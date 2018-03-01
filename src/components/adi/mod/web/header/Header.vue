@@ -9,13 +9,9 @@ export default {
   props: {
     mod: {
       type: Object,
-      default: () => {
-        return properties
-      }
+      default: properties
     },
-    editMode: {
-      type: Boolean
-    }
+    editMode: Boolean
   },
   data() {
     return {
@@ -43,7 +39,18 @@ export default {
     }),
     menuData() {
       return this.mod.data.menu
+    },
+    mediaData() {
+      return this.mod.data.media
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.kp-header-media {
+  width: 20%;
+  min-width: 30px;
+  margin: auto;
+}
+</style>
+

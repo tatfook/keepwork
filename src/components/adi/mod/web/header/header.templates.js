@@ -1,9 +1,7 @@
-import { AdiMenu } from '@/components/adi/common'
+import { AdiMenu, AdiMedia } from '@/components/adi/common'
 
 const menu = (h, comp) => {
-  return (
-    <AdiMenu menu={comp.menuData} />
-  )
+  return <AdiMenu menu={comp.menuData} />
 }
 
 const edMenu = (h, comp) => {
@@ -18,22 +16,35 @@ const edMenu = (h, comp) => {
   )
 }
 
+const media = (h, comp) => {
+  return <AdiMedia media={comp.mediaData} />
+}
+
+const edMedia = (h, comp) => {
+  return (
+    <AdiMedia
+      media={comp.mediaData}
+      editorMode={true}
+      sign={'media'}
+      isActive={comp.isChildActive('media')}
+      onEditProperty={comp.onEditProperty}
+    />
+  )
+}
+
 const template1 = {
   render: (h, comp) => {
-    if (comp.editMode) {
-      return (
-        <div class="header-menu-bar">
-          {edMenu(h, comp)}
+    let editable = comp.editMode
+    return (
+      <div class="kp-header">
+        <div class="kp-header-media">
+          {editable ? edMedia(h, comp) : media(h, comp)}
         </div>
-      )
-    }
-    else {
-      return (
-        <div class="header-menu-bar">
-          {menu(h, comp)}
+        <div class="kp-header-menu">
+          {editable ? edMenu(h, comp) : menu(h, comp)}
         </div>
-      )
-    }
+      </div>
+    )
   }
 }
 
