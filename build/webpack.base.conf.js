@@ -35,6 +35,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
+      'vue': 'vue/dist/vue.js'
     }
   },
   module: {
@@ -49,6 +50,10 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

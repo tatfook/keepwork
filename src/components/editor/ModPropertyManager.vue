@@ -6,11 +6,7 @@
 
 <script>
 export default {
-  name: 'Editor',
-  data () {
-    return {
-      msg: 'Welcome to Mod Property Editor'
-    }
-  }
+  name: 'ModPropertyManager',
+
 }
 </script>

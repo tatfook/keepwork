@@ -1,4 +1,4 @@
-import Mod from './adi-mod'
+import Mod from './mod'
 
 export default {
   Mod

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AsyncComponents from '@/components/adi/adi-mod/asyncPac'
+import AsyncComponents from '@/components/adi/mod/asyncPac'
 
 export default {
   props: {

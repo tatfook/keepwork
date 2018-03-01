@@ -1,22 +1,26 @@
 <template>
-  <div class='viewport-container'>
-    <editor-viewport :state='store.state'> </editor-viewport>
-  </div>
+  <el-row :gutter="20">
+    <el-col :span="16">
+      <editor-viewport> </editor-viewport>
+    </el-col>
+    <el-col :span="8">
+      <mod-property-manager> </mod-property-manager>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import store from '@/vuex/editor/editor.store'
 import EditorViewport from './EditorViewport'
+import ModPropertyManager from './ModPropertyManager'
 
 export default {
   name: 'Editor',
-  data () {
-    return {
-      store: store
-    }
+  data() {
+    return {}
   },
   components: {
-    EditorViewport
+    EditorViewport,
+    ModPropertyManager
   }
 }
 </script>
