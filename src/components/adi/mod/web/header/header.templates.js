@@ -48,10 +48,29 @@ const template1 = {
   }
 }
 
-const templates = [template1]
+const template2 = {
+  render: (h, comp) => {
+    let editable = comp.editMode
+    return (
+      <div class="kp-header">
+        <div class="kp-header-menu">
+          {editable ? edMenu(h, comp) : menu(h, comp)}
+        </div>
+        <div class="kp-header-media">
+          {editable ? edMedia(h, comp) : media(h, comp)}
+        </div>
+      </div>
+    )
+  }
+}
+
+const templates = {
+  template1,
+  template2
+}
 
 let RenderTemplate = (h, style, comp) => {
-  let template = templates[style.templateID - 1]
+  let template = templates[style.template]
   return template.render(h, comp)
 }
 

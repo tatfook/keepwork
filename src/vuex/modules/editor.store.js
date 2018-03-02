@@ -23,13 +23,18 @@ const getters = {
   theme: state => state.theme,
   modList: state => state.modList,
   activeMod: state => state.activeMod,
-  activeProperty: state => state.activeProperty
+  activeProperty: state => state.activeProperty,
+  hasActiveMod: state => !!state.activeMod,
+  hasActiveProperty: state => !!state.activeProperty
 }
 
 const actions = {
   addMod({ commit }, params) {
     const mod = modFactory.generate(params.modName)
-    commit('ADD_MOD', { mod: mod, key: params.preModKey })
+    commit('ADD_MOD', {
+      mod: mod,
+      key: params.preModKey
+    })
     commit('SET_ACTIVE_MOD', mod)
   },
   setActiveMod({ commit }, mod) {
@@ -41,6 +46,9 @@ const actions = {
   },
   deleteMod({ commit }, mod) {
     commit('DELETE_MOD', mod)
+  },
+  updateActiveModStyle({ commit }, styleID) {
+    commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
   }
 }
 
@@ -65,8 +73,11 @@ const mutations = {
     if (!state.activeMod) return
     state.activeProperty = property
   },
-  UPDATE_ATTRIBUTES(state, { key, value }) {
+  UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     state.activeMod.key = value
+  },
+  UPDATE_ACTIVE_MOD_STYLE(state, styleID) {
+    Vue.set(state.activeMod, 'styleID', styleID)
   },
   UPDATE_LAYOUT(state, layout) {
     state.layout = layout
