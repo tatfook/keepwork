@@ -30,7 +30,7 @@ export default {
       type: Boolean,
       default: false
     },
-    sign: String,
+    property: String,
     isActive: Boolean
   },
   computed: {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     editProperty() {
-      this.$emit('editProperty', this.sign)
+      this.$emit('editProperty', this.property)
     }
   }
 }

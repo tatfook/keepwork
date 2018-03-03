@@ -1,3 +1,5 @@
+import templates from './header.templates'
+
 const style1 = {
   id: 1,
   template: 'template1',
@@ -12,4 +14,10 @@ const style2 = {
 
 const styles = [style1, style2]
 
-export default styles
+const renderStyle = (h, mod, styleID) => {
+  let style = styles[styleID]
+  let template = templates[style.template]
+  return template.render(h, mod)
+}
+
+export default renderStyle

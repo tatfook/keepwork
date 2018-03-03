@@ -5,8 +5,14 @@ const properties = {
   modType: 'AdiHeader',
   styleID: 1,
   data: {
-    menu: defaultMenuProperies,
-    media: defaultMediaProperies
+    menu: {
+      componentType: 'AdiMenu',
+      data: defaultMenuProperies
+    },
+    media: {
+      componentType: 'AdiMedia',
+      data: defaultMediaProperies
+    }
   }
 }
 
