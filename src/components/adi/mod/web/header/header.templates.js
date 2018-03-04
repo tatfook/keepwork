@@ -4,10 +4,12 @@ const template1 = {
   render: (h, mod) => {
     return (
       <div class="mod-header">
-        <div class="mod-header-media">
+        <div class={mod.jssClass('mod-header-media')}>
           {compFactory.create(h, mod, 'media')}
         </div>
-        <div class="mod-header-menu">{compFactory.create(h, mod, 'menu')}</div>
+        <div class={mod.jssClass('mod-header-menu')}>
+          {compFactory.create(h, mod, 'menu')}
+        </div>
       </div>
     )
   }
@@ -17,8 +19,10 @@ const template2 = {
   render: (h, mod) => {
     return (
       <div class="mod-header">
-        <div class="mod-header-menu">{compFactory.create(h, mod, 'menu')}</div>
-        <div class="mod-header-media">
+        <div class={mod.jssClass('mod-header-menu')}>
+          {compFactory.create(h, mod, 'menu')}
+        </div>
+        <div class={mod.jssClass('mod-header-media')}>
           {compFactory.create(h, mod, 'media')}
         </div>
       </div>

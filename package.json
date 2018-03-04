@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "element-ui": "^2.2.0",
+    "jss": "^9.8.0",
+    "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

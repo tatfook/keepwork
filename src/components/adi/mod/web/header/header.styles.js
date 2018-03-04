@@ -1,26 +1,39 @@
-import templates from './header.templates'
-
 const style1 = {
-  id: 1,
+  name: 1,
   template: 'template1',
-  style: {}
+  data: {}
 }
 
 const style2 = {
-  id: 2,
+  name: 2,
   template: 'template2',
-  style: {}
+  data: {
+    'mod-header-menu': {
+      margin: '50px 0 0 0'
+    },
+    'mod-header-media': {
+      width: '20%',
+      'min-width': '30px',
+      margin: 'auto'
+    }
+  }
 }
 
-export const styles = [style1, style2]
-
-export const renderStyle = (h, mod, styleID) => {
-  let style = styles[styleID]
-  let template = templates[style.template]
-  return template.render(h, mod)
+const style3 = {
+  name: 3,
+  template: 'template2',
+  data: {
+    'mod-header-menu': {
+      margin: '50px 0 50px 0'
+    },
+    'mod-header-media': {
+      width: '40%',
+      'min-width': '30px',
+      margin: 'auto'
+    }
+  }
 }
 
-export default {
-  renderStyle,
-  styles
-}
+const styles = [style1, style2, style3]
+
+export default styles

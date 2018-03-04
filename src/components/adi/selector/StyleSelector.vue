@@ -1,7 +1,7 @@
 <template>
   <div class='kp-mod-styles'>
-    <div v-for='style in styles' :key='style.id' class='kp-mod-style' :class='{active: isActive(style.id)}' @click='changeStyle(style.id)'>
-      {{style.template}}
+    <div v-for='(style, index) in styles' :key='style.name' class='kp-mod-style' :class='{active: isActive(index)}' @click='changeStyle(index)'>
+      {{style.name}}
     </div>
   </div>
 </template>

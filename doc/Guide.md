@@ -89,6 +89,28 @@
 
     * 基础组件工厂方法，便于在 mod 组件直接使用，使用 jsx 语法
 
+* mod component
+
+  > mod 组件，由一组基础组件组成，不可嵌套使用每一个基础 mod 用一个 div 包裹，通过设置包裹层的 div 内容设置版式
+
+  * mod.vue
+
+    * mod 代码，自动需添加 base mod mixin
+
+  * mod.properties.js
+
+    * mod 默认数据，由基础组件数据组成，并附带自身的一些特殊属性
+
+  * mod.templates.js
+
+    * mod 模板文件，包含一组模板
+    * 注意：在模板中应用样式时，需调用 jssClass 方法
+
+  * mod.styles.js
+
+    * mod 样式文件，包含一组样式
+    * 多个样式可以共用一组模板
+
 ## 常用开发思路
 
 * 新的单页应用？
