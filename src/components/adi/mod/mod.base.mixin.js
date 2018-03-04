@@ -7,15 +7,15 @@ jss.setup(preset())
 const modBaseMixin = {
   props: {
     mod: Object,
-    editMode: Boolean,
-    sheet: Object
+    theme: Object,
+    editMode: Boolean
   },
   render(h) {
+    if (this.sheet) this.sheet.detach()
     let style = this.styles[this.mod.styleID]
     let template = this.templates[style.template]
     this.sheet = jss.createStyleSheet(style.data)
     this.sheet.attach()
-
     return template.render(h, this)
   },
   methods: {
@@ -28,6 +28,9 @@ const modBaseMixin = {
     isChildActive(property) {
       return this.mod.isActive && property === this.activeProperty
     },
+    isChildHidden(property) {
+      return !!this.mod.data[property].hidden
+    },
     childData(property) {
       return this.mod.data[property].data
     },
@@ -36,6 +39,9 @@ const modBaseMixin = {
     },
     jssClass(name) {
       return this.sheet.classes[name]
+    },
+    themeClass(name) {
+      if (this.theme) return this.theme.classes[name]
     }
   },
   computed: {

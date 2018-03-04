@@ -1,4 +1,5 @@
 import AdiMenu from './menu/Menu'
 import AdiMedia from './media/Media'
+import AdiLabel from './label/Label'
 
-export { AdiMenu, AdiMedia }
+export default { AdiMenu, AdiMedia, AdiLabel }

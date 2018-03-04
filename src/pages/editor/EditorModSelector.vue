@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'mod-active': mod.isActive }" @click='setActive'>
     <div class='mod'>
-      <component :is='modComponent' :mod='mod' :editMode='true'> </component>
+      <component :is='modComponent' :mod='mod' :theme='theme' :editMode='true'> </component>
     </div>
     <div class='operator' v-if='mod.isActive'>
       <el-button @click.stop.prevent='newMod'> + </el-button>
@@ -15,7 +15,8 @@ import AdiComponents from '@/components/adi/mod'
 
 export default {
   props: {
-    mod: Object
+    mod: Object,
+    theme: Object
   },
   data() {
     return {}

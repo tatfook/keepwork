@@ -1,14 +1,15 @@
 <template>
-  <div v-if='editorMode' @click.stop.prevent='editProperty' class='comp-menu' :class='{active: isActive}'>
-    <el-menu :mode='menu.mode' :background-color='menu.backgroundColor' :text-color='menu.textColor' :active-text-color='menu.activeTextColor'>
-      <el-menu-item v-for='menuData in menu.data' :key='menuData.title' :index='menuData.title'>
+  <div v-if='isHidden'></div>
+  <div v-else-if='editorMode' @click.stop.prevent='editProperty' class='comp-menu' :class='{active: isActive}'>
+    <el-menu :mode='mode' :background-color='backgroundColor' :text-color='textColor' :active-text-color='activeTextColor'>
+      <el-menu-item v-for='menuData in source.data' :key='menuData.title' :index='menuData.title'>
         {{menuData.title}}
       </el-menu-item>
     </el-menu>
   </div>
   <div v-else class='comp-menu'>
-    <el-menu :mode='menu.mode' :background-color='menu.backgroundColor' :text-color='menu.textColor' :active-text-color='menu.activeTextColor'>
-      <el-menu-item v-for='menuData in menu.data' :key='menuData.title' :index='menuData.title'>
+    <el-menu :mode='mode' :background-color='backgroundColor' :text-color='textColor' :active-text-color='activeTextColor'>
+      <el-menu-item v-for='menuData in source.data' :key='menuData.title' :index='menuData.title'>
         {{menuData.title}}
       </el-menu-item>
     </el-menu>
@@ -16,25 +17,23 @@
 </template>
 
 <script>
+import compBaseMixin from '../comp.base.mixin'
+
 export default {
-  props: {
-    menu: {
-      type: Object,
-      required: true
+  name: 'AdiMenu',
+  mixins: [compBaseMixin],
+  computed: {
+    mode() {
+      return this.source.mode
     },
-    editorMode: {
-      type: Boolean,
-      default: false
+    backgroundColor() {
+      return this.source.backgroundColor
     },
-    sign: String,
-    isActive: Boolean
-  },
-  data() {
-    return {}
-  },
-  methods: {
-    editProperty() {
-      this.$emit('editProperty', this.sign)
+    textColor() {
+      return this.source.textColor
+    },
+    activeTextColor() {
+      return this.source.activeTextColor
     }
   }
 }

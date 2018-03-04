@@ -7,6 +7,9 @@ const template1 = {
         <div class={mod.jssClass('mod-header-media')}>
           {compFactory.create(h, mod, 'media')}
         </div>
+        <div class={mod.jssClass('mod-header-label')}>
+          {compFactory.create(h, mod, 'label')}
+        </div>
         <div class={mod.jssClass('mod-header-menu')}>
           {compFactory.create(h, mod, 'menu')}
         </div>
@@ -22,8 +25,15 @@ const template2 = {
         <div class={mod.jssClass('mod-header-menu')}>
           {compFactory.create(h, mod, 'menu')}
         </div>
-        <div class={mod.jssClass('mod-header-media')}>
+        <div
+          class={[mod.jssClass('mod-header-media'), mod.themeClass('font_1')]}
+        >
           {compFactory.create(h, mod, 'media')}
+        </div>
+        <div
+          class={(mod.jssClass('mod-header-label'), mod.themeClass('font_1'))}
+        >
+          {compFactory.create(h, mod, 'label')}
         </div>
       </div>
     )

@@ -9,7 +9,7 @@ const style2 = {
   template: 'template2',
   data: {
     'mod-header-menu': {
-      margin: '50px 0 0 0'
+      margin: '50px 0'
     },
     'mod-header-media': {
       width: '20%',
@@ -24,12 +24,11 @@ const style3 = {
   template: 'template2',
   data: {
     'mod-header-menu': {
-      margin: '50px 0 50px 0'
+      margin: '20px 0'
     },
     'mod-header-media': {
       width: '40%',
-      'min-width': '30px',
-      margin: 'auto'
+      'min-width': '30px'
     }
   }
 }

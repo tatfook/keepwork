@@ -1,17 +1,20 @@
-import defaultMenuProperies from '@/components/adi/common/menu/menu.properties'
-import defaultMediaProperies from '@/components/adi/common/media/media.properties'
+import BaseCompProperties from '@/components/adi/common/comp.properties'
 
 const properties = {
   modType: 'AdiHeader',
-  styleID: 1,
+  styleID: 0,
   data: {
     menu: {
       componentType: 'AdiMenu',
-      data: defaultMenuProperies
+      data: BaseCompProperties.menu
     },
     media: {
       componentType: 'AdiMedia',
-      data: defaultMediaProperies
+      data: BaseCompProperties.media
+    },
+    label: {
+      componentType: 'AdiLabel',
+      data: BaseCompProperties.label
     }
   }
 }

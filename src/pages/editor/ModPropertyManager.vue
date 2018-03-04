@@ -1,7 +1,7 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
     <el-tabs>
-      <el-tab-pane label='属性'>
+      <el-tab-pane label='Property'>
         <div class='properties-container' v-if='hasActiveProperty'>
           {{activeProperty}}
         </div>
@@ -9,9 +9,14 @@
           No selected property
         </div>
       </el-tab-pane>
-      <el-tab-pane label='样式'>
+      <el-tab-pane label='Style'>
         <div class='styles-container'>
           <style-selector :mod='activeMod' />
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label='Theme'>
+        <div class='styles-container'>
+          <theme-selector />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -20,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import StyleSelector from '@/components/adi/selector/StyleSelector'
+import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
 
 export default {
   name: 'ModPropertyManager',
@@ -33,7 +38,8 @@ export default {
     })
   },
   components: {
-    StyleSelector
+    StyleSelector,
+    ThemeSelector
   }
 }
 </script>

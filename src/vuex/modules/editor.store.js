@@ -12,15 +12,14 @@ const state = {
   //   siderbar: {}
   // },
   theme: {
-    name: '',
-    themeID: 1,
-    colorsID: 1,
-    fontsID: 1
+    name: 'light',
+    colorID: 0,
+    fontID: 0
   }
 }
 
 const getters = {
-  theme: state => state.theme,
+  themeConf: state => state.theme,
   modList: state => state.modList,
   activeMod: state => state.activeMod,
   activeProperty: state => state.activeProperty,
@@ -54,6 +53,17 @@ const actions = {
   },
   updateActiveModStyle({ commit }, styleID) {
     commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
+  },
+  changeTheme({ commit }, themeName) {
+    commit('UPDATE_THEME_NAME', themeName)
+    commit('UPDATE_THEME_COLOR', 0)
+    commit('UPDATE_THEME_FONT', 0)
+  },
+  changeThemeColor({ commit }, colorID) {
+    commit('UPDATE_THEME_COLOR', colorID)
+  },
+  changeThemeFont({ commit }, fontID) {
+    commit('UPDATE_THEME_FONT', fontID)
   }
 }
 
@@ -83,15 +93,17 @@ const mutations = {
   UPDATE_ACTIVE_MOD_STYLE(state, styleID) {
     Vue.set(state.activeMod, 'styleID', styleID)
   },
-  UPDATE_LAYOUT(state, layout) {
-    state.layout = layout
-  },
-  UPDATE_THEME(state, theme) {
-    state.theme = theme
-  },
   UPDATE_MODS(state, mods) {
-    state.modList = mods
-    state.activeMod = {}
+    Vue.set(state, 'modList', mods)
+  },
+  UPDATE_THEME_NAME(state, themeName) {
+    Vue.set(state.theme, 'name', themeName)
+  },
+  UPDATE_THEME_COLOR(state, colorID) {
+    Vue.set(state.theme, 'colorID', colorID)
+  },
+  UPDATE_THEME_FONT(state, fontID) {
+    Vue.set(state.theme, 'fontID', fontID)
   }
 }
 
