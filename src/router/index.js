@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const Editor = resolve => require(['@/components/editor/Editor'], resolve)
-const PageViewer = resolve => require(['@/components/page_viewer/MdPageViewer'], resolve)
+const Editor = resolve => require(['@/pages/editor/Editor'], resolve)
+const PageViewer = resolve => require(['@/pages/viewer/MdPageViewer'], resolve)
 
 Vue.use(Router)
 

@@ -1,4 +1,4 @@
-import AdiMedia from './AdiMedia'
+import AdiMedia from './Media'
 
 const media = (h, mod, property) => {
   return <AdiMedia media={mod.childData(property)} />

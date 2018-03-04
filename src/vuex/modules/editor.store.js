@@ -39,6 +39,7 @@ const actions = {
   },
   setActiveMod({ commit }, mod) {
     commit('SET_ACTIVE_MOD', mod)
+    commit('SET_ACTIVE_PROPERTY', null)
   },
   setActiveProperty({ commit }, params) {
     commit('SET_ACTIVE_MOD', params.mod)
@@ -46,6 +47,10 @@ const actions = {
   },
   deleteMod({ commit }, mod) {
     commit('DELETE_MOD', mod)
+    if (mod === state.activeMod) {
+      commit('SET_ACTIVE_MOD', null)
+      commit('SET_ACTIVE_PROPERTY', null)
+    }
   },
   updateActiveModStyle({ commit }, styleID) {
     commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
@@ -56,18 +61,17 @@ const mutations = {
   ADD_MOD(state, { mod, key }) {
     let index = 0
     if (key) index = state.modList.map(el => el.key).indexOf(key)
-    state.modList.splice(index, 0, mod)
+    state.modList.splice(index + 1, 0, mod)
   },
   DELETE_MOD(state, mod) {
-    if (mod === state.activeMod) state.activeMod = null
     let index = state.modList.map(el => el.key).indexOf(mod.key)
-    state.modList.splice(index, 1)
+    Vue.delete(state.modList, index)
   },
   SET_ACTIVE_MOD(state, mod) {
     if (state.activeMod === mod) return
     if (state.activeMod) Vue.set(state.activeMod, 'isActive', false)
-    state.activeMod = mod
-    Vue.set(state.activeMod, 'isActive', true)
+    if (mod) Vue.set(mod, 'isActive', true)
+    Vue.set(state, 'activeMod', mod)
   },
   SET_ACTIVE_PROPERTY(state, property) {
     if (!state.activeMod) return

@@ -1,14 +1,12 @@
 <template>
   <div :class="{ 'mod-active': mod.isActive }" @click='setActive'>
-    <div class='operator' v-if='mod.isActive'>
-      <el-button > Styles </el-button>
-      <el-button > Properties </el-button>
-      <el-button @click='deleteMod'> Delete </el-button>
-    </div>
     <div class='mod'>
       <component :is='modComponent' :mod='mod' :editMode='true'> </component>
     </div>
-    <el-button @click='newMod'> + </el-button>
+    <div class='operator' v-if='mod.isActive'>
+      <el-button @click.stop.prevent='newMod'> + </el-button>
+      <el-button @click.stop.prevent='deleteMod'> - </el-button>
+    </div>
   </div>
 </template>
 
@@ -20,8 +18,7 @@ export default {
     mod: Object
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     modComponent() {
@@ -42,15 +39,15 @@ export default {
       this.$store.dispatch('deleteMod', this.mod)
     }
   }
-};
+}
 </script>
 
 <style scoped>
- .mod-active {
-   border: 3px solid rgb(228, 37, 37)
- }
- .mod {
-   border: 1px dashed rgb(87, 55, 231)
- }
+.mod-active {
+  border: 3px solid rgb(228, 37, 37);
+}
+.mod {
+  border: 1px dashed rgb(87, 55, 231);
+}
 </style>
 

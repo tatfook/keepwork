@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import modStyles from '@/components/adi/mod/styles'
+import modStyles from '@/components/adi/mod/mod.styles'
 
 export default {
   props: {

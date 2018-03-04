@@ -1,4 +1,4 @@
-import AdiMenu from './AdiMenu'
+import AdiMenu from './Menu'
 
 const menu = (h, mod, property) => {
   return <AdiMenu menu={mod.childData(property)} />

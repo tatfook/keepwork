@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AsyncComponents from '@/components/adi/mod/asyncPac'
+import AsyncMods from '@/components/adi/mod/index.async'
 
 export default {
   props: {
@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     modComponent() {
-      return AsyncComponents[this.mod.modType]
+      return AsyncMods[this.mod.modType]
     }
   }
 }

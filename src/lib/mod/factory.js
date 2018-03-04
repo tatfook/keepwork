@@ -1,4 +1,4 @@
-import properties from '@/components/adi/mod/properties'
+import properties from '@/components/adi/mod/mod.properties'
 import _ from 'lodash'
 
 const uuid = () => {

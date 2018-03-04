@@ -1,5 +1,5 @@
 <template>
-  <div v-if='editorMode' @click.stop.prevent='editProperty' class='kp-media' :class='{active: isActive}'>
+  <div v-if='editorMode' @click.stop.prevent='editProperty' class='comp-media' :class='{active: isActive}'>
     <a v-if='hasMedia'>
       <img v-if='isImage' :src='media.src'>
       <video v-else-if='isVideo' :src='media.src'></video>
@@ -8,7 +8,7 @@
       <img src="@/assets/logo.svg">
     </a>
   </div>
-  <div v-else class='kp-media'>
+  <div v-else class='comp-media'>
     <a :href='media.link'>
       <img v-if='isImage' :src='media.src'>
       <video v-else-if='isVideo' :src='media.src'></video>
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.kp-media {
+.comp-media {
   a {
     width: 100%;
     height: 100%;

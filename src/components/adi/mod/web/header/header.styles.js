@@ -12,12 +12,15 @@ const style2 = {
   style: {}
 }
 
-const styles = [style1, style2]
+export const styles = [style1, style2]
 
-const renderStyle = (h, mod, styleID) => {
+export const renderStyle = (h, mod, styleID) => {
   let style = styles[styleID]
   let template = templates[style.template]
   return template.render(h, mod)
 }
 
-export default renderStyle
+export default {
+  renderStyle,
+  styles
+}

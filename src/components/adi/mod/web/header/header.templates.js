@@ -3,9 +3,11 @@ import compFactory from '@/components/adi/common/comp.factory'
 const template1 = {
   render: (h, mod) => {
     return (
-      <div class="kp-header">
-        <div class="kp-header-media">{compFactory.create(h, mod, 'media')}</div>
-        <div class="kp-header-menu">{compFactory.create(h, mod, 'menu')}</div>
+      <div class="mod-header">
+        <div class="mod-header-media">
+          {compFactory.create(h, mod, 'media')}
+        </div>
+        <div class="mod-header-menu">{compFactory.create(h, mod, 'menu')}</div>
       </div>
     )
   }
@@ -14,9 +16,11 @@ const template1 = {
 const template2 = {
   render: (h, mod) => {
     return (
-      <div class="kp-header">
-        <div class="kp-header-menu">{compFactory.create(h, mod, 'menu')}</div>
-        <div class="kp-header-media">{compFactory.create(h, mod, 'media')}</div>
+      <div class="mod-header">
+        <div class="mod-header-menu">{compFactory.create(h, mod, 'menu')}</div>
+        <div class="mod-header-media">
+          {compFactory.create(h, mod, 'media')}
+        </div>
       </div>
     )
   }

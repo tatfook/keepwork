@@ -1,12 +1,12 @@
 <template>
-  <div v-if='editorMode' @click.stop.prevent='editProperty' class='kp-menu' :class='{active: isActive}'>
+  <div v-if='editorMode' @click.stop.prevent='editProperty' class='comp-menu' :class='{active: isActive}'>
     <el-menu :mode='menu.mode' :background-color='menu.backgroundColor' :text-color='menu.textColor' :active-text-color='menu.activeTextColor'>
       <el-menu-item v-for='menuData in menu.data' :key='menuData.title' :index='menuData.title'>
         {{menuData.title}}
       </el-menu-item>
     </el-menu>
   </div>
-  <div v-else class='kp-menu'>
+  <div v-else class='comp-menu'>
     <el-menu :mode='menu.mode' :background-color='menu.backgroundColor' :text-color='menu.textColor' :active-text-color='menu.activeTextColor'>
       <el-menu-item v-for='menuData in menu.data' :key='menuData.title' :index='menuData.title'>
         {{menuData.title}}
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.kp-menu {
+.comp-menu {
   &.active {
     border: 1px solid rgb(199, 27, 27);
   }

@@ -1,5 +1,5 @@
 <script>
-import renderStyle from './header.styles'
+import { renderStyle } from './header.styles'
 import modBaseMixin from '@/components/adi/mod/base.mixin'
 
 export default {
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.kp-header-media {
+.mod-header-media {
   width: 20%;
   min-width: 30px;
   margin: auto;

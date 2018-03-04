@@ -1,4 +1,4 @@
-import AdiMenu from './menu/AdiMenu'
-import AdiMedia from './media/AdiMedia'
+import AdiMenu from './menu/Menu'
+import AdiMedia from './media/Media'
 
 export { AdiMenu, AdiMedia }
