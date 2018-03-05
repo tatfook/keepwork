@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import jss from 'jss'
 import preset from 'jss-preset-default'
-import mods from '../index'
 import { mapGetters } from 'vuex'
 import compFactory from '@/components/adi/common/comp.factory'
 
@@ -33,12 +32,12 @@ const renderTemplate = (h, conf, mod) => {
 const modBaseMixin = {
   props: {
     mod: Object,
+    conf: Object,
     theme: Object,
     editMode: Boolean
   },
   render(h) {
     if (this.sheet) this.sheet.detach()
-    this.conf = mods[this.mod.type]
     this.style = this.conf.styles[this.mod.styleID]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()

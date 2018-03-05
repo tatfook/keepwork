@@ -38,9 +38,39 @@ const testData = {
           }
         }
       }
+    },
+    {
+      key: 'fdshgdsak',
+      type: 'ModLogo',
+      styleID: 1,
+      components: {
+        media: {
+          type: 'AdiMedia',
+          data: {
+            src: 'http://keepwork.com/wiki/assets/imgs/icon/logo.svg',
+            link: 'http://keepwork.com'
+          }
+        },
+        label1: {
+          type: 'AdiLabel',
+          data: {
+            text: 'keepwork'
+          }
+        },
+        label2: {
+          type: 'AdiLabel',
+          data: {
+            text: 'keep your work!'
+          }
+        }
+      }
     }
   ],
-  theme: {},
+  theme: {
+    name: 'light',
+    colorID: 1,
+    fontID: 1
+  },
   layout: {}
 }
 

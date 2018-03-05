@@ -1,5 +1,5 @@
 <template>
-  <component :is='modComponent' :mod='mod' :key='mod.key'> </component>
+  <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :key='mod.key'> </component>
 </template>
 
 <script>
@@ -7,11 +7,13 @@ import AsyncMods from '@/components/adi/mod/index.async'
 
 export default {
   props: {
-    mod: Object
+    mod: Object,
+    theme: Object
   },
   data() {
     return {
-      modComponent: undefined
+      modComponent: undefined,
+      modConf: undefined
     }
   },
   created() {
@@ -19,8 +21,9 @@ export default {
   },
   methods: {
     async loadComponent() {
-      let modConf = await AsyncMods[this.mod.type]()
-      this.modComponent = modConf.default.mod
+      let data = await AsyncMods[this.mod.type]()
+      this.modConf = data.default
+      this.modComponent = this.modConf.mod
     }
   }
 }
