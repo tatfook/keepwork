@@ -1,2 +1,11 @@
 // add global variables here
-export default {}
+export const gClasses = {
+  compActive: 'comp-active',
+  compHover: 'comp-hover',
+  modActive: 'mod-active',
+  modHover: 'mod-hover'
+}
+
+export default {
+  gClasses
+}

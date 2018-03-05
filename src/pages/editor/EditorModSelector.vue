@@ -42,12 +42,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.mod-active {
-  border: 3px solid rgb(228, 37, 37);
-}
-.mod {
-  border: 1px dashed rgb(87, 55, 231);
-}
-</style>

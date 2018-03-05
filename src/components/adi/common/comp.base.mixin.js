@@ -11,11 +11,6 @@ const compBaseMixin = {
     property: String,
     isActive: Boolean,
     isHidden: Boolean
-  },
-  methods: {
-    editProperty() {
-      this.$emit('editProperty', this.property)
-    }
   }
 }
 

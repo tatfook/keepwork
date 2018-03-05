@@ -24,3 +24,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.mod-active {
+  border: 2px solid rgb(240, 15, 15);
+}
+.comp-active {
+  border: 3px dashed rgb(43, 11, 221);
+}
+</style>

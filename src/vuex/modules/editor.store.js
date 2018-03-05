@@ -85,7 +85,7 @@ const mutations = {
   },
   SET_ACTIVE_PROPERTY(state, property) {
     if (!state.activeMod) return
-    state.activeProperty = property
+    Vue.set(state, 'activeProperty', property)
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     state.activeMod.key = value

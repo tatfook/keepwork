@@ -1,15 +1,5 @@
 <template>
-  <div v-if='isHidden'></div>
-  <div v-else-if='editorMode' @click.stop.prevent='editProperty' class='comp-media' :class='{active: isActive}'>
-    <a v-if='hasMedia'>
-      <img v-if='isImage' :src='src'>
-      <video v-else-if='isVideo' :src='src'></video>
-    </a>
-    <a v-else>
-      <img src="@/assets/logo.svg">
-    </a>
-  </div>
-  <div v-else class='comp-media'>
+  <div class='comp-media'>
     <a :href='link'>
       <img v-if='isImage' :src='src'>
       <video v-else-if='isVideo' :src='src'></video>
@@ -43,11 +33,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss' scoped>
-.comp-media {
-  &.active {
-    border: 1px solid rgb(199, 27, 27);
-  }
-}
-</style>

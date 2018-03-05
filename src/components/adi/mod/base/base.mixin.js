@@ -8,9 +8,13 @@ import compFactory from '@/components/adi/common/comp.factory'
 jss.setup(preset())
 
 const compWrapper = (h, mod, comp, property) => {
+  let onEditProperty = e => {
+    e.stopPropagation()
+    mod.onEditProperty(property)
+  }
   return (
-    <div class={mod.compWrapperClass(property)}>
-      {compFactory.create(h, mod, property)}
+    <div onClick={onEditProperty} class={mod.compWrapperClass(property)}>
+      {mod.isChildHidden(property) ? '' : compFactory.create(h, mod, property)}
     </div>
   )
 }
@@ -18,7 +22,7 @@ const compWrapper = (h, mod, comp, property) => {
 const renderTemplate = (h, conf, mod) => {
   let components = conf.properties.components
   return (
-    <div class={conf.name}>
+    <div class={_.kebabCase(conf.name)}>
       {_.map(components, (el, key) => {
         return compWrapper(h, mod, el, key)
       })}
@@ -65,10 +69,11 @@ const modBaseMixin = {
     themeClass(name) {
       if (this.theme) return this.theme.classes[name]
     },
-    compWrapperClass(name) {
+    compWrapperClass(property) {
       let classes = []
-      name = _.kebabCase(this.conf.name) + '-' + name
-      classes.push(this.jssClass(name))
+      let name = _.kebabCase(this.conf.name) + '-' + property
+      if (this.isChildActive(property)) classes.push('comp-active')
+      if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
       }
