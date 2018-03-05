@@ -2,11 +2,11 @@ const testData = {
   modList: [
     {
       key: 'abcd',
-      modType: 'AdiHeader',
+      type: 'ModHeader',
       styleID: 1,
-      data: {
+      components: {
         menu: {
-          componentType: 'AdiMenu',
+          type: 'AdiMenu',
           data: {
             mode: 'horizontal',
             backgroundColor: '#545c64',
@@ -25,10 +25,16 @@ const testData = {
           }
         },
         media: {
-          componentType: 'AdiMedia',
+          type: 'AdiMedia',
           data: {
             src: 'http://keepwork.com/wiki/assets/imgs/icon/logo.svg',
             link: 'http://keepwork.com'
+          }
+        },
+        label: {
+          type: 'AdiLabel',
+          data: {
+            text: 'keepwork'
           }
         }
       }

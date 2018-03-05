@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AdiComponents from '@/components/adi/mod'
+import mods from '@/components/adi/mod'
 
 export default {
   props: {
@@ -23,13 +23,13 @@ export default {
   },
   computed: {
     modComponent() {
-      return AdiComponents[this.mod.modType]
+      return mods[this.mod.type].mod
     }
   },
   methods: {
     newMod() {
       this.$store.dispatch('addMod', {
-        modName: 'AdiHeader',
+        modName: 'ModHeader',
         preModKey: this.mod.key
       })
     },
@@ -51,4 +51,3 @@ export default {
   border: 1px dashed rgb(87, 55, 231);
 }
 </style>
-

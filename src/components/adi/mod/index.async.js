@@ -1,5 +1,5 @@
-const AdiHeader = () => import('./web/header/Header')
+const ModHeader = () => import('./web/header')
 
 export default {
-  AdiHeader
+  ModHeader
 }

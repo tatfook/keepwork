@@ -1,12 +1,11 @@
 const style1 = {
-  name: 1,
-  template: 'template1',
-  data: {}
+  data: {},
+  theme: {
+    'mod-header-label': ['font_0', 'color_1']
+  }
 }
 
 const style2 = {
-  name: 2,
-  template: 'template2',
   data: {
     'mod-header-menu': {
       margin: '50px 0'
@@ -16,12 +15,13 @@ const style2 = {
       'min-width': '30px',
       margin: 'auto'
     }
+  },
+  theme: {
+    'mod-header-label': ['font_0', 'color_0']
   }
 }
 
 const style3 = {
-  name: 3,
-  template: 'template2',
   data: {
     'mod-header-menu': {
       margin: '20px 0'
@@ -30,6 +30,9 @@ const style3 = {
       width: '40%',
       'min-width': '30px'
     }
+  },
+  theme: {
+    'mod-header-label': ['font_0', 'color_0']
   }
 }
 

@@ -1,9 +1,9 @@
-import menu from './menu/menu.properties'
-import media from './media/media.properties'
-import label from './label/label.properties'
+import AdiMenu from './menu/menu.properties'
+import AdiMedia from './media/media.properties'
+import AdiLabel from './label/label.properties'
 
 export default {
-  menu,
-  media,
-  label
+  AdiMenu,
+  AdiMedia,
+  AdiLabel
 }

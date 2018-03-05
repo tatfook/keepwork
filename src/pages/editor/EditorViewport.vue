@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     newMod() {
-      this.$store.dispatch('addMod', { modName: 'AdiHeader' })
+      this.$store.dispatch('addMod', { modName: 'ModHeader' })
     }
   }
 }

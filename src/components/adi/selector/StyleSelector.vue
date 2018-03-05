@@ -1,13 +1,13 @@
 <template>
   <div class='kp-mod-styles'>
     <div v-for='(style, index) in styles' :key='style.name' class='kp-mod-style' :class='{active: isActive(index)}' @click='changeStyle(index)'>
-      {{style.name}}
+      {{index}}
     </div>
   </div>
 </template>
 
 <script>
-import modStyles from '@/components/adi/mod/mod.styles'
+import mods from '@/components/adi/mod'
 
 export default {
   props: {
@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     styles() {
-      return modStyles[this.mod.modType]
+      return mods[this.mod.type].styles
     }
   },
   methods: {
@@ -39,4 +39,3 @@ export default {
   }
 }
 </style>
-

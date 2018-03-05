@@ -10,11 +10,17 @@ export default {
     mod: Object
   },
   data() {
-    return {}
+    return {
+      modComponent: undefined
+    }
   },
-  computed: {
-    modComponent() {
-      return AsyncMods[this.mod.modType]
+  created() {
+    this.loadComponent()
+  },
+  methods: {
+    async loadComponent() {
+      let modConf = await AsyncMods[this.mod.type]()
+      this.modComponent = modConf.default.mod
     }
   }
 }

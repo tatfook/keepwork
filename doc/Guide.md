@@ -96,20 +96,25 @@
   * mod.vue
 
     * mod 代码，自动需添加 base mod mixin
+    * 默认可以不写，在 index.js 使用基础 mod 即可
 
-  * mod.properties.js
+  * index.js
 
     * mod 默认数据，由基础组件数据组成，并附带自身的一些特殊属性
-
-  * mod.templates.js
-
-    * mod 模板文件，包含一组模板
-    * 注意：在模板中应用样式时，需调用 jssClass 方法
 
   * mod.styles.js
 
     * mod 样式文件，包含一组样式
-    * 多个样式可以共用一组模板
+    * 一个样式中可以包含 theme，以此来定义子组件的 wrapper div 的样式
+    * 子组件的 wrapper div 的命名范例为 mod-header-label
+
+* theme
+
+  > 全站样式，定义配色和字体
+
+  * 一个 theme 定义一种主色
+  * 一个主色下可以有多种配色
+  * 一个 theme 有多种 font (font 方案是否只要定义最小 font 即可，还是和 color 一样，是一组 font)
 
 ## 常用开发思路
 

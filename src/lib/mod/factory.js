@@ -1,4 +1,4 @@
-import properties from '@/components/adi/mod/mod.properties'
+import mods from '@/components/adi/mod'
 import _ from 'lodash'
 
 const uuid = () => {
@@ -15,7 +15,7 @@ const uuid = () => {
 }
 
 const generate = modName => {
-  let modProperties = _.cloneDeep(properties[modName])
+  let modProperties = _.cloneDeep(mods[modName].properties)
   modProperties.key = uuid()
   return modProperties
 }

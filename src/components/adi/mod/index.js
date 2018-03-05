@@ -1,5 +1,5 @@
-import AdiHeader from './web/header/Header'
+import ModHeader from './web/header'
 
 export default {
-  AdiHeader
+  ModHeader
 }
