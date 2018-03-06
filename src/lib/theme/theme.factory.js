@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import themeData from './theme.data'
 import jss from 'jss'
 import preset from 'jss-preset-default'
@@ -20,14 +21,24 @@ const buildColorClasses = colors => {
   return colorClasses
 }
 
-const generate = conf => {
-  let theme = themeData[conf.name]
-  let colors = theme.colors[conf.colorID]
-  let fonts = theme.fonts[conf.fontID]
+const buildBgColorClasses = bgColors => {
+  let bgColorClasses = {}
+  bgColors.forEach((el, index) => {
+    bgColorClasses['bg_color_' + index] = { 'background-color': el }
+  })
+  return bgColorClasses
+}
 
-  let themeClasses = Object.assign(
+const generate = conf => {
+  let theme = themeData[conf.name] || 'light'
+  let colors = theme.colors[conf.colorID || 0]
+  let fonts = theme.fonts[conf.fontID || 0]
+  let bgColors = theme.bgColors[conf.bgColorID || 0]
+
+  let themeClasses = _.assign(
     buildFontClasses(fonts),
-    buildColorClasses(colors)
+    buildColorClasses(colors),
+    buildBgColorClasses(bgColors)
   )
 
   return jss.createStyleSheet(themeClasses)

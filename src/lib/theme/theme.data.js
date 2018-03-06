@@ -11,6 +11,11 @@ const light = {
     [12, 14, 16, 18, 20, 24],
     [16, 18, 20, 24, 28, 36],
     [24, 26, 28, 32, 36, 42]
+  ],
+  bgColors: [
+    ['#fff', 'blue', 'green'],
+    ['#eee', 'green', 'red'],
+    ['#ddd', 'red', 'blue']
   ]
 }
 
@@ -19,14 +24,19 @@ const dark = {
   preview: '',
   mainColor: [0, 0, 0], // RGB
   colors: [
-    ['dark', 'blue', 'green'],
-    ['blue', 'green', 'dark'],
-    ['green', 'dark', 'blue']
+    ['#eee', 'green', 'red'],
+    ['#fff', 'blue', 'green'],
+    ['#ddd', 'red', 'blue']
   ],
   fonts: [
     [12, 14, 16, 18, 20, 24],
     [16, 18, 20, 24, 28, 36],
     [24, 26, 28, 32, 36, 42]
+  ],
+  bgColors: [
+    ['#eee', 'green', 'red'],
+    ['#fff', 'blue', 'green'],
+    ['#ddd', 'red', 'blue']
   ]
 }
 

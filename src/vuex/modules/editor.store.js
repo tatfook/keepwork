@@ -62,6 +62,9 @@ const actions = {
   changeThemeColor({ commit }, colorID) {
     commit('UPDATE_THEME_COLOR', colorID)
   },
+  changeThemeBgColor({ commit }, bgColorID) {
+    commit('UPDATE_THEME_BG_COLOR', bgColorID)
+  },
   changeThemeFont({ commit }, fontID) {
     commit('UPDATE_THEME_FONT', fontID)
   }
@@ -69,7 +72,7 @@ const actions = {
 
 const mutations = {
   ADD_MOD(state, { mod, key }) {
-    let index = 0
+    let index = -1
     if (key) index = state.modList.map(el => el.key).indexOf(key)
     state.modList.splice(index + 1, 0, mod)
   },
@@ -101,6 +104,9 @@ const mutations = {
   },
   UPDATE_THEME_COLOR(state, colorID) {
     Vue.set(state.theme, 'colorID', colorID)
+  },
+  UPDATE_THEME_BG_COLOR(state, bgColorID) {
+    Vue.set(state.theme, 'bgColorID', bgColorID)
   },
   UPDATE_THEME_FONT(state, fontID) {
     Vue.set(state.theme, 'fontID', fontID)

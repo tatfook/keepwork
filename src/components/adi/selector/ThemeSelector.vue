@@ -9,6 +9,9 @@
     <el-select :value='themeConf.fontID' placeholder='请选择字体' @change='changeThemeFont'>
       <el-option v-for='(t, index) in theme.fonts' :key='index' :label='index' :value='index' />
     </el-select>
+    <el-select :value='themeConf.bgColorID' placeholder='请选择背景配色' @change='changeThemeBgColor'>
+      <el-option v-for='(t, index) in theme.bgColors' :key='index' :label='index' :value='index' />
+    </el-select>
   </div>
 </template>
 
@@ -39,6 +42,9 @@ export default {
     },
     changeThemeColor(colorId) {
       this.$store.dispatch('changeThemeColor', colorId)
+    },
+    changeThemeBgColor(bgColorId) {
+      this.$store.dispatch('changeThemeBgColor', bgColorId)
     }
   }
 }

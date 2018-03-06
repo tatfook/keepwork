@@ -1,7 +1,7 @@
 const style1 = {
   data: {},
   theme: {
-    'mod-header-label': ['font_0', 'color_1']
+    'mod-header-label': ['font_0', 'color_1', 'bg_color_0']
   }
 }
 
@@ -17,7 +17,7 @@ const style2 = {
     }
   },
   theme: {
-    'mod-header-label': ['font_0', 'color_0']
+    'mod-header-label': ['font_0', 'color_0', 'bg_color_0']
   }
 }
 

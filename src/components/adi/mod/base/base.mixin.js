@@ -2,28 +2,23 @@ import _ from 'lodash'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
-import compFactory from '@/components/adi/common/comp.factory'
+import CompWrapper from './CompWrapper'
 
 jss.setup(preset())
 
-const compWrapper = (h, mod, comp, property) => {
-  let onEditProperty = e => {
-    e.stopPropagation()
-    mod.onEditProperty(property)
-  }
+const renderTemplate = (h, m) => {
+  let components = m.conf.properties.components
   return (
-    <div onClick={onEditProperty} class={mod.compWrapperClass(property)}>
-      {mod.isChildHidden(property) ? '' : compFactory.create(h, mod, property)}
-    </div>
-  )
-}
-
-const renderTemplate = (h, conf, mod) => {
-  let components = conf.properties.components
-  return (
-    <div class={_.kebabCase(conf.name)}>
-      {_.map(components, (el, key) => {
-        return compWrapper(h, mod, el, key)
+    <div class={_.kebabCase(m.conf.name)}>
+      {_.map(components, (_, key) => {
+        return (
+          <CompWrapper
+            mod={m.mod}
+            property={key}
+            classes={m.compWrapperClass(key)}
+            editMode={m.editMode}
+          />
+        )
       })}
     </div>
   )
@@ -41,26 +36,11 @@ export default {
     this.style = this.conf.styles[this.mod.styleID]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
-    return renderTemplate(h, this.conf, this)
+    return renderTemplate(h, this)
   },
   methods: {
-    onEditProperty(property) {
-      this.$store.dispatch('setActiveProperty', {
-        mod: this.mod,
-        property: property
-      })
-    },
     isChildActive(property) {
       return this.mod.isActive && property === this.activeProperty
-    },
-    isChildHidden(property) {
-      return !!this.mod.components[property].hidden
-    },
-    childData(property) {
-      return this.mod.components[property].data
-    },
-    childComponentType(property) {
-      return this.mod.components[property].type
     },
     jssClass(name) {
       return this.sheet.classes[name]

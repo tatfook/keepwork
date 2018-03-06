@@ -100,13 +100,20 @@
 
   * index.js
 
-    * mod 默认数据，由基础组件数据组成，并附带自身的一些特殊属性
+    * 默认请引用 base mod
+    * 定义一组引用的 basic components，并使用代码自动生成 properties
 
   * mod.styles.js
 
     * mod 样式文件，包含一组样式
-    * 一个样式中可以包含 theme，以此来定义子组件的 wrapper div 的样式
+    * data 为此样式的 css
+    * theme 为 wrapper div 的 theme 样式，比如 color_1, color_2, font_1, font_2 等
     * 子组件的 wrapper div 的命名范例为 mod-header-label
+
+  * mod/base
+
+    * Base.vue 会自动做基础数据渲染
+    * ModWrapper 会自动为 basic component 做封装，Mod 会把样式加在此 component 上
 
 * theme
 
