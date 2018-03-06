@@ -30,9 +30,7 @@ const dark = {
   ]
 }
 
-export const themes = {
+export default {
   light,
   dark
 }
-
-export default themes

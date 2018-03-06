@@ -1,6 +1,4 @@
-const properties = {
+export default {
   text: 'KeepWork',
   link: '#'
 }
-
-export default properties

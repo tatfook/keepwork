@@ -1,6 +1,4 @@
-const properties = {
+export default {
   src: '',
   link: '#'
 }
-
-export default properties

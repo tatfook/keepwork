@@ -1,4 +1,4 @@
-const testData = {
+export default {
   modList: [
     {
       key: 'abcd',
@@ -73,5 +73,3 @@ const testData = {
   },
   layout: {}
 }
-
-export default testData

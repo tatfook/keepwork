@@ -29,7 +29,7 @@ const renderTemplate = (h, conf, mod) => {
   )
 }
 
-const modBaseMixin = {
+export default {
   props: {
     mod: Object,
     conf: Object,
@@ -85,5 +85,3 @@ const modBaseMixin = {
     })
   }
 }
-
-export default modBaseMixin

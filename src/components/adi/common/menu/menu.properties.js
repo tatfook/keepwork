@@ -1,4 +1,4 @@
-const properties = {
+export default {
   mode: 'horizontal',
   backgroundColor: '',
   textColor: '',
@@ -10,5 +10,3 @@ const properties = {
     }
   ]
 }
-
-export default properties
