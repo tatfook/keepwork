@@ -1,28 +1,27 @@
 <template>
   <div>
-    <template v-for='mod in source.modList'>
+    <template v-for='mod in modList'>
       <mod-loader :mod='mod' :theme='theme' :key='mod.key'> </mod-loader>
     </template>
   </div>
 </template>
 
 <script>
-import testData from './testData'
+import { mapGetters } from 'vuex'
 import ModLoader from './ModLoader'
 import themeFactory from '@/lib/theme/theme.factory'
 
 export default {
-  data() {
-    return {
-      source: testData
-    }
-  },
   components: {
     ModLoader
   },
   computed: {
+    ...mapGetters({
+      modList: 'modList',
+      themeConf: 'themeConf'
+    }),
     theme() {
-      let newTheme = themeFactory.generate(this.source.theme)
+      let newTheme = themeFactory.generate(this.themeConf)
       if (this.storedTheme === newTheme) return this.storedTheme
       if (this.storedTheme) this.storedTheme.detach()
       this.storedTheme = newTheme

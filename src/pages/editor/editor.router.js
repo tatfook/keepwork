@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const Editor = () => import('@/pages/editor/Editor')
-const PageViewer = () => import('@/pages/viewer/MdPageViewer')
+const Editor = () => import('@/components/editor/Editor')
+const PageViewer = () => import('@/components/viewer/MdPageViewer')
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/preview',
       name: 'PageViewer',
       component: PageViewer
     },

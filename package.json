@@ -13,6 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "element-ui": "^2.2.0",
     "jss": "^9.8.0",
     "jss-preset-default": "^4.3.0",
@@ -87,7 +88,8 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "glob": "^7.0.3"
   },
   "engines": {
     "node": ">= 6.0.0",

@@ -40,7 +40,9 @@ export default {
   },
   methods: {
     isChildActive(property) {
-      return this.mod.isActive && property === this.activeProperty
+      return (
+        this.editMode && this.mod.isActive && property === this.activeProperty
+      )
     },
     jssClass(name) {
       return this.sheet.classes[name]

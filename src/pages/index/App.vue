@@ -5,7 +5,7 @@
         <a href='/'> Home </a>
       </el-menu-item>
       <el-menu-item index='2'>
-        <a href='/editor'> Editor </a>
+        <a href='/editor.html'> Editor </a>
       </el-menu-item>
     </el-menu>
     <router-view/>

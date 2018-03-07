@@ -1,5 +1,8 @@
-import modFactory from '@/lib/mod/factory'
 import Vue from 'vue'
+import Vuex from 'vuex'
+import modFactory from '@/lib/mod/factory'
+
+Vue.use(Vuex)
 
 const state = {
   activePage: '',
@@ -113,9 +116,9 @@ const mutations = {
   }
 }
 
-export default {
+export default new Vuex.Store({
   state,
   getters,
   actions,
   mutations
-}
+})

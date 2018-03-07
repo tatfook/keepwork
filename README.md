@@ -2,7 +2,7 @@
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
@@ -15,3 +15,5 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+
+> /editor.html 跳转至 html 页面
