@@ -22,6 +22,7 @@ const state = {
 }
 
 const getters = {
+  activePage: state => state.activePage,
   themeConf: state => state.theme,
   modList: state => state.modList,
   activeMod: state => state.activeMod,
@@ -31,6 +32,10 @@ const getters = {
 }
 
 const actions = {
+  setActivePage({ commit }, path) {
+    commit('SET_ACTIVE_PAGE', path)
+    // TODO load page data via api service
+  },
   addMod({ commit }, params) {
     const mod = modFactory.generate(params.modName)
     commit('ADD_MOD', {
@@ -74,6 +79,9 @@ const actions = {
 }
 
 const mutations = {
+  SET_ACTIVE_PAGE(state, path) {
+    Vue.set(state, 'activePage', path)
+  },
   ADD_MOD(state, { mod, key }) {
     let index = -1
     if (key) index = state.modList.map(el => el.key).indexOf(key)
