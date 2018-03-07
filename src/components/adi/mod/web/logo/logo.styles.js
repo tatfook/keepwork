@@ -1,5 +1,10 @@
 const style1 = {
-  data: {},
+  data: {
+    'mod-logo': {
+      'max-width': '800px',
+      margin: 'auto'
+    }
+  },
   theme: {
     'mod-log-label1': ['font_5', 'color_1'],
     'mod-log-label2': ['font_0', 'color_1']
@@ -8,6 +13,10 @@ const style1 = {
 
 const style2 = {
   data: {
+    'mod-logo': {
+      'max-width': '800px',
+      margin: 'auto'
+    },
     'mod-header-menu': {
       margin: '50px 0'
     },
@@ -25,6 +34,10 @@ const style2 = {
 
 const style3 = {
   data: {
+    'mod-logo': {
+      'max-width': '800px',
+      margin: 'auto'
+    },
     'mod-header-menu': {
       margin: '20px 0'
     },

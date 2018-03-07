@@ -29,6 +29,10 @@ const style3 = {
     'mod-header-media': {
       width: '40%',
       'min-width': '30px'
+    },
+    'mod-header-label': {
+      width: '60%',
+      'min-width': '80px'
     }
   },
   theme: {

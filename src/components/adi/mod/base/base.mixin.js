@@ -9,7 +9,7 @@ jss.setup(preset())
 const renderTemplate = (h, m) => {
   let components = m.conf.properties.components
   return (
-    <div class={_.kebabCase(m.conf.name)}>
+    <div class={m.modClasses()}>
       {_.map(components, (_, key) => {
         return (
           <CompWrapper
@@ -52,6 +52,15 @@ export default {
       let classes = []
       let name = _.kebabCase(this.conf.name) + '-' + property
       if (this.isChildActive(property)) classes.push('comp-active')
+      if (this.jssClass(name)) classes.push(this.jssClass(name))
+      if (this.style.theme && this.style.theme[name]) {
+        this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
+      }
+      return classes
+    },
+    modClasses() {
+      let classes = []
+      let name = _.kebabCase(this.conf.name)
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
