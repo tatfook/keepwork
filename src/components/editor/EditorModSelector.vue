@@ -31,10 +31,7 @@ export default {
   },
   methods: {
     newMod() {
-      this.$store.dispatch('addMod', {
-        modName: 'ModHeader',
-        preModKey: this.mod.key
-      })
+      this.$emit('onAddMod', this.mod.key)
     },
     setActive() {
       this.$store.dispatch('setActiveMod', this.mod)

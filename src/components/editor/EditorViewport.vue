@@ -2,11 +2,9 @@
   <div class='viewport-container'>
     <el-button @click='openModSelector'> + </el-button>
     <template v-for='mod in modList'>
-      <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme'></editor-mod-selector>
+      <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
     </template>
-    <el-dialog
-      :visible.sync='dialogVisible'
-    >
+    <el-dialog :visible.sync='dialogVisible'>
       <div v-for='mod in mods' :key='mod.name' @click='newMod(mod.name)'>
         {{mod.name}}
       </div>
@@ -25,7 +23,8 @@ export default {
   data() {
     return {
       mods,
-      dialogVisible: false
+      dialogVisible: false,
+      selectedModKey: null
     }
   },
   components: {
@@ -47,11 +46,17 @@ export default {
   },
   methods: {
     newMod(name) {
-      this.$store.dispatch('addMod', { modName: name })
+      console.log(this.selectedModKey)
+      this.$store.dispatch('addMod', {
+        modName: name,
+        preModKey: this.selectedModKey
+      })
       this.dialogVisible = false
+      this.selectedModKey = null
     },
-    openModSelector() {
+    openModSelector(key) {
       this.dialogVisible = true
+      this.selectedModKey = key
     }
   }
 }
