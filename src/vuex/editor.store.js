@@ -66,6 +66,7 @@ const actions = {
     commit('UPDATE_THEME_NAME', themeName)
     commit('UPDATE_THEME_COLOR', 0)
     commit('UPDATE_THEME_FONT', 0)
+    commit('UPDATE_THEME_BG_COLOR', 0)
   },
   changeThemeColor({ commit }, colorID) {
     commit('UPDATE_THEME_COLOR', colorID)

@@ -1,9 +1,16 @@
 <template>
   <div class='viewport-container'>
-    <el-button @click='newMod'> + </el-button>
+    <el-button @click='openModSelector'> + </el-button>
     <template v-for='mod in modList'>
       <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme'></editor-mod-selector>
     </template>
+    <el-dialog
+      :visible.sync='dialogVisible'
+    >
+      <div v-for='mod in mods' :key='mod.name' @click='newMod(mod.name)'>
+        {{mod.name}}
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -11,9 +18,16 @@
 import { mapGetters, mapActions } from 'vuex'
 import EditorModSelector from './EditorModSelector'
 import themeFactory from '@/lib/theme/theme.factory'
+import mods from '@/components/adi/mod'
 
 export default {
   name: 'EditorViewport',
+  data() {
+    return {
+      mods,
+      dialogVisible: false
+    }
+  },
   components: {
     EditorModSelector
   },
@@ -32,8 +46,12 @@ export default {
     }
   },
   methods: {
-    newMod() {
-      this.$store.dispatch('addMod', { modName: 'ModHeader' })
+    newMod(name) {
+      this.$store.dispatch('addMod', { modName: name })
+      this.dialogVisible = false
+    },
+    openModSelector() {
+      this.dialogVisible = true
     }
   }
 }
