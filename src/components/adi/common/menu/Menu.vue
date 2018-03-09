@@ -1,11 +1,10 @@
 <template>
   <div class='comp-menu'>
-    <el-menu :mode='mode' :background-color='backgroundColor' :text-color='textColor' :active-text-color='activeTextColor'>
-      <el-menu-item v-for='menuData in source.data' :key='menuData.title' :index='menuData.title'>
+    <el-menu :mode='mode'>
+      <el-menu-item v-for='menuData in data' :key='menuData.title' :index='menuData.title'>
         {{menuData.title}}
       </el-menu-item>
     </el-menu>
-    <div class="test" :class='options.bgColor1'>{{ source.title }}</div>
   </div>
 </template>
 
@@ -17,16 +16,10 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     mode() {
-      return this.source.mode
+      return this.options.mode
     },
-    backgroundColor() {
-      return this.source.backgroundColor
-    },
-    textColor() {
-      return this.source.textColor
-    },
-    activeTextColor() {
-      return this.source.activeTextColor
+    data() {
+      return JSON.parse(this.source.data)
     }
   }
 }

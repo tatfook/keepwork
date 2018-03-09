@@ -23,9 +23,9 @@ export default {
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)
       if (this.storedTheme === newTheme) return this.storedTheme
-      if (this.storedTheme) this.storedTheme.detach()
+      if (this.storedTheme) this.storedTheme.sheet.detach()
       this.storedTheme = newTheme
-      this.storedTheme.attach()
+      this.storedTheme.sheet.attach()
       return this.storedTheme
     }
   }

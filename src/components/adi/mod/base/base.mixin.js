@@ -5,15 +5,13 @@ import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
 
 jss.setup(preset())
-let times = 0
+
 const renderTemplate = (h, m) => {
   let components = m.conf.properties.components
 
   return (
     <div class={m.modClasses()}>
       {_.map(components, (_, key) => {
-        times = times + 1
-        console.log(times)
         return (
           <CompWrapper
             mod={m.mod}
@@ -52,7 +50,10 @@ export default {
       return this.sheet.classes[name]
     },
     themeClass(name) {
-      if (this.theme) return this.theme.classes[name]
+      if (this.theme) return this.theme.sheet.classes[name]
+    },
+    themeData(name) {
+      if (this.theme) return this.theme.data[name]
     },
     compWrapperClass(name) {
       let classes = []
@@ -74,12 +75,18 @@ export default {
     },
     compWrapperOptions(name) {
       let options = {}
-      if (this.style.options && this.style.options[name]) {
-        _.forEach(this.style.options[name], (op, key) => {
-          options[key] = this.themeClass(op)
-        })
+
+      if (this.style.options) {
+        if (this.style.options.config[name]) {
+          options = _.cloneDeep(this.style.options.config[name])
+        }
+        if (this.style.options.theme[name]) {
+          _.forEach(this.style.options.theme[name], (op, key) => {
+            // 如果定义了相同的theme key，则之前的配置会被覆盖
+            options[key] = this.themeData(op)
+          })
+        }
       }
-      console.log(options)
       return options
     }
   },

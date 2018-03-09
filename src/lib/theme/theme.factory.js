@@ -7,7 +7,7 @@ jss.setup(preset())
 
 const buildFontClasses = fonts => {
   let fontClasses = {}
-  fonts.forEach((el, index) => {
+  _.forEach(fonts, (el, index) => {
     fontClasses['font_' + index] = { 'font-size': el + 'px' }
   })
   return fontClasses
@@ -15,7 +15,7 @@ const buildFontClasses = fonts => {
 
 const buildColorClasses = colors => {
   let colorClasses = {}
-  colors.forEach((el, index) => {
+  _.forEach(colors, (el, index) => {
     colorClasses['color_' + index] = { color: el }
   })
   return colorClasses
@@ -23,17 +23,28 @@ const buildColorClasses = colors => {
 
 const buildBgColorClasses = bgColors => {
   let bgColorClasses = {}
-  bgColors.forEach((el, index) => {
+  _.forEach(bgColors, (el, index) => {
     bgColorClasses['bg_color_' + index] = { 'background-color': el }
   })
   return bgColorClasses
+}
+
+const buildOrigin = themeClasses => {
+  let originData = {}
+  _.forEach(themeClasses, (el, key) => {
+    originData[key] = _.map(el, ele => {
+      return ele
+    })[0]
+  })
+  return originData
 }
 
 const generate = conf => {
   let theme = themeData[conf.name] || 'light'
   let colors = theme.colors[conf.colorID || 0]
   let fonts = theme.fonts[conf.fontID || 0]
-  let bgColors = theme.bgColors[conf.bgColorID || 0]
+  let themeBgColors = theme.bgColors || theme.colors
+  let bgColors = themeBgColors[conf.bgColorID || 0]
 
   let themeClasses = _.assign(
     buildFontClasses(fonts),
@@ -41,7 +52,10 @@ const generate = conf => {
     buildBgColorClasses(bgColors)
   )
 
-  return jss.createStyleSheet(themeClasses)
+  let data = buildOrigin(themeClasses)
+  let sheet = jss.createStyleSheet(themeClasses)
+
+  return { data, sheet }
 }
 
 export default {

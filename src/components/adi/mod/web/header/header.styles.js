@@ -1,10 +1,26 @@
+const childDataOption1 = {
+  // 子组件配置参数
+  menu: {
+    mode: 'horizontal'
+  }
+}
+
+const optionTheme1 = {
+  // 子组件的style参数
+  menu: {
+    bgColor1: 'bg_color_1'
+  }
+}
+
 export default [
   // style1
   {
     data: {
+      // 定义mod根div的样式
       root: {
         margin: '30px'
       },
+      // 定义子组件menu的wrapper样式
       menu: {
         padding: '10px'
       }
@@ -13,9 +29,8 @@ export default [
       root: ['font_0', 'color_1', 'bg_color_0']
     },
     options: {
-      menu: {
-        bgColor1: 'bg_color_1'
-      }
+      theme: optionTheme1,
+      config: childDataOption1
     }
   },
   // style2
@@ -34,9 +49,8 @@ export default [
       'mod-header-label': ['font_0', 'color_0', 'bg_color_0']
     },
     options: {
-      menu: {
-        bgColor1: 'bg_color_0'
-      }
+      theme: optionTheme1,
+      config: childDataOption1
     }
   },
   // style3
