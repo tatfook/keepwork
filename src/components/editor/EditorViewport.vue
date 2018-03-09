@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     newMod(name) {
-      console.log(this.selectedModKey)
       this.$store.dispatch('addMod', {
         modName: name,
         preModKey: this.selectedModKey
@@ -58,6 +57,11 @@ export default {
       this.dialogVisible = true
       this.selectedModKey = key
     }
+  },
+  created: function() {
+    this.$watch('modList', () => {
+      console.log(this.modList)
+    })
   }
 }
 </script>

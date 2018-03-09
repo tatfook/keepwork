@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'mod-active': mod.isActive }" @click='setActive'>
     <div class='mod'>
-      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true'> </component>
+      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true'></component>
     </div>
     <div class='operator' v-if='mod.isActive'>
       <el-button @click.stop.prevent='newMod'> + </el-button>

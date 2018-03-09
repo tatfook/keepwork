@@ -4,6 +4,7 @@ export default {
       type: Object,
       required: true
     },
+    options: Object,
     editorMode: {
       type: Boolean,
       default: false

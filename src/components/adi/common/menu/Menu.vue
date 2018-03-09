@@ -5,6 +5,7 @@
         {{menuData.title}}
       </el-menu-item>
     </el-menu>
+    <div class="test" :class='options.bgColor1'>{{ source.title }}</div>
   </div>
 </template>
 
@@ -30,3 +31,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.test {
+  width: 100px;
+  height: 100px;
+}
+
+.el-menu {
+}
+
+.el-menu--horizontal {
+  border-right: 10px;
+}
+</style>
