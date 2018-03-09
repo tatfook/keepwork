@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
+import mdParser from '@/lib/mod/mdParser/mdParser'
 
 Vue.use(Vuex)
 
 const state = {
   activePage: '',
+  code: '',
   modList: [],
   activeMod: null,
   activeProperty: null,
@@ -23,6 +26,7 @@ const state = {
 
 const getters = {
   activePage: state => state.activePage,
+  code: state => state.code,
   themeConf: state => state.theme,
   modList: state => state.modList,
   activeMod: state => state.activeMod,
@@ -36,6 +40,13 @@ const actions = {
     commit('SET_ACTIVE_PAGE', path)
     // TODO load page data via api service
   },
+  updateMarkDown({ commit }, code) {
+    commit('UPDATE_CODE', code)
+    commit('SET_ACTIVE_MOD', null)
+    commit('SET_ACTIVE_PROPERTY', null)
+    const data = mdParser.mdToJson(code)
+    commit('UPDATE_MODS', data)
+  },
   addMod({ commit }, params) {
     const mod = modFactory.generate(params.modName)
     commit('ADD_MOD', {
@@ -43,6 +54,8 @@ const actions = {
       key: params.preModKey
     })
     commit('SET_ACTIVE_MOD', mod)
+    const md = mdParser.jsonToMd(state.modList)
+    commit('UPDATE_CODE', md)
   },
   setActiveMod({ commit }, mod) {
     commit('SET_ACTIVE_MOD', mod)
@@ -58,6 +71,8 @@ const actions = {
       commit('SET_ACTIVE_MOD', null)
       commit('SET_ACTIVE_PROPERTY', null)
     }
+    const md = mdParser.jsonToMd(state.modList)
+    commit('UPDATE_CODE', md)
   },
   updateActiveModStyle({ commit }, styleID) {
     commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
@@ -82,6 +97,9 @@ const actions = {
 const mutations = {
   SET_ACTIVE_PAGE(state, path) {
     Vue.set(state, 'activePage', path)
+  },
+  UPDATE_CODE(state, code) {
+    Vue.set(state, 'code', code)
   },
   ADD_MOD(state, { mod, key }) {
     let index = -1
@@ -109,6 +127,21 @@ const mutations = {
     Vue.set(state.activeMod, 'styleID', styleID)
   },
   UPDATE_MODS(state, mods) {
+    _.forEach(mods, (el, newIndex) => {
+      let oldIndex = _.indexOf(
+        _.map(state.modList, el => {
+          return el.key
+        }),
+        el.key
+      )
+
+      if (oldIndex) {
+        // oldIndex will always >= newIndex
+        if (oldIndex > newIndex) {
+          state.modList.splice(newIndex, oldIndex - newIndex - 1)
+        }
+      }
+    })
     Vue.set(state, 'modList', mods)
   },
   UPDATE_THEME_NAME(state, themeName) {
