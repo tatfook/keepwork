@@ -1,17 +1,3 @@
-const childDataOption1 = {
-  // 子组件配置参数
-  menu: {
-    mode: 'horizontal'
-  }
-}
-
-const optionTheme1 = {
-  // 子组件的style参数
-  menu: {
-    bgColor1: 'bg_color_1'
-  }
-}
-
 export default [
   // style1
   {
@@ -22,15 +8,25 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        padding: '10px'
+        width: '100%'
       }
     },
     theme: {
-      root: ['font_0', 'color_1', 'bg_color_0']
+      root: ['font_0', 'color_1']
     },
     options: {
-      theme: optionTheme1,
-      config: childDataOption1
+      theme: {
+        // 子组件的style参数
+        menu: {
+          bgColor1: 'bg_color_1'
+        }
+      },
+      config: {
+        // 子组件配置参数
+        menu: {
+          mode: 'horizontal'
+        }
+      }
     }
   },
   // style2
@@ -46,11 +42,11 @@ export default [
       }
     },
     theme: {
-      'mod-header-label': ['font_0', 'color_0', 'bg_color_0']
+      'mod-header-label': ['font_0', 'color_0']
     },
     options: {
-      theme: optionTheme1,
-      config: childDataOption1
+      // theme: optionTheme1,
+      // config: childDataOption1
     }
   },
   // style3

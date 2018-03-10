@@ -40,11 +40,11 @@ const buildOrigin = themeClasses => {
 }
 
 const generate = conf => {
-  let theme = themeData[conf.name] || 'light'
+  let theme = themeData[conf.name] || 'classic'
   let colors = theme.colors[conf.colorID || 0]
   let fonts = theme.fonts[conf.fontID || 0]
   let themeBgColors = theme.bgColors || theme.colors
-  let bgColors = themeBgColors[conf.bgColorID || 0]
+  let bgColors = themeBgColors[conf.colorID || 0]
 
   let themeClasses = _.assign(
     buildFontClasses(fonts),

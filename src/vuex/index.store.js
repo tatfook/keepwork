@@ -11,7 +11,7 @@ const state = {
   //   siderbar: {}
   // },
   theme: {
-    name: 'light',
+    name: 'classic',
     colorID: 0,
     fontID: 0
   }

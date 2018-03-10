@@ -21,14 +21,15 @@ export default {
     data() {
       return JSON.parse(this.source.data)
     }
+  },
+  created: function() {
+    console.log(this.mod)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.test {
-  width: 100px;
-  height: 100px;
+.el-menu--horizontal > .el-menu-item {
 }
 
 .el-menu {
