@@ -7,15 +7,17 @@ import CompWrapper from './CompWrapper'
 jss.setup(preset())
 
 const renderTemplate = (h, m) => {
-  let components = m.conf.properties.components
+  let components = m.conf.components
 
   return (
     <div class={m.modClasses()}>
-      {_.map(components, (_, key) => {
+      {_.map(components, (compType, key) => {
         return (
           <CompWrapper
             mod={m.mod}
+            source={m.compSource(key)}
             property={key}
+            compType={compType}
             classes={m.compWrapperClass(key)}
             editMode={m.editMode}
             options={m.compWrapperOptions(key)}
@@ -54,6 +56,10 @@ export default {
     },
     themeData(name) {
       if (this.theme) return this.theme.data[name]
+    },
+    compSource(name) {
+      // use default data if column was deleted by user
+      return _.merge(_.cloneDeep(this.conf.properties), this.mod[name])
     },
     compWrapperClass(name) {
       let classes = []

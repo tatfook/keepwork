@@ -12,4 +12,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, properties, styles }
+export default { mod, name, components, properties, styles }

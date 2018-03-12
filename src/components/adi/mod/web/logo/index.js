@@ -6,10 +6,10 @@ const name = 'ModLogo'
 
 const components = {
   media: 'AdiMedia',
-  label1: 'AdiLabel',
-  label2: 'AdiLabel'
+  labelA: 'AdiLabel',
+  labelB: 'AdiLabel'
 }
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, properties, styles }
+export default { mod, name, components, properties, styles }
