@@ -23,6 +23,11 @@ export default [
         top: '20px',
         left: '143px'
       },
+      tagline: {
+        position: 'absolute',
+        top: '55px',
+        left: '143px'
+      },
       // 定义子组件menu的wrapper样式
       menu: {
         width: '100%',
@@ -33,8 +38,7 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
-      businessName: ['font_24']
+      root: ['font_0', 'color_7']
     },
     options: {
       theme: {
@@ -46,6 +50,10 @@ export default [
         businessName: {
           fontSize: 'font_5',
           fontColor: 'color_3'
+        },
+        tagline: {
+          fontSize: 'font_2',
+          fontColor: 'color_2'
         }
       },
       config: {
