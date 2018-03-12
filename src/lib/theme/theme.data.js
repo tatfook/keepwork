@@ -5,8 +5,8 @@ export default {
     mainColor: [255, 255, 255], // RGB
     colors: [
       ['#327abf', 'blue', 'green', 'blue', 'blue', 'blue', 'blue', '#fff'],
-      ['blue', 'green', 'red'],
-      ['green', 'red', 'blue']
+      ['blue', 'green', 'red', 'red'],
+      ['green', 'red', 'blue', 'yellow']
     ],
     fonts: [
       [12, 14, 16, 18, 20, 24],

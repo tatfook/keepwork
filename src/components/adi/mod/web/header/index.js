@@ -6,6 +6,7 @@ const name = 'ModHeader'
 
 const components = {
   logo: 'AdiLogo',
+  businessName: 'AdiBusinessName',
   menu: 'AdiMenu'
 }
 
