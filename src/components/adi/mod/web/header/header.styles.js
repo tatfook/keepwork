@@ -4,12 +4,28 @@ export default [
     data: {
       // 定义mod根div的样式
       root: {
-        // margin: '30px'
+        height: '203px',
+        position: 'relative'
       },
+      logo: {
+        height: '87px',
+        width: '87px',
+        'padding-left': '28px',
+        'padding-right': '28px',
+        'padding-top': '30px',
+        'padding-bottom': '30px',
+        position: 'absolute',
+        top: 0,
+        left: 0
+      },
+
       // 定义子组件menu的wrapper样式
       menu: {
         width: '100%',
-        height: '50px'
+        height: '50px',
+        position: 'absolute',
+        top: '153px',
+        left: 0
       }
     },
     theme: {

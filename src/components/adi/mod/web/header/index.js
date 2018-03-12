@@ -5,9 +5,8 @@ import styles from './header.styles'
 const name = 'ModHeader'
 
 const components = {
+  logo: 'AdiLogo',
   menu: 'AdiMenu'
-  // label: 'AdiLabel',
-  // media: 'AdiMedia'
 }
 
 const properties = generateProperties(name, components)
