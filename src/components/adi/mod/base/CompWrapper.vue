@@ -13,7 +13,7 @@ import BasicComponents from '@/components/adi/common/'
 export default {
   props: {
     mod: Object,
-    source: Object,
+    modData: Object,
     property: String,
     compType: String,
     classes: Array,
@@ -33,7 +33,10 @@ export default {
       return BasicComponents[this.compType]
     },
     isDisplay() {
-      return !this.mod[this.property].hidden
+      return !this.modData[this.property].hidden
+    },
+    source() {
+      return this.modData[this.property]
     }
   }
 }

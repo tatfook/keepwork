@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
-import mdParser from '@/lib/mod/mdParser/mdParser'
+import Parser from '@/lib/mod/parser'
 
 Vue.use(Vuex)
 
@@ -41,21 +41,22 @@ const actions = {
     // TODO load page data via api service
   },
   updateMarkDown({ commit }, code) {
-    commit('UPDATE_CODE', code)
-    commit('SET_ACTIVE_MOD', null)
-    commit('SET_ACTIVE_PROPERTY', null)
-    const data = mdParser.mdToJson(code)
-    commit('UPDATE_MODS', data)
+    let blockList = Parser.buildBlockList(code)
+
+    // commit('UPDATE_CODE', code)
+    // commit('SET_ACTIVE_MOD', null)
+    // commit('SET_ACTIVE_PROPERTY', null)
+    commit('UPDATE_MODS', blockList)
   },
   addMod({ commit }, params) {
-    const mod = modFactory.generate(params.modName)
-    commit('ADD_MOD', {
-      mod: mod,
-      key: params.preModKey
+    const modProperties = modFactory.generate(params.modName)
+    const mod = commit('ADD_MOD', {
+      modProperties: modProperties,
+      key: params.preModKey,
+      cmd: Parser.getCmd(params.modName)
     })
     commit('SET_ACTIVE_MOD', mod)
-    const md = mdParser.jsonToMd(state.modList)
-    commit('UPDATE_CODE', md)
+    commit('UPDATE_CODE', Parser.buildMarkdown(state.modList))
   },
   setActiveMod({ commit }, mod) {
     commit('SET_ACTIVE_MOD', mod)
@@ -71,8 +72,6 @@ const actions = {
       commit('SET_ACTIVE_MOD', null)
       commit('SET_ACTIVE_PROPERTY', null)
     }
-    const md = mdParser.jsonToMd(state.modList)
-    commit('UPDATE_CODE', md)
   },
   updateActiveModStyle({ commit }, styleID) {
     commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
@@ -101,10 +100,8 @@ const mutations = {
   UPDATE_CODE(state, code) {
     Vue.set(state, 'code', code)
   },
-  ADD_MOD(state, { mod, key }) {
-    let index = -1
-    if (key) index = state.modList.map(el => el.key).indexOf(key)
-    state.modList.splice(index + 1, 0, mod)
+  ADD_MOD(state, { modProperties, key, cmd }) {
+    return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
   },
   DELETE_MOD(state, mod) {
     let index = state.modList.map(el => el.key).indexOf(mod.key)
@@ -112,8 +109,6 @@ const mutations = {
   },
   SET_ACTIVE_MOD(state, mod) {
     if (state.activeMod === mod) return
-    if (state.activeMod) Vue.set(state.activeMod, 'isActive', false)
-    if (mod) Vue.set(mod, 'isActive', true)
     Vue.set(state, 'activeMod', mod)
   },
   SET_ACTIVE_PROPERTY(state, property) {
@@ -134,15 +129,18 @@ const mutations = {
         }),
         el.key
       )
-
-      if (oldIndex) {
+      if (oldIndex >= 0) {
         // oldIndex will always >= newIndex
-        if (oldIndex > newIndex) {
-          state.modList.splice(newIndex, oldIndex - newIndex - 1)
-        }
+        state.modList.splice(newIndex, oldIndex - newIndex)
+        // console.log(state.modList[newIndex])
+        // console.log(el)
+        // Vue.set(state.modList, newIndex, _.deepClone(el))
+        // _.merge(state.modList[newIndex], el)
       }
+      state.modList.splice(newIndex, 0, el) // remove and insert new one
     })
-    Vue.set(state, 'modList', mods)
+    state.modList.splice(mods.length, state.modList.length - mods.length)
+    // Vue.set(state, 'modList', mods)
   },
   UPDATE_THEME_NAME(state, themeName) {
     Vue.set(state.theme, 'name', themeName)

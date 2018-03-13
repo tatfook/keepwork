@@ -1,7 +1,8 @@
 <template>
   <div :class="{ 'mod-active': isActive }" @click='setActive'>
     <div class='mod'>
-      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true'></component>
+      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
+      <span v-if='invalid'> 错误的Mod指令 </span>
     </div>
     <div class='operator' v-if='isActive'>
       <el-button @click.stop.prevent='newMod'> + </el-button>
@@ -27,13 +28,16 @@ export default {
       activeMod: 'activeMod'
     }),
     modComponent() {
-      return mods[this.mod.type].mod
+      if (this.modConf) return this.modConf.mod
     },
     modConf() {
-      return mods[this.mod.type]
+      return mods[this.mod.modType]
     },
     isActive() {
       return this.activeMod && this.mod.key === this.activeMod.key
+    },
+    invalid() {
+      return !this.modConf
     }
   },
   methods: {

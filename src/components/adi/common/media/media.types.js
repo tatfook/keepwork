@@ -5,11 +5,15 @@ export const imageTypes = ['.png', '.jpg', '.jpeg', '.svg']
 export const videoTypes = ['.mp4']
 
 export const isVideo = src => {
-  return videoTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+  return (
+    src && videoTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+  )
 }
 
 export const isImage = src => {
-  return imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+  return (
+    src && imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+  )
 }
 
 export default {

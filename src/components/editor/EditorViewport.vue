@@ -1,8 +1,8 @@
 <template>
   <div class='viewport-container'>
     <el-button @click='openModSelector'> + </el-button>
-    <template v-for='mod in modList'>
-      <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
+    <template v-for='(mod, index) in modList'>
+      <editor-mod-selector :key='index' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
     </template>
     <el-dialog :visible.sync='dialogVisible'>
       <div v-for='mod in mods' :key='mod.name' @click='newMod(mod.name)'>

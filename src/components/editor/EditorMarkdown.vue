@@ -1,6 +1,6 @@
 <template>
   <div class='kp-md-editor'>
-    <codemirror :options='options' :value='code' @change='updateMarkdown' />
+    <codemirror ref='mdEditor' :options='options' :value='code' @change='updateMarkdown' />
   </div>
 </template>
 
@@ -8,6 +8,9 @@
 import { mapGetters } from 'vuex'
 import { codemirror } from 'vue-codemirror-lite'
 import 'codemirror/mode/markdown/markdown'
+import 'codemirror/addon/hint/show-hint.js'
+import 'codemirror/addon/hint/show-hint.css'
+import 'codemirror/addon/hint/javascript-hint.js'
 
 export default {
   name: 'EditorMarkdown',
@@ -22,6 +25,9 @@ export default {
       return {
         mode: 'markdown'
       }
+    },
+    editor() {
+      return this.$refs.mdEditor.editor
     }
   },
   methods: {

@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     styles() {
-      return mods[this.mod.type].styles
+      return mods[this.mod.modType].styles
     }
   },
   methods: {
@@ -23,7 +23,8 @@ export default {
       this.$store.dispatch('updateActiveModStyle', styleID)
     },
     isActive(styleID) {
-      return this.mod.styleID == styleID
+      let curStyle = this.mod.data.styleID || 0
+      return curStyle === styleID
     }
   }
 }
