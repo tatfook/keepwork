@@ -10,5 +10,10 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    data() {
+      return JSON.parse(this.source.data)
+    }
   }
 }

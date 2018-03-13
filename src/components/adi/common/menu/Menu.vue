@@ -48,9 +48,6 @@ export default {
   computed: {
     mode() {
       return this.options.mode
-    },
-    data() {
-      return JSON.parse(this.source.data)
     }
   },
   created() {

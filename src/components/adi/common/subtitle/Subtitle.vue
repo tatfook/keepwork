@@ -1,21 +1,20 @@
 <template>
-  <div class="comp-business-name">
-    <a :href="data.link">
-      <h1 :style="style">{{ data.name }}</h1>
-    </a>
-  </div>
+    <div class="comp-tagline">
+        <a :href="data.link">
+            <h1 :style="style">{{ data.name }}</h1>
+        </a>
+    </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 
 export default {
-  name: 'AdiBussinessName',
+  name: 'AdiSubtitle',
   mixins: [compBaseMixin],
   methods: {},
   computed: {
     style() {
-      console.log(this)
       return (
         'font-size:' +
         this.options.fontSize +
@@ -25,6 +24,9 @@ export default {
         ';color:' +
         this.options.fontColor
       )
+    },
+    data() {
+      return JSON.parse(this.source.data)
     }
   }
 }
@@ -35,4 +37,3 @@ a {
   text-decoration: none;
 }
 </style>
-

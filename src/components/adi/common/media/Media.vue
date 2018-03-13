@@ -16,20 +16,29 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     isImage() {
-      return Media.isImage(this.source.src)
+      return Media.isImage(this.data.src)
     },
     isVideo() {
-      return Media.isVideo(this.source.src)
+      return Media.isVideo(this.data.src)
     },
     hasMedia() {
-      return this.source.src && this.source.src !== ''
+      return this.data.src && this.data.src !== ''
     },
     src() {
-      return this.source.src
+      return this.data.src
     },
     link() {
-      return this.source.link
+      return this.data.link
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.comp-media {
+  img {
+    width: 100%;
+  }
+}
+</style>
+

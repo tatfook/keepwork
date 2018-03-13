@@ -36,9 +36,6 @@ export default {
     source() {
       return this.mod.components[this.property].data
     }
-  },
-  created() {
-    console.log(this)
   }
 }
 </script>
