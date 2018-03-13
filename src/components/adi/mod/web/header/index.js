@@ -1,5 +1,5 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import mod from '@/components/adi/mod/base/Base'
+import mod from './Header'
 import styles from './header.styles'
 
 const name = 'ModHeader'

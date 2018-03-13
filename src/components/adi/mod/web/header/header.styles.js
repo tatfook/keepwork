@@ -18,15 +18,11 @@ export default [
         top: 0,
         left: 0
       },
-      businessName: {
+      couple: {
         position: 'absolute',
-        top: '20px',
-        left: '143px'
-      },
-      tagline: {
-        position: 'absolute',
-        top: '55px',
-        left: '143px'
+        top: '35%',
+        left: '145px',
+        transform: 'translateY(-50%)'
       },
       // 定义子组件menu的wrapper样式
       menu: {
