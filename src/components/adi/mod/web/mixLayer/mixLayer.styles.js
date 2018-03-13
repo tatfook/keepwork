@@ -5,12 +5,16 @@ export default [
       // 定义mod根div的样式
       root: {
         position: 'relative',
-        overflow: 'auto',
+        overflow: 'hidden',
         zoom: 1
       },
       media: {
-        width: '40%',
-        float: 'left'
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        'z-index': -1
       },
       group: {
         width: '50%',
