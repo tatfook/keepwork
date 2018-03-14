@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 
@@ -42,39 +41,51 @@ const actions = {
   },
   updateMarkDown({ commit }, code) {
     let blockList = Parser.buildBlockList(code)
-
-    // commit('UPDATE_CODE', code)
-    // commit('SET_ACTIVE_MOD', null)
-    // commit('SET_ACTIVE_PROPERTY', null)
+    commit('SET_ACTIVE_MOD', null)
+    commit('SET_ACTIVE_PROPERTY', null)
     commit('UPDATE_MODS', blockList)
+    commit('UPDATE_CODE', code)
   },
-  addMod({ commit }, params) {
-    const modProperties = modFactory.generate(params.modName)
-    const mod = commit('ADD_MOD', {
+  updateMarkDownBlock({ commit }, payload) {
+    commit('UPDATE_CODE', payload.code)
+    commit('SET_ACTIVE_MOD', payload.mod)
+    commit('SET_ACTIVE_PROPERTY', null)
+    commit('REFRESH_MOD_ATTRIBUTES', payload.mod)
+  },
+  addMod({ commit }, payload) {
+    const modProperties = modFactory.generate(payload.modName)
+    commit('ADD_MOD', {
       modProperties: modProperties,
-      key: params.preModKey,
-      cmd: Parser.getCmd(params.modName)
+      key: payload.preModKey,
+      cmd: Parser.getCmd(payload.modName)
     })
-    commit('SET_ACTIVE_MOD', mod)
-    commit('UPDATE_CODE', Parser.buildMarkdown(state.modList))
+    commit('SET_ACTIVE_MOD', null)
+    commit('SET_ACTIVE_PROPERTY', null)
+    commit('REFRESH_CODE')
   },
   setActiveMod({ commit }, mod) {
     commit('SET_ACTIVE_MOD', mod)
     commit('SET_ACTIVE_PROPERTY', null)
   },
-  setActiveProperty({ commit }, params) {
-    commit('SET_ACTIVE_MOD', params.mod)
-    commit('SET_ACTIVE_PROPERTY', params.property)
+  setActiveProperty({ commit }, payload) {
+    commit('SET_ACTIVE_MOD', payload.mod)
+    commit('SET_ACTIVE_PROPERTY', payload.property)
   },
   deleteMod({ commit }, mod) {
     commit('DELETE_MOD', mod)
-    if (mod === state.activeMod) {
+    if (mod.key === state.activeMod.key) {
       commit('SET_ACTIVE_MOD', null)
       commit('SET_ACTIVE_PROPERTY', null)
     }
+    commit('REFRESH_CODE')
   },
   updateActiveModStyle({ commit }, styleID) {
     commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
+    commit('REFRESH_CODE')
+  },
+  updateActiveModAttribute({ commit }, payload) {
+    commit('UPDATE_ACTIVE_MOD_ATTRIBUTES', payload)
+    commit('REFRESH_CODE')
   },
   changeTheme({ commit }, themeName) {
     commit('UPDATE_THEME_NAME', themeName)
@@ -100,6 +111,9 @@ const mutations = {
   UPDATE_CODE(state, code) {
     Vue.set(state, 'code', code)
   },
+  REFRESH_CODE(state) {
+    Vue.set(state, 'code', Parser.buildMarkdown(state.modList))
+  },
   ADD_MOD(state, { modProperties, key, cmd }) {
     return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
   },
@@ -115,32 +129,17 @@ const mutations = {
     if (!state.activeMod) return
     Vue.set(state, 'activeProperty', property)
   },
+  REFRESH_MOD_ATTRIBUTES(state, mod) {
+    Parser.updateBlock(state.modList, mod, state.code)
+  },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
-    state.activeMod.key = value
+    Vue.set(state.activeMod, key, value)
   },
   UPDATE_ACTIVE_MOD_STYLE(state, styleID) {
     Vue.set(state.activeMod, 'styleID', styleID)
   },
   UPDATE_MODS(state, mods) {
-    _.forEach(mods, (el, newIndex) => {
-      let oldIndex = _.indexOf(
-        _.map(state.modList, el => {
-          return el.key
-        }),
-        el.key
-      )
-      if (oldIndex >= 0) {
-        // oldIndex will always >= newIndex
-        state.modList.splice(newIndex, oldIndex - newIndex)
-        // console.log(state.modList[newIndex])
-        // console.log(el)
-        // Vue.set(state.modList, newIndex, _.deepClone(el))
-        // _.merge(state.modList[newIndex], el)
-      }
-      state.modList.splice(newIndex, 0, el) // remove and insert new one
-    })
-    state.modList.splice(mods.length, state.modList.length - mods.length)
-    // Vue.set(state, 'modList', mods)
+    Parser.updateBlockList(state.modList, mods)
   },
   UPDATE_THEME_NAME(state, themeName) {
     Vue.set(state.theme, 'name', themeName)

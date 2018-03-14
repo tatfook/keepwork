@@ -83,6 +83,7 @@ export const mdToJson = text => {
 
   let _mdToJson = function(line) {
     let temp = line.match(/^([-+#]) (.*)/)
+    if (!temp) return
     let flag = temp[1]
     let content = line.substring(flag.length + 1).trim()
     let key, value

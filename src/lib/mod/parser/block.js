@@ -1,8 +1,9 @@
 import _ from 'lodash'
-import Vue from 'vue'
 import md5 from 'blueimp-md5'
 import { mdToJson, jsonToMd } from './mdParser'
 const MARKDOWN_CMD = 'Markdown'
+const MOD_CMD_BEGIN = '```@'
+const MOD_CMD_END = '```'
 
 class ModBlock {
   constructor(cmd, lineBegin) {
@@ -13,37 +14,48 @@ class ModBlock {
     this.lengthDiff = 0
     this.data = null // data-binding
     this.key = null // data-binding
-    this.oldKey = null
     this.modKey = null
   }
 
   buildJson() {
     this.data = this.isMarkdownMod()
       ? { md: { data: this.text() } }
-      : mdToJson(this.md)
+      : mdToJson(this.text())
   }
 
-  buildHash() {
-    Vue.set(this, 'key', md5(this.data, this.lineBegin))
-    Vue.set(this, 'modKey', md5(this.data))
+  buildKey() {
+    this.key = md5(this.text(), this.lineBegin)
+    this.modKey = md5(this.text())
   }
 
   isMarkdownMod() {
     return this.cmd === MARKDOWN_CMD
   }
 
+  isOnEdit(lineNumber) {
+    return (
+      lineNumber >= this.contentBegin() &&
+      lineNumber < this.contentBegin() + this.md.length + 1
+    )
+  }
+
+  contentBegin() {
+    return this.isMarkdownMod() ? this.lineBegin : this.lineBegin + 1
+  }
+
   updateJson(jsonData) {
-    let newMd
-    if (this.isMarkdownMod()) {
-      newMd = jsonData.md.data // hardcode for markdown mod
-    } else {
-      newMd = jsonToMd(jsonData)
-    }
+    let newMd = this.isMarkdownMod() ? jsonData.md.data : jsonToMd(jsonData)
     this.lengthDiff = newMd.length - this.md.length
     this.md = newMd.split('\n')
-    this.oldKey = this.key
-    Vue.set(this, 'data', jsonData)
-    this.buildHash()
+    this.data = _.cloneDeep(jsonData)
+    this.buildKey()
+  }
+
+  updateMarkdown(mdLines) {
+    this.lengthDiff = mdLines.length - this.md.length
+    this.md = mdLines
+    this.buildJson()
+    this.buildKey()
   }
 
   addLine(line) {
@@ -52,6 +64,7 @@ class ModBlock {
 
   modifyBegin(diff) {
     this.lineBegin += diff
+    this.buildKey()
   }
 
   textLength() {
@@ -60,8 +73,8 @@ class ModBlock {
 
   lines() {
     if (this.cmd !== MARKDOWN_CMD) {
-      let headLine = '```@' + this.cmd
-      let endLine = '```'
+      let headLine = MOD_CMD_BEGIN + this.cmd
+      let endLine = MOD_CMD_END
       return _.flatten([headLine, this.md, endLine])
     } else {
       return this.md

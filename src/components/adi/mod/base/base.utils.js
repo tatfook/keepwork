@@ -6,7 +6,7 @@ export const generateProperties = (name, components) => {
     styleID: 0
   }
   _.each(components, (comp, key) => {
-    mod[key] = BaseCompProperties[comp]
+    mod[key] = _.cloneDeep(BaseCompProperties[comp])
   })
   return mod
 }
