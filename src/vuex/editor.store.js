@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 
@@ -31,6 +32,9 @@ const getters = {
   modList: state => state.modList,
   activeMod: state => state.activeMod,
   activeProperty: state => state.activeProperty,
+  activePropertyData: state => {
+    return _.get(state, ['activeMod', 'data', state.activeProperty], {})
+  },
   hasActiveMod: state => !!state.activeMod,
   hasActiveProperty: state => !!state.activeProperty,
   activeComponentType: state => state.activeWinType
@@ -74,6 +78,9 @@ const actions = {
   setActiveProperty({ commit }, payload) {
     commit('SET_ACTIVE_MOD', payload.mod)
     commit('SET_ACTIVE_PROPERTY', payload.property)
+  },
+  setActivePropertyData({ commit }, params) {
+    commit('SET_ACTIVE_PROPERTY_DATA', params.data)
   },
   deleteMod({ commit }, mod) {
     commit('DELETE_MOD', mod)
@@ -138,6 +145,22 @@ const mutations = {
   },
   REFRESH_MOD_ATTRIBUTES(state, mod) {
     Parser.updateBlock(state.modList, mod, state.code)
+  },
+  SET_ACTIVE_PROPERTY_DATA(state, data) {
+    if (!state.activeMod) return
+    if (!state.activeProperty) return
+    if (!state.activeMod.data) return
+    if (!state.activeMod.data[state.activeProperty]) return
+    let originalData = state.activeMod.data[state.activeProperty]
+
+    // only assign the value if the key is in original keys
+    // drop other information in data
+    let resultData = _.keys(originalData).reduce((prev, key) => {
+      prev[key] = _.has(data, key) ? data[key] : originalData[key]
+      return prev
+    }, {})
+
+    Vue.set(state.activeMod.data, state.activeProperty, resultData)
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     Parser.updateBlockAttribute(state.activeMod, key, value)

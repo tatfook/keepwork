@@ -4,6 +4,14 @@
       <el-tab-pane label='Property'>
         <div class='properties-container' v-if='hasActiveProperty'>
           {{activeProperty}}
+          <pre>{{activePropertyDataCopy}}</pre>
+          <v-json-editor
+              ref='editor'
+              :key='key'
+              :data="activePropertyDataCopy"
+              :editable="editable"
+              @change="updateActiveProperData"
+          ></v-json-editor>
         </div>
         <div v-else>
           No selected property
@@ -24,15 +32,38 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import _ from 'lodash'
+import { mapGetters, mapActions } from 'vuex'
 import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
 
 export default {
   name: 'ModPropertyManager',
+  data: () => ({
+    editable: true,
+    jsonEditorData: {}
+  }),
+  methods: {
+    ...mapActions({
+      setActivePropertyData: 'setActivePropertyData'
+    }),
+    updateActiveProperData() {
+      // the data of the json_editor is in ini_data of the component
+      let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}));
+      this.setActivePropertyData({data})
+    }
+  },
   computed: {
+    key() {
+      let modKey = _.get(this, ['activeMod', 'key'], '')
+      return `${ modKey }_${ this.activeProperty }`
+    },
+    activePropertyDataCopy() {
+      return this.jsonEditorData = _.cloneDeep(this.activePropertyData)
+    },
     ...mapGetters({
       activeMod: 'activeMod',
       activeProperty: 'activeProperty',
+      activePropertyData: 'activePropertyData',
       hasActiveMod: 'hasActiveMod',
       hasActiveProperty: 'hasActiveProperty'
     })
