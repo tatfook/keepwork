@@ -133,10 +133,10 @@ const mutations = {
     Parser.updateBlock(state.modList, mod, state.code)
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
-    Vue.set(state.activeMod, key, value)
+    Parser.updateBlockAttribute(state.activeMod, key, value)
   },
   UPDATE_ACTIVE_MOD_STYLE(state, styleID) {
-    Vue.set(state.activeMod, 'styleID', styleID)
+    Parser.updateBlockAttribute(state.activeMod, 'styleID', styleID)
   },
   UPDATE_MODS(state, mods) {
     Parser.updateBlockList(state.modList, mods)

@@ -107,6 +107,11 @@ const updateBlock = (blockList, block, mdText) => {
   return block
 }
 
+const updateBlockAttribute = (block, key, value) => {
+  block.updateJsonValue(key, value)
+  return block
+}
+
 const deleteBlock = (blockList, blockIndex) => {
   let block = blockList[blockIndex]
   updateBlocksBeginLine(blockList, blockIndex + 1, -block.textLength())
@@ -179,6 +184,7 @@ export default {
   buildJsonData,
   updateBlockList,
   updateBlock,
+  updateBlockAttribute,
   deleteBlock,
   addBlockByIndex,
   addBlockByKey,

@@ -51,6 +51,12 @@ class ModBlock {
     this.buildKey()
   }
 
+  updateJsonValue(key, value) {
+    let data = _.cloneDeep(this.data)
+    data[key] = value
+    this.updateJson(data)
+  }
+
   updateMarkdown(mdLines) {
     this.lengthDiff = mdLines.length - this.md.length
     this.md = mdLines

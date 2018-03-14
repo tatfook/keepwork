@@ -23,7 +23,7 @@ export default {
       this.$store.dispatch('updateActiveModStyle', styleID)
     },
     isActive(styleID) {
-      let curStyle = this.mod.data.styleID || 0
+      let curStyle = Number(this.mod.data.styleID) || 0
       return curStyle === styleID
     }
   }
