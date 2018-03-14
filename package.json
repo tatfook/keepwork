@@ -14,11 +14,14 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "blueimp-md5": "^2.10.0",
     "element-ui": "^2.2.0",
     "jss": "^9.8.0",
     "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
     "vue": "^2.5.2",
+    "vue-codemirror": "^4.0.3",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
     "vuex": "^2.4.0"
   },
@@ -53,6 +56,7 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
+    "glob": "^7.0.3",
     "html-webpack-plugin": "^2.30.1",
     "inject-loader": "^3.0.0",
     "karma": "^1.4.1",
@@ -88,8 +92,7 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0",
-    "glob": "^7.0.3"
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 6.0.0",

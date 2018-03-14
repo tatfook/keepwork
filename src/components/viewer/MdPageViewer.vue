@@ -1,7 +1,7 @@
 <template>
   <div>
-    <template v-for='mod in modList'>
-      <mod-loader :mod='mod' :theme='theme' :key='mod.key'> </mod-loader>
+    <template v-for='(mod, index) in modList'>
+      <mod-loader :mod='mod' :theme='theme' :key='index'> </mod-loader>
     </template>
   </div>
 </template>

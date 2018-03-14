@@ -12,12 +12,13 @@
       <editor-viewport> </editor-viewport>
     </el-col>
     <el-col :span="9" class="code-win">
-      <editor-viewport> </editor-viewport>
+      <editor-markdown/>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import EditorMarkdown from './EditorMarkdown'
 import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
@@ -34,6 +35,7 @@ export default {
     this.changeView('Search')
   },
   components: {
+    EditorMarkdown,
     EditorViewport,
     ModPropertyManager,
     Search,

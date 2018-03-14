@@ -1,15 +1,14 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
-import styles from './logo.styles'
+import styles from './markdown.styles'
 
-const name = 'ModLogo'
+const name = 'ModMarkdown'
 
 const components = {
-  media: 'AdiMedia',
-  labelA: 'AdiLabel',
-  labelB: 'AdiLabel'
+  md: 'AdiMarkdown'
 }
 
 const properties = generateProperties(name, components)
+properties.styleID = undefined
 
 export default { mod, name, components, properties, styles }

@@ -11,10 +11,6 @@ export default new Router({
       path: '/',
       name: 'PageViewer',
       component: PageViewer
-    },
-    {
-      path: '/editor',
-      redirect: '/editor.html'
     }
   ]
 })

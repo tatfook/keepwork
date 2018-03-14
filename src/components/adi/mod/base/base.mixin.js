@@ -7,15 +7,17 @@ import CompWrapper from './CompWrapper'
 jss.setup(preset())
 
 const renderTemplate = (h, m) => {
-  let components = m.conf.properties.components
+  let components = m.conf.components
 
   return (
     <div class={m.modClasses()}>
-      {_.map(components, (_, key) => {
+      {_.map(components, (compType, key) => {
         return (
           <CompWrapper
             mod={m.mod}
+            modData={m.modData}
             property={key}
+            compType={compType}
             classes={m.compWrapperClass(key)}
             editMode={m.editMode}
             options={m.compWrapperOptions(key)}
@@ -31,20 +33,23 @@ export default {
     mod: Object,
     conf: Object,
     theme: Object,
-    editMode: Boolean
+    editMode: Boolean,
+    active: Boolean
   },
   render(h) {
     if (this.sheet) this.sheet.detach()
-    this.style = this.conf.styles[this.mod.styleID]
+    let styleID =
+      Number(this.modData.styleID) >= this.conf.styles.length
+        ? this.conf.styles.length - 1
+        : Number(this.modData.styleID)
+    this.style = this.conf.styles[styleID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
     return renderTemplate(h, this)
   },
   methods: {
     isChildActive(property) {
-      return (
-        this.editMode && this.mod.isActive && property === this.activeProperty
-      )
+      return this.editMode && this.active && property === this.activeProperty
     },
     jssClass(name) {
       return this.sheet.classes[name]
@@ -93,6 +98,10 @@ export default {
   computed: {
     ...mapGetters({
       activeProperty: 'activeProperty'
-    })
+    }),
+    modData() {
+      // use basic data as default to make sure the mod data is correct
+      return _.merge(_.cloneDeep(this.conf.properties), this.mod.data)
+    }
   }
 }
