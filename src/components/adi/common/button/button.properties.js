@@ -1,5 +1,6 @@
 export default {
   data: `{
-    "name": "按钮"
+    "text": "查看更多",
+    "link": "http://keepwork.com"
   }`
 }

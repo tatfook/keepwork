@@ -13,17 +13,27 @@ export default [
         float: 'left'
       },
       group: {
-        width: '50%',
+        width: '56%',
         float: 'left',
-        'margin-left': '5px'
+        'margin-left': '3%'
+      },
+      button: {
+        float: 'right'
       }
     },
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']
+      // button: ['color_7']
     },
     options: {
-      theme: {},
+      theme: {
+        button: {
+          fontSize: 'font_0',
+          fontColor: 'color_7',
+          bgColor: 'color_0'
+        }
+      },
       config: {}
     }
   },
