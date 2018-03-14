@@ -1,10 +1,13 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="16">
+    <el-col :span="4">
+      <mod-property-manager> </mod-property-manager>
+    </el-col>
+    <el-col :span="10">
       <editor-viewport> </editor-viewport>
     </el-col>
-    <el-col :span="8">
-      <mod-property-manager> </mod-property-manager>
+    <el-col :span="10">
+      <editor-viewport> </editor-viewport>
     </el-col>
   </el-row>
 </template>

@@ -1,5 +1,16 @@
 <template>
-  <div id='editor'>
+  <el-container id="editor">
+    <el-header>
+      <EditorHeader></EditorHeader>
+    </el-header>
+    <el-main>
+      <router-view/>
+      <el-dialog :visible.sync='dialogVisible' width='100%' height='100%'>
+        <PageViewer />
+      </el-dialog>
+    </el-main>
+  </el-container>
+  <!-- <div id='editor'>
     <el-menu mode='horizontal'>
       <el-menu-item index='0'>
         <a href='/'> Home </a>
@@ -13,18 +24,16 @@
       <el-button @click='showPreview'>Preview</el-button>
     </el-menu>
     <router-view/>
-    <el-dialog
-      :visible.sync='dialogVisible'
-      width='100%'
-      height='100%'>
+    <el-dialog :visible.sync='dialogVisible' width='100%' height='100%'>
       <PageViewer />
     </el-dialog>
 
-  </div>
+  </div> -->
 </template>
 
 <script>
 import PageViewer from '@/components/viewer/MdPageViewer'
+import EditorHeader from '@/components/editor/EditorHeader'
 export default {
   name: 'EditorPage',
   data() {
@@ -47,18 +56,18 @@ export default {
     }
   },
   components: {
-    PageViewer
+    PageViewer,
+    EditorHeader
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+html, body, .el-container{
+  height: 100%;
+}
+body{
+  margin: 0;
+  padding: 0;
 }
 </style>
