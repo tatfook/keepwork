@@ -70,4 +70,8 @@ body{
   margin: 0;
   padding: 0;
 }
+.el-main{
+    height: 100%;
+    padding: 0 10px;
+}
 </style>
