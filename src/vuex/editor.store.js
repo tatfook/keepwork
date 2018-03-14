@@ -81,6 +81,7 @@ const actions = {
   },
   setActivePropertyData({ commit }, params) {
     commit('SET_ACTIVE_PROPERTY_DATA', params.data)
+    commit('REFRESH_CODE')
   },
   deleteMod({ commit }, mod) {
     commit('DELETE_MOD', mod)
@@ -160,7 +161,11 @@ const mutations = {
       return prev
     }, {})
 
-    Vue.set(state.activeMod.data, state.activeProperty, resultData)
+    Parser.updateBlockAttribute(
+      state.activeMod,
+      state.activeProperty,
+      resultData
+    )
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     Parser.updateBlockAttribute(state.activeMod, key, value)
