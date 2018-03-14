@@ -39,6 +39,7 @@ const actions = {
     commit('SET_ACTIVE_PAGE', path)
     // TODO load page data via api service
   },
+  // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, code) {
     let blockList = Parser.buildBlockList(code)
     commit('SET_ACTIVE_MOD', null)
@@ -46,6 +47,7 @@ const actions = {
     commit('UPDATE_MODS', blockList)
     commit('UPDATE_CODE', code)
   },
+  // only update a particular mod
   updateMarkDownBlock({ commit }, payload) {
     commit('UPDATE_CODE', payload.code)
     commit('SET_ACTIVE_MOD', payload.mod)

@@ -47,21 +47,30 @@ export default {
       let change = changes[0]
       let mod = Parser.getActiveBlock(this.modList, change.from.line)
 
-      if (!mod) {
-        return this.$store.dispatch('updateMarkDown', code)
+      if (!mod) return this.$store.dispatch('updateMarkDown', code)
+
+      // the new input might create a new cmd
+      let text = _.cloneDeep(change.text)
+      if (text[0] !== '') text[0] = editor.getLine(change.from.line)
+      if (text[text.length - 1] !== '')
+        text[text.length - 1] = editor.getLine(change.to.line)
+
+      // the last line of removed code might broke the cmd
+      let removed = _.cloneDeep(change.removed)
+      if (removed.length > 1) {
+        let oldMdLines = this.code.split('\n')
+        removed[removed.length - 1] = oldMdLines[change.to.line]
       }
 
       if (
-        !Parser.isModMarkdown(mod, change.removed) ||
-        !Parser.isModMarkdown(mod, change.text)
+        !Parser.isModMarkdown(mod, removed) ||
+        !Parser.isModMarkdown(mod, text)
       ) {
+        // if there are some changes affect the mod data, will try to build all
         return this.$store.dispatch('updateMarkDown', code)
       }
 
-      this.$store.dispatch('updateMarkDownBlock', {
-        code,
-        mod
-      })
+      this.$store.dispatch('updateMarkDownBlock', { code, mod })
     }
   }
 }

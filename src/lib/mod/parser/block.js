@@ -35,7 +35,7 @@ class ModBlock {
   isOnEdit(lineNumber) {
     return (
       lineNumber >= this.contentBegin() &&
-      lineNumber < this.contentBegin() + this.md.length + 1
+      lineNumber < this.contentBegin() + this.md.length
     )
   }
 

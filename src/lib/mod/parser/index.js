@@ -167,14 +167,15 @@ const getActiveBlock = (blockList, beginLine) => {
 }
 
 const isModMarkdown = (block, mdLines) => {
-  _.forEach(mdLines, line => {
+  for (let i = 0; i < mdLines.length; i++) {
+    let line = mdLines[i]
     if (
       (line.match(MOD_CMD_END_REG) && !block.isMarkdownMod()) ||
       line.match(MOD_CMD_BEGIN_REG)
     ) {
       return false
     }
-  })
+  }
   return true
 }
 
