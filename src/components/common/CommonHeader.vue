@@ -21,7 +21,9 @@
         </template>
         <el-menu-item index="5-1">我的主页</el-menu-item>
         <el-menu-item index="5-2">网站管理</el-menu-item>
-        <el-menu-item index="5-3">页面编辑器</el-menu-item>
+        <el-menu-item index="5-3">
+            <a href="/editor.html">页面编辑器</a>
+        </el-menu-item>
         <el-menu-item index="5-3">我的网盘</el-menu-item>
       </el-submenu>
     </el-menu>

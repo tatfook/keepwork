@@ -20,7 +20,8 @@ const state = {
     name: 'light',
     colorID: 0,
     fontID: 0
-  }
+  },
+  activeComponentType: ''
 }
 
 const getters = {
@@ -31,7 +32,8 @@ const getters = {
   activeMod: state => state.activeMod,
   activeProperty: state => state.activeProperty,
   hasActiveMod: state => !!state.activeMod,
-  hasActiveProperty: state => !!state.activeProperty
+  hasActiveProperty: state => !!state.activeProperty,
+  activeComponentType: state => state.activeWinType
 }
 
 const actions = {
@@ -103,6 +105,9 @@ const actions = {
   },
   changeThemeFont({ commit }, fontID) {
     commit('UPDATE_THEME_FONT', fontID)
+  },
+  setActiveWinType({ commit }, componentType) {
+    commit('UPDATE_WIN_TYPE', componentType)
   }
 }
 
@@ -154,6 +159,9 @@ const mutations = {
   },
   UPDATE_THEME_FONT(state, fontID) {
     Vue.set(state.theme, 'fontID', fontID)
+  },
+  UPDATE_WIN_TYPE(state, componentType) {
+    Vue.set(state, 'activeWinType', componentType)
   }
 }
 
