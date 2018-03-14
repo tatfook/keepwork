@@ -1,3 +1,4 @@
+import AdiImgLoop from './imgLoop/ImgLoop'
 import AdiTitle from './title/Title'
 import AdiSubtitle from './subtitle/Subtitle'
 import AdiParagraph from './paragraph/Paragraph'
@@ -10,6 +11,7 @@ import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
 
 export default {
+  AdiImgLoop,
   AdiTitle,
   AdiSubtitle,
   AdiParagraph,
