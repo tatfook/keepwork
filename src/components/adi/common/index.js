@@ -9,6 +9,7 @@ import AdiLogo from './logo/Logo'
 import AdiMenu from './menu/Menu'
 import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
+import AdiMarkdown from './markdown/Markdown'
 
 export default {
   AdiImgLoop,
@@ -21,5 +22,6 @@ export default {
   AdiLogo,
   AdiMenu,
   AdiMedia,
-  AdiLabel
+  AdiLabel,
+  AdiMarkdown
 }

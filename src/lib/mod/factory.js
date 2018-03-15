@@ -16,7 +16,7 @@ export const uuid = () => {
 
 export const generate = modName => {
   let modProperties = _.cloneDeep(mods[modName].properties)
-  modProperties.key = uuid()
+  // modProperties.key = uuid()
   return modProperties
 }
 

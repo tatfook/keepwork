@@ -13,7 +13,9 @@ import BasicComponents from '@/components/adi/common/'
 export default {
   props: {
     mod: Object,
+    modData: Object,
     property: String,
+    compType: String,
     classes: Array,
     editMode: Boolean,
     options: Object
@@ -28,13 +30,13 @@ export default {
   },
   computed: {
     basicComp() {
-      return BasicComponents[this.mod.components[this.property].type]
+      return BasicComponents[this.compType]
     },
     isDisplay() {
-      return !this.mod.components[this.property].hidden
+      return !this.modData[this.property].hidden
     },
     source() {
-      return this.mod.components[this.property].data
+      return this.modData[this.property]
     }
   }
 }
