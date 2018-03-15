@@ -33,8 +33,7 @@ import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
 export default {
   name: 'ModPropertyManager',
   data: () => ({
-    editable: true,
-    jsonEditorData: {}
+    editable: true
   }),
   methods: {
     ...mapActions({
@@ -48,7 +47,7 @@ export default {
   },
   computed: {
     activePropertyDataCopy() {
-      return (this.jsonEditorData = _.cloneDeep(this.activePropertyData))
+      return _.cloneDeep(this.activePropertyData)
     },
     ...mapGetters({
       activeMod: 'activeMod',
