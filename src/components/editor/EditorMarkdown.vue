@@ -1,5 +1,5 @@
 <template>
-  <div class='kp-md-editor'>
+  <div class='kp-md-editor full-height'>
     <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
   </div>
 </template>
@@ -76,6 +76,13 @@ export default {
 }
 </script>
 
+<style scoped>
+  .full-height, .vue-codemirror{
+    height: 100%;
+  }
+</style>
 <style>
-
+  .CodeMirror{
+    height: 100%;;
+  }
 </style>

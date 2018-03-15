@@ -8,9 +8,11 @@
       <component :is='activeComponent'></component>
       <!-- <mod-property-manager> </mod-property-manager> -->
     </el-col>
+    <div class="editor-resizer"></div>
     <el-col :span="9" class="preview-win">
       <editor-viewport> </editor-viewport>
     </el-col>
+    <div class="editor-resizer"></div>
     <el-col :span="9" class="code-win">
       <editor-markdown/>
     </el-col>
@@ -55,23 +57,21 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.mod-active {
-  border: 2px solid rgb(240, 15, 15);
-}
-.comp-active {
-  border: 3px dashed rgb(43, 11, 221);
-}
+<style scoped>
 .manager-win{
-  // background-color: red;
+  /* background-color: red; */
 }
 .preview-win{
-  // background-color: blue;
+  /* background-color: blue; */
 }
 .code-win{
-  // background-color: yellow;
+  /* background-color: yellow; */
 }
 .full-height{
   height: 100%;
+}
+.editor-resizer{
+  width: 10px;
+  background-color: #343436;
 }
 </style>
