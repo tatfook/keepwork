@@ -13,10 +13,10 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.components.media.data.data = `{
+properties.media.data = `{
   "src": "./static/adi/mix-layer.png",
   "name": "MEDIA",
   "link": "http://keepwork.com"
 }`
 
-export default { mod, name, properties, styles }
+export default { mod, name, components, properties, styles }

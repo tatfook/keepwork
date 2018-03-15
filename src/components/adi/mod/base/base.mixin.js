@@ -37,14 +37,6 @@ export default {
     active: Boolean
   },
   render(h) {
-    if (this.sheet) this.sheet.detach()
-    let styleID =
-      Number(this.modData.styleID) >= this.conf.styles.length
-        ? this.conf.styles.length - 1
-        : Number(this.modData.styleID)
-    this.style = this.conf.styles[styleID || 0]
-    this.sheet = jss.createStyleSheet(this.style.data)
-    this.sheet.attach()
     return renderTemplate(h, this)
   },
   methods: {
@@ -103,5 +95,17 @@ export default {
       // use basic data as default to make sure the mod data is correct
       return _.merge(_.cloneDeep(this.conf.properties), this.mod.data)
     }
+  },
+  created() {
+    console.log(this.conf)
+
+    if (this.sheet) this.sheet.detach()
+    let styleID =
+      Number(this.modData.styleID) >= this.conf.styles.length
+        ? this.conf.styles.length - 1
+        : Number(this.modData.styleID)
+    this.style = this.conf.styles[styleID || 0]
+    this.sheet = jss.createStyleSheet(this.style.data)
+    this.sheet.attach()
   }
 }

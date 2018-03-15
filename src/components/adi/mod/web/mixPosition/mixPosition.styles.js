@@ -5,7 +5,7 @@ export default [
       // 定义mod根div的样式
       root: {
         position: 'relative',
-        overflow: 'auto',
+        overflow: 'hidden',
         zoom: 1
       },
       media: {
