@@ -28,6 +28,15 @@ class ModBlock {
     this.modKey = md5(this.text())
   }
 
+  buildMarkdown() {
+    if (!this.data) return
+    let newMd = this.isMarkdownMod() ? this.data.md.data : jsonToMd(this.data)
+    newMd = newMd.split('\n')
+    this.lengthDiff = newMd.length - this.md.length
+    this.md = newMd
+    this.buildKey()
+  }
+
   isMarkdownMod() {
     return this.cmd === MARKDOWN_CMD
   }
@@ -44,17 +53,13 @@ class ModBlock {
   }
 
   updateJson(jsonData) {
-    let newMd = this.isMarkdownMod() ? jsonData.md.data : jsonToMd(jsonData)
-    this.lengthDiff = newMd.length - this.md.length
-    this.md = newMd.split('\n')
     this.data = _.cloneDeep(jsonData)
-    this.buildKey()
+    this.buildMarkdown()
   }
 
   updateJsonValue(key, value) {
-    let data = _.cloneDeep(this.data)
-    data[key] = value
-    this.updateJson(data)
+    this.data[key] = value
+    this.buildMarkdown()
   }
 
   updateMarkdown(mdLines) {

@@ -5,13 +5,7 @@
         <div class='properties-container' v-if='hasActiveProperty'>
           {{activeProperty}}
           <pre>{{activePropertyDataCopy}}</pre>
-          <v-json-editor
-              ref='editor'
-              :key='key'
-              :data="activePropertyDataCopy"
-              :editable="editable"
-              @change="updateActiveProperData"
-          ></v-json-editor>
+          <v-json-editor ref='editor' :data="activePropertyDataCopy" :editable="editable" @change="updateActiveProperData"></v-json-editor>
         </div>
         <div v-else>
           No selected property
@@ -47,15 +41,11 @@ export default {
     }),
     updateActiveProperData() {
       // the data of the json_editor is in ini_data of the component
-      let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}));
-      this.setActivePropertyData({data})
+      let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}))
+      this.setActivePropertyData({ data })
     }
   },
   computed: {
-    key() {
-      let modKey = _.get(this, ['activeMod', 'key'], '')
-      return `${ modKey }_${ this.activeProperty }`
-    },
     activePropertyDataCopy() {
       return _.cloneDeep(this.activePropertyData)
     },
