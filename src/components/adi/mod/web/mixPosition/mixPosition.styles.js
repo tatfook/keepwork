@@ -15,7 +15,7 @@ export default [
       group: {
         width: '56%',
         float: 'left',
-        'margin-left': '3%'
+        'margin-left': '1rem'
       },
       button: {
         float: 'right'
@@ -24,7 +24,6 @@ export default [
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']
-      // button: ['color_7']
     },
     options: {
       theme: {
