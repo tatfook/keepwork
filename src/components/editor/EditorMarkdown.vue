@@ -1,7 +1,7 @@
 <template>
-  <div class='kp-md-editor'>
-    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
-  </div>
+    <div class='kp-md-editor'>
+        <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
+    </div>
 </template>
 
 <script>
@@ -76,6 +76,21 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.kp-md-editor{
+    flex: 1;
+    overflow: auto;
+}
+.vue-codemirror {
+  height: 100%;
+}
+</style>
+<style lang="css">
+.CodeMirror {
+  height: 100%;
+}
+.CodeMirror-gutters {
+  background-color: transparent;
+  border: none;
+}
 </style>

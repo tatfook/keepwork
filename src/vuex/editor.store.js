@@ -78,6 +78,7 @@ const actions = {
   setActiveProperty({ commit }, payload) {
     commit('SET_ACTIVE_MOD', payload.mod)
     commit('SET_ACTIVE_PROPERTY', payload.property)
+    commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
   setActivePropertyData({ commit }, params) {
     commit('SET_ACTIVE_PROPERTY_DATA', params.data)

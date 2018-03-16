@@ -1,23 +1,66 @@
 <template>
-  <el-row :gutter="20" class="full-height" type='flex'>
-    <el-col :span="6" class="manager-win">
-      <el-button @click="changeView('Search')">搜索</el-button>
-      <el-button @click="changeView('ModPropertyManager')">ADI属性</el-button>
-      <el-button @click="changeView('ModsList')">Mod list</el-button>
-      <el-button @click="changeView('FileManager')">文件管理</el-button>
-      <component :is='activeComponent'></component>
+  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp()">
+    <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-file" @click="changeView('FileManager')"></el-button>
+          <el-button class="btn-bigfile" @click="changeView('ModPropertyManager')"></el-button>
+          <el-button class="btn-mods" @click="changeView('ModsList')"></el-button>
+          <el-button class="btn-search" @click="changeView('Search')"></el-button>
+        </el-button-group>
+      </el-row>
+      <el-row class="manager-content-box">
+        <component :is='activeComponent'></component>
+      </el-row>
       <!-- <mod-property-manager> </mod-property-manager> -->
     </el-col>
-    <el-col :span="9" class="preview-win">
-      <editor-viewport> </editor-viewport>
+    <div class="editor-resizer" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
+    <el-col id="previewWin" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-computer" title="电脑"></el-button>
+          <el-button class="btn-phone" title="手机"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-scale" title="缩小"></el-button>
+          <el-button class="btn-enlarge" title="放大"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-adaptive" title="自适应"></el-button>
+          <el-button class="btn-newWin" title="新窗口打开"></el-button>
+        </el-button-group>
+      </el-row>
+      <editor-viewport></editor-viewport>
     </el-col>
-    <el-col :span="9" class="code-win">
+    <div class="editor-resizer" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" :style='{ width: codeWinWidth + "%" }' class="code-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-H1" title="标题1"></el-button>
+          <el-button class="btn-H2" title="标题2"></el-button>
+          <el-button class="btn-H3" title="标题3"></el-button>
+          <el-button class="btn-bold" title="加粗"></el-button>
+          <el-button class="btn-italic" title="斜体"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-listul" title="无序列表"></el-button>
+          <el-button class="btn-listol" title="有序列表"></el-button>
+          <el-button class="btn-blockqote" title="引用内容"></el-button>
+          <el-button class="btn-table" title="表格"></el-button>
+          <el-button class="btn-horizontal-line" title="水平分割线"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-code" title="代码"></el-button>
+          <el-button class="btn-link" title="链接"></el-button>
+        </el-button-group>
+      </el-row>
       <editor-markdown/>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import _ from 'lodash'
 import EditorMarkdown from './EditorMarkdown'
 import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
@@ -29,10 +72,30 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Editor',
   data() {
-    return {}
+    return {
+      bodyWidth: document.body.clientWidth,
+      managerWinWidth: 25,
+      previewWinWidth: 37.5,
+      codeWinWidth: 37.5,
+      resizeWinParams: {
+        mouseStartX: 0,
+        isResizing: false,
+        leftColWidthParam: '',
+        rightColWidthParam: ''
+      }
+    }
   },
   created() {
     this.changeView('Search')
+  },
+  mounted() {
+    this.$nextTick(function() {
+      window.addEventListener('resize', function(e) {
+        _.throttle(function() {
+          this.bodyWidth = document.body.clientWidth
+        }, 1000)
+      })
+    })
   },
   components: {
     EditorMarkdown,
@@ -50,28 +113,148 @@ export default {
   methods: {
     changeView(type) {
       this.$store.dispatch('setActiveWinType', type)
+    },
+    resizeCol(event, leftColWidthParam, rightColWidthParam) {
+      if (!(event && event.clientX)) {
+        return
+      }
+      this.resizeWinParams.isResizing = true
+      this.resizeWinParams.mouseStartX = event.clientX
+      this.resizeWinParams.leftColWidthParam = leftColWidthParam
+      this.resizeWinParams.rightColWidthParam = rightColWidthParam
+    },
+    dragMouseMove(event) {
+      if (!(this.resizeWinParams.isResizing && event && event.clientX)) {
+        return
+      }
+      var mouseNowX = event.clientX
+      var diffClientX = mouseNowX - this.resizeWinParams.mouseStartX
+      var diffPercent = diffClientX / this.bodyWidth * 100
+      this.resizeWinParams.mouseStartX = mouseNowX
+      var leftColName = this.resizeWinParams.leftColWidthParam
+      var rightColName = this.resizeWinParams.rightColWidthParam
+      this[leftColName] += diffPercent
+      this[rightColName] -= diffPercent
+    },
+    dragMouseUp() {
+      this.resizeWinParams.isResizing = false
+      this.resizeWinParams.leftColWidthParam = ''
+      this.resizeWinParams.rightColWidthParam = ''
     }
   }
 }
 </script>
 
-<style lang="scss">
-.mod-active {
-  border: 2px solid rgb(240, 15, 15);
-}
-.comp-active {
-  border: 3px dashed rgb(43, 11, 221);
-}
-.manager-win{
-  // background-color: red;
-}
-.preview-win{
-  // background-color: blue;
-}
-.code-win{
-  // background-color: yellow;
-}
+<style scoped>
 .full-height{
-  height: 100%;
+  height: 100%;;
+}
+.manager-win, .preview-win, .code-win {
+  display: flex;
+  flex-direction: column;
+}
+.manager-content-box{
+  flex: 1;
+  background-color: #fff;
+}
+.editor-resizer {
+  width: 17px;
+  background-color: #cdd4db;
+  cursor: col-resize;
+}
+.editor-resizer:hover {
+  background-color: #d9eafb;
+}
+.manager-win .el-button,
+.code-win .el-button {
+  width: 50px;
+  height: 40px;
+}
+.toolbar {
+  background-color: #fff;
+  padding: 9px 15px;
+  margin-bottom: 10px;
+}
+</style>
+<style lang="scss" scoped>
+$spriteUrl: '../../assets/img/editor_sprites.png';
+
+.btn-file {
+  background: url($spriteUrl) 13px 6px no-repeat;
+}
+.btn-bigfile {
+  background: url($spriteUrl) -37px 6px no-repeat;
+}
+.btn-mods {
+  background: url($spriteUrl) -88px 6px no-repeat;
+}
+.btn-search {
+  background: url($spriteUrl) -140px 6px no-repeat;
+}
+.btn-computer {
+  width: 49px;
+  height: 40px;
+  background: url($spriteUrl) -394px 6px no-repeat;
+}
+.btn-phone {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -444px 6px no-repeat;
+}
+.btn-scale {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -496px 6px no-repeat;
+}
+.btn-enlarge {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -546px 6px no-repeat;
+}
+.btn-adaptive {
+  width: 45px;
+  height: 40px;
+  background: url($spriteUrl) -600px 6px no-repeat;
+}
+.btn-newWin {
+  width: 45px;
+  height: 40px;
+  background: url($spriteUrl) -652px 6px no-repeat;
+}
+.btn-H1 {
+  background: url($spriteUrl) -698px 6px no-repeat;
+}
+.btn-H2 {
+  background: url($spriteUrl) -748px 6px no-repeat;
+}
+.btn-H3 {
+  background: url($spriteUrl) -802px 6px no-repeat;
+}
+.btn-bold {
+  background: url($spriteUrl) -851px 6px no-repeat;
+}
+.btn-italic {
+  background: url($spriteUrl) -902px 6px no-repeat;
+}
+.btn-listul {
+  background: url($spriteUrl) -954px 6px no-repeat;
+}
+.btn-listol {
+  background: url($spriteUrl) -1004px 6px no-repeat;
+}
+.btn-blockqote {
+  background: url($spriteUrl) -1054px 6px no-repeat;
+}
+.btn-table {
+  background: url($spriteUrl) -1106px 6px no-repeat;
+}
+.btn-horizontal-line {
+  background: url($spriteUrl) -1158px 6px no-repeat;
+}
+.btn-code {
+  background: url($spriteUrl) -1208px 6px no-repeat;
+}
+.btn-link {
+  background: url($spriteUrl) -1258px 6px no-repeat;
 }
 </style>
