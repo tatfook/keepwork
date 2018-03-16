@@ -6,25 +6,44 @@ import CompWrapper from './CompWrapper'
 
 jss.setup(preset())
 
-const renderTemplate = (h, m) => {
-  let components = m.conf.components
-
+const buildCompWrapper = (h, m, property, compType) => {
   return (
-    <div class={m.modClasses()}>
-      {_.map(components, (compType, key) => {
-        return (
-          <CompWrapper
-            mod={m.mod}
-            modData={m.modData}
-            property={key}
-            compType={compType}
-            classes={m.compWrapperClass(key)}
-            editMode={m.editMode}
-            options={m.compWrapperOptions(key)}
-          />
-        )
+    <CompWrapper
+      mod={m.mod}
+      modData={m.modData}
+      property={property}
+      compType={compType}
+      classes={m.compWrapperClass(property)}
+      editMode={m.editMode}
+      options={m.compWrapperOptions(property)}
+    />
+  )
+}
+
+const renderTemplate = (h, m, template, root) => {
+  template = template || m.template
+  return (
+    <el-row>
+      {_.map(template, obj => {
+        return _.map(obj, (element, key) => {
+          if (Array.isArray(element)) {
+            return (
+              <el-col class={m.getClasses(key)}>
+                {renderTemplate(h, m, element, key)}
+              </el-col>
+            )
+          } else if (typeof element === 'string') {
+            return (
+              <el-col class={m.getClasses(key)}>
+                {buildCompWrapper(h, m, element, m.compType(element))}
+              </el-col>
+            )
+          } else {
+            console.log('Invalid element with key: ' + key)
+          }
+        })
       })}
-    </div>
+    </el-row>
   )
 }
 
@@ -36,12 +55,26 @@ export default {
     editMode: Boolean,
     active: Boolean
   },
+  created() {
+    if (this.sheet) this.sheet.detach()
+    let styleID =
+      Number(this.modData.styleID) >= this.conf.styles.length
+        ? this.conf.styles.length - 1
+        : Number(this.modData.styleID)
+    this.style = this.conf.styles[styleID || 0]
+    this.template = this.conf.templates[this.style.templateID || 0]
+    this.sheet = jss.createStyleSheet(this.style.data)
+    this.sheet.attach()
+  },
   render(h) {
-    return renderTemplate(h, this)
+    return <div class={this.getClasses('root')}>{renderTemplate(h, this)}</div>
   },
   methods: {
     isChildActive(property) {
       return this.editMode && this.active && property === this.activeProperty
+    },
+    compType(property) {
+      return this.conf.components[property]
     },
     jssClass(name) {
       return this.sheet.classes[name]
@@ -53,22 +86,19 @@ export default {
       if (this.theme) return this.theme.data[name]
     },
     compWrapperClass(name) {
-      let classes = []
+      let classes = this.getClasses(name)
       if (this.isChildActive(name)) classes.push('comp-active')
-      if (this.jssClass(name)) classes.push(this.jssClass(name))
-      if (this.style.theme && this.style.theme[name]) {
-        this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
-      }
       return classes
     },
-    modClasses() {
+    getClasses(name) {
+      name = name || 'root'
       let classes = []
-      let name = 'root'
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
       }
-      return classes
+      if (this.style.layout) classes.push(this.style.layout[name])
+      return _.flatten(classes)
     },
     compWrapperOptions(name) {
       let options = {}
@@ -95,17 +125,5 @@ export default {
       // use basic data as default to make sure the mod data is correct
       return _.merge(_.cloneDeep(this.conf.properties), this.mod.data)
     }
-  },
-  created() {
-    console.log(this.conf)
-
-    if (this.sheet) this.sheet.detach()
-    let styleID =
-      Number(this.modData.styleID) >= this.conf.styles.length
-        ? this.conf.styles.length - 1
-        : Number(this.modData.styleID)
-    this.style = this.conf.styles[styleID || 0]
-    this.sheet = jss.createStyleSheet(this.style.data)
-    this.sheet.attach()
   }
 }

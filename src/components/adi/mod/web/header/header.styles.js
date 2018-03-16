@@ -5,33 +5,30 @@ export default [
       // 定义mod根div的样式
       root: {
         height: '203px',
-        position: 'relative'
+        position: 'relative',
+        'padding-top': '30px'
       },
       logo: {
         height: '87px',
         width: '87px',
-        'padding-left': '28px',
-        'padding-right': '28px',
-        'padding-top': '30px',
-        'padding-bottom': '30px',
-        position: 'absolute',
-        top: 0,
-        left: 0
+        margin: 'auto'
       },
-      couple: {
-        position: 'absolute',
-        top: '35%',
-        left: '145px',
-        transform: 'translateY(-50%)'
+      colLogo: {
+        width: '100px'
+      },
+      colCouple: {
+        'min-width': '200px'
       },
       // 定义子组件menu的wrapper样式
       menu: {
         width: '100%',
         height: '50px',
-        position: 'absolute',
-        top: '153px',
-        left: 0
+        'margin-top': '30px'
       }
+    },
+    layout: {
+      colLogo: ['el-col-xs-8', 'el-col-sm-8'],
+      colCouple: ['el-col-xs-12', 'el-col-sm-12']
     },
     theme: {
       root: ['font_0', 'color_7']
