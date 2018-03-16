@@ -1,19 +1,59 @@
 <template>
-  <el-row :gutter="0" class="full-height" type='flex' @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp()">
+  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp()">
     <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
-      <el-button :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')">搜索</el-button>
-      <el-button :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')">ADI属性</el-button>
-      <el-button :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')">Mod list</el-button>
-      <el-button :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')">文件管理</el-button>
-      <component :is='activeComponent'></component>
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-file" @click="changeView('FileManager')"></el-button>
+          <el-button class="btn-bigfile" @click="changeView('ModPropertyManager')"></el-button>
+          <el-button class="btn-mods" @click="changeView('ModsList')"></el-button>
+          <el-button class="btn-search" @click="changeView('Search')"></el-button>
+        </el-button-group>
+      </el-row>
+      <el-row class="manager-content-box">
+        <component :is='activeComponent'></component>
+      </el-row>
       <!-- <mod-property-manager> </mod-property-manager> -->
     </el-col>
     <div class="editor-resizer" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
     <el-col id="previewWin" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-computer" title="电脑"></el-button>
+          <el-button class="btn-phone" title="手机"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-scale" title="缩小"></el-button>
+          <el-button class="btn-enlarge" title="放大"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-adaptive" title="自适应"></el-button>
+          <el-button class="btn-newWin" title="新窗口打开"></el-button>
+        </el-button-group>
+      </el-row>
       <editor-viewport></editor-viewport>
     </el-col>
     <div class="editor-resizer" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" :style='{ width: codeWinWidth + "%" }' class="code-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-H1" title="标题1"></el-button>
+          <el-button class="btn-H2" title="标题2"></el-button>
+          <el-button class="btn-H3" title="标题3"></el-button>
+          <el-button class="btn-bold" title="加粗"></el-button>
+          <el-button class="btn-italic" title="斜体"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-listul" title="无序列表"></el-button>
+          <el-button class="btn-listol" title="有序列表"></el-button>
+          <el-button class="btn-blockqote" title="引用内容"></el-button>
+          <el-button class="btn-table" title="表格"></el-button>
+          <el-button class="btn-horizontal-line" title="水平分割线"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-code" title="代码"></el-button>
+          <el-button class="btn-link" title="链接"></el-button>
+        </el-button-group>
+      </el-row>
       <editor-markdown/>
     </el-col>
   </el-row>
@@ -106,21 +146,115 @@ export default {
 </script>
 
 <style scoped>
-.manager-win {
-  background-color: #fff;
+.full-height{
+  height: 100%;;
 }
-.preview-win {
-  background-color: #fff;
+.manager-win, .preview-win, .code-win {
+  display: flex;
+  flex-direction: column;
 }
-.code-win {
+.manager-content-box{
+  flex: 1;
   background-color: #fff;
-}
-.full-height {
-  height: 100%;
 }
 .editor-resizer {
-  width: 10px;
-  background-color: #343436;
+  width: 17px;
+  background-color: #cdd4db;
   cursor: col-resize;
+}
+.editor-resizer:hover {
+  background-color: #d9eafb;
+}
+.manager-win .el-button,
+.code-win .el-button {
+  width: 50px;
+  height: 40px;
+}
+.toolbar {
+  background-color: #fff;
+  padding: 9px 15px;
+  margin-bottom: 10px;
+}
+</style>
+<style lang="scss" scoped>
+$spriteUrl: '../../assets/img/editor_sprites.png';
+
+.btn-file {
+  background: url($spriteUrl) 13px 6px no-repeat;
+}
+.btn-bigfile {
+  background: url($spriteUrl) -37px 6px no-repeat;
+}
+.btn-mods {
+  background: url($spriteUrl) -88px 6px no-repeat;
+}
+.btn-search {
+  background: url($spriteUrl) -140px 6px no-repeat;
+}
+.btn-computer {
+  width: 49px;
+  height: 40px;
+  background: url($spriteUrl) -394px 6px no-repeat;
+}
+.btn-phone {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -444px 6px no-repeat;
+}
+.btn-scale {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -496px 6px no-repeat;
+}
+.btn-enlarge {
+  width: 50px;
+  height: 40px;
+  background: url($spriteUrl) -546px 6px no-repeat;
+}
+.btn-adaptive {
+  width: 45px;
+  height: 40px;
+  background: url($spriteUrl) -600px 6px no-repeat;
+}
+.btn-newWin {
+  width: 45px;
+  height: 40px;
+  background: url($spriteUrl) -652px 6px no-repeat;
+}
+.btn-H1 {
+  background: url($spriteUrl) -698px 6px no-repeat;
+}
+.btn-H2 {
+  background: url($spriteUrl) -748px 6px no-repeat;
+}
+.btn-H3 {
+  background: url($spriteUrl) -802px 6px no-repeat;
+}
+.btn-bold {
+  background: url($spriteUrl) -851px 6px no-repeat;
+}
+.btn-italic {
+  background: url($spriteUrl) -902px 6px no-repeat;
+}
+.btn-listul {
+  background: url($spriteUrl) -954px 6px no-repeat;
+}
+.btn-listol {
+  background: url($spriteUrl) -1004px 6px no-repeat;
+}
+.btn-blockqote {
+  background: url($spriteUrl) -1054px 6px no-repeat;
+}
+.btn-table {
+  background: url($spriteUrl) -1106px 6px no-repeat;
+}
+.btn-horizontal-line {
+  background: url($spriteUrl) -1158px 6px no-repeat;
+}
+.btn-code {
+  background: url($spriteUrl) -1208px 6px no-repeat;
+}
+.btn-link {
+  background: url($spriteUrl) -1258px 6px no-repeat;
 }
 </style>
