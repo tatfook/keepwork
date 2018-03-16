@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import '@/lib/iconfont/iconfont.css'
 export default {
   name: 'EditorHeader',
   data: function() {
