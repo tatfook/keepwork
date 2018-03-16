@@ -8,5 +8,5 @@ RUN npm run build
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
-COPY --from=builder /build/dist ./wikitest
+COPY --from=builder /build/dist .
 CMD ["nginx", "-g", "daemon off;"]
