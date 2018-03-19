@@ -1,12 +1,12 @@
 export default {
   data: [
     {
-      name: '',
+      name: 'test1',
       img: '',
       link: ''
     },
     {
-      name: '',
+      name: 'test2',
       img: '',
       link: ''
     }

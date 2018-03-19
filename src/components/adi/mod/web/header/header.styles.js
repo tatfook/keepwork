@@ -6,17 +6,20 @@ export default [
       root: {},
       logo: {
         height: '87px',
-        width: '87px',
-        margin: 'auto'
+        width: '87px'
       },
       colLogo: {
-        width: '87px'
+        width: 'auto'
       },
       colCouple: {
         'min-width': '200px',
         height: '87px',
         display: 'flex',
         'align-items': 'center'
+      },
+      colMenu: {
+        'padding-top': '5px',
+        'padding-bottom': '5px'
       },
       // 定义子组件menu的wrapper样式
       menu: {
