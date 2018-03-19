@@ -14,14 +14,11 @@ export default {
   methods: {},
   computed: {
     style() {
-      return (
-        'font-size:' +
-        this.options.fontSize +
-        ';color:' +
-        this.options.fontColor +
-        ';background:' +
-        this.options.bgColor
-      )
+      return this.generateStyleString({
+        'font-size': this.options.fontSize,
+        color: this.options.fontColor,
+        margin: 0
+      })
     }
   }
 }

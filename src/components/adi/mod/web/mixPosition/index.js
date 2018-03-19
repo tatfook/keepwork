@@ -1,6 +1,7 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import mod from './MixPosition'
+import mod from '@/components/adi/mod/base/Base'
 import styles from './mixPosition.styles'
+import templates from './mixPosition.templates'
 
 const name = 'ModMixPosition'
 
@@ -14,4 +15,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles }
+export default { mod, name, components, properties, styles, templates }

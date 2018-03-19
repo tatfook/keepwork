@@ -1,12 +1,12 @@
 export default [
   // template 1
   [
-    { colLogo: 'media' },
+    { colMedia: 'media' },
     {
       colGroup: [
         { colTitle: 'title' },
         { colSubtitle: 'subtitle' },
-        { colParagraph: 'parapragh' },
+        { colParagraph: 'paragraph' },
         { colButton: 'button' }
       ]
     }
@@ -18,11 +18,11 @@ export default [
       colGroup: [
         { colTitle: 'title' },
         { colSubtitle: 'subtitle' },
-        { colParagraph: 'parapragh' },
+        { colParagraph: 'paragraph' },
         { colButton: 'button' }
       ]
     },
-    { colLogo: 'media' }
+    { colMedia: 'media' }
   ],
 
   // template 3
@@ -31,20 +31,20 @@ export default [
       colGroup: [
         { colTitle: 'title' },
         { colSubtitle: 'subtitle' },
-        { colParagraph: 'parapragh' }
+        { colParagraph: 'paragraph' }
       ]
     },
-    { colLogo: 'media' }
+    { colMedia: 'media' }
   ],
 
   // template 4
   [
-    { colLogo: 'media' },
+    { colMedia: 'media' },
     {
       colGroup: [
         { colTitle: 'title' },
         { colSubtitle: 'subtitle' },
-        { colParagraph: 'parapragh' }
+        { colParagraph: 'paragraph' }
       ]
     }
   ]
