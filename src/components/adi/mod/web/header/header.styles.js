@@ -24,9 +24,10 @@ export default [
         height: '50px'
       }
     },
-    layout: {
-      colLogo: ['el-col-xs-8', 'el-col-sm-8'],
-      colCouple: ['el-col-xs-16', 'el-col-sm-16']
+    props: {
+      colLogo: { span: 10 },
+      colCouple: { span: 16 },
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: ['font_0', 'color_7']
