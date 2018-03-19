@@ -60,3 +60,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.viewport-container {
+  flex: 1;
+  background-color: #FFF;
+  overflow: auto;
+}
+</style>

@@ -10,25 +10,6 @@
       </el-dialog>
     </el-main>
   </el-container>
-  <!-- <div id='editor'>
-    <el-menu mode='horizontal'>
-      <el-menu-item index='0'>
-        <a href='/'> Home </a>
-      </el-menu-item>
-      <el-menu-item index='1'>
-        <router-link to='/user/repo/page1'> page1 </router-link>
-      </el-menu-item>
-      <el-menu-item index='2'>
-        <router-link to='/user/repo/page2'> page2 </router-link>
-      </el-menu-item>
-      <el-button @click='showPreview'>Preview</el-button>
-    </el-menu>
-    <router-view/>
-    <el-dialog :visible.sync='dialogVisible' width='100%' height='100%'>
-      <PageViewer />
-    </el-dialog>
-
-  </div> -->
 </template>
 
 <script>
@@ -74,7 +55,8 @@ body {
 }
 .el-main {
   height: 100%;
-  padding: 0 10px;
+  padding: 17px 16px;
+  background-color: #cdd4dc;
 }
 </style>
 
