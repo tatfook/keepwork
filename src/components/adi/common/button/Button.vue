@@ -1,9 +1,5 @@
 <template>
-  <div class="comp-button">
-    <a :href="data.link">
-      <button :style="style"> {{data.text}} </button>
-    </a>
-  </div>
+  <button>{{source.name}}</button>
 </template>
 
 <script>

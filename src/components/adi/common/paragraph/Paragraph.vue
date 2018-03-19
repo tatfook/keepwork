@@ -1,6 +1,6 @@
 <template>
   <div class="comp-paragraph">
-    <p>{{ data.content }}</p>
+    <p>{{ source.content }}</p>
   </div>
 </template>
 

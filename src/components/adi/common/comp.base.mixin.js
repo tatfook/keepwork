@@ -28,10 +28,5 @@ export default {
 
       return parseInt(px) / rem + 'rem'
     }
-  },
-  computed: {
-    data() {
-      return JSON.parse(this.source.data)
-    }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="comp-tagline">
-    <a :href="data.link">
-      <h1 :style="style">{{ data.name }}</h1>
+    <a :href="source.link">
+      <h1 :style="style">{{ source.name }}</h1>
     </a>
   </div>
 </template>
@@ -15,6 +15,7 @@ export default {
   methods: {},
   computed: {
     style() {
+<<<<<<< HEAD
       return this.generateStyleString({
         'font-size': this.options.fontSize,
         color: this.options.fontColor,
@@ -23,6 +24,17 @@ export default {
     },
     data() {
       return JSON.parse(this.source.data)
+=======
+      return (
+        'font-size:' +
+        this.options.fontSize +
+        ';line-height:' +
+        parseInt(this.options.fontSize) / 2 +
+        'px' +
+        ';color:' +
+        this.options.fontColor
+      )
+>>>>>>> 4f2f857... Update basic component, always use json data directly, DO NOT use json string!!!
     }
   }
 }

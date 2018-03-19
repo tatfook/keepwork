@@ -1,6 +1,6 @@
 <template>
   <div class="comp-logo">
-    <a :href="data.link">
+    <a :href="source.link">
       <div class="logo-img" :style="logoImg"></div>
     </a>
   </div>
@@ -17,12 +17,9 @@ export default {
     logoImg() {
       return (
         `background: url('` +
-        this.data.img +
+        this.source.img +
         `');background-position: center;background-size: cover;`
       )
-    },
-    data() {
-      return JSON.parse(this.source.data)
     }
   }
 }

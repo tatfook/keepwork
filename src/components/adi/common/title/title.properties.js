@@ -1,6 +1,4 @@
 export default {
-  data: `{
-      "name": "TITLE",
-      "link": "http://keepwork.com"
-    }`
+  name: 'TITLE',
+  link: 'http://keepwork.com'
 }
