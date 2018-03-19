@@ -49,9 +49,6 @@ export default {
     mode() {
       return this.options.mode
     }
-  },
-  created() {
-    console.log(this)
   }
 }
 </script>

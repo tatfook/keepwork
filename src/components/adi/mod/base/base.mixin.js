@@ -55,7 +55,8 @@ export default {
     editMode: Boolean,
     active: Boolean
   },
-  created() {
+  created() {},
+  render(h) {
     if (this.sheet) this.sheet.detach()
     let styleID =
       Number(this.modData.styleID) >= this.conf.styles.length
@@ -65,8 +66,7 @@ export default {
     this.template = this.conf.templates[this.style.templateID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
-  },
-  render(h) {
+
     return <div class={this.getClasses('root')}>{renderTemplate(h, this)}</div>
   },
   methods: {
