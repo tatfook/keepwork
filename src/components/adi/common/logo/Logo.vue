@@ -15,11 +15,11 @@ export default {
   methods: {},
   computed: {
     logoImg() {
-      return (
-        `background: url('` +
-        this.source.img +
-        `');background-position: center;background-size: cover;`
-      )
+      return this.generateStyleString({
+        background: 'url(' + this.source.img + ')',
+        'background-position': 'center',
+        'background-size': 'cover'
+      })
     }
   }
 }

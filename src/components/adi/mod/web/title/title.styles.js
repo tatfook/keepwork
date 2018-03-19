@@ -21,9 +21,15 @@ export default [
         'align-items': 'center'
       }
     },
+<<<<<<< HEAD
     layout: {
       colLogo: ['el-col-xs-8', 'el-col-sm-8', 'el-col-8'],
       colCouple: ['el-col-xs-16', 'el-col-sm-16', 'el-col-16']
+=======
+    props: {
+      colLogo: { span: 8 },
+      colCouple: { span: 16 }
+>>>>>>> f25d5d0... 1. title layout gutter and props 2. img loop layout
     },
     theme: {
       root: ['font_0', 'color_7']
