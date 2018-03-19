@@ -11,7 +11,7 @@ const renderTemplate = (h, m) => {
         text-color={m.options.fontColor}
         active-text-color={m.options.fontColor}
       >
-        {_.map(m.data, menuData => {
+        {_.map(m.source.data, menuData => {
           if (!menuData.child) {
             return (
               <el-menu-item style={m.options.itemStyle} index="1">

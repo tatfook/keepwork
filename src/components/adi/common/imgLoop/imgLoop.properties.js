@@ -1,14 +1,14 @@
 export default {
-  data: `[
+  data: [
     {
-      "name": "",
-      "img": "",
-      "link": ""
+      name: '',
+      img: '',
+      link: ''
     },
     {
-      "name": "",
-      "img": "",
-      "link": ""
+      name: '',
+      img: '',
+      link: ''
     }
-  ]`
+  ]
 }

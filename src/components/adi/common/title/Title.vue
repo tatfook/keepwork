@@ -1,9 +1,9 @@
 <template>
-    <div class="comp-business-name">
-        <a :href="data.link">
-            <h1 :style="style">{{ data.name }}</h1>
-        </a>
-    </div>
+  <div class="comp-business-name">
+    <a :href="source.link">
+      <h1 :style="style">{{ source.name }}</h1>
+    </a>
+  </div>
 </template>
 
 <script>
