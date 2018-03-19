@@ -22,19 +22,20 @@ const buildCompWrapper = (h, m, property, compType) => {
 
 const renderTemplate = (h, m, template, root) => {
   template = template || m.template
+  root = (root || 'root') + 'Row'
   return (
-    <el-row>
+    <el-row {...m.getProps(root)} class={m.getClasses(root)}>
       {_.map(template, obj => {
         return _.map(obj, (element, key) => {
           if (Array.isArray(element)) {
             return (
-              <el-col class={m.getClasses(key)}>
+              <el-col {...m.getProps(key)} class={m.getClasses(key)}>
                 {renderTemplate(h, m, element, key)}
               </el-col>
             )
           } else if (typeof element === 'string') {
             return (
-              <el-col class={m.getClasses(key)}>
+              <el-col {...m.getProps(key)} class={m.getClasses(key)}>
                 {buildCompWrapper(h, m, element, m.compType(element))}
               </el-col>
             )
@@ -97,8 +98,11 @@ export default {
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
       }
-      if (this.style.layout) classes.push(this.style.layout[name])
       return _.flatten(classes)
+    },
+    getProps(name) {
+      let props = (this.style.props && this.style.props[name]) || {}
+      return { props }
     },
     compWrapperOptions(name) {
       let options = {}
