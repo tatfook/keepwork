@@ -47,7 +47,6 @@
           <a href="/">返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='2'>{{pathname}}</el-menu-item>
       <el-menu-item index='3' class="li-btn">
         <span class="btn icon-save" title="保存"></span>
       </el-menu-item>
@@ -60,8 +59,13 @@
       <el-menu-item index='6' class="li-btn">
         <span class="btn icon-full-screen" title="全屏"></span>
       </el-menu-item>
+      <el-menu-item index='2'>
+        <span class="input-link-copy-box">
+          <a :href="pathname" target="_blank">{{pathname}}</a>
+        </span>
+      </el-menu-item>
 
-      <el-menu-item index='7' class="pull-right">
+      <el-menu-item index='7' class="pull-right user-profile-box">
         <img class="user-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
       </el-menu-item>
     </el-menu>
@@ -80,7 +84,7 @@ export default {
 </script>
 
 <style scoped>
-.kp-logo{
+.kp-logo {
   width: 127px;
 }
 .li-btn {
@@ -96,28 +100,44 @@ export default {
 .pull-right {
   float: right !important;
 }
+.user-profile-box {
+  padding-right: 0;
+}
 .user-profile {
   width: 46px;
   height: 46px;
   border-radius: 50%;
 }
+.input-link-copy-box {
+  display: inline-block;
+  width: 367px;
+  border: 1px solid #dcdfe6;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 4px;
+  padding: 0 16px;
+}
+.input-link-copy-box a{
+  color: #288ce9;
+  text-decoration: none;
+}
 </style>
 
 <style lang="scss" scoped>
-  $spriteUrl: '../../assets/img/editor_sprites.png';
+$spriteUrl: '../../assets/img/editor_sprites.png';
 
-  .icon-save {
-    background: url($spriteUrl) -194px 6px no-repeat;
-  }
-  .icon-undo {
-    background: url($spriteUrl) -246px 6px no-repeat;
-  }
-  .icon-redo {
-    background: url($spriteUrl) -295px 6px no-repeat;
-  }
-  .icon-full-screen {
-    background: url($spriteUrl) -346px 6px no-repeat;
-  }
+.icon-save {
+  background: url($spriteUrl) -194px 6px no-repeat;
+}
+.icon-undo {
+  background: url($spriteUrl) -246px 6px no-repeat;
+}
+.icon-redo {
+  background: url($spriteUrl) -295px 6px no-repeat;
+}
+.icon-full-screen {
+  background: url($spriteUrl) -346px 6px no-repeat;
+}
 </style>
 
 

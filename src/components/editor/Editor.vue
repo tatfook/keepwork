@@ -3,10 +3,22 @@
     <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="btn-file" @click="changeView('FileManager')"></el-button>
-          <el-button class="btn-bigfile" @click="changeView('ModPropertyManager')"></el-button>
-          <el-button class="btn-mods" @click="changeView('ModsList')"></el-button>
-          <el-button class="btn-search" @click="changeView('Search')"></el-button>
+          <el-button class="btn-file" 
+            :class='{"el-button--primary": activeComponent=="FileManager"}' 
+            @click="changeView('FileManager')"
+          ></el-button>
+          <el-button class="btn-bigfile"
+            :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' 
+            @click="changeView('ModPropertyManager')"
+           ></el-button>
+          <el-button class="btn-mods" 
+            :class='{"el-button--primary": activeComponent=="ModsList"}' 
+            @click="changeView('ModsList')"
+          ></el-button>
+          <el-button class="btn-search" 
+            :class='{"el-button--primary": activeComponent=="Search"}' 
+            @click="changeView('Search')"
+          ></el-button>
         </el-button-group>
       </el-row>
       <el-row class="manager-content-box">
@@ -170,10 +182,34 @@ export default {
   width: 50px;
   height: 40px;
 }
+.manager-win .el-button-group .el-button--primary{
+  border-color: #409eff;
+}
 .toolbar {
   background-color: #fff;
   padding: 9px 15px;
   margin-bottom: 10px;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+}
+.toolbar::-webkit-scrollbar  
+{  
+    width: 8px;  
+    height: 8px;  
+    background-color: #F5F5F5;
+} 
+.toolbar::-webkit-scrollbar-track  
+{  
+    border-radius: 0px;  
+    background-color: #F5F5F5;  
+}
+.toolbar::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+    background-color: #555;  
 }
 </style>
 <style lang="scss" scoped>
