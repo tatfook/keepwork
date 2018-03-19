@@ -1,5 +1,3 @@
 export default {
-  data: `{
-    "name": "按钮"
-  }`
+  name: '按钮'
 }

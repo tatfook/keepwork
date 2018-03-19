@@ -16,19 +16,19 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     isImage() {
-      return Media.isImage(this.data.src)
+      return Media.isImage(this.source.src)
     },
     isVideo() {
-      return Media.isVideo(this.data.src)
+      return Media.isVideo(this.source.src)
     },
     hasMedia() {
-      return this.data.src && this.data.src !== ''
+      return this.source.src && this.source.src !== ''
     },
     src() {
-      return this.data.src
+      return this.source.src
     },
     link() {
-      return this.data.link
+      return this.source.link
     }
   }
 }

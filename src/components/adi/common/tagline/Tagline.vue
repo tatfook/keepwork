@@ -1,7 +1,7 @@
 <template>
   <div class="comp-tagline">
-    <a :href="data.link">
-      <h1 :style="style">{{ data.name }}</h1>
+    <a :href="source.link">
+      <h1 :style="style">{{ source.name }}</h1>
     </a>
   </div>
 </template>
@@ -22,9 +22,6 @@ export default {
         margin: 0
         // 'margin-top': parseInt(this.options.fontSize) / 2 + 'px'
       })
-    },
-    data() {
-      return JSON.parse(this.source.data)
     }
   }
 }

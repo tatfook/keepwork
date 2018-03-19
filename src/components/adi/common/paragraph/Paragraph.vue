@@ -1,7 +1,7 @@
 <template>
-    <div class="comp-paragraph">
-        <p>{{ data.content }}</p>
-    </div>
+  <div class="comp-paragraph">
+    <p>{{ source.content }}</p>
+  </div>
 </template>
 
 <script>
