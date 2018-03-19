@@ -4,26 +4,26 @@ export default [
     data: {
       // 定义mod根div的样式
       root: {
-        height: '147px',
-        position: 'relative'
+        // height: '147px',
+        // position: 'relative'
       },
       logo: {
         height: '87px',
-        width: '87px',
-        'padding-left': '28px',
-        'padding-right': '28px',
-        'padding-top': '30px',
-        'padding-bottom': '30px',
-        position: 'absolute',
-        top: 0,
-        left: 0
+        width: '87px'
       },
-      couple: {
-        position: 'absolute',
-        top: '50%',
-        left: '145px',
-        transform: 'translateY(-50%)'
+      colLogo: {
+        width: '87px'
+      },
+      couple: {},
+      colCouple: {
+        height: '87px',
+        display: 'flex',
+        'align-items': 'center'
       }
+    },
+    layout: {
+      colLogo: ['el-col-xs-8', 'el-col-sm-8'],
+      colCouple: ['el-col-xs-16', 'el-col-sm-16']
     },
     theme: {
       root: ['font_0', 'color_7']

@@ -1,9 +1,9 @@
 <template>
-    <div class="comp-tagline">
-        <a :href="data.link">
-            <h1 :style="style">{{ data.name }}</h1>
-        </a>
-    </div>
+  <div class="comp-tagline">
+    <a :href="data.link">
+      <h1 :style="style">{{ data.name }}</h1>
+    </a>
+  </div>
 </template>
 
 <script>

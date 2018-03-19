@@ -63,15 +63,25 @@ export default {
 </script>
 
 <style>
-html, body, .el-container{
+html,
+body,
+.el-container {
   height: 100%;
 }
-body{
+body {
   margin: 0;
   padding: 0;
 }
-.el-main{
-    height: 100%;
-    padding: 0 10px;
+.el-main {
+  height: 100%;
+  padding: 0 10px;
 }
 </style>
+
+<style lang="scss">
+@function px2rem($px) {
+  $rem: 100px;
+  @return ($px/$rem) + rem;
+}
+</style>
+

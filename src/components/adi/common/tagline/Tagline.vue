@@ -15,15 +15,13 @@ export default {
   methods: {},
   computed: {
     style() {
-      return (
-        'font-size:' +
-        this.options.fontSize +
-        ';line-height:' +
-        parseInt(this.options.fontSize) / 2 +
-        'px' +
-        ';color:' +
-        this.options.fontColor
-      )
+      return this.generateStyleString({
+        'font-size': this.options.fontSize,
+        'line-height': this.options.fontSize,
+        color: this.options.fontColor,
+        margin: 0
+        // 'margin-top': parseInt(this.options.fontSize) / 2 + 'px'
+      })
     },
     data() {
       return JSON.parse(this.source.data)

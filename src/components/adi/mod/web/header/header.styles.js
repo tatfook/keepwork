@@ -3,32 +3,30 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {
-        height: '203px',
-        position: 'relative',
-        'padding-top': '30px'
-      },
+      root: {},
       logo: {
         height: '87px',
         width: '87px',
         margin: 'auto'
       },
       colLogo: {
-        width: '100px'
+        width: '87px'
       },
       colCouple: {
-        'min-width': '200px'
+        'min-width': '200px',
+        height: '87px',
+        display: 'flex',
+        'align-items': 'center'
       },
       // 定义子组件menu的wrapper样式
       menu: {
         width: '100%',
-        height: '50px',
-        'margin-top': '30px'
+        height: '50px'
       }
     },
     layout: {
       colLogo: ['el-col-xs-8', 'el-col-sm-8'],
-      colCouple: ['el-col-xs-12', 'el-col-sm-12']
+      colCouple: ['el-col-xs-16', 'el-col-sm-16']
     },
     theme: {
       root: ['font_0', 'color_7']
