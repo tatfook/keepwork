@@ -21,6 +21,10 @@ export default [
         float: 'right'
       }
     },
+    layout: {
+      colMedia: ['el-col-xs-4', 'el-col-sm-4', 'el-col-4'],
+      colGroup: ['el-col-xs-8', 'el-col-sm-8', 'el-col-8']
+    },
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']
