@@ -2,42 +2,53 @@
 import compBaseMixin from '../comp.base.mixin'
 import _ from 'lodash'
 
-const renderTemplate = (h, m) => {
-  return (
-    <div class="comp-menu">
-      <el-menu
-        mode={m.mode}
-        background-color={m.options.menuBackground}
-        text-color={m.options.fontColor}
-        active-text-color={m.options.fontColor}
-      >
-        {_.map(m.source.data, menuData => {
-          if (!menuData.child) {
-            return (
-              <el-menu-item style={m.options.itemStyle} index="1">
-                {menuData.name}
-              </el-menu-item>
-            )
-          } else {
-            return (
-              <el-submenu style={m.options.itemStyle} index="2">
-                <template slot="title">{menuData.name}</template>
-                {_.map(menuData.child, sMenuData => {
-                  return <el-menu-item index="2">{sMenuData.name}</el-menu-item>
-                })}
-              </el-submenu>
-            )
-          }
-        })}
-      </el-menu>
-    </div>
-  )
+const renderTemplate = (h, m, data, parentIndex) => {
+  data = data || m.source.data
+  let index = 0
+
+  function getIndexString(index, isSubIndex) {
+    if (parentIndex) {
+      return String(parentIndex + '-' + index)
+    } else {
+      return String(index)
+    }
+  }
+
+  return _.map(data, menuData => {
+    index++
+
+    if (!menuData.child) {
+      return (
+        <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
+          {menuData.name}
+        </el-menu-item>
+      )
+    } else {
+      return (
+        <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
+          <template slot="title">{menuData.name}</template>
+          {renderTemplate(h, m, menuData.child, getIndexString(index))}
+        </el-submenu>
+      )
+    }
+  })
 }
 
 export default {
   name: 'AdiMenu',
   render(h) {
-    return renderTemplate(h, this)
+    return (
+      <div class="comp-menu">
+        <el-menu
+          mode={this.mode}
+          background-color={this.options.menuBackground}
+          text-color={this.options.fontColor}
+          active-text-color={this.options.fontColor}
+        >
+          {renderTemplate(h, this)}
+        </el-menu>
+      </div>
+    )
   },
   mixins: [compBaseMixin],
   methods: {
