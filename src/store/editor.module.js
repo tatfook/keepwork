@@ -24,6 +24,7 @@ const state = () => ({
     isManagerShow: true,
     isCodeShow: true,
     isPreviewShow: true
+  }
 })
 
 const getters = {
