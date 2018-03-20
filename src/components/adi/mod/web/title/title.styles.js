@@ -12,7 +12,7 @@ export default [
         width: '87px'
       },
       colLogo: {
-        width: '87px'
+        width: 'auto'
       },
       couple: {},
       colCouple: {
@@ -23,7 +23,8 @@ export default [
     },
     props: {
       colLogo: { span: 8 },
-      colCouple: { span: 16 }
+      colCouple: { span: 16 },
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: ['font_0', 'color_7']

@@ -7,10 +7,13 @@ const name = 'ModTitle'
 
 const components = {
   logo: 'AdiLogo',
-  businessName: 'AdiBusinessName',
-  tagline: 'AdiTagline'
+  businessName: 'AdiTitle',
+  tagline: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)
+
+properties.businessName.name = 'BUSINESS NAME'
+properties.tagline.name = 'TAG LINE'
 
 export default { mod, name, components, properties, styles, templates }

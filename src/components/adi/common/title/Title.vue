@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-business-name">
+  <div class="comp-title">
     <a :href="source.link">
       <h1 :style="style">{{ source.name }}</h1>
     </a>
@@ -30,3 +30,4 @@ a {
   text-decoration: none;
 }
 </style>
+
