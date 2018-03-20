@@ -1,7 +1,8 @@
 import gitLabAPIGenerator from 'node-gitlab-api'
 
 const defaultConfig = {
-  url: process.env.GITLAB_API_PREFIX
+  url: process.env.GITLAB_API_PREFIX,
+  token: ''
 }
 
 export const newGitlabAPI = (params) => gitLabAPIGenerator({
@@ -9,6 +10,6 @@ export const newGitlabAPI = (params) => gitLabAPIGenerator({
   ...params
 })
 
-const gitlab = newGitlabAPI({token: 'GB5sw41LBpCZFMb3ZhRx'})
+const gitlab = newGitlabAPI()
 
 export default gitlab

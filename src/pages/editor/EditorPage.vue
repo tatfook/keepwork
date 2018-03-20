@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import EditorHeader from '@/components/editor/EditorHeader'
 
@@ -31,17 +31,25 @@ export default {
     this.userLogin({
       username: 'kaitlyn',
       password: '123456'
+    }).then(() => {
+      return this.userGetProfile()
+    }).then(() => {
+      return this.getAllProjects({max_pages:2, per_page:40})
     })
-
-    this.getAllProjects()
   },
   watch: {
     $route: 'setActivePage'
   },
+  computed: {
+    ...mapGetters({
+      gitlabConfig: 'user/gitlabConfig'
+    })
+  },
   methods: {
     ...mapActions({
       getAllProjects: 'gitlab/getAllProjects',
-      userLogin: 'user/login'
+      userLogin: 'user/login',
+      userGetProfile: 'user/getProfile',
     }),
     setActivePage() {
       this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
