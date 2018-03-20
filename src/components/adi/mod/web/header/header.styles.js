@@ -54,8 +54,7 @@ export default [
       config: {
         // 子组件配置参数
         menu: {
-          mode: 'horizontal',
-          itemStyle: `float: left`
+          mode: 'horizontal'
         }
       }
     }
