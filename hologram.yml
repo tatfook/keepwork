@@ -1,0 +1,26 @@
+# Hologram config
+# Important: Please install hologram ruby gem and hologram-github-theme npm package first.
+
+# The directory containing the source files to parse
+source: ./src
+
+# The directory that hologram will build to
+destination: ./docs
+
+# The assets needed to build the docs (includes header.html, footer.html, etc)
+documentation_assets: ./node_modules/hologram-github-theme
+
+# This is a custom markdown renderer (see Redcarpet documentation for
+# how to do this)
+# custom_markdown: trulia_markdown_renderer.rb
+
+# Any other asset folders that need to be copied to the destination folder
+# This where you should include your full stylesheets, component javascript,
+# libraries and any other dependencies your style guide will have
+dependencies:
+  # - ./build
+
+# To additionally output navigation for top level sections, set the value to
+# 'section'. To output navigation for sub-sections,
+# set the value to `all`
+nav_level: all
