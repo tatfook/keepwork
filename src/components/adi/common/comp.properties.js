@@ -1,10 +1,6 @@
 import AdiImgLoop from './imgLoop/imgLoop.properties'
 import AdiTitle from './title/title.properties'
-import AdiSubtitle from './subtitle/subtitle.properties'
-import AdiParagraph from './paragraph/paragraph.properties'
 import AdiButton from './button/button.properties'
-import AdiTagline from './tagline/tagline.properties'
-import AdiBusinessName from './businessName/businessName.properties'
 import AdiLogo from './logo/logo.properties'
 import AdiMenu from './menu/menu.properties'
 import AdiMedia from './media/media.properties'
@@ -14,11 +10,7 @@ import AdiMarkdown from './markdown/markdown.properties'
 export default {
   AdiImgLoop,
   AdiTitle,
-  AdiSubtitle,
-  AdiParagraph,
   AdiButton,
-  AdiTagline,
-  AdiBusinessName,
   AdiLogo,
   AdiMenu,
   AdiMedia,
