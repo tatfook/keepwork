@@ -210,6 +210,7 @@ export default {
 .code-win {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 .manager-content-box {
   flex: 1;

@@ -62,6 +62,7 @@ export default {
     },
     compWrapperClass(name) {
       let classes = []
+      classes.push('comp')
       if (this.isChildActive(name)) classes.push('comp-active')
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
