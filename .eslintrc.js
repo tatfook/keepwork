@@ -27,6 +27,7 @@ module.exports = {
         asyncArrow: 'always'
       }
     ],
+    'spaced-comment': [2, 'always', { exceptions: ['doc'] }],
     'brace-style': 2,
     // allow async-await
     'generator-star-spacing': 'off',

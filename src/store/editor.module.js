@@ -1,12 +1,9 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 
-Vue.use(Vuex)
-
-const state = {
+const state = () => ({
   activePage: '',
   code: '',
   modList: [],
@@ -22,8 +19,13 @@ const state = {
     colorID: 0,
     fontID: 0
   },
-  activeComponentType: ''
-}
+  activeComponentType: '',
+  showingCol: {
+    isManagerShow: true,
+    isCodeShow: true,
+    isPreviewShow: true
+  }
+})
 
 const getters = {
   activePage: state => state.activePage,
@@ -37,7 +39,8 @@ const getters = {
   },
   hasActiveMod: state => !!state.activeMod,
   hasActiveProperty: state => !!state.activeProperty,
-  activeComponentType: state => state.activeWinType
+  activeComponentType: state => state.activeWinType,
+  showingCol: state => state.showingCol
 }
 
 const actions = {
@@ -117,6 +120,9 @@ const actions = {
   },
   setActiveWinType({ commit }, componentType) {
     commit('UPDATE_WIN_TYPE', componentType)
+  },
+  resetShowingCol({ commit }, showingColObj) {
+    commit('RESET_SHOWING_COL', showingColObj)
   }
 }
 
@@ -191,12 +197,17 @@ const mutations = {
   },
   UPDATE_WIN_TYPE(state, componentType) {
     Vue.set(state, 'activeWinType', componentType)
+  },
+  RESET_SHOWING_COL(state, showingColObj) {
+    Vue.set(state.showingCol, 'isManagerShow', (showingColObj.isManagerShow === undefined ? true : showingColObj.isManagerShow))
+    Vue.set(state.showingCol, 'isPreviewShow', (showingColObj.isPreviewShow === undefined ? true : showingColObj.isPreviewShow))
+    Vue.set(state.showingCol, 'isCodeShow', (showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow))
   }
 }
 
-export default new Vuex.Store({
+export default {
   state,
   getters,
   actions,
   mutations
-})
+}

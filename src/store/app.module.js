@@ -1,9 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
-const state = {
+const state = () => ({
   modList: [],
   // layout: {
   //   header: {},
@@ -15,7 +10,7 @@ const state = {
     colorID: 0,
     fontID: 0
   }
-}
+})
 
 const getters = {
   themeConf: state => state.theme,
@@ -26,9 +21,9 @@ const actions = {}
 
 const mutations = {}
 
-export default new Vuex.Store({
+export default {
   state,
   getters,
   actions,
   mutations
-})
+}
