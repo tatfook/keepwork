@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { gitlab } from '@/api'
+import { newGitlabAPI } from '@/api'
 
 const GET_ALL_PROJECTS_SUCCESS = 'GET_ALL_PROJECTS_SUCCESS'
 const GET_FILE_CONTENT_SUCCESS = 'GET_FILE_CONTENT_SUCCESS'
@@ -8,23 +8,29 @@ const state = () => ({
   projects: {}
 })
 
-// todo: create gitlab api dynamically with user info in store
-
-console.log('gitlab.module.js gitlab: ', gitlab)
-
 const getters = {
   info: state => state.info
 }
 
+const gitlabCache = {}
+const getGitlabAPI = ({ rootGetters }) => {
+  let config = rootGetters['user/gitlabConfig']
+  let cacheKey = JSON.stringify(config)
+  return gitlabCache[cacheKey] || (
+    gitlabCache[cacheKey] = newGitlabAPI(config)
+  )
+}
+
 const actions = {
-  getAllProjects({ commit }, payload) {
-    gitlab.projects.all(payload).then(list => {
+  getAllProjects(context, payload) {
+    let { commit } = context
+    return getGitlabAPI(context).projects.all(payload).then(list => {
       commit(GET_ALL_PROJECTS_SUCCESS, list)
     })
   },
-  getFileContent({ commit }, payload) {
-    // todo: get file content
-    gitlab.projects.repository.file.showRaw(payload).then(content => {
+  getFileContent(context, payload) {
+    let { commit } = context
+    return getGitlabAPI(context).projects.repository.file.showRaw(payload).then(content => {
       commit(GET_FILE_CONTENT_SUCCESS, content)
     })
   }
