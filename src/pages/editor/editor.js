@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import EditorPage from './EditorPage'
 import router from './editor.router'
-import { editorModule } from '@/store'
+import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import JsonEditor from 'vue-json-editor-block-view'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -16,6 +16,8 @@ Vue.use(JsonEditor)
 
 const store = new Vuex.Store({
   modules: {
+    user: userModule,
+    gitlab: gitlabModule,
     editor: editorModule
   }
 })
