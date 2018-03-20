@@ -3,35 +3,26 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {
-        // position: 'relative',
-        // overflow: 'hidden',
-        // zoom: 1
-      },
+      root: {},
       media: {
-        width: '200px'
+        width: '200px',
+        height: '200px'
       },
       colMedia: {
-        width: '200px'
+        width: '200px',
+        height: '200px'
       },
-      // group: {
-      //   width: '300px'
-      //   float: 'left'
-      //   'margin-left': '1rem'
-      // },
       colGroup: {
-        width: '300px',
-        display: 'flex',
-        'align-items': 'center'
+        width: '300px'
       },
       button: {
         float: 'right'
       }
     },
-    layout: {
-      colMedia: ['el-col-xs-12', 'el-col-sm-12'],
-      colGroup: ['el-col-xs-12', 'el-col-sm-12']
-    },
+    // props: {
+    //   colMedia: { span: 12 },
+    //   colGroup: { sapn: 12 }
+    // },
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']

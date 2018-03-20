@@ -1,5 +1,9 @@
 <template>
-  <button>{{source.name}}</button>
+  <div class="comp-button">
+    <a :href="source.link" :style="style">
+      {{source.name}}
+    </a>
+  </div>
 </template>
 
 <script>
@@ -13,7 +17,7 @@ export default {
       return this.generateStyleString({
         'font-size': this.options.fontSize,
         color: this.options.fontColor,
-        margin: 0
+        'background-color': this.options.bgColor
       })
     }
   }
@@ -24,12 +28,7 @@ export default {
 .comp-button {
   height: 100%;
   a {
-    height: 100%;
-    button {
-      border: none;
-      height: 100%;
-      // line-height: 20px;
-    }
+    text-decoration: none;
   }
 }
 </style>
