@@ -1,8 +1,8 @@
 <template>
   <div class="block">
-    <el-carousel height="150px">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3>{{ item }}</h3>
+    <el-carousel :height="options.height">
+      <el-carousel-item v-for="item in source.data" :key="item">
+        <div class="imgs" :style="loadImg(item)"></div>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -14,12 +14,25 @@ import compBaseMixin from '../comp.base.mixin'
 export default {
   name: 'AdiImgLoop',
   mixins: [compBaseMixin],
-  methods: {},
+  methods: {
+    loadImg(item) {
+      return this.generateStyleString({
+        background: 'url(' + item.img + ')',
+        'background-position': 'center',
+        'background-size': 'cover'
+      })
+    }
+  },
   computed: {}
 }
 </script>
 
 <style lang="scss" scoped>
+.imgs {
+  width: 100%;
+  height: 100%;
+}
+
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;

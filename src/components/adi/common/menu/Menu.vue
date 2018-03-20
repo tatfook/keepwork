@@ -51,11 +51,6 @@ export default {
     )
   },
   mixins: [compBaseMixin],
-  methods: {
-    hasSubmenu(params) {
-      return true
-    }
-  },
   computed: {
     mode() {
       return this.options.mode

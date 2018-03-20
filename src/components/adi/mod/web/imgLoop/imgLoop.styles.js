@@ -28,7 +28,11 @@ export default [
     },
     options: {
       theme: {},
-      config: {}
+      config: {
+        imgLoop: {
+          height: '150px'
+        }
+      }
     }
   },
   // style2
