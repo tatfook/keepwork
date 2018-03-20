@@ -3,31 +3,18 @@
     <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="btn-file" 
-            :class='{"el-button--primary": activeComponent=="FileManager"}' 
-            @click="changeView('FileManager')"
-          ></el-button>
-          <el-button class="btn-bigfile"
-            :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' 
-            @click="changeView('ModPropertyManager')"
-           ></el-button>
-          <el-button class="btn-mods" 
-            :class='{"el-button--primary": activeComponent=="ModsList"}' 
-            @click="changeView('ModsList')"
-          ></el-button>
-          <el-button class="btn-search" 
-            :class='{"el-button--primary": activeComponent=="Search"}' 
-            @click="changeView('Search')"
-          ></el-button>
+          <el-button class="btn-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button>
+          <el-button class="btn-mods" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button>
         </el-button-group>
       </el-row>
       <el-row class="manager-content-box">
         <component :is='activeComponent'></component>
       </el-row>
-      <!-- <mod-property-manager> </mod-property-manager> -->
     </el-col>
-    <div class="editor-resizer" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
-    <el-col id="previewWin" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
+    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="btn-computer" title="电脑"></el-button>
@@ -44,8 +31,9 @@
       </el-row>
       <editor-viewport></editor-viewport>
     </el-col>
-    <div class="editor-resizer" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == false && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="btn-H1" title="标题1"></el-button>
@@ -119,8 +107,64 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeComponent: 'activeComponentType'
+      activeComponent: 'activeComponentType',
+      showingCol: 'showingCol'
     })
+  },
+  watch: {
+    'showingCol.isPreviewShow': {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
+        if (newVal === false) {
+          this.previewWinWidth = 0
+          this.codeWinWidth = 100 - this.managerWinWidth
+        }else if (this.showingCol.isCodeShow === false) {
+          this.previewWinWidth = 100 - this.managerWinWidth
+        }else {
+          var halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    },
+    'showingCol.isCodeShow': {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
+        if (newVal === false) {
+          this.codeWinWidth = 0
+          this.previewWinWidth = 100 - this.managerWinWidth
+        }else if (this.showingCol.isPreviewShow === false) {
+          this.codeWinWidth = 100 - this.managerWinWidth
+        }else{
+          var halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    },
+    'showingCol.isManagerShow': {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
+        if (newVal === false) {
+          this.managerWinWidth = 0
+          this.previewWinWidth = 100 - this.codeWinWidth
+        }else{
+          var halfWidth = (100 - this.codeWinWidth) / 2
+          var minusWidth = halfWidth > 25 ? 25 : halfWidth
+          this.managerWinWidth = minusWidth
+          this.previewWinWidth = halfWidth - minusWidth
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     changeView(type) {
@@ -145,7 +189,7 @@ export default {
       this.resizeWinParams.mouseStartX = mouseNowX
       var leftColName = this.resizeWinParams.leftColWidthParam
       var rightColName = this.resizeWinParams.rightColWidthParam
-      this[leftColName] += diffPercent
+      this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
     dragMouseUp() {
@@ -158,14 +202,16 @@ export default {
 </script>
 
 <style scoped>
-.full-height{
-  height: 100%;;
+.full-height {
+  height: 100%;
 }
-.manager-win, .preview-win, .code-win {
+.manager-win,
+.preview-win,
+.code-win {
   display: flex;
   flex-direction: column;
 }
-.manager-content-box{
+.manager-content-box {
   flex: 1;
   background-color: #fff;
 }
@@ -182,7 +228,7 @@ export default {
   width: 50px;
   height: 40px;
 }
-.manager-win .el-button-group .el-button--primary{
+.manager-win .el-button-group .el-button--primary {
   border-color: #409eff;
 }
 .toolbar {
@@ -194,22 +240,19 @@ export default {
   overflow-y: hidden;
   position: relative;
 }
-.toolbar::-webkit-scrollbar  
-{  
-    width: 8px;  
-    height: 8px;  
-    background-color: #F5F5F5;
-} 
-.toolbar::-webkit-scrollbar-track  
-{  
-    border-radius: 0px;  
-    background-color: #F5F5F5;  
+.toolbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #f5f5f5;
 }
-.toolbar::-webkit-scrollbar-thumb  
-{  
-    border-radius: 10px;  
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-    background-color: #555;  
+.toolbar::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background-color: #f5f5f5;
+}
+.toolbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
 </style>
 <style lang="scss" scoped>
