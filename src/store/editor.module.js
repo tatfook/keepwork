@@ -1,12 +1,9 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 
-Vue.use(Vuex)
-
-const state = {
+const state = () => ({
   activePage: '',
   code: '',
   modList: [],
@@ -23,7 +20,7 @@ const state = {
     fontID: 0
   },
   activeComponentType: ''
-}
+})
 
 const getters = {
   activePage: state => state.activePage,
@@ -194,9 +191,9 @@ const mutations = {
   }
 }
 
-export default new Vuex.Store({
+export default {
   state,
   getters,
   actions,
   mutations
-})
+}
