@@ -80,9 +80,6 @@ import FileManager from './FileManager'
 import ModsList from './ModsList'
 import Search from './Search'
 import { mapGetters } from 'vuex'
-import { gitlab, keepwork } from '@/api'
-
-console.log('gitlab: ', gitlab)
 
 export default {
   name: 'Editor',
@@ -104,13 +101,6 @@ export default {
     this.changeView('Search')
   },
   mounted() {
-    keepwork.user.login({
-      username: 'kaitlyn',
-      password: '123456'
-    }).then(data => {
-      console.log('login success data: ', data)
-    })
-
     this.$nextTick(function() {
       window.addEventListener('resize', function(e) {
         _.throttle(function() {
