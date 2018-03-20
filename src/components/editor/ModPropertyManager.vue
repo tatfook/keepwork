@@ -16,11 +16,11 @@
           <style-selector :mod='activeMod' />
         </div>
       </el-tab-pane>
-      <el-tab-pane label='Theme'>
+      <!-- <el-tab-pane label='Theme'>
         <div class='styles-container'>
           <theme-selector />
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

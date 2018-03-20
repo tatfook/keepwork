@@ -28,7 +28,8 @@ export default {
       return {
         mode: 'markdown',
         lineNumbers: true,
-        line: true
+        line: true,
+        lineWrapping: true,
       }
     },
     editor() {
