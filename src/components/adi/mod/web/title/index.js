@@ -6,13 +6,14 @@ import templates from './title.templates'
 const name = 'ModTitle'
 
 const components = {
-  logo: 'AdiLogo',
+  logo: 'AdiMedia',
   businessName: 'AdiTitle',
   tagline: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)
 
+properties.logo.src = './static/adi/logo.png'
 properties.businessName.name = 'BUSINESS NAME'
 properties.tagline.name = 'TAG LINE'
 

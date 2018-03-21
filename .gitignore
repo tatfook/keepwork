@@ -1,11 +1,13 @@
 .DS_Store
 node_modules/
 /dist/
+/docs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /test/unit/coverage/
 *.log
+.keep
 
 # Editor directories and files
 .idea
