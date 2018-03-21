@@ -4,7 +4,7 @@ MAINTAINER xuntian "li.zq@foxmail.com"
 COPY ./ /build/
 WORKDIR /build
 RUN npm --registry https://registry.npm.taobao.org install hologram-github-theme
-RUN gem install bundle && bundle && hologram hologram.yml
+RUN gem install bundle && gem install hologram && hologram hologram.yml
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
