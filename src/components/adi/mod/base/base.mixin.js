@@ -1,16 +1,14 @@
-import Vue from 'vue'
 import _ from 'lodash'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
 
-Vue.component('CompWrapper', CompWrapper)
 jss.setup(preset())
 
 const buildCompWrapper = (h, m, property, compType) => {
   return (
-    <compWrapper
+    <CompWrapper
       mod={m.mod}
       modData={m.modData}
       property={property}
@@ -90,23 +88,17 @@ export default {
     },
     compWrapperClass(name) {
       let classes = this.getClasses(name)
-      if (this.isChildActive(name)) classes['comp-active'] = true
+      if (this.isChildActive(name)) classes.push('comp-active')
       return classes
     },
     getClasses(name) {
       name = name || 'root'
       let classes = []
-      let classArr = []
-      let classMap = {}
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
       }
-      classArr = _.flattenDeep(classes)
-      for (var i = 0; i < classArr.length; i++) {
-        classMap[classArr[i]] = true
-      }
-      return classMap
+      return _.flatten(classes)
     },
     getProps(name) {
       let props = (this.style.props && this.style.props[name]) || {}
