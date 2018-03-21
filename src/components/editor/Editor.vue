@@ -86,7 +86,7 @@ export default {
     }
   },
   created() {
-    this.changeView('Search')
+    this.changeView('FileManager')
   },
   mounted() {
     this.$nextTick(function() {

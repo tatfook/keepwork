@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import EditorPage from './EditorPage'
 import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
@@ -19,7 +20,10 @@ const store = new Vuex.Store({
     user: userModule,
     gitlab: gitlabModule,
     editor: editorModule
-  }
+  },
+  plugins: [createPersistedState({
+    paths: ['user', 'gitlab']
+  })]
 })
 
 /* eslint-disable no-new */

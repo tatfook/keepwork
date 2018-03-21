@@ -28,29 +28,13 @@ export default {
     this.setActivePage()
   },
   mounted() {
-    this.userLogin({
-      username: 'kaitlyn',
-      password: '123456'
-    }).then(() => {
-      return this.userGetProfile()
-    }).then(() => {
-      return this.getAllProjects({max_pages:2, per_page:40})
-    })
   },
   watch: {
     $route: 'setActivePage'
   },
   computed: {
-    ...mapGetters({
-      gitlabConfig: 'user/gitlabConfig'
-    })
   },
   methods: {
-    ...mapActions({
-      getAllProjects: 'gitlab/getAllProjects',
-      userLogin: 'user/login',
-      userGetProfile: 'user/getProfile',
-    }),
     setActivePage() {
       this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
     },
