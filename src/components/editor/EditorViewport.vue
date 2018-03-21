@@ -4,11 +4,6 @@
     <template v-for='(mod, index) in modList'>
       <editor-mod-selector :key='index' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
     </template>
-    <el-dialog :visible.sync='dialogVisible'>
-      <div v-for='mod in mods' :key='mod.name' @click='newMod(mod.name)'>
-        {{mod.name}}
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -23,8 +18,6 @@ export default {
   data() {
     return {
       mods,
-      dialogVisible: false,
-      selectedModKey: null
     }
   },
   components: {
@@ -45,17 +38,8 @@ export default {
     }
   },
   methods: {
-    newMod(name) {
-      this.$store.dispatch('addMod', {
-        modName: name,
-        preModKey: this.selectedModKey
-      })
-      this.dialogVisible = false
-      this.selectedModKey = null
-    },
     openModSelector(key) {
-      this.dialogVisible = true
-      this.selectedModKey = key
+      this.$store.dispatch('setActiveWinType', 'ModsList')
     }
   }
 }

@@ -85,6 +85,7 @@ export default {
   border: none;
   position: absolute;
   left: 50%;
+  z-index: 1;
 }
 .add-mod-btn + .add-mod-btn {
   margin-left: 0;
