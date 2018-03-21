@@ -29,6 +29,17 @@ export default {
   height: 100%;
   a {
     text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border-radius: 4px;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 }
 </style>
