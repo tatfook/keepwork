@@ -16,7 +16,7 @@ export default {
     modData: Object,
     property: String,
     compType: String,
-    classes: Object,
+    classes: Array,
     editMode: Boolean,
     options: Object
   },
