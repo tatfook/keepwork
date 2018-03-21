@@ -31,7 +31,8 @@ export default [
     options: {
       theme: optionTheme1,
       config: childDataOption1
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1521618798979.png'
   },
   // style2
   {
@@ -51,7 +52,8 @@ export default [
     options: {
       theme: optionTheme1,
       config: childDataOption1
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1521618818597.png'
   },
   // style3
   {
@@ -70,6 +72,7 @@ export default [
     },
     theme: {
       'mod-header-label': ['font_0', 'color_0']
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1521618827960.png'
   }
 ]

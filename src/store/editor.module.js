@@ -65,8 +65,13 @@ const actions = {
   },
   addMod({ commit }, payload) {
     const modProperties = modFactory.generate(payload.modName)
+    var modPropertiesStyle
+    if (payload.styleID) {
+      modPropertiesStyle = modProperties
+      modPropertiesStyle.styleID = payload.styleID
+    }
     commit('ADD_MOD', {
-      modProperties: modProperties,
+      modProperties: modPropertiesStyle || modProperties,
       key: payload.preModKey,
       cmd: Parser.getCmd(payload.modName)
     })
