@@ -32,12 +32,12 @@ const buildBlockList = mdText => {
         curModBlock = null
       } else if (line.match(MOD_CMD_BEGIN_REG)) {
         endModBlock(blockList, curModBlock)
-        curModBlock = beginModBlock(line, lineNumber)
+        curModBlock = beginModBlock(line, lineNumber + 1)
       } else {
         curModBlock.addLine(line)
       }
     } else if (line.trim() !== '') {
-      curModBlock = beginModBlock(line, lineNumber)
+      curModBlock = beginModBlock(line, lineNumber + 1)
     }
   })
 
@@ -84,8 +84,7 @@ const updateBlocksBeginLine = (blockList, beginIndex, lengthDiff) => {
 const getBlockLines = (mdText, block) => {
   let mdLines = mdText.trim().split('\n')
   let blockLines = []
-
-  for (let i = block.contentBegin(); i < mdLines.length; i++) {
+  for (let i = block.contentBegin() - 1; i < mdLines.length; i++) {
     if (
       (mdLines[i].match(MOD_CMD_END_REG) && !block.isMarkdownMod()) ||
       mdLines[i].match(MOD_CMD_BEGIN_REG)
@@ -114,19 +113,19 @@ const updateBlockAttribute = (block, key, value) => {
 
 const deleteBlock = (blockList, blockIndex) => {
   let block = blockList[blockIndex]
-  updateBlocksBeginLine(blockList, blockIndex + 1, -block.textLength())
+  updateBlocksBeginLine(blockList, blockIndex + 1, -1 - block.textLength())
   blockList.splice(blockIndex, 1)
 
   return block
 }
 
 const addBlockByIndex = (blockList, index, jsonData, cmd) => {
-  let nextBlock = blockList[index]
-  let beginLine = nextBlock ? nextBlock.beginLine : 0
+  let preBlock = blockList[index]
+  let beginLine = preBlock ? preBlock.endLine() + 1 : 1
   let block = new ModBlock(cmd, beginLine)
   block.updateJson(jsonData)
-  blockList.splice(index, 0, block)
-  updateBlocksBeginLine(blockList, index + 1, -block.textLength())
+  blockList.splice(index + 1, 0, block)
+  updateBlocksBeginLine(blockList, index + 2, block.textLength() + 1)
 
   return block
 }
@@ -134,7 +133,7 @@ const addBlockByIndex = (blockList, index, jsonData, cmd) => {
 const addBlockByKey = (blockList, key, jsonData, cmd) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
-  return addBlockByIndex(blockList, index + 1, jsonData, cmd)
+  return addBlockByIndex(blockList, index, jsonData, cmd)
 }
 
 const buildMarkdown = blockList => {
