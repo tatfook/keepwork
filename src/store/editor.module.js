@@ -199,9 +199,25 @@ const mutations = {
     Vue.set(state, 'activeWinType', componentType)
   },
   RESET_SHOWING_COL(state, showingColObj) {
-    Vue.set(state.showingCol, 'isManagerShow', (showingColObj.isManagerShow === undefined ? true : showingColObj.isManagerShow))
-    Vue.set(state.showingCol, 'isPreviewShow', (showingColObj.isPreviewShow === undefined ? true : showingColObj.isPreviewShow))
-    Vue.set(state.showingCol, 'isCodeShow', (showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow))
+    Vue.set(
+      state.showingCol,
+      'isManagerShow',
+      showingColObj.isManagerShow === undefined
+        ? true
+        : showingColObj.isManagerShow
+    )
+    Vue.set(
+      state.showingCol,
+      'isPreviewShow',
+      showingColObj.isPreviewShow === undefined
+        ? true
+        : showingColObj.isPreviewShow
+    )
+    Vue.set(
+      state.showingCol,
+      'isCodeShow',
+      showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
+    )
   }
 }
 

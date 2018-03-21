@@ -9,7 +9,7 @@ class ModBlock {
   constructor(cmd, lineBegin) {
     this.cmd = cmd || MARKDOWN_CMD
     this.modType = 'Mod' + this.cmd
-    this.lineBegin = lineBegin
+    this.lineBegin = lineBegin || 1 // line number in editor
     this.md = []
     this.lengthDiff = 0
     this.data = null // data-binding
@@ -90,6 +90,10 @@ class ModBlock {
     } else {
       return this.md
     }
+  }
+
+  endLine() {
+    return this.lineBegin + this.textLength()
   }
 
   text() {
