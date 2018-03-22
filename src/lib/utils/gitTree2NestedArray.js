@@ -6,13 +6,13 @@ import _ from 'lodash'
   git tree results => nested array with children as key
 */
 
-const gitTree2NestedArray = files => {
+const gitTree2NestedArray = (files, rootPath) => {
   let keysSeperator = '<~>'
   let temporaryChildrenKey = '<~children~>'
   let treeWithChildren = {}
 
   files.forEach(file => {
-    let setKeys = file.path.split('/').join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`).split(keysSeperator)
+    let setKeys = file.path.substr(rootPath.length + 1).split('/').join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`).split(keysSeperator)
     let temporaryObject = _.set({}, setKeys, {...file})
     _.merge(treeWithChildren, temporaryObject)
   })

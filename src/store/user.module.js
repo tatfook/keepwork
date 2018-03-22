@@ -41,9 +41,9 @@ const getters = {
 
     return websiteNames.map(name => {
       let projectId = _.get(siteDataSourcesMap, [name, 'projectId'], getters.defaultSiteProjectId)
-      let path = `${username}/${name}`
-      let files = _.get(repositoryTrees, [projectId, path], []).map(item => ({...item, path: item.path.substr(path.length + 1)}))
-      let children = gitTree2NestedArray(files)
+      let rootPath = `${username}/${name}`
+      let files = _.get(repositoryTrees, [projectId, rootPath], [])
+      let children = gitTree2NestedArray(files, rootPath)
       return {
         ...websitesMap[name],
         projectId,
