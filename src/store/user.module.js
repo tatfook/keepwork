@@ -23,6 +23,7 @@ const getters = {
 
   defaultSiteDataSource: state => _.get(state, 'profile.defaultSiteDataSource'),
   defaultSiteProjectId: (state, getters) => _.get(getters.defaultSiteDataSource, 'projectId'),
+  defaultSiteLastCommitId: (state, getters) => _.get(getters.defaultSiteDataSource, 'lastCommitId'),
   gitlabConfig: (state, getters) => ({
     url: _.get(getters.defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(getters.defaultSiteDataSource, 'dataSourceToken')
@@ -41,15 +42,21 @@ const getters = {
 
     return websiteNames.map(name => {
       let projectId = _.get(siteDataSourcesMap, [name, 'projectId'], getters.defaultSiteProjectId)
+      let lastCommitId = _.get(siteDataSourcesMap, [name, 'lastCommitId'], getters.defaultSiteLastCommitId)
       let rootPath = `${username}/${name}`
       let files = _.get(repositoryTrees, [projectId, rootPath], [])
       let children = gitTree2NestedArray(files, rootPath)
       return {
         ...websitesMap[name],
         projectId,
+        lastCommitId,
         children
       }
     })
+  },
+  personalSitePathMap: (state, getters) => {
+    let { personalSiteList } = getters
+    return _.keyBy(personalSiteList, ({username, name}) => `${username}/${name}`)
   }
 }
 

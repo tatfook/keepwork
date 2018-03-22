@@ -25,18 +25,21 @@ export default {
     }
   },
   created() {
-    this.setActivePage()
+    this.updateActivePage()
   },
   mounted() {
   },
   watch: {
-    $route: 'setActivePage'
+    $route: 'updateActivePage'
   },
   computed: {
   },
   methods: {
-    setActivePage() {
-      this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
+    ...mapActions({
+      setActivePage: 'setActivePage'
+    }),
+    updateActivePage() {
+      this.setActivePage(this.$router.currentRoute.path)
     },
     showPreview() {
       this.dialogVisible = true
