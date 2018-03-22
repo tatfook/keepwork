@@ -5,7 +5,7 @@ import AdiMenu from './menu/Menu'
 import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
 import AdiMarkdown from './markdown/Markdown'
-import AdiBoard from './board/board'
+import AdiBoard from './board/Board'
 
 export default {
   AdiImgLoop,
