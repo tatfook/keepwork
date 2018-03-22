@@ -1,7 +1,9 @@
-import input from './inputType'
-import link from './linkType'
+import input from './InputType'
+import link from './LinkType'
+import menu from './MenuType'
 
 export default {
   input,
-  link
+  link,
+  menu
 }

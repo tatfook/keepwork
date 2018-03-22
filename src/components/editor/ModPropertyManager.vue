@@ -8,13 +8,7 @@
                     <v-json-editor ref='editor' :data="activePropertyDataCopy" :editable="editable" @change="updateActiveProperData"></v-json-editor>
                 </div>
                 <div v-else>
-                    <div v-for="(prop, index) in editingProps" :key='index'>
-                        {{prop}}
-                        <div class="prop-item" v-for='(propItem, index) in BaseCompProptypes[prop]' :key='index'>
-                            {{propItem}}
-                            <component :is='proptypes[propItem]'></component>
-                        </div>
-                    </div>
+                    <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key'></PropTypeCard>
                 </div>
             </el-tab-pane>
             <el-tab-pane label='Style'>
@@ -37,16 +31,14 @@ import { mapGetters, mapActions } from 'vuex'
 import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
 import mods from '@/components/adi/mod'
 import BaseCompProptypes from '@/components/adi/common/comp.proptypes'
-
-import proptypes from "@/components/proptypes";
+import PropTypeCard from "@/components/editor/PropTypeCard";
 
 export default {
   name: 'ModPropertyManager',
   data: () => ({
     editable: true,
     mods,
-    BaseCompProptypes,
-    proptypes
+    BaseCompProptypes
   }),
   methods: {
     ...mapActions({
@@ -77,16 +69,20 @@ export default {
   },
   components: {
     StyleSelector,
-    ThemeSelector
+    ThemeSelector,
+    PropTypeCard
   }
 }
 </script>
 <style>
-.prop-box {
-  border: 1px solid red;
+.property-manager-container {
+  height: 100%;
+  background-color: #ebeef5;
+  padding: 0 18px;
 }
-.prop-item {
-  border: 1px solid blue;
+.prop-box {
+    background-color: #FFF;
+    padding: 25px 18px;
+    margin-bottom: 12px;
 }
 </style>
-
