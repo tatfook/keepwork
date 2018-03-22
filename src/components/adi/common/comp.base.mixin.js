@@ -12,13 +12,10 @@ export default {
   },
   computed: {
     properties() {
-      if (!this.sourceData) {
-        this.sourceData = _.merge(
-          compDefaultProperties[this.$options.name] || {},
-          this.source || {}
-        )
-      }
-      return this.sourceData
+      return _.merge(
+        compDefaultProperties[this.$options.name] || {},
+        this.source || {}
+      )
     }
   },
   methods: {
