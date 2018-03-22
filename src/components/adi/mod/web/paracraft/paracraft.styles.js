@@ -6,10 +6,14 @@ export default [
       preview: {
         width: '300px',
         height: '200px'
+      },
+      colPreview: {
+        width: 'auto'
       }
     },
     props: {
-      rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 },
+      colGroup: { xs: { span: 24 }, sm: { span: 8 } }
     },
     theme: {
       root: ['font_0', 'color_0'],

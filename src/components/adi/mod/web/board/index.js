@@ -6,8 +6,7 @@ import templates from './board.templates'
 const name = 'ModBoard'
 
 const components = {
-  title: 'AdiTitle',
-  paragraph: 'AdiMarkdown'
+  board: 'AdiBoard'
 }
 
 const properties = generateProperties(name, components)

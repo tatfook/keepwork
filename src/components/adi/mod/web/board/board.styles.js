@@ -2,10 +2,14 @@ export default [
   // style 1
   {
     data: {
-      root: {}
+      root: {
+        height: '300px',
+        width: '100%'
+      }
     },
     props: {
-      rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 },
+      colBoard: { span: 24 }
     },
     theme: {
       root: ['font_0', 'color_0'],
