@@ -2,14 +2,7 @@
   <div class='property-manager-container' v-if='hasActiveMod'>
     <el-tabs>
       <el-tab-pane label='Property'>
-        <div class='properties-container' v-if='hasActiveProperty'>
-          {{activeProperty}}
-          <pre>{{activePropertyDataCopy}}</pre>
-          <v-json-editor ref='editor' :data="activePropertyDataCopy" :editable="editable" @change="updateActiveProperData"></v-json-editor>
-        </div>
-        <div v-else>
-          <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key'></PropTypeCard>
-        </div>
+        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='activeMod.data[key]' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
       <el-tab-pane label='Style'>
         <div class='styles-container'>
@@ -79,10 +72,5 @@ export default {
   height: 100%;
   background-color: #ebeef5;
   padding: 0 18px;
-}
-.prop-box {
-  background-color: #fff;
-  padding: 25px 18px;
-  margin-bottom: 12px;
 }
 </style>

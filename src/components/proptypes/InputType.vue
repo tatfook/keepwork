@@ -4,9 +4,13 @@
 <script>
 export default {
   name: 'InputType',
+  props: {
+    editingKey: String,
+    originValue: String
+  },
   data() {
     return {
-      inputTypeValue: ''
+      inputTypeValue: this.originValue,
     }
   }
 }
@@ -18,5 +22,8 @@ export default {
   font-size: 16px;
   padding: 18px 0 0;
   border-radius: 0;
+}
+.input-type .el-input__suffix{
+    top: 10px;
 }
 </style>
