@@ -1,11 +1,13 @@
 import ModHeader from './web/header'
-// import ModLogo from './web/logo'
-// import ModMarkdown from './web/markdown'
+import ModTitle from './web/title'
+import ModBoard from './web/board'
+import ModText from './web/text'
+
 var modsList = [
   {
     id: 1,
     label: '全部',
-    mods: [ModHeader]
+    mods: [ModHeader, ModTitle, ModBoard, ModText]
   },
   {
     id: 2,
@@ -13,19 +15,9 @@ var modsList = [
     children: [
       {
         id: 3,
-        label: '标题',
-        mods: [ModHeader]
+        label: '测试',
+        mods: []
       }
-      // {
-      //   id: 4,
-      //   label: '导航菜单',
-      //   mods: [ModLogo]
-      // },
-      // {
-      //   id: 5,
-      //   label: '文本',
-      //   mods: [ModMarkdown]
-      // }
     ]
   }
 ]

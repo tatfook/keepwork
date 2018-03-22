@@ -88,6 +88,7 @@ export default {
     },
     compWrapperClass(name) {
       let classes = []
+      classes = this.getClasses(name)
       classes.push('comp')
       if (this.isChildActive(name)) classes.push('comp-active')
       return classes
