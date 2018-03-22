@@ -17,15 +17,13 @@ export default [
       },
       paragraph: {
         'text-indent': '28px'
-      },
-      button: {
-        float: 'right'
       }
     },
     props: {
       colMedia: { span: 12 },
       colGroup: { sapn: 12 },
-      rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 },
+      colButton: { span: 6, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],
@@ -61,24 +59,20 @@ export default [
         height: '200px'
       },
       colMedia: {
-        width: 'auto',
-        float: 'right'
+        width: 'auto'
       },
       group: {},
       colGroup: {
-        width: '340px',
-        float: 'left'
+        width: '340px'
       },
       paragraph: {
         'text-indent': '28px'
-      },
-      button: {
-        float: 'right'
       }
     },
     props: {
-      colMedia: { span: 12 },
-      colGroup: { sapn: 12 },
+      colMedia: { span: 10, push: 15 },
+      colGroup: { sapn: 10, pull: 8 },
+      colButton: { span: 6, push: 18 },
       rootRow: { gutter: 10 }
     },
     theme: {

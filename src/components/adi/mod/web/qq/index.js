@@ -6,10 +6,15 @@ import templates from './qq.templates'
 const name = 'ModQQ'
 
 const components = {
-  logo: 'AdiTitle',
-  desc: 'AdiLable'
+  pic: 'AdiMedia',
+  desc: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)
+
+properties.pic.src = './static/adi/qqMod.png'
+properties.pic.link =
+  'http://wpa.qq.com/msgrd?v=3&uin=123456789&site=qq&menu=yes'
+properties.desc.name = '客服中心'
 
 export default { mod, name, components, properties, styles, templates }
