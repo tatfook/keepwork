@@ -47,8 +47,8 @@
           <a href="/">返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='3' class="li-btn">
-        <span class="btn icon-save" title="保存"></span>
+      <el-menu-item v-loading="savePending" index='3' class="li-btn">
+        <span class="btn icon-save" title="保存" @click="save"></span>
       </el-menu-item>
       <el-menu-item index='4' class="li-btn">
         <span class="btn icon-undo" title="撤销"></span>
@@ -86,11 +86,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: 'EditorHeader',
   data: function() {
     return {
+      savePending: false,
       pathname: window.location.pathname
     }
   },
@@ -111,6 +112,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      saveActivePage: 'saveActivePage'
+    }),
+    async save() {
+      this.savePending = true
+      await this.saveActivePage()
+      this.savePending = false
+    },
     changeViewType(command) {
       this.$store.dispatch('resetShowingCol', command)
     }
