@@ -10,12 +10,13 @@
             </el-col>
         </el-row>
         <el-row class="prop-item" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-            <component :is='proptypes[propItem]' :editingKey='index' :originValue='cardValue[index]'></component>
+            <component :is='proptypes[propItem]' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData'></component>
         </el-row>
     </div>
 </template>
 <script>
 import proptypes from '@/components/proptypes'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PropTypeCard',
   props: {
@@ -24,10 +25,30 @@ export default {
     prop: Object,
     isCardActive: Boolean
   },
+  computed: {
+    ...mapGetters({
+      activeMod: 'activeMod'
+    })
+  },
   data() {
     return {
       proptypes,
       isModShow: true
+    }
+  },
+  methods: {
+    ...mapActions({
+      setActiveProperty: 'setActiveProperty',
+      setActivePropertyData: 'setActivePropertyData'
+    }),
+    changeProptyData(changedData) {
+      this.setActiveProperty({
+        mod: this.activeMod,
+        property: this.cardKey
+      })
+      this.setActivePropertyData({
+          data: changedData
+      })
     }
   }
 }

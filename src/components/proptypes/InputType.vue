@@ -1,5 +1,5 @@
 <template>
-  <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue' clearable></el-input>
+    <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue'></el-input>
 </template>
 <script>
 export default {
@@ -10,7 +10,14 @@ export default {
   },
   data() {
     return {
-      inputTypeValue: this.originValue,
+      inputTypeValue: this.originValue
+    }
+  },
+  methods: {
+    updateValue(newVal) {
+      var tempChangedDataObj = {}
+      tempChangedDataObj[this.editingKey] = newVal
+      this.$emit('onPropertyChange', tempChangedDataObj)
     }
   }
 }
@@ -23,7 +30,7 @@ export default {
   padding: 18px 0 0;
   border-radius: 0;
 }
-.input-type .el-input__suffix{
-    top: 10px;
+.input-type .el-input__suffix {
+  top: 10px;
 }
 </style>
