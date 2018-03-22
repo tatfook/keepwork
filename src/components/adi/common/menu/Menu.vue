@@ -3,7 +3,7 @@ import compBaseMixin from '../comp.base.mixin'
 import _ from 'lodash'
 
 const renderTemplate = (h, m, data, parentIndex) => {
-  data = data || m.source.data
+  data = data || m.properties.data
   let index = 0
 
   function getIndexString(index, isSubIndex) {

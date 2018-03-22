@@ -65,8 +65,13 @@ const actions = {
   },
   addMod({ commit }, payload) {
     const modProperties = modFactory.generate(payload.modName)
+    var modPropertiesStyle
+    if (payload.styleID) {
+      modPropertiesStyle = modProperties
+      modPropertiesStyle.styleID = payload.styleID
+    }
     commit('ADD_MOD', {
-      modProperties: modProperties,
+      modProperties: modPropertiesStyle || modProperties,
       key: payload.preModKey,
       cmd: Parser.getCmd(payload.modName)
     })
@@ -199,9 +204,25 @@ const mutations = {
     Vue.set(state, 'activeWinType', componentType)
   },
   RESET_SHOWING_COL(state, showingColObj) {
-    Vue.set(state.showingCol, 'isManagerShow', (showingColObj.isManagerShow === undefined ? true : showingColObj.isManagerShow))
-    Vue.set(state.showingCol, 'isPreviewShow', (showingColObj.isPreviewShow === undefined ? true : showingColObj.isPreviewShow))
-    Vue.set(state.showingCol, 'isCodeShow', (showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow))
+    Vue.set(
+      state.showingCol,
+      'isManagerShow',
+      showingColObj.isManagerShow === undefined
+        ? true
+        : showingColObj.isManagerShow
+    )
+    Vue.set(
+      state.showingCol,
+      'isPreviewShow',
+      showingColObj.isPreviewShow === undefined
+        ? true
+        : showingColObj.isPreviewShow
+    )
+    Vue.set(
+      state.showingCol,
+      'isCodeShow',
+      showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
+    )
   }
 }
 

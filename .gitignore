@@ -8,6 +8,7 @@ yarn-error.log*
 /test/unit/coverage/
 *.log
 .keep
+package-lock.json
 
 # Editor directories and files
 .idea

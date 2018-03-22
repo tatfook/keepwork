@@ -4,6 +4,6 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  KEEPWORK_API_PREFIX: '"http://dev.keepwork.com/api/wiki/models"',
+  KEEPWORK_API_PREFIX: '"http://front.keepwork.com/api/wiki/models"',
   GITLAB_API_PREFIX: '"http://git.stage.keepwork.com"'
 })

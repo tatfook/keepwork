@@ -1,7 +1,7 @@
 <template>
   <div class="comp-title">
-    <a :href="source.link">
-      <h1 :style="style">{{ source.name }}</h1>
+    <a :href="properties.link">
+      <h1 :style="style">{{ properties.name }}</h1>
     </a>
   </div>
 </template>
@@ -30,4 +30,3 @@ a {
   text-decoration: none;
 }
 </style>
-

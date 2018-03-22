@@ -1,7 +1,7 @@
 export default [
   // template 1
   [
-    { colPreview: 'preview' }
+    { colBoard: 'board' }
     // {
     //   colGroup: [[{ colWorldName: 'worldName' }, { colVersion: 'version' }]]
     // }

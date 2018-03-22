@@ -1,5 +1,5 @@
 <template>
-    <el-input placeholder='请输入内容' v-model='inputTypeValue' clearable></el-input>
+  <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue' clearable></el-input>
 </template>
 <script>
 export default {
@@ -11,4 +11,12 @@ export default {
   }
 }
 </script>
-
+<style>
+.input-type .el-input__inner {
+  border: none;
+  border-bottom: 1px solid #e4e7ed;
+  font-size: 16px;
+  padding: 18px 0 0;
+  border-radius: 0;
+}
+</style>

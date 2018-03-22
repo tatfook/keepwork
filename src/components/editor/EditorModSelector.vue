@@ -5,8 +5,9 @@
       <span v-if='invalid'> 错误的Mod指令 </span>
     </div>
     <div class='operator' v-if='isActive'>
-      <el-button @click.stop.prevent='newMod'> + </el-button>
-      <el-button @click.stop.prevent='deleteMod'> - </el-button>
+      <!-- <el-button class="add-mod-btn add-before" @click.stop.prevent='newMod'> + </el-button> -->
+      <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod'> + </el-button>
+      <!-- <el-button @click.stop.prevent='deleteMod'> - </el-button> -->
     </div>
   </div>
 </template>
@@ -56,10 +57,49 @@ export default {
 
 <style>
 .mod-active {
-  border: 2px solid rgb(240, 15, 15);
+  border: 2px dashed #69b9ff;
+  position: relative;
 }
-.comp-active {
-  border: 3px dashed rgb(43, 11, 221);
+.comp {
+  position: relative;
+}
+.comp:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: rgba(127, 195, 255, 0.4);
+}
+.add-mod-btn {
+  width: 38px;
+  height: 38px;
+  background-color: #7fc3ff;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  padding: 0;
+  font-size: 30px;
+  border: none;
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+}
+.add-mod-btn + .add-mod-btn {
+  margin-left: 0;
+}
+.add-before {
+  top: -19px;
+}
+.add-after {
+  bottom: -19px;
+}
+.add-mod-btn:hover {
+  transform: scale(1.211);
+  background-color: #7fc3ff;
+  color: #fff;
 }
 </style>
 

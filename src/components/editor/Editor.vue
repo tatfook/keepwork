@@ -86,7 +86,7 @@ export default {
     }
   },
   created() {
-    this.changeView('Search')
+    this.changeView('FileManager')
   },
   mounted() {
     this.$nextTick(function() {
@@ -210,10 +210,12 @@ export default {
 .code-win {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 .manager-content-box {
   flex: 1;
   background-color: #fff;
+  overflow-y: auto;
 }
 .editor-resizer {
   width: 17px;
@@ -239,6 +241,7 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
+  flex-shrink: 0;
 }
 .toolbar::-webkit-scrollbar {
   width: 8px;

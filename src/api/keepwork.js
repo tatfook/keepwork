@@ -6,18 +6,23 @@ export const keepworkEndpoint = axios.create({
 
 export const post = (...args) => keepworkEndpoint.post(...args).then(res => res.data.data)
 
-// {
-//   username: 'kaitlyn',
-//   password: '123456'
-// }
-export const login = (params) => post('/user/login', params)
-
 export const user = {
-  login
+  login: (...args) => post('/user/login', ...args),
+  getProfile: (...args) => post('/user/getProfile', ...args)
+}
+
+export const website = {
+  getAllByUsername: (...args) => post('website/getAllByUsername', ...args)
+}
+
+export const siteDataSource = {
+  getByUsername: (...args) => post('site_data_source/getByUsername', ...args)
 }
 
 export const keepwork = {
-  user
+  user,
+  website,
+  siteDataSource
 }
 
 export default keepwork

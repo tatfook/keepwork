@@ -87,7 +87,9 @@ export default {
       if (this.theme) return this.theme.data[name]
     },
     compWrapperClass(name) {
-      let classes = this.getClasses(name)
+      let classes = []
+      classes = this.getClasses(name)
+      classes.push('comp')
       if (this.isChildActive(name)) classes.push('comp-active')
       return classes
     },

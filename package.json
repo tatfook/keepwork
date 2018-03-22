@@ -5,9 +5,11 @@
   "author": "keepwork team",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev":
+      "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "unit":
+      "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js"
@@ -15,6 +17,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
+    "cookie": "^0.3.1",
     "element-ui": "^2.2.0",
     "js-base64": "^2.4.3",
     "jss": "^9.8.0",
@@ -26,7 +29,8 @@
     "vue-json-editor-block-view": "^1.0.21",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
-    "vuex": "^2.4.0"
+    "vuex": "^2.4.0",
+    "vuex-persistedstate": "^2.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -102,9 +106,5 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
