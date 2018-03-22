@@ -5,7 +5,8 @@
       v-show="!loading"
       :data="personalSiteList"
       :props="filesTreeProps"
-      accordion
+      node-key="name"
+      :default-expanded-keys="defaultExpandedKeys"
       @node-click="handleNodeClick">
     </el-tree>
   </div>
@@ -19,12 +20,10 @@ export default {
   data() {
     return {
       loading: true,
+      defaultExpandedKeys: [],
       filesTreeProps: {
         children: 'children',
-        label: 'name',
-        isLeaf(data, node) {
-          return !_.has(data, 'children')
-        }
+        label: 'name'
       }
     }
   },
@@ -44,18 +43,39 @@ export default {
       getRepositoryTree: 'gitlab/getRepositoryTree'
     }),
     handleNodeClick(data, node, component) {
-      node.loading = true
-      let {username, name, projectId} = data
-      //todo, if it's file, open the file
-      this.getRepositoryTree({
-        projectId,
-        path: `${ username }/${ name }`,
-        recursive: true
-      }).then(() => {
-        node.loading = false
-      })
-      console.log('handleNodeClick: ', data, node);
+      //try open files list in site level
+      if (node.level === 1 && _.isEmpty(data.children)) {
+        let {username, name, projectId} = data
+        node.loading = true
+        this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [])
+        this.getRepositoryTree({
+          projectId,
+          path: `${ username }/${ name }`,
+          recursive: true
+        }).then(() => {
+          this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [name])
+        })
+      }
+      //try open file
+      if (data.type === 'blob') {
+        this.$router.push('/' + data.path)
+      }
     }
   }
 }
 </script>
+
+<style lang="scss">
+.file-manager {
+  &>.el-tree {
+    &>.el-tree-node {
+      &>.el-tree-node__content {
+        &>.el-tree-node__expand-icon {
+          color: #c0c4cc;
+          cursor: pointer;
+        }
+      }
+    }
+  } 
+}
+</style>
