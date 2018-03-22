@@ -65,3 +65,11 @@ body {
   background-color: #cdd4dc;
 }
 </style>
+
+<style lang="scss">
+@function px2rem($px) {
+  $rem: 100px;
+  @return ($px/$rem) + rem;
+}
+</style>
+

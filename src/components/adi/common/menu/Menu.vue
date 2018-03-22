@@ -1,40 +1,85 @@
-<template>
-  <div class='comp-menu'>
-    <el-menu :mode='mode'>
-      <el-menu-item v-for='menuData in data' :key='menuData.title' :index='menuData.title'>
-        {{menuData.title}}
-      </el-menu-item>
-    </el-menu>
-  </div>
-</template>
-
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import _ from 'lodash'
+
+const renderTemplate = (h, m, data, parentIndex) => {
+  data = data || m.source.data
+  let index = 0
+
+  function getIndexString(index, isSubIndex) {
+    if (parentIndex) {
+      return String(parentIndex + '-' + index)
+    } else {
+      return String(index)
+    }
+  }
+
+  return _.map(data, menuData => {
+    index++
+
+    if (!menuData.child) {
+      return (
+        <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
+          {menuData.name}
+        </el-menu-item>
+      )
+    } else {
+      return (
+        <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
+          <template slot="title">{menuData.name}</template>
+          {renderTemplate(h, m, menuData.child, getIndexString(index))}
+        </el-submenu>
+      )
+    }
+  })
+}
 
 export default {
   name: 'AdiMenu',
+  render(h) {
+    return (
+      <div class="comp-menu">
+        <el-menu
+          mode={this.mode}
+          background-color={this.options.menuBackground}
+          text-color={this.options.fontColor}
+          active-text-color={this.options.fontColor}
+        >
+          {renderTemplate(h, this)}
+        </el-menu>
+      </div>
+    )
+  },
   mixins: [compBaseMixin],
   computed: {
     mode() {
       return this.options.mode
-    },
-    data() {
-      return JSON.parse(this.source.data)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.test {
-  width: 100px;
-  height: 100px;
+.comp-menu {
+  height: 100%;
+
+  .el-menu {
+    height: 100%;
+
+    .el-menu-item {
+      height: 100%;
+      line-height: 50px;
+    }
+  }
+}
+</style>
+<style>
+.comp-menu .el-menu .el-submenu {
+  height: 100%;
 }
 
-.el-menu {
-}
-
-.el-menu--horizontal {
-  border-right: 10px;
+.comp-menu .el-menu .el-submenu .el-submenu__title {
+  height: 100%;
+  line-height: 50px;
 }
 </style>

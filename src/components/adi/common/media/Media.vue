@@ -1,7 +1,7 @@
 <template>
   <div class='comp-media'>
     <a :href='link'>
-      <img v-if='isImage' :src='src'>
+      <div v-if='isImage' class="img" :style="loadImg"></div>
       <video v-else-if='isVideo' :src='src'></video>
     </a>
   </div>
@@ -29,7 +29,27 @@ export default {
     },
     link() {
       return this.source.link
+    },
+    loadImg() {
+      return this.generateStyleString({
+        background: 'url(' + this.source.src + ')',
+        'background-position': 'center',
+        'background-size': 'cover'
+      })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.comp-media {
+  width: 100%;
+  height: 100%;
+
+  .img {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
+

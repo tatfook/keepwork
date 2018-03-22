@@ -1,9 +1,9 @@
 <template>
   <div v-if='editMode' @click.stop.prevent='onEditProperty' :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :editMode='editMode' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :mod='mod' :source='source' :editMode='editMode' :options='options' />
   </div>
   <div v-else :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :mod='mod' :source='source' :options='options' />
   </div>
 </template>
 

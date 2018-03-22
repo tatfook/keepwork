@@ -1,9 +1,21 @@
 import ModHeader from './web/header'
-import ModLogo from './web/logo'
-import ModMarkdown from './web/markdown'
+import ModTitle from './web/title'
+import ModMixPosition from './web/mixPosition'
+import ModMixLayer from './web/mixLayer'
+import ModImgLoop from './web/imgLoop'
+import ModParacraft from './web/paracraft'
+import ModQQ from './web/qq'
+import ModText from './web/text'
+import ModBoard from './web/board'
 
 export default {
   ModHeader,
-  ModLogo,
-  ModMarkdown
+  ModTitle,
+  ModMixPosition,
+  ModMixLayer,
+  ModImgLoop,
+  ModParacraft,
+  ModQQ,
+  ModText,
+  ModBoard
 }
