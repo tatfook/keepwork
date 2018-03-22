@@ -1,5 +1,5 @@
 <template>
-  <button>{{source.name}}</button>
+  <button>{{properties.name}}</button>
 </template>
 
 <script>
@@ -7,12 +7,6 @@ import compBaseMixin from '../comp.base.mixin'
 
 export default {
   name: 'AdiButton',
-  mixins: [compBaseMixin],
-  methods: {},
-  computed: {}
+  mixins: [compBaseMixin]
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div class='comp-label'>
-    <a :href='source.link'>
-      <label> {{source.text}} </label>
+    <a :href='properties.link'>
+      <label> {{properties.text}} </label>
     </a>
   </div>
 </template>

@@ -1,16 +1,24 @@
 import _ from 'lodash'
+import compDefaultProperties from './comp.properties'
 
 export default {
   props: {
-    mod: Object,
-    source: {
-      type: Object,
-      required: true
-    },
+    source: Object,
     options: Object,
     editorMode: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    properties() {
+      if (!this.sourceData) {
+        this.sourceData = _.merge(
+          compDefaultProperties[this.$options.name] || {},
+          this.source || {}
+        )
+      }
+      return this.sourceData
     }
   },
   methods: {

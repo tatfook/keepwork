@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown :source='source.data' />
+  <vue-markdown :source='properties.data' />
 </template>
 
 <script>

@@ -16,23 +16,23 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     isImage() {
-      return Media.isImage(this.source.src)
+      return Media.isImage(this.properties.src)
     },
     isVideo() {
-      return Media.isVideo(this.source.src)
+      return Media.isVideo(this.properties.src)
     },
     hasMedia() {
-      return this.source.src && this.source.src !== ''
+      return this.properties.src && this.properties.src !== ''
     },
     src() {
-      return this.source.src
+      return this.properties.src
     },
     link() {
-      return this.source.link
+      return this.properties.link
     },
     loadImg() {
       return this.generateStyleString({
-        background: 'url(' + this.source.src + ')',
+        background: 'url(' + this.properties.src + ')',
         'background-position': 'center',
         'background-size': 'cover'
       })
@@ -52,4 +52,3 @@ export default {
   }
 }
 </style>
-
