@@ -6,26 +6,26 @@ import SimpleUndo from '@/lib/utils/simpleUndo'
 
 const initialState = () => {
   return {
-    activePage: '',
-    code: '',
-    modList: [],
-    activeMod: null,
-    activeProperty: null,
-    // layout: {
-    //   header: {},
-    //   footer: {},
-    //   siderbar: {}
-    // },
-    theme: {
-      name: 'classic',
-      colorID: 0,
-      fontID: 0
-    },
-    activeComponentType: '',
-    showingCol: {
-      isManagerShow: true,
-      isCodeShow: true,
-      isPreviewShow: true
+  activePage: '',
+  code: '',
+  modList: [],
+  activeMod: null,
+  activeProperty: null,
+  // layout: {
+  //   header: {},
+  //   footer: {},
+  //   siderbar: {}
+  // },
+  theme: {
+    name: 'classic',
+    colorID: 0,
+    fontID: 0
+  },
+  activeComponentType: '',
+  showingCol: {
+    isManagerShow: true,
+    isCodeShow: true,
+    isPreviewShow: true
     },
     undoManager: new SimpleUndo()
   }
@@ -109,6 +109,7 @@ const actions = {
   setActiveMod({ commit }, mod) {
     commit('SET_ACTIVE_MOD', mod)
     commit('SET_ACTIVE_PROPERTY', null)
+    commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
   setActiveProperty({ commit }, payload) {
     commit('SET_ACTIVE_MOD', payload.mod)
@@ -119,7 +120,7 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY_DATA', params.data)
     commit('REFRESH_CODE')
   },
-  deleteMod({ commit }, mod) {
+  deleteMod({ commit, state }, mod) {
     commit('DELETE_MOD', mod)
     if (mod.key === state.activeMod.key) {
       commit('SET_ACTIVE_MOD', null)

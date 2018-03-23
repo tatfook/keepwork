@@ -7,7 +7,6 @@
     <div class='operator' v-if='isActive'>
       <!-- <el-button class="add-mod-btn add-before" @click.stop.prevent='newMod'> + </el-button> -->
       <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod'> + </el-button>
-      <!-- <el-button @click.stop.prevent='deleteMod'> - </el-button> -->
     </div>
   </div>
 </template>
@@ -47,9 +46,6 @@ export default {
     },
     setActive() {
       this.$store.dispatch('setActiveMod', this.mod)
-    },
-    deleteMod() {
-      this.$store.dispatch('deleteMod', this.mod)
     }
   }
 }

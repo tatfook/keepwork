@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import '@/assets/iconfont/iconfont.css'
 import createPersistedState from 'vuex-persistedstate'
 import EditorPage from './EditorPage'
 import router from './editor.router'
