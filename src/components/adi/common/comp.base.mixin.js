@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import compDefaultProperties from './comp.properties'
 
 export default {
   props: {
@@ -12,10 +11,7 @@ export default {
   },
   computed: {
     properties() {
-      return _.merge(
-        compDefaultProperties[this.$options.name] || {},
-        this.source || {}
-      )
+      return this.source
     }
   },
   methods: {

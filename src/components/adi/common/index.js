@@ -6,6 +6,7 @@ import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
 import AdiMarkdown from './markdown/Markdown'
 import AdiBoard from './board/Board'
+import AdiDescLabel from './descLabel/DescLabel'
 
 export default {
   AdiImgLoop,
@@ -15,5 +16,6 @@ export default {
   AdiMedia,
   AdiLabel,
   AdiMarkdown,
-  AdiBoard
+  AdiBoard,
+  AdiDescLabel
 }

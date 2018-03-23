@@ -9,7 +9,8 @@
         </el-switch>
       </el-col>
     </el-row>
-    <el-row class="prop-item" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
+    <el-row class="prop-item" :prop='prop' v-if='typeof(proptypes[propItem]) == "object"' v-for='(propItem, index) in prop' :key='index'>
+      {{typeof(proptypes[propItem])}} {{index}}
       <component :is='proptypes[propItem]' :editingKey='index'></component>
     </el-row>
   </div>
@@ -31,7 +32,7 @@ export default {
 }
 </script>
 <style scoped>
-.prop-header{
+.prop-header {
   margin-bottom: 12px;
 }
 .card-info {

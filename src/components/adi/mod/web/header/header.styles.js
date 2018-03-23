@@ -3,7 +3,9 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {},
+      root: {
+        overflow: 'hidden'
+      },
       logo: {
         height: '87px',
         width: '87px'
