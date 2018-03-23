@@ -116,8 +116,9 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY', payload.property)
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
-  setActivePropertyData({ commit }, params) {
-    commit('SET_ACTIVE_PROPERTY_DATA', params.data)
+  setActivePropertyData({ commit, getters: {activePropertyData} }, {data}) {
+    let newData = _.merge({}, activePropertyData, data)
+    commit('SET_ACTIVE_PROPERTY_DATA', newData)
     commit('REFRESH_CODE')
   },
   deleteMod({ commit, state }, mod) {
@@ -197,24 +198,7 @@ const mutations = {
     Parser.updateBlock(state.modList, mod, state.code)
   },
   SET_ACTIVE_PROPERTY_DATA(state, data) {
-    if (!state.activeMod) return
-    if (!state.activeProperty) return
-    if (!state.activeMod.data) return
-    if (!state.activeMod.data[state.activeProperty]) return
-    let originalData = state.activeMod.data[state.activeProperty]
-
-    // only assign the value if the key is in original keys
-    // drop other information in data
-    let resultData = _.keys(originalData).reduce((prev, key) => {
-      prev[key] = _.has(data, key) ? data[key] : originalData[key]
-      return prev
-    }, {})
-
-    Parser.updateBlockAttribute(
-      state.activeMod,
-      state.activeProperty,
-      resultData
-    )
+    Parser.updateBlockAttribute(state.activeMod, state.activeProperty, data)
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     Parser.updateBlockAttribute(state.activeMod, key, value)
