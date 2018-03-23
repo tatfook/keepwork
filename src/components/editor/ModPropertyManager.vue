@@ -69,7 +69,7 @@ export default {
 </script>
 <style>
 .property-manager-container {
-  height: 100%;
+  min-height: 100%;
   background-color: #ebeef5;
   padding: 0 18px;
 }

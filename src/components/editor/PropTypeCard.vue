@@ -10,7 +10,7 @@
             </el-col>
         </el-row>
         <el-row class="prop-item" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-            <component :is='proptypes[propItem]' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData'></component>
+            <component :is='proptypes[propItem]' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData' @onChangeValue='changeActivePropty'></component>
         </el-row>
     </div>
 </template>
@@ -41,13 +41,16 @@ export default {
       setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData'
     }),
-    changeProptyData(changedData) {
+    changeActivePropty() {
       this.setActiveProperty({
         mod: this.activeMod,
         property: this.cardKey
       })
+    },
+    changeProptyData(changedData) {
+      this.changeActivePropty()
       this.setActivePropertyData({
-          data: changedData
+        data: changedData
       })
     }
   }

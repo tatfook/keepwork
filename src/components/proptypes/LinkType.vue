@@ -1,5 +1,5 @@
 <template>
-  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable></el-input>
+  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 export default {
@@ -11,6 +11,16 @@ export default {
   data() {
     return {
       inputTypeValue: this.originValue
+    }
+  },
+  methods: {
+    updateValue(newVal) {
+      var tempChangedDataObj = {}
+      tempChangedDataObj[this.editingKey] = newVal
+      this.$emit('onPropertyChange', tempChangedDataObj)
+    },
+    getFocus() {
+      this.$emit('onChangeValue')
     }
   }
 }
