@@ -72,6 +72,9 @@ export default {
     }
   }
 }
+.el-menu--horizontal {
+  border: none;
+}
 </style>
 <style>
 .comp-menu .el-menu .el-submenu {
