@@ -2,7 +2,9 @@ export default [
   // style 1
   {
     data: {
-      root: {},
+      root: {
+        overflow: 'hidden'
+      },
       preview: {
         width: '300px',
         height: '200px'

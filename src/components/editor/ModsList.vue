@@ -21,7 +21,6 @@ export default {
   mounted() {
     this.$refs.tree.setCurrentNode(mods[0])
     this.activeModsList = mods[0].mods
-    console.log(this.activeModsList)
   },
   data() {
     return {

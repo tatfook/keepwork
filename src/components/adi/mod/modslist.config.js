@@ -7,12 +7,20 @@ import ModMixPositon from './web/mixPosition'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 
-
 var modsList = [
   {
     id: 1,
     label: '全部',
-    mods: [ModHeader, ModTitle, ModBoard, ModImgLoop, ModText, ModParacraft]
+    mods: [
+      ModHeader,
+      ModTitle,
+      ModBoard,
+      ModImgLoop,
+      ModText,
+      ModParacraft,
+      ModQQ,
+      ModMixPositon
+    ]
   }
   // {
   //   id: 2,
