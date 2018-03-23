@@ -2,8 +2,11 @@ import ModHeader from './web/header'
 import ModTitle from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
+import ModQQ from './web/qq'
+import ModMixPositon from './web/mixPosition'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
+
 
 var modsList = [
   {
