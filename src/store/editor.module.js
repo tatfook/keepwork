@@ -2,30 +2,38 @@ import Vue from 'vue'
 import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
+import SimpleUndo from '@/lib/utils/simpleUndo'
 
-const state = () => ({
-  activePage: '',
-  code: '',
-  modList: [],
-  activeMod: null,
-  activeProperty: null,
-  // layout: {
-  //   header: {},
-  //   footer: {},
-  //   siderbar: {}
-  // },
-  theme: {
-    name: 'classic',
-    colorID: 0,
-    fontID: 0
-  },
-  activeComponentType: '',
-  showingCol: {
-    isManagerShow: true,
-    isCodeShow: true,
-    isPreviewShow: true
+const initialState = () => {
+  return {
+    activePage: '',
+    code: '',
+    modList: [],
+    activeMod: null,
+    activeProperty: null,
+    // layout: {
+    //   header: {},
+    //   footer: {},
+    //   siderbar: {}
+    // },
+    theme: {
+      name: 'classic',
+      colorID: 0,
+      fontID: 0
+    },
+    activeComponentType: '',
+    showingCol: {
+      isManagerShow: true,
+      isCodeShow: true,
+      isPreviewShow: true
+    },
+    undoManager: new SimpleUndo()
   }
-})
+}
+
+const state = {
+  ...initialState()
+}
 
 const getters = {
   activePage: state => state.activePage,
@@ -40,38 +48,44 @@ const getters = {
   hasActiveMod: state => !!state.activeMod,
   hasActiveProperty: state => !!state.activeProperty,
   activeComponentType: state => state.activeWinType,
-  showingCol: state => state.showingCol
+  showingCol: state => state.showingCol,
+  undoManager: state => state.undoManager
 }
 
 const actions = {
-  async setActivePage({ commit, getters, dispatch, rootGetters }, path) {
-    (getters.activePage !== path) && commit('SET_ACTIVE_PAGE', path)
+  async setActivePage(context, path) {
+    if (context.getters.activePage === path) return
+
+    context.commit('RESET_STATE')
+    context.commit('SET_ACTIVE_PAGE', path)
 
     if (path === '/') {
-      dispatch('updateMarkDown', '')
       return Promise.resolve()
     }
 
-    await dispatch('gitlab/getFileContent', path, {root: true})
+    await context.dispatch('gitlab/getFileContent', path, { root: true })
 
-    let { content } = rootGetters['gitlab/files'][path]
-    dispatch('updateMarkDown', content)
+    let { content } = context.rootGetters['gitlab/files'][path]
+    if (content) {
+      context.dispatch('updateMarkDown', { code: content, enableHistory: true })
+    }
   },
   async saveActivePage({ getters, dispatch }) {
     let { code: content, activePage: path } = getters
-    await dispatch('gitlab/saveFileContent', {content, path}, {root: true})
+    await dispatch('gitlab/saveFileContent', { content, path }, { root: true })
   },
   // rebuild all mods, will takes a little bit more time
-  updateMarkDown({ commit }, code) {
-    let blockList = Parser.buildBlockList(code)
+  updateMarkDown({ commit }, payload) {
+    if (payload.code === undefined) payload = { payload }
+    let blockList = Parser.buildBlockList(payload.code)
     commit('SET_ACTIVE_MOD', null)
     commit('SET_ACTIVE_PROPERTY', null)
     commit('UPDATE_MODS', blockList)
-    commit('UPDATE_CODE', code)
+    commit('UPDATE_CODE', payload)
   },
   // only update a particular mod
   updateMarkDownBlock({ commit }, payload) {
-    commit('UPDATE_CODE', payload.code)
+    commit('UPDATE_CODE', { code: payload.code })
     commit('SET_ACTIVE_MOD', payload.mod)
     commit('SET_ACTIVE_PROPERTY', null)
     commit('REFRESH_MOD_ATTRIBUTES', payload.mod)
@@ -145,14 +159,23 @@ const actions = {
 }
 
 const mutations = {
+  RESET_STATE(state) {
+    const newState = initialState()
+    for (let f in newState) {
+      Vue.set(state, f, newState[f])
+    }
+  },
   SET_ACTIVE_PAGE(state, path) {
     Vue.set(state, 'activePage', path)
   },
-  UPDATE_CODE(state, code) {
+  UPDATE_CODE(state, { code, enableHistory }) {
     Vue.set(state, 'code', code)
+    if (!enableHistory) state.undoManager.save(code)
   },
   REFRESH_CODE(state) {
-    Vue.set(state, 'code', Parser.buildMarkdown(state.modList))
+    const code = Parser.buildMarkdown(state.modList)
+    Vue.set(state, 'code', code)
+    state.undoManager.save(code)
   },
   ADD_MOD(state, { modProperties, key, cmd }) {
     return Parser.addBlockByKey(state.modList, key, modProperties, cmd)

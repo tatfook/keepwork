@@ -1,7 +1,7 @@
 <template>
-    <div class='kp-md-editor'>
-        <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
-    </div>
+  <div class='kp-md-editor'>
+    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
+  </div>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
         mode: 'markdown',
         lineNumbers: true,
         line: true,
-        lineWrapping: true,
+        lineWrapping: true
       }
     },
     editor() {
@@ -78,9 +78,9 @@ export default {
 </script>
 
 <style scoped>
-.kp-md-editor{
-    flex: 1;
-    overflow: auto;
+.kp-md-editor {
+  flex: 1;
+  overflow: auto;
 }
 .vue-codemirror {
   height: 100%;
