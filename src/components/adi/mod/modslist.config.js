@@ -2,12 +2,14 @@ import ModHeader from './web/header'
 import ModTitle from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
+import ModQq from './web/qq'
+import ModMixPositon from './web/mixPosition'
 
 var modsList = [
   {
     id: 1,
     label: '全部',
-    mods: [ModHeader, ModTitle, ModBoard, ModText]
+    mods: [ModHeader, ModTitle, ModBoard, ModText, ModQq, ModMixPositon]
   },
   {
     id: 2,
