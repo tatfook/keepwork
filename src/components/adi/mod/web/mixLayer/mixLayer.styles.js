@@ -3,25 +3,22 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {},
+      root: {
+        width: '100%',
+        height: '100%'
+      },
       media: {
         width: '100%',
-        height: '694px'
+        height: '450px'
       },
-      colEmptyDiv: {
-        width: '0.1px',
-        height: '0.1px'
-      },
-      colPhoto: {
-        width: '100%',
-        float: 'left'
+      colGroup: {
+        width: '100%'
       },
       colCouple: {
         'min-width': '200px',
-        'margin-top': '-500px',
         display: 'flex',
-        'align-items': 'center',
-        float: 'left'
+        'margin-top': '-400px',
+        'align-items': 'center'
       }
     },
     props: {

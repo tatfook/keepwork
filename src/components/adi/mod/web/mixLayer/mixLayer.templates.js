@@ -1,8 +1,7 @@
 export default [
   // template 1
   [
-    { colPhoto: 'media' },
-    { colEmptyDiv: 'photo' },
+    { colGroup: 'media' },
     {
       colCouple: [
         { colBusinessName: 'businessName' },

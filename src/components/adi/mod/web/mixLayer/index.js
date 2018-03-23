@@ -14,6 +14,6 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.media.src = './static/adi/mix-layer.png'
+properties.media.src = './static/adi/mixLayer/mix-layer.png'
 
 export default { mod, name, components, properties, styles, templates }
