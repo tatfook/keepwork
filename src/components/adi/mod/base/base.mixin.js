@@ -56,7 +56,6 @@ export default {
     editMode: Boolean,
     active: Boolean
   },
-  created() {},
   render(h) {
     if (this.sheet) this.sheet.detach()
     let styleID =

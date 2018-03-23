@@ -1,3 +1,4 @@
+import ModMarkdown from './common/markdown'
 import ModHeader from './web/header'
 import ModTitle from './web/title'
 import ModMixPosition from './web/mixPosition'
@@ -9,6 +10,7 @@ import ModText from './web/text'
 import ModBoard from './web/board'
 
 export default {
+  ModMarkdown,
   ModHeader,
   ModTitle,
   ModMixPosition,
