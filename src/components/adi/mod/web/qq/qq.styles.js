@@ -2,16 +2,23 @@ export default [
   // style 1
   {
     data: {
-      root: {},
+      root: {
+        'z-index': '999'
+      },
       pic: {
+        position: 'fixed',
+        right: '10px',
         width: '70px',
-        height: '70px'
+        height: '70px',
+        'border-radius': '50%'
       },
       colPic: {
         display: 'flex',
         'justify-content': 'flex-end'
       },
       desc: {
+        position: 'fixed',
+        right: '10px',
         width: '70px',
         'text-align': 'center',
         overflow: 'hidden',
@@ -24,7 +31,6 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 },
       colPic: {
         span: 4,
         offset: 20

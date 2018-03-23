@@ -13,17 +13,17 @@ export default [
       },
       group: {},
       colGroup: {
-        width: '340px'
+        width: '370px'
       },
       paragraph: {
         'text-indent': '28px'
       }
     },
     props: {
+      rootRow: { gutter: 10 },
       colMedia: { span: 12 },
       colGroup: { sapn: 12 },
-      rootRow: { gutter: 10 },
-      colButton: { span: 6, push: 18 }
+      colButton: { span: 6.5, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],
@@ -70,10 +70,10 @@ export default [
       }
     },
     props: {
+      rootRow: { gutter: 10 },
       colMedia: { span: 10, push: 15 },
       colGroup: { sapn: 10, pull: 8 },
-      colButton: { span: 6, push: 18 },
-      rootRow: { gutter: 10 }
+      colButton: { span: 6.5, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],

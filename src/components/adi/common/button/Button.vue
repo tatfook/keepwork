@@ -1,7 +1,7 @@
 <template>
   <div class="comp-button">
-    <a :href="source.link" :style="style">
-      {{source.name}}
+    <a :href="properties.link" :style="style">
+      {{properties.name}}
     </a>
   </div>
 </template>
@@ -34,11 +34,7 @@ export default {
     white-space: nowrap;
     padding: 6px 12px;
     border-radius: 4px;
-    -ms-touch-action: manipulation;
     touch-action: manipulation;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 }

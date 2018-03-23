@@ -32,7 +32,7 @@ export default {
     },
     loadImg() {
       return this.generateStyleString({
-        'background-image': 'url(' + this.source.src + ')',
+        'background-image': 'url(' + this.properties.src + ')',
         'background-position': 'center',
         'background-size': 'cover'
       })

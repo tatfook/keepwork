@@ -12,7 +12,7 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.pic.src = './static/adi/qqMod.png'
+properties.pic.src = './static/adi/qq/qqMod.png'
 properties.pic.link =
   'http://wpa.qq.com/msgrd?v=3&uin=123456789&site=qq&menu=yes'
 properties.desc.name = '客服中心'
