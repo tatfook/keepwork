@@ -5,7 +5,8 @@ export default [
       // 定义mod根div的样式
       root: {
         width: '100%',
-        height: '100%'
+        height: '100%',
+        overflow: 'hidden'
       },
       media: {
         width: '100%',
