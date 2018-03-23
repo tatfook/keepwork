@@ -20,12 +20,12 @@
           <el-button class="btn-computer" title="电脑"></el-button>
           <el-button class="btn-phone" title="手机"></el-button>
         </el-button-group>
-        <el-button-group>
+        <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
           <el-button class="btn-enlarge" title="放大"></el-button>
-        </el-button-group>
+        </el-button-group> -->
         <el-button-group>
-          <el-button class="btn-adaptive" title="自适应"></el-button>
+          <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <el-button class="btn-newWin" title="新窗口打开"></el-button>
         </el-button-group>
       </el-row>
@@ -115,14 +115,14 @@ export default {
     'showingCol.isPreviewShow': {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return;
+          return
         }
         if (newVal === false) {
           this.previewWinWidth = 0
           this.codeWinWidth = 100 - this.managerWinWidth
-        }else if (this.showingCol.isCodeShow === false) {
+        } else if (this.showingCol.isCodeShow === false) {
           this.previewWinWidth = 100 - this.managerWinWidth
-        }else {
+        } else {
           var halfWidth = (100 - this.managerWinWidth) / 2
           this.previewWinWidth = halfWidth
           this.codeWinWidth = halfWidth
@@ -133,14 +133,14 @@ export default {
     'showingCol.isCodeShow': {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return;
+          return
         }
         if (newVal === false) {
           this.codeWinWidth = 0
           this.previewWinWidth = 100 - this.managerWinWidth
-        }else if (this.showingCol.isPreviewShow === false) {
+        } else if (this.showingCol.isPreviewShow === false) {
           this.codeWinWidth = 100 - this.managerWinWidth
-        }else{
+        } else {
           var halfWidth = (100 - this.managerWinWidth) / 2
           this.previewWinWidth = halfWidth
           this.codeWinWidth = halfWidth
@@ -151,12 +151,12 @@ export default {
     'showingCol.isManagerShow': {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return;
+          return
         }
         if (newVal === false) {
           this.managerWinWidth = 0
           this.previewWinWidth = 100 - this.codeWinWidth
-        }else{
+        } else {
           var halfWidth = (100 - this.codeWinWidth) / 2
           var minusWidth = halfWidth > 25 ? 25 : halfWidth
           this.managerWinWidth = minusWidth

@@ -1,14 +1,12 @@
 <template>
-  <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue' clearable></el-input>
+  <el-input class="input-type" :placeholder='placeholder' v-model='inputTypeValue' clearable></el-input>
 </template>
 <script>
+import protypesBaseMixin from './protypes.base.mixin'
+
 export default {
   name: 'InputType',
-  data() {
-    return {
-      inputTypeValue: ''
-    }
-  }
+  mixins: [protypesBaseMixin]
 }
 </script>
 <style>

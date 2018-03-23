@@ -44,9 +44,22 @@ const getters = {
 }
 
 const actions = {
-  setActivePage({ commit }, path) {
-    commit('SET_ACTIVE_PAGE', path)
-    // TODO load page data via api service
+  async setActivePage({ commit, getters, dispatch, rootGetters }, path) {
+    (getters.activePage !== path) && commit('SET_ACTIVE_PAGE', path)
+
+    if (path === '/') {
+      dispatch('updateMarkDown', '')
+      return Promise.resolve()
+    }
+
+    await dispatch('gitlab/getFileContent', path, {root: true})
+
+    let { content } = rootGetters['gitlab/files'][path]
+    dispatch('updateMarkDown', content)
+  },
+  async saveActivePage({ getters, dispatch }) {
+    let { code: content, activePage: path } = getters
+    await dispatch('gitlab/saveFileContent', {content, path}, {root: true})
   },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, code) {

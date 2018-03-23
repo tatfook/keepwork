@@ -1,21 +1,24 @@
 <template>
-  <el-container id="editor">
-    <el-header>
-      <EditorHeader></EditorHeader>
-    </el-header>
-    <el-main>
-      <router-view/>
-      <el-dialog :visible.sync='dialogVisible' width='100%' height='100%'>
-        <PageViewer />
-      </el-dialog>
-    </el-main>
-  </el-container>
+  <fullscreen id='fullscreen' ref='fullscreen'>
+    <el-container id="editor">
+      <el-header>
+        <EditorHeader @changeFullscreen=' changeFullscreen '></EditorHeader>
+      </el-header>
+      <el-main>
+        <router-view/>
+        <el-dialog :visible.sync='dialogVisible ' width='100% ' height='100% '>
+          <PageViewer />
+        </el-dialog>
+      </el-main>
+    </el-container>
+  </fullscreen>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import EditorHeader from '@/components/editor/EditorHeader'
+import Fullscreen from 'vue-fullscreen/src/component.vue'
 
 export default {
   name: 'EditorPage',
@@ -25,26 +28,29 @@ export default {
     }
   },
   created() {
-    this.setActivePage()
-  },
-  mounted() {
+    this.updateActivePage()
   },
   watch: {
-    $route: 'setActivePage'
-  },
-  computed: {
+    $route: 'updateActivePage'
   },
   methods: {
-    setActivePage() {
-      this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
+    ...mapActions({
+      setActivePage: 'setActivePage'
+    }),
+    updateActivePage() {
+      this.setActivePage(this.$router.currentRoute.path)
     },
     showPreview() {
       this.dialogVisible = true
+    },
+    changeFullscreen() {
+      this.$refs['fullscreen'].toggle()
     }
   },
   components: {
     PageViewer,
-    EditorHeader
+    EditorHeader,
+    Fullscreen
   }
 }
 </script>
@@ -52,6 +58,7 @@ export default {
 <style>
 html,
 body,
+#fullscreen,
 .el-container {
   height: 100%;
 }
@@ -63,6 +70,9 @@ body {
   height: 100%;
   padding: 17px 16px;
   background-color: #cdd4dc;
+}
+#editor {
+  background: white;
 }
 </style>
 
