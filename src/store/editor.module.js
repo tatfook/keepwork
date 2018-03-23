@@ -6,26 +6,26 @@ import SimpleUndo from '@/lib/utils/simpleUndo'
 
 const initialState = () => {
   return {
-  activePage: '',
-  code: '',
-  modList: [],
-  activeMod: null,
-  activeProperty: null,
-  // layout: {
-  //   header: {},
-  //   footer: {},
-  //   siderbar: {}
-  // },
-  theme: {
-    name: 'classic',
-    colorID: 0,
-    fontID: 0
-  },
-  activeComponentType: '',
-  showingCol: {
-    isManagerShow: true,
-    isCodeShow: true,
-    isPreviewShow: true
+    activePage: '',
+    code: '',
+    modList: [],
+    activeMod: null,
+    activeProperty: null,
+    // layout: {
+    //   header: {},
+    //   footer: {},
+    //   siderbar: {}
+    // },
+    theme: {
+      name: 'classic',
+      colorID: 0,
+      fontID: 0
+    },
+    activeComponentType: '',
+    showingCol: {
+      isManagerShow: true,
+      isCodeShow: true,
+      isPreviewShow: true
     },
     undoManager: new SimpleUndo()
   }

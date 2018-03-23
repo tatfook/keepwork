@@ -2,13 +2,13 @@
     <div class='property-manager-container' v-if='hasActiveMod'>
         <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
             <i class="iconfont icon-bianjiqi-shanchu"></i>
-            …æ≥˝ƒ£øÈ
+            Âà†Èô§Ê®°Âùó
         </div>
         <el-tabs>
-            <el-tab-pane label=' Ù–‘'>
+            <el-tab-pane label='Â±ûÊÄß'>
                 <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='activeMod.data[key]' :isCardActive='key === activeProperty'></PropTypeCard>
             </el-tab-pane>
-            <el-tab-pane label='—˘ Ω'>
+            <el-tab-pane label='Ê†∑Âºè'>
                 <div class='styles-container'>
                     <style-selector :mod='activeMod' />
                 </div>
@@ -48,7 +48,7 @@ export default {
       this.setActivePropertyData({ data })
     },
     toDeleteMod() {
-      this.$confirm('»∑∂®…æ≥˝’‚∏ˆƒ£øÈ£ø', '…æ≥˝Ã· æ', {
+      this.$confirm('Á°ÆÂÆöÂà†Èô§Ëøô‰∏™Ê®°ÂùóÔºü', 'Âà†Èô§ÊèêÁ§∫', {
         type: 'error'
       })
         .then(() => {
