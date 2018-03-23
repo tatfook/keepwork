@@ -1,15 +1,26 @@
 <template>
-  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable></el-input>
+  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 export default {
   name: 'InputType',
   props: {
-    editingKey: String
+    editingKey: String,
+    originValue: String
   },
   data() {
     return {
-      inputTypeValue: ''
+      inputTypeValue: this.originValue
+    }
+  },
+  methods: {
+    updateValue(newVal) {
+      var tempChangedDataObj = {}
+      tempChangedDataObj[this.editingKey] = newVal
+      this.$emit('onPropertyChange', tempChangedDataObj)
+    },
+    getFocus() {
+      this.$emit('onChangeValue')
     }
   }
 }
@@ -21,5 +32,8 @@ export default {
   font-size: 16px;
   padding: 18px 0 0;
   border-radius: 0;
+}
+.link-type .el-input__suffix{
+    top: 10px;
 }
 </style>
