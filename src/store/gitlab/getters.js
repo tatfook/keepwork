@@ -14,6 +14,7 @@ const getGitlabAPI = config => {
 /*doc
   getGitFileOptionsByPath
   we need {projectId, ref} to access file in gitlab server
+  we use 'master' as default ref usually
 */
 const getGitFileOptionsByPath = (rootGetters, path) => {
   let personalSitePathMap = rootGetters['user/personalSitePathMap']

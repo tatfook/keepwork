@@ -33,7 +33,8 @@ const actions = {
 
     // call user/getAllPersonalSite then we can get git file options
     await dispatch('user/getAllPersonalSite', null, {root: true})
-    let { projectId, ref } = getGitFileOptionsByPath(path)
+    let { projectId } = getGitFileOptionsByPath(path)
+    let ref = 'master'
 
     let gitlab = getGitlabAPI()
     let file = await gitlab.projects.repository.files.show(projectId, path, ref)
