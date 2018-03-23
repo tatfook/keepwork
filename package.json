@@ -21,6 +21,7 @@
     "jss": "^9.8.0",
     "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
+    "mousetrap": "^1.6.1",
     "node-gitlab-api": "^2.2.4",
     "vue": "^2.5.2",
     "vue-codemirror": "^4.0.3",

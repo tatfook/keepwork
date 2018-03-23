@@ -8,6 +8,7 @@
 import Parser from '@/lib/mod/parser'
 import { mapGetters } from 'vuex'
 import { codemirror } from 'vue-codemirror'
+import Mousetrap from 'mousetrap'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
@@ -25,11 +26,16 @@ export default {
       modList: 'modList'
     }),
     options() {
+      let save = () => Mousetrap.trigger('mod+s')
       return {
         mode: 'markdown',
         lineNumbers: true,
         line: true,
-        lineWrapping: true
+        lineWrapping: true,
+        extraKeys: {
+          'Ctrl-S': save,
+          'Cmd-S': save
+        }
       }
     },
     editor() {
