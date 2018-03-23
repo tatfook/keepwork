@@ -50,35 +50,35 @@
       <el-menu-item v-loading="savePending" index='3' class="li-btn">
         <span class="btn icon-save" title="保存" @click="save"></span>
       </el-menu-item>
-      <el-menu-item index='4' class="li-btn">
+      <!-- <el-menu-item index='4' class="li-btn">
         <span class="btn icon-undo" title="撤销"></span>
       </el-menu-item>
       <el-menu-item index='5' class="li-btn">
         <span class="btn icon-redo" title="重做"></span>
-      </el-menu-item>
-      <el-menu-item index='6' class="li-btn">
+      </el-menu-item> -->
+      <el-menu-item index='6' class="li-btn" @click='changeFullscreen'>
         <span class="btn icon-full-screen" title="全屏"></span>
       </el-menu-item>
-      <el-menu-item index='8' class="li-btn">
-        <el-dropdown @command='changeViewType'>
+      <el-menu-item index=' 8 ' class="li-btn">
+        <el-dropdown @command='changeViewType '>
           <el-button class="dropdown-btn">
             {{showingType}}
             <i class="el-icon-arrow-down el-icon--right dropdown-arrow"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true}'>预览</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false}'>代码</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true}'>分屏</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>预览</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>代码</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>分屏</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index='2'>
+      <el-menu-item index='2 '>
         <span class="input-link-copy-box">
           <a :href="pathname" target="_blank">{{pathname}}</a>
         </span>
       </el-menu-item>
 
-      <el-menu-item index='7' class="pull-right user-profile-box">
+      <el-menu-item index='7 ' class="pull-right user-profile-box">
         <img class="user-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
       </el-menu-item>
     </el-menu>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'EditorHeader',
   data: function() {
@@ -99,14 +99,23 @@ export default {
     ...mapGetters({
       showingCol: 'showingCol'
     }),
-    showingType(){
-      if (this.showingCol.isCodeShow === false && this.showingCol.isPreviewShow === true) {
+    showingType() {
+      if (
+        this.showingCol.isCodeShow === false &&
+        this.showingCol.isPreviewShow === true
+      ) {
         return '预览'
       }
-      if (this.showingCol.isCodeShow === true && this.showingCol.isPreviewShow === false) {
+      if (
+        this.showingCol.isCodeShow === true &&
+        this.showingCol.isPreviewShow === false
+      ) {
         return '代码'
       }
-      if (this.showingCol.isCodeShow === true && this.showingCol.isPreviewShow === true) {
+      if (
+        this.showingCol.isCodeShow === true &&
+        this.showingCol.isPreviewShow === true
+      ) {
         return '分屏'
       }
     }
@@ -122,6 +131,9 @@ export default {
     },
     changeViewType(command) {
       this.$store.dispatch('resetShowingCol', command)
+    },
+    changeFullscreen() {
+      this.$emit('changeFullscreen')
     }
   }
 }
