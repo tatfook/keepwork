@@ -40,7 +40,7 @@ export default {
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
 
-      if (code === this.code) return
+      if (code === undefined || code === this.code) return
 
       if (changes.length > 1)
         return this.$store.dispatch('updateMarkDown', code)

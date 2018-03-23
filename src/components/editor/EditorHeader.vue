@@ -74,7 +74,7 @@
       </el-menu-item>
       <el-menu-item index='2 '>
         <span class='input-link-copy-box'>
-          <a :href='pathname' target='_blank'>{{pathname}}</a>
+          <a :href='activePage' target='_blank'>{{activePage}}</a>
         </span>
       </el-menu-item>
 
@@ -91,14 +91,14 @@ export default {
   name: 'EditorHeader',
   data: function() {
     return {
-      savePending: false,
-      pathname: window.location.pathname
+      savePending: false
     }
   },
   computed: {
     ...mapGetters({
       showingCol: 'showingCol',
-      undoManager: 'undoManager'
+      undoManager: 'undoManager',
+      activePage: 'activePage'
     }),
     showingType() {
       if (

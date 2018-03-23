@@ -76,7 +76,7 @@ const actions = {
   },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, payload) {
-    if (payload.code === undefined) payload = { payload }
+    if (payload.code === undefined) payload = { code: payload }
     let blockList = Parser.buildBlockList(payload.code)
     commit('SET_ACTIVE_MOD', null)
     commit('SET_ACTIVE_PROPERTY', null)
