@@ -13,7 +13,7 @@ export default {
   computed: {
     properties() {
       return _.merge(
-        compDefaultProperties[this.$options.name] || {},
+        _.cloneDeep(compDefaultProperties[this.$options.name]) || {},
         this.source || {}
       )
     }
