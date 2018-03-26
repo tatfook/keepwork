@@ -1,4 +1,5 @@
 <script>
+import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
 import boardProptypes from './board.proptypes'
 
@@ -64,7 +65,7 @@ export default {
   render(h) {
     return (
       <div id="">
-        <div on-click={() => this.showDialog()}>点击此处开始编辑</div>
+        <div>点击右侧编辑按钮开始编辑</div>
         <el-dialog {...this.getDialogProps}>
           <div id="mx-client">
             <div
@@ -94,12 +95,21 @@ export default {
     closeDialog() {
       this.visible = false
 
-      // $('.mxWindow').remove()
+      let data = this.ui.getCurrentCompressData()
+      this.properties.data = data
+
+      let mxWindow = document.querySelectorAll('.mxWindow')
+
+      if (mxWindow) {
+        mxWindow.forEach(element => {
+          element.parentNode.removeChild(element)
+        })
+      }
     },
     loadBoardEditor() {
       if (!isInitEditor) {
         initEditor(this.data, ui => {
-          console.log(ui)
+          this.ui = ui
         })
       }
     }
@@ -116,7 +126,7 @@ export default {
             function() {
               this.loadBoardEditor()
             }.bind(this),
-            1000
+            0
           )
         }
       }

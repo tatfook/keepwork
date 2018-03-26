@@ -6,6 +6,8 @@ import ModQQ from './web/qq'
 import ModMixPositon from './web/mixPosition'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
+import ModVipRead from './web/vipRead'
+import ModComment from './web/comment'
 
 var modsList = [
   {
@@ -19,7 +21,9 @@ var modsList = [
       ModText,
       ModParacraft,
       ModQQ,
-      ModMixPositon
+      ModMixPositon,
+      ModVipRead,
+      ModComment
     ]
   }
   // {

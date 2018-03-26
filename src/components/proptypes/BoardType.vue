@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="openEditor">board</el-button>
+  <el-button @click="openEditor">编辑</el-button>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'

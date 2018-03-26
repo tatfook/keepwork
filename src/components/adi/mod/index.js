@@ -8,6 +8,8 @@ import ModParacraft from './web/paracraft'
 import ModQQ from './web/qq'
 import ModText from './web/text'
 import ModBoard from './web/board'
+import ModVipRead from './web/vipRead'
+import ModComment from './web/comment'
 
 export default {
   ModMarkdown,
@@ -19,5 +21,7 @@ export default {
   ModParacraft,
   ModQQ,
   ModText,
-  ModBoard
+  ModBoard,
+  ModVipRead,
+  ModComment
 }

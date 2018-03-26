@@ -1,12 +1,12 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
-import styles from './vipRead.styles'
-import templates from './vipRead.templates'
+import styles from './comment.styles'
+import templates from './comment.templates'
 
-const name = 'ModVipRead'
+const name = 'ModComment'
 
 const components = {
-  vipRead: 'AdiVipRead'
+  comment: 'AdiComment'
 }
 
 const properties = generateProperties(name, components)

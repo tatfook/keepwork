@@ -7,6 +7,8 @@ import AdiLabel from './label/label.properties'
 import AdiMarkdown from './markdown/markdown.properties'
 import AdiBoard from './board/board.properties'
 import AdiDescLabel from './descLabel/descLabel.properties'
+import AdiVipRead from './vipRead/vipRead.properties'
+import AdiComment from './comment/comment.properties'
 
 export default {
   AdiImgLoop,
@@ -17,5 +19,7 @@ export default {
   AdiLabel,
   AdiMarkdown,
   AdiBoard,
-  AdiDescLabel
+  AdiDescLabel,
+  AdiVipRead,
+  AdiComment
 }
