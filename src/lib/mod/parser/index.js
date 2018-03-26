@@ -22,6 +22,7 @@ const endModBlock = (blockList, curModBlock) => {
 }
 
 const buildBlockList = mdText => {
+  if (!mdText) return []
   let mdLines = mdText.trim().split('\n')
   let blockList = []
   let curModBlock = null

@@ -60,5 +60,74 @@ export default [
         }
       }
     }
+  },
+  {
+    // style2
+    data: {
+      // 定义mod根div的样式
+      root: {
+        padding: '10px 0px'
+      },
+      logo: {
+        height: '87px',
+        width: '87px',
+        margin: 'auto'
+      },
+      colCouple: {
+        'min-width': '200px',
+        height: '60px',
+        display: 'flex',
+        'align-items': 'center'
+      },
+      colCoupleRow: {
+        margin: 'auto',
+        'text-align': 'center'
+      },
+      colMenu: {
+        'padding-top': '5px',
+        'padding-bottom': '5px'
+      },
+      businessName: {
+        margin: 'auto'
+      },
+      // 定义子组件menu的wrapper样式
+      menu: {
+        'max-width': '760px',
+        height: '50px',
+        margin: 'auto'
+      }
+    },
+    props: {
+      colLogo: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
+    },
+    theme: {
+      root: ['font_0', 'color_7'],
+      colMenu: ['bg_color_0']
+    },
+    options: {
+      theme: {
+        // 子组件的style参数
+        menu: {
+          menuBackground: 'bg_color_0',
+          fontColor: 'color_7'
+        },
+        businessName: {
+          fontSize: 'font_5',
+          fontColor: 'color_3'
+        },
+        tagline: {
+          fontSize: 'font_2',
+          fontColor: 'color_2'
+        }
+      },
+      config: {
+        // 子组件配置参数
+        menu: {
+          mode: 'horizontal'
+        }
+      }
+    }
   }
 ]

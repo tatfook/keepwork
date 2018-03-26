@@ -1,12 +1,12 @@
 <template>
-  <div class="editor-header">
+  <div class='editor-header'>
     <el-menu mode='horizontal'>
       <el-submenu index='1'>
         <template slot='title'>
-          <img class="kp-logo" src="@/assets/img/logo.svg" alt="Menu">
+          <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
         </template>
         <el-submenu index='1-1'>
-          <template slot="title">系统</template>
+          <template slot='title'>系统</template>
           <el-menu-item index='1-1-1'>新建网站</el-menu-item>
           <el-menu-item index='1-1-2'>新建页面</el-menu-item>
           <el-menu-item index='1-1-3'>保存</el-menu-item>
@@ -44,28 +44,28 @@
         </el-submenu>
         <el-menu-item index='1-6'>帮助</el-menu-item>
         <el-menu-item index='1-7'>
-          <a href="/">返回首页</a>
+          <a href='/'>返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item v-loading="savePending" index='3' class="li-btn">
-        <span class="btn icon-save" title="保存" @click="save"></span>
+      <el-menu-item v-loading='savePending' index='3' class='li-btn'>
+        <span class='btn icon-save' title='保存' @click='save'></span>
       </el-menu-item>
-      <!-- <el-menu-item index='4' class="li-btn">
-        <span class="btn icon-undo" title="撤销"></span>
+      <el-menu-item index='4' class='li-btn' @click='undo' :disabled='canUndo'>
+        <span class='btn icon-undo' title='撤销'></span>
       </el-menu-item>
-      <el-menu-item index='5' class="li-btn">
-        <span class="btn icon-redo" title="重做"></span>
-      </el-menu-item> -->
-      <el-menu-item index='6' class="li-btn" @click='changeFullscreen'>
-        <span class="btn icon-full-screen" title="全屏"></span>
+      <el-menu-item index='5' class='li-btn' @click='redo' :disabled='canRedo'>
+        <span class='btn icon-redo' title='重做'></span>
       </el-menu-item>
-      <el-menu-item index=' 8 ' class="li-btn">
+      <el-menu-item index='6' class='li-btn' @click='changeFullscreen'>
+        <span class='btn icon-full-screen' title='全屏'></span>
+      </el-menu-item>
+      <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
-          <el-button class="dropdown-btn">
+          <el-button class='dropdown-btn'>
             {{showingType}}
-            <i class="el-icon-arrow-down el-icon--right dropdown-arrow"></i>
+            <i class='el-icon-arrow-down el-icon--right dropdown-arrow'></i>
           </el-button>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot='dropdown'>
             <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>预览</el-dropdown-item>
             <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>代码</el-dropdown-item>
             <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>分屏</el-dropdown-item>
@@ -73,13 +73,13 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item index='2 '>
-        <span class="input-link-copy-box">
-          <a :href="pathname" target="_blank">{{pathname}}</a>
+        <span class='input-link-copy-box'>
+          <a :href='activePage' target='_blank'>{{activePage}}</a>
         </span>
       </el-menu-item>
 
-      <el-menu-item index='7 ' class="pull-right user-profile-box">
-        <img class="user-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+      <el-menu-item index='7 ' class='pull-right user-profile-box'>
+        <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
       </el-menu-item>
     </el-menu>
   </div>
@@ -91,13 +91,14 @@ export default {
   name: 'EditorHeader',
   data: function() {
     return {
-      savePending: false,
-      pathname: window.location.pathname
+      savePending: false
     }
   },
   computed: {
     ...mapGetters({
-      showingCol: 'showingCol'
+      showingCol: 'showingCol',
+      undoManager: 'undoManager',
+      activePage: 'activePage'
     }),
     showingType() {
       if (
@@ -118,6 +119,12 @@ export default {
       ) {
         return '分屏'
       }
+    },
+    canUndo() {
+      return !this.undoManager.canUndo()
+    },
+    canRedo() {
+      return !this.undoManager.canRedo()
     }
   },
   methods: {
@@ -134,6 +141,22 @@ export default {
     },
     changeFullscreen() {
       this.$emit('changeFullscreen')
+    },
+    undo() {
+      this.undoManager.undo(code => {
+        this.$store.dispatch('updateMarkDown', {
+          code: code || '',
+          enableHistory: true
+        })
+      })
+    },
+    redo() {
+      this.undoManager.redo(code => {
+        this.$store.dispatch('updateMarkDown', {
+          code: code || '',
+          enableHistory: true
+        })
+      })
     }
   }
 }
@@ -192,7 +215,7 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 $spriteUrl: '../../assets/img/editor_sprites.png';
 
 .icon-save {

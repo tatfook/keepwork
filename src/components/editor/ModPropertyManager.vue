@@ -1,28 +1,25 @@
 <template>
-  <div class='property-manager-container' v-if='hasActiveMod'>
-    <el-tabs>
-      <el-tab-pane label='Property'>
-        <div class='properties-container' v-if='hasActiveProperty'>
-          {{activeProperty}}
-          <pre>{{activePropertyDataCopy}}</pre>
-          <v-json-editor ref='editor' :data="activePropertyDataCopy" :editable="editable" @change="updateActiveProperData"></v-json-editor>
+    <div class='property-manager-container' v-if='hasActiveMod'>
+        <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
+            <i class="iconfont icon-bianjiqi-shanchu"></i>
+            删除模块
         </div>
-        <div v-else>
-          <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key'></PropTypeCard>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label='Style'>
-        <div class='styles-container'>
-          <style-selector :mod='activeMod' />
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label='Theme'>
+        <el-tabs>
+            <el-tab-pane label='属性'>
+                <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='activeMod.data[key]' :isCardActive='key === activeProperty'></PropTypeCard>
+            </el-tab-pane>
+            <el-tab-pane label='样式'>
+                <div class='styles-container'>
+                    <style-selector :mod='activeMod' />
+                </div>
+            </el-tab-pane>
+      <!-- <el-tab-pane label='Theme'>
         <div class='styles-container'>
           <theme-selector />
         </div>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+      </el-tab-pane> -->
+        </el-tabs>
+    </div>
 </template>
 
 <script>
@@ -42,12 +39,22 @@ export default {
   }),
   methods: {
     ...mapActions({
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      deleteMod: 'deleteMod'
     }),
     updateActiveProperData() {
       // the data of the json_editor is in ini_data of the component
       let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}))
       this.setActivePropertyData({ data })
+    },
+    toDeleteMod() {
+      this.$confirm('确定删除这个模块？', '删除提示', {
+        type: 'error'
+      })
+        .then(() => {
+          this.deleteMod(this.activeMod)
+        })
+        .catch(() => {})
     }
   },
   computed: {
@@ -76,13 +83,20 @@ export default {
 </script>
 <style>
 .property-manager-container {
-  height: 100%;
+  min-height: 100%;
   background-color: #ebeef5;
   padding: 0 18px;
+  position: relative;
 }
-.prop-box {
-  background-color: #fff;
-  padding: 25px 18px;
-  margin-bottom: 12px;
+.property-manager-container .delete-mod {
+  position: absolute;
+  right: 18px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+.el-tabs__item {
+  padding: 0 20px;
+  font-size: 16px;
 }
 </style>
