@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'mod-active': isActive }" @click='setActive'>
+  <div :class="{ 'mod-active': isActive }" class='kp-mod-selector' @click='setActive'>
     <div class='mod'>
       <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
       <span v-if='invalid'> 错误的Mod指令 </span>
@@ -51,23 +51,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .mod-active {
   border: 2px dashed #69b9ff;
   position: relative;
-}
-.comp {
-  position: relative;
-}
-.comp:hover::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-  background-color: rgba(127, 195, 255, 0.4);
 }
 .add-mod-btn {
   width: 38px;
@@ -96,6 +83,22 @@ export default {
   transform: scale(1.211);
   background-color: #7fc3ff;
   color: #fff;
+}
+</style>
+
+<style>
+.kp-mod-selector .comp {
+  position: relative;
+}
+.kp-mod-selector .comp:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: rgba(127, 195, 255, 0.4);
 }
 </style>
 

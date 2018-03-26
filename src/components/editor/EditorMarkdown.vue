@@ -87,10 +87,10 @@ export default {
 }
 </style>
 <style lang="css">
-.CodeMirror {
+.kp-md-editor .CodeMirror {
   height: 100%;
 }
-.CodeMirror-gutters {
+.kp-md-editor .CodeMirror-gutters {
   background-color: transparent;
   border: none;
 }
