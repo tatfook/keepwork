@@ -14,3 +14,11 @@ export default {
   mixins: [compBaseMixin]
 }
 </script>
+
+<style lang="scss" scoped>
+.comp-label {
+  a {
+    text-decoration: none;
+  }
+}
+</style>

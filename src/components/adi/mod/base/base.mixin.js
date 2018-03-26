@@ -22,7 +22,7 @@ const buildCompWrapper = (h, m, property, compType) => {
 
 const renderTemplate = (h, m, template, root) => {
   template = template || m.template
-  console.log(root)
+
   root = (root || 'root') + 'Row'
   return (
     <el-row {...m.getProps(root)} class={m.getClasses(root)}>

@@ -1,22 +1,23 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import boardProptypes from './board.proptypes'
 
 let isInitEditor = false
 
 const initEditor = (data, callback) => {
   isInitEditor = true
 
+  let mxClientEle = document.querySelector('#mx-client')
+
   if (!mxClient.isBrowserSupported()) {
-    window.querySelector('#mx-client').innerHTML('Browser is not supported!')
+    mxClientEle.innerHTML('Browser is not supported!')
   }
 
-  var mxClientHeight = $(window).height()
-  var mxClientWidth = $('#mx-client').outerWidth()
+  var mxClientHeight = window.innerHeight
+  var mxClientWidth = window.innerWidth
 
-  window.querySelector('#mx-client').css({
-    width: mxClientWidth + 'px',
-    height: mxClientHeight + 'px'
-  })
+  mxClientEle.style.width = mxClientWidth + 'px'
+  mxClientEle.style.height = mxClientHeight + 'px'
 
   mxResources.loadDefaultBundle = false
 
@@ -34,7 +35,7 @@ const initEditor = (data, callback) => {
 
       let ui = new Board(
         new Editor(urlParams['chrome'] == '0', themes),
-        document.querySelector('#mx-client')
+        mxClientEle
       )
 
       if (
@@ -52,7 +53,7 @@ const initEditor = (data, callback) => {
       }
     },
     function() {
-      $('#mx-client').innerHTML =
+      mxClientEle.innerHTML =
         '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>'
     }
   )
@@ -93,7 +94,7 @@ export default {
     closeDialog() {
       this.visible = false
 
-      $('.mxWindow').remove()
+      // $('.mxWindow').remove()
     },
     loadBoardEditor() {
       if (!isInitEditor) {
@@ -111,12 +112,35 @@ export default {
           this.visible = v
         },
         open: () => {
-          this.loadBoardEditor()
+          setTimeout(
+            function() {
+              this.loadBoardEditor()
+            }.bind(this),
+            1000
+          )
         }
       }
 
       return { props, on }
     }
+  },
+  created() {
+    let boardScript = document.createElement('script')
+    boardScript.setAttribute('src', './static/adi/board/keepwork-board.min.js')
+
+    let graphEditorCss = document.createElement('link')
+    graphEditorCss.setAttribute('rel', 'stylesheet')
+    graphEditorCss.setAttribute('type', 'text/css')
+    graphEditorCss.setAttribute(
+      'href',
+      './static/adi/board/assets/styles/grapheditor.css'
+    )
+
+    let body = document.querySelector('body')
+    body.appendChild(boardScript)
+    body.appendChild(graphEditorCss)
+
+    boardProptypes.click = this.showDialog
   }
 }
 </script>
