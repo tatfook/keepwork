@@ -26,16 +26,17 @@ export default {
 
 <style lang="scss" scoped>
 .comp-button {
-  height: 100%;
   a {
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
     white-space: nowrap;
-    padding: 6px 12px;
+    padding: 6px 0px;
     border-radius: 4px;
     touch-action: manipulation;
     user-select: none;
+    width: 100%;
+    text-align: center;
   }
 }
 </style>

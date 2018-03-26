@@ -1,18 +1,38 @@
 export default [
   // template 1
   [
+    { colPreview: 'preview' },
     {
-      colPreview: 'preview',
-      colGroup: [
-        { colWorldName: 'worldName' },
+      colGroupLeft: [
         {
-          colGroup: [{ colVersion: 'version' }, { colUpdateTime: 'updateTime' }]
+          colGroupA: [
+            { colWorldName: 'worldName' },
+            {
+              colGroupVersionAndUpdateTime: [
+                { colVersion: 'version' },
+                { colUpdateTime: 'updateTime' }
+              ]
+            }
+          ]
+        },
+        {
+          colGroupB: [{ colAuthor: 'author' }]
+        },
+        {
+          colGroupC: [
+            {
+              colGroupCA: [
+                { colViewTimesImg: 'viewTimesImg' },
+                { colViewTimes: 'viewTimes' },
+                { colSize: 'size' }
+              ]
+            },
+            {
+              colGroupCB: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+            }
+          ]
         }
       ]
     }
-
-    // {
-    //   colGroup: [[{ colWorldName: 'worldName' }, { colVersion: 'version' }]]
-    // }
   ]
 ]
