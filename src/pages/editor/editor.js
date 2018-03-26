@@ -3,13 +3,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import '@/assets/iconfont/iconfont.css'
+import 'element-ui/lib/theme-chalk/index.css'
 import createPersistedState from 'vuex-persistedstate'
 import EditorPage from './EditorPage'
 import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import JsonEditor from 'vue-json-editor-block-view'
-import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
