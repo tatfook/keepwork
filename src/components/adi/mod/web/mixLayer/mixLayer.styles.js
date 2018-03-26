@@ -4,33 +4,45 @@ export default [
     data: {
       // 定义mod根div的样式
       root: {
-        position: 'relative',
-        overflow: 'hidden',
-        zoom: 1
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
       },
       media: {
         width: '100%',
-        height: '100%',
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        'z-index': -1
+        height: '450px'
       },
-      group: {
-        width: '50%',
-        float: 'left',
-        'margin-left': '5px'
+      colGroup: {
+        width: '100%'
+      },
+      colCouple: {
+        'min-width': '200px',
+        display: 'flex',
+        'margin-top': '-400px',
+        'align-items': 'center'
       }
+    },
+    props: {
+      colPhoto: { span: 10 },
+      colCouple: { span: 16 },
+      rootRow: { gutter: 100 }
     },
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']
     },
     options: {
-      theme: {},
+      theme: {
+        businessName: {
+          fontSize: 'font_5',
+          fontColor: 'color_3'
+        },
+        tagline: {
+          fontSize: 'font_2',
+          fontColor: 'color_2'
+        }
+      },
       config: {}
     }
-  },
-  // style2
-  {}
+  }
 ]
