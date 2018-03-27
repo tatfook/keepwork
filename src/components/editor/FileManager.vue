@@ -54,13 +54,13 @@ export default {
       //try open files list in site level
       let repositoryIsClickedAndFileListIsEmpty = node.level === 1 && _.isEmpty(data.children)
       if (repositoryIsClickedAndFileListIsEmpty) {
-        let {username, name, projectId} = data
+        let {username, name} = data
         let path = `${ username }/${ name }`
         let recursive = true
 
         node.loading = true
         this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [])
-        await this.getRepositoryTree({ projectId, path })
+        await this.getRepositoryTree({ path })
         this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [name])
       }
 

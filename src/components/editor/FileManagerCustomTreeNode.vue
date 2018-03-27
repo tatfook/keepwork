@@ -14,6 +14,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions } from 'vuex';
+import { suffixFileExtension } from '@/lib/utils'
 
 export default {
   name: 'FileManagerCustomTreeNode',
@@ -37,7 +38,7 @@ export default {
     async addFile() {
       let newFileName = (prompt('What\'s the file name?') || '').trim()
       if (!newFileName) return
-      newFileName = /\.md$/.test(newFileName) ? newFileName : `${newFileName}.md`
+      newFileName = suffixFileExtension(newFileName, 'md')
 
       let newFilePath = `${this.currentPath}/${newFileName}`
       this.addFilePending = true
