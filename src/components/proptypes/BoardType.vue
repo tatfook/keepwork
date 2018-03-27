@@ -1,5 +1,5 @@
 <template>
-    <el-button plain type='primary' size='mini'>打开菜单编辑器</el-button>
+  <el-button plain type='primary' size='mini' @click.native='openBoard'>打开绘图板</el-button>
 </template>
 <script>
 export default {
@@ -7,6 +7,11 @@ export default {
   data() {
     return {
       inputTypeValue: ''
+    }
+  },
+  methods: {
+    openBoard() {
+      console.log('openBoard')
     }
   }
 }

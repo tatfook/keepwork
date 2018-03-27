@@ -8,9 +8,12 @@ export default {
     editingKey: String,
     originValue: String
   },
-  data() {
-    return {
-      inputTypeValue: this.originValue
+  computed: {
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
     }
   },
   methods: {
