@@ -1,15 +1,15 @@
 <template>
-  <div class="prop-box" :class="{active: isCardActive}">
+  <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isModShow}">
     <el-row class="prop-header" type='flex' justify='space-between'>
       <el-col>
         {{cardKey}}
       </el-col>
       <el-col class="card-info">
-        <el-switch v-model="isModShow" active-color="#3ba4ff" @change='toggleModVisible'>
+        <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
         </el-switch>
       </el-col>
     </el-row>
-    <el-row class="prop-item" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
+    <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
       <component :is='proptypes[propItem]' :prop='prop' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData' @onChangeValue='changeActivePropty'></component>
     </el-row>
   </div>
@@ -25,16 +25,19 @@ export default {
     prop: Object,
     isCardActive: Boolean
   },
+  data() {
+    return {
+      proptypes,
+      isModShow: null
+    }
+  },
   computed: {
     ...mapGetters({
       activeMod: 'activeMod'
     })
   },
-  data() {
-    return {
-      proptypes,
-      isModShow: true
-    }
+  created() {
+    this.isModShow = !this.activeMod.data[this.cardKey].hidden
   },
   methods: {
     ...mapActions({
@@ -71,8 +74,16 @@ export default {
 .prop-box.active {
   border: 2px solid #3da4fd;
 }
+.card-only-title {
+  padding: 16px 18px;
+}
+.card-only-title .prop-header {
+  margin-bottom: 0;
+}
 .prop-header {
   margin-bottom: 12px;
+  font-size: 16px;
+  color: #3ba4ff;
 }
 .card-info {
   width: auto;

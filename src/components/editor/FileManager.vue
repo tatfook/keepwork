@@ -3,10 +3,11 @@
     <h2>文件管理</h2>
     <el-tree
       v-show="!loading"
+      node-key="name"
       :data="personalSiteList"
       :props="filesTreeProps"
-      node-key="name"
       :default-expanded-keys="defaultExpandedKeys"
+      :render-content="renderContent"
       @node-click="handleNodeClick">
     </el-tree>
   </div>
@@ -14,6 +15,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex';
+import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
 
 export default {
   name: 'FileManager',
@@ -42,40 +44,35 @@ export default {
       getAllPersonalSite: 'user/getAllPersonalSite',
       getRepositoryTree: 'gitlab/getRepositoryTree'
     }),
-    handleNodeClick(data, node, component) {
+    renderContent(h, { node, data, store }) {
+      // trick codes, manipulated the node in <el-tree/>
+      node.isLeaf = data.type === 'blob'
+      return <FileManagerCustomTreeNode data={data} node={node}/>
+    },
+    async handleNodeClick(data, node, component) {
+
       //try open files list in site level
-      if (node.level === 1 && _.isEmpty(data.children)) {
+      let repositoryIsClickedAndFileListIsEmpty = node.level === 1 && _.isEmpty(data.children)
+      if (repositoryIsClickedAndFileListIsEmpty) {
         let {username, name, projectId} = data
+        let path = `${ username }/${ name }`
+        let recursive = true
+
         node.loading = true
         this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [])
-        this.getRepositoryTree({
-          projectId,
-          path: `${ username }/${ name }`,
-          recursive: true
-        }).then(() => {
-          this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [name])
-        })
+        await this.getRepositoryTree({ projectId, path })
+        this.defaultExpandedKeys[0] !== name && (this.defaultExpandedKeys = [name])
       }
+
       //try open file
-      if (data.type === 'blob') {
-        this.$router.push('/' + data.path)
-      }
+      let isFileClicked = data.type === 'blob'
+      isFileClicked && this.$router.push('/' + data.path)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.file-manager {
-  &>.el-tree {
-    &>.el-tree-node {
-      &>.el-tree-node__content {
-        &>.el-tree-node__expand-icon {
-          color: #c0c4cc;
-          cursor: pointer;
-        }
-      }
-    }
-  } 
-}
+// .file-manager {
+// }
 </style>

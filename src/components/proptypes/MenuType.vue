@@ -11,7 +11,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .el-button {
   font-size: 16px;
 }

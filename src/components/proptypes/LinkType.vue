@@ -1,5 +1,5 @@
 <template>
-  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
+    <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
@@ -10,9 +10,12 @@ export default {
     editingKey: String,
     originValue: String
   },
-  data() {
-    return {
-      inputTypeValue: this.originValue
+  computed: {
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
     }
   },
   methods: {

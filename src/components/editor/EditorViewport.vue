@@ -48,6 +48,7 @@ export default {
 .viewport-container {
   flex: 1;
   background-color: #fff;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

@@ -63,7 +63,7 @@ const actions = {
       return Promise.resolve()
     }
 
-    await context.dispatch('gitlab/getFileContent', path, { root: true })
+    await context.dispatch('gitlab/getFileContent', { path }, { root: true })
 
     let { content } = context.rootGetters['gitlab/files'][path]
     if (content) {
@@ -72,7 +72,7 @@ const actions = {
   },
   async saveActivePage({ getters, dispatch }) {
     let { code: content, activePage: path } = getters
-    await dispatch('gitlab/saveFileContent', { content, path }, { root: true })
+    await dispatch('gitlab/saveFile', { content, path }, { root: true })
   },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, payload) {
@@ -183,8 +183,7 @@ const mutations = {
     return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
   },
   DELETE_MOD(state, mod) {
-    let index = state.modList.map(el => el.key).indexOf(mod.key)
-    Vue.delete(state.modList, index)
+    return Parser.deleteBlock(state.modList, mod)
   },
   SET_ACTIVE_MOD(state, mod) {
     if (state.activeMod === mod) return

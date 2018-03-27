@@ -1,8 +1,8 @@
 <template>
   <fullscreen id='fullscreen' ref='fullscreen'>
-    <el-container id="editor">
+    <el-container v-loading="loading" id="editor">
       <el-header>
-        <EditorHeader @changeFullscreen=' changeFullscreen '></EditorHeader>
+        <EditorHeader @changeFullscreen='changeFullscreen' @showPreview='showPreview'></EditorHeader>
       </el-header>
       <el-main>
         <router-view/>
@@ -24,6 +24,7 @@ export default {
   name: 'EditorPage',
   data() {
     return {
+      loading: false,
       dialogVisible: false
     }
   },
@@ -37,8 +38,10 @@ export default {
     ...mapActions({
       setActivePage: 'setActivePage'
     }),
-    updateActivePage() {
-      this.setActivePage(this.$router.currentRoute.path)
+    async updateActivePage() {
+      this.loading = true
+      await this.setActivePage(this.$router.currentRoute.path)
+      this.loading = false
     },
     showPreview() {
       this.dialogVisible = true
@@ -68,7 +71,7 @@ body {
 }
 .el-main {
   height: 100%;
-  padding: 17px 16px;
+  padding: 17px 0;
   background-color: #cdd4dc;
 }
 #editor {

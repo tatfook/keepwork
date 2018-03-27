@@ -21,12 +21,24 @@ export default {
   components: {
     CommonHeader,
     CommonFooter
+  },
+  created() {
+    this.updateActivePage()
+  },
+  watch: {
+    $route: 'updateActivePage'
+  },
+  methods: {
+    updateActivePage() {
+      this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
+    }
   }
 }
 </script>
 
 <style>
-html, body{
+html,
+body {
   height: 100%;
 }
 body {
@@ -52,7 +64,7 @@ body {
   align-items: center;
   background-color: #f9f9f9;
 }
-.el-container{
+.el-container {
   min-height: 100%;
 }
 </style>

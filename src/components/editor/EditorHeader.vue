@@ -59,6 +59,9 @@
       <el-menu-item index='6' class='li-btn' @click='changeFullscreen'>
         <span class='btn icon-full-screen' title='全屏'></span>
       </el-menu-item>
+      <el-menu-item index='6' class='li-btn' @click='showPreview'>
+        <span class='btn icon-preview' title='预览'></span>
+      </el-menu-item>
       <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
           <el-button class='dropdown-btn'>
@@ -87,12 +90,21 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Mousetrap from 'mousetrap'
+
 export default {
   name: 'EditorHeader',
   data: function() {
     return {
       savePending: false
     }
+  },
+  mounted() {
+    Mousetrap.unbind('mod+s')
+    Mousetrap.bind('mod+s', () => {
+      this.save()
+      return false
+    })
   },
   computed: {
     ...mapGetters({
@@ -141,6 +153,9 @@ export default {
     },
     changeFullscreen() {
       this.$emit('changeFullscreen')
+    },
+    showPreview() {
+      this.$emit('showPreview')
     },
     undo() {
       this.undoManager.undo(code => {
@@ -229,6 +244,11 @@ $spriteUrl: '../../assets/img/editor_sprites.png';
 }
 .icon-full-screen {
   background: url($spriteUrl) -346px 6px no-repeat;
+}
+.icon-preview {
+  width: 45px;
+  height: 40px;
+  background: url($spriteUrl) -652px 6px no-repeat;
 }
 </style>
 

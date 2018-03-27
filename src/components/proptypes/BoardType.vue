@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="openEditor">编辑</el-button>
+  <el-button plain type='primary' size='mini' @click.native='openEditor'>打开绘图板</el-button>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
@@ -32,15 +32,8 @@ export default {
   }
 }
 </script>
-<style>
-.input-type .el-input__inner {
-  border: none;
-  border-bottom: 1px solid #e4e7ed;
+<style scoped>
+.el-button {
   font-size: 16px;
-  padding: 18px 0 0;
-  border-radius: 0;
-}
-.input-type .el-input__suffix {
-  top: 10px;
 }
 </style>
