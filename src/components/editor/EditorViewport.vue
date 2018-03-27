@@ -17,7 +17,7 @@ export default {
   name: 'EditorViewport',
   data() {
     return {
-      mods,
+      mods
     }
   },
   components: {
@@ -47,7 +47,8 @@ export default {
 <style scoped>
 .viewport-container {
   flex: 1;
-  background-color: #FFF;
-  overflow: auto;
+  background-color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

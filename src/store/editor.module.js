@@ -63,7 +63,7 @@ const actions = {
       return Promise.resolve()
     }
 
-    await context.dispatch('gitlab/getFileContent', {path}, { root: true })
+    await context.dispatch('gitlab/getFileContent', { path }, { root: true })
 
     let { content } = context.rootGetters['gitlab/files'][path]
     if (content) {
@@ -116,7 +116,7 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY', payload.property)
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
-  setActivePropertyData({ commit, getters: {activePropertyData} }, {data}) {
+  setActivePropertyData({ commit, getters: { activePropertyData } }, { data }) {
     let newData = _.merge({}, activePropertyData, data)
     commit('SET_ACTIVE_PROPERTY_DATA', newData)
     commit('REFRESH_CODE')
@@ -183,8 +183,7 @@ const mutations = {
     return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
   },
   DELETE_MOD(state, mod) {
-    let index = state.modList.map(el => el.key).indexOf(mod.key)
-    Vue.delete(state.modList, index)
+    return Parser.deleteBlock(state.modList, mod)
   },
   SET_ACTIVE_MOD(state, mod) {
     if (state.activeMod === mod) return

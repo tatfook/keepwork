@@ -112,7 +112,8 @@ const updateBlockAttribute = (block, key, value) => {
   return block
 }
 
-const deleteBlock = (blockList, blockIndex) => {
+const deleteBlock = (blockList, mod) => {
+  let blockIndex = blockList.map(el => el.key).indexOf(mod.key)
   let block = blockList[blockIndex]
   updateBlocksBeginLine(blockList, blockIndex + 1, -1 - block.textLength())
   blockList.splice(blockIndex, 1)
