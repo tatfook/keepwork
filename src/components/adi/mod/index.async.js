@@ -1,3 +1,4 @@
+const ModMarkdown = () => import('./common/markdown')
 const ModHeader = () => import('./web/header')
 const ModTitle = () => import('./web/title')
 const ModMixPosition = () => import('./web/mixPosition')
@@ -8,6 +9,7 @@ const ModQQ = () => import('./web/qq')
 const ModText = () => import('./web/text')
 
 export default {
+  ModMarkdown,
   ModHeader,
   ModTitle,
   ModMixPosition,

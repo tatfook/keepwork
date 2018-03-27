@@ -1,5 +1,5 @@
 <template>
-  <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :key='key'> </component>
+  <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme'> </component>
 </template>
 
 <script>
