@@ -1,8 +1,7 @@
 export default [
   // template 1
   [
-    { colLogo: 'logo' },
-    { colDesc: 'desc' }
+    { colComment: 'comment' }
     // {
     //   colGroup: [[{ colWorldName: 'worldName' }, { colVersion: 'version' }]]
     // }

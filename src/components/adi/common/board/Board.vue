@@ -2,6 +2,7 @@
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
 import boardProptypes from './board.proptypes'
+import { mapGetters, mapActions } from 'vuex'
 
 let isInitEditor = false
 
@@ -10,32 +11,34 @@ const initEditor = (data, callback) => {
 
   let mxClientEle = document.querySelector('#mx-client')
 
-  if (!mxClient.isBrowserSupported()) {
+  if (!window.mxClient.isBrowserSupported()) {
     mxClientEle.innerHTML('Browser is not supported!')
   }
 
-  var mxClientHeight = window.innerHeight
-  var mxClientWidth = window.innerWidth
+  let mxClientHeight = window.innerHeight
+  let mxClientWidth = window.innerWidth
 
   mxClientEle.style.width = mxClientWidth + 'px'
   mxClientEle.style.height = mxClientHeight + 'px'
 
-  mxResources.loadDefaultBundle = false
+  window.mxResources.loadDefaultBundle = false
 
-  var bundle =
-    mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
-    mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage)
+  let bundle =
+    window.mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
+    window.mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage)
 
-  mxUtils.getAll(
-    [bundle, STYLE_PATH + '/default.xml'],
+  window.mxUtils.getAll(
+    [bundle, window.STYLE_PATH + '/default.xml'],
     function(xhr) {
-      mxResources.parse(xhr[0].getText())
+      window.mxResources.parse(xhr[0].getText())
 
       let themes = new Object()
-      themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement()
+      themes[
+        window.Graph.prototype.defaultThemeName
+      ] = xhr[1].getDocumentElement()
 
-      let ui = new Board(
-        new Editor(urlParams['chrome'] == '0', themes),
+      let ui = new window.Board(
+        new window.Editor(urlParams['chrome'] == '0', themes),
         mxClientEle
       )
 
@@ -60,12 +63,89 @@ const initEditor = (data, callback) => {
   )
 }
 
+const initPreview = (data, callback) => {
+  if (!window.mxClient.isBrowserSupported()) {
+    return 'Browser is not supported!'
+  }
+
+  let container = document.createElement('div')
+
+  window.mxResources.loadDefaultBundle = false
+
+  let bundle =
+    window.mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
+    window.mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage)
+
+  window.mxUtils.getAll([bundle, window.STYLE_PATH + '/default.xml'], function(
+    xhr
+  ) {
+    window.mxResources.parse(xhr[0].getText())
+
+    let themes = new Object()
+    themes[
+      window.Graph.prototype.defaultThemeName
+    ] = xhr[1].getDocumentElement()
+
+    let graph = new window.Graph(container, null, null, null, themes)
+
+    let mxGraphModelData
+
+    if (data) {
+      mxGraphModelData = graph.getDecompressData(data)
+    }
+
+    let decoder = new window.mxCodec(mxGraphModelData)
+    let node = mxGraphModelData.documentElement
+
+    graph.centerZoom = false
+    graph.setTooltips(false)
+    graph.setEnabled(false)
+
+    decoder.decode(node, graph.getModel())
+
+    let svg = container.querySelector('svg')
+    svg.style.backgroundImage = null
+
+    if (typeof callback == 'function') {
+      callback(container.innerHTML)
+    }
+  })
+}
+
 export default {
   name: 'AdiBoard',
   render(h) {
+    let self = this
+
     return (
-      <div id="">
-        <div>点击右侧编辑按钮开始编辑</div>
+      <div class="comp-board">
+        {(() => {
+          if (self.properties.data) {
+            let initPreviewRender = () => {
+              if (Boolean(window.mxClient)) {
+                initPreview(self.properties.data, svg => {
+                  self.svg = svg
+                })
+              } else {
+                setTimeout(initPreviewRender, 500)
+              }
+            }
+
+            initPreviewRender()
+
+            return h(
+              'div',
+              {
+                domProps: {
+                  innerHTML: self.svg
+                }
+              },
+              []
+            )
+          } else {
+            return <div class="mx-client-start">点击右侧编辑按钮开始编辑</div>
+          }
+        })()}
         <el-dialog {...this.getDialogProps}>
           <div id="mx-client">
             <div
@@ -84,11 +164,18 @@ export default {
   data() {
     return {
       visible: false,
-      data: `<diagram version="0.0.1">1ZbBboMwDIafhjskLWXXsXa77MRh5wwMiRYICmHAnn6hCdCorbTDqAQX7N9OYn+OBB6Oy/5Vkpq+iwy4h/ys9/CLh1CAUKhfozIYJcS+EQrJMpu0CAn7AStOaS3LoHESlRBcsdoVU1FVkCpHI1KKzk3LBXdPrUkBV0KSEn6tfrBMUaNG6LDob8AKOp0chE8m8knSr0KKtrLneQjn52e08dHDsRRCGavsY+AjtwmJaf50JzrXJKFSf1mAzIJvwluYqhmFRg1Tn3qBRqqd544yBUlN0jHS6alqjaqSay/Qpt0KpIL+bjnB3KS+GCBKUHLQKb0728F1u4VvYBvy6QXbyGrEjrSYN15a14bt/jYJ/I8kSFObG5ezHrJ10NxgE62EZrctNLeuzVpo9ttCgx+IJtwWmt0D0Ry2hWa/HhrtLh+7c+zibwEffwE=</diagram>`
+      svg: ''
     }
   },
   mixins: [compBaseMixin],
   methods: {
+    ...mapActions({
+      setActiveProperty: 'setActiveProperty',
+      setActivePropertyData: 'setActivePropertyData'
+    }),
+    ...mapGetters({
+      activeProperty: 'activeProperty'
+    }),
     showDialog() {
       this.visible = true
     },
@@ -96,7 +183,10 @@ export default {
       this.visible = false
 
       let data = this.ui.getCurrentCompressData()
-      this.properties.data = data
+
+      if (this.activeProperty()) {
+        this.changeProptyData({ data })
+      }
 
       let mxWindow = document.querySelectorAll('.mxWindow')
 
@@ -108,10 +198,19 @@ export default {
     },
     loadBoardEditor() {
       if (!isInitEditor) {
-        initEditor(this.data, ui => {
+        initEditor(this.properties.data, ui => {
           this.ui = ui
         })
       }
+    },
+    changeProptyData(changedData) {
+      // this.changeActivePropty()
+      this.setActivePropertyData({
+        data: changedData
+      })
+    },
+    sync(prop, value) {
+      this[prop] = value
     }
   },
   computed: {
@@ -135,6 +234,7 @@ export default {
     }
   },
   created() {
+    //TODO: Rewrite mxGraph to es6 code
     let boardScript = document.createElement('script')
     boardScript.setAttribute('src', './static/adi/board/keepwork-board.min.js')
 
@@ -163,32 +263,43 @@ export default {
 
 
 <style lang="scss" scoped>
-.mx-client-close {
-  position: absolute;
-  right: 0;
-  top: 0px;
-  z-index: 9999;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  background-color: #4d90fe;
-  background-image: linear-gradient(top, #4d90fe, #4787ed);
-  border: 1px solid #3079ed;
-  color: #fff;
-  border-radius: 2px;
-  cursor: default;
-  font-size: 11px;
-  font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  margin-right: 16px;
-  height: 27px;
-  line-height: 27px;
-  min-width: 54px;
-  outline: 0px;
-  width: 90px;
-  padding: 0 8px;
-  padding: 0 8px;
-  cursor: pointer;
+.comp-board {
+  .mx-client-close {
+    position: absolute;
+    right: 0;
+    top: 0px;
+    z-index: 9999;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-color: #4d90fe;
+    background-image: linear-gradient(top, #4d90fe, #4787ed);
+    border: 1px solid #3079ed;
+    color: #fff;
+    border-radius: 2px;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    margin-right: 16px;
+    height: 27px;
+    line-height: 27px;
+    min-width: 54px;
+    outline: 0px;
+    width: 90px;
+    padding: 0 8px;
+    padding: 0 8px;
+    cursor: pointer;
+  }
+
+  .mx-client-start {
+    background-color: #dedede;
+    color: #333;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    font-size: 30px;
+  }
 }
 </style>

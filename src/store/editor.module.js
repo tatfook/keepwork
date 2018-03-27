@@ -116,7 +116,7 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY', payload.property)
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
-  setActivePropertyData({ commit, getters: {activePropertyData} }, {data}) {
+  setActivePropertyData({ commit, getters: { activePropertyData } }, { data }) {
     let newData = _.merge({}, activePropertyData, data)
     commit('SET_ACTIVE_PROPERTY_DATA', newData)
     commit('REFRESH_CODE')

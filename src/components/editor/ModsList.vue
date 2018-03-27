@@ -43,9 +43,8 @@ export default {
       if (data.children && data.children.length > 0) {
         return
       }
-      console.log(11111)
+
       this.activeModsList = data.mods
-      console.log(this.activeModsList)
     },
     nodeCollapseHandle(data, node, comp) {},
     newMode(name, index) {

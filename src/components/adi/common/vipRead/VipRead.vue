@@ -35,9 +35,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.comp-label {
-  a {
-    text-decoration: none;
+.comp-vip-read {
+  .vip-more-permission {
+    /* position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0; */
+    color: #3977ad;
+    background-color: #fff;
+    box-shadow: 1px -1px 10px #b5b5b5;
+    height: 80px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 30px;
+    padding-top: 25px;
+    z-index: 1;
+  }
+  .vip-more-permission .switch-notice {
+    font-size: 17px;
+    margin-top: -15px;
+  }
+  .vip-more-permission .switch-notice span {
+    font-size: 20px;
+  }
+  .vip-more-permission .fa-lock {
+    border: 1px solid;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
   }
 }
 </style>
