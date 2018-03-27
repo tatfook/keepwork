@@ -63,7 +63,7 @@ const actions = {
       return Promise.resolve()
     }
 
-    await context.dispatch('gitlab/getFileContent', path, { root: true })
+    await context.dispatch('gitlab/getFileContent', {path}, { root: true })
 
     let { content } = context.rootGetters['gitlab/files'][path]
     if (content) {
@@ -72,7 +72,7 @@ const actions = {
   },
   async saveActivePage({ getters, dispatch }) {
     let { code: content, activePage: path } = getters
-    await dispatch('gitlab/saveFileContent', { content, path }, { root: true })
+    await dispatch('gitlab/saveFile', { content, path }, { root: true })
   },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, payload) {

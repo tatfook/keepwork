@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import cookie from 'cookie'
 import { gitTree2NestedArray } from '@/lib/utils'
+import { EMPTY_GIT_FOLDER_KEEPER } from '@/lib/utils/consts'
 
 const getters = {
   info: state => state.info,
@@ -34,7 +35,7 @@ const getters = {
 
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
-      let files = _.get(repositoryTrees, [projectId, rootPath], [])
+      let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(({name}) => name !== EMPTY_GIT_FOLDER_KEEPER)
       let children = gitTree2NestedArray(files, rootPath)
 
       return {

@@ -90,12 +90,21 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Mousetrap from 'mousetrap'
+
 export default {
   name: 'EditorHeader',
   data: function() {
     return {
       savePending: false
     }
+  },
+  mounted() {
+    Mousetrap.unbind('mod+s')
+    Mousetrap.bind('mod+s', () => {
+      this.save()
+      return false
+    })
   },
   computed: {
     ...mapGetters({
