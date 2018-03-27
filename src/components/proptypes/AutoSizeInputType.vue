@@ -1,12 +1,19 @@
 <template>
-    <el-input type='textarea' class="autosize-input-type" :autosize="{ maxRows: 10}" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus'></el-input>
+    <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ maxRows: maxRows}" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
 </template>
 <script>
+const blurMaxRows = 2
+const focusMaxRows = 20
 export default {
   name: 'LinkType',
   props: {
     editingKey: String,
     originValue: String
+  },
+  data() {
+    return {
+      maxRows: blurMaxRows
+    }
   },
   computed: {
     inputTypeValue: {
@@ -24,6 +31,16 @@ export default {
     },
     getFocus() {
       this.$emit('onChangeValue')
+      this.maxRows = focusMaxRows
+      this.$nextTick(function() {
+        this.$refs.autosizeTextarea.resizeTextarea()
+      })
+    },
+    blurEventHandler(){
+      this.maxRows = blurMaxRows
+      this.$nextTick(function() {
+        this.$refs.autosizeTextarea.resizeTextarea()
+      })
     }
   }
 }
