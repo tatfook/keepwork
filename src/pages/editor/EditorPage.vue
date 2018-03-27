@@ -71,7 +71,7 @@ body {
 }
 .el-main {
   height: 100%;
-  padding: 17px 16px;
+  padding: 17px 0;
   background-color: #cdd4dc;
 }
 #editor {

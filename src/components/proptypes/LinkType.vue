@@ -1,5 +1,5 @@
 <template>
-  <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
+    <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 export default {
@@ -8,9 +8,12 @@ export default {
     editingKey: String,
     originValue: String
   },
-  data() {
-    return {
-      inputTypeValue: this.originValue
+  computed: {
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
     }
   },
   methods: {
@@ -33,7 +36,7 @@ export default {
   padding: 18px 0 0;
   border-radius: 0;
 }
-.link-type .el-input__suffix{
-    top: 10px;
+.link-type .el-input__suffix {
+  top: 10px;
 }
 </style>

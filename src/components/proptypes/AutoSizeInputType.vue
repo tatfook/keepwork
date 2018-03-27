@@ -1,5 +1,5 @@
 <template>
-    <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
+    <el-input type='textarea' class="autosize-input-type" :autosize="{ maxRows: 10}" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 export default {
@@ -29,14 +29,10 @@ export default {
 }
 </script>
 <style>
-.input-type .el-input__inner {
+.autosize-input-type .el-textarea__inner {
+  font-size: 16px;
+  border-radius: 0;
   border: none;
   border-bottom: 1px solid #e4e7ed;
-  font-size: 16px;
-  padding: 18px 0 0;
-  border-radius: 0;
-}
-.input-type .el-input__suffix {
-  top: 10px;
 }
 </style>
