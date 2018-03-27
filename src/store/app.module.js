@@ -31,7 +31,7 @@ const actions = {
       return Promise.resolve()
     }
 
-    await context.dispatch('gitlab/getFileContent', path, { root: true })
+    await context.dispatch('gitlab/getFileContent', { path }, { root: true })
 
     let { content } = context.rootGetters['gitlab/files'][path]
     if (content) {
