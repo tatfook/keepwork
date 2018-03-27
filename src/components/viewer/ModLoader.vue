@@ -21,7 +21,8 @@ export default {
   },
   methods: {
     async loadComponent() {
-      let data = await AsyncMods[this.mod.type]()
+      let modType = 'Mod' + this.mod.cmd
+      let data = await AsyncMods[modType]()
       this.modConf = data.default
       this.modComponent = this.modConf.mod
     }

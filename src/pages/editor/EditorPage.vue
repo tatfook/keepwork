@@ -2,7 +2,7 @@
   <fullscreen id='fullscreen' ref='fullscreen'>
     <el-container id="editor">
       <el-header>
-        <EditorHeader @changeFullscreen=' changeFullscreen '></EditorHeader>
+        <EditorHeader @changeFullscreen='changeFullscreen' @showPreview='showPreview'></EditorHeader>
       </el-header>
       <el-main>
         <router-view/>
