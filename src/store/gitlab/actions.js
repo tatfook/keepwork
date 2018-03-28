@@ -12,7 +12,12 @@ const {
   REMOVE_FILE_SUCCESS
 } = props
 
-const getGitlabCommonParamsWithContext = async (context, {path, content = '\n'}) => {
+/*doc
+  getGitlabParams
+
+  return gitlab params for common usage
+*/
+const getGitlabParams = async (context, {path, content = '\n'}) => {
   let branch = 'master'
   let ref = branch
   let { dispatch, getters: { getGitlabAPI, getGitFileOptionsByPath } } = context
@@ -27,6 +32,24 @@ const getGitlabCommonParamsWithContext = async (context, {path, content = '\n'})
   return { username, name, ref, branch, gitlab, projectId, options }
 }
 
+/*doc
+  getGitlabFileParams
+
+  add fullPath as path return with getGitlabParams results
+*/
+const getGitlabFileParams = async (context, {path: inputPath, content = '\n'}) => {
+  let { dispatch, getters: { getFileFullPathByPath } } = context
+  let { username, name, ref, branch, gitlab, projectId, options } = await getGitlabParams(context, {path: inputPath, content})
+
+  // call getRepositoryTree to check weather the path is a dir or file
+  // if the path is a dir, try index.md, if it's a file, read directly
+  await dispatch('getRepositoryTree', {path: `${username}/${name}`})
+  let path = getFileFullPathByPath(inputPath)
+  if (!path) return Promise.reject(new Error('404'))
+
+  return { username, name, ref, branch, gitlab, projectId, options, path }
+}
+
 const actions = {
   async getAllProjects(context, payload) {
     let { commit, getters: { getGitlabAPI } } = context
@@ -36,9 +59,9 @@ const actions = {
     commit(GET_ALL_PROJECTS_SUCCESS, list)
   },
   async getRepositoryTree(context, payload) {
-    let { path, ignoreCache, recursive = true } = payload
+    let { path, ignoreCache = false, recursive = true } = payload
     let { commit, getters: { repositoryTrees } } = context
-    let { gitlab, projectId } = await getGitlabCommonParamsWithContext(context, {path})
+    let { gitlab, projectId } = await getGitlabParams(context, {path})
     let children = _.get(repositoryTrees, [projectId, path])
 
     if (!ignoreCache && !_.isEmpty(children)) return Promise.resolve()
@@ -46,25 +69,25 @@ const actions = {
     let list = await gitlab.projects.repository.tree(projectId, {path, recursive})
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
   },
-  async getFileContent(context, {path}) {
+  async readFile(context, {path: inputPath}) {
     let { commit } = context
-    let { gitlab, projectId, ref } = await getGitlabCommonParamsWithContext(context, {path})
+    let { gitlab, projectId, ref, path } = await getGitlabFileParams(context, {path: inputPath})
 
     let file = await gitlab.projects.repository.files.show(projectId, path, ref)
     let payload = { path, file: {...file, content: Base64.decode(file.content)} }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
-  async saveFile(context, {path, content}) {
+  async saveFile(context, {path: inputPath, content}) {
     let { commit } = context
-    let { branch, gitlab, projectId, options } = await getGitlabCommonParamsWithContext(context, {path, content})
-    await gitlab.projects.repository.files.edit(projectId, path, branch, options)
+    let { gitlab, projectId, branch, path, options } = await getGitlabFileParams(context, {path: inputPath, content})
 
+    await gitlab.projects.repository.files.edit(projectId, path, branch, options)
     let payload = { path, branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
   },
   async createFile(context, {path, content = '\n'}) {
     let { commit, dispatch } = context
-    let { username, name, branch, gitlab, projectId, options } = await getGitlabCommonParamsWithContext(context, {path, content})
+    let { username, name, branch, gitlab, projectId, options } = await getGitlabParams(context, {path, content})
     await gitlab.projects.repository.files.create(projectId, path, branch, options)
 
     let payload = { path, branch }
@@ -78,7 +101,7 @@ const actions = {
   },
   async removeFile(context, {path}) {
     let { commit, dispatch } = context
-    let { username, name, branch, gitlab, projectId, options } = await getGitlabCommonParamsWithContext(context, {path})
+    let { username, name, branch, gitlab, projectId, options } = await getGitlabParams(context, {path})
     await gitlab.projects.repository.files.remove(projectId, path, branch, options)
 
     let payload = { path, branch }
