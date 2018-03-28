@@ -27,17 +27,19 @@ export default {
   },
   data() {
     return {
-      proptypes,
-      isModShow: null
+      proptypes
     }
   },
   computed: {
     ...mapGetters({
       activeMod: 'activeMod'
-    })
-  },
-  created() {
-    this.isModShow = !this.activeMod.data[this.cardKey].hidden
+    }),
+    isModShow: {
+      get() {
+        return !this.cardValue.hidden
+      },
+      set() {}
+    }
   },
   methods: {
     ...mapActions({

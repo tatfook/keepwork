@@ -58,7 +58,7 @@ class ModBlock {
   }
 
   updateJsonValue(key, value) {
-    this.data[key] = value
+    _.set(this, ['data', key], value)
     this.buildMarkdown()
   }
 
