@@ -1,7 +1,6 @@
 <template>
   <div class='comp-comment'>
-
-    <div ng-hide="params.multiText_desc.is_mod_hide">
+    <div>
       <h3>我要评论</h3>
       <div class="comments-box">
         <div class="comment-item clearfix" ng-repeat="comment in commentObj.commentList">
@@ -12,12 +11,11 @@
             <p>comment.content</p>
           </div>
           <a class="delete-btn">删除</a>
-          <a class="delete-btn">删除</a>
         </div>
       </div>
       <div class="comment-input">
-        <textarea rows="3" ng-model="comment.content"></textarea>
-        <el-button>提交</el-button>
+        <textarea rows="3" v-model="content"></textarea>
+        <el-button @click="commit">提交</el-button>
       </div>
     </div>
     <!-- <div class="text-center shutup-comment" ng-hide="!params.multiText_desc.is_mod_hide">
@@ -29,10 +27,29 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AdiComment',
-  mixins: [compBaseMixin]
+  mixins: [compBaseMixin],
+  data() {
+    return {
+      content: 'hello world!!!'
+    }
+  },
+  methods: {
+    ...mapActions({
+      setActiveProperty: 'setActiveProperty',
+      setActivePropertyData: 'setActivePropertyData'
+    }),
+    ...mapGetters({
+      info: 'info'
+    }),
+    commit() {
+      console.log(this.info())
+      alert(this.content)
+    }
+  }
 }
 </script>
 

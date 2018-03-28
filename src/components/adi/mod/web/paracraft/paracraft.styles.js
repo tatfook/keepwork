@@ -8,11 +8,7 @@ export default [
         'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)'
       },
       preview: {
-        width: '300px',
         height: '200px'
-      },
-      colPreview: {
-        width: 'auto'
       },
       colGroupLeft: {
         padding: '20px'
@@ -24,16 +20,33 @@ export default [
       colViewTimesImg: {
         width: 'auto'
       },
+      colGroupA: {
+        'padding-left': '10px'
+      },
       colGroupB: {
-        'margin-top': '60px'
+        'margin-top': '40px',
+        'padding-left': '10px'
       },
       colGroupC: {
-        'margin-top': '10px'
-      }
+        'margin-top': '10px',
+        'padding-left': '10px'
+      },
+      colDialog: {}
     },
     props: {
       rootRow: { gutter: 10 },
-      colGroupLeft: { span: 14 },
+      colPreview: {
+        lg: {
+          span: 6
+        },
+        md: {
+          span: 24
+        }
+      },
+      colGroupLeft: {
+        lg: { span: 14 },
+        md: { span: 24 }
+      },
       colWorldName: {
         span: 8
       },
@@ -45,7 +58,7 @@ export default [
         span: 8
       },
       colGroupCA: {
-        span: 12
+        span: 15
       },
       colGroupCARow: {
         gutter: 5
@@ -57,16 +70,16 @@ export default [
         span: 6
       },
       colGroupCB: {
-        span: 12
+        span: 9
       },
       colGroupCBRow: {
         gutter: 10
       },
       colDownload: {
-        span: 8
+        span: 11
       },
       colEnter: {
-        span: 8
+        span: 11
       }
     },
     theme: {

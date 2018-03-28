@@ -33,6 +33,9 @@ export default [
           ]
         }
       ]
+    },
+    {
+      colInnerModal: 'innerModal'
     }
   ]
 ]

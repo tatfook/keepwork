@@ -9,6 +9,7 @@ const ModQQ = () => import('./web/qq')
 const ModText = () => import('./web/text')
 const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
+const ModBoard = () => import('./web/board')
 
 export default {
   ModMarkdown,
@@ -21,5 +22,6 @@ export default {
   ModQQ,
   ModText,
   ModVipRead,
-  ModComment
+  ModComment,
+  ModBoard
 }
