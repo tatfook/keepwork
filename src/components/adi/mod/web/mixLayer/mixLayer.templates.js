@@ -19,5 +19,15 @@ export default [
         { colParagraph: 'paragraph' }
       ]
     }
+  ],
+  [
+    { colMedia: 'media' },
+    {
+      colCouple: [
+        { colBusinessName: 'businessName' },
+        { colTagline: 'tagline' },
+        { colParagraph: 'paragraph' }
+      ]
+    }
   ]
 ]
