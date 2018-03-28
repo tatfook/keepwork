@@ -1,3 +1,4 @@
 export default {
-  name: 'input'
+  name: 'input',
+  link: 'link'
 }

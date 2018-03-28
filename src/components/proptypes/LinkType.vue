@@ -2,6 +2,8 @@
     <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
+import protypesBaseMixin from './protypes.base.mixin'
+
 export default {
   name: 'InputType',
   props: {

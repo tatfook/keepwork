@@ -13,7 +13,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 import { suffixFileExtension } from '@/lib/utils'
 
 export default {
@@ -36,27 +36,27 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async addFile() {
-      let newFileName = (prompt('What\'s the file name?') || '').trim()
+      let newFileName = (prompt("What's the file name?") || '').trim()
       if (!newFileName) return
       newFileName = suffixFileExtension(newFileName, 'md')
 
       let newFilePath = `${this.currentPath}/${newFileName}`
       this.addFilePending = true
-      await this.gitlabCreateFile({path: newFilePath})
+      await this.gitlabCreateFile({ path: newFilePath })
       this.addFilePending = false
     },
     async addFolder() {
-      let newFolderName = (prompt('What\'s the folder name?') || '').trim()
+      let newFolderName = (prompt("What's the folder name?") || '').trim()
       if (!newFolderName) return
 
       let newFolderPath = `${this.currentPath}/${newFolderName}`
       this.addFolderPending = true
-      await this.gitlabAddFolder({path: newFolderPath})
+      await this.gitlabAddFolder({ path: newFolderPath })
       this.addFolderPending = false
     },
     async removeFile() {
       this.removePending = true
-      await this.gitlabRemoveFile({path: this.currentPath})
+      await this.gitlabRemoveFile({ path: this.currentPath })
       this.removePending = false
     }
   },
@@ -83,7 +83,9 @@ export default {
       return this.isFirstLevel
     },
     currentPath() {
-      return this.isFirstLevel ? `${this.data.username}/${this.data.name}` : this.data.path
+      return this.isFirstLevel
+        ? `${this.data.username}/${this.data.name}`
+        : this.data.path
     }
   },
   filters: {

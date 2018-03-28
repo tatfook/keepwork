@@ -5,9 +5,9 @@ import { suffixFileExtension } from '@/lib/utils'
 const gitlabAPICache = {}
 const getGitlabAPI = config => {
   let cacheKey = JSON.stringify(config)
-  let getlabAPI = gitlabAPICache[cacheKey] || (
-    gitlabAPICache[cacheKey] = newGitlabAPI(config)
-  )
+  let getlabAPI =
+    gitlabAPICache[cacheKey] ||
+    (gitlabAPICache[cacheKey] = newGitlabAPI(config))
   console.log('getGitlabAPI: ', getlabAPI)
   return getlabAPI
 }
@@ -23,9 +23,18 @@ const getGitFileOptionsByPath = (rootGetters, path) => {
   let defaultSiteLastCommitId = rootGetters['user/defaultSiteLastCommitId']
   let [username, sitename] = path.split('/').filter(x => x)
 
-  let projectId = _.get(personalSitePathMap, [`${username}/${sitename}`, 'projectId'], defaultSiteProjectId)
-  let ref = _.get(personalSitePathMap, [`${username}/${sitename}`, 'lastCommitId'], defaultSiteLastCommitId) || 'master'
-  let gitFileParams = {projectId, ref}
+  let projectId = _.get(
+    personalSitePathMap,
+    [`${username}/${sitename}`, 'projectId'],
+    defaultSiteProjectId
+  )
+  let ref =
+    _.get(
+      personalSitePathMap,
+      [`${username}/${sitename}`, 'lastCommitId'],
+      defaultSiteLastCommitId
+    ) || 'master'
+  let gitFileParams = { projectId, ref }
 
   return gitFileParams
 }
@@ -33,7 +42,10 @@ const getGitFileOptionsByPath = (rootGetters, path) => {
 const getProjectIdByPath = (rootGetters, path) => {
   let [username, name] = path.split('/').filter(x => x)
   let personalSitePathMap = rootGetters['user/personalSitePathMap']
-  let projectId = _.get(personalSitePathMap, [`${username}/${name}`, 'projectId'])
+  let projectId = _.get(personalSitePathMap, [
+    `${username}/${name}`,
+    'projectId'
+  ])
   return projectId
 }
 
@@ -61,7 +73,10 @@ const getFileFullPathByPath = (rootGetters, path) => {
 
   let targetPath = path.replace(/^\/*/, '')
   let targetMarkdownFilePath = suffixFileExtension(targetPath, 'md')
-  let targetIndexMarkdownFilePath = suffixFileExtension(targetPath + '/index', 'md')
+  let targetIndexMarkdownFilePath = suffixFileExtension(
+    targetPath + '/index',
+    'md'
+  )
 
   let targetFile = filesMapByPath[targetPath]
   let targetMarkdownFile = filesMapByPath[targetMarkdownFilePath]

@@ -81,7 +81,10 @@ export default {
 .mods-treeview .el-tree-node__content {
   padding-right: 15px;
 }
-.mods-treeview .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+.mods-treeview
+  .el-tree--highlight-current
+  .el-tree-node.is-current
+  > .el-tree-node__content {
   background-color: #e6f7ff;
   color: #1890ff;
   position: relative;

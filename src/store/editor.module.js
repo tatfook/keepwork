@@ -61,10 +61,10 @@ const actions = {
     commit('SET_ACTIVE_PAGE', path)
     if (path === '/') return
 
-    await dispatch('gitlab/readFile', {path}, {root: true})
+    await dispatch('gitlab/readFile', { path }, { root: true })
     let { content } = rootGetters['gitlab/getFileByPath'](path)
 
-    let payload = {code: content, enableHistory: true}
+    let payload = { code: content, enableHistory: true }
     content && dispatch('updateMarkDown', payload)
   },
   async saveActivePage({ getters, dispatch }) {

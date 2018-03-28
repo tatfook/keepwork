@@ -7,6 +7,9 @@ const ModImgLoop = () => import('./web/imgLoop')
 const ModParacraft = () => import('./web/paracraft')
 const ModQQ = () => import('./web/qq')
 const ModText = () => import('./web/text')
+const ModVipRead = () => import('./web/vipRead')
+const ModComment = () => import('./web/comment')
+const ModBoard = () => import('./web/board')
 
 export default {
   ModMarkdown,
@@ -17,5 +20,8 @@ export default {
   ModImgLoop,
   ModParacraft,
   ModQQ,
-  ModText
+  ModText,
+  ModVipRead,
+  ModComment,
+  ModBoard
 }

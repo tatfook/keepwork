@@ -4,29 +4,98 @@ export default [
     data: {
       // 定义mod根div的样式
       root: {
-        position: 'relative',
-        overflow: 'hidden',
-        zoom: 1
+        overflow: 'hidden'
       },
       media: {
-        width: '40%',
-        float: 'left'
+        width: '200px',
+        height: '200px'
       },
-      group: {
-        width: '50%',
-        float: 'left',
-        'margin-left': '5px'
+      colMedia: {
+        width: 'auto'
+      },
+      group: {},
+      colGroup: {},
+      paragraph: {
+        'text-indent': '28px'
       }
+    },
+    props: {
+      rootRow: { gutter: 10 },
+      colGroup: { span: 15 },
+      colButton: { span: 6, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],
       paragraph: ['color_3']
     },
     options: {
-      theme: {},
+      theme: {
+        title: {
+          fontSize: 'font_5',
+          fontColor: 'color_3'
+        },
+        subtitle: {
+          fontSize: 'font_2',
+          fontColor: 'color_2'
+        },
+        button: {
+          fontSize: 'font_0',
+          fontColor: 'color_7',
+          bgColor: 'color_0'
+        }
+      },
       config: {}
     }
   },
+
   // style2
-  {}
+  {
+    data: {
+      // 定义mod根div的样式
+      root: {
+        overflow: 'hidden'
+      },
+      media: {
+        width: '200px',
+        height: '200px'
+      },
+      colMedia: {
+        float: 'right',
+        width: 'auto'
+      },
+      group: {},
+      colGroup: {},
+      paragraph: {
+        'text-indent': '28px'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 },
+      colMedia: { span: 12 },
+      colGroup: { span: 12 },
+      colButton: { span: 6, push: 18 }
+    },
+    theme: {
+      root: ['font_0', 'color_7'],
+      paragraph: ['color_3']
+    },
+    options: {
+      theme: {
+        title: {
+          fontSize: 'font_5',
+          fontColor: 'color_3'
+        },
+        subtitle: {
+          fontSize: 'font_2',
+          fontColor: 'color_2'
+        },
+        button: {
+          fontSize: 'font_0',
+          fontColor: 'color_7',
+          bgColor: 'color_0'
+        }
+      },
+      config: {}
+    }
+  }
 ]

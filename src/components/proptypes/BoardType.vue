@@ -1,17 +1,33 @@
 <template>
-  <el-button plain type='primary' size='mini' @click.native='openBoard'>打开绘图板</el-button>
+  <el-button plain type='primary' size='mini' @click.native='openEditor'>打开绘图板</el-button>
 </template>
 <script>
+import protypesBaseMixin from './protypes.base.mixin'
+
 export default {
-  name: 'MenuType',
+  name: 'BoardType',
+  mixins: [protypesBaseMixin],
+  props: {
+    editingKey: String,
+    originValue: String,
+    prop: Object
+  },
   data() {
     return {
-      inputTypeValue: ''
+      inputTypeValue: this.originValue
     }
   },
   methods: {
-    openBoard() {
-      console.log('openBoard')
+    openEditor() {
+      this.prop.click()
+    },
+    updateValue(newVal) {
+      var tempChangedDataObj = {}
+      tempChangedDataObj[this.editingKey] = newVal
+      this.$emit('onPropertyChange', tempChangedDataObj)
+    },
+    getFocus() {
+      this.$emit('onChangeValue')
     }
   }
 }

@@ -3,7 +3,6 @@ export default [
   {
     data: {
       root: {
-        height: '300px',
         width: '100%'
       }
     },

@@ -1,3 +1,4 @@
 export default {
-  name: '按钮'
+  name: '按钮',
+  link: 'http://keepwork.com'
 }

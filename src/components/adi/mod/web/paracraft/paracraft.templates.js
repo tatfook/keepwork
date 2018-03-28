@@ -3,10 +3,39 @@ export default [
   [
     { colPreview: 'preview' },
     {
-      colGroup: [{ colWorldName: 'worldName' }]
+      colGroupLeft: [
+        {
+          colGroupA: [
+            { colWorldName: 'worldName' },
+            {
+              colGroupVersionAndUpdateTime: [
+                { colVersion: 'version' },
+                { colUpdateTime: 'updateTime' }
+              ]
+            }
+          ]
+        },
+        {
+          colGroupB: [{ colAuthor: 'author' }]
+        },
+        {
+          colGroupC: [
+            {
+              colGroupCA: [
+                { colViewTimesImg: 'viewTimesImg' },
+                { colViewTimes: 'viewTimes' },
+                { colSize: 'size' }
+              ]
+            },
+            {
+              colGroupCB: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      colInnerModal: 'innerModal'
     }
-    // {
-    //   colGroup: [[{ colWorldName: 'worldName' }, { colVersion: 'version' }]]
-    // }
   ]
 ]

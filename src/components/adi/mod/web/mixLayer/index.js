@@ -1,22 +1,19 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import mod from './MixLayer'
+import mod from '@/components/adi/mod/base/Base'
 import styles from './mixLayer.styles'
+import templates from './mixLayer.templates'
 
 const name = 'ModMixLayer'
 
 const components = {
   media: 'AdiMedia',
-  title: 'AdiTitle',
-  subtitle: 'AdiSubtitle',
-  paragraph: 'AdiParagraph'
+  businessName: 'AdiTitle',
+  tagline: 'AdiTitle',
+  paragraph: 'AdiMarkdown'
 }
 
 const properties = generateProperties(name, components)
 
-properties.media.data = `{
-  "src": "./static/adi/mix-layer.png",
-  "name": "MEDIA",
-  "link": "http://keepwork.com"
-}`
+properties.media.src = './static/adi/mixLayer/mix-layer.png'
 
-export default { mod, name, components, properties, styles }
+export default { mod, name, components, properties, styles, templates }
