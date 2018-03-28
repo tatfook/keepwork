@@ -95,7 +95,7 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
-.el-tabs__item {
+.property-manager-container .el-tabs__item {
   padding: 0 20px;
   font-size: 16px;
 }
