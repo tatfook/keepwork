@@ -41,6 +41,7 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232589267.jpeg'
   }
 ]

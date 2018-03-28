@@ -100,6 +100,7 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/wiki/assets/imgs/3DWorld_model.jpg'
   }
 ]

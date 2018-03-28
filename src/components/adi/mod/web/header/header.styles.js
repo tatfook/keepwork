@@ -59,7 +59,8 @@ export default [
           mode: 'horizontal'
         }
       }
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232384706.jpeg'
   },
   {
     // style2
@@ -128,6 +129,7 @@ export default [
           mode: 'horizontal'
         }
       }
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232391869.jpeg'
   }
 ]

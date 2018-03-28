@@ -25,7 +25,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232839492.jpeg'
   },
   // style 2
   {
@@ -53,6 +54,7 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232920376.jpeg'
   }
 ]
