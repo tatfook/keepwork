@@ -17,6 +17,7 @@ export default [
     options: {
       theme: {},
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/board/assets/imgs/wiki_board.png'
   }
 ]

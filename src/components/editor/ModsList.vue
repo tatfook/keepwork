@@ -6,7 +6,6 @@
     </el-col>
     <el-col class="preview-box">
       <div v-for='mod in activeModsList' :key='mod.name'>
-        <a @click='newMode(mod.name, 0)'>{{mod.name}}</a>
         <img v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMode(mod.name, index)'>
       </div>
     </el-col>
@@ -21,7 +20,6 @@ export default {
   mounted() {
     this.$refs.tree.setCurrentNode(mods[0])
     this.activeModsList = mods[0].mods
-    console.log(this.activeModsList)
   },
   data() {
     return {
@@ -44,9 +42,7 @@ export default {
       if (data.children && data.children.length > 0) {
         return
       }
-      console.log(11111)
       this.activeModsList = data.mods
-      console.log(this.activeModsList)
     },
     nodeCollapseHandle(data, node, comp) {},
     newMode(name, index) {
@@ -75,6 +71,8 @@ export default {
 .preview-box {
   padding: 0 5px;
   background-color: #e4e7ed;
+  max-height: 100%;
+  overflow: auto;
 }
 </style>
 <style>
