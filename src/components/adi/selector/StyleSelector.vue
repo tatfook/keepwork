@@ -1,9 +1,7 @@
 <template>
-  <div class='kp-mod-styles'>
-    <div v-for='(style, index) in styles' :key='style.name' class='kp-mod-style' :class='{active: isActive(index)}' @click='changeStyle(index)'>
-      {{index}}
+    <div>
+        <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
     </div>
-  </div>
 </template>
 
 <script>
@@ -30,13 +28,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.kp-mod-style {
-  height: 20px;
+<style scoped>
+.style-item {
   width: 100%;
-  border-bottom: 3px solid blue;
-  &.active {
-    background-color: cadetblue;
-  }
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  display: block;
+  margin-bottom: 12px;
+}
+.style-item.active {
+  border-color: #3da4fd;
 }
 </style>
