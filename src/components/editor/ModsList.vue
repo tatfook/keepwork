@@ -21,6 +21,7 @@ export default {
   mounted() {
     this.$refs.tree.setCurrentNode(mods[0])
     this.activeModsList = mods[0].mods
+    console.log(this.activeModsList)
   },
   data() {
     return {
@@ -43,8 +44,9 @@ export default {
       if (data.children && data.children.length > 0) {
         return
       }
-
+      console.log(11111)
       this.activeModsList = data.mods
+      console.log(this.activeModsList)
     },
     nodeCollapseHandle(data, node, comp) {},
     newMode(name, index) {
@@ -76,19 +78,22 @@ export default {
 }
 </style>
 <style>
-.el-tree-node__content {
+.mods-treeview .el-tree-node__content {
   padding-right: 15px;
 }
-.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+.mods-treeview
+  .el-tree--highlight-current
+  .el-tree-node.is-current
+  > .el-tree-node__content {
   background-color: #e6f7ff;
   color: #1890ff;
   position: relative;
 }
-.el-tree-node__content {
+.mods-treeview .el-tree-node__content {
   height: 40px;
   line-height: 40px;
 }
-.el-tree-node__label {
+.mods-treeview .el-tree-node__label {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

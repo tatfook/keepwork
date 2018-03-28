@@ -40,7 +40,9 @@ export default {
     }),
     async updateActivePage() {
       this.loading = true
-      await this.setActivePage(this.$router.currentRoute.path)
+      await this.setActivePage(this.$router.currentRoute.path).catch(() => {
+        this.loading = false
+      })
       this.loading = false
     },
     showPreview() {
@@ -85,4 +87,3 @@ body {
   @return ($px/$rem) + rem;
 }
 </style>
-

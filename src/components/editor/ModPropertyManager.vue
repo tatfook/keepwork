@@ -1,25 +1,25 @@
 <template>
-    <div class='property-manager-container' v-if='hasActiveMod'>
-        <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-            <i class="iconfont icon-bianjiqi-shanchu"></i>
-            删除模块
+  <div class='property-manager-container' v-if='hasActiveMod'>
+    <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
+      <i class="iconfont icon-bianjiqi-shanchu"></i>
+      删除模块
+    </div>
+    <el-tabs>
+      <el-tab-pane label='属性'>
+        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='activeMod.data[key]' :isCardActive='key === activeProperty'></PropTypeCard>
+      </el-tab-pane>
+      <el-tab-pane label='样式'>
+        <div class='styles-container'>
+          <style-selector :mod='activeMod' />
         </div>
-        <el-tabs>
-            <el-tab-pane label='属性'>
-                <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='activeMod.data[key]' :isCardActive='key === activeProperty'></PropTypeCard>
-            </el-tab-pane>
-            <el-tab-pane label='样式'>
-                <div class='styles-container'>
-                    <style-selector :mod='activeMod' />
-                </div>
-            </el-tab-pane>
+      </el-tab-pane>
       <!-- <el-tab-pane label='Theme'>
         <div class='styles-container'>
           <theme-selector />
         </div>
       </el-tab-pane> -->
-        </el-tabs>
-    </div>
+    </el-tabs>
+  </div>
 </template>
 
 <script>
@@ -95,7 +95,7 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
-.el-tabs__item {
+.property-manager-container .el-tabs__item {
   padding: 0 20px;
   font-size: 16px;
 }

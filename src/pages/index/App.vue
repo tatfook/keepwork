@@ -1,13 +1,13 @@
 <template>
-  <el-container id='app'>
-    <el-header height='61px'>
+  <el-container id='app' class="index-page-container">
+    <el-header height='61px' class="index-page-header">
       <common-header class="container"></common-header>
     </el-header>
-    <el-main>
+    <el-main class="index-page-main">
       <router-view/>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='100px'>
+    <el-footer height='100px' class="index-page-footer">
       <common-footer class="container"></common-footer>
     </el-footer>
   </el-container>
@@ -52,19 +52,19 @@ body {
   text-align: center;
   color: #2c3e50;
 }
-.container {
+.index-page-header .container {
   max-width: 1140px;
   margin: 0 auto;
 }
-.el-header {
+.index-page-header {
   border-bottom: 1px solid #e6e6e6;
 }
-.el-footer {
+.index-page-footer {
   display: flex;
   align-items: center;
   background-color: #f9f9f9;
 }
-.el-container {
+.index-page-container {
   min-height: 100%;
 }
 </style>
