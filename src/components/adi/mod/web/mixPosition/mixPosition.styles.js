@@ -3,7 +3,9 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {},
+      root: {
+        overflow: 'hidden'
+      },
       media: {
         width: '200px',
         height: '200px'
@@ -12,18 +14,15 @@ export default [
         width: 'auto'
       },
       group: {},
-      colGroup: {
-        width: '370px'
-      },
+      colGroup: {},
       paragraph: {
         'text-indent': '28px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
-      colMedia: { span: 12 },
-      colGroup: { sapn: 12 },
-      colButton: { span: 6.5, push: 18 }
+      colGroup: { span: 15 },
+      colButton: { span: 6, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],
@@ -53,27 +52,28 @@ export default [
   {
     data: {
       // 定义mod根div的样式
-      root: {},
+      root: {
+        overflow: 'hidden'
+      },
       media: {
         width: '200px',
         height: '200px'
       },
       colMedia: {
+        float: 'right',
         width: 'auto'
       },
       group: {},
-      colGroup: {
-        width: '340px'
-      },
+      colGroup: {},
       paragraph: {
         'text-indent': '28px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
-      colMedia: { span: 10, push: 15 },
-      colGroup: { sapn: 10, pull: 8 },
-      colButton: { span: 6.5, push: 18 }
+      colMedia: { span: 12 },
+      colGroup: { span: 12 },
+      colButton: { span: 6, push: 18 }
     },
     theme: {
       root: ['font_0', 'color_7'],
