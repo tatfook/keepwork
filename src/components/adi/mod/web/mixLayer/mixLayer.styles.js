@@ -17,7 +17,9 @@ export default [
       },
       colCouple: {
         'margin-top': '-550px',
-        'margin-left': '15%'
+        'padding-right': '15%',
+        'padding-left': '15%',
+        width: '100%'
       }
     },
     props: {
@@ -26,17 +28,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -60,6 +62,8 @@ export default [
       colCouple: {
         'margin-top': '-550px',
         'text-align': 'center',
+        'padding-right': '15%',
+        'padding-left': '15%',
         width: '100%'
       }
     },
@@ -69,17 +73,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -104,6 +108,7 @@ export default [
         width: '100%',
         'margin-top': '-550px',
         'padding-right': '15%',
+        'padding-left': '15%',
         'text-align': 'right'
       }
     },
@@ -113,17 +118,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -147,7 +152,8 @@ export default [
       colCouple: {
         width: '100%',
         'margin-top': '-400px',
-        'margin-left': '15%'
+        'padding-right': '15%',
+        'padding-left': '15%'
       }
     },
     props: {
@@ -156,17 +162,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -190,6 +196,8 @@ export default [
       colCouple: {
         width: '100%',
         'margin-top': '-400px',
+        'padding-right': '15%',
+        'padding-left': '15%',
         'text-align': 'center'
       }
     },
@@ -199,17 +207,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -234,6 +242,7 @@ export default [
         width: '100%',
         'margin-top': '-400px',
         'padding-right': '15%',
+        'padding-left': '15%',
         'text-align': 'right'
       }
     },
@@ -243,17 +252,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -277,7 +286,8 @@ export default [
       colCouple: {
         width: '100%',
         'margin-top': '-250px',
-        'margin-left': '15%'
+        'padding-right': '15%',
+        'padding-left': '15%'
       }
     },
     props: {
@@ -286,17 +296,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -320,6 +330,8 @@ export default [
       colCouple: {
         width: '100%',
         'margin-top': '-250px',
+        'padding-right': '15%',
+        'padding-left': '15%',
         'text-align': 'center'
       }
     },
@@ -329,17 +341,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
@@ -364,6 +376,7 @@ export default [
         width: '100%',
         'margin-top': '-250px',
         'padding-right': '15%',
+        'padding-left': '15%',
         'text-align': 'right'
       }
     },
@@ -373,17 +386,17 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
-      paragraph: ['color_3']
+      paragraph: ['color_7']
     },
     options: {
       theme: {
         businessName: {
           fontSize: 'font_5',
-          fontColor: 'color_3'
+          fontColor: 'color_7'
         },
         tagline: {
           fontSize: 'font_2',
-          fontColor: 'color_2'
+          fontColor: 'color_7'
         }
       },
       config: {}
