@@ -1,4 +1,5 @@
 export default {
   name: 'input',
-  link: 'link'
+  link: 'link',
+  target: 'input'
 }

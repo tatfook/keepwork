@@ -1,3 +1,1 @@
-export default {
-  text: 'input'
-}
+export default {}

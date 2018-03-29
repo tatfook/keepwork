@@ -4,10 +4,14 @@ export default [
     { colMedia: 'media' },
     {
       colGroup: [
-        { colTitle: 'title' },
-        { colSubtitle: 'subtitle' },
-        { colParagraph: 'paragraph' },
-        { colButton: 'button' }
+        {
+          colGroupItem: [
+            { colTitle: 'title' },
+            { colSubtitle: 'subtitle' },
+            { colParagraph: 'paragraph' }
+          ],
+          colButton: 'button'
+        }
       ]
     }
   ]

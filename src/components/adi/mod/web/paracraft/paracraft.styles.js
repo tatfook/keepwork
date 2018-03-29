@@ -5,7 +5,8 @@ export default [
       root: {
         overflow: 'hidden',
         'background-color': '#F9F9F9',
-        'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)'
+        'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)',
+        position: 'relative'
       },
       preview: {
         height: '200px'
@@ -30,8 +31,7 @@ export default [
       colGroupC: {
         'margin-top': '10px',
         'padding-left': '10px'
-      },
-      colDialog: {}
+      }
     },
     props: {
       rootRow: { gutter: 10 },
@@ -99,8 +99,13 @@ export default [
           bgColor: 'color_0'
         }
       },
-      config: {}
-    },
-    cover: 'http://keepwork.com/wiki/js/mod/wiki/assets/imgs/3DWorld_model.jpg'
+      config: {
+        innerModal: {
+          width: '70%',
+          height: '80%',
+          'background-color': 'white'
+        }
+      }
+    }
   }
 ]

@@ -1,6 +1,6 @@
 <template>
   <div class="comp-title">
-    <a :href="properties.link">
+    <a :target='properties.target' :href='properties.link'>
       <h1 :style="style">{{ properties.name }}</h1>
     </a>
   </div>

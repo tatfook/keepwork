@@ -5,10 +5,10 @@ export default [
       root: {},
       title: {
         'text-align': 'left'
-      },
-      paragraph: {
-        'text-indent': '28px'
       }
+      // paragraph: {
+      //   'text-indent': '28px'
+      // }
     },
     props: {
       rootRow: { gutter: 10 }

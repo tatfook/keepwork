@@ -1,13 +1,14 @@
 import ModHeader from './web/header'
 import ModTitle from './web/title'
-// import ModBoard from './web/board'
+import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
-// import ModMixPositon from './web/mixPosition'
+import ModMixLayer from './web/mixLayer'
+import ModMixPositon from './web/mixPosition'
 import ModImgLoop from './web/imgLoop'
-// import ModParacraft from './web/paracraft'
-// import ModVipRead from './web/vipRead'
-// import ModComment from './web/comment'
+import ModParacraft from './web/paracraft'
+import ModVipRead from './web/vipRead'
+import ModComment from './web/comment'
 
 var modsList = [
   {
@@ -95,6 +96,23 @@ var modsList = [
         label: '调用QQ聊天',
         mods: [ModQQ]
       }
+    ]
+  },
+  {
+    id: '8',
+    label: '其他',
+    mods: [
+      ModHeader,
+      ModTitle,
+      ModBoard,
+      ModImgLoop,
+      ModText,
+      ModParacraft,
+      ModQQ,
+      ModMixLayer,
+      ModMixPositon,
+      ModVipRead,
+      ModComment
     ]
   }
 ]
