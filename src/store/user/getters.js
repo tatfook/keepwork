@@ -48,7 +48,21 @@ const getters = {
 
     return personalSiteList
   },
-  personalSitePathMap: (state, {personalSiteList}) => _.keyBy(personalSiteList, ({username, name}) => `${username}/${name}`)
+  personalSitePathMap: (state, {personalSiteList}) => _.keyBy(personalSiteList, ({username, name}) => `${username}/${name}`),
+  getPersonalSiteInfoByPath: (state, {personalSitePathMap}) => path => {
+    let [username, name] = path.split('/').filter(x => x)
+    return personalSitePathMap[`${username}/${name}`]
+  },
+
+  comments: state => state.comments,
+  getCommentListByPath: (state, {comments}, rootState, rootGetters) => path => {
+    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+    return comments[fullPath]
+  },
+  activePageCommentList: (state, {getCommentListByPath}, rootState, rootGetters) => {
+    let activePagePath = rootGetters['activePage']
+    return getCommentListByPath(activePagePath)
+  }
 }
 
 export default getters
