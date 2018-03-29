@@ -3,6 +3,7 @@ import ModTitle from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
+import ModMixLayer from './web/mixLayer'
 import ModMixPositon from './web/mixPosition'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
@@ -21,6 +22,7 @@ var modsList = [
       ModText,
       ModParacraft,
       ModQQ,
+      ModMixLayer,
       ModMixPositon,
       ModVipRead,
       ModComment

@@ -1,3 +1,5 @@
 export default {
-  text: 'input'
+  text: 'input',
+  desc: 'input',
+  target: 'input'
 }

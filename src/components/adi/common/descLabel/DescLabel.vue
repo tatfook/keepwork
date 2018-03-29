@@ -1,6 +1,6 @@
 <template>
   <div class='comp-label'>
-    <a :href='properties.link'>
+    <a :target='properties.target' :href='properties.link'>
       <label> {{properties.desc}} </label>
       <label> {{properties.text}} </label>
     </a>

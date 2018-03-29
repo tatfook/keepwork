@@ -106,20 +106,29 @@ export default {
       let props = (this.style.props && this.style.props[name]) || {}
       return { props }
     },
-    compWrapperOptions(name) {
+    generateOptionsStyle(name) {
+      let self = this
       let options = {}
 
-      if (this.style.options) {
-        if (this.style.options.config[name]) {
-          options = _.cloneDeep(this.style.options.config[name])
+      if (self.style.options) {
+        if (self.style.options.config[name]) {
+          options = _.cloneDeep(self.style.options.config[name])
         }
-        if (this.style.options.theme[name]) {
-          _.forEach(this.style.options.theme[name], (op, key) => {
+        if (self.style.options.theme[name]) {
+          _.forEach(self.style.options.theme[name], (op, key) => {
             // 如果定义了相同的theme key，则之前的配置会被覆盖
-            options[key] = this.themeData(op)
+            options[key] = self.themeData(op)
           })
         }
       }
+
+      return options
+    },
+    compWrapperOptions(name) {
+      let options = {}
+
+      options = _.merge(options, this.generateOptionsStyle(name))
+
       return options
     }
   },
@@ -129,7 +138,7 @@ export default {
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct
-      return _.merge(_.cloneDeep(this.conf.properties), this.mod.data)
+      return _.merge({}, this.conf.properties, this.mod.data)
     }
   }
 }

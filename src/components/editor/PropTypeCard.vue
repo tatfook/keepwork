@@ -37,7 +37,9 @@ export default {
     })
   },
   created() {
-    this.isModShow = !this.activeMod.data[this.cardKey].hidden
+    this.isModShow = this.activeMod.data[this.cardKey]
+      ? !this.activeMod.data[this.cardKey].hidden
+      : false
   },
   methods: {
     ...mapActions({

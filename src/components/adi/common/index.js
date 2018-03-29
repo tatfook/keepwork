@@ -9,7 +9,7 @@ import AdiBoard from './board/Board'
 import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
-import AdiInnerModal from './innerModal/innerModal'
+import AdiInnerModal from './innerModal/InnerModal'
 
 export default {
   AdiImgLoop,
