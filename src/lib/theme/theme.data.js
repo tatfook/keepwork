@@ -4,7 +4,17 @@ export default {
     preview: '',
     mainColor: [255, 255, 255], // RGB
     colors: [
-      ['#327abf', 'blue', 'green', 'blue', 'blue', 'blue', 'blue', '#fff'],
+      [
+        '#327abf',
+        'blue',
+        'green',
+        'blue',
+        'blue',
+        'blue',
+        'blue',
+        '#fff',
+        '#000'
+      ],
       ['blue', 'green', 'red', 'red'],
       ['green', 'red', 'blue', 'yellow']
     ],
