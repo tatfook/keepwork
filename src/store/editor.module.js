@@ -27,13 +27,14 @@ const initialState = () => {
       isCodeShow: true,
       isPreviewShow: true
     },
+    filemanagerTreeNodeExpandMapByPath: {},
     undoManager: new SimpleUndo()
   }
 }
 
-const state = {
-  ...initialState()
-}
+const resetIgnoreKeys = [
+  'filemanagerTreeNodeExpandMapByPath'
+]
 
 const getters = {
   activePage: state => state.activePage,
@@ -49,6 +50,7 @@ const getters = {
   hasActiveProperty: state => !!state.activeProperty,
   activeComponentType: state => state.activeWinType,
   showingCol: state => state.showingCol,
+  filemanagerTreeNodeExpandMapByPath: state => state.filemanagerTreeNodeExpandMapByPath,
   undoManager: state => state.undoManager
 }
 
@@ -154,14 +156,18 @@ const actions = {
   },
   resetShowingCol({ commit }, showingColObj) {
     commit('RESET_SHOWING_COL', showingColObj)
+  },
+  updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
+    commit('UPDATE_FILEMANAGER_TREE_NODE_EXPANDED', payload)
   }
 }
 
 const mutations = {
   RESET_STATE(state) {
     const newState = initialState()
-    for (let f in newState) {
-      Vue.set(state, f, newState[f])
+    for (let key in newState) {
+      let resettable = !resetIgnoreKeys.includes(key)
+      resettable && Vue.set(state, key, newState[key])
     }
   },
   SET_ACTIVE_PAGE(state, path) {
@@ -240,11 +246,17 @@ const mutations = {
       'isCodeShow',
       showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
     )
+  },
+  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED(state, {path, expanded}) {
+    Vue.set(state, 'filemanagerTreeNodeExpandMapByPath', {
+      ...state.filemanagerTreeNodeExpandMapByPath,
+      [path]: expanded
+    })
   }
 }
 
 export default {
-  state,
+  state: initialState,
   getters,
   actions,
   mutations

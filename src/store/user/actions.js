@@ -5,7 +5,10 @@ const {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
   GET_ALL_WEBSITE_SUCCESS,
-  GET_SITE_DATASOURCE_SUCCESS
+  GET_SITE_DATASOURCE_SUCCESS,
+  CREATE_COMMENT_SUCCESS,
+  DELETE_COMMENT_SUCCESS,
+  GET_COMMENTS_BY_PAGE_URL_SUCCESS
 } = props
 
 const actions = {
@@ -58,6 +61,40 @@ const actions = {
     let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
 
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
+  },
+  async createComment(context, { url: path, content }) {
+    let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context
+    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+    let { _id: websiteId, userId } = rootGetters['user/getPersonalSiteInfoByPath'](path)
+
+    let payload = {websiteId, userId, url: fullPath, content}
+    let { commentList } = await keepwork.websiteComment.create(payload, authRequestConfig)
+
+    commit(CREATE_COMMENT_SUCCESS, { url: fullPath, commentList })
+    await dispatch('getCommentsByPageUrl', {url: fullPath})
+  },
+  async createCommentForActivePage(context, { content }) {
+    let { dispatch, rootGetters: { activePage } } = context
+    await dispatch('createComment', {url: activePage, content})
+  },
+  async deleteCommentById(context, { _id }) {
+    let { dispatch, commit, getters: { authRequestConfig } } = context
+    await keepwork.websiteComment.deleteById({_id}, authRequestConfig)
+
+    commit(DELETE_COMMENT_SUCCESS, { _id })
+    await dispatch('getActivePageComments')
+  },
+  async getCommentsByPageUrl(context, { url: path }) {
+    let { commit, getters: { authRequestConfig }, rootGetters } = context
+    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+
+    let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath}, authRequestConfig)
+
+    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList})
+  },
+  async getActivePageComments(context) {
+    let { dispatch, rootGetters: { activePage } } = context
+    await dispatch('getCommentsByPageUrl', {url: activePage})
   }
 }
 

@@ -2,11 +2,10 @@
   <el-row type='flex' class="full-height">
     <el-col class="mods-treeview">
       <!-- <el-tree :data='modsMenu' :props='defaultProps' highlight-current accordion :indent=0 @node-click='modeMenuClick'></el-tree> -->
-      <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
+      <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' :default-expanded-keys='defaultExpandedKeys' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
     </el-col>
     <el-col class="preview-box">
       <div v-for='mod in activeModsList' :key='mod.name'>
-        <a @click='newMode(mod.name, 0)'>{{mod.name}}</a>
         <img v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMode(mod.name, index)'>
       </div>
     </el-col>
@@ -19,8 +18,14 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ModsList',
   mounted() {
-    this.$refs.tree.setCurrentNode(mods[0])
-    this.activeModsList = mods[0].mods
+    if (mods[0].children) {
+      let modsChildren = mods[0].children[0]
+      this.$refs.tree.setCurrentNode(modsChildren)
+      this.activeModsList = modsChildren.mods
+    } else {
+      this.$refs.tree.setCurrentNode(mods[0])
+      this.activeModsList = mods[0].mods
+    }
   },
   data() {
     return {
@@ -30,6 +35,7 @@ export default {
         children: 'children',
         label: 'label'
       },
+      defaultExpandedKeys: ['1-1'],
       selectedModKey: null
     }
   },
@@ -43,7 +49,6 @@ export default {
       if (data.children && data.children.length > 0) {
         return
       }
-
       this.activeModsList = data.mods
     },
     nodeCollapseHandle(data, node, comp) {},
@@ -73,6 +78,8 @@ export default {
 .preview-box {
   padding: 0 5px;
   background-color: #e4e7ed;
+  max-height: 100%;
+  overflow: auto;
 }
 </style>
 <style>

@@ -6,7 +6,8 @@ const state = () => ({
   info: {},
   profile: {},
   website: {},
-  siteDataSource: {}
+  siteDataSource: {},
+  comments: {}
 })
 
 export default {

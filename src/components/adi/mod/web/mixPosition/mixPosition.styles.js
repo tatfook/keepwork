@@ -66,7 +66,9 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover:
+      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522233836994.jpeg'
   },
 
   // style 2 左文右图

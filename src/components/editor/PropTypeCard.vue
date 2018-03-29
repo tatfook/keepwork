@@ -27,19 +27,19 @@ export default {
   },
   data() {
     return {
-      proptypes,
-      isModShow: null
+      proptypes
     }
   },
   computed: {
     ...mapGetters({
       activeMod: 'activeMod'
-    })
-  },
-  created() {
-    this.isModShow = this.activeMod.data[this.cardKey]
-      ? !this.activeMod.data[this.cardKey].hidden
-      : false
+    }),
+    isModShow: {
+      get() {
+        return !this.cardValue.hidden
+      },
+      set() {}
+    }
   },
   methods: {
     ...mapActions({
@@ -58,9 +58,9 @@ export default {
         data: changedData
       })
     },
-    toggleModVisible() {
+    toggleModVisible(value) {
       this.changeProptyData({
-        hidden: !this.isModShow
+        hidden: !value
       })
     }
   }
