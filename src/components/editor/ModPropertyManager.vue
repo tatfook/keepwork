@@ -81,7 +81,7 @@ export default {
         activeModDafaultDatas,
         this.activeMod.data
       )
-      return activeModDafaultDatas
+      return activeModDatas
     }
   },
   components: {
