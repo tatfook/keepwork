@@ -1,20 +1,20 @@
 <template>
-  <div class='comp-comment'>
+  <div class='comp-comment' v-loading='loading'>
     <div>
       <h3>我要评论</h3>
       <div class="comments-box">
-        <div class="comment-item clearfix" ng-repeat="comment in commentObj.commentList">
-          <img>
+        <div class="comment-item clearfix" v-for='comment in activePageCommentList' :key='comment._id'>
+          <img :src="comment.userInfo.portrait">
           <div class="text">
-            <h4>未知用户</h4>
-            <p class="info">comment.updateTime</p>
-            <p>comment.content</p>
+            <h4>{{ comment.userInfo.displayName }}</h4>
+            <p class="info">{{ comment.updateTime }}</p>
+            <p>{{ comment.content }}</p>
           </div>
-          <a class="delete-btn">删除</a>
+          <a class="delete-btn" @click="deleteComment(comment._id)">删除</a>
         </div>
       </div>
       <div class="comment-input">
-        <textarea rows="3" v-model="content"></textarea>
+        <textarea rows="3" v-model="content" placeholder="Share your ideas!"></textarea>
         <el-button @click="commit">提交</el-button>
       </div>
     </div>
@@ -34,21 +34,40 @@ export default {
   mixins: [compBaseMixin],
   data() {
     return {
-      content: 'hello world!!!'
+      loading: false,
+      content: ''
     }
+  },
+  async mounted() {
+    this.loading = true
+    await this.getActivePageComments()
+    this.loading = false
+  },
+  computed: {
+    ...mapGetters({
+      activePageCommentList: 'user/activePageCommentList'
+    })
   },
   methods: {
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      getActivePageComments: 'user/getActivePageComments',
+      createCommentForActivePage: 'user/createCommentForActivePage',
+      deleteCommentById: 'user/deleteCommentById'
     }),
-    ...mapGetters({
-      info: 'info'
-    }),
-    commit() {
-      console.log(this.info())
-      alert(this.content)
-    }
+    async commit() {
+      let { content } = this
+      this.loading = true
+      await this.createCommentForActivePage({content})
+      this.content = ''
+      this.loading = false
+    },
+    async deleteComment(commentId) {
+      this.loading = true
+      await this.deleteCommentById({_id: commentId})
+      this.loading = false
+    },
   }
 }
 </script>
