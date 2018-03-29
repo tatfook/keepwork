@@ -58,9 +58,9 @@ export default {
         data: changedData
       })
     },
-    toggleModVisible() {
+    toggleModVisible(value) {
       this.changeProptyData({
-        hidden: !this.isModShow
+        hidden: !value
       })
     }
   }
