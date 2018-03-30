@@ -14,7 +14,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions } from 'vuex'
-import { suffixFileExtension } from '@/lib/utils'
+import { suffixFileExtension } from '@/lib/utils/gitlab'
 
 export default {
   name: 'FileManagerCustomTreeNode',
