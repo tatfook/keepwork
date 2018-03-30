@@ -42,7 +42,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix1.png'
   },
   // style2
   {
