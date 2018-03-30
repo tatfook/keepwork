@@ -1,64 +1,64 @@
 <template>
-    <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-        <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
-            <el-row class="toolbar">
-                <el-button-group>
-                    <el-button class="btn-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
-                    <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-                    <el-button class="btn-mods" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
-                    <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
-                </el-button-group>
-            </el-row>
-            <el-row class="manager-content-box">
-                <component :is='activeComponent'></component>
-            </el-row>
-        </el-col>
-        <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
-        <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
-            <el-row class="toolbar">
-                <el-button-group>
-                    <el-button class="btn-computer" title="电脑"></el-button>
-                    <el-button class="btn-phone" title="手机"></el-button>
-                </el-button-group>
-                <!-- <el-button-group>
+  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
+    <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
+          <el-button class="btn-mods" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
+        </el-button-group>
+      </el-row>
+      <el-row class="manager-content-box">
+        <component :is='activeComponent'></component>
+      </el-row>
+    </el-col>
+    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
+    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-computer" title="电脑"></el-button>
+          <el-button class="btn-phone" title="手机"></el-button>
+        </el-button-group>
+        <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
           <el-button class="btn-enlarge" title="放大"></el-button>
         </el-button-group> -->
-                <el-button-group>
-                    <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-                    <el-button class="btn-newWin" title="新窗口打开"></el-button>
-                </el-button-group>
-            </el-row>
-            <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
-            <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
-            <!-- <editor-viewport></editor-viewport> -->
-        </el-col>
-        <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-        <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == false && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'codeWinWidth')"></div>
-        <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
-            <el-row class="toolbar">
-                <el-button-group>
-                    <el-button class="btn-H1" title="标题1"></el-button>
-                    <el-button class="btn-H2" title="标题2"></el-button>
-                    <el-button class="btn-H3" title="标题3"></el-button>
-                    <el-button class="btn-bold" title="加粗"></el-button>
-                    <el-button class="btn-italic" title="斜体"></el-button>
-                </el-button-group>
-                <el-button-group>
-                    <el-button class="btn-listul" title="无序列表"></el-button>
-                    <el-button class="btn-listol" title="有序列表"></el-button>
-                    <el-button class="btn-blockqote" title="引用内容"></el-button>
-                    <el-button class="btn-table" title="表格"></el-button>
-                    <el-button class="btn-horizontal-line" title="水平分割线"></el-button>
-                </el-button-group>
-                <el-button-group>
-                    <el-button class="btn-code" title="代码"></el-button>
-                    <el-button class="btn-link" title="链接"></el-button>
-                </el-button-group>
-            </el-row>
-            <editor-markdown/>
-        </el-col>
-    </el-row>
+        <el-button-group>
+          <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
+          <el-button class="btn-newWin" title="新窗口打开"></el-button>
+        </el-button-group>
+      </el-row>
+      <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
+      <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
+      <!-- <editor-viewport></editor-viewport> -->
+    </el-col>
+    <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == false && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+      <el-row class="toolbar">
+        <el-button-group>
+          <el-button class="btn-H1" title="标题1"></el-button>
+          <el-button class="btn-H2" title="标题2"></el-button>
+          <el-button class="btn-H3" title="标题3"></el-button>
+          <el-button class="btn-bold" title="加粗"></el-button>
+          <el-button class="btn-italic" title="斜体"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-listul" title="无序列表"></el-button>
+          <el-button class="btn-listol" title="有序列表"></el-button>
+          <el-button class="btn-blockqote" title="引用内容"></el-button>
+          <el-button class="btn-table" title="表格"></el-button>
+          <el-button class="btn-horizontal-line" title="水平分割线"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="btn-code" title="代码"></el-button>
+          <el-button class="btn-link" title="链接"></el-button>
+        </el-button-group>
+      </el-row>
+      <editor-markdown/>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
