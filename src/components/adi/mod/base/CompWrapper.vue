@@ -23,7 +23,7 @@ export default {
   methods: {
     onEditProperty() {
       this.$store.dispatch('setActiveProperty', {
-        mod: this.mod,
+        key: this.mod.key,
         property: this.property
       })
     }

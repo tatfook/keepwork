@@ -4,18 +4,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
+import Viewport from './Viewport'
 import createPersistedState from 'vuex-persistedstate'
-import EditorPage from './EditorPage'
-import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
-import JsonEditor from 'vue-json-editor-block-view'
-import { broadcast } from 'vuex-iframe-sync'
+import { transfer } from 'vuex-iframe-sync'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
-Vue.use(JsonEditor)
 
 const store = new Vuex.Store({
   modules: {
@@ -27,15 +24,14 @@ const store = new Vuex.Store({
     createPersistedState({
       paths: ['user', 'gitlab']
     }),
-    broadcast('frameViewport')
+    transfer()
   ]
 })
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#editor',
-  router,
+  el: '#viewport',
   store,
-  components: { EditorPage },
-  template: '<EditorPage/>'
+  components: { Viewport },
+  template: '<Viewport/>'
 })

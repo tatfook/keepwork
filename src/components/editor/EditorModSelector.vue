@@ -45,7 +45,7 @@ export default {
       this.$emit('onAddMod', this.mod.key)
     },
     setActive() {
-      this.$store.dispatch('setActiveMod', this.mod)
+      this.$store.dispatch('setActiveMod', this.mod.key)
     }
   }
 }
