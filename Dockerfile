@@ -1,9 +1,9 @@
-From xuntian/node_packages as builder
+From node as builder
 MAINTAINER xuntian "li.zq@foxmail.com"
 COPY ./ /build/
 WORKDIR /build
 RUN npm --registry https://registry.npm.taobao.org install
-RUN npm --registry https://registry.npm.taobao.org update
+# RUN npm --registry https://registry.npm.taobao.org update
 RUN npm run build
 
 
