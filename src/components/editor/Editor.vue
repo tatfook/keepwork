@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp()">
+  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
     <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
@@ -30,6 +30,7 @@
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
+      <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
     </el-col>
     <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
@@ -228,6 +229,18 @@ export default {
 }
 #frameViewport {
   border: none;
+}
+.previewWin {
+  position: relative;
+}
+.mouse-event-backup {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: transparent;
+  z-index: 122;
 }
 
 .manager-win .el-button,
