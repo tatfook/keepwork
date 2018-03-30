@@ -1,15 +1,9 @@
 <template>
-  <div class="file-manager" v-loading="loading">
-    <h2>文件管理</h2>
-    <el-tree
-      v-show="!loading"
-      node-key="name"
-      :data="personalSiteList"
-      :props="filesTreeProps"
-      :render-content="renderContent"
-      @node-click="handleNodeClick">
-    </el-tree>
-  </div>
+    <div class="file-manager" v-loading="loading">
+        <h2>文件管理</h2>
+        <el-tree v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        </el-tree>
+    </div>
 </template>
 <script>
 import _ from 'lodash'
@@ -33,7 +27,7 @@ export default {
     })
   },
   computed: {
-    ... mapGetters({
+    ...mapGetters({
       personalSiteList: 'user/personalSiteList',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     })
@@ -42,25 +36,30 @@ export default {
     ...mapActions({
       getAllPersonalSite: 'user/getAllPersonalSite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
-      updateFilemanagerTreeNodeExpandMapByPath: 'updateFilemanagerTreeNodeExpandMapByPath'
+      updateFilemanagerTreeNodeExpandMapByPath:
+        'updateFilemanagerTreeNodeExpandMapByPath'
     }),
     renderContent(h, { node, data, store }) {
       // trick codes below
       // manipulated the node in <el-tree/>
       node.isLeaf = data.type === 'blob'
       // restore node expand status
-      let path = data.path || `${ data.username }/${ data.name }`
+      let path = data.path || `${data.username}/${data.name}`
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]
 
-      return <FileManagerCustomTreeNode data={data} node={node}/>
+      return <FileManagerCustomTreeNode data={data} node={node} />
     },
     async handleNodeClick(data, node, component) {
       // save node expand status
-      let path = data.path || `${ data.username }/${ data.name }`
-      this.updateFilemanagerTreeNodeExpandMapByPath({path, expanded: node.expanded})
+      let path = data.path || `${data.username}/${data.name}`
+      this.updateFilemanagerTreeNodeExpandMapByPath({
+        path,
+        expanded: node.expanded
+      })
 
       // try open files list in site level
-      let repositoryIsClickedAndFileListIsEmpty = node.level === 1 && _.isEmpty(data.children)
+      let repositoryIsClickedAndFileListIsEmpty =
+        node.level === 1 && _.isEmpty(data.children)
       if (repositoryIsClickedAndFileListIsEmpty) {
         let { username, name } = data
         let path = `${username}/${name}`
@@ -77,7 +76,66 @@ export default {
 }
 </script>
 
-<style lang="scss">
-// .file-manager {
-// }
+<style lang='scss'>
+.file-manager {
+  a {
+    text-decoration: none;
+  }
+  .el-tree {
+    color: #535353;
+  }
+
+  .el-tree--highlight-current
+    .el-tree-node.is-current
+    > .el-tree-node__content {
+    background-color: #ccfffc;
+  }
+  .el-tree-node__content:hover {
+    background-color: #ccfffc;
+  }
+  .el-tree-node__content {
+    height: 32px;
+    line-height: 32px;
+  }
+  .el-tree-node__expand-icon {
+    font-weight: bold;
+    color: #535353;
+  }
+  .el-tree-node__expand-icon.is-leaf {
+    color: transparent;
+  }
+  .el-icon-caret-right:before {
+    content: '\E604';
+  }
+  .el-tree-node__label {
+    width: 100%;
+    position: relative;
+    padding-left: 20px;
+  }
+  .node-icon {
+    position: absolute;
+    left: 0;
+  }
+  .file-manager-buttons-container {
+    position: absolute;
+    right: 20px;
+  }
+  .file-manager-buttons-container .iconfont {
+    font-size: 20px;
+    color: #333;
+  }
+  .el-button + .el-button {
+    margin-left: 5px;
+  }
+  .icon-ziyuan9 {
+    font-weight: bold;
+    color: #000;
+  }
+  .icon-ziyuan17 {
+    color: #f48622;
+  }
+  .icon-gongyouwangzhan {
+    color: #4c97d1;
+  }
+}
 </style>

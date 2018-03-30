@@ -1,15 +1,23 @@
 <template>
-  <span class="file-manager-custom-tree-node">
-    <span class="el-tree-node__label">{{node.label | hideMDFileExtension}}</span>
-    <span class="file-manager-buttons-container">
-      <span v-if="isAddable">
-        <el-button size="mini" type="text" @click.stop="addFile">AddFile</el-button>
-        <el-button size="mini" type="text" @click.stop="addFolder">AddFolder</el-button>
-      </span>
-      <el-button v-if="isRemovable" size="mini" type="text" @click.stop="removeFile">Remove</el-button>
-      <a v-if="isSettable" class="el-button el-button--text el-button--mini" href="/wiki/user_center" target="_blank">Setting</a>
-    </span>
-  </span>
+    <div class="el-tree-node__label">
+        {{node.label | hideMDFileExtension}}
+        <span class="node-icon">
+            <i class="iconfont icon-ziyuan9" v-if="node.isLeaf"></i>
+            <i class="iconfont icon-ziyuan17" v-else-if="data.visibility === 'private'"></i>
+            <i class="iconfont icon-gongyouwangzhan" v-else></i>
+        </span>
+        <span class="file-manager-buttons-container">
+            <el-button v-if="isAddable" class="iconfont icon-ziyuan13" size="mini" type="text" @click.stop="addFile" title='新建页面'>
+            </el-button>
+            <el-button v-if="isAddable" class="iconfont icon-ziyuan11" size="mini" type="text" @click.stop="addFolder" title='新建文件夹'>
+            </el-button>
+            <el-button v-if="isRemovable" class="iconfont icon-bianjiqi-shanchu" size="mini" type="text" @click.stop="removeFile">
+            </el-button>
+            <el-button v-if="isSettable" size="mini" type="text" @click.stop="addFolder" title='设置'>
+                <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
+            </el-button>
+        </span>
+    </div>
 </template>
 <script>
 import _ from 'lodash'
@@ -95,18 +103,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.file-manager {
-  .el-tree-node__label {
-    line-height: 40px;
-  }
-  &-buttons-container {
-    float: right;
-    height: 40px;
-    line-height: 40px;
-  }
-  &-custom-tree-node {
-    flex: 1;
-  }
-}
-</style>

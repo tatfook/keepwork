@@ -3,9 +3,9 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="btn-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="iconfont icon-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="btn-mods" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button class="iconfont icon-ziyuan6" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -17,8 +17,8 @@
     <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="btn-computer" title="电脑"></el-button>
-          <el-button class="btn-phone" title="手机"></el-button>
+          <el-button class="iconfont icon-pcduandiannao" title="电脑"></el-button>
+          <el-button class="iconfont icon-shouji" title="手机"></el-button>
         </el-button-group>
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
@@ -26,7 +26,7 @@
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="btn-newWin" title="新窗口打开"></el-button>
+          <el-button class="iconfont icon-ziyuan18" title="新窗口打开" @click='showPreview'></el-button>
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
@@ -37,22 +37,22 @@
     <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="btn-H1" title="标题1"></el-button>
-          <el-button class="btn-H2" title="标题2"></el-button>
-          <el-button class="btn-H3" title="标题3"></el-button>
-          <el-button class="btn-bold" title="加粗"></el-button>
-          <el-button class="btn-italic" title="斜体"></el-button>
+          <el-button class="iconfont icon-ziyuan5" title="标题1"></el-button>
+          <el-button class="iconfont icon-ziyuan4" title="标题2"></el-button>
+          <el-button class="iconfont icon-ziyuan2" title="标题3"></el-button>
+          <el-button class="iconfont icon-ziyuan3" title="加粗"></el-button>
+          <el-button class="iconfont icon-ziyuan20" title="斜体"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="btn-listul" title="无序列表"></el-button>
-          <el-button class="btn-listol" title="有序列表"></el-button>
-          <el-button class="btn-blockqote" title="引用内容"></el-button>
-          <el-button class="btn-table" title="表格"></el-button>
-          <el-button class="btn-horizontal-line" title="水平分割线"></el-button>
+          <el-button class="iconfont icon-ziyuan1" title="无序列表"></el-button>
+          <el-button class="iconfont icon-ziyuan" title="有序列表"></el-button>
+          <el-button class="iconfont icon-ziyuan21" title="引用内容"></el-button>
+          <el-button class="iconfont icon-ziyuan22" title="表格"></el-button>
+          <el-button class="iconfont icon-ziyuan24" title="水平分割线"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="btn-code" title="代码"></el-button>
-          <el-button class="btn-link" title="链接"></el-button>
+          <el-button class="iconfont icon-ziyuan23" title="代码"></el-button>
+          <el-button class="iconfont icon-share_link" title="链接"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown/>
@@ -193,6 +193,9 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
+    showPreview() {
+      this.$emit('showPreview')
+    },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
       this.resizeWinParams.leftColWidthParam = ''
@@ -280,86 +283,13 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-</style>
-<style lang="scss" scoped>
-$spriteUrl: '../../assets/img/editor_sprites.png';
-
-.btn-file {
-  background: url($spriteUrl) 13px 6px no-repeat;
+.iconfont{
+    padding: 0;
+    width: 50px;
+    height: 40px;
+    font-size: 27px;
 }
-.btn-bigfile {
-  background: url($spriteUrl) -37px 6px no-repeat;
-}
-.btn-mods {
-  background: url($spriteUrl) -88px 6px no-repeat;
-}
-.btn-search {
-  background: url($spriteUrl) -140px 6px no-repeat;
-}
-.btn-computer {
-  width: 49px;
-  height: 40px;
-  background: url($spriteUrl) -394px 6px no-repeat;
-}
-.btn-phone {
-  width: 50px;
-  height: 40px;
-  background: url($spriteUrl) -444px 6px no-repeat;
-}
-.btn-scale {
-  width: 50px;
-  height: 40px;
-  background: url($spriteUrl) -496px 6px no-repeat;
-}
-.btn-enlarge {
-  width: 50px;
-  height: 40px;
-  background: url($spriteUrl) -546px 6px no-repeat;
-}
-.btn-adaptive {
-  width: 45px;
-  height: 40px;
-  background: url($spriteUrl) -600px 6px no-repeat;
-}
-.btn-newWin {
-  width: 45px;
-  height: 40px;
-  background: url($spriteUrl) -652px 6px no-repeat;
-}
-.btn-H1 {
-  background: url($spriteUrl) -698px 6px no-repeat;
-}
-.btn-H2 {
-  background: url($spriteUrl) -748px 6px no-repeat;
-}
-.btn-H3 {
-  background: url($spriteUrl) -802px 6px no-repeat;
-}
-.btn-bold {
-  background: url($spriteUrl) -851px 6px no-repeat;
-}
-.btn-italic {
-  background: url($spriteUrl) -902px 6px no-repeat;
-}
-.btn-listul {
-  background: url($spriteUrl) -954px 6px no-repeat;
-}
-.btn-listol {
-  background: url($spriteUrl) -1004px 6px no-repeat;
-}
-.btn-blockqote {
-  background: url($spriteUrl) -1054px 6px no-repeat;
-}
-.btn-table {
-  background: url($spriteUrl) -1106px 6px no-repeat;
-}
-.btn-horizontal-line {
-  background: url($spriteUrl) -1158px 6px no-repeat;
-}
-.btn-code {
-  background: url($spriteUrl) -1208px 6px no-repeat;
-}
-.btn-link {
-  background: url($spriteUrl) -1258px 6px no-repeat;
+.code-win .iconfont{
+    font-size: 16px;
 }
 </style>
