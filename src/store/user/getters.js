@@ -1,7 +1,10 @@
 import _ from 'lodash'
 import Cookies from 'js-cookie'
-import { gitTree2NestedArray } from '@/lib/utils'
-import { EMPTY_GIT_FOLDER_KEEPER } from '@/lib/utils/consts'
+import {
+  gitTree2NestedArray,
+  getFileFullPathByPath,
+  EMPTY_GIT_FOLDER_KEEPER
+} from '@/lib/utils/gitlab'
 
 const getters = {
   info: state => state.info,
@@ -11,45 +14,24 @@ const getters = {
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
   defaultSiteDataSource: state => _.get(state, 'profile.defaultSiteDataSource'),
-  defaultSiteProjectId: (state, { defaultSiteDataSource }) =>
-    _.get(defaultSiteDataSource, 'projectId'),
-  defaultSiteLastCommitId: (state, { defaultSiteDataSource }) =>
-    _.get(defaultSiteDataSource, 'lastCommitId'),
 
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
     url: _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
 
-  websitesMap: (state, { username }) => _.get(state, ['website', username]),
-  siteDataSourcesMap: (state, { username }) =>
-    _.get(state, ['siteDataSource', username]),
-
-  personalSiteList: (state, getters, rootState, rootGetters) => {
-    let {
-      username,
-      websitesMap,
-      siteDataSourcesMap,
-      defaultSiteProjectId,
-      defaultSiteLastCommitId
-    } = getters
+  getPersonalSiteListByUsername: (state, getters, rootState, rootGetters) => username => {
     let { 'gitlab/repositoryTrees': repositoryTrees } = rootGetters
+    let websitesMap = _.get(state, ['website', username])
+    let siteDataSourcesMap = _.get(state, ['siteDataSource', username])
 
     // use websitesMap to generate personal website list
     let websiteNames = _.keys(websitesMap)
 
     let personalSiteList = websiteNames.map(name => {
       // use siteDataSourcesMap to get projectId and lastCommitId
-      let projectId = _.get(
-        siteDataSourcesMap,
-        [name, 'projectId'],
-        defaultSiteProjectId
-      )
-      let lastCommitId = _.get(
-        siteDataSourcesMap,
-        [name, 'lastCommitId'],
-        defaultSiteLastCommitId
-      )
+      let projectId = _.get(siteDataSourcesMap, [name, 'projectId'])
+      let lastCommitId = _.get(siteDataSourcesMap, [name, 'lastCommitId'])
 
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
@@ -68,21 +50,20 @@ const getters = {
 
     return personalSiteList
   },
-  personalSitePathMap: (state, { personalSiteList }) =>
-    _.keyBy(personalSiteList, ({ username, name }) => `${username}/${name}`),
-  getPersonalSiteInfoByPath: (state, { personalSitePathMap }) => path => {
+  personalSiteList: (state, {username, getPersonalSiteListByUsername}) => {
+    let personalSiteList = getPersonalSiteListByUsername(username)
+    return personalSiteList
+  },
+  personalSitePathMap: (state, {personalSiteList}) => _.keyBy(personalSiteList, ({username, name}) => `${username}/${name}`),
+
+  getPersonalSiteInfoByPath: (state, {personalSitePathMap}) => path => {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
   },
 
   comments: state => state.comments,
-  getCommentListByPath: (
-    state,
-    { comments },
-    rootState,
-    rootGetters
-  ) => path => {
-    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+  getCommentListByPath: (state, {comments}, rootState, rootGetters) => path => {
+    let fullPath = getFileFullPathByPath(path)
     return comments[fullPath]
   },
   activePageCommentList: (
