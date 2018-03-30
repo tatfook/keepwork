@@ -76,8 +76,8 @@ export default {
         // if there are some changes affect the mod data, will try to build all
         return this.$store.dispatch('updateMarkDown', code)
       }
-
-      this.$store.dispatch('updateMarkDownBlock', { code, mod })
+      let key = mod.key
+      this.$store.dispatch('updateMarkDownBlock', { code, key })
     }
   }
 }

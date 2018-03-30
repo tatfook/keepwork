@@ -8,7 +8,6 @@ const getGitlabAPI = config => {
   let getlabAPI =
     gitlabAPICache[cacheKey] ||
     (gitlabAPICache[cacheKey] = newGitlabAPI(config))
-  console.log('getGitlabAPI: ', getlabAPI)
   return getlabAPI
 }
 
