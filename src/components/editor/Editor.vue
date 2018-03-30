@@ -29,7 +29,8 @@
           <el-button class="btn-newWin" title="新窗口打开"></el-button>
         </el-button-group>
       </el-row>
-      <editor-viewport></editor-viewport>
+      <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
+      <!-- <editor-viewport></editor-viewport> -->
     </el-col>
     <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == false && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'codeWinWidth')"></div>
@@ -62,7 +63,7 @@
 <script>
 import _ from 'lodash'
 import EditorMarkdown from './EditorMarkdown'
-import EditorViewport from './EditorViewport'
+// import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
@@ -99,7 +100,7 @@ export default {
   },
   components: {
     EditorMarkdown,
-    EditorViewport,
+    // EditorViewport,
     ModPropertyManager,
     Search,
     ModsList,
@@ -225,6 +226,10 @@ export default {
 .editor-resizer:hover {
   background-color: #d9eafb;
 }
+#frameViewport {
+  border: none;
+}
+
 .manager-win .el-button,
 .code-win .el-button {
   width: 50px;
