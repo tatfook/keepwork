@@ -23,7 +23,7 @@ export default {
     CommonFooter
   },
   created() {
-    this.updateActivePage()
+    // this.updateActivePage()
   },
   watch: {
     $route: 'updateActivePage'
@@ -49,7 +49,7 @@ body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
 }
 .index-page-header .container {
