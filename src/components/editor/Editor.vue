@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" :style='{ width: managerWinWidth + "%" }' class="manager-win">
+    <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="btn-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
@@ -13,7 +13,7 @@
         <component :is='activeComponent'></component>
       </el-row>
     </el-col>
-    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'previewWinWidth')"></div>
+    <div class="col-between"></div>
     <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
@@ -33,8 +33,7 @@
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
     </el-col>
-    <div class="editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <div class="editor-resizer" v-if="showingCol.isManagerShow == true && showingCol.isPreviewShow == false && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'managerWinWidth', 'codeWinWidth')"></div>
+    <div class="col-between editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
@@ -76,9 +75,9 @@ export default {
   data() {
     return {
       bodyWidth: document.body.clientWidth,
-      managerWinWidth: 25,
-      previewWinWidth: 37.5,
-      codeWinWidth: 37.5,
+      managerWinWidth: 0,
+      previewWinWidth: 50,
+      codeWinWidth: 50,
       resizeWinParams: {
         mouseStartX: 0,
         isResizing: false,
@@ -214,14 +213,20 @@ export default {
   flex-direction: column;
   overflow: auto;
 }
+.manager-win {
+  flex-basis: 440px;
+}
 .manager-content-box {
   flex: 1;
   background-color: #fff;
   overflow-y: auto;
 }
-.editor-resizer {
-  width: 17px;
+.col-between {
+  flex-basis: 17px;
+  flex-shrink: 0;
   background-color: #cdd4db;
+}
+.editor-resizer {
   cursor: col-resize;
 }
 .editor-resizer:hover {
