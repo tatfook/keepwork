@@ -106,6 +106,7 @@ export default [
           'background-color': 'white'
         }
       }
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft1.png'
   }
 ]
