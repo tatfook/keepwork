@@ -5,6 +5,7 @@
 <script>
 import EditorViewport from '@/components/editor/EditorViewport'
 export default {
+  name: 'Viewport',
   components: {
     EditorViewport
   }
