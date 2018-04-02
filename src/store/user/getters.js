@@ -8,7 +8,7 @@ import {
 
 const getters = {
   info: state => state.info,
-  token: state => _.get(state, ['info', 'token'], _.get(Cookies.get('token'))),
+  token: state => _.get(state, ['info', 'token'], Cookies.get('token')),
   username: state => _.get(state, 'profile.username'),
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
