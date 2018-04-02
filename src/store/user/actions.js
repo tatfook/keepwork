@@ -25,8 +25,8 @@ const actions = {
     dispatch this action first, in any action which depends on username.
   */
   async getProfile(context) {
-    let { commit, getters: { username, authRequestConfig, token } } = context
-    if (username) return Promise.resolve()
+    let { commit, getters: { isLogined, authRequestConfig, token } } = context
+    if (isLogined) return
 
     let profile = await keepwork.user.getProfile(null, authRequestConfig)
       .catch(e => {
@@ -38,7 +38,7 @@ const actions = {
   },
   async getAllPersonalSite({ dispatch, getters }) {
     let { personalSiteList } = getters
-    if (personalSiteList.length) return Promise.resolve()
+    if (personalSiteList.length) return
 
     await dispatch('getProfile')
 
