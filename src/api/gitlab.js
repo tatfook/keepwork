@@ -1,3 +1,4 @@
+import axios from 'axios'
 import gitLabAPIGenerator from 'node-gitlab-api'
 
 const defaultConfig = {
@@ -5,11 +6,25 @@ const defaultConfig = {
   token: ' '
 }
 
-export const newGitlabAPI = (params) => gitLabAPIGenerator({
-  ...defaultConfig,
-  ...params
-})
+export const showRawForGuest = async (rawBaseUrl, dataSourceUsername, projectName, fullPath) => {
+  let url = `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master/${fullPath}?_random=${Math.random()}`
+  let { data: content = '' } = await axios.get(url)
+  return content
+}
+
+export const newGitlabAPI = (params) => {
+  let api = gitLabAPIGenerator({
+    ...defaultConfig,
+    ...params
+  })
+  // api.projects.repository.files.showRawForGuest = showRawForGuest
+  return api
+}
 
 const gitlab = newGitlabAPI()
+console.log('gitlab: ', gitlab)
 
-export default gitlab
+export default {
+  newGitlabAPI,
+  showRawForGuest
+}

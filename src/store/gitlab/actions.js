@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { Base64 } from 'js-base64'
+import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import { props } from './mutations'
 import {
   EMPTY_GIT_FOLDER_KEEPER,
@@ -7,7 +8,6 @@ import {
 } from '@/lib/utils/gitlab'
 
 const {
-  GET_ALL_PROJECTS_SUCCESS,
   GET_FILE_CONTENT_SUCCESS,
   SAVE_FILE_CONTENT_SUCCESS,
   CREATE_FILE_CONTENT_SUCCESS,
@@ -40,10 +40,7 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
 
   add fullPath as path return with getGitlabParams results
 */
-const getGitlabFileParams = async (
-  context,
-  { path: inputPath, content = '\n' }
-) => {
+const getGitlabFileParams = async (context, { path: inputPath, content = '\n' }) => {
   let { username, name, ref, branch, gitlab, projectId, options } = await getGitlabParams(context, { path: inputPath, content })
   let path = getFileFullPathByPath(inputPath)
 
@@ -51,13 +48,6 @@ const getGitlabFileParams = async (
 }
 
 const actions = {
-  async getAllProjects(context, payload) {
-    let { commit, getters: { getGitlabAPI } } = context
-
-    let gitlab = getGitlabAPI()
-    let list = await gitlab.projects.all(payload)
-    commit(GET_ALL_PROJECTS_SUCCESS, list)
-  },
   async getRepositoryTree(context, payload) {
     let { path, ignoreCache = false, recursive = true } = payload
     let { commit, getters: { repositoryTrees } } = context
@@ -73,16 +63,33 @@ const actions = {
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
   },
   async readFile(context, { path: inputPath }) {
-    let { commit } = context
-    let { gitlab, projectId, ref, path } = await getGitlabFileParams(context, {
-      path: inputPath
-    })
+    let { commit, dispatch, rootGetters } = context
 
-    let file = await gitlab.projects.repository.files.show(projectId, path, ref)
-    let payload = {
-      path,
-      file: { ...file, content: Base64.decode(file.content) }
+    let {'user/username': username, activePageUsername} = rootGetters
+    let visitorIsGuest = username !== activePageUsername
+    if (visitorIsGuest) {
+      await dispatch('readFileForGuest', {path: inputPath})
+      return
     }
+
+    let { gitlab, projectId, ref, path } = await getGitlabFileParams(context, {path: inputPath})
+    let file = await gitlab.projects.repository.files.show(projectId, path, ref)
+
+    let payload = {path, file: { ...file, content: Base64.decode(file.content) }}
+    commit(GET_FILE_CONTENT_SUCCESS, payload)
+  },
+  async readFileForGuest(context, { path }) {
+    let { commit, dispatch, rootGetters } = context
+
+    // load necessary info for guest to get the file content
+    await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
+    let {'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath} = rootGetters
+    let { rawBaseUrl, dataSourceUsername, projectName } = getSiteDetailInfoDataSourceByPath(path)
+
+    let fullPath = getFileFullPathByPath(path)
+    let content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, fullPath)
+
+    let payload = { path: fullPath, file: { content } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
   async saveFile(context, { path: inputPath, content }) {
