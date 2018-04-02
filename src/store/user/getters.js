@@ -9,7 +9,13 @@ import {
 const getters = {
   info: state => state.info,
   token: state => _.get(state, ['info', 'token'], Cookies.get('token')),
-  username: state => _.get(state, 'profile.username'),
+  username: (state, { token }) => {
+    // handle logout
+    let profileUserToken = _.get(state, 'profile.token')
+    if (profileUserToken !== token) return
+  
+    return _.get(state, 'profile.username')
+  },
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
