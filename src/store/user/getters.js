@@ -9,18 +9,18 @@ import {
 const getters = {
   info: state => state.info,
   token: state => _.get(state, ['info', 'token'], Cookies.get('token')),
-  username: (state, { token }) => {
-    // handle logout
-    let profileUserToken = _.get(state, 'profile.token')
-    if (profileUserToken !== token) return
-  
-    return _.get(state, 'profile.username')
+  profile: (state, {token}) => {
+    let { token: profileUserToken } = state.profile
+    if (profileUserToken !== token) return {}
+    return state.profile
   },
+  isLogined: (state, {profile}) => !_.isEmpty(profile),
+  username: (state, { profile: { username } }) => username,
+  vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
-  defaultSiteDataSource: state => _.get(state, 'profile.defaultSiteDataSource'),
-
+  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) => defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
     url: _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
