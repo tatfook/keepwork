@@ -9,7 +9,8 @@ const {
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
-  GET_COMMENTS_BY_PAGE_URL_SUCCESS
+  GET_COMMENTS_BY_PAGE_URL_SUCCESS,
+  GET_SITE_DETAIL_INFO_SUCCESS
 } = props
 
 const actions = {
@@ -63,6 +64,15 @@ const actions = {
     let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
 
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
+  },
+  async getWebsiteDetailInfoByPath(context, { path }) {
+    let { commit, getters: { getSiteDetailInfoByPath } } = context
+    if (getSiteDetailInfoByPath(path)) return
+
+    let [username, sitename] = path.split('/').filter(x => x)
+    let detailInfo = await keepwork.website.getDetailInfo({username, sitename})
+
+    commit(GET_SITE_DETAIL_INFO_SUCCESS, {username, sitename, detailInfo})
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context

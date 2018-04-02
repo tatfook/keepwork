@@ -38,6 +38,12 @@ const resetIgnoreKeys = ['filemanagerTreeNodeExpandMapByPath']
 
 const getters = {
   activePage: state => state.activePage,
+  activePageInfo: (state, {activePage}) => {
+    let [username, sitename] = activePage.split('/').filter(x => x)
+    return {username, sitename}
+  },
+  activePageUsername: (state, {activePageInfo: {username}}) => username,
+
   code: state => state.code,
   themeConf: state => state.theme,
   modList: state => state.modList,
