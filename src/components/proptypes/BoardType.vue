@@ -19,7 +19,8 @@ export default {
   },
   methods: {
     openEditor() {
-      this.prop.click()
+      console.log(this.prop)
+      // this.prop.click()
     },
     updateValue(newVal) {
       var tempChangedDataObj = {}

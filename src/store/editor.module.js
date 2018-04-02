@@ -56,6 +56,7 @@ const getters = {
 }
 
 const actions = {
+  setCardProtype() {},
   async setActivePage(context, path) {
     let { getters, rootGetters, commit, dispatch } = context
 
