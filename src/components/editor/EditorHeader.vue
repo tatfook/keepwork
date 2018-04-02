@@ -48,19 +48,16 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item v-loading='savePending' index='3' class='li-btn'>
-        <span class='btn icon-save' title='保存' @click='save'></span>
+        <span class='iconfont icon-ziyuan19' title='保存' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='canUndo'>
-        <span class='btn icon-undo' title='撤销'></span>
+        <span class='iconfont icon-ziyuan26' title='撤销'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='canRedo'>
-        <span class='btn icon-redo' title='重做'></span>
+        <span class='iconfont icon-ziyuan27' title='重做'></span>
       </el-menu-item>
       <el-menu-item index='6' class='li-btn' @click='changeFullscreen'>
-        <span class='btn icon-full-screen' title='全屏'></span>
-      </el-menu-item>
-      <el-menu-item index='6' class='li-btn' @click='showPreview'>
-        <span class='btn icon-preview' title='预览'></span>
+        <span class='iconfont icon-ziyuan14' title='全屏'></span>
       </el-menu-item>
       <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -154,14 +151,11 @@ export default {
     changeFullscreen() {
       this.$emit('changeFullscreen')
     },
-    showPreview() {
-      this.$emit('showPreview')
-    },
     undo() {
       this.undoManager.undo(code => {
         this.$store.dispatch('updateMarkDown', {
           code: code || '',
-          enableHistory: true
+          historyDisabled: true
         })
       })
     },
@@ -169,7 +163,7 @@ export default {
       this.undoManager.redo(code => {
         this.$store.dispatch('updateMarkDown', {
           code: code || '',
-          enableHistory: true
+          historyDisabled: true
         })
       })
     }
@@ -228,29 +222,16 @@ export default {
   width: auto;
   margin-left: 0px;
 }
-</style>
-
-<style lang='scss' scoped>
-$spriteUrl: '../../assets/img/editor_sprites.png';
-
-.icon-save {
-  background: url($spriteUrl) -194px 6px no-repeat;
-}
-.icon-undo {
-  background: url($spriteUrl) -246px 6px no-repeat;
-}
-.icon-redo {
-  background: url($spriteUrl) -295px 6px no-repeat;
-}
-.icon-full-screen {
-  background: url($spriteUrl) -346px 6px no-repeat;
-}
-.icon-preview {
-  width: 45px;
+.iconfont {
+  display: inline-block;
+  width: 40px;
   height: 40px;
-  background: url($spriteUrl) -652px 6px no-repeat;
+  line-height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 21px;
+  color: #666;
+  font-weight: bold;
 }
 </style>
-
-
-

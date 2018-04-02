@@ -2,10 +2,10 @@
   <fullscreen id='fullscreen' ref='fullscreen'>
     <el-container v-loading="loading" id="editor">
       <el-header>
-        <EditorHeader @changeFullscreen='changeFullscreen' @showPreview='showPreview'></EditorHeader>
+        <EditorHeader @changeFullscreen='changeFullscreen'></EditorHeader>
       </el-header>
       <el-main>
-        <router-view/>
+        <router-view @showPreview='showPreview'/>
         <el-dialog :visible.sync='dialogVisible ' width='100% ' height='100% '>
           <PageViewer />
         </el-dialog>

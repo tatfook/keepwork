@@ -1,5 +1,6 @@
 import { keepwork } from '@/api'
 import { props } from './mutations'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
 const {
   LOGIN_SUCCESS,
@@ -26,10 +27,11 @@ const actions = {
     let { commit, getters: {username, authRequestConfig} } = context
     if (username) return Promise.resolve()
 
-    let profile = await keepwork.user.getProfile(null, authRequestConfig).catch(e => {
-      alert('尚未登陆，请登陆后访问！')
-      location.href = '/wiki/login'
-    })
+    let profile = await keepwork.user.getProfile(null, authRequestConfig)
+    // .catch(e => {
+    //   alert('尚未登陆，请登陆后访问！')
+    //   location.href = '/wiki/login'
+    // })
 
     commit(GET_PROFILE_SUCCESS, profile)
   },
@@ -64,7 +66,7 @@ const actions = {
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context
-    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+    let fullPath = getFileFullPathByPath(path)
     let { _id: websiteId, userId } = rootGetters['user/getPersonalSiteInfoByPath'](path)
 
     let payload = {websiteId, userId, url: fullPath, content}
@@ -85,8 +87,8 @@ const actions = {
     await dispatch('getActivePageComments')
   },
   async getCommentsByPageUrl(context, { url: path }) {
-    let { commit, getters: { authRequestConfig }, rootGetters } = context
-    let fullPath = rootGetters['gitlab/getFileFullPathByPath'](path)
+    let { commit, getters: { authRequestConfig } } = context
+    let fullPath = getFileFullPathByPath(path)
 
     let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath}, authRequestConfig)
 

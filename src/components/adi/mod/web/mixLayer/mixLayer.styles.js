@@ -88,7 +88,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix2.png'
   },
   // style3
   {
@@ -133,7 +134,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix3.png'
   },
   // style4
   {
@@ -177,7 +179,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix4.png'
   },
   // style5
   {
@@ -222,7 +225,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix5.png'
   },
   // style6
   {
@@ -267,7 +271,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix6.png'
   },
   // style7
   {
@@ -311,7 +316,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix7.png'
   },
   // style8
   {
@@ -356,7 +362,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix8.png'
   },
   // style9
   {
@@ -401,6 +408,7 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix9.png'
   }
 ]

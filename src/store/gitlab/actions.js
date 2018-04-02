@@ -1,7 +1,10 @@
 import _ from 'lodash'
 import { Base64 } from 'js-base64'
 import { props } from './mutations'
-import { EMPTY_GIT_FOLDER_KEEPER } from '@/lib/utils/consts'
+import {
+  EMPTY_GIT_FOLDER_KEEPER,
+  getFileFullPathByPath
+} from '@/lib/utils/gitlab'
 
 const {
   GET_ALL_PROJECTS_SUCCESS,
@@ -41,22 +44,8 @@ const getGitlabFileParams = async (
   context,
   { path: inputPath, content = '\n' }
 ) => {
-  let { dispatch, getters: { getFileFullPathByPath } } = context
-  let {
-    username,
-    name,
-    ref,
-    branch,
-    gitlab,
-    projectId,
-    options
-  } = await getGitlabParams(context, { path: inputPath, content })
-
-  // call getRepositoryTree to check weather the path is a dir or file
-  // if the path is a dir, try index.md, if it's a file, read directly
-  await dispatch('getRepositoryTree', { path: `${username}/${name}` })
+  let { username, name, ref, branch, gitlab, projectId, options } = await getGitlabParams(context, { path: inputPath, content })
   let path = getFileFullPathByPath(inputPath)
-  if (!path) return Promise.reject(new Error('404'))
 
   return { username, name, ref, branch, gitlab, projectId, options, path }
 }
