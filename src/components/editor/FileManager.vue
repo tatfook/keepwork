@@ -1,9 +1,9 @@
 <template>
-    <div class="file-manager" v-loading="loading">
-        <h2>文件管理</h2>
-        <el-tree v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
-        </el-tree>
-    </div>
+  <div class="file-manager" v-loading="loading">
+    <h2>文件管理</h2>
+    <el-tree v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+    </el-tree>
+  </div>
 </template>
 <script>
 import _ from 'lodash'
