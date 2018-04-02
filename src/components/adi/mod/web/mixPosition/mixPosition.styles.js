@@ -67,8 +67,7 @@ export default [
       },
       config: {}
     },
-    cover:
-      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522233836994.jpeg'
+    cover: './static/adi/mixPosition/cover/projectOne.png'
   },
 
   // style 2 左文右图
@@ -135,7 +134,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: './static/adi/mixPosition/cover/projectTwo.png'
   },
 
   // style 3  左文右图（文字竖排）
@@ -220,7 +220,8 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: './static/adi/mixPosition/cover/projectThree.png'
   },
 
   // style 4 上图下文
@@ -268,6 +269,7 @@ export default [
         }
       },
       config: {}
-    }
+    },
+    cover: './static/adi/mixPosition/cover/上图下文.png'
   }
 ]
