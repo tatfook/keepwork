@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
-    </div>
+  <div>
+    <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
+  </div>
 </template>
 
 <script>
 import mods from '@/components/adi/mod'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -17,8 +18,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      updateActiveModStyle: 'updateActiveModStyle'
+    }),
     changeStyle(styleID) {
-      this.$store.dispatch('updateActiveModStyle', styleID)
+      this.updateActiveModStyle(styleID)
     },
     isActive(styleID) {
       let curStyle = Number(this.mod.data.styleID) || 0
