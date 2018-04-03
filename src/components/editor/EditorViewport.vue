@@ -1,6 +1,9 @@
 <template>
   <div class='viewport-container'>
-    <el-button @click='openModSelector'> + </el-button>
+    <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
+      <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
+      <p class="info">请点击添加内容</p>
+    </div>
     <template v-for='(mod, index) in modList'>
       <editor-mod-selector :key='index' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
     </template>
@@ -51,5 +54,23 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   height: 100%;
+}
+.add-btn-row{
+  text-align: center;
+  padding-top: 43px;
+  cursor: pointer;
+}
+.add-mod-btn {
+  width: 66px;
+  height: 66px;
+  background-color: #3ba4ff;
+  color: #fff;
+  padding: 0;
+  font-size: 40px;
+}
+.info{
+  font-size: 25px;
+  color: #c0c4cc;
+  margin-top: 13px;
 }
 </style>

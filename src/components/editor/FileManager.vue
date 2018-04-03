@@ -1,7 +1,6 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <h2>文件管理</h2>
-    <el-tree v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+    <el-tree ref='fileManagerTree' v-show="!loading" node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
     </el-tree>
   </div>
 </template>
@@ -25,6 +24,7 @@ export default {
     this.getAllPersonalSite().then(() => {
       this.loading = false
     })
+    this.initUrlExpandSelect()
   },
   computed: {
     ...mapGetters({
@@ -39,6 +39,22 @@ export default {
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath'
     }),
+    initUrlExpandSelect() {
+      let fileManagerTree = this.$refs.fileManagerTree
+      let nowPath = this.$route.path.replace(/^\//, '')
+      let pathArr = nowPath.split('/')
+      let pathArrLen = pathArr.length
+      var levelPath = pathArr[0]
+      for (let index = 1; index < pathArrLen - 1; index++) {
+        levelPath += '/' + pathArr[index]
+        this.updateFilemanagerTreeNodeExpandMapByPath({
+          path: levelPath,
+          expanded: true
+        })
+      }
+      levelPath += '/' + pathArr[pathArrLen - 1]
+      this.$refs.fileManagerTree.setCurrentKey(levelPath + '.md')
+    },
     renderContent(h, { node, data, store }) {
       // trick codes below
       // manipulated the node in <el-tree/>

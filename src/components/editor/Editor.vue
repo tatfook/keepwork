@@ -218,6 +218,7 @@ export default {
 }
 .manager-win {
   flex-basis: 440px;
+  flex-shrink: 0;
 }
 .manager-content-box {
   flex: 1;

@@ -69,6 +69,12 @@ export default {
 .style-cover {
   width: 100%;
   cursor: pointer;
+  display: block;
+  margin-bottom: 12px;
+  border: 2px solid transparent;
+}
+.style-cover:hover{
+    border: 2px solid #bcbcbc;
 }
 .mods-treeview {
   border-right: 2px solid #c0c4cc;
