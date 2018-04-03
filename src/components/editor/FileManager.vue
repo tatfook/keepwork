@@ -1,7 +1,6 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <h2>文件管理</h2>
-    <el-tree v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+    <el-tree ref='fileManagerTree' v-show="!loading" node-key="name" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
     </el-tree>
   </div>
 </template>
@@ -25,6 +24,20 @@ export default {
     this.getAllPersonalSite().then(() => {
       this.loading = false
     })
+    let nowPath = this.$route.path.replace(/^\//, '')
+    let pathArr = nowPath.split('/')
+    let pathArrLen = pathArr.length
+    let sitePath = pathArr[0] + pathArr[1]
+    this.getRepositoryTree({ sitePath, ignoreCache: true, recursive: true })
+    var levelPath = pathArr[0]
+    for (let index = 1; index < pathArrLen - 1; index++) {
+      levelPath += '/' + pathArr[index]
+      this.updateFilemanagerTreeNodeExpandMapByPath({
+        path: levelPath,
+        expanded: true
+      })
+    }
+    this.$refs.fileManagerTree.setCurrentKey(pathArr[pathArrLen-1]+'.md')
   },
   computed: {
     ...mapGetters({
