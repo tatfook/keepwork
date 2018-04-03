@@ -8,8 +8,8 @@ const MOD_CMD_END = '```'
 const blockHelper = {
   buildJson(block) {
     block.data = this.isMarkdownMod(block)
-      ? { md: { data: this.text(block) } }
-      : mdToJson(this.text(block))
+      ? { md: { data: block.md } }
+      : mdToJson(block.md)
   },
 
   buildKey(block) {
