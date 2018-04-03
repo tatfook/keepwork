@@ -14,7 +14,7 @@
       </el-row>
     </el-col>
     <div class="col-between"></div>
-    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="iconfont icon-pcduandiannao" title="电脑"></el-button>
@@ -33,8 +33,8 @@
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
     </el-col>
-    <div class="col-between editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="iconfont icon-ziyuan5" title="标题1"></el-button>
@@ -56,6 +56,15 @@
         </el-button-group>
       </el-row>
       <editor-markdown/>
+    </el-col>
+    <el-col v-if="isWelcomeShow" class="guid-col">
+      <div class="guid-content">
+        <h1>Welcome to Keepwork</h1>
+        <div>
+          <el-button type='primary'>创建新网站</el-button>
+          <el-button>创建新网页</el-button>
+        </div>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -108,9 +117,14 @@ export default {
   },
   computed: {
     ...mapGetters({
+      personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
-      showingCol: 'showingCol'
-    })
+      showingCol: 'showingCol',
+      activePageInfo: 'activePageInfo'
+    }),
+    isWelcomeShow() {
+      return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
+    }
   },
   watch: {
     'showingCol.isPreviewShow': {
@@ -262,7 +276,7 @@ export default {
 }
 .toolbar {
   background-color: #fff;
-  padding: 9px 15px;
+  padding: 9px 18px;
   margin-bottom: 10px;
   white-space: nowrap;
   overflow-x: auto;
@@ -284,13 +298,25 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-.iconfont{
-    padding: 0;
-    width: 50px;
-    height: 40px;
-    font-size: 27px;
+.iconfont {
+  padding: 0;
+  width: 50px;
+  height: 40px;
+  font-size: 27px;
 }
-.code-win .iconfont{
-    font-size: 16px;
+.code-win .iconfont {
+  font-size: 16px;
+}
+.guid-col {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #48a3ff;
+}
+.guid-col h1 {
+  margin: 0 0 36px 0;
+  font-size: 46px;
 }
 </style>

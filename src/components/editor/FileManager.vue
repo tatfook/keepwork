@@ -1,7 +1,20 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <el-tree ref='fileManagerTree' v-show="!loading" node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
-    </el-tree>
+    <div class="my-tree tree-item">
+      <h1>我创建的网站</h1>
+      <el-tree v-if="personalSiteList.length > 0" ref='fileManagerTree' v-show="!loading" node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+      </el-tree>
+      <div class="empty" v-if="personalSiteList.length <= 0">
+        <p class="info">还没有创建网站</p>
+        <el-button type='text'>现在创建</el-button>
+      </div>
+    </div>
+    <div class="joined-tree tree-item">
+      <h1>我参与的网站</h1>
+      <div class="empty">
+        <p class="info">获得他人网站的编辑权限后，将会在这里显示</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -41,6 +54,9 @@ export default {
     }),
     initUrlExpandSelect() {
       let fileManagerTree = this.$refs.fileManagerTree
+      if (!fileManagerTree) {
+        return
+      }
       let nowPath = this.$route.path.replace(/^\//, '')
       let pathArr = nowPath.split('/')
       let pathArrLen = pathArr.length
@@ -53,7 +69,7 @@ export default {
         })
       }
       levelPath += '/' + pathArr[pathArrLen - 1]
-      this.$refs.fileManagerTree.setCurrentKey(levelPath + '.md')
+      fileManagerTree.setCurrentKey(levelPath + '.md')
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -94,6 +110,15 @@ export default {
 
 <style lang='scss'>
 .file-manager {
+  height: 100%;
+  background-color: #ccd3da;
+
+  h1 {
+    font-size: 16px;
+    color: #333;
+    margin: 0 0 12px 0;
+    padding-left: 18px;
+  }
   a {
     text-decoration: none;
   }
@@ -152,6 +177,23 @@ export default {
   }
   .icon-gongyouwangzhan {
     color: #4c97d1;
+  }
+
+  .tree-item {
+    background-color: #fff;
+    padding: 16px 0;
+    margin-bottom: 8px;
+  }
+  .info {
+    font-size: 14px;
+    color: #c0c4cc;
+    margin: 0 0 10px 0;
+  }
+  .el-button--text {
+    padding: 0;
+  }
+  .empty {
+    padding-left: 35px;
   }
 }
 </style>
