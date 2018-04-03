@@ -10,5 +10,5 @@ RUN yarn build
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
-COPY --from=builder /build/dist .
+COPY --from=builder /code/dist .
 CMD ["nginx", "-g", "daemon off;"]
