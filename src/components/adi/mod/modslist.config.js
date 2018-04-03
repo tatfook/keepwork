@@ -29,6 +29,16 @@ var modsList = [
         id: '1-3',
         label: '图文轮播',
         mods: [ModImgLoop]
+      },
+      {
+        id: '1-4',
+        label: '图文叠加',
+        mods: [ModMixLayer]
+      },
+      {
+        id: '1-5',
+        label: '图文拼接',
+        mods: [ModMixPositon]
       }
     ]
   },
@@ -41,6 +51,11 @@ var modsList = [
         label: '图文轮播',
         mods: [ModImgLoop]
       }
+      // {
+      //   id: '2-2',
+      //   label: '绘图板',
+      //   mods: [ModBoard]
+      // }
     ]
   },
   {
@@ -73,33 +88,64 @@ var modsList = [
         id: '5-1',
         label: '标题',
         mods: [ModTitle, ModText]
+      },
+      {
+        id: '5-2',
+        label: '图文叠加',
+        mods: [ModMixLayer]
+      },
+      {
+        id: '5-3',
+        label: '图文拼接',
+        mods: [ModMixPositon]
+      },
+      {
+        id: '5-4',
+        label: 'Paracraft作品',
+        mods: [ModParacraft]
       }
     ]
   },
   {
     id: '6',
-    label: '特殊表现',
+    label: '作品',
     children: [
       {
         id: '6-1',
-        label: '图文轮播',
-        mods: [ModImgLoop]
+        label: 'Paracraft作品',
+        mods: [ModParacraft]
       }
     ]
   },
   {
     id: '7',
-    label: '设置',
+    label: '特殊表现',
     children: [
       {
         id: '7-1',
+        label: '图文轮播',
+        mods: [ModImgLoop]
+      }
+      // {
+      //   id: '7-2',
+      //   label: '绘图板',
+      //   mods: [ModBoard]
+      // }
+    ]
+  },
+  {
+    id: '8',
+    label: '设置',
+    children: [
+      {
+        id: '8-1',
         label: '调用QQ聊天',
         mods: [ModQQ]
       }
     ]
   },
   {
-    id: '8',
+    id: '9',
     label: '其他',
     mods: [
       ModHeader,

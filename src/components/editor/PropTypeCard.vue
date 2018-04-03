@@ -48,7 +48,7 @@ export default {
     }),
     changeActivePropty() {
       this.setActiveProperty({
-        mod: this.activeMod,
+        key: this.activeMod.key,
         property: this.cardKey
       })
     },

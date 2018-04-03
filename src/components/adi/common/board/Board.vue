@@ -250,7 +250,7 @@ export default {
     body.appendChild(boardScript)
     body.appendChild(graphEditorCss)
 
-    boardProptypes.click = this.showDialog
+    // boardProptypes.click = this.showDialog
   }
 }
 </script>

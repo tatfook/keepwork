@@ -72,8 +72,10 @@ export default {
 }
 .mods-treeview {
   border-right: 2px solid #c0c4cc;
-  width: auto;
-  max-width: 40%;
+  flex-basis: 135px;
+  max-width: 135px;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 .preview-box {
   padding: 0 5px;
@@ -83,8 +85,18 @@ export default {
 }
 </style>
 <style>
-.mods-treeview .el-tree-node__content {
-  padding-right: 15px;
+.mods-treeview .el-tree-node__content > .el-tree-node__expand-icon {
+  padding-left: 15px;
+}
+.mods-treeview .el-tree-node__content > .el-tree-node__expand-icon.expanded {
+  padding: 15px;
+  margin-right: -9px;
+}
+.mod.mods-treeview
+  .el-tree-node__content
+  > .el-tree-node__expand-icon.expanded {
+  padding: 6px;
+  padding-top: 15px;
 }
 .mods-treeview
   .el-tree--highlight-current

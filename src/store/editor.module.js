@@ -4,6 +4,8 @@ import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 import SimpleUndo from '@/lib/utils/simpleUndo'
 
+const UndoManager = new SimpleUndo()
+
 const initialState = () => {
   return {
     activePage: '',
@@ -28,13 +30,11 @@ const initialState = () => {
       isPreviewShow: true
     },
     filemanagerTreeNodeExpandMapByPath: {},
-    undoManager: new SimpleUndo()
+    undoManager: UndoManager
   }
 }
 
-const resetIgnoreKeys = [
-  'filemanagerTreeNodeExpandMapByPath'
-]
+const resetIgnoreKeys = ['filemanagerTreeNodeExpandMapByPath']
 
 const getters = {
   activePage: state => state.activePage,
@@ -50,11 +50,13 @@ const getters = {
   hasActiveProperty: state => !!state.activeProperty,
   activeComponentType: state => state.activeWinType,
   showingCol: state => state.showingCol,
-  filemanagerTreeNodeExpandMapByPath: state => state.filemanagerTreeNodeExpandMapByPath,
+  filemanagerTreeNodeExpandMapByPath: state =>
+    state.filemanagerTreeNodeExpandMapByPath,
   undoManager: state => state.undoManager
 }
 
 const actions = {
+  setCardProtype() {},
   async setActivePage(context, path) {
     let { getters, rootGetters, commit, dispatch } = context
 
@@ -66,7 +68,7 @@ const actions = {
     await dispatch('gitlab/readFile', { path }, { root: true })
     let { content } = rootGetters['gitlab/getFileByPath'](path)
 
-    let payload = { code: content, enableHistory: true }
+    let payload = { code: content, historyDisabled: true }
     content && dispatch('updateMarkDown', payload)
   },
   async saveActivePage({ getters, dispatch }) {
@@ -85,9 +87,9 @@ const actions = {
   // only update a particular mod
   updateMarkDownBlock({ commit }, payload) {
     commit('UPDATE_CODE', { code: payload.code })
-    commit('SET_ACTIVE_MOD', payload.mod)
+    commit('SET_ACTIVE_MOD', payload.key)
     commit('SET_ACTIVE_PROPERTY', null)
-    commit('REFRESH_MOD_ATTRIBUTES', payload.mod)
+    commit('REFRESH_MOD_ATTRIBUTES', payload.key)
   },
   addMod({ commit }, payload) {
     const modProperties = modFactory.generate(payload.modName)
@@ -105,13 +107,13 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY', null)
     commit('REFRESH_CODE')
   },
-  setActiveMod({ commit }, mod) {
-    commit('SET_ACTIVE_MOD', mod)
+  setActiveMod({ commit }, key) {
+    commit('SET_ACTIVE_MOD', key)
     commit('SET_ACTIVE_PROPERTY', null)
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
   setActiveProperty({ commit }, payload) {
-    commit('SET_ACTIVE_MOD', payload.mod)
+    commit('SET_ACTIVE_MOD', payload.key)
     commit('SET_ACTIVE_PROPERTY', payload.property)
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
@@ -120,16 +122,16 @@ const actions = {
     commit('SET_ACTIVE_PROPERTY_DATA', newData)
     commit('REFRESH_CODE')
   },
-  deleteMod({ commit, state }, mod) {
-    commit('DELETE_MOD', mod)
-    if (mod.key === state.activeMod.key) {
+  deleteMod({ commit, state }, key) {
+    commit('DELETE_MOD', key)
+    if (key === state.activeMod.key) {
       commit('SET_ACTIVE_MOD', null)
       commit('SET_ACTIVE_PROPERTY', null)
     }
     commit('REFRESH_CODE')
   },
   updateActiveModStyle({ commit }, styleID) {
-    commit('UPDATE_ACTIVE_MOD_STYLE', styleID)
+    commit('UPDATE_ACTIVE_MOD_ATTRIBUTES', { styleID })
     commit('REFRESH_CODE')
   },
   updateActiveModAttribute({ commit }, payload) {
@@ -164,6 +166,7 @@ const actions = {
 
 const mutations = {
   RESET_STATE(state) {
+    UndoManager.clear()
     const newState = initialState()
     for (let key in newState) {
       let resettable = !resetIgnoreKeys.includes(key)
@@ -173,40 +176,43 @@ const mutations = {
   SET_ACTIVE_PAGE(state, path) {
     Vue.set(state, 'activePage', path)
   },
-  UPDATE_CODE(state, { code, enableHistory }) {
+  UPDATE_CODE(state, { code, historyDisabled }) {
     Vue.set(state, 'code', code)
-    if (!enableHistory) state.undoManager.save(code)
+    if (!historyDisabled) UndoManager.save(code)
   },
   REFRESH_CODE(state) {
     const code = Parser.buildMarkdown(state.modList)
     Vue.set(state, 'code', code)
-    state.undoManager.save(code)
+    UndoManager.save(code)
   },
   ADD_MOD(state, { modProperties, key, cmd }) {
     return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
   },
-  DELETE_MOD(state, mod) {
-    return Parser.deleteBlock(state.modList, mod)
+  DELETE_MOD(state, key) {
+    return Parser.deleteBlock(state.modList, key)
   },
-  SET_ACTIVE_MOD(state, mod) {
-    if (state.activeMod === mod) return
-    Vue.set(state, 'activeMod', mod)
+  SET_ACTIVE_MOD(state, key) {
+    if (state.activeMod && state.activeMod.key === key) return
+    const index = state.modList.map(el => el.key).indexOf(key)
+    if (index !== -1) Vue.set(state, 'activeMod', state.modList[index])
   },
   SET_ACTIVE_PROPERTY(state, property) {
     if (!state.activeMod) return
     Vue.set(state, 'activeProperty', property)
   },
-  REFRESH_MOD_ATTRIBUTES(state, mod) {
-    Parser.updateBlock(state.modList, mod, state.code)
+  REFRESH_MOD_ATTRIBUTES(state, key) {
+    Parser.updateBlock(state.modList, key, state.code)
   },
   SET_ACTIVE_PROPERTY_DATA(state, data) {
-    Parser.updateBlockAttribute(state.activeMod, state.activeProperty, data)
+    Parser.updateBlockAttribute(
+      state.modList,
+      state.activeMod.key,
+      state.activeProperty,
+      data
+    )
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
-    Parser.updateBlockAttribute(state.activeMod, key, value)
-  },
-  UPDATE_ACTIVE_MOD_STYLE(state, styleID) {
-    Parser.updateBlockAttribute(state.activeMod, 'styleID', styleID)
+    Parser.updateBlockAttribute(state.modList, state.activeMod.key, key, value)
   },
   UPDATE_MODS(state, mods) {
     Parser.updateBlockList(state.modList, mods)
@@ -247,7 +253,7 @@ const mutations = {
       showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
     )
   },
-  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED(state, {path, expanded}) {
+  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED(state, { path, expanded }) {
     Vue.set(state, 'filemanagerTreeNodeExpandMapByPath', {
       ...state.filemanagerTreeNodeExpandMapByPath,
       [path]: expanded

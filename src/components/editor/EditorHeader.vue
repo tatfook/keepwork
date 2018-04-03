@@ -161,7 +161,7 @@ export default {
       this.undoManager.undo(code => {
         this.$store.dispatch('updateMarkDown', {
           code: code || '',
-          enableHistory: true
+          historyDisabled: true
         })
       })
     },
@@ -169,7 +169,7 @@ export default {
       this.undoManager.redo(code => {
         this.$store.dispatch('updateMarkDown', {
           code: code || '',
-          enableHistory: true
+          historyDisabled: true
         })
       })
     }

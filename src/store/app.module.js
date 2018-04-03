@@ -23,20 +23,17 @@ const getters = {
 
 const actions = {
   async setActivePage(context, path) {
-    if (context.getters.activePage === path) return
+    let { getters, rootGetters, commit, dispatch } = context
 
-    context.commit('SET_ACTIVE_PAGE', path)
+    if (getters.activePage === path) return
+    if (path === '/') return
+    commit('SET_ACTIVE_PAGE', path)
 
-    if (path === '/') {
-      return Promise.resolve()
-    }
+    await dispatch('gitlab/readFile', { path }, { root: true })
+    let { content } = rootGetters['gitlab/getFileByPath'](path)
 
-    await context.dispatch('gitlab/getFileContent', { path }, { root: true })
-
-    let { content } = context.rootGetters['gitlab/files'][path]
-    if (content) {
-      context.dispatch('updateMarkDown', { code: content })
-    }
+    let payload = { code: content, historyDisabled: true }
+    content && dispatch('updateMarkDown', payload)
   },
   async saveActivePage({ getters, dispatch }) {
     let { code: content, activePage: path } = getters

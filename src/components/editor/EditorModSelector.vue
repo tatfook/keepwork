@@ -45,7 +45,7 @@ export default {
       this.$emit('onAddMod', this.mod.key)
     },
     setActive() {
-      this.$store.dispatch('setActiveMod', this.mod)
+      this.$store.dispatch('setActiveMod', this.mod.key)
     }
   }
 }
@@ -68,7 +68,8 @@ export default {
   border: none;
   position: absolute;
   left: 50%;
-  z-index: 1;
+  margin-left: -19px;
+  z-index: 11111;
 }
 .add-mod-btn + .add-mod-btn {
   margin-left: 0;
