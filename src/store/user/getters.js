@@ -14,7 +14,7 @@ const getters = {
     if (profileUserToken !== token) return {}
     return state.profile
   },
-  isLogined: (state, {profile}) => !_.isEmpty(profile),
+  isLogined: (state, {profile}) => !_.isEmpty(_.omit(profile, ['token'])),
   username: (state, { profile: { username } }) => username,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>

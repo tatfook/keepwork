@@ -9,13 +9,11 @@ import EditorPage from './EditorPage'
 import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
-import JsonEditor from 'vue-json-editor-block-view'
 import { broadcast } from 'vuex-iframe-sync'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
-Vue.use(JsonEditor)
 
 const store = new Vuex.Store({
   modules: {
