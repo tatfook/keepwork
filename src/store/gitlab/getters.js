@@ -37,14 +37,18 @@ const getProjectIdByPath = (rootGetters, path) => {
 }
 
 const getFileByPath = (rootGetters, path) => {
+  // todo, read file form cache, clear cache while save
   let fullPath = getFileFullPathByPath(path)
-  let content = rootGetters['gitlab/files'][fullPath]
-  return content
+  let file = rootGetters['gitlab/files'][fullPath]
+  let unsavedFile = rootGetters['gitlab/unsavedFiles'][fullPath]
+
+  return unsavedFile || file
 }
 
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   files: state => state.files,
+  unsavedFiles: state => state.unsavedFiles,
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']
