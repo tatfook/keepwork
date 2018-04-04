@@ -1,18 +1,18 @@
 <template>
-    <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isModShow}">
-        <el-row class="prop-header" type='flex' justify='space-between'>
-            <el-col>
-                {{cardKey}}
-            </el-col>
-            <el-col class="card-info">
-                <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
-                </el-switch>
-            </el-col>
-        </el-row>
-        <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-            <component :is='proptypes[propItem]' :prop='prop' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData' @onChangeValue='changeActivePropty'></component>
-        </el-row>
-    </div>
+  <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isModShow}">
+    <el-row class="prop-header" type='flex' justify='space-between'>
+      <el-col>
+        {{cardKey}}
+      </el-col>
+      <el-col class="card-info">
+        <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
+        </el-switch>
+      </el-col>
+    </el-row>
+    <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
+      <component :is='proptypes[propItem]' :prop='prop' :editingKey='index' :originValue='cardValue[index]' @onPropertyChange='changeProptyData' @onChangeValue='changeActivePropty'></component>
+    </el-row>
+  </div>
 </template>
 <script>
 import proptypes from '@/components/proptypes'
