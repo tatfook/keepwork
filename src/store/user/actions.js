@@ -25,12 +25,24 @@ const actions = {
     dispatch this action first, in any action which depends on username.
   */
   async getProfile(context) {
-    let { commit, getters: { isLogined, authRequestConfig, token } } = context
+    let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
     if (isLogined) return
 
     let profile = await keepwork.user.getProfile(null, authRequestConfig)
-      .catch(e => {
+      .catch(async e => {
         alert('尚未登陆，请登陆后访问！')
+
+        // login for localhost test
+        if (location.hostname === 'localhost') {
+          let payload = {
+            username: prompt('username: '),
+            password: prompt('password: ')
+          }
+          await dispatch('login', payload)
+          await dispatch('getProfile')
+          return
+        }
+
         location.href = '/wiki/login'
       })
 

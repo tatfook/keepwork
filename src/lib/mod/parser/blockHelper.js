@@ -92,7 +92,7 @@ const blockHelper = {
   },
 
   mdText(block) {
-    return this.block.md.join('\n')
+    return block.md.join('\n')
   }
 }
 
