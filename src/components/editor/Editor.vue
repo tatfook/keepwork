@@ -3,9 +3,9 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="iconfont icon-ziyuan6" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -17,8 +17,8 @@
     <el-col id="previewWin" v-if="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-pcduandiannao" title="电脑"></el-button>
-          <el-button class="iconfont icon-shouji" title="手机"></el-button>
+          <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
+          <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
         </el-button-group>
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
@@ -26,7 +26,7 @@
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="iconfont icon-ziyuan18" title="新窗口打开" @click='showPreview'></el-button>
+          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
@@ -37,21 +37,21 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan5" title="标题1"></el-button>
-          <el-button class="iconfont icon-ziyuan4" title="标题2"></el-button>
-          <el-button class="iconfont icon-ziyuan2" title="标题3"></el-button>
-          <el-button class="iconfont icon-ziyuan3" title="加粗"></el-button>
-          <el-button class="iconfont icon-ziyuan20" title="斜体"></el-button>
+          <el-button class="iconfont icon-H" title="标题1"></el-button>
+          <el-button class="iconfont icon-h1" title="标题2"></el-button>
+          <el-button class="iconfont icon-zihyuan" title="标题3"></el-button>
+          <el-button class="iconfont icon-jiacu" title="加粗"></el-button>
+          <el-button class="iconfont icon-qingxie" title="斜体"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan1" title="无序列表"></el-button>
-          <el-button class="iconfont icon-ziyuan" title="有序列表"></el-button>
-          <el-button class="iconfont icon-ziyuan21" title="引用内容"></el-button>
-          <el-button class="iconfont icon-ziyuan22" title="表格"></el-button>
-          <el-button class="iconfont icon-ziyuan24" title="水平分割线"></el-button>
+          <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
+          <el-button class="iconfont icon-xulie" title="有序列表"></el-button>
+          <el-button class="iconfont icon-yinyong" title="引用内容"></el-button>
+          <el-button class="iconfont icon-biaoge" title="表格"></el-button>
+          <el-button class="iconfont icon-ziyuanfengexian" title="水平分割线"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan23" title="代码"></el-button>
+          <el-button class="iconfont icon-daima" title="代码"></el-button>
           <el-button class="iconfont icon-share_link" title="链接"></el-button>
         </el-button-group>
       </el-row>
@@ -276,7 +276,7 @@ export default {
 }
 .toolbar {
   background-color: #fff;
-  padding: 9px 18px;
+  padding: 9px 20px;
   margin-bottom: 10px;
   white-space: nowrap;
   overflow-x: auto;

@@ -1,19 +1,27 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <div class="my-tree tree-item">
-      <h1>我创建的网站</h1>
-      <el-tree v-if="personalSiteList.length > 0" ref='fileManagerTree' v-show="!loading" node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
-      </el-tree>
-      <div class="empty" v-if="personalSiteList.length <= 0">
-        <p class="info">还没有创建网站</p>
-        <el-button type='text'>现在创建</el-button>
-      </div>
+    <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
+      <h1 class="toggle-bar" @click='toggleContent("isMyShow")'>
+        <i class="el-icon-arrow-right"></i> 我创建的网站
+      </h1>
+      <el-collapse-transition>
+        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        </el-tree>
+        <div class="empty" v-if="personalSiteList.length <= 0">
+          <p class="info">还没有创建网站</p>
+          <el-button type='text'>现在创建</el-button>
+        </div>
+      </el-collapse-transition>
     </div>
-    <div class="joined-tree tree-item">
-      <h1>我参与的网站</h1>
-      <div class="empty">
-        <p class="info">获得他人网站的编辑权限后，将会在这里显示</p>
-      </div>
+    <div class="joined-tree tree-item" :class="{'is-active': trees.isJoinedShow}">
+      <h1 class="toggle-bar" @click='toggleContent("isJoinedShow")'>
+        <i class="el-icon-arrow-right"></i> 我参与的网站
+      </h1>
+      <el-collapse-transition>
+        <div class="empty" v-show="trees.isJoinedShow">
+          <p class="info">获得他人网站的编辑权限后，将会在这里显示</p>
+        </div>
+      </el-collapse-transition>
     </div>
   </div>
 </template>
@@ -30,6 +38,10 @@ export default {
       filesTreeProps: {
         children: 'children',
         label: 'name'
+      },
+      trees: {
+        isMyShow: true,
+        isJoinedShow: false
       }
     }
   },
@@ -103,6 +115,9 @@ export default {
       // try open file
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
+    },
+    toggleContent(type) {
+      this.trees[type] = !this.trees[type]
     }
   }
 }
@@ -116,8 +131,25 @@ export default {
   h1 {
     font-size: 16px;
     color: #333;
-    margin: 0 0 12px 0;
+    margin: 0;
     padding-left: 18px;
+    position: relative;
+  }
+  .toggle-bar {
+    cursor: pointer;
+  }
+  .toggle-bar .el-icon-arrow-right {
+    position: absolute;
+    left: 4px;
+    top: 6px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  .is-active h1 {
+    margin: 0 0 12px 0;
+  }
+  .is-active .el-icon-arrow-right {
+    transform: rotate(90deg);
   }
   a {
     text-decoration: none;
@@ -137,6 +169,7 @@ export default {
   .el-tree-node__content {
     height: 32px;
     line-height: 32px;
+    padding-left: 15px;
   }
   .el-tree-node__expand-icon {
     font-weight: bold;
@@ -172,7 +205,7 @@ export default {
     font-weight: bold;
     color: #000;
   }
-  .icon-ziyuan17 {
+  .icon-siyouwangzhan {
     color: #f48622;
   }
   .icon-gongyouwangzhan {
@@ -181,8 +214,11 @@ export default {
 
   .tree-item {
     background-color: #fff;
-    padding: 16px 0;
+    padding: 8px 0 9px 20px;
     margin-bottom: 8px;
+  }
+  .tree-item.is-active {
+    padding: 6px 0 6px 20px;
   }
   .info {
     font-size: 14px;

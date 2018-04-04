@@ -2,16 +2,16 @@
   <div class="el-tree-node__label">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
-      <i class="iconfont icon-ziyuan9" v-if="node.isLeaf"></i>
-      <i class="iconfont icon-ziyuan17" v-else-if="data.visibility === 'private'"></i>
+      <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
+      <i class="iconfont icon-siyouwangzhan" v-else-if="data.visibility === 'private'"></i>
       <i class="iconfont icon-gongyouwangzhan" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
-      <el-button v-if="isAddable" class="iconfont icon-ziyuan13" size="mini" type="text" @click.stop="addFile" title='新建页面'>
+      <el-button v-if="isAddable" class="iconfont icon-tianjiawenjian" size="mini" type="text" @click.stop="addFile" title='新建页面'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-ziyuan11" size="mini" type="text" @click.stop="addFolder" title='新建文件夹'>
+      <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" title='新建文件夹'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-bianjiqi-shanchu" size="mini" type="text" @click.stop="removeFile">
+      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile">
       </el-button>
       <el-button v-if="isSettable" size="mini" type="text" @click.stop="addFolder" title='设置'>
         <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
