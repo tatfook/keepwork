@@ -1,4 +1,3 @@
 export default {
-  name: 'board',
-  test: 'input'
+  data: 'board'
 }
