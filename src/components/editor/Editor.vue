@@ -52,7 +52,7 @@
         </el-button-group>
         <el-button-group>
           <el-button class="iconfont icon-daima" title="代码"></el-button>
-          <el-button class="iconfont icon-share_link" title="链接"></el-button>
+          <el-button class="iconfont icon-fenxianglianjie" title="链接"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown/>
