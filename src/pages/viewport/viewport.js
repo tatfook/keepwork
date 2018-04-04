@@ -5,8 +5,7 @@ import Vuex from 'vuex'
 import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import Viewport from './Viewport.vue'
-import createPersistedState from 'vuex-persistedstate'
-import { editorModule, userModule, gitlabModule } from '@/store'
+import { editorModule, userModule } from '@/store'
 import ElementUI from 'element-ui'
 import { transfer } from 'vuex-iframe-sync'
 
@@ -16,14 +15,10 @@ Vue.use(ElementUI)
 
 const store = new Vuex.Store({
   modules: {
-    user: userModule,
-    gitlab: gitlabModule,
-    editor: editorModule
+    editor: editorModule,
+    user: userModule
   },
   plugins: [
-    createPersistedState({
-      paths: ['user', 'gitlab']
-    }),
     transfer()
   ]
 })
