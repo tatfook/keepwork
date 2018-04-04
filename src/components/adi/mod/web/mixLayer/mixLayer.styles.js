@@ -19,7 +19,8 @@ export default [
         'margin-top': '-550px',
         'padding-right': '15%',
         'padding-left': '15%',
-        width: '100%'
+        width: '100%',
+        'z-index': 999
       }
     },
     props: {
@@ -32,11 +33,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -78,11 +79,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -124,11 +125,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -169,11 +170,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -215,11 +216,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -261,11 +262,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -306,11 +307,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -352,11 +353,11 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
         }
@@ -398,13 +399,56 @@ export default [
     },
     options: {
       theme: {
-        businessName: {
+        title: {
           fontSize: 'font_5',
           fontColor: 'color_7'
         },
-        tagline: {
+        subtitle: {
           fontSize: 'font_2',
           fontColor: 'color_7'
+        }
+      },
+      config: {}
+    },
+    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix9.png'
+  },
+  {
+    data: {
+      root: {
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      },
+      media: {
+        width: '100%',
+        height: '689px'
+      },
+      colGroup: {
+        width: '100%'
+      },
+      colCouple: {
+        width: '100%',
+        'margin-top': '50px',
+        'text-align': 'center'
+      }
+    },
+    props: {
+      colGroup: { span: 10 },
+      colCouple: { span: 10 }
+    },
+    theme: {
+      root: ['font_0', 'color_8'],
+      paragraph: ['color_8']
+    },
+    options: {
+      theme: {
+        title: {
+          fontSize: 'font_5',
+          fontColor: 'color_8'
+        },
+        subtitle: {
+          fontSize: 'font_2',
+          fontColor: 'color_8'
         }
       },
       config: {}
