@@ -1,13 +1,14 @@
-From node as builder
+From xuntian/node-yarn as builder
 MAINTAINER xuntian "li.zq@foxmail.com"
-COPY ./ /build/
-WORKDIR /build
-RUN npm --registry https://registry.npm.taobao.org install
+COPY ./ /code/
+WORKDIR /code
+# RUN npm --registry https://registry.npm.taobao.org install
 # RUN npm --registry https://registry.npm.taobao.org update
-RUN npm run build
-
+# RUN npm run build
+RUN yarn install 
+RUN yarn build
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
-COPY --from=builder /build/dist .
+COPY --from=builder /code/dist .
 CMD ["nginx", "-g", "daemon off;"]

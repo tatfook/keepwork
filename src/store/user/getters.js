@@ -8,13 +8,19 @@ import {
 
 const getters = {
   info: state => state.info,
-  token: state => _.get(state, ['info', 'token'], _.get(Cookies.get('token'))),
-  username: state => _.get(state, 'profile.username'),
+  token: state => _.get(state, ['info', 'token'], Cookies.get('token')),
+  profile: (state, {token}) => {
+    let { token: profileUserToken } = state.profile
+    if (profileUserToken !== token) return {}
+    return state.profile
+  },
+  isLogined: (state, {profile}) => !_.isEmpty(profile),
+  username: (state, { profile: { username } }) => username,
+  vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
-  defaultSiteDataSource: state => _.get(state, 'profile.defaultSiteDataSource'),
-
+  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) => defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
     url: _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
@@ -55,10 +61,23 @@ const getters = {
     return personalSiteList
   },
   personalSitePathMap: (state, {personalSiteList}) => _.keyBy(personalSiteList, ({username, name}) => `${username}/${name}`),
-
   getPersonalSiteInfoByPath: (state, {personalSitePathMap}) => path => {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
+  },
+
+  siteDetailInfo: state => state.siteDetailInfo,
+  getSiteDetailInfoByPath: (state, {siteDetailInfo}) => path => {
+    let [username, name] = path.split('/').filter(x => x)
+    return siteDetailInfo[`${username}/${name}`]
+  },
+  getSiteDetailInfoDataSourceByPath: (state, {getSiteDetailInfoByPath}) => path => {
+    let [username, sitename] = path.split('/').filter(x => x)
+    let {userinfo: {dataSource: dataSourceList = []}} = getSiteDetailInfoByPath(path)
+    let targetDataSource = dataSourceList.filter(dataSource => {
+      return dataSource.username === username && dataSource.sitename === sitename
+    })[0]
+    return targetDataSource
   },
 
   comments: state => state.comments,
@@ -66,12 +85,7 @@ const getters = {
     let fullPath = getFileFullPathByPath(path)
     return comments[fullPath]
   },
-  activePageCommentList: (
-    state,
-    { getCommentListByPath },
-    rootState,
-    rootGetters
-  ) => {
+  activePageCommentList: (state, {getCommentListByPath}, rootState, rootGetters) => {
     let activePagePath = rootGetters['activePage']
     return getCommentListByPath(activePagePath)
   }

@@ -38,6 +38,12 @@ const resetIgnoreKeys = ['filemanagerTreeNodeExpandMapByPath']
 
 const getters = {
   activePage: state => state.activePage,
+  activePageInfo: (state, { activePage }) => {
+    let [username, sitename] = activePage.split('/').filter(x => x)
+    return { username, sitename }
+  },
+  activePageUsername: (state, { activePageInfo: { username } }) => username,
+
   code: state => state.code,
   themeConf: state => state.theme,
   modList: state => state.modList,
@@ -131,7 +137,10 @@ const actions = {
     commit('REFRESH_CODE')
   },
   updateActiveModStyle({ commit }, styleID) {
-    commit('UPDATE_ACTIVE_MOD_ATTRIBUTES', { styleID })
+    commit('UPDATE_ACTIVE_MOD_ATTRIBUTES', {
+      key: 'styleID',
+      value: styleID
+    })
     commit('REFRESH_CODE')
   },
   updateActiveModAttribute({ commit }, payload) {

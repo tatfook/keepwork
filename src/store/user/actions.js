@@ -9,7 +9,8 @@ const {
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
-  GET_COMMENTS_BY_PAGE_URL_SUCCESS
+  GET_COMMENTS_BY_PAGE_URL_SUCCESS,
+  GET_SITE_DETAIL_INFO_SUCCESS
 } = props
 
 const actions = {
@@ -24,20 +25,20 @@ const actions = {
     dispatch this action first, in any action which depends on username.
   */
   async getProfile(context) {
-    let { commit, getters: {username, authRequestConfig} } = context
-    if (username) return Promise.resolve()
+    let { commit, getters: { isLogined, authRequestConfig, token } } = context
+    if (isLogined) return
 
     let profile = await keepwork.user.getProfile(null, authRequestConfig)
-    // .catch(e => {
-    //   alert('尚未登陆，请登陆后访问！')
-    //   location.href = '/wiki/login'
-    // })
+      .catch(e => {
+        alert('尚未登陆，请登陆后访问！')
+        location.href = '/wiki/login'
+      })
 
-    commit(GET_PROFILE_SUCCESS, profile)
+    commit(GET_PROFILE_SUCCESS, {...profile, token})
   },
   async getAllPersonalSite({ dispatch, getters }) {
     let { personalSiteList } = getters
-    if (personalSiteList.length) return Promise.resolve()
+    if (personalSiteList.length) return
 
     await dispatch('getProfile')
 
@@ -63,6 +64,15 @@ const actions = {
     let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
 
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
+  },
+  async getWebsiteDetailInfoByPath(context, { path }) {
+    let { commit, getters: { getSiteDetailInfoByPath } } = context
+    if (getSiteDetailInfoByPath(path)) return
+
+    let [username, sitename] = path.split('/').filter(x => x)
+    let detailInfo = await keepwork.website.getDetailInfo({username, sitename})
+
+    commit(GET_SITE_DETAIL_INFO_SUCCESS, {username, sitename, detailInfo})
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context
