@@ -1,5 +1,5 @@
 export default [
-  // style 1 上图下文
+  // style 0 上图下文
   {
     data: {
       root: {},
@@ -64,7 +64,7 @@ export default [
     cover: './static/adi/qq/cover/qqCoverOne.png'
   },
 
-  // style 2 左图右文
+  // style 1 左图右文
   {
     data: {
       root: {},
