@@ -58,7 +58,9 @@ const getters = {
   showingCol: state => state.showingCol,
   filemanagerTreeNodeExpandMapByPath: state =>
     state.filemanagerTreeNodeExpandMapByPath,
-  undoManager: state => state.undoManager
+  undoManager: state => state.undoManager,
+  canUndo: (state, { undoManager }) => undoManager.canUndo(),
+  canRedo: (state, { undoManager }) => undoManager.canRedo()
 }
 
 const actions = {
@@ -69,11 +71,12 @@ const actions = {
     if (getters.activePage === path) return
     commit('RESET_STATE')
     commit('SET_ACTIVE_PAGE', path)
-    if (path === '/') return
 
-    await dispatch('gitlab/readFile', { path }, { root: true })
-    let { content } = rootGetters['gitlab/getFileByPath'](path)
+    if (path !== '/') {
+      await dispatch('gitlab/readFile', { path }, { root: true })
+    }
 
+    let { content = '' } = rootGetters['gitlab/getFileByPath'](path)
     let payload = { code: content, historyDisabled: true }
     content && dispatch('updateMarkDown', payload)
   },
@@ -82,20 +85,24 @@ const actions = {
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
   },
   // rebuild all mods, will takes a little bit more time
-  updateMarkDown({ commit }, payload) {
+  updateMarkDown({ commit, dispatch }, payload) {
     if (payload.code === undefined) payload = { code: payload }
-    let blockList = Parser.buildBlockList(payload.code)
     commit('SET_ACTIVE_MOD', null)
     commit('SET_ACTIVE_PROPERTY', null)
-    commit('UPDATE_MODS', blockList)
+    commit('UPDATE_MODS', payload.code)
     commit('UPDATE_CODE', payload)
   },
   // only update a particular mod
-  updateMarkDownBlock({ commit }, payload) {
-    commit('UPDATE_CODE', { code: payload.code })
+  updateMarkDownBlock({ commit, dispatch }, payload) {
+    dispatch('updateCode', { code: payload.code })
     commit('SET_ACTIVE_MOD', payload.key)
     commit('SET_ACTIVE_PROPERTY', null)
     commit('REFRESH_MOD_ATTRIBUTES', payload.key)
+  },
+  updateCode(context, { code }) {
+    let { commit, dispatch, getters: { activePage: path } } = context
+    commit('UPDATE_CODE', { code })
+    dispatch('gitlab/cacheUnsavedFile', { content: code, path })
   },
   addMod({ commit }, payload) {
     const modProperties = modFactory.generate(payload.modName)
@@ -124,8 +131,7 @@ const actions = {
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
   setActivePropertyData({ commit, getters: { activePropertyData } }, { data }) {
-    let newData = _.merge({}, activePropertyData, data)
-    commit('SET_ACTIVE_PROPERTY_DATA', newData)
+    commit('SET_ACTIVE_PROPERTY_DATA', {activePropertyData, data})
     commit('REFRESH_CODE')
   },
   deleteMod({ commit, state }, key) {
@@ -170,6 +176,16 @@ const actions = {
   },
   updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
     commit('UPDATE_FILEMANAGER_TREE_NODE_EXPANDED', payload)
+  },
+  undo({ dispatch, getters: { undoManager } }) {
+    undoManager.undo((code = '') =>
+      dispatch('updateMarkDown', { code, historyDisabled: true })
+    )
+  },
+  redo({ dispatch, getters: { undoManager } }) {
+    undoManager.redo((code = '') =>
+      dispatch('updateMarkDown', { code, historyDisabled: true })
+    )
   }
 }
 
@@ -212,19 +228,21 @@ const mutations = {
   REFRESH_MOD_ATTRIBUTES(state, key) {
     Parser.updateBlock(state.modList, key, state.code)
   },
-  SET_ACTIVE_PROPERTY_DATA(state, data) {
+  SET_ACTIVE_PROPERTY_DATA(state, {activePropertyData, data}) {
+    let newData = _.merge({}, activePropertyData, data)
     Parser.updateBlockAttribute(
       state.modList,
       state.activeMod.key,
       state.activeProperty,
-      data
+      newData
     )
   },
   UPDATE_ACTIVE_MOD_ATTRIBUTES(state, { key, value }) {
     Parser.updateBlockAttribute(state.modList, state.activeMod.key, key, value)
   },
-  UPDATE_MODS(state, mods) {
-    Parser.updateBlockList(state.modList, mods)
+  UPDATE_MODS(state, code) {
+    let blockList = Parser.buildBlockList(code)
+    Parser.updateBlockList(state.modList, blockList)
   },
   UPDATE_THEME_NAME(state, themeName) {
     Vue.set(state.theme, 'name', themeName)

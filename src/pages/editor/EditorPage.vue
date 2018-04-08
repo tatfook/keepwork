@@ -40,7 +40,8 @@ export default {
     }),
     async updateActivePage() {
       this.loading = true
-      await this.setActivePage(this.$router.currentRoute.path).catch(() => {
+      await this.setActivePage(this.$router.currentRoute.path).catch(e => {
+        console.error(e)
         this.loading = false
       })
       this.loading = false

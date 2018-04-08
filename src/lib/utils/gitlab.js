@@ -66,16 +66,22 @@ export const suffixFileExtension = (() => {
   getFileFullPathByPath('/username/sitename/pagename') => 'kaitlyn/kaitlyn/pagename.md'
   getFileFullPathByPath('/username/sitename/pagename.md') => 'kaitlyn/kaitlyn/pagename.md'
 */
-export const getFileFullPathByPath = path => {
-  let [username, name, ...pagenames] = path.split('/').filter(x => x)
-  let isSiteRootPath = !pagenames.length
+export const getFileFullPathByPath = (() => {
+  let cache = {}
+  return path => {
+    let cacheKey = path
+    if (!cache[cacheKey]) {
+      let [username, name, ...pagenames] = path.split('/').filter(x => x)
+      let isSiteRootPath = !pagenames.length
 
-  let fullPathNames = isSiteRootPath ? [username, name, 'index'] : [username, name, ...pagenames]
-  let fullPath = fullPathNames.join('/')
-  fullPath = suffixFileExtension(fullPath, 'md')
-
-  return fullPath
-}
+      let fullPathNames = isSiteRootPath ? [username, name, 'index'] : [username, name, ...pagenames]
+      let fullPath = fullPathNames.join('/')
+      fullPath = suffixFileExtension(fullPath, 'md')
+      cache[cacheKey] = fullPath
+    }
+    return cache[cacheKey]
+  }
+})()
 
 export default {
   EMPTY_GIT_FOLDER_KEEPER,

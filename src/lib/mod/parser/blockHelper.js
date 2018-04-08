@@ -8,8 +8,8 @@ const MOD_CMD_END = '```'
 const blockHelper = {
   buildJson(block) {
     block.data = this.isMarkdownMod(block)
-      ? { md: { data: block.md } }
-      : mdToJson(block.md)
+      ? { md: { data: this.mdText(block) } }
+      : mdToJson(this.mdText(block))
   },
 
   buildKey(block) {
@@ -89,6 +89,10 @@ const blockHelper = {
 
   text(block) {
     return this.lines(block).join('\n')
+  },
+
+  mdText(block) {
+    return block.md.join('\n')
   }
 }
 

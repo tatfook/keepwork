@@ -12,7 +12,9 @@ const {
   SAVE_FILE_CONTENT_SUCCESS,
   CREATE_FILE_CONTENT_SUCCESS,
   GET_REPOSITORY_TREE_SUCCESS,
-  REMOVE_FILE_SUCCESS
+  REMOVE_FILE_SUCCESS,
+  CACHE_UNSAVED_FILE,
+  CLEAR_UNSAVED_FILE
 } = props
 
 /*doc
@@ -93,23 +95,12 @@ const actions = {
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
   async saveFile(context, { path: inputPath, content }) {
-    let { commit } = context
-    let {
-      gitlab,
-      projectId,
-      branch,
-      path,
-      options
-    } = await getGitlabFileParams(context, { path: inputPath, content })
-
-    await gitlab.projects.repository.files.edit(
-      projectId,
-      path,
-      branch,
-      options
-    )
+    let { commit, dispatch } = context
+    let { gitlab, projectId, branch, path, options } = await getGitlabFileParams(context, { path: inputPath, content })
+    await gitlab.projects.repository.files.edit(projectId, path, branch, options)
     let payload = { path, branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
+    dispatch('clearUnsavedFile', { path: inputPath })
   },
   async createFile(context, { path, content = '\n' }) {
     let { commit, dispatch } = context
@@ -164,6 +155,19 @@ const actions = {
       path: `${username}/${name}`,
       ignoreCache: true
     })
+  },
+  cacheUnsavedFile({ commit, getters: { getFileByPath } }, { path, content }) {
+    let { content: currentContent } = getFileByPath(path)
+    if (content === currentContent) return
+
+    let fullPath = getFileFullPathByPath(path)
+    let timestamp = Date.now()
+    let payload = {path: fullPath, file: {content, timestamp}}
+    commit(CACHE_UNSAVED_FILE, payload)
+  },
+  clearUnsavedFile({ commit }, { path }) {
+    let fullPath = getFileFullPathByPath(path)
+    commit(CLEAR_UNSAVED_FILE, { path: fullPath })
   }
 }
 
