@@ -1,5 +1,30 @@
 <template>
   <div class="file-manager" v-loading="loading">
+    <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
+      <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
+        <i class="el-icon-arrow-right"></i> 已打开
+      </h1>
+      <el-collapse-transition>
+        <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
+          <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
+            <span class="node-icon">
+              <i class="iconfont icon-dakaidewenjian" :class="{'is-modified': data.isModified}"></i>
+            </span>
+            <span class=''>{{ node.label }}</span>
+            <span class="file-manager-buttons-container">
+              <el-button class="iconfont icon-baocun" size="mini" type="text" title='保存'>
+              </el-button>
+              <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新'>
+              </el-button>
+              <el-button class="iconfont icon-guanxi" size="mini" type="text" title='关闭'>
+              </el-button>
+              <el-button class="iconfont icon-shanchu" size="mini" type="text" title='删除'>
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </el-collapse-transition>
+    </div>
     <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
       <h1 class="toggle-bar" @click='toggleContent("isMyShow")'>
         <i class="el-icon-arrow-right"></i> 我创建的网站
@@ -40,8 +65,13 @@ export default {
         label: 'name'
       },
       trees: {
+        isOpenedShow: true,
         isMyShow: true,
         isJoinedShow: false
+      },
+      openedTreesProps: {
+        children: 'children',
+        label: 'label'
       }
     }
   },
@@ -54,8 +84,29 @@ export default {
   computed: {
     ...mapGetters({
       personalSiteList: 'user/personalSiteList',
+      unsavedFiles: 'gitlab/unsavedFiles',
+      activePage: 'activePage',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
-    })
+    }),
+    openedTreeData() {
+      let clonedUnsavedFiles = _.clone(this.unsavedFiles)
+      let treeDatas = []
+      let that = this
+      _.forOwn(clonedUnsavedFiles, function(value, key) {
+        let pathArr = key.split('/')
+        let pathLen = pathArr.length
+        let pageName = pathArr[pathLen - 1].replace(/.md$/, '')
+        let userName = pathArr[0]
+        let siteName = pathArr[1]
+        let nodeData = {
+          label: `${pageName}(${userName}/${siteName})`,
+          path: key,
+          isModified: value && value.timestamp
+        }
+        treeDatas.push(nodeData)
+      })
+      return treeDatas
+    }
   },
   methods: {
     ...mapActions({
@@ -66,6 +117,7 @@ export default {
     }),
     initUrlExpandSelect() {
       let fileManagerTree = this.$refs.fileManagerTree
+      let openedTree = this.$refs.openedTree
       if (!fileManagerTree) {
         return
       }
@@ -82,6 +134,7 @@ export default {
       }
       levelPath += '/' + pathArr[pathArrLen - 1]
       fileManagerTree.setCurrentKey(levelPath + '.md')
+      openedTree.setCurrentKey(levelPath + '.md')
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -116,8 +169,23 @@ export default {
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
     },
+    handleOpenedClick(data, node) {
+      let path = data.path
+      let openedTree = this.$refs.openedTree
+      this.$router.push('/' + path.replace(/\.md$/, ''))
+      openedTree.setCurrentKey(path)
+    },
     toggleContent(type) {
       this.trees[type] = !this.trees[type]
+    }
+  },
+  watch: {
+    activePage: function(val) {
+      let openedTree = this.$refs.openedTree
+      let fileManagerTree = this.$refs.fileManagerTree
+      let keyPath = val.replace(/^\//, '') + '.md'
+      openedTree.setCurrentKey(keyPath)
+      fileManagerTree.setCurrentKey(keyPath)
     }
   }
 }
@@ -196,7 +264,7 @@ export default {
   }
   .file-manager-buttons-container .iconfont {
     font-size: 20px;
-    color: #333;
+    color: #777;
   }
   .el-button + .el-button {
     margin-left: 5px;
@@ -230,6 +298,10 @@ export default {
   }
   .empty {
     padding-left: 35px;
+  }
+
+  .icon-dakaidewenjian.is-modified {
+    color: #f4b622;
   }
 }
 </style>
