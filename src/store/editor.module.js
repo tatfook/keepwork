@@ -72,10 +72,12 @@ const actions = {
     commit('SET_ACTIVE_PAGE', path)
 
     if (path !== '/') {
-      await dispatch('gitlab/readFile', { path }, { root: true })
+      await dispatch('gitlab/readFile', { path, editorMode: true }, { root: true })
     }
 
-    let { content = '' } = rootGetters['gitlab/getFileByPath'](path)
+    let file = rootGetters['gitlab/getFileByPath'](path)
+    if (!file) return
+    let { content } = file
     let payload = { code: content, historyDisabled: true }
     content && dispatch('updateMarkDown', payload)
   },
