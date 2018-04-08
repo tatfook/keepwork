@@ -5,7 +5,7 @@ export default {
   props: {
     source: Object,
     options: Object,
-    editorMode: {
+    editMode: {
       type: Boolean,
       default: false
     }

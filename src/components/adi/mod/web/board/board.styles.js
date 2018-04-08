@@ -1,5 +1,5 @@
 export default [
-  // style 1
+  // style 0
   {
     data: {
       root: {

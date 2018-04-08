@@ -8,6 +8,7 @@ const name = 'ModParacraft'
 
 const components = {
   preview: 'AdiMedia',
+  desc: 'AdiMarkdown',
   worldName: 'AdiTitle',
   author: 'AdiDescLabel',
   version: 'AdiDescLabel',
@@ -137,5 +138,8 @@ properties.download.link = 'http://keepwork.com'
 
 properties.enter.name = '进入'
 properties.enter.link = 'http://keepwork.com'
+
+properties.desc.data = `作品简介：
+从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。`
 
 export default { mod, name, components, properties, styles, templates }

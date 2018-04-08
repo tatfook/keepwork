@@ -111,10 +111,10 @@ export default {
       let options = {}
 
       if (self.style.options) {
-        if (self.style.options.config[name]) {
+        if (self.style.options.config && self.style.options.config[name]) {
           options = _.cloneDeep(self.style.options.config[name])
         }
-        if (self.style.options.theme[name]) {
+        if (self.style.options.theme && self.style.options.theme[name]) {
           _.forEach(self.style.options.theme[name], (op, key) => {
             // 如果定义了相同的theme key，则之前的配置会被覆盖
             options[key] = self.themeData(op)

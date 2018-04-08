@@ -1,5 +1,5 @@
 export default [
-  // style1
+  // style 0
   {
     data: {
       // 定义mod根div的样式
@@ -60,15 +60,14 @@ export default [
         }
       }
     },
-    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232384706.jpeg'
+    cover:
+      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232384706.jpeg'
   },
   {
-    // style2
+    // style 1
     data: {
       // 定义mod根div的样式
-      root: {
-        padding: '10px 0px'
-      },
+      root: {},
       logo: {
         height: '87px',
         width: '87px',
@@ -83,10 +82,6 @@ export default [
       colCoupleRow: {
         margin: 'auto',
         'text-align': 'center'
-      },
-      colMenu: {
-        'padding-top': '5px',
-        'padding-bottom': '5px'
       },
       businessName: {
         margin: 'auto'
@@ -130,6 +125,7 @@ export default [
         }
       }
     },
-    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232391869.jpeg'
+    cover:
+      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232391869.jpeg'
   }
 ]

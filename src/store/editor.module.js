@@ -130,7 +130,7 @@ const actions = {
     commit('UPDATE_WIN_TYPE', 'ModPropertyManager')
   },
   setActivePropertyData({ commit, getters: { activePropertyData } }, { data }) {
-    commit('SET_ACTIVE_PROPERTY_DATA', {activePropertyData, data})
+    commit('SET_ACTIVE_PROPERTY_DATA', { activePropertyData, data })
     commit('REFRESH_CODE')
   },
   deleteMod({ commit, state }, key) {
@@ -227,7 +227,7 @@ const mutations = {
   REFRESH_MOD_ATTRIBUTES(state, key) {
     Parser.updateBlock(state.modList, key, state.code)
   },
-  SET_ACTIVE_PROPERTY_DATA(state, {activePropertyData, data}) {
+  SET_ACTIVE_PROPERTY_DATA(state, { activePropertyData, data }) {
     let newData = _.merge({}, activePropertyData, data)
     Parser.updateBlockAttribute(
       state.modList,

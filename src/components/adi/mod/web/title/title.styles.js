@@ -1,5 +1,5 @@
 export default [
-  // style 1
+  // style 0
   {
     data: {
       // 定义mod根div的样式
@@ -42,6 +42,7 @@ export default [
       },
       config: {}
     },
-    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232589267.jpeg'
+    cover:
+      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522232589267.jpeg'
   }
 ]

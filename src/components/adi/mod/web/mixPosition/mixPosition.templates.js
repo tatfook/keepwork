@@ -1,5 +1,5 @@
 export default [
-  // template 1
+  // template 0
   [
     { colMedia: 'media' },
     {
@@ -14,5 +14,22 @@ export default [
         }
       ]
     }
+  ],
+
+  // template 1
+  [
+    {
+      colGroup: [
+        {
+          colGroupItem: [
+            { colTitle: 'title' },
+            { colSubtitle: 'subtitle' },
+            { colParagraph: 'paragraph' }
+          ],
+          colButton: 'button'
+        }
+      ]
+    },
+    { colMedia: 'media' }
   ]
 ]

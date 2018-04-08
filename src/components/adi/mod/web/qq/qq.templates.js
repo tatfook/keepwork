@@ -1,4 +1,8 @@
 export default [
-  // template 1
-  [{ colPic: 'pic' }, { colDesc: 'desc' }]
+  // template 0
+  [
+    {
+      colPicDesc: [{ colPic: 'pic' }, { colDesc: 'desc' }]
+    }
+  ]
 ]

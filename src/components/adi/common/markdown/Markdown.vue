@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown :source='properties.data' />
+  <vue-markdown class="comp-markdown" :source='properties.data' />
 </template>
 
 <script>
@@ -14,3 +14,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.comp-markdown {
+  p {
+    margin: 0;
+  }
+}
+</style>
+

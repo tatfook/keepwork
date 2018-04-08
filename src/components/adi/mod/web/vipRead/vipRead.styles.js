@@ -1,5 +1,5 @@
 export default [
-  // style 1
+  // style 0
   {
     data: {
       root: {}
@@ -15,6 +15,7 @@ export default [
       theme: {},
       config: {}
     },
-    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522236629461.jpeg'
+    cover:
+      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522236629461.jpeg'
   }
 ]

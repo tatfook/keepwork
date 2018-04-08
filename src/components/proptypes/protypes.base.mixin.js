@@ -1,15 +1,20 @@
 export default {
   props: {
-    editingKey: String
+    editingKey: String,
+    originValue: String
   },
   data() {
-    return {
-      inputTypeValue: ''
-    }
+    return {}
   },
   computed: {
     placeholder() {
       return this.editingKey ? this.editingKey : ''
+    },
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
     }
   }
 }

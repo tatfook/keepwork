@@ -1,11 +1,12 @@
 export default [
-  // style 1 左图右文
+  // style 0 左图右文
   {
+    templateID: 0,
     data: {
       // 定义mod根div的样式
       root: {
         overflow: 'hidden',
-        'margin-top': '20px'
+        padding: '15px'
       },
       media: {
         height: '300px'
@@ -20,7 +21,9 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px'
+        'text-indent': '28px',
+        'word-wrap': 'break-word',
+        'white-space': 'pre-wrap'
       },
       button: {
         'margin-top': '20px'
@@ -29,20 +32,34 @@ export default [
     props: {
       rootRow: { gutter: 10 },
       colMedia: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 10 },
-        lg: { span: 10 }
+        xs: { span: 10 },
+        sm: { span: 9 },
+        md: { span: 8 },
+        lg: { span: 7 }
       },
       colGroup: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 13 },
-        lg: { span: 13 }
+        xs: { span: 14 },
+        sm: { span: 15 },
+        md: { span: 16 },
+        lg: { span: 17 }
       },
       colButton: {
-        span: 6,
-        push: 18
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 4,
+          push: 20
+        },
+        md: {
+          span: 2,
+          push: 22
+        },
+        lg: {
+          span: 2,
+          push: 22
+        }
       }
     },
     theme: {
@@ -67,28 +84,29 @@ export default [
       },
       config: {}
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/projectOne.png'
+    cover: './static/adi/mixPosition/cover/projectOne.png'
   },
 
-  // style 2 左文右图
+  // style 1 左文右图
   {
+    templateID: 1,
     data: {
       root: {
         overflow: 'hidden',
-        'margin-top': '20px'
+        padding: '15px'
       },
       media: {
         height: '300px'
       },
-      colMedia: {
-        float: 'right'
-      },
+      colMedia: {},
       subtitle: {
         'margin-top': '10px'
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px'
+        'text-indent': '28px',
+        'word-wrap': 'break-word',
+        'white-space': 'pre-wrap'
       },
       button: {
         'margin-top': '20px'
@@ -97,20 +115,34 @@ export default [
     props: {
       rootRow: { gutter: 10 },
       colMedia: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 10 },
-        lg: { span: 10 }
+        xs: { span: 10 },
+        sm: { span: 9 },
+        md: { span: 8 },
+        lg: { span: 7 }
       },
       colGroup: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 13 },
-        lg: { span: 13 }
+        xs: { span: 14 },
+        sm: { span: 15 },
+        md: { span: 16 },
+        lg: { span: 17 }
       },
       colButton: {
-        span: 6,
-        push: 18
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 4,
+          push: 20
+        },
+        md: {
+          span: 2,
+          push: 22
+        },
+        lg: {
+          span: 2,
+          push: 22
+        }
       }
     },
     theme: {
@@ -135,22 +167,21 @@ export default [
       },
       config: {}
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/projectThree.png'
+    cover: './static/adi/mixPosition/cover/projectTwo.png'
   },
 
-  // style 3  左文右图（文字竖排）
+  // style 2  左文右图（文字竖排）
   {
+    templateID: 1,
     data: {
       root: {
         overflow: 'hidden',
-        'margin-top': '20px'
+        padding: '15px'
       },
       media: {
         height: '350px'
       },
-      colMedia: {
-        float: 'right'
-      },
+      colMedia: {},
       colGroup: {
         height: '350px'
       },
@@ -179,24 +210,38 @@ export default [
     props: {
       rootRow: { gutter: 10 },
       colMedia: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 10 },
-        lg: { span: 10 }
+        xs: { span: 10 },
+        sm: { span: 9 },
+        md: { span: 8 },
+        lg: { span: 7 }
       },
       colGroup: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 14 },
-        lg: { span: 14 }
+        xs: { span: 14 },
+        sm: { span: 15 },
+        md: { span: 16 },
+        lg: { span: 17 }
       },
       colGroupItem: { span: 24 },
       colTitle: { span: 4 },
       colSubtitle: { span: 4 },
       colParagraph: { span: 16 },
       colButton: {
-        span: 6,
-        push: 18
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 4,
+          push: 20
+        },
+        md: {
+          span: 2,
+          push: 22
+        },
+        lg: {
+          span: 2,
+          push: 22
+        }
       }
     },
     theme: {
@@ -221,11 +266,12 @@ export default [
       },
       config: {}
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/projectTwo.png'
+    cover: './static/adi/mixPosition/cover/projectThree.png'
   },
 
-  // style 4 上图下文
+  // style 3 上图下文
   {
+    templateID: 0,
     data: {
       root: {
         overflow: 'hidden',
@@ -236,6 +282,7 @@ export default [
         height: '300px'
       },
       title: {
+        'margin-top': '20px',
         'text-align': 'center'
       },
       subtitle: {
@@ -244,13 +291,37 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px'
+        'text-indent': '28px',
+        'word-wrap': 'break-word',
+        'white-space': 'pre-wrap'
       }
     },
     props: {
       rootRow: { gutter: 10 },
-      colMedia: { span: 24 },
-      colGroup: { span: 24 },
+      colMedia: {
+        xs: { span: 24 },
+        sm: { span: 24 },
+        md: {
+          span: 18,
+          offset: 3
+        },
+        lg: {
+          span: 18,
+          offset: 3
+        }
+      },
+      colGroup: {
+        xs: { span: 24 },
+        sm: { span: 24 },
+        md: {
+          span: 18,
+          offset: 3
+        },
+        lg: {
+          span: 18,
+          offset: 3
+        }
+      },
       colButton: { span: 0 }
     },
     theme: {
@@ -270,6 +341,81 @@ export default [
       },
       config: {}
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/%E4%B8%8A%E5%9B%BE%E4%B8%8B%E6%96%87.png'
+    cover: './static/adi/mixPosition/cover/projectFour.png'
+  },
+
+  // style 4 上文下图
+  {
+    templateID: 1,
+    data: {
+      root: {
+        overflow: 'hidden',
+        'margin-top': '20px'
+      },
+      colGroup: {},
+      media: {
+        height: '300px'
+      },
+      title: {
+        'margin-top': '20px',
+        'text-align': 'center'
+      },
+      subtitle: {
+        'margin-top': '10px',
+        'text-align': 'center'
+      },
+      paragraph: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'word-wrap': 'break-word',
+        'white-space': 'pre-wrap'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 },
+      colMedia: {
+        xs: { span: 24 },
+        sm: { span: 24 },
+        md: {
+          span: 18,
+          offset: 3
+        },
+        lg: {
+          span: 18,
+          offset: 3
+        }
+      },
+      colGroup: {
+        xs: { span: 24 },
+        sm: { span: 24 },
+        md: {
+          span: 18,
+          offset: 3
+        },
+        lg: {
+          span: 18,
+          offset: 3
+        }
+      },
+      colButton: { span: 0 }
+    },
+    theme: {
+      root: ['font_0', 'color_7'],
+      paragraph: ['color_8']
+    },
+    options: {
+      theme: {
+        title: {
+          fontSize: 'font_5',
+          fontColor: 'color_8'
+        },
+        subtitle: {
+          fontSize: 'font_2',
+          fontColor: 'color_8'
+        }
+      },
+      config: {}
+    },
+    cover: './static/adi/mixPosition/cover/projectFive.png'
   }
 ]
