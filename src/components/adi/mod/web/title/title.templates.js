@@ -1,5 +1,5 @@
 export default [
-  // style1
+  // style 0
   [
     { colLogo: 'logo' },
     {

@@ -1,5 +1,5 @@
 export default [
-  // style1
+  // style 0
   {
     data: {
       // 定义mod根div的样式

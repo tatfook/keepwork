@@ -1,4 +1,4 @@
 export default [
-  // template 1
+  // template 0
   [{ colTitle: 'title' }, { colParagraph: 'paragraph' }]
 ]

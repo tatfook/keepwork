@@ -1,4 +1,4 @@
 export default [
-  // style1
+  // style 0
   [{ colImgLoop: 'imgLoop' }]
 ]

@@ -32,9 +32,7 @@ export default {
     },
     loadImg() {
       return this.generateStyleString({
-        'background-image': 'url(' + this.properties.src + ')',
-        'background-position': 'center',
-        'background-size': 'cover'
+        'background-image': 'url(' + this.properties.src + ')'
       })
     }
   }
@@ -49,6 +47,8 @@ export default {
   .img {
     width: 100%;
     height: 100%;
+    background-position: center;
+    background-size: cover;
   }
 }
 </style>
