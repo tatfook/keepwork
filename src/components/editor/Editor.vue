@@ -3,9 +3,9 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-file" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="iconfont icon-ziyuan6" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -14,11 +14,11 @@
       </el-row>
     </el-col>
     <div class="col-between"></div>
-    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-pcduandiannao" title="电脑"></el-button>
-          <el-button class="iconfont icon-shouji" title="手机"></el-button>
+          <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
+          <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
         </el-button-group>
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
@@ -26,36 +26,45 @@
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="iconfont icon-ziyuan18" title="新窗口打开" @click='showPreview'></el-button>
+          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
     </el-col>
-    <div class="col-between editor-resizer" v-if="showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan5" title="标题1"></el-button>
-          <el-button class="iconfont icon-ziyuan4" title="标题2"></el-button>
-          <el-button class="iconfont icon-ziyuan2" title="标题3"></el-button>
-          <el-button class="iconfont icon-ziyuan3" title="加粗"></el-button>
-          <el-button class="iconfont icon-ziyuan20" title="斜体"></el-button>
+          <el-button class="iconfont icon-H" title="标题1"></el-button>
+          <el-button class="iconfont icon-h1" title="标题2"></el-button>
+          <el-button class="iconfont icon-zihyuan" title="标题3"></el-button>
+          <el-button class="iconfont icon-jiacu" title="加粗"></el-button>
+          <el-button class="iconfont icon-qingxie" title="斜体"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan1" title="无序列表"></el-button>
-          <el-button class="iconfont icon-ziyuan" title="有序列表"></el-button>
-          <el-button class="iconfont icon-ziyuan21" title="引用内容"></el-button>
-          <el-button class="iconfont icon-ziyuan22" title="表格"></el-button>
-          <el-button class="iconfont icon-ziyuan24" title="水平分割线"></el-button>
+          <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
+          <el-button class="iconfont icon-xulie" title="有序列表"></el-button>
+          <el-button class="iconfont icon-yinyong" title="引用内容"></el-button>
+          <el-button class="iconfont icon-biaoge" title="表格"></el-button>
+          <el-button class="iconfont icon-ziyuanfengexian" title="水平分割线"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-ziyuan23" title="代码"></el-button>
-          <el-button class="iconfont icon-share_link" title="链接"></el-button>
+          <el-button class="iconfont icon-daima" title="代码"></el-button>
+          <el-button class="iconfont icon-fenxianglianjie" title="链接"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown/>
+    </el-col>
+    <el-col v-if="isWelcomeShow" class="guid-col">
+      <div class="guid-content">
+        <h1>Welcome to Keepwork</h1>
+        <div>
+          <el-button type='primary'>创建新网站</el-button>
+          <el-button>创建新网页</el-button>
+        </div>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -108,9 +117,14 @@ export default {
   },
   computed: {
     ...mapGetters({
+      personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
-      showingCol: 'showingCol'
-    })
+      showingCol: 'showingCol',
+      activePageInfo: 'activePageInfo'
+    }),
+    isWelcomeShow() {
+      return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
+    }
   },
   watch: {
     'showingCol.isPreviewShow': {
@@ -262,7 +276,7 @@ export default {
 }
 .toolbar {
   background-color: #fff;
-  padding: 9px 15px;
+  padding: 9px 20px;
   margin-bottom: 10px;
   white-space: nowrap;
   overflow-x: auto;
@@ -284,13 +298,25 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-.iconfont{
-    padding: 0;
-    width: 50px;
-    height: 40px;
-    font-size: 27px;
+.iconfont {
+  padding: 0;
+  width: 50px;
+  height: 40px;
+  font-size: 27px;
 }
-.code-win .iconfont{
-    font-size: 16px;
+.code-win .iconfont {
+  font-size: 16px;
+}
+.guid-col {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #48a3ff;
+}
+.guid-col h1 {
+  margin: 0 0 36px 0;
+  font-size: 46px;
 }
 </style>

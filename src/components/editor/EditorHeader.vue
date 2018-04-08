@@ -48,16 +48,16 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item v-loading='savePending' index='3' class='li-btn'>
-        <span class='iconfont icon-ziyuan19' title='保存' @click='save'></span>
+        <span class='iconfont icon-baocun' title='保存' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-ziyuan26' title='撤销'></span>
+        <span class='iconfont icon-fanhui' title='撤销'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-ziyuan27' title='重做'></span>
+        <span class='iconfont icon-chongzuo' title='重做'></span>
       </el-menu-item>
       <el-menu-item index='6' class='li-btn' @click='changeFullscreen'>
-        <span class='iconfont icon-ziyuan14' title='全屏'></span>
+        <span class='iconfont icon-quanping' title='全屏'></span>
       </el-menu-item>
       <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -204,6 +204,5 @@ export default {
   text-align: center;
   font-size: 21px;
   color: #666;
-  font-weight: bold;
 }
 </style>
