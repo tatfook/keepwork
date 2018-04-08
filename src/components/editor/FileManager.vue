@@ -32,6 +32,8 @@
       <el-collapse-transition>
         <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
+      </el-collapse-transition>
+      <el-collapse-transition>
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">还没有创建网站</p>
           <el-button type='text'>现在创建</el-button>
@@ -115,7 +117,7 @@ export default {
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath'
     }),
-    initUrlExpandSelect() {
+    async initUrlExpandSelect() {
       let fileManagerTree = this.$refs.fileManagerTree
       let openedTree = this.$refs.openedTree
       if (!fileManagerTree) {
@@ -125,6 +127,9 @@ export default {
       let pathArr = nowPath.split('/')
       let pathArrLen = pathArr.length
       var levelPath = pathArr[0]
+      let userName = pathArr[0]
+      let siteName = pathArr[1]
+      await this.getRepositoryTree({ path: `${userName}/${siteName}` })
       for (let index = 1; index < pathArrLen - 1; index++) {
         levelPath += '/' + pathArr[index]
         this.updateFilemanagerTreeNodeExpandMapByPath({
@@ -181,6 +186,7 @@ export default {
   },
   watch: {
     activePage: function(val) {
+      this.initUrlExpandSelect()
       let openedTree = this.$refs.openedTree
       let fileManagerTree = this.$refs.fileManagerTree
       let keyPath = val.replace(/^\//, '') + '.md'
