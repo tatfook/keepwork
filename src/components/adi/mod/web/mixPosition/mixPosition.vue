@@ -10,11 +10,11 @@ export default {
 
       options = _.merge(options, this.generateOptionsStyle(name))
 
-      if (this.modData.styleID == '1') {
+      if (this.modData.styleID == '3' || this.modData.styleID == '4') {
         return _.merge(
           {},
           options,
-          (this.modData.pic.src = './static/adi/qq/qqModSecond.png')
+          (this.modData.media.src = './static/adi/mixPosition/stitching.png')
         )
       } else {
         return options
