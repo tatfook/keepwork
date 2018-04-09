@@ -12,13 +12,13 @@
             </span>
             <span class=''>{{ node.label }}</span>
             <span class="file-manager-buttons-container">
-              <el-button class="iconfont icon-baocun" size="mini" type="text" title='保存'>
+              <el-button v-if='isSaveble(data)' v-loading='savePending' class="iconfont icon-baocun" size="mini" type="text" title='保存' @click.stop='save(data)'>
               </el-button>
               <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新'>
               </el-button>
               <el-button class="iconfont icon-guanxi" size="mini" type="text" title='关闭'>
               </el-button>
-              <el-button class="iconfont icon-shanchu" size="mini" type="text" title='删除'>
+              <el-button class="iconfont icon-shanchu" size="mini" type="text" title='删除' @click.stop="removeFile(data)">
               </el-button>
             </span>
           </span>
@@ -74,7 +74,8 @@ export default {
       openedTreesProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      savePending: false
     }
   },
   mounted() {
@@ -115,7 +116,9 @@ export default {
       getAllPersonalSite: 'user/getAllPersonalSite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
       updateFilemanagerTreeNodeExpandMapByPath:
-        'updateFilemanagerTreeNodeExpandMapByPath'
+        'updateFilemanagerTreeNodeExpandMapByPath',
+      savePageByPath: 'savePageByPath',
+      gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async initUrlExpandSelect() {
       let fileManagerTree = this.$refs.fileManagerTree
@@ -182,6 +185,32 @@ export default {
     },
     toggleContent(type) {
       this.trees[type] = !this.trees[type]
+    },
+    async save(data) {
+      let path = data.path
+      this.savePending = true
+      await this.savePageByPath(path)
+      this.savePending = false
+    },
+    isSaveble(nodeData) {
+      let path = nodeData.path
+      return (
+        path && this.unsavedFiles[path] && this.unsavedFiles[path].timestamp
+      )
+    },
+    removeFile(data) {
+      let path = data.path
+      let pathArr = path.split('/')
+      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
+      this.$confirm(`确定删除 ${pageName} 页面？`, '删除提醒', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      })
+        .then(async () => {
+          await this.gitlabRemoveFile({ path })
+        })
+        .catch(() => {})
     }
   },
   watch: {

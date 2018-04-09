@@ -83,6 +83,15 @@ const actions = {
     let { code: content, activePage: path } = getters
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
   },
+
+  async savePageByPath({ getters, rootGetters, dispatch }, path) {
+    if (!path) {
+      return
+    }
+    let content = rootGetters['gitlab/unsavedFiles'][path].content
+    await dispatch('gitlab/saveFile', { content, path }, { root: true })
+  },
+
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit, dispatch }, payload) {
     if (payload.code === undefined) payload = { code: payload }

@@ -11,7 +11,7 @@
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" title='新建文件夹'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile">
+      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" title='删除'>
       </el-button>
       <el-button v-if="isSettable" size="mini" type="text" @click.stop="addFolder" title='设置'>
         <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
@@ -62,10 +62,20 @@ export default {
       await this.gitlabAddFolder({ path: newFolderPath })
       this.addFolderPending = false
     },
-    async removeFile() {
-      this.removePending = true
-      await this.gitlabRemoveFile({ path: this.currentPath })
-      this.removePending = false
+    removeFile() {
+      let pathArr = this.data.path.split('/')
+      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
+      this.$confirm(`确定删除 ${pageName} 页面？`, '删除提醒', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      })
+        .then(async () => {
+          this.removePending = true
+          await this.gitlabRemoveFile({ path: this.currentPath })
+          this.removePending = false
+        })
+        .catch(() => {})
     }
   },
   computed: {

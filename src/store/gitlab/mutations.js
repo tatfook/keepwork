@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import _ from 'lodash'
 
 const GET_FILE_CONTENT_SUCCESS = 'GET_FILE_CONTENT_SUCCESS'
 const SAVE_FILE_CONTENT_SUCCESS = 'SAVE_FILE_CONTENT_SUCCESS'
@@ -48,10 +49,7 @@ const mutations = {
     })
   },
   [CLEAR_UNSAVED_FILE](state, { path, file }) {
-    Vue.set(state, 'unsavedFiles', {
-      ...state.unsavedFiles,
-      [path]: null
-    })
+    Vue.set(state, 'unsavedFiles', _.omit(state.unsavedFiles, path))
   }
 }
 
