@@ -1,6 +1,3 @@
-<!-- template>
-  <el-button plain type='primary' size='mini' @click.native='openEditor'>打开绘图板</el-button>
-</template -->
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 import { mapActions, mapGetters } from 'vuex'
@@ -81,15 +78,14 @@ export default {
           打开绘图板
         </el-button>
         <el-dialog {...this.getDialogProps}>
-          <div id="mx-client">
-            <div
-              class="mx-client-close"
-              on-click={() => {
-                this.closeEditor()
-              }}
-            >
-              关闭
-            </div>
+          <div id="mx-client" />
+          <div
+            class="mx-client-close"
+            on-click={() => {
+              this.closeEditor()
+            }}
+          >
+            关闭
           </div>
         </el-dialog>
       </div>
@@ -152,6 +148,7 @@ export default {
     },
     closeEditor() {
       this.visible = false
+      isInitEditor = false
 
       let data = this.ui.getCurrentCompressData()
 
@@ -165,6 +162,12 @@ export default {
         mxWindow.forEach(element => {
           element.parentNode.removeChild(element)
         })
+      }
+
+      let mxClientEle = document.querySelector('#mx-client')
+
+      while (mxClientEle.hasChildNodes()) {
+        mxClientEle.removeChild(mxClientEle.firstChild)
       }
     },
     updateValue(newVal) {
