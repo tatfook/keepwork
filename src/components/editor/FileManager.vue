@@ -1,5 +1,6 @@
 <template>
   <div class="file-manager" v-loading="loading">
+
     <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
       <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
         <i class="el-icon-arrow-right"></i> 已打开
@@ -25,6 +26,7 @@
         </el-tree>
       </el-collapse-transition>
     </div>
+
     <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
       <h1 class="toggle-bar" @click='toggleContent("isMyShow")'>
         <i class="el-icon-arrow-right"></i> 我创建的网站
@@ -40,16 +42,22 @@
         </div>
       </el-collapse-transition>
     </div>
-    <div class="joined-tree tree-item" :class="{'is-active': trees.isJoinedShow}">
-      <h1 class="toggle-bar" @click='toggleContent("isJoinedShow")'>
+
+    <div class="joined-tree tree-item" :class="{'is-active': trees.isContributedShow}">
+      <h1 class="toggle-bar" @click='toggleContent("isContributedShow")'>
         <i class="el-icon-arrow-right"></i> 我参与的网站
       </h1>
       <el-collapse-transition>
-        <div class="empty" v-show="trees.isJoinedShow">
+        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="contributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        </el-tree>
+      </el-collapse-transition>
+      <el-collapse-transition>
+        <div class="empty" v-show="trees.isContributedShow">
           <p class="info">获得他人网站的编辑权限后，将会在这里显示</p>
         </div>
       </el-collapse-transition>
     </div>
+
   </div>
 </template>
 <script>
@@ -69,7 +77,7 @@ export default {
       trees: {
         isOpenedShow: true,
         isMyShow: true,
-        isJoinedShow: false
+        isContributedShow: false
       },
       openedTreesProps: {
         children: 'children',
@@ -79,7 +87,7 @@ export default {
     }
   },
   mounted() {
-    this.getAllPersonalSite().then(() => {
+    this.getAllPersonalAndContributedSite().then(() => {
       this.loading = false
     })
     this.initUrlExpandSelect()
@@ -87,6 +95,7 @@ export default {
   computed: {
     ...mapGetters({
       personalSiteList: 'user/personalSiteList',
+      contributedSiteList: 'user/contributedSiteList',
       unsavedFiles: 'gitlab/unsavedFiles',
       activePage: 'activePage',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
@@ -113,7 +122,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllPersonalSite: 'user/getAllPersonalSite',
+      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',

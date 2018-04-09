@@ -20,6 +20,10 @@ export const website = {
   getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
 }
 
+export const siteUser = {
+  getSiteListByMemberName: (...args) => post('site_user/getSiteListByMemberName', ...args)
+}
+
 export const siteDataSource = {
   getByUsername: (...args) => post('site_data_source/getByUsername', ...args)
 }
@@ -42,6 +46,7 @@ export const sensitiveWords = {
 export const keepwork = {
   user,
   website,
+  siteUser,
   siteDataSource,
   websiteComment,
   sensitiveWords

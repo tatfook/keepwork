@@ -28,8 +28,8 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   let { dispatch, getters: { getGitlabAPI, getGitFileOptionsByPath } } = context
   let [username, name] = path.split('/').filter(x => x)
 
-  // call user/getAllPersonalSite then we can get git file options
-  await dispatch('user/getAllPersonalSite', null, { root: true })
+  // call user/getAllPersonalAndContributedSite then we can get git file options
+  await dispatch('user/getAllPersonalAndContributedSite', null, { root: true })
   let { projectId } = getGitFileOptionsByPath(path)
   let gitlab = getGitlabAPI()
   let options = { content, commit_message: `keepwork commit: ${path}` }
@@ -64,16 +64,13 @@ const actions = {
     })
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
   },
-  async readFile(context, { path: inputPath }) {
-    let { commit, dispatch, rootGetters } = context
-
-    let {'user/username': username, activePageUsername} = rootGetters
-    let visitorIsGuest = username !== activePageUsername
-    if (visitorIsGuest) {
-      await dispatch('readFileForGuest', {path: inputPath})
-      return
-    }
-
+  async readFile({ dispatch }, { path, editorMode }) {
+    editorMode
+      ? await dispatch('readFileForOwner', {path})
+      : await dispatch('readFileForGuest', {path})
+  },
+  async readFileForOwner(context, { path: inputPath }) {
+    let { commit } = context
     let { gitlab, projectId, ref, path } = await getGitlabFileParams(context, {path: inputPath})
     let file = await gitlab.projects.repository.files.show(projectId, path, ref)
 

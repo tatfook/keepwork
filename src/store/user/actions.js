@@ -10,7 +10,8 @@ const {
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
-  GET_SITE_DETAIL_INFO_SUCCESS
+  GET_SITE_DETAIL_INFO_SUCCESS,
+  GET_CONTRIBUTED_WEBSITE_SUCCESS
 } = props
 
 const actions = {
@@ -48,7 +49,7 @@ const actions = {
 
     commit(GET_PROFILE_SUCCESS, {...profile, token})
   },
-  async getAllPersonalSite({ dispatch, getters }) {
+  async getAllPersonalAndContributedSite({ dispatch, getters }) {
     let { personalSiteList } = getters
     if (personalSiteList.length) return
 
@@ -56,6 +57,7 @@ const actions = {
 
     return Promise.all([
       dispatch('getAllWebsite'),
+      dispatch('getAllContributedWebsite'),
       dispatch('getAllSiteDataSource')
     ])
   },
@@ -77,6 +79,15 @@ const actions = {
 
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
   },
+  async getAllContributedWebsite(context) {
+    let { dispatch, commit, getters } = context
+    await dispatch('getProfile')
+
+    let { username, authRequestConfig } = getters
+    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
+
+    commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
+  },
   async getWebsiteDetailInfoByPath(context, { path }) {
     let { commit, getters: { getSiteDetailInfoByPath } } = context
     if (getSiteDetailInfoByPath(path)) return
@@ -89,6 +100,7 @@ const actions = {
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context
     let fullPath = getFileFullPathByPath(path)
+    // todo fix createComment
     let { _id: websiteId, userId } = rootGetters['user/getPersonalSiteInfoByPath'](path)
 
     let payload = {websiteId, userId, url: fullPath, content}
