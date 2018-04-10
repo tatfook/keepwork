@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
+import { gConst } from '@/lib/global'
 
 const MOD_CMD_BEGIN_REG = /^```@\w*$/
 const MOD_CMD_END_REG = /^```$/
@@ -135,7 +136,7 @@ const deleteBlock = (blockList, key) => {
   return block
 }
 
-const addBlockByIndex = (blockList, index, jsonData, cmd) => {
+const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
   let preBlock = blockList[index]
   let beginLine = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
   let block = new ModBlock(cmd, beginLine)
@@ -146,10 +147,11 @@ const addBlockByIndex = (blockList, index, jsonData, cmd) => {
   return block
 }
 
-const addBlockByKey = (blockList, key, jsonData, cmd) => {
+const addBlockByKey = (blockList, key, jsonData, cmd, position) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
-  return addBlockByIndex(blockList, index, jsonData, cmd)
+  if (position === gConst.POSITION_BEFORE) index = index - 1
+  return addBlockAfterIndex(blockList, index, jsonData, cmd)
 }
 
 const buildMarkdown = blockList => {
@@ -202,7 +204,7 @@ export default {
   updateBlock,
   updateBlockAttribute,
   deleteBlock,
-  addBlockByIndex,
+  addBlockAfterIndex,
   addBlockByKey,
   getCmd,
   getActiveBlock,

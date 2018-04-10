@@ -39,7 +39,11 @@ const actions = {
     commit(SET_ACTIVE_PAGE, path)
 
     if (path !== '/') {
-      await dispatch('gitlab/readFile', { path, editorMode: true }, { root: true })
+      await dispatch(
+        'gitlab/readFile',
+        { path, editorMode: true },
+        { root: true }
+      )
     }
 
     let file = rootGetters['gitlab/getFileByPath'](path)
@@ -163,6 +167,9 @@ const actions = {
     undoManager.redo((code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
+  },
+  setNewModPosition({ commit }, position) {
+    commit('SET_NEW_MOD_POSITION', position)
   }
 }
 

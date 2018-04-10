@@ -6,6 +6,12 @@ export const gClasses = {
   modHover: 'mod-hover'
 }
 
+export const gConst = {
+  POSITION_BEFORE: 'before',
+  POSITION_AFTER: 'after'
+}
+
 export default {
-  gClasses
+  gClasses,
+  gConst
 }

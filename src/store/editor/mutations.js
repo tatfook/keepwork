@@ -27,7 +27,10 @@ const UPDATE_THEME_FONT = 'UPDATE_THEME_FONT'
 const UPDATE_WIN_TYPE = 'UPDATE_WIN_TYPE'
 const RESET_SHOWING_COL = 'RESET_SHOWING_COL'
 
-const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED = 'UPDATE_FILEMANAGER_TREE_NODE_EXPANDED'
+const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
+  'UPDATE_FILEMANAGER_TREE_NODE_EXPANDED'
+
+const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 
 export const props = {
   RESET_STATE,
@@ -54,7 +57,9 @@ export const props = {
   UPDATE_WIN_TYPE,
   RESET_SHOWING_COL,
 
-  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED
+  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
+
+  SET_NEW_MOD_POSITION
 }
 
 const resetIgnoreKeys = ['filemanagerTreeNodeExpandMapByPath']
@@ -81,10 +86,17 @@ const mutations = {
     UndoManager.save(code)
   },
   [ADD_MOD](state, { modProperties, key, cmd }) {
-    return Parser.addBlockByKey(state.modList, key, modProperties, cmd)
+    const mod = Parser.addBlockByKey(
+      state.modList,
+      key,
+      modProperties,
+      cmd,
+      state.newModPosition
+    )
+    Vue.set(state, 'activeMod', mod)
   },
   [DELETE_MOD](state, key) {
-    return Parser.deleteBlock(state.modList, key)
+    Parser.deleteBlock(state.modList, key)
   },
   [SET_ACTIVE_MOD](state, key) {
     if (state.activeMod && state.activeMod.key === key) return
@@ -155,6 +167,9 @@ const mutations = {
       ...state.filemanagerTreeNodeExpandMapByPath,
       [path]: expanded
     })
+  },
+  [SET_NEW_MOD_POSITION](state, position) {
+    state.newModPosition = position
   }
 }
 

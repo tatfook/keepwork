@@ -1,4 +1,5 @@
 import SimpleUndo from '@/lib/utils/simpleUndo'
+import { gConst } from '@/lib/global'
 
 export const UndoManager = new SimpleUndo()
 
@@ -24,6 +25,7 @@ const state = () => ({
     isCodeShow: true,
     isPreviewShow: true
   },
+  newModPosition: gConst.POSITION_AFTER, // after active mod
   filemanagerTreeNodeExpandMapByPath: {},
   undoManager: UndoManager
 })
