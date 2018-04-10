@@ -1,13 +1,13 @@
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 import { props } from './mutations'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
 const {
   RESET_STATE,
   SET_ACTIVE_PAGE,
 
   UPDATE_CODE,
-  REFRESH_CODE,
 
   ADD_MOD,
   DELETE_MOD,
@@ -27,7 +27,10 @@ const {
   UPDATE_WIN_TYPE,
   RESET_SHOWING_COL,
 
-  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED
+  UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
+
+  CACHE_OPENED_FILE,
+  CLEAR_OPENED_FILE
 } = props
 
 const actions = {
@@ -61,8 +64,19 @@ const actions = {
     if (!path) {
       return
     }
-    let content = rootGetters['gitlab/openedFiles'][path].content
+    let content = rootGetters['openedFiles'][path].content
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
+  },
+
+  updateCode(context, { code, historyDisabled }) {
+    let { commit, dispatch, getters: { activePage: path, undoManager } } = context
+    commit(UPDATE_CODE, { code })
+    !historyDisabled && undoManager.save(code)
+    dispatch('cacheUnsavedFile', { content: code, path })
+  },
+  refreshCode({ dispatch, getters: { modList } }) {
+    const code = Parser.buildMarkdown(modList)
+    dispatch('updateCode', {code})
   },
 
   // rebuild all mods, will takes a little bit more time
@@ -71,21 +85,17 @@ const actions = {
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MODS, payload.code)
-    commit(UPDATE_CODE, payload)
+    dispatch('updateCode', payload)
   },
   // only update a particular mod
   updateMarkDownBlock({ commit, dispatch }, payload) {
-    dispatch('updateCode', { code: payload.code })
+    dispatch('updateCode', payload)
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(REFRESH_MOD_ATTRIBUTES, payload.key)
   },
-  updateCode(context, { code }) {
-    let { commit, dispatch, getters: { activePage: path } } = context
-    commit(UPDATE_CODE, { code })
-    dispatch('gitlab/cacheUnsavedFile', { content: code, path })
-  },
-  addMod({ commit }, payload) {
+
+  addMod({ commit, dispatch }, payload) {
     const modProperties = modFactory.generate(payload.modName)
     var modPropertiesStyle
     if (payload.styleID) {
@@ -99,7 +109,7 @@ const actions = {
     })
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(REFRESH_CODE)
+    dispatch('refreshCode')
   },
   setActiveMod({ commit }, key) {
     commit(SET_ACTIVE_MOD, key)
@@ -111,28 +121,28 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
   },
-  setActivePropertyData({ commit, getters: { activePropertyData } }, { data }) {
+  setActivePropertyData({ commit, dispatch, getters: { activePropertyData } }, { data }) {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
-    commit(REFRESH_CODE)
+    dispatch('refreshCode')
   },
-  deleteMod({ commit, state }, key) {
+  deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
     if (key === state.activeMod.key) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
     }
-    commit(REFRESH_CODE)
+    dispatch('refreshCode')
   },
-  updateActiveModStyle({ commit }, styleID) {
+  updateActiveModStyle({ commit, dispatch }, styleID) {
     commit(UPDATE_ACTIVE_MOD_ATTRIBUTES, {
       key: 'styleID',
       value: styleID
     })
-    commit(REFRESH_CODE)
+    dispatch('refreshCode')
   },
-  updateActiveModAttribute({ commit }, payload) {
+  updateActiveModAttribute({ commit, dispatch }, payload) {
     commit(UPDATE_ACTIVE_MOD_ATTRIBUTES, payload)
-    commit(REFRESH_CODE)
+    dispatch('refreshCode')
   },
   changeTheme({ commit }, themeName) {
     commit(UPDATE_THEME_NAME, themeName)
@@ -158,6 +168,7 @@ const actions = {
   updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
+
   undo({ dispatch, getters: { undoManager } }) {
     undoManager.undo((code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
@@ -170,6 +181,23 @@ const actions = {
   },
   setNewModPosition({ commit }, position) {
     commit('SET_NEW_MOD_POSITION', position)
+  },
+
+  cacheUnsavedFile(context, { path, content }) {
+    let fullPath = getFileFullPathByPath(path)
+    let { commit, rootGetters: { 'gitlab/getFileByPath': getFileByPath }, getters: { openedFiles } } = context
+    let openedFile = openedFiles[fullPath]
+
+    let { content: currentContent } = openedFile || getFileByPath(path)
+    if (content === currentContent) return
+
+    let timestamp = Date.now()
+    let payload = {path: fullPath, file: {content, timestamp}}
+    commit(CACHE_OPENED_FILE, payload)
+  },
+  clearUnsavedFile({ commit }, { path }) {
+    let fullPath = getFileFullPathByPath(path)
+    commit(CLEAR_OPENED_FILE, { path: fullPath })
   }
 }
 
