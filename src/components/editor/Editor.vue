@@ -37,25 +37,25 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-H" title="标题1"></el-button>
-          <el-button class="iconfont icon-h1" title="标题2"></el-button>
-          <el-button class="iconfont icon-zihyuan" title="标题3"></el-button>
-          <el-button class="iconfont icon-jiacu" title="加粗"></el-button>
-          <el-button class="iconfont icon-qingxie" title="斜体"></el-button>
+          <el-button class="iconfont icon-H" title="标题1" @click="insertHeadline(1)"></el-button>
+          <el-button class="iconfont icon-h1" title="标题2" @click="insertHeadline(2)"></el-button>
+          <el-button class="iconfont icon-zihyuan" title="标题3" @click="insertHeadline(3)"></el-button>
+          <el-button class="iconfont icon-jiacu" title="加粗" @click="setFontStyle('bold')"></el-button>
+          <el-button class="iconfont icon-qingxie" title="斜体" @click="setFontStyle('italic')"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
+          <!-- <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
           <el-button class="iconfont icon-xulie" title="有序列表"></el-button>
-          <el-button class="iconfont icon-yinyong" title="引用内容"></el-button>
-          <el-button class="iconfont icon-biaoge" title="表格"></el-button>
-          <el-button class="iconfont icon-ziyuanfengexian" title="水平分割线"></el-button>
+          <el-button class="iconfont icon-yinyong" title="引用内容"></el-button> -->
+          <!-- <el-button class="iconfont icon-biaoge" title="表格"></el-button> -->
+          <el-button class="iconfont icon-ziyuanfengexian" title="水平分割线" @click="insertLine"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-daima" title="代码"></el-button>
-          <el-button class="iconfont icon-fenxianglianjie" title="链接"></el-button>
+          <el-button class="iconfont icon-daima" title="代码" @click="insertCode"></el-button>
+          <el-button class="iconfont icon-fenxianglianjie" title="链接" @click="insertLink"></el-button>
         </el-button-group>
       </el-row>
-      <editor-markdown/>
+      <editor-markdown ref='codemirror' />
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <div class="guid-content">
@@ -214,6 +214,24 @@ export default {
       this.resizeWinParams.isResizing = false
       this.resizeWinParams.leftColWidthParam = ''
       this.resizeWinParams.rightColWidthParam = ''
+    },
+    setFontStyle(style) {
+      this.$refs.codemirror.setFontStyle(style)
+    },
+    insertHeadline(level) {
+      this.$refs.codemirror.insertHeadline(level)
+    },
+    insertCode() {
+      this.$refs.codemirror.insertCode()
+    },
+    insertLine() {
+      this.$refs.codemirror.insertLine()
+    },
+    insertLink() {
+      this.$refs.codemirror.insertLink()
+    },
+    insertImage() {
+      this.$refs.codemirror.insertImage()
     }
   }
 }
