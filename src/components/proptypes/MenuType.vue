@@ -20,12 +20,13 @@ export default {
   },
   methods:{
     cancel(){
-      console.log('cancel parent')
       this.isMenuEditorShow = false
     },
     finishEditing(resultMenuData){
       this.isMenuEditorShow = false
-      console.log(resultMenuData)
+      var tempChangedDataObj = {}
+      tempChangedDataObj[this.editingKey] = resultMenuData
+      this.$emit('onPropertyChange', tempChangedDataObj)
     }
   },
   components: {
