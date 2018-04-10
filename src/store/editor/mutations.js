@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
-import { initialState, UndoManager } from './state'
+import { resetPartialState } from './state'
 
 const RESET_STATE = 'RESET_STATE'
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 
 const UPDATE_CODE = 'UPDATE_CODE'
-const REFRESH_CODE = 'REFRESH_CODE'
 
 const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
@@ -32,12 +31,14 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 
+const CACHE_OPENED_FILE = 'CACHE_OPENED_FILE'
+const CLEAR_OPENED_FILE = 'CLEAR_OPENED_FILE'
+
 export const props = {
   RESET_STATE,
   SET_ACTIVE_PAGE,
 
   UPDATE_CODE,
-  REFRESH_CODE,
 
   ADD_MOD,
   DELETE_MOD,
@@ -59,31 +60,24 @@ export const props = {
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
 
-  SET_NEW_MOD_POSITION
-}
+  SET_NEW_MOD_POSITION,
 
-const resetIgnoreKeys = ['filemanagerTreeNodeExpandMapByPath']
+  CACHE_OPENED_FILE,
+  CLEAR_OPENED_FILE
+}
 
 const mutations = {
   [RESET_STATE](state) {
-    UndoManager.clear()
-    const newState = initialState()
-    for (let key in newState) {
-      let resettable = !resetIgnoreKeys.includes(key)
-      resettable && Vue.set(state, key, newState[key])
-    }
+    const resettedPartialState = resetPartialState()
+    _.keys(resettedPartialState).forEach(key => {
+      Vue.set(state, key, resettedPartialState[key])
+    })
   },
   [SET_ACTIVE_PAGE](state, path) {
     Vue.set(state, 'activePage', path)
   },
-  [UPDATE_CODE](state, { code, historyDisabled }) {
+  [UPDATE_CODE](state, { code }) {
     Vue.set(state, 'code', code)
-    if (!historyDisabled) UndoManager.save(code)
-  },
-  [REFRESH_CODE](state) {
-    const code = Parser.buildMarkdown(state.modList)
-    Vue.set(state, 'code', code)
-    UndoManager.save(code)
   },
   [ADD_MOD](state, { modProperties, key, cmd }) {
     const mod = Parser.addBlockByKey(
@@ -170,6 +164,16 @@ const mutations = {
   },
   [SET_NEW_MOD_POSITION](state, position) {
     state.newModPosition = position
+  },
+
+  [CACHE_OPENED_FILE](state, { path, file }) {
+    Vue.set(state, 'openedFiles', {
+      ...state.openedFiles,
+      [path]: file
+    })
+  },
+  [CLEAR_OPENED_FILE](state, { path, file }) {
+    Vue.set(state, 'openedFiles', _.omit(state.openedFiles, path))
   }
 }
 

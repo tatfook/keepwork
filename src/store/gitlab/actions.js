@@ -12,9 +12,7 @@ const {
   SAVE_FILE_CONTENT_SUCCESS,
   CREATE_FILE_CONTENT_SUCCESS,
   GET_REPOSITORY_TREE_SUCCESS,
-  REMOVE_FILE_SUCCESS,
-  CACHE_OPENED_FILE,
-  CLEAR_OPENED_FILE
+  REMOVE_FILE_SUCCESS
 } = props
 
 /*doc
@@ -97,7 +95,7 @@ const actions = {
     await gitlab.projects.repository.files.edit(projectId, path, branch, options)
     let payload = { path, branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
-    dispatch('clearUnsavedFile', { path: inputPath })
+    dispatch('clearUnsavedFile', { path: inputPath }, { root: true })
   },
   async createFile(context, { path, content = '\n' }) {
     let { commit, dispatch } = context
@@ -153,19 +151,6 @@ const actions = {
       ignoreCache: true
     })
     dispatch('clearUnsavedFile', { path: '/' + path.replace(/.md$/, '') })
-  },
-  cacheUnsavedFile({ commit, getters: { getFileByPath } }, { path, content }) {
-    let { content: currentContent } = getFileByPath(path)
-    if (content === currentContent) return
-
-    let fullPath = getFileFullPathByPath(path)
-    let timestamp = Date.now()
-    let payload = {path: fullPath, file: {content, timestamp}}
-    commit(CACHE_OPENED_FILE, payload)
-  },
-  clearUnsavedFile({ commit }, { path }) {
-    let fullPath = getFileFullPathByPath(path)
-    commit(CLEAR_OPENED_FILE, { path: fullPath })
   }
 }
 

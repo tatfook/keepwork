@@ -96,7 +96,7 @@ export default {
     ...mapGetters({
       personalSiteList: 'user/personalSiteList',
       contributedSiteList: 'user/contributedSiteList',
-      openedFiles: 'gitlab/openedFiles',
+      openedFiles: 'openedFiles',
       activePage: 'activePage',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     }),

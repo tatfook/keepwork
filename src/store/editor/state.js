@@ -1,25 +1,34 @@
 import SimpleUndo from '@/lib/utils/simpleUndo'
 import { gConst } from '@/lib/global'
 
-export const UndoManager = new SimpleUndo()
+export const resetPartialState = () => {
+  const UndoManager = new SimpleUndo()
+
+  return {
+    activePage: '',
+    code: '',
+    modList: [],
+    activeMod: null,
+    activeProperty: null,
+    // layout: {
+    //   header: {},
+    //   footer: {},
+    //   siderbar: {}
+    // },
+    theme: {
+      name: 'classic',
+      colorID: 0,
+      fontID: 0
+    },
+    activeComponentType: '',
+    undoManager: UndoManager
+  }
+}
 
 const state = () => ({
-  activePage: '',
-  code: '',
-  modList: [],
-  activeMod: null,
-  activeProperty: null,
-  // layout: {
-  //   header: {},
-  //   footer: {},
-  //   siderbar: {}
-  // },
-  theme: {
-    name: 'classic',
-    colorID: 0,
-    fontID: 0
-  },
-  activeComponentType: '',
+  openedFiles: {},
+  filemanagerTreeNodeExpandMapByPath: {},
+
   showingCol: {
     isManagerShow: true,
     isCodeShow: true,
@@ -27,9 +36,8 @@ const state = () => ({
   },
   newModPosition: gConst.POSITION_AFTER, // after active mod
   filemanagerTreeNodeExpandMapByPath: {},
-  undoManager: UndoManager
-})
 
-export const initialState = state
+  ...resetPartialState()
+})
 
 export default state

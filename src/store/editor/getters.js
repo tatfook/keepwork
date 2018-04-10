@@ -1,6 +1,8 @@
 import _ from 'lodash'
 
 const getters = {
+  openedFiles: state => state.openedFiles,
+
   activePage: state => state.activePage,
   activePageInfo: (state, { activePage }) => {
     let [username, sitename] = activePage.split('/').filter(x => x)
@@ -27,8 +29,8 @@ const getters = {
     state.filemanagerTreeNodeExpandMapByPath,
 
   undoManager: state => state.undoManager,
-  canUndo: (state, { undoManager }) => undoManager.canUndo(),
-  canRedo: (state, { undoManager }) => undoManager.canRedo()
+  canUndo: (state, { undoManager }) => undoManager.canUndo && undoManager.canUndo(),
+  canRedo: (state, { undoManager }) => undoManager.canRedo && undoManager.canRedo()
 }
 
 export default getters
