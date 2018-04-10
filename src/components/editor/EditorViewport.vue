@@ -4,8 +4,8 @@
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
       <p class="info">请点击添加内容</p>
     </div>
-    <template v-for='(mod, index) in modList'>
-      <editor-mod-selector :key='index' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
+    <template v-for='mod in modList'>
+      <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
     </template>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
   overflow-y: auto;
   height: 100%;
 }
-.add-btn-row{
+.add-btn-row {
   text-align: center;
   padding-top: 43px;
   cursor: pointer;
@@ -68,7 +68,7 @@ export default {
   padding: 0;
   font-size: 40px;
 }
-.info{
+.info {
   font-size: 25px;
   color: #c0c4cc;
   margin-top: 13px;
