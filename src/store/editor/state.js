@@ -35,7 +35,6 @@ const state = () => ({
     isPreviewShow: true
   },
   newModPosition: gConst.POSITION_AFTER, // after active mod
-  filemanagerTreeNodeExpandMapByPath: {},
 
   ...resetPartialState()
 })
