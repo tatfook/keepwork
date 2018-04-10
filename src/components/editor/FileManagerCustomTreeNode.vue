@@ -13,7 +13,7 @@
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" title='删除'>
       </el-button>
-      <el-button v-if="isSettable" size="mini" type="text" @click.stop="addFolder" title='设置'>
+      <el-button v-if="isSettable" size="mini" type="text" title='设置'>
         <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
       </el-button>
     </span>
