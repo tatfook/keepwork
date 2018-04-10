@@ -24,8 +24,8 @@
         <span class="node-operate">
           <el-button icon='iconfont icon-houmiantianjia' circle title='后面添加'></el-button>
           <el-button icon='iconfont icon-qianmiantianjia' circle title='前面添加'></el-button>
-          <el-button icon='iconfont icon-tianjiazixiang' circle title='添加子项' @click='() => this.append(data)'></el-button>
-          <el-button icon='iconfont icon-shanchu' circle title='删除' @click='() => this.remove(node, data)'></el-button>
+          <el-button icon='iconfont icon-tianjiazixiang' circle title='添加子项' @click='append(data)'></el-button>
+          <el-button icon='iconfont icon-shanchu' circle title='删除' @click='remove(node, data)'></el-button>
         </span>
       </span>
     </el-tree>
@@ -71,17 +71,32 @@ export default {
         this.$set(data, showKey, false)
       }
       data[showKey] = true
-      let targetInputElement = this.$refs[inputRefId];
+      let targetInputElement = this.$refs[inputRefId]
       targetInputElement.focus()
     },
     hideInput(data, type) {
       let showKey = type + 'InputShow'
       data[showKey] = false
     },
-    finishInput(inputRefId, type){
+    finishInput(inputRefId, type) {
       inputRefId = type + inputRefId
-      let targetInputElement = this.$refs[inputRefId];
+      let targetInputElement = this.$refs[inputRefId]
       targetInputElement.blur()
+    },
+    append(data) {},
+    remove(node, data) {
+      this.$confirm('确定删除这个节点？子节点也会直接被删除', '删除提醒', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(()=>{
+        let parent = node.parent;
+        let children = parent.data.child || parent.data
+        let deleteDataIndex = _.findIndex(children, function(value) {
+          return value === data
+        })
+        children.splice(deleteDataIndex, 1)
+      })
     }
   }
 }
@@ -140,7 +155,7 @@ export default {
     left: 0;
     z-index: -1;
   }
-  .el-input.is-focus{
+  .el-input.is-focus {
     z-index: 1;
   }
   .el-input__inner {
@@ -148,10 +163,10 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .tree-head{
+  .tree-head {
     font-weight: bold;
   }
-  .text{
+  .text {
     display: inline-block;
     width: 100%;
   }
