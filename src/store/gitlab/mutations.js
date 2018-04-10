@@ -6,8 +6,8 @@ const SAVE_FILE_CONTENT_SUCCESS = 'SAVE_FILE_CONTENT_SUCCESS'
 const CREATE_FILE_CONTENT_SUCCESS = 'CREATE_FILE_CONTENT_SUCCESS'
 const GET_REPOSITORY_TREE_SUCCESS = 'GET_REPOSITORY_TREE_SUCCESS'
 const REMOVE_FILE_SUCCESS = 'REMOVE_FILE_SUCCESS'
-const CACHE_UNSAVED_FILE = 'CACHE_UNSAVED_FILE'
-const CLEAR_UNSAVED_FILE = 'CLEAR_UNSAVED_FILE'
+const CACHE_OPENED_FILE = 'CACHE_OPENED_FILE'
+const CLEAR_OPENED_FILE = 'CLEAR_OPENED_FILE'
 
 export const props = {
   GET_FILE_CONTENT_SUCCESS,
@@ -15,8 +15,8 @@ export const props = {
   CREATE_FILE_CONTENT_SUCCESS,
   GET_REPOSITORY_TREE_SUCCESS,
   REMOVE_FILE_SUCCESS,
-  CACHE_UNSAVED_FILE,
-  CLEAR_UNSAVED_FILE
+  CACHE_OPENED_FILE,
+  CLEAR_OPENED_FILE
 }
 
 const doNothing = state => {
@@ -42,14 +42,14 @@ const mutations = {
   [SAVE_FILE_CONTENT_SUCCESS]: doNothing,
   [CREATE_FILE_CONTENT_SUCCESS]: doNothing,
   [REMOVE_FILE_SUCCESS]: doNothing,
-  [CACHE_UNSAVED_FILE](state, { path, file }) {
-    Vue.set(state, 'unsavedFiles', {
-      ...state.unsavedFiles,
+  [CACHE_OPENED_FILE](state, { path, file }) {
+    Vue.set(state, 'openedFiles', {
+      ...state.openedFiles,
       [path]: file
     })
   },
-  [CLEAR_UNSAVED_FILE](state, { path, file }) {
-    Vue.set(state, 'unsavedFiles', _.omit(state.unsavedFiles, path))
+  [CLEAR_OPENED_FILE](state, { path, file }) {
+    Vue.set(state, 'openedFiles', _.omit(state.openedFiles, path))
   }
 }
 

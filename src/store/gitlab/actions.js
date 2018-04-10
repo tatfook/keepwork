@@ -13,8 +13,8 @@ const {
   CREATE_FILE_CONTENT_SUCCESS,
   GET_REPOSITORY_TREE_SUCCESS,
   REMOVE_FILE_SUCCESS,
-  CACHE_UNSAVED_FILE,
-  CLEAR_UNSAVED_FILE
+  CACHE_OPENED_FILE,
+  CLEAR_OPENED_FILE
 } = props
 
 /*doc
@@ -161,11 +161,11 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let timestamp = Date.now()
     let payload = {path: fullPath, file: {content, timestamp}}
-    commit(CACHE_UNSAVED_FILE, payload)
+    commit(CACHE_OPENED_FILE, payload)
   },
   clearUnsavedFile({ commit }, { path }) {
     let fullPath = getFileFullPathByPath(path)
-    commit(CLEAR_UNSAVED_FILE, { path: fullPath })
+    commit(CLEAR_OPENED_FILE, { path: fullPath })
   }
 }
 
