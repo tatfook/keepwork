@@ -40,7 +40,7 @@ const getFileByPath = (rootGetters, path) => {
   // todo, read file form cache, clear cache while save
   let fullPath = getFileFullPathByPath(path)
   let file = rootGetters['gitlab/files'][fullPath]
-  let unsavedFile = rootGetters['gitlab/unsavedFiles'][fullPath]
+  let unsavedFile = rootGetters['gitlab/openedFiles'][fullPath]
 
   return unsavedFile || file
 }
@@ -48,7 +48,7 @@ const getFileByPath = (rootGetters, path) => {
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   files: state => state.files,
-  unsavedFiles: state => state.unsavedFiles,
+  openedFiles: state => state.openedFiles,
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']

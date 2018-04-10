@@ -96,15 +96,15 @@ export default {
     ...mapGetters({
       personalSiteList: 'user/personalSiteList',
       contributedSiteList: 'user/contributedSiteList',
-      unsavedFiles: 'gitlab/unsavedFiles',
+      openedFiles: 'gitlab/openedFiles',
       activePage: 'activePage',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     }),
     openedTreeData() {
-      let clonedUnsavedFiles = _.clone(this.unsavedFiles)
+      let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
       let that = this
-      _.forOwn(clonedUnsavedFiles, function(value, key) {
+      _.forOwn(clonedopenedFiles, function(value, key) {
         let pathArr = key.split('/')
         let pathLen = pathArr.length
         let pageName = pathArr[pathLen - 1].replace(/.md$/, '')
@@ -204,7 +204,7 @@ export default {
     isSaveble(nodeData) {
       let path = nodeData.path
       return (
-        path && this.unsavedFiles[path] && this.unsavedFiles[path].timestamp
+        path && this.openedFiles[path] && this.openedFiles[path].timestamp
       )
     },
     removeFile(data) {

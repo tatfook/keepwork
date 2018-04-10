@@ -1,15 +1,10 @@
+import state from './state'
 import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 
-const state = () => ({
-  repositoryTrees: {},
-  files: {},
-  openedFiles: {}
-})
-
 export default {
-  namespaced: true,
+  namespaced: false, // todo: change it to true to reduce global name risk
   state,
   getters,
   actions,
