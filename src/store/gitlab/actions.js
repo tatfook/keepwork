@@ -90,12 +90,11 @@ const actions = {
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
   async saveFile(context, { path: inputPath, content }) {
-    let { commit, dispatch } = context
+    let { commit } = context
     let { gitlab, projectId, branch, path, options } = await getGitlabFileParams(context, { path: inputPath, content })
     await gitlab.projects.repository.files.edit(projectId, path, branch, options)
     let payload = { path, branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
-    dispatch('clearUnsavedFile', { path: inputPath }, { root: true })
   },
   async createFile(context, { path, content = '\n' }) {
     let { commit, dispatch } = context

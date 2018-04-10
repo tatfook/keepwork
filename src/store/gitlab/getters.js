@@ -20,7 +20,7 @@ const getGitFileOptionsByPath = (rootGetters, path) => {
   let personalAndContributedSitePathMap = rootGetters['user/personalAndContributedSitePathMap']
   let [username, sitename] = path.split('/').filter(x => x)
 
-  let {projectId, ref = 'master'} = _.get(personalAndContributedSitePathMap, `${username}/${sitename}`)
+  let {projectId, lastCommitId: ref = 'master'} = _.get(personalAndContributedSitePathMap, `${username}/${sitename}`)
   let gitFileParams = { projectId, ref }
 
   return gitFileParams

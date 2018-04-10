@@ -1,7 +1,9 @@
 import _ from 'lodash'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
 const getters = {
-  openedFiles: state => state.openedFiles,
+  openedFiles: (state, getters, rootState, {'user/username': username}) => state.openedFiles[username] || {},
+  getOpenedFileByPath: (state, { openedFiles }) => path => openedFiles[getFileFullPathByPath(path)] || {},
 
   activePage: state => state.activePage,
   activePageInfo: (state, { activePage }) => {
@@ -10,7 +12,7 @@ const getters = {
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
 
-  code: state => state.code,
+  code: (state, { getOpenedFileByPath, activePage }) => getOpenedFileByPath(activePage).content || '',
   themeConf: state => state.theme,
   modList: state => state.modList,
 

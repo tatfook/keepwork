@@ -6,7 +6,6 @@ export const resetPartialState = () => {
 
   return {
     activePage: '',
-    code: '',
     modList: [],
     activeMod: null,
     activeProperty: null,
