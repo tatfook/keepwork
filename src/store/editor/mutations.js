@@ -105,7 +105,7 @@ const mutations = {
     Parser.updateBlock(state.modList, key, state.code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
-    let newData = _.merge({}, activePropertyData, data)
+    let newData = { ...activePropertyData, ...data }
     Parser.updateBlockAttribute(
       state.modList,
       state.activeMod.key,
