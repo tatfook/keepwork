@@ -136,6 +136,40 @@ const deleteBlock = (blockList, key) => {
   return block
 }
 
+const moveBlock = (blockList, oldIndex, newIndex) => {
+  let block = _.cloneDeep(blockList[oldIndex])
+
+  if (!block || oldIndex === newIndex) return
+
+  // step 1 move block to the new index
+
+  if (oldIndex > newIndex) {
+    blockList.splice(newIndex, 0, block)
+    blockList.splice(oldIndex + 1, 1)
+  } else {
+    blockList.splice(newIndex + 1, 0, block)
+    blockList.splice(oldIndex, 1)
+  }
+
+  // step 2 recount block line number
+
+  let tempIndex = oldIndex
+  let endIndex = newIndex
+
+  if (oldIndex > newIndex) {
+    tempIndex = newIndex
+    endIndex = oldIndex
+  }
+
+  while (tempIndex <= endIndex) {
+    let curBlock = blockList[tempIndex]
+    let preBlock = blockList[tempIndex - 1]
+    let position = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
+    BlockHelper.modifyBegin(curBlock, position - curBlock.lineBegin)
+    tempIndex++
+  }
+}
+
 const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
   let preBlock = blockList[index]
   let beginLine = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
@@ -204,6 +238,7 @@ export default {
   updateBlock,
   updateBlockAttribute,
   deleteBlock,
+  moveBlock,
   addBlockAfterIndex,
   addBlockByKey,
   getCmd,

@@ -8,6 +8,7 @@ const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 
 const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
+const MOVE_MOD = 'MOVE_MOD'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
@@ -38,6 +39,7 @@ export const props = {
 
   ADD_MOD,
   DELETE_MOD,
+  MOVE_MOD,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -84,6 +86,10 @@ const mutations = {
   },
   [DELETE_MOD](state, key) {
     Parser.deleteBlock(state.modList, key)
+  },
+  [MOVE_MOD](state, { oldIndex, newIndex }) {
+    Parser.moveBlock(state.modList, oldIndex, newIndex)
+    Vue.set(state, 'activeMod', state.modList[newIndex])
   },
   [SET_ACTIVE_MOD](state, key) {
     if (state.activeMod && state.activeMod.key === key) return
@@ -164,7 +170,10 @@ const mutations = {
       ...state.openedFiles,
       [username]: {
         ..._.get(state, ['openedFiles', username]),
-        [path]: {..._.get(state, ['openedFiles', username, path]), ...partialUpdatedFileInfo}
+        [path]: {
+          ..._.get(state, ['openedFiles', username, path]),
+          ...partialUpdatedFileInfo
+        }
       }
     })
   },

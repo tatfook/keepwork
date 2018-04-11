@@ -4,13 +4,16 @@
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
       <p class="info">请点击添加内容</p>
     </div>
-    <template v-for='mod in modList'>
-      <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
-    </template>
+    <draggable v-model='modDraggableList' @change="changeDraggableList">
+      <template v-for='mod in modList'>
+        <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
+      </template>
+    </draggable>
   </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
 import EditorModSelector from './EditorModSelector'
 import themeFactory from '@/lib/theme/theme.factory'
@@ -24,7 +27,8 @@ export default {
     }
   },
   components: {
-    EditorModSelector
+    EditorModSelector,
+    draggable
   },
   computed: {
     ...mapGetters({
@@ -38,11 +42,27 @@ export default {
       this.storedTheme = newTheme
       this.storedTheme.sheet.attach()
       return this.storedTheme
+    },
+    modDraggableList: {
+      get() {
+        return this.modList
+      },
+      set(value) {
+        // do nothing
+      }
     }
   },
   methods: {
     openModSelector(key) {
       this.$store.dispatch('setActiveWinType', 'ModsList')
+    },
+    changeDraggableList(evt) {
+      if (evt.moved) {
+        this.$store.dispatch('moveMod', {
+          oldIndex: evt.moved.oldIndex,
+          newIndex: evt.moved.newIndex
+        })
+      }
     }
   }
 }

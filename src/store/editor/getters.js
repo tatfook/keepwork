@@ -48,11 +48,7 @@ const getters = {
   showingCol: state => state.showingCol,
 
   filemanagerTreeNodeExpandMapByPath: state =>
-    state.filemanagerTreeNodeExpandMapByPath,
-
-  undoManager: state => state.undoManager,
-  canUndo: (state, { undoManager }) => undoManager.canUndo && undoManager.canUndo(),
-  canRedo: (state, { undoManager }) => undoManager.canRedo && undoManager.canRedo()
+    state.filemanagerTreeNodeExpandMapByPath
 }
 
 export default getters

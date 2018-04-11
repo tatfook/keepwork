@@ -1,9 +1,6 @@
-import SimpleUndo from '@/lib/utils/simpleUndo'
 import { gConst } from '@/lib/global'
 
 export const resetPartialState = () => {
-  const UndoManager = new SimpleUndo()
-
   return {
     activePage: '',
     modList: [],
@@ -20,8 +17,7 @@ export const resetPartialState = () => {
       fontID: 0
     },
     activeComponentType: '',
-    newModPosition: gConst.POSITION_AFTER, // after active mod
-    undoManager: UndoManager
+    newModPosition: gConst.POSITION_AFTER // after active mod
   }
 }
 

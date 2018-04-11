@@ -1,4 +1,6 @@
 // add global variables here
+import SimpleUndo from '@/lib/utils/simpleUndo'
+
 export const gClasses = {
   compActive: 'comp-active',
   compHover: 'comp-hover',
@@ -11,7 +13,10 @@ export const gConst = {
   POSITION_AFTER: 'after'
 }
 
+export const gUndoManager = new SimpleUndo()
+
 export default {
   gClasses,
-  gConst
+  gConst,
+  gUndoManager
 }

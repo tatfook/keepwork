@@ -1,5 +1,6 @@
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
+import { gUndoManager } from '@/lib/global'
 import { props } from './mutations'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
@@ -9,6 +10,7 @@ const {
 
   ADD_MOD,
   DELETE_MOD,
+  MOVE_MOD,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -57,16 +59,15 @@ const actions = {
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
     dispatch('updateOpenedFile', { saved: true, path })
   },
-
   updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
-    let { code: oldCode, activePage: path, undoManager } = getters
+    let { code: oldCode, activePage: path } = getters
     if (newCode === oldCode) return
     dispatch('updateOpenedFile', { content: newCode, path })
-    !historyDisabled && undoManager.save(newCode)
+    !historyDisabled && gUndoManager.save(newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
-    dispatch('updateCode', {code})
+    dispatch('updateCode', { code })
   },
 
   // rebuild all mods, will takes a little bit more time
@@ -81,10 +82,17 @@ const actions = {
   updateMarkDownBlock({ commit, dispatch }, payload) {
     dispatch('updateCode', payload)
     commit(SET_ACTIVE_MOD, payload.key)
+    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
     commit(SET_ACTIVE_PROPERTY, null)
     commit(REFRESH_MOD_ATTRIBUTES, payload)
   },
-
+  moveMod({ commit, dispatch }, payload) {
+    commit(SET_ACTIVE_MOD, null)
+    commit(SET_ACTIVE_PROPERTY, null)
+    commit(MOVE_MOD, payload)
+    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    dispatch('refreshCode')
+  },
   addMod({ commit, dispatch }, payload) {
     const modProperties = modFactory.generate(payload.modName)
     var modPropertiesStyle
@@ -92,13 +100,14 @@ const actions = {
       modPropertiesStyle = modProperties
       modPropertiesStyle.styleID = payload.styleID
     }
+    commit(SET_ACTIVE_MOD, null)
+    commit(SET_ACTIVE_PROPERTY, null)
     commit(ADD_MOD, {
       modProperties: modPropertiesStyle || modProperties,
       key: payload.preModKey,
       cmd: Parser.getCmd(payload.modName)
     })
-    commit(SET_ACTIVE_MOD, null)
-    commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
     dispatch('refreshCode')
   },
   setActiveMod({ commit }, key) {
@@ -111,7 +120,10 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
   },
-  setActivePropertyData({ commit, dispatch, getters: { activePropertyData } }, { data }) {
+  setActivePropertyData(
+    { commit, dispatch, getters: { activePropertyData } },
+    { data }
+  ) {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
     dispatch('refreshCode')
   },
@@ -159,13 +171,13 @@ const actions = {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
 
-  undo({ dispatch, getters: { undoManager } }) {
-    undoManager.undo((code = '') =>
+  undo({ dispatch }) {
+    gUndoManager.undo((code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
-  redo({ dispatch, getters: { undoManager } }) {
-    undoManager.redo((code = '') =>
+  redo({ dispatch }) {
+    gUndoManager.redo((code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
@@ -174,13 +186,17 @@ const actions = {
   },
 
   async refreshOpenedFile({ dispatch, rootGetters }, { path }) {
-    await dispatch('gitlab/readFile', { path, editorMode: true }, { root: true })
+    await dispatch(
+      'gitlab/readFile',
+      { path, editorMode: true },
+      { root: true }
+    )
     let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
     let file = gitlabGetFileByPath(path)
     if (!file) return
 
     let { content } = file
-    await dispatch('updateOpenedFile', {path, content})
+    await dispatch('updateOpenedFile', { path, content })
   },
   updateOpenedFile(context, payload) {
     let { path } = payload
@@ -189,13 +205,17 @@ const actions = {
     let { 'user/username': username } = rootGetters
 
     let timestamp = Date.now()
-    let commitPayload = {username, path: fullPath, partialUpdatedFileInfo: {timestamp, ...payload}}
+    let commitPayload = {
+      username,
+      path: fullPath,
+      partialUpdatedFileInfo: { timestamp, ...payload }
+    }
     commit(UPDATE_OPENED_FILE, commitPayload)
   },
   closeOpenedFile(context, { path }) {
     let fullPath = getFileFullPathByPath(path)
     let { commit, rootGetters: { 'user/username': username } } = context
-    commit(CLOSE_OPENED_FILE, {username, path: fullPath})
+    commit(CLOSE_OPENED_FILE, { username, path: fullPath })
   }
 }
 
