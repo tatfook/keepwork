@@ -6,8 +6,6 @@ import { resetPartialState } from './state'
 const RESET_STATE = 'RESET_STATE'
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 
-const UPDATE_CODE = 'UPDATE_CODE'
-
 const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
 
@@ -37,8 +35,6 @@ const CLEAR_OPENED_FILE = 'CLEAR_OPENED_FILE'
 export const props = {
   RESET_STATE,
   SET_ACTIVE_PAGE,
-
-  UPDATE_CODE,
 
   ADD_MOD,
   DELETE_MOD,
@@ -76,9 +72,6 @@ const mutations = {
   [SET_ACTIVE_PAGE](state, path) {
     Vue.set(state, 'activePage', path)
   },
-  [UPDATE_CODE](state, { code }) {
-    Vue.set(state, 'code', code)
-  },
   [ADD_MOD](state, { modProperties, key, cmd }) {
     const mod = Parser.addBlockByKey(
       state.modList,
@@ -101,8 +94,8 @@ const mutations = {
     if (!state.activeMod) return
     Vue.set(state, 'activeProperty', property)
   },
-  [REFRESH_MOD_ATTRIBUTES](state, key) {
-    Parser.updateBlock(state.modList, key, state.code)
+  [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
+    Parser.updateBlock(state.modList, key, code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }
@@ -166,14 +159,20 @@ const mutations = {
     state.newModPosition = position
   },
 
-  [CACHE_OPENED_FILE](state, { path, file }) {
+  [CACHE_OPENED_FILE](state, { username, path, file }) {
     Vue.set(state, 'openedFiles', {
       ...state.openedFiles,
-      [path]: file
+      [username]: {
+        ..._.get(state, ['openedFiles', username]),
+        [path]: file
+      }
     })
   },
-  [CLEAR_OPENED_FILE](state, { path, file }) {
-    Vue.set(state, 'openedFiles', _.omit(state.openedFiles, path))
+  [CLEAR_OPENED_FILE](state, { username, path, file }) {
+    Vue.set(state, 'openedFiles', {
+      ...state.openedFiles,
+      [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
+    })
   }
 }
 

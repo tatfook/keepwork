@@ -7,8 +7,6 @@ const {
   RESET_STATE,
   SET_ACTIVE_PAGE,
 
-  UPDATE_CODE,
-
   ADD_MOD,
   DELETE_MOD,
 
@@ -41,13 +39,7 @@ const actions = {
     commit(RESET_STATE)
     commit(SET_ACTIVE_PAGE, path)
 
-    if (path !== '/') {
-      await dispatch(
-        'gitlab/readFile',
-        { path, editorMode: true },
-        { root: true }
-      )
-    }
+    if (path !== '/') await dispatch('gitlab/readFile', { path, editorMode: true }, { root: true })
 
     let file = rootGetters['gitlab/getFileByPath'](path)
     if (!file) return
@@ -56,23 +48,21 @@ const actions = {
     content && dispatch('updateMarkDown', payload)
   },
   async saveActivePage({ getters, dispatch }) {
-    let { code: content, activePage: path } = getters
-    await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    let { activePage: path } = getters
+    dispatch('savePageByPath', path)
   },
-
-  async savePageByPath({ getters, rootGetters, dispatch }, path) {
-    if (!path) {
-      return
-    }
-    let content = rootGetters['openedFiles'][path].content
+  async savePageByPath({ getters: { getOpenedFileByPath }, dispatch }, path) {
+    if (!path) return
+    let { content } = getOpenedFileByPath(path)
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    dispatch('clearUnsavedFile', { path })
   },
 
   updateCode(context, { code, historyDisabled }) {
-    let { commit, dispatch, getters: { activePage: path, undoManager } } = context
-    commit(UPDATE_CODE, { code })
-    !historyDisabled && undoManager.save(code)
+    let { dispatch, getters: { activePage: path, undoManager } } = context
+    // commit(UPDATE_CODE, { code })
     dispatch('cacheUnsavedFile', { content: code, path })
+    !historyDisabled && undoManager.save(code)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -92,7 +82,7 @@ const actions = {
     dispatch('updateCode', payload)
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(REFRESH_MOD_ATTRIBUTES, payload.key)
+    commit(REFRESH_MOD_ATTRIBUTES, payload)
   },
 
   addMod({ commit, dispatch }, payload) {
@@ -185,19 +175,17 @@ const actions = {
 
   cacheUnsavedFile(context, { path, content }) {
     let fullPath = getFileFullPathByPath(path)
-    let { commit, rootGetters: { 'gitlab/getFileByPath': getFileByPath }, getters: { openedFiles } } = context
-    let openedFile = openedFiles[fullPath]
-
-    let { content: currentContent } = openedFile || getFileByPath(path)
-    if (content === currentContent) return
+    let { commit, rootGetters } = context
+    let { 'user/username': username } = rootGetters
 
     let timestamp = Date.now()
-    let payload = {path: fullPath, file: {content, timestamp}}
+    let payload = {username, path: fullPath, file: {content, timestamp}}
     commit(CACHE_OPENED_FILE, payload)
   },
-  clearUnsavedFile({ commit }, { path }) {
+  clearUnsavedFile(context, { path }) {
     let fullPath = getFileFullPathByPath(path)
-    commit(CLEAR_OPENED_FILE, { path: fullPath })
+    let { commit, rootGetters: { 'user/username': username } } = context
+    commit(CLEAR_OPENED_FILE, {username, path: fullPath})
   }
 }
 
