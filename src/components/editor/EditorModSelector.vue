@@ -75,9 +75,6 @@ export default {
   margin-left: -19px;
   z-index: 11111;
 }
-.add-mod-btn + .add-mod-btn {
-  margin-left: 0;
-}
 .add-before {
   top: -19px;
 }
