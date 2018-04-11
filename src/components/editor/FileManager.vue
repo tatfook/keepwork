@@ -64,6 +64,7 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
 export default {
   name: 'FileManager',
@@ -100,6 +101,9 @@ export default {
       activePage: 'activePage',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     }),
+    activePageFullPath() {
+      return getFileFullPathByPath(this.activePage)
+    },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
@@ -134,15 +138,13 @@ export default {
     async initUrlExpandSelect() {
       let fileManagerTree = this.$refs.fileManagerTree
       let openedTree = this.$refs.openedTree
-      if (!fileManagerTree) {
-        return
-      }
+      if (!fileManagerTree) return
+
       let nowPath = this.$route.path.replace(/^\//, '')
       let pathArr = nowPath.split('/')
       let pathArrLen = pathArr.length
       var levelPath = pathArr[0]
-      let userName = pathArr[0]
-      let siteName = pathArr[1]
+      let [userName, siteName] = pathArr
       await this.getRepositoryTree({ path: `${userName}/${siteName}` })
       for (let index = 1; index < pathArrLen - 1; index++) {
         levelPath += '/' + pathArr[index]
@@ -151,9 +153,6 @@ export default {
           expanded: true
         })
       }
-      levelPath += '/' + pathArr[pathArrLen - 1]
-      fileManagerTree.setCurrentKey(levelPath + '.md')
-      openedTree.setCurrentKey(levelPath + '.md')
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -162,6 +161,9 @@ export default {
       // restore node expand status
       let path = data.path || `${data.username}/${data.name}`
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]
+
+      // modify store info
+      this.activePageFullPath === data.path && store.setCurrentNode(node)
 
       return <FileManagerCustomTreeNode data={data} node={node} />
     },
@@ -222,16 +224,6 @@ export default {
           await this.gitlabRemoveFile({ path })
         })
         .catch(() => {})
-    }
-  },
-  watch: {
-    activePage: function(val) {
-      this.initUrlExpandSelect()
-      let openedTree = this.$refs.openedTree
-      let fileManagerTree = this.$refs.fileManagerTree
-      let keyPath = val.replace(/^\//, '') + '.md'
-      openedTree.setCurrentKey(keyPath)
-      fileManagerTree.setCurrentKey(keyPath)
     }
   }
 }
