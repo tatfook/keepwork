@@ -29,8 +29,8 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 
-const CACHE_OPENED_FILE = 'CACHE_OPENED_FILE'
-const CLEAR_OPENED_FILE = 'CLEAR_OPENED_FILE'
+const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
+const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 
 export const props = {
   RESET_STATE,
@@ -58,8 +58,8 @@ export const props = {
 
   SET_NEW_MOD_POSITION,
 
-  CACHE_OPENED_FILE,
-  CLEAR_OPENED_FILE
+  UPDATE_OPENED_FILE,
+  CLOSE_OPENED_FILE
 }
 
 const mutations = {
@@ -159,16 +159,16 @@ const mutations = {
     state.newModPosition = position
   },
 
-  [CACHE_OPENED_FILE](state, { username, path, file }) {
+  [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
     Vue.set(state, 'openedFiles', {
       ...state.openedFiles,
       [username]: {
         ..._.get(state, ['openedFiles', username]),
-        [path]: file
+        [path]: {..._.get(state, ['openedFiles', username, path]), ...partialUpdatedFileInfo}
       }
     })
   },
-  [CLEAR_OPENED_FILE](state, { username, path, file }) {
+  [CLOSE_OPENED_FILE](state, { username, path, file }) {
     Vue.set(state, 'openedFiles', {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)

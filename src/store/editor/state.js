@@ -20,6 +20,7 @@ export const resetPartialState = () => {
       fontID: 0
     },
     activeComponentType: '',
+    newModPosition: gConst.POSITION_AFTER, // after active mod
     undoManager: UndoManager
   }
 }
@@ -33,7 +34,6 @@ const state = () => ({
     isCodeShow: true,
     isPreviewShow: true
   },
-  newModPosition: gConst.POSITION_AFTER, // after active mod
 
   ...resetPartialState()
 })

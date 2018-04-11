@@ -12,7 +12,27 @@ const getters = {
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
 
-  code: (state, { getOpenedFileByPath, activePage }) => getOpenedFileByPath(activePage).content || '',
+  activePageOpenedFile: (state, { getOpenedFileByPath, activePage }) => getOpenedFileByPath(activePage),
+  activePageCacheAvailable: (state, { activePageOpenedFile }) => {
+    if (_.isEmpty(activePageOpenedFile)) return false
+
+    let savedExpires = 5 * 60 * 1000 // 5 mins
+    let unsavedExpires = 2 * 24 * 60 * 60 * 1000 // 2 days
+    let now = Date.now()
+
+    let { timestamp, saved } = activePageOpenedFile
+    let cachedTime = now - timestamp
+
+    let saveExpired = cachedTime > savedExpires
+    let unsavedExpired = cachedTime > unsavedExpires
+
+    if (saved && !saveExpired) return true
+    if (!saved && !unsavedExpired) return true
+
+    return false
+  },
+  code: (state, { activePageOpenedFile = {} }) => activePageOpenedFile.content || '',
+
   themeConf: state => state.theme,
   modList: state => state.modList,
 
