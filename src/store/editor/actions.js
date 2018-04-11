@@ -43,6 +43,9 @@ const actions = {
     if (activePageCacheAvailable) return
 
     await dispatch('refreshOpenedFile', { path })
+    let { code } = getters
+    let payload = { code, historyDisabled: true }
+    dispatch('updateMarkDown', payload)
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePage: path } = getters
@@ -55,10 +58,11 @@ const actions = {
     dispatch('updateOpenedFile', { saved: true, path })
   },
 
-  updateCode(context, { code, historyDisabled }) {
-    let { dispatch, getters: { activePage: path, undoManager } } = context
-    dispatch('updateOpenedFile', { content: code, path })
-    !historyDisabled && undoManager.save(code)
+  updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
+    let { code: oldCode, activePage: path, undoManager } = getters
+    if (newCode === oldCode) return
+    dispatch('updateOpenedFile', { content: newCode, path })
+    !historyDisabled && undoManager.save(newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -173,12 +177,10 @@ const actions = {
     await dispatch('gitlab/readFile', { path, editorMode: true }, { root: true })
     let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
     let file = gitlabGetFileByPath(path)
-
     if (!file) return
 
     let { content } = file
-    let payload = { code: content, historyDisabled: true }
-    content && dispatch('updateMarkDown', payload)
+    await dispatch('updateOpenedFile', {path, content})
   },
   updateOpenedFile(context, payload) {
     let { path } = payload
