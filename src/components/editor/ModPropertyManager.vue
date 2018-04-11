@@ -76,11 +76,7 @@ export default {
     cardValues() {
       var modType = 'Mod' + this.activeMod.cmd
       var activeModDafaultDatas = mods[modType].properties
-      var activeModDatas = _.merge(
-        {},
-        activeModDafaultDatas,
-        this.activeMod.data
-      )
+      var activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
       return activeModDatas
     }
   },
