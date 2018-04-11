@@ -16,7 +16,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         'margin-top': '-550px',
@@ -67,7 +68,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         'margin-top': '-550px',
@@ -119,7 +121,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -171,7 +174,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -222,7 +226,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -274,7 +279,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -326,7 +332,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -377,7 +384,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -429,7 +437,8 @@ export default [
         'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
@@ -478,7 +487,8 @@ export default [
         height: '689px'
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
