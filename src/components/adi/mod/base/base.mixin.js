@@ -68,7 +68,11 @@ export default {
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
 
-    return <div class={this.getClasses('root')}>{renderTemplate(h, this)}</div>
+    return (
+      <div data-mod={this.mod.modType} class={this.getClasses('root')}>
+        {renderTemplate(h, this)}
+      </div>
+    )
   },
   methods: {
     isChildActive(property) {

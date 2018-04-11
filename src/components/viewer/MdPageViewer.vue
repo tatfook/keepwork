@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div mod-container>
     <template v-for='mod in modList'>
       <mod-loader :mod='mod' :theme='theme' :key='mod.key'> </mod-loader>
     </template>

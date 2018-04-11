@@ -22,13 +22,14 @@
         </p>
       </div>
     </div>
-
+    {{init()}}
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'AdiVipRead',
@@ -51,7 +52,27 @@ export default {
     ...mapGetters({
       isLogined: 'user/isLogined',
       vipInfo: 'user/vipInfo'
-    })
+    }),
+    init() {
+      setTimeout(() => {
+        let modContainer = document.querySelector('[mod-container]')
+
+        if (modContainer) {
+          let vipReadEle
+          let deleteEleKey
+
+          _.forEach(modContainer.childNodes, (element, key) => {
+            if (element.getAttribute('data-mod') == 'ModVipRead') {
+              vipReadEle = element
+              deleteEleKey = key
+            }
+          })
+
+          modContainer.childNodes[deleteEleKey].remove()
+          modContainer.insertBefore(vipReadEle, modContainer.childNodes[0])
+        }
+      }, 0)
+    }
   }
 }
 </script>
@@ -59,10 +80,6 @@ export default {
 <style lang="scss" scoped>
 .comp-vip-read {
   .vip-more-permission {
-    /* position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0; */
     color: #3977ad;
     background-color: #fff;
     box-shadow: 1px -1px 10px #b5b5b5;
