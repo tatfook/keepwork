@@ -54,6 +54,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   height: 100%;
+  padding: 20px;
 }
 .add-btn-row {
   text-align: center;
