@@ -11,7 +11,7 @@
         设置
       </span>
     </div>
-    <el-tree :data="treeData" :props='defaultProps' :expand-on-click-node="false">
+    <el-tree ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
           <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>
@@ -22,9 +22,9 @@
           <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-houmiantianjia' circle title='后面添加'></el-button>
-          <el-button icon='iconfont icon-qianmiantianjia' circle title='前面添加'></el-button>
-          <el-button icon='iconfont icon-tianjiazixiang' circle title='添加子项' @click='append(data)'></el-button>
+          <el-button icon='iconfont icon-houmiantianjia' circle title='后面添加' @click='insert(node, data, "after")'></el-button>
+          <el-button icon='iconfont icon-qianmiantianjia' circle title='前面添加' @click='insert(node, data, "before")'></el-button>
+          <el-button icon='iconfont icon-tianjiazixiang' circle title='添加子项' @click='insert(node, data, "child")'></el-button>
           <el-button icon='iconfont icon-shanchu' circle title='删除' @click='remove(node, data)'></el-button>
         </span>
       </span>
@@ -36,6 +36,7 @@
   </el-dialog>
 </template>
 <script>
+let newMenuId = 1
 export default {
   name: 'treeDataEditor',
   props: {
@@ -83,19 +84,56 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.blur()
     },
-    append(data) {},
+    insert(node, data, position) {
+      let menuTree = this.$refs.menuTree
+      const newChild = {
+        name: '菜单项' + newMenuId,
+        link: 'http://keepwork.com'
+      }
+      let parent = node.parent
+      let children = parent.data.child || parent.data
+      let targetIndex = _.findIndex(children, function(value) {
+        return value === data
+      })
+      let newNode
+      let newNodeId
+      let that = this
+      let inputFocus = function() {
+        that.$nextTick(() => {
+          let newNodeId = newNode.$treeNodeId
+          that.showInput(newNodeId, newNode, 'name')
+        })
+      }
+      switch (position) {
+        case 'before':
+          menuTree.insertBefore(newChild, node)
+          newNode = children[targetIndex]
+          inputFocus()
+          break
+        case 'after':
+          menuTree.insertAfter(newChild, node)
+          newNode = children[targetIndex + 1]
+          inputFocus()
+          break
+        default:
+          node.expanded = true
+          this.$nextTick(() => {
+            menuTree.append(newChild, node)
+            let childrenNodes = node.childNodes
+            let childrenLen = childrenNodes.length - 1
+            newNode = childrenNodes[childrenLen].data
+            inputFocus()
+          })
+      }
+      newMenuId++
+    },
     remove(node, data) {
       this.$confirm('确定删除这个节点？子节点也会直接被删除', '删除提醒', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'error'
-      }).then(()=>{
-        let parent = node.parent;
-        let children = parent.data.child || parent.data
-        let deleteDataIndex = _.findIndex(children, function(value) {
-          return value === data
-        })
-        children.splice(deleteDataIndex, 1)
+      }).then(() => {
+        this.$refs.menuTree.remove(node)
       })
     }
   }
@@ -118,6 +156,9 @@ export default {
     flex-grow: 1;
     position: relative;
     cursor: text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
   }
   .node-link {
     flex-basis: 450px;
@@ -131,7 +172,7 @@ export default {
     cursor: text;
   }
   .node-operate {
-    flex-basis: 140px;
+    flex-basis: 200px;
     flex-shrink: 0;
     flex-grow: 0;
     margin-left: 10px;
@@ -169,6 +210,11 @@ export default {
   .text {
     display: inline-block;
     width: 100%;
+    height: 100%;
+  }
+  .el-tree{
+    max-height: 350px;
+    overflow-y: auto;
   }
 }
 </style>
