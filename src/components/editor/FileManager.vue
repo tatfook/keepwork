@@ -15,9 +15,9 @@
             <span class="file-manager-buttons-container">
               <el-button v-if='isSaveble(data)' v-loading='savePending' class="iconfont icon-baocun" size="mini" type="text" title='保存' @click.stop='save(data)'>
               </el-button>
-              <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新'>
+              <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-guanxi" size="mini" type="text" title='关闭'>
+              <el-button class="iconfont icon-guanxi" size="mini" type="text" title='关闭' @click.stop='closeOpenedFile(data)'>
               </el-button>
               <el-button class="iconfont icon-shanchu" size="mini" type="text" title='删除' @click.stop="removeFile(data)">
               </el-button>
@@ -127,6 +127,8 @@ export default {
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',
       savePageByPath: 'savePageByPath',
+      refreshOpenedFile: 'refreshOpenedFile',
+      closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async initUrlExpandSelect() {

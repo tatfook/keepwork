@@ -149,7 +149,7 @@ const actions = {
       path: `${username}/${name}`,
       ignoreCache: true
     })
-    dispatch('clearUnsavedFile', { path: '/' + path.replace(/.md$/, '') })
+    dispatch('closeOpenedFile', { path })
   }
 }
 
