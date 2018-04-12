@@ -4,8 +4,8 @@
       <p class="switch-notice">
         <!-- <span class="fa fa-lock"></span> -->
         本网页内容，仅限VIP用户浏览全部 <br />
-        <!-- <span ng-if="params.switch_vipread.is_mod_hide">（关闭）</span> -->
-        <!-- <span ng-if="!params.switch_vipread.is_mod_hide">（开启）</span> -->
+        <span v-if="!properties.switch.value">（关闭）</span>
+        <span v-if="properties.switch.value">（开启）</span>
       </p>
     </div>
 
@@ -54,24 +54,29 @@ export default {
       vipInfo: 'user/vipInfo'
     }),
     init() {
-      setTimeout(() => {
-        let modContainer = document.querySelector('[mod-container]')
+      if (this.properties.switch.value) {
+        setTimeout(() => {
+          let modContainer = document.querySelector('[mod-container]')
 
-        if (modContainer) {
-          let vipReadEle
-          let deleteEleKey
+          if (modContainer) {
+            let vipReadEle
+            let deleteEleKey
 
-          _.forEach(modContainer.childNodes, (element, key) => {
-            if (element.getAttribute('data-mod') == 'ModVipRead') {
-              vipReadEle = element
-              deleteEleKey = key
-            }
-          })
+            _.forEach(modContainer.childNodes, (element, key) => {
+              if (element.getAttribute('data-mod') == 'ModVipRead') {
+                vipReadEle = element
+                deleteEleKey = key
+              }
+            })
 
-          modContainer.childNodes[deleteEleKey].remove()
-          modContainer.insertBefore(vipReadEle, modContainer.childNodes[0])
-        }
-      }, 0)
+            modContainer.childNodes[deleteEleKey].remove()
+            modContainer.insertBefore(vipReadEle, modContainer.childNodes[0])
+
+            modContainer.style.maxHeight = '300px'
+            modContainer.style.overflow = 'hidden'
+          }
+        }, 0)
+      }
     }
   }
 }

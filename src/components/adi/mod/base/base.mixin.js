@@ -3,6 +3,7 @@ import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
+import { gThemeData } from '@/lib/global'
 
 jss.setup(preset())
 
@@ -67,6 +68,8 @@ export default {
     this.template = this.conf.templates[this.style.templateID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
+
+    _.merge(this.theme.data, gThemeData)
 
     return (
       <div data-mod={this.mod.modType} class={this.getClasses('root')}>

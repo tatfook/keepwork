@@ -88,7 +88,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        'max-width': '760px',
         height: '50px',
         margin: 'auto'
       }
@@ -100,6 +99,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7'],
+      menu: ['mod-full-width'],
       colMenu: ['bg_color_0']
     },
     options: {

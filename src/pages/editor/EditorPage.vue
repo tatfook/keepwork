@@ -5,7 +5,7 @@
         <EditorHeader @changeFullscreen='changeFullscreen'></EditorHeader>
       </el-header>
       <el-main>
-        <router-view @showPreview='showPreview'/>
+        <router-view @showPreview='showPreview' />
         <el-dialog :visible.sync='dialogVisible ' width='100% ' height='100% '>
           <PageViewer />
         </el-dialog>

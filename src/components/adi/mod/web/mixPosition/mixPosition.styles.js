@@ -178,6 +178,9 @@ export default [
         overflow: 'hidden',
         padding: '15px'
       },
+      rootRow: {
+        width: '100px'
+      },
       media: {
         height: '350px'
       },
