@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
+import { gConst } from '@/lib/global'
 
 const MOD_CMD_BEGIN_REG = /^```@\w*$/
 const MOD_CMD_END_REG = /^```$/
@@ -135,7 +136,41 @@ const deleteBlock = (blockList, key) => {
   return block
 }
 
-const addBlockByIndex = (blockList, index, jsonData, cmd) => {
+const moveBlock = (blockList, oldIndex, newIndex) => {
+  let block = _.cloneDeep(blockList[oldIndex])
+
+  if (!block || oldIndex === newIndex) return
+
+  // step 1 move block to the new index
+
+  if (oldIndex > newIndex) {
+    blockList.splice(newIndex, 0, block)
+    blockList.splice(oldIndex + 1, 1)
+  } else {
+    blockList.splice(newIndex + 1, 0, block)
+    blockList.splice(oldIndex, 1)
+  }
+
+  // step 2 recount block line number
+
+  let tempIndex = oldIndex
+  let endIndex = newIndex
+
+  if (oldIndex > newIndex) {
+    tempIndex = newIndex
+    endIndex = oldIndex
+  }
+
+  while (tempIndex <= endIndex) {
+    let curBlock = blockList[tempIndex]
+    let preBlock = blockList[tempIndex - 1]
+    let position = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
+    BlockHelper.modifyBegin(curBlock, position - curBlock.lineBegin)
+    tempIndex++
+  }
+}
+
+const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
   let preBlock = blockList[index]
   let beginLine = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
   let block = new ModBlock(cmd, beginLine)
@@ -146,10 +181,11 @@ const addBlockByIndex = (blockList, index, jsonData, cmd) => {
   return block
 }
 
-const addBlockByKey = (blockList, key, jsonData, cmd) => {
+const addBlockByKey = (blockList, key, jsonData, cmd, position) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
-  return addBlockByIndex(blockList, index, jsonData, cmd)
+  if (position === gConst.POSITION_BEFORE) index = index - 1
+  return addBlockAfterIndex(blockList, index, jsonData, cmd)
 }
 
 const buildMarkdown = blockList => {
@@ -202,7 +238,8 @@ export default {
   updateBlock,
   updateBlockAttribute,
   deleteBlock,
-  addBlockByIndex,
+  moveBlock,
+  addBlockAfterIndex,
   addBlockByKey,
   getCmd,
   getActiveBlock,

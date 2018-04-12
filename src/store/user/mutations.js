@@ -9,6 +9,7 @@ const CREATE_COMMENT_SUCCESS = 'CREATE_COMMENT_SUCCESS'
 const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS'
 const GET_COMMENTS_BY_PAGE_URL_SUCCESS = 'GET_COMMENTS_BY_PAGE_URL_SUCCESS'
 const GET_SITE_DETAIL_INFO_SUCCESS = 'GET_SITE_DETAIL_INFO_SUCCESS'
+const GET_CONTRIBUTED_WEBSITE_SUCCESS = 'GET_CONTRIBUTED_WEBSITE_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -18,7 +19,8 @@ export const props = {
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
-  GET_SITE_DETAIL_INFO_SUCCESS
+  GET_SITE_DETAIL_INFO_SUCCESS,
+  GET_CONTRIBUTED_WEBSITE_SUCCESS
 }
 
 const doNothing = state => {
@@ -36,6 +38,19 @@ const mutations = {
     Vue.set(state, 'website', {
       ...state.website,
       [username]: _.keyBy(list, 'name')
+    })
+  },
+  [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, {username, list}) {
+    let targetList = list.map(({siteinfo, siteuser}) => ({
+      ...siteinfo,
+      ...siteuser,
+      _id: siteinfo._id,
+      rootPath: `${siteinfo.username}/${siteinfo.name}`,
+      projectId: siteinfo.dataSource.projectId
+    }))
+    Vue.set(state, 'contributedWebsite', {
+      ...state.siteDataSource,
+      [username]: _.keyBy(targetList, 'rootPath')
     })
   },
   [GET_SITE_DATASOURCE_SUCCESS](state, {username, list}) {

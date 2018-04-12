@@ -1,4 +1,3 @@
 export default {
-  text: 'input',
-  link: 'link'
+  switch: 'switchButton'
 }

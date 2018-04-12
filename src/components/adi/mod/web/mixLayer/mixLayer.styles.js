@@ -1,26 +1,31 @@
 export default [
-  // style1
+  // style 0
   {
+    templateID: 0,
     data: {
-      // 定义mod根div的样式
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         'margin-top': '-550px',
         'padding-right': '15%',
         'padding-left': '15%',
         width: '100%',
-        'z-index': 999
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -46,27 +51,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix1.png'
   },
-  // style2
+  // style 1
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         'margin-top': '-550px',
         'text-align': 'center',
         'padding-right': '15%',
         'padding-left': '15%',
-        width: '100%'
+        width: '100%',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -92,27 +104,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix2.png'
   },
-  // style3
+  // style 2
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-550px',
         'padding-right': '15%',
         'padding-left': '15%',
-        'text-align': 'right'
+        'text-align': 'right',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -138,26 +157,33 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix3.png'
   },
-  // style4
+  // style 3
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-400px',
         'padding-right': '15%',
-        'padding-left': '15%'
+        'padding-left': '15%',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -183,27 +209,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix4.png'
   },
-  // style5
+  // style 4
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-400px',
         'padding-right': '15%',
         'padding-left': '15%',
-        'text-align': 'center'
+        'text-align': 'center',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -229,27 +262,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix5.png'
   },
-  // style6
+  // style 5
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-400px',
         'padding-right': '15%',
         'padding-left': '15%',
-        'text-align': 'right'
+        'text-align': 'right',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -275,26 +315,33 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix6.png'
   },
-  // style7
+  // style 6
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-250px',
         'padding-right': '15%',
-        'padding-left': '15%'
+        'padding-left': '15%',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -320,27 +367,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix7.png'
   },
-  // style8
+  // style 7
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-250px',
         'padding-right': '15%',
         'padding-left': '15%',
-        'text-align': 'center'
+        'text-align': 'center',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -366,27 +420,34 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix8.png'
   },
-  // style9
+  // style 8
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       },
       media: {
         width: '100%',
-        height: '689px'
+        height: '689px',
+        position: 'absolute',
+        'z-index': 1
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',
         'margin-top': '-250px',
         'padding-right': '15%',
         'padding-left': '15%',
-        'text-align': 'right'
+        'text-align': 'right',
+        position: 'relative',
+        'z-index': 2
       }
     },
     props: {
@@ -412,7 +473,9 @@ export default [
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix9.png'
   },
+  // style 9
   {
+    templateID: 0,
     data: {
       root: {
         width: '100%',
@@ -424,7 +487,8 @@ export default [
         height: '689px'
       },
       colGroup: {
-        width: '100%'
+        width: '100%',
+        height: '689px'
       },
       colCouple: {
         width: '100%',

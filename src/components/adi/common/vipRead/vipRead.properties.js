@@ -1,4 +1,6 @@
 export default {
-  text: 'KeepWork',
-  link: '#'
+  switch: {
+    desc: '阅读权限',
+    value: true
+  }
 }

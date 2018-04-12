@@ -88,6 +88,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
+import { gUndoManager } from '@/lib/global'
 
 export default {
   name: 'EditorHeader',
@@ -104,7 +105,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['showingCol', 'activePage', 'canUndo', 'canRedo']),
+    ...mapGetters(['showingCol', 'activePage']),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -124,6 +125,12 @@ export default {
       ) {
         return '分屏'
       }
+    },
+    canUndo() {
+      return gUndoManager.canUndo()
+    },
+    canRedo() {
+      return gUndoManager.canRedo()
     }
   },
   methods: {

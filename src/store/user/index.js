@@ -6,6 +6,7 @@ const state = () => ({
   info: {},
   profile: {},
   website: {},
+  contributedWebsite: {},
   siteDataSource: {},
   comments: {},
   siteDetailInfo: {}

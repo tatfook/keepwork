@@ -29,6 +29,7 @@
     "vue-json-editor-block-view": "^1.0.21",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
+    "vuedraggable": "^2.16.0",
     "vuex": "^2.4.0",
     "vuex-iframe-sync": "^1.4.1",
     "vuex-persistedstate": "^2.5.1"
@@ -82,7 +83,6 @@
     "node-sass": "^4.8.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
-    "phantomjs-prebuilt": "^2.1.14",
     "portfinder": "^1.0.13",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.1.3",

@@ -5,8 +5,8 @@
       <span v-if='invalid'> 错误的Mod指令 </span>
     </div>
     <div class='operator' v-if='isActive'>
-      <!-- <el-button class="add-mod-btn add-before" @click.stop.prevent='newMod'> + </el-button> -->
-      <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod'> + </el-button>
+      <el-button class="add-mod-btn add-before" @click.stop.prevent='newMod(gConst.POSITION_BEFORE)'> + </el-button>
+      <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import mods from '@/components/adi/mod'
 import { mapGetters } from 'vuex'
+import { gConst } from '@/lib/global'
 
 export default {
   props: {
@@ -21,7 +22,9 @@ export default {
     theme: Object
   },
   data() {
-    return {}
+    return {
+      gConst
+    }
   },
   computed: {
     ...mapGetters({
@@ -41,7 +44,8 @@ export default {
     }
   },
   methods: {
-    newMod() {
+    newMod(position) {
+      this.$store.dispatch('setNewModPosition', position)
       this.$emit('onAddMod', this.mod.key)
     },
     setActive() {
@@ -71,9 +75,6 @@ export default {
   margin-left: -19px;
   z-index: 11111;
 }
-.add-mod-btn + .add-mod-btn {
-  margin-left: 0;
-}
 .add-before {
   top: -19px;
 }
@@ -81,9 +82,10 @@ export default {
   bottom: -19px;
 }
 .add-mod-btn:hover {
-  transform: scale(1.211);
-  background-color: #7fc3ff;
+  background-color: #3ba4ff;
   color: #fff;
+  font-size: 38px;
+  transition: all 0.2s;
 }
 </style>
 

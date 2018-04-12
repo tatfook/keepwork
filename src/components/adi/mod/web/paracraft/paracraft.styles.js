@@ -32,21 +32,26 @@ export default [
       colGroupC: {
         'margin-top': '10px',
         'padding-left': '10px'
+      },
+      '@media only screen and (max-width: 787px)': {
+        preview: {
+          height: '250px'
+        }
       }
     },
     props: {
       rootRow: { gutter: 10 },
       colPreview: {
-        lg: {
+        sm: {
           span: 6
         },
-        md: {
+        xs: {
           span: 24
         }
       },
       colGroupLeft: {
-        lg: { span: 14 },
-        md: { span: 24 }
+        sm: { span: 14 },
+        xs: { span: 24 }
       },
       colWorldName: {
         span: 8
@@ -116,27 +121,38 @@ export default [
     data: {
       preview: {
         height: '314px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        colPreview: {
+          'margin-top': '10px'
+        },
+        colGroupAB: {
+          'margin-top': '10px'
+        },
+        colDesc: {
+          'margin-top': '10px'
+        }
       }
     },
     props: {
       colGroupAA: {
-        lg: {
-          span: 6
+        sm: {
+          span: 8
         }
       },
       colWorldName: {
-        lg: {
-          span: 6
+        sm: {
+          span: 10
         }
       },
       colAuthor: {
-        lg: {
-          span: 6
+        sm: {
+          span: 8
         }
       },
       colGroupAB: {
-        lg: {
-          offset: 12,
+        sm: {
+          offset: 10,
           span: 6
         }
       },
@@ -144,31 +160,27 @@ export default [
         gutter: 20
       },
       colDownload: {
-        lg: {
-          span: 12
-        }
+        span: 12
       },
       colEnter: {
-        lg: {
-          span: 12
-        }
+        span: 12
       },
       colGroupBRow: {
         gutter: 30
       },
       colPreview: {
-        lg: {
-          span: 7
+        sm: {
+          span: 8
         },
-        md: {
+        xs: {
           span: 24
         }
       },
       colDesc: {
-        lg: {
-          span: 17
+        sm: {
+          span: 16
         },
-        md: {
+        xs: {
           span: 24
         }
       }
@@ -213,8 +225,24 @@ export default [
       preview: {
         height: '314px'
       },
-      colGroupAA: {
-        'margin-top': '40px'
+      '@media only screen and (max-width: 767px)': {
+        colGroupA: {
+          'margin-top': '10px'
+        },
+        colAuthor: {
+          'margin-top': '10px'
+        },
+        colDesc: {
+          'margin-top': '10px'
+        },
+        colGroupAA: {
+          'margin-top': '10px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colGroupAA: {
+          'margin-top': '40px'
+        }
       }
     },
     props: {
@@ -222,17 +250,17 @@ export default [
         gutter: 30
       },
       colPreview: {
-        lg: {
-          span: 7
+        sm: {
+          span: 9
         }
       },
       colGroupA: {
-        lg: {
-          span: 17
+        sm: {
+          span: 15
         }
       },
       colGroupAA: {
-        lg: {
+        sm: {
           span: 9
         }
       },

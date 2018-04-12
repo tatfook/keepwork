@@ -17,10 +17,10 @@ const getGitlabAPI = config => {
   we use 'master' as default ref usually
 */
 const getGitFileOptionsByPath = (rootGetters, path) => {
-  let personalSitePathMap = rootGetters['user/personalSitePathMap']
+  let personalAndContributedSitePathMap = rootGetters['user/personalAndContributedSitePathMap']
   let [username, sitename] = path.split('/').filter(x => x)
 
-  let {projectId, ref = 'master'} = _.get(personalSitePathMap, `${username}/${sitename}`)
+  let {projectId, lastCommitId: ref = 'master'} = _.get(personalAndContributedSitePathMap, `${username}/${sitename}`)
   let gitFileParams = { projectId, ref }
 
   return gitFileParams
@@ -40,15 +40,12 @@ const getFileByPath = (rootGetters, path) => {
   // todo, read file form cache, clear cache while save
   let fullPath = getFileFullPathByPath(path)
   let file = rootGetters['gitlab/files'][fullPath]
-  let unsavedFile = rootGetters['gitlab/unsavedFiles'][fullPath]
-
-  return unsavedFile || file
+  return file
 }
 
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   files: state => state.files,
-  unsavedFiles: state => state.unsavedFiles,
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']

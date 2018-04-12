@@ -8,17 +8,28 @@
 import Parser from '@/lib/mod/parser'
 import { mapGetters } from 'vuex'
 import { codemirror } from 'vue-codemirror'
+import _CodeMirror from 'codemirror'
 import Mousetrap from 'mousetrap'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
 import 'codemirror/addon/hint/show-hint.css'
-import 'codemirror/addon/hint/javascript-hint.js'
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/foldcode.js'
+import 'codemirror/addon/fold/foldgutter.js'
+import 'codemirror/addon/fold/xml-fold'
+import 'codemirror/addon/fold/markdown-fold'
+import 'codemirror/addon/lint/json-lint'
+
+const CodeMirror = window.CodeMirror || _CodeMirror
 
 export default {
   name: 'EditorMarkdown',
   components: {
     codemirror
+  },
+  created() {
+    CodeMirror.registerHelper('fold', 'wikiCmdFold', this.wikiCmdFold)
   },
   computed: {
     ...mapGetters({
@@ -32,14 +43,31 @@ export default {
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        foldGutter: true,
+        foldOptions: {
+          rangeFinder: new CodeMirror.fold.combine(
+            CodeMirror.fold.markdown,
+            CodeMirror.fold.xml,
+            CodeMirror.fold.wikiCmdFold
+          ),
+          clearOnEnter: false
+        },
+        gutters: [
+          'CodeMirror-linenumbers',
+          'CodeMirror-foldgutter',
+          'CodeMirror-lint-markers'
+        ],
+        matchBrackets: true,
         extraKeys: {
           'Ctrl-S': save,
-          'Cmd-S': save
+          'Cmd-S': save,
+          'Ctrl-Space': 'autocomplete',
+          'Cmd-Space': 'autocomplete'
         }
       }
     },
     editor() {
-      return this.$refs.mdEditor.editor
+      return this.$refs.mdEditor.codemirror
     }
   },
   methods: {
@@ -78,6 +106,126 @@ export default {
       }
       let key = mod.key
       this.$store.dispatch('updateMarkDownBlock', { code, key })
+    },
+    wikiCmdFold(cm, start) {
+      let line = cm.getLine(start.line)
+      if (!line || !line.match(/^```[@\/]/)) return
+      let end = start.line + 1
+      let lastLineNo = cm.lastLine()
+      while (end < lastLineNo) {
+        line = cm.getLine(end)
+        if (line) {
+          if (line.match(/^```$/)) break
+          else if (line.match(/^```@/)) {
+            end--
+            break
+          }
+        }
+        end++
+      }
+      return {
+        from: CodeMirror.Pos(start.line),
+        to: CodeMirror.Pos(end, cm.getLine(end).length)
+      }
+    },
+    setFontStyle(style) {
+      let wrapper = ''
+      if (style === 'bold') wrapper = '**'
+      else if (style === 'italic') wrapper = '*'
+
+      if (this.editor.somethingSelected()) {
+        let selection = this.editor.getSelection()
+        let replaceStr =
+          wrapper + selection.replace(/\n/g, wrapper + '\n' + wrapper) + wrapper
+        this.editor.replaceSelection(replaceStr)
+      }
+    },
+    insertHeadline(level) {
+      let preChar = ''
+      while (level > 0) {
+        preChar += '#'
+        level--
+      }
+      preChar += ' '
+
+      let cursor = this.editor.getCursor()
+      let content = this.editor.getLine(cursor.line)
+
+      let iSpace = 0
+      let chrCmp = ''
+      for (let i = 0; i < content.length; i++) {
+        chrCmp = content.substr(i, 1)
+        if (chrCmp == '#') {
+          continue
+        } else {
+          if (chrCmp == ' ') {
+            iSpace = i + 1
+          }
+          break
+        }
+      }
+      this.editor.replaceRange(
+        preChar,
+        CodeMirror.Pos(cursor.line, 0),
+        CodeMirror.Pos(cursor.line, iSpace)
+      )
+      this.editor.focus()
+    },
+    insertCode() {
+      let selection = this.editor.getSelection()
+      let replaceStr = '```\n' + selection + '\n```'
+      this.editor.replaceSelection(replaceStr)
+
+      let cursor = this.editor.getCursor()
+      this.editor.setCursor(CodeMirror.Pos(cursor.line - 1, cursor.ch))
+      this.editor.focus()
+    },
+    insertLine() {
+      let cursor = this.editor.getCursor()
+      this.editor.replaceRange(
+        '---\n',
+        CodeMirror.Pos(cursor.line + 1, 0),
+        CodeMirror.Pos(cursor.line + 1, 0)
+      )
+      this.editor.setCursor(CodeMirror.Pos(cursor.line + 2, 0))
+      this.editor.focus()
+    },
+    insertLink() {
+      let replaceStr = ''
+      if (this.editor.somethingSelected()) {
+        replaceStr += '[' + this.editor.getSelection() + ']'
+      } else {
+        replaceStr += '[]'
+      }
+      this.editor.replaceSelection(replaceStr + '(' + ')')
+      if (replaceStr == '[]') {
+        this.editor.setCursor(
+          CodeMirror.Pos(
+            this.editor.getCursor().line,
+            this.editor.getCursor().ch - 3
+          )
+        )
+      }
+      this.editor.focus()
+    },
+    insertImage(txt, url) {
+      let replaceStr = ''
+      if (txt) {
+        replaceStr += '![' + txt + ']'
+      } else if (this.editor.somethingSelected()) {
+        replaceStr += '![' + this.editor.getSelection() + ']'
+      } else {
+        replaceStr += '![]'
+      }
+
+      if (url) {
+        replaceStr += '(' + url + ')'
+      } else {
+        replaceStr += '(' + dat + ')'
+      }
+
+      this.editor.replaceSelection(replaceStr)
+      this.editor.focus()
     }
   }
 }

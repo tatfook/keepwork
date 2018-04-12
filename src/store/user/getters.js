@@ -66,6 +66,34 @@ const getters = {
     return personalSitePathMap[`${username}/${name}`]
   },
 
+  getContributedSiteListByUsername: (state, getters, rootState, rootGetters) => username => {
+    let { 'gitlab/repositoryTrees': repositoryTrees } = rootGetters
+    let contributedWebsitesMapByRootpath = _.get(state, ['contributedWebsite', username])
+    let websiteRootpaths = _.keys(contributedWebsitesMapByRootpath)
+
+    let contributedSiteList = websiteRootpaths.map(rootPath => {
+      let { projectId, dataSource: { lastCommitId } } = contributedWebsitesMapByRootpath[rootPath]
+      let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
+        ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
+      )
+      let children = gitTree2NestedArray(files, rootPath)
+      return {
+        ...contributedWebsitesMapByRootpath[rootPath],
+        projectId,
+        lastCommitId,
+        children
+      }
+    })
+
+    return contributedSiteList
+  },
+  contributedSiteList: (state, {username, getContributedSiteListByUsername}) => getContributedSiteListByUsername(username),
+  contributedSitePathMap: (state, {contributedSiteList}) => _.keyBy(contributedSiteList, ({username, name}) => `${username}/${name}`),
+
+  personalAndContributedSiteList: (state, {personalSiteList, contributedSiteList}) => ([...personalSiteList, ...contributedSiteList]),
+  personalAndContributedSitePathMap: (state, {personalSitePathMap, contributedSitePathMap}) => ({...personalSitePathMap, ...contributedSitePathMap}),
+  // todo getContributedSiteListByUsername
+
   siteDetailInfo: state => state.siteDetailInfo,
   getSiteDetailInfoByPath: (state, {siteDetailInfo}) => path => {
     let [username, name] = path.split('/').filter(x => x)

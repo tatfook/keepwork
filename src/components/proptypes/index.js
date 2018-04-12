@@ -4,6 +4,7 @@ import menu from './MenuType'
 import board from './BoardType'
 import autoSizeInput from './AutoSizeInputType'
 import linkTarget from './LinkTargetType'
+import switchButton from './SwitchButtonType'
 
 export default {
   input,
@@ -11,5 +12,6 @@ export default {
   menu,
   board,
   autoSizeInput,
-  linkTarget
+  linkTarget,
+  switchButton
 }
