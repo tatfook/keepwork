@@ -38,9 +38,11 @@ const actions = {
   async setActivePage(context, path) {
     let { getters, commit, dispatch } = context
 
-    if (getters.activePage === path || path === '/') return
+    if (getters.activePage === path) return
     commit(RESET_STATE)
     commit(SET_ACTIVE_PAGE, path)
+
+    if (path === '/') return
 
     let { activePageCacheAvailable } = getters
     if (activePageCacheAvailable) return
