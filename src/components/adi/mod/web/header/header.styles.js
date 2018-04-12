@@ -4,11 +4,6 @@ export default [
     templateID: 0,
     data: {
       // 定义mod根div的样式
-      root: {
-        overflow: 'hidden',
-        'margin-top': '60px',
-        'margin-bottom': '60px'
-      },
       logo: {
         height: '87px',
         width: '87px'
@@ -38,7 +33,7 @@ export default [
       colGroupARow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
       colGroupRow: ['mod-full-width'],
       menu: ['mod-full-width'],
       colMenu: ['bg_color_0']
@@ -74,7 +69,6 @@ export default [
     templateID: 1,
     data: {
       // 定义mod根div的样式
-      root: {},
       logo: {
         height: '87px',
         width: '87px',
@@ -105,7 +99,7 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
       menu: ['mod-full-width'],
       colMenu: ['bg_color_0']
     },
