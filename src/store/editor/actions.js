@@ -25,6 +25,7 @@ const {
   UPDATE_THEME_FONT,
 
   UPDATE_WIN_TYPE,
+  UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
@@ -115,10 +116,14 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
   },
-  setActiveProperty({ commit }, payload) {
+  setActiveProperty({ commit, dispatch }, payload) {
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    dispatch('setActivePropertyTabType', 'attr')
+  },
+  setActivePropertyTabType({ commit }, type) {
+    commit(UPDATE_PROPERTY_TAB_TYPE, type)
   },
   setActivePropertyData(
     { commit, dispatch, getters: { activePropertyData } },

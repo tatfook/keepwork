@@ -4,11 +4,11 @@
       <i class="iconfont icon-bianjiqi-shanchu"></i>
       删除模块
     </div>
-    <el-tabs>
-      <el-tab-pane label='属性'>
+    <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
+      <el-tab-pane label='属性' name='attr'>
         <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
-      <el-tab-pane label='样式'>
+      <el-tab-pane label='样式' name='style'>
         <div class='styles-container'>
           <style-selector :mod='activeMod' />
         </div>
@@ -40,7 +40,8 @@ export default {
   methods: {
     ...mapActions({
       setActivePropertyData: 'setActivePropertyData',
-      deleteMod: 'deleteMod'
+      deleteMod: 'deleteMod',
+      setActivePropertyTabType: 'setActivePropertyTabType'
     }),
     updateActiveProperData() {
       // the data of the json_editor is in ini_data of the component
@@ -55,6 +56,10 @@ export default {
           this.deleteMod(this.activeMod.key)
         })
         .catch(() => {})
+    },
+    tabClickHandle(tabItem) {
+      let activeName = tabItem.name
+      this.setActivePropertyTabType(activeName)
     }
   },
   computed: {
@@ -66,7 +71,8 @@ export default {
       activeProperty: 'activeProperty',
       activePropertyData: 'activePropertyData',
       hasActiveMod: 'hasActiveMod',
-      hasActiveProperty: 'hasActiveProperty'
+      hasActiveProperty: 'hasActiveProperty',
+      activePropertyTabType: 'activePropertyTabType'
     }),
     editingProps() {
       var modType = 'Mod' + this.activeMod.cmd
@@ -78,6 +84,12 @@ export default {
       var activeModDafaultDatas = mods[modType].properties
       var activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
       return activeModDatas
+    },
+    activeTab: {
+      get() {
+        return this.activePropertyTabType || 'attr'
+      },
+      set() {}
     }
   },
   components: {

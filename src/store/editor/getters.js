@@ -45,6 +45,7 @@ const getters = {
   hasActiveMod: state => !!state.activeMod,
   hasActiveProperty: state => !!state.activeProperty,
   activeComponentType: state => state.activeWinType,
+  activePropertyTabType: state => state.activePropertyTabType,
   showingCol: state => state.showingCol,
 
   filemanagerTreeNodeExpandMapByPath: state =>
