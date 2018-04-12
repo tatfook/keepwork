@@ -13,11 +13,9 @@ export const gThemeData = {
 }
 
 export const gTheme = {
-  modFullWidth: {
-    '@media only screen and (min-width: 1080px)': {
-      'mod-full-width': {
-        width: gThemeData['mod-full-width']
-      }
+  '@media only screen and (min-width: 1080px)': {
+    'mod-full-width': {
+      width: gThemeData['mod-full-width']
     }
   }
 }
@@ -32,6 +30,7 @@ export const gUndoManager = new SimpleUndo()
 export default {
   gClasses,
   gUndoManager,
+  gThemeData,
   gTheme,
   gConst
 }

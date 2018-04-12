@@ -51,7 +51,7 @@ const generate = conf => {
     buildFontClasses(fonts),
     buildColorClasses(colors),
     buildBgColorClasses(bgColors),
-    gTheme.modFullWidth
+    gTheme
   )
 
   let data = buildOrigin(themeClasses)
