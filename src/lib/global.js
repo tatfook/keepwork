@@ -21,8 +21,8 @@ export const gTheme = {
       margin: 'auto'
     },
     'mod-space': {
-      'margin-top': gThemeData['mod-space-computer'],
-      'margin-bottom': gThemeData['mod-space-computer']
+      'padding-top': gThemeData['mod-space-computer'],
+      'padding-bottom': gThemeData['mod-space-computer']
     }
   },
   '@media only screen and (max-width: 1080px)': {
@@ -30,8 +30,8 @@ export const gTheme = {
       padding: '0 20px'
     },
     'mod-space': {
-      'margin-top': gThemeData['mod-space-mobile'],
-      'margin-bottom': gThemeData['mod-space-mobile']
+      'padding-top': gThemeData['mod-space-mobile'],
+      'padding-bottom': gThemeData['mod-space-mobile']
     }
   }
 }
