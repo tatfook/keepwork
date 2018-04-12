@@ -20,13 +20,15 @@ const renderTemplate = (h, m, data, parentIndex) => {
     if (!menuData.child) {
       return (
         <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
-          {menuData.name}
+          <a href={menuData.link}>{menuData.name}</a>
         </el-menu-item>
       )
     } else {
       return (
         <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
-          <template slot="title">{menuData.name}</template>
+          <template slot="title">
+            <a href={menuData.link}>{menuData.name}</a>
+          </template>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </el-submenu>
       )
@@ -60,6 +62,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a {
+  text-decoration: none;
+  color: unset;
+}
+
 .comp-menu {
   height: 100%;
 
@@ -69,6 +76,7 @@ export default {
     .el-menu-item {
       height: 100%;
       line-height: 50px;
+      border: 0;
     }
   }
 }
@@ -76,13 +84,27 @@ export default {
   border: none;
 }
 </style>
-<style>
-.comp-menu .el-menu .el-submenu {
-  height: 100%;
+<style lang="scss">
+.comp-menu {
+  a {
+    text-decoration: none;
+    color: unset;
+  }
+
+  .el-menu {
+    .el-submenu {
+      height: 100%;
+    }
+
+    .el-submenu__title {
+      height: 100%;
+      line-height: 50px;
+      border: 0;
+    }
+  }
 }
 
-.comp-menu .el-menu .el-submenu .el-submenu__title {
-  height: 100%;
-  line-height: 50px;
+.el-menu--horizontal {
+  border: 0;
 }
 </style>

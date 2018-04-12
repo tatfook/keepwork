@@ -15,7 +15,13 @@ export const gThemeData = {
 export const gTheme = {
   '@media only screen and (min-width: 1080px)': {
     'mod-full-width': {
-      width: gThemeData['mod-full-width']
+      width: gThemeData['mod-full-width'],
+      margin: 'auto'
+    }
+  },
+  '@media only screen and (max-width: 1080px)': {
+    'mod-full-width': {
+      padding: '0 20px'
     }
   }
 }

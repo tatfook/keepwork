@@ -1,10 +1,13 @@
 export default [
   // style 0
   {
+    templateID: 0,
     data: {
       // 定义mod根div的样式
       root: {
-        overflow: 'hidden'
+        overflow: 'hidden',
+        'margin-top': '60px',
+        'margin-bottom': '60px'
       },
       logo: {
         height: '87px',
@@ -19,23 +22,26 @@ export default [
         display: 'flex',
         'align-items': 'center'
       },
-      colMenu: {
-        'padding-top': '5px',
-        'padding-bottom': '5px'
-      },
       // 定义子组件menu的wrapper样式
       menu: {
-        width: '100%',
-        height: '50px'
+        height: '50px',
+        margin: 'auto'
+      },
+      colMenu: {
+        'margin-top': '20px'
       }
     },
     props: {
+      rootRow: { gutter: 10 },
       colLogo: { span: 10 },
       colCouple: { span: 16 },
-      rootRow: { gutter: 10 }
+      colGroupARow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7']
+      root: ['font_0', 'color_7'],
+      colGroupRow: ['mod-full-width'],
+      menu: ['mod-full-width'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
@@ -65,6 +71,7 @@ export default [
   },
   {
     // style 1
+    templateID: 1,
     data: {
       // 定义mod根div的样式
       root: {},
