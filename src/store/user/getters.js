@@ -16,6 +16,7 @@ const getters = {
   },
   isLogined: (state, {profile}) => !_.isEmpty(_.omit(profile, ['token'])),
   username: (state, { profile: { username } }) => username,
+  userId: (state, { profile: { _id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},

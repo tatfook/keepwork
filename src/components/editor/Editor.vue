@@ -58,13 +58,7 @@
       <editor-markdown ref='codemirror' />
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
-      <div class="guid-content">
-        <h1>Welcome to Keepwork</h1>
-        <div>
-          <el-button type='primary'>创建新网站</el-button>
-          <el-button>创建新网页</el-button>
-        </div>
-      </div>
+      <editor-welcome />
     </el-col>
   </el-row>
 </template>
@@ -72,6 +66,7 @@
 <script>
 import _ from 'lodash'
 import EditorMarkdown from './EditorMarkdown'
+import EditorWelcome from './EditorWelcome'
 // import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
@@ -109,6 +104,7 @@ export default {
   },
   components: {
     EditorMarkdown,
+    EditorWelcome,
     // EditorViewport,
     ModPropertyManager,
     Search,
