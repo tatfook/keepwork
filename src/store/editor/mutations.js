@@ -23,6 +23,7 @@ const UPDATE_THEME_BG_COLOR = 'UPDATE_THEME_BG_COLOR'
 const UPDATE_THEME_FONT = 'UPDATE_THEME_FONT'
 
 const UPDATE_WIN_TYPE = 'UPDATE_WIN_TYPE'
+const UPDATE_PROPERTY_TAB_TYPE = 'UPDATE_PROPERTY_TAB_TYPE'
 const RESET_SHOWING_COL = 'RESET_SHOWING_COL'
 
 const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
@@ -54,6 +55,7 @@ export const props = {
   UPDATE_THEME_FONT,
 
   UPDATE_WIN_TYPE,
+  UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
@@ -133,6 +135,9 @@ const mutations = {
   },
   [UPDATE_WIN_TYPE](state, componentType) {
     Vue.set(state, 'activeWinType', componentType)
+  },
+  [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
+    Vue.set(state, 'activePropertyTabType', componentType)
   },
   [RESET_SHOWING_COL](state, showingColObj) {
     Vue.set(
