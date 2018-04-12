@@ -82,9 +82,10 @@ export default {
   bottom: -19px;
 }
 .add-mod-btn:hover {
-  transform: scale(1.211);
-  background-color: #7fc3ff;
+  background-color: #3ba4ff;
   color: #fff;
+  font-size: 38px;
+  transition: all 0.2s;
 }
 </style>
 
