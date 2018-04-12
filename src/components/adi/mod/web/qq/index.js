@@ -6,13 +6,13 @@ import mod from './QQ'
 const name = 'ModQQ'
 
 const components = {
+  qq: 'AdiNumber',
   pic: 'AdiMedia',
   desc: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)
 
-properties.pic.name = '图片点击跳转qq聊天链接'
 properties.pic.src = './static/adi/qq/qqMod.png'
 properties.pic.link =
   'http://wpa.qq.com/msgrd?v=3&uin=123456789&site=qq&menu=yes'

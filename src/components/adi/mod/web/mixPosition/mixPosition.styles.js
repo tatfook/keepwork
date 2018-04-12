@@ -6,12 +6,18 @@ export default [
       // 定义mod根div的样式
       root: {
         overflow: 'hidden',
-        padding: '15px'
+        padding: '15px',
+        'max-width': '1170px',
+        margin: '0 auto'
       },
       media: {
-        height: '300px'
+        height: '611px'
       },
-      colMedia: {},
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
+      },
       colGroup: {
         display: 'flex',
         'align-items': ' flex-start'
@@ -33,15 +39,11 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        sm: { span: 8 }
       },
       colGroup: {
         xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
+        sm: { span: 16 }
       },
       colButton: {
         xs: {
@@ -49,16 +51,8 @@ export default [
           push: 18
         },
         sm: {
-          span: 4,
-          push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
+          span: 3,
+          push: 21
         }
       }
     },
@@ -93,12 +87,18 @@ export default [
     data: {
       root: {
         overflow: 'hidden',
-        padding: '15px'
+        padding: '15px',
+        'max-width': '1170px',
+        margin: '0 auto'
       },
       media: {
-        height: '300px'
+        height: '611px'
       },
-      colMedia: {},
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
+      },
       subtitle: {
         'margin-top': '10px'
       },
@@ -116,15 +116,11 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        sm: { span: 8 }
       },
       colGroup: {
         xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
+        sm: { span: 16 }
       },
       colButton: {
         xs: {
@@ -132,16 +128,8 @@ export default [
           push: 18
         },
         sm: {
-          span: 4,
-          push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
+          span: 3,
+          push: 21
         }
       }
     },
@@ -172,75 +160,94 @@ export default [
 
   // style 2  左文右图（文字竖排）
   {
-    templateID: 1,
+    templateID: 2,
     data: {
       root: {
         overflow: 'hidden',
-        padding: '15px'
+        padding: '15px',
+        'max-width': '1170px',
+        margin: '0 auto'
       },
-      media: {
-        height: '350px'
+      colTitle: {
+        height: '700px'
       },
-      colMedia: {},
-      colGroup: {
-        height: '350px'
+      colSubtitle: {
+        height: '700px'
       },
       colGroupItem: {
-        height: '300px'
+        height: '700px'
+      },
+      colParagraph: {
+        height: '646px'
+      },
+      media: {
+        height: '700px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        colTitle: {
+          height: '350px'
+        },
+        colSubtitle: {
+          height: '350px'
+        },
+        colGroupItem: {
+          height: '350px'
+        },
+        colParagraph: {
+          height: '300px'
+        },
+        media: {
+          height: '350px'
+        },
+        paragraph: {
+          'max-width': '180px'
+        }
       },
       title: {
         'writing-mode': 'vertical-rl',
         overflow: 'hidden'
       },
       subtitle: {
-        'margin-top': '10px',
         'writing-mode': 'vertical-rl',
         overflow: 'hidden'
       },
       paragraph: {
         float: 'right',
-        'margin-top': '15px',
+        'max-width': '420px',
         'text-indent': '28px',
         'writing-mode': 'vertical-rl'
       },
       colButton: {
-        'margin-top': '20px'
+        'margin-top': '18px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
+      colTitle: {
+        xs: { span: 2 },
+        sm: { span: 1 }
+      },
+      colSubtitle: {
+        xs: { span: 1 },
+        sm: { span: 1 }
+      },
+      colGroupItem: {
+        xs: { span: 9 },
+        sm: { span: 9 }
+      },
       colMedia: {
-        xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        xs: { span: 12 },
+        sm: { span: 13 }
       },
-      colGroup: {
-        xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
-      },
-      colGroupItem: { span: 24 },
-      colTitle: { span: 4 },
-      colSubtitle: { span: 4 },
-      colParagraph: { span: 16 },
+      colParagraph: { span: 24 },
       colButton: {
         xs: {
-          span: 6,
-          push: 18
+          span: 8,
+          push: 16
         },
         sm: {
           span: 4,
           push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
         }
       }
     },
@@ -275,11 +282,17 @@ export default [
     data: {
       root: {
         overflow: 'hidden',
-        'margin-top': '20px'
+        'margin-top': '20px',
+        'max-width': '1170px',
+        margin: '0 auto'
       },
-      colGroup: {},
       media: {
-        height: '300px'
+        height: '550px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
       },
       title: {
         'margin-top': '20px',
@@ -300,27 +313,11 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colGroup: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colButton: { span: 0 }
     },
@@ -350,11 +347,17 @@ export default [
     data: {
       root: {
         overflow: 'hidden',
-        'margin-top': '20px'
+        'margin-top': '20px',
+        'max-width': '1170px',
+        margin: '0 auto'
       },
-      colGroup: {},
       media: {
-        height: '300px'
+        height: '550px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
       },
       title: {
         'margin-top': '20px',
@@ -375,27 +378,11 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colGroup: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colButton: { span: 0 }
     },

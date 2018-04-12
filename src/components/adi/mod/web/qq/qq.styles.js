@@ -37,17 +37,17 @@ export default [
     },
     props: {
       colPicDesc: {
-        xs: { span: 8, offset: 16 },
-        sm: { span: 4, offset: 20 },
-        md: { span: 4, offset: 20 },
-        lg: { span: 4, offset: 20 }
+        xs: {
+          span: 8,
+          offset: 16
+        },
+        sm: {
+          span: 4,
+          offset: 20
+        }
       },
-      colPic: {
-        span: 24
-      },
-      colDesc: {
-        span: 24
-      }
+      colPic: { span: 24 },
+      colDesc: { span: 24 }
     },
     theme: {
       root: ['font_0', 'color_0']
@@ -103,17 +103,17 @@ export default [
     },
     props: {
       colPicDesc: {
-        xs: { span: 12, offset: 12 },
-        sm: { span: 6, offset: 18 },
-        md: { span: 6, offset: 18 },
-        lg: { span: 6, offset: 18 }
+        xs: {
+          span: 12,
+          offset: 12
+        },
+        sm: {
+          span: 6,
+          offset: 18
+        }
       },
-      colPic: {
-        span: 12
-      },
-      colDesc: {
-        span: 12
-      }
+      colPic: { span: 12 },
+      colDesc: { span: 12 }
     },
     theme: {
       root: ['font_0', 'color_0']

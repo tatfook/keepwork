@@ -31,5 +31,15 @@ export default [
       ]
     },
     { colMedia: 'media' }
+  ],
+
+  // template 2
+  [
+    { colTitle: 'title' },
+    { colSubtitle: 'subtitle' },
+    {
+      colGroupItem: [{ colParagraph: 'paragraph' }, { colButton: 'button' }]
+    },
+    { colMedia: 'media' }
   ]
 ]
