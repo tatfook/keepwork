@@ -4,8 +4,8 @@
       <p class="switch-notice">
         <!-- <span class="fa fa-lock"></span> -->
         本网页内容，仅限VIP用户浏览全部 <br />
-        <!-- <span ng-if="params.switch_vipread.is_mod_hide">（关闭）</span> -->
-        <!-- <span ng-if="!params.switch_vipread.is_mod_hide">（开启）</span> -->
+        <span v-if="!properties.switch.value">（关闭）</span>
+        <span v-if="properties.switch.value">（开启）</span>
       </p>
     </div>
 
@@ -22,13 +22,14 @@
         </p>
       </div>
     </div>
-
+    {{init()}}
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'AdiVipRead',
@@ -51,7 +52,32 @@ export default {
     ...mapGetters({
       isLogined: 'user/isLogined',
       vipInfo: 'user/vipInfo'
-    })
+    }),
+    init() {
+      if (this.properties.switch.value) {
+        setTimeout(() => {
+          let modContainer = document.querySelector('[mod-container]')
+
+          if (modContainer) {
+            let vipReadEle
+            let deleteEleKey
+
+            _.forEach(modContainer.childNodes, (element, key) => {
+              if (element.getAttribute('data-mod') == 'ModVipRead') {
+                vipReadEle = element
+                deleteEleKey = key
+              }
+            })
+
+            modContainer.childNodes[deleteEleKey].remove()
+            modContainer.insertBefore(vipReadEle, modContainer.childNodes[0])
+
+            modContainer.style.maxHeight = '300px'
+            modContainer.style.overflow = 'hidden'
+          }
+        }, 0)
+      }
+    }
   }
 }
 </script>
@@ -59,10 +85,6 @@ export default {
 <style lang="scss" scoped>
 .comp-vip-read {
   .vip-more-permission {
-    /* position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0; */
     color: #3977ad;
     background-color: #fff;
     box-shadow: 1px -1px 10px #b5b5b5;

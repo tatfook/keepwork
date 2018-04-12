@@ -51,11 +51,6 @@ var modsList = [
         label: '图文轮播',
         mods: [ModImgLoop]
       }
-      // {
-      //   id: '2-2',
-      //   label: '绘图板',
-      //   mods: [ModBoard]
-      // }
     ]
   },
   {
@@ -125,12 +120,22 @@ var modsList = [
         id: '7-1',
         label: '图文轮播',
         mods: [ModImgLoop]
+      },
+      {
+        id: '7-2',
+        label: '绘图板',
+        mods: [ModBoard]
+      },
+      {
+        id: '7-3',
+        label: 'VIP阅读',
+        mods: [ModVipRead]
+      },
+      {
+        id: '7-4',
+        label: '评论',
+        mods: [ModComment]
       }
-      // {
-      //   id: '7-2',
-      //   label: '绘图板',
-      //   mods: [ModBoard]
-      // }
     ]
   },
   {
@@ -143,23 +148,24 @@ var modsList = [
         mods: [ModQQ]
       }
     ]
-  },
-  {
-    id: '9',
-    label: '其他',
-    mods: [
-      ModHeader,
-      ModTitle,
-      ModBoard,
-      ModImgLoop,
-      ModText,
-      ModParacraft,
-      ModQQ,
-      ModMixLayer,
-      ModMixPositon,
-      ModVipRead,
-      ModComment
-    ]
   }
+  // for test
+  // ,{
+  //   id: '9',
+  //   label: '其他',
+  //   mods: [
+  //     ModHeader,
+  //     ModTitle,
+  //     ModBoard,
+  //     ModImgLoop,
+  //     ModText,
+  //     ModParacraft,
+  //     ModQQ,
+  //     ModMixLayer,
+  //     ModMixPositon,
+  //     ModVipRead,
+  //     ModComment
+  //   ]
+  // }
 ]
 export default modsList

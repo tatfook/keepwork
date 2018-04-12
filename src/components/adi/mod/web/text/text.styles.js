@@ -2,7 +2,10 @@ export default [
   // style 0
   {
     data: {
-      root: {},
+      root: {
+        'margin-top': '60px',
+        'margin-bottom': '60px'
+      },
       title: {
         'text-align': 'left'
       }
@@ -32,7 +35,10 @@ export default [
   // style 1
   {
     data: {
-      root: {},
+      root: {
+        'margin-top': '60px',
+        'margin-bottom': '60px'
+      },
       title: {
         'text-align': 'center'
       },

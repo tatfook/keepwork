@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { gTheme } from '../global'
 import themeData from './theme.data'
 import jss from 'jss'
 import preset from 'jss-preset-default'
@@ -49,7 +50,8 @@ const generate = conf => {
   let themeClasses = _.assign(
     buildFontClasses(fonts),
     buildColorClasses(colors),
-    buildBgColorClasses(bgColors)
+    buildBgColorClasses(bgColors),
+    gTheme
   )
 
   let data = buildOrigin(themeClasses)
