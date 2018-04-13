@@ -2,12 +2,12 @@ export default [
   // template 0
   [
     {
-      colMod: [
+      colGroup: [
         {
-          colModItem: [
+          colGroupA: [
             { colMedia: 'media' },
             {
-              colGroup: [
+              colGroupAA: [
                 { colTitle: 'title' },
                 { colSubtitle: 'subtitle' },
                 { colParagraph: 'paragraph' },
@@ -23,11 +23,11 @@ export default [
   // template 1
   [
     {
-      colMod: [
+      colGroup: [
         {
-          colModItem: [
+          colGroupA: [
             {
-              colGroup: [
+              colGroupAA: [
                 { colTitle: 'title' },
                 { colSubtitle: 'subtitle' },
                 { colParagraph: 'paragraph' },
@@ -44,13 +44,16 @@ export default [
   // template 2
   [
     {
-      colMod: [
+      colGroup: [
         {
-          colModItem: [
+          colGroupA: [
             { colTitle: 'title' },
             { colSubtitle: 'subtitle' },
             {
-              colGroup: [{ colParagraph: 'paragraph' }, { colButton: 'button' }]
+              colGroupAA: [
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
             },
             { colMedia: 'media' }
           ]

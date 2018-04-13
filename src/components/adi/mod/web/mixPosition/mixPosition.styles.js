@@ -4,9 +4,6 @@ export default [
     templateID: 0,
     data: {
       // 定义mod根div的样式
-      root: {
-        overflow: 'hidden'
-      },
       media: {
         height: '611px'
       },
@@ -15,7 +12,7 @@ export default [
           height: '300px'
         }
       },
-      colGroup: {
+      colGroupAA: {
         display: 'flex',
         'align-items': ' flex-start'
       },
@@ -34,12 +31,12 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
-      colModItemRow: { gutter: 24 },
+      colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
         sm: { span: 8 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 14 },
         sm: { span: 16 }
       },
@@ -56,7 +53,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7', 'mod-space'],
-      colModRow: ['mod-full-width'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -84,9 +81,6 @@ export default [
   {
     templateID: 1,
     data: {
-      root: {
-        overflow: 'hidden'
-      },
       media: {
         height: '611px'
       },
@@ -110,12 +104,12 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
-      colModItemRow: { gutter: 24 },
+      colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
         sm: { span: 8 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 14 },
         sm: { span: 16 }
       },
@@ -132,7 +126,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7', 'mod-space'],
-      colModRow: ['mod-full-width'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -160,16 +154,13 @@ export default [
   {
     templateID: 2,
     data: {
-      root: {
-        overflow: 'hidden'
-      },
       colTitle: {
         height: '700px'
       },
       colSubtitle: {
         height: '700px'
       },
-      colGroup: {
+      colGroupAA: {
         height: '700px'
       },
       colParagraph: {
@@ -185,7 +176,7 @@ export default [
         colSubtitle: {
           height: '350px'
         },
-        colGroup: {
+        colGroupAA: {
           height: '350px'
         },
         colParagraph: {
@@ -218,7 +209,7 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
-      colModItemRow: { gutter: 14 },
+      colGroupARow: { gutter: 14 },
       colTitle: {
         xs: { span: 2 },
         sm: { span: 1 }
@@ -227,7 +218,7 @@ export default [
         xs: { span: 1 },
         sm: { span: 1 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 9 },
         sm: { span: 9 }
       },
@@ -249,7 +240,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7', 'mod-space'],
-      colModRow: ['mod-full-width'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -277,9 +268,6 @@ export default [
   {
     templateID: 0,
     data: {
-      root: {
-        overflow: 'hidden'
-      },
       media: {
         height: '550px'
       },
@@ -309,7 +297,7 @@ export default [
         xs: { span: 24 },
         sm: { span: 24 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 24 },
         sm: { span: 24 }
       },
@@ -317,7 +305,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7', 'mod-space'],
-      colModRow: ['mod-full-width'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -340,9 +328,6 @@ export default [
   {
     templateID: 1,
     data: {
-      root: {
-        overflow: 'hidden'
-      },
       media: {
         height: '550px'
       },
@@ -372,7 +357,7 @@ export default [
         xs: { span: 24 },
         sm: { span: 24 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 24 },
         sm: { span: 24 }
       },
@@ -380,7 +365,7 @@ export default [
     },
     theme: {
       root: ['font_0', 'color_7', 'mod-space'],
-      colModRow: ['mod-full-width'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {

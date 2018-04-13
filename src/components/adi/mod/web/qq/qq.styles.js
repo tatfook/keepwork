@@ -7,7 +7,7 @@ export default [
         position: 'fixed',
         height: '120px'
       },
-      colPicDesc: {
+      colGroup: {
         position: 'fixed',
         right: '40px',
         top: '15%',
@@ -37,7 +37,7 @@ export default [
       }
     },
     props: {
-      colPicDesc: {
+      colGroup: {
         xs: {
           span: 8,
           offset: 16
@@ -73,7 +73,7 @@ export default [
         position: 'fixed',
         height: '120px'
       },
-      colPicDesc: {
+      colGroup: {
         display: 'flex',
         'justify-content': 'flex-end',
         position: 'fixed',
@@ -104,7 +104,7 @@ export default [
       }
     },
     props: {
-      colPicDesc: {
+      colGroup: {
         xs: {
           span: 12,
           offset: 12

@@ -23,8 +23,8 @@ export default {
 
       if (this.editMode) {
         this.style.data.root.position = 'relative'
-        this.style.data.colPicDesc.position = 'relative'
-        this.style.data.colPicDesc.top = 'unset'
+        this.style.data.colGroup.position = 'relative'
+        this.style.data.colGroup.top = 'unset'
       }
 
       if (this.modData.styleID == '1') {
