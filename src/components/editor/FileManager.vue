@@ -13,7 +13,7 @@
             </span>
             <span class=''>{{ node.label }}</span>
             <span class="file-manager-buttons-container">
-              <el-button v-if='isSaveble(data)' v-loading='savePending' class="iconfont icon-baocun" size="mini" type="text" title='保存' @click.stop='save(data)'>
+              <el-button v-if='isSaveble(data)' v-loading='data.savePending' class="iconfont icon-baocun" size="mini" type="text" title='保存' @click.stop='save(data)'>
               </el-button>
               <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新' @click.stop='refreshOpenedFile(data)'>
               </el-button>
@@ -83,8 +83,7 @@ export default {
       openedTreesProps: {
         children: 'children',
         label: 'label'
-      },
-      savePending: false
+      }
     }
   },
   mounted() {
@@ -200,16 +199,17 @@ export default {
       this.trees[type] = !this.trees[type]
     },
     async save(data) {
+      if (data.savePending === undefined) {
+        this.$set(data, 'savePending', false)
+      }
       let path = data.path
-      this.savePending = true
+      data.savePending = true
       await this.savePageByPath(path)
-      this.savePending = false
+      data.savePending = false
     },
     isSaveble(nodeData) {
       let path = nodeData.path
-      return (
-        path && this.openedFiles[path] && this.openedFiles[path].timestamp
-      )
+      return path && this.openedFiles[path] && this.openedFiles[path].timestamp
     },
     removeFile(data) {
       let path = data.path
@@ -340,6 +340,9 @@ export default {
 
   .icon-dakaidewenjian.is-modified {
     color: #f4b622;
+  }
+  .el-loading-spinner .circular {
+    width: 22px;
   }
 }
 </style>
