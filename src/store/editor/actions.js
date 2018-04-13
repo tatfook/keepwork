@@ -139,6 +139,7 @@ const actions = {
     if (key === state.activeMod.key) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
+      commit(UPDATE_WIN_TYPE, 'ModsList')
     }
     dispatch('refreshCode')
   },
