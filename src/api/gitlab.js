@@ -17,12 +17,11 @@ export const newGitlabAPI = (params) => {
     ...defaultConfig,
     ...params
   })
-  // api.projects.repository.files.showRawForGuest = showRawForGuest
   return api
 }
 
-const gitlab = newGitlabAPI()
-console.log('gitlab: ', gitlab)
+// const gitlab = newGitlabAPI()
+// console.log('gitlab: ', gitlab)
 
 export default {
   newGitlabAPI,

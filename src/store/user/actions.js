@@ -1,6 +1,8 @@
+import _ from 'lodash'
 import { keepwork } from '@/api'
 import { props } from './mutations'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import { getFileFullPathByPath, webTemplateProject } from '@/lib/utils/gitlab'
+import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 
 const {
   LOGIN_SUCCESS,
@@ -12,7 +14,8 @@ const {
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
   GET_SITE_DETAIL_INFO_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
-  UPSERT_WEBSITE_SUCCESS
+  UPSERT_WEBSITE_SUCCESS,
+  GET_WEB_TEMPLATE_CONFIG_SUCCESS
 } = props
 
 const actions = {
@@ -72,29 +75,53 @@ const actions = {
     await dispatch('upsertWebsite', { name })
     await dispatch('getAllWebsite')
     await dispatch('getAllSiteDataSource')
-    await dispatch('gitlab/createFile', { path: `${username}/${name}/index.md` }, { root: true })
+    await dispatch('initWebsite', { name })
   },
-  async upsertWebsite(context, { name }) {
+  async initWebsite({ dispatch, getters }, { name }) {
+    let { username, getWebTemplateStyle, getPersonalSiteInfoByPath } = getters
+    let { type: classify, templateName, styleName } = getPersonalSiteInfoByPath(`${username}/${name}`)
+
+    await dispatch('getWebTemplateConfig')
+    let { contents } = getWebTemplateStyle({ classify, templateName, styleName })
+
+    // copy all file in template.style.contents
+    for (let {pagepath, contentUrl} of contents) {
+      let { rawBaseUrl, dataSourceUsername, projectName } = webTemplateProject
+      let contentUrlFullPath = getFileFullPathByPath(contentUrl)
+      let content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, contentUrlFullPath)
+      await dispatch('gitlab/createFile', { path: `${username}/${name}/${pagepath}.md`, content, refreshRepositoryTree: false }, { root: true })
+    }
+
+    // refresh repositoryTree
+    await dispatch('gitlab/getRepositoryTree', {path: `${username}/${name}`, ignoreCache: true}, { root: true })
+  },
+  async getWebTemplateConfig({ commit, getters: { webTemplateConfig } }) {
+    if (!_.isEmpty(webTemplateConfig)) return
+    let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
+    let configMarkDown = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
+    let configStringified = configMarkDown.replace(/^[\s`]*|[\s`]*$/g, '')
+    let config = JSON.parse(configStringified)
+    commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, {config})
+  },
+  async upsertWebsite(context, { name, websiteSetting: {
+    categoryName = '个 人',
+    type = 'personal', // level1 classify get templates
+    templateName = '空模板', // level2 templates .name
+    styleName = '默认样式', // level3 template.styles .name
+    logoUrl = 'http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
+  } }) {
     let { commit, getters: { username, userId, authRequestConfig } } = context
-    let necessaryPayloadInfo = {
+    let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }
+    let upsertPayload = {
       name,
       domain: name,
       visibility: 'public',
       userId,
       username,
-      defaultDataSourceName: '内置gitlab'
+      defaultDataSourceName: '内置gitlab',
+      ...websiteSetting
     }
-    // actually, the info below is not necessary for current usage
-    // we keep it to prevent any surprise with old version keepwork
-    let unnecessaryPayloadInfo = {
-      categoryName: '个 人',
-      type: 'personal',
-      templateName: '空模板',
-      styleName: '默认样式',
-      logoUrl: 'http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
-    }
-
-    let site = await keepwork.website.upsert({...necessaryPayloadInfo, ...unnecessaryPayloadInfo}, authRequestConfig)
+    let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
   async getAllWebsite(context) {

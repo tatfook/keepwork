@@ -96,7 +96,7 @@ const actions = {
     let payload = { path, branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
   },
-  async createFile(context, { path, content = '\n' }) {
+  async createFile(context, { path, content = '\n', refreshRepositoryTree = true }) {
     let { commit, dispatch } = context
     let {
       username,
@@ -116,10 +116,12 @@ const actions = {
     let payload = { path, branch }
     commit(CREATE_FILE_CONTENT_SUCCESS, payload)
 
-    await dispatch('getRepositoryTree', {
-      path: `${username}/${name}`,
-      ignoreCache: true
-    })
+    if (refreshRepositoryTree) {
+      await dispatch('getRepositoryTree', {
+        path: `${username}/${name}`,
+        ignoreCache: true
+      })
+    }
   },
   async addFolder({ dispatch }, { path }) {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`

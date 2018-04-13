@@ -11,6 +11,7 @@ const GET_COMMENTS_BY_PAGE_URL_SUCCESS = 'GET_COMMENTS_BY_PAGE_URL_SUCCESS'
 const GET_SITE_DETAIL_INFO_SUCCESS = 'GET_SITE_DETAIL_INFO_SUCCESS'
 const GET_CONTRIBUTED_WEBSITE_SUCCESS = 'GET_CONTRIBUTED_WEBSITE_SUCCESS'
 const UPSERT_WEBSITE_SUCCESS = 'UPSERT_WEBSITE_SUCCESS'
+const GET_WEB_TEMPLATE_CONFIG_SUCCESS = 'GET_WEB_TEMPLATE_CONFIG_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -22,7 +23,8 @@ export const props = {
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
   GET_SITE_DETAIL_INFO_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
-  UPSERT_WEBSITE_SUCCESS
+  UPSERT_WEBSITE_SUCCESS,
+  GET_WEB_TEMPLATE_CONFIG_SUCCESS
 }
 
 const doNothing = state => {
@@ -75,6 +77,9 @@ const mutations = {
       ...state.siteDetailInfo,
       [`${username}/${sitename}`]: detailInfo
     })
+  },
+  [GET_WEB_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
+    Vue.set(state, 'webTemplateConfig', config)
   }
 }
 

@@ -117,6 +117,20 @@ const getters = {
   activePageCommentList: (state, {getCommentListByPath}, rootState, rootGetters) => {
     let activePagePath = rootGetters['activePage']
     return getCommentListByPath(activePagePath)
+  },
+
+  webTemplateConfig: state => state.webTemplateConfig,
+  getWebTemplates: (state, { webTemplateConfig = [] }) => classify => {
+    let categoriesMap = _.keyBy(webTemplateConfig, 'classify')
+    return _.get(categoriesMap, [classify, 'templates'], [])
+  },
+  getWebTemplate: (state, { getWebTemplates }) => ({classify, templateName}) => {
+    let templatesInClassify = getWebTemplates(classify)
+    return _.get(_.keyBy(templatesInClassify, 'name'), [templateName], {})
+  },
+  getWebTemplateStyle: (state, { getWebTemplate }) => ({classify, templateName, styleName}) => {
+    let { styles = [] } = getWebTemplate({classify, templateName})
+    return styles[0] // _.keyBy(styles, 'name')[styleName]
   }
 }
 
