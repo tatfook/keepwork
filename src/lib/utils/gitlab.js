@@ -2,6 +2,14 @@ import _ from 'lodash'
 
 export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
 
+let protocol = (location && location.protocol) ? location.protocol : 'http:'
+export const webTemplateProject = {
+  rawBaseUrl: `${protocol}//git.keepwork.com`,
+  dataSourceUsername: 'gitlab_rls_official',
+  projectName: 'keepworktemplate',
+  configFullPath: 'official/template/webTemplateConfig.md'
+}
+
 /*doc
   # gitTree2NestedArray
 
@@ -85,6 +93,7 @@ export const getFileFullPathByPath = (() => {
 
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
+  webTemplateProject,
   gitTree2NestedArray,
   suffixFileExtension,
   getFileFullPathByPath

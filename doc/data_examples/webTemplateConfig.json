@@ -1,0 +1,426 @@
+[
+  {
+    "name": "个 人",
+    "classify": "personal",
+    "templates": [
+      {
+        "name": "空模板",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png",
+        "previewUrl": "http://keepwork.com/official/template/base_center_vip_template/index",
+        "styles": [
+          {
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_blank",
+            "name": "默认样式",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/blank/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/blank/_theme.md",
+                "index": 1
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/blank/_header.md",
+                "index": 2
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/blank/_footer.md",
+                "index": 3
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/blank/_sidebar.md",
+                "index": 4
+              }
+            ],
+            "index": 0
+          },
+          {
+            "name": "默认样式",
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png",
+            "previewUrl": "http://keepwork.com/official/template/base_center_vip_template/index",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/base_center_vip_template/index.md"
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/base_center_vip_template/_theme"
+              }
+            ],
+            "index": 1
+          }
+        ],
+        "index": 0
+      },
+      {
+        "name": "基本模板",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_basic_template.png",
+        "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_basic",
+        "styles": [
+          {
+            "name": "默认样式",
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_basic_template.png",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_basic",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/tpl_basic/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/tpl_basic/_theme.md",
+                "index": 1
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/tpl_basic/_header.md"
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/tpl_basic/_sidebar.md"
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/tpl_basic/_footer.md"
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 1
+      },
+      {
+        "name": "简历模板",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_resume_site_template.png",
+        "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_wiki",
+        "styles": [
+          {
+            "name": "默认样式",
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_resume_site_template.png",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_wiki",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/resume/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/resume/_theme.md",
+                "index": 1
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/resume/_header.md"
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/resume/_sidebar.md"
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/resume/_footer.md"
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 2
+      },
+      {
+        "name": "VIP可浏览全部",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_basic_template.png",
+        "previewUrl": "http://keepwork.com/official/template/base_center_vip_template/index",
+        "styles": [
+          {
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_basic_template.png",
+            "previewUrl": "http://keepwork.com/official/template/base_center_vip_template/index",
+            "name": "默认样式",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/base_center_vip_template/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/base_center_vip_template/_theme.md",
+                "index": 1
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/base_center_vip_template/_header.md"
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/base_center_vip_template/_sidebar.md"
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/base_center_vip_template/_footer.md"
+              }
+            ],
+            "index": 0
+          },
+          {
+            "name": "默认样式",
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png",
+            "previewUrl": "http://keepwork.com/official/template/base_center_vip_template/index",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/base_center_vip_template/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/base_center_vip_template/_theme.md",
+                "index": 1
+              }
+            ],
+            "index": 1
+          }
+        ],
+        "index": 3
+      }
+    ]
+  },
+  {
+    "name": "企 业",
+    "classify": "company",
+    "templates": [
+      {
+        "name": "企 业",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_company1_template.jpg",
+        "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_company1",
+        "styles": [
+          {
+            "name": "默认样式",
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_company1_template.jpg",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_company1",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/tpl_company1/index.md",
+                "index": 0
+              },
+              {
+                "contentUrl": "official/template/tpl_company1/_theme.md",
+                "pagepath": "_theme"
+              },
+              {
+                "contentUrl": "official/template/tpl_company1/_header.md",
+                "pagepath": "_header"
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/tpl_company1/_sidebar.md"
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/tpl_company1/_footer.md"
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 0
+      },
+      {
+        "name": "企业模板2",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_company2_template.png",
+        "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_company2",
+        "styles": [
+          {
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_company2_template.png",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_company2",
+            "name": "默认样式",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/tpl_company2/index.md",
+                "index": 0
+              },
+              {
+                "contentUrl": "official/template/tpl_company2/_theme.md",
+                "pagepath": "_theme"
+              },
+              {
+                "contentUrl": "official/template/tpl_company2/_header.md",
+                "pagepath": "_header"
+              },
+              {
+                "contentUrl": "official/template/tpl_company2/_sidebar.md",
+                "pagepath": "_sidebar"
+              },
+              {
+                "contentUrl": "official/template/tpl_company2/_footer.md",
+                "pagepath": "_footer"
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 1
+      }
+    ]
+  },
+  {
+    "name": "组 织",
+    "classify": "organizaion",
+    "templates": [
+      {
+        "name": "组织模板",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_organization_template.png",
+        "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_organization",
+        "styles": [
+          {
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_organization_template.png",
+            "previewUrl": "http://keepwork.com/keepwork/sitetemplate/tpl_organization",
+            "name": "默认样式",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/organization/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "more",
+                "contentUrl": "official/template/organization/more.md",
+                "index": 1
+              },
+              {
+                "pagepath": "member_apply",
+                "contentUrl": "official/template/organization/member_apply.md"
+              },
+              {
+                "pagepath": "member_manage",
+                "contentUrl": "official/template/organization/member_manage.md"
+              },
+              {
+                "pagepath": "submit_work",
+                "contentUrl": "official/template/organization/submit_work.md"
+              },
+              {
+                "pagepath": "works_manage",
+                "contentUrl": "official/template/organization/works_manage.md"
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/organization/_theme.md",
+                "index": 6
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/organization/_header.md",
+                "index": 7
+              },
+              {
+                "pagepath": "_footer",
+                "contentUrl": "official/template/organization/_footer.md",
+                "index": 8
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/organization/_sidebar.md",
+                "index": 9
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 0
+      }
+    ]
+  },
+  {
+    "name": "比 赛",
+    "classify": "game",
+    "templates": [
+      {
+        "name": "大赛模板",
+        "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_game_template.jpg",
+        "previewUrl": "http://keepwork.com/official/template/game/index",
+        "styles": [
+          {
+            "logoUrl": "http://keepwork.com/wiki/assets/imgs/wiki_game_template.jpg",
+            "previewUrl": "http://keepwork.com/official/template/game/index",
+            "name": "默认样式",
+            "contents": [
+              {
+                "pagepath": "index",
+                "contentUrl": "official/template/game/index.md",
+                "index": 0
+              },
+              {
+                "pagepath": "member_apply",
+                "contentUrl": "official/template/game/member_apply.md",
+                "index": 1
+              },
+              {
+                "pagepath": "member_manage",
+                "contentUrl": "official/template/game/member_manage.md",
+                "index": 2
+              },
+              {
+                "pagepath": "more",
+                "contentUrl": "official/template/game/more.md",
+                "index": 3
+              },
+              {
+                "pagepath": "submit_work",
+                "contentUrl": "official/template/game/submit_work.md",
+                "index": 4
+              },
+              {
+                "pagepath": "works_manage",
+                "contentUrl": "official/template/game/works_manage.md",
+                "index": 5
+              },
+              {
+                "pagepath": "_theme",
+                "contentUrl": "official/template/game/_theme.md"
+              },
+              {
+                "pagepath": "_header",
+                "contentUrl": "official/template/game/_header.md"
+              },
+              {
+                "pagepath": "_sidebar",
+                "contentUrl": "official/template/game/_sidebar.md"
+              },
+              {
+                "contentUrl": "official/template/game/_footer.md",
+                "pagepath": "_footer"
+              }
+            ],
+            "index": 0
+          }
+        ],
+        "index": 0
+      }
+    ]
+  },
+  {
+    "name": "课 程",
+    "classify": "course",
+    "templates": [
+      {
+        "name": "课程",
+        "logoUrl": "http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1509532234890.png",
+        "isThirdWay": true,
+        "extraLink": "http://dev.keepwork.com/lecture/main/addcourse",
+        "previewUrl": ""
+      }
+    ]
+  }
+]
