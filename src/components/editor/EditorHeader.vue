@@ -47,8 +47,8 @@
           <a href='/'>返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item v-loading='savePending' index='3' class='li-btn'>
-        <span class='iconfont icon-baocun' title='保存' @click='save'></span>
+      <el-menu-item index='3' class='li-btn'>
+        <span v-loading='savePending' class='iconfont icon-baocun' title='保存' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
         <span class='iconfont icon-fanhui' title='撤销'></span>
