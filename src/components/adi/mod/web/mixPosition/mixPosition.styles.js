@@ -5,10 +5,7 @@ export default [
     data: {
       // 定义mod根div的样式
       root: {
-        overflow: 'hidden',
-        padding: '15px',
-        'max-width': '1170px',
-        margin: '0 auto'
+        overflow: 'hidden'
       },
       media: {
         height: '611px'
@@ -37,6 +34,7 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
+      colModItemRow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
         sm: { span: 8 }
@@ -57,7 +55,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colModRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -86,10 +85,7 @@ export default [
     templateID: 1,
     data: {
       root: {
-        overflow: 'hidden',
-        padding: '15px',
-        'max-width': '1170px',
-        margin: '0 auto'
+        overflow: 'hidden'
       },
       media: {
         height: '611px'
@@ -114,6 +110,7 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
+      colModItemRow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
         sm: { span: 8 }
@@ -134,7 +131,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colModRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -163,10 +161,7 @@ export default [
     templateID: 2,
     data: {
       root: {
-        overflow: 'hidden',
-        padding: '15px',
-        'max-width': '1170px',
-        margin: '0 auto'
+        overflow: 'hidden'
       },
       colTitle: {
         height: '700px'
@@ -174,7 +169,7 @@ export default [
       colSubtitle: {
         height: '700px'
       },
-      colGroupItem: {
+      colGroup: {
         height: '700px'
       },
       colParagraph: {
@@ -190,7 +185,7 @@ export default [
         colSubtitle: {
           height: '350px'
         },
-        colGroupItem: {
+        colGroup: {
           height: '350px'
         },
         colParagraph: {
@@ -223,6 +218,7 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
+      colModItemRow: { gutter: 14 },
       colTitle: {
         xs: { span: 2 },
         sm: { span: 1 }
@@ -231,7 +227,7 @@ export default [
         xs: { span: 1 },
         sm: { span: 1 }
       },
-      colGroupItem: {
+      colGroup: {
         xs: { span: 9 },
         sm: { span: 9 }
       },
@@ -242,8 +238,8 @@ export default [
       colParagraph: { span: 24 },
       colButton: {
         xs: {
-          span: 8,
-          push: 16
+          span: 10,
+          push: 14
         },
         sm: {
           span: 4,
@@ -252,7 +248,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colModRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -281,10 +278,7 @@ export default [
     templateID: 0,
     data: {
       root: {
-        overflow: 'hidden',
-        'margin-top': '20px',
-        'max-width': '1170px',
-        margin: '0 auto'
+        overflow: 'hidden'
       },
       media: {
         height: '550px'
@@ -322,7 +316,8 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colModRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -346,10 +341,7 @@ export default [
     templateID: 1,
     data: {
       root: {
-        overflow: 'hidden',
-        'margin-top': '20px',
-        'max-width': '1170px',
-        margin: '0 auto'
+        overflow: 'hidden'
       },
       media: {
         height: '550px'
@@ -387,7 +379,8 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colModRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {

@@ -21,6 +21,12 @@ export default {
         this.modData.pic.link = qqUrl
       }
 
+      if (this.editMode) {
+        this.style.data.root.position = 'relative'
+        this.style.data.colPicDesc.position = 'relative'
+        this.style.data.colPicDesc.top = 'unset'
+      }
+
       if (this.modData.styleID == '1') {
         return _.merge(
           {},
