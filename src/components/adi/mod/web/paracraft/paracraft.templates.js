@@ -1,34 +1,38 @@
 export default [
   // template 0
   [
-    { colPreview: 'preview' },
     {
-      colGroupLeft: [
+      colGroup: [
+        { colPreview: 'preview' },
         {
-          colGroupA: [
-            { colWorldName: 'worldName' },
+          colGroupLeft: [
             {
-              colGroupVersionAndUpdateTime: [
-                { colVersion: 'version' },
-                { colUpdateTime: 'updateTime' }
-              ]
-            }
-          ]
-        },
-        {
-          colGroupB: [{ colAuthor: 'author' }]
-        },
-        {
-          colGroupC: [
-            {
-              colGroupCA: [
-                { colViewTimesImg: 'viewTimesImg' },
-                { colViewTimes: 'viewTimes' },
-                { colSize: 'size' }
+              colGroupA: [
+                { colWorldName: 'worldName' },
+                {
+                  colGroupVersionAndUpdateTime: [
+                    { colVersion: 'version' },
+                    { colUpdateTime: 'updateTime' }
+                  ]
+                }
               ]
             },
             {
-              colGroupCB: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+              colGroupB: [{ colAuthor: 'author' }]
+            },
+            {
+              colGroupC: [
+                {
+                  colGroupCA: [
+                    { colViewTimesImg: 'viewTimesImg' },
+                    { colViewTimes: 'viewTimes' },
+                    { colSize: 'size' }
+                  ]
+                },
+                {
+                  colGroupCB: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+                }
+              ]
             }
           ]
         }
@@ -60,13 +64,17 @@ export default [
   // template 2
   [
     {
-      colPreview: 'preview',
-      colGroupA: [
-        { colWorldName: 'worldName' },
-        { colAuthor: 'author' },
-        { colDesc: 'desc' },
+      colGroup: [
         {
-          colGroupAA: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+          colPreview: 'preview',
+          colGroupA: [
+            { colWorldName: 'worldName' },
+            { colAuthor: 'author' },
+            { colDesc: 'desc' },
+            {
+              colGroupAA: [{ colDownload: 'download' }, { colEnter: 'enter' }]
+            }
+          ]
         }
       ]
     },

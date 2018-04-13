@@ -30,12 +30,9 @@ export default [
   // style 1
   {
     data: {
-      root: {
-        'margin-top': '60px',
-        'margin-bottom': '60px'
-      },
       title: {
-        'text-align': 'center'
+        'text-align': 'center',
+        'margin-bottom': '20px'
       },
       paragraph: {
         'text-indent': '28px'
@@ -45,7 +42,8 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {

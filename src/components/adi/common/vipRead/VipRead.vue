@@ -84,6 +84,11 @@ export default {
 
 <style lang="scss" scoped>
 .comp-vip-read {
+  a {
+    text-decoration: none;
+    color: unset;
+  }
+
   .vip-more-permission {
     color: #3977ad;
     background-color: #fff;

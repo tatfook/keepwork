@@ -7,11 +7,11 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colBoard: { span: 24 }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
+      rootRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {
