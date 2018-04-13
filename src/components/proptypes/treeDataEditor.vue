@@ -1,6 +1,6 @@
 <template>
   <el-dialog class="tree-data-dialog" title="菜单编辑器" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
-    <div class="tree-head">
+    <div v-if="treeData.length > 0" class="tree-head">
       <span class="node-label">
         名称
       </span>
@@ -11,7 +11,7 @@
         设置
       </span>
     </div>
-    <el-tree ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
+    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
           <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>
@@ -29,6 +29,10 @@
         </span>
       </span>
     </el-tree>
+    <p class="empty" v-if="treeData.length <= 0" @click="insert()">
+      暂无数据，请添加
+      <span class="iconfont icon-tianjia"></span>
+    </p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose">取 消</el-button>
       <el-button type="primary" @click="finishEditingMenu">确 定</el-button>
@@ -85,11 +89,20 @@ export default {
       targetInputElement.blur()
     },
     insert(node, data, position) {
-      let menuTree = this.$refs.menuTree
       const newChild = {
         name: '菜单项' + newMenuId,
         link: 'http://keepwork.com'
       }
+      if (!node) {
+        this.treeData.push(newChild)
+        this.$nextTick(() => {
+          let firstNode = this.treeData[0]
+          let firstNodeId = firstNode.$treeNodeId
+          this.showInput(firstNodeId, firstNode, 'name')
+        })
+        return
+      }
+      let menuTree = this.$refs.menuTree
       let parent = node.parent
       let children = parent.data.child || parent.data
       let targetIndex = _.findIndex(children, function(value) {
@@ -212,9 +225,21 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .el-tree{
+  .el-tree {
     max-height: 350px;
     overflow-y: auto;
+  }
+  .empty {
+    text-align: center;
+    margin: 0;
+    line-height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .empty .iconfont {
+    font-size: 28px;
+    vertical-align: middle;
+    color: #3ba4ff;
   }
 }
 </style>
