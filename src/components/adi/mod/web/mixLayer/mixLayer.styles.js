@@ -4,8 +4,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -20,20 +18,20 @@ export default [
         height: '689px'
       },
       colCouple: {
-        'margin-top': '-550px',
-        'padding-right': '15%',
-        'padding-left': '15%',
-        width: '100%',
+        'margin-top': '-600px',
         position: 'relative',
+        'word-wrap': 'break-word',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -56,8 +54,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -72,21 +68,21 @@ export default [
         height: '689px'
       },
       colCouple: {
-        'margin-top': '-550px',
-        'text-align': 'center',
-        'padding-right': '15%',
-        'padding-left': '15%',
-        width: '100%',
+        'margin-top': '-600px',
+        'word-wrap': 'break-word',
         position: 'relative',
+        'text-align': 'center',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -109,8 +105,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -125,21 +119,21 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
-        'margin-top': '-550px',
-        'padding-right': '15%',
-        'padding-left': '15%',
+        'margin-top': '-600px',
+        'word-wrap': 'break-word',
         'text-align': 'right',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -162,8 +156,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -178,20 +170,19 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-400px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -214,8 +205,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -230,21 +219,20 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-400px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         'text-align': 'center',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -267,8 +255,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -283,21 +269,20 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-400px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         'text-align': 'right',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -320,8 +305,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -336,20 +319,19 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-250px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -372,8 +354,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -388,21 +368,20 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-250px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         'text-align': 'center',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -425,8 +404,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         position: 'relative'
       },
@@ -441,21 +418,20 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '-250px',
-        'padding-right': '15%',
-        'padding-left': '15%',
         'text-align': 'right',
         position: 'relative',
         'z-index': 2
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_7']
     },
     options: {
@@ -478,8 +454,6 @@ export default [
     templateID: 0,
     data: {
       root: {
-        width: '100%',
-        height: '100%',
         overflow: 'hidden'
       },
       media: {
@@ -491,17 +465,18 @@ export default [
         height: '689px'
       },
       colCouple: {
-        width: '100%',
         'margin-top': '50px',
         'text-align': 'center'
       }
     },
     props: {
-      colGroup: { span: 10 },
-      colCouple: { span: 10 }
+      colGroup: { span: 24 },
+      colCouple: { span: 24 },
+      rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_8'],
+      root: ['font_0', 'color_8', 'mod-space'],
+      colCoupleRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
