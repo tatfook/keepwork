@@ -1,7 +1,7 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import mod from '@/components/adi/mod/base/Base'
 import styles from './mixLayer.styles'
 import templates from './mixLayer.templates'
+import mod from '@/components/adi/mod/base/Base'
 
 const name = 'ModMixLayer'
 
