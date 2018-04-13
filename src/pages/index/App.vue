@@ -67,4 +67,7 @@ body {
 .index-page-container {
   min-height: 100%;
 }
+.index-page-main{
+  padding: 0;
+}
 </style>
