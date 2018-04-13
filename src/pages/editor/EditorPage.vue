@@ -1,24 +1,21 @@
 <template>
-  <fullscreen id='fullscreen' ref='fullscreen'>
-    <el-container v-loading="loading" id="editor">
+  <el-container v-loading="loading" id="editor">
       <el-header>
-        <EditorHeader @changeFullscreen='changeFullscreen'></EditorHeader>
+        <EditorHeader></EditorHeader>
       </el-header>
       <el-main>
         <router-view @showPreview='showPreview' />
-        <el-dialog :visible.sync='dialogVisible ' width='100% ' height='100% '>
+        <el-dialog  class="preview-dialog" :visible.sync='dialogVisible ' width='100% ' height='100% '>
           <PageViewer />
         </el-dialog>
       </el-main>
     </el-container>
-  </fullscreen>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import EditorHeader from '@/components/editor/EditorHeader'
-import Fullscreen from 'vue-fullscreen/src/component.vue'
 
 export default {
   name: 'EditorPage',
@@ -48,15 +45,11 @@ export default {
     },
     showPreview() {
       this.dialogVisible = true
-    },
-    changeFullscreen() {
-      this.$refs['fullscreen'].toggle()
     }
   },
   components: {
     PageViewer,
-    EditorHeader,
-    Fullscreen
+    EditorHeader
   }
 }
 </script>
@@ -64,7 +57,6 @@ export default {
 <style>
 html,
 body,
-#fullscreen,
 .el-container {
   height: 100%;
 }
@@ -80,6 +72,9 @@ body {
 }
 #editor {
   background: white;
+}
+.preview-dialog .el-dialog__body{
+  padding: 30px 0;
 }
 </style>
 

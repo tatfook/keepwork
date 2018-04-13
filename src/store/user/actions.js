@@ -11,7 +11,8 @@ const {
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
   GET_SITE_DETAIL_INFO_SUCCESS,
-  GET_CONTRIBUTED_WEBSITE_SUCCESS
+  GET_CONTRIBUTED_WEBSITE_SUCCESS,
+  UPSERT_WEBSITE_SUCCESS
 } = props
 
 const actions = {
@@ -60,6 +61,41 @@ const actions = {
       dispatch('getAllContributedWebsite'),
       dispatch('getAllSiteDataSource')
     ])
+  },
+  async createWebsite(context, { name }) {
+    let { dispatch, getters: { username, authRequestConfig } } = context
+
+    // check if the site already exists
+    let siteWithTheSameName = await keepwork.website.getByName({username, sitename: name}, authRequestConfig)
+    if (siteWithTheSameName) throw new Error(`Website ${name} already exists!`)
+
+    await dispatch('upsertWebsite', { name })
+    await dispatch('getAllWebsite')
+    await dispatch('getAllSiteDataSource')
+    await dispatch('gitlab/createFile', { path: `${username}/${name}/index.md` }, { root: true })
+  },
+  async upsertWebsite(context, { name }) {
+    let { commit, getters: { username, userId, authRequestConfig } } = context
+    let necessaryPayloadInfo = {
+      name,
+      domain: name,
+      visibility: 'public',
+      userId,
+      username,
+      defaultDataSourceName: '内置gitlab'
+    }
+    // actually, the info below is not necessary for current usage
+    // we keep it to prevent any surprise with old version keepwork
+    let unnecessaryPayloadInfo = {
+      categoryName: '个 人',
+      type: 'personal',
+      templateName: '空模板',
+      styleName: '默认样式',
+      logoUrl: 'http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
+    }
+
+    let site = await keepwork.website.upsert({...necessaryPayloadInfo, ...unnecessaryPayloadInfo}, authRequestConfig)
+    commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
   async getAllWebsite(context) {
     let { dispatch, commit, getters } = context
