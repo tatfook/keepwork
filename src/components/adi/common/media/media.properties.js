@@ -1,4 +1,4 @@
 export default {
-  link: 'http://keepwork.com',
-  src: './static/adi/picture-mod.png'
+  src: './static/adi/picture-mod.png',
+  link: 'http://keepwork.com'
 }

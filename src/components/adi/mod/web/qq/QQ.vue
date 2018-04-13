@@ -10,6 +10,23 @@ export default {
 
       options = _.merge(options, this.generateOptionsStyle(name))
 
+      let qqUrl =
+        'http://wpa.qq.com/msgrd?v=3&uin=' +
+        this.modData.qq.number +
+        '&site=qq&menu=yes'
+
+      if (this.modData.qq.number == null) {
+        this.modData.pic.link = ''
+      } else {
+        this.modData.pic.link = qqUrl
+      }
+
+      if (this.editMode) {
+        this.style.data.root.position = 'relative'
+        this.style.data.colGroup.position = 'relative'
+        this.style.data.colGroup.top = 'unset'
+      }
+
       if (this.modData.styleID == '1') {
         return _.merge(
           {},

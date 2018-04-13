@@ -1,16 +1,20 @@
 export default [
   // template 0
   [
-    { colMedia: 'media' },
     {
       colGroup: [
         {
-          colGroupItem: [
-            { colTitle: 'title' },
-            { colSubtitle: 'subtitle' },
-            { colParagraph: 'paragraph' }
-          ],
-          colButton: 'button'
+          colGroupA: [
+            { colMedia: 'media' },
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -21,15 +25,40 @@ export default [
     {
       colGroup: [
         {
-          colGroupItem: [
-            { colTitle: 'title' },
-            { colSubtitle: 'subtitle' },
-            { colParagraph: 'paragraph' }
-          ],
-          colButton: 'button'
+          colGroupA: [
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            },
+            { colMedia: 'media' }
+          ]
         }
       ]
-    },
-    { colMedia: 'media' }
+    }
+  ],
+
+  // template 2
+  [
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colTitle: 'title' },
+            { colSubtitle: 'subtitle' },
+            {
+              colGroupAA: [
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            },
+            { colMedia: 'media' }
+          ]
+        }
+      ]
+    }
   ]
 ]

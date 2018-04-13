@@ -5,10 +5,12 @@
 ```
 - styleID :  //当前样式id
 
-# pic  //图片
-- src :  //图片地址
-- name :  //图片名称
-- link :  //图片点击跳转链接
+# qq
+- number :  //填写QQ号码
+
+# pic
+- src : //图片来源地址
+- link : //图片点击跳转链接
 
 # desc  //文本描述
 - name :  //文本名称

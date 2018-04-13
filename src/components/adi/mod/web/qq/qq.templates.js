@@ -2,7 +2,7 @@ export default [
   // template 0
   [
     {
-      colPicDesc: [{ colPic: 'pic' }, { colDesc: 'desc' }]
+      colGroup: [{ colQQ: 'qq' }, { colPic: 'pic' }, { colDesc: 'desc' }]
     }
   ]
 ]
