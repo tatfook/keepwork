@@ -8,7 +8,7 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
       title: ['color_0']
     },
     options: {

@@ -1,8 +1,7 @@
 <template>
   <div>
     {{originValue.desc}}
-    <!-- <el-input class="input-type" :placeholder='editingKey' v-model='inputTypeValue.value' clearable @change='updateValue' @focus='getFocus'></el-input> -->
-    <el-switch v-model="originValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @change='updateValue'></el-switch>
+    <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @change='updateValue' @focus='getFocus'></el-switch>
   </div>
 </template>
 <script>
@@ -15,17 +14,16 @@ export default {
     originValue: Object
   },
   computed: {
-    // inputTypeValue: {
-    //   get() {
-    //     return this.originValue
-    //   },
-    //   set() {}
-    // }
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
+    }
   },
   methods: {
     updateValue(newVal) {
-      var tempChangedDataObj = { [this.editingKey]: { value: newVal } }
-      // tempChangedDataObj[this.editingKey].value = newVal
+      let tempChangedDataObj = { [this.editingKey]: { desc: this.inputTypeValue.desc, value: newVal } }
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
