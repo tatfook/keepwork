@@ -56,9 +56,6 @@
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
         <span class='iconfont icon-chongzuo' title='重做'></span>
       </el-menu-item>
-      <el-menu-item index='6' class='li-btn' @click='changeFullscreen'>
-        <span class='iconfont icon-quanping' title='全屏'></span>
-      </el-menu-item>
       <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
           <el-button class='dropdown-btn'>
@@ -142,9 +139,6 @@ export default {
     },
     changeViewType(command) {
       this.$store.dispatch('resetShowingCol', command)
-    },
-    changeFullscreen() {
-      this.$emit('changeFullscreen')
     }
   }
 }
