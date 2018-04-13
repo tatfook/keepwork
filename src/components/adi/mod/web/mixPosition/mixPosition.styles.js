@@ -4,15 +4,15 @@ export default [
     templateID: 0,
     data: {
       // 定义mod根div的样式
-      root: {
-        overflow: 'hidden',
-        padding: '15px'
-      },
       media: {
-        height: '300px'
+        height: '611px'
       },
-      colMedia: {},
-      colGroup: {
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
+      },
+      colGroupAA: {
         display: 'flex',
         'align-items': ' flex-start'
       },
@@ -31,17 +31,14 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        sm: { span: 8 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
+        sm: { span: 16 }
       },
       colButton: {
         xs: {
@@ -49,21 +46,14 @@ export default [
           push: 18
         },
         sm: {
-          span: 4,
-          push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
+          span: 3,
+          push: 21
         }
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -91,14 +81,14 @@ export default [
   {
     templateID: 1,
     data: {
-      root: {
-        overflow: 'hidden',
-        padding: '15px'
-      },
       media: {
-        height: '300px'
+        height: '611px'
       },
-      colMedia: {},
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
+      },
       subtitle: {
         'margin-top': '10px'
       },
@@ -114,17 +104,14 @@ export default [
     },
     props: {
       rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        sm: { span: 8 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
+        sm: { span: 16 }
       },
       colButton: {
         xs: {
@@ -132,21 +119,14 @@ export default [
           push: 18
         },
         sm: {
-          span: 4,
-          push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
+          span: 3,
+          push: 21
         }
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -172,83 +152,95 @@ export default [
 
   // style 2  左文右图（文字竖排）
   {
-    templateID: 1,
+    templateID: 2,
     data: {
-      root: {
-        overflow: 'hidden',
-        padding: '15px'
+      colTitle: {
+        height: '700px'
       },
-      rootRow: {
-        width: '100px'
+      colSubtitle: {
+        height: '700px'
+      },
+      colGroupAA: {
+        height: '700px'
+      },
+      colParagraph: {
+        height: '646px'
       },
       media: {
-        height: '350px'
+        height: '700px'
       },
-      colMedia: {},
-      colGroup: {
-        height: '350px'
-      },
-      colGroupItem: {
-        height: '300px'
+      '@media only screen and (max-width: 767px)': {
+        colTitle: {
+          height: '350px'
+        },
+        colSubtitle: {
+          height: '350px'
+        },
+        colGroupAA: {
+          height: '350px'
+        },
+        colParagraph: {
+          height: '300px'
+        },
+        media: {
+          height: '350px'
+        },
+        paragraph: {
+          'max-width': '180px'
+        }
       },
       title: {
         'writing-mode': 'vertical-rl',
         overflow: 'hidden'
       },
       subtitle: {
-        'margin-top': '10px',
         'writing-mode': 'vertical-rl',
         overflow: 'hidden'
       },
       paragraph: {
         float: 'right',
-        'margin-top': '15px',
+        'max-width': '420px',
         'text-indent': '28px',
         'writing-mode': 'vertical-rl'
       },
       colButton: {
-        'margin-top': '20px'
+        'margin-top': '18px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 14 },
+      colTitle: {
+        xs: { span: 2 },
+        sm: { span: 1 }
+      },
+      colSubtitle: {
+        xs: { span: 1 },
+        sm: { span: 1 }
+      },
+      colGroupAA: {
+        xs: { span: 9 },
+        sm: { span: 9 }
+      },
       colMedia: {
-        xs: { span: 10 },
-        sm: { span: 9 },
-        md: { span: 8 },
-        lg: { span: 7 }
+        xs: { span: 12 },
+        sm: { span: 13 }
       },
-      colGroup: {
-        xs: { span: 14 },
-        sm: { span: 15 },
-        md: { span: 16 },
-        lg: { span: 17 }
-      },
-      colGroupItem: { span: 24 },
-      colTitle: { span: 4 },
-      colSubtitle: { span: 4 },
-      colParagraph: { span: 16 },
+      colParagraph: { span: 24 },
       colButton: {
         xs: {
-          span: 6,
-          push: 18
+          span: 10,
+          push: 14
         },
         sm: {
           span: 4,
           push: 20
-        },
-        md: {
-          span: 2,
-          push: 22
-        },
-        lg: {
-          span: 2,
-          push: 22
         }
       }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -276,13 +268,13 @@ export default [
   {
     templateID: 0,
     data: {
-      root: {
-        overflow: 'hidden',
-        'margin-top': '20px'
-      },
-      colGroup: {},
       media: {
-        height: '300px'
+        height: '550px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
       },
       title: {
         'margin-top': '20px',
@@ -303,32 +295,17 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {
@@ -351,13 +328,13 @@ export default [
   {
     templateID: 1,
     data: {
-      root: {
-        overflow: 'hidden',
-        'margin-top': '20px'
-      },
-      colGroup: {},
       media: {
-        height: '300px'
+        height: '550px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        }
       },
       title: {
         'margin-top': '20px',
@@ -378,32 +355,17 @@ export default [
       rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
-      colGroup: {
+      colGroupAA: {
         xs: { span: 24 },
-        sm: { span: 24 },
-        md: {
-          span: 18,
-          offset: 3
-        },
-        lg: {
-          span: 18,
-          offset: 3
-        }
+        sm: { span: 24 }
       },
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7'],
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
       paragraph: ['color_8']
     },
     options: {

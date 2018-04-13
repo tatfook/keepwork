@@ -15,9 +15,8 @@ export default {
 <style>
 html,
 body {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   height: 100%;
-}
-body {
   margin: 0;
   padding: 0;
 }

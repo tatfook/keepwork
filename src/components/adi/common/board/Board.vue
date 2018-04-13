@@ -84,7 +84,11 @@ export default {
               []
             )
           } else {
-            return <div class="mx-client-start">点击右侧编辑按钮开始编辑</div>
+            if(!self.properties.data && self.editMode) {
+              return <div class="mx-client-start">点击右侧编辑按钮开始编辑</div>
+            } else {
+              return <div></div>
+            }
           }
         })()}
       </div>
@@ -129,7 +133,7 @@ export default {
       let boardScript = document.createElement('script')
       boardScript.setAttribute(
         'src',
-        './static/adi/board/keepwork-board.min.js'
+        '/static/adi/board/keepwork-board.min.js'
       )
 
       let graphEditorCss = document.createElement('link')
@@ -137,7 +141,7 @@ export default {
       graphEditorCss.setAttribute('type', 'text/css')
       graphEditorCss.setAttribute(
         'href',
-        './static/adi/board/assets/styles/grapheditor.css'
+        '/static/adi/board/assets/styles/grapheditor.css'
       )
 
       let body = document.querySelector('body')

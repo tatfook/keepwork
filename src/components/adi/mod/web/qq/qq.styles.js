@@ -2,14 +2,18 @@ export default [
   // style 0 上图下文
   {
     data: {
-      root: {},
-      colPicDesc: {
-        'z-index': '3'
+      root: {
+        'z-index': '3',
+        position: 'fixed',
+        height: '120px'
+      },
+      colGroup: {
+        position: 'fixed',
+        right: '40px',
+        top: '15%',
+        'padding-top': '15px'
       },
       pic: {
-        position: 'fixed',
-        right: '3%',
-        top: '15.5%',
         width: '70px',
         height: '70px',
         'border-radius': '50%'
@@ -20,9 +24,6 @@ export default [
         'justify-content': 'flex-end'
       },
       desc: {
-        position: 'fixed',
-        right: '3%',
-        top: '24%',
         width: '70px',
         'text-align': 'center',
         overflow: 'hidden',
@@ -36,18 +37,18 @@ export default [
       }
     },
     props: {
-      colPicDesc: {
-        xs: { span: 8, offset: 16 },
-        sm: { span: 4, offset: 20 },
-        md: { span: 4, offset: 20 },
-        lg: { span: 4, offset: 20 }
+      colGroup: {
+        xs: {
+          span: 8,
+          offset: 16
+        },
+        sm: {
+          span: 4,
+          offset: 20
+        }
       },
-      colPic: {
-        span: 24
-      },
-      colDesc: {
-        span: 24
-      }
+      colPic: { span: 24 },
+      colDesc: { span: 24 }
     },
     theme: {
       root: ['font_0', 'color_0']
@@ -67,16 +68,20 @@ export default [
   // style 1 左图右文
   {
     data: {
-      root: {},
-      colPicDesc: {
+      root: {
         'z-index': '3',
+        position: 'fixed',
+        height: '120px'
+      },
+      colGroup: {
         display: 'flex',
-        'justify-content': 'flex-end'
+        'justify-content': 'flex-end',
+        position: 'fixed',
+        right: '40px',
+        top: '15%',
+        'padding-top': '15px'
       },
       pic: {
-        position: 'fixed',
-        right: '8%',
-        top: '17%',
         width: '70px',
         height: '70px',
         'border-radius': '50%'
@@ -85,9 +90,6 @@ export default [
         'min-width': '70px'
       },
       desc: {
-        position: 'fixed',
-        right: '3%',
-        top: '22%',
         width: '70px',
         'text-align': 'center',
         border: '1px solid #3977AD',
@@ -98,22 +100,22 @@ export default [
       },
       colDesc: {
         'min-width': '70px',
-        'margin-top': '50px'
+        'margin-top': '48px'
       }
     },
     props: {
-      colPicDesc: {
-        xs: { span: 12, offset: 12 },
-        sm: { span: 6, offset: 18 },
-        md: { span: 6, offset: 18 },
-        lg: { span: 6, offset: 18 }
+      colGroup: {
+        xs: {
+          span: 12,
+          offset: 12
+        },
+        sm: {
+          span: 6,
+          offset: 18
+        }
       },
-      colPic: {
-        span: 12
-      },
-      colDesc: {
-        span: 12
-      }
+      colPic: { span: 12 },
+      colDesc: { span: 12 }
     },
     theme: {
       root: ['font_0', 'color_0']

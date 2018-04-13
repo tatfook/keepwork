@@ -14,7 +14,7 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.logo.src = './static/adi/logo.png'
+properties.logo.src = require('@/../static/adi/logo.png')
 properties.businessName.name = 'BUSINESS NAME'
 properties.tagline.name = 'TAG LINE'
 

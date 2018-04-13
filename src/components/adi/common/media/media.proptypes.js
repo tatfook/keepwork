@@ -1,4 +1,4 @@
 export default {
-  link: 'input',
-  src: 'media'
+  src: 'input',
+  link: 'input'
 }

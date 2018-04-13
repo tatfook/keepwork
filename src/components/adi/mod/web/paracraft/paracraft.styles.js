@@ -4,10 +4,11 @@ export default [
     templateID: 0,
     data: {
       root: {
-        overflow: 'hidden',
-        'background-color': '#F9F9F9',
-        'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)',
         position: 'relative'
+      },
+      colGroup: {
+        'background-color': '#F9F9F9',
+        'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)'
       },
       preview: {
         height: '200px'
@@ -40,7 +41,7 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
+      colGroupRow: { gutter: 10 },
       colPreview: {
         sm: {
           span: 6
@@ -89,7 +90,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
+      rootRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {
@@ -186,7 +188,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
+      rootRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {
@@ -246,7 +249,7 @@ export default [
       }
     },
     props: {
-      rootRow: {
+      colGroupRow: {
         gutter: 30
       },
       colPreview: {
@@ -275,7 +278,8 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0'],
+      root: ['font_0', 'color_0', 'mod-space'],
+      rootRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {
