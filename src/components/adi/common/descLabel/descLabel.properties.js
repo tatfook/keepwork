@@ -1,6 +1,6 @@
 export default {
-  text: '输入的文字',
-  desc: '描述',
+  text: '',
+  desc: '',
   link: 'http://keepwork.com',
   target: '_blank'
 }

@@ -70,4 +70,7 @@ body {
 .index-page-main{
   padding: 0;
 }
+[mod-container] {
+  overflow: hidden;
+}
 </style>

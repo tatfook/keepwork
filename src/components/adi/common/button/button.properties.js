@@ -1,5 +1,5 @@
 export default {
-  name: '按钮',
+  name: '',
   link: 'http://keepwork.com',
   target: '_blank'
 }
