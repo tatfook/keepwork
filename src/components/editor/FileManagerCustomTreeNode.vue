@@ -46,41 +46,42 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async addFile() {
-      await this.getRepositoryTree({ path: this.sitePath })
-      let childNames = this.gitlabChildNamesByPath(this.currentPath)
-      console.log(childNames)
-      let { value: newFileName } = await this.$prompt(
-        '网页名',
-        '创建网页',
-        {
-          cancelButtonText: '取消',
-          confirmButtonText: '确认',
-          inputValidator: str => {
-            let value = str.trim()
-            if (!value) return
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return '文件名只能由字母，数字和下划线组成'
-            if (childNames.indexOf(value) > -1) return '同名文件已经存在'
-            return true
-          }
-        }
-      )
-
-      if (!newFileName) return
+      let newFileName = await this.newFileNamePrompt()
       newFileName = suffixFileExtension(newFileName, 'md')
-
       let newFilePath = `${this.currentPath}/${newFileName}`
       this.addFilePending = true
       await this.gitlabCreateFile({ path: newFilePath })
       this.addFilePending = false
     },
     async addFolder() {
-      let newFolderName = (prompt("What's the folder name?") || '').trim()
+      let newFolderName = await this.newFileNamePrompt({what: '文件夹'})
       if (!newFolderName) return
-
       let newFolderPath = `${this.currentPath}/${newFolderName}`
       this.addFolderPending = true
       await this.gitlabAddFolder({ path: newFolderPath })
       this.addFolderPending = false
+    },
+    async newFileNamePrompt({what = '网页'} = {}) {
+      await this.getRepositoryTree({ path: this.sitePath })
+      let childNames = this.gitlabChildNamesByPath(this.currentPath)
+
+      let { value: newFileName } = await this.$prompt(
+        `${what}名`,
+        `创建${what}`,
+        {
+          cancelButtonText: '取消',
+          confirmButtonText: '确认',
+          inputValidator: str => {
+            let value = (str || '').trim()
+            if (!value) return `${what}名不能为空`
+            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}名只能由字母，数字和下划线组成`
+            if (childNames.indexOf(value) > -1) return '同名文件已经存在'
+            return true
+          }
+        }
+      )
+
+      return newFileName && newFileName.trim()
     },
     removeFile() {
       let pathArr = this.data.path.split('/')
