@@ -5,6 +5,7 @@ import ModText from './web/text'
 import ModQQ from './web/qq'
 import ModMixLayer from './web/mixLayer'
 import ModMixPositon from './web/mixPosition'
+import ModImg from './web/img'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
@@ -50,6 +51,11 @@ var modsList = [
         id: '2-1',
         label: '图文轮播',
         mods: [ModImgLoop]
+      },
+      {
+        id: '2-2',
+        label: '图像宽屏',
+        mods: [ModImg]
       }
     ]
   },

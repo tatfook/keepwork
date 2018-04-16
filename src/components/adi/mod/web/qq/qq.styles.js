@@ -1,3 +1,14 @@
+let emptyData = {
+  pic: {
+    emptySrc: require('@/../static/adi/qq/qqMod.png'),
+    emptyLink: 'http://keepwork.com'
+  },
+  desc: {
+    emptyName: '客服中心',
+    emptyLink: 'http://keepwork.com'
+  }
+}
+
 export default [
   // style 0 上图下文
   {
@@ -60,7 +71,9 @@ export default [
           fontColor: 'color_0'
         }
       },
-      config: {}
+      config: {
+        ...emptyData
+      }
     },
     cover: './static/adi/qq/cover/qqCoverOne.png'
   },
@@ -127,7 +140,9 @@ export default [
           fontColor: 'color_0'
         }
       },
-      config: {}
+      config: {
+        ...emptyData
+      }
     },
     cover: './static/adi/qq/cover/qqCoverTwo.png'
   }
