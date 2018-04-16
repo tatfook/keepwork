@@ -1,14 +1,12 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import styles from './qq.styles'
-import templates from './qq.templates'
-import mod from './QQ'
+import mod from '@/components/adi/mod/base/Base'
+import styles from './img.styles'
+import templates from './img.templates'
 
-const name = 'ModQQ'
+const name = 'ModImg'
 
 const components = {
-  qq: 'AdiNumber',
-  pic: 'AdiMedia',
-  desc: 'AdiTitle'
+  img: 'AdiMedia'
 }
 
 const properties = generateProperties(name, components)
