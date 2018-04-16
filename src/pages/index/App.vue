@@ -7,20 +7,15 @@
       <router-view/>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='100px' class="index-page-footer">
-      <common-footer class="container"></common-footer>
-    </el-footer>
   </el-container>
 </template>
 
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
-import CommonFooter from '../../components/common/CommonFooter'
 export default {
   name: 'App',
   components: {
-    CommonHeader,
-    CommonFooter
+    CommonHeader
   },
   created() {
     // this.updateActivePage()
@@ -67,7 +62,7 @@ body {
 .index-page-container {
   min-height: 100%;
 }
-.index-page-main{
+.index-page-main {
   padding: 0;
 }
 </style>
