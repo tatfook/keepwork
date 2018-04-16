@@ -1,12 +1,12 @@
 <template>
   <div class="comp-button">
-    <a v-if="!options.clickEvent" :class="getClassStyle" :target='properties.target' :href="properties.link" :style="buttonStyle">
+    <a v-if="!options.clickEvent" :class="getClassStyle" :target='properties.target' :href="properties.link ? properties.link : options.emptyLink" :style="buttonStyle">
       <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{properties.name}}
+      {{ properties.name ? properties.name : options.emptyName }}
     </a>
     <a v-if="options.clickEvent" :class="getClassStyle" @click='callback' :style="buttonStyle">
       <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{properties.name}}
+      {{ properties.name ? properties.name : options.emptyName }}
     </a>
   </div>
 </template>
