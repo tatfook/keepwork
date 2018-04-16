@@ -1,3 +1,47 @@
+let emptyData = {
+  preview: {
+    emptySrc: 'http://git.keepwork.com/gitlab_rls_testv2/world_base32_5g5zr2foutszbdpfvwltg/raw/master/preview.jpg'
+  },
+  worldName: {
+    emptyName: '默认名字'
+  },
+  author: {
+    emptyDesc: '作者:',
+    emptyText: '你的名字'
+  },
+  version: {
+    emptyDesc: '版本',
+    emptyText: '0.0.0'
+  },
+  updateTime: {
+    emptyText: '2018-1-10-14-30',
+    emptyLink: 'http://keepwork.com'
+  },
+  viewTimesImg: {
+    emptySrc: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/icon/world3D_eye.png'
+  },
+  viewTimes: {
+    emptyText: '0',
+    emptyDesc: '浏览量'
+  },
+  size: {
+    emptyText: '31KB',
+    emptySize: '大小'
+  },
+  download: {
+    emptyName: '下载',
+    emptyLink: 'http://keepwork.com'
+  },
+  enter: {
+    emptyName: '进入',
+    emptyLink: 'http://keepwork.com'
+  },
+  desc: {
+    emptyData: `作品简介：
+    从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。`
+  }
+}
+
 export default [
   // style 0
   {
@@ -112,7 +156,8 @@ export default [
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        }
+        },
+        ...emptyData
       }
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft1.png'
@@ -216,7 +261,8 @@ export default [
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        }
+        },
+        ...emptyData
       }
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft2.png'
@@ -306,7 +352,8 @@ export default [
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        }
+        },
+        ...emptyData
       }
     },
     cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft3.png'
