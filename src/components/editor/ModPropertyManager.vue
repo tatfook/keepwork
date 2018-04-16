@@ -8,7 +8,7 @@
       <el-tab-pane label='属性' name='attr'>
         <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
-      <el-tab-pane label='样式' name='style'>
+      <el-tab-pane label='样式' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class='styles-container'>
           <style-selector :mod='activeMod' />
         </div>
