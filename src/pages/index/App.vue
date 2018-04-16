@@ -4,6 +4,7 @@
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
+      <tool-header class="container"></tool-header>
       <router-view/>
     </el-main>
     <el-aside></el-aside>
@@ -12,10 +13,12 @@
 
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
+import ToolHeader from '../../components/common/ToolHeader'
 export default {
   name: 'App',
   components: {
-    CommonHeader
+    CommonHeader,
+    ToolHeader
   },
   created() {
     // this.updateActivePage()
@@ -47,7 +50,7 @@ body {
   /* text-align: center; */
   color: #2c3e50;
 }
-.index-page-header .container {
+.container {
   max-width: 1140px;
   margin: 0 auto;
 }

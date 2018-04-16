@@ -7,8 +7,11 @@ const getters = {
 
   activePage: state => state.activePage,
   activePageInfo: (state, { activePage }) => {
-    let [username, sitename] = activePage.split('/').filter(x => x)
-    return { username, sitename }
+    let pageInfos = activePage.split('/')
+    let username = pageInfos[1]
+    let sitename = pageInfos[2]
+    let paths = pageInfos.slice(3)
+    return { username, sitename, paths }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
 
