@@ -21,18 +21,15 @@ export default {
     isVideo() {
       return Media.isVideo(this.properties.src)
     },
-    hasMedia() {
-      return this.properties.src && this.properties.src !== ''
-    },
     src() {
-      return this.properties.src
+      return this.properties.src ? this.properties.src : this.options.emptySrc
     },
     link() {
       return this.properties.link
     },
     loadImg() {
       return this.generateStyleString({
-        'background-image': 'url(' + this.properties.src + ')'
+        'background-image': 'url(' + this.src + ')'
       })
     }
   }
