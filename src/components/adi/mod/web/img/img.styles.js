@@ -28,7 +28,7 @@ export default [
         }
       }
     },
-    cover: './static/adi/img/cover/imgOne.png'
+    cover: require('@/../static/adi/img/cover/imgOne.png')
   },
 
   // style 1
@@ -60,6 +60,6 @@ export default [
         }
       }
     },
-    cover: './static/adi/img/cover/imgTwo.png'
+    cover: require('@/../static/adi/img/cover/imgTwo.png')
   }
 ]

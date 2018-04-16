@@ -14,7 +14,7 @@ export default {
         return _.merge(
           {},
           options,
-          (this.modData.media.src = './static/adi/mixPosition/stitching.png')
+          (this.modData.media.src = require('@/../static/adi/mixPosition/stitching.png'))
         )
       } else {
         return options
