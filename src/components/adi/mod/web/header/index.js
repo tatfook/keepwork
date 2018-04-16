@@ -14,8 +14,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.logo.src = require('@/../static/adi/logo.png')
-properties.businessName.name = 'BUSINESS NAME'
-properties.tagline.name = 'TAG LINE'
-
 export default { mod, name, components, properties, styles, templates }

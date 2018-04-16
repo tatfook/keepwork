@@ -58,6 +58,15 @@ export default [
         // 子组件配置参数
         menu: {
           mode: 'horizontal'
+        },
+        logo: {
+          emptySrc: require('@/../static/adi/logo.png')
+        },
+        businessName: {
+          emptyName: 'BUSINESS NAME'
+        },
+        tagline: {
+          emptyName: 'TAG LINE'
         }
       }
     },
@@ -123,6 +132,9 @@ export default [
         // 子组件配置参数
         menu: {
           mode: 'horizontal'
+        },
+        logo: {
+          emptySrc: require('@/../static/adi/logo.png')
         }
       }
     },

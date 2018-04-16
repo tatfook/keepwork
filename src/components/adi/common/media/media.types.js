@@ -11,9 +11,13 @@ export const isVideo = src => {
 }
 
 export const isImage = src => {
-  return (
-    src && imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
-  )
+  if (src === '') {
+    return true
+  } else {
+    return (
+      src && imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+    )
+  }
 }
 
 export default {

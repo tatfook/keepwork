@@ -1,7 +1,7 @@
 <template>
   <div class="comp-title">
     <a :target='properties.target' :href='properties.link'>
-      <h1 :style="style">{{ properties.name }}</h1>
+      <h1 :style="style">{{ properties.name ? properties.name : options.emptyName }}</h1>
     </a>
   </div>
 </template>
