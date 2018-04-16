@@ -1,8 +1,8 @@
 import { gConst } from '@/lib/global'
+import SimpleUndo from '@/lib/utils/undo/simpleUndo'
 
-export const resetPartialState = () => {
+export const initPageState = () => {
   return {
-    activePage: '',
     modList: [],
     activeMod: null,
     activeProperty: null,
@@ -16,12 +16,15 @@ export const resetPartialState = () => {
       colorID: 0,
       fontID: 0
     },
+    undoManager: new SimpleUndo(),
     activeComponentType: '',
     newModPosition: gConst.POSITION_AFTER // after active mod
   }
 }
 
 const state = () => ({
+  activePage: null,
+  activePageUrl: '',
   openedFiles: {},
   filemanagerTreeNodeExpandMapByPath: {},
 
@@ -29,9 +32,7 @@ const state = () => ({
     isManagerShow: true,
     isCodeShow: true,
     isPreviewShow: true
-  },
-
-  ...resetPartialState()
+  }
 })
 
 export default state
