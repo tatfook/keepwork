@@ -58,7 +58,7 @@
       <editor-markdown ref='codemirror' />
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
-      <editor-welcome />
+      <editorWelcome />
     </el-col>
   </el-row>
 </template>
