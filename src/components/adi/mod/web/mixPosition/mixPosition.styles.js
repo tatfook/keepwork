@@ -98,7 +98,7 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/mixPosition/cover/projectOne.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectOne.png')
   },
 
   // style 1 左文右图
@@ -173,7 +173,7 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/mixPosition/cover/projectTwo.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectTwo.png')
   },
 
   // style 2  左文右图（文字竖排）
@@ -289,7 +289,7 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/mixPosition/cover/projectThree.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectThree.png')
   },
 
   // style 3 上图下文
@@ -351,7 +351,7 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/mixPosition/cover/projectFour.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectFour.png')
   },
 
   // style 4 上文下图
@@ -413,6 +413,6 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/mixPosition/cover/projectFive.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectFive.png')
   }
 ]

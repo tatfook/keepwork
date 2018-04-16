@@ -75,7 +75,7 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/qq/cover/qqCoverOne.png'
+    cover: require('@/../static/adi/qq/cover/qqCoverOne.png')
   },
 
   // style 1 左图右文
@@ -144,6 +144,6 @@ export default [
         ...emptyData
       }
     },
-    cover: './static/adi/qq/cover/qqCoverTwo.png'
+    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png')
   }
 ]
