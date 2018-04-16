@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { newGitlabAPI } from '@/api'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import { getFileFullPathByPath, EMPTY_GIT_FOLDER_KEEPER } from '@/lib/utils/gitlab'
 
 const gitlabAPICache = {}
 const getGitlabAPI = config => {
@@ -45,6 +45,30 @@ const getFileByPath = (rootGetters, path) => {
 
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
+  repositoryTreesAllFiles: (state, { repositoryTrees = [] }) => {
+    let projects = _.values(repositoryTrees)
+    let allFiles = projects.reduce((prev, sitesMap) => {
+      let sites = _.values(sitesMap)
+      let filesInSites = sites.reduce((prev, files) => {
+        return prev.concat(files)
+      }, [])
+      return prev.concat(filesInSites)
+    }, [])
+    return allFiles
+  },
+  childNamesByPath: (state, { repositoryTreesAllFiles: files = [] }) => path => {
+    let repositoryTreesAllFilePaths = files.map(file => file.path)
+    let names = repositoryTreesAllFilePaths.filter(
+      filePath => filePath.indexOf(path) === 0 && filePath !== path
+    ).map(
+      filePath => filePath.replace(path + '/', '').split('/')[0]
+    ).filter(
+      name => name && name !== EMPTY_GIT_FOLDER_KEEPER
+    ).map(
+      name => name.replace(/\.md$/, '')
+    )
+    return _.uniq(names)
+  },
   files: state => state.files,
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {

@@ -21,7 +21,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension } from '@/lib/utils/gitlab'
 
 export default {
@@ -34,17 +34,37 @@ export default {
     return {
       addFolderPending: false,
       addFilePending: false,
-      removePending: false
+      removePending: false,
+      isAddFileDialogShow: false
     }
   },
   methods: {
     ...mapActions({
+      getRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
       gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async addFile() {
-      let newFileName = (prompt("What's the file name?") || '').trim()
+      await this.getRepositoryTree({ path: this.sitePath })
+      let childNames = this.gitlabChildNamesByPath(this.currentPath)
+      console.log(childNames)
+      let { value: newFileName } = await this.$prompt(
+        '网页名',
+        '创建网页',
+        {
+          cancelButtonText: '取消',
+          confirmButtonText: '确认',
+          inputValidator: str => {
+            let value = str.trim()
+            if (!value) return
+            if (!/^[A-Za-z0-9_]+$/.test(value)) return '文件名只能由字母，数字和下划线组成'
+            if (childNames.indexOf(value) > -1) return '同名文件已经存在'
+            return true
+          }
+        }
+      )
+
       if (!newFileName) return
       newFileName = suffixFileExtension(newFileName, 'md')
 
@@ -79,6 +99,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      gitlabChildNamesByPath: 'gitlab/childNamesByPath'
+    }),
     pending() {
       return this.addFolderPending || this.addFilePending || this.removePending
     },
@@ -104,6 +127,12 @@ export default {
       return this.isFirstLevel
         ? `${this.data.username}/${this.data.name}`
         : this.data.path
+    },
+    sitePath() {
+      if (this.isFirstLevel) return `${this.data.username}/${this.data.name}`
+
+      let [username, name] = this.data.path.split('/')
+      return `${username}/${name}`
     }
   },
   filters: {
