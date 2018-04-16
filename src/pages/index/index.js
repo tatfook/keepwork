@@ -6,7 +6,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './index.router'
 import createPersistedState from 'vuex-persistedstate'
-import { appModule, userModule, gitlabModule } from '@/store'
+import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -18,7 +18,7 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     gitlab: gitlabModule,
-    app: appModule
+    editor: editorModule
   },
   plugins: [
     createPersistedState({
