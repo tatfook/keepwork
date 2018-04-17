@@ -1,5 +1,5 @@
 export default {
   name: '',
-  link: 'http://keepwork.com',
+  link: '',
   target: '_blank'
 }

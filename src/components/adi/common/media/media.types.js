@@ -1,7 +1,6 @@
 import _ from 'lodash'
 
 export const imageTypes = ['.png', '.jpg', '.jpeg', '.svg']
-
 export const videoTypes = ['.mp4']
 
 export const isVideo = src => {
@@ -20,9 +19,22 @@ export const isImage = src => {
   }
 }
 
+export const isBase64Svg = src => {
+  if (typeof (src) === 'string') {
+    let type = src.split(',')[0] ? src.split(',')[0] : ''
+
+    if (type === 'data:image/svg+xml;base64') {
+      return true
+    } else {
+      return false
+    }
+  }
+}
+
 export default {
   imageTypes,
   videoTypes,
   isImage,
-  isVideo
+  isVideo,
+  isBase64Svg
 }

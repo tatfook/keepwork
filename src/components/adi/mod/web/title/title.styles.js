@@ -33,25 +33,22 @@ export default [
       colGroupARow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
+      businessName: ['font_1', 'color_4'],
+      tagline: ['font_3', 'color_2'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_0']
+      colMenu: ['bg_color_7']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_0',
-          fontColor: 'color_7'
+          menuBackground: 'bg_color_7',
+          fontColor: 'color_0'
         },
-        businessName: {
-          fontSize: 'font_5',
-          fontColor: 'color_3'
-        },
-        tagline: {
-          fontSize: 'font_2',
-          fontColor: 'color_2'
+        logo: {
+          svgFillColor: 'color_7'
         }
       },
       config: {
@@ -60,13 +57,16 @@ export default [
           mode: 'horizontal'
         },
         logo: {
-          emptySrc: require('@/../static/adi/logo.png')
+          emptySrc: require('@/../static/adi/title/bear.svg'),
+          emptyLink: 'http://keepwork.com'
         },
         businessName: {
-          emptyName: 'BUSINESS NAME'
+          emptyName: 'BUSINESS NAME',
+          emptyLink: 'http://keepwork.com'
         },
         tagline: {
-          emptyName: 'TAG LINE'
+          emptyName: 'TAG LINE',
+          emptyLink: 'http://keepwork.com'
         }
       }
     },
@@ -133,13 +133,16 @@ export default [
           mode: 'horizontal'
         },
         logo: {
-          emptySrc: require('@/../static/adi/logo.png')
+          emptySrc: require('@/../static/adi/title/bear.svg'),
+          emptyLink: 'http://keepwork.com'
         },
         businessName: {
-          emptyName: 'BUSINESS NAME'
+          emptyName: 'BUSINESS NAME',
+          emptyLink: 'http://keepwork.com'
         },
         tagline: {
-          emptyName: 'TAG LINE'
+          emptyName: 'TAG LINE',
+          emptyLink: 'http://keepwork.com'
         }
       }
     },
