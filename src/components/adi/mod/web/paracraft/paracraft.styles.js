@@ -1,6 +1,6 @@
 let emptyData = {
   preview: {
-    emptySrc: 'http://git.keepwork.com/gitlab_rls_testv2/world_base32_5g5zr2foutszbdpfvwltg/raw/master/preview.jpg'
+    emptySrc: require('@/../static/adi/paracraft/preview.jpg')
   },
   worldName: {
     emptyName: '默认名字'
@@ -18,7 +18,7 @@ let emptyData = {
     emptyLink: 'http://keepwork.com'
   },
   viewTimesImg: {
-    emptySrc: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/icon/world3D_eye.png'
+    emptySrc: require('@/../static/adi/paracraft/eye.png')
   },
   viewTimes: {
     emptyText: '0',
@@ -134,21 +134,23 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_4'],
+      download: ['font_12', 'color_4'],
+      enter: ['font_12', 'color_0']
     },
     options: {
       theme: {
         download: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          // fontSize: 'font_0',
+          // fontColor: 'color_7',
+          bgColor: 'color_1'
         },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          // fontSize: 'font_0',
+          // fontColor: 'color_7',
+          bgColor: 'color_8'
         }
       },
       config: {
@@ -160,7 +162,7 @@ export default [
         ...emptyData
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft1.png'
+    cover: require('@/../static/adi/paracraft/paracraft1.png')
   },
   // style 1
   {
@@ -254,7 +256,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/down.png'
+            src: require('@/../static/adi/paracraft/down.png')
           }
         },
         innerModal: {
@@ -265,7 +267,7 @@ export default [
         ...emptyData
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft2.png'
+    cover: require('@/../static/adi/paracraft/paracraft2.png')
   },
   // style 2
   {
@@ -345,7 +347,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/down.png'
+            src: require('@/../static/adi/paracraft/down.png')
           }
         },
         innerModal: {
@@ -356,6 +358,6 @@ export default [
         ...emptyData
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft3.png'
+    cover: require('@/../static/adi/paracraft/paracraft3.png')
   }
 ]

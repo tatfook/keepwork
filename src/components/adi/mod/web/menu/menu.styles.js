@@ -16,16 +16,16 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
-      menu: ['mod-full-width'],
-      colMenu: ['bg_color_0']
+      root: ['mod-space'],
+      menu: ['mod-full-width', 'font_3'],
+      colMenu: ['bg_color_7']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_0',
-          fontColor: 'color_7'
+          menuBackground: 'bg_color_7',
+          fontColor: 'color_0'
         }
       },
       config: {

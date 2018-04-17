@@ -20,6 +20,7 @@ export default {
 .comp-label {
   a {
     text-decoration: none;
+    color: unset;
   }
 }
 </style>

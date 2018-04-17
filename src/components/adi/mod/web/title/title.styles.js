@@ -15,7 +15,8 @@ export default [
         'min-width': '200px',
         height: '87px',
         display: 'flex',
-        'align-items': 'center'
+        'align-items': 'center',
+        'max-width': '100%'
       },
       // 定义子组件menu的wrapper样式
       menu: {
@@ -84,13 +85,13 @@ export default [
       },
       colCouple: {
         'min-width': '200px',
-        height: '60px',
         display: 'flex',
         'align-items': 'center'
       },
       colCoupleRow: {
         margin: 'auto',
-        'text-align': 'center'
+        'text-align': 'center',
+        'max-width': '100%'
       },
       businessName: {
         margin: 'auto'
@@ -107,24 +108,21 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
+      businessName: ['font_1', 'color_4'],
+      tagline: ['font_3', 'color_2'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_0']
+      colMenu: ['bg_color_7']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_0',
-          fontColor: 'color_7'
+          menuBackground: 'bg_color_7',
+          fontColor: 'color_0'
         },
-        businessName: {
-          fontSize: 'font_5',
-          fontColor: 'color_3'
-        },
-        tagline: {
-          fontSize: 'font_2',
-          fontColor: 'color_2'
+        logo: {
+          svgFillColor: 'color_7'
         }
       },
       config: {

@@ -88,6 +88,7 @@ export default {
     align-items: center;
     justify-content: center;
     line-height: unset;
+    color: unset;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <a :href='link'>
       <div class="img" v-if='isImage' :style="loadImg"></div>
       <video v-else-if='isVideo' :src='src'></video>
-      <div class="svg" v-html="svg()" :style="svgFill"></div>
+      <div class="svg" v-if="isBase64Svg" v-html="svg()" :style="svgFill"></div>
     </a>
   </div>
 </template>

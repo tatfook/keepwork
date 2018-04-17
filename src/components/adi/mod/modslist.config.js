@@ -38,12 +38,12 @@ var modsList = [
       },
       {
         id: '1-5',
-        label: '导航栏',
+        label: '菜单',
         mods: [ModMenu]
       },
       {
         id: '1-6',
-        label: '导航菜单',
+        label: '标题',
         mods: [ModTitle]
       }
     ]
