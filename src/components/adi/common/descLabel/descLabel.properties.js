@@ -1,6 +1,6 @@
 export default {
   text: '',
   desc: '',
-  link: 'http://keepwork.com',
+  link: '',
   target: '_blank'
 }

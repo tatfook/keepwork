@@ -1,5 +1,5 @@
 export default {
   text: '',
-  link: '#',
+  link: '',
   target: '_blank'
 }

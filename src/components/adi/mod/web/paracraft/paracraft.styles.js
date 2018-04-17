@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 let emptyData = {
   preview: {
     emptySrc: require('@/../static/adi/paracraft/preview.jpg')
@@ -143,23 +145,19 @@ export default [
     options: {
       theme: {
         download: {
-          // fontSize: 'font_0',
-          // fontColor: 'color_7',
           bgColor: 'color_1'
         },
         enter: {
-          // fontSize: 'font_0',
-          // fontColor: 'color_7',
           bgColor: 'color_8'
         }
       },
       config: {
+        ...emptyData,
         innerModal: {
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        },
-        ...emptyData
+        }
       }
     },
     cover: require('@/../static/adi/paracraft/paracraft1.png')
@@ -235,36 +233,34 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_7'],
+      download: ['font_10'],
+      enter: ['font_10', 'color_0'],
+      desc: ['font_10', 'color_4']
     },
     options: {
       theme: {
-        download: {
-          fontSize: 'font_0'
-        },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_8'
         }
       },
       config: {
-        download: {
+        ...emptyData,
+        download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
             src: require('@/../static/adi/paracraft/down.png')
           }
-        },
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        },
-        ...emptyData
+        }
       }
     },
     cover: require('@/../static/adi/paracraft/paracraft2.png')
@@ -326,36 +322,34 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_7'],
+      download: ['font_10'],
+      enter: ['font_10', 'color_0'],
+      desc: ['font_10', 'color_4']
     },
     options: {
       theme: {
-        download: {
-          fontSize: 'font_0'
-        },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_8'
         }
       },
       config: {
-        download: {
+        ...emptyData,
+        download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
             src: require('@/../static/adi/paracraft/down.png')
           }
-        },
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        },
-        ...emptyData
+        }
       }
     },
     cover: require('@/../static/adi/paracraft/paracraft3.png')

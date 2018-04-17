@@ -24,8 +24,6 @@ export default {
   computed: {
     buttonStyle() {
       return this.generateStyleString({
-        'font-size': this.options.fontSize,
-        color: this.options.fontColor || null,
         'background-color': this.options.bgColor || null
       })
     },
