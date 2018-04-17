@@ -74,24 +74,17 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
       config: {
@@ -149,24 +142,17 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
       config: {
@@ -195,12 +181,37 @@ export default [
       media: {
         height: '700px'
       },
+      title: {
+        'max-width': '45px',
+        'line-height': '45px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      subtitle: {
+        'max-width': '30px',
+        'line-height': '30px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      paragraph: {
+        float: 'right',
+        'max-width': '396px',
+        'text-indent': '28px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      colButton: {
+        'margin-top': '18px'
+      },
       '@media only screen and (max-width: 767px)': {
         colTitle: {
           height: '350px'
         },
         colSubtitle: {
           height: '350px'
+        },
+        colGroupA: {
+          overflow: 'hidden'
         },
         colGroupAA: {
           height: '350px'
@@ -212,36 +223,19 @@ export default [
           height: '350px'
         },
         paragraph: {
-          'max-width': '180px'
+          'max-width': '185px'
         }
-      },
-      title: {
-        'writing-mode': 'vertical-rl',
-        overflow: 'hidden'
-      },
-      subtitle: {
-        'writing-mode': 'vertical-rl',
-        overflow: 'hidden'
-      },
-      paragraph: {
-        float: 'right',
-        'max-width': '420px',
-        'text-indent': '28px',
-        'writing-mode': 'vertical-rl'
-      },
-      colButton: {
-        'margin-top': '18px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 14 },
       colTitle: {
-        xs: { span: 2 },
-        sm: { span: 1 }
+        xs: { span: 3 },
+        sm: { span: 2 }
       },
       colSubtitle: {
-        xs: { span: 1 },
+        xs: { span: 2 },
         sm: { span: 1 }
       },
       colGroupAA: {
@@ -249,8 +243,8 @@ export default [
         sm: { span: 9 }
       },
       colMedia: {
-        xs: { span: 12 },
-        sm: { span: 13 }
+        xs: { span: 10 },
+        sm: { span: 12 }
       },
       colParagraph: { span: 24 },
       colButton: {
@@ -265,24 +259,17 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
       config: {
@@ -332,21 +319,14 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        }
-      },
+      theme: {},
       config: {
         ...emptyData
       }
@@ -394,21 +374,14 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        }
-      },
+      theme: {},
       config: {
         ...emptyData
       }

@@ -1,6 +1,6 @@
 let emptyData = {
   pic: {
-    emptySrc: require('@/../static/adi/qq/qqMod.png'),
+    emptySrc: require('@/../static/adi/qq/qqOne.svg'),
     emptyLink: 'http://keepwork.com'
   },
   desc: {
@@ -62,13 +62,13 @@ export default [
       colDesc: { span: 24 }
     },
     theme: {
-      root: ['font_0', 'color_0']
+      root: [],
+      desc: ['font_9', 'color_7']
     },
     options: {
       theme: {
-        desc: {
-          fontSize: 'font_1',
-          fontColor: 'color_0'
+        pic: {
+          svgFillColor: 'color_4'
         }
       },
       config: {
@@ -105,7 +105,8 @@ export default [
       desc: {
         width: '70px',
         'text-align': 'center',
-        border: '1px solid #3977AD',
+        'line-height': '19px',
+        border: '1px solid #3ba4ff',
         'border-radius': '8px',
         overflow: 'hidden',
         'white-space': 'nowrap',
@@ -131,13 +132,13 @@ export default [
       colDesc: { span: 12 }
     },
     theme: {
-      root: ['font_0', 'color_0']
+      root: [],
+      desc: ['font_9', 'color_7']
     },
     options: {
       theme: {
-        desc: {
-          fontSize: 'font_1',
-          fontColor: 'color_0'
+        pic: {
+          svgFillColor: 'color_7'
         }
       },
       config: {
