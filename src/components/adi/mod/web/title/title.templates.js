@@ -1,5 +1,24 @@
 export default [
-  // style 0
+  // template 0
+  [
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colLogo: 'logo' },
+            {
+              colCouple: [
+                { colBusinessName: 'businessName' },
+                { colTagline: 'tagline' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    { colMenu: 'menu' }
+  ],
+  // template 1
   [
     { colLogo: 'logo' },
     {
@@ -7,6 +26,7 @@ export default [
         { colBusinessName: 'businessName' },
         { colTagline: 'tagline' }
       ]
-    }
+    },
+    { colMenu: 'menu' }
   ]
 ]

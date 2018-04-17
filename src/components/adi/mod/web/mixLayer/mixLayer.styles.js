@@ -61,7 +61,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix1.png'
+    cover: require('@/../static/adi/mixLayer/mix1.png')
   },
   // style 1
   {
@@ -126,7 +126,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix2.png'
+    cover: require('@/../static/adi/mixLayer/mix2.png')
   },
   // style 2
   {
@@ -191,7 +191,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix3.png'
+    cover: require('@/../static/adi/mixLayer/mix3.png')
   },
   // style 3
   {
@@ -254,7 +254,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix4.png'
+    cover: require('@/../static/adi/mixLayer/mix4.png')
   },
   // style 4
   {
@@ -318,7 +318,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix5.png'
+    cover: require('@/../static/adi/mixLayer/mix5.png')
   },
   // style 5
   {
@@ -382,7 +382,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix6.png'
+    cover: require('@/../static/adi/mixLayer/mix6.png')
   },
   // style 6
   {
@@ -445,7 +445,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix7.png'
+    cover: require('@/../static/adi/mixLayer/mix7.png')
   },
   // style 7
   {
@@ -509,7 +509,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix8.png'
+    cover: require('@/../static/adi/mixLayer/mix8.png')
   },
   // style 8
   {
@@ -573,7 +573,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix9.png'
+    cover: require('@/../static/adi/mixLayer/mix9.png')
   },
   // style 9
   {
@@ -632,6 +632,6 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/mix9.png'
+    cover: require('@/../static/adi/mixLayer/mix10.png')
   }
 ]
