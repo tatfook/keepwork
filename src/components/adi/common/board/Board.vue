@@ -85,7 +85,7 @@ export default {
             )
           } else {
             if(!self.properties.data && self.editMode) {
-              return <div class="mx-client-start">点击右侧编辑按钮开始编辑</div>
+              return <div class="mx-client-start">点击左侧编辑按钮开始编辑</div>
             } else {
               return <div></div>
             }
