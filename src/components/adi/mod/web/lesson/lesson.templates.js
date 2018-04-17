@@ -1,6 +1,21 @@
 export default [
-  // style 0
-  [{
-    colImgLoop: 'lesson'
-  }]
+  // template 0
+  [
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colMedia: 'animation' },
+            {
+              colGroupAA: [
+                { colTitle: 'topic' },
+                { colParagraph: 'lessonGoals' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 ]

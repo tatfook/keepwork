@@ -1,40 +1,76 @@
 export default [
-  // style 0
   {
+    templateID: 0,
     data: {
       // 定义mod根div的样式
-      root: {
-        position: 'relative',
-        overflow: 'hidden',
-        zoom: 1
+      animation: {
+        height: '160px'
       },
-      media: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        'z-index': -1
+      '@media only screen and (max-width: 767px)': {
+        animation: {
+          height: '160px'
+        }
       },
-      group: {
-        width: '50%',
-        float: 'left',
-        'margin-left': '5px'
+      colGroupAA: {
+        display: 'flex',
+        'align-items': ' flex-start'
+      },
+      lessonGoals: {
+        color: 'black',
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'word-wrap': 'break-word',
+        'white-space': 'pre-wrap'
+      },
+      button: {
+        'margin-top': '20px'
       }
     },
-    theme: {
-      root: ['font_0', 'color_0'],
-      paragraph: ['color_3']
-    },
-    options: {
-      theme: {},
-      config: {
-        imgLoop: {
-          height: '150px'
+    props: {
+      rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 24 },
+      colMedia: {
+        xs: { span: 10 },
+        sm: { span: 8 }
+      },
+      colGroupAA: {
+        xs: { span: 14 },
+        sm: { span: 16 }
+      },
+      colButton: {
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 3,
+          push: 21
         }
       }
     },
-    cover: 'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522231482952.png'
+    theme: {
+      root: ['font_0', 'color_7', 'mod-space'],
+      colGroupRow: ['mod-full-width'],
+      paragraph: ['color_8']
+    },
+    options: {
+      theme: {
+        title: {
+          fontSize: 'font_5',
+          fontColor: 'color_8'
+        },
+        subtitle: {
+          fontSize: 'font_2',
+          fontColor: 'color_8'
+        },
+        button: {
+          fontSize: 'font_0',
+          fontColor: 'color_7',
+          bgColor: 'color_0'
+        }
+      },
+      config: {}
+    },
+    cover: './static/adi/mixPosition/cover/projectOne.png'
   }
-
 ]

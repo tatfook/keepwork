@@ -10,7 +10,6 @@ import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
-import AdiLesson from './lesson/Lesson'
 
 export default {
   AdiImgLoop,
@@ -24,6 +23,5 @@ export default {
   AdiDescLabel,
   AdiVipRead,
   AdiComment,
-  AdiInnerModal,
-  AdiLesson
+  AdiInnerModal
 }
