@@ -12,10 +12,21 @@ export const isVideo = src => {
 export const isImage = src => {
   if (src === '') {
     return true
-  } else {
-    return (
-      src && imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
-    )
+  } else if (typeof (src) === 'string') {
+    let isImageFile = src && imageTypes.findIndex(el => _.endsWith(src.toLowerCase(), el)) !== -1
+
+    if (isImageFile) {
+      return true
+    } else {
+      // base64 image
+      let type = src.split(',')[0] ? src.split(',')[0] : ''
+
+      if (type === 'data:image/png;base64' || type === 'data:image/jpeg;base64' || type === 'data:image/gif;base64') {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 }
 
