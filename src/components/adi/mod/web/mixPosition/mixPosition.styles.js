@@ -1,3 +1,25 @@
+let emptyData = {
+  media: {
+    emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
+    emptyLink: 'http://keepwork.com'
+  },
+  title: {
+    emptyName: '一个人，一条路，人在途中',
+    emptyLink: 'http://keepwork.com'
+  },
+  subtitle: {
+    emptyName: '我们一直在旅行',
+    emptyLink: 'http://keepwork.com'
+  },
+  paragraph: {
+    emptyData: `一个人去旅行，而且是去故乡的山水间徜徉。临行之前，面对太多的疑问和不解：为何是一个人？也有善意的提醒：何不去远方！昆明呀——赶一个花海；三亚呀——赴一个蓝天碧海。只是微笑地固执自己的坚持，不做任何解释。没有人明白，这一次是一个告别，或者一个永远的告别，以后我会去到很多很繁华或苍凉，辽远或偏僻的地方，而会常常想起这一次的旅行，想起那座山，那个城，那些人……`
+  },
+  button: {
+    emptyName: '查看更多',
+    emptyLink: 'http://keepwork.com'
+  }
+}
+
 export default [
   // style 0 左图右文
   {
@@ -52,29 +74,24 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
-      config: {}
+      config: {
+        ...emptyData
+      }
     },
-    cover: './static/adi/mixPosition/cover/projectOne.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectOne.png')
   },
 
   // style 1 左文右图
@@ -125,29 +142,24 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
-      config: {}
+      config: {
+        ...emptyData
+      }
     },
-    cover: './static/adi/mixPosition/cover/projectTwo.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectTwo.png')
   },
 
   // style 2  左文右图（文字竖排）
@@ -169,12 +181,37 @@ export default [
       media: {
         height: '700px'
       },
+      title: {
+        'max-width': '45px',
+        'line-height': '45px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      subtitle: {
+        'max-width': '30px',
+        'line-height': '30px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      paragraph: {
+        float: 'right',
+        'max-width': '396px',
+        'text-indent': '28px',
+        'writing-mode': 'tb-rl',
+        'overflow-x': 'auto'
+      },
+      colButton: {
+        'margin-top': '18px'
+      },
       '@media only screen and (max-width: 767px)': {
         colTitle: {
           height: '350px'
         },
         colSubtitle: {
           height: '350px'
+        },
+        colGroupA: {
+          overflow: 'hidden'
         },
         colGroupAA: {
           height: '350px'
@@ -186,36 +223,19 @@ export default [
           height: '350px'
         },
         paragraph: {
-          'max-width': '180px'
+          'max-width': '185px'
         }
-      },
-      title: {
-        'writing-mode': 'vertical-rl',
-        overflow: 'hidden'
-      },
-      subtitle: {
-        'writing-mode': 'vertical-rl',
-        overflow: 'hidden'
-      },
-      paragraph: {
-        float: 'right',
-        'max-width': '420px',
-        'text-indent': '28px',
-        'writing-mode': 'vertical-rl'
-      },
-      colButton: {
-        'margin-top': '18px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 14 },
       colTitle: {
-        xs: { span: 2 },
-        sm: { span: 1 }
+        xs: { span: 3 },
+        sm: { span: 2 }
       },
       colSubtitle: {
-        xs: { span: 1 },
+        xs: { span: 2 },
         sm: { span: 1 }
       },
       colGroupAA: {
@@ -223,8 +243,8 @@ export default [
         sm: { span: 9 }
       },
       colMedia: {
-        xs: { span: 12 },
-        sm: { span: 13 }
+        xs: { span: 10 },
+        sm: { span: 12 }
       },
       colParagraph: { span: 24 },
       colButton: {
@@ -239,29 +259,24 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_0']
     },
     options: {
       theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        },
         button: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_7'
         }
       },
-      config: {}
+      config: {
+        ...emptyData
+      }
     },
-    cover: './static/adi/mixPosition/cover/projectThree.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectThree.png')
   },
 
   // style 3 上图下文
@@ -304,24 +319,19 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        }
-      },
-      config: {}
+      theme: {},
+      config: {
+        ...emptyData
+      }
     },
-    cover: './static/adi/mixPosition/cover/projectFour.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectFour.png')
   },
 
   // style 4 上文下图
@@ -364,23 +374,18 @@ export default [
       colButton: { span: 0 }
     },
     theme: {
-      root: ['font_0', 'color_7', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      paragraph: ['color_8']
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_8'
-        },
-        subtitle: {
-          fontSize: 'font_2',
-          fontColor: 'color_8'
-        }
-      },
-      config: {}
+      theme: {},
+      config: {
+        ...emptyData
+      }
     },
-    cover: './static/adi/mixPosition/cover/projectFive.png'
+    cover: require('@/../static/adi/mixPosition/cover/projectFive.png')
   }
 ]

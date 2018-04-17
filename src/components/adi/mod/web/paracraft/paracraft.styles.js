@@ -1,3 +1,49 @@
+import _ from 'lodash'
+
+let emptyData = {
+  preview: {
+    emptySrc: require('@/../static/adi/paracraft/preview.jpg')
+  },
+  worldName: {
+    emptyName: '默认名字'
+  },
+  author: {
+    emptyDesc: '作者:',
+    emptyText: '你的名字'
+  },
+  version: {
+    emptyDesc: '版本',
+    emptyText: '0.0.0'
+  },
+  updateTime: {
+    emptyText: '2018-1-10-14-30',
+    emptyLink: 'http://keepwork.com'
+  },
+  viewTimesImg: {
+    emptySrc: require('@/../static/adi/paracraft/eye.png')
+  },
+  viewTimes: {
+    emptyText: '0',
+    emptyDesc: '浏览量'
+  },
+  size: {
+    emptyText: '31KB',
+    emptySize: '大小'
+  },
+  download: {
+    emptyName: '下载',
+    emptyLink: 'http://keepwork.com'
+  },
+  enter: {
+    emptyName: '进入',
+    emptyLink: 'http://keepwork.com'
+  },
+  desc: {
+    emptyData: `作品简介：
+    从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。`
+  }
+}
+
 export default [
   // style 0
   {
@@ -90,24 +136,23 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_4'],
+      download: ['font_12', 'color_4'],
+      enter: ['font_12', 'color_0']
     },
     options: {
       theme: {
         download: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_1'
         },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_8'
         }
       },
       config: {
+        ...emptyData,
         innerModal: {
           width: '70%',
           height: '80%',
@@ -115,7 +160,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft1.png'
+    cover: require('@/../static/adi/paracraft/paracraft1.png')
   },
   // style 1
   {
@@ -188,30 +233,29 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_7'],
+      download: ['font_10'],
+      enter: ['font_10', 'color_0'],
+      desc: ['font_10', 'color_4']
     },
     options: {
       theme: {
-        download: {
-          fontSize: 'font_0'
-        },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_8'
         }
       },
       config: {
-        download: {
+        ...emptyData,
+        download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
-            src: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/down.png'
+            src: require('@/../static/adi/paracraft/down.png')
           }
-        },
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
@@ -219,7 +263,7 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft2.png'
+    cover: require('@/../static/adi/paracraft/paracraft2.png')
   },
   // style 2
   {
@@ -278,30 +322,29 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_6', 'mod-space'],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      worldName: ['font_4', 'color_7'],
+      download: ['font_10'],
+      enter: ['font_10', 'color_0'],
+      desc: ['font_10', 'color_4']
     },
     options: {
       theme: {
-        download: {
-          fontSize: 'font_0'
-        },
         enter: {
-          fontSize: 'font_0',
-          fontColor: 'color_7',
-          bgColor: 'color_0'
+          bgColor: 'color_8'
         }
       },
       config: {
-        download: {
+        ...emptyData,
+        download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
-            src: 'http://keepwork.com/wiki/js/mod/adi/assets/imgs/down.png'
+            src: require('@/../static/adi/paracraft/down.png')
           }
-        },
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
@@ -309,6 +352,6 @@ export default [
         }
       }
     },
-    cover: 'http://keepwork.com/wiki/js/mod/adi/assets/images/paracraft3.png'
+    cover: require('@/../static/adi/paracraft/paracraft3.png')
   }
 ]

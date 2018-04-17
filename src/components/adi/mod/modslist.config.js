@@ -1,14 +1,15 @@
-import ModHeader from './web/header'
 import ModTitle from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
 import ModMixLayer from './web/mixLayer'
 import ModMixPositon from './web/mixPosition'
+import ModImg from './web/img'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
+import ModMenu from './web/menu'
 
 var modsList = [
   {
@@ -17,28 +18,33 @@ var modsList = [
     children: [
       {
         id: '1-1',
-        label: '导航菜单',
-        mods: [ModHeader]
-      },
-      {
-        id: '1-2',
         label: '文本',
         mods: [ModText]
       },
       {
-        id: '1-3',
+        id: '1-2',
         label: '图文轮播',
         mods: [ModImgLoop]
       },
       {
-        id: '1-4',
+        id: '1-3',
         label: '图文叠加',
         mods: [ModMixLayer]
       },
       {
-        id: '1-5',
+        id: '1-4',
         label: '图文拼接',
         mods: [ModMixPositon]
+      },
+      {
+        id: '1-5',
+        label: '菜单',
+        mods: [ModMenu]
+      },
+      {
+        id: '1-6',
+        label: '标题',
+        mods: [ModTitle]
       }
     ]
   },
@@ -50,6 +56,11 @@ var modsList = [
         id: '2-1',
         label: '图文轮播',
         mods: [ModImgLoop]
+      },
+      {
+        id: '2-2',
+        label: '图像宽屏',
+        mods: [ModImg]
       }
     ]
   },

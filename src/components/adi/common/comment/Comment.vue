@@ -1,6 +1,6 @@
 <template>
   <div class='comp-comment' v-loading='loading'>
-    <div>
+    <div v-if="properties.switch.value">
       <h3>我要评论</h3>
       <div class="comments-box">
         <div class="comment-item clearfix" v-for='comment in activePageCommentList' :key='comment._id'>
@@ -18,10 +18,9 @@
         <el-button @click="commit">提交</el-button>
       </div>
     </div>
-    <!-- <div class="text-center shutup-comment" ng-hide="!params.multiText_desc.is_mod_hide">
+    <div class="text-center shutup-comment" v-if="!properties.switch.value">
       评论功能已关闭
-    </div> -->
-
+    </div>
   </div>
 </template>
 
@@ -132,6 +131,7 @@ export default {
   .shutup-comment {
     border: 1px solid #999999;
     padding: 60px;
+    text-align: center;
   }
 }
 </style>

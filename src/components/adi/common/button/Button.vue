@@ -1,12 +1,12 @@
 <template>
   <div class="comp-button">
-    <a v-if="!options.clickEvent" :class="getClassStyle" :target='properties.target' :href="properties.link" :style="buttonStyle">
+    <a v-if="!options.clickEvent" :class="getClassStyle" :target='properties.target' :href="properties.link ? properties.link : options.emptyLink" :style="buttonStyle">
       <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{properties.name}}
+      {{ properties.name ? properties.name : options.emptyName }}
     </a>
     <a v-if="options.clickEvent" :class="getClassStyle" @click='callback' :style="buttonStyle">
       <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{properties.name}}
+      {{ properties.name ? properties.name : options.emptyName }}
     </a>
   </div>
 </template>
@@ -24,8 +24,6 @@ export default {
   computed: {
     buttonStyle() {
       return this.generateStyleString({
-        'font-size': this.options.fontSize,
-        color: this.options.fontColor || null,
         'background-color': this.options.bgColor || null
       })
     },
@@ -88,6 +86,7 @@ export default {
     align-items: center;
     justify-content: center;
     line-height: unset;
+    color: unset;
   }
 }
 </style>

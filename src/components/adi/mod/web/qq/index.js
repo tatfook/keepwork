@@ -13,9 +13,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.pic.src = './static/adi/qq/qqMod.png'
-properties.pic.link = ''
-
-properties.desc.name = '客服中心'
-
 export default { mod, name, components, properties, styles, templates }

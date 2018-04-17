@@ -4,11 +4,10 @@ export default [
     data: {
       root: {}
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['font_0', 'color_0', 'mod-space'],
+      rootRow: ['mod-full-width'],
       title: ['color_0']
     },
     options: {

@@ -11,17 +11,13 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['color_0']
+      title: ['font_1', 'color_7'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_0'
-        }
-      },
+      theme: {},
       config: {}
     },
     cover:
@@ -33,26 +29,19 @@ export default [
       title: {
         'text-align': 'center',
         'margin-bottom': '20px'
-      },
-      paragraph: {
-        'text-indent': '28px'
       }
     },
     props: {
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['color_0']
+      title: ['font_1', 'color_7'],
+      paragraph: ['font_9', 'color_4']
     },
     options: {
-      theme: {
-        title: {
-          fontSize: 'font_5',
-          fontColor: 'color_0'
-        }
-      },
+      theme: {},
       config: {}
     },
     cover:

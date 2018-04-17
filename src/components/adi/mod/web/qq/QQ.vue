@@ -31,7 +31,7 @@ export default {
         return _.merge(
           {},
           options,
-          (this.modData.pic.src = './static/adi/qq/qqModSecond.png')
+          (this.modData.pic.src = './static/adi/qq/qqTwo.svg')
         )
       } else {
         return options
