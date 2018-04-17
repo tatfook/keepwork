@@ -59,14 +59,13 @@ export default {
     ...mapGetters({
       activePage: 'activePage',
       activePageInfo: 'activePageInfo',
-      loginUser: 'user/info'
+      loginUser: 'user/profile'
     })
   },
   mounted() {},
   methods: {
     showSocialShare() {
-      let loginUser =
-        this.loginUser.userinfo.displayName || this.loginUser.userinfo.username
+      let loginUser = this.loginUser.displayName || this.loginUser.username
       window.socialShare('.kp-social-share', {
         mode: 'prepend',
         description: `我将${
