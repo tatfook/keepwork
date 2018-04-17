@@ -11,6 +11,7 @@ import AdiVipRead from './vipRead/vipRead.proptypes'
 import AdiComment from './comment/comment.proptypes'
 import AdiInnerModal from './innerModal/innerModal.proptypes'
 import AdiNumber from './number/number.proptypes'
+import AdiLesson from './lesson/lesson.proptypes'
 
 export default {
   AdiImgLoop,
@@ -25,5 +26,6 @@ export default {
   AdiVipRead,
   AdiComment,
   AdiInnerModal,
-  AdiNumber
+  AdiNumber,
+  AdiLesson
 }

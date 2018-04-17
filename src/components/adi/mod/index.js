@@ -10,6 +10,7 @@ import ModText from './web/text'
 import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
+import ModLesson from './web/lesson'
 
 export default {
   ModMarkdown,
@@ -23,5 +24,6 @@ export default {
   ModText,
   ModBoard,
   ModVipRead,
-  ModComment
+  ModComment,
+  ModLesson
 }

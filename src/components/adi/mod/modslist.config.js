@@ -9,6 +9,7 @@ import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
+import ModLesson from './web/lesson'
 
 var modsList = [
   {
@@ -146,6 +147,17 @@ var modsList = [
         id: '8-1',
         label: '调用QQ聊天',
         mods: [ModQQ]
+      }
+    ]
+  },
+  {
+    id: '9',
+    label: 'Lesson',
+    children: [
+      {
+        id: '9-1',
+        label: 'ModLesson',
+        mods: [ModLesson]
       }
     ]
   }
