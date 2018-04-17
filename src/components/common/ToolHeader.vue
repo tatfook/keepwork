@@ -41,24 +41,49 @@
       <a href="/editor.html" class="icon-item">
         <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
       </a>
-      <img class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
+      <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
+      <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
+        <div class="kp-social-share"></div>
+      </el-popover>
       <i class="iconfont icon-dianzan icon-item"></i>
     </div>
   </div>
 </template>
 <script>
+import 'social-share.js/dist/js/social-share.min.js'
+import 'social-share.js/dist/css/share.min.css'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ToolHeader',
   computed: {
     ...mapGetters({
       activePage: 'activePage',
-      activePageInfo: 'activePageInfo'
+      activePageInfo: 'activePageInfo',
+      loginUser: 'user/info'
     })
+  },
+  mounted() {},
+  methods: {
+    showSocialShare() {
+      let loginUser =
+        this.loginUser.userinfo.displayName || this.loginUser.userinfo.username
+      window.socialShare('.kp-social-share', {
+        mode: 'prepend',
+        description: `我将${
+          this.activePageInfo.username
+        }在KEEPWORK.COM制作的网站分享给你`,
+        title: `${loginUser}分享给你${this.activePageInfo.username}制作的${
+          this.activePageInfo.sitename
+        }网站`,
+        sites: ['qq', 'qzone', 'weibo', 'wechat'],
+        wechatQrcodeTitle: '', // 微信二维码提示文字
+        wechatQrcodeHelper: '扫描二维码打开网页'
+      })
+    }
   }
 }
 </script>
-<style <style lang="scss" scoped>
+<style lang="scss">
 .tool-header {
   position: relative;
   .breadcrumb {
@@ -88,6 +113,33 @@ export default {
   a:hover {
     color: #3ba4ff;
     cursor: pointer;
+  }
+}
+
+.kp-social-share.social-share {
+  text-align: center;
+
+  .icon-wechat {
+    visibility: hidden;
+    height: 150px;
+
+    .wechat-qrcode {
+      top: 0;
+      left: -40px;
+      width: 110px;
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      visibility: visible;
+      display: block;
+      height: 165px;
+    }
+    .wechat-qrcode::after {
+      content: none;
+    }
+    h4 {
+      display: none;
+    }
   }
 }
 </style>
