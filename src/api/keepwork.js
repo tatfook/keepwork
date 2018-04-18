@@ -1,11 +1,9 @@
 /*doc
 ---
 title: API
-name: API
+name: Keepwork API
 category: API
 ---
-
-keepwork API
 */
 import axios from 'axios'
 
@@ -22,38 +20,44 @@ export const user = {
 
 /*doc
 ---
-title: Keepwork
-name: Keepwork
+title: website
+name: website
 category: API
-parent: API
+parent: Keepwork API
 ---
 
-website
+**upsert:**
+```
+payload
+{
+  name,
+  domain: name,
+  visibility : "public",
+  userId: 2,
+  username : "dukes",
+  defaultDataSourceName : "内置gitlab",
+  // actually, the info below is not necessary for current usage
+  // we keep it to prevent any surprise with old version keepwork
+  categoryName : "个 人",
+  type : "personal",
+  templateName : "空模板",
+  styleName : "默认样式",
+  logoUrl : "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png"
+}
+res data
+{
+  ...websiteInfo,
+  dataSource: { projectId }
+}
+```
 
-upsert
-  payload
-  {
-    name,
-    domain: name,
-    visibility : "public",
-    userId: 2,
-    username : "dukes",
-    defaultDataSourceName : "内置gitlab",
-    // actually, the info below is not necessary for current usage
-    // we keep it to prevent any surprise with old version keepwork
-    categoryName : "个 人",
-    type : "personal",
-    templateName : "空模板",
-    styleName : "默认样式",
-    logoUrl : "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png"
-  }
-  res data
-  {
-    ...websiteInfo,
-    dataSource: { projectId }
-  }
-
-getDetailInfo payload {"username":"kaitlyn","sitename":"site"}
+**getDetailInfo:**
+```
+payload: {
+  "username":"kaitlyn",
+  "sitename":"site"
+}
+```
 */
 export const website = {
   upsert: (...args) => post('website/upsert', ...args),
@@ -64,25 +68,27 @@ export const website = {
 
 /*doc
 ---
-title: Keepwork
-name: Keepwork
+title: pages
+name: pages
 category: API
-parent: API
+parent: Keepwork API
 ---
 
-pages
-
-star
+**star:**
+```
 payload: {
   url: 'kaitlyn/a1/newfolder/index',
   visitor: 'kaitlyn2'
 }
+```
 
-getDetail
+**getDetail:**
+```
 payload: {
   url: 'kaitlyn/a1/newfolder/index',
   visitor: 'kaitlyn2' // username of login user or ''
 }
+```
 */
 export const pages = {
   star: (...args) => post('pages/star', ...args),
@@ -98,9 +104,29 @@ export const siteDataSource = {
 }
 
 /*doc
-  websiteComment
-  create payload {"url":"/kaitlyn/site/index", "websiteId":90, "userId":4, "content":"范德萨范德萨分"}
-  getByPageUrl payload {"url":"/kaitlyn/site/index", "pageSize":10000000}
+---
+title: websiteComment
+name: websiteComment
+category: API
+parent: Keepwork API
+---
+
+**create:**
+```
+payload: {
+  "url":"/kaitlyn/site/index",
+  "websiteId":90, "userId":4,
+  "content":"范德萨范德萨分"
+}
+```
+
+**getByPageUrl:**
+```
+payload: {
+  "url":"/kaitlyn/site/index",
+  "pageSize":10000000
+}
+```
 */
 export const websiteComment = {
   create: (...args) => post('website_comment/create', ...args),
