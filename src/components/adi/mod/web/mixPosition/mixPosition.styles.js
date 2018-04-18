@@ -38,6 +38,9 @@ export default [
         display: 'flex',
         'align-items': ' flex-start'
       },
+      title: {
+        'margin-top': '20px'
+      },
       subtitle: {
         'margin-top': '10px'
       },
@@ -55,18 +58,15 @@ export default [
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
       colMedia: {
-        xs: { span: 10 },
+        xs: { span: 24 },
         sm: { span: 8 }
       },
       colGroupAA: {
-        xs: { span: 14 },
+        xs: { span: 24 },
         sm: { span: 16 }
       },
       colButton: {
-        xs: {
-          span: 6,
-          push: 18
-        },
+        xs: { span: 24 },
         sm: {
           span: 3,
           push: 21
@@ -96,8 +96,11 @@ export default [
 
   // style 1 左文右图
   {
-    templateID: 1,
+    templateID: 0,
     data: {
+      colMedia: {
+        float: 'right'
+      },
       media: {
         height: '611px'
       },
@@ -105,6 +108,9 @@ export default [
         media: {
           height: '300px'
         }
+      },
+      title: {
+        'margin-top': '20px'
       },
       subtitle: {
         'margin-top': '10px'
@@ -123,18 +129,15 @@ export default [
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
       colMedia: {
-        xs: { span: 10 },
+        xs: { span: 24 },
         sm: { span: 8 }
       },
       colGroupAA: {
-        xs: { span: 14 },
+        xs: { span: 24 },
         sm: { span: 16 }
       },
       colButton: {
-        xs: {
-          span: 6,
-          push: 18
-        },
+        xs: { span: 24 },
         sm: {
           span: 3,
           push: 21
@@ -166,18 +169,11 @@ export default [
   {
     templateID: 2,
     data: {
-      colTitle: {
-        height: '700px'
-      },
-      colSubtitle: {
-        height: '700px'
-      },
-      colGroupAA: {
-        height: '700px'
-      },
-      colParagraph: {
-        height: '646px'
-      },
+      colMedia: { float: 'right' },
+      colTitle: { height: '700px' },
+      colSubtitle: { height: '700px' },
+      colGroupAA: { height: '700px' },
+      colParagraph: { height: '646px' },
       media: {
         height: '700px'
       },
@@ -204,26 +200,29 @@ export default [
         'margin-top': '18px'
       },
       '@media only screen and (max-width: 767px)': {
-        colTitle: {
-          height: '350px'
+        colTitle: { height: 'auto' },
+        colSubtitle: { height: 'auto' },
+        colGroupAA: { height: 'auto' },
+        colParagraph: { height: 'auto' },
+        media: { height: '300px' },
+        title: {
+          'margin-top': '20px',
+          ' max-width': '100%',
+          'writing-mode': 'lr-tb'
         },
-        colSubtitle: {
-          height: '350px'
-        },
-        colGroupA: {
-          overflow: 'hidden'
-        },
-        colGroupAA: {
-          height: '350px'
-        },
-        colParagraph: {
-          height: '300px'
-        },
-        media: {
-          height: '350px'
+        subtitle: {
+          'margin-top': '10px',
+          ' max-width': '100%',
+          'writing-mode': 'lr-tb'
         },
         paragraph: {
-          'max-width': '185px'
+          float: 'none',
+          'margin-top': '15px',
+          ' max-width': '100%',
+          'text-indent': '28px',
+          'writing-mode': 'lr-tb',
+          'word-wrap': 'break-word',
+          'white-space': 'pre-wrap'
         }
       }
     },
@@ -231,27 +230,24 @@ export default [
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 14 },
       colTitle: {
-        xs: { span: 3 },
+        xs: { span: 24 },
         sm: { span: 2 }
       },
       colSubtitle: {
-        xs: { span: 2 },
+        xs: { span: 24 },
         sm: { span: 1 }
       },
       colGroupAA: {
-        xs: { span: 9 },
+        xs: { span: 24 },
         sm: { span: 9 }
       },
       colMedia: {
-        xs: { span: 10 },
+        xs: { span: 24 },
         sm: { span: 12 }
       },
       colParagraph: { span: 24 },
       colButton: {
-        xs: {
-          span: 10,
-          push: 14
-        },
+        xs: { span: 24 },
         sm: {
           span: 4,
           push: 20
@@ -347,7 +343,6 @@ export default [
         }
       },
       title: {
-        'margin-top': '20px',
         'text-align': 'center'
       },
       subtitle: {
@@ -356,6 +351,7 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
+        'margin-bottom': '20px',
         'text-indent': '28px',
         'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
