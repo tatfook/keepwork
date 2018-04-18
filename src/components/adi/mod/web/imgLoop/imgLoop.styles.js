@@ -10,7 +10,7 @@ export default [
       }
     },
     theme: {
-      root: ['font_0', 'color_0']
+      root: ['mod-space']
     },
     options: {
       theme: {},
@@ -20,13 +20,14 @@ export default [
         }
       }
     },
-    cover:
-      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522231482952.png'
+    cover: require('@/../static/adi/imgLoop/thumbnail.png')
   },
 
   // style 1
   {
-    cover:
-      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522231747641.jpeg'
+    theme: {
+      root: ['mod-space']
+    },
+    cover: require('@/../static/adi/imgLoop/thumbnail.png')
   }
 ]
