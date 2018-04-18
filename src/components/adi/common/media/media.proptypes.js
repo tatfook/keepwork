@@ -1,4 +1,5 @@
 export default {
   src: 'input',
-  link: 'input'
+  link: 'input',
+  target: 'linkTarget'
 }

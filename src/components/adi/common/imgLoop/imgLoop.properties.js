@@ -1,13 +1,11 @@
 export default {
   data: [
     {
-      img:
-        'http://keepwork.com/wiki/js/mod/adi/assets/images/imgCarouselOne.jpg',
+      img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
       link: 'http://keepwork.com'
     },
     {
-      img:
-        'http://keepwork.com/wiki/js/mod/adi/assets/images/imgCarouselTo.jpg',
+      img: require('@/../static/adi/imgLoop/imgCarouselTwo.jpg'),
       link: 'http://keepwork.com'
     }
   ]

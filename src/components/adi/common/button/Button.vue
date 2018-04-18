@@ -90,3 +90,10 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.comp-button {
+  .el-button {
+    font-size: unset;
+  }
+}
+</style>

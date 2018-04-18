@@ -18,7 +18,9 @@ export default [
       root: {},
       colImg: { span: 24 }
     },
-    theme: {},
+    theme: {
+      root: ['mod-space']
+    },
     options: {
       theme: {},
       config: {
@@ -50,7 +52,9 @@ export default [
       root: {},
       colImg: { span: 24 }
     },
-    theme: {},
+    theme: {
+      root: ['mod-space']
+    },
     options: {
       theme: {},
       config: {
