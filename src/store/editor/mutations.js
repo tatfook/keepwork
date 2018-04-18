@@ -30,6 +30,7 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 
+const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 
@@ -60,6 +61,7 @@ export const props = {
 
   SET_NEW_MOD_POSITION,
 
+  RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE
 }
@@ -71,8 +73,6 @@ const mutations = {
     Vue.set(state, 'activePage', pageData)
     Vue.set(state, 'activePageUrl', path)
     if (pageData) {
-      let blockList = Parser.buildBlockList(pageData.content)
-      Parser.updateBlockList(state.activePage.modList, blockList)
       Vue.set(state.activePage, 'activeMod', null)
       Vue.set(state.activePage, 'activeProperty', null)
     }
@@ -180,13 +180,16 @@ const mutations = {
     state.activePage.newModPosition = position
   },
 
+  [RESET_OPENED_FILE](state, { username, path, data }) {
+    Vue.set(state.openedFiles, username, {
+      ..._.get(state, ['openedFiles', username]),
+      [path]: data
+    })
+  },
   [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
-    Vue.set(state, 'openedFiles', {
-      ...state.openedFiles,
+    _.merge(state.openedFiles, {
       [username]: {
-        ..._.get(state, ['openedFiles', username]),
         [path]: {
-          ..._.get(state, ['openedFiles', username, path]),
           ...partialUpdatedFileInfo
         }
       }

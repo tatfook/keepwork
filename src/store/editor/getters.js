@@ -18,25 +18,8 @@ const getters = {
     return { username, sitename, paths }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  activePageCacheAvailable: (state, { activePage }) => {
-    if (_.isEmpty(activePage)) return false
-
-    let savedExpires = 5 * 60 * 1000 // 5 mins
-    let unsavedExpires = 2 * 24 * 60 * 60 * 1000 // 2 days
-    let now = Date.now()
-
-    let { timestamp, saved } = activePage
-    let cachedTime = now - timestamp
-
-    let saveExpired = cachedTime > savedExpires
-    let unsavedExpired = cachedTime > unsavedExpires
-
-    if (saved && !saveExpired) return true
-    if (!saved && !unsavedExpired) return true
-
-    return false
-  },
-  code: (state, { activePage = {} }) => activePage.content || '',
+  code: (state, { activePage = {} }) =>
+    (activePage && activePage.content) || '',
 
   themeConf: state => {
     if (state.activePage) return state.activePage.theme
