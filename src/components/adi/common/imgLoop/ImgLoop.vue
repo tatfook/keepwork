@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <el-carousel :height="options.height">
-      <el-carousel-item v-for="(item, index) in properties.data" :key="index">
+      <el-carousel-item v-for="(item, index) in forImgs" :key="index">
         <div class="imgs" :style="loadImg(item)"></div>
       </el-carousel-item>
     </el-carousel>
@@ -17,13 +17,17 @@ export default {
   methods: {
     loadImg(item) {
       return this.generateStyleString({
-        background: 'url(' + item.img + ')',
-        'background-position': 'center',
-        'background-size': 'cover'
+        'background-image': 'url(' + item.img + ')'
       })
     }
   },
-  computed: {}
+  computed: {
+    forImgs() {
+      return this.properties.data.length == 0
+        ? this.options
+        : this.properties.data
+    }
+  }
 }
 </script>
 
@@ -31,6 +35,8 @@ export default {
 .imgs {
   width: 100%;
   height: 100%;
+  background-position: center;
+  background-size: cover;
 }
 
 .el-carousel__item h3 {
