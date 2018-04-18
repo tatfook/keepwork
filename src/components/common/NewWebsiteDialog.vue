@@ -19,7 +19,7 @@
             class='new-website-template'
             :key='template.name'>
             <div @click='setSelectedTemplateIndex(index)'>
-              <img :src="template.logoUrl">
+              <img width="280px" height="210px" :src="template.logoUrl">
             </div>
           </el-col>
         </el-col>
