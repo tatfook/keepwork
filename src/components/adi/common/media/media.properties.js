@@ -1,4 +1,5 @@
 export default {
   src: '',
-  link: ''
+  link: '',
+  target: '_blank'
 }
