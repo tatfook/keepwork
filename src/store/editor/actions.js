@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 import undoHelper from '@/lib/utils/undo/undoHelper'
