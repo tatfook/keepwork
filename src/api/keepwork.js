@@ -46,6 +46,26 @@ export const website = {
   getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
 }
 
+/* doc
+  pages
+
+  star
+  payload: {
+    url: 'kaitlyn/a1/newfolder/index',
+    visitor: 'kaitlyn2'
+  }
+
+  getDetail
+  payload: {
+    url: 'kaitlyn/a1/newfolder/index',
+    visitor: 'kaitlyn2' // username of login user or ''
+  }
+*/
+export const pages = {
+  star: (...args) => post('pages/star', ...args),
+  getDetail: (...args) => post('pages/getDetail', ...args)
+}
+
 export const siteUser = {
   getSiteListByMemberName: (...args) => post('site_user/getSiteListByMemberName', ...args)
 }
@@ -75,7 +95,8 @@ export const keepwork = {
   siteUser,
   siteDataSource,
   websiteComment,
-  sensitiveWords
+  sensitiveWords,
+  pages
 }
 
 export default keepwork

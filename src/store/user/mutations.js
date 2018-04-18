@@ -12,6 +12,7 @@ const GET_SITE_DETAIL_INFO_SUCCESS = 'GET_SITE_DETAIL_INFO_SUCCESS'
 const GET_CONTRIBUTED_WEBSITE_SUCCESS = 'GET_CONTRIBUTED_WEBSITE_SUCCESS'
 const UPSERT_WEBSITE_SUCCESS = 'UPSERT_WEBSITE_SUCCESS'
 const GET_WEB_TEMPLATE_CONFIG_SUCCESS = 'GET_WEB_TEMPLATE_CONFIG_SUCCESS'
+const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -24,7 +25,8 @@ export const props = {
   GET_SITE_DETAIL_INFO_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
-  GET_WEB_TEMPLATE_CONFIG_SUCCESS
+  GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  SET_PAGE_STAR_DETAIL
 }
 
 const doNothing = state => {
@@ -80,6 +82,9 @@ const mutations = {
   },
   [GET_WEB_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
     Vue.set(state, 'webTemplateConfig', config)
+  },
+  [SET_PAGE_STAR_DETAIL](state, { starred, starredCount }) {
+    Vue.set(state, 'activePageStarInfo', { starred, starredCount })
   }
 }
 

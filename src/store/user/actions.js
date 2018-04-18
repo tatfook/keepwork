@@ -15,7 +15,8 @@ const {
   GET_SITE_DETAIL_INFO_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
-  GET_WEB_TEMPLATE_CONFIG_SUCCESS
+  GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  SET_PAGE_STAR_DETAIL
 } = props
 
 const actions = {
@@ -194,6 +195,16 @@ const actions = {
   async getActivePageComments(context) {
     let { dispatch, rootGetters: { activePage } } = context
     await dispatch('getCommentsByPageUrl', {url: activePage})
+  },
+  async starPages(context, { url, visitor }) {
+    let { commit, getters: { authRequestConfig } } = context
+    let pageStarResult = await keepwork.pages.star({url, visitor}, authRequestConfig)
+    commit(SET_PAGE_STAR_DETAIL, pageStarResult)
+  },
+  async initPageDetail(context, { url, visitor }) {
+    let { commit } = context
+    let pageDetail = await keepwork.pages.getDetail({url, visitor})
+    commit(SET_PAGE_STAR_DETAIL, pageDetail)
   }
 }
 

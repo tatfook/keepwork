@@ -45,25 +45,37 @@
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
-      <i class="iconfont icon-dianzan icon-item"></i>
+      <span class="icon-item" v-loading='starPending'>
+        <i class="iconfont icon-dianzan" :class="{'active': activePageStarInfo.starred}" @click='togglePageStar'></i>
+        <span class="info">{{activePageStarInfo.starredCount}}</span>
+      </span>
     </div>
   </div>
 </template>
 <script>
 import 'social-share.js/dist/js/social-share.min.js'
 import 'social-share.js/dist/css/share.min.css'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ToolHeader',
   computed: {
     ...mapGetters({
       activePage: 'activePage',
       activePageInfo: 'activePageInfo',
-      loginUser: 'user/profile'
+      loginUser: 'user/profile',
+      activePageStarInfo: 'user/activePageStarInfo'
     })
   },
   mounted() {},
+  data() {
+    return{
+      starPending: false
+    }
+  },
   methods: {
+    ...mapActions({
+      starPages: 'user/starPages'
+    }),
     showSocialShare() {
       let loginUser = this.loginUser.displayName || this.loginUser.username
       window.socialShare('.kp-social-share', {
@@ -78,6 +90,14 @@ export default {
         wechatQrcodeTitle: '', // 微信二维码提示文字
         wechatQrcodeHelper: '扫描二维码打开网页'
       })
+    },
+    async togglePageStar() {
+      this.starPending = true
+      await this.starPages({
+        url: this.activePage,
+        visitor: this.loginUser.username
+      })
+      this.starPending = false
     }
   }
 }
@@ -96,12 +116,18 @@ export default {
     top: 0;
   }
   .icon-item {
-    font-size: 30px;
     line-height: 1;
     padding: 10px 15px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
+  }
+  .icon-item .iconfont {
+    font-size: 30px;
+    vertical-align: middle;
+  }
+  .icon-item .iconfont.active{
+    color: #fe7532;
   }
   a {
     color: #606266;
