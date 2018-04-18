@@ -6,7 +6,7 @@ export default [
     },
     props: {},
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: [],
       rootRow: ['mod-full-width'],
       title: ['color_0']
     },
