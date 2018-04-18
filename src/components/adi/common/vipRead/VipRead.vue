@@ -9,19 +9,19 @@
     </div>
 
     <div v-if="!editMode">
-      <div v-if="isLogined() && !isVip && properties.value" class="vip-more-permission">
+      <div v-if="isLogined && !isVip && properties.switch.value && !isMyPage" class="vip-more-permission">
         <p>
           <a href="/wiki/vip">
             <span class="fa fa-lock"></span>成为VIP，才能查看更多</a>
         </p>
       </div>
-      <div v-if="!isLogined()" class="vip-more-permission">
+      <div v-if="!isLogined" class="vip-more-permission">
         <p ng-show="!editorMode">
           <a ng-click="goLoginModal()">登录后，才能查看更多</a>
         </p>
       </div>
+      {{init()}}
     </div>
-    {{init()}}
   </div>
 </template>
 
@@ -34,13 +34,25 @@ export default {
   name: 'AdiVipRead',
   mixins: [compBaseMixin],
   computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined',
+      vipInfo: 'user/vipInfo',
+      username: 'user/username'
+    }),
     isVip() {
-      let vipInfo = this.vipInfo()
-
-      let endDate = new Date(vipInfo['endDate']).getTime()
+      let endDate = new Date(this.vipInfo['endDate']).getTime()
       let now = Date.now()
 
-      if (vipInfo['isValid'] && endDate >= now) {
+      if (this.vipInfo['isValid'] && endDate >= now) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isMyPage() {
+      let pathUsername = window.location.pathname.split('/')[1]
+
+      if(pathUsername && pathUsername == this.username) {
         return true
       } else {
         return false
@@ -48,12 +60,8 @@ export default {
     }
   },
   methods: {
-    ...mapGetters({
-      isLogined: 'user/isLogined',
-      vipInfo: 'user/vipInfo'
-    }),
     init() {
-      if (this.properties.switch.value) {
+      if (this.properties.switch.value && !this.isMyPage) {
         setTimeout(() => {
           let modContainer = document.querySelector('[mod-container]')
 
