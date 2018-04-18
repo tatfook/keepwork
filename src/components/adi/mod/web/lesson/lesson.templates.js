@@ -8,11 +8,17 @@ export default [
             { colMedia: 'animation' },
             {
               colGroupAA: [
+                { colLessonNo: 'lessonNo' },
                 { colTitle: 'topic' },
                 { colParagraph: 'lessonGoals' },
                 { colButton: 'button' }
               ]
             }
+          ]
+        },
+        {
+          colGroupA: [
+            { colTabs: 'tabs' }
           ]
         }
       ]

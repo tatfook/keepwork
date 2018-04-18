@@ -15,6 +15,9 @@ export default [
         display: 'flex',
         'align-items': ' flex-start'
       },
+      lessonNo: {
+        color: 'black'
+      },
       lessonGoals: {
         color: 'black',
         'margin-top': '15px',
@@ -39,11 +42,11 @@ export default [
       },
       colButton: {
         xs: {
-          span: 6,
-          push: 18
+          span: 10,
+          push: 21
         },
         sm: {
-          span: 3,
+          span: 10,
           push: 21
         }
       }
