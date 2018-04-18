@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown class="comp-markdown" :source='properties.data' />
+  <vue-markdown class="comp-markdown" :source='properties.data ? properties.data : options.emptyData' />
 </template>
 
 <script>

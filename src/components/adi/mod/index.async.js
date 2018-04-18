@@ -1,8 +1,9 @@
 const ModMarkdown = () => import('./common/markdown')
-const ModHeader = () => import('./web/header')
 const ModTitle = () => import('./web/title')
 const ModMixPosition = () => import('./web/mixPosition')
 const ModMixLayer = () => import('./web/mixLayer')
+const ModImg = () => import('./web/img')
+const ModMenu = () => import('./web/menu')
 const ModImgLoop = () => import('./web/imgLoop')
 const ModParacraft = () => import('./web/paracraft')
 const ModQQ = () => import('./web/qq')
@@ -14,10 +15,10 @@ const ModLesson = () => import('./web/lesson')
 
 export default {
   ModMarkdown,
-  ModHeader,
   ModTitle,
   ModMixPosition,
   ModMixLayer,
+  ModImg,
   ModImgLoop,
   ModParacraft,
   ModQQ,
@@ -25,5 +26,6 @@ export default {
   ModVipRead,
   ModComment,
   ModBoard,
-  ModLesson
+  ModLesson,
+  ModMenu
 }

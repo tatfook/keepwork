@@ -1,4 +1,6 @@
 export default {
-  text: 'KeepWork',
-  link: '#'
+  switch: {
+    desc: '评论是否开启',
+    value: true
+  }
 }

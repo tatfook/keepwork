@@ -47,6 +47,7 @@ export default [
       colGroup: [
         {
           colGroupA: [
+            { colMedia: 'media' },
             { colTitle: 'title' },
             { colSubtitle: 'subtitle' },
             {
@@ -54,8 +55,7 @@ export default [
                 { colParagraph: 'paragraph' },
                 { colButton: 'button' }
               ]
-            },
-            { colMedia: 'media' }
+            }
           ]
         }
       ]

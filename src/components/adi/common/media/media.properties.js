@@ -1,4 +1,5 @@
 export default {
   src: '',
-  link: 'http://keepwork.com'
+  link: '',
+  target: '_blank'
 }

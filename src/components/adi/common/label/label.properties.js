@@ -1,5 +1,5 @@
 export default {
-  text: 'KeepWork',
-  link: '#',
+  text: '',
+  link: '',
   target: '_blank'
 }

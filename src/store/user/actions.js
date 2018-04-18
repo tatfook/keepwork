@@ -15,7 +15,8 @@ const {
   GET_SITE_DETAIL_INFO_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
-  GET_WEB_TEMPLATE_CONFIG_SUCCESS
+  GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  SET_PAGE_STAR_DETAIL
 } = props
 
 const actions = {
@@ -65,17 +66,17 @@ const actions = {
       dispatch('getAllSiteDataSource')
     ])
   },
-  async createWebsite(context, { name }) {
-    let { dispatch, getters: { username, authRequestConfig } } = context
-
+  async createWebsite({ dispatch }, payload) {
     // check if the site already exists
-    let siteWithTheSameName = await keepwork.website.getByName({username, sitename: name}, authRequestConfig)
-    if (siteWithTheSameName) throw new Error(`Website ${name} already exists!`)
+    // don't need any more, we've got the function in NewWebsiteDialog.vue
+    // let { name } = payload
+    // let siteWithTheSameName = await keepwork.website.getByName({username, sitename: name}, authRequestConfig)
+    // if (siteWithTheSameName) throw new Error(`Website ${name} already exists!`)
 
-    await dispatch('upsertWebsite', { name })
+    await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite')
     await dispatch('getAllSiteDataSource')
-    await dispatch('initWebsite', { name })
+    await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
     let { username, getWebTemplateStyle, getPersonalSiteInfoByPath } = getters
@@ -124,13 +125,14 @@ const actions = {
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
-  async getAllWebsite(context) {
+  async getAllWebsite(context, { ignoreCache = true } = {}) {
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
-    let { username, authRequestConfig } = getters
-    let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
+    let { username, authRequestConfig, personalSiteList } = getters
+    if (!ignoreCache && personalSiteList.length) return
 
+    let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
     commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
   },
   async getAllSiteDataSource(context) {
@@ -194,6 +196,16 @@ const actions = {
   async getActivePageComments(context) {
     let { dispatch, rootGetters: { activePage } } = context
     await dispatch('getCommentsByPageUrl', {url: activePage})
+  },
+  async starPages(context, { url, visitor }) {
+    let { commit, getters: { authRequestConfig } } = context
+    let pageStarResult = await keepwork.pages.star({url, visitor}, authRequestConfig)
+    commit(SET_PAGE_STAR_DETAIL, pageStarResult)
+  },
+  async initPageDetail(context, { url, visitor }) {
+    let { commit } = context
+    let pageDetail = await keepwork.pages.getDetail({url, visitor})
+    commit(SET_PAGE_STAR_DETAIL, pageDetail)
   }
 }
 

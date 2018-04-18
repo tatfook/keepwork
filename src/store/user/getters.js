@@ -66,6 +66,7 @@ const getters = {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
   },
+  personalWebsiteNames: (state, {personalSiteList = []}) => personalSiteList.map(site => site.name),
 
   getContributedSiteListByUsername: (state, getters, rootState, rootGetters) => username => {
     let { 'gitlab/repositoryTrees': repositoryTrees } = rootGetters
@@ -131,7 +132,8 @@ const getters = {
   getWebTemplateStyle: (state, { getWebTemplate }) => ({classify, templateName, styleName}) => {
     let { styles = [] } = getWebTemplate({classify, templateName})
     return styles[0] // _.keyBy(styles, 'name')[styleName]
-  }
+  },
+  activePageStarInfo: state => state.activePageStarInfo
 }
 
 export default getters

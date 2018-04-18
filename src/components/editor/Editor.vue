@@ -14,7 +14,7 @@
       </el-row>
     </el-col>
     <div class="col-between"></div>
-    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <el-button-group>
           <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>

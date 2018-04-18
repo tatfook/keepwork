@@ -26,6 +26,6 @@ export default {
 
 <style>
   video {
-    height: 160px;
+    height: 200px;
   }
 </style>
