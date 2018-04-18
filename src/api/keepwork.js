@@ -1,3 +1,12 @@
+/*doc
+  ---
+  title: API,
+  name: API,
+  category: API
+  ---
+
+  keepwork API
+*/
 import axios from 'axios'
 
 export const keepworkEndpoint = axios.create({
@@ -46,7 +55,13 @@ export const website = {
   getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
 }
 
-/* doc
+/*doc
+  ---
+  title: Keepwork
+  name: Keepwork
+  parent: API
+  ---
+
   pages
 
   star
