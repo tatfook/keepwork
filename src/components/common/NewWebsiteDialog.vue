@@ -12,15 +12,16 @@
             {{ category.name }}
           </div>
         </el-col>
-        <el-col :span="20">
-          <div 
+        <el-col :span="20" class="new-website-templates">
+          <el-col :span="12" 
             v-for='(template, index) in selectedCategory.templates'
             v-bind:class="{ active: selectedTemplateIndex === index }"
             class='new-website-template'
-            :key='template.name'
-            @click='setSelectedTemplateIndex(index)'>
-            {{ template.name }}
-          </div>
+            :key='template.name'>
+            <div @click='setSelectedTemplateIndex(index)'>
+              <img :src="template.logoUrl">
+            </div>
+          </el-col>
         </el-col>
       </el-row>
     </div>
@@ -173,6 +174,8 @@ export default {
       this.resetAndClose()
     },
     handleEdit() {
+      let path = `${this.username}/${this.websiteNameForm.value}/index`
+      this.$router.push('/' + path)
       this.resetAndClose()
     },
     resetAndClose() {
@@ -199,9 +202,6 @@ export default {
 
 <style lang='scss'>
 .new-website {
-  &-dialog {
-
-  }
   &-category {
     &.active {
       background: blue; 
