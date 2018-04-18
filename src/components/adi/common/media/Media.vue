@@ -1,6 +1,6 @@
 <template>
   <div class='comp-media'>
-    <a :href='link'>
+    <a :target='properties.target' :href='properties.link ? properties.link : options.emptyLink'>
       <div class="img" v-if='isImage' :style="loadImg"></div>
       <video v-else-if='isVideo' :src='src'></video>
       <div class="svg" v-if="isBase64Svg" v-html="svg()" :style="svgFill"></div>
@@ -11,15 +11,15 @@
 <script>
 import Media from './media.types'
 import compBaseMixin from '../comp.base.mixin'
-import { Base64 } from 'js-base64';
+import { Base64 } from 'js-base64'
 
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
   methods: {
     svg() {
-      if(this.isBase64Svg) {
-        let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : '';
+      if (this.isBase64Svg) {
+        let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : ''
 
         return Base64.decode(base64Svg)
       }
@@ -39,7 +39,9 @@ export default {
       return this.properties.src ? this.properties.src : this.options.emptySrc
     },
     link() {
-      return this.properties.link ? this.properties.link : this.options.emptyLink
+      return this.properties.link
+        ? this.properties.link
+        : this.options.emptyLink
     },
     loadImg() {
       return this.generateStyleString({
@@ -48,7 +50,7 @@ export default {
     },
     svgFill() {
       return this.generateStyleString({
-        'fill': this.options.svgFillColor
+        fill: this.options.svgFillColor
       })
     }
   }
@@ -60,7 +62,7 @@ export default {
   .svg {
     svg {
       width: 100%;
-      height:100%;
+      height: 100%;
     }
   }
 }
