@@ -11,6 +11,7 @@ import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModLesson from './web/lesson'
+import ModQuizz from './web/quizz'
 
 export default {
   ModMarkdown,
@@ -25,5 +26,6 @@ export default {
   ModBoard,
   ModVipRead,
   ModComment,
-  ModLesson
+  ModLesson,
+  ModQuizz
 }

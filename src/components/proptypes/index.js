@@ -5,6 +5,7 @@ import board from './BoardType'
 import autoSizeInput from './AutoSizeInputType'
 import linkTarget from './LinkTargetType'
 import switchButton from './SwitchButtonType'
+import quizz from './QuizzType'
 
 export default {
   input,
@@ -13,5 +14,6 @@ export default {
   board,
   autoSizeInput,
   linkTarget,
-  switchButton
+  switchButton,
+  quizz
 }

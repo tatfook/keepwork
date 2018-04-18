@@ -11,6 +11,7 @@ const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
 const ModLesson = () => import('./web/lesson')
+const ModQuizz = () => import('./web/quizz')
 
 export default {
   ModMarkdown,
@@ -25,5 +26,6 @@ export default {
   ModVipRead,
   ModComment,
   ModBoard,
-  ModLesson
+  ModLesson,
+  ModQuizz
 }

@@ -12,6 +12,7 @@ import AdiComment from './comment/comment.properties'
 import AdiInnerModal from './innerModal/innerModal.properties'
 import AdiNumber from './number/number.properties'
 import AdiTabs from './tabs/tabs.properties'
+import AdiQuizz from './quizz/quizz.properties'
 
 export default {
   AdiImgLoop,
@@ -27,5 +28,6 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiNumber,
-  AdiTabs
+  AdiTabs,
+  AdiQuizz
 }
