@@ -1,11 +1,11 @@
 /*doc
-  ---
-  title: API,
-  name: API,
-  category: API
-  ---
+---
+title: API,
+name: API,
+category: API
+---
 
-  keepwork API
+keepwork API
 */
 import axios from 'axios'
 
@@ -56,25 +56,25 @@ export const website = {
 }
 
 /*doc
-  ---
-  title: Keepwork
-  name: Keepwork
-  parent: API
-  ---
+---
+title: Keepwork
+name: Keepwork
+parent: API
+---
 
-  pages
+pages
 
-  star
-  payload: {
-    url: 'kaitlyn/a1/newfolder/index',
-    visitor: 'kaitlyn2'
-  }
+star
+payload: {
+  url: 'kaitlyn/a1/newfolder/index',
+  visitor: 'kaitlyn2'
+}
 
-  getDetail
-  payload: {
-    url: 'kaitlyn/a1/newfolder/index',
-    visitor: 'kaitlyn2' // username of login user or ''
-  }
+getDetail
+payload: {
+  url: 'kaitlyn/a1/newfolder/index',
+  visitor: 'kaitlyn2' // username of login user or ''
+}
 */
 export const pages = {
   star: (...args) => post('pages/star', ...args),
