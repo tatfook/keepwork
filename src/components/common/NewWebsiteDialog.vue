@@ -1,26 +1,27 @@
 <template>
-  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="900px" :before-close="handleClose">
+  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
     <div v-if="stepIndex===0">
       <el-row>
-        <el-col :span="4">
-          <div 
-            v-for='(category, index) in categories' 
-            v-bind:class="{ active: selectedCategoryIndex === index }"
-            class='new-website-category'
-            :key='category.name'
-            @click='setSelectedCategoryIndex(index)'>
-            {{ category.name }}
-          </div>
+        <el-col :span="3">
+          <el-menu default-active="0" @select='setSelectedCategoryIndex'>
+            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index'>
+              {{ category.name }}
+            </el-menu-item>
+          </el-menu>
         </el-col>
-        <el-col :span="20" class="new-website-templates">
-          <el-col :span="12" 
-            v-for='(template, index) in selectedCategory.templates'
-            v-bind:class="{ active: selectedTemplateIndex === index }"
-            class='new-website-template'
-            :key='template.name'>
-            <div @click='setSelectedTemplateIndex(index)'>
-              <img width="280px" height="210px" :src="template.logoUrl">
-            </div>
+        <el-col :span="21" class="new-website-templates">
+          <el-col :span="10" :offset='index%2 !== 0 ? 2 : 0' v-for='(template, index) in selectedCategory.templates' v-bind:class="{ active: selectedTemplateIndex === index }" class='new-website-template' :key='template.name'>
+            <el-card :body-style="{padding: '0px'}" shadow="never">
+              <div class="template-img" @click='setSelectedTemplateIndex(index)'>
+                <img :src="template.logoUrl">
+                <span class="template-info">{{ template.name }}</span>
+              </div>
+              <div class="bottom">
+                <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
+                  <i class="iconfont icon-chakanyanjingshishifenxi"></i> 预 览
+                </a>
+              </div>
+            </el-card>
           </el-col>
         </el-col>
       </el-row>
@@ -34,9 +35,8 @@
         </el-form-item>
       </el-form>
       <p>
-        可使用小写字母、数字（例如：mysite123）<br/>
-        设定后不可修改<br/>
-        VIP可在网站设置中设置cname转发
+        可使用小写字母、数字（例如：mysite123）<br/> 设定后不可修改
+        <br/> VIP可在网站设置中设置cname转发
       </p>
     </div>
     <div v-if="stepIndex===2">
@@ -69,8 +69,10 @@ export default {
     let websiteNameValidator = (rule, value, callback) => {
       let trimmedValue = value.trim()
       if (!trimmedValue) return callback(new Error('不能为空'))
-      if (!/^[A-Za-z0-9_]+$/.test(trimmedValue)) return callback(new Error('网站名只能由字母，数字和下划线组成'))
-      if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1) return callback(new Error('同名网站已经存在'))
+      if (!/^[A-Za-z0-9_]+$/.test(trimmedValue))
+        return callback(new Error('网站名只能由字母，数字和下划线组成'))
+      if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1)
+        return callback(new Error('同名网站已经存在'))
       callback()
     }
 
@@ -101,7 +103,7 @@ export default {
     }
   },
   computed: {
-    ... mapGetters({
+    ...mapGetters({
       username: 'user/username',
       userWebTemplateConfig: 'user/webTemplateConfig',
       userPersonalWebsiteNames: 'user/personalWebsiteNames'
@@ -113,7 +115,11 @@ export default {
       return _.get(this.categories, [this.selectedCategoryIndex], {})
     },
     selectedTemplate() {
-      return _.get(this.selectedCategory, ['templates', this.selectedTemplateIndex], {})
+      return _.get(
+        this.selectedCategory,
+        ['templates', this.selectedTemplateIndex],
+        {}
+      )
     },
     currentStep() {
       return this.steps[this.stepIndex]
@@ -123,8 +129,8 @@ export default {
     },
     websiteSetting() {
       // to check the data structure, see doc/data_examples/webTemplateConfig.json
-      let {name: categoryName, classify: type} = this.selectedCategory
-      let {name: templateName, logoUrl} = this.selectedTemplate
+      let { name: categoryName, classify: type } = this.selectedCategory
+      let { name: templateName, logoUrl } = this.selectedTemplate
       return {
         categoryName,
         type,
@@ -140,7 +146,7 @@ export default {
     this.loading = false
   },
   methods: {
-    ... mapActions({
+    ...mapActions({
       userCreateWebsite: 'user/createWebsite',
       userGetWebTemplateConfig: 'user/getWebTemplateConfig',
       userGetAllWebsite: 'user/getAllWebsite'
@@ -193,7 +199,7 @@ export default {
       this.loading = true
       let name = this.websiteNameForm.value
       let websiteSetting = this.websiteSetting
-      await this.userCreateWebsite({name, websiteSetting})
+      await this.userCreateWebsite({ name, websiteSetting })
       this.loading = false
     }
   }
@@ -204,13 +210,71 @@ export default {
 .new-website {
   &-category {
     &.active {
-      background: blue; 
+      background: blue;
     }
   }
   &-template {
-    &.active {
-      background: blue;
+    padding-left: 20px;
+    .template-img:hover .template-info {
+      display: inline-block;
     }
+  }
+}
+
+.new-website-dialog {
+  .el-menu-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+  }
+  .el-card {
+    border: 3px solid transparent;
+    box-shadow: none;
+    margin-bottom: 20px;
+    .template-img {
+      width: 100%;
+      height: 160px;
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+    }
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    .bottom {
+      text-align: right;
+    }
+    .bottom a {
+      text-decoration: none;
+      border-radius: none;
+      border: none;
+      padding: 12px 20px;
+      color: #303133;
+    }
+    .bottom a:hover {
+      color: #409eff;
+    }
+    .bottom .iconfont {
+      vertical-align: middle;
+    }
+    .template-info {
+      line-height: 160px;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      font-size: 20px;
+      color: #fff;
+      display: none;
+      background: rgba(26, 52, 71, 0.8);
+    }
+  }
+  .active .el-card {
+    border: 3px solid #409eff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 }
 </style>
