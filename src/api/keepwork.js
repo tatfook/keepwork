@@ -1,7 +1,7 @@
 /*doc
 ---
-title: API,
-name: API,
+title: API
+name: API
 category: API
 ---
 
@@ -21,32 +21,39 @@ export const user = {
 }
 
 /*doc
-  website
+---
+title: Keepwork
+name: Keepwork
+category: API
+parent: API
+---
 
-  upsert
-    payload
-    {
-      name,
-      domain: name,
-      visibility : "public",
-      userId: 2,
-      username : "dukes",
-      defaultDataSourceName : "内置gitlab",
-      // actually, the info below is not necessary for current usage
-      // we keep it to prevent any surprise with old version keepwork
-      categoryName : "个 人",
-      type : "personal",
-      templateName : "空模板",
-      styleName : "默认样式",
-      logoUrl : "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png"
-    }
-    res data
-    {
-      ...websiteInfo,
-      dataSource: { projectId }
-    }
+website
 
-  getDetailInfo payload {"username":"kaitlyn","sitename":"site"}
+upsert
+  payload
+  {
+    name,
+    domain: name,
+    visibility : "public",
+    userId: 2,
+    username : "dukes",
+    defaultDataSourceName : "内置gitlab",
+    // actually, the info below is not necessary for current usage
+    // we keep it to prevent any surprise with old version keepwork
+    categoryName : "个 人",
+    type : "personal",
+    templateName : "空模板",
+    styleName : "默认样式",
+    logoUrl : "http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png"
+  }
+  res data
+  {
+    ...websiteInfo,
+    dataSource: { projectId }
+  }
+
+getDetailInfo payload {"username":"kaitlyn","sitename":"site"}
 */
 export const website = {
   upsert: (...args) => post('website/upsert', ...args),
@@ -59,6 +66,7 @@ export const website = {
 ---
 title: Keepwork
 name: Keepwork
+category: API
 parent: API
 ---
 
