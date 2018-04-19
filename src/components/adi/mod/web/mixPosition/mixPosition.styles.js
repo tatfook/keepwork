@@ -35,8 +35,7 @@ export default [
         }
       },
       colGroupAA: {
-        display: 'flex',
-        'align-items': ' flex-start'
+        'word-wrap': 'break-word'
       },
       title: {
         'margin-top': '20px'
@@ -47,7 +46,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       },
       button: {
@@ -104,6 +102,9 @@ export default [
       media: {
         height: '611px'
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       '@media only screen and (max-width: 767px)': {
         media: {
           height: '300px'
@@ -118,7 +119,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       },
       button: {
@@ -170,59 +170,57 @@ export default [
     templateID: 2,
     data: {
       colMedia: { float: 'right' },
-      colTitle: { height: '700px' },
-      colSubtitle: { height: '700px' },
-      colGroupAA: { height: '700px' },
-      colParagraph: { height: '646px' },
       media: {
-        height: '700px'
+        height: '300px'
+      },
+      colGroupA: {
+        'word-wrap': 'break-word'
       },
       title: {
-        'max-width': '45px',
-        'line-height': '45px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'margin-top': '20px'
       },
       subtitle: {
-        'max-width': '30px',
-        'line-height': '30px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'margin-top': '10px'
       },
       paragraph: {
-        float: 'right',
-        'max-width': '396px',
+        'margin-top': '15px',
         'text-indent': '28px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'white-space': 'pre-wrap'
       },
       colButton: {
         'margin-top': '18px'
       },
-      '@media only screen and (max-width: 767px)': {
-        colTitle: { height: 'auto' },
-        colSubtitle: { height: 'auto' },
-        colGroupAA: { height: 'auto' },
-        colParagraph: { height: 'auto' },
-        media: { height: '300px' },
+      '@media only screen and (min-width: 768px)': {
+        colTitle: { height: '700px' },
+        colSubtitle: { height: '700px' },
+        colGroupAA: { height: '700px' },
+        colParagraph: { height: '646px' },
+        media: { height: '700px' },
+        colGroupA: {
+          'word-wrap': 'normal',
+          overflow: 'hidden'
+        },
         title: {
-          'margin-top': '20px',
-          ' max-width': '100%',
-          'writing-mode': 'lr-tb'
+          'margin-top': '0',
+          'max-width': '45px',
+          'line-height': '45px',
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         },
         subtitle: {
-          'margin-top': '10px',
-          ' max-width': '100%',
-          'writing-mode': 'lr-tb'
+          'margin-top': '0',
+          'max-width': '30px',
+          'line-height': '30px',
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         },
         paragraph: {
-          float: 'none',
+          float: 'right',
           'margin-top': '15px',
-          ' max-width': '100%',
+          'max-width': '396px',
           'text-indent': '28px',
-          'writing-mode': 'lr-tb',
-          'word-wrap': 'break-word',
-          'white-space': 'pre-wrap'
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         }
       }
     },
@@ -287,6 +285,9 @@ export default [
           height: '300px'
         }
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       title: {
         'margin-top': '20px',
         'text-align': 'center'
@@ -298,7 +299,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       }
     },
@@ -342,6 +342,9 @@ export default [
           height: '300px'
         }
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       title: {
         'text-align': 'center'
       },
@@ -353,7 +356,6 @@ export default [
         'margin-top': '15px',
         'margin-bottom': '20px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       }
     },

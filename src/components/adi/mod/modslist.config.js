@@ -160,23 +160,5 @@ var modsList = [
       }
     ]
   }
-  // for test
-  // ,{
-  //   id: '9',
-  //   label: '其他',
-  //   mods: [
-  //     ModHeader,
-  //     ModTitle,
-  //     ModBoard,
-  //     ModImgLoop,
-  //     ModText,
-  //     ModParacraft,
-  //     ModQQ,
-  //     ModMixLayer,
-  //     ModMixPositon,
-  //     ModVipRead,
-  //     ModComment
-  //   ]
-  // }
 ]
 export default modsList
