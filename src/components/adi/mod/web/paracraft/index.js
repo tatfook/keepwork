@@ -19,7 +19,7 @@ const components = {
   download: 'AdiButton',
   enter: 'AdiButton',
   innerModal: 'AdiInnerModal',
-  paracraft_info: 'AdiLabel'
+  paracraftInfo: 'AdiLabel'
 }
 
 // let imgsPath    = config.wikiModPath + 'adi/assets/imgs/';

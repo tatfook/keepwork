@@ -63,6 +63,7 @@ category: Adi Mod
 */
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
+import { mapGetters } from 'vuex';
 
 export default {
   mixins: [baseMixin],
@@ -70,6 +71,11 @@ export default {
     return {
       isShowInnerModal: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      token: 'user/token'
+    })
   },
   methods: {
     compWrapperOptions(name) {
@@ -81,13 +87,13 @@ export default {
           return (
             <div style="text-align: center;">
               <p style="font-size: 18px;margin-top: 40px;width: 100%;">
-                {self.modData.paracraft_info.desc_info
-                  ? self.modData.paracraft_info.desc_info
+                {self.modData.paracraftInfo.desc_info
+                  ? self.modData.paracraftInfo.desc_info
                   : '如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft'}
               </p>
               <el-button on-click={this.downloadUrl} plain>
-                {self.modData.paracraft_info.download_info
-                  ? self.modData.paracraft_info.download_info
+                {self.modData.paracraftInfo.download_info
+                  ? self.modData.paracraftInfo.download_info
                   : '点击下载'}
               </el-button>
             </div>
@@ -95,8 +101,8 @@ export default {
         },
         methods: {
           downloadUrl() {
-            let downloadUrl = self.modData.paracraft_info.client_url
-              ? self.modData.paracraft_info.client_url
+            let downloadUrl = self.modData.paracraftInfo.client_url
+              ? self.modData.paracraftInfo.client_url
               : 'http://www.paracraft.cn'
             window.open(downloadUrl)
           }
@@ -123,6 +129,17 @@ export default {
         return _.merge({}, options, {
           clickEvent: true,
           callback: () => {
+            let urlprotocol = self.modData.urlprotocol
+            let protocol = urlprotocol && urlprotocol.protocol ? urlprotocol.protocol : 'paracraft'
+            let paramA = urlprotocol && urlprotocol.paramA ? JSON.stringify(urlprotocol.paramA) : ''
+            let paramB = urlprotocol && urlprotocol.paramB ? JSON.stringify(urlprotocol.paramB) : ''
+            let token = this.token ? this.token : ''
+            let link = self.modData.enter.link ? self.modData.enter.link : self.style.options.config.enter.emptyLink
+
+            let url = protocol + ':// protocol="' + protocol + '" paramA="' + paramA + '" paramB="' + paramB + '" usertoken="' + token + '" cmd/loadworld ' + link
+
+            window.open(url)
+
             self.isShowInnerModal = true
           }
         })
