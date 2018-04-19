@@ -97,11 +97,11 @@ export default {
       personalSiteList: 'user/personalSiteList',
       contributedSiteList: 'user/contributedSiteList',
       openedFiles: 'openedFiles',
-      activePage: 'activePage',
+      activePageUrl: 'activePageUrl',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     }),
     activePageFullPath() {
-      return getFileFullPathByPath(this.activePage)
+      getFileFullPathByPath(this.activePageUrl)
     },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)

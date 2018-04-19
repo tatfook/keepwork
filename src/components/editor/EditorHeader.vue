@@ -70,7 +70,7 @@
       </el-menu-item>
       <el-menu-item index='2 '>
         <span class='input-link-copy-box'>
-          <a :href='activePage' target='_blank'>{{activePage}}</a>
+          <a :href='activePageUrl' target='_blank'>{{activePageUrl}}</a>
         </span>
       </el-menu-item>
 
@@ -78,14 +78,13 @@
         <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
       </el-menu-item>
     </el-menu>
-    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
-import { gUndoManager } from '@/lib/global'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
 export default {
@@ -104,7 +103,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['showingCol', 'activePage']),
+    ...mapGetters(['showingCol', 'activePageUrl', 'canUndo', 'canRedo']),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -124,12 +123,6 @@ export default {
       ) {
         return '分屏'
       }
-    },
-    canUndo() {
-      return gUndoManager.canUndo()
-    },
-    canRedo() {
-      return gUndoManager.canRedo()
     }
   },
   methods: {

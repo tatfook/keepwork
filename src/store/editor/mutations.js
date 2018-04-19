@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
-import { resetPartialState } from './state'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
-const RESET_STATE = 'RESET_STATE'
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 
 const ADD_MOD = 'ADD_MOD'
@@ -31,11 +30,11 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 
+const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 
 export const props = {
-  RESET_STATE,
   SET_ACTIVE_PAGE,
 
   ADD_MOD,
@@ -62,82 +61,93 @@ export const props = {
 
   SET_NEW_MOD_POSITION,
 
+  RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE
 }
 
 const mutations = {
-  [RESET_STATE](state) {
-    const resettedPartialState = resetPartialState()
-    _.keys(resettedPartialState).forEach(key => {
-      Vue.set(state, key, resettedPartialState[key])
-    })
-  },
-  [SET_ACTIVE_PAGE](state, path) {
-    Vue.set(state, 'activePage', path)
+  [SET_ACTIVE_PAGE](state, { username, path }) {
+    if (!state.openedFiles[username]) return
+    const pageData = state.openedFiles[username][getFileFullPathByPath(path)]
+    Vue.set(state, 'activePage', pageData)
+    Vue.set(state, 'activePageUrl', path)
+    if (pageData) {
+      Vue.set(state.activePage, 'activeMod', null)
+      Vue.set(state.activePage, 'activeProperty', null)
+    }
   },
   [ADD_MOD](state, { modProperties, key, cmd }) {
     const mod = Parser.addBlockByKey(
-      state.modList,
+      state.activePage.modList,
       key,
       modProperties,
       cmd,
-      state.newModPosition
+      state.activePage.newModPosition
     )
-    Vue.set(state, 'activeMod', mod)
+    Vue.set(state.activePage, 'activeMod', mod)
   },
   [DELETE_MOD](state, key) {
-    Parser.deleteBlock(state.modList, key)
+    Parser.deleteBlock(state.activePage.modList, key)
   },
   [MOVE_MOD](state, { oldIndex, newIndex }) {
-    Parser.moveBlock(state.modList, oldIndex, newIndex)
-    Vue.set(state, 'activeMod', state.modList[newIndex])
+    Parser.moveBlock(state.activePage.modList, oldIndex, newIndex)
+    Vue.set(state.activePage, 'activeMod', state.activePage.modList[newIndex])
   },
   [SET_ACTIVE_MOD](state, key) {
-    if (state.activeMod && state.activeMod.key === key) return
-    const index = state.modList.map(el => el.key).indexOf(key)
-    if (index !== -1) Vue.set(state, 'activeMod', state.modList[index])
+    if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
+      return
+    }
+    const index = state.activePage.modList.map(el => el.key).indexOf(key)
+    if (index !== -1) {
+      Vue.set(state.activePage, 'activeMod', state.activePage.modList[index])
+    }
   },
   [SET_ACTIVE_PROPERTY](state, property) {
-    if (!state.activeMod) return
-    Vue.set(state, 'activeProperty', property)
+    if (!state.activePage.activeMod) return
+    Vue.set(state.activePage, 'activeProperty', property)
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
-    Parser.updateBlock(state.modList, key, code)
+    Parser.updateBlock(state.activePage.modList, key, code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }
     Parser.updateBlockAttribute(
-      state.modList,
-      state.activeMod.key,
-      state.activeProperty,
+      state.activePage.modList,
+      state.activePage.activeMod.key,
+      state.activePage.activeProperty,
       newData
     )
   },
   [UPDATE_ACTIVE_MOD_ATTRIBUTES](state, { key, value }) {
-    Parser.updateBlockAttribute(state.modList, state.activeMod.key, key, value)
+    Parser.updateBlockAttribute(
+      state.activePage.modList,
+      state.activePage.activeMod.key,
+      key,
+      value
+    )
   },
   [UPDATE_MODS](state, code) {
     let blockList = Parser.buildBlockList(code)
-    Parser.updateBlockList(state.modList, blockList)
+    Parser.updateBlockList(state.activePage.modList, blockList)
   },
   [UPDATE_THEME_NAME](state, themeName) {
     Vue.set(state.theme, 'name', themeName)
   },
   [UPDATE_THEME_COLOR](state, colorID) {
-    Vue.set(state.theme, 'colorID', colorID)
+    Vue.set(state.activePage.theme, 'colorID', colorID)
   },
   [UPDATE_THEME_BG_COLOR](state, bgColorID) {
-    Vue.set(state.theme, 'bgColorID', bgColorID)
+    Vue.set(state.activePage.theme, 'bgColorID', bgColorID)
   },
   [UPDATE_THEME_FONT](state, fontID) {
-    Vue.set(state.theme, 'fontID', fontID)
+    Vue.set(state.activePage.theme, 'fontID', fontID)
   },
   [UPDATE_WIN_TYPE](state, componentType) {
     Vue.set(state, 'activeWinType', componentType)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
-    Vue.set(state, 'activePropertyTabType', componentType)
+    Vue.set(state.activePage, 'activePropertyTabType', componentType)
   },
   [RESET_SHOWING_COL](state, showingColObj) {
     Vue.set(
@@ -167,16 +177,19 @@ const mutations = {
     })
   },
   [SET_NEW_MOD_POSITION](state, position) {
-    state.newModPosition = position
+    state.activePage.newModPosition = position
   },
 
+  [RESET_OPENED_FILE](state, { username, path, data }) {
+    Vue.set(state.openedFiles, username, {
+      ..._.get(state, ['openedFiles', username]),
+      [path]: data
+    })
+  },
   [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
-    Vue.set(state, 'openedFiles', {
-      ...state.openedFiles,
+    _.merge(state.openedFiles, {
       [username]: {
-        ..._.get(state, ['openedFiles', username]),
         [path]: {
-          ..._.get(state, ['openedFiles', username, path]),
           ...partialUpdatedFileInfo
         }
       }

@@ -26,7 +26,7 @@ export default {
     }
   },
   created() {
-    this.updateActivePage()
+    // this.updateActivePage()
   },
   watch: {
     $route: 'updateActivePage'

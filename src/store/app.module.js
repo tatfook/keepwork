@@ -35,15 +35,10 @@ const actions = {
     let payload = { code: content, historyDisabled: true }
     content && dispatch('updateMarkDown', payload)
   },
-  async saveActivePage({ getters, dispatch }) {
-    let { code: content, activePage: path } = getters
-    await dispatch('gitlab/saveFileContent', { content, path }, { root: true })
-  },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, payload) {
     if (payload.code === undefined) payload = { code: payload }
-    let blockList = Parser.buildBlockList(payload.code)
-    commit('UPDATE_MODS', blockList)
+    commit('UPDATE_MODS', payload.code)
   }
 }
 
@@ -51,8 +46,9 @@ const mutations = {
   SET_ACTIVE_PAGE(state, path) {
     Vue.set(state, 'activePage', path)
   },
-  UPDATE_MODS(state, mods) {
-    Parser.updateBlockList(state.modList, mods)
+  UPDATE_MODS(state, code) {
+    let blockList = Parser.buildBlockList(code)
+    Parser.updateBlockList(state.modList, blockList)
   }
 }
 
