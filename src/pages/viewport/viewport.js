@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 import Viewport from './Viewport.vue'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
@@ -21,9 +21,9 @@ const store = new Vuex.Store({
     editor: editorModule
   },
   plugins: [
-    createPersistedState({
-      // paths: ['user', 'gitlab', 'editor']
-    }),
+    // createPersistedState({
+    //   paths: ['user', 'gitlab', 'editor']
+    // }),
     transfer()
   ]
 })
