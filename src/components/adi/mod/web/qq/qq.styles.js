@@ -1,11 +1,13 @@
 let emptyData = {
   pic: {
     emptySrc: require('@/../static/adi/qq/qqOne.svg'),
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   desc: {
     emptyName: '客服中心',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 

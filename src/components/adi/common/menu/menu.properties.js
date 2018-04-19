@@ -1,4 +1,4 @@
 export default {
   data: [],
-  target: '_blank'
+  target: ''
 }

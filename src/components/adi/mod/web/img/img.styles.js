@@ -26,7 +26,8 @@ export default [
       config: {
         img: {
           emptySrc: require('@/../static/adi/img/imgTwo.png'),
-          emptyLink: 'http://keepwork.com'
+          emptyLink: 'http://keepwork.com',
+          emptyTarget: '_blank'
         }
       }
     },
@@ -60,7 +61,8 @@ export default [
       config: {
         img: {
           emptySrc: require('@/../static/adi/img/imgTwo.png'),
-          emptyLink: 'http://keepwork.com'
+          emptyLink: 'http://keepwork.com',
+          emptyTarget: '_blank'
         }
       }
     },
