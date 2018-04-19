@@ -27,26 +27,26 @@ export default [
       },
       button: {
         'margin-top': '20px'
+      },
+      colTabs: {
+        'margin-top': '20px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
       colMedia: {
-        xs: { span: 10 },
+        xs: { span: 24 },
         sm: { span: 8 }
       },
       colGroupAA: {
-        xs: { span: 14 },
+        xs: { span: 24 },
         sm: { span: 16 }
       },
       colButton: {
-        xs: {
-          span: 10,
-          push: 21
-        },
+        xs: { span: 24 },
         sm: {
-          span: 10,
+          span: 3,
           push: 21
         }
       }

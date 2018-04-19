@@ -32,7 +32,7 @@ export default {
             let t = mods[i]
             if(t == name){
               hideMod(t)
-            }else{
+            }else {
               hideMod(t, true)
             }
           }
