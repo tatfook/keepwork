@@ -14,7 +14,7 @@
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
 import ToolHeader from '../../components/common/ToolHeader'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -32,16 +32,20 @@ export default {
     async updateActivePage() {
       let path = this.$router.currentRoute.path
       await this.setActivePage({ path, editorMode: false })
-      await this.userInitPageDetail({
-        url: path,
-        visitor: this.username || ''
-      })
+      try {
+        await this.userInitPageDetail({
+          url: path,
+          visitor: this.username || ''
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
-  computed:{
+  computed: {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
-      username: 'user/username',
+      username: 'user/username'
     })
   }
 }
