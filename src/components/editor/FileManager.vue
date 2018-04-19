@@ -98,11 +98,9 @@ export default {
       contributedSiteList: 'user/contributedSiteList',
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
+      activePageInfo: 'activePageInfo',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
     }),
-    activePageFullPath() {
-      getFileFullPathByPath(this.activePageUrl)
-    },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
@@ -135,23 +133,19 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile'
     }),
     async initUrlExpandSelect() {
-      let fileManagerTree = this.$refs.fileManagerTree
-      let openedTree = this.$refs.openedTree
-      if (!fileManagerTree) return
+      let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
+      if (!isLegal) return
+      await this.getRepositoryTree({ path: sitepath })
 
-      let nowPath = this.$route.path.replace(/^\//, '')
-      let pathArr = nowPath.split('/')
-      let pathArrLen = pathArr.length
-      var levelPath = pathArr[0]
-      let [userName, siteName] = pathArr
-      await this.getRepositoryTree({ path: `${userName}/${siteName}` })
-      for (let index = 1; index < pathArrLen - 1; index++) {
-        levelPath += '/' + pathArr[index]
-        this.updateFilemanagerTreeNodeExpandMapByPath({
-          path: levelPath,
-          expanded: true
-        })
-      }
+      let folderPaths = paths.slice(0, paths.length - 1)
+      let expandedFolderPaths = folderPaths.reduce((prev, current) => {
+        let expanededPath = sitepath + '/' + (prev[prev.length-1] ? prev[prev.length-1] + '/' : '') + current
+        return prev.concat(expanededPath)
+      }, [])
+      expandedFolderPaths.unshift(sitepath)
+
+      let expandedFolderPathsList = expandedFolderPaths.map(path => ({path, expanded: true}))
+      this.updateFilemanagerTreeNodeExpandMapByPath(expandedFolderPathsList)
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -162,7 +156,8 @@ export default {
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]
 
       // modify store info
-      this.activePageFullPath === data.path && store.setCurrentNode(node)
+      let { fullPath: activePageFullPath } = this.activePageInfo
+      activePageFullPath === data.path && store.setCurrentNode(node)
 
       return <FileManagerCustomTreeNode data={data} node={node} />
     },
