@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 let emptyData = {
   imgLoop: [
     {
