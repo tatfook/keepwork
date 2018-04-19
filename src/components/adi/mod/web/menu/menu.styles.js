@@ -1,3 +1,10 @@
+let emptyData = [
+  {
+    name: '菜单1',
+    link: 'http://keepwork.com'
+  }
+]
+
 export default [
   // style 0
   {
@@ -32,7 +39,8 @@ export default [
         // 子组件配置参数
         menu: {
           mode: 'horizontal'
-        }
+        },
+        ...emptyData
       }
     },
     cover: require('@/../static/adi/menu/menu.jpeg')
