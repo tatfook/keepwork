@@ -11,7 +11,7 @@ import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
 import AdiTabs from './tabs/Tabs'
-import AdiQizz from './quizz/Quizz'
+import AdiQuizz from './quizz/Quizz'
 
 export default {
   AdiImgLoop,
@@ -27,5 +27,5 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiTabs,
-  AdiQizz
+  AdiQuizz
 }

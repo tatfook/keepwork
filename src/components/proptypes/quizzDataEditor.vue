@@ -75,7 +75,7 @@
 </template>
 <script>
 export default {
-  name: 'QADataEditor',
+  name: 'quizzDataEditor',
   props: {
     isEditorShow: Boolean,
   },

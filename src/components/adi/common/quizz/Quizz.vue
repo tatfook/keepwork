@@ -1,9 +1,12 @@
+<template>
+
+</template>
+
 <script>
 import compBaseMixin from '../comp.base.mixin'
-import _ from 'lodash'
 
 export default {
-  name: 'AdiQizz',
+  name: 'AdiQuizz',
   render(h) {
     let self = this
 
