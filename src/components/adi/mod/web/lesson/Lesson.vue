@@ -11,7 +11,7 @@ export default {
       let firstInFlag = true
       options = _.merge(options, this.generateOptionsStyle(name))
       // Tab 被点击的回调
-      options.callback = function(tab) {
+      options.tabClick = function(tab) {
         const mods = ['ModMarkdown', 'ModAnimations', 'ModStudent', 'ModSummary']
         const hideMod = function(name, flag) {
           let eles = document.getElementsByTagName('div')
@@ -32,7 +32,7 @@ export default {
             let t = mods[i]
             if(t == name){
               hideMod(t)
-            }else{
+            }else {
               hideMod(t, true)
             }
           }
@@ -56,7 +56,18 @@ export default {
         }
         if(firstInFlag) {
           let lessonMod = getMod('ModLesson')
-          lessonMod.parentNode.appendChild(createMod('ModAnimations', "<p>Ralated Animations<p>"))
+          let animations = self.modData.lesson.animations
+          let len = animations.length
+          if(len == 0) {
+            lessonMod.parentNode.appendChild(createMod('ModAnimations', "<p>没有素材<p>"))
+          } else {
+            let html = ""
+            for(let i = 0; i < len; i++) {
+              let item = animations[i]
+              html += 'Animations:' + item.cover + "-" + item.title + "-" + item.animation
+            }
+            lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
+          }
           lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
           lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
           firstInFlag = false
@@ -67,6 +78,7 @@ export default {
             break;
           case '1': // Ralated Animations
             sliceMod('ModAnimations')
+            console.log(self.modData.lesson.animations)
             break;
           case '2': // Student's Performance
             sliceMod('ModStudent')
@@ -76,14 +88,17 @@ export default {
             break;
         }
       }
+
+      options.playClick = function() {
+        console.log('Play Click')
+      }
+
+      options.classOpClick = function() {
+        console.log('class Op Click')
+      }
+
       return options
     }
   }
 }
 </script>
-
-<style>
-  video {
-    height: 160px;
-  }
-</style>

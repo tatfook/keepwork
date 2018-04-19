@@ -6860,6 +6860,10 @@ sntp@2.x.x:
   dependencies:
     hoek "4.x.x"
 
+social-share.js@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/social-share.js/-/social-share.js-1.0.16.tgz#1fd4a91c46c8c6835670f11472ecb2e293215310"
+
 socket.io-adapter@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-0.5.0.tgz#cb6d4bb8bec81e1078b99677f9ced0046066bb8b"

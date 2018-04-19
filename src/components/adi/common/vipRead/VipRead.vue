@@ -2,7 +2,6 @@
   <div class='comp-vip-read'>
     <div v-if="editMode" class="vip-more-permission">
       <p class="switch-notice">
-        <!-- <span class="fa fa-lock"></span> -->
         本网页内容，仅限VIP用户浏览全部 <br />
         <span v-if="!properties.switch.value">（关闭）</span>
         <span v-if="properties.switch.value">（开启）</span>
@@ -10,7 +9,7 @@
     </div>
 
     <div v-if="!editMode">
-      <div v-if="isLogined() && !isVip" class="vip-more-permission">
+      <div v-if="isLogined() && !isVip && properties.value" class="vip-more-permission">
         <p>
           <a href="/wiki/vip">
             <span class="fa fa-lock"></span>成为VIP，才能查看更多</a>

@@ -14,6 +14,7 @@
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
 import ToolHeader from '../../components/common/ToolHeader'
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'App',
   components: {
@@ -29,7 +30,16 @@ export default {
   methods: {
     updateActivePage() {
       this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
+      this.$store.dispatch('user/initPageDetail', {
+        url: this.$router.currentRoute.path,
+        visitor: (this.loginUser && this.loginUser.username) || ''
+      })
     }
+  },
+  computed:{
+    ...mapGetters({
+      loginUser: 'user/profile'
+    })
   }
 }
 </script>
@@ -67,5 +77,8 @@ body {
 }
 .index-page-main {
   padding: 0;
+}
+[mod-container] {
+  overflow: hidden;
 }
 </style>

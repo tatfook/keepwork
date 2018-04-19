@@ -110,36 +110,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-properties.preview.src =
-  'http://git.keepwork.com/gitlab_rls_testv2/world_base32_5g5zr2foutszbdpfvwltg/raw/master/preview.jpg'
-
-properties.worldName.name = '默认名字'
-
-properties.author.text = '你的名字'
-properties.author.desc = '作者:'
-
-properties.version.text = '0.0.0'
-properties.version.desc = '版本'
-
-properties.updateTime.text = '2018-1-10-14-30'
-properties.updateTime.link = '#'
-
-properties.viewTimesImg.src =
-  'http://keepwork.com/wiki/js/mod/adi/assets/imgs/icon/world3D_eye.png'
-
-properties.viewTimes.text = '0'
-properties.viewTimes.desc = '浏览量'
-
-properties.size.text = '31KB'
-properties.size.desc = '大小'
-
-properties.download.name = '下载'
-properties.download.link = 'http://keepwork.com'
-
-properties.enter.name = '进入'
-properties.enter.link = 'http://keepwork.com'
-
-properties.desc.data = `作品简介：
-从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。`
-
 export default { mod, name, components, properties, styles, templates }

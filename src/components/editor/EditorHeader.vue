@@ -7,12 +7,11 @@
         </template>
         <el-submenu index='1-1'>
           <template slot='title'>系统</template>
-          <el-menu-item index='1-1-1'>新建网站</el-menu-item>
-          <el-menu-item index='1-1-2'>新建页面</el-menu-item>
-          <el-menu-item index='1-1-3'>保存</el-menu-item>
-          <el-menu-item index='1-1-4'>网站设置</el-menu-item>
-          <el-menu-item index='1-1-5'>网站备份</el-menu-item>
-          <el-menu-item index='1-1-6'>版本管理</el-menu-item>
+          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">新建网站</el-menu-item>
+          <el-menu-item index='1-1-2'>保存</el-menu-item>
+          <el-menu-item index='1-1-3'>网站设置</el-menu-item>
+          <el-menu-item index='1-1-4'>网站备份</el-menu-item>
+          <el-menu-item index='1-1-5'>版本管理</el-menu-item>
         </el-submenu>
         <el-submenu index='1-2'>
           <template slot='title'>页面</template>
@@ -79,6 +78,7 @@
         <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
       </el-menu-item>
     </el-menu>
+    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
   </div>
 </template>
 
@@ -86,12 +86,14 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
 import { gUndoManager } from '@/lib/global'
+import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
 export default {
   name: 'EditorHeader',
   data: function() {
     return {
-      savePending: false
+      savePending: false,
+      isNewWebsiteDialogShow: false
     }
   },
   mounted() {
@@ -139,7 +141,16 @@ export default {
     },
     changeViewType(command) {
       this.$store.dispatch('resetShowingCol', command)
+    },
+    openNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = true
+    },
+    closeNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = false
     }
+  },
+  components: {
+    NewWebsiteDialog
   }
 }
 </script>

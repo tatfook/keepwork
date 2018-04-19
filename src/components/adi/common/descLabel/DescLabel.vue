@@ -1,8 +1,8 @@
 <template>
   <div class='comp-label'>
     <a :target='properties.target' :href='properties.link'>
-      <label> {{properties.desc}} </label>
-      <label> {{properties.text}} </label>
+      <label> {{properties.desc ? properties.desc : options.emptyDesc}} </label>
+      <label> {{properties.text ? properties.text : options.emptyText}} </label>
     </a>
   </div>
 </template>
@@ -20,6 +20,7 @@ export default {
 .comp-label {
   a {
     text-decoration: none;
+    color: unset;
   }
 }
 </style>

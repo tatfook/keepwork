@@ -1,3 +1,4 @@
 export default {
-  data: 'menu'
+  data: 'menu',
+  target: 'linkTarget'
 }
