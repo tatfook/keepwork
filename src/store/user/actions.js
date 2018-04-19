@@ -30,30 +30,40 @@ const actions = {
     only uses cookie info;
     dispatch this action first, in any action which depends on username.
   */
-  async getProfile(context) {
-    let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
-    if (isLogined) return
+  getProfile: (() => {
+    let getProfilePromise
+    let clearGetProfilePromise = () => (getProfilePromise = null)
 
-    let profile = await keepwork.user.getProfile(null, authRequestConfig)
-      .catch(async e => {
-        alert('尚未登陆，请登陆后访问！')
+    return async (context) => {
+      let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
+      if (isLogined) return
 
-        // login for localhost test
-        if (location.hostname === 'localhost') {
-          let payload = {
-            username: prompt('username: '),
-            password: prompt('password: ')
+      getProfilePromise = getProfilePromise || new Promise(resolve => {
+        keepwork.user.getProfile(null, authRequestConfig).then(profile => {
+          commit(GET_PROFILE_SUCCESS, {...profile, token})
+          resolve()
+        }).catch(async e => {
+          alert('尚未登陆，请登陆后访问！')
+          // login for localhost test
+          if (location.hostname === 'localhost') {
+            let payload = {
+              username: prompt('username: '),
+              password: prompt('password: ')
+            }
+            await dispatch('login', payload)
+
+            clearGetProfilePromise()
+            await dispatch('getProfile')
+            return resolve()
           }
-          await dispatch('login', payload)
-          await dispatch('getProfile')
-          return
-        }
+          location.href = '/wiki/login'
+          setTimeout(resolve, 10 * 1000)
+        })
+      }).then(clearGetProfilePromise)
 
-        location.href = '/wiki/login'
-      })
-
-    commit(GET_PROFILE_SUCCESS, {...profile, token})
-  },
+      await getProfilePromise
+    }
+  })(),
   async getAllPersonalAndContributedSite({ dispatch, getters }) {
     let { personalSiteList } = getters
     if (personalSiteList.length) return

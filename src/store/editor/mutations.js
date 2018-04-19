@@ -68,10 +68,10 @@ export const props = {
 
 const mutations = {
   [SET_ACTIVE_PAGE](state, { username, path }) {
+    Vue.set(state, 'activePageUrl', path)
     if (!state.openedFiles[username]) return
     const pageData = state.openedFiles[username][getFileFullPathByPath(path)]
     Vue.set(state, 'activePage', pageData)
-    Vue.set(state, 'activePageUrl', path)
     if (pageData) {
       Vue.set(state.activePage, 'activeMod', null)
       Vue.set(state.activePage, 'activeProperty', null)

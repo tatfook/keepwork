@@ -30,9 +30,9 @@ const getters = {
 const actions = {
   async setActivePage(context, { path }) {
     let { rootGetters, commit, dispatch } = context
-    if (path === '/') return
     commit('SET_ACTIVE_PAGE', path)
 
+    if (path === '/') return
     await dispatch('gitlab/readFile', { path }, { root: true })
     let { content } = rootGetters['gitlab/getFileByPath'](path)
     let payload = { code: content, historyDisabled: true }
