@@ -7,7 +7,13 @@ const components = {
   md: 'AdiMarkdown'
 }
 
-const styles = [{}]
+const styles = [{
+  theme: {
+    root: ['mod-space'],
+    rootRow: ['mod-full-width']
+  },
+  cover: require('@/../static/adi/markdown.jpeg')
+}]
 const templates = [[{ colMarkdown: 'md' }]]
 
 const properties = generateProperties(name, components)
