@@ -1,23 +1,26 @@
 <template>
-  <div mod-container>
-    <template v-for='mod in modList'>
-      <mod-loader :mod='mod' :theme='theme' :key='mod.key'> </mod-loader>
-    </template>
-  </div>
+  <component :is='layoutTemplate'>
+    <mod-list-viewer v-if='hasHeader' slot='header' modList='headerModList' />
+    <mod-list-viewer v-if='hasFooter' slot='footer' modList='footerModList' />
+    <mod-list-viewer v-if='hasSidebar' slot='sidebar' modList='sidebarModList' />
+    <mod-list-viewer modList='modList' />
+  </component>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ModLoader from './ModLoader'
+import layoutTemplates from '@/components/adi/layout/templates'
+import ModListViewer from './MdPageViewer'
 import themeFactory from '@/lib/theme/theme.factory'
+import { mapGetters } from 'vuex'
 
 export default {
-  components: {
-    ModLoader
-  },
   computed: {
     ...mapGetters({
+      layout: 'layout',
       modList: 'modList',
+      headerModList: 'headerModList',
+      footerModList: 'footerModList',
+      sidebarModList: 'sidebarModList',
       themeConf: 'themeConf'
     }),
     theme() {
@@ -27,7 +30,13 @@ export default {
       this.storedTheme = newTheme
       this.storedTheme.sheet.attach()
       return this.storedTheme
+    },
+    layoutTemplate() {
+      return layoutTemplates[this.layout.styleID]
     }
+  },
+  components: {
+    ModListViewer
   }
 }
 </script>

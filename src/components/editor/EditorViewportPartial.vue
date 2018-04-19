@@ -1,11 +1,14 @@
 <template>
   <div class='viewport-container'>
-    <component :is='layoutTemplate'>
-      <mod-list-viewer v-if='hasHeader' slot='header' modList='headerModList' />
-      <mod-list-viewer v-if='hasFooter' slot='footer' modList='footerModList' />
-      <mod-list-viewer v-if='hasSidebar' slot='sidebar' modList='sidebarModList' />
-      <mod-list-viewer modList='modList' />
-    </component>
+    <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
+      <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
+      <p class="info">请点击添加内容</p>
+    </div>
+    <draggable v-model='modDraggableList' @change="changeDraggableList">
+      <template v-for='mod in modList'>
+        <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
+      </template>
+    </draggable>
   </div>
 </template>
 
@@ -13,12 +16,11 @@
 import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
 import EditorModSelector from './EditorModSelector'
-import layoutTemplates from '@/components/adi/layout/templates'
 import themeFactory from '@/lib/theme/theme.factory'
 import mods from '@/components/adi/mod'
 
 export default {
-  name: 'EditorViewport',
+  name: 'EditorViewportPartial',
   data() {
     return {
       mods
@@ -30,11 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      layout: 'layout',
       modList: 'modList',
-      headerModList: 'headerModList',
-      footerModList: 'footerModList',
-      sidebarModList: 'sidebarModList',
       themeConf: 'themeConf'
     }),
     theme() {
@@ -52,9 +50,6 @@ export default {
       set(value) {
         // do nothing
       }
-    },
-    layoutTemplate() {
-      return layoutTemplates[this.layout.styleID]
     }
   },
   methods: {
