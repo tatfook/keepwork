@@ -20,7 +20,7 @@
         <el-radio-group :style="{width: '100%'}" v-model="ruleForm.single">
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.singleOptions">
             <el-radio :label="serialNo[index]"></el-radio>
-            <el-input placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
           </div>
           <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
@@ -37,7 +37,7 @@
 
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.mutipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
-            <el-input v-model="opt.value" placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
           </div>
           <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
@@ -68,8 +68,8 @@
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitForm('ruleForm'); resetForm('ruleForm')">submit</el-button>
-      <el-button @click="handleClose(); resetForm('ruleForm')">cancel</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm', ruleForm.type)">submit</el-button>
+      <el-button @click="handleClose">cancel</el-button>
     </span>
   </el-dialog>
 </template>
@@ -93,10 +93,10 @@ export default {
         mutiple: [],
         judge: '',
         singleOptions: [{
-          value: '000'
+          item: ''
         }],
         mutipleOptions: [{
-          value: ''
+          item: ''
         }],
         score: '',
         desc: '',
@@ -151,30 +151,36 @@ export default {
       // 多选
       if(type == 1) {
         this.ruleForm.mutipleOptions.push({
-          value: ''
+          item: ''
         });
       }else{ // 单选
         this.ruleForm.singleOptions.push({
-          value: ''
+          item: ''
         });
       }
 
     },
-    submitForm(formName) {
+    submitForm(formName, type) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let writeQA = {
+          let writerQA = {
             type: this.ruleForm.type,
             title: this.ruleForm.title,
-            singleOptions: this.ruleForm.singleOptions,
-            mutipleOptions: this.ruleForm.mutipleOptions,
-            judge: this.ruleForm.judge,
             score: this.ruleForm.score,
             desc: this.ruleForm.desc,
-            single: this.ruleForm.single,
-            mutiple: this.ruleForm.mutiple,
           }
-          this.quizzData.push(writeQA);
+
+          if(type == 0) { //单选
+            writerQA.options = this.ruleForm.singleOptions;
+            writerQA.answer = this.ruleForm.single;
+          }else if(type == 1) { // 多选
+             writerQA.options = this.ruleForm.mutipleOptions;
+             writerQA.answer = this.ruleForm.mutiple;
+          }else {  // 判断题
+             writerQA.answer = this.ruleForm.judge;
+          }
+
+          this.quizzData.push(writerQA);
           this.handleClose();
           this.$emit('finishEditing', this.quizzData);
         } else {

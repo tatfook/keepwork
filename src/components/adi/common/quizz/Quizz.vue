@@ -1,38 +1,34 @@
 <template>
+  <div class="comp-quizz">
+    <div v-for="(item, index) in properties.data">
+      <div>Quiz {{index + 1}}</div>
+      <div>{{ item.title }}</div>
 
+      <ol type="A">
+        <li v-for="opt in item.options">{{ opt.item }}</li>
+      </ol>
+
+      <div hidden><span>Answer:</span> {{ item.answer }}</div>
+      <div><span>Score:</span> {{ item.score }}</div>
+      <div hidden><span>Analysis:</span> {{ item.desc }}</div>
+    </div>
+  </div>
 </template>
+
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 
 export default {
   name: 'AdiQuizz',
-  render(h) {
-    let self = this
-
-    return (
-      <div class="comp-quizz">
-        {(() => {
-          if (self.properties.data) {
-
-          } else {
-            if(!self.properties.data && self.editMode) {
-              return <div class="mx-client-start">Click Open Quizz Editor</div>
-            } else {
-              return <div></div>
-            }
-          }
-        })()}
-      </div>
-    )
-  },
   mixins: [compBaseMixin],
-  computed: {
-    mode() {
-      return this.options.mode
-    }
-  }
 }
 </script>
+
+<style>
+  .com-quizz {
+
+  }
+</style>
 
 
