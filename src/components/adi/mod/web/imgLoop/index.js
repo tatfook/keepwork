@@ -1,9 +1,10 @@
-/*
+/*doc
 ---
 title: imgLoop Mod
 name: imgLoop Mod
 category: Adi Mod
 ---
+
 ## @ImgLoop
 
 ## 参数说明

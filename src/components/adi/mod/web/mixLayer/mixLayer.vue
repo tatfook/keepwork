@@ -1,10 +1,11 @@
 <script>
-/*
+/*doc
 ---
 title: mixLayer Mod
 name: mixLayer Mod
 category: Adi Mod
 ---
+
 ## @mixLayer
 
 ## 参数说明
