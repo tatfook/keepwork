@@ -21,24 +21,27 @@ export default {
     CommonHeader,
     ToolHeader
   },
-  created() {
-    // this.updateActivePage()
-  },
   watch: {
     $route: 'updateActivePage'
   },
   methods: {
-    updateActivePage() {
-      this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
-      this.$store.dispatch('user/initPageDetail', {
-        url: this.$router.currentRoute.path,
-        visitor: (this.loginUser && this.loginUser.username) || ''
+    ...mapActions({
+      setActivePage: 'setActivePage',
+      userInitPageDetail: 'user/initPageDetail'
+    }),
+    async updateActivePage() {
+      let path = this.$router.currentRoute.path
+      await this.setActivePage({ path, editorMode: false })
+      await this.userInitPageDetail({
+        url: path,
+        visitor: this.username || ''
       })
     }
   },
   computed:{
     ...mapGetters({
-      loginUser: 'user/profile'
+      activePageUrl: 'activePageUrl',
+      username: 'user/username',
     })
   }
 }

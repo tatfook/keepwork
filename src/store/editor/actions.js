@@ -56,7 +56,7 @@ const activePageCacheAvailable = pageData => {
 }
 
 const actions = {
-  async setActivePage(context, path) {
+  async setActivePage(context, { path, editorMode = true }) {
     let {
       getters,
       commit,
@@ -68,7 +68,7 @@ const actions = {
 
     const pageData = getters.openedFiles[getFileFullPathByPath(path)]
     if (!activePageCacheAvailable(pageData)) {
-      await dispatch('refreshOpenedFile', { path })
+      await dispatch('refreshOpenedFile', { path, editorMode })
     }
 
     commit(SET_ACTIVE_PAGE, { path, username })
@@ -226,11 +226,11 @@ const actions = {
 
   async refreshOpenedFile(
     { commit, dispatch, rootGetters, getters },
-    { path }
+    { path, editorMode = true }
   ) {
     await dispatch(
       'gitlab/readFile',
-      { path, editorMode: true },
+      { path, editorMode },
       { root: true }
     )
     let {
