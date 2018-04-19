@@ -13,6 +13,7 @@ import AdiInnerModal from './innerModal/innerModal.proptypes'
 import AdiNumber from './number/number.proptypes'
 import AdiTabs from './tabs/tabs.proptypes'
 import AdiQuizz from './quizz/quizz.proptypes'
+import AdiLesson from './lesson/lesson.proptypes'
 
 export default {
   AdiImgLoop,
@@ -29,5 +30,6 @@ export default {
   AdiInnerModal,
   AdiNumber,
   AdiTabs,
-  AdiQuizz
+  AdiQuizz,
+  AdiLesson
 }
