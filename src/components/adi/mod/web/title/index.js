@@ -1,4 +1,4 @@
-/*
+/*doc
 ---
 title: Title Mod
 name: Title Mod

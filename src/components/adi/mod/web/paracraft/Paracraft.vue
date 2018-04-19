@@ -1,5 +1,5 @@
 <script>
-/*
+/*doc
 ---
 title: Paracraft Mod
 name: Paracraft Mod
@@ -10,6 +10,7 @@ category: Adi Mod
 ## 参数说明
 
 ```
+
 - styleID :  //样式ID
 
 # preview
@@ -59,6 +60,7 @@ category: Adi Mod
 # paracraft_info
 - text : // 未安装Paracraft客户端提示文字
 - link : // 下载Paracraft客户端链接
+
 ```
 */
 import _ from 'lodash'

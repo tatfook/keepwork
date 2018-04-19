@@ -1,5 +1,4 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-// import mod from '@/components/adi/mod/base/Base'
 import styles from './paracraft.styles'
 import templates from './paracraft.templates'
 import mod from './Paracraft'
