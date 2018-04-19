@@ -4,7 +4,7 @@
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
           <el-menu class="full-height" :default-active="''+selectedCategoryIndex" @select='setSelectedCategoryIndex'>
-            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index'>
+            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index' v-if="(category.classify !== 'course')">
               {{ category.name }}
             </el-menu-item>
           </el-menu>
