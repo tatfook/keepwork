@@ -22,16 +22,21 @@ export default [
     },
     options: {
       theme: {
-        // 子组件的style参数
         menu: {
           menuBackground: 'bg_color_7',
           fontColor: 'color_0'
         }
       },
       config: {
-        // 子组件配置参数
         menu: {
-          mode: 'horizontal'
+          mode: 'horizontal',
+          emptyData: [
+            {
+              name: '菜单1',
+              link: 'http://keepwork.com'
+            }
+          ],
+          emptyTarget: '_blank'
         }
       }
     },

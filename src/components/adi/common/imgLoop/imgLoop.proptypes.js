@@ -1,3 +1,1 @@
-export default {
-  data: 'media'
-}
+export default {}

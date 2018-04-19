@@ -1,15 +1,18 @@
 let emptyData = {
   media: {
     emptySrc: require('@/../static/adi/mixLayer/mix-layer.png'),
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   title: {
     emptyName: '加利福尼亚大学',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   subtitle: {
     emptyName: '顶尖研究型大学',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   paragraph: {
     emptyData:

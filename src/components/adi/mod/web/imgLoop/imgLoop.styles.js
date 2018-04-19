@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 let emptyData = {
   imgLoop: [
     {
@@ -30,7 +28,10 @@ export default [
       theme: {},
       config: {
         ...emptyData,
-        imgLoop: _.merge({}, emptyData.imgLoop, { height: '150px' })
+        imgLoop: {
+          emptydata: emptyData,
+          height: '150px'
+        }
       }
     },
     cover: require('@/../static/adi/imgLoop/thumbnail.png')
