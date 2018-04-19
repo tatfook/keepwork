@@ -170,10 +170,13 @@ const mutations = {
       showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
     )
   },
-  [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, { path, expanded }) {
+  [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, payload) {
+    payload = _.isArray(payload) ? payload : [payload]
+    let updatedInfo = {}
+    payload.forEach(({path, expanded}) => (updatedInfo[path] = expanded))
     Vue.set(state, 'filemanagerTreeNodeExpandMapByPath', {
       ...state.filemanagerTreeNodeExpandMapByPath,
-      [path]: expanded
+      ...updatedInfo
     })
   },
   [SET_NEW_MOD_POSITION](state, position) {

@@ -22,7 +22,7 @@ const store = new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      paths: ['user', 'gitlab', 'editor']
+      // paths: ['user', 'gitlab', 'editor']
     }),
     transfer()
   ]

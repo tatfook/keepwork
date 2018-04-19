@@ -11,11 +11,13 @@ const getters = {
   activePage: state => state.activePage,
   activePageUrl: state => state.activePageUrl,
   activePageInfo: (state, { activePageUrl }) => {
-    let pageInfos = activePageUrl.split('/')
-    let username = pageInfos[1]
-    let sitename = pageInfos[2]
-    let paths = pageInfos.slice(3)
-    return { username, sitename, paths }
+    let pageInfos = activePageUrl.split('/').filter(x => x)
+    let [username, sitename] = pageInfos
+    let isLegal = (username && sitename)
+    let sitepath = isLegal ? `${username}/${sitename}` : ''
+    let fullPath = isLegal ? getFileFullPathByPath(activePageUrl) : ''
+    let [, , ...paths] = fullPath.split('/').filter(x => x)
+    return { username, sitename, isLegal, fullPath, sitepath, paths }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
   code: (state, { activePage = {} }) =>
