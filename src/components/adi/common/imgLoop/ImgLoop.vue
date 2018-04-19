@@ -24,7 +24,7 @@ export default {
   computed: {
     forImgs() {
       return this.properties.data.length == 0
-        ? this.options
+        ? this.options.emptydata.imgLoop
         : this.properties.data
     }
   }
