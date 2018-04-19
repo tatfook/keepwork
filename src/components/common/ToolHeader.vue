@@ -38,7 +38,7 @@
       </el-dropdown>
     </div>
     <div class="icons">
-      <a href="/editor.html" class="icon-item">
+      <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
       </a>
       <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
