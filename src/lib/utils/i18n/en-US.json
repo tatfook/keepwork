@@ -1,3 +1,24 @@
 {
-  "hello": "hello"
+  "common": {
+    "welcomeToKeepwork": "Welcome to Keepwork",
+    "createNewWebsite": "Create New Website"
+  },
+  "editor": {
+    "save": "Save",
+    "preview": "Preview",
+    "code": "Code",
+    "splitScreen": "Split",
+
+    "refresh": "Refresh",
+    "close": "Close",
+    "delete": "Delete",
+
+    "openedFiles": "Opened",
+    "myPersonalWebsites": "Personal websites",
+    "myContributedWebsites": "Contributed websites",
+    "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
+    
+    "noPersonalWebsite": "No personal website",
+    "createWebsiteNow": "Create Website Now"
+  }
 }

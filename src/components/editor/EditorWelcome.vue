@@ -1,8 +1,8 @@
 <template>
   <div class="guid-content">
-    <h1>Welcome to Keepwork</h1>
+    <h1>{{ $t('common.welcomeToKeepwork') }}</h1>
     <div>
-      <el-button type='primary' @click="openNewWebsiteDialog">创建新网站</el-button>
+      <el-button type='primary' @click="openNewWebsiteDialog">{{ $t('common.createNewWebsite') }}</el-button>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
   </div>
