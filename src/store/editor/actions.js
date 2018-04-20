@@ -74,7 +74,7 @@ const actions = {
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl } = getters
-    dispatch('savePageByPath', activePageUrl)
+    await dispatch('savePageByPath', activePageUrl)
   },
   async savePageByPath(
     {

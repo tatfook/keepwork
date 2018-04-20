@@ -46,7 +46,7 @@
           <a href='/'>返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='3' class='li-btn'>
+      <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
         <span v-loading='savePending' class='iconfont icon-baocun' title='保存' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
@@ -103,7 +103,14 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['showingCol', 'activePageUrl', 'canUndo', 'canRedo']),
+    ...mapGetters([
+      'showingCol',
+      'activePageUrl',
+      'canUndo',
+      'canRedo',
+      'openedFiles',
+      'activePageInfo'
+    ]),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -123,13 +130,35 @@ export default {
       ) {
         return '分屏'
       }
+    },
+    isActivePageSaved() {
+      let { saved } = this.activePageInfo
+      return saved
     }
   },
   methods: {
     ...mapActions(['saveActivePage', 'undo', 'redo']),
     async save() {
+      if (this.isActivePageSaved) {
+        return
+      }
       this.savePending = true
       await this.saveActivePage()
+        .then(() => {
+          this.$message({
+            showClose: true,
+            message: '文件保存成功',
+            type: 'success'
+          })
+        })
+        .catch(e => {
+          console.log(e)
+          this.$message({
+            showClose: true,
+            message: '文件保存失败',
+            type: 'error'
+          })
+        })
       this.savePending = false
     },
     changeViewType(command) {
