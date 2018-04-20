@@ -1,3 +1,30 @@
+let defaultData = {
+  menu: {
+    mode: 'horizontal',
+    emptyData: [
+      {
+        name: '菜单1',
+        link: 'http://keepwork.com'
+      }
+    ],
+    emptyTarget: '_blank'
+  },
+  logo: {
+    emptySrc: require('@/../static/adi/title/bear.svg'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  businessName: {
+    emptyName: 'BUSINESS NAME',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  tagline: {
+    emptyName: 'TAG LINE',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  }
+}
 export default [
   // style 0
   {
@@ -54,31 +81,7 @@ export default [
       },
       config: {
         // 子组件配置参数
-        menu: {
-          mode: 'horizontal',
-          emptyData: [
-            {
-              name: '菜单1',
-              link: 'http://keepwork.com'
-            }
-          ],
-          emptyTarget: '_blank'
-        },
-        logo: {
-          emptySrc: require('@/../static/adi/title/bear.svg'),
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        },
-        businessName: {
-          emptyName: 'BUSINESS NAME',
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        },
-        tagline: {
-          emptyName: 'TAG LINE',
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        }
+        ...defaultData
       }
     },
     cover: require('@/../static/adi/title/titleOne.jpeg')
@@ -137,31 +140,7 @@ export default [
       },
       config: {
         // 子组件配置参数
-        menu: {
-          mode: 'horizontal',
-          emptyData: [
-            {
-              name: '菜单1',
-              link: 'http://keepwork.com'
-            }
-          ],
-          emptyTarget: '_blank'
-        },
-        logo: {
-          emptySrc: require('@/../static/adi/title/bear.svg'),
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        },
-        businessName: {
-          emptyName: 'BUSINESS NAME',
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        },
-        tagline: {
-          emptyName: 'TAG LINE',
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        }
+        ...defaultData
       }
     },
     cover: require('@/../static/adi/title/titleTwo.jpeg')
