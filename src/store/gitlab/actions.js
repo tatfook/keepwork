@@ -147,11 +147,12 @@ const actions = {
     let payload = { path, branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
+    dispatch('closeOpenedFile', { path }, { root: true })
+
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
       ignoreCache: true
     })
-    dispatch('closeOpenedFile', { path })
   }
 }
 
