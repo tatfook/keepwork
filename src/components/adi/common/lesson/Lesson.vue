@@ -61,7 +61,7 @@ export default {
 
 <style>
   .lessonDesc {
-    padding-left: 20px
+    padding-left: 20px;
   }
 </style>
 
