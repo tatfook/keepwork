@@ -16,7 +16,9 @@ import { broadcast } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 
 Vue.use(fullscreen)
-Vue.use(VueClipboard)Vue.config.productionTip = false
+Vue.use(VueClipboard)
+
+Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
 
