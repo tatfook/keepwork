@@ -1,6 +1,6 @@
 <template>
   <div class='comp-media'>
-    <a :target='properties.target ? properties.target : options.emptyTarget' :href='properties.link ? properties.link : options.emptyLink'>
+    <a :target='target' :href='link'>
       <div class="img" v-if='isImage' :style="loadImg"></div>
       <video v-else-if='isVideo' :src='src'></video>
       <div class="svg" v-if="isBase64Svg" v-html="svg()" :style="svgFill"></div>
@@ -37,6 +37,11 @@ export default {
     },
     src() {
       return this.properties.src ? this.properties.src : this.options.emptySrc
+    },
+    target() {
+      return this.properties.target
+        ? this.properties.target
+        : this.options.emptyTarget
     },
     link() {
       return this.properties.link
