@@ -18,6 +18,6 @@ export default [
       theme: {},
       config: {}
     },
-    cover: 'http://keepwork.com/wiki/js/mod/board/assets/imgs/wiki_board.png'
+    cover: require('@/../static/adi/board/wiki_board.png')
   }
 ]

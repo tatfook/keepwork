@@ -1,5 +1,4 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-// import mod from '@/components/adi/mod/base/Base'
 import styles from './paracraft.styles'
 import templates from './paracraft.templates'
 import mod from './Paracraft'
@@ -19,7 +18,7 @@ const components = {
   download: 'AdiButton',
   enter: 'AdiButton',
   innerModal: 'AdiInnerModal',
-  paracraft_info: 'AdiLabel'
+  paracraftInfo: 'AdiLabel'
 }
 
 // let imgsPath    = config.wikiModPath + 'adi/assets/imgs/';

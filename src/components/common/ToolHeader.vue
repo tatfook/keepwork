@@ -38,7 +38,7 @@
       </el-dropdown>
     </div>
     <div class="icons">
-      <a href="/editor.html" class="icon-item">
+      <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
       </a>
       <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
@@ -46,8 +46,8 @@
         <div class="kp-social-share"></div>
       </el-popover>
       <span class="icon-item" v-loading='starPending'>
-        <i class="iconfont icon-dianzan" :class="{'active': activePageStarInfo.starred}" @click='togglePageStar'></i>
-        <span class="info">{{activePageStarInfo.starredCount}}</span>
+        <i class="iconfont icon-dianzan" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
+        <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
       </span>
     </div>
   </div>
@@ -60,15 +60,16 @@ export default {
   name: 'ToolHeader',
   computed: {
     ...mapGetters({
-      activePage: 'activePage',
+      activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
-      loginUser: 'user/profile',
+      username: 'user/username',
+      displayUsername: 'user/displayUsername',
       activePageStarInfo: 'user/activePageStarInfo'
     })
   },
   mounted() {},
   data() {
-    return{
+    return {
       starPending: false
     }
   },
@@ -77,15 +78,13 @@ export default {
       starPages: 'user/starPages'
     }),
     showSocialShare() {
-      let loginUser = this.loginUser.displayName || this.loginUser.username
+      let { username: siteUsername, sitename } = this.activePageInfo
       window.socialShare('.kp-social-share', {
         mode: 'prepend',
-        description: `我将${
-          this.activePageInfo.username
-        }在KEEPWORK.COM制作的网站分享给你`,
-        title: `${loginUser}分享给你${this.activePageInfo.username}制作的${
-          this.activePageInfo.sitename
-        }网站`,
+        description: `我将${siteUsername}在KEEPWORK.COM制作的网站分享给你`,
+        title: `${
+          this.displayUsername
+        }分享给你${siteUsername}制作的${siteUsername}网站`,
         sites: ['qq', 'qzone', 'weibo', 'wechat'],
         wechatQrcodeTitle: '', // 微信二维码提示文字
         wechatQrcodeHelper: '扫描二维码打开网页'
@@ -93,10 +92,14 @@ export default {
     },
     async togglePageStar() {
       this.starPending = true
-      await this.starPages({
-        url: this.activePage,
-        visitor: this.loginUser.username
-      })
+      try {
+        await this.starPages({
+          url: this.activePageUrl,
+          visitor: this.username
+        })
+      } catch (error) {
+        console.log(error)
+      }
       this.starPending = false
     }
   }
@@ -126,7 +129,7 @@ export default {
     font-size: 30px;
     vertical-align: middle;
   }
-  .icon-item .iconfont.active{
+  .icon-item .iconfont.active {
     color: #fe7532;
   }
   a {

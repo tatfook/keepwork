@@ -2,41 +2,51 @@ import _ from 'lodash'
 
 let emptyData = {
   preview: {
-    emptySrc: require('@/../static/adi/paracraft/preview.jpg')
+    emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
+    emptyTarget: '_blank'
   },
   worldName: {
-    emptyName: '默认名字'
+    emptyName: '默认名字',
+    emptyTarget: '_blank'
   },
   author: {
     emptyDesc: '作者:',
-    emptyText: '你的名字'
+    emptyText: '你的名字',
+    emptyTarget: '_blank'
   },
   version: {
     emptyDesc: '版本',
-    emptyText: '0.0.0'
+    emptyText: '0.0.0',
+    emptyTarget: '_blank'
   },
   updateTime: {
     emptyText: '2018-1-10-14-30',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   viewTimesImg: {
-    emptySrc: require('@/../static/adi/paracraft/eye.png')
+    emptySrc: require('@/../static/adi/paracraft/eye.png'),
+    emptyTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
-    emptyDesc: '浏览量'
+    emptyDesc: '浏览量',
+    emptyTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
-    emptySize: '大小'
+    emptySize: '大小',
+    emptyTarget: '_blank'
   },
   download: {
     emptyName: '下载',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   enter: {
     emptyName: '进入',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   desc: {
     emptyData: `作品简介：

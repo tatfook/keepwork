@@ -3,7 +3,8 @@ import compBaseMixin from '../comp.base.mixin'
 import _ from 'lodash'
 
 const renderTemplate = (h, m, data, parentIndex) => {
-  data = data || m.properties.data
+  data = data || m.properties.data.length != 0 ? m.properties.data : m.options.emptyData
+
   let index = 0
 
   function getIndexString(index, isSubIndex) {
@@ -20,14 +21,14 @@ const renderTemplate = (h, m, data, parentIndex) => {
     if (!menuData.child) {
       return (
         <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
-          <a target={m.properties.target} href={menuData.link}>{menuData.name}</a>
+          <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{menuData.name}</a>
         </el-menu-item>
       )
     } else {
       return (
         <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
           <template slot="title">
-            <a target={m.properties.target} href={menuData.link}>{menuData.name}</a>
+            <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{menuData.name}</a>
           </template>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </el-submenu>

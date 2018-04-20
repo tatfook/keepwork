@@ -1,22 +1,26 @@
 let emptyData = {
   media: {
     emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   title: {
     emptyName: '一个人，一条路，人在途中',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   subtitle: {
     emptyName: '我们一直在旅行',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   },
   paragraph: {
     emptyData: `一个人去旅行，而且是去故乡的山水间徜徉。临行之前，面对太多的疑问和不解：为何是一个人？也有善意的提醒：何不去远方！昆明呀——赶一个花海；三亚呀——赴一个蓝天碧海。只是微笑地固执自己的坚持，不做任何解释。没有人明白，这一次是一个告别，或者一个永远的告别，以后我会去到很多很繁华或苍凉，辽远或偏僻的地方，而会常常想起这一次的旅行，想起那座山，那个城，那些人……`
   },
   button: {
     emptyName: '查看更多',
-    emptyLink: 'http://keepwork.com'
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 
@@ -35,8 +39,7 @@ export default [
         }
       },
       colGroupAA: {
-        display: 'flex',
-        'align-items': ' flex-start'
+        'word-wrap': 'break-word'
       },
       title: {
         'margin-top': '20px'
@@ -47,7 +50,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       },
       button: {
@@ -104,6 +106,9 @@ export default [
       media: {
         height: '611px'
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       '@media only screen and (max-width: 767px)': {
         media: {
           height: '300px'
@@ -118,7 +123,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       },
       button: {
@@ -170,59 +174,57 @@ export default [
     templateID: 2,
     data: {
       colMedia: { float: 'right' },
-      colTitle: { height: '700px' },
-      colSubtitle: { height: '700px' },
-      colGroupAA: { height: '700px' },
-      colParagraph: { height: '646px' },
       media: {
-        height: '700px'
+        height: '300px'
+      },
+      colGroupA: {
+        'word-wrap': 'break-word'
       },
       title: {
-        'max-width': '45px',
-        'line-height': '45px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'margin-top': '20px'
       },
       subtitle: {
-        'max-width': '30px',
-        'line-height': '30px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'margin-top': '10px'
       },
       paragraph: {
-        float: 'right',
-        'max-width': '396px',
+        'margin-top': '15px',
         'text-indent': '28px',
-        'writing-mode': 'tb-rl',
-        'overflow-x': 'auto'
+        'white-space': 'pre-wrap'
       },
       colButton: {
         'margin-top': '18px'
       },
-      '@media only screen and (max-width: 767px)': {
-        colTitle: { height: 'auto' },
-        colSubtitle: { height: 'auto' },
-        colGroupAA: { height: 'auto' },
-        colParagraph: { height: 'auto' },
-        media: { height: '300px' },
+      '@media only screen and (min-width: 768px)': {
+        colTitle: { height: '700px' },
+        colSubtitle: { height: '700px' },
+        colGroupAA: { height: '700px' },
+        colParagraph: { height: '646px' },
+        media: { height: '700px' },
+        colGroupA: {
+          'word-wrap': 'normal',
+          overflow: 'hidden'
+        },
         title: {
-          'margin-top': '20px',
-          ' max-width': '100%',
-          'writing-mode': 'lr-tb'
+          'margin-top': '0',
+          'max-width': '45px',
+          'line-height': '45px',
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         },
         subtitle: {
-          'margin-top': '10px',
-          ' max-width': '100%',
-          'writing-mode': 'lr-tb'
+          'margin-top': '0',
+          'max-width': '30px',
+          'line-height': '30px',
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         },
         paragraph: {
-          float: 'none',
+          float: 'right',
           'margin-top': '15px',
-          ' max-width': '100%',
+          'max-width': '396px',
           'text-indent': '28px',
-          'writing-mode': 'lr-tb',
-          'word-wrap': 'break-word',
-          'white-space': 'pre-wrap'
+          'writing-mode': 'tb-rl',
+          'overflow-x': 'auto'
         }
       }
     },
@@ -287,6 +289,9 @@ export default [
           height: '300px'
         }
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       title: {
         'margin-top': '20px',
         'text-align': 'center'
@@ -298,7 +303,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       }
     },
@@ -342,6 +346,9 @@ export default [
           height: '300px'
         }
       },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
       title: {
         'text-align': 'center'
       },
@@ -353,7 +360,6 @@ export default [
         'margin-top': '15px',
         'margin-bottom': '20px',
         'text-indent': '28px',
-        'word-wrap': 'break-word',
         'white-space': 'pre-wrap'
       }
     },

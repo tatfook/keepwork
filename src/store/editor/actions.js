@@ -1,11 +1,12 @@
+import _ from 'lodash'
 import modFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
-import { gUndoManager } from '@/lib/global'
+import undoHelper from '@/lib/utils/undo/undoHelper'
 import { props } from './mutations'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import { initPageState } from './state'
 
 const {
-  RESET_STATE,
   SET_ACTIVE_PAGE,
 
   ADD_MOD,
@@ -30,43 +31,68 @@ const {
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
 
+  RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE
 } = props
 
+const activePageCacheAvailable = pageData => {
+  if (_.isEmpty(pageData)) return false
+
+  let savedExpires = 5 * 60 * 1000 // 5 mins
+  let unsavedExpires = 2 * 24 * 60 * 60 * 1000 // 2 days
+  let now = Date.now()
+
+  let { timestamp, saved } = pageData
+  let cachedTime = now - timestamp
+
+  let saveExpired = cachedTime > savedExpires
+  let unsavedExpired = cachedTime > unsavedExpires
+
+  if (saved && !saveExpired) return true
+  if (!saved && !unsavedExpired) return true
+
+  return false
+}
+
 const actions = {
-  async setActivePage(context, path) {
-    let { getters, commit, dispatch } = context
+  async setActivePage(context, { path, editorMode = true }) {
+    let {
+      getters,
+      commit,
+      dispatch,
+      rootGetters: { 'user/username': username }
+    } = context
 
-    if (getters.activePage === path) return
-    commit(RESET_STATE)
-    commit(SET_ACTIVE_PAGE, path)
-
+    commit(SET_ACTIVE_PAGE, { path, username })
     if (path === '/') return
 
-    let { activePageCacheAvailable } = getters
-    if (activePageCacheAvailable) return
-
-    await dispatch('refreshOpenedFile', { path })
-    let { code } = getters
-    let payload = { code, historyDisabled: true }
-    dispatch('updateMarkDown', payload)
+    const pageData = getters.openedFiles[getFileFullPathByPath(path)]
+    if (!activePageCacheAvailable(pageData)) {
+      await dispatch('refreshOpenedFile', { path, editorMode })
+    }
   },
   async saveActivePage({ getters, dispatch }) {
-    let { activePage: path } = getters
-    dispatch('savePageByPath', path)
+    let { activePageUrl } = getters
+    await dispatch('savePageByPath', activePageUrl)
   },
-  async savePageByPath({ getters: { getOpenedFileByPath }, dispatch }, path) {
+  async savePageByPath(
+    {
+      getters: { getOpenedFileByPath },
+      dispatch
+    },
+    path
+  ) {
     if (!path) return
     let { content } = getOpenedFileByPath(path)
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
     dispatch('updateOpenedFile', { saved: true, path })
   },
   updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
-    let { code: oldCode, activePage: path } = getters
+    let { code: oldCode, activePageUrl: path, activePage } = getters
     if (newCode === oldCode) return
-    dispatch('updateOpenedFile', { content: newCode, path })
-    !historyDisabled && gUndoManager.save(newCode)
+    dispatch('updateOpenedFile', { content: newCode, saved: false, path })
+    !historyDisabled && undoHelper.save(activePage.undoManager, newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -128,7 +154,11 @@ const actions = {
     commit(UPDATE_PROPERTY_TAB_TYPE, type)
   },
   setActivePropertyData(
-    { commit, dispatch, getters: { activePropertyData } },
+    {
+      commit,
+      dispatch,
+      getters: { activePropertyData }
+    },
     { data }
   ) {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
@@ -136,7 +166,7 @@ const actions = {
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
-    if (key === state.activeMod.key) {
+    if (key === state.activePage.activeMod.key) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
       commit(UPDATE_WIN_TYPE, 'ModsList')
@@ -179,13 +209,13 @@ const actions = {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
 
-  undo({ dispatch }) {
-    gUndoManager.undo((code = '') =>
+  undo({ state, dispatch }) {
+    undoHelper.undo(state.activePage.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
-  redo({ dispatch }) {
-    gUndoManager.redo((code = '') =>
+  redo({ state, dispatch }) {
+    undoHelper.redo(state.activePage.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
@@ -193,18 +223,38 @@ const actions = {
     commit('SET_NEW_MOD_POSITION', position)
   },
 
-  async refreshOpenedFile({ dispatch, rootGetters }, { path }) {
+  async refreshOpenedFile(
+    { commit, dispatch, rootGetters, getters },
+    { path, editorMode = true }
+  ) {
     await dispatch(
       'gitlab/readFile',
-      { path, editorMode: true },
+      { path, editorMode },
       { root: true }
     )
-    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
+    let {
+      'gitlab/getFileByPath': gitlabGetFileByPath,
+      'user/username': username
+    } = rootGetters
     let file = gitlabGetFileByPath(path)
-    if (!file) return
+    if (!file && file !== '') return
 
     let { content } = file
-    await dispatch('updateOpenedFile', { path, content })
+
+    let pageData = initPageState()
+    pageData.modList = Parser.buildBlockList(content)
+
+    let fullPath = getFileFullPathByPath(path)
+    let timestamp = Date.now()
+    let commitPayload = {
+      username,
+      path: fullPath,
+      data: { timestamp, path, content, ...pageData }
+    }
+    commit(RESET_OPENED_FILE, commitPayload)
+    if (getFileFullPathByPath(getters.activePageUrl) === fullPath) {
+      commit(SET_ACTIVE_PAGE, { path, username })
+    }
   },
   updateOpenedFile(context, payload) {
     let { path } = payload
@@ -222,8 +272,16 @@ const actions = {
   },
   closeOpenedFile(context, { path }) {
     let fullPath = getFileFullPathByPath(path)
-    let { commit, rootGetters: { 'user/username': username } } = context
+    let {
+      commit,
+      state,
+      rootGetters: { 'user/username': username }
+    } = context
     commit(CLOSE_OPENED_FILE, { username, path: fullPath })
+
+    if (path === state.activePageUrl) {
+      commit(SET_ACTIVE_PAGE, null)
+    }
   }
 }
 

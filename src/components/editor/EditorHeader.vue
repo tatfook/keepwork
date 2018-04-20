@@ -46,7 +46,7 @@
           <a href='/'>返回首页</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='3' class='li-btn'>
+      <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
         <span v-loading='savePending' class='iconfont icon-baocun' title='保存' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
@@ -70,7 +70,7 @@
       </el-menu-item>
       <el-menu-item index='2 '>
         <span class='input-link-copy-box'>
-          <a :href='activePage' target='_blank'>{{activePage}}</a>
+          <a :href='activePageUrl' target='_blank'>{{activePageUrl}}</a>
         </span>
       </el-menu-item>
 
@@ -78,14 +78,13 @@
         <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
       </el-menu-item>
     </el-menu>
-    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
-import { gUndoManager } from '@/lib/global'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
 export default {
@@ -104,7 +103,14 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['showingCol', 'activePage']),
+    ...mapGetters([
+      'showingCol',
+      'activePageUrl',
+      'canUndo',
+      'canRedo',
+      'openedFiles',
+      'activePageInfo'
+    ]),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -125,18 +131,34 @@ export default {
         return '分屏'
       }
     },
-    canUndo() {
-      return gUndoManager.canUndo()
-    },
-    canRedo() {
-      return gUndoManager.canRedo()
+    isActivePageSaved() {
+      let { saved } = this.activePageInfo
+      return saved
     }
   },
   methods: {
     ...mapActions(['saveActivePage', 'undo', 'redo']),
     async save() {
+      if (this.isActivePageSaved) {
+        return
+      }
       this.savePending = true
       await this.saveActivePage()
+        .then(() => {
+          this.$message({
+            showClose: true,
+            message: '文件保存成功',
+            type: 'success'
+          })
+        })
+        .catch(e => {
+          console.log(e)
+          this.$message({
+            showClose: true,
+            message: '文件保存失败',
+            type: 'error'
+          })
+        })
       this.savePending = false
     },
     changeViewType(command) {

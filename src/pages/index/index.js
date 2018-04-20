@@ -5,8 +5,8 @@ import Vuex from 'vuex'
 
 import App from './App'
 import router from './index.router'
-import createPersistedState from 'vuex-persistedstate'
-import { editorModule, userModule, gitlabModule } from '@/store'
+// import createPersistedState from 'vuex-persistedstate'
+import { appModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -16,14 +16,14 @@ Vue.use(ElementUI)
 
 const store = new Vuex.Store({
   modules: {
+    app: appModule,
     user: userModule,
-    gitlab: gitlabModule,
-    editor: editorModule
+    gitlab: gitlabModule
   },
   plugins: [
-    createPersistedState({
-      paths: ['user', 'gitlab']
-    })
+    // createPersistedState({
+    //   paths: ['user', 'gitlab']
+    // })
   ]
 })
 

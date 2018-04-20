@@ -14,31 +14,38 @@
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
 import ToolHeader from '../../components/common/ToolHeader'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
     CommonHeader,
     ToolHeader
   },
-  created() {
-    // this.updateActivePage()
-  },
   watch: {
     $route: 'updateActivePage'
   },
   methods: {
-    updateActivePage() {
-      this.$store.dispatch('setActivePage', this.$router.currentRoute.path)
-      this.$store.dispatch('user/initPageDetail', {
-        url: this.$router.currentRoute.path,
-        visitor: (this.loginUser && this.loginUser.username) || ''
-      })
+    ...mapActions({
+      setActivePage: 'setActivePage',
+      userInitPageDetail: 'user/initPageDetail'
+    }),
+    async updateActivePage() {
+      let path = this.$router.currentRoute.path
+      await this.setActivePage({ path, editorMode: false })
+      try {
+        await this.userInitPageDetail({
+          url: path,
+          visitor: this.username || ''
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      loginUser: 'user/profile'
+      activePageUrl: 'activePageUrl',
+      username: 'user/username'
     })
   }
 }
