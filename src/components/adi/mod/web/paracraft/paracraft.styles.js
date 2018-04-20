@@ -3,20 +3,24 @@ import _ from 'lodash'
 let emptyData = {
   preview: {
     emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   worldName: {
     emptyName: '默认名字',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   author: {
     emptyDesc: '作者:',
     emptyText: '你的名字',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   version: {
     emptyDesc: '版本',
     emptyText: '0.0.0',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   updateTime: {
@@ -26,16 +30,19 @@ let emptyData = {
   },
   viewTimesImg: {
     emptySrc: require('@/../static/adi/paracraft/eye.png'),
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
     emptyDesc: '浏览量',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
     emptySize: '大小',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   download: {
