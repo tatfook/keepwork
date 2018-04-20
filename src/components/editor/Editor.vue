@@ -132,8 +132,10 @@ export default {
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
     },
-    fullscreenIcon(){
-      return this.isFullscreen ? 'iconfont icon-tuichuquanping' : 'iconfont icon-quanping1'
+    fullscreenIcon() {
+      return this.isFullscreen
+        ? 'iconfont icon-tuichuquanping'
+        : 'iconfont icon-quanping1'
     }
   },
   watch: {
@@ -214,10 +216,11 @@ export default {
     toggleFullscreen() {
       this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
         wrap: false,
+        fullscreenClass: 'code-win-fullscreen',
         callback: this.fullscreenChange
       })
     },
-    fullscreenChange(fullscreen){
+    fullscreenChange(fullscreen) {
       this.isFullscreen = fullscreen
     },
     resizeCol(event, leftColWidthParam, rightColWidthParam) {
@@ -388,5 +391,11 @@ export default {
 }
 .code-win-swich > span {
   vertical-align: middle;
+}
+.code-win-fullscreen {
+  width: 100% !important;
+  height: 100%;
+  background-color:#cdd4dc;
+  max-width: 1080px;
 }
 </style>
