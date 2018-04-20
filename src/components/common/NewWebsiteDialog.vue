@@ -46,7 +46,7 @@
       </h1>
       <p>网址：
         <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
-        <br/> 您还可以在 网站设置 页面设置网站名称、标签
+        <br/> 您还可以在 网站设置 页面设置网站名称
         <br/>
         开启VIP ，额外支持私有权限以及权限管理等特权
       </p>
@@ -211,6 +211,7 @@ export default {
     resetAndClose() {
       this.$emit('close')
       this.stepIndex = 0
+      this.websiteNameForm.value = ''
       this.resetSelectedCategoryIndex()
     },
     async handleSubmit() {
