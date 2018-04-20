@@ -1,7 +1,7 @@
 <template>
   <div class="menu-type">
     <el-button plain type='primary' size='mini' @click='isQAEditorShow = true'>Open Quizz Editor</el-button>
-    <quizzDataEditor :isEditorShow='isQAEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></quizzDataEditor>
+    <quizzDataEditor :isEditorShow='isQAEditorShow' @finishEditing='finishEditing' @cancel='cancel'></quizzDataEditor>
   </div>
 
 </template>
@@ -10,8 +10,7 @@ import quizzDataEditor from "./quizzDataEditor";
 export default {
   name: 'QuizzType',
   props: {
-    editingKey: String,
-    originValue: Array
+    editingKey: String
   },
   data() {
     return {

@@ -1,7 +1,6 @@
 <template>
   <div class="comp-quizz">
-    <div v-for="(item, index) in properties.data">
-      <div>Quiz {{index + 1}}</div>
+    <div v-for="item in properties.data">
       <div>{{ item.title }}</div>
 
       <ol type="A">
@@ -11,6 +10,8 @@
       <div hidden><span>Answer:</span> {{ item.answer }}</div>
       <div><span>Score:</span> {{ item.score }}</div>
       <div hidden><span>Analysis:</span> {{ item.desc }}</div>
+
+      <el-button type="primary" @click="submitQuizz">submit</el-button>
     </div>
   </div>
 </template>
@@ -22,13 +23,13 @@ import compBaseMixin from '../comp.base.mixin'
 export default {
   name: 'AdiQuizz',
   mixins: [compBaseMixin],
+  methods: {
+    submitQuizz() {
+      console.log(this.properties.data);
+    }
+  }
 }
 </script>
 
-<style>
-  .com-quizz {
-
-  }
-</style>
 
 

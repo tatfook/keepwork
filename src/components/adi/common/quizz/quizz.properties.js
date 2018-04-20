@@ -7,8 +7,7 @@ export default {
       answer: 'A',
       options: [
         { item: 'press Ctrl+G' },
-        { item: 'press ESC key and click mode button on top left corner of the screen.' },
-        { item: 'press enter key, and type /mode edit' }
+        { item: 'press ESC key and click mode button on top left corner of the screen.' }
       ]
     }
   ]
