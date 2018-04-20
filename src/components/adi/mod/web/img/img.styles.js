@@ -1,3 +1,10 @@
+let emptyData = {
+  img: {
+    emptySrc: require('@/../static/adi/img/imgTwo.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  }
+}
 export default [
   // style 0
   {
@@ -23,13 +30,7 @@ export default [
     },
     options: {
       theme: {},
-      config: {
-        img: {
-          emptySrc: require('@/../static/adi/img/imgTwo.png'),
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        }
-      }
+      config: { ...emptyData }
     },
     cover: require('@/../static/adi/img/cover/imgOne.png')
   },
@@ -58,13 +59,7 @@ export default [
     },
     options: {
       theme: {},
-      config: {
-        img: {
-          emptySrc: require('@/../static/adi/img/imgTwo.png'),
-          emptyLink: 'http://keepwork.com',
-          emptyTarget: '_blank'
-        }
-      }
+      config: { ...emptyData }
     },
     cover: require('@/../static/adi/img/cover/imgTwo.png')
   }
