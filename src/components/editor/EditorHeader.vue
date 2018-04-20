@@ -68,10 +68,9 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item> -->
-      <el-menu-item index='2 '>
-        <span class='input-link-copy-box'>
-          <a :href='activePageUrl' target='_blank'>{{activePageUrl}}</a>
-        </span>
+      <el-menu-item index='2' class="link-box">
+        <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
+        <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
       </el-menu-item>
 
       <el-menu-item index='7 ' class='pull-right user-profile-box'>
@@ -92,7 +91,8 @@ export default {
   data: function() {
     return {
       savePending: false,
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
+      nowOrigin: document.location.origin
     }
   },
   mounted() {
@@ -166,6 +166,27 @@ export default {
     },
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
+    },
+    doCopyLink() {
+      let that = this
+      let toCopyLink = this.nowOrigin + this.activePageUrl
+      this.$copyText(toCopyLink).then(
+        function(e) {
+          that.$message({
+            showClose: true,
+            message: '链接复制成功',
+            type: 'success'
+          })
+        },
+        function(e) {
+          console.log(e)
+          that.$message({
+            showClose: true,
+            message: '链接复制失败',
+            type: 'error'
+          })
+        }
+      )
     }
   },
   components: {
@@ -235,5 +256,15 @@ export default {
   text-align: center;
   font-size: 21px;
   color: #666;
+}
+.link-box .iconfont {
+  border: none;
+}
+.link-box a {
+  text-decoration: none;
+}
+.link-box .iconfont:hover,
+.link-box a:hover {
+  color: #429efd;
 }
 </style>
