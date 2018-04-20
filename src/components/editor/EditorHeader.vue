@@ -55,7 +55,7 @@
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
         <span class='iconfont icon-chongzuo' title='重做'></span>
       </el-menu-item>
-      <el-menu-item index=' 8 ' class='li-btn'>
+      <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
           <el-button class='dropdown-btn'>
             {{showingType}}
@@ -67,7 +67,7 @@
             <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>分屏</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-menu-item>
+      </el-menu-item> -->
       <el-menu-item index='2 '>
         <span class='input-link-copy-box'>
           <a :href='activePageUrl' target='_blank'>{{activePageUrl}}</a>
@@ -160,9 +160,6 @@ export default {
           })
         })
       this.savePending = false
-    },
-    changeViewType(command) {
-      this.$store.dispatch('resetShowingCol', command)
     },
     openNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = true
