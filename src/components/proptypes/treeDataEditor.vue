@@ -91,7 +91,7 @@ export default {
     insert(node, data, position) {
       const newChild = {
         name: '菜单项' + newMenuId,
-        link: 'http://keepwork.com'
+        link: ''
       }
       if (!node) {
         this.treeData.push(newChild)

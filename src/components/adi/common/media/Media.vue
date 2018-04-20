@@ -3,7 +3,7 @@
     <a :target='target' :href='link'>
       <div class="img" v-if='isImage' :style="loadImg"></div>
       <video v-else-if='isVideo' :src='src'></video>
-      <div class="svg" v-if="isBase64Svg" v-html="svg()" :style="svgFill"></div>
+      <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
   </div>
 </template>
@@ -16,16 +16,14 @@ import { Base64 } from 'js-base64'
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
-  methods: {
+  computed: {
     svg() {
       if (this.isBase64Svg) {
         let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : ''
 
         return Base64.decode(base64Svg)
       }
-    }
-  },
-  computed: {
+    },
     isImage() {
       return Media.isImage(this.src)
     },
