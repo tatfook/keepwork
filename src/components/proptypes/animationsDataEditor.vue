@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      treeData: [],
+      treeData: this.originalTreeData,
       defaultProps: {
         children: 'child',
         label: 'name'

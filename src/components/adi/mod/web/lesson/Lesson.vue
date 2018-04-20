@@ -10,9 +10,9 @@ export default {
       let self = this
       let firstInFlag = true
       options = _.merge(options, this.generateOptionsStyle(name))
+      const mods = []
       // Tab 被点击的回调
       options.tabClick = function(tab) {
-        const mods = ['ModMarkdown', 'ModAnimations', 'ModStudent', 'ModSummary']
         const hideMod = function(name, flag) {
           let eles = document.getElementsByTagName('div')
           for(let i =0; i < eles.length; i++) {
@@ -28,12 +28,25 @@ export default {
         }
         // 切换显示的页卡
         const sliceMod = function(name) {
-          for(let i = 0; i < mods.length; i ++) {
-            let t = mods[i]
-            if(t == name){
-              hideMod(t)
-            }else {
-              hideMod(t, true)
+           // ["ModLesson", "ModMarkdown", "ModQuizz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
+          if(name == 'ModOverview') {
+            // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
+            for(let i = 0; i < mods.length; i ++) {
+              let t = mods[i]
+              if(t != 'ModAnimations' && t != 'ModStudent' && t != 'ModSummary'){
+                hideMod(t)
+              }else {
+                hideMod(t, true)
+              }
+            }
+          } else {
+            for(let i = 0; i < mods.length; i ++) {
+              let t = mods[i]
+              if(t == name){
+                hideMod(t)
+              }else {
+                hideMod(t, true)
+              }
             }
           }
         }
@@ -64,17 +77,27 @@ export default {
             let html = ""
             for(let i = 0; i < len; i++) {
               let item = animations[i]
-              html += 'Animations:' + item.cover + "-" + item.title + "-" + item.animation
+              html += '<p>Animations:' + item.cover + "-" + item.title + "-" + item.animation + '</p><br>'
             }
             lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
           }
           lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
           lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
+          let eles = document.getElementsByTagName('div')
+          for(let i = 0; i < eles.length; i++) {
+            let ele = eles[i]
+            let modName = ele.getAttribute('data-mod')
+            if(modName != null && modName != '' && modName != undefined && modName != 'ModLesson'){
+              mods.push(modName)
+            }
+          }
+          console.log("---------------------")
+          console.log(mods)
           firstInFlag = false
         }
         switch( tab.index ){
           case '0': // Overview
-            sliceMod('ModMarkdown')
+            sliceMod('ModOverview')
             break;
           case '1': // Ralated Animations
             sliceMod('ModAnimations')
