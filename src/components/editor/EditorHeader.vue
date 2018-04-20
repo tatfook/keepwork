@@ -47,7 +47,7 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-baocun' title='保存' @click='save'></span>
+        <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
         <span class='iconfont icon-fanhui' title='撤销'></span>
@@ -62,9 +62,9 @@
             <i class='el-icon-arrow-down el-icon--right dropdown-arrow'></i>
           </el-button>
           <el-dropdown-menu slot='dropdown'>
-            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>预览</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>代码</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>分屏</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>{{ $t('editor.preview') }}</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>{{ $t('editor.code') }}</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>{{ $t('editor.splitScreen') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item> -->
@@ -116,19 +116,19 @@ export default {
         this.showingCol.isCodeShow === false &&
         this.showingCol.isPreviewShow === true
       ) {
-        return '预览'
+        return this.$t('editor.preview')
       }
       if (
         this.showingCol.isCodeShow === true &&
         this.showingCol.isPreviewShow === false
       ) {
-        return '代码'
+        return this.$t('editor.code')
       }
       if (
         this.showingCol.isCodeShow === true &&
         this.showingCol.isPreviewShow === true
       ) {
-        return '分屏'
+        return this.$t('editor.splitScreen')
       }
     },
     isActivePageSaved() {

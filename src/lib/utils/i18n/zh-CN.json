@@ -1,3 +1,25 @@
 {
-  "hello": "你好"
+  "common": {
+    "welcomeToKeepwork": "欢迎来到 Keepwork",
+    "createNewWebsite": "创建新网站"
+  },
+  "editor": {
+    "save": "保存",
+
+    "preview": "预览",
+    "code": "代码",
+    "splitScreen": "分屏",
+
+    "refresh": "刷新",
+    "close": "关闭",
+    "delete": "删除",
+
+    "openedFiles": "已打开",
+    "myPersonalWebsites": "我创建的网站",
+    "myContributedWebsites": "我参与的网站",
+    "myContributedWebsitesTip": "获得他人网站的编辑权限后，将会在这里显示",
+
+    "noPersonalWebsite": "还没有创建网站",
+    "createWebsiteNow": "现在创建"
+  }
 }

@@ -12,18 +12,16 @@ import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import { broadcast } from 'vuex-iframe-sync'
-import { messages as i18nMessages } from '@/lib/utils/i18n'
-Vue.use(fullscreen)
+import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 
+Vue.use(fullscreen)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: 'zh-CN',
-  messages: {
-    ...i18nMessages
-  }
+  locale,
+  messages: i18nMessages
 })
 
 Vue.use(ElementUI, {

@@ -3,7 +3,7 @@
 
     <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
       <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
-        <i class="el-icon-arrow-right"></i> 已打开
+        <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
       </h1>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
@@ -13,13 +13,13 @@
             </span>
             <span class=''>{{ node.label }}</span>
             <span class="file-manager-buttons-container">
-              <el-button v-if='isSaveble(data)' v-loading='data.savePending' class="iconfont icon-baocun" size="mini" type="text" title='保存' @click.stop='save(data)'>
+              <el-button v-if='isSaveble(data)' v-loading='data.savePending' class="iconfont icon-baocun" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
               </el-button>
-              <el-button class="iconfont icon-shuaxin" size="mini" type="text" title='刷新' @click.stop='refreshOpenedFile(data)'>
+              <el-button class="iconfont icon-shuaxin" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-guanxi" size="mini" type="text" title='关闭' @click.stop='closeOpenedFile(data)'>
+              <el-button class="iconfont icon-guanxi" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-shanchu" size="mini" type="text" title='删除' @click.stop="removeFile(data)">
+              <el-button class="iconfont icon-shanchu" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
             </span>
           </span>
@@ -29,7 +29,7 @@
 
     <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
       <h1 class="toggle-bar" @click='toggleContent("isMyShow")'>
-        <i class="el-icon-arrow-right"></i> 我创建的网站
+        <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
       </h1>
       <el-collapse-transition>
         <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
@@ -37,15 +37,15 @@
       </el-collapse-transition>
       <el-collapse-transition>
         <div class="empty" v-if="personalSiteList.length <= 0">
-          <p class="info">还没有创建网站</p>
-          <el-button type='text'>现在创建</el-button>
+          <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
+          <el-button type='text'>{{ $t('editor.createWebsiteNow') }}</el-button>
         </div>
       </el-collapse-transition>
     </div>
 
     <div class="joined-tree tree-item" :class="{'is-active': trees.isContributedShow}">
       <h1 class="toggle-bar" @click='toggleContent("isContributedShow")'>
-        <i class="el-icon-arrow-right"></i> 我参与的网站
+        <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
         <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="contributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
@@ -53,7 +53,7 @@
       </el-collapse-transition>
       <el-collapse-transition>
         <div class="empty" v-show="trees.isContributedShow">
-          <p class="info">获得他人网站的编辑权限后，将会在这里显示</p>
+          <p class="info">{{ $t('editor.myContributedWebsitesTip') }}</p>
         </div>
       </el-collapse-transition>
     </div>
