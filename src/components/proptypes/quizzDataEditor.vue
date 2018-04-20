@@ -4,7 +4,7 @@
       <el-form-item label="Type:" prop="type">
         <el-radio-group v-model="ruleForm.type">
           <el-radio label="0">Single Choices</el-radio>
-          <el-radio label="1">Mutiple Choices</el-radio>
+          <el-radio label="1">Multiple Choices</el-radio>
           <el-radio label="2">True or False</el-radio>
         </el-radio-group>
       </el-form-item>
@@ -29,13 +29,13 @@
       </el-form-item>
 
       <!-- 多选题 -->
-      <el-form-item label="Answer options:" prop="mutiple" v-if="ruleForm.type == 1">
+      <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
 
-        <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.mutiple">
+        <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
 
-          <div class="flex-center-between" v-for="(opt, index) in ruleForm.mutipleOptions">
+          <div class="flex-center-between" v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
@@ -58,7 +58,7 @@
       </el-form-item>
 
       <el-form-item label="Score:" prop="score">
-        <el-input v-model="ruleForm.score" placeholder="Please Input..." :style="{ width: '20%'}"></el-input>
+        <el-input v-model.number="ruleForm.score" placeholder="Please Input..." :style="{ width: '20%'}"></el-input>
       </el-form-item>
 
       <el-form-item label="Explanation:" prop="desc">
@@ -77,7 +77,7 @@
 export default {
   name: 'quizzDataEditor',
   props: {
-    isEditorShow: Boolean,
+    isEditorShow: Boolean
   },
 
   data() {
@@ -90,13 +90,18 @@ export default {
         type: '0',
         title: '',
         single: '',
-        mutiple: [],
+        multiple: [],
         judge: '',
         singleOptions: [{
           item: ''
         }],
-        mutipleOptions: [{
+        multipleOptions: [{
           item: ''
+        }],
+        judgeOptions: [{
+          item: 'True'
+        },{
+          item: 'False'
         }],
         score: '',
         desc: '',
@@ -108,14 +113,15 @@ export default {
         single: [
           { required: true, message: 'please select', trigger: 'change'}
         ],
-        mutiple: [
+        multiple: [
           { type: 'array', required: true, message: 'please select', trigger: 'change'}
         ],
         judge: [
           { required: true, message: 'please select', trigger: 'change' }
         ],
         score: [
-          { required: true, message: 'please input score', trigger: 'blur'}
+          { required: true, message: 'please input score', trigger: 'blur'},
+          { type: 'number', required: true, message: 'please input number type', trigger: 'blur'}
         ],
         desc: [
           { required: true, message: 'please input explanation', trigger: 'blur' }
@@ -136,9 +142,9 @@ export default {
     removeOption(item, type) {  // 移除选项
       // 多选
       if(type == 1) {
-        var index = this.ruleForm.mutipleOptions.indexOf(item)
+        var index = this.ruleForm.multipleOptions.indexOf(item)
         if (index !== -1) {
-          this.ruleForm.mutipleOptions.splice(index, 1)
+          this.ruleForm.multipleOptions.splice(index, 1)
         }
       }else{ // 单选
         var index = this.ruleForm.singleOptions.indexOf(item)
@@ -150,7 +156,7 @@ export default {
     addOption(type) {  // 添加选项
       // 多选
       if(type == 1) {
-        this.ruleForm.mutipleOptions.push({
+        this.ruleForm.multipleOptions.push({
           item: ''
         });
       }else{ // 单选
@@ -174,13 +180,14 @@ export default {
             writerQA.options = this.ruleForm.singleOptions;
             writerQA.answer = this.ruleForm.single;
           }else if(type == 1) { // 多选
-             writerQA.options = this.ruleForm.mutipleOptions;
-             writerQA.answer = this.ruleForm.mutiple;
+             writerQA.options = this.ruleForm.multipleOptions;
+             writerQA.answer = this.ruleForm.multiple;
           }else {  // 判断题
+             writerQA.options = this.ruleForm.judgeOptions;
              writerQA.answer = this.ruleForm.judge;
           }
 
-          this.quizzData.push(writerQA);
+          this.quizzData = [writerQA];
           this.handleClose();
           this.$emit('finishEditing', this.quizzData);
         } else {
