@@ -173,10 +173,13 @@ const actions = {
     commit(GET_SITE_DETAIL_INFO_SUCCESS, {username, sitename, detailInfo})
   },
   async createComment(context, { url: path, content }) {
-    let { dispatch, commit, getters: { authRequestConfig }, rootGetters } = context
+    let { dispatch, commit, getters, rootGetters } = context
     let fullPath = getFileFullPathByPath(path)
-    // todo fix createComment
-    let { _id: websiteId, userId } = rootGetters['user/getPersonalSiteInfoByPath'](path)
+
+    await dispatch('getProfile')
+    let { authRequestConfig, userId } = getters
+    await dispatch('getWebsiteDetailInfoByPath', { path })
+    let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
     let payload = {websiteId, userId, url: fullPath, content}
     let { commentList } = await keepwork.websiteComment.create(payload, authRequestConfig)
@@ -185,8 +188,8 @@ const actions = {
     await dispatch('getCommentsByPageUrl', {url: fullPath})
   },
   async createCommentForActivePage(context, { content }) {
-    let { dispatch, rootGetters: { activePage } } = context
-    await dispatch('createComment', {url: activePage, content})
+    let { dispatch, rootGetters: { activePageUrl } } = context
+    await dispatch('createComment', {url: activePageUrl, content})
   },
   async deleteCommentById(context, { _id }) {
     let { dispatch, commit, getters: { authRequestConfig } } = context
@@ -195,17 +198,16 @@ const actions = {
     commit(DELETE_COMMENT_SUCCESS, { _id })
     await dispatch('getActivePageComments')
   },
-  async getCommentsByPageUrl(context, { url: path }) {
-    let { commit, getters: { authRequestConfig } } = context
+  async getCommentsByPageUrl({ commit }, { url: path }) {
     let fullPath = getFileFullPathByPath(path)
 
-    let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath}, authRequestConfig)
+    let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath})
 
     commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList})
   },
   async getActivePageComments(context) {
-    let { dispatch, rootGetters: { activePage } } = context
-    await dispatch('getCommentsByPageUrl', {url: activePage})
+    let { dispatch, rootGetters: { activePageUrl } } = context
+    await dispatch('getCommentsByPageUrl', {url: activePageUrl})
   },
   async starPages(context, { url, visitor }) {
     let { commit, getters: { authRequestConfig } } = context

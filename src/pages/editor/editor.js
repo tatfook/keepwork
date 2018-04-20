@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 // import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
-// import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 import EditorPage from './EditorPage'
 import router from './editor.router'
 import { editorModule, userModule, gitlabModule } from '@/store'
@@ -35,9 +35,9 @@ const store = new Vuex.Store({
     editor: editorModule
   },
   plugins: [
-    // createPersistedState({
-    //   paths: ['user', 'gitlab', 'editor']
-    // }),
+    createPersistedState({
+      paths: ['user'] // , 'gitlab', 'editor']
+    }),
     broadcast('frameViewport')
   ]
 })

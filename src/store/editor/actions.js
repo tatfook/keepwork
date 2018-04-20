@@ -64,13 +64,13 @@ const actions = {
       rootGetters: { 'user/username': username }
     } = context
 
-    commit(SET_ACTIVE_PAGE, { path, username })
-    if (path === '/') return
+    if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
 
     const pageData = getters.openedFiles[getFileFullPathByPath(path)]
     if (!activePageCacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
+    commit(SET_ACTIVE_PAGE, { path, username })
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl } = getters
