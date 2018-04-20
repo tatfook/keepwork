@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import fullscreen from 'vue-fullscreen'
+import VueClipboard from 'vue-clipboard2'
 // import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import createPersistedState from 'vuex-persistedstate'
@@ -15,6 +16,8 @@ import { broadcast } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 
 Vue.use(fullscreen)
+Vue.use(VueClipboard)
+
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
