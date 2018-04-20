@@ -5,8 +5,9 @@ WORKDIR /code
 # RUN npm --registry https://registry.npm.taobao.org install
 # RUN npm --registry https://registry.npm.taobao.org update
 # RUN npm run build
-RUN yarn install 
-RUN yarn build
+ARG BUILD_ENV
+RUN yarn install
+RUN NODE_ENV=${BUILD_ENV} yarn build
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
