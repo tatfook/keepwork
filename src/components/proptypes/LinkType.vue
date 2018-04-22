@@ -5,7 +5,7 @@
 import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
-  name: 'InputType',
+  name: 'LinkType',
   props: {
     editingKey: String,
     originValue: String
