@@ -6,15 +6,13 @@ export const initPageState = () => {
     modList: [],
     activeMod: null,
     activeProperty: null,
-    // layout: {
-    //   header: {},
-    //   footer: {},
-    //   siderbar: {}
-    // },
-    theme: {
-      name: 'classic',
-      colorID: 0,
-      fontID: 0
+    activeArea: 'main',
+    displayLayout: true,
+    layout: {
+      styleID: 1,
+      header: null,
+      footer: null,
+      sidebar: null
     },
     undoManager: new SimpleUndo(),
     activeComponentType: '',
@@ -22,10 +20,34 @@ export const initPageState = () => {
   }
 }
 
+export const initLayoutPageState = () => {
+  return {
+    modList: [],
+    activeMod: null,
+    activeProperty: null,
+    undoManager: new SimpleUndo(),
+    activeComponentType: '',
+    newModPosition: gConst.POSITION_AFTER // after active mod
+  }
+}
+
+export const initSiteState = () => {
+  return {
+    layoutConfig: [],
+    pages: {},
+    theme: {
+      name: 'classic',
+      colorID: 0,
+      fontID: 0
+    }
+  }
+}
+
 const state = () => ({
   activePage: null,
   activePageUrl: '',
   openedFiles: {},
+  siteSettings: {}, // user -> site -> {layouts, header, footer, sidebar}
   filemanagerTreeNodeExpandMapByPath: {},
 
   showingCol: {

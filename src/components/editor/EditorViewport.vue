@@ -1,10 +1,10 @@
 <template>
-  <div class='viewport-container'>
+  <div class='viewport-container' v-if='layout'>
     <component :is='layoutTemplate'>
-      <mod-list-viewer v-if='hasHeader' slot='header' modList='headerModList' />
-      <mod-list-viewer v-if='hasFooter' slot='footer' modList='footerModList' />
-      <mod-list-viewer v-if='hasSidebar' slot='sidebar' modList='sidebarModList' />
-      <mod-list-viewer modList='modList' />
+      <editor-viewport-partial v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' :area='HEADER_AREA' />
+      <editor-viewport-partial v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' :area='FOOTER_AREA' />
+      <editor-viewport-partial v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' :area='SIDEBAR_AREA' />
+      <editor-viewport-partial :modList='mainModList' :theme='theme' :area='MAIN_AREA' />
     </component>
   </div>
 </template>
@@ -12,6 +12,13 @@
 <script>
 import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
+import {
+  MAIN_AREA,
+  HEADER_AREA,
+  FOOTER_AREA,
+  SIDEBAR_AREA
+} from '@/lib/mod/layout/const'
+import EditorViewportPartial from './EditorViewportPartial'
 import EditorModSelector from './EditorModSelector'
 import layoutTemplates from '@/components/adi/layout/templates'
 import themeFactory from '@/lib/theme/theme.factory'
@@ -26,16 +33,18 @@ export default {
   },
   components: {
     EditorModSelector,
+    EditorViewportPartial,
     draggable
   },
   computed: {
     ...mapGetters({
       layout: 'layout',
-      modList: 'modList',
+      mainModList: 'mainModList',
       headerModList: 'headerModList',
       footerModList: 'footerModList',
       sidebarModList: 'sidebarModList',
-      themeConf: 'themeConf'
+      themeConf: 'themeConf',
+      activeArea: 'activeArea'
     }),
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)

@@ -1,6 +1,10 @@
 import _ from 'lodash'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
-import undoHelper from '@/lib/utils/undo/undoHelper'
+import {
+  getFileFullPathByPath,
+  getFileSitePathByPath
+} from '@/lib/utils/gitlab'
+import UndoHelper from '@/lib/utils/undo/undoHelper'
+import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
   openedFiles: (state, getters, rootState, { 'user/username': username }) =>
@@ -21,15 +25,17 @@ const getters = {
     return { username, sitename, isLegal, fullPath, sitepath, paths, saved }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  code: (state, { activePage = {} }) =>
-    (activePage && activePage.content) || '',
-
-  themeConf: state => {
-    if (state.activePage) return state.activePage.theme
+  code: (state, { activePage }) => (activePage && activePage.content) || '',
+  themeConf: (state, { siteSetting }) => {
+    if (siteSetting) return siteSetting.theme
     return {}
   },
-  modList: state => {
-    if (state.activePage) return state.activePage.modList
+  activeArea: (state, { activePage }) => activePage && activePage.activeArea,
+  modList: (state, { mainModList, layout, activeArea, siteSetting }) => {
+    if (activeArea === 'main') return mainModList
+    else if (layout && layout[activeArea]) {
+      return siteSetting.pages[layout.header].modList
+    }
     return []
   },
   activeMod: state => {
@@ -51,11 +57,28 @@ const getters = {
   },
   showingCol: state => state.showingCol,
   canUndo: state =>
-    state.activePage && undoHelper.canUndo(state.activePage.undoManager),
+    state.activePage && UndoHelper.canUndo(state.activePage.undoManager),
   canRedo: state =>
-    state.activePage && undoHelper.canRedo(state.activePage.undoManager),
+    state.activePage && UndoHelper.canRedo(state.activePage.undoManager),
   filemanagerTreeNodeExpandMapByPath: state =>
-    state.filemanagerTreeNodeExpandMapByPath
+    state.filemanagerTreeNodeExpandMapByPath,
+
+  allSiteSettings: state => state.siteSettings,
+  sitePath: state => getFileSitePathByPath(state.activePageUrl),
+  siteSetting: (state, { allSiteSettings, sitePath }) =>
+    allSiteSettings[sitePath],
+  layout: (state, { allSiteSettings, sitePath, activePageUrl }) => {
+    if (allSiteSettings[sitePath]) {
+      return LayoutHelper.getLayout(allSiteSettings[sitePath], activePageUrl)
+    }
+  },
+  headerModList: (state, { siteSetting, layout }) =>
+    layout && layout.header ? siteSetting.pages[layout.header].modList : [],
+  footerModList: (state, { siteSetting, layout }) =>
+    layout && layout.footer ? siteSetting.pages[layout.footer].modList : [],
+  sidebarModList: (state, { siteSetting, layout }) =>
+    layout && layout.sidebar ? siteSetting.pages[layout.sidebar].modList : [],
+  mainModList: state => (state.activePage ? state.activePage.modList : [])
 }
 
 export default getters

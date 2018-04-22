@@ -1,10 +1,14 @@
 import _ from 'lodash'
-import modFactory from '@/lib/mod/factory'
+import ModFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
-import undoHelper from '@/lib/utils/undo/undoHelper'
+import UndoHelper from '@/lib/utils/undo/undoHelper'
+import LayoutHelper from '@/lib/mod/layout'
 import { props } from './mutations'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
-import { initPageState } from './state'
+import {
+  getFileFullPathByPath,
+  getFileSitePathByPath
+} from '@/lib/utils/gitlab'
+import { initPageState, initSiteState } from './state'
 
 const {
   SET_ACTIVE_PAGE,
@@ -17,6 +21,7 @@ const {
   SET_ACTIVE_PROPERTY,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
+  SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
   UPDATE_MODS,
@@ -33,10 +38,12 @@ const {
 
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
-  CLOSE_OPENED_FILE
+  CLOSE_OPENED_FILE,
+
+  REFRESH_SITE_SETTINGS
 } = props
 
-const activePageCacheAvailable = pageData => {
+const cacheAvailable = pageData => {
   if (_.isEmpty(pageData)) return false
 
   let savedExpires = 5 * 60 * 1000 // 5 mins
@@ -58,6 +65,7 @@ const activePageCacheAvailable = pageData => {
 const actions = {
   async setActivePage(context, { path, editorMode = true }) {
     let {
+      state,
       getters,
       commit,
       dispatch,
@@ -66,8 +74,15 @@ const actions = {
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
 
+    const sitePath = getFileSitePathByPath(path)
+    const siteData = state.siteSettings[sitePath]
+
+    if (!cacheAvailable(siteData)) {
+      await dispatch('refreshSiteSettings', { sitePath })
+    }
+
     const pageData = getters.openedFiles[getFileFullPathByPath(path)]
-    if (!activePageCacheAvailable(pageData)) {
+    if (!cacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     commit(SET_ACTIVE_PAGE, { path, username })
@@ -75,6 +90,8 @@ const actions = {
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl } = getters
     await dispatch('savePageByPath', activePageUrl)
+    // TODO
+    // Save layout files
   },
   async savePageByPath(
     {
@@ -92,7 +109,7 @@ const actions = {
     let { code: oldCode, activePageUrl: path, activePage } = getters
     if (newCode === oldCode) return
     dispatch('updateOpenedFile', { content: newCode, saved: false, path })
-    !historyDisabled && undoHelper.save(activePage.undoManager, newCode)
+    !historyDisabled && UndoHelper.save(activePage.undoManager, newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -123,7 +140,7 @@ const actions = {
     dispatch('refreshCode')
   },
   addMod({ commit, dispatch }, payload) {
-    const modProperties = modFactory.generate(payload.modName)
+    const modProperties = ModFactory.generate(payload.modName)
     var modPropertiesStyle
     if (payload.styleID) {
       modPropertiesStyle = modProperties
@@ -162,6 +179,14 @@ const actions = {
     { data }
   ) {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
+    dispatch('refreshCode')
+  },
+  setActiveArea({ commit, getters, dispatch }, area) {
+    if (getters.activePage.activeArea === area) return
+    // TODO save current area unless it if main area
+    commit(SET_ACTIVE_AREA, area)
+    commit(SET_ACTIVE_MOD, null)
+    commit(SET_ACTIVE_PROPERTY, null)
     dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {
@@ -210,12 +235,12 @@ const actions = {
   },
 
   undo({ state, dispatch }) {
-    undoHelper.undo(state.activePage.undoManager, (code = '') =>
+    UndoHelper.undo(state.activePage.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
   redo({ state, dispatch }) {
-    undoHelper.redo(state.activePage.undoManager, (code = '') =>
+    UndoHelper.redo(state.activePage.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
@@ -223,21 +248,55 @@ const actions = {
     commit('SET_NEW_MOD_POSITION', position)
   },
 
+  async refreshSiteSettings({ commit, dispatch, rootGetters }, { sitePath }) {
+    let siteSetting = initSiteState()
+    const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch(
+      'gitlab/readFile',
+      { path: layoutFilePath, editorMode: true },
+      { root: true }
+    )
+    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
+    let file = gitlabGetFileByPath(layoutFilePath) || ''
+    if (!file) return
+    let { content } = file
+    siteSetting.layoutConfig = LayoutHelper.buildLayouts(content)
+
+    let pages = _.flatten([
+      siteSetting.layoutConfig.headers,
+      siteSetting.layoutConfig.footers,
+      siteSetting.layoutConfig.sidebars
+    ])
+
+    for (let i = 0; i < pages.length; i++) {
+      let fileName = pages[i].name
+      let pageFilePath = LayoutHelper.layoutPagePath(sitePath, fileName)
+      await dispatch(
+        'gitlab/readFile',
+        { path: pageFilePath, editorMode: true },
+        { root: true }
+      )
+      file = gitlabGetFileByPath(pageFilePath) || ''
+      content = file.content
+      siteSetting.pages[fileName] = {
+        content,
+        modList: Parser.buildBlockList(content)
+      }
+    }
+    commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
+  },
+
   async refreshOpenedFile(
     { commit, dispatch, rootGetters, getters },
     { path, editorMode = true }
   ) {
-    await dispatch(
-      'gitlab/readFile',
-      { path, editorMode },
-      { root: true }
-    )
+    await dispatch('gitlab/readFile', { path, editorMode }, { root: true })
     let {
       'gitlab/getFileByPath': gitlabGetFileByPath,
       'user/username': username
     } = rootGetters
     let file = gitlabGetFileByPath(path)
-    if (!file && file !== '') return
+    if (!file) return
 
     let { content } = file
 

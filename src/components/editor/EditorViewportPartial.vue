@@ -1,5 +1,6 @@
 <template>
   <div class='viewport-container'>
+    <div class='mask' v-if='unActive' @click='setActiveArea' />
     <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
       <p class="info">请点击添加内容</p>
@@ -21,6 +22,12 @@ import mods from '@/components/adi/mod'
 
 export default {
   name: 'EditorViewportPartial',
+  props: {
+    theme: Object,
+    modList: Array,
+    isActive: Boolean,
+    area: String
+  },
   data() {
     return {
       mods
@@ -32,17 +39,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      modList: 'modList',
-      themeConf: 'themeConf'
+      activeArea: 'activeArea'
     }),
-    theme() {
-      let newTheme = themeFactory.generate(this.themeConf)
-      if (this.storedTheme === newTheme) return this.storedTheme
-      if (this.storedTheme) this.storedTheme.sheet.detach()
-      this.storedTheme = newTheme
-      this.storedTheme.sheet.attach()
-      return this.storedTheme
-    },
     modDraggableList: {
       get() {
         return this.modList
@@ -50,6 +48,9 @@ export default {
       set(value) {
         // do nothing
       }
+    },
+    unActive() {
+      return this.activeArea !== this.area
     }
   },
   methods: {
@@ -63,6 +64,17 @@ export default {
           newIndex: evt.moved.newIndex
         })
       }
+    },
+    maskStyle() {
+      console.log(this.$children)
+      console.log(this.$el)
+      // return {
+      //   height: this.$refs.viewport.clientHeight,
+      //   width: this.$refs.viewport.clientWidth
+      // }
+    },
+    setActiveArea() {
+      this.$store.dispatch('setActiveArea', this.area)
     }
   }
 }
@@ -92,5 +104,18 @@ export default {
   font-size: 25px;
   color: #c0c4cc;
   margin-top: 13px;
+}
+.mask {
+  z-index: 9;
+  background-color: black;
+  opacity: 0.2;
+  -moz-opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  /* right: 0;
+  bottom: 0; */
 }
 </style>

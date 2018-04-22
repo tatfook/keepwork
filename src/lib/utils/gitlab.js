@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
 
-let protocol = (location && location.protocol) ? location.protocol : 'http:'
+let protocol = location && location.protocol ? location.protocol : 'http:'
 export const webTemplateProject = {
   rawBaseUrl: `${protocol}//git.keepwork.com`,
   dataSourceUsername: 'gitlab_rls_official',
@@ -22,8 +22,12 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let treeWithChildren = {}
 
   files.forEach(file => {
-    let setKeys = file.path.substr(rootPath.length + 1).split('/').join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`).split(keysSeperator)
-    let temporaryObject = _.set({}, setKeys, {...file})
+    let setKeys = file.path
+      .substr(rootPath.length + 1)
+      .split('/')
+      .join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`)
+      .split(keysSeperator)
+    let temporaryObject = _.set({}, setKeys, { ...file })
     _.merge(treeWithChildren, temporaryObject)
   })
 
@@ -37,7 +41,9 @@ export const gitTree2NestedArray = (files, rootPath) => {
     return tree
   }
 
-  let nestedArray = convertChildren2ArrayInTree({[temporaryChildrenKey]: treeWithChildren})['children']
+  let nestedArray = convertChildren2ArrayInTree({
+    [temporaryChildrenKey]: treeWithChildren
+  })['children']
   return nestedArray
 }
 
@@ -82,7 +88,9 @@ export const getFileFullPathByPath = (() => {
       let [username, name, ...pagenames] = path.split('/').filter(x => x)
       let isSiteRootPath = !pagenames.length
 
-      let fullPathNames = isSiteRootPath ? [username, name, 'index'] : [username, name, ...pagenames]
+      let fullPathNames = isSiteRootPath
+        ? [username, name, 'index']
+        : [username, name, ...pagenames]
       let fullPath = fullPathNames.join('/')
       fullPath = suffixFileExtension(fullPath, 'md')
       cache[cacheKey] = fullPath
@@ -91,10 +99,17 @@ export const getFileFullPathByPath = (() => {
   }
 })()
 
+export const getFileSitePathByPath = path => {
+  let [username, name] = path.split('/').filter(x => x)
+
+  return [username, name].join('/')
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   webTemplateProject,
   gitTree2NestedArray,
   suffixFileExtension,
-  getFileFullPathByPath
+  getFileFullPathByPath,
+  getFileSitePathByPath
 }
