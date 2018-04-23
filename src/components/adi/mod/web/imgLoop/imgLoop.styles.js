@@ -1,15 +1,20 @@
+import _ from 'lodash'
+
 let emptyData = {
-  imgLoop: [
-    {
-      img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
-      link: 'http://keepwork.com'
-    },
-    {
-      img: require('@/../static/adi/imgLoop/imgCarouselTwo.jpg'),
-      link: 'http://keepwork.com'
-    }
-  ]
+  imgLoop: {
+    data: [
+      {
+        img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
+        link: 'http://keepwork.com'
+      },
+      {
+        img: require('@/../static/adi/imgLoop/imgCarouselTwo.jpg'),
+        link: 'http://keepwork.com'
+      }
+    ]
+  }
 }
+
 export default [
   // style 0
   {
@@ -28,10 +33,7 @@ export default [
       theme: {},
       config: {
         ...emptyData,
-        imgLoop: {
-          emptydata: emptyData,
-          height: '150px'
-        }
+        imgLoop: _.merge({}, {height: '150px'}, emptyData.imgLoop)
       }
     },
     cover: require('@/../static/adi/imgLoop/thumbnail.png')
