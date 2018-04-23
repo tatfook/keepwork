@@ -85,7 +85,7 @@ export default {
             )
           } else {
             if(!self.properties.data && self.editMode) {
-              return <div class="mx-client-start">{self.options.desc}</div>
+              return <div class="mx-client-start">{self.$t(self.options.desc)}</div>
             } else {
               return <div></div>
             }
