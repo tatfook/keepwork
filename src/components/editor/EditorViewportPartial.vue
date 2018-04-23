@@ -1,6 +1,8 @@
 <template>
   <div class='viewport-container'>
-    <div class='mask' v-if='unActive' @click='setActiveArea' />
+    <div class='mask' v-if='unActive' @click='setActiveArea'>
+      <span> 点击编辑 </span>
+    </div>
     <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
       <p class="info">请点击添加内容</p>
@@ -65,27 +67,21 @@ export default {
         })
       }
     },
-    maskStyle() {
-      console.log(this.$children)
-      console.log(this.$el)
-      // return {
-      //   height: this.$refs.viewport.clientHeight,
-      //   width: this.$refs.viewport.clientWidth
-      // }
-    },
     setActiveArea() {
       this.$store.dispatch('setActiveArea', this.area)
     }
   }
 }
 </script>
-<style scoped>
+
+<style lang="scss"  scoped>
 .viewport-container {
   flex: 1;
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 20px 0;
+  position: relative;
 }
 .add-btn-row {
   text-align: center;
@@ -113,9 +109,19 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 60px;
-  /* right: 0;
-  bottom: 0; */
+  /* width: 100%;
+  height: 60px; */
+  right: 0;
+  bottom: 0;
+  span {
+    display: none;
+    font-size: 24px;
+    color: white;
+  }
+  &:hover {
+    span {
+      display: block;
+    }
+  }
 }
 </style>

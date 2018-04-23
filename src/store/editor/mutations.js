@@ -120,6 +120,7 @@ const mutations = {
     Vue.set(state.activePage, 'activeMod', modList[newIndex])
   },
   [SET_ACTIVE_MOD](state, key) {
+    if (!key) return Vue.set(state.activePage, 'activeMod', null)
     if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
       return
     }
@@ -148,7 +149,7 @@ const mutations = {
     )
   },
   [SET_ACTIVE_AREA](state, area) {
-    state.activeArea = area
+    Vue.set(state.activePage, 'activeArea', area)
   },
   [UPDATE_ACTIVE_MOD_ATTRIBUTES](state, { key, value }) {
     const modList = activeModList(state)

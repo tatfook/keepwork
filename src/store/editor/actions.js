@@ -181,12 +181,13 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
     dispatch('refreshCode')
   },
-  setActiveArea({ commit, getters, dispatch }, area) {
-    if (getters.activePage.activeArea === area) return
+  setActiveArea({ commit, state, dispatch }, area) {
+    if (state.activePage.activeArea === area) return
     // TODO save current area unless it if main area
     commit(SET_ACTIVE_AREA, area)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_WIN_TYPE, 'ModsList')
     dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {

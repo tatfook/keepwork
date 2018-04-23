@@ -28,7 +28,11 @@ export default {
   name: 'EditorViewport',
   data() {
     return {
-      mods
+      mods,
+      MAIN_AREA,
+      HEADER_AREA,
+      FOOTER_AREA,
+      SIDEBAR_AREA
     }
   },
   components: {
