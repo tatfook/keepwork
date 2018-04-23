@@ -64,16 +64,14 @@ const actions = {
       await getProfilePromise
     }
   })(),
-  async getAllPersonalAndContributedSite({ dispatch, getters }) {
-    let { personalSiteList } = getters
-    if (personalSiteList.length) return
-
+  async getAllPersonalAndContributedSite({ dispatch }, payload) {
+    let { useCache = true } = payload || {}
     await dispatch('getProfile')
 
     return Promise.all([
-      dispatch('getAllWebsite'),
-      dispatch('getAllContributedWebsite'),
-      dispatch('getAllSiteDataSource')
+      dispatch('getAllWebsite', { useCache }),
+      dispatch('getAllContributedWebsite', { useCache }),
+      dispatch('getAllSiteDataSource', { useCache })
     ])
   },
   async createWebsite({ dispatch }, payload) {
@@ -84,8 +82,8 @@ const actions = {
     // if (siteWithTheSameName) throw new Error(`Website ${name} already exists!`)
 
     await dispatch('upsertWebsite', payload)
-    await dispatch('getAllWebsite')
-    await dispatch('getAllSiteDataSource')
+    await dispatch('getAllWebsite', { useCache: false })
+    await dispatch('getAllSiteDataSource', { useCache: false })
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
@@ -104,7 +102,7 @@ const actions = {
     }
 
     // refresh repositoryTree
-    await dispatch('gitlab/getRepositoryTree', {path: `${username}/${name}`, ignoreCache: true}, { root: true })
+    await dispatch('gitlab/getRepositoryTree', {path: `${username}/${name}`, useCache: false}, { root: true })
   },
   async getWebTemplateConfig({ commit, getters: { webTemplateConfig } }) {
     if (!_.isEmpty(webTemplateConfig)) return
@@ -135,32 +133,34 @@ const actions = {
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
-  async getAllWebsite(context, { ignoreCache = true } = {}) {
+  async getAllWebsite(context, { useCache = false } = {}) {
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
     let { username, authRequestConfig, personalSiteList } = getters
-    if (!ignoreCache && personalSiteList.length) return
+    if (useCache && personalSiteList.length) return
 
     let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
     commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
   },
-  async getAllSiteDataSource(context) {
+  async getAllSiteDataSource(context, { useCache = false }) {
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
-    let { username, authRequestConfig } = getters
-    let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
+    let { username, authRequestConfig, siteDataSourcesMap } = getters
+    if (useCache && !_.isEmpty(siteDataSourcesMap)) return
 
+    let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
   },
-  async getAllContributedWebsite(context) {
+  async getAllContributedWebsite(context, { useCache = false }) {
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
-    let { username, authRequestConfig } = getters
-    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
+    let { username, authRequestConfig, contributedSiteList } = getters
+    if (useCache && !_.isEmpty(contributedSiteList)) return
 
+    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
