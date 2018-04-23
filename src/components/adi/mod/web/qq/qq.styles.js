@@ -26,38 +26,34 @@ export default [
         top: '15%',
         'padding-top': '15px'
       },
+      colPic: {
+        'min-width': '100px',
+        display: 'flex',
+        'justify-content': 'center'
+      },
       pic: {
         width: '70px',
         height: '70px',
         'border-radius': '50%'
       },
-      colPic: {
-        'min-width': '70px',
+      colDesc: {
+        'min-width': '100px',
         display: 'flex',
-        'justify-content': 'flex-end'
+        'justify-content': 'center'
       },
       desc: {
-        width: '70px',
-        'text-align': 'center',
-        overflow: 'hidden',
-        'white-space': 'nowrap',
-        'text-overflow': 'ellipsis'
-      },
-      colDesc: {
-        'min-width': '70px',
-        display: 'flex',
-        'justify-content': 'flex-end'
+        'text-align': 'center'
       }
     },
     props: {
       colGroup: {
         xs: {
-          span: 8,
-          offset: 16
+          span: 3,
+          offset: 21
         },
         sm: {
-          span: 4,
-          offset: 20
+          span: 2,
+          offset: 22
         }
       },
       colPic: { span: 24 },
@@ -86,37 +82,40 @@ export default [
       root: {
         'z-index': '3',
         position: 'fixed',
-        height: '120px'
+        height: '100px'
       },
       colGroup: {
-        display: 'flex',
-        'justify-content': 'flex-end',
         position: 'fixed',
         right: '40px',
         top: '15%',
-        'padding-top': '15px'
+        'padding-top': '15px',
+        display: 'flex',
+        'justify-content': 'flex-end'
+      },
+      colPic: {
+        'min-width': '100px',
+        'padding-right': '10px',
+        display: 'flex',
+        'justify-content': 'flex-end'
       },
       pic: {
         width: '70px',
         height: '70px',
         'border-radius': '50%'
       },
-      colPic: {
-        'min-width': '70px'
+      colDesc: {
+        'min-width': '100px',
+        'margin-top': '48px',
+        display: 'flex',
+        'justify-content': 'flex-start'
       },
       desc: {
-        width: '70px',
+        'padding-left': '10px',
+        'padding-right': '10px',
         'text-align': 'center',
         'line-height': '19px',
         border: '1px solid #3ba4ff',
-        'border-radius': '8px',
-        overflow: 'hidden',
-        'white-space': 'nowrap',
-        'text-overflow': 'ellipsis'
-      },
-      colDesc: {
-        'min-width': '70px',
-        'margin-top': '48px'
+        'border-radius': '8px'
       }
     },
     props: {
@@ -126,8 +125,8 @@ export default [
           offset: 12
         },
         sm: {
-          span: 6,
-          offset: 18
+          span: 9,
+          offset: 15
         }
       },
       colPic: { span: 12 },
