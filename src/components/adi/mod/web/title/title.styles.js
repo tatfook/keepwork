@@ -84,7 +84,7 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/titleOne.jpeg')
+    cover: require('@/../static/adi/title/title1.png')
   },
   {
     // style 1
@@ -143,6 +143,6 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/titleTwo.jpeg')
+    cover: require('@/../static/adi/title/title2.png')
   }
 ]

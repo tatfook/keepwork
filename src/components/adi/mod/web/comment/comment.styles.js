@@ -13,6 +13,6 @@ export default [
       theme: {},
       config: {}
     },
-    cover: require('@/../static/adi/comment/comment.jpeg')
+    cover: require('@/../static/adi/comment/comment.png')
   }
 ]
