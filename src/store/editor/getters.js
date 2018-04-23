@@ -13,7 +13,7 @@ const getters = {
   activePageInfo: (state, { activePageUrl, openedFiles }) => {
     let pageInfos = activePageUrl.split('/').filter(x => x)
     let [username, sitename] = pageInfos
-    let isLegal = (username && sitename)
+    let isLegal = username && sitename
     let sitepath = isLegal ? `${username}/${sitename}` : ''
     let fullPath = isLegal ? getFileFullPathByPath(activePageUrl) : ''
     let [, , ...paths] = fullPath.split('/').filter(x => x)
@@ -38,12 +38,8 @@ const getters = {
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
   },
-  activePropertyData: state => {
-    return _.get(
-      state,
-      ['activePage', 'activeMod', 'data', state.activeProperty],
-      {}
-    )
+  activePropertyData: (state, { activeProperty }) => {
+    return _.get(state, ['activePage', 'activeMod', 'data', activeProperty], {})
   },
 
   hasActiveMod: state => state.activePage && state.activePage.activeMod,
