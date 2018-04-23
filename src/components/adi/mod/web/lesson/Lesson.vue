@@ -1,6 +1,7 @@
 <script>
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
+import axios from 'axios'
 
 export default {
   mixins: [baseMixin],
@@ -95,8 +96,6 @@ export default {
           }
           firstInFlag = false
         }
-        console.log('ttttttttttttttttttttttttttttttt')
-        console.log(tab)
         switch( tab.name ){
           case 'first': // Overview
             sliceMod('ModOverview')
@@ -120,6 +119,8 @@ export default {
 
       options.classOpClick = function() {
         console.log('class Op Click')
+        // Begin Class TODO: /api/class/begin
+        axios.post
       }
 
       return options
