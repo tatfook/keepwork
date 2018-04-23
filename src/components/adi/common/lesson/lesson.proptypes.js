@@ -4,5 +4,6 @@ export default {
   lessonNo: 'input',
   lessonTitle: 'input',
   lessonGoals: 'input',
-  animations: 'animations'
+  animations: 'animations',
+  vipFlag: false
 }

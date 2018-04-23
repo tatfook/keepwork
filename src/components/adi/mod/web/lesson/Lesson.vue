@@ -6,9 +6,11 @@ export default {
   mixins: [baseMixin],
   methods: {
     compWrapperOptions(name) {
+      console.log('init')
       let options = {}
       let self = this
       let firstInFlag = true
+
       options = _.merge(options, this.generateOptionsStyle(name))
       const mods = []
       // Tab 被点击的回调
@@ -91,22 +93,22 @@ export default {
               mods.push(modName)
             }
           }
-          console.log("---------------------")
-          console.log(mods)
           firstInFlag = false
         }
-        switch( tab.index ){
-          case '0': // Overview
+        console.log('ttttttttttttttttttttttttttttttt')
+        console.log(tab)
+        switch( tab.name ){
+          case 'first': // Overview
             sliceMod('ModOverview')
             break;
-          case '1': // Ralated Animations
+          case 'second': // Ralated Animations
             sliceMod('ModAnimations')
             console.log(self.modData.lesson.animations)
             break;
-          case '2': // Student's Performance
+          case 'third': // Student's Performance
             sliceMod('ModStudent')
             break;
-          case '3': // Summary
+          case 'fourth': // Summary
             sliceMod('ModSummary')
             break;
         }

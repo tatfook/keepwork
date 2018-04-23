@@ -13,17 +13,17 @@
           <span>{{properties.lessonGoals}}</span>
           <el-row>
             <el-button @click="playClick" type="primary">Play Paracraft</el-button>
-            <el-button @click="classOpClick" type="primary">Begin the Class</el-button>
+            <el-button @click="classOpClick" v-if="properties.vipFlag" type="primary">Begin the Class</el-button>
             <span>(Click here to begin the class)</span>
           </el-row>
         </div>
       </el-col>
     </el-row>
     <el-row>
-      <el-tabs class="tabs" @tab-click="tabClick">
+      <el-tabs class="tabs" value="first" @tab-click="tabClick">
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
-        <el-tab-pane label="Student's Performance" name="third"></el-tab-pane>
+        <el-tab-pane label="Student's Performance" v-if="properties.vipFlag" name="third"></el-tab-pane>
         <el-tab-pane label="Summary" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>
