@@ -17,7 +17,7 @@
       </div>
       <div v-if="!isLogined" class="vip-more-permission">
         <p ng-show="!editorMode">
-          <a ng-click="goLoginModal()">{{$t(options.login)}}</a>
+          <a href="http://keepwork.com/wiki/home">{{$t(options.login)}}</a>
         </p>
       </div>
       {{init()}}
