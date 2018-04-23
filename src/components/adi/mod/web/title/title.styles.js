@@ -3,7 +3,7 @@ let defaultData = {
     mode: 'horizontal',
     emptyData: [
       {
-        name: '菜单1',
+        name: 'adi.title.menu',
         link: 'http://keepwork.com'
       }
     ],
@@ -15,12 +15,12 @@ let defaultData = {
     emptyTarget: '_blank'
   },
   businessName: {
-    emptyName: 'BUSINESS NAME',
+    emptyName: 'adi.title.businessName',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   tagline: {
-    emptyName: 'TAG LINE',
+    emptyName: 'adi.title.tagLine',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   }

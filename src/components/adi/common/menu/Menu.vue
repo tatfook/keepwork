@@ -21,14 +21,14 @@ const renderTemplate = (h, m, data, parentIndex) => {
     if (!menuData.child) {
       return (
         <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
-          <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{menuData.name}</a>
+          <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{m.$t(menuData.name)}</a>
         </el-menu-item>
       )
     } else {
       return (
         <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
           <template slot="title">
-            <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{menuData.name}</a>
+            <a target={m.properties.target ? m.properties.target : m.options.emptyTarget} href={menuData.link}>{m.$t(menuData.name)}</a>
           </template>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </el-submenu>

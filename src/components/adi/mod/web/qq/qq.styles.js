@@ -5,7 +5,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   desc: {
-    emptyName: '客服中心',
+    emptyName: 'adi.qq.desc',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   }

@@ -1,7 +1,7 @@
 <template>
   <div class='comp-comment' v-loading='loading'>
     <div v-if="properties.switch.value">
-      <h3>我要评论</h3>
+      <h3>{{$t(options.title)}}</h3>
       <div class="comments-box">
         <div class="comment-item clearfix" v-for='comment in activePageCommentList' :key='comment._id'>
           <img :src="comment.userInfo.portrait">
@@ -10,16 +10,16 @@
             <p class="info">{{ comment.updateTime }}</p>
             <p>{{ comment.content }}</p>
           </div>
-          <a class="delete-btn" @click="deleteComment(comment._id)">删除</a>
+          <a class="delete-btn" @click="deleteComment(comment._id)">{{$t(options.delete)}}</a>
         </div>
       </div>
       <div class="comment-input">
-        <textarea rows="3" v-model="content" placeholder="Share your ideas!"></textarea>
-        <el-button @click="commit">提交</el-button>
+        <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
+        <el-button @click="commit">{{$t(options.commit)}}</el-button>
       </div>
     </div>
     <div class="text-center shutup-comment" v-if="!properties.switch.value">
-      评论功能已关闭
+      {{$t(options.close)}}
     </div>
   </div>
 </template>

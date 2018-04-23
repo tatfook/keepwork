@@ -16,7 +16,11 @@ export default [
     },
     options: {
       theme: {},
-      config: {}
+      config: {
+        board: {
+          desc: 'adi.board.desc'
+        }
+      }
     },
     cover: require('@/../static/adi/board/wiki_board.png')
   }
