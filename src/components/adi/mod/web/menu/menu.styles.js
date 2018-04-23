@@ -40,6 +40,6 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/menu/menu.jpeg')
+    cover: require('@/../static/adi/menu/menu.png')
   }
 ]

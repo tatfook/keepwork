@@ -31,7 +31,7 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/text/text1.jpeg')
+    cover: require('@/../static/adi/text/text1.png')
   },
   // style 1
   {
@@ -54,6 +54,6 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/text/text2.jpeg')
+    cover: require('@/../static/adi/text/text2.png')
   }
 ]
