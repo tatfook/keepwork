@@ -38,7 +38,10 @@ export default [
       },
       desc: {
         width: '70px',
-        'text-align': 'center'
+        'text-align': 'center',
+        overflow: 'hidden',
+        'white-space': 'nowrap',
+        'text-overflow': 'ellipsis'
       },
       colDesc: {
         'min-width': '70px',
@@ -106,7 +109,10 @@ export default [
         'text-align': 'center',
         'line-height': '19px',
         border: '1px solid #3ba4ff',
-        'border-radius': '8px'
+        'border-radius': '8px',
+        overflow: 'hidden',
+        'white-space': 'nowrap',
+        'text-overflow': 'ellipsis'
       },
       colDesc: {
         'min-width': '70px',
