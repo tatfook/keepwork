@@ -4,16 +4,10 @@ import SimpleUndo from '@/lib/utils/undo/simpleUndo'
 export const initPageState = () => {
   return {
     modList: [],
+    saved: true,
     activeMod: null,
     activeProperty: null,
     activeArea: 'main',
-    displayLayout: true,
-    layout: {
-      styleID: 1,
-      header: null,
-      footer: null,
-      sidebar: null
-    },
     undoManager: new SimpleUndo(),
     activeComponentType: '',
     newModPosition: gConst.POSITION_AFTER // after active mod
@@ -23,10 +17,8 @@ export const initPageState = () => {
 export const initLayoutPageState = () => {
   return {
     modList: [],
-    activeMod: null,
-    activeProperty: null,
+    saved: true,
     undoManager: new SimpleUndo(),
-    activeComponentType: '',
     newModPosition: gConst.POSITION_AFTER // after active mod
   }
 }

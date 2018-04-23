@@ -8,7 +8,7 @@ import {
   getFileFullPathByPath,
   getFileSitePathByPath
 } from '@/lib/utils/gitlab'
-import { initPageState, initSiteState } from './state'
+import { initPageState, initSiteState, initLayoutPageState } from './state'
 
 const {
   SET_ACTIVE_PAGE,
@@ -40,7 +40,8 @@ const {
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE,
 
-  REFRESH_SITE_SETTINGS
+  REFRESH_SITE_SETTINGS,
+  UPDATE_OPENED_LAYOUT_FILE
 } = props
 
 const cacheAvailable = pageData => {
@@ -88,10 +89,19 @@ const actions = {
     commit(SET_ACTIVE_PAGE, { path, username })
   },
   async saveActivePage({ getters, dispatch }) {
-    let { activePageUrl } = getters
+    let { activePageUrl, layoutPages } = getters
     await dispatch('savePageByPath', activePageUrl)
-    // TODO
     // Save layout files
+    for (let i = 0; i < layoutPages.length; i++) {
+      let pageData = layoutPages[i]
+      if (!pageData.saved) {
+        await dispatch(
+          'gitlab/saveFile',
+          { content: pageData.content, path: pageData.path },
+          { root: true }
+        )
+      }
+    }
   },
   async savePageByPath(
     {
@@ -106,10 +116,19 @@ const actions = {
     dispatch('updateOpenedFile', { saved: true, path })
   },
   updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
-    let { code: oldCode, activePageUrl: path, activePage } = getters
+    let {
+      code: oldCode,
+      activePageUrl: path,
+      activeAreaData,
+      activeArea
+    } = getters
     if (newCode === oldCode) return
-    dispatch('updateOpenedFile', { content: newCode, saved: false, path })
-    !historyDisabled && UndoHelper.save(activePage.undoManager, newCode)
+    if (activeArea === LayoutHelper.Const.MAIN_AREA) {
+      dispatch('updateOpenedFile', { content: newCode, saved: false, path })
+    } else {
+      dispatch('updateOpenedLayoutFile', { content: newCode, saved: false })
+    }
+    !historyDisabled && UndoHelper.save(activeAreaData.undoManager, newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -181,14 +200,22 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
     dispatch('refreshCode')
   },
-  setActiveArea({ commit, state, dispatch }, area) {
-    if (state.activePage.activeArea === area) return
-    // TODO save current area unless it if main area
+  async setActiveArea({ commit, getters, dispatch }, area) {
+    let { activeArea, activeAreaData } = getters
+    if (activeArea === area) return
+    // save current area unless it is main area
+    if (activeArea !== LayoutHelper.Const.MAIN_AREA && !activeAreaData.saved) {
+      await dispatch(
+        'gitlab/saveFile',
+        { content: activeAreaData.content, path: activeAreaData.path },
+        { root: true }
+      )
+    }
     commit(SET_ACTIVE_AREA, area)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_WIN_TYPE, 'ModsList')
-    dispatch('refreshCode')
+    await dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
@@ -235,13 +262,13 @@ const actions = {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
 
-  undo({ state, dispatch }) {
-    UndoHelper.undo(state.activePage.undoManager, (code = '') =>
+  undo({ getters, dispatch }) {
+    UndoHelper.undo(getters.activeAreaData.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
-  redo({ state, dispatch }) {
-    UndoHelper.redo(state.activePage.undoManager, (code = '') =>
+  redo({ getters, dispatch }) {
+    UndoHelper.redo(getters.activeAreaData.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
@@ -279,12 +306,27 @@ const actions = {
       )
       file = gitlabGetFileByPath(pageFilePath) || ''
       content = file.content
-      siteSetting.pages[fileName] = {
+      siteSetting.pages[fileName] = initLayoutPageState()
+      _.merge(siteSetting.pages[fileName], {
         content,
-        modList: Parser.buildBlockList(content)
-      }
+        modList: Parser.buildBlockList(content),
+        path: pageFilePath,
+        fileName: fileName
+      })
     }
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
+  },
+
+  async updateOpenedLayoutFile({ getters, commit }, payload) {
+    let { sitePath, activeAreaData } = getters
+
+    let commitPayload = {
+      sitePath,
+      fileName: activeAreaData.fileName,
+      data: payload
+    }
+
+    commit(UPDATE_OPENED_LAYOUT_FILE, commitPayload)
   },
 
   async refreshOpenedFile(

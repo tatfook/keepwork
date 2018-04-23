@@ -25,19 +25,21 @@ const getters = {
     return { username, sitename, isLegal, fullPath, sitepath, paths, saved }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  code: (state, { activePage }) => (activePage && activePage.content) || '',
+  code: (state, { activeAreaData }) =>
+    (activeAreaData && activeAreaData.content) || '',
   themeConf: (state, { siteSetting }) => {
     if (siteSetting) return siteSetting.theme
     return {}
   },
   activeArea: (state, { activePage }) => activePage && activePage.activeArea,
-  modList: (state, { mainModList, layout, activeArea, siteSetting }) => {
-    if (activeArea === 'main') return mainModList
-    else if (layout && layout[activeArea]) {
-      return siteSetting.pages[layout.header].modList
+  activeAreaData: (state, { activePage, layout, activeArea, siteSetting }) => {
+    if (layout && layout[activeArea]) {
+      return siteSetting.pages[layout.header]
     }
-    return []
+    return activePage
   },
+  modList: (state, { activeAreaData }) =>
+    activeAreaData && activeAreaData.modList,
   activeMod: state => {
     if (state.activePage) return state.activePage.activeMod
   },
@@ -72,13 +74,23 @@ const getters = {
       return LayoutHelper.getLayout(allSiteSettings[sitePath], activePageUrl)
     }
   },
-  headerModList: (state, { siteSetting, layout }) =>
-    layout && layout.header ? siteSetting.pages[layout.header].modList : [],
-  footerModList: (state, { siteSetting, layout }) =>
-    layout && layout.footer ? siteSetting.pages[layout.footer].modList : [],
-  sidebarModList: (state, { siteSetting, layout }) =>
-    layout && layout.sidebar ? siteSetting.pages[layout.sidebar].modList : [],
-  mainModList: state => (state.activePage ? state.activePage.modList : [])
+  header: (state, { siteSetting, layout }) =>
+    layout && layout.header && siteSetting.pages[layout.header],
+  footer: (state, { siteSetting, layout }) =>
+    layout && layout.footer && siteSetting.pages[layout.footer],
+  sidebar: (state, { siteSetting, layout }) =>
+    layout && layout.sidebar && siteSetting.pages[layout.sidebar],
+  layoutPages: (state, { header, footer, sidebar }) => {
+    let pages = []
+    if (header) pages.push(header)
+    if (footer) pages.push(footer)
+    if (sidebar) pages.push(sidebar)
+    return pages
+  },
+  mainModList: state => (state.activePage ? state.activePage.modList : []),
+  headerModList: (state, { header }) => header && header.modList,
+  footerModList: (state, { footer }) => footer && footer.modList,
+  sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList
 }
 
 export default getters
