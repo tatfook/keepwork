@@ -32,7 +32,7 @@ export default [
           mode: 'horizontal',
           emptyData: [
             {
-              name: '菜单1',
+              name: 'adi.menu.menu',
               link: 'http://keepwork.com'
             }
           ],
@@ -40,6 +40,6 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/menu/menu.jpeg')
+    cover: require('@/../static/adi/menu/menu.png')
   }
 ]

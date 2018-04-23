@@ -11,8 +11,16 @@ export default [
     },
     options: {
       theme: {},
-      config: {}
+      config: {
+        comment: {
+          title: 'adi.comment.title',
+          delete: 'adi.comment.delete',
+          commit: 'adi.comment.commit',
+          close: 'adi.comment.close',
+          notice: 'adi.comment.notice'
+        }
+      }
     },
-    cover: require('@/../static/adi/comment/comment.jpeg')
+    cover: require('@/../static/adi/comment/comment.png')
   }
 ]
