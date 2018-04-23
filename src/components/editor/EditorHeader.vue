@@ -1,35 +1,39 @@
 <template>
   <div class='editor-header'>
     <el-menu mode='horizontal'>
-      <el-submenu index='1'>
+      <el-submenu index='1' popper-class='logo-submenu'>
         <template slot='title'>
           <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
         </template>
         <el-submenu index='1-1'>
           <template slot='title'>系统</template>
           <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">新建网站</el-menu-item>
-          <el-menu-item index='1-1-2'>保存</el-menu-item>
-          <el-menu-item index='1-1-3'>网站设置</el-menu-item>
-          <el-menu-item index='1-1-4'>网站备份</el-menu-item>
-          <el-menu-item index='1-1-5'>版本管理</el-menu-item>
+          <el-menu-item index='1-1-2' :disabled='isActivePageSaved' @click='save'>保存</el-menu-item>
+          <el-menu-item index='1-1-3'>
+            <a href="/wiki/user_center?userCenterContentType=websiteManager" target="_blank">网站设置</a>
+          </el-menu-item>
+          <!-- <el-menu-item index='1-1-4'>网站备份</el-menu-item>
+          <el-menu-item index='1-1-5'>版本管理</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-2'>
           <template slot='title'>页面</template>
-          <el-menu-item index='1-2-1'>数据源</el-menu-item>
+          <el-menu-item index='1-2-1'>
+            <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=dataSource" target="_blank">数据源</a>
+          </el-menu-item>
         </el-submenu>
         <el-submenu index='1-3'>
           <template slot='title'>编辑</template>
-          <el-menu-item index='1-3-1'>撤销</el-menu-item>
-          <el-menu-item index='1-3-2'>重做</el-menu-item>
-          <el-menu-item index='1-3-3'>搜索</el-menu-item>
-          <el-menu-item index='1-3-4'>替换</el-menu-item>
+          <el-menu-item index='1-3-1' @click='undo' :disabled='!canUndo'>撤销</el-menu-item>
+          <el-menu-item index='1-3-2' @click='redo' :disabled='!canRedo'>重做</el-menu-item>
+          <!-- <el-menu-item index='1-3-3'>搜索</el-menu-item>
+          <el-menu-item index='1-3-4'>替换</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-4'>
           <template slot='title'>插入</template>
-          <el-menu-item index='1-4-1'>模块</el-menu-item>
-          <el-menu-item index='1-4-2'>网盘</el-menu-item>
+          <el-menu-item index='1-4-1' @click="changeView('ModsList')">模块</el-menu-item>
+          <!-- <el-menu-item index='1-4-2'>网盘</el-menu-item> -->
         </el-submenu>
-        <el-submenu index='1-5'>
+        <!-- <el-submenu index='1-5'>
           <template slot='title'>显示</template>
           <el-menu-item index='1-5-1'>预览</el-menu-item>
           <el-menu-item index='1-5-2'>代码</el-menu-item>
@@ -40,8 +44,10 @@
             <el-menu-item index='1-5-5-1'>电脑</el-menu-item>
             <el-menu-item index='1-5-5-2'>手机</el-menu-item>
           </el-submenu>
-        </el-submenu>
-        <el-menu-item index='1-6'>帮助</el-menu-item>
+        </el-submenu> -->
+        <el-menu-item index='1-6'>
+          <a href="/official/help/index" target="_blank">帮助</a>
+        </el-menu-item>
         <el-menu-item index='1-7'>
           <a href='/'>返回首页</a>
         </el-menu-item>
@@ -72,9 +78,8 @@
         <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
         <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
       </el-menu-item>
-
       <el-menu-item index='7 ' class='pull-right user-profile-box'>
-        <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
+        <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
@@ -103,14 +108,16 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([
-      'showingCol',
-      'activePageUrl',
-      'canUndo',
-      'canRedo',
-      'openedFiles',
-      'activePageInfo'
-    ]),
+    ...mapGetters({
+      showingCol: 'showingCol',
+      activePageUrl: 'activePageUrl',
+      canUndo: 'canUndo',
+      canRedo: 'canRedo',
+      openedFiles: 'openedFiles',
+      activePageInfo: 'activePageInfo',
+      openedFiles: 'openedFiles',
+      userProfile: 'user/profile'
+    }),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -137,7 +144,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo']),
+    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveWinType']),
     async save() {
       if (this.isActivePageSaved) {
         return
@@ -187,6 +194,9 @@ export default {
           })
         }
       )
+    },
+    changeView(type) {
+      this.setActiveWinType(type)
     }
   },
   components: {
@@ -268,3 +278,19 @@ export default {
   color: #429efd;
 }
 </style>
+<style lang="scss">
+.logo-submenu {
+  .el-menu .el-submenu__title,
+  a {
+    color: #909399;
+  }
+  a {
+    text-decoration: none;
+  }
+  .el-menu .el-submenu__title:hover,
+  a:hover {
+    color: #303133;
+  }
+}
+</style>
+

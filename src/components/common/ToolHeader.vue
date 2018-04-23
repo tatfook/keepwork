@@ -6,7 +6,7 @@
       <el-breadcrumb-item>{{activePageInfo.sitename}}</el-breadcrumb-item>
       <el-breadcrumb-item v-for="path in activePageInfo.paths" :key="path">{{path}}</el-breadcrumb-item>
     </el-breadcrumb> -->
-    <div class="breadcrumb">
+    <!-- <div class="breadcrumb">
       <a class="breadcrumb-item" href="/">http://keepwork.com</a>
       <span class="breadcrumb-separator" role="presentation">/</span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
@@ -36,7 +36,7 @@
           <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </div>
+    </div> -->
     <div class="icons">
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
