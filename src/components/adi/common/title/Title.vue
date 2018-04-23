@@ -26,8 +26,5 @@ a {
 h1 {
   margin: 0;
   font-size: unset;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>
