@@ -9,10 +9,10 @@ export default {
     return mdToJson(content) || []
   },
 
-  getLayout(siteSetting, path) {
-    const layouts = siteSetting.layoutConfig.layouts
+  getLayout(layouts, path) {
+    if (!layouts) return
     let index = _.findIndex(layouts, layout => {
-      return layout.rules && _.indexOf(layout.paths, path) !== -1
+      return layout.paths && _.indexOf(layout.paths, path) !== -1
     })
     if (index > -1) return layouts[index]
     index = _.findIndex(layouts, layout => {

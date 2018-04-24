@@ -84,7 +84,10 @@ const activeModList = state => {
 
   const sitePath = getFileSitePathByPath(state.activePageUrl)
   const siteSetting = state.siteSettings[sitePath]
-  const layout = LayoutHelper.getLayout(siteSetting, state.activePageUrl)
+  const layout = LayoutHelper.getLayout(
+    siteSetting.layoutConfig.layouts,
+    state.activePageUrl
+  )
 
   if (layout && layout[area]) {
     return siteSetting.pages[layout[area]].modList

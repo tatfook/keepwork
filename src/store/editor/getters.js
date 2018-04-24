@@ -71,7 +71,10 @@ const getters = {
     allSiteSettings[sitePath],
   layout: (state, { allSiteSettings, sitePath, activePageUrl }) => {
     if (allSiteSettings[sitePath]) {
-      return LayoutHelper.getLayout(allSiteSettings[sitePath], activePageUrl)
+      return LayoutHelper.getLayout(
+        allSiteSettings[sitePath].layoutConfig.layouts,
+        activePageUrl
+      )
     }
   },
   header: (state, { siteSetting, layout }) =>

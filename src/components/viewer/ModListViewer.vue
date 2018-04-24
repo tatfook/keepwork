@@ -11,8 +11,8 @@ import ModLoader from './ModLoader'
 
 export default {
   props: {
-    modList,
-    theme
+    modList: Array,
+    theme: Object
   },
   components: {
     ModLoader

@@ -1,15 +1,15 @@
 <template>
-  <component :is='layoutTemplate'>
-    <mod-list-viewer v-if='hasHeader' slot='header' modList='headerModList' />
-    <mod-list-viewer v-if='hasFooter' slot='footer' modList='footerModList' />
-    <mod-list-viewer v-if='hasSidebar' slot='sidebar' modList='sidebarModList' />
-    <mod-list-viewer modList='modList' />
+  <component :is='layoutTemplate' v-if='layout'>
+    <mod-list-viewer v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' />
+    <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
+    <mod-list-viewer v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' />
+    <mod-list-viewer :modList='modList' :theme='theme' />
   </component>
 </template>
 
 <script>
 import layoutTemplates from '@/components/adi/layout/templates'
-import ModListViewer from './MdPageViewer'
+import ModListViewer from './ModListViewer'
 import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
 
