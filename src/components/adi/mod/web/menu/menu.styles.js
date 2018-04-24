@@ -7,9 +7,6 @@ export default [
       menu: {
         height: '50px',
         margin: 'auto'
-      },
-      colMenu: {
-        'margin-top': '20px'
       }
     },
     props: {
