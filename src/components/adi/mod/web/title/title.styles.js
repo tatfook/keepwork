@@ -61,7 +61,7 @@ export default [
       colGroupARow: { gutter: 10 }
     },
     theme: {
-      root: ['mod-space'],
+      root: [],
       colGroupRow: ['mod-full-width'],
       businessName: ['font_1', 'color_4'],
       tagline: ['font_3', 'color_2'],
@@ -121,7 +121,7 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['mod-space'],
+      root: [],
       businessName: ['font_1', 'color_4'],
       tagline: ['font_3', 'color_2'],
       menu: ['mod-full-width'],

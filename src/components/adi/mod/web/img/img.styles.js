@@ -26,7 +26,7 @@ export default [
       colImg: { span: 24 }
     },
     theme: {
-      root: ['mod-space']
+      root: []
     },
     options: {
       theme: {},
@@ -55,7 +55,7 @@ export default [
       colImg: { span: 24 }
     },
     theme: {
-      root: ['mod-space']
+      root: []
     },
     options: {
       theme: {},
