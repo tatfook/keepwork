@@ -1,34 +1,57 @@
 <script>
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
-import axios from 'axios'
+
+const hideMod = function(name, flag) {
+  let eles = document.getElementsByTagName('div')
+  for(let i =0; i < eles.length; i++) {
+    let ele = eles[i]
+    if(ele.getAttribute('data-mod')==name){
+      if(flag) {
+        ele.setAttribute('hidden', 'hidden')
+      }else {
+        ele.removeAttribute('hidden')
+      }
+    }
+  }
+}
+
+const init = function(){
+  console.log('init')
+  let query = location.href.split('?')[1]
+  let device
+  if (query) {
+      query = query.split('&');
+      for (var i = 0; i < query.length; i++) {
+          var ary = query[i].split('=');
+          if (ary[0] == 'device' && ary[1]) {
+              device = ary[1];
+              break;
+          }
+      }
+  }
+  if (device == 'pc' || device == 'pad') {
+    document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
+    document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
+    hideMod('ModLesson', true)
+  }
+}
 
 export default {
+  mounted: function(){
+    init()
+  },
   mixins: [baseMixin],
   methods: {
     compWrapperOptions(name) {
-      console.log('init')
       let options = {}
       let self = this
       let firstInFlag = true
-
       options = _.merge(options, this.generateOptionsStyle(name))
       const mods = []
+      options.defaultCover = require('@/../static/adi/imgLoop/imgCarouselOne.jpg')
       // Tab 被点击的回调
       options.tabClick = function(tab) {
-        const hideMod = function(name, flag) {
-          let eles = document.getElementsByTagName('div')
-          for(let i =0; i < eles.length; i++) {
-            let ele = eles[i]
-            if(ele.getAttribute('data-mod')==name){
-              if(flag) {
-                ele.setAttribute('hidden', 'hidden')
-              }else {
-                ele.removeAttribute('hidden')
-              }
-            }
-          }
-        }
         // 切换显示的页卡
         const sliceMod = function(name) {
            // ["ModLesson", "ModMarkdown", "ModQuizz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
@@ -122,7 +145,6 @@ export default {
         // Begin Class TODO: /api/class/begin
         axios.post
       }
-
       return options
     }
   }

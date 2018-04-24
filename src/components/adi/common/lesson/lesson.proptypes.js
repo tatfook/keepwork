@@ -1,9 +1,8 @@
 export default {
-  lessonVideoSrc: 'input',
-  lessonCoverSrc: 'input',
   lessonNo: 'input',
   lessonTitle: 'input',
-  lessonGoals: 'input',
-  animations: 'animations',
-  vipFlag: false
+  lessonGoals: 'autoSizeInput',
+  lessonVideoSrc: 'input',
+  lessonCoverSrc: 'input',
+  animations: 'animations'
 }

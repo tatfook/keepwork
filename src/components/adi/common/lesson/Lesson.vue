@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="index-page-lesson">
     <el-row>
       <el-col :span="8">
         <div :style="loadCover(properties)">
@@ -7,14 +7,14 @@
         </div>
       </el-col>
       <el-col :span="16">
-        <div class="lessonDesc">
+        <div class="lessonDesc">  
           <span>Lesson {{properties.lessonNo}}: {{properties.lessonTitle}}</span><br>
           <span>Lesson Goals:</span><br>
           <span>{{properties.lessonGoals}}</span>
           <el-row>
             <el-button @click="playClick" type="primary">Play Paracraft</el-button>
-            <el-button @click="classOpClick" v-if="properties.vipFlag" type="primary">Begin the Class</el-button>
-            <span>(Click here to begin the class)</span>
+            <el-button @click="classOpClick" v-if="properties.vip" type="primary">Begin the Class</el-button>
+            <span v-if="properties.vip">(Click here to begin the class)</span>
           </el-row>
         </div>
       </el-col>
@@ -23,7 +23,7 @@
       <el-tabs class="tabs" value="first" @tab-click="tabClick">
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
-        <el-tab-pane label="Student's Performance" v-if="properties.vipFlag" name="third"></el-tab-pane>
+        <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
         <el-tab-pane label="Summary" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>

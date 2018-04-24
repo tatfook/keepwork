@@ -1,8 +1,8 @@
 export default {
-  lessonVideoSrc: '',
-  lessonCoverSrc: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
-  lessonNo: 'ch1',
+  lessonNo: '1',
   lessonTitle: 'lesson title',
   lessonGoals: 'lesson goals',
+  lessonVideoSrc: '',
+  lessonCoverSrc: require('@/../static/adi/mixPosition/stitching.png'),
   animations: []
 }
