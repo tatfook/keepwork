@@ -60,5 +60,82 @@ export default [
         }
       ]
     }
+  ],
+
+  // template 3
+  [
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colMedia: 'media' },
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    { colSpace: [] },
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colMedia: 'media' },
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  // template 4
+  [
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colMedia: 'media' },
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      colGroup: [
+        {
+          colGroupA: [
+            { colMedia: 'media' },
+            {
+              colGroupAA: [
+                { colTitle: 'title' },
+                { colSubtitle: 'subtitle' },
+                { colParagraph: 'paragraph' },
+                { colButton: 'button' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
 ]
