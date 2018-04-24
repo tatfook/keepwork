@@ -209,9 +209,11 @@ const actions = {
     let { dispatch, rootGetters: { activePageUrl } } = context
     await dispatch('getCommentsByPageUrl', {url: activePageUrl})
   },
-  async starPages(context, { url, visitor }) {
-    let { commit, getters: { authRequestConfig } } = context
-    let pageStarResult = await keepwork.pages.star({url, visitor}, authRequestConfig)
+  async starPages(context, { url }) {
+    let { commit, dispatch, getters } = context
+    await dispatch('getProfile')
+    let { username, authRequestConfig } = getters
+    let pageStarResult = await keepwork.pages.star({url, visitor: username}, authRequestConfig)
     commit(SET_PAGE_STAR_DETAIL, pageStarResult)
   },
   async initPageDetail(context, { url, visitor }) {

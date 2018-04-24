@@ -92,14 +92,16 @@ export default {
     },
     async togglePageStar() {
       this.starPending = true
-      try {
-        await this.starPages({
-          url: this.activePageUrl,
-          visitor: this.username
+      await this.starPages({
+        url: this.activePageUrl
+      }).catch(e => {
+        console.log(e)
+        this.$message({
+          showClose: true,
+          message: '出错啦，请重试',
+          type: 'error'
         })
-      } catch (error) {
-        console.log(error)
-      }
+      })
       this.starPending = false
     }
   }
