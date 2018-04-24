@@ -1,5 +1,5 @@
 <template>
-  <div class='viewport-container'>
+  <div class='viewport-partial' :class='activeClass'>
     <div class='mask' v-if='unActive' @click='setActiveArea'>
       <span> 点击编辑 </span>
     </div>
@@ -53,6 +53,9 @@ export default {
     },
     unActive() {
       return this.activeArea !== this.area
+    },
+    activeClass() {
+      if (this.activeArea === this.area) return 'active'
     }
   },
   methods: {
@@ -75,13 +78,14 @@ export default {
 </script>
 
 <style lang="scss"  scoped>
-.viewport-container {
-  flex: 1;
+.viewport-partial {
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  min-height: 20px;
+  &.active {
+    padding: 20px 0;
+  }
 }
 .add-btn-row {
   text-align: center;

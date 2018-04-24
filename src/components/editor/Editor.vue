@@ -16,10 +16,10 @@
     <div class="col-between"></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
-        <el-button-group>
+        <!-- <el-button-group>
           <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
           <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
-        </el-button-group>
+        </el-button-group> -->
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
           <el-button class="btn-enlarge" title="放大"></el-button>
@@ -395,7 +395,7 @@ export default {
 .code-win-fullscreen {
   width: 100% !important;
   height: 100%;
-  background-color:#cdd4dc;
+  background-color: #cdd4dc;
   max-width: 1080px;
 }
 </style>
