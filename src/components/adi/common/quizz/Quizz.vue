@@ -1,6 +1,7 @@
 <template>
   <div class="comp-quizz">
     <div v-for="item in properties.data" :data-id="item.id">
+      <h3 class="no">Quiz </h3>
       <div>{{ item.title }}</div>
 
       <ol type="A">
@@ -29,5 +30,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  [mod-container], .viewport-container {
+    counter-reset: no;
+  }
+  [data-mod="ModQuizz"] .no:after {
+    content: counters(no, '-');
+    counter-increment: no;
+  }
+</style>
 
 
