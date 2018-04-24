@@ -1,12 +1,15 @@
 import _ from 'lodash'
-import { mdToJson } from '../parser/mdParser'
+// import { mdToJson } from '../parser/mdParser'
+import {
+  getRelativePathByPath
+} from '@/lib/utils/gitlab'
 import Const from './const'
 
 export default {
   Const,
 
   buildLayouts(content) {
-    return mdToJson(content) || []
+    return JSON.parse(content)
   },
 
   getLayout(layouts, path) {
@@ -22,12 +25,44 @@ export default {
     console.error('missing default layout!')
   },
 
+  // {
+  //   "layoutConfig": {
+  //     "defaultLayoutId": 0,
+  //     "layouts": [
+  //       {
+  //         "id": 0,
+  //         "name": "Basic",
+  //         "styleName": "basic",
+  //         "match": "",
+  //         "content": {
+  //           "footer": "footer.md",
+  //           "header": "header.md",
+  //           "sidebar": "sidebar.md"
+  //         }
+  //       }
+  //     ]
+  //   },
+  //   "pages": {
+  //     "index.md": {
+  //       "layout": 0
+  //     }
+  //   }
+  // }
+  getLayoutByPath(siteLayoutConfig, path) {
+    let defaultLayoutId = _.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0)
+    let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
+    let relativePath = getRelativePathByPath(path)
+    let targetPageLayoutId = _.get(siteLayoutConfig, ['pages', relativePath, 'layout'], defaultLayoutId)
+    let targetLayout = _.keyBy(allLayouts, 'id')[targetPageLayoutId]
+    return targetLayout
+  },
+
   layoutRootPath(sitePath) {
     return sitePath + '/_config/'
   },
 
   layoutFilePath(sitePath) {
-    return this.layoutRootPath(sitePath) + 'layout'
+    return this.layoutRootPath(sitePath) + 'layout.json'
   },
 
   layoutPagePath(sitePath, pageName) {

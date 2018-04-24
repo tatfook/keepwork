@@ -33,8 +33,10 @@ const getters = {
   },
   activeArea: (state, { activePage }) => activePage && activePage.activeArea,
   activeAreaData: (state, { activePage, layout, activeArea, siteSetting }) => {
-    if (layout && layout[activeArea]) {
-      return siteSetting.pages[layout[activeArea]]
+    let targetLayoutContentFileName = _.get(layout, ['content', activeArea])
+    let targetLayoutContentFilePath = `${activeArea}s/${targetLayoutContentFileName}`
+    if (targetLayoutContentFileName && targetLayoutContentFilePath) {
+      return siteSetting.pages[targetLayoutContentFilePath]
     }
     return activePage
   },
@@ -69,20 +71,32 @@ const getters = {
   sitePath: state => getFileSitePathByPath(state.activePageUrl),
   siteSetting: (state, { allSiteSettings, sitePath }) =>
     allSiteSettings[sitePath],
-  layout: (state, { allSiteSettings, sitePath, activePageUrl }) => {
-    if (allSiteSettings[sitePath]) {
-      return LayoutHelper.getLayout(
-        allSiteSettings[sitePath].layoutConfig.layouts,
+  layout: (state, { siteSetting, activePageUrl }) => {
+    if (siteSetting) {
+      return LayoutHelper.getLayoutByPath(
+        siteSetting.siteLayoutConfig,
         activePageUrl
       )
     }
   },
-  header: (state, { siteSetting, layout }) =>
-    layout && layout.header && siteSetting.pages[layout.header],
-  footer: (state, { siteSetting, layout }) =>
-    layout && layout.footer && siteSetting.pages[layout.footer],
-  sidebar: (state, { siteSetting, layout }) =>
-    layout && layout.sidebar && siteSetting.pages[layout.sidebar],
+  header: (state, { siteSetting, layout }) => {
+    let headerFileName = _.get(layout, ['content', 'header'])
+    if (!headerFileName) return
+    let headerFilePath = `headers/${headerFileName}`
+    return siteSetting.pages[headerFilePath]
+  },
+  footer: (state, { siteSetting, layout }) => {
+    let footerFileName = _.get(layout, ['content', 'footer'])
+    if (!footerFileName) return
+    let footerFilePath = `footers/${footerFileName}`
+    return siteSetting.pages[footerFilePath]
+  },
+  sidebar: (state, { siteSetting, layout }) => {
+    let sidebarFileName = _.get(layout, ['content', 'sidebar'])
+    if (!sidebarFileName) return
+    let sidebarFilePath = `sidebars/${sidebarFileName}`
+    return siteSetting.pages[sidebarFilePath]
+  },
   layoutPages: (state, { header, footer, sidebar }) => {
     let pages = []
     if (header) pages.push(header)

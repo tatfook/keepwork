@@ -22,13 +22,11 @@ import EditorViewportPartial from './EditorViewportPartial'
 import EditorModSelector from './EditorModSelector'
 import layoutTemplates from '@/components/adi/layout/templates'
 import themeFactory from '@/lib/theme/theme.factory'
-import mods from '@/components/adi/mod'
 
 export default {
   name: 'EditorViewport',
   data() {
     return {
-      mods,
       MAIN_AREA,
       HEADER_AREA,
       FOOTER_AREA,
@@ -67,7 +65,7 @@ export default {
       }
     },
     layoutTemplate() {
-      return layoutTemplates[this.layout.styleID]
+      return layoutTemplates[this.layout.styleName]
     }
   },
   methods: {

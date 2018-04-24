@@ -20,7 +20,6 @@ import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
 import EditorModSelector from './EditorModSelector'
 import themeFactory from '@/lib/theme/theme.factory'
-import mods from '@/components/adi/mod'
 
 export default {
   name: 'EditorViewportPartial',
@@ -32,7 +31,6 @@ export default {
   },
   data() {
     return {
-      mods
     }
   },
   components: {

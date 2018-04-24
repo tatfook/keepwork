@@ -10,7 +10,7 @@ const state = () => ({
   activePageUrl: '',
   modList: [],
   siteSetting: {
-    layoutConfig: [],
+    siteLayoutConfig: [],
     pages: {},
     theme: {
       name: 'classic',
@@ -35,7 +35,7 @@ const getters = {
   modList: state => state.modList,
   siteSetting: state => state.siteSetting,
   layout: (state, { siteSetting, activePageUrl }) =>
-    LayoutHelper.getLayout(siteSetting.layoutConfig.layouts, activePageUrl),
+    LayoutHelper.getLayout(siteSetting.siteLayoutConfig.layouts, activePageUrl),
   header: (state, { siteSetting, layout }) =>
     layout && layout.header && siteSetting.pages[layout.header],
   footer: (state, { siteSetting, layout }) =>
@@ -77,10 +77,10 @@ const actions = {
     let file = gitlabGetFileByPath(layoutFilePath) || ''
     if (!file) return
     let { content } = file
-    let layoutConfig = LayoutHelper.buildLayouts(content)
-    commit('UPDATE_LAYOUT_CONFIG', { layoutConfig })
+    let siteLayoutConfig = LayoutHelper.buildLayouts(content)
+    commit('UPDATE_LAYOUT_CONFIG', { siteLayoutConfig })
 
-    let layout = LayoutHelper.getLayout(layoutConfig.layouts, path)
+    let layout = LayoutHelper.getLayout(siteLayoutConfig.layouts, path)
     await dispatch('loadLayoutPage', { sitePath, fileName: layout.header })
     await dispatch('loadLayoutPage', { sitePath, fileName: layout.footer })
     await dispatch('loadLayoutPage', { sitePath, fileName: layout.sidebar })
@@ -112,9 +112,9 @@ const mutations = {
     let blockList = Parser.buildBlockList(code)
     Parser.updateBlockList(state.modList, blockList)
   },
-  UPDATE_LAYOUT_CONFIG(state, { layoutConfig }) {
-    console.log(layoutConfig)
-    Vue.set(state.siteSetting, 'layoutConfig', layoutConfig)
+  UPDATE_LAYOUT_CONFIG(state, { siteLayoutConfig }) {
+    console.log(siteLayoutConfig)
+    Vue.set(state.siteSetting, 'siteLayoutConfig', siteLayoutConfig)
   },
   UPDATE_LAYOUT_PAGE(state, { content, fileName }) {
     let blockList = Parser.buildBlockList(content)

@@ -26,7 +26,7 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
-import mods from '@/components/adi/mod'
+import modLoader from '@/components/adi/mod'
 import BaseCompProptypes from '@/components/adi/common/comp.proptypes'
 import PropTypeCard from '@/components/editor/PropTypeCard'
 
@@ -34,7 +34,6 @@ export default {
   name: 'ModPropertyManager',
   data: () => ({
     editable: true,
-    mods,
     BaseCompProptypes
   }),
   methods: {
@@ -76,12 +75,12 @@ export default {
     }),
     editingProps() {
       var modType = 'Mod' + this.activeMod.cmd
-      var modComponents = this.mods[modType].components
+      var modComponents = modLoader.load(modType).components
       return modComponents
     },
     cardValues() {
       var modType = 'Mod' + this.activeMod.cmd
-      var activeModDafaultDatas = mods[modType].properties
+      var activeModDafaultDatas = modLoader.load(modType).properties
       var activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
       return activeModDatas
     },
