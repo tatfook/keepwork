@@ -34,7 +34,6 @@
 
 
         <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
-
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
@@ -256,7 +255,6 @@ export default {
              writerQA.answer = this.ruleForm.judge;
           }
 
-          console.log(writerQA);
           this.quizzData = [writerQA];
           this.handleClose();
           this.$emit('finishEditing', this.quizzData);
