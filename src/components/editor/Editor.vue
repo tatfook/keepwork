@@ -287,7 +287,7 @@ export default {
   overflow: auto;
 }
 .manager-win {
-  flex-basis: 440px;
+  flex-basis: 460px;
   flex-shrink: 0;
 }
 .manager-content-box {
