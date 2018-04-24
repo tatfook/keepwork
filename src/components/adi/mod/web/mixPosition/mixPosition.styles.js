@@ -389,5 +389,147 @@ export default [
       }
     },
     cover: require('@/../static/adi/mixPosition/cover/projectFive.png')
+  },
+
+  // style 5 左图右文2X1 纵向
+  {
+    templateID: 3,
+    data: {
+      // 定义mod根div的样式
+      media: {
+        height: '280px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '280px'
+        }
+      },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
+      title: {},
+      subtitle: {
+        'margin-top': '10px'
+      },
+      paragraph: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button: {
+        'margin-top': '10px',
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      },
+      colSpace: {
+        height: '50px'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 24 },
+      colMedia: {
+        xs: { span: 10 },
+        sm: { span: 8 }
+      },
+      colGroupAA: {
+        xs: { span: 14 },
+        sm: { span: 16 }
+      },
+      colButton: {
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 3,
+          push: 21
+        }
+      }
+    },
+    theme: {
+      root: ['mod-space'],
+      colGroupRow: ['mod-full-width'],
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_7']
+    },
+    options: {
+      theme: {
+        button: {
+          bgColor: 'color_0'
+        }
+      },
+      config: {
+        ...emptyData
+      }
+    },
+    cover: require('@/../static/adi/mixPosition/cover/verticalTwo.png')
+  },
+
+  // style 6 上图下文2X1 横向
+  {
+    templateID: 4,
+    data: {
+      media: {
+        height: '340px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '170px'
+        }
+      },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
+      title: {
+        'margin-top': '20px'
+      },
+      subtitle: {
+        'margin-top': '10px'
+      },
+      paragraph: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button: {
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      }
+    },
+    props: {
+      rootRow: { gutter: 20 },
+      colGroup: { span: 12 },
+      colButton: {
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 4,
+          push: 20
+        }
+      }
+    },
+    theme: {
+      root: ['mod-space', 'mod-full-width'],
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_7']
+    },
+    options: {
+      theme: {
+        button: {
+          bgColor: 'color_0'
+        }
+      },
+      config: {
+        ...emptyData
+      }
+    },
+    cover: require('@/../static/adi/mixPosition/cover/horizontalTwo.png')
   }
 ]
