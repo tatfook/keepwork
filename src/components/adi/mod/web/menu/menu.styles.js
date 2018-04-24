@@ -16,7 +16,7 @@ export default [
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['mod-space'],
+      root: [],
       menu: ['mod-full-width', 'font_3'],
       colMenu: ['bg_color_7']
     },
