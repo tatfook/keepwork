@@ -34,7 +34,7 @@ const getters = {
   activeArea: (state, { activePage }) => activePage && activePage.activeArea,
   activeAreaData: (state, { activePage, layout, activeArea, siteSetting }) => {
     if (layout && layout[activeArea]) {
-      return siteSetting.pages[layout.header]
+      return siteSetting.pages[layout[activeArea]]
     }
     return activePage
   },

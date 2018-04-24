@@ -80,8 +80,8 @@ export default {
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 20px 0;
   position: relative;
+  min-height: 20px;
 }
 .add-btn-row {
   text-align: center;
