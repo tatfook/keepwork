@@ -5,7 +5,7 @@
         <el-button-group>
           <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -124,6 +124,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      activePage: 'activePage',
       personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
       showingCol: 'showingCol',
