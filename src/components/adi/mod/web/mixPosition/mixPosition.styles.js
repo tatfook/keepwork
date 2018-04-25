@@ -21,6 +21,29 @@ let emptyData = {
     emptyName: 'adi.mixPosition.button',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
+  },
+  media2: {
+    emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  title2: {
+    emptyName: 'adi.mixPosition.title',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  subtitle2: {
+    emptyName: 'adi.mixPosition.subtitle',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  paragraph2: {
+    emptyData: 'adi.mixPosition.paragraph'
+  },
+  button2: {
+    emptyName: 'adi.mixPosition.button',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 
@@ -399,15 +422,23 @@ export default [
       media: {
         height: '280px'
       },
+      media2: {
+        height: '280px'
+      },
       '@media only screen and (max-width: 767px)': {
         media: {
+          height: '280px'
+        },
+        media2: {
           height: '280px'
         }
       },
       colGroupAA: {
         'word-wrap': 'break-word'
       },
-      title: {},
+      colGroupBA: {
+        'word-wrap': 'break-word'
+      },
       subtitle: {
         'margin-top': '10px'
       },
@@ -421,18 +452,36 @@ export default [
         border: '1px solid #3ba4ff',
         'border-radius': '4px'
       },
-      colSpace: {
-        height: '50px'
+      subtitle2: {
+        'margin-top': '10px'
+      },
+      paragraph2: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button2: {
+        'margin-top': '10px',
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      },
+      colGroupB: {
+        'margin-top': '50px'
       }
     },
     props: {
       rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
+      colGroupBRow: { gutter: 24 },
       colMedia: {
         xs: { span: 10 },
         sm: { span: 8 }
       },
       colGroupAA: {
+        xs: { span: 14 },
+        sm: { span: 16 }
+      },
+      colGroupBA: {
         xs: { span: 14 },
         sm: { span: 16 }
       },
@@ -453,11 +502,18 @@ export default [
       title: ['font_1', 'color_7'],
       subtitle: ['font_3', 'color_2'],
       paragraph: ['font_9', 'color_4'],
-      button: ['font_10', 'color_7']
+      button: ['font_10', 'color_7'],
+      title2: ['font_1', 'color_7'],
+      subtitle2: ['font_3', 'color_2'],
+      paragraph2: ['font_9', 'color_4'],
+      button2: ['font_10', 'color_7']
     },
     options: {
       theme: {
         button: {
+          bgColor: 'color_0'
+        },
+        button2: {
           bgColor: 'color_0'
         }
       },
@@ -470,17 +526,26 @@ export default [
 
   // style 6 上图下文2X1 横向
   {
-    templateID: 4,
+    templateID: 3,
     data: {
       media: {
+        height: '340px'
+      },
+      media2: {
         height: '340px'
       },
       '@media only screen and (max-width: 767px)': {
         media: {
           height: '170px'
+        },
+        media2: {
+          height: '170px'
         }
       },
       colGroupAA: {
+        'word-wrap': 'break-word'
+      },
+      colGroupBA: {
         'word-wrap': 'break-word'
       },
       title: {
@@ -497,11 +562,28 @@ export default [
       button: {
         border: '1px solid #3ba4ff',
         'border-radius': '4px'
+      },
+      title2: {
+        'margin-top': '20px'
+      },
+      subtitle2: {
+        'margin-top': '10px'
+      },
+      paragraph2: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button2: {
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
       }
     },
     props: {
-      rootRow: { gutter: 20 },
-      colGroup: { span: 12 },
+      colGroupRow: { gutter: 20 },
+      colGroup: { span: 24 },
+      colGroupA: { span: 12 },
+      colGroupB: { span: 12 },
       colButton: {
         xs: {
           span: 6,
@@ -518,11 +600,18 @@ export default [
       title: ['font_1', 'color_7'],
       subtitle: ['font_3', 'color_2'],
       paragraph: ['font_9', 'color_4'],
-      button: ['font_10', 'color_7']
+      button: ['font_10', 'color_7'],
+      title2: ['font_1', 'color_7'],
+      subtitle2: ['font_3', 'color_2'],
+      paragraph2: ['font_9', 'color_4'],
+      button2: ['font_10', 'color_7']
     },
     options: {
       theme: {
         button: {
+          bgColor: 'color_0'
+        },
+        button2: {
           bgColor: 'color_0'
         }
       },
