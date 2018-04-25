@@ -1,8 +1,8 @@
 export default {
-  lessonNo: 'input',
-  lessonTitle: 'input',
-  lessonGoals: 'autoSizeInput',
-  lessonVideoSrc: 'input',
-  lessonCoverSrc: 'input',
+  LessonNo: 'input',
+  Title: 'input',
+  LessonGoals: 'autoSizeInput',
+  CoverImageOfTheLesson: 'input',
+  AnimationOfTheLesson: 'input',
   animations: 'animations'
 }

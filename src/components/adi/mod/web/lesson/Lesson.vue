@@ -1,6 +1,9 @@
 <script>
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
+import qs from 'qs'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div')
@@ -16,8 +19,13 @@ const hideMod = function(name, flag) {
   }
 }
 
+const lessonHost = 'http://127.0.0.1:3000'
+let vuex = {}
 const init = function(){
   console.log('init')
+  if (localStorage && localStorage.vuex) {
+    vuex = JSON.parse(localStorage.vuex)
+  }
   let query = location.href.split('?')[1]
   let device
   if (query) {
@@ -37,7 +45,28 @@ const init = function(){
   }
 }
 
+const timer = {
+  timeout: 3000, // 3s
+  timeoutObj: null,
+  reset: function() {
+    clearInterval(this.timeoutObj);
+    return this;
+  },
+  start: function() {
+    this.timeoutObj = setInterval( function () {
+      // TODO: /class/performance 获取数据后 DOM 操作
+    }, this.timeout)
+  }
+}
+
 export default {
+  computed: {
+    ...mapGetters({
+      username: 'user/username',
+      isLogined: 'user/isLogined',
+      activePageUrl: 'activePageUrl'
+    })
+  },
   mounted: function(){
     init()
   },
@@ -138,12 +167,97 @@ export default {
 
       options.playClick = function() {
         console.log('Play Click')
+        console.log(self.modData)
+        // TODO: 生成一个 Record， 返回做题的地址
+        if(self.isLogined) {
+          let params = {}
+          params.username = self.username
+          params.lessonUrl = self.activePageUrl
+          params.lessonTitle = self.modData.lesson.Title
+          params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
+          params.goals = self.modData.lesson.LessonGoals
+          params.lessonNo = self.modData.lesson.LessonNo
+          // lessonPerformance、
+          console.log(params)
+          axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => {
+              console.log(response)
+              // TODO:open客户端传递我们的地址
+            })
+        } else {
+          console.log('未登录')
+        }
       }
 
+      let classState = 0 // 0 未开始 1 已开始 2 已结束
+      let classId
       options.classOpClick = function() {
         console.log('class Op Click')
-        // Begin Class TODO: /api/class/begin
-        axios.post
+        let params = {}
+        let btnClass = document.getElementById('btnClass')
+        let tipClass = document.getElementById('tipClass')
+        params.username = self.username
+        params.lessonNo = self.modData.lesson.LessonNo
+        params.lessonUrl = self.activePageUrl
+        params.lessonTitle = self.modData.lesson.Title
+        params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
+        params.goals = self.modData.lesson.LessonGoals
+        if( classState == 0 ) {
+          // begin class
+          axios.post(lessonHost + '/api/class/begin', qs.stringify(params),
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(response => {
+            let r = response.data
+            if(r.err == 0) {
+              btnClass.lastChild.innerText = 'Dismiss the Class'
+              tipClass.innerText = '(Click here to dismiss the class)'
+              classState = 1
+              classId = r.data.classId
+              // TODO: 开始轮询获取 Students' Performance 数据
+              // 弹窗显示 ClassId
+              self.$alert("The class ID is " + r.data.classId + ".<br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Students' Performance.OK<br/>Attention: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.", 'Info', {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: 'OK',
+                callback: action => {
+                  self.$notify({
+                    title: 'ClassId:',
+                    message: r.data.classId,
+                    duration: 0,
+                    showClose: false
+                  })
+                }
+              })
+            } else {
+              // error
+            }
+          })
+        } else if ( classState == 1 ) {
+          // finish class
+          self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          }).then(() => {
+            // yes
+            axios.post(lessonHost + '/api/class/finish', qs.stringify(params),
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => {
+              let r = response.data
+              console.log(r)
+              // TODO: 展现 Summary 数据
+            })
+            btnClass.setAttribute('disable','true')
+          }).catch(() => {
+            // cancel
+          })
+        }
       }
       return options
     }

@@ -2,19 +2,19 @@
   <div class="index-page-lesson">
     <el-row>
       <el-col :span="8">
-        <div :style="loadCover(properties)">
-          <video :src='properties.lessonVideoSrc'></video>
+        <div :style="loadCover()">
+          <video :src='properties.AnimationOfTheLesson'></video>
         </div>
       </el-col>
       <el-col :span="16">
         <div class="lessonDesc">  
-          <span>Lesson {{properties.lessonNo}}: {{properties.lessonTitle}}</span><br>
+          <span>Lesson {{properties.LessonNo}}: {{properties.Title}}{{properties.vip}}</span><br>
           <span>Lesson Goals:</span><br>
-          <span>{{properties.lessonGoals}}</span>
+          <span>{{properties.LessonGoals}}</span>
           <el-row>
-            <el-button @click="playClick" type="primary">Play Paracraft</el-button>
-            <el-button @click="classOpClick" v-if="properties.vip" type="primary">Begin the Class</el-button>
-            <span v-if="properties.vip">(Click here to begin the class)</span>
+            <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
+            <el-button @click="classOpClick" v-if="properties.vip" type="primary" id="btnClass">Begin the Class</el-button>
+            <span v-if="properties.vip" id="tipClass">(Click here to begin the class)</span>
           </el-row>
         </div>
       </el-col>
@@ -32,14 +32,20 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
-
+import { mapGetters } from 'vuex'
+import axios from 'axios'
 export default {
+  computed: {
+    ...mapGetters({
+      username: 'user/username'
+    })
+  },
   name: 'AdiLesson',
   mixins: [compBaseMixin],
   methods: {
-    loadCover(properties) {
+    loadCover() {
       return this.generateStyleString({
-        background: 'url(' + properties.lessonCoverSrc + ')',
+        background: 'url(' + this.properties.CoverImageOfTheLesson + ')',
         'background-position': 'center',
         'background-size': 'cover'
       })
@@ -54,7 +60,29 @@ export default {
       this.options.classOpClick()
     }
   },
-  computed: {
+  created: function() {
+    const lessonHost = 'http://127.0.0.1:3000'
+    let username = this.username
+    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+      if (username) {
+        axios.get(lessonHost + '/api/member/auth', {
+          params: {
+            username: username
+          }
+        }).then(response => {
+          let r = response.data
+          if (r.data && r.data.vipDay >= 0) {
+            this.properties.vip = true
+          } else {
+            this.properties.vip = false
+          }
+          this.$forceUpdate()
+        })
+      } else {
+        this.properties.vip = false
+      }
+      this.$forceUpdate()
+    }
   }
 }
 </script>
