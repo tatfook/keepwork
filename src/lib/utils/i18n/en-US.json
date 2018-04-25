@@ -22,6 +22,9 @@
     "createWebsiteNow": "Create Website Now"
   },
   "adi": {
+    "markdown": {
+      "markdown": "Welcome to the Keepwork Markdown Editor"
+    },
     "menu": {
       "menu": "MENU1"
     },

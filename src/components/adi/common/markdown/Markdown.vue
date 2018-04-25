@@ -19,6 +19,7 @@ export default {
 .comp-markdown {
   p {
     margin: 0;
+    word-wrap: break-word;
   }
 }
 </style>
