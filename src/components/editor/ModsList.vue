@@ -23,9 +23,25 @@ import mods from '@/components/adi/mod/modslist.config'
 import modFactory from '@/lib/mod/factory'
 import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
+
 export default {
   name: 'ModsList',
   mounted() {
+    let self = this
+
+    function i18n(data) {
+      _.forEach(data, (item, key) => {
+        item.label = self.$t(item.label)
+
+        if(item.children) {
+          i18n(item.children)
+        }
+      })
+    }
+
+    i18n(mods)
+
     if (mods[0].children) {
       let modsChildren = mods[0].children[0]
       this.$refs.tree.setCurrentNode(modsChildren)

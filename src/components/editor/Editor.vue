@@ -29,7 +29,7 @@
           <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
         </el-button-group>
         <div class="code-win-swich">
-          <span>显示代码</span>
+          <span>{{$t('editor.showCode')}}</span>
           <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
           </el-switch>
         </div>

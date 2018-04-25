@@ -2,13 +2,13 @@
   <div class='property-manager-container' v-if='hasActiveMod'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
       <i class="iconfont icon-bianjiqi-shanchu"></i>
-      删除模块
+      {{$t('editor.modDel')}}
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
-      <el-tab-pane label='属性' name='attr'>
+      <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
-      <el-tab-pane label='样式' name='style' v-if="activeMod.cmd !== 'Markdown'">
+      <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class='styles-container'>
           <style-selector :mod='activeMod' />
         </div>
@@ -49,13 +49,13 @@ export default {
       this.setActivePropertyData({ data })
     },
     toDeleteMod() {
-      this.$confirm('确定删除这个模块？', '删除提示', {
+      this.$confirm(this.$t('editor.modDelMsg'), this.$t('editor.modDelMsgTitle'), {
         type: 'error'
       })
-        .then(() => {
-          this.deleteMod(this.activeMod.key)
-        })
-        .catch(() => {})
+      .then(() => {
+        this.deleteMod(this.activeMod.key)
+      })
+      .catch(() => {})
     },
     tabClickHandle(tabItem) {
       let activeName = tabItem.name

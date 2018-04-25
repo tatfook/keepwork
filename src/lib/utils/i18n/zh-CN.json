@@ -20,7 +20,38 @@
     "myContributedWebsitesTip": "获得他人网站的编辑权限后，将会在这里显示",
 
     "noPersonalWebsite": "还没有创建网站",
-    "createWebsiteNow": "现在创建"
+    "createWebsiteNow": "现在创建",
+
+    "addMod": "请点击添加内容",
+    "showCode": "显示代码",
+
+    "modAttr": "属性",
+    "modStyle": "样式",
+    "modDel": "删除模块",
+    "modDelMsg": "确定删除这个模块？",
+    "modDelMsgTitle": "删除提示"
+  },
+  "modList": {
+    "recent": "常用",
+    "markdown": "标记语言",
+    "text": "文本",
+    "carousel": "图文轮播",
+    "mixLayer": "图文叠加",
+    "mixPosition": "图文拼接",
+    "menu": "菜单",
+    "title": "标题",
+    "graphic": "图形",
+    "widescreenImage": "图像宽屏",
+    "interative": "交互",
+    "qq": "调用QQ聊天",
+    "mixAndMatch": "混合搭配",
+    "paracraft": "Paracraft作品",
+    "works": "作品",
+    "specialPerformance": "特殊表现",
+    "board": "绘图板",
+    "vipRead": "VIP Read",
+    "comment": "评论",
+    "setting": "设置"
   },
   "adi": {
     "markdown": {

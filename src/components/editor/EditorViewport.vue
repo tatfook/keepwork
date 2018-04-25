@@ -2,7 +2,7 @@
   <div class='viewport-container'>
     <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
-      <p class="info">请点击添加内容</p>
+      <p class="info">{{$t('editor.addMod')}}</p>
     </div>
     <draggable v-model='modDraggableList' @change="changeDraggableList">
       <template v-for='mod in modList'>
