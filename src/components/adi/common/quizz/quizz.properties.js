@@ -2,6 +2,7 @@ export default {
   data: [
     {
       id: 0,
+      type: '0',
       title: 'How can you switch between game and edit mode?',
       score: '0',
       desc: '解析',

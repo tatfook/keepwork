@@ -3,14 +3,14 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="Type:" prop="type">
         <el-radio-group v-model="ruleForm.type">
-          <el-radio label="0">Single Choices</el-radio>
+          <el-radio label="0">Single Choice</el-radio>
           <el-radio label="1">Multiple Choices</el-radio>
           <el-radio label="2">True or False</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="Question:" prop="title">
-        <el-input v-model="ruleForm.title" placeholder="Please Input..."></el-input>
+        <el-input v-model="ruleForm.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
 
       <!-- 单选题 -->
@@ -32,9 +32,7 @@
       <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-
         <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
-
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
@@ -51,8 +49,9 @@
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
         <el-radio-group v-model="ruleForm.judge">
-            <el-radio label="A True"></el-radio>
-            <el-radio label="B False"></el-radio>
+          <span class="el-radio" v-for="(opt, index) in ruleForm.judgeOptions">
+            <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
+          </span>
         </el-radio-group>
 
       </el-form-item>
@@ -62,7 +61,7 @@
       </el-form-item>
 
       <el-form-item label="Explanation:" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc" placeholder="Please Input..."></el-input>
+        <el-input type="textarea" maxlength="512" v-model="ruleForm.desc" placeholder="Please Input..."></el-input>
       </el-form-item>
 
     </el-form>
@@ -115,6 +114,23 @@ export default {
   },
 
   data() {
+    var checkScore = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('please input score'));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('please input number type'));
+        } else {
+          if (value < 0) {
+            callback(new Error('an integer greater than 0'));
+          } else {
+            callback();
+          }
+        }
+      }, 1000);
+    };
+
     return {
       quizzData: [],
 
@@ -128,8 +144,26 @@ export default {
         judge: '',
         singleOptions: [{
           item: ''
+        },
+        {
+          item: ''
+        },
+        {
+          item: ''
+        },
+        {
+          item: ''
         }],
         multipleOptions: [{
+          item: ''
+        },
+        {
+          item: ''
+        },
+        {
+          item: ''
+        },
+        {
           item: ''
         }],
         judgeOptions: [{
@@ -154,8 +188,7 @@ export default {
           { required: true, message: 'please select', trigger: 'change' }
         ],
         score: [
-          { required: true, message: 'please input score', trigger: 'blur'},
-          { type: 'number', required: true, message: 'please input number type', trigger: 'blur'}
+          { validator: checkScore, trigger: 'blur' }
         ],
         desc: [
           { required: true, message: 'please input explanation', trigger: 'blur' }
@@ -204,7 +237,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let writerQA = {
-            id: uuid(3, 16),
+            id: uuid(8, 16),
             type: this.ruleForm.type,
             title: this.ruleForm.title,
             score: this.ruleForm.score,
@@ -216,13 +249,12 @@ export default {
             writerQA.answer = this.ruleForm.single;
           }else if(type == 1) { // 多选
              writerQA.options = this.ruleForm.multipleOptions;
-             writerQA.answer = this.ruleForm.multiple;
+             writerQA.answer = JSON.stringify(this.ruleForm.multiple);
           }else {  // 判断题
              writerQA.options = this.ruleForm.judgeOptions;
              writerQA.answer = this.ruleForm.judge;
           }
 
-          console.log(writerQA);
           this.quizzData = [writerQA];
           this.handleClose();
           this.$emit('finishEditing', this.quizzData);

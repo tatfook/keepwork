@@ -114,5 +114,19 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": ".eslintrc.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaop1ng/keepwork.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiaop1ng/keepwork/issues"
+  },
+  "homepage": "https://github.com/xiaop1ng/keepwork#readme"
 }
