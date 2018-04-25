@@ -12,7 +12,7 @@ import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 
-export default {
+export const modList = {
   ModMarkdown,
   ModTitle,
   ModMixPosition,
@@ -26,4 +26,12 @@ export default {
   ModVipRead,
   ModComment,
   ModMenu
+}
+
+export const load = modName => {
+  return modList[modName]
+}
+
+export default {
+  load
 }

@@ -12,7 +12,7 @@ const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
 
-export default {
+export const modList = {
   ModMarkdown,
   ModTitle,
   ModMixPosition,
@@ -26,4 +26,14 @@ export default {
   ModComment,
   ModBoard,
   ModMenu
+}
+
+export const load = async modName => {
+  const mod = modList[modName]
+
+  if (mod) return mod()
+}
+
+export default {
+  load
 }

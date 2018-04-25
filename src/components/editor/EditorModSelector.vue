@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import mods from '@/components/adi/mod'
+import ModLoader from '@/components/adi/mod'
 import { mapGetters } from 'vuex'
 import { gConst } from '@/lib/global'
 
@@ -34,7 +34,7 @@ export default {
       if (this.modConf) return this.modConf.mod
     },
     modConf() {
-      return mods[this.mod.modType]
+      return ModLoader.load(this.mod.modType)
     },
     isActive() {
       return this.activeMod && this.mod.key === this.activeMod.key
