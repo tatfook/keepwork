@@ -1,11 +1,18 @@
 <template>
   <div>
-    <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
+    <div v-if='modConf.name != "ModMarkdown"' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
+      <div class="render-mod-container--click-prevent"></div>
+      <div class="render-mod-container">
+        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
+      </div>
+    </div>
+    <!-- <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index"> -->
   </div>
 </template>
 
 <script>
 import mods from '@/components/adi/mod'
+import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -13,9 +20,21 @@ export default {
     mod: Object
   },
   computed: {
-    styles() {
-      return mods[this.mod.modType].styles
+    ...mapGetters({
+      themeConf: 'themeConf'
+    }),
+    modConf() {
+      return mods[this.mod.modType]
+    },
+    theme() {
+      let globalTheme = themeFactory.generate(this.themeConf)
+      globalTheme.sheet.attach()
+
+      return globalTheme
     }
+    // styles() {
+    //   return mods[this.mod.modType].styles
+    // }
   },
   methods: {
     ...mapActions({
@@ -27,12 +46,19 @@ export default {
     isActive(styleID) {
       let curStyle = Number(this.mod.data.styleID) || 0
       return curStyle === styleID
+    },
+    currentMod(index) {
+      let currentMod = _.merge({}, this.mod)
+
+      currentMod.data.styleID = index
+
+      return currentMod
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .style-item {
   width: 100%;
   box-sizing: border-box;
@@ -42,5 +68,36 @@ export default {
 }
 .style-item.active {
   border-color: #3da4fd;
+}
+
+.render {
+  // width: 295px;
+  height: 310px;
+  background-color: white;
+  overflow: hidden;
+  margin: auto;
+  margin-bottom: 12px;
+  position: relative;
+
+  .render-mod-container--click-prevent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .render-mod-container{
+    border: 10px solid white;
+    // width: 275px;
+    height: 290px;
+    overflow: hidden;
+
+    .render-mod {
+      width: 1080px;
+      transform: scale(0.357);
+      transform-origin: top left;
+    }
+  }
+  
 }
 </style>

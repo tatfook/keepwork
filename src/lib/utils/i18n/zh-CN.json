@@ -23,6 +23,9 @@
     "createWebsiteNow": "现在创建"
   },
   "adi": {
+    "markdown": {
+      "markdown": "欢迎使用Keepwork Markdown编辑器"
+    },
     "menu": {
       "menu": "菜单1"
     },

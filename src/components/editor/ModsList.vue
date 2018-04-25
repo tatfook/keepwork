@@ -6,12 +6,13 @@
     </el-col>
     <el-col class="preview-box">
       <div v-for='mod in activeModsList' :key='mod.name'>
-        <div v-if='mod.name != "ModMarkdown"' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
+        <div v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
+          <div class="render-mod-container--click-prevent"></div>
           <div class="render-mod-container">
             <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
           </div>
         </div>
-        <img v-if='mod.name == "ModMarkdown"' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+        <!-- <img v-if='mod.name == "ModMarkdown"' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'> -->
       </div>
     </el-col>
   </el-row>
@@ -122,6 +123,14 @@ export default {
   overflow: hidden;
   margin: auto;
   margin-bottom: 12px;
+  position: relative;
+
+  .render-mod-container--click-prevent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
 
   .render-mod-container{
     border: 10px solid white;
