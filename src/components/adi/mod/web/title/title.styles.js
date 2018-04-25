@@ -31,6 +31,9 @@ export default [
     templateID: 0,
     data: {
       // 定义mod根div的样式
+      colGroup: {
+        'margin-top': '20px'
+      },
       logo: {
         height: '87px',
         width: '87px'
@@ -95,6 +98,9 @@ export default [
         height: '87px',
         width: '87px',
         margin: 'auto'
+      },
+      colLogo: {
+        'margin-top': '20px'
       },
       colCouple: {
         'min-width': '200px',
