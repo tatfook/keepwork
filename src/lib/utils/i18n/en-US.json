@@ -1,3 +1,97 @@
 {
-  "hello": "hello"
+  "common": {
+    "welcomeToKeepwork": "Welcome to Keepwork",
+    "createNewWebsite": "Create New Website"
+  },
+  "editor": {
+    "save": "Save",
+    "preview": "Preview",
+    "code": "Code",
+    "splitScreen": "Split",
+
+    "refresh": "Refresh",
+    "close": "Close",
+    "delete": "Delete",
+
+    "openedFiles": "Opened",
+    "myPersonalWebsites": "Personal websites",
+    "myContributedWebsites": "Contributed websites",
+    "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
+    
+    "noPersonalWebsite": "No personal website",
+    "createWebsiteNow": "Create Website Now"
+  },
+  "adi": {
+    "markdown": {
+      "markdown": "Welcome to the Keepwork Markdown Editor"
+    },
+    "menu": {
+      "menu": "MENU1"
+    },
+    "title": {
+      "menu": "MENU1",
+      "businessName": "BUSINESS NAME",
+      "tagLine": "TAG LINE"
+    },
+    "text": {
+      "title": "Ljubljana",
+      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
+    },
+    "mixLayer": {
+      "title": "University of California",
+      "subtitle": "Top Research University",
+      "paragraph": "The University of California, Berkeley is one of the most prestigious and top public research universities in the United States, located on the hills of the East Bay Berkeley, San Francisco. Founded in 1868 by the California College and the College of Agriculture, Mining, and Mechanics, it was relocated to Berkeley, near San Francisco, in 1873. Berkeley was the oldest one at the University of California. It is also a founding member of the Association of American Universities. Its mascots have changed from the emblem of California, so their students often call themselves \"Golden Bears.\" The University of California, Berkeley, along with Stanford University and the Massachusetts Institute of Technology, are honored as the academic leaders of engineering science and technology in the United States."
+    },
+    "mixPosition": {
+      "title": "One person, one road, people on the way",
+      "subtitle": "We have been traveling",
+      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……",
+      "button": "MORE"
+    },
+    "paracraft": {
+      "worldName": "Default name",
+      "author": {
+        "desc": "Author:",
+        "text": "Your name"
+      },
+      "version": {
+        "desc": "version"
+      },
+      "viewTimes": {
+        "desc": "Page views"
+      },
+      "size": {
+        "desc": "size"
+      },
+      "download": {
+        "name": "Download"
+      },
+      "enter": {
+        "name": "Enter"
+      },
+      "desc": {
+        "data": "Work Description: \r never memorized the memory, can not remember where to go, what landscapes to see, who met. Although the classmates said that traveling is not about memory, it is at the time of lunch, lunch and dinner. May not eat well, but it is still wiped the other side of the mouth of the oil stains. It doesn't really matter what the landscape is."
+      }
+    },
+    "board": {
+      "desc": "Click the edit button on the left to start editing"
+    },
+    "qq": {
+      "desc": "Customer Service"
+    },
+    "vipRead": {
+      "onlyVip": "This page is for VIP users only",
+      "on": "(Open)",
+      "off": "(shut down)",
+      "becomeVip": "Become a VIP to see more",
+      "login": "Sign in to see more"
+    },
+    "comment": {
+      "title": "I want to comment",
+      "delete": "delete",
+      "commit": "submit",
+      "close": "Comments are closed",
+      "notice": "Share your ideas!"
+    }
+  }
 }

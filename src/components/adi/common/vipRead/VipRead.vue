@@ -2,9 +2,9 @@
   <div class='comp-vip-read'>
     <div v-if="editMode" class="vip-more-permission">
       <p class="switch-notice">
-        本网页内容，仅限VIP用户浏览全部 <br />
-        <span v-if="!properties.switch.value">（关闭）</span>
-        <span v-if="properties.switch.value">（开启）</span>
+        {{$t(options.onlyVip)}} <br />
+        <span v-if="!properties.switch.value">{{$t(options.off)}}</span>
+        <span v-if="properties.switch.value">{{$t(options.on)}}</span>
       </p>
     </div>
 
@@ -12,12 +12,12 @@
       <div v-if="isLogined && !isVip && properties.switch.value && !isMyPage" class="vip-more-permission">
         <p>
           <a href="/wiki/vip">
-            <span class="fa fa-lock"></span>成为VIP，才能查看更多</a>
+            <span class="fa fa-lock"></span>{{$t(options.becomeVip)}}</a>
         </p>
       </div>
       <div v-if="!isLogined" class="vip-more-permission">
         <p ng-show="!editorMode">
-          <a ng-click="goLoginModal()">登录后，才能查看更多</a>
+          <a href="http://keepwork.com/wiki/home">{{$t(options.login)}}</a>
         </p>
       </div>
       {{init()}}
@@ -109,7 +109,7 @@ export default {
   }
   .vip-more-permission .switch-notice {
     font-size: 17px;
-    margin-top: -15px;
+    margin-top: 0px;
   }
   .vip-more-permission .switch-notice span {
     font-size: 20px;

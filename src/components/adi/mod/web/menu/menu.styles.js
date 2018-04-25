@@ -7,16 +7,13 @@ export default [
       menu: {
         height: '50px',
         margin: 'auto'
-      },
-      colMenu: {
-        'margin-top': '20px'
       }
     },
     props: {
       rootRow: { gutter: 10 }
     },
     theme: {
-      root: ['mod-space'],
+      root: [],
       menu: ['mod-full-width', 'font_3'],
       colMenu: ['bg_color_7']
     },
@@ -32,7 +29,7 @@ export default [
           mode: 'horizontal',
           emptyData: [
             {
-              name: '菜单1',
+              name: 'adi.menu.menu',
               link: 'http://keepwork.com'
             }
           ],
@@ -40,6 +37,6 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/menu/menu.jpeg')
+    cover: require('@/../static/adi/menu/menu.png')
   }
 ]

@@ -12,9 +12,16 @@ export default [
     },
     options: {
       theme: {},
-      config: {}
+      config: {
+        vipRead: {
+          onlyVip: 'adi.vipRead.onlyVip',
+          on: 'adi.vipRead.on',
+          off: 'adi.vipRead.off',
+          becomeVip: 'adi.vipRead.becomeVip',
+          login: 'adi.vipRead.login'
+        }
+      }
     },
-    cover:
-      'http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1522236629461.jpeg'
+    cover: require('@/../static/adi/vipRead/vip.jpeg')
   }
 ]

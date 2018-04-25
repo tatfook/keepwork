@@ -72,7 +72,7 @@ export default {
     _.merge(this.theme.data, gThemeData)
 
     return (
-      <div data-mod={this.mod.modType} class={this.getClasses('root')}>
+      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} class={this.getClasses('root')}>
         {renderTemplate(h, this)}
       </div>
     )
@@ -145,7 +145,7 @@ export default {
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct
-      return _.merge({}, this.conf.properties, this.mod.data)
+      return _.merge({}, this.conf.properties, this.mod ? this.mod.data : '')
     }
   }
 }

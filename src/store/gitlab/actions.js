@@ -49,12 +49,12 @@ const getGitlabFileParams = async (context, { path: inputPath, content = '\n' })
 
 const actions = {
   async getRepositoryTree(context, payload) {
-    let { path, ignoreCache = false, recursive = true } = payload
+    let { path, useCache = true, recursive = true } = payload
     let { commit, getters: { repositoryTrees } } = context
     let { gitlab, projectId } = await getGitlabParams(context, { path })
     let children = _.get(repositoryTrees, [projectId, path])
 
-    if (!ignoreCache && !_.isEmpty(children)) return Promise.resolve()
+    if (useCache && !_.isEmpty(children)) return
 
     let list = await gitlab.projects.repository.tree(projectId, {
       path,
@@ -119,7 +119,7 @@ const actions = {
     if (refreshRepositoryTree) {
       await dispatch('getRepositoryTree', {
         path: `${username}/${name}`,
-        ignoreCache: true
+        useCache: false
       })
     }
   },
@@ -147,11 +147,12 @@ const actions = {
     let payload = { path, branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
+    dispatch('closeOpenedFile', { path }, { root: true })
+
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
-      ignoreCache: true
+      useCache: false
     })
-    dispatch('closeOpenedFile', { path })
   }
 }
 

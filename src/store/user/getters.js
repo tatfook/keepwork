@@ -29,15 +29,15 @@ const getters = {
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
 
+  siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (
     state,
-    getters,
+    { siteDataSourcesMap },
     rootState,
     rootGetters
   ) => username => {
     let { 'gitlab/repositoryTrees': repositoryTrees } = rootGetters
     let websitesMap = _.get(state, ['website', username])
-    let siteDataSourcesMap = _.get(state, ['siteDataSource', username])
 
     // use websitesMap to generate personal website list
     let websiteNames = _.keys(websitesMap)

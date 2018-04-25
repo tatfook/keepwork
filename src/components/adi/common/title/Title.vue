@@ -1,7 +1,7 @@
 <template>
   <div class="comp-title">
     <a :target='properties.target ? properties.target : options.emptyTarget' :href='properties.link ? properties.link : options.emptyLink'>
-      <h1>{{ properties.name ? properties.name : options.emptyName }}</h1>
+      <h1>{{ properties.name ? properties.name : $t(options.emptyName) }}</h1>
     </a>
   </div>
 </template>
@@ -26,5 +26,8 @@ a {
 h1 {
   margin: 0;
   font-size: unset;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

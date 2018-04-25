@@ -1,6 +1,6 @@
 export default {
   text: 'input',
   desc: 'input',
-  link: 'input',
+  link: 'link',
   target: 'linkTarget'
 }
