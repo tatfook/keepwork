@@ -1,36 +1,36 @@
 <template>
     <div class="menu-type">
-        <el-button plain type='primary' size='mini' @click='isMenuEditorShow = true'>打开图片编辑器</el-button>
-        <treeDataEditor :isEditorShow='isMenuEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></treeDataEditor>
+        <el-button plain type='primary' size='mini' @click='isGalleryEditorShow = true'>打开图片编辑器</el-button>
+        <galleryDataEditor :isEditorShow='isGalleryEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></galleryDataEditor>
     </div>
 
 </template>
 <script>
-import treeDataEditor from './treeGalleryDataEditor.vue'
+import galleryDataEditor from './galleryDataEditor.vue'
 export default {
-  name: 'MenuType',
+  name: 'GalleryType',
   props: {
     editingKey: String,
     originValue: Array
   },
   data() {
     return {
-      isMenuEditorShow: false
+      isGalleryEditorShow: false
     }
   },
   methods: {
     cancel() {
-      this.isMenuEditorShow = false
+      this.isGalleryEditorShow = false
     },
-    finishEditing(resultMenuData) {
-      this.isMenuEditorShow = false
+    finishEditing(resultGalleryData) {
+      this.isGalleryEditorShow = false
       var tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = resultMenuData
+      tempChangedDataObj[this.editingKey] = resultGalleryData
       this.$emit('onPropertyChange', tempChangedDataObj)
     }
   },
   components: {
-    treeDataEditor
+    galleryDataEditor
   }
 }
 </script>

@@ -11,11 +11,11 @@
                 设置
             </span>
         </div>
-        <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
+        <el-tree v-if="treeData.length > 0" ref='galleryTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
             <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span class="node-label">
-                    <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>
-                    <el-input :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
+                    <span class="text" @click.stop='showInput(node.id, data, "img")'>{{data.img}}</span>
+                    <el-input :ref='"img" + node.id' :class="{'is-focus': data.imgInputShow}" size='mini' v-model='data.img' @blur='hideInput(data, "img")' @keyup.enter.native.prevent='finishInput(node.id, "img")'></el-input>
                 </span>
                 <span class="node-link">
                     <span class="text" @click.stop='showInput(node.id, data, "link")'>{{data.link}}</span>
@@ -89,19 +89,22 @@ export default {
     },
     insert(node, data, position) {
       const newChild = {
-        name: '菜单项' + newMenuId,
+        img: '',//'菜单项' + newMenuId,
         link: ''
       }
+
       if (!node) {
         this.treeData.push(newChild)
         this.$nextTick(() => {
           let firstNode = this.treeData[0]
           let firstNodeId = firstNode.$treeNodeId
-          this.showInput(firstNodeId, firstNode, 'name')
+          this.showInput(firstNodeId, firstNode, 'img')
         })
+
         return
       }
-      let menuTree = this.$refs.menuTree
+
+      let galleryTree = this.$refs.galleryTree
       let parent = node.parent
       let children = parent.data.child || parent.data
       let targetIndex = _.findIndex(children, function(value) {
@@ -113,17 +116,17 @@ export default {
       let inputFocus = function() {
         that.$nextTick(() => {
           let newNodeId = newNode.$treeNodeId
-          that.showInput(newNodeId, newNode, 'name')
+          that.showInput(newNodeId, newNode, 'img')
         })
       }
       switch (position) {
         case 'before':
-          menuTree.insertBefore(newChild, node)
+          galleryTree.insertBefore(newChild, node)
           newNode = children[targetIndex]
           inputFocus()
           break
         case 'after':
-          menuTree.insertAfter(newChild, node)
+          galleryTree.insertAfter(newChild, node)
           newNode = children[targetIndex + 1]
           inputFocus()
           break
@@ -137,6 +140,7 @@ export default {
             inputFocus()
           })
       }
+
       newMenuId++
     },
     remove(node, data) {
@@ -145,7 +149,7 @@ export default {
         cancelButtonText: '取消',
         type: 'error'
       }).then(() => {
-        this.$refs.menuTree.remove(node)
+        this.$refs.galleryTree.remove(node)
       })
     }
   }
