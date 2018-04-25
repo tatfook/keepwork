@@ -32,7 +32,6 @@
       <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-
         <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
@@ -50,8 +49,9 @@
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
         <el-radio-group v-model="ruleForm.judge">
-            <el-radio label="A True"></el-radio>
-            <el-radio label="B False"></el-radio>
+          <span class="el-radio" v-for="(opt, index) in ruleForm.judgeOptions">
+            <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
+          </span>
         </el-radio-group>
 
       </el-form-item>
@@ -114,7 +114,7 @@ export default {
   },
 
   data() {
-    var checkAge = (rule, value, callback) => {
+    var checkScore = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('please input score'));
       }
@@ -188,7 +188,7 @@ export default {
           { required: true, message: 'please select', trigger: 'change' }
         ],
         score: [
-          { validator: checkAge, trigger: 'blur' }
+          { validator: checkScore, trigger: 'blur' }
         ],
         desc: [
           { required: true, message: 'please input explanation', trigger: 'blur' }
@@ -237,7 +237,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let writerQA = {
-            id: uuid(3, 16),
+            id: uuid(8, 16),
             type: this.ruleForm.type,
             title: this.ruleForm.title,
             score: this.ruleForm.score,
@@ -249,7 +249,7 @@ export default {
             writerQA.answer = this.ruleForm.single;
           }else if(type == 1) { // 多选
              writerQA.options = this.ruleForm.multipleOptions;
-             writerQA.answer = this.ruleForm.multiple;
+             writerQA.answer = JSON.stringify(this.ruleForm.multiple);
           }else {  // 判断题
              writerQA.options = this.ruleForm.judgeOptions;
              writerQA.answer = this.ruleForm.judge;
