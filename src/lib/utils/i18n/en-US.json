@@ -19,7 +19,38 @@
     "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
     
     "noPersonalWebsite": "No personal website",
-    "createWebsiteNow": "Create Website Now"
+    "createWebsiteNow": "Create Website Now",
+
+    "addMod": "Please click to add content",
+    "showCode": "Display code",
+
+    "modAttr": "Attributes",
+    "modStyle": "style",
+    "modDel": "Delete module",
+    "modDelMsg": "Are you sure to delete this module?",
+    "modDelMsgTitle": "Delete prompt"
+  },
+  "modList": {
+    "recent": "Commonly used",
+    "markdown": "Markdown",
+    "text": "Text",
+    "carousel": "Carousel",
+    "mixLayer": "Mix layer",
+    "mixPosition": "Mix position",
+    "menu": "Menu",
+    "title": "Title",
+    "graphic": "Graphic",
+    "widescreenImage": "Widescreen image",
+    "interative": "Interactive",
+    "qq": "Call QQ chat",
+    "mixAndMatch": "Mix and match",
+    "paracraft": "Paracraft works",
+    "works": "Works",
+    "specialPerformance": "Special performance",
+    "board": "Board",
+    "vipRead": "VIP Read",
+    "comment": "Comment",
+    "setting": "Setting"
   },
   "adi": {
     "markdown": {

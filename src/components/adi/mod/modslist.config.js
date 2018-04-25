@@ -15,153 +15,153 @@ import ModMenu from './web/menu'
 var modsList = [
   {
     id: 1,
-    label: '常用',
+    label: 'modList.recent',
     children: [
       {
         id: '1-1',
-        label: 'Markdown',
+        label: 'modList.markdown',
         mods: [ModMarkdown]
       },
       {
         id: '1-2',
-        label: '文本',
+        label: 'modList.text',
         mods: [ModText]
       },
       {
         id: '1-3',
-        label: '图文轮播',
+        label: 'modList.carousel',
         mods: [ModImgLoop]
       },
       {
         id: '1-4',
-        label: '图文叠加',
+        label: 'modList.mixLayer',
         mods: [ModMixLayer]
       },
       {
         id: '1-5',
-        label: '图文拼接',
+        label: 'modList.mixPosition',
         mods: [ModMixPositon]
       },
       {
         id: '1-6',
-        label: '菜单',
+        label: 'modList.menu',
         mods: [ModMenu]
       },
       {
         id: '1-7',
-        label: '标题',
+        label: 'modList.title',
         mods: [ModTitle]
       }
     ]
   },
   {
     id: '2',
-    label: '图形',
+    label: 'modList.graphic',
     children: [
       {
         id: '2-1',
-        label: '图文轮播',
+        label: 'modList.carousel',
         mods: [ModImgLoop]
       },
       {
         id: '2-2',
-        label: '图像宽屏',
+        label: 'modList.widescreenImage',
         mods: [ModImg]
       }
     ]
   },
   {
     id: '3',
-    label: '文本',
+    label: 'modList.text',
     children: [
       {
         id: '3-1',
-        label: '文本',
+        label: 'modList.text',
         mods: [ModText]
       }
     ]
   },
   {
     id: '4',
-    label: '交互',
+    label: 'modList.interative',
     children: [
       {
         id: '4-1',
-        label: '调用QQ聊天',
+        label: 'modList.qq',
         mods: [ModQQ]
       }
     ]
   },
   {
     id: '5',
-    label: '混合搭配',
+    label: 'modList.mixAndMatch',
     children: [
       {
         id: '5-1',
-        label: '标题',
-        mods: [ModTitle, ModText]
+        label: 'modList.title',
+        mods: [ModTitle]
       },
       {
         id: '5-2',
-        label: '图文叠加',
+        label: 'modList.mixLayer',
         mods: [ModMixLayer]
       },
       {
         id: '5-3',
-        label: '图文拼接',
+        label: 'modList.mixPosition',
         mods: [ModMixPositon]
       },
       {
         id: '5-4',
-        label: 'Paracraft作品',
+        label: 'modList.paracraft',
         mods: [ModParacraft]
       }
     ]
   },
   {
     id: '6',
-    label: '作品',
+    label: 'modList.works',
     children: [
       {
         id: '6-1',
-        label: 'Paracraft作品',
+        label: 'modList.paracraft',
         mods: [ModParacraft]
       }
     ]
   },
   {
     id: '7',
-    label: '特殊表现',
+    label: 'modList.specialPerformance',
     children: [
       {
         id: '7-1',
-        label: '图文轮播',
+        label: 'modList.carousel',
         mods: [ModImgLoop]
       },
       {
         id: '7-2',
-        label: '绘图板',
+        label: 'modList.board',
         mods: [ModBoard]
       },
       {
         id: '7-3',
-        label: 'VIP阅读',
+        label: 'modList.vipRead',
         mods: [ModVipRead]
       },
       {
         id: '7-4',
-        label: '评论',
+        label: 'modList.comment',
         mods: [ModComment]
       }
     ]
   },
   {
     id: '8',
-    label: '设置',
+    label: 'modList.setting',
     children: [
       {
         id: '8-1',
-        label: '调用QQ聊天',
+        label: 'modList.qq',
         mods: [ModQQ]
       }
     ]
