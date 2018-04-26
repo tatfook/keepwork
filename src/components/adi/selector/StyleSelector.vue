@@ -26,14 +26,14 @@ export default {
       themeConf: 'themeConf'
     }),
     modConf() {
-      return mods[this.mod.modType]
+      return modLoader.load(this.mod.modType)
     },
     theme() {
       let globalTheme = themeFactory.generate(this.themeConf)
       globalTheme.sheet.attach()
 
       return globalTheme
-    },
+    }
     // styles() {
     //   return mods[this.mod.modType].styles
     // }
@@ -45,9 +45,9 @@ export default {
     generateStyleString(style, isOutter) {
       let string = ''
 
-      if(style) {
+      if (style) {
         _.forEach(style, (value, key) => {
-          if(isOutter) {
+          if (isOutter) {
             string = string + key + ':' + (parseInt(value) + 20) + 'px;'
           } else {
             string = string + key + ':' + value + ';'
@@ -103,7 +103,7 @@ export default {
     z-index: 1;
   }
 
-  .render-mod-container{
+  .render-mod-container {
     border: 10px solid white;
     // width: 275px;
     height: 290px;
@@ -115,6 +115,5 @@ export default {
       transform-origin: top left;
     }
   }
-  
 }
 </style>
