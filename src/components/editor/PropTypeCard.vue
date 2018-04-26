@@ -2,7 +2,7 @@
   <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isModShow}">
     <el-row class="prop-header" type='flex' justify='space-between'>
       <el-col>
-        {{cardKey}}
+        {{$t("card." + cardKey)}}
       </el-col>
       <el-col class="card-info">
         <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
