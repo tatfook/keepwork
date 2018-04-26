@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <el-carousel :height="options.height">
-      <el-carousel-item v-for="(item, index) in forImgs" :key="index">
+      <el-carousel-item v-for="(item, index) in forImgs" :key="index" v-if="item.img && item.img.length != 0">
         <div class="imgs" :style="loadImg(item)"></div>
       </el-carousel-item>
     </el-carousel>
@@ -23,7 +23,9 @@ export default {
   },
   computed: {
     forImgs() {
-      return this.properties.data
+      return this.properties.data.length == 0
+        ? this.options.data
+        : this.properties.data
     }
   }
 }
