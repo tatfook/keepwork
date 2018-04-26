@@ -111,7 +111,7 @@ var modsList = [
         mods: [ModComment]
       },
       {
-        id: '4-2',
+        id: '4-3',
         label: 'modList.qq',
         mods: [ModQQ]
       }
@@ -172,6 +172,11 @@ var modsList = [
         id: '7-2',
         label: 'modList.carousel',
         mods: [ModImgLoop]
+      },
+      {
+        id: '7-3',
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
       }
     ]
   },
@@ -185,7 +190,7 @@ var modsList = [
         mods: [ModQQ]
       },
       {
-        id: '8-2',
+        id: '8-3',
         label: 'modList.vipRead',
         mods: [ModVipRead]
       }
