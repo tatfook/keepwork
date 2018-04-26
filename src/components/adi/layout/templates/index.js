@@ -14,5 +14,5 @@ export default {
   // header: Template3,
   header: Header,
   // header_siderbar: Template3
-  header_siderbar: HeaderSidebar
+  header_sidebar: HeaderSidebar
 }
