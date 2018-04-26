@@ -1,6 +1,6 @@
 // import Template1 from './Template1'
 // import Template2 from './Template2'
-import Template3 from './Template3'
+// import Template3 from './Template3'
 import Basic from './Basic'
 import BasicFullscreen from './BasicFullscreen'
 import Header from './Header'
