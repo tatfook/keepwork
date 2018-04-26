@@ -5,7 +5,7 @@
         <el-button-group>
           <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -16,18 +16,24 @@
     <div class="col-between"></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
-        <el-button-group>
+        <!-- <el-button-group>
           <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
           <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
-        </el-button-group>
+        </el-button-group> -->
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
           <el-button class="btn-enlarge" title="放大"></el-button>
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
+          <!-- <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button> -->
+          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPage'></el-button>
         </el-button-group>
+        <div class="code-win-swich">
+          <span>{{$t('editor.showCode')}}</span>
+          <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
+          </el-switch>
+        </div>
       </el-row>
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
@@ -36,6 +42,9 @@
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
+        <el-button-group>
+          <el-button :title='isFullscreen ? "退出全屏" : "全屏"' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+        </el-button-group>
         <el-button-group>
           <el-button class="iconfont icon-H" title="标题1" @click="insertHeadline(1)"></el-button>
           <el-button class="iconfont icon-h1" title="标题2" @click="insertHeadline(2)"></el-button>
@@ -65,6 +74,7 @@
 
 <script>
 import _ from 'lodash'
+import fullscreen from 'vue-fullscreen'
 import EditorMarkdown from './EditorMarkdown'
 import EditorWelcome from './EditorWelcome'
 // import EditorViewport from './EditorViewport'
@@ -72,7 +82,7 @@ import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
 import Search from './Search'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Editor',
@@ -87,7 +97,9 @@ export default {
         isResizing: false,
         leftColWidthParam: '',
         rightColWidthParam: ''
-      }
+      },
+      isCodeWinShow: true,
+      isFullscreen: false
     }
   },
   created() {
@@ -113,6 +125,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      activePage: 'activePage',
+      activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
       showingCol: 'showingCol',
@@ -120,6 +134,11 @@ export default {
     }),
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
+    },
+    fullscreenIcon() {
+      return this.isFullscreen
+        ? 'iconfont icon-tuichuquanping'
+        : 'iconfont icon-quanping1'
     }
   },
   watch: {
@@ -178,8 +197,34 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      resetShowingCol: 'resetShowingCol'
+    }),
     changeView(type) {
       this.$store.dispatch('setActiveWinType', type)
+    },
+    toggleCodeWin(isCodeWinShow) {
+      if (isCodeWinShow) {
+        this.resetShowingCol({
+          isCodeShow: true,
+          isPreviewShow: true
+        })
+      } else {
+        this.resetShowingCol({
+          isCodeShow: false,
+          isPreviewShow: true
+        })
+      }
+    },
+    toggleFullscreen() {
+      this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
+        wrap: false,
+        fullscreenClass: 'code-win-fullscreen',
+        callback: this.fullscreenChange
+      })
+    },
+    fullscreenChange(fullscreen) {
+      this.isFullscreen = fullscreen
     },
     resizeCol(event, leftColWidthParam, rightColWidthParam) {
       if (!(event && event.clientX)) {
@@ -203,8 +248,11 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
-    showPreview() {
-      this.$emit('showPreview')
+    // showPreview() {
+    //   this.$emit('showPreview')
+    // },
+    showPage() {
+      window.open(this.activePageUrl)
     },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
@@ -245,7 +293,7 @@ export default {
   overflow: auto;
 }
 .manager-win {
-  flex-basis: 440px;
+  flex-basis: 460px;
   flex-shrink: 0;
 }
 .manager-content-box {
@@ -284,6 +332,14 @@ export default {
 .code-win .el-button {
   width: 50px;
   height: 40px;
+}
+.code-win .el-button.is-circle {
+  width: 40px;
+  border-radius: 50%;
+  padding: 0;
+}
+.code-win .is-circle .iconfont {
+  font-size: 18px;
 }
 .manager-win .el-button-group .el-button--primary {
   border-color: #409eff;
@@ -332,5 +388,20 @@ export default {
 .guid-col h1 {
   margin: 0 0 36px 0;
   font-size: 46px;
+}
+.code-win-swich {
+  position: absolute;
+  right: 15px;
+  top: 18px;
+  font-size: 12px;
+}
+.code-win-swich > span {
+  vertical-align: middle;
+}
+.code-win-fullscreen {
+  width: 100% !important;
+  height: 100%;
+  background-color: #cdd4dc;
+  max-width: 1080px;
 }
 </style>

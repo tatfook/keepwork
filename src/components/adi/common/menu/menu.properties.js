@@ -1,4 +1,9 @@
 export default {
-  data: [],
+  data: [
+    {
+      name: 'MENU',
+      link: 'http://keepwork.com'
+    }
+  ],
   target: ''
 }

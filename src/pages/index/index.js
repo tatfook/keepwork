@@ -5,14 +5,26 @@ import Vuex from 'vuex'
 
 import App from './App'
 import router from './index.router'
-// import createPersistedState from 'vuex-persistedstate'
-import { appModule, userModule, gitlabModule } from '@/store'
+import VueI18n from 'vue-i18n'
+import { appModule, userModule, gitlabModule, createPersistedState } from '@/store'
 import ElementUI from 'element-ui'
+import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
+
+Vue.use(VueI18n)
+
+const i18n = new VueI18n({
+  locale,
+  messages: i18nMessages
+})
+
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 
 const store = new Vuex.Store({
   modules: {
@@ -21,9 +33,9 @@ const store = new Vuex.Store({
     gitlab: gitlabModule
   },
   plugins: [
-    // createPersistedState({
-    //   paths: ['user', 'gitlab']
-    // })
+    createPersistedState({
+      paths: ['user']
+    })
   ]
 })
 
@@ -32,6 +44,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
 })

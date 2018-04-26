@@ -12,6 +12,14 @@ const styles = [{
     root: ['mod-space'],
     rootRow: ['mod-full-width']
   },
+  options: {
+    config: {
+      md: {
+        emptyData: 'adi.markdown.markdown'
+      }
+    }
+  },
+  useImage: true,
   cover: require('@/../static/adi/markdown.jpeg')
 }]
 const templates = [[{ colMarkdown: 'md' }]]

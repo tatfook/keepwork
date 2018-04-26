@@ -4,21 +4,34 @@ import SimpleUndo from '@/lib/utils/undo/simpleUndo'
 export const initPageState = () => {
   return {
     modList: [],
+    saved: true,
     activeMod: null,
     activeProperty: null,
-    // layout: {
-    //   header: {},
-    //   footer: {},
-    //   siderbar: {}
-    // },
+    activeArea: 'main',
+    undoManager: new SimpleUndo(),
+    activeComponentType: '',
+    newModPosition: gConst.POSITION_AFTER // after active mod
+  }
+}
+
+export const initLayoutPageState = () => {
+  return {
+    modList: [],
+    saved: true,
+    undoManager: new SimpleUndo(),
+    newModPosition: gConst.POSITION_AFTER // after active mod
+  }
+}
+
+export const initSiteState = () => {
+  return {
+    siteLayoutConfig: {},
+    pages: {},
     theme: {
       name: 'classic',
       colorID: 0,
       fontID: 0
-    },
-    undoManager: new SimpleUndo(),
-    activeComponentType: '',
-    newModPosition: gConst.POSITION_AFTER // after active mod
+    }
   }
 }
 
@@ -26,6 +39,7 @@ const state = () => ({
   activePage: null,
   activePageUrl: '',
   openedFiles: {},
+  siteSettings: {},
   filemanagerTreeNodeExpandMapByPath: {},
 
   showingCol: {

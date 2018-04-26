@@ -6,7 +6,15 @@
     </el-col>
     <el-col class="preview-box">
       <div v-for='mod in activeModsList' :key='mod.name'>
-        <img v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMode(mod.name, index)'>
+        <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
+          <div class="render-mod-container--click-prevent"></div>
+          <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [])">
+            <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
+              <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+            </div>
+          </div>
+        </div>
+        <img v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
       </div>
     </el-col>
   </el-row>
@@ -14,10 +22,28 @@
 
 <script>
 import mods from '@/components/adi/mod/modslist.config'
+import modFactory from '@/lib/mod/factory'
+import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
+
 export default {
   name: 'ModsList',
   mounted() {
+    let self = this
+
+    function i18n(data) {
+      _.forEach(data, (item, key) => {
+        item.label = self.$t(item.label)
+
+        if(item.children) {
+          i18n(item.children)
+        }
+      })
+    }
+
+    i18n(mods)
+
     if (mods[0].children) {
       let modsChildren = mods[0].children[0]
       this.$refs.tree.setCurrentNode(modsChildren)
@@ -41,10 +67,28 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeMod: 'activeMod'
-    })
+      activeMod: 'activeMod',
+      themeConf: 'themeConf'
+    }),
+    theme() {
+      let globalTheme = themeFactory.generate(this.themeConf)
+      globalTheme.sheet.attach()
+
+      return globalTheme
+    }
   },
   methods: {
+    generateStyleString(style) {
+      let string = ''
+
+      if(style) {
+        _.forEach(style, (value, key) => {
+          string = string + key + ':' + value + ';'
+        })
+      }
+
+      return string
+    },
     nodeMenuClick(data) {
       if (data.children && data.children.length > 0) {
         return
@@ -52,17 +96,29 @@ export default {
       this.activeModsList = data.mods
     },
     nodeCollapseHandle(data, node, comp) {},
-    newMode(name, index) {
+    newMod(name, index) {
       this.$store.dispatch('addMod', {
         modName: name,
         preModKey: this.activeMod && this.activeMod.key,
         styleID: index
       })
+    },
+    modFactory(mod) {
+      if(mod.name && mod.name != 'ModMarkdown') {
+        return modFactory.generate(mod.name)
+      }
+    },
+    modConf(mod, index) {
+      let currentMod = _.merge({}, mod)
+
+      currentMod.properties.styleID = index
+
+      return currentMod
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .full-height {
   height: 100%;
 }
@@ -89,7 +145,38 @@ export default {
   max-height: 100%;
   overflow: auto;
 }
+.render {
+  width: 295px;
+  height: auto;
+  background-color: white;
+  overflow: hidden;
+  margin: auto;
+  margin-bottom: 12px;
+  position: relative;
+
+  .render-mod-container--click-prevent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .render-mod-container{
+    border: 10px solid white;
+    height: 300px;
+    width: 275px;
+    overflow: hidden;
+
+    .render-mod {
+      width: 1080px;
+      transform: scale(0.26);
+      transform-origin: top left;
+    }
+  }
+  
+}
 </style>
+
 <style>
 .mods-treeview .el-tree-node__content > .el-tree-node__expand-icon {
   padding-left: 15px;

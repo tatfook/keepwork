@@ -1,35 +1,39 @@
 <template>
   <div class='editor-header'>
     <el-menu mode='horizontal'>
-      <el-submenu index='1'>
+      <el-submenu index='1' popper-class='logo-submenu'>
         <template slot='title'>
           <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
         </template>
         <el-submenu index='1-1'>
-          <template slot='title'>系统</template>
-          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">新建网站</el-menu-item>
-          <el-menu-item index='1-1-2'>保存</el-menu-item>
-          <el-menu-item index='1-1-3'>网站设置</el-menu-item>
-          <el-menu-item index='1-1-4'>网站备份</el-menu-item>
-          <el-menu-item index='1-1-5'>版本管理</el-menu-item>
+          <template slot='title'>{{$t('editor.system')}}</template>
+          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</el-menu-item>
+          <el-menu-item index='1-1-2' :disabled='isActivePageSaved' @click='save'>{{$t('editor.save')}}</el-menu-item>
+          <el-menu-item index='1-1-3'>
+            <a href="/wiki/user_center?userCenterContentType=websiteManager" target="_blank">{{$t('editor.siteSettings')}}</a>
+          </el-menu-item>
+          <!-- <el-menu-item index='1-1-4'>网站备份</el-menu-item>
+          <el-menu-item index='1-1-5'>版本管理</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-2'>
-          <template slot='title'>页面</template>
-          <el-menu-item index='1-2-1'>数据源</el-menu-item>
+          <template slot='title'>{{$t('editor.page')}}</template>
+          <el-menu-item index='1-2-1'>
+            <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=dataSource" target="_blank">{{$t('editor.dataSource')}}</a>
+          </el-menu-item>
         </el-submenu>
         <el-submenu index='1-3'>
-          <template slot='title'>编辑</template>
-          <el-menu-item index='1-3-1'>撤销</el-menu-item>
-          <el-menu-item index='1-3-2'>重做</el-menu-item>
-          <el-menu-item index='1-3-3'>搜索</el-menu-item>
-          <el-menu-item index='1-3-4'>替换</el-menu-item>
+          <template slot='title'>{{$t('editor.edit')}}</template>
+          <el-menu-item index='1-3-1' @click='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</el-menu-item>
+          <el-menu-item index='1-3-2' @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</el-menu-item>
+          <!-- <el-menu-item index='1-3-3'>搜索</el-menu-item>
+          <el-menu-item index='1-3-4'>替换</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-4'>
-          <template slot='title'>插入</template>
-          <el-menu-item index='1-4-1'>模块</el-menu-item>
-          <el-menu-item index='1-4-2'>网盘</el-menu-item>
+          <template slot='title'>{{$t('editor.insert')}}</template>
+          <el-menu-item index='1-4-1' @click="changeView('ModsList')">{{$t('editor.module')}}</el-menu-item>
+          <!-- <el-menu-item index='1-4-2'>网盘</el-menu-item> -->
         </el-submenu>
-        <el-submenu index='1-5'>
+        <!-- <el-submenu index='1-5'>
           <template slot='title'>显示</template>
           <el-menu-item index='1-5-1'>预览</el-menu-item>
           <el-menu-item index='1-5-2'>代码</el-menu-item>
@@ -40,42 +44,42 @@
             <el-menu-item index='1-5-5-1'>电脑</el-menu-item>
             <el-menu-item index='1-5-5-2'>手机</el-menu-item>
           </el-submenu>
-        </el-submenu>
-        <el-menu-item index='1-6'>帮助</el-menu-item>
+        </el-submenu> -->
+        <el-menu-item index='1-6'>
+          <a href="/official/help/index" target="_blank">{{$t('editor.help')}}</a>
+        </el-menu-item>
         <el-menu-item index='1-7'>
-          <a href='/'>返回首页</a>
+          <a href='/'>{{$t('editor.backHomePage')}}</a>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-baocun' title='保存' @click='save'></span>
+        <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-fanhui' title='撤销'></span>
+        <span class='iconfont icon-fanhui' :title='$t("editor.revoke")'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-chongzuo' title='重做'></span>
+        <span class='iconfont icon-chongzuo' :title='$t("editor.redo")'></span>
       </el-menu-item>
-      <el-menu-item index=' 8 ' class='li-btn'>
+      <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
           <el-button class='dropdown-btn'>
             {{showingType}}
             <i class='el-icon-arrow-down el-icon--right dropdown-arrow'></i>
           </el-button>
           <el-dropdown-menu slot='dropdown'>
-            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>预览</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>代码</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>分屏</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>{{ $t('editor.preview') }}</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>{{ $t('editor.code') }}</el-dropdown-item>
+            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>{{ $t('editor.splitScreen') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+      </el-menu-item> -->
+      <el-menu-item index='2' class="link-box">
+        <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
+        <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
       </el-menu-item>
-      <el-menu-item index='2 '>
-        <span class='input-link-copy-box'>
-          <a :href='activePageUrl' target='_blank'>{{activePageUrl}}</a>
-        </span>
-      </el-menu-item>
-
       <el-menu-item index='7 ' class='pull-right user-profile-box'>
-        <img class='user-profile' src='http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png' alt=''>
+        <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
@@ -92,7 +96,8 @@ export default {
   data: function() {
     return {
       savePending: false,
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
+      nowOrigin: document.location.origin
     }
   },
   mounted() {
@@ -103,32 +108,34 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([
-      'showingCol',
-      'activePageUrl',
-      'canUndo',
-      'canRedo',
-      'openedFiles',
-      'activePageInfo'
-    ]),
+    ...mapGetters({
+      showingCol: 'showingCol',
+      activePageUrl: 'activePageUrl',
+      canUndo: 'canUndo',
+      canRedo: 'canRedo',
+      openedFiles: 'openedFiles',
+      activePageInfo: 'activePageInfo',
+      openedFiles: 'openedFiles',
+      userProfile: 'user/profile'
+    }),
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
         this.showingCol.isPreviewShow === true
       ) {
-        return '预览'
+        return this.$t('editor.preview')
       }
       if (
         this.showingCol.isCodeShow === true &&
         this.showingCol.isPreviewShow === false
       ) {
-        return '代码'
+        return this.$t('editor.code')
       }
       if (
         this.showingCol.isCodeShow === true &&
         this.showingCol.isPreviewShow === true
       ) {
-        return '分屏'
+        return this.$t('editor.splitScreen')
       }
     },
     isActivePageSaved() {
@@ -137,8 +144,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo']),
+    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveWinType']),
     async save() {
+      let self = this
+
       if (this.isActivePageSaved) {
         return
       }
@@ -147,7 +156,7 @@ export default {
         .then(() => {
           this.$message({
             showClose: true,
-            message: '文件保存成功',
+            message: self.$t('editor.saveSuccess'),
             type: 'success'
           })
         })
@@ -155,20 +164,41 @@ export default {
           console.log(e)
           this.$message({
             showClose: true,
-            message: '文件保存失败',
+            message: self.$t('editor.saveFail'),
             type: 'error'
           })
         })
       this.savePending = false
-    },
-    changeViewType(command) {
-      this.$store.dispatch('resetShowingCol', command)
     },
     openNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = true
     },
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
+    },
+    doCopyLink() {
+      let that = this
+      let toCopyLink = this.nowOrigin + this.activePageUrl
+      this.$copyText(toCopyLink).then(
+        function(e) {
+          that.$message({
+            showClose: true,
+            message: that.$t('editor.copySuccess'),
+            type: 'success'
+          })
+        },
+        function(e) {
+          console.log(e)
+          that.$message({
+            showClose: true,
+            message: that.$t('editor.copyFail'),
+            type: 'error'
+          })
+        }
+      )
+    },
+    changeView(type) {
+      this.setActiveWinType(type)
     }
   },
   components: {
@@ -239,4 +269,30 @@ export default {
   font-size: 21px;
   color: #666;
 }
+.link-box .iconfont {
+  border: none;
+}
+.link-box a {
+  text-decoration: none;
+}
+.link-box .iconfont:hover,
+.link-box a:hover {
+  color: #429efd;
+}
 </style>
+<style lang="scss">
+.logo-submenu {
+  .el-menu .el-submenu__title,
+  a {
+    color: #909399;
+  }
+  a {
+    text-decoration: none;
+  }
+  .el-menu .el-submenu__title:hover,
+  a:hover {
+    color: #303133;
+  }
+}
+</style>
+

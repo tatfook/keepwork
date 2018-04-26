@@ -1,3 +1,202 @@
 {
-  "hello": "你好"
+  "common": {
+    "welcomeToKeepwork": "欢迎来到 Keepwork",
+    "createNewWebsite": "创建新网站"
+  },
+  "editor": {
+    "save": "保存",
+    "saveSuccess": "文件保存成功",
+    "saveFail": "文件保存失败",
+    "copySuccess": "链接复制成功",
+    "copyFail": "链接复制失败",
+
+    "preview": "预览",
+    "code": "代码",
+    "splitScreen": "分屏",
+
+    "system":"系统",
+    "page":"页面",
+    "edit":"编辑",
+    "insert":"插入",
+    "help":"帮助",
+    "backHomePage":"返回首页",
+    "newWebsite":"新建网站",
+    "siteSettings":"网站设置",
+    "dataSource":"数据源",
+    "revoke":"撤销",
+    "redo":"重做",
+    "module":"模块",
+
+    "refresh": "刷新",
+    "close": "关闭",
+    "delete": "删除",
+    "delConfirm": "确定删除",
+    "nameSingle": "名",
+    "name": "名称",
+    "link": "链接",
+    "setting": "设置",
+    "create": "创建",
+
+    "folder": "文件夹",
+    "newPage": "新建页面",
+    "newFolder": "新建文件夹",
+    "website": "网页",
+    "page": "页面",
+
+    "emptyName": "名不能为空",
+    "nameRule": "名只能由字母，数字和下划线组成",
+    "nameUnderline": "名不能由下划线开头",
+    "nameExist": "同名文件已经存在",
+
+    "openedFiles": "已打开",
+    "myPersonalWebsites": "我创建的网站",
+    "myContributedWebsites": "我参与的网站",
+    "myContributedWebsitesTip": "获得他人网站的编辑权限后，将会在这里显示",
+
+    "noPersonalWebsite": "还没有创建网站",
+    "createWebsiteNow": "现在创建",
+
+    "addMod": "请点击添加内容",
+    "showCode": "显示代码",
+
+    "modAttr": "属性",
+    "modStyle": "样式",
+    "modDel": "删除模块",
+    "modDelMsg": "确定删除这个模块？",
+    "modDelMsgTitle": "删除提示",
+
+    "select": "请选择",
+    "selfWindowOpen": "本窗口打开",
+    "newWindowOpen": "新窗口打开",
+    "openMenuEditor": "打开菜单编辑器",
+    "openGalleryEditor": "打开图片编辑器",
+    "menuEditor": "菜单编辑器",
+    "galleryEditor": "图片编辑器",
+    "imgSrc": "图片地址",
+    "insertAfter": "后面添加",
+    "insertBefore": "前面添加",
+    "insertChild": "添加子项",
+    "noData": "暂无数据，请添加",
+    "delNotice": "删除提醒",
+    "menuDelMsg": "确定删除这个节点？子节点也会直接被删除",
+    "menuItem": "菜单项"
+  },
+  "modList": {
+    "recent": "常用",
+    "markdown": "Markdown",
+    "text": "文本",
+    "carousel": "图片轮播",
+    "mixLayer": "图文叠加",
+    "mixPosition": "图文拼接",
+    "menu": "导航菜单",
+    "title": "标题",
+    "graphic": "图形",
+    "widescreenImage": "宽屏图像",
+    "interative": "交互",
+    "qq": "调用QQ聊天",
+    "mixAndMatch": "混合搭配",
+    "paracraft": "Paracraft作品",
+    "works": "作品",
+    "specialPerformance": "特殊表现",
+    "board": "绘图板",
+    "vipRead": "VIP阅读权限",
+    "comment": "评论留言",
+    "setting": "设置"
+  },
+  "adi": {
+    "markdown": {
+      "markdown": "欢迎使用Keepwork Markdown编辑器"
+    },
+    "menu": {
+      "menu": "菜单1"
+    },
+    "title": {
+      "menu": "菜单1",
+      "businessName": "公司名称",
+      "tagLine": "宣传词"
+    },
+    "text": {
+      "title": "卢布尔雅那",
+      "paragraph":
+        "一个人去旅行，而且是去故乡的山水间徜徉。临行之前，面对太多的疑问和不解：为何是一个人？也有善意的提醒：何不去远方！昆明呀——赶一个花海；三亚呀——赴一个蓝天碧海。只是微笑地固执自己的坚持，不做任何解释。没有人明白，这一次是一个告别，或者一个永远的告别，以后我会去到很多很繁华或苍凉，辽远或偏僻的地方，而会常常想起这一次的旅行，想起那座山，那个城，那些人……"
+    },
+    "mixLayer": {
+      "title": "加利福尼亚大学",
+      "subtitle": "顶尖研究型大学",
+      "paragraph":
+        "加利福尼亚大学伯克利分校是美国最负盛名且是最顶尖的一所公立研究型大学，位于旧金山东湾伯克利市的山丘上。1868年由加利福尼亚学院以及农业、矿业和机械学院合并而成，1873年迁至圣弗朗西斯科（旧金山）附近的伯克利市。伯克利加大是加利福尼亚大学中最老的一所。它也是美国大学协会（Association of American Universities）创始会员之一。其吉祥物蜕变自加州徽号，故其学生亦常自称“金色小熊”。加州大学伯克利分校与斯坦福大学、麻省理工学院等一同被誉为美国工程科技界的学术领袖。"
+    },
+    "mixPosition": {
+      "title": "一个人，一条路，人在途中",
+      "subtitle": "我们一直在旅行",
+      "paragraph":
+        "一个人去旅行，而且是去故乡的山水间徜徉。临行之前，面对太多的疑问和不解：为何是一个人？也有善意的提醒：何不去远方！昆明呀——赶一个花海；三亚呀——赴一个蓝天碧海。只是微笑地固执自己的坚持，不做任何解释。没有人明白，这一次是一个告别，或者一个永远的告别，以后我会去到很多很繁华或苍凉，辽远或偏僻的地方，而会常常想起这一次的旅行，想起那座山，那个城，那些人……",
+      "button": "查看更多"
+    },
+    "paracraft": {
+      "worldName": "默认名字",
+      "author": {
+        "desc": "作者:",
+        "text": "你的名字"
+      },
+      "version": {
+        "desc": "版本"
+      },
+      "viewTimes": {
+        "desc": "浏览量"
+      },
+      "size": {
+        "desc": "大小"
+      },
+      "download": {
+        "name": "下载"
+      },
+      "enter": {
+        "name": "进入"
+      },
+      "desc": {
+        "data":
+          "作品简介：\r从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。"
+      }
+    },
+    "board": {
+      "desc": "点击左侧编辑按钮开始编辑"
+    },
+    "qq": {
+      "desc": "客服中心"
+    },
+    "vipRead": {
+      "onlyVip": "本网页内容，仅限VIP用户浏览全部",
+      "on": "（开启）",
+      "off": "（关闭）",
+      "becomeVip": "成为VIP，才能查看更多",
+      "login": "登录后，才能查看更多"
+    },
+    "comment": {
+      "title": "我要评论",
+      "delete": "删除",
+      "commit": "提交",
+      "close": "评论功能已关闭",
+      "notice": "分享你的想法！"
+    }
+  },
+  "card": {
+    "imgLoop": "图文轮播",
+    "img": "宽屏图像",
+    "media": "图片",
+    "title": "主标题",
+    "subtitle": "副标题",
+    "paragraph": "文本档",
+    "button": "按钮",
+    "menu": "菜单编辑器",
+    "logo": "logo",
+    "businessName": "主标题",
+    "tagline": "副标题",
+    "qq": "qq号码",
+    "pic": "图片",
+    "desc": "文本描述",
+    "md": "markdown文档",
+    "comment": "评论",
+    "vipRead": "vip阅读"
+  }
 }

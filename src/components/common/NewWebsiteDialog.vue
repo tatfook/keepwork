@@ -17,9 +17,9 @@
                 <span class="template-info">{{ template.name }}</span>
               </div>
               <div class="bottom">
-                <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
-                  <i class="iconfont icon-chakanyanjingshishifenxi"></i> 预 览
-                </a>
+                <!-- <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
+                  <i class="iconfont icon-chakanyanjingshishifenxi"></i> 预 览 【新版本预览先隐藏】
+                </a> -->
               </div>
             </el-card>
           </el-col>
@@ -46,7 +46,7 @@
       </h1>
       <p>网址：
         <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
-        <br/> 您还可以在 网站设置 页面设置网站名称、标签
+        <br/> 您还可以在 网站设置 页面设置网站名称
         <br/>
         开启VIP ，额外支持私有权限以及权限管理等特权
       </p>
@@ -84,6 +84,10 @@ export default {
       if (!/^[A-Za-z0-9_]+$/.test(trimmedValue)) {
         this.isNameIllegal = true
         return callback(new Error('网站名只能由字母，数字和下划线组成'))
+      }
+      if (/^[_]/.test(trimmedValue)) {
+        this.isNameIllegal = true
+        return callback(new Error('网站名不能以下划线开头'))
       }
       if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1) {
         this.isNameIllegal = true
@@ -148,13 +152,13 @@ export default {
     },
     websiteSetting() {
       // to check the data structure, see doc/data_examples/webTemplateConfig.json
-      let { name: categoryName, classify: type } = this.selectedCategory
+      let { name: categoryName } = this.selectedCategory
       let { name: templateName, logoUrl } = this.selectedTemplate
       return {
         categoryName,
-        type,
+        type: categoryName, // seems useless
         templateName,
-        logoUrl,
+        logoUrl, // todo: add for new templates solution
         styleName: '默认样式' // seems useless
       }
     },
@@ -166,7 +170,7 @@ export default {
   },
   async mounted() {
     await this.userGetWebTemplateConfig()
-    await this.userGetAllWebsite({ ignoreCache: false })
+    await this.userGetAllWebsite({ useCache: true })
     this.loading = false
   },
   methods: {
@@ -211,6 +215,7 @@ export default {
     resetAndClose() {
       this.$emit('close')
       this.stepIndex = 0
+      this.websiteNameForm.value = ''
       this.resetSelectedCategoryIndex()
     },
     async handleSubmit() {
@@ -299,7 +304,7 @@ export default {
       left: 0;
       font-size: 20px;
       color: #fff;
-      display: none;
+      display: inline-block;
       background: rgba(26, 52, 71, 0.8);
     }
   }

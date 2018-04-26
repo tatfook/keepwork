@@ -85,7 +85,7 @@ export default {
             )
           } else {
             if(!self.properties.data && self.editMode) {
-              return <div class="mx-client-start">点击左侧编辑按钮开始编辑</div>
+              return <div class="mx-client-start">{self.$t(self.options.desc)}</div>
             } else {
               return <div></div>
             }
@@ -101,11 +101,6 @@ export default {
     }
   },
   mixins: [compBaseMixin],
-  methods: {
-    sync(prop, value) {
-      this[prop] = value
-    }
-  },
   computed: {
     getDialogProps() {
       let props = { visible: this.visible, fullscreen: true }
@@ -165,9 +160,10 @@ export default {
     background-color: #dedede;
     color: #333;
     height: 100px;
-    line-height: 100px;
-    text-align: center;
-    font-size: 30px;
+    font-size: 20px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

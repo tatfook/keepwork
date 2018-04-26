@@ -5,18 +5,17 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   title: {
-    emptyName: '加利福尼亚大学',
+    emptyName: 'adi.mixLayer.title',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   subtitle: {
-    emptyName: '顶尖研究型大学',
+    emptyName: 'adi.mixLayer.subtitle',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   paragraph: {
-    emptyData:
-      '加利福尼亚大学伯克利分校是美国最负盛名且是最顶尖的一所公立研究型大学，位于旧金山东湾伯克利市的山丘上。1868年由加利福尼亚学院以及农业、矿业和机械学院合并而成，1873年迁至圣弗朗西斯科（旧金山）附近的伯克利市。伯克利加大是加利福尼亚大学中最老的一所。它也是美国大学协会（Association of American Universities）创始会员之一。其吉祥物蜕变自加州徽号，故其学生亦常自称“金色小熊”。加州大学伯克利分校与斯坦福大学、麻省理工学院等一同被誉为美国工程科技界的学术领袖。'
+    emptyData: 'adi.mixLayer.paragraph'
   }
 }
 export default [
@@ -81,7 +80,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix1.png')
+    cover: require('@/../static/adi/mixLayer/mix1.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 1
   {
@@ -145,7 +152,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix2.png')
+    cover: require('@/../static/adi/mixLayer/mix2.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 2
   {
@@ -209,7 +224,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix3.png')
+    cover: require('@/../static/adi/mixLayer/mix3.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 3
   {
@@ -271,7 +294,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix4.png')
+    cover: require('@/../static/adi/mixLayer/mix4.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 4
   {
@@ -334,7 +365,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix5.png')
+    cover: require('@/../static/adi/mixLayer/mix5.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 5
   {
@@ -397,7 +436,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix6.png')
+    cover: require('@/../static/adi/mixLayer/mix6.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 6
   {
@@ -459,7 +506,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix7.png')
+    cover: require('@/../static/adi/mixLayer/mix7.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 7
   {
@@ -522,7 +577,15 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix8.png')
+    cover: require('@/../static/adi/mixLayer/mix8.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 8
   {
@@ -585,6 +648,14 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix9.png')
+    cover: require('@/../static/adi/mixLayer/mix9.png'),
+    preview: {
+      outter: {
+        height: '176px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   }
 ]

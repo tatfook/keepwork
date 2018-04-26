@@ -3,20 +3,24 @@ import _ from 'lodash'
 let emptyData = {
   preview: {
     emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   worldName: {
-    emptyName: '默认名字',
+    emptyName: 'adi.paracraft.worldName',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   author: {
-    emptyDesc: '作者:',
-    emptyText: '你的名字',
+    emptyDesc: 'adi.paracraft.author.desc',
+    emptyText: 'adi.paracraft.author.text',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   version: {
-    emptyDesc: '版本',
+    emptyDesc: 'adi.paracraft.version.desc',
     emptyText: '0.0.0',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   updateTime: {
@@ -26,31 +30,33 @@ let emptyData = {
   },
   viewTimesImg: {
     emptySrc: require('@/../static/adi/paracraft/eye.png'),
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
-    emptyDesc: '浏览量',
+    emptyDesc: 'adi.paracraft.viewTimes.desc',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
-    emptySize: '大小',
+    emptySize: 'adi.paracraft.size.size',
+    emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   download: {
-    emptyName: '下载',
+    emptyName: 'adi.paracraft.download.name',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   enter: {
-    emptyName: '进入',
+    emptyName: 'adi.paracraft.enter.name',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
   desc: {
-    emptyData: `作品简介：
-    从来都记忆模糊，记不得都去了哪些地方，看了哪些风景，遇到哪些人。尽管同学说，去旅行不在于记忆，而在于当时餐，午餐，晚餐。或许吃得不好，可是却依旧为对方擦去嘴角的油渍。风景如何，其实并不重要。`
+    emptyData: 'adi.paracraft.desc.data'
   }
 }
 
@@ -170,7 +176,15 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png')
+    cover: require('@/../static/adi/paracraft/paracraft1.png'),
+    preview: {
+      outter: {
+        height: '48px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 1
   {
@@ -273,7 +287,15 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft2.png')
+    cover: require('@/../static/adi/paracraft/paracraft2.png'),
+    preview: {
+      outter: {
+        height: '87px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   },
   // style 2
   {
@@ -362,6 +384,14 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft3.png')
+    cover: require('@/../static/adi/paracraft/paracraft3.png'),
+    preview: {
+      outter: {
+        height: '79px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   }
 ]

@@ -1,15 +1,9 @@
 let emptyData = {
-  imgLoop: [
-    {
-      img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
-      link: 'http://keepwork.com'
-    },
-    {
-      img: require('@/../static/adi/imgLoop/imgCarouselTwo.jpg'),
-      link: 'http://keepwork.com'
-    }
-  ]
+  imgLoop: {
+    data: []
+  }
 }
+
 export default [
   // style 0
   {
@@ -22,30 +16,36 @@ export default [
       }
     },
     theme: {
-      root: ['mod-space']
+      root: []
     },
     options: {
       theme: {},
       config: {
-        ...emptyData,
-        imgLoop: {
-          emptydata: emptyData,
-          height: '150px'
-        }
+        imgLoop: { height: '150px' }
       }
     },
-    cover: require('@/../static/adi/imgLoop/thumbnail.png')
+    cover: require('@/../static/adi/imgLoop/thumbnail.png'),
+    preview: {
+      outter: {
+        height: '40px'
+      }
+    }
   },
 
   // style 1
   {
     theme: {
-      root: ['mod-space']
+      root: []
     },
     options: {
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/imgLoop/thumbnail.png')
+    cover: require('@/../static/adi/imgLoop/thumbnail.png'),
+    preview: {
+      outter: {
+        height: '79px'
+      }
+    }
   }
 ]

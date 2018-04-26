@@ -2,17 +2,29 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueI18n from 'vue-i18n'
 import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
-// import createPersistedState from 'vuex-persistedstate'
 import Viewport from './Viewport.vue'
 import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import { transfer } from 'vuex-iframe-sync'
+import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
+
+Vue.use(VueI18n)
+
+const i18n = new VueI18n({
+  locale,
+  messages: i18nMessages
+})
+
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 
 const store = new Vuex.Store({
   modules: {
@@ -32,6 +44,7 @@ const store = new Vuex.Store({
 new Vue({
   el: '#viewport',
   store,
+  i18n,
   components: { Viewport },
   template: '<Viewport/>'
 })

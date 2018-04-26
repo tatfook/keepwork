@@ -1,20 +1,11 @@
 <template>
   <!-- <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input> -->
-  <el-select class="link-target-type" v-model='linkTargetValue' placeholder='请选择' @change='updateValue' size='mini' @focus='getFocus'>
+  <el-select class="link-target-type" v-model='linkTargetValue' :placeholder='$t("editor.select")' @change='updateValue' size='mini' @focus='getFocus'>
     <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
   </el-select>
 </template>
 <script>
-const LinkTargetOptions = [
-  {
-    label: '本窗口打开',
-    value: '_self'
-  },
-  {
-    label: '新窗口打开',
-    value: '_blank'
-  }
-]
+
 import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
@@ -24,8 +15,19 @@ export default {
     originValue: String
   },
   data() {
+    let self = this
+
     return {
-      linkTargets: LinkTargetOptions
+      linkTargets: [
+        {
+          label: self.$t('editor.selfWindowOpen'),
+          value: '_self'
+        },
+        {
+          label: self.$t('editor.newWindowOpen'),
+          value: '_blank'
+        }
+      ]
     }
   },
   computed: {
@@ -52,7 +54,7 @@ export default {
 <style lang='scss'>
 .link-target-type {
   margin-top: 11px;
-  width: 108px;
+  width: auto;
 
   .el-input__inner {
     color: #909399;

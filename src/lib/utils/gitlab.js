@@ -1,13 +1,15 @@
 import _ from 'lodash'
 
 export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
+export const CONFIG_FOLDER_NAME = '_config'
 
-let protocol = (location && location.protocol) ? location.protocol : 'http:'
+let protocol = location && location.protocol ? location.protocol : 'http:'
 export const webTemplateProject = {
   rawBaseUrl: `${protocol}//git.keepwork.com`,
   dataSourceUsername: 'gitlab_rls_official',
-  projectName: 'keepworktemplate',
-  configFullPath: 'official/template/webTemplateConfig.md'
+  projectName: 'keepwork-template-v2',
+  projectId: 36332,
+  configFullPath: 'config.json'
 }
 
 /*doc
@@ -22,8 +24,12 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let treeWithChildren = {}
 
   files.forEach(file => {
-    let setKeys = file.path.substr(rootPath.length + 1).split('/').join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`).split(keysSeperator)
-    let temporaryObject = _.set({}, setKeys, {...file})
+    let setKeys = file.path
+      .substr(rootPath.length + 1)
+      .split('/')
+      .join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`)
+      .split(keysSeperator)
+    let temporaryObject = _.set({}, setKeys, { ...file })
     _.merge(treeWithChildren, temporaryObject)
   })
 
@@ -37,7 +43,9 @@ export const gitTree2NestedArray = (files, rootPath) => {
     return tree
   }
 
-  let nestedArray = convertChildren2ArrayInTree({[temporaryChildrenKey]: treeWithChildren})['children']
+  let nestedArray = convertChildren2ArrayInTree({
+    [temporaryChildrenKey]: treeWithChildren
+  })['children']
   return nestedArray
 }
 
@@ -54,10 +62,15 @@ export const suffixFileExtension = (() => {
   return (str, fileExtension = 'md') => {
     let cacheKey = str + fileExtension
     if (!cache[cacheKey]) {
-      let suffixStr = '.' + fileExtension
-      let strArr = str.split(suffixStr)
-      if (strArr[strArr.length - 1] !== '') strArr[strArr.length] = ''
-      cache[cacheKey] = strArr.join(suffixStr)
+      // ignore json file, todo: add more ignore file suffix
+      if (/\.json$/.test(str)) {
+        cache[cacheKey] = str
+      } else {
+        let suffixStr = '.' + fileExtension
+        let strArr = str.split(suffixStr)
+        if (strArr[strArr.length - 1] !== '') strArr[strArr.length] = ''
+        cache[cacheKey] = strArr.join(suffixStr)
+      }
     }
     return cache[cacheKey]
   }
@@ -82,7 +95,9 @@ export const getFileFullPathByPath = (() => {
       let [username, name, ...pagenames] = path.split('/').filter(x => x)
       let isSiteRootPath = !pagenames.length
 
-      let fullPathNames = isSiteRootPath ? [username, name, 'index'] : [username, name, ...pagenames]
+      let fullPathNames = isSiteRootPath
+        ? [username, name, 'index']
+        : [username, name, ...pagenames]
       let fullPath = fullPathNames.join('/')
       fullPath = suffixFileExtension(fullPath, 'md')
       cache[cacheKey] = fullPath
@@ -91,10 +106,23 @@ export const getFileFullPathByPath = (() => {
   }
 })()
 
+export const getFileSitePathByPath = path => {
+  let [username, name] = path.split('/').filter(x => x)
+  return [username, name].join('/')
+}
+
+export const getRelativePathByPath = path => {
+  let [, , ...subPaths] = path.split('/').filter(x => x)
+  return subPaths.join('/')
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
+  CONFIG_FOLDER_NAME,
   webTemplateProject,
   gitTree2NestedArray,
   suffixFileExtension,
-  getFileFullPathByPath
+  getFileFullPathByPath,
+  getFileSitePathByPath,
+  getRelativePathByPath
 }

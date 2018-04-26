@@ -1,9 +1,10 @@
-/*
+/*doc
 ---
 title: Text Mod
 name: Text Mod
 category: Adi Mod
 ---
+
 ## @Text
 
 ## 参数说明
