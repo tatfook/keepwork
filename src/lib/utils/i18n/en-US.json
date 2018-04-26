@@ -157,5 +157,24 @@
       "close": "Comments are closed",
       "notice": "Share your ideas!"
     }
+  },
+  "card": {
+    "imgLoop": "Graphic rotation",
+    "img": "Widescreen image",
+    "media": "image",
+    "title": "Main title",
+    "subtitle": "subtitle",
+    "paragraph": "Text file",
+    "button": "button",
+    "menu": "Menu Editor",
+    "logo": "logo",
+    "businessName": "Main title",
+    "tagline": "subtitle",
+    "qq": "qq number",
+    "pic": "image",
+    "desc": "Text description",
+    "md": "Markdown documentation",
+    "comment": "comment",
+    "vipRead": "Vip reading"
   }
 }

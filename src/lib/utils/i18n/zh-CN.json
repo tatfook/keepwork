@@ -158,5 +158,24 @@
       "close": "评论功能已关闭",
       "notice": "分享你的想法！"
     }
+  },
+  "card": {
+    "imgLoop": "图文轮播",
+    "img": "宽屏图像",
+    "media": "图片",
+    "title": "主标题",
+    "subtitle": "副标题",
+    "paragraph": "文本档",
+    "button": "按钮",
+    "menu": "菜单编辑器",
+    "logo": "logo",
+    "businessName": "主标题",
+    "tagline": "副标题",
+    "qq": "qq号码",
+    "pic": "图片",
+    "desc": "文本描述",
+    "md": "markdown文档",
+    "comment": "评论",
+    "vipRead": "vip阅读"
   }
 }
