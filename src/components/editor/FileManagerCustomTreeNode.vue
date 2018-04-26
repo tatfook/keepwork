@@ -78,8 +78,8 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}${$t('nameRule')}`
-            if (/^[_]/.test(value)) return `${what}${$t('editor.nameUnderline')}`
+            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}${self.$t('nameRule')}`
+            if (/^[_]/.test(value)) return `${what}${self.$t('editor.nameUnderline')}`
             if (childNames.indexOf(value) > -1) return self.$t('nameExist')
             return true
           }
