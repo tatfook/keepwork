@@ -5,10 +5,27 @@
   },
   "editor": {
     "save": "保存",
+    "saveSuccess": "文件保存成功",
+    "saveFail": "文件保存失败",
+    "copySuccess": "链接复制成功",
+    "copyFail": "链接复制失败",
 
     "preview": "预览",
     "code": "代码",
     "splitScreen": "分屏",
+
+    "system":"系统",
+    "page":"页面",
+    "edit":"编辑",
+    "insert":"插入",
+    "help":"帮助",
+    "backHomePage":"返回首页",
+    "newWebsite":"新建网站",
+    "siteSettings":"网站设置",
+    "dataSource":"数据源",
+    "revoke":"撤销",
+    "redo":"重做",
+    "module":"模块",
 
     "refresh": "刷新",
     "close": "关闭",
