@@ -115,7 +115,7 @@ const actions = {
     const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
     await dispatch(
       'gitlab/readFile',
-      { path: layoutFilePath, editorMode: true },
+      { path: layoutFilePath, editorMode: false },
       { root: true }
     )
     let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
@@ -132,7 +132,7 @@ const actions = {
       let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
       await dispatch(
         'gitlab/readFile',
-        { path: filePath, editorMode: true },
+        { path: filePath, editorMode: false },
         { root: true }
       )
       let { content } = gitlabGetFileByPath(filePath)

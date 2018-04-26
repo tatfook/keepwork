@@ -9,7 +9,7 @@ export default {
   Const,
 
   buildLayouts(content) {
-    return JSON.parse(content)
+    return _.isString(content) ? JSON.parse(content) : content
   },
 
   getLayout(layouts, path) {
