@@ -6,13 +6,15 @@
     </el-col>
     <el-col class="preview-box">
       <div v-for='mod in activeModsList' :key='mod.name'>
-        <div v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
+        <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
           <div class="render-mod-container--click-prevent"></div>
-          <div class="render-mod-container">
-            <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+          <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [])">
+            <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
+              <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+            </div>
           </div>
         </div>
-        <!-- <img v-if='mod.name == "ModMarkdown"' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'> -->
+        <img v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
       </div>
     </el-col>
   </el-row>
@@ -76,6 +78,17 @@ export default {
     }
   },
   methods: {
+    generateStyleString(style) {
+      let string = ''
+
+      if(style) {
+        _.forEach(style, (value, key) => {
+          string = string + key + ':' + value + ';'
+        })
+      }
+
+      return string
+    },
     nodeMenuClick(data) {
       if (data.children && data.children.length > 0) {
         return
@@ -134,7 +147,7 @@ export default {
 }
 .render {
   width: 295px;
-  height: 181px;
+  height: auto;
   background-color: white;
   overflow: hidden;
   margin: auto;
@@ -150,8 +163,8 @@ export default {
 
   .render-mod-container{
     border: 10px solid white;
+    height: 300px;
     width: 275px;
-    height: 161px;
     overflow: hidden;
 
     .render-mod {

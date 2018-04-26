@@ -22,6 +22,11 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/vipRead/vip.jpeg')
+    cover: require('@/../static/adi/vipRead/vip.jpeg'),
+    preview: {
+      outter: {
+        height: '40px'
+      }
+    }
   }
 ]

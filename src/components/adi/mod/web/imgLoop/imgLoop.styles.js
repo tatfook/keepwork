@@ -36,7 +36,12 @@ export default [
         imgLoop: _.merge({}, { height: '150px' }, emptyData.imgLoop)
       }
     },
-    cover: require('@/../static/adi/imgLoop/thumbnail.png')
+    cover: require('@/../static/adi/imgLoop/thumbnail.png'),
+    preview: {
+      outter: {
+        height: '40px'
+      }
+    }
   },
 
   // style 1
@@ -48,6 +53,11 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/imgLoop/thumbnail.png')
+    cover: require('@/../static/adi/imgLoop/thumbnail.png'),
+    preview: {
+      outter: {
+        height: '79px'
+      }
+    }
   }
 ]

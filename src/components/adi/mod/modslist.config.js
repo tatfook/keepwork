@@ -19,38 +19,43 @@ var modsList = [
     children: [
       {
         id: '1-1',
-        label: 'modList.markdown',
-        mods: [ModMarkdown]
+        label: 'modList.title',
+        mods: [ModTitle]
       },
       {
         id: '1-2',
-        label: 'modList.text',
-        mods: [ModText]
-      },
-      {
-        id: '1-3',
-        label: 'modList.carousel',
-        mods: [ModImgLoop]
-      },
-      {
-        id: '1-4',
-        label: 'modList.mixLayer',
-        mods: [ModMixLayer]
-      },
-      {
-        id: '1-5',
-        label: 'modList.mixPosition',
-        mods: [ModMixPositon]
-      },
-      {
-        id: '1-6',
         label: 'modList.menu',
         mods: [ModMenu]
       },
       {
+        id: '1-3',
+        label: 'modList.widescreenImage',
+        mods: [ModImg]
+      },
+      {
+        id: '1-4',
+        label: 'modList.text',
+        mods: [ModText]
+      },
+      {
+        id: '1-5',
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
+      },
+      {
+        id: '1-6',
+        label: 'modList.mixPosition',
+        mods: [ModMixPositon]
+      },
+      {
         id: '1-7',
-        label: 'modList.title',
-        mods: [ModTitle]
+        label: 'modList.mixLayer',
+        mods: [ModMixLayer]
+      },
+      {
+        id: '1-8',
+        label: 'modList.carousel',
+        mods: [ModImgLoop]
       }
     ]
   },
@@ -60,13 +65,18 @@ var modsList = [
     children: [
       {
         id: '2-1',
+        label: 'modList.widescreenImage',
+        mods: [ModImg]
+      },
+      {
+        id: '2-2',
         label: 'modList.carousel',
         mods: [ModImgLoop]
       },
       {
-        id: '2-2',
-        label: 'modList.widescreenImage',
-        mods: [ModImg]
+        id: '2-3',
+        label: 'modList.board',
+        mods: [ModBoard]
       }
     ]
   },
@@ -78,6 +88,16 @@ var modsList = [
         id: '3-1',
         label: 'modList.text',
         mods: [ModText]
+      },
+      {
+        id: '3-2',
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
+      },
+      {
+        id: '3-3',
+        label: 'modList.menu',
+        mods: [ModMenu]
       }
     ]
   },
@@ -87,6 +107,11 @@ var modsList = [
     children: [
       {
         id: '4-1',
+        label: 'modList.comment',
+        mods: [ModComment]
+      },
+      {
+        id: '4-2',
         label: 'modList.qq',
         mods: [ModQQ]
       }
@@ -103,18 +128,23 @@ var modsList = [
       },
       {
         id: '5-2',
-        label: 'modList.mixLayer',
-        mods: [ModMixLayer]
+        label: 'modList.paracraft',
+        mods: [ModParacraft]
       },
       {
         id: '5-3',
+        label: 'modList.text',
+        mods: [ModText]
+      },
+      {
+        id: '5-4',
         label: 'modList.mixPosition',
         mods: [ModMixPositon]
       },
       {
-        id: '5-4',
-        label: 'modList.paracraft',
-        mods: [ModParacraft]
+        id: '5-5',
+        label: 'modList.mixLayer',
+        mods: [ModMixLayer]
       }
     ]
   },
@@ -135,23 +165,13 @@ var modsList = [
     children: [
       {
         id: '7-1',
-        label: 'modList.carousel',
-        mods: [ModImgLoop]
-      },
-      {
-        id: '7-2',
         label: 'modList.board',
         mods: [ModBoard]
       },
       {
-        id: '7-3',
-        label: 'modList.vipRead',
-        mods: [ModVipRead]
-      },
-      {
-        id: '7-4',
-        label: 'modList.comment',
-        mods: [ModComment]
+        id: '7-2',
+        label: 'modList.carousel',
+        mods: [ModImgLoop]
       }
     ]
   },
@@ -163,6 +183,11 @@ var modsList = [
         id: '8-1',
         label: 'modList.qq',
         mods: [ModQQ]
+      },
+      {
+        id: '8-2',
+        label: 'modList.vipRead',
+        mods: [ModVipRead]
       }
     ]
   }

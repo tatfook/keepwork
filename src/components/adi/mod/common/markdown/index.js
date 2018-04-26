@@ -19,6 +19,7 @@ const styles = [{
       }
     }
   },
+  useImage: true,
   cover: require('@/../static/adi/markdown.jpeg')
 }]
 const templates = [[{ colMarkdown: 'md' }]]
