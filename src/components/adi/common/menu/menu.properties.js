@@ -1,7 +1,7 @@
 export default {
   data: [
     {
-      name: 'adi.menu.menu',
+      name: 'MENU',
       link: 'http://keepwork.com'
     }
   ],
