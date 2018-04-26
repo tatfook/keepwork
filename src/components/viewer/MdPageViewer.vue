@@ -32,7 +32,7 @@ export default {
       return this.storedTheme
     },
     layoutTemplate() {
-      return layoutTemplates[this.layout.styleID]
+      return layoutTemplates[this.layout.styleName]
     }
   },
   components: {

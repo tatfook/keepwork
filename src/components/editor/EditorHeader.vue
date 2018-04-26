@@ -6,31 +6,31 @@
           <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
         </template>
         <el-submenu index='1-1'>
-          <template slot='title'>系统</template>
-          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">新建网站</el-menu-item>
-          <el-menu-item index='1-1-2' :disabled='isActivePageSaved' @click='save'>保存</el-menu-item>
+          <template slot='title'>{{$t('editor.system')}}</template>
+          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</el-menu-item>
+          <el-menu-item index='1-1-2' :disabled='isActivePageSaved' @click='save'>{{$t('editor.save')}}</el-menu-item>
           <el-menu-item index='1-1-3'>
-            <a href="/wiki/user_center?userCenterContentType=websiteManager" target="_blank">网站设置</a>
+            <a href="/wiki/user_center?userCenterContentType=websiteManager" target="_blank">{{$t('editor.siteSettings')}}</a>
           </el-menu-item>
           <!-- <el-menu-item index='1-1-4'>网站备份</el-menu-item>
           <el-menu-item index='1-1-5'>版本管理</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-2'>
-          <template slot='title'>页面</template>
+          <template slot='title'>{{$t('editor.page')}}</template>
           <el-menu-item index='1-2-1'>
-            <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=dataSource" target="_blank">数据源</a>
+            <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=dataSource" target="_blank">{{$t('editor.dataSource')}}</a>
           </el-menu-item>
         </el-submenu>
         <el-submenu index='1-3'>
-          <template slot='title'>编辑</template>
-          <el-menu-item index='1-3-1' @click='undo' :disabled='!canUndo'>撤销</el-menu-item>
-          <el-menu-item index='1-3-2' @click='redo' :disabled='!canRedo'>重做</el-menu-item>
+          <template slot='title'>{{$t('editor.edit')}}</template>
+          <el-menu-item index='1-3-1' @click='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</el-menu-item>
+          <el-menu-item index='1-3-2' @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</el-menu-item>
           <!-- <el-menu-item index='1-3-3'>搜索</el-menu-item>
           <el-menu-item index='1-3-4'>替换</el-menu-item> -->
         </el-submenu>
         <el-submenu index='1-4'>
-          <template slot='title'>插入</template>
-          <el-menu-item index='1-4-1' @click="changeView('ModsList')">模块</el-menu-item>
+          <template slot='title'>{{$t('editor.insert')}}</template>
+          <el-menu-item index='1-4-1' @click="changeView('ModsList')">{{$t('editor.module')}}</el-menu-item>
           <!-- <el-menu-item index='1-4-2'>网盘</el-menu-item> -->
         </el-submenu>
         <!-- <el-submenu index='1-5'>
@@ -46,20 +46,20 @@
           </el-submenu>
         </el-submenu> -->
         <el-menu-item index='1-6'>
-          <a href="/official/help/index" target="_blank">帮助</a>
+          <a href="/official/help/index" target="_blank">{{$t('editor.help')}}</a>
         </el-menu-item>
         <el-menu-item index='1-7'>
-          <a href='/'>返回首页</a>
+          <a href='/'>{{$t('editor.backHomePage')}}</a>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
         <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-fanhui' title='撤销'></span>
+        <span class='iconfont icon-fanhui' :title='$t("editor.revoke")'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-chongzuo' title='重做'></span>
+        <span class='iconfont icon-chongzuo' :title='$t("editor.redo")'></span>
       </el-menu-item>
       <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -146,6 +146,8 @@ export default {
   methods: {
     ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveWinType']),
     async save() {
+      let self = this
+
       if (this.isActivePageSaved) {
         return
       }
@@ -154,7 +156,7 @@ export default {
         .then(() => {
           this.$message({
             showClose: true,
-            message: '文件保存成功',
+            message: self.$t('editor.saveSuccess'),
             type: 'success'
           })
         })
@@ -162,7 +164,7 @@ export default {
           console.log(e)
           this.$message({
             showClose: true,
-            message: '文件保存失败',
+            message: self.$t('editor.saveFail'),
             type: 'error'
           })
         })
@@ -181,7 +183,7 @@ export default {
         function(e) {
           that.$message({
             showClose: true,
-            message: '链接复制成功',
+            message: that.$t('editor.copySuccess'),
             type: 'success'
           })
         },
@@ -189,7 +191,7 @@ export default {
           console.log(e)
           that.$message({
             showClose: true,
-            message: '链接复制失败',
+            message: that.$t('editor.copyFail'),
             type: 'error'
           })
         }

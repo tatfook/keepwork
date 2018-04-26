@@ -29,10 +29,6 @@ export default {
     isActive: Boolean,
     area: String
   },
-  data() {
-    return {
-    }
-  },
   components: {
     EditorModSelector,
     draggable

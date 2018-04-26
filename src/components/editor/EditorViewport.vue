@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
 import {
   MAIN_AREA,
@@ -19,7 +18,6 @@ import {
   SIDEBAR_AREA
 } from '@/lib/mod/layout/const'
 import EditorViewportPartial from './EditorViewportPartial'
-import EditorModSelector from './EditorModSelector'
 import layoutTemplates from '@/components/adi/layout/templates'
 import themeFactory from '@/lib/theme/theme.factory'
 
@@ -34,9 +32,7 @@ export default {
     }
   },
   components: {
-    EditorModSelector,
-    EditorViewportPartial,
-    draggable
+    EditorViewportPartial
   },
   computed: {
     ...mapGetters({
@@ -55,14 +51,6 @@ export default {
       this.storedTheme = newTheme
       this.storedTheme.sheet.attach()
       return this.storedTheme
-    },
-    modDraggableList: {
-      get() {
-        return this.modList
-      },
-      set(value) {
-        // do nothing
-      }
     },
     layoutTemplate() {
       return layoutTemplates[this.layout.styleName]

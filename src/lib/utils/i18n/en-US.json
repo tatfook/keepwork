@@ -5,9 +5,27 @@
   },
   "editor": {
     "save": "Save",
+    "saveSuccess": "File saved successfully",
+    "saveFail": "File save failed",
+    "copySuccess": "Link copied successfully",
+    "copyFail": "Link copy failed",
+
     "preview": "Preview",
     "code": "Code",
     "splitScreen": "Split",
+
+    "system":"System",
+    "page":"Page",
+    "edit":"Edit",
+    "insert":"Insert",
+    "help":"Help",
+    "backHomePage":"BackHomePage",
+    "newWebsite":"NewWebsite",
+    "siteSettings":"SiteSettings",
+    "dataSource":"DataSource",
+    "revoke":"Revoke",
+    "redo":"Redo",
+    "module":"Module",
 
     "refresh": "Refresh",
     "close": "Close",
