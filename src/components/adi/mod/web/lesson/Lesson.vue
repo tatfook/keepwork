@@ -19,8 +19,33 @@ const hideMod = function(name, flag) {
   }
 }
 
+const getMods = function(name) {
+  let eles = document.getElementsByTagName('div')
+  let rets = []
+  for(let i = 0; i < eles.length; i++) {
+    let ele = eles[i]
+    if(ele.getAttribute('data-mod')==name){
+      rets.push(ele)
+    }
+  }
+  return rets
+}
+
+// get the first mod
+const getMod = function(name) {
+  let eles = document.getElementsByTagName('div')
+  for(let i = 0; i < eles.length; i++) {
+    let ele = eles[i]
+    if(ele.getAttribute('data-mod')==name){
+      return ele
+    }
+  }
+  return null
+}
+
 const lessonHost = 'http://127.0.0.1:3000'
 let vuex = {}
+
 const init = function(){
   console.log('init')
   if (localStorage && localStorage.vuex) {
@@ -49,13 +74,28 @@ const timer = {
   timeout: 3000, // 3s
   timeoutObj: null,
   reset: function() {
-    clearInterval(this.timeoutObj);
-    return this;
+    clearInterval(this.timeoutObj)
+    return this
   },
-  start: function() {
+  start: function(username) {
     this.timeoutObj = setInterval( function () {
       // TODO: /class/performance 获取数据后 DOM 操作
+      console.log(username)
+      let params = {username: username}
+      axios.post(lessonHost + '/api/class/performance', qs.stringify(params),
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(response => {
+          let r = response.data
+          console.log(r)
+          let studentMod = getMod('ModStudent')
+          studentMod.innerHTML = JSON.stringify(r.data)
+        })
     }, this.timeout)
+  },
+  stop: function() {
+    clearInterval(this.timeoutObj)
   }
 }
 
@@ -104,17 +144,6 @@ export default {
               }
             }
           }
-        }
-        // get the first mod
-        const getMod = function(name) {
-          let eles = document.getElementsByTagName('div')
-          for(let i = 0; i < eles.length; i++) {
-            let ele = eles[i]
-            if(ele.getAttribute('data-mod')==name){
-              return ele
-            }
-          }
-          return null
         }
         const createMod = function(name, html) {
           let ele = document.createElement('div')
@@ -177,6 +206,8 @@ export default {
           params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
           params.goals = self.modData.lesson.LessonGoals
           params.lessonNo = self.modData.lesson.LessonNo
+          let quizzs = getMods('ModQuizz');
+          console.log(quizzs);
           // lessonPerformance、
           console.log(params)
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
@@ -185,7 +216,11 @@ export default {
             })
             .then(response => {
               console.log(response)
-              // TODO:open客户端传递我们的地址
+              let r = response.data
+              if(r.err == 0) {
+                // TODO:open客户端传递我们的地址
+                window.location = r.data.url + '?device=pc&sn=' + r.data.recordSn
+              }
             })
         } else {
           console.log('未登录')
@@ -219,6 +254,7 @@ export default {
               classState = 1
               classId = r.data.classId
               // TODO: 开始轮询获取 Students' Performance 数据
+              timer.reset().start(self.username)
               // 弹窗显示 ClassId
               self.$alert("The class ID is " + r.data.classId + ".<br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Students' Performance.OK<br/>Attention: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.", 'Info', {
                 dangerouslyUseHTMLString: true,

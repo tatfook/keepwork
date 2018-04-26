@@ -44,6 +44,8 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import axios from 'axios'
+import qs from 'qs'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div');
@@ -60,6 +62,14 @@ const hideMod = function(name, flag) {
 }
 
 const saveQuiz = []; // 保存所提交的题型
+const quizzList = []; // 试题集合
+const answerSheet = []; // 保存当前答题卡
+const lessonHost = 'http://127.0.0.1:3000'
+let device; // 设备 pc 电脑自学 pad 课堂学习
+let sn; // 试题的sn
+let classId; // 课堂 Id
+let username; // 用户名
+let studentNo; // 学号
 
 export default {
   name: 'AdiQuizz',
@@ -78,50 +88,151 @@ export default {
   },
   mounted: function() {
     let query = location.href.split('?')[1];
-    let device;
     if (query) {
         query = query.split('&');
         for (var i = 0; i < query.length; i++) {
             var ary = query[i].split('=');
             if (ary[0] == 'device' && ary[1]) {
-                device = ary[1];
-                break;
+              device = ary[1];
+            } else if(ary[0] == 'sn' && ary[1]) {
+              sn = ary[1];
+            } else if(ary[0] == 'classId' && ary[1]) {
+              classId = ary[1];
+            } else if(ary[0] == 'username' && ary[1]) {
+              username = ary[1];
+            } else if(ary[0] == 'studentNo' && ary[1]) {
+              studentNo = ary[1];
             }
         }
     }
     if (device == 'pc' || device == 'pad') {
-      document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden');
-      document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden');
-      hideMod('ModLesson', true);
+      let _this = this.properties.data[0];
+      quizzList.push(_this);
+      let answer = {};
+      answer.quizzId = _this.id;
+      answer.quizzScore = _this.score;
+      answerSheet.push(answer);
+    }
+    if(device == 'pc') {
       this.isOperate = true;
+    } else if(device == 'pad') {
+      // 课堂学习 TODO: 进入课堂 /class/enter
+      let params = {
+        device: 'pad',
+        classId: classId,
+        username: username,
+        studentNo: studentNo
+      }
+      axios.post(lessonHost + '/api/class/enter', qs.stringify(params),
+      {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(response => {
+        let r = response.data
+        if(r.err == 0) {
+          this.isOperate = true;
+        } else {
+          this.$message.error("课堂已关闭或数据异常~");
+        }
+      })
     }
   },
   methods: {
     submitQuizz() {
       this.isShow = true;
       let data = this.properties.data;
-
+      let trueFlag = false;
+      let myAnswer;
       if(data[0].type == 0) {  // 单选
-        if(this.quizz.single === data[0].answer) {
-          console.log("恭喜你，单选答对了~");
+        myAnswer = this.quizz.single;
+        if(myAnswer === data[0].answer) {
+          trueFlag = true;
         }else {
-          console.log("很遗憾，单选答错了~");
+          trueFlag = false;
         }
       }else if(data[0].type == 2) { // 判断
-        if(this.quizz.judge === data[0].answer) {
-          console.log("恭喜你，判断答对了~");
+        myAnswer = this.quizz.judge;
+        if(myAnswer === data[0].answer) {
+          trueFlag = true;
         }else {
-          console.log("很遗憾，判断答错了~");
+          trueFlag = false;
         }
       }else if(data[0].type == 1) { // 多选
-        if(JSON.stringify(this.quizz.multiple) === data[0].answer) {
-          console.log("恭喜你，多选答对了~");
+        myAnswer = this.quizz.multiple;
+        if(JSON.stringify(myAnswer) === data[0].answer) {
+          trueFlag = true;
         }else {
-          console.log("很遗憾，多选答错了~");
+          trueFlag = false;
         }
       }
-
+      if(trueFlag) {
+        this.$message({
+          message: '恭喜你，答对了~',
+          type: 'success'
+        });
+      } else {
+        this.$message.error("很遗憾，答错了~");
+      }
+      for(let i = 0; i < answerSheet.length; i++) {
+        let item = answerSheet[i];
+        if(item.quizzId === data[0].id) {
+          item.trueFlag = trueFlag;
+          if(myAnswer instanceof Array) {
+            item.myAnswer = myAnswer.join(',');
+          }else {
+            item.myAnswer = myAnswer;
+          }
+          break;
+        }
+      }
       saveQuiz.push(JSON.stringify(data));
+      // console.log('ssssssssssssssssssssssss')
+      // console.log(saveQuiz)
+      // console.log(quizzList)
+      // console.log('answerSheet:')
+      // console.log(answerSheet)
+      let params = {};
+      params.answerSheet = JSON.stringify(answerSheet);
+      params.totalScore = 0;
+      params.rightCount = 0;
+      params.wrongCount = 0;
+      params.emptyCount = 0;
+      params.sn = sn;
+      for(let i = 0; i < answerSheet.length; i++) {
+        let item = answerSheet[i];
+        if(item.myAnswer) {
+          if(item.trueFlag) {
+            params.rightCount++;
+            params.totalScore += parseInt(item.quizzScore);
+          } else {
+            params.wrongCount++;
+          }
+        } else{
+          params.emptyCount++;
+        }
+      }
+      if(device === 'pc') { // 自学
+        if(!sn) {
+          // 异常
+          return;
+        }
+        axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(response => {
+
+          })
+      } else if(device === 'pad') { // 课堂学习
+        params.username = username
+        axios.post(lessonHost + '/api/class/replay', qs.stringify(params),
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(response => {
+
+          })
+      }
     }
   }
 }
