@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import LayoutHelper from '@/lib/mod/layout'
+import {
+  getFileFullPathByPath,
+  getFileSitePathByPath
+} from '@/lib/utils/gitlab'
 
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 
@@ -13,6 +17,7 @@ const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
 const REFRESH_MOD_ATTRIBUTES = 'REFRESH_MOD_ATTRIBUTES'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
+const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
 
 const UPDATE_ACTIVE_MOD_ATTRIBUTES = 'UPDATE_ACTIVE_MOD_ATTRIBUTES'
 const UPDATE_MODS = 'UPDATE_MODS'
@@ -34,6 +39,9 @@ const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 
+const REFRESH_SITE_SETTINGS = 'REFRESH_SITE_SETTINGS'
+const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
+
 export const props = {
   SET_ACTIVE_PAGE,
 
@@ -45,6 +53,7 @@ export const props = {
   SET_ACTIVE_PROPERTY,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
+  SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
   UPDATE_MODS,
@@ -63,7 +72,29 @@ export const props = {
 
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
-  CLOSE_OPENED_FILE
+  CLOSE_OPENED_FILE,
+
+  REFRESH_SITE_SETTINGS,
+  UPDATE_OPENED_LAYOUT_FILE
+}
+
+const activeModList = state => {
+  const area = state.activePage.activeArea
+  if (area === LayoutHelper.Const.MAIN_AREA) return state.activePage.modList
+
+  const sitePath = getFileSitePathByPath(state.activePageUrl)
+  const siteSetting = state.siteSettings[sitePath]
+  const layout = LayoutHelper.getLayoutByPath(
+    siteSetting.siteLayoutConfig,
+    state.activePageUrl
+  )
+
+  let targetLayoutContentFileName = _.get(layout, ['content', area])
+  let targetLayoutContentFilePath = `${area}s/${targetLayoutContentFileName}`
+  if (targetLayoutContentFileName && targetLayoutContentFilePath) {
+    return siteSetting.pages[targetLayoutContentFilePath].modList
+  }
+  console.error('invalid active mod list')
 }
 
 const mutations = {
@@ -79,7 +110,7 @@ const mutations = {
   },
   [ADD_MOD](state, { modProperties, key, cmd }) {
     const mod = Parser.addBlockByKey(
-      state.activePage.modList,
+      activeModList(state),
       key,
       modProperties,
       cmd,
@@ -88,19 +119,22 @@ const mutations = {
     Vue.set(state.activePage, 'activeMod', mod)
   },
   [DELETE_MOD](state, key) {
-    Parser.deleteBlock(state.activePage.modList, key)
+    Parser.deleteBlock(activeModList(state), key)
   },
   [MOVE_MOD](state, { oldIndex, newIndex }) {
-    Parser.moveBlock(state.activePage.modList, oldIndex, newIndex)
-    Vue.set(state.activePage, 'activeMod', state.activePage.modList[newIndex])
+    const modList = activeModList(state)
+    Parser.moveBlock(modList, oldIndex, newIndex)
+    Vue.set(state.activePage, 'activeMod', modList[newIndex])
   },
   [SET_ACTIVE_MOD](state, key) {
+    if (!key) return Vue.set(state.activePage, 'activeMod', null)
     if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
       return
     }
-    const index = state.activePage.modList.map(el => el.key).indexOf(key)
+    const modList = activeModList(state)
+    const index = modList.map(el => el.key).indexOf(key)
     if (index !== -1) {
-      Vue.set(state.activePage, 'activeMod', state.activePage.modList[index])
+      Vue.set(state.activePage, 'activeMod', modList[index])
     }
   },
   [SET_ACTIVE_PROPERTY](state, property) {
@@ -108,28 +142,35 @@ const mutations = {
     Vue.set(state.activePage, 'activeProperty', property)
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
-    Parser.updateBlock(state.activePage.modList, key, code)
+    const modList = activeModList(state)
+    Parser.updateBlock(modList, key, code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }
+    const modList = activeModList(state)
     Parser.updateBlockAttribute(
-      state.activePage.modList,
+      modList,
       state.activePage.activeMod.key,
       state.activePage.activeProperty,
       newData
     )
   },
+  [SET_ACTIVE_AREA](state, area) {
+    Vue.set(state.activePage, 'activeArea', area)
+  },
   [UPDATE_ACTIVE_MOD_ATTRIBUTES](state, { key, value }) {
+    const modList = activeModList(state)
     Parser.updateBlockAttribute(
-      state.activePage.modList,
+      modList,
       state.activePage.activeMod.key,
       key,
       value
     )
   },
   [UPDATE_MODS](state, code) {
+    const modList = activeModList(state)
     let blockList = Parser.buildBlockList(code)
-    Parser.updateBlockList(state.activePage.modList, blockList)
+    Parser.updateBlockList(modList, blockList)
   },
   [UPDATE_THEME_NAME](state, themeName) {
     Vue.set(state.theme, 'name', themeName)
@@ -173,7 +214,7 @@ const mutations = {
   [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, payload) {
     payload = _.isArray(payload) ? payload : [payload]
     let updatedInfo = {}
-    payload.forEach(({path, expanded}) => (updatedInfo[path] = expanded))
+    payload.forEach(({ path, expanded }) => (updatedInfo[path] = expanded))
     Vue.set(state, 'filemanagerTreeNodeExpandMapByPath', {
       ...state.filemanagerTreeNodeExpandMapByPath,
       ...updatedInfo
@@ -203,6 +244,13 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
+  },
+  [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
+    Vue.set(state.siteSettings, sitePath, siteSetting)
+  },
+  [UPDATE_OPENED_LAYOUT_FILE](state, { sitePath, layoutContentFilePath, data }) {
+    let siteSetting = state.siteSettings[sitePath]
+    _.merge(siteSetting.pages[layoutContentFilePath], data)
   }
 }
 

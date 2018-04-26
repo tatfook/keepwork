@@ -1,10 +1,15 @@
 import _ from 'lodash'
-import modFactory from '@/lib/mod/factory'
+import ModFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
-import undoHelper from '@/lib/utils/undo/undoHelper'
+import UndoHelper from '@/lib/utils/undo/undoHelper'
+import LayoutHelper from '@/lib/mod/layout'
 import { props } from './mutations'
-import { getFileFullPathByPath } from '@/lib/utils/gitlab'
-import { initPageState } from './state'
+import {
+  getFileFullPathByPath,
+  getFileSitePathByPath,
+  CONFIG_FOLDER_NAME
+} from '@/lib/utils/gitlab'
+import { initPageState, initSiteState, initLayoutPageState } from './state'
 
 const {
   SET_ACTIVE_PAGE,
@@ -17,6 +22,7 @@ const {
   SET_ACTIVE_PROPERTY,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
+  SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
   UPDATE_MODS,
@@ -33,10 +39,13 @@ const {
 
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
-  CLOSE_OPENED_FILE
+  CLOSE_OPENED_FILE,
+
+  REFRESH_SITE_SETTINGS,
+  UPDATE_OPENED_LAYOUT_FILE
 } = props
 
-const activePageCacheAvailable = pageData => {
+const cacheAvailable = pageData => {
   if (_.isEmpty(pageData)) return false
 
   let savedExpires = 5 * 60 * 1000 // 5 mins
@@ -58,6 +67,7 @@ const activePageCacheAvailable = pageData => {
 const actions = {
   async setActivePage(context, { path, editorMode = true }) {
     let {
+      state,
       getters,
       commit,
       dispatch,
@@ -66,15 +76,34 @@ const actions = {
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
 
-    const pageData = getters.openedFiles[getFileFullPathByPath(path)]
-    if (!activePageCacheAvailable(pageData)) {
+    const fullPath = getFileFullPathByPath(path)
+    const sitePath = getFileSitePathByPath(path)
+    const siteData = state.siteSettings[sitePath]
+
+    if (!cacheAvailable(siteData)) {
+      await dispatch('refreshSiteSettings', { sitePath })
+    }
+
+    const pageData = getters.openedFiles[fullPath]
+    if (!cacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     commit(SET_ACTIVE_PAGE, { path, username })
   },
   async saveActivePage({ getters, dispatch }) {
-    let { activePageUrl } = getters
+    let { activePageUrl, layoutPages } = getters
     await dispatch('savePageByPath', activePageUrl)
+    // Save layout files
+    for (let i = 0; i < layoutPages.length; i++) {
+      let pageData = layoutPages[i]
+      if (!pageData.saved) {
+        await dispatch(
+          'gitlab/saveFile',
+          { content: pageData.content, path: pageData.path },
+          { root: true }
+        )
+      }
+    }
   },
   async savePageByPath(
     {
@@ -89,10 +118,19 @@ const actions = {
     dispatch('updateOpenedFile', { saved: true, path })
   },
   updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
-    let { code: oldCode, activePageUrl: path, activePage } = getters
+    let {
+      code: oldCode,
+      activePageUrl: path,
+      activeAreaData,
+      activeArea
+    } = getters
     if (newCode === oldCode) return
-    dispatch('updateOpenedFile', { content: newCode, saved: false, path })
-    !historyDisabled && undoHelper.save(activePage.undoManager, newCode)
+    if (activeArea === LayoutHelper.Const.MAIN_AREA) {
+      dispatch('updateOpenedFile', { content: newCode, saved: false, path })
+    } else {
+      dispatch('updateOpenedLayoutFile', { content: newCode, saved: false })
+    }
+    !historyDisabled && UndoHelper.save(activeAreaData.undoManager, newCode)
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -123,7 +161,7 @@ const actions = {
     dispatch('refreshCode')
   },
   addMod({ commit, dispatch }, payload) {
-    const modProperties = modFactory.generate(payload.modName)
+    const modProperties = ModFactory.generate(payload.modName)
     var modPropertiesStyle
     if (payload.styleID) {
       modPropertiesStyle = modProperties
@@ -163,6 +201,23 @@ const actions = {
   ) {
     commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
     dispatch('refreshCode')
+  },
+  async setActiveArea({ commit, getters, dispatch }, area) {
+    let { activeArea, activeAreaData } = getters
+    if (activeArea === area) return
+    // save current area unless it is main area
+    if (activeArea !== LayoutHelper.Const.MAIN_AREA && !activeAreaData.saved) {
+      await dispatch(
+        'gitlab/saveFile',
+        { content: activeAreaData.content, path: activeAreaData.path },
+        { root: true }
+      )
+    }
+    commit(SET_ACTIVE_AREA, area)
+    commit(SET_ACTIVE_MOD, null)
+    commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_WIN_TYPE, 'ModsList')
+    await dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
@@ -209,35 +264,108 @@ const actions = {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
 
-  undo({ state, dispatch }) {
-    undoHelper.undo(state.activePage.undoManager, (code = '') =>
+  undo({ getters, dispatch }) {
+    UndoHelper.undo(getters.activeAreaData.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
-  redo({ state, dispatch }) {
-    undoHelper.redo(state.activePage.undoManager, (code = '') =>
+  redo({ getters, dispatch }) {
+    UndoHelper.redo(getters.activeAreaData.undoManager, (code = '') =>
       dispatch('updateMarkDown', { code, historyDisabled: true })
     )
   },
   setNewModPosition({ commit }, position) {
     commit('SET_NEW_MOD_POSITION', position)
   },
+  async refreshSiteSettings({ commit, dispatch, rootGetters }, { sitePath }) {
+    let siteSetting = initSiteState()
+
+    // todo: move this part into editor/actions/getSiteLayoutConfig({ path })
+    const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch(
+      'gitlab/readFile',
+      { path: layoutFilePath, editorMode: true },
+      { root: true }
+    )
+    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
+    let file = gitlabGetFileByPath(layoutFilePath) || ''
+    if (!file) return
+    let { content } = file
+    siteSetting.siteLayoutConfig = LayoutHelper.buildLayouts(content)
+    // {
+    //   "layoutConfig": {
+    //     "defaultLayoutId": 0,
+    //     "layouts": [
+    //       {
+    //         "id": 0,
+    //         "name": "Basic",
+    //         "styleName": "basic",
+    //         "match": "",
+    //         "content": {
+    //           "footer": "footer.md",
+    //           "header": "header.md",
+    //           "sidebar": "sidebar.md"
+    //         }
+    //       }
+    //     ]
+    //   },
+    //   "pages": {
+    //     "index.md": {
+    //       "layout": 0
+    //     }
+    //   }
+    // }
+
+    // todo: move this part into editor/getters/getTargetLayoutContentByPath(path)
+    let allLayouts = _.get(siteSetting.siteLayoutConfig, ['layoutConfig', 'layouts'], [])
+    let allLayoutContentFilePaths = _.flatten(allLayouts.map(
+      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
+    ))
+
+    console.log('allLayoutContentFilePaths: ', allLayoutContentFilePaths)
+
+    // keep this part
+    await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
+      let fileName = layoutContentFilePath.split('/').slice(1).join('/')
+      let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
+      await dispatch(
+        'gitlab/readFile',
+        { path: filePath, editorMode: true },
+        { root: true }
+      )
+      let { content } = gitlabGetFileByPath(filePath)
+      siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
+      _.merge(siteSetting.pages[layoutContentFilePath], {
+        content,
+        modList: Parser.buildBlockList(content),
+        path: filePath,
+        fileName: fileName
+      })
+    }))
+
+    commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
+  },
+
+  async updateOpenedLayoutFile({ getters, commit }, payload) {
+    let { sitePath, activeArea, activeAreaData } = getters
+    commit(UPDATE_OPENED_LAYOUT_FILE, {
+      sitePath,
+      layoutContentFilePath: `${activeArea}s/${activeAreaData.fileName}`,
+      data: payload
+    })
+  },
 
   async refreshOpenedFile(
     { commit, dispatch, rootGetters, getters },
     { path, editorMode = true }
   ) {
-    await dispatch(
-      'gitlab/readFile',
-      { path, editorMode },
-      { root: true }
-    )
+    await dispatch('gitlab/readFile', { path, editorMode }, { root: true })
     let {
       'gitlab/getFileByPath': gitlabGetFileByPath,
       'user/username': username
     } = rootGetters
     let file = gitlabGetFileByPath(path)
-    if (!file && file !== '') return
+    if (!file) return
 
     let { content } = file
 

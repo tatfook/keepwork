@@ -17,9 +17,9 @@
                 <span class="template-info">{{ template.name }}</span>
               </div>
               <div class="bottom">
-                <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
-                  <i class="iconfont icon-chakanyanjingshishifenxi"></i> 预 览
-                </a>
+                <!-- <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
+                  <i class="iconfont icon-chakanyanjingshishifenxi"></i> 预 览 【新版本预览先隐藏】
+                </a> -->
               </div>
             </el-card>
           </el-col>
@@ -85,6 +85,10 @@ export default {
         this.isNameIllegal = true
         return callback(new Error('网站名只能由字母，数字和下划线组成'))
       }
+      if (/^[_]/.test(trimmedValue)) {
+        this.isNameIllegal = true
+        return callback(new Error('网站名不能以下划线开头'))
+      }
       if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1) {
         this.isNameIllegal = true
         return callback(new Error('同名网站已经存在'))
@@ -148,13 +152,13 @@ export default {
     },
     websiteSetting() {
       // to check the data structure, see doc/data_examples/webTemplateConfig.json
-      let { name: categoryName, classify: type } = this.selectedCategory
+      let { name: categoryName } = this.selectedCategory
       let { name: templateName, logoUrl } = this.selectedTemplate
       return {
         categoryName,
-        type,
+        type: categoryName, // seems useless
         templateName,
-        logoUrl,
+        logoUrl, // todo: add for new templates solution
         styleName: '默认样式' // seems useless
       }
     },
@@ -300,7 +304,7 @@ export default {
       left: 0;
       font-size: 20px;
       color: #fff;
-      display: none;
+      display: inline-block;
       background: rgba(26, 52, 71, 0.8);
     }
   }

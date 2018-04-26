@@ -1,39 +1,52 @@
 <template>
-  <div class='viewport-container'>
-    <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
-      <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
-      <p class="info">{{$t('editor.addMod')}}</p>
-    </div>
-    <draggable v-model='modDraggableList' @change="changeDraggableList">
-      <template v-for='mod in modList'>
-        <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
-      </template>
-    </draggable>
+  <div class='viewport-container' v-if='layout'>
+    <component :is='layoutTemplate'>
+      <editor-viewport-partial v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' :area='HEADER_AREA' />
+      <editor-viewport-partial v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' :area='FOOTER_AREA' />
+      <editor-viewport-partial v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' :area='SIDEBAR_AREA' />
+      <editor-viewport-partial :modList='mainModList' :theme='theme' :area='MAIN_AREA' />
+    </component>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
 import { mapGetters, mapActions } from 'vuex'
+import {
+  MAIN_AREA,
+  HEADER_AREA,
+  FOOTER_AREA,
+  SIDEBAR_AREA
+} from '@/lib/mod/layout/const'
+import EditorViewportPartial from './EditorViewportPartial'
 import EditorModSelector from './EditorModSelector'
+import layoutTemplates from '@/components/adi/layout/templates'
 import themeFactory from '@/lib/theme/theme.factory'
-import mods from '@/components/adi/mod'
 
 export default {
   name: 'EditorViewport',
   data() {
     return {
-      mods
+      MAIN_AREA,
+      HEADER_AREA,
+      FOOTER_AREA,
+      SIDEBAR_AREA
     }
   },
   components: {
     EditorModSelector,
+    EditorViewportPartial,
     draggable
   },
   computed: {
     ...mapGetters({
-      modList: 'modList',
-      themeConf: 'themeConf'
+      layout: 'layout',
+      mainModList: 'mainModList',
+      headerModList: 'headerModList',
+      footerModList: 'footerModList',
+      sidebarModList: 'sidebarModList',
+      themeConf: 'themeConf',
+      activeArea: 'activeArea'
     }),
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)
@@ -50,6 +63,9 @@ export default {
       set(value) {
         // do nothing
       }
+    },
+    layoutTemplate() {
+      return layoutTemplates[this.layout.styleName]
     }
   },
   methods: {
@@ -73,7 +89,6 @@ export default {
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 20px 0;
 }
 .add-btn-row {
   text-align: center;

@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import mods from '@/components/adi/mod'
 import themeFactory from '@/lib/theme/theme.factory'
+import modLoader from '@/components/adi/mod'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -33,7 +33,7 @@ export default {
       globalTheme.sheet.attach()
 
       return globalTheme
-    }
+    },
     // styles() {
     //   return mods[this.mod.modType].styles
     // }
