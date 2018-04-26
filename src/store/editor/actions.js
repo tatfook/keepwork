@@ -6,7 +6,8 @@ import LayoutHelper from '@/lib/mod/layout'
 import { props } from './mutations'
 import {
   getFileFullPathByPath,
-  getFileSitePathByPath
+  getFileSitePathByPath,
+  CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 import { initPageState, initSiteState, initLayoutPageState } from './state'
 
@@ -75,6 +76,7 @@ const actions = {
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
 
+    const fullPath = getFileFullPathByPath(path)
     const sitePath = getFileSitePathByPath(path)
     const siteData = state.siteSettings[sitePath]
 
@@ -82,7 +84,7 @@ const actions = {
       await dispatch('refreshSiteSettings', { sitePath })
     }
 
-    const pageData = getters.openedFiles[getFileFullPathByPath(path)]
+    const pageData = getters.openedFiles[fullPath]
     if (!cacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
@@ -275,9 +277,10 @@ const actions = {
   setNewModPosition({ commit }, position) {
     commit('SET_NEW_MOD_POSITION', position)
   },
-
   async refreshSiteSettings({ commit, dispatch, rootGetters }, { sitePath }) {
     let siteSetting = initSiteState()
+
+    // todo: move this part into editor/actions/getSiteLayoutConfig({ path })
     const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
     await dispatch(
       'gitlab/readFile',
@@ -288,45 +291,68 @@ const actions = {
     let file = gitlabGetFileByPath(layoutFilePath) || ''
     if (!file) return
     let { content } = file
-    siteSetting.layoutConfig = LayoutHelper.buildLayouts(content)
+    siteSetting.siteLayoutConfig = LayoutHelper.buildLayouts(content)
+    // {
+    //   "layoutConfig": {
+    //     "defaultLayoutId": 0,
+    //     "layouts": [
+    //       {
+    //         "id": 0,
+    //         "name": "Basic",
+    //         "styleName": "basic",
+    //         "match": "",
+    //         "content": {
+    //           "footer": "footer.md",
+    //           "header": "header.md",
+    //           "sidebar": "sidebar.md"
+    //         }
+    //       }
+    //     ]
+    //   },
+    //   "pages": {
+    //     "index.md": {
+    //       "layout": 0
+    //     }
+    //   }
+    // }
 
-    let pages = _.flatten([
-      siteSetting.layoutConfig.headers,
-      siteSetting.layoutConfig.footers,
-      siteSetting.layoutConfig.sidebars
-    ])
+    // todo: move this part into editor/getters/getTargetLayoutContentByPath(path)
+    let allLayouts = _.get(siteSetting.siteLayoutConfig, ['layoutConfig', 'layouts'], [])
+    let allLayoutContentFilePaths = _.flatten(allLayouts.map(
+      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
+    ))
 
-    for (let i = 0; i < pages.length; i++) {
-      let fileName = pages[i].name
-      let pageFilePath = LayoutHelper.layoutPagePath(sitePath, fileName)
+    console.log('allLayoutContentFilePaths: ', allLayoutContentFilePaths)
+
+    // keep this part
+    await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
+      let fileName = layoutContentFilePath.split('/').slice(1).join('/')
+      let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
       await dispatch(
         'gitlab/readFile',
-        { path: pageFilePath, editorMode: true },
+        { path: filePath, editorMode: true },
         { root: true }
       )
-      file = gitlabGetFileByPath(pageFilePath) || ''
-      content = file.content
-      siteSetting.pages[fileName] = initLayoutPageState()
-      _.merge(siteSetting.pages[fileName], {
+      let { content } = gitlabGetFileByPath(filePath)
+      siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
+      _.merge(siteSetting.pages[layoutContentFilePath], {
         content,
         modList: Parser.buildBlockList(content),
-        path: pageFilePath,
+        path: filePath,
         fileName: fileName
       })
-    }
+    }))
+
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
   },
 
   async updateOpenedLayoutFile({ getters, commit }, payload) {
-    let { sitePath, activeAreaData } = getters
-
-    let commitPayload = {
+    let { sitePath, activeArea, activeAreaData } = getters
+    commit(UPDATE_OPENED_LAYOUT_FILE, {
       sitePath,
-      fileName: activeAreaData.fileName,
+      layoutContentFilePath: `${activeArea}s/${activeAreaData.fileName}`,
       data: payload
-    }
-
-    commit(UPDATE_OPENED_LAYOUT_FILE, commitPayload)
+    })
   },
 
   async refreshOpenedFile(

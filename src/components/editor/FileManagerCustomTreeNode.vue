@@ -75,6 +75,7 @@ export default {
             let value = (str || '').trim()
             if (!value) return `${what}名不能为空`
             if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}名只能由字母，数字和下划线组成`
+            if (/^[_]/.test(value)) return `${what}名不能由下划线开头`
             if (childNames.indexOf(value) > -1) return '同名文件已经存在'
             return true
           }

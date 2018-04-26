@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import mods from '@/components/adi/mod'
+import modLoader from '@/components/adi/mod'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     styles() {
-      return mods[this.mod.modType].styles
+      return modLoader.load(this.mod.modType).styles
     }
   },
   methods: {

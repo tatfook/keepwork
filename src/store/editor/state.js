@@ -25,7 +25,7 @@ export const initLayoutPageState = () => {
 
 export const initSiteState = () => {
   return {
-    layoutConfig: [],
+    siteLayoutConfig: {},
     pages: {},
     theme: {
       name: 'classic',

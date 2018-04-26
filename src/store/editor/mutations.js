@@ -84,13 +84,15 @@ const activeModList = state => {
 
   const sitePath = getFileSitePathByPath(state.activePageUrl)
   const siteSetting = state.siteSettings[sitePath]
-  const layout = LayoutHelper.getLayout(
-    siteSetting.layoutConfig.layouts,
+  const layout = LayoutHelper.getLayoutByPath(
+    siteSetting.siteLayoutConfig,
     state.activePageUrl
   )
 
-  if (layout && layout[area]) {
-    return siteSetting.pages[layout[area]].modList
+  let targetLayoutContentFileName = _.get(layout, ['content', area])
+  let targetLayoutContentFilePath = `${area}s/${targetLayoutContentFileName}`
+  if (targetLayoutContentFileName && targetLayoutContentFilePath) {
+    return siteSetting.pages[targetLayoutContentFilePath].modList
   }
   console.error('invalid active mod list')
 }
@@ -246,9 +248,9 @@ const mutations = {
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)
   },
-  [UPDATE_OPENED_LAYOUT_FILE](state, { sitePath, fileName, data }) {
+  [UPDATE_OPENED_LAYOUT_FILE](state, { sitePath, layoutContentFilePath, data }) {
     let siteSetting = state.siteSettings[sitePath]
-    _.merge(siteSetting.pages[fileName], data)
+    _.merge(siteSetting.pages[layoutContentFilePath], data)
   }
 }
 
