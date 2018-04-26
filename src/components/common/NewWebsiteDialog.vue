@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
-    <div class="full-height firs-step" v-if="stepIndex===0">
+    <div class="full-height first-step" v-if="stepIndex===0">
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
           <el-menu class="full-height" :default-active="''+selectedCategoryIndex" @select='setSelectedCategoryIndex'>
@@ -10,7 +10,7 @@
           </el-menu>
         </el-col>
         <el-col :span="21" class="new-website-templates">
-          <el-col :span="10" :offset='index%2 !== 0 ? 2 : 0' v-for='(template, index) in selectedCategory.templates' v-bind:class="{ active: selectedTemplateIndex === index }" class='new-website-template' :key='template.name'>
+          <el-col :span="10" :offset='index%2 !== 0 ? 2 : 0' v-for='(template, index) in selectedCategory.templates' :class="{ active: selectedTemplateIndex === index }" class='new-website-template' :key='template.name'>
             <el-card :body-style="{padding: '0px'}" shadow="never">
               <div class="template-img" @click='setSelectedTemplateIndex(index)'>
                 <img :src="template.logoUrl">
@@ -254,7 +254,7 @@ export default {
   .full-height {
     height: 100%;
   }
-  .firs-step {
+  .first-step {
     height: 445px;
     overflow: auto;
   }
