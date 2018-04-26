@@ -111,7 +111,7 @@ var modsList = [
         mods: [ModComment]
       },
       {
-        id: '4-2',
+        id: '4-3',
         label: 'modList.qq',
         mods: [ModQQ]
       }
@@ -123,26 +123,21 @@ var modsList = [
     children: [
       {
         id: '5-1',
-        label: 'modList.title',
-        mods: [ModTitle]
-      },
-      {
-        id: '5-2',
         label: 'modList.paracraft',
         mods: [ModParacraft]
       },
       {
-        id: '5-3',
+        id: '5-2',
         label: 'modList.text',
         mods: [ModText]
       },
       {
-        id: '5-4',
+        id: '5-3',
         label: 'modList.mixPosition',
         mods: [ModMixPositon]
       },
       {
-        id: '5-5',
+        id: '5-4',
         label: 'modList.mixLayer',
         mods: [ModMixLayer]
       }
@@ -172,6 +167,11 @@ var modsList = [
         id: '7-2',
         label: 'modList.carousel',
         mods: [ModImgLoop]
+      },
+      {
+        id: '7-3',
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
       }
     ]
   },
@@ -185,7 +185,7 @@ var modsList = [
         mods: [ModQQ]
       },
       {
-        id: '8-2',
+        id: '8-3',
         label: 'modList.vipRead',
         mods: [ModVipRead]
       }
