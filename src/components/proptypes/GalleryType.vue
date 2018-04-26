@@ -1,6 +1,6 @@
 <template>
     <div class="menu-type">
-        <el-button plain type='primary' size='mini' @click='isGalleryEditorShow = true'>打开图片编辑器</el-button>
+        <el-button plain type='primary' size='mini' @click='isGalleryEditorShow = true'>{{$t('editor.openGalleryEditor')}}</el-button>
         <galleryDataEditor :isEditorShow='isGalleryEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></galleryDataEditor>
     </div>
 

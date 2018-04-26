@@ -13,6 +13,23 @@
     "refresh": "刷新",
     "close": "关闭",
     "delete": "删除",
+    "delConfirm": "确定删除",
+    "nameSingle": "名",
+    "name": "名称",
+    "link": "链接",
+    "setting": "设置",
+    "create": "创建",
+
+    "folder": "文件夹",
+    "newPage": "新建页面",
+    "newFolder": "新建文件夹",
+    "website": "网页",
+    "page": "页面",
+
+    "emptyName": "名不能为空",
+    "nameRule": "名只能由字母，数字和下划线组成",
+    "nameUnderline": "名不能由下划线开头",
+    "nameExist": "同名文件已经存在",
 
     "openedFiles": "已打开",
     "myPersonalWebsites": "我创建的网站",
@@ -29,7 +46,23 @@
     "modStyle": "样式",
     "modDel": "删除模块",
     "modDelMsg": "确定删除这个模块？",
-    "modDelMsgTitle": "删除提示"
+    "modDelMsgTitle": "删除提示",
+
+    "select": "请选择",
+    "selfWindowOpen": "本窗口打开",
+    "newWindowOpen": "新窗口打开",
+    "openMenuEditor": "打开菜单编辑器",
+    "openGalleryEditor": "打开图片编辑器",
+    "menuEditor": "菜单编辑器",
+    "galleryEditor": "图片编辑器",
+    "imgSrc": "图片地址",
+    "insertAfter": "后面添加",
+    "insertBefore": "前面添加",
+    "insertChild": "添加子项",
+    "noData": "暂无数据，请添加",
+    "delNotice": "删除提醒",
+    "menuDelMsg": "确定删除这个节点？子节点也会直接被删除",
+    "menuItem": "菜单项"
   },
   "modList": {
     "recent": "常用",
@@ -49,7 +82,7 @@
     "works": "作品",
     "specialPerformance": "特殊表现",
     "board": "绘图板",
-    "vipRead": "VIP Read",
+    "vipRead": "阅读权限",
     "comment": "评论",
     "setting": "设置"
   },
