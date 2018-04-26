@@ -22,6 +22,7 @@ export default [
         }
       }
     },
+    useImage: true,
     cover: require('@/../static/adi/board/wiki_board.png')
   }
 ]

@@ -3,7 +3,6 @@ export default [
   {
     templateID: 0,
     data: {
-      // 定义mod根div的样式
       menu: {
         height: '50px',
         margin: 'auto'
@@ -37,6 +36,11 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/menu/menu.png')
+    cover: require('@/../static/adi/menu/menu.png'),
+    preview: {
+      outter: {
+        height: '14px'
+      }
+    }
   }
 ]
