@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown class="comp-markdown markdown-body" :source='properties.data ? properties.data : $t(options.emptyData)' />
+  <vue-markdown class="markdown-body comp-markdown" :source='properties.data ? properties.data : $t(options.emptyData)' />
 </template>
 
 <script>
@@ -18,6 +18,8 @@ export default {
 
 <style lang="scss">
 .comp-markdown {
+  color: unset;
+
   p {
     margin: 0;
     word-wrap: break-word;
