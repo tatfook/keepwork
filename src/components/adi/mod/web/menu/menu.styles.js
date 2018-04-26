@@ -26,12 +26,6 @@ export default [
       config: {
         menu: {
           mode: 'horizontal',
-          emptyData: [
-            {
-              name: 'adi.menu.menu',
-              link: 'http://keepwork.com'
-            }
-          ],
           emptyTarget: '_blank'
         }
       }
