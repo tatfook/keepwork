@@ -35,7 +35,7 @@ export default [
         'margin-top': '20px'
       },
       logo: {
-        height: '87px',
+        'max-height': '87px',
         width: '87px'
       },
       colLogo: {
