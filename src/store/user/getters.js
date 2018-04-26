@@ -3,9 +3,8 @@ import Cookies from 'js-cookie'
 import {
   gitTree2NestedArray,
   getFileFullPathByPath,
-  EMPTY_GIT_FOLDER_KEEPER
-  // ,
-  // CONFIG_FOLDER_NAME
+  EMPTY_GIT_FOLDER_KEEPER,
+  CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
 const getters = {
