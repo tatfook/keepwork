@@ -23,9 +23,7 @@ export default {
   },
   computed: {
     forImgs() {
-      return this.properties.data.length == 0
-        ? this.options.data
-        : this.properties.data
+      return this.properties.data
     }
   }
 }
