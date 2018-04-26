@@ -39,7 +39,7 @@ const state = () => ({
   activePage: null,
   activePageUrl: '',
   openedFiles: {},
-  siteSettings: {}, // user -> site -> {layouts, header, footer, sidebar}
+  siteSettings: {},
   filemanagerTreeNodeExpandMapByPath: {},
 
   showingCol: {

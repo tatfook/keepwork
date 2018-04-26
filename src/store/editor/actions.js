@@ -322,8 +322,6 @@ const actions = {
       ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
     ))
 
-    console.log('allLayoutContentFilePaths: ', allLayoutContentFilePaths)
-
     // keep this part
     await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
       let fileName = layoutContentFilePath.split('/').slice(1).join('/')
