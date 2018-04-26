@@ -22,7 +22,7 @@
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
         <el-menu-item index="5-1">
-          我的主页
+          <a :href='"/" + userProfile.username'>我的主页</a>
         </el-menu-item>
         <el-menu-item index="5-2">
           <a href="/wiki/user_center?userCenterContentType=websiteManager">网站管理</a>
