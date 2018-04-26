@@ -5,6 +5,7 @@ import Basic from './Basic'
 import BasicFullscreen from './BasicFullscreen'
 import Header from './Header'
 import HeaderSidebar from './HeaderSidebar'
+import HeaderFooter from './HeaderFooter'
 
 export default {
   // basic: Template1,
@@ -14,5 +15,6 @@ export default {
   // header: Template3,
   header: Header,
   // header_siderbar: Template3
-  header_sidebar: HeaderSidebar
+  header_sidebar: HeaderSidebar,
+  header_footer: HeaderFooter
 }
