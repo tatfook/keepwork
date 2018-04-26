@@ -110,6 +110,7 @@ export default {
 <style lang="scss">
 .tool-header {
   position: relative;
+  height: 50px;
   .breadcrumb {
     padding: 0 20px;
     height: 50px;
