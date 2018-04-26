@@ -12,6 +12,22 @@
     "refresh": "Refresh",
     "close": "Close",
     "delete": "Delete",
+    "delConfirm": "OK to delete at",
+    "nameSingle": "name",
+    "name": "Name",
+    "link": "Link",
+    "setting": "Setting",
+    "create": "Create",
+
+    "folder": "Folder",
+    "newPage": "New page",
+    "newFolder": "New folder",
+    "website": "Web page",
+    "page": "page",
+
+    "emptyName": "name cannot be empty",
+    "nameRule": "naame can only be composed of letters, numbers and underscores",
+    "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
     "myPersonalWebsites": "Personal websites",
@@ -28,7 +44,23 @@
     "modStyle": "style",
     "modDel": "Delete module",
     "modDelMsg": "Are you sure to delete this module?",
-    "modDelMsgTitle": "Delete prompt"
+    "modDelMsgTitle": "Delete prompt",
+
+    "select": "please choose",
+    "selfWindowOpen": "This window opens",
+    "newWindowOpen": "open in a new window",
+    "openMenuEditor": "Open the menu editor",
+    "openGalleryEditor": "Open the picture editor",
+    "menuEditor": "Menu Editor",
+    "galleryEditor": "Picture editor",
+    "imgSrc": "The map's address",
+    "insertAfter": "Add later",
+    "insertBefore": "Added before",
+    "insertChild": "Add children",
+    "noData": "No data, please add",
+    "delNotice": "Delete reminder",
+    "menuDelMsg": "Are you sure to delete this node? Child nodes are also deleted directly",
+    "menuItem": "Menu Item"
   },
   "modList": {
     "recent": "Commonly used",

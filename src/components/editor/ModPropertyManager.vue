@@ -48,7 +48,11 @@ export default {
       this.setActivePropertyData({ data })
     },
     toDeleteMod() {
+      let self = this
+
       this.$confirm(this.$t('editor.modDelMsg'), this.$t('editor.modDelMsgTitle'), {
+        confirmButtonText: self.$t('el.messagebox.confirm'),
+        cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
       })
       .then(() => {

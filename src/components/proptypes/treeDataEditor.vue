@@ -1,14 +1,14 @@
 <template>
-  <el-dialog class="tree-data-dialog" title="菜单编辑器" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" :title="$t('editor.menuEditor')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
     <div v-if="treeData.length > 0" class="tree-head">
       <span class="node-label">
-        名称
+        {{$t('editor.name')}}
       </span>
       <span class="node-link">
-        链接
+        {{$t('editor.link')}}
       </span>
       <span class="node-operate">
-        设置
+        {{$t('editor.setting')}}
       </span>
     </div>
     <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
@@ -22,20 +22,20 @@
           <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-houmiantianjia' circle title='后面添加' @click='insert(node, data, "after")'></el-button>
-          <el-button icon='iconfont icon-qianmiantianjia' circle title='前面添加' @click='insert(node, data, "before")'></el-button>
-          <el-button icon='iconfont icon-tianjiazixiang' circle title='添加子项' @click='insert(node, data, "child")'></el-button>
-          <el-button icon='iconfont icon-shanchu' circle title='删除' @click='remove(node, data)'></el-button>
+          <el-button icon='iconfont icon-houmiantianjia' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
+          <el-button icon='iconfont icon-qianmiantianjia' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
+          <el-button icon='iconfont icon-tianjiazixiang' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
+          <el-button icon='iconfont icon-shanchu' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
         </span>
       </span>
     </el-tree>
     <p class="empty" v-if="treeData.length <= 0" @click="insert()">
-      暂无数据，请添加
+      {{$t('editor.noData')}}
       <span class="iconfont icon-tianjia"></span>
     </p>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="handleClose">取 消</el-button>
-      <el-button type="primary" @click="finishEditingMenu">确 定</el-button>
+      <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>
+      <el-button type="primary" @click="finishEditingMenu">{{$t('el.messagebox.confirm')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -89,8 +89,10 @@ export default {
       targetInputElement.blur()
     },
     insert(node, data, position) {
+      let self = this
+
       const newChild = {
-        name: '菜单项' + newMenuId,
+        name: self.$t('editor.menuItem') + newMenuId,
         link: ''
       }
       if (!node) {
@@ -141,9 +143,11 @@ export default {
       newMenuId++
     },
     remove(node, data) {
-      this.$confirm('确定删除这个节点？子节点也会直接被删除', '删除提醒', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      let self = this
+
+      this.$confirm(self.$t('editor.menuDelMsg'), self.$t('editor.delNotice'), {
+        confirmButtonText: self.$t('el.messagebox.confirm'),
+        cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
       }).then(() => {
         this.$refs.menuTree.remove(node)
