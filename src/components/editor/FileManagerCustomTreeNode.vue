@@ -79,7 +79,7 @@ export default {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
             if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}${$t('nameRule')}`
-            if (/^[_]/.test(value)) return `${what}名不能由下划线开头`
+            if (/^[_]/.test(value)) return `${what}${$t('editor.nameUnderline')}`
             if (childNames.indexOf(value) > -1) return self.$t('nameExist')
             return true
           }

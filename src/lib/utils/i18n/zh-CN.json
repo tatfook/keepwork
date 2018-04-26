@@ -28,6 +28,7 @@
 
     "emptyName": "名不能为空",
     "nameRule": "名只能由字母，数字和下划线组成",
+    "nameUnderline": "名不能由下划线开头",
     "nameExist": "同名文件已经存在",
 
     "openedFiles": "已打开",
