@@ -26,7 +26,8 @@
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
+          <!-- <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button> -->
+          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPage'></el-button>
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
@@ -125,6 +126,7 @@ export default {
   computed: {
     ...mapGetters({
       activePage: 'activePage',
+      activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
       showingCol: 'showingCol',
@@ -246,8 +248,11 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
-    showPreview() {
-      this.$emit('showPreview')
+    // showPreview() {
+    //   this.$emit('showPreview')
+    // },
+    showPage() {
+      window.open(this.activePageUrl)
     },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
@@ -396,7 +401,7 @@ export default {
 .code-win-fullscreen {
   width: 100% !important;
   height: 100%;
-  background-color:#cdd4dc;
+  background-color: #cdd4dc;
   max-width: 1080px;
 }
 </style>
