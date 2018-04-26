@@ -60,10 +60,10 @@ const getters = {
     if (state.activePage) return state.activePage.activePropertyTabType
   },
   showingCol: state => state.showingCol,
-  canUndo: state =>
-    state.activePage && UndoHelper.canUndo(state.activePage.undoManager),
-  canRedo: state =>
-    state.activePage && UndoHelper.canRedo(state.activePage.undoManager),
+  canUndo: (state, { activeAreaData }) =>
+    activeAreaData && UndoHelper.canUndo(activeAreaData.undoManager),
+  canRedo: (state, { activeAreaData }) =>
+    activeAreaData && UndoHelper.canRedo(activeAreaData.undoManager),
   filemanagerTreeNodeExpandMapByPath: state =>
     state.filemanagerTreeNodeExpandMapByPath,
 
