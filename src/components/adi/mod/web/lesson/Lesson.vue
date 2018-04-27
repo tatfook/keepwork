@@ -45,6 +45,7 @@ const getMod = function(name) {
 
 const lessonHost = 'http://127.0.0.1:3000'
 let vuex = {}
+let firstInFlag = true
 
 const init = function(){
   console.log('init')
@@ -90,7 +91,9 @@ const timer = {
           let r = response.data
           console.log(r)
           let studentMod = getMod('ModStudent')
-          studentMod.innerHTML = JSON.stringify(r.data)
+          if(r.data) {
+            studentMod.innerHTML = JSON.stringify(r.data)
+          }
         })
     }, this.timeout)
   },
@@ -115,7 +118,6 @@ export default {
     compWrapperOptions(name) {
       let options = {}
       let self = this
-      let firstInFlag = true
       options = _.merge(options, this.generateOptionsStyle(name))
       const mods = []
       options.defaultCover = require('@/../static/adi/imgLoop/imgCarouselOne.jpg')
@@ -288,6 +290,11 @@ export default {
               let r = response.data
               console.log(r)
               // TODO: 展现 Summary 数据
+              timer.stop()
+              let summaryMod = getMod('ModSummary')
+              if(r.data) {
+                summaryMod.innerHTML = JSON.stringify(r.data)
+              }
             })
             btnClass.setAttribute('disable','true')
           }).catch(() => {
