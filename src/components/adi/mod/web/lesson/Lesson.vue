@@ -81,35 +81,6 @@ const init = function(){
     lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
     lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
   }
-
-  let teachersMod = getMods('ModTeachers');
-  let overviewDom = document.getElementById("pane-first");
-  if(teachersMod.length > 0) {
-    let div = document.createElement("div");
-    let button = document.createElement("button");
-    div.setAttribute("class", "text-right");
-    button.setAttribute("class", "el-button el-button--primary");
-    button.setAttribute("id", "isTeachersContent");
-    button.innerHTML = "Hide All";
-    div.appendChild(button);
-    overviewDom.appendChild(div);
-  }
-
-  let operate = document.getElementById("isTeachersContent");
-  operate.addEventListener("click", function(){
-    if(operate.innerHTML == "Show All") {
-      operate.innerHTML = "Hide All";
-      for(let i = 0, len = teachersMod.length; i < len; i++) {
-        teachersMod[i].style.display = "block";
-      }
-
-    }else {
-      operate.innerHTML = "Show All";
-      for(let i = 0, len = teachersMod.length; i < len; i++) {
-        teachersMod[i].style.display = "none";
-      }
-    }
-  });
 }
 
 const timer = {
