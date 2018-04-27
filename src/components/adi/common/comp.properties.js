@@ -15,6 +15,7 @@ import AdiTabs from './tabs/tabs.properties'
 import AdiQuizz from './quizz/quizz.properties'
 import AdiLesson from './lesson/lesson.properties'
 import AdiTeachers from './teachers/teachers.properties'
+import AdiLessonGet from './lessonGet/lessonGet.properties'
 
 export default {
   AdiImgLoop,
@@ -33,5 +34,6 @@ export default {
   AdiTabs,
   AdiQuizz,
   AdiLesson,
-  AdiTeachers
+  AdiTeachers,
+  AdiLessonGet
 }

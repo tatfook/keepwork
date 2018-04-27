@@ -14,6 +14,7 @@ import AdiTabs from './tabs/Tabs'
 import AdiQuizz from './quizz/Quizz'
 import AdiLesson from './lesson/Lesson'
 import AdiTeachers from './teachers/Teachers'
+import AdiLessonGet from './lessonGet/LessonGet'
 
 export default {
   AdiImgLoop,
@@ -31,5 +32,6 @@ export default {
   AdiTabs,
   AdiQuizz,
   AdiLesson,
-  AdiTeachers
+  AdiTeachers,
+  AdiLessonGet
 }

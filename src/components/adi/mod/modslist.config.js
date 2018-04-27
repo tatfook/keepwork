@@ -14,6 +14,7 @@ import ModLesson from './web/lesson'
 import ModMenu from './web/menu'
 import ModQuizz from './web/quizz'
 import ModTeachers from './web/teachers'
+import ModLessonGet from './web/lessonGet'
 
 var modsList = [
   {
@@ -187,6 +188,11 @@ var modsList = [
         id: '9-3',
         label: 'Mod-Teachers',
         mods: [ModTeachers]
+      },
+      {
+        id: '9-4',
+        label: 'ModLessonGet',
+        mods: [ModLessonGet]
       }
     ]
   }

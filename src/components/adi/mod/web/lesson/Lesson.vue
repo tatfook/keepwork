@@ -31,6 +31,14 @@ const getMods = function(name) {
   return rets
 }
 
+const createMod = function(name, html) {
+  let ele = document.createElement('div')
+  ele.setAttribute('data-mod', name)
+  ele.setAttribute('hidden', 'true')
+  ele.innerHTML = html
+  return ele
+}
+
 // get the first mod
 const getMod = function(name) {
   let eles = document.getElementsByTagName('div')
@@ -68,6 +76,10 @@ const init = function(){
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
+  } else {
+    let lessonMod = getMod('ModLesson')
+    lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
+    lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
   }
 
   let teachersMod = getMods('ModTeachers');
@@ -176,12 +188,6 @@ export default {
             }
           }
         }
-        const createMod = function(name, html) {
-          let ele = document.createElement('div')
-          ele.setAttribute('data-mod', name)
-          ele.innerHTML = html
-          return ele
-        }
         if(firstInFlag) {
           let lessonMod = getMod('ModLesson')
           let animations = self.modData.lesson.animations
@@ -196,8 +202,6 @@ export default {
             }
             lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
           }
-          lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
-          lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
           let eles = document.getElementsByTagName('div')
           for(let i = 0; i < eles.length; i++) {
             let ele = eles[i]
@@ -227,8 +231,7 @@ export default {
 
       options.playClick = function() {
         console.log('Play Click')
-        console.log(self.modData)
-        // TODO: 生成一个 Record， 返回做题的地址
+        // 生成一个 Record， 返回做题的地址
         if(self.isLogined) {
           let params = {}
           params.username = self.username

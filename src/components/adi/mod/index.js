@@ -14,6 +14,7 @@ import ModComment from './web/comment'
 import ModLesson from './web/lesson'
 import ModQuizz from './web/quizz'
 import ModTeachers from './web/teachers'
+import ModLessonGet from './web/lessonGet'
 
 export default {
   ModMarkdown,
@@ -31,5 +32,6 @@ export default {
   ModLesson,
   ModMenu,
   ModQuizz,
-  ModTeachers
+  ModTeachers,
+  ModLessonGet
 }
