@@ -104,8 +104,9 @@ export default {
         // if there are some changes affect the mod data, will try to build all
         return this.$store.dispatch('updateMarkDown', code)
       }
-      let key = mod.key
-      this.$store.dispatch('updateMarkDownBlock', { code, key })
+      const key = mod.key
+      const modType = mod.modType
+      this.$store.dispatch('updateMarkDownBlock', { code, key, modType })
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)

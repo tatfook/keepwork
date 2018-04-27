@@ -1,17 +1,12 @@
 <template>
-  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows: 7 }" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus'></el-input>
+  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows: 7 }" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @focus='getFocus' @blur='updateValue'></el-input>
 </template>
 <script>
 export default {
-  name: 'LinkType',
+  name: 'AutoSizeInputType',
   props: {
     editingKey: String,
     originValue: String
-  },
-  data() {
-    return {
-      maxRows: blurMaxRows
-    }
   },
   computed: {
     inputTypeValue: {
@@ -22,10 +17,14 @@ export default {
     }
   },
   methods: {
-    updateValue(newVal) {
+    updateValue(evt) {
+      const newVal = evt.srcElement.value
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
+    },
+    getFocus() {
+      this.$emit('onChangeValue')
     }
   }
 }
