@@ -17,7 +17,7 @@
     "myPersonalWebsites": "Personal websites",
     "myContributedWebsites": "Contributed websites",
     "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
-    
+
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create Website Now"
   },
@@ -92,6 +92,9 @@
       "commit": "submit",
       "close": "Comments are closed",
       "notice": "Share your ideas!"
+    },
+    "teachers": {
+      "content": "The editor said what he said to the teacher."
     }
   }
 }

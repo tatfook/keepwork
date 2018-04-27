@@ -13,6 +13,7 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModLesson from './web/lesson'
 import ModQuizz from './web/quizz'
+import ModTeachers from './web/teachers'
 
 export default {
   ModMarkdown,
@@ -29,5 +30,6 @@ export default {
   ModComment,
   ModLesson,
   ModMenu,
-  ModQuizz
+  ModQuizz,
+  ModTeachers
 }
