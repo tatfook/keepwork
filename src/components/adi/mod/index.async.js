@@ -13,6 +13,7 @@ const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
 const ModLesson = () => import('./web/lesson')
 const ModQuizz = () => import('./web/quizz')
+const ModTeachers = () => import('./web/teachers')
 
 export default {
   ModMarkdown,
@@ -29,5 +30,6 @@ export default {
   ModBoard,
   ModLesson,
   ModMenu,
-  ModQuizz
+  ModQuizz,
+  ModTeachers
 }

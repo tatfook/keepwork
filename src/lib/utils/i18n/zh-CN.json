@@ -93,6 +93,9 @@
       "commit": "提交",
       "close": "评论功能已关闭",
       "notice": "分享你的想法！"
+    },
+    "teachers": {
+      "content": "编辑对老师说的话。"
     }
   }
 }

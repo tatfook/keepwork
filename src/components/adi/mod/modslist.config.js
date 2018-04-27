@@ -13,6 +13,7 @@ import ModComment from './web/comment'
 import ModLesson from './web/lesson'
 import ModMenu from './web/menu'
 import ModQuizz from './web/quizz'
+import ModTeachers from './web/teachers'
 
 var modsList = [
   {
@@ -181,6 +182,11 @@ var modsList = [
         id: '9-2',
         label: 'ModQuizz',
         mods: [ModQuizz]
+      },
+      {
+        id: '9-3',
+        label: 'Mod-Teachers',
+        mods: [ModTeachers]
       }
     ]
   }

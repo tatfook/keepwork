@@ -14,6 +14,7 @@ import AdiNumber from './number/number.proptypes'
 import AdiTabs from './tabs/tabs.proptypes'
 import AdiQuizz from './quizz/quizz.proptypes'
 import AdiLesson from './lesson/lesson.proptypes'
+import AdiTeachers from './teachers/teachers.proptypes'
 
 export default {
   AdiImgLoop,
@@ -31,5 +32,6 @@ export default {
   AdiNumber,
   AdiTabs,
   AdiQuizz,
-  AdiLesson
+  AdiLesson,
+  AdiTeachers
 }
