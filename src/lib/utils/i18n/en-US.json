@@ -44,15 +44,17 @@
     "page": "page",
 
     "emptyName": "name cannot be empty",
-    "nameRule": "naame can only be composed of letters, numbers and underscores",
+    "nameRule":
+      "naame can only be composed of letters, numbers and underscores",
     "nameUnderline": "name cannot begin with an underscore",
     "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
     "myPersonalWebsites": "Personal websites",
     "myContributedWebsites": "Contributed websites",
-    "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
-    
+    "myContributedWebsitesTip":
+      "Others' websites will be here after you get authorization",
+
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create Website Now",
 
@@ -78,7 +80,8 @@
     "insertChild": "Add children",
     "noData": "No data, please add",
     "delNotice": "Delete reminder",
-    "menuDelMsg": "Are you sure to delete this node? Child nodes are also deleted directly",
+    "menuDelMsg":
+      "Are you sure to delete this node? Child nodes are also deleted directly",
     "menuItem": "Menu Item"
   },
   "modList": {
@@ -117,17 +120,20 @@
     },
     "text": {
       "title": "Ljubljana",
-      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
+      "paragraph":
+        "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
     },
     "mixLayer": {
       "title": "University of California",
       "subtitle": "Top Research University",
-      "paragraph": "The University of California, Berkeley is one of the most prestigious and top public research universities in the United States, located on the hills of the East Bay Berkeley, San Francisco. Founded in 1868 by the California College and the College of Agriculture, Mining, and Mechanics, it was relocated to Berkeley, near San Francisco, in 1873. Berkeley was the oldest one at the University of California. It is also a founding member of the Association of American Universities. Its mascots have changed from the emblem of California, so their students often call themselves \"Golden Bears.\" The University of California, Berkeley, along with Stanford University and the Massachusetts Institute of Technology, are honored as the academic leaders of engineering science and technology in the United States."
+      "paragraph":
+        "The University of California, Berkeley is one of the most prestigious and top public research universities in the United States, located on the hills of the East Bay Berkeley, San Francisco. Founded in 1868 by the California College and the College of Agriculture, Mining, and Mechanics, it was relocated to Berkeley, near San Francisco, in 1873. Berkeley was the oldest one at the University of California. It is also a founding member of the Association of American Universities. Its mascots have changed from the emblem of California, so their students often call themselves \"Golden Bears.\" The University of California, Berkeley, along with Stanford University and the Massachusetts Institute of Technology, are honored as the academic leaders of engineering science and technology in the United States."
     },
     "mixPosition": {
       "title": "One person, one road, people on the way",
       "subtitle": "We have been traveling",
-      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……",
+      "paragraph":
+        "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……",
       "button": "MORE"
     },
     "paracraft": {
@@ -152,7 +158,8 @@
         "name": "Enter"
       },
       "desc": {
-        "data": "Work Description: \r never memorized the memory, can not remember where to go, what landscapes to see, who met. Although the classmates said that traveling is not about memory, it is at the time of lunch, lunch and dinner. May not eat well, but it is still wiped the other side of the mouth of the oil stains. It doesn't really matter what the landscape is."
+        "data":
+          "Work Description: \r never memorized the memory, can not remember where to go, what landscapes to see, who met. Although the classmates said that traveling is not about memory, it is at the time of lunch, lunch and dinner. May not eat well, but it is still wiped the other side of the mouth of the oil stains. It doesn't really matter what the landscape is."
       }
     },
     "board": {
@@ -178,21 +185,29 @@
   },
   "card": {
     "imgLoop": "Graphic rotation",
-    "img": "Widescreen image",
-    "media": "image",
-    "title": "Main title",
+    "img": "picture",
+    "media": "picture",
+    "title": "title",
     "subtitle": "subtitle",
-    "paragraph": "Text file",
+    "paragraph": "text",
     "button": "button",
-    "menu": "Menu Editor",
-    "logo": "logo",
-    "businessName": "Main title",
+    "preview": "Cover picture",
+    "worldName": "name",
+    "author": "author",
+    "version": "version",
+    "updateTime": "update time",
+    "viewTimes": "view times",
+    "size": "size",
+    "menu": "menu",
+    "logo": "icon",
+    "businessName": "main title",
     "tagline": "subtitle",
-    "qq": "qq number",
-    "pic": "image",
-    "desc": "Text description",
-    "md": "Markdown documentation",
+    "qq": "QQ number",
+    "pic": "head portrait",
+    "desc": "name",
+    "md": "Markdown document",
+    "board": "drawing board",
     "comment": "comment",
-    "vipRead": "Vip reading"
+    "vipRead": "VIP read privileges"
   }
 }
