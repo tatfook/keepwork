@@ -208,6 +208,8 @@
     "md": "Markdown document",
     "board": "drawing board",
     "comment": "comment",
-    "vipRead": "VIP read privileges"
+    "vipRead": "VIP read privileges",
+    "openBoard": "Open board",
+    "switchComment": "Comment is on"
   }
 }

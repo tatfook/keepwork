@@ -1,6 +1,6 @@
 export default {
   switch: {
-    desc: '评论是否开启',
+    desc: 'card.switchComment',
     value: true
   }
 }

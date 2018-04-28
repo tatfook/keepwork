@@ -205,6 +205,8 @@
     "md": "markdown文档",
     "board": "绘图板",
     "comment": "评论",
-    "vipRead": "VIP阅读权限"
+    "vipRead": "VIP阅读权限",
+    "openBoard": "打开绘图板",
+    "switchComment": "评论是否开启"
   }
 }
