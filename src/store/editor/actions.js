@@ -317,31 +317,42 @@ const actions = {
     // }
 
     // todo: move this part into editor/getters/getTargetLayoutContentByPath(path)
-    let allLayouts = _.get(siteSetting.siteLayoutConfig, ['layoutConfig', 'layouts'], [])
-    let allLayoutContentFilePaths = _.flatten(allLayouts.map(
-      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
-    ))
+    let allLayouts = _.get(
+      siteSetting.siteLayoutConfig,
+      ['layoutConfig', 'layouts'],
+      []
+    )
+    let allLayoutContentFilePaths = _.flatten(
+      allLayouts.map(({ content }) =>
+        _.keys(content).map(key => `${key}s/${content[key]}`)
+      )
+    )
 
-    console.log('allLayoutContentFilePaths: ', allLayoutContentFilePaths)
+    // console.log('allLayoutContentFilePaths: ', allLayoutContentFilePaths)
 
     // keep this part
-    await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
-      let fileName = layoutContentFilePath.split('/').slice(1).join('/')
-      let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
-      await dispatch(
-        'gitlab/readFile',
-        { path: filePath, editorMode: true },
-        { root: true }
-      )
-      let { content } = gitlabGetFileByPath(filePath)
-      siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
-      _.merge(siteSetting.pages[layoutContentFilePath], {
-        content,
-        modList: Parser.buildBlockList(content),
-        path: filePath,
-        fileName: fileName
+    await Promise.all(
+      allLayoutContentFilePaths.map(async layoutContentFilePath => {
+        let fileName = layoutContentFilePath
+          .split('/')
+          .slice(1)
+          .join('/')
+        let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
+        await dispatch(
+          'gitlab/readFile',
+          { path: filePath, editorMode: true },
+          { root: true }
+        )
+        let { content } = gitlabGetFileByPath(filePath)
+        siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
+        _.merge(siteSetting.pages[layoutContentFilePath], {
+          content,
+          modList: Parser.buildBlockList(content),
+          path: filePath,
+          fileName: fileName
+        })
       })
-    }))
+    )
 
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
   },
