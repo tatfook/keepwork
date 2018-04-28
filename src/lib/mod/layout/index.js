@@ -1,12 +1,24 @@
 import _ from 'lodash'
 // import { mdToJson } from '../parser/mdParser'
-import {
-  getRelativePathByPath
-} from '@/lib/utils/gitlab'
+import { getRelativePathByPath } from '@/lib/utils/gitlab'
+import uuid from '@/lib/utils/uuid'
 import Const from './const'
 
 export default {
   Const,
+  newLayout() {
+    return {
+      id: uuid(),
+      name: 'New layout',
+      styleName: 'basic',
+      match: '',
+      content: {
+        footer: 'footer.md',
+        header: 'header.md',
+        sidebar: 'sidebar.md'
+      }
+    }
+  },
 
   buildLayouts(content) {
     return _.isString(content) ? JSON.parse(content) : content
@@ -67,5 +79,9 @@ export default {
 
   layoutPagePath(sitePath, pageName) {
     return this.layoutRootPath(sitePath) + 'pages/' + pageName
+  },
+
+  layoutContentFolderPath(sitePath, contentKey) {
+    return this.layoutPagePath(sitePath, `${contentKey}s`)
   }
 }

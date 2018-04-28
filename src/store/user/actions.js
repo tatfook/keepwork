@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import { keepwork } from '@/api'
 import { props } from './mutations'
-import { getFileFullPathByPath, webTemplateProject } from '@/lib/utils/gitlab'
+import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest, newGitlabAPI } from '@/api/gitlab'
+import LayoutHelper from '@/lib/mod/layout'
 
 const {
   LOGIN_SUCCESS,
@@ -18,7 +19,9 @@ const {
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
   GET_WEB_TEMPLATE_FILELIST_SUCCESS,
   GET_WEB_TEMPLATE_FILE_SUCCESS,
-  SET_PAGE_STAR_DETAIL
+  SET_PAGE_STAR_DETAIL,
+  GET_SITE_LAYOUT_CONFIG_SUCCESS,
+  SAVE_SITE_LAYOUT_CONFIG_SUCCESS
 } = props
 
 const actions = {
@@ -192,6 +195,34 @@ const actions = {
     let detailInfo = await keepwork.website.getDetailInfo({username, sitename})
 
     commit(GET_SITE_DETAIL_INFO_SUCCESS, {username, sitename, detailInfo})
+  },
+  async getSiteLayoutConfig(context, { path, editorMode = true, useCache = true }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath }, rootGetters } = context
+    let sitePath = getFileSitePathByPath(path)
+    let config = siteLayoutConfigBySitePath(sitePath)
+    if (useCache && !_.isEmpty(config)) return
+
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/readFile', { path: layoutFilePath, editorMode }, { root: true })
+    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
+    let { content } = gitlabGetFileByPath(layoutFilePath) || {}
+    config = _.isString(content) ? JSON.parse(content) : content
+    commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
+  },
+  async saveSiteLayoutConfigLayouts(context, { sitePath, layouts }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    let config = siteLayoutConfigBySitePath(sitePath)
+    let unsavedConfig = {
+      ...config,
+      layoutConfig: {
+        ...config.layoutConfig,
+        layouts
+      }
+    }
+    let content = JSON.stringify(unsavedConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context
