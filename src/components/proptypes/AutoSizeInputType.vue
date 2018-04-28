@@ -1,5 +1,5 @@
 <template>
-  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows: minRows}" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
+  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows:7, maxRows: maxRows }" resize='none' :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
 </template>
 <script>
 const blurMinRows = 7
@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      minRows: blurMinRows
+      maxRows: blurMinRows
     }
   },
   computed: {
@@ -31,14 +31,14 @@ export default {
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
-       this.$emit('onChangeValue')
-       this.minRows = focusMinRows
-       this.$nextTick(function() {
-         this.$refs.autosizeTextarea.resizeTextarea()
-       })
+      this.$emit('onChangeValue')
+      this.maxRows = focusMinRows
+      this.$nextTick(function() {
+        this.$refs.autosizeTextarea.resizeTextarea()
+      })
     },
-    blurEventHandler(){
-      this.minRows = blurMinRows
+    blurEventHandler() {
+      this.maxRows = blurMinRows
       this.$nextTick(function() {
         this.$refs.autosizeTextarea.resizeTextarea()
       })
