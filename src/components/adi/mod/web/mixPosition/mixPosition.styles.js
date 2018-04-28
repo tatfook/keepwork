@@ -21,6 +21,29 @@ let emptyData = {
     emptyName: 'adi.mixPosition.button',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
+  },
+  media2: {
+    emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  title2: {
+    emptyName: 'adi.mixPosition.title',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  subtitle2: {
+    emptyName: 'adi.mixPosition.subtitle',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  paragraph2: {
+    emptyData: 'adi.mixPosition.paragraph'
+  },
+  button2: {
+    emptyName: 'adi.mixPosition.button',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 
@@ -424,6 +447,230 @@ export default [
     preview: {
       outter: {
         height: '189px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
+  },
+
+  // style 5 左图右文2X1 纵向
+  {
+    templateID: 3,
+    data: {
+      // 定义mod根div的样式
+      media: {
+        height: '280px'
+      },
+      media2: {
+        height: '280px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '280px'
+        },
+        media2: {
+          height: '280px'
+        }
+      },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
+      colGroupBA: {
+        'word-wrap': 'break-word'
+      },
+      subtitle: {
+        'margin-top': '10px'
+      },
+      paragraph: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button: {
+        'margin-top': '10px',
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      },
+      subtitle2: {
+        'margin-top': '10px'
+      },
+      paragraph2: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button2: {
+        'margin-top': '10px',
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      },
+      colGroupB: {
+        'margin-top': '50px'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 },
+      colGroupARow: { gutter: 24 },
+      colGroupBRow: { gutter: 24 },
+      colMedia: {
+        xs: { span: 10 },
+        sm: { span: 8 }
+      },
+      colGroupAA: {
+        xs: { span: 14 },
+        sm: { span: 16 }
+      },
+      colGroupBA: {
+        xs: { span: 14 },
+        sm: { span: 16 }
+      },
+      colButton: {
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 3,
+          push: 21
+        }
+      }
+    },
+    theme: {
+      root: ['mod-space'],
+      colGroupRow: ['mod-full-width'],
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_7'],
+      title2: ['font_1', 'color_7'],
+      subtitle2: ['font_3', 'color_2'],
+      paragraph2: ['font_9', 'color_4'],
+      button2: ['font_10', 'color_7']
+    },
+    options: {
+      theme: {
+        button: {
+          bgColor: 'color_0'
+        },
+        button2: {
+          bgColor: 'color_0'
+        }
+      },
+      config: {
+        ...emptyData
+      }
+    },
+    cover: require('@/../static/adi/mixPosition/cover/verticalTwo.png'),
+    preview: {
+      outter: {
+        height: '360px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
+  },
+
+  // style 6 上图下文2X1 横向
+  {
+    templateID: 3,
+    data: {
+      media: {
+        height: '340px'
+      },
+      media2: {
+        height: '340px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '170px'
+        },
+        media2: {
+          height: '170px'
+        }
+      },
+      colGroupAA: {
+        'word-wrap': 'break-word'
+      },
+      colGroupBA: {
+        'word-wrap': 'break-word'
+      },
+      title: {
+        'margin-top': '20px'
+      },
+      subtitle: {
+        'margin-top': '10px'
+      },
+      paragraph: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button: {
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      },
+      title2: {
+        'margin-top': '20px'
+      },
+      subtitle2: {
+        'margin-top': '10px'
+      },
+      paragraph2: {
+        'margin-top': '15px',
+        'text-indent': '28px',
+        'white-space': 'pre-wrap'
+      },
+      button2: {
+        border: '1px solid #3ba4ff',
+        'border-radius': '4px'
+      }
+    },
+    props: {
+      colGroupRow: { gutter: 20 },
+      colGroup: { span: 24 },
+      colGroupA: { span: 12 },
+      colGroupB: { span: 12 },
+      colButton: {
+        xs: {
+          span: 6,
+          push: 18
+        },
+        sm: {
+          span: 4,
+          push: 20
+        }
+      }
+    },
+    theme: {
+      root: ['mod-space', 'mod-full-width'],
+      title: ['font_1', 'color_7'],
+      subtitle: ['font_3', 'color_2'],
+      paragraph: ['font_9', 'color_4'],
+      button: ['font_10', 'color_7'],
+      title2: ['font_1', 'color_7'],
+      subtitle2: ['font_3', 'color_2'],
+      paragraph2: ['font_9', 'color_4'],
+      button2: ['font_10', 'color_7']
+    },
+    options: {
+      theme: {
+        button: {
+          bgColor: 'color_0'
+        },
+        button2: {
+          bgColor: 'color_0'
+        }
+      },
+      config: {
+        ...emptyData
+      }
+    },
+    cover: require('@/../static/adi/mixPosition/cover/horizontalTwo.png'),
+    preview: {
+      outter: {
+        height: '360px'
       },
       inner: {
         'margin-top': '-20px'
