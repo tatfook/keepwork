@@ -1,7 +1,7 @@
 <template>
   <div class="menu-type">
-    <el-button plain type='primary' size='mini' @click='isAnimationsEditorShow = true'>Add Animations</el-button>
-    <animationsDataEditor :isEditorShow='isAnimationsEditorShow' :originalTreeData='originValue'  @finishEditing='finishEditing' @cancel='cancel'></animationsDataEditor>
+    <el-button plain type='primary' @click="openAnimationsDialog">Add Animations</el-button>
+    <animationsDataEditor :show='isAnimationsEditorShow' @finish='finish' @cancel='cancel'></animationsDataEditor>
   </div>
 </template>
 <script>
@@ -9,8 +9,7 @@ import animationsDataEditor from "./animationsDataEditor";
 export default {
   name: 'AnimationsType',
   props: {
-    editingKey: String,
-    originValue: Array
+    editingKey: String
   },
   data() {
     return {
@@ -21,11 +20,14 @@ export default {
     cancel(){
       this.isAnimationsEditorShow = false
     },
-    finishEditing(resultMenuData){
+    openAnimationsDialog(){
+      this.isAnimationsEditorShow = true
+    },
+    finish(data){
       this.isAnimationsEditorShow = false
-      var tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = resultMenuData
-      this.$emit('onPropertyChange', tempChangedDataObj)
+      var tmp = {}
+      tmp[this.editingKey] = data
+      this.$emit('onPropertyChange', tmp)
     }
   },
   components: {
@@ -33,8 +35,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.el-button {
-  font-size: 16px;
-}
-</style>

@@ -92,8 +92,7 @@ const timer = {
   },
   start: function(username) {
     this.timeoutObj = setInterval( function () {
-      // TODO: /class/performance 获取数据后 DOM 操作
-      console.log(username)
+      // /class/performance 获取数据后 DOM 操作
       let params = {username: username}
       axios.post(lessonHost + '/api/class/performance', qs.stringify(params),
         {
@@ -101,7 +100,6 @@ const timer = {
         })
         .then(response => {
           let r = response.data
-          console.log(r)
           let studentMod = getMod('ModStudent')
           if(r.data) {
             studentMod.innerHTML = JSON.stringify(r.data)
@@ -202,7 +200,8 @@ export default {
 
       options.playClick = function() {
         console.log('Play Click')
-        // 生成一个 Record， 返回做题的地址
+        // 生成一个 Record，返回做题的地址
+        // TODO: 如存在课程总结 params 追加一个 lessonPerformance
         if(self.isLogined) {
           let params = {}
           params.username = self.username
@@ -211,8 +210,20 @@ export default {
           params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
           params.goals = self.modData.lesson.LessonGoals
           params.lessonNo = self.modData.lesson.LessonNo
-          let quizzs = getMods('ModQuizz');
-          console.log(quizzs);
+          let quizzs = getMods('ModQuizz')
+          let lessonGet = getMod('ModLessonGet')
+          let lessonPerformance = ''
+          if(lessonGet) {
+            let eles = lessonGet.getElementsByTagName('div')
+            for(let i =0; i < eles.length; i++) {
+              let ele = eles[i]
+              if(ele.getAttribute('class')=='content'){
+                lessonPerformance = ele.innerText
+              }
+            }
+            params.lessonPerformance = lessonPerformance
+          }
+          console.log(quizzs)
           // lessonPerformance、
           console.log(params)
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
@@ -245,6 +256,18 @@ export default {
         params.lessonTitle = self.modData.lesson.Title
         params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
         params.goals = self.modData.lesson.LessonGoals
+        let lessonGet = getMod('ModLessonGet')
+        let lessonPerformance = ''
+        if(lessonGet) {
+          let eles = lessonGet.getElementsByTagName('div')
+          for(let i =0; i < eles.length; i++) {
+            let ele = eles[i]
+            if(ele.getAttribute('class')=='content'){
+              lessonPerformance = ele.innerText
+            }
+          }
+          params.lessonPerformance = lessonPerformance
+        }
         if( classState == 0 ) {
           // begin class
           axios.post(lessonHost + '/api/class/begin', qs.stringify(params),

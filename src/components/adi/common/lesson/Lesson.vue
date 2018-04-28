@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="16">
         <div class="lessonDesc">
-          <span>Lesson {{properties.LessonNo}}: {{properties.Title}}{{properties.vip}}</span><br>
+          <span>Lesson {{properties.LessonNo}}: {{properties.Title}}</span><br>
           <span>Lesson Goals:</span><br>
           <span>{{properties.LessonGoals}}</span>
           <el-row>
