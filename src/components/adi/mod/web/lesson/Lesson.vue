@@ -78,8 +78,10 @@ const init = function(){
     hideMod('ModLesson', true)
   } else {
     let lessonMod = getMod('ModLesson')
-    lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
-    lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
+    if(lessonMod && lessonMod.parentNode != null) {
+      lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
+      lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
+    }
   }
 }
 
@@ -131,6 +133,7 @@ export default {
       options = _.merge(options, this.generateOptionsStyle(name))
       const mods = []
       options.defaultCover = require('@/../static/adi/imgLoop/imgCarouselOne.jpg')
+      options.tempAnimations = []
       // Tab 被点击的回调
       options.tabClick = function(tab) {
         // 切换显示的页卡
@@ -161,15 +164,17 @@ export default {
           let lessonMod = getMod('ModLesson')
           let animations = self.modData.lesson.animations
           let len = animations.length
-          if(len == 0) {
-            lessonMod.parentNode.appendChild(createMod('ModAnimations', "<p>没有素材<p>"))
-          } else {
-            let html = ""
-            for(let i = 0; i < len; i++) {
-              let item = animations[i]
-              html += '<p>Animations:' + item.cover + "-" + item.title + "-" + item.animation + '</p><br>'
+          if(lessonMod && lessonMod.parentNode != null) {
+            if(len == 0) {
+              lessonMod.parentNode.appendChild(createMod('ModAnimations', "<p>没有素材<p>"))
+            } else {
+              let html = ""
+              for(let i = 0; i < len; i++) {
+                let item = animations[i]
+                html += '<p>Animations' + (i+1) + ':' + item.coverImage + " - " + item.title + " - " + item.animation + '</p><br>'
+              }
+              lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
             }
-            lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
           }
           let eles = document.getElementsByTagName('div')
           for(let i = 0; i < eles.length; i++) {
@@ -249,7 +254,7 @@ export default {
         console.log('class Op Click')
         let params = {}
         let btnClass = document.getElementById('btnClass')
-        let tipClass = document.getElementById('tipClass')
+        // let tipClass = document.getElementById('tipClass')
         params.username = self.username
         params.lessonNo = self.modData.lesson.LessonNo
         params.lessonUrl = self.activePageUrl
@@ -278,7 +283,7 @@ export default {
             let r = response.data
             if(r.err == 0) {
               btnClass.lastChild.innerText = 'Dismiss the Class'
-              tipClass.innerText = '(Click here to dismiss the class)'
+              // tipClass.innerText = '(Click here to dismiss the class)'
               classState = 1
               classId = r.data.classId
               // TODO: 开始轮询获取 Students' Performance 数据
@@ -322,7 +327,7 @@ export default {
                 summaryMod.innerHTML = JSON.stringify(r.data)
               }
             })
-            btnClass.setAttribute('disable','true')
+            btnClass.setAttribute('disabled','true')
           }).catch(() => {
             // cancel
           })

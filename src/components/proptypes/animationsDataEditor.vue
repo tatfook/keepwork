@@ -1,11 +1,11 @@
 <template>
-  <el-dialog class="tree-data-dialog" title="Add animations" :visible.sync="show" width="900px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" title="Add animations" :visible.sync="show" width="600px" :before-close="handleClose">
     <draggable v-model="animationsDataCopy">
       <transition-group>
         <div v-for="item in animationsDataCopy" :key="item.id">
           <el-row :gutter="10" class="row-animation">
             <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
-              <el-form class="animationForm" label-position="right" label-width="160px">
+              <el-form class="animationForm" label-position="right" label-width="120px" size="mini">
                 <el-form-item label="Title">
                   <el-input v-model="item.title"></el-input>
                 </el-form-item>
@@ -67,12 +67,13 @@ function uuid(len, radix) {
 export default {
   name: 'animationsDataEditor',
   props: {
+    animationsData: Array,
     show: Boolean
   },
   data() {
-    this.animationsData = []
     return {
-      animationsDataCopy: _.cloneDeep(this.animationsData)
+      // animationsDataCopy: _.cloneDeep(this.animationsData)
+      animationsDataCopy: this.animationsData
     }
   },
   methods: {

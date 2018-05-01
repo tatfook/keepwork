@@ -1,7 +1,7 @@
 <template>
   <div class="menu-type">
     <el-button plain type='primary' @click="openAnimationsDialog">Add Animations</el-button>
-    <animationsDataEditor :show='isAnimationsEditorShow' @finish='finish' @cancel='cancel'></animationsDataEditor>
+    <animationsDataEditor :show='isAnimationsEditorShow' :animationsData='originValue' @finish='finish' @cancel='cancel'></animationsDataEditor>
   </div>
 </template>
 <script>
@@ -9,7 +9,8 @@ import animationsDataEditor from "./animationsDataEditor";
 export default {
   name: 'AnimationsType',
   props: {
-    editingKey: String
+    editingKey: String,
+    originValue: Array
   },
   data() {
     return {

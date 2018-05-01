@@ -8,6 +8,7 @@ const components = {
   lesson: 'AdiLesson'
 }
 const properties = generateProperties(name, components)
+properties.lesson.animations = []
 export default {
   mod,
   name,

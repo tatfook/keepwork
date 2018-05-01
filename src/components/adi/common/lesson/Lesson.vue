@@ -8,13 +8,13 @@
       </el-col>
       <el-col :span="16">
         <div class="lessonDesc">
-          <span>Lesson {{properties.LessonNo}}: {{properties.Title}}</span><br>
-          <span>Lesson Goals:</span><br>
-          <span>{{properties.LessonGoals}}</span>
-          <el-row>
+          <span class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</span><br>
+          <span class="lesson-goals-title">Lesson Goals:</span><br>
+          <span class="lesson-goals">{{properties.LessonGoals}}</span>
+          <el-row class="lesson-button">
             <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
-            <el-button @click="classOpClick" v-if="properties.vip" type="primary" id="btnClass">Begin the Class</el-button>
-            <span v-if="properties.vip" id="tipClass">(Click here to begin the class)</span>
+            <el-button class="btn-begin" @click="classOpClick" v-if="properties.vip" type="primary" plain id="btnClass">Begin the Class</el-button>
+            <!-- <span v-if="properties.vip" id="tipClass">(Click here to begin the class)</span> -->
           </el-row>
         </div>
       </el-col>
@@ -47,7 +47,9 @@ export default {
       return this.generateStyleString({
         background: 'url(' + this.properties.CoverImageOfTheLesson + ')',
         'background-position': 'center',
-        'background-size': 'cover'
+        'background-size': 'cover',
+        'opacity':'0.8',
+        'border-radius': '8px'
       })
     },
     tabClick(tab) {
@@ -90,6 +92,33 @@ export default {
 <style>
   .lessonDesc {
     padding-left: 20px;
+  }
+  .lesson-button {
+    padding-top: 50px;
+  }
+  .lesson-title {
+    font-size:20px;
+    color:#111111;
+  }
+  .lesson-goals-title {
+    font-size:18px;
+    color:#4C4C4C;
+    padding-top: 20px;
+  }
+  .lesson-goals {
+    color:#4C4C4C;
+    line-height:30px;
+    font-size:16px;
+    padding-top: 10px;
+  }
+  .tabs {
+    padding-top: 20px;
+  }
+  .btn-begin:disabled {
+    background:#D2D2D2;
+    cursor: not-allowed;
+    color: white;
+    pointer-events: none;
   }
 </style>
 
