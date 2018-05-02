@@ -9,5 +9,5 @@ export default {
       link: 'http://keepwork.com'
     }
   ],
-  target: ''
+  target: '_self'
 }
