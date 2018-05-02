@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-if='show' class="website-setting-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
+  <el-dialog v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
     <WebsiteSettingLayout @close='handleClose' :sitePath='sitePath'/>
   </el-dialog>
 </template>
@@ -15,6 +15,11 @@ export default {
     show: Boolean,
     sitePath: String,
   },
+  data() {
+    return {
+      title: `//${location.host}/${this.sitePath}`
+    }
+  },
   methods: {
     handleClose() {
       this.$emit('close')
@@ -28,14 +33,19 @@ export default {
 
 <style lang='scss'>
 .website-setting {
-  &-layout-item {
-    &.active {
-      box-shadow: 0 0 1px blue;
+  &-dialog {
+    .el-dialog {
+      width: 1000px;
+      min-height: 700px;
     }
-  }
-  &-style-item {
-    &.active {
-      box-shadow: 0 0 1px blue;
+    .el-dialog__header {
+      box-shadow: 0 2px 2px #b5b5b5;
+      z-index: 10;
+      position: relative;
+    }
+    .el-dialog__body {
+      padding: 0;
+      border-top: 15px solid #cdd4dc;
     }
   }
 }

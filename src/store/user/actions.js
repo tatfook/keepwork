@@ -209,14 +209,14 @@ const actions = {
     config = _.isString(content) ? JSON.parse(content) : content
     commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
   },
-  async saveSiteLayoutConfigLayouts(context, { sitePath, layouts }) {
+  async saveSiteLayoutConfig(context, { sitePath, layoutConfig }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
     let unsavedConfig = {
       ...config,
       layoutConfig: {
         ...config.layoutConfig,
-        layouts
+        ...layoutConfig
       }
     }
     let content = JSON.stringify(unsavedConfig, null, 2)

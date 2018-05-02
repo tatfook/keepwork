@@ -1,90 +1,124 @@
 <template>
-  <div v-loading='loading'>
-    <el-row>
+  <div v-loading='loading' @click.stop="handleDialogClick">
+    <el-row class="website-setting-layout">
       <el-col :span="6" class="website-setting-layouts">
-        <el-button size="mini" type="text" @click.stop="addLayout">添加布局</el-button>
-        <div
-          v-for='(layout) in siteLayoutsMap'
-          :key='layout.id'
-          class="website-setting-layout-item" 
-          :class="{active: selectedLayoutId==layout.id}"
-          @click.stop="selectLayout(layout)"
-        >
-          <div v-if="selectedLayoutNameEdittable && selectedLayoutId==layout.id">
-            <el-form class="website-setting-name" :model="layoutForm" :rules="layoutFormRules" ref="layoutNameForm">
-              <el-form-item prop="name">
-                <el-input placeholder="name" v-model="layoutForm.name"></el-input>
-              </el-form-item>
-            </el-form>
+        <header>
+          <h1>1. 布局方案</h1>
+        </header>
+        <main>
+          <el-button class="add-layout-btn" icon="el-icon-plus" type="text" @click.stop="addLayout">添加布局</el-button>
+          <div class="website-setting-layout-list">
+            <div
+              v-for='(layout) in siteLayoutsMap'
+              :key='layout.id'
+              class="website-setting-layout-item" 
+              :class="{
+                active: selectedLayoutId==layout.id,
+                is_default: unsavedDefaultLayoutId==layout.id
+              }"
+              @click.stop="selectLayout(layout)"
+              :ref="'layout' + layout.id"
+            >
+              <div v-if="selectedLayoutNameEdittable && selectedLayoutId==layout.id" class="input-state">
+                <el-form class="website-setting-name" :model="layoutForm" :rules="layoutFormRules" ref="layoutNameForm">
+                  <el-form-item prop="name">
+                    <el-input placeholder="name" size="small" v-model="layoutForm.name"></el-input>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div v-else class="display-state">
+                <label>
+                  {{ layout.name }}
+                </label>
+                <span class="display-state-btns">
+                  <el-button
+                    class="default-btn"
+                    :class="{is_default: unsavedDefaultLayoutId==layout.id}"
+                    size="mini" type="text"
+                    @click.stop="setDefault(layout)"
+                    title="默认">
+                    默认
+                  </el-button>
+                  <el-button size="mini" type="text" @click.stop="editLayout(layout)" title="编辑">编辑</el-button>
+                  <el-button size="mini" type="text" @click.stop="removeLayout(layout)" title="删除">删除</el-button>
+                </span>
+              </div>
+            </div>
           </div>
-          <div v-else>
-            {{ layout.name }}
-            <el-button size="mini" type="text" @click.stop="editLayout(layout)">编辑</el-button>
-            <el-button size="mini" type="text" @click.stop="removeLayout(layout)">删除</el-button>
+        </main>
+      </el-col>
+      <el-col :span="7" class="website-setting-styles">
+        <header>
+          <h1>2. 布局样式</h1>
+        </header>
+        <main>
+          <div
+            v-for='(styleComponent, name) in stylesList'
+            :key='name'
+            class="website-setting-style-item"
+            :class="{active: selectedLayoutStyleName==name}"
+            @click.stop="selectStyle(name)"
+            >
+            {{ name }}
           </div>
-        </div>
+        </main>
       </el-col>
-      <el-col :span="8" class="website-setting-styles">
-        <div
-          v-for='(styleComponent, name) in stylesList'
-          :key='name'
-          class="website-setting-style-item"
-          :class="{active: selectedLayoutStyleName==name}"
-          @click.stop="selectStyle(name)"
-          >
-          {{ name }}
-        </div>
+      <el-col :span="8" class="website-setting-layoutconfig">
+        <header>
+          <h1>3. 布局参数</h1>
+        </header>
+        <main>
+          <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
+            <el-form-item prop="header">
+              <label>header</label>
+              <el-select size="small" v-model="layoutForm.header" filterable placeholder="Select">
+                <el-option
+                  v-for="fileName in getAvailableContentFileNames('header')"
+                  :key="fileName"
+                  :label="fileName"
+                  :value="fileName">
+                </el-option>
+              </el-select>
+              <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('header')"></el-button>
+            </el-form-item>
+            <el-form-item prop="sidebar">
+              <label>sidebar</label>
+              <el-select size="small" v-model="layoutForm.sidebar" filterable placeholder="Select">
+                <el-option
+                  v-for="fileName in getAvailableContentFileNames('sidebar')"
+                  :key="fileName"
+                  :label="fileName"
+                  :value="fileName">
+                </el-option>
+              </el-select>
+              <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('sidebar')"></el-button>
+            </el-form-item>
+            <el-form-item prop="footer">
+              <label>footer</label>
+              <el-select size="small" v-model="layoutForm.footer" filterable placeholder="Select">
+                <el-option
+                  v-for="fileName in getAvailableContentFileNames('footer')"
+                  :key="fileName"
+                  :label="fileName"
+                  :value="fileName">
+                </el-option>
+              </el-select>
+              <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('footer')"></el-button>
+            </el-form-item>
+            <el-form-item prop="match">
+              <label>match</label>
+              <el-input size="small" placeholder="match" v-model="layoutForm.match">
+              </el-input>
+              <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
+            </el-form-item>
+          </el-form>
+        </main>
       </el-col>
-      <el-col :span="10" class="website-setting-layoutconfig">
-        <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
-          <el-form-item prop="header">
-            header
-            <el-select v-model="layoutForm.header" filterable placeholder="Select">
-              <el-option
-                v-for="fileName in getAvailableContentFileNames('header')"
-                :key="fileName"
-                :label="fileName"
-                :value="fileName">
-              </el-option>
-            </el-select>
-            <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('header')"></el-button>
-          </el-form-item>
-          <el-form-item prop="sidebar">
-            sidebar
-            <el-select v-model="layoutForm.sidebar" filterable placeholder="Select">
-              <el-option
-                v-for="fileName in getAvailableContentFileNames('sidebar')"
-                :key="fileName"
-                :label="fileName"
-                :value="fileName">
-              </el-option>
-            </el-select>
-            <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('sidebar')"></el-button>
-          </el-form-item>
-          <el-form-item prop="footer">
-            footer
-            <el-select v-model="layoutForm.footer" filterable placeholder="Select">
-              <el-option
-                v-for="fileName in getAvailableContentFileNames('footer')"
-                :key="fileName"
-                :label="fileName"
-                :value="fileName">
-              </el-option>
-            </el-select>
-            <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('footer')"></el-button>
-          </el-form-item>
-          <el-form-item prop="match">
-            <el-input placeholder="match" v-model="layoutForm.match">
-              <template slot="prepend">match</template>
-            </el-input>
-          </el-form-item>
-        </el-form>
+      <el-col :span="3" class="website-setting-btns">
+        <el-button type="primary" @click="handleSave">保存</el-button>
+        <el-button @click="handleClose">放弃</el-button>
       </el-col>
     </el-row>
-    <span class="dialog-footer">
-      <el-button type="primary" @click="handleSave">保存</el-button>
-      <el-button @click="handleClose">放弃</el-button>
-    </span>
   </div>
 </template>
 
@@ -112,12 +146,14 @@ export default {
     }
 
     return {
+      newLayoutIndex: 0,
       loading: true,
       selectedLayoutId: NaN,
       selectedLayoutNameEdittable: false,
       updatedLayoutsMap: {}, // this is for modify the unsaved layoutConfig data
       stylesList,
       layoutForm: {
+        defaultLayoutId: NaN,
         name: '',
         header: '',
         sidebar: '',
@@ -133,12 +169,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userSiteLayoutsBySitePath: 'user/siteLayoutsBySitePath',
+      userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       gitlabChildNamesByPath: 'gitlab/childNamesByPath'
     }),
+    userSiteLayoutConfigClone() {
+      let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(this.sitePath)
+      return _.cloneDeep(userSiteLayoutConfig)
+    },
     userSiteLayoutsMapClone() {
-      let userSiteLayouts = this.userSiteLayoutsBySitePath(this.sitePath)
-      return _.cloneDeep(_.keyBy(userSiteLayouts, 'id'))
+      return _.keyBy(_.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'layouts'], []), 'id')
+    },
+    userSiteDefaultLayoutId() {
+      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'defaultLayoutId'], NaN)
     },
     allSiteLayoutsMap() {
       return _.merge({}, this.userSiteLayoutsMapClone, this.updatedLayoutsMap)
@@ -154,6 +196,22 @@ export default {
     },
     firstLayout() {
       return _.values(this.siteLayoutsMap)[0]
+    },
+    unsavedDefaultLayoutId() {
+      const defaultLayoutIdIsLegal = id => {
+        // lodash keys return a string array
+        return _.keys(this.siteLayoutsMap).indexOf(id+'') > -1
+      }
+      let firstLayoutId = _.get(this.firstLayout, 'id', NaN)
+      let idCandidates = [
+        this.layoutForm.defaultLayoutId,
+        this.userSiteDefaultLayoutId,
+        firstLayoutId
+      ]
+      for (let i in idCandidates) {
+        if (defaultLayoutIdIsLegal(idCandidates[i])) return idCandidates[i]
+      }
+      return this.userSiteDefaultLayoutId
     },
     siteLayoutsLength() {
       return _.values(this.siteLayoutsMap).length
@@ -208,14 +266,14 @@ export default {
   methods: {
     ...mapActions({
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
-      userSaveSiteLayoutConfigLayouts: 'user/saveSiteLayoutConfigLayouts',
+      userSaveSiteLayoutConfig: 'user/saveSiteLayoutConfig',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile'
     }),
     addLayout() {
-      let newLayout = LayoutHelper.newLayout()
+      let newLayout = LayoutHelper.newLayout(++this.newLayoutIndex)
       Vue.set(this.updatedLayoutsMap, newLayout.id, newLayout)
-      this.selectLayout(newLayout)
+      this.editLayout(newLayout)
     },
     removeLayout(layout) {
       if (this.siteLayoutsLength <= 1) return alert('Keep one layout at least!')
@@ -250,11 +308,22 @@ export default {
       this.selectLayout(layout)
       this.enableSelectedLayoutNameEdittable()
     },
+    setDefault(layout) {
+      this.layoutForm.defaultLayoutId = layout.id
+    },
     disalbeSelectedLayoutNameEdittable() {
       this.selectedLayoutNameEdittable = false
     },
-    enableSelectedLayoutNameEdittable() {
+    async enableSelectedLayoutNameEdittable() {
       this.selectedLayoutNameEdittable = true
+
+      // try auto focus
+      await this.$nextTick()
+      try {
+        let layoutItemDOM = this.$refs[`layout${this.selectedLayoutId}`]
+        layoutItemDOM = _.isArray(layoutItemDOM) ? layoutItemDOM[0] : layoutItemDOM
+        layoutItemDOM.querySelector('input').focus()
+      } catch (e) {}
     },
     getAvailableContentFileNames(contentKey) {
       let contentFolderPath = LayoutHelper.layoutContentFolderPath(this.sitePath, contentKey)
@@ -300,9 +369,12 @@ export default {
     },
     async handleSave() {
       this.loading = true
-      await this.userSaveSiteLayoutConfigLayouts({
+      await this.userSaveSiteLayoutConfig({
         sitePath: this.sitePath,
-        layouts: this.allUnsavedLayouts
+        layoutConfig: {
+          layouts: this.allUnsavedLayouts,
+          defaultLayoutId: this.unsavedDefaultLayoutId
+        }
       }).catch(e => {
         console.error(e)
         this.loading = false
@@ -312,6 +384,9 @@ export default {
     },
     handleClose() {
       this.$emit('close')
+    },
+    handleDialogClick() {
+      this.disalbeSelectedLayoutNameEdittable()
     }
   }
 }
@@ -319,14 +394,144 @@ export default {
 
 <style lang='scss'>
 .website-setting {
+  $column-height: 650px;
+
+  &-layout {
+    cursor: default;
+    min-height: $column-height;
+    min-width: 1000px;
+  }
+  &-layout-list {
+    margin-top: 15px;
+  }
   &-layout-item {
+    height: 32px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 1px solid #BCBCBC;
+    border-radius: 4px;
     &.active {
-      box-shadow: 0 0 1px blue;
+      border: 1px solid #1890FF;
+    }
+    .input-state, .display-state {
+      height: 100%;
+    }
+    .input-state {
+      [class*="el-form"] {
+        height: 100%;
+        line-height: initial;
+      }
+      input {
+        border: 0;
+        padding-left: 10px;
+        font-size: 14px;
+      }
+    }
+    .display-state {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+    .display-state-btns {
+      .default-btn {
+        &.is_default {
+          background: pink;
+        }
+      }
     }
   }
   &-style-item {
     &.active {
       box-shadow: 0 0 1px blue;
+    }
+  }
+  &-layouts, &-styles, &-layoutconfig, &-btns {
+    padding: 20px;
+    height: $column-height;
+    h1 {
+      padding-left: 0;
+    }
+  }
+  &-layouts {
+    .add-layout-btn {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      color: black;
+      .el-icon-plus {
+        width: 20px;
+        height: 20px;
+        border: 1px solid black;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        color: black;
+      }
+    }
+  }
+  &-styles, &-layoutconfig {
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    header {
+      padding: 0 20px 0;
+    }
+    main {
+      padding: 0 20px 0;
+      flex: 1;
+      position: relative;
+      &::before {
+        content: '';
+        height: 100%;
+        display: block;
+        width: 1px;
+        background: #cdd4dc;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+  &-layoutconfig {
+    .el-form-item__content {
+      display: flex;
+      align-items: center;
+      label {
+        flex: 0 0 60px;
+        text-align: right;
+        padding-right:6px;
+      }
+      button {
+        margin-left: 6px;
+        flex: 0 0 26px;
+      }
+    }
+    button {
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 0;
+      &:hover, &:focus {
+        background: #C0C4CC;
+        color: black;
+      }
+    }
+  }
+  &-btns {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-left: 15px solid #cdd4dc;
+    button {
+      width: 100%;
+      margin: 15px 0 0 !important;
     }
   }
 }
