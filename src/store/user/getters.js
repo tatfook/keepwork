@@ -55,10 +55,9 @@ const getters = {
       let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
         ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
       )
-      let children = gitTree2NestedArray(files, rootPath)
-      // .filter(
-      //   ({ name }) => name !== CONFIG_FOLDER_NAME
-      // )
+      let children = gitTree2NestedArray(files, rootPath).filter(
+        ({ name }) => name !== CONFIG_FOLDER_NAME
+      )
 
       return {
         ...websitesMap[name],
