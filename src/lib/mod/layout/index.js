@@ -6,10 +6,10 @@ import Const from './const'
 
 export default {
   Const,
-  newLayout() {
+  newLayout(index) {
     return {
       id: uuid(),
-      name: 'New layout',
+      name: `New layout ${index}`,
       styleName: 'basic',
       match: '',
       content: {
@@ -61,7 +61,7 @@ export default {
   //   }
   // }
   getLayoutByPath(siteLayoutConfig, path) {
-    let defaultLayoutId = _.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0)
+    let defaultLayoutId = _.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0).toString()
     let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
     let relativePath = getRelativePathByPath(path)
     let targetPageLayoutId = _.get(siteLayoutConfig, ['pages', relativePath, 'layout'], defaultLayoutId)
