@@ -7,10 +7,12 @@
 <script>
 import Parser from '@/lib/mod/parser'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
 import _CodeMirror from 'codemirror'
 import Mousetrap from 'mousetrap'
+import { gConst } from '@/lib/global'
+
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
@@ -26,6 +28,11 @@ const CodeMirror = window.CodeMirror || _CodeMirror
 
 export default {
   name: 'EditorMarkdown',
+  data() {
+    return {
+      gConst
+    }
+  },
   components: {
     codemirror
   },
@@ -34,6 +41,36 @@ export default {
   },
   mounted() {
     this.foldCodes(this.editor)
+    this.editor.on('drop', (cm, evt) => {
+      let files = evt.dataTransfer.files
+      let file = files[0]
+      let cursor = cm.getCursor()
+      // TODO: cursor got issues
+      if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
+        // gitlab
+        let fileReader = new FileReader()
+
+        fileReader.onload = async () => {
+          const path = await this.gitlabUploadFile({
+            content: fileReader.result
+          })
+          console.log(path)
+          console.log(cursor.line)
+          if (!path) {
+            this.replaceLine(cm, cursor.line, '***Upload Failed!***')
+          } else if (/image\/\w+/.test(file.type)) {
+            this.replaceLine(cm, cursor.line, '![](' + path + ')')
+          } else {
+            this.replaceLine(
+              cm,
+              cursor.line,
+              '![' + file.name + '](' + path + ')'
+            )
+          }
+        }
+        fileReader.readAsDataURL(file)
+      }
+    })
   },
   computed: {
     ...mapGetters({
@@ -59,6 +96,8 @@ export default {
           'CodeMirror-lint-markers'
         ],
         matchBrackets: true,
+        dragDrop: true,
+        // allowDropFileTypes: ['jpg', 'jpeg'],
         extraKeys: {
           'Ctrl-S': save,
           'Cmd-S': save,
@@ -72,6 +111,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      gitlabUploadFile: 'gitlab/uploadFile'
+    }),
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
 
@@ -242,6 +284,16 @@ export default {
 
       this.editor.replaceSelection(replaceStr)
       this.editor.focus()
+    },
+    // 整行替换，不自动获取焦点
+    replaceLine(editor, lineNo, content) {
+      var originContent = editor.getLine(lineNo)
+      var offsetX = originContent && originContent.length
+      editor.replaceRange(
+        content,
+        CodeMirror.Pos(lineNo, 0),
+        CodeMirror.Pos(lineNo, offsetX)
+      )
     }
   }
 }
