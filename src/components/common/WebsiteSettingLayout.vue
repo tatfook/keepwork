@@ -52,14 +52,21 @@
           <h1>2. 布局样式</h1>
         </header>
         <main>
-          <div
-            v-for='(styleComponent, name) in stylesList'
-            :key='name'
-            class="website-setting-style-item"
-            :class="{active: selectedLayoutStyleName==name}"
-            @click.stop="selectStyle(name)"
-            >
-            {{ name }}
+          <div class="website-setting-styles-main">
+            <div
+              v-for='(styleComponent, name) in stylesList'
+              :key='name'
+              class="website-setting-style-item"
+              :class="{active: selectedLayoutStyleName==name}"
+              @click.stop="selectStyle(name)"
+              >
+              <component :is='styleComponent'>
+                <div slot='header'>header</div>
+                <div slot='footer'>footer</div>
+                <div slot='sidebar'>aside</div>
+                main
+              </component>
+            </div>
           </div>
         </main>
       </el-col>
@@ -441,11 +448,6 @@ export default {
       }
     }
   }
-  &-style-item {
-    &.active {
-      box-shadow: 0 0 1px blue;
-    }
-  }
   &-layouts, &-styles, &-layoutconfig, &-btns {
     padding: 20px;
     height: $column-height;
@@ -479,10 +481,10 @@ export default {
     padding-right: 0;
     display: flex;
     flex-direction: column;
-    header {
+    > header {
       padding: 0 20px 0;
     }
-    main {
+    > main {
       padding: 0 20px 0;
       flex: 1;
       position: relative;
@@ -496,6 +498,43 @@ export default {
         top: 0;
         left: 0;
       }
+    }
+  }
+  &-styles {
+    &-main {
+      max-height: 570px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .el-header, .el-footer, .el-aside, .el-main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .el-header, .el-footer {
+      background: #B3C0D1 !important;
+    }
+    .el-aside {
+      max-width: 50px !important;
+      background: #D3DCE6 !important;
+    }
+    .el-main {
+      background: #E4EEF3;
+    }
+    .basic-template {
+      .el-main {
+        border-left: 40px solid white;
+        border-right: 40px solid white;
+      }
+    }
+  }
+  &-style-item {
+    height: 120px;
+    margin-bottom: 10px;
+    border: 5px solid #E4EEF3;
+    background: #E4EEF3;
+    &.active {
+      border: 5px solid #1989FA;
     }
   }
   &-layoutconfig {
