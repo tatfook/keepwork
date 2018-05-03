@@ -103,7 +103,8 @@
     "board": "Board",
     "vipRead": "VIP Read",
     "comment": "Comment",
-    "setting": "Setting"
+    "setting": "Setting",
+    "pageList": "Page list"
   },
   "adi": {
     "markdown": {
@@ -209,6 +210,7 @@
     "comment": "comment",
     "vipRead": "VIP read privileges",
     "openBoard": "Open board",
-    "switchComment": "Comment is on"
+    "switchComment": "Comment is on",
+    "pageList": "Page list"
   }
 }

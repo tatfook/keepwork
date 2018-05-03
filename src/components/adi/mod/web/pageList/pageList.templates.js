@@ -1,0 +1,7 @@
+export default [
+  [
+    {
+      colPageList: 'pageList'
+    }
+  ]
+]

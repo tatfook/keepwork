@@ -11,6 +11,7 @@ import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
+import ModPageList from './web/pageList'
 
 var modsList = [
   {
@@ -56,6 +57,11 @@ var modsList = [
         id: '1-8',
         label: 'modList.carousel',
         mods: [ModImgLoop]
+      },
+      {
+        id: '1-9',
+        label: 'modList.pageList',
+        mods: [ModPageList]
       }
     ]
   },
