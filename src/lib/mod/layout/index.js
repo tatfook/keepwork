@@ -70,7 +70,7 @@ export default {
     if (targetLayout) return targetLayout
 
     // return empty config
-    return { content: {} }
+    return { styleName: 'basic', content: {} }
   },
 
   layoutRootPath(sitePath) {
