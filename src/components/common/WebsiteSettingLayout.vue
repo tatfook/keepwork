@@ -114,7 +114,7 @@
             </el-form-item>
             <el-form-item prop="match">
               <label>match</label>
-              <el-input size="small" placeholder="match" v-model="layoutForm.match">
+              <el-input size="small" placeholder="match" type="textarea" v-model="layoutForm.match">
               </el-input>
               <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
             </el-form-item>
@@ -498,6 +498,11 @@ export default {
         top: 0;
         left: 0;
       }
+    }
+  }
+  &-layoutconfig {
+    .el-textarea, textarea {
+      min-height: 70px !important;
     }
   }
   &-styles {

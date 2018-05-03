@@ -203,7 +203,10 @@ const actions = {
     if (useCache && !_.isEmpty(config)) return
 
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
-    await dispatch('gitlab/readFile', { path: layoutFilePath, editorMode }, { root: true })
+    await dispatch('gitlab/readFile', { path: layoutFilePath, editorMode }, { root: true }).catch(e => {
+      // ignore the error, for old site without config information
+      console.error(e)
+    })
     let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
     let { content } = gitlabGetFileByPath(layoutFilePath) || {}
     config = _.isString(content) ? JSON.parse(content) : content
