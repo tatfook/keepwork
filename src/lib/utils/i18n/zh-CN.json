@@ -78,7 +78,13 @@
     "noData": "暂无数据，请添加",
     "delNotice": "删除提醒",
     "menuDelMsg": "确定删除这个节点？子节点也会直接被删除",
-    "menuItem": "菜单项"
+    "menuItem": "菜单项",
+    "fullScreen": "全屏",
+    "exitFullScreen": "退出全屏",
+    "title": "标题",
+    "bold": "加粗",
+    "italic": "斜体",
+    "horizontalDiv": "水平分割线"
   },
   "modList": {
     "recent": "常用",
