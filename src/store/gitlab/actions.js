@@ -253,7 +253,7 @@ const actions = {
       options
     )
     // TODO: any exceptions?
-    return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/${path}`
+    return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
   }
 }
 

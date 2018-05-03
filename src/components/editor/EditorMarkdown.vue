@@ -41,36 +41,8 @@ export default {
   },
   mounted() {
     this.foldCodes(this.editor)
-    this.editor.on('drop', (cm, evt) => {
-      let files = evt.dataTransfer.files
-      let file = files[0]
-      let cursor = cm.getCursor()
-      // TODO: cursor got issues
-      if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
-        // gitlab
-        let fileReader = new FileReader()
-
-        fileReader.onload = async () => {
-          const path = await this.gitlabUploadFile({
-            content: fileReader.result
-          })
-          console.log(path)
-          console.log(cursor.line)
-          if (!path) {
-            this.replaceLine(cm, cursor.line, '***Upload Failed!***')
-          } else if (/image\/\w+/.test(file.type)) {
-            this.replaceLine(cm, cursor.line, '![](' + path + ')')
-          } else {
-            this.replaceLine(
-              cm,
-              cursor.line,
-              '![' + file.name + '](' + path + ')'
-            )
-          }
-        }
-        fileReader.readAsDataURL(file)
-      }
-    })
+    this.editor.on('drop', this.onDropFile)
+    this.editor.on('paste', this.onPaste)
   },
   computed: {
     ...mapGetters({
@@ -294,6 +266,47 @@ export default {
         CodeMirror.Pos(lineNo, 0),
         CodeMirror.Pos(lineNo, offsetX)
       )
+    },
+    uploadFile(cm, file) {
+      let cursor = cm.getCursor()
+      // TODO: cursor got issues
+      if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
+        // gitlab
+        let fileReader = new FileReader()
+
+        fileReader.onload = async () => {
+          const path = await this.gitlabUploadFile({
+            content: fileReader.result
+          })
+          if (!path) {
+            this.replaceLine(cm, cursor.line, '***Upload Failed!***')
+          } else if (/image\/\w+/.test(file.type)) {
+            this.replaceLine(cm, cursor.line, '![](' + path + ')')
+          } else {
+            this.replaceLine(
+              cm,
+              cursor.line,
+              '![' + file.name + '](' + path + ')'
+            )
+          }
+        }
+        fileReader.readAsDataURL(file)
+      }
+    },
+    uploadFiles(cm, files) {
+      _.forEach(files, file => {
+        this.uploadFile(cm, file)
+      })
+    },
+    onDropFile(cm, evt) {
+      let files = evt.dataTransfer.files
+      this.uploadFiles(cm, files)
+    },
+    onPaste(cm, evt) {
+      if (evt.clipboardData && evt.clipboardData.files.length > 0) {
+        let files = evt.clipboardData.files
+        this.uploadFiles(cm, files)
+      }
     }
   }
 }
