@@ -121,10 +121,31 @@ export default {
         if (self.style.options.config && self.style.options.config[name]) {
           options = _.cloneDeep(self.style.options.config[name])
         }
+
         if (self.style.options.theme && self.style.options.theme[name]) {
-          _.forEach(self.style.options.theme[name], (op, key) => {
-            // 如果定义了相同的theme key，则之前的配置会被覆盖
-            options[key] = self.themeData(op)
+          let themeClassOptions = self.style.options.theme[name]
+
+          let getClassStyle = (item, themeOptions) => {
+            _.forEach(item, (op, key) => {
+              // 如果定义了相同的theme key，则之前的配置会被覆盖
+
+              if (typeof (op) === 'object') {
+                getClassStyle(op)
+              } else {
+                themeOptions[key] = self.themeData(op)
+              }
+            })
+          }
+
+          _.forEach(themeClassOptions, (item, key) => {
+            if (typeof (item) === 'object') {
+              let themeOptions = {}
+              getClassStyle(item, themeOptions)
+
+              options[key] = themeOptions
+            } else {
+              options[key] = self.themeData(item)
+            }
           })
         }
       }

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 let emptyData = {
   pic: {
     emptySrc: require('@/../static/adi/qq/qqOne.svg'),
@@ -109,19 +111,13 @@ export default [
         'border-radius': '50%'
       },
       colDesc: {
-        'min-width': '100px',
-        'margin-top': '48px',
         display: 'flex',
-        'justify-content': 'flex-start'
+        'min-width': '100px',
+        'justify-content': 'flex-start',
+        'align-items': 'flex-end',
+        height: '100%'
       },
-      desc: {
-        'padding-left': '10px',
-        'padding-right': '10px',
-        'text-align': 'center',
-        'line-height': '19px',
-        border: '1px solid #3ba4ff',
-        'border-radius': '8px'
-      }
+      desc: {}
     },
     props: {
       colGroup: {
@@ -148,7 +144,14 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        desc: _.merge({}, emptyData.desc, {
+          buttonStyle: {
+            border: '1px solid #3ba4ff',
+            'border-radius': '18px',
+            padding: '4px'
+          }
+        })
       }
     },
     cover: require('@/../static/adi/qq/cover/qqCoverTwo.png'),

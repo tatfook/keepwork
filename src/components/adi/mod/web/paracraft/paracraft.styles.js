@@ -161,10 +161,14 @@ export default [
     options: {
       theme: {
         download: {
-          bgColor: 'color_1'
+          buttonStyle: {
+            'background-color': 'color_1'
+          }
         },
         enter: {
-          bgColor: 'color_8'
+          buttonStyle: {
+            'background-color': 'color_8'
+          }
         }
       },
       config: {
@@ -267,7 +271,9 @@ export default [
     options: {
       theme: {
         enter: {
-          bgColor: 'color_8'
+          buttonStyle: {
+            'background-color': 'color_8'
+          }
         }
       },
       config: {
@@ -364,7 +370,9 @@ export default [
     options: {
       theme: {
         enter: {
-          bgColor: 'color_8'
+          buttonStyle: {
+            'background-color': 'color_8'
+          }
         }
       },
       config: {
