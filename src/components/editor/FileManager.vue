@@ -210,9 +210,9 @@ export default {
       let path = data.path
       let pathArr = path.split('/')
       let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(`确定删除 ${pageName} 页面？`, '删除提醒', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('editor.delConfirm')} ${pageName} ${this.$t('editor.page')}?`, this.$t('editor.delNotice'), {
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel'),
         type: 'error'
       })
         .then(async () => {

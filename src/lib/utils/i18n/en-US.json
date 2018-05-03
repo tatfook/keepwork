@@ -81,7 +81,13 @@
     "delNotice": "Delete reminder",
     "menuDelMsg":
       "Are you sure to delete this node? Child nodes are also deleted directly",
-    "menuItem": "Menu Item"
+    "menuItem": "Menu Item",
+    "fullScreen": "Full Screen",
+    "exitFullScreen": "Exit Full Screen",
+    "title": "Title",
+    "bold": "Bold",
+    "italic": "Italic",
+    "horizontalDiv": "Horizontal Dividingline"
   },
   "modList": {
     "recent": "Commonly used",
