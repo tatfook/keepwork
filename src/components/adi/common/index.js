@@ -10,7 +10,7 @@ import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
-import AdiPageList from './pageList/PageList'
+import AdiPageList from './pageList/pageList'
 
 export default {
   AdiImgLoop,
