@@ -3,7 +3,9 @@ export default [
     templateID: 0,
     data: {},
     props: {},
-    theme: {},
+    theme: {
+      // root: ['mod-space']
+    },
     options: {}
   }
 ]

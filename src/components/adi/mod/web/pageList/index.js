@@ -1,15 +1,17 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
-import styles from './mixPosition.styles'
-import templates from './mixPosition.templates'
-import mod from './mixPosition'
+import styles from './pageList.styles'
+import templates from './pageList.templates'
+import mod from './pageList'
 
 const name = 'ModPageList'
 
-const components = {}
+const components = {
+  pageList: 'AdiPageList'
+}
 
 const properties = generateProperties(name, components)
 
-export {
+export default {
   mod,
   name,
   components,
