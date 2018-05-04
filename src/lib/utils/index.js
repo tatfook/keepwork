@@ -1,4 +1,4 @@
 import gitlab from './gitlab'
-import SimpleUndo from './simpleUndo'
+import uuid from './uuid'
 
-export { SimpleUndo, gitlab }
+export { gitlab, uuid }

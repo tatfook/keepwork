@@ -20,8 +20,8 @@ export const newGitlabAPI = (params) => {
   return api
 }
 
-// const gitlab = newGitlabAPI()
-// console.log('gitlab: ', gitlab)
+const gitlab = newGitlabAPI()
+console.log('gitlab: ', gitlab)
 
 export default {
   newGitlabAPI,

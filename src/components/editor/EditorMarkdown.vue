@@ -6,10 +6,13 @@
 
 <script>
 import Parser from '@/lib/mod/parser'
-import { mapGetters } from 'vuex'
+import BlockHelper from '@/lib/mod/parser/blockHelper'
+import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
 import _CodeMirror from 'codemirror'
 import Mousetrap from 'mousetrap'
+import { gConst } from '@/lib/global'
+
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
@@ -25,16 +28,27 @@ const CodeMirror = window.CodeMirror || _CodeMirror
 
 export default {
   name: 'EditorMarkdown',
+  data() {
+    return {
+      gConst
+    }
+  },
   components: {
     codemirror
   },
   created() {
     CodeMirror.registerHelper('fold', 'wikiCmdFold', this.wikiCmdFold)
   },
+  mounted() {
+    this.foldCodes(this.editor)
+    this.editor.on('drop', this.onDropFile)
+    this.editor.on('paste', this.onPaste)
+  },
   computed: {
     ...mapGetters({
       code: 'code',
-      modList: 'modList'
+      modList: 'modList',
+      activeMod: 'activeMod'
     }),
     options() {
       let save = () => Mousetrap.trigger('mod+s')
@@ -45,11 +59,7 @@ export default {
         lineWrapping: true,
         foldGutter: true,
         foldOptions: {
-          rangeFinder: new CodeMirror.fold.combine(
-            CodeMirror.fold.markdown,
-            CodeMirror.fold.xml,
-            CodeMirror.fold.wikiCmdFold
-          ),
+          rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.wikiCmdFold),
           clearOnEnter: false
         },
         gutters: [
@@ -58,6 +68,8 @@ export default {
           'CodeMirror-lint-markers'
         ],
         matchBrackets: true,
+        dragDrop: true,
+        allowDropFileTypes: ['jpg', 'jpeg'], // codemirror will automatically parse the dropped file and insert the content into editing area, eg: js, svg, xml...
         extraKeys: {
           'Ctrl-S': save,
           'Cmd-S': save,
@@ -71,10 +83,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      gitlabUploadFile: 'gitlab/uploadFile'
+    }),
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
 
-      if (code === undefined || code === this.code) return
+      if (code === undefined) return
+      if (code === this.code) {
+        // update by ADI
+        this.foldCodes(editor)
+        return
+      }
 
       if (changes.length > 1)
         return this.$store.dispatch('updateMarkDown', code)
@@ -104,8 +124,18 @@ export default {
         // if there are some changes affect the mod data, will try to build all
         return this.$store.dispatch('updateMarkDown', code)
       }
-      let key = mod.key
-      this.$store.dispatch('updateMarkDownBlock', { code, key })
+      const key = mod.key
+      const modType = mod.modType
+      this.$store.dispatch('updateMarkDownBlock', { code, key, modType })
+    },
+    foldCodes(cm) {
+      for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {
+        // function isOnEdit only check the content of a mod, doesn't include the mod cmd
+        // and cm.firstLine() equal to 0, but the line number start with 1,
+        // that's why we use l + 2 here to check if it is the cmd line
+        if (!this.activeMod || !BlockHelper.isOnEdit(this.activeMod, l + 2))
+          cm.foldCode({ line: l, ch: 0 }, null, 'fold')
+      }
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)
@@ -182,50 +212,106 @@ export default {
     },
     insertLine() {
       let cursor = this.editor.getCursor()
-      this.editor.replaceRange(
-        '---\n',
-        CodeMirror.Pos(cursor.line + 1, 0),
-        CodeMirror.Pos(cursor.line + 1, 0)
-      )
+      this.addNewLine(cursor.line, '---')
       this.editor.setCursor(CodeMirror.Pos(cursor.line + 2, 0))
       this.editor.focus()
     },
-    insertLink() {
+    insertLink(txt, url, coords) {
       let replaceStr = ''
-      if (this.editor.somethingSelected()) {
+      if (txt) {
+        replaceStr += '[' + txt + ']'
+      } else if (!coords && this.editor.somethingSelected()) {
         replaceStr += '[' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '[]'
       }
-      this.editor.replaceSelection(replaceStr + '(' + ')')
-      if (replaceStr == '[]') {
-        this.editor.setCursor(
-          CodeMirror.Pos(
-            this.editor.getCursor().line,
-            this.editor.getCursor().ch - 3
-          )
-        )
-      }
+      replaceStr += url ? `(${url})` : '()'
+      coords
+        ? this.editor.replaceRange(replaceStr, coords)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
-    insertImage(txt, url) {
+    insertFile(txt, url, coords) {
       let replaceStr = ''
       if (txt) {
         replaceStr += '![' + txt + ']'
-      } else if (this.editor.somethingSelected()) {
+      } else if (!coords && this.editor.somethingSelected()) {
         replaceStr += '![' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '![]'
       }
 
-      if (url) {
-        replaceStr += '(' + url + ')'
-      } else {
-        replaceStr += '(' + dat + ')'
-      }
-
-      this.editor.replaceSelection(replaceStr)
+      replaceStr += url ? `(${url})` : '()'
+      coords
+        ? this.editor.replaceRange(replaceStr, coords)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
+    },
+    addNewLine(lineNo, content) {
+      // add new line after line {lineNo}
+      if (!lineNo) lineNo = this.editor.getCursor().line
+      let replaceStr = content ? `${content}\n` : '\n'
+      this.editor.replaceRange(
+        replaceStr,
+        CodeMirror.Pos(lineNo + 1, 0),
+        CodeMirror.Pos(lineNo + 1, 0)
+      )
+      return lineNo + 1
+    },
+    getEmptyLine(lineNo) {
+      var content = this.editor.getLine(lineNo)
+      while (content) {
+        content = this.editor.getLine(++lineNo)
+      }
+      if (undefined === content) {
+        this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
+      }
+      return lineNo
+    },
+    replaceLine(lineNo, content) {
+      const originalContent = this.editor.getLine(lineNo)
+      const offsetX = originalContent && originalContent.length
+      this.editor.replaceRange(
+        content,
+        CodeMirror.Pos(lineNo, 0),
+        CodeMirror.Pos(lineNo, offsetX)
+      )
+    },
+    uploadFile(file, coords) {
+      if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
+        // gitlab
+        let fileReader = new FileReader()
+        fileReader.onload = async () => {
+          const path = await this.gitlabUploadFile({
+            fileName: file.name,
+            content: fileReader.result
+          })
+          if (!path) {
+            this.insertLink(null, '***Upload Failed!***', coords)
+          } else if (/image\/\w+/.test(file.type)) {
+            this.insertFile(null, path, coords)
+          } else {
+            this.insertLink(file.name, path, coords)
+          }
+        }
+        fileReader.readAsDataURL(file)
+      }
+    },
+    onDropFile(cm, evt) {
+      let files = evt.dataTransfer.files
+      const coords = cm.coordsChar({ left: evt.x, top: evt.y })
+      _.forEach(files, file => {
+        this.uploadFile(file, coords)
+      })
+      return false
+    },
+    onPaste(cm, evt) {
+      if (evt.clipboardData && evt.clipboardData.files.length > 0) {
+        let files = evt.clipboardData.files
+        _.forEach(files, file => {
+          this.uploadFile(file)
+        })
+      }
     }
   }
 }

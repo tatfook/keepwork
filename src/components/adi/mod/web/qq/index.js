@@ -8,7 +8,7 @@ const name = 'ModQQ'
 const components = {
   qq: 'AdiNumber',
   pic: 'AdiMedia',
-  desc: 'AdiTitle'
+  desc: 'AdiButton'
 }
 
 const properties = generateProperties(name, components)

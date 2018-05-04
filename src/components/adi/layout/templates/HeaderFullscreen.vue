@@ -1,5 +1,5 @@
 <template>
-  <el-container class="header-fullscreen-template">
+  <el-container class="fullscreen-template">
     <el-header height='auto'>
       <slot name="header"></slot>
     </el-header>
@@ -14,7 +14,7 @@ export default {}
 </script>
 
 <style lang="scss">
-.header-fullscreen-template{
+.fullscreen-template{
   .el-header, .el-main{
     padding: 0;
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{originValue.desc}}
+    {{$t(originValue.desc)}}
     <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @change='updateValue' @focus='getFocus'></el-switch>
   </div>
 </template>

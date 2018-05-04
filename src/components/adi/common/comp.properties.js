@@ -11,6 +11,7 @@ import AdiVipRead from './vipRead/vipRead.properties'
 import AdiComment from './comment/comment.properties'
 import AdiInnerModal from './innerModal/innerModal.properties'
 import AdiNumber from './number/number.properties'
+import AdiPageList from './pageList/pageList.properties'
 
 export default {
   AdiImgLoop,
@@ -25,5 +26,6 @@ export default {
   AdiVipRead,
   AdiComment,
   AdiInnerModal,
-  AdiNumber
+  AdiNumber,
+  AdiPageList
 }

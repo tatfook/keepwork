@@ -1,5 +1,5 @@
 <template>
-  <el-container class="basic-template">
+  <el-container class="fullscreen-template">
     <el-main>
       <slot> </slot>
     </el-main>
@@ -11,11 +11,9 @@ export default {}
 </script>
 
 <style lang="scss">
-.basic-template{
+.fullscreen-template{
   .el-main{
     padding: 0;
-    max-width: 1080px;
-    margin: 0 auto;
   }
 }
 </style>

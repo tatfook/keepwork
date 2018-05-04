@@ -1,42 +1,42 @@
 <template>
-    <el-dialog class="tree-data-dialog" :title="$t('editor.galleryEditor')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
-        <div v-if="treeData.length > 0" class="tree-head">
-            <span class="node-label">
-                {{$t('editor.imgSrc')}}
-            </span>
-            <span class="node-link">
-                {{$t('editor.link')}}
-            </span>
-            <span class="node-operate">
-                {{$t('editor.setting')}}
-            </span>
-        </div>
-        <el-tree v-if="treeData.length > 0" ref='galleryTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span class="node-label">
-                    <span class="text" @click.stop='showInput(node.id, data, "img")'>{{data.img}}</span>
-                    <el-input :ref='"img" + node.id' :class="{'is-focus': data.imgInputShow}" size='mini' v-model='data.img' @blur='hideInput(data, "img")' @keyup.enter.native.prevent='finishInput(node.id, "img")'></el-input>
-                </span>
-                <span class="node-link">
-                    <span class="text" @click.stop='showInput(node.id, data, "link")'>{{data.link}}</span>
-                    <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
-                </span>
-                <span class="node-operate">
-                    <el-button icon='iconfont icon-houmiantianjia' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
-                    <el-button icon='iconfont icon-qianmiantianjia' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
-                    <el-button icon='iconfont icon-shanchu' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
-                </span>
-            </span>
-        </el-tree>
-        <p class="empty" v-if="treeData.length <= 0" @click="insert()">
-            {{$t('editor.noData')}}
-            <span class="iconfont icon-tianjia"></span>
-        </p>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>
-            <el-button type="primary" @click="finishEditingMenu">{{$t('el.messagebox.confirm')}}</el-button>
+  <el-dialog class="tree-data-dialog" :title="$t('editor.galleryEditor')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
+    <div v-if="treeData.length > 0" class="tree-head">
+      <span class="node-label">
+        {{$t('editor.imgSrc')}}
+      </span>
+      <span class="node-link">
+        {{$t('editor.link')}}
+      </span>
+      <span class="node-operate">
+        {{$t('editor.setting')}}
+      </span>
+    </div>
+    <el-tree v-if="treeData.length > 0" ref='galleryTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
+      <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span class="node-label">
+          <span class="text" @click.stop='showInput(node.id, data, "img")'>{{data.img}}</span>
+          <el-input :ref='"img" + node.id' :class="{'is-focus': data.imgInputShow}" size='mini' v-model='data.img' @blur='hideInput(data, "img")' @keyup.enter.native.prevent='finishInput(node.id, "img")'></el-input>
         </span>
-    </el-dialog>
+        <span class="node-link">
+          <span class="text" @click.stop='showInput(node.id, data, "link")'>{{data.link}}</span>
+          <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+        </span>
+        <span class="node-operate">
+          <el-button icon='iconfont icon-houmiantianjia' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
+          <el-button icon='iconfont icon-qianmiantianjia' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
+          <el-button icon='iconfont icon-shanchu' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
+        </span>
+      </span>
+    </el-tree>
+    <p class="empty" v-if="treeData.length <= 0" @click="insert()">
+      {{$t('editor.noData')}}
+      <span class="iconfont icon-tianjia"></span>
+    </p>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>
+      <el-button type="primary" @click="finishEditingMenu">{{$t('el.messagebox.confirm')}}</el-button>
+    </span>
+  </el-dialog>
 </template>
 <script>
 let newMenuId = 1
@@ -89,7 +89,7 @@ export default {
     },
     insert(node, data, position) {
       const newChild = {
-        img: '',//'菜单项' + newMenuId,
+        img: '', //'菜单项' + newMenuId,
         link: ''
       }
 
@@ -133,7 +133,7 @@ export default {
         default:
           node.expanded = true
           this.$nextTick(() => {
-            menuTree.append(newChild, node)
+            galleryTree.append(newChild, node)
             let childrenNodes = node.childNodes
             let childrenLen = childrenNodes.length - 1
             newNode = childrenNodes[childrenLen].data
@@ -151,7 +151,7 @@ export default {
         cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
       }).then(() => {
-        this.$refs.menuTree.remove(node)
+        this.$refs.galleryTree.remove(node)
       })
     }
   }

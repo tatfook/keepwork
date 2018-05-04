@@ -23,9 +23,7 @@ export default {
   },
   computed: {
     buttonStyle() {
-      return this.generateStyleString({
-        'background-color': this.options.bgColor || null
-      })
+      return this.generateStyleString(this.options.buttonStyle)
     },
     buttonImgStyle() {
       return this.generateStyleString({

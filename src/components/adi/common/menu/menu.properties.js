@@ -2,8 +2,8 @@ export default {
   data: [
     {
       name: 'MENU',
-      link: 'http://keepwork.com'
+      link: ''
     }
   ],
-  target: ''
+  target: '_self'
 }

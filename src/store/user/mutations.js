@@ -15,6 +15,8 @@ const GET_WEB_TEMPLATE_CONFIG_SUCCESS = 'GET_WEB_TEMPLATE_CONFIG_SUCCESS'
 const GET_WEB_TEMPLATE_FILELIST_SUCCESS = 'GET_WEB_TEMPLATE_FILELIST_SUCCESS'
 const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
+const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
+const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -30,7 +32,9 @@ export const props = {
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
   GET_WEB_TEMPLATE_FILELIST_SUCCESS,
   GET_WEB_TEMPLATE_FILE_SUCCESS,
-  SET_PAGE_STAR_DETAIL
+  SET_PAGE_STAR_DETAIL,
+  GET_SITE_LAYOUT_CONFIG_SUCCESS,
+  SAVE_SITE_LAYOUT_CONFIG_SUCCESS
 }
 
 const doNothing = state => {
@@ -95,6 +99,18 @@ const mutations = {
   },
   [SET_PAGE_STAR_DETAIL](state, { starred, starredCount }) {
     Vue.set(state, 'activePageStarInfo', { starred, starredCount })
+  },
+  [GET_SITE_LAYOUT_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteLayoutConfigs', {
+      ...state.siteLayoutConfigs,
+      [sitePath]: config
+    })
+  },
+  [SAVE_SITE_LAYOUT_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteLayoutConfigs', {
+      ...state.siteLayoutConfigs,
+      [sitePath]: config
+    })
   }
 }
 

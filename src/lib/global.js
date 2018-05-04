@@ -36,6 +36,7 @@ export const gTheme = {
 }
 
 export const gConst = {
+  GIT_FILE_UPLOAD_MAX_SIZE: 1024 * 1024 * 10, // 10M
   POSITION_BEFORE: 'before',
   POSITION_AFTER: 'after'
 }
