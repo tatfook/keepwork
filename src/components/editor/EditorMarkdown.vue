@@ -69,7 +69,7 @@ export default {
         ],
         matchBrackets: true,
         dragDrop: true,
-        // allowDropFileTypes: ['jpg', 'jpeg'],
+        allowDropFileTypes: ['jpg', 'jpeg'], // codemirror will automatically parse the dropped file and insert the content into editing area, eg: js, svg, xml...
         extraKeys: {
           'Ctrl-S': save,
           'Cmd-S': save,
@@ -216,34 +216,34 @@ export default {
       this.editor.setCursor(CodeMirror.Pos(cursor.line + 2, 0))
       this.editor.focus()
     },
-    insertLink(txt, url, lineNo) {
+    insertLink(txt, url, coords) {
       let replaceStr = ''
       if (txt) {
         replaceStr += '[' + txt + ']'
-      } else if (!lineNo && this.editor.somethingSelected()) {
+      } else if (!coords && this.editor.somethingSelected()) {
         replaceStr += '[' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '[]'
       }
       replaceStr += url ? `(${url})` : '()'
-      lineNo
-        ? this.replaceLine(lineNo, replaceStr)
+      coords
+        ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
-    insertFile(txt, url, lineNo) {
+    insertFile(txt, url, coords) {
       let replaceStr = ''
       if (txt) {
         replaceStr += '![' + txt + ']'
-      } else if (!lineNo && this.editor.somethingSelected()) {
+      } else if (!coords && this.editor.somethingSelected()) {
         replaceStr += '![' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '![]'
       }
 
       replaceStr += url ? `(${url})` : '()'
-      lineNo
-        ? this.replaceLine(lineNo, replaceStr)
+      coords
+        ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
@@ -277,7 +277,7 @@ export default {
         CodeMirror.Pos(lineNo, offsetX)
       )
     },
-    uploadFile(file, replaceLine) {
+    uploadFile(file, coords) {
       if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
         // gitlab
         let fileReader = new FileReader()
@@ -287,11 +287,11 @@ export default {
             content: fileReader.result
           })
           if (!path) {
-            this.insertLink(null, '***Upload Failed!***', replaceLine)
+            this.insertLink(null, '***Upload Failed!***', coords)
           } else if (/image\/\w+/.test(file.type)) {
-            this.insertFile(null, path, replaceLine)
+            this.insertFile(null, path, coords)
           } else {
-            this.insertLink(file.name, path, replaceLine)
+            this.insertLink(file.name, path, coords)
           }
         }
         fileReader.readAsDataURL(file)
@@ -299,11 +299,11 @@ export default {
     },
     onDropFile(cm, evt) {
       let files = evt.dataTransfer.files
-      let lineNumber = this.getEmptyLine(this.editor.getCursor().line)
+      const coords = cm.coordsChar({ left: evt.x, top: evt.y })
       _.forEach(files, file => {
-        this.uploadFile(file, lineNumber)
-        lineNumber = this.addNewLine(lineNumber)
+        this.uploadFile(file, coords)
       })
+      return false
     },
     onPaste(cm, evt) {
       if (evt.clipboardData && evt.clipboardData.files.length > 0) {
