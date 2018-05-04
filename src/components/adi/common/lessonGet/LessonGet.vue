@@ -1,6 +1,6 @@
 <template>
   <div class="comp-lesson-get">
-    <div class="content"> {{properties.content ? properties.content : $t(options.content)}}</div>
+    <pre class="content"> {{properties.content ? properties.content : $t(options.content)}}</pre>
   </div>
 </template>
 

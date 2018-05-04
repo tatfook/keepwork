@@ -1,34 +1,29 @@
 <template>
   <el-dialog class="tree-data-dialog" title="Add animations" :visible.sync="show" width="600px" :before-close="handleClose">
-    <draggable v-model="animationsDataCopy">
-      <transition-group>
-        <div v-for="item in animationsDataCopy" :key="item.id">
-          <el-row :gutter="10" class="row-animation">
-            <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
-              <el-form class="animationForm" label-position="right" label-width="120px" size="mini">
-                <el-form-item label="Title">
-                  <el-input v-model="item.title"></el-input>
-                </el-form-item>
-                <el-form-item label="Cover Image">
-                  <el-input v-model="item.coverImage"></el-input>
-                </el-form-item>
-                <el-form-item label="Animation">
-                  <el-input v-model="item.animation"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-col>
-            <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2">
-              <el-button type="danger" icon="el-icon-delete" @click="removeItem(item.id)" circle></el-button>
-            </el-col>
-          </el-row>
-        </div>
-      </transition-group>
+    <draggable element="el-collapse" :list="animationsDataCopy" accordion>
+      <el-collapse-item v-for="e in animationsDataCopy" :name="e.id" :key="e.id">
+        <template slot="title">
+          <img class="cover" :src="e.coverImage"/>
+          <span>{{e.title}}</span>
+          <a :href="e.animation" target="_blank">{{e.animation}}</a>
+          <span class="delete">
+            <el-button type="danger" icon="el-icon-delete" @click="removeItem(e.id)" circle></el-button>
+          </span>
+        </template>
+        <el-form class="animationForm" label-position="right" label-width="120px" size="mini">
+          <el-form-item label="Title">
+            <el-input v-model="e.title"></el-input>
+          </el-form-item>
+          <el-form-item label="Cover Image">
+            <el-input v-model="e.coverImage"></el-input>
+          </el-form-item>
+          <el-form-item label="Animation">
+            <el-input v-model="e.animation"></el-input>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
     </draggable>
     <el-button type="primary" icon="el-icon-plus" @click="addAnimation" circle></el-button>
-    <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleSave()">submit</el-button>
-      <el-button @click="handleClose()">cancel</el-button>
-    </span>
   </el-dialog>
 </template>
 <script>
@@ -72,7 +67,6 @@ export default {
   },
   data() {
     return {
-      // animationsDataCopy: _.cloneDeep(this.animationsData)
       animationsDataCopy: this.animationsData
     }
   },
@@ -92,13 +86,14 @@ export default {
       this.$emit('finish', this.animationsDataCopy);
     },
     addAnimation() {
+      let uid = uuid(8, 16)
       this.animationsDataCopy.push({
-        id: uuid(8, 16),
+        id: uid,
         title: '',
         coverImage: '',
         animation: ''
       })
-    }
+    },
   },
   components: {
     draggable
@@ -107,6 +102,12 @@ export default {
 </script>
 
 <style>
+.el-collapse-item__header .el-collapse-item__arrow {
+  float: left;
+}
+.el-collapse-item__header .delete {
+  float:right;
+}
 .row-animation{
   display:flex;
   display:-webkit-flex;
@@ -125,4 +126,10 @@ export default {
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }
+.cover {
+  height: 40px;
+  align-self: auto;
+}
+
+
 </style>

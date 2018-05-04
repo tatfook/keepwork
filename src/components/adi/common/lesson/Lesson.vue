@@ -10,7 +10,7 @@
         <div class="lessonDesc">
           <span class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</span><br>
           <span class="lesson-goals-title">Lesson Goals:</span><br>
-          <span class="lesson-goals">{{properties.LessonGoals}}</span>
+          <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
           <el-row class="lesson-button">
             <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
             <el-button class="btn-begin" @click="classOpClick" v-if="properties.vip" type="primary" plain id="btnClass">Begin the Class</el-button>
@@ -103,13 +103,12 @@ export default {
   .lesson-goals-title {
     font-size:18px;
     color:#4C4C4C;
-    padding-top: 20px;
   }
   .lesson-goals {
     color:#4C4C4C;
-    line-height:30px;
+    line-height:25px;
     font-size:16px;
-    padding-top: 10px;
+    font-family:MicrosoftYaHeiLight;
   }
   .tabs {
     padding-top: 20px;

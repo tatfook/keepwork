@@ -70,6 +70,31 @@ let sn; // 试题的sn
 let classId; // 课堂 Id
 let username; // 用户名
 let studentNo; // 学号
+const timer = {
+  timeout: 1000 * 60, // 60s
+  timeoutObj: null,
+  reset: function() {
+    clearInterval(this.timeoutObj)
+    return this
+  },
+  start: function(username) {
+    this.timeoutObj = setInterval( function(){
+      // 开始记录学习时长
+      let params = {sn: sn}
+      axios.post(lessonHost + '/api/record/study', qs.stringify(params),
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(response => {
+          let r = response.data
+          console.log(r)
+        })
+    }, this.timeout)
+  },
+  stop: function() {
+    clearInterval(this.timeoutObj)
+  }
+}
 
 export default {
   name: 'AdiQuizz',
@@ -112,6 +137,7 @@ export default {
       answer.quizzId = _this.id;
       answer.quizzScore = _this.score;
       answerSheet.push(answer);
+      timer.reset().start();
     }
     if(device == 'pc') {
       this.isOperate = true;
