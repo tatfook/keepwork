@@ -5,13 +5,48 @@
   },
   "editor": {
     "save": "Save",
+    "saveSuccess": "File saved successfully",
+    "saveFail": "File save failed",
+    "copySuccess": "Link copied successfully",
+    "copyFail": "Link copy failed",
+
     "preview": "Preview",
     "code": "Code",
     "splitScreen": "Split",
 
+    "system":"System",
+    "page":"Page",
+    "edit":"Edit",
+    "insert":"Insert",
+    "help":"Help",
+    "backHomePage":"BackHomePage",
+    "newWebsite":"NewWebsite",
+    "siteSettings":"SiteSettings",
+    "dataSource":"DataSource",
+    "revoke":"Revoke",
+    "redo":"Redo",
+    "module":"Module",
+
     "refresh": "Refresh",
     "close": "Close",
     "delete": "Delete",
+    "delConfirm": "OK to delete at",
+    "nameSingle": "name",
+    "name": "Name",
+    "link": "Link",
+    "setting": "Setting",
+    "create": "Create",
+
+    "folder": "Folder",
+    "newPage": "New page",
+    "newFolder": "New folder",
+    "website": "Web page",
+    "page": "page",
+
+    "emptyName": "name cannot be empty",
+    "nameRule": "naame can only be composed of letters, numbers and underscores",
+    "nameUnderline": "name cannot begin with an underscore",
+    "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
     "myPersonalWebsites": "Personal websites",
@@ -19,7 +54,54 @@
     "myContributedWebsitesTip": "Others' websites will be here after you get authorization",
 
     "noPersonalWebsite": "No personal website",
-    "createWebsiteNow": "Create Website Now"
+    "createWebsiteNow": "Create Website Now",
+
+    "addMod": "Please click to add content",
+    "showCode": "Display code",
+
+    "modAttr": "Attributes",
+    "modStyle": "style",
+    "modDel": "Delete module",
+    "modDelMsg": "Are you sure to delete this module?",
+    "modDelMsgTitle": "Delete prompt",
+
+    "select": "please choose",
+    "selfWindowOpen": "This window opens",
+    "newWindowOpen": "open in a new window",
+    "openMenuEditor": "Open the menu editor",
+    "openGalleryEditor": "Open the picture editor",
+    "menuEditor": "Menu Editor",
+    "galleryEditor": "Picture editor",
+    "imgSrc": "The map's address",
+    "insertAfter": "Add later",
+    "insertBefore": "Added before",
+    "insertChild": "Add children",
+    "noData": "No data, please add",
+    "delNotice": "Delete reminder",
+    "menuDelMsg": "Are you sure to delete this node? Child nodes are also deleted directly",
+    "menuItem": "Menu Item"
+  },
+  "modList": {
+    "recent": "Commonly used",
+    "markdown": "Markdown",
+    "text": "Text",
+    "carousel": "Carousel",
+    "mixLayer": "Mix layer",
+    "mixPosition": "Mix position",
+    "menu": "Menu",
+    "title": "Title",
+    "graphic": "Graphic",
+    "widescreenImage": "Widescreen image",
+    "interative": "Interactive",
+    "qq": "Call QQ chat",
+    "mixAndMatch": "Mix and match",
+    "paracraft": "Paracraft works",
+    "works": "Works",
+    "specialPerformance": "Special performance",
+    "board": "Board",
+    "vipRead": "VIP Read",
+    "comment": "Comment",
+    "setting": "Setting"
   },
   "adi": {
     "markdown": {
@@ -96,5 +178,24 @@
     "teachers": {
       "content": "The editor said what he said to the teacher."
     }
+  },
+  "card": {
+    "imgLoop": "Graphic rotation",
+    "img": "Widescreen image",
+    "media": "image",
+    "title": "Main title",
+    "subtitle": "subtitle",
+    "paragraph": "Text file",
+    "button": "button",
+    "menu": "Menu Editor",
+    "logo": "logo",
+    "businessName": "Main title",
+    "tagline": "subtitle",
+    "qq": "qq number",
+    "pic": "image",
+    "desc": "Text description",
+    "md": "Markdown documentation",
+    "comment": "comment",
+    "vipRead": "Vip reading"
   }
 }

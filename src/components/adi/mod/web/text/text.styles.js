@@ -31,7 +31,12 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/text/text1.png')
+    cover: require('@/../static/adi/text/text1.png'),
+    preview: {
+      outter: {
+        height: '70px'
+      }
+    }
   },
   // style 1
   {
@@ -54,6 +59,11 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/text/text2.png')
+    cover: require('@/../static/adi/text/text2.png'),
+    preview: {
+      outter: {
+        height: '70px'
+      }
+    }
   }
 ]

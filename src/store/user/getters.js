@@ -3,7 +3,8 @@ import Cookies from 'js-cookie'
 import {
   gitTree2NestedArray,
   getFileFullPathByPath,
-  EMPTY_GIT_FOLDER_KEEPER
+  EMPTY_GIT_FOLDER_KEEPER,
+  CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
 const getters = {
@@ -52,7 +53,9 @@ const getters = {
       let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
         ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
       )
-      let children = gitTree2NestedArray(files, rootPath)
+      let children = gitTree2NestedArray(files, rootPath).filter(
+        ({ name }) => name !== CONFIG_FOLDER_NAME
+      )
 
       return {
         ...websitesMap[name],
@@ -97,7 +100,9 @@ const getters = {
       let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
         ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
       )
-      let children = gitTree2NestedArray(files, rootPath)
+      let children = gitTree2NestedArray(files, rootPath).filter(
+        ({ name }) => name !== CONFIG_FOLDER_NAME
+      )
       return {
         ...contributedWebsitesMapByRootpath[rootPath],
         projectId,
@@ -167,25 +172,18 @@ const getters = {
   },
 
   webTemplateConfig: state => state.webTemplateConfig,
-  getWebTemplates: (state, { webTemplateConfig = [] }) => classify => {
-    let categoriesMap = _.keyBy(webTemplateConfig, 'classify')
-    return _.get(categoriesMap, [classify, 'templates'], [])
+  getWebTemplates: (state, { webTemplateConfig = [] }) => categoryName => {
+    let categoriesMap = _.keyBy(webTemplateConfig, 'name')
+    return _.get(categoriesMap, [categoryName, 'templates'], [])
   },
   getWebTemplate: (state, { getWebTemplates }) => ({
-    classify,
+    categoryName,
     templateName
   }) => {
-    let templatesInClassify = getWebTemplates(classify)
-    return _.get(_.keyBy(templatesInClassify, 'name'), [templateName], {})
+    let templatesInCategory = getWebTemplates(categoryName)
+    return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
   },
-  getWebTemplateStyle: (state, { getWebTemplate }) => ({
-    classify,
-    templateName,
-    styleName
-  }) => {
-    let { styles = [] } = getWebTemplate({ classify, templateName })
-    return styles[0] // _.keyBy(styles, 'name')[styleName]
-  },
+
   activePageStarInfo: state => state.activePageStarInfo
 }
 

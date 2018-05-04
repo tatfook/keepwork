@@ -35,7 +35,7 @@ export default [
         'margin-top': '20px'
       },
       logo: {
-        height: '87px',
+        'max-height': '87px',
         width: '87px'
       },
       colLogo: {
@@ -87,7 +87,12 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title1.png')
+    cover: require('@/../static/adi/title/title1.png'),
+    preview: {
+      outter: {
+        height: '47px'
+      }
+    }
   },
   {
     // style 1
@@ -149,6 +154,11 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title2.png')
+    cover: require('@/../static/adi/title/title2.png'),
+    preview: {
+      outter: {
+        height: '63px'
+      }
+    }
   }
 ]

@@ -7,6 +7,7 @@ import linkTarget from './LinkTargetType'
 import switchButton from './SwitchButtonType'
 import quizz from './QuizzType'
 import animations from './AnimationsType'
+import gallery from './GalleryType'
 
 export default {
   input,
@@ -17,5 +18,6 @@ export default {
   linkTarget,
   switchButton,
   quizz,
-  animations
+  animations,
+  gallery
 }

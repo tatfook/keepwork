@@ -21,6 +21,14 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/comment/comment.png')
+    cover: require('@/../static/adi/comment/comment.png'),
+    preview: {
+      outter: {
+        height: '28px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
   }
 ]

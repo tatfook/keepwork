@@ -19,13 +19,12 @@ const styles = [{
       }
     }
   },
+  useImage: true,
   cover: require('@/../static/adi/markdown.jpeg')
 }]
 const templates = [[{ colMarkdown: 'md' }]]
 
 const properties = generateProperties(name, components)
 properties.styleID = undefined
-
-console.log(properties)
 
 export default { mod, name, components, properties, styles, templates }

@@ -3,7 +3,6 @@ export default [
   {
     templateID: 0,
     data: {
-      // 定义mod根div的样式
       menu: {
         height: '50px',
         margin: 'auto'
@@ -27,16 +26,15 @@ export default [
       config: {
         menu: {
           mode: 'horizontal',
-          emptyData: [
-            {
-              name: 'adi.menu.menu',
-              link: 'http://keepwork.com'
-            }
-          ],
           emptyTarget: '_blank'
         }
       }
     },
-    cover: require('@/../static/adi/menu/menu.png')
+    cover: require('@/../static/adi/menu/menu.png'),
+    preview: {
+      outter: {
+        height: '14px'
+      }
+    }
   }
 ]

@@ -7,13 +7,13 @@
       <i class="iconfont icon-gongyouwangzhan" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
-      <el-button v-if="isAddable" class="iconfont icon-tianjiawenjian" size="mini" type="text" @click.stop="addFile" title='新建页面'>
+      <el-button v-if="isAddable" class="iconfont icon-tianjiawenjian" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" title='新建文件夹'>
+      <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" title='删除'>
+      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" size="mini" type="text" title='设置'>
+      <el-button v-if="isSettable" size="mini" type="text" :title='$t("editor.setting")'>
         <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
       </el-button>
     </span>
@@ -54,28 +54,33 @@ export default {
       this.addFilePending = false
     },
     async addFolder() {
-      let newFolderName = await this.newFileNamePrompt({what: '文件夹'})
+      let self = this
+
+      let newFolderName = await this.newFileNamePrompt({what: self.$t('editor.folder')})
       if (!newFolderName) return
       let newFolderPath = `${this.currentPath}/${newFolderName}`
       this.addFolderPending = true
       await this.gitlabAddFolder({ path: newFolderPath })
       this.addFolderPending = false
     },
-    async newFileNamePrompt({what = '网页'} = {}) {
+    async newFileNamePrompt({what = this.$t('editor.website')} = {}) {
+      let self = this
+
       await this.getRepositoryTree({ path: this.sitePath })
       let childNames = this.gitlabChildNamesByPath(this.currentPath)
 
       let { value: newFileName } = await this.$prompt(
-        `${what}名`,
-        `创建${what}`,
+        `${what}${self.$t('editor.nameSingle')}`,
+        `${self.$t('editor.create')}${what}`,
         {
-          cancelButtonText: '取消',
-          confirmButtonText: '确认',
+          cancelButtonText: self.$t('el.messagebox.cancel'),
+          confirmButtonText: self.$t('el.messagebox.confirm'),
           inputValidator: str => {
             let value = (str || '').trim()
-            if (!value) return `${what}名不能为空`
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}名只能由字母，数字和下划线组成`
-            if (childNames.indexOf(value) > -1) return '同名文件已经存在'
+            if (!value) return `${what}${self.$t('editor.emptyName')}`
+            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}${self.$t('nameRule')}`
+            if (/^[_]/.test(value)) return `${what}${self.$t('editor.nameUnderline')}`
+            if (childNames.indexOf(value) > -1) return self.$t('nameExist')
             return true
           }
         }
@@ -84,11 +89,13 @@ export default {
       return newFileName && newFileName.trim()
     },
     removeFile() {
+      let self = this
+
       let pathArr = this.data.path.split('/')
       let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(`确定删除 ${pageName} 页面？`, '删除提醒', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${self.$t('editor.delConfirm')} ${pageName} ${self.$t('editor.page')}？`, self.$t('editor.delete'), {
+        confirmButtonText: self.$t('el.messagebox.confirm'),
+        cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
       })
         .then(async () => {

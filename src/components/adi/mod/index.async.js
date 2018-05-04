@@ -16,7 +16,7 @@ const ModQuizz = () => import('./web/quizz')
 const ModTeachers = () => import('./web/teachers')
 const ModLessonGet = () => import('./web/lessonGet')
 
-export default {
+export const modList = {
   ModMarkdown,
   ModTitle,
   ModMixPosition,
@@ -34,4 +34,14 @@ export default {
   ModQuizz,
   ModTeachers,
   ModLessonGet
+}
+
+export const load = async modName => {
+  const mod = modList[modName]
+
+  if (mod) return mod()
+}
+
+export default {
+  load
 }

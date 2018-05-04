@@ -16,7 +16,7 @@ import ModQuizz from './web/quizz'
 import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
 
-export default {
+export const modList = {
   ModMarkdown,
   ModTitle,
   ModMixPosition,
@@ -34,4 +34,12 @@ export default {
   ModQuizz,
   ModTeachers,
   ModLessonGet
+}
+
+export const load = modName => {
+  return modList[modName]
+}
+
+export default {
+  load
 }

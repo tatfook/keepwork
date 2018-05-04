@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AsyncMods from '@/components/adi/mod/index.async'
+import AsyncModLoader from '@/components/adi/mod/index.async'
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
   methods: {
     async loadComponent() {
       let modType = 'Mod' + this.mod.cmd
-      let data = await AsyncMods[modType]()
+      let data = await AsyncModLoader.load(modType)
       this.modConf = data.default
       this.modComponent = this.modConf.mod
     }

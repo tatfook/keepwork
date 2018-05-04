@@ -2,8 +2,10 @@
   <div>
     <div v-if='modConf.name != "ModMarkdown"' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
       <div class="render-mod-container--click-prevent"></div>
-      <div class="render-mod-container">
-        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
+      <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [], true)">
+        <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
+          <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
+        </div>
       </div>
     </div>
     <!-- <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index"> -->
@@ -11,8 +13,8 @@
 </template>
 
 <script>
-import mods from '@/components/adi/mod'
 import themeFactory from '@/lib/theme/theme.factory'
+import modLoader from '@/components/adi/mod'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -24,7 +26,7 @@ export default {
       themeConf: 'themeConf'
     }),
     modConf() {
-      return mods[this.mod.modType]
+      return modLoader.load(this.mod.modType)
     },
     theme() {
       let globalTheme = themeFactory.generate(this.themeConf)
@@ -40,6 +42,21 @@ export default {
     ...mapActions({
       updateActiveModStyle: 'updateActiveModStyle'
     }),
+    generateStyleString(style, isOutter) {
+      let string = ''
+
+      if (style) {
+        _.forEach(style, (value, key) => {
+          if (isOutter) {
+            string = string + key + ':' + (parseInt(value) + 20) + 'px;'
+          } else {
+            string = string + key + ':' + value + ';'
+          }
+        })
+      }
+
+      return string
+    },
     changeStyle(styleID) {
       this.updateActiveModStyle(styleID)
     },
@@ -72,7 +89,7 @@ export default {
 
 .render {
   // width: 295px;
-  height: 310px;
+  height: auto;
   background-color: white;
   overflow: hidden;
   margin: auto;
@@ -86,7 +103,7 @@ export default {
     z-index: 1;
   }
 
-  .render-mod-container{
+  .render-mod-container {
     border: 10px solid white;
     // width: 275px;
     height: 290px;
@@ -98,6 +115,5 @@ export default {
       transform-origin: top left;
     }
   }
-  
 }
 </style>

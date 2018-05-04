@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "element-ui": "^2.3.0",
+    "github-markdown-css": "^2.10.0",
     "js-base64": "^2.4.3",
     "js-cookie": "^2.2.0",
     "jss": "^9.8.1",

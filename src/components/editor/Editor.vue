@@ -5,7 +5,7 @@
         <el-button-group>
           <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -16,20 +16,21 @@
     <div class="col-between"></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
-        <el-button-group>
+        <!-- <el-button-group>
           <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
           <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
-        </el-button-group>
+        </el-button-group> -->
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
           <el-button class="btn-enlarge" title="放大"></el-button>
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button>
+          <!-- <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button> -->
+          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPage'></el-button>
         </el-button-group>
         <div class="code-win-swich">
-          <span>显示代码</span>
+          <span>{{$t('editor.showCode')}}</span>
           <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
           </el-switch>
         </div>
@@ -124,6 +125,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      activePage: 'activePage',
+      activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeComponent: 'activeComponentType',
       showingCol: 'showingCol',
@@ -245,8 +248,11 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
-    showPreview() {
-      this.$emit('showPreview')
+    // showPreview() {
+    //   this.$emit('showPreview')
+    // },
+    showPage() {
+      window.open(this.activePageUrl)
     },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
@@ -395,7 +401,7 @@ export default {
 .code-win-fullscreen {
   width: 100% !important;
   height: 100%;
-  background-color:#cdd4dc;
+  background-color: #cdd4dc;
   max-width: 1080px;
 }
 </style>
