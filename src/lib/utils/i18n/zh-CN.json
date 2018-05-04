@@ -215,6 +215,7 @@
     "vipRead": "VIP阅读权限",
     "openBoard": "打开绘图板",
     "switchComment": "评论是否开启",
-    "pageList": "页面列表"
+    "pageList": "页面列表",
+    "footer": "页脚"
   }
 }
