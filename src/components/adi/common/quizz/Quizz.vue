@@ -313,8 +313,8 @@ export default {
     border-bottom: 1px dashed #BFBFBF;
   }
 
-  [data-mod="ModQuizz"]:nth-of-type(2) .splic {
-    border-bottom: none;
+  [data-mod="ModQuizz"]:last-child {
+    padding-bottom: 40px;
   }
 
   .comp-quizz {
@@ -384,7 +384,6 @@ export default {
     margin-bottom: 0;
     padding: 15px 20px 0;
   }
-
 </style>
 
 

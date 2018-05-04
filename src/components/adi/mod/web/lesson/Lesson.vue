@@ -79,8 +79,14 @@ const init = function(){
   } else {
     let lessonMod = getMod('ModLesson')
     if(lessonMod && lessonMod.parentNode != null) {
-      lessonMod.parentNode.appendChild(createMod('ModStudent', "<p>Student<p>"))
-      lessonMod.parentNode.appendChild(createMod('ModSummary', "<p>Summary<p>"))
+      let studentHtm =  '<div class="el-row mod-full-width-0-0-32">'
+                        + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
+                      + '</div>';
+      let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
+                        + '<div class="no-data">no summary.</div>'
+                      + '</div>';
+      lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
+      lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
     }
   }
 }
@@ -101,10 +107,64 @@ const timer = {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
         .then(response => {
-          let r = response.data
-          let studentMod = getMod('ModStudent')
+          let r = response.data;
+          let studentMod = getMod('ModStudent');
+
           if(r.data) {
-            studentMod.innerHTML = JSON.stringify(r.data)
+            let data = r.data;
+            let theadHtm = '', tbodyHtm = '', quizzHtm = '', myanswer = '';  //thead tbody 题目答案
+            let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
+
+            for(var i in data) {
+              let answerItem = data[i].answerSheet;
+              if(answerItem) {
+                for(let j = 0; j < answerItem.length; j++) {
+                  theadHtm += '<td><div class="sort-btn"><span>Quiz'+ parseInt(j+1) +'</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                  myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
+
+                  quizzHtm += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>';
+
+                  total = answerItem.length;
+                }
+              }
+
+             if(data[i].rightCount || data[i].wrongCount) {
+               count =  parseInt(data[i].rightCount) + parseInt(data[i].wrongCount);
+             }
+
+              progress = count + '/' + total;
+              if(total != 0 && count === total) {
+                progress = "finished";
+              }
+
+              tbodyHtm += '<tr class="tbl-body"><td>'+ data[i].username +'</td>'
+                             + '<td>'+ data[i].studentNo +'</td>'
+                             + '<td>'+ progress +'</td>'
+                             + quizzHtm
+                        + '</tr>';
+            }
+
+            let studetDataHtm = '<div class="student-taughted-details">'
+                  + '<div class="express">'
+                    + '<span class="r">right</span>'
+                    + '<span class="w">wrong</span>'
+                + '</div>'
+                + '<table class="table-wrap" cellspacing="0" border="0">'
+                    + '<thead>'
+                      + '<tr class="tbl-head">'
+                          + '<td><div class="sort-btn"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                          + '<td><div class="sort-btn"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                          + '<td><div class="sort-btn"><span>Quizzes(Total:'+ total +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                          + theadHtm
+                      + '</tr>'
+                    + '</thead>'
+                    + '<tbody>'
+                        + tbodyHtm
+                    + '</tbody>'
+                + '</table>'
+            + '</div>';
+
+            studentMod.innerHTML = studetDataHtm;
           }
         })
     }, this.timeout)
@@ -166,20 +226,23 @@ export default {
           let len = animations.length
           if(lessonMod && lessonMod.parentNode != null) {
             if(len == 0) {
-              let htm = '<div class="el-row mod-full-width-0-0-32 animations-list"><div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
-                  + '<a href="#" class="animations-cover">'
-                  +     '<div style="background-image: url(https://images.unsplash.com/photo-1520357750302-03cee3ee2e6a?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjcwOTV9&s=6a77942f2264fa230fe1c6561c46f9f1);"></div>'
-                  + '</a>'
-                  +  '<a href="#" class="animations-title">Lesson 1 Actors Animations</a>'
-              + '</div>'
-            + '</div>';
+              let htm = '<div class="el-row mod-full-width-0-0-32">'
+                        + '<div class="no-data">no animations</div>'
+                      + '</div>'
               lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
-              let html = ""
+              let html = '<div class="el-row mod-full-width-0-0-32 animations-list">'
               for(let i = 0; i < len; i++) {
-                let item = animations[i]
-                html += '<p>Animations' + (i+1) + ':' + item.coverImage + " - " + item.title + " - " + item.animation + '</p><br>'
+                let item = animations[i];
+                html += '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
+                          + '<a href="'+ item.animation +'" class="animations-cover">'
+                           + '<div style="background-image: url('+ item.coverImage +')"></div>'
+                          + '</a>'
+                          + '<a href="'+ item.animation +'" class="animations-title">'+ item.title +'</a>'
+                      + '</div>';
               }
+              html += '</div>';
+
               lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
             }
           }
@@ -331,6 +394,7 @@ export default {
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
+                let htm = ''
                 summaryMod.innerHTML = JSON.stringify(r.data)
               }
             })
@@ -403,6 +467,107 @@ export default {
 
 .animations-title:hover {
    color: #409EFE;
+}
+
+.no-data {
+  padding-top: 230px;
+  margin: 5% auto;
+  background: url(/static/adi/lesson/search.png) no-repeat top center;
+  background-size: 200px;
+  font-size: 24px;
+  line-height: 30px;
+  color: #b8b8b8;
+  text-align: center;
+}
+.student-taughted-details {
+    margin-top: 40px;
+}
+.express >span {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #676767;
+}
+.express span.r::before, .express span.w::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin: 0 15px;
+    vertical-align: middle;
+    border-radius:50%;
+}
+span.r::before {
+    background-color: #27CE2F;
+}
+span.w::before {
+    background-color: #F53838;
+}
+.table-wrap {
+    margin-top: 15px;
+    width: 100%;
+    border:1px solid #BFBFBF;
+    border-radius: 8px;
+}
+
+.table-wrap td {
+    height: 50px;
+    padding: 8px 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.table-wrap thead td {
+    border-right:1px solid #BFBFBF;
+    border-bottom: 2px solid #bfbfbf;
+    font-size: 16px;
+    color:#333;
+}
+
+.table-wrap thead td:last-child {
+    border-right: none;
+}
+
+.table-wrap .sort-btn {
+    display: flex;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    justify-content: center;
+}
+
+.table-wrap .sort-icon {
+    padding-left: 5px;
+}
+
+.table-wrap .sort-icon i {
+   display: block;
+   line-height: 8px;
+   color: #CCC;
+}
+
+.table-wrap .sort-icon.active i{
+    color: #49A5F8;
+}
+
+.table-wrap tbody tr:nth-child(even) {
+    background:rgba(64,158,254, .1);
+}
+
+.table-wrap .user-img {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border-radius:50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.table-wrap .right {
+    color: #27CE2F;
+}
+.table-wrap .wrong {
+    color: #F53838;
 }
 
 </style>

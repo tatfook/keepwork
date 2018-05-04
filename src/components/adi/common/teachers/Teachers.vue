@@ -33,6 +33,7 @@ const init = function(){
         let button = document.createElement("button");
         div.setAttribute("class", "text-right");
         button.setAttribute("class", "el-button el-button--primary el-button--small");
+        button.setAttribute("data-tip", "Click to hide all notes for teachers");
         button.setAttribute("id", "isTeachersContent");
         button.innerHTML = "Hide All";
         div.appendChild(button);
@@ -47,12 +48,14 @@ const init = function(){
             for(let i = 0, len = teachersMod.length; i < len; i++) {
               teachersMod[i].style.display = "block";
             }
+            operate.setAttribute("data-tip", "Click to hide all notes for teachers");
 
           }else {
             operate.innerHTML = "Show All";
             for(let i = 0, len = teachersMod.length; i < len; i++) {
               teachersMod[i].style.display = "none";
             }
+            operate.setAttribute("data-tip", "Click to show all notes for teachers");
           }
         });
     }
@@ -126,4 +129,34 @@ export default {
     color: #676767;
     font-family:MicrosoftYaHeiLight;
   }
+
+#isTeachersContent{
+  position: relative;
+}
+
+#isTeachersContent:hover:before{
+    content: attr(data-tip);
+    background: #303133;
+    color: #fff;
+    border-radius: 3px;
+    padding: 8px 10px;
+    position: absolute;
+    left: -150px;
+    top: -4px;
+    white-space: pre-wrap;
+    width: 120px;
+    line-height: 16px;
+    line-height: 1.2;
+    font-size: 12px;
+}
+#isTeachersContent:hover:after{
+    content: "";
+    position: absolute;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid #313033;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+}
 </style>

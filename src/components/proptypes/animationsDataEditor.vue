@@ -5,9 +5,9 @@
         <template slot="title">
           <img class="cover" :src="e.coverImage"/>
           <span>{{e.title}}</span>
-          <a :href="e.animation" target="_blank">{{e.animation}}</a>
+          <a :href="e.animation" target="_blank" class="link">{{e.animation}}</a>
           <span class="delete">
-            <el-button type="danger" icon="el-icon-delete" @click="removeItem(e.id)" circle></el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="removeItem(e.id)" circle></el-button>
           </span>
         </template>
         <el-form class="animationForm" label-position="right" label-width="120px" size="mini">
@@ -23,7 +23,13 @@
         </el-form>
       </el-collapse-item>
     </draggable>
-    <el-button type="primary" icon="el-icon-plus" @click="addAnimation" circle></el-button>
+    <div style="margin-top: 20px;">
+      <el-button type="primary" icon="el-icon-plus" @click="addAnimation" circle></el-button>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="handleSave()">submit</el-button>
+      <el-button @click="handleClose()">cancel</el-button>
+    </span>
   </el-dialog>
 </template>
 <script>
@@ -108,28 +114,21 @@ export default {
 .el-collapse-item__header .delete {
   float:right;
 }
-.row-animation{
-  display:flex;
-  display:-webkit-flex;
-  display:-moz-flex;
-  display:-ms-flex;
-  display:-o-flex;
-  align-items:center;
-  -webkit-align-items:center;
-  -moz-align-items:center;
-  -ms-align-items:center;
-  -o-align-items:center;
-}
+
 .animationForm{
   margin: 5px;
-  padding: 5px;
+  padding: 15px 10px 5px;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }
-.cover {
+.tree-data-dialog .cover {
   height: 40px;
-  align-self: auto;
+  margin-right:10px;
+  vertical-align: middle;
 }
-
-
+.tree-data-dialog .link {
+    text-decoration: none;
+    margin-left: 10px;
+    color: #409eff;
+}
 </style>

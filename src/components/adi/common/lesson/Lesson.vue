@@ -13,14 +13,16 @@
           </div>
           <el-row class="lesson-button">
             <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
-            <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">Begin the Class</el-button>
-            <!-- <span v-if="properties.vip" id="tipClass">(Click here to begin the class)</span> -->
+            <el-tooltip class="item" effect="dark" content="(Click here to begin the class)" v-if="properties.vip" placement="top">
+              <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">Begin the Class</el-button>
+            </el-tooltip>
           </el-row>
         </div>
       </el-col>
     </el-row>
     <el-row>
       <el-tabs class="tabs" value="first" @tab-click="tabClick">
+        <div v-if="properties.vip" class="student-info">learning:<span>20</span>,&nbsp;&nbsp;Leave learning page:<span>10</span>, &nbsp;&nbsp;Offline:<span>4</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
@@ -137,5 +139,30 @@ export default {
     color: white;
     pointer-events: none;
   }
+
+.el-tabs__item {
+  font-size: 20px;
+  height: 53px;
+  line-height:40px;
+
+}
+.el-tabs__content {
+  overflow: inherit;
+}
+
+.student-info {
+  position: absolute;
+  top: -35px;
+  left: 315px;
+  z-index: 99;
+  color: #000;
+  font-size: 12px;
+  color: #409EFE;
+}
+
+.student-info span {
+  color: #FF414A;
+}
+
 </style>
 

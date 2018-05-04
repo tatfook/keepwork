@@ -36,3 +36,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .menu-type {
+    margin-top: 20px;
+  }
+</style>
