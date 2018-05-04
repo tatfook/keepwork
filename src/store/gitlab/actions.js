@@ -203,7 +203,7 @@ const actions = {
       useCache: false
     })
   },
-  async uploadFile({ dispatch, rootGetters, getters }, { content }) {
+  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content }) {
     let {
       activePageUrl,
       'user/username': username,
@@ -212,15 +212,10 @@ const actions = {
     let path = '/' + username
     content = content.split(',')
     if (content.length > 1) {
-      var fileType = content[0]
+      let fileType = content[0].match(/(image|video)\/([\w]+)/)
       content = content[1]
-      fileType = fileType.match(/(image|video)\/([\w]+)/)
-      const isMedia = fileType && fileType[2]
-      if (isMedia) {
-        path = path + '_images/img_' + uuid() + '.' + fileType[2]
-      } else {
-        return
-      }
+      if (fileType && fileType[2]) path = path + '_images/' + uuid() + fileName
+      else path = path + '_files/' + uuid() + fileName
     } else {
       return // invalid file
     }
@@ -244,16 +239,17 @@ const actions = {
     } = getSiteDetailInfoDataSourceByPath(activePageUrl)
 
     let projectId = getProjectIdByPath(activePageUrl)
-    console.log(projectId)
-
-    await gitlab.projects.repository.files.create(
-      projectId,
-      path,
-      'master',
-      options
-    )
-    // TODO: any exceptions?
-    return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
+    try {
+      await gitlab.projects.repository.files.create(
+        projectId,
+        path,
+        'master',
+        options
+      )
+      return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 

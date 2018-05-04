@@ -212,100 +212,105 @@ export default {
     },
     insertLine() {
       let cursor = this.editor.getCursor()
-      this.editor.replaceRange(
-        '---\n',
-        CodeMirror.Pos(cursor.line + 1, 0),
-        CodeMirror.Pos(cursor.line + 1, 0)
-      )
+      this.addNewLine(cursor.line, '---')
       this.editor.setCursor(CodeMirror.Pos(cursor.line + 2, 0))
       this.editor.focus()
     },
-    insertLink() {
+    insertLink(txt, url, lineNo) {
       let replaceStr = ''
-      if (this.editor.somethingSelected()) {
+      if (txt) {
+        replaceStr += '[' + txt + ']'
+      } else if (!lineNo && this.editor.somethingSelected()) {
         replaceStr += '[' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '[]'
       }
-      this.editor.replaceSelection(replaceStr + '(' + ')')
-      if (replaceStr == '[]') {
-        this.editor.setCursor(
-          CodeMirror.Pos(
-            this.editor.getCursor().line,
-            this.editor.getCursor().ch - 3
-          )
-        )
-      }
+      replaceStr += url ? `(${url})` : '()'
+      lineNo
+        ? this.replaceLine(lineNo, replaceStr)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
-    insertImage(txt, url) {
+    insertFile(txt, url, lineNo) {
       let replaceStr = ''
       if (txt) {
         replaceStr += '![' + txt + ']'
-      } else if (this.editor.somethingSelected()) {
+      } else if (!lineNo && this.editor.somethingSelected()) {
         replaceStr += '![' + this.editor.getSelection() + ']'
       } else {
         replaceStr += '![]'
       }
 
-      if (url) {
-        replaceStr += '(' + url + ')'
-      } else {
-        replaceStr += '(' + dat + ')'
-      }
-
-      this.editor.replaceSelection(replaceStr)
+      replaceStr += url ? `(${url})` : '()'
+      lineNo
+        ? this.replaceLine(lineNo, replaceStr)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
-    // 整行替换，不自动获取焦点
-    replaceLine(editor, lineNo, content) {
-      var originContent = editor.getLine(lineNo)
-      var offsetX = originContent && originContent.length
-      editor.replaceRange(
+    addNewLine(lineNo, content) {
+      // add new line after line {lineNo}
+      if (!lineNo) lineNo = this.editor.getCursor().line
+      let replaceStr = content ? `${content}\n` : '\n'
+      this.editor.replaceRange(
+        replaceStr,
+        CodeMirror.Pos(lineNo + 1, 0),
+        CodeMirror.Pos(lineNo + 1, 0)
+      )
+      return lineNo + 1
+    },
+    getEmptyLine(lineNo) {
+      var content = this.editor.getLine(lineNo)
+      while (content) {
+        content = this.editor.getLine(++lineNo)
+      }
+      if (undefined === content) {
+        this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
+      }
+      return lineNo
+    },
+    replaceLine(lineNo, content) {
+      const originalContent = this.editor.getLine(lineNo)
+      const offsetX = originalContent && originalContent.length
+      this.editor.replaceRange(
         content,
         CodeMirror.Pos(lineNo, 0),
         CodeMirror.Pos(lineNo, offsetX)
       )
     },
-    uploadFile(cm, file) {
-      let cursor = cm.getCursor()
-      // TODO: cursor got issues
+    uploadFile(file, replaceLine) {
       if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
         // gitlab
         let fileReader = new FileReader()
-
         fileReader.onload = async () => {
           const path = await this.gitlabUploadFile({
+            fileName: file.name,
             content: fileReader.result
           })
           if (!path) {
-            this.replaceLine(cm, cursor.line, '***Upload Failed!***')
+            this.insertLink(null, '***Upload Failed!***', replaceLine)
           } else if (/image\/\w+/.test(file.type)) {
-            this.replaceLine(cm, cursor.line, '![](' + path + ')')
+            this.insertFile(null, path, replaceLine)
           } else {
-            this.replaceLine(
-              cm,
-              cursor.line,
-              '![' + file.name + '](' + path + ')'
-            )
+            this.insertLink(file.name, path, replaceLine)
           }
         }
         fileReader.readAsDataURL(file)
       }
     },
-    uploadFiles(cm, files) {
-      _.forEach(files, file => {
-        this.uploadFile(cm, file)
-      })
-    },
     onDropFile(cm, evt) {
       let files = evt.dataTransfer.files
-      this.uploadFiles(cm, files)
+      let lineNumber = this.getEmptyLine(this.editor.getCursor().line)
+      _.forEach(files, file => {
+        this.uploadFile(file, lineNumber)
+        lineNumber = this.addNewLine(lineNumber)
+      })
     },
     onPaste(cm, evt) {
       if (evt.clipboardData && evt.clipboardData.files.length > 0) {
         let files = evt.clipboardData.files
-        this.uploadFiles(cm, files)
+        _.forEach(files, file => {
+          this.uploadFile(file)
+        })
       }
     }
   }

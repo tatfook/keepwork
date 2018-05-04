@@ -275,7 +275,7 @@ export default {
       this.$refs.codemirror.insertLink()
     },
     insertImage() {
-      this.$refs.codemirror.insertImage()
+      this.$refs.codemirror.insertFile()
     }
   }
 }
