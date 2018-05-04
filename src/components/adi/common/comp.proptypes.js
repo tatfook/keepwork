@@ -12,6 +12,7 @@ import AdiComment from './comment/comment.proptypes'
 import AdiInnerModal from './innerModal/innerModal.proptypes'
 import AdiNumber from './number/number.proptypes'
 import AdiPageList from './pageList/pageList.proptypes'
+import AdiFooter from './footer/footer.proptypes'
 
 export default {
   AdiImgLoop,
@@ -27,5 +28,6 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiNumber,
-  AdiPageList
+  AdiPageList,
+  AdiFooter
 }
