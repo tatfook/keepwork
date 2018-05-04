@@ -124,15 +124,9 @@ export default {
 
   .lesson-goals li {
     color:#4C4C4C;
-<<<<<<< HEAD
-    line-height:25px;
-    font-size:16px;
-    font-family:MicrosoftYaHeiLight;
-=======
     line-height:24px;
     font-size:16px;
     margin-bottom: 10px;
->>>>>>> d20899d9e3af3f1ca5d571a6e892704015c5e411
   }
   .tabs {
     padding-top: 20px;
