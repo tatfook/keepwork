@@ -218,7 +218,7 @@ const actions = {
     let unsavedConfig = {
       ...config,
       layoutConfig: {
-        ...config.layoutConfig,
+        ..._.get(config, 'layoutConfig'),
         ...layoutConfig
       }
     }

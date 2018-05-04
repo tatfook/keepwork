@@ -13,9 +13,9 @@ export default {
       styleName: 'basic',
       match: '',
       content: {
-        footer: 'footer.md',
-        header: 'header.md',
-        sidebar: 'sidebar.md'
+        footer: '',
+        header: '',
+        sidebar: ''
       }
     }
   },
