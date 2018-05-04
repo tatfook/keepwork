@@ -6,7 +6,8 @@ WORKDIR /code
 # RUN npm --registry https://registry.npm.taobao.org update
 # RUN npm run build
 ARG BUILD_ENV
-RUN yarn config set registry http://registry.npm.taobao.org/ && yarn install
+RUN yarn config set registry https://registry.npm.taobao.org/
+RUN yarn install --ignore-optional
 RUN NODE_ENV=${BUILD_ENV} TZ=Asia/Shanghai yarn build
 
 FROM nginx
