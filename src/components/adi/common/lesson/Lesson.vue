@@ -1,19 +1,19 @@
 <template>
-  <div class="index-page-lesson">
-    <el-row>
-      <el-col :span="8">
-        <div :style="loadCover()">
-          <video :src='properties.AnimationOfTheLesson'></video>
-        </div>
-      </el-col>
-      <el-col :span="16">
+  <el-row class="index-page-lesson">
+    <el-row type="flex">
+      <el-col class="lesson-cover" :style="loadCover()"></el-col>
+      <el-col>
         <div class="lessonDesc">
-          <span class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</span><br>
-          <span class="lesson-goals-title">Lesson Goals:</span><br>
-          <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
+          <div class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</div>
+          <div class="lesson-goals-title">
+            Lesson Goals:
+            <ol class="lesson-goals">
+              <li>{{properties.LessonGoals}}</li>
+            </ol>
+          </div>
           <el-row class="lesson-button">
             <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
-            <el-button class="btn-begin" @click="classOpClick" v-if="properties.vip" type="primary" plain id="btnClass">Begin the Class</el-button>
+            <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">Begin the Class</el-button>
             <!-- <span v-if="properties.vip" id="tipClass">(Click here to begin the class)</span> -->
           </el-row>
         </div>
@@ -27,7 +27,7 @@
         <el-tab-pane label="Summary" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>
-  </div>
+  </el-row>
 </template>
 
 <script>
@@ -90,13 +90,26 @@ export default {
 </script>
 
 <style>
+  .lesson-cover {
+    height:340px;
+  }
   .lessonDesc {
-    padding-left: 20px;
+    margin-left: 20px;
+    position: relative;
+    height: 100%;
   }
   .lesson-button {
-    padding-top: 50px;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+  }
+  .lesson-button .el-button {
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-left: 0;
   }
   .lesson-title {
+    margin-bottom: 20px;
     font-size:20px;
     color:#111111;
   }
@@ -105,10 +118,21 @@ export default {
     color:#4C4C4C;
   }
   .lesson-goals {
+    padding-left: 20px;
+    margin-top: 20px;
+  }
+
+  .lesson-goals li {
     color:#4C4C4C;
+<<<<<<< HEAD
     line-height:25px;
     font-size:16px;
     font-family:MicrosoftYaHeiLight;
+=======
+    line-height:24px;
+    font-size:16px;
+    margin-bottom: 10px;
+>>>>>>> d20899d9e3af3f1ca5d571a6e892704015c5e411
   }
   .tabs {
     padding-top: 20px;

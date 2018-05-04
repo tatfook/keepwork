@@ -1,12 +1,14 @@
 <template>
-  <div class="comp-teachers">
-    <div>Teachers:</div>
-    <div class="content"> {{properties.content ? properties.content : $t(options.content)}}</div>
+  <div class="comp-teachers" v-if="teacherShow">
+    <span>Teachers:</span>
+    <pre class="content"> {{properties.content ? properties.content : $t(options.content)}}</pre>
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import  { mapGetters} from 'vuex'
+import axios from 'axios'
 
 const getMods = function(name) {
   let eles = document.getElementsByTagName('div')
@@ -30,7 +32,7 @@ const init = function(){
         let div = document.createElement("div");
         let button = document.createElement("button");
         div.setAttribute("class", "text-right");
-        button.setAttribute("class", "el-button el-button--primary");
+        button.setAttribute("class", "el-button el-button--primary el-button--small");
         button.setAttribute("id", "isTeachersContent");
         button.innerHTML = "Hide All";
         div.appendChild(button);
@@ -61,16 +63,67 @@ const init = function(){
 export default {
   name: 'AdiTeachers',
   mixins: [compBaseMixin],
+  computed: {
+    ...mapGetters({
+      username: 'user/username'
+    })
+  },
+  data () {
+    return {
+      teacherShow: false
+    }
+  },
   mounted: function(){
     init()
+  },
+  created: function() {
+    const lessonHost = 'http://127.0.0.1:3000'
+    let username = this.username
+    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+      if (username) {
+        axios.get(lessonHost + '/api/member/auth', {
+          params: {
+            username: username
+          }
+        }).then(response => {
+          let r = response.data
+          if (r.data && r.data.vipDay >= 0) {
+            this.teacherShow = true
+          } else {
+            this.teacherShow = false
+          }
+          this.$forceUpdate()
+        })
+      } else {
+        this.teacherShow = false
+      }
+      this.$forceUpdate()
+    }
   }
 }
 </script>
 
 <style>
-  .comp-teachers .content {
+  [data-mod="ModTeachers"] {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .comp-teachers {
+    margin-left: 40px;
     margin-top:25px;
+    padding: 5px 3px;
+    background:rgba(238,238,238, 0.5);
+    border-radius: 4px;
     font-size: 16px;
-    color:#333;
+    line-height:20px;
+  }
+  .comp-teachers span {
+    color: #FF5C5C;
+  }
+
+  .comp-teachers .content {
+    margin:20px 0 0;
+    color: #676767;
+    font-family:MicrosoftYaHeiLight;
   }
 </style>

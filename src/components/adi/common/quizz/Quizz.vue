@@ -1,43 +1,48 @@
 <template>
-  <div class="comp-quizz">
+  <div class="comp-quizz" v-bind:class="{'error': !isRight }">
+      <div v-if="!isOperate" class="splic"></div>
+
     <div v-for="item in properties.data" :data-id="item.id">
-      <div class="no">Quiz </div>
-      <h3>{{ item.title }}</h3>
+      <div class="no"><i class="el-icon-edit-outline"></i> Quiz </div>
 
-      <div v-if="isOperate">
-        <!-- 单选题 -->
-        <el-radio-group v-if="item.type == 0" v-model="quizz.single">
-          <div class="opt-item" v-for="(opt, index) in item.options">
-            <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
-          </div>
-        </el-radio-group>
+      <div class="quizz-content">
+        <div class="title">{{ item.title }} <span v-if="item.type == 1">(<em>multiple choices</em>)</span></div>
 
-        <!-- 多选题 -->
-        <el-checkbox-group v-if="item.type == 1" v-model="quizz.multiple">
-          <div class="opt-item" v-for="(opt, index) in item.options">
-            <el-checkbox name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
-          </div>
-        </el-checkbox-group>
-
-        <!-- 判断题 -->
-        <el-radio-group v-if="item.type == 2" v-model="quizz.judge">
+        <div v-if="isOperate">
+          <!-- 单选题 -->
+          <el-radio-group v-if="item.type == 0" v-model="quizz.single">
             <div class="opt-item" v-for="(opt, index) in item.options">
               <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
-        </el-radio-group>
-      </div>
+          </el-radio-group>
 
-      <div v-if="!isOperate">
-        <div class="opt-item" v-for="(opt, index) in item.options">
-            {{serialNo[index]}} {{opt.item}}
+          <!-- 多选题 -->
+          <el-checkbox-group v-if="item.type == 1" v-model="quizz.multiple">
+            <div class="opt-item" v-for="(opt, index) in item.options">
+              <el-checkbox name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
+            </div>
+          </el-checkbox-group>
+
+          <!-- 判断题 -->
+          <el-radio-group v-if="item.type == 2" v-model="quizz.judge">
+              <div class="opt-item" v-for="(opt, index) in item.options">
+                <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
+              </div>
+          </el-radio-group>
         </div>
+
+        <div v-if="!isOperate">
+          <div class="opt-item" v-for="(opt, index) in item.options">
+              {{serialNo[index]}} {{opt.item}}
+          </div>
+        </div>
+        <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuizz">submit</el-button>
       </div>
 
-      <div v-if="isShow" class="opt-item"><span>Answer:</span> {{ item.answer }}</div>
-      <div v-if="isShow" class="opt-item"><span>Score:</span> {{ item.score }}</div>
-      <div v-if="isShow" class="opt-item"><span>Analysis:</span> {{ item.desc }}</div>
-
-      <el-button v-if="isOperate && !isShow" type="primary" @click="submitQuizz">submit</el-button>
+      <div v-if="isShow" class="submit-show">
+        <div class="opt-item"><span>Right Answer:</span> {{ item.answer }}</div>
+        <div class="opt-item"><span>Explanation:</span> {{ item.desc }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -103,6 +108,7 @@ export default {
     return {
       isOperate: false,
       isShow: false,
+      isRight: true,
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
       quizz: {
         single: '',
@@ -173,22 +179,28 @@ export default {
         myAnswer = this.quizz.single;
         if(myAnswer === data[0].answer) {
           trueFlag = true;
+          this.isRight = true;
         }else {
           trueFlag = false;
+          this.isRight = false;
         }
       }else if(data[0].type == 2) { // 判断
         myAnswer = this.quizz.judge;
         if(myAnswer === data[0].answer) {
           trueFlag = true;
+          this.isRight = true;
         }else {
           trueFlag = false;
+          this.isRight = false;
         }
       }else if(data[0].type == 1) { // 多选
         myAnswer = this.quizz.multiple;
         if(JSON.stringify(myAnswer) === data[0].answer) {
           trueFlag = true;
+          this.isRight = true;
         }else {
           trueFlag = false;
+          this.isRight = false;
         }
       }
       if(trueFlag) {
@@ -268,17 +280,111 @@ export default {
   [mod-container], .viewport-container {
     counter-reset: no;
   }
+
   [data-mod="ModQuizz"] {
-    padding: 30px 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
+
+  [data-mod="ModQuizz"] .no {
+    font-weight: 600;
+  }
+
+  [data-mod="ModQuizz"] .no>i {
+    color: #1982FF;
+    font-size:22px;
+    font-weight: 600;
+    padding-right: 12px;
+    vertical-align: middle;
+  }
+
   [data-mod="ModQuizz"] .no:after {
     content: counters(no, '-');
     counter-increment: no;
   }
 
-  .comp-quizz .opt-item{
-    margin-bottom: 15px;
+  .quizz-content {
+    margin-left: 40px;
   }
+
+  .splic {
+    height: 1px;
+    margin: 0 0 30px 40px;
+    border-bottom: 1px dashed #BFBFBF;
+  }
+
+  [data-mod="ModQuizz"]:nth-of-type(2) .splic {
+    border-bottom: none;
+  }
+
+  .comp-quizz {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #fff;
+    color: #4c4c4c;
+  }
+
+  .comp-quizz .title {
+    margin: 20px 0;
+  }
+
+  .comp-quizz .title span {
+    padding-left:10px;
+  }
+
+  em {
+    color:#FF414A;
+    font-style: normal;
+  }
+
+  .comp-quizz .opt-item{
+    margin-top: 20px;
+  }
+
+  .quizz-content .el-radio__label,
+  .quizz-content .el-checkbox__label {
+    font-size: 16px;
+  }
+  .quizz-content .el-radio__input.is-checked+.el-radio__label,
+  .quizz-content .el-checkbox__input.is-checked+.el-checkbox__label {
+      color: #4C4C4C;
+      font-weight: 600;
+  }
+
+  .quizz-content .el-button {
+    margin: 20px 0;
+  }
+
+  .submit-show {
+    margin: 20px 0 20px 20px;
+    padding: 15px 25px;
+    background:rgba(64,158,254,0.05);
+    font-weight: 600;
+    color: #409EFE;
+  }
+
+  .submit-show .opt-item {
+    margin: 12px 0;
+  }
+
+  .submit-show span {
+    color: #111;
+  }
+
+  .comp-quizz.error {
+    margin-bottom: 20px;
+    background: rgba(245,56,56,0.05);
+    border: 1px solid #F53838;
+  }
+
+  .comp-quizz.error .submit-show {
+    background: none;
+    color: #FF414A;
+    margin-bottom: 0;
+    padding: 15px 20px 0;
+  }
+
 </style>
 
 
