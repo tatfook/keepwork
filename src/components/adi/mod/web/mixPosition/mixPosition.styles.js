@@ -86,7 +86,9 @@ export default [
     options: {
       theme: {
         button: {
-          bgColor: 'color_7'
+          buttonStyle: {
+            'background-color': 'color_7'
+          }
         }
       },
       config: {
@@ -283,7 +285,9 @@ export default [
     options: {
       theme: {
         button: {
-          bgColor: 'color_7'
+          buttonStyle: {
+            'background-color': 'color_7'
+          }
         }
       },
       config: {

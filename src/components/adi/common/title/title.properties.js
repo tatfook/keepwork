@@ -1,5 +1,5 @@
 export default {
   name: '',
   link: '',
-  target: ''
+  target: '_self'
 }

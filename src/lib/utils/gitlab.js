@@ -29,7 +29,9 @@ export const gitTree2NestedArray = (files, rootPath) => {
       .split('/')
       .join(`${keysSeperator}${temporaryChildrenKey}${keysSeperator}`)
       .split(keysSeperator)
-    let temporaryObject = _.set({}, setKeys, { ...file })
+    // _.setWith Object
+    // _.set will handle number in setKeys with Array, that's not what we want
+    let temporaryObject = _.setWith({}, setKeys, { ...file }, Object)
     _.merge(treeWithChildren, temporaryObject)
   })
 

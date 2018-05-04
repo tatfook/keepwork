@@ -27,7 +27,7 @@
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <!-- <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPage'></el-button>
+          <el-button class="iconfont icon-xinchuangkouyulan" :title="$t('editor.newWindowOpen')" @click='showPage'></el-button>
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
@@ -43,25 +43,25 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button :title='isFullscreen ? "退出全屏" : "全屏"' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+          <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-H" title="标题1" @click="insertHeadline(1)"></el-button>
-          <el-button class="iconfont icon-h1" title="标题2" @click="insertHeadline(2)"></el-button>
-          <el-button class="iconfont icon-zihyuan" title="标题3" @click="insertHeadline(3)"></el-button>
-          <el-button class="iconfont icon-jiacu" title="加粗" @click="setFontStyle('bold')"></el-button>
-          <el-button class="iconfont icon-qingxie" title="斜体" @click="setFontStyle('italic')"></el-button>
+          <el-button class="iconfont icon-H" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
+          <el-button class="iconfont icon-h1" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
+          <el-button class="iconfont icon-zihyuan" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
+          <el-button class="iconfont icon-jiacu" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
+          <el-button class="iconfont icon-qingxie" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
         </el-button-group>
         <el-button-group>
           <!-- <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
           <el-button class="iconfont icon-xulie" title="有序列表"></el-button>
           <el-button class="iconfont icon-yinyong" title="引用内容"></el-button> -->
           <!-- <el-button class="iconfont icon-biaoge" title="表格"></el-button> -->
-          <el-button class="iconfont icon-ziyuanfengexian" title="水平分割线" @click="insertLine"></el-button>
+          <el-button class="iconfont icon-ziyuanfengexian" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-daima" title="代码" @click="insertCode"></el-button>
-          <el-button class="iconfont icon-fenxianglianjie" title="链接" @click="insertLink"></el-button>
+          <el-button class="iconfont icon-daima" :title="$t('editor.code')" @click="insertCode"></el-button>
+          <el-button class="iconfont icon-fenxianglianjie" :title="$t('editor.link')" @click="insertLink"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown ref='codemirror' />

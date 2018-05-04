@@ -3,9 +3,11 @@ import Cookies from 'js-cookie'
 import {
   gitTree2NestedArray,
   getFileFullPathByPath,
+  getFileSitePathByPath,
   EMPTY_GIT_FOLDER_KEEPER,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
+import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
   info: state => state.info,
@@ -184,7 +186,29 @@ const getters = {
     return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
   },
 
-  activePageStarInfo: state => state.activePageStarInfo
+  activePageStarInfo: state => state.activePageStarInfo,
+
+  siteLayoutConfigs: state => state.siteLayoutConfigs,
+  siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath],
+  siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {
+    let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
+    return allLayouts
+  },
+  allLayoutContentFilePathsBySitePath: (state, { siteLayoutsBySitePath }) => sitePath => {
+    let allLayouts = siteLayoutsBySitePath(sitePath)
+    let allLayoutContentFilePaths = _.flatten(allLayouts.map(
+      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
+    ))
+    return allLayoutContentFilePaths
+  },
+  layoutContentFilePathsByPath: (state, { siteLayoutConfigBySitePath }) => path => {
+    let sitePath = getFileSitePathByPath(path)
+    let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    let layout = LayoutHelper.getLayoutByPath(siteLayoutConfig, path)
+    let layoutContentFilePaths = _.keys(layout.content).map(key => `${key}s/${layout.content[key]}`)
+    return layoutContentFilePaths
+  }
 }
 
 export default getters

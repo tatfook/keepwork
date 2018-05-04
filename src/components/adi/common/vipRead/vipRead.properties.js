@@ -1,6 +1,6 @@
 export default {
   switch: {
-    desc: '阅读权限',
+    desc: 'card.vipRead',
     value: true
   }
 }
