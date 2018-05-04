@@ -11,9 +11,7 @@ import {
 const state = () => ({
   activePageUrl: '',
   modList: [],
-  siteSettings: {
-    'fdsaf': 'fdsafdsa'
-  }
+  siteSettings: {}
 })
 
 const initSiteState = () => {
@@ -112,20 +110,14 @@ const actions = {
   async loadLayout({ commit, dispatch, rootGetters }, { path }) {
     let siteSetting = initSiteState()
     const sitePath = getFileSitePathByPath(path)
-    const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
-    await dispatch(
-      'gitlab/readFile',
-      { path: layoutFilePath, editorMode: false },
-      { root: true }
-    )
-    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
-    let file = gitlabGetFileByPath(layoutFilePath) || ''
-    if (!file) return
-    let { content } = file
-    siteSetting.siteLayoutConfig = LayoutHelper.buildLayouts(content)
-
-    let layout = LayoutHelper.getLayoutByPath(siteSetting.siteLayoutConfig, path)
-    let layoutContentFilePaths = _.keys(layout.content).map(key => `${key}s/${layout.content[key]}`)
+    await dispatch('user/getSiteLayoutConfig', { path: sitePath, editorMode: false })
+    let {
+      'user/siteLayoutConfigBySitePath': siteLayoutConfigBySitePath,
+      'user/layoutContentFilePathsByPath': layoutContentFilePathsByPath,
+      'gitlab/getFileByPath': gitlabGetFileByPath
+    } = rootGetters
+    siteSetting.siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    let layoutContentFilePaths = layoutContentFilePathsByPath(path)
 
     await Promise.all(layoutContentFilePaths.map(async layoutContentFilePath => {
       let fileName = layoutContentFilePath.split('/').slice(1).join('/')
@@ -144,7 +136,7 @@ const actions = {
         fileName: fileName
       })
     }))
-    console.log(siteSetting)
+
     commit('REFRESH_SITE_SETTINGS', { sitePath, siteSetting })
   }
 }

@@ -6,6 +6,7 @@
 
 <script>
 import Parser from '@/lib/mod/parser'
+import BlockHelper from '@/lib/mod/parser/blockHelper'
 import { mapGetters } from 'vuex'
 import { codemirror } from 'vue-codemirror'
 import _CodeMirror from 'codemirror'
@@ -31,10 +32,14 @@ export default {
   created() {
     CodeMirror.registerHelper('fold', 'wikiCmdFold', this.wikiCmdFold)
   },
+  mounted() {
+    this.foldCodes(this.editor)
+  },
   computed: {
     ...mapGetters({
       code: 'code',
-      modList: 'modList'
+      modList: 'modList',
+      activeMod: 'activeMod'
     }),
     options() {
       let save = () => Mousetrap.trigger('mod+s')
@@ -45,11 +50,7 @@ export default {
         lineWrapping: true,
         foldGutter: true,
         foldOptions: {
-          rangeFinder: new CodeMirror.fold.combine(
-            CodeMirror.fold.markdown,
-            CodeMirror.fold.xml,
-            CodeMirror.fold.wikiCmdFold
-          ),
+          rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.wikiCmdFold),
           clearOnEnter: false
         },
         gutters: [
@@ -74,7 +75,12 @@ export default {
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
 
-      if (code === undefined || code === this.code) return
+      if (code === undefined) return
+      if (code === this.code) {
+        // update by ADI
+        this.foldCodes(editor)
+        return
+      }
 
       if (changes.length > 1)
         return this.$store.dispatch('updateMarkDown', code)
@@ -104,8 +110,18 @@ export default {
         // if there are some changes affect the mod data, will try to build all
         return this.$store.dispatch('updateMarkDown', code)
       }
-      let key = mod.key
-      this.$store.dispatch('updateMarkDownBlock', { code, key })
+      const key = mod.key
+      const modType = mod.modType
+      this.$store.dispatch('updateMarkDownBlock', { code, key, modType })
+    },
+    foldCodes(cm) {
+      for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {
+        // function isOnEdit only check the content of a mod, doesn't include the mod cmd
+        // and cm.firstLine() equal to 0, but the line number start with 1,
+        // that's why we use l + 2 here to check if it is the cmd line
+        if (!this.activeMod || !BlockHelper.isOnEdit(this.activeMod, l + 2))
+          cm.foldCode({ line: l, ch: 0 }, null, 'fold')
+      }
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)

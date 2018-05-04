@@ -75,7 +75,7 @@ export default {
             this.openEditor()
           }}
         >
-          打开绘图板
+          {this.$t('card.openBoard')}
         </el-button>
         <el-dialog {...this.getDialogProps}>
           <div id="mx-client" />

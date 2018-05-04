@@ -15,6 +15,7 @@ const ModLesson = () => import('./web/lesson')
 const ModQuizz = () => import('./web/quizz')
 const ModTeachers = () => import('./web/teachers')
 const ModLessonGet = () => import('./web/lessonGet')
+const ModPageList = () => import('./web/pageList')
 
 export const modList = {
   ModMarkdown,
@@ -22,6 +23,7 @@ export const modList = {
   ModMixPosition,
   ModMixLayer,
   ModImg,
+  ModMenu,
   ModImgLoop,
   ModParacraft,
   ModQQ,
@@ -33,7 +35,8 @@ export const modList = {
   ModMenu,
   ModQuizz,
   ModTeachers,
-  ModLessonGet
+  ModLessonGet,
+  ModPageList
 }
 
 export const load = async modName => {

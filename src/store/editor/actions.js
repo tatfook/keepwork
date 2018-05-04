@@ -148,9 +148,11 @@ const actions = {
   // only update a particular mod
   updateMarkDownBlock({ commit, dispatch }, payload) {
     dispatch('updateCode', payload)
-    commit(SET_ACTIVE_MOD, payload.key)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
-    commit(SET_ACTIVE_PROPERTY, null)
+    if (payload.modType !== 'ModMarkdown') {
+      commit(SET_ACTIVE_MOD, payload.key)
+      commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+      commit(SET_ACTIVE_PROPERTY, null)
+    }
     commit(REFRESH_MOD_ATTRIBUTES, payload)
   },
   moveMod({ commit, dispatch }, payload) {
@@ -206,7 +208,12 @@ const actions = {
     let { activeArea, activeAreaData } = getters
     if (activeArea === area) return
     // save current area unless it is main area
-    if (activeArea !== LayoutHelper.Const.MAIN_AREA && !activeAreaData.saved) {
+    if (
+      activeArea &&
+      activeAreaData &&
+      activeArea !== LayoutHelper.Const.MAIN_AREA &&
+      !activeAreaData.saved
+    ) {
       await dispatch(
         'gitlab/saveFile',
         { content: activeAreaData.content, path: activeAreaData.path },
@@ -277,52 +284,17 @@ const actions = {
   setNewModPosition({ commit }, position) {
     commit('SET_NEW_MOD_POSITION', position)
   },
-  async refreshSiteSettings({ commit, dispatch, rootGetters }, { sitePath }) {
+  async refreshSiteSettings({ commit, dispatch, getters, rootGetters }, { sitePath }) {
     let siteSetting = initSiteState()
+    await dispatch('user/getSiteLayoutConfig', { path: sitePath })
+    let {
+      'user/siteLayoutConfigBySitePath': siteLayoutConfigBySitePath,
+      'user/allLayoutContentFilePathsBySitePath': allLayoutContentFilePathsBySitePath,
+      'gitlab/getFileByPath': gitlabGetFileByPath
+    } = rootGetters
+    siteSetting.siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    let allLayoutContentFilePaths = allLayoutContentFilePathsBySitePath(sitePath)
 
-    // todo: move this part into editor/actions/getSiteLayoutConfig({ path })
-    const layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
-    await dispatch(
-      'gitlab/readFile',
-      { path: layoutFilePath, editorMode: true },
-      { root: true }
-    )
-    let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
-    let file = gitlabGetFileByPath(layoutFilePath) || ''
-    if (!file) return
-    let { content } = file
-    siteSetting.siteLayoutConfig = LayoutHelper.buildLayouts(content)
-    // {
-    //   "layoutConfig": {
-    //     "defaultLayoutId": 0,
-    //     "layouts": [
-    //       {
-    //         "id": 0,
-    //         "name": "Basic",
-    //         "styleName": "basic",
-    //         "match": "",
-    //         "content": {
-    //           "footer": "footer.md",
-    //           "header": "header.md",
-    //           "sidebar": "sidebar.md"
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   "pages": {
-    //     "index.md": {
-    //       "layout": 0
-    //     }
-    //   }
-    // }
-
-    // todo: move this part into editor/getters/getTargetLayoutContentByPath(path)
-    let allLayouts = _.get(siteSetting.siteLayoutConfig, ['layoutConfig', 'layouts'], [])
-    let allLayoutContentFilePaths = _.flatten(allLayouts.map(
-      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
-    ))
-
-    // keep this part
     await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
       let fileName = layoutContentFilePath.split('/').slice(1).join('/')
       let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`

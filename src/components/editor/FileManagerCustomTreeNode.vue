@@ -13,16 +13,19 @@
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" size="mini" type="text" :title='$t("editor.setting")'>
-        <a class="iconfont icon-shezhi" href="/wiki/user_center" target="_blank"></a>
+      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="openWebsiteSettingDialog" :title='$t("editor.setting")'>
       </el-button>
     </span>
+    <div @click.stop v-if='isWebsiteSettingShow'>
+      <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'/>
+    </div>
   </div>
 </template>
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension } from '@/lib/utils/gitlab'
+import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 
 export default {
   name: 'FileManagerCustomTreeNode',
@@ -35,12 +38,12 @@ export default {
       addFolderPending: false,
       addFilePending: false,
       removePending: false,
-      isAddFileDialogShow: false
+      isWebsiteSettingShow: false
     }
   },
   methods: {
     ...mapActions({
-      getRepositoryTree: 'gitlab/getRepositoryTree',
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
       gitlabRemoveFile: 'gitlab/removeFile'
@@ -66,7 +69,7 @@ export default {
     async newFileNamePrompt({what = this.$t('editor.website')} = {}) {
       let self = this
 
-      await this.getRepositoryTree({ path: this.sitePath })
+      await this.gitlabGetRepositoryTree({ path: this.sitePath })
       let childNames = this.gitlabChildNamesByPath(this.currentPath)
 
       let { value: newFileName } = await this.$prompt(
@@ -103,7 +106,13 @@ export default {
           await this.gitlabRemoveFile({ path: this.currentPath })
           this.removePending = false
         })
-        .catch(() => {})
+        .catch(e => console.error(e))
+    },
+    openWebsiteSettingDialog() {
+      this.isWebsiteSettingShow = true
+    },
+    closeWebsiteSettingDialog() {
+      this.isWebsiteSettingShow = false
     }
   },
   computed: {
@@ -147,6 +156,9 @@ export default {
     hideMDFileExtension(str) {
       return str.replace(/\.md$/, '')
     }
+  },
+  components: {
+    WebsiteSettingDialog
   }
 }
 </script>

@@ -10,7 +10,8 @@ const state = () => ({
   siteDataSource: {},
   comments: {},
   siteDetailInfo: {},
-  webTemplateConfig: []
+  webTemplateConfig: [],
+  siteLayoutConfigs: {}
 })
 
 export default {

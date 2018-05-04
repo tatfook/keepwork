@@ -16,6 +16,7 @@ import AdiQuizz from './quizz/quizz.proptypes'
 import AdiLesson from './lesson/lesson.proptypes'
 import AdiTeachers from './teachers/teachers.proptypes'
 import AdiLessonGet from './lessonGet/lessonGet.proptypes'
+import AdiPageList from './pageList/pageList.proptypes'
 
 export default {
   AdiImgLoop,
@@ -35,5 +36,6 @@ export default {
   AdiQuizz,
   AdiLesson,
   AdiTeachers,
-  AdiLessonGet
+  AdiLessonGet,
+  AdiPageList
 }

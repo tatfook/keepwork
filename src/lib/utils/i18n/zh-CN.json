@@ -14,18 +14,18 @@
     "code": "代码",
     "splitScreen": "分屏",
 
-    "system":"系统",
-    "page":"页面",
-    "edit":"编辑",
-    "insert":"插入",
-    "help":"帮助",
-    "backHomePage":"返回首页",
-    "newWebsite":"新建网站",
-    "siteSettings":"网站设置",
-    "dataSource":"数据源",
-    "revoke":"撤销",
-    "redo":"重做",
-    "module":"模块",
+    "system": "系统",
+    "page": "页面",
+    "edit": "编辑",
+    "insert": "插入",
+    "help": "帮助",
+    "backHomePage": "返回首页",
+    "newWebsite": "新建网站",
+    "siteSettings": "网站设置",
+    "dataSource": "数据源",
+    "revoke": "撤销",
+    "redo": "重做",
+    "module": "模块",
 
     "refresh": "刷新",
     "close": "关闭",
@@ -41,7 +41,6 @@
     "newPage": "新建页面",
     "newFolder": "新建文件夹",
     "website": "网页",
-    "page": "页面",
 
     "emptyName": "名不能为空",
     "nameRule": "名只能由字母，数字和下划线组成",
@@ -79,7 +78,13 @@
     "noData": "暂无数据，请添加",
     "delNotice": "删除提醒",
     "menuDelMsg": "确定删除这个节点？子节点也会直接被删除",
-    "menuItem": "菜单项"
+    "menuItem": "菜单项",
+    "fullScreen": "全屏",
+    "exitFullScreen": "退出全屏",
+    "title": "标题",
+    "bold": "加粗",
+    "italic": "斜体",
+    "horizontalDiv": "水平分割线"
   },
   "modList": {
     "recent": "常用",
@@ -101,7 +106,8 @@
     "board": "绘图板",
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
-    "setting": "设置"
+    "setting": "设置",
+    "pageList": "页面列表"
   },
   "adi": {
     "markdown": {
@@ -184,22 +190,33 @@
     }
   },
   "card": {
-    "imgLoop": "图文轮播",
-    "img": "宽屏图像",
+    "imgLoop": "图片轮播",
+    "img": "图片",
     "media": "图片",
-    "title": "主标题",
+    "title": "标题",
     "subtitle": "副标题",
-    "paragraph": "文本档",
+    "paragraph": "正文",
     "button": "按钮",
-    "menu": "菜单编辑器",
-    "logo": "logo",
+    "preview": "封面图片",
+    "worldName": "名称",
+    "author": "作者",
+    "version": "版本",
+    "updateTime": "更新时间",
+    "viewTimes": "浏览次数",
+    "size": "大小",
+    "menu": "菜单",
+    "logo": "图标",
     "businessName": "主标题",
     "tagline": "副标题",
-    "qq": "qq号码",
-    "pic": "图片",
-    "desc": "文本描述",
+    "qq": "QQ号",
+    "pic": "头像",
+    "desc": "名称",
     "md": "markdown文档",
+    "board": "绘图板",
     "comment": "评论",
-    "vipRead": "vip阅读"
+    "vipRead": "VIP阅读权限",
+    "openBoard": "打开绘图板",
+    "switchComment": "评论是否开启",
+    "pageList": "页面列表"
   }
 }

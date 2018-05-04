@@ -15,6 +15,7 @@ import ModMenu from './web/menu'
 import ModQuizz from './web/quizz'
 import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
+import ModPageList from './web/pageList'
 
 var modsList = [
   {
@@ -60,6 +61,11 @@ var modsList = [
         id: '1-8',
         label: 'modList.carousel',
         mods: [ModImgLoop]
+      },
+      {
+        id: '1-9',
+        label: 'modList.pageList',
+        mods: [ModPageList]
       }
     ]
   },
