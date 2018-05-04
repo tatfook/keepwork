@@ -32,7 +32,6 @@ export const modList = {
   ModVipRead,
   ModComment,
   ModLesson,
-  ModMenu,
   ModQuizz,
   ModTeachers,
   ModLessonGet,
