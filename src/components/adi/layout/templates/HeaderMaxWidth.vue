@@ -1,5 +1,5 @@
 <template>
-  <el-container class="header-template">
+  <el-container class="maxwidth-template">
     <el-header height='auto'>
       <slot name="header"></slot>
     </el-header>
@@ -14,7 +14,7 @@ export default {}
 </script>
 
 <style lang="scss">
-.header-template {
+.maxwidth-template {
   .el-header,
   .el-main {
     padding: 0;
