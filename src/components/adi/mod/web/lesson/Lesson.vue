@@ -166,7 +166,14 @@ export default {
           let len = animations.length
           if(lessonMod && lessonMod.parentNode != null) {
             if(len == 0) {
-              lessonMod.parentNode.appendChild(createMod('ModAnimations', "<p>没有素材<p>"))
+              let htm = '<div class="el-row mod-full-width-0-0-32 animations-list"><div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
+                  + '<a href="#" class="animations-cover">'
+                  +     '<div style="background-image: url(https://images.unsplash.com/photo-1520357750302-03cee3ee2e6a?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjcwOTV9&s=6a77942f2264fa230fe1c6561c46f9f1);"></div>'
+                  + '</a>'
+                  +  '<a href="#" class="animations-title">Lesson 1 Actors Animations</a>'
+              + '</div>'
+            + '</div>';
+              lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
               let html = ""
               for(let i = 0; i < len; i++) {
@@ -339,8 +346,63 @@ export default {
 }
 </script>
 
-<style>
-  .text-right {
-    text-align: right;
-  }
+<style lang="scss">
+ [data-mod="ModLesson"] {
+   padding-bottom: 0;
+
+ }
+.text-right {
+  text-align: right;
+}
+
+.animations-list {
+    padding: 0 60px 20px;
+}
+
+.animations-list .el-col {
+  padding: 20px 16px 15px;
+}
+
+.animations-cover {
+  display: block;
+  height: 160px;
+}
+
+.animations-cover > div{
+    width: 100%;
+    height: 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    position: relative;
+}
+
+.animations-cover:hover div:before {
+    content: "";
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 2;
+    background: url('/static/adi/lesson/play_btn_action.png') center center no-repeat;
+    background-size: contain
+}
+
+.animations-title {
+    display: block;
+    margin-top: 12px;
+    color: #333;
+    font-size: 17px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.animations-title:hover {
+   color: #409EFE;
+}
+
 </style>
