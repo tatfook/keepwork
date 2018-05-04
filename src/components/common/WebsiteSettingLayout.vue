@@ -559,8 +559,9 @@ export default {
     .el-main {
       background: #E4EEF3;
     }
-    .basic-template {
+    .maxwidth-template {
       .el-main {
+        margin: 0 !important;
         border-left: 40px solid white;
         border-right: 40px solid white;
       }

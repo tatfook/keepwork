@@ -1,5 +1,5 @@
 <template>
-  <el-container class="basic-template">
+  <el-container class="maxwidth-template">
     <el-main>
       <slot> </slot>
     </el-main>
@@ -11,7 +11,7 @@ export default {}
 </script>
 
 <style lang="scss">
-.basic-template{
+.maxwidth-template{
   .el-main{
     padding: 0;
     max-width: 1080px;
