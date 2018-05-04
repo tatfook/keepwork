@@ -36,5 +36,8 @@ export default [
         height: '14px'
       }
     }
+  },
+  {
+    templateID: 1
   }
 ]
