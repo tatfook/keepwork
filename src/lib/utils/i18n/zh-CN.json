@@ -107,7 +107,8 @@
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
     "setting": "设置",
-    "pageList": "页面列表"
+    "pageList": "页面列表",
+    "textBoard": "文本与绘图板"
   },
   "adi": {
     "markdown": {
