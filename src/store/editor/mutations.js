@@ -34,6 +34,7 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
   'UPDATE_FILEMANAGER_TREE_NODE_EXPANDED'
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
+const SET_EDITING_AREA = 'SET_EDITING_AREA'
 
 const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
@@ -69,6 +70,7 @@ export const props = {
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
 
   SET_NEW_MOD_POSITION,
+  SET_EDITING_AREA,
 
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
@@ -157,6 +159,10 @@ const mutations = {
   },
   [SET_ACTIVE_AREA](state, area) {
     Vue.set(state.activePage, 'activeArea', area)
+  },
+  [SET_EDITING_AREA](state, payload) {
+    Vue.set(state.activePage, 'addingArea', payload.area)
+    Vue.set(state.activePage, 'cursorPosition', payload.cursorPosition)
   },
   [UPDATE_ACTIVE_MOD_ATTRIBUTES](state, { key, value }) {
     const modList = activeModList(state)
@@ -248,7 +254,10 @@ const mutations = {
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)
   },
-  [UPDATE_OPENED_LAYOUT_FILE](state, { sitePath, layoutContentFilePath, data }) {
+  [UPDATE_OPENED_LAYOUT_FILE](
+    state,
+    { sitePath, layoutContentFilePath, data }
+  ) {
     let siteSetting = state.siteSettings[sitePath]
     _.merge(siteSetting.pages[layoutContentFilePath], data)
   }

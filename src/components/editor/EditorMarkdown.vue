@@ -80,12 +80,23 @@ export default {
     },
     editor() {
       return this.$refs.mdEditor.codemirror
+    },
+    activeCursorLine() {
+      const cursor = this.editor.getCursor()
+      return cursor.sticky ? cursor.line : this.editor.lastLine()
     }
   },
   methods: {
     ...mapActions({
       gitlabUploadFile: 'gitlab/uploadFile'
     }),
+    addMod() {
+      this.$store.dispatch('setAddingArea', {
+        area: gConst.ADDING_AREA_MARKDOWN,
+        cursorPosition: this.activeCursorLine
+      })
+      this.$store.dispatch('setActiveWinType', 'ModsList') // TODO: move wintype defination to gConst
+    },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
 

@@ -58,10 +58,11 @@
           <el-button class="iconfont icon-yinyong" title="引用内容"></el-button> -->
           <!-- <el-button class="iconfont icon-biaoge" title="表格"></el-button> -->
           <el-button class="iconfont icon-ziyuanfengexian" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-        </el-button-group>
-        <el-button-group>
           <el-button class="iconfont icon-daima" :title="$t('editor.code')" @click="insertCode"></el-button>
           <el-button class="iconfont icon-fenxianglianjie" :title="$t('editor.link')" @click="insertLink"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="iconfont" title="MOD" @click="addModToMarkdown">MOD</el-button>
         </el-button-group>
       </el-row>
       <editor-markdown ref='codemirror' />
@@ -74,6 +75,7 @@
 
 <script>
 import _ from 'lodash'
+import { gConst } from '@/lib/global'
 import fullscreen from 'vue-fullscreen'
 import EditorMarkdown from './EditorMarkdown'
 import EditorWelcome from './EditorWelcome'
@@ -99,7 +101,8 @@ export default {
         rightColWidthParam: ''
       },
       isCodeWinShow: true,
-      isFullscreen: false
+      isFullscreen: false,
+      gConst
     }
   },
   created() {
@@ -209,6 +212,9 @@ export default {
           isCodeShow: true,
           isPreviewShow: true
         })
+        this.$store.dispatch('setAddingArea', {
+          area: this.gConst.ADDING_AREA_ADI
+        })
       } else {
         this.resetShowingCol({
           isCodeShow: false,
@@ -276,6 +282,9 @@ export default {
     },
     insertImage() {
       this.$refs.codemirror.insertFile()
+    },
+    addModToMarkdown() {
+      this.$refs.codemirror.addMod()
     }
   }
 }
