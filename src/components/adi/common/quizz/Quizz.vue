@@ -68,7 +68,7 @@ const hideMod = function(name, flag) {
 
 const saveQuiz = []; // 保存所提交的题型
 const quizzList = []; // 试题集合
-const answerSheet = []; // 保存当前答题卡
+let answerSheet = []; // 保存当前答题卡
 const lessonHost = 'http://127.0.0.1:3000'
 let device; // 设备 pc 电脑自学 pad 课堂学习
 let sn; // 试题的sn
@@ -92,7 +92,6 @@ const timer = {
         })
         .then(response => {
           let r = response.data
-          console.log(r)
         })
     }, this.timeout)
   },
@@ -162,7 +161,32 @@ export default {
       .then(response => {
         let r = response.data
         if(r.err == 0) {
-          this.isOperate = true;
+          this.isOperate = true
+          if(r.data.u){
+            sn = r.data.u.recordSn
+            let ans = r.data.u.answerSheet
+            if(ans) {
+              answerSheet = ans;
+              // TODO: 恢复答题状态
+              for(let i = 0; i < ans.length; i++) {
+                var item  = ans[i];
+                let data = this.properties.data;
+                if(item.quizzId == data[0].id && item.myAnswer) {
+                  // 找到了该题目
+                  this.isShow = true;
+                  this.isRight = item.trueFlag;
+                  if(data[0].type == 0){// 单选
+                    this.quizz.single = item.myAnswer;
+                  } else if(data[0].type == 1) {
+                    this.quizz.multiple = item.myAnswer.split(',');
+                  } else if(data[0].type == 2) {
+                    this.quizz.judge = item.myAnswer;
+                  }
+                  break;
+                }
+              }
+            }
+          }
         } else {
           this.$message.error("课堂已关闭或数据异常~");
         }
@@ -194,8 +218,9 @@ export default {
           this.isRight = false;
         }
       }else if(data[0].type == 1) { // 多选
-        myAnswer = this.quizz.multiple;
-        if(JSON.stringify(myAnswer) === data[0].answer) {
+        myAnswer = this.quizz.multiple.sort();
+        let answer = JSON.parse(data[0].answer).sort();
+        if(JSON.stringify(myAnswer) === JSON.stringify(answer)) {
           trueFlag = true;
           this.isRight = true;
         }else {
@@ -203,14 +228,14 @@ export default {
           this.isRight = false;
         }
       }
-      if(trueFlag) {
-        this.$message({
-          message: '恭喜你，答对了~',
-          type: 'success'
-        });
-      } else {
-        this.$message.error("很遗憾，答错了~");
-      }
+      // if(trueFlag) {
+      //   this.$message({
+      //     message: '恭喜你，答对了~',
+      //     type: 'success'
+      //   });
+      // } else {
+      //   this.$message.error("很遗憾，答错了~");
+      // }
       for(let i = 0; i < answerSheet.length; i++) {
         let item = answerSheet[i];
         if(item.quizzId === data[0].id) {
@@ -224,11 +249,6 @@ export default {
         }
       }
       saveQuiz.push(JSON.stringify(data));
-      // console.log('ssssssssssssssssssssssss')
-      // console.log(saveQuiz)
-      // console.log(quizzList)
-      // console.log('answerSheet:')
-      // console.log(answerSheet)
       let params = {};
       params.answerSheet = JSON.stringify(answerSheet);
       params.totalScore = 0;

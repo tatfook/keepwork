@@ -249,7 +249,7 @@ export default {
             writerQA.answer = this.ruleForm.single;
           }else if(type == 1) { // 多选
              writerQA.options = this.ruleForm.multipleOptions;
-             writerQA.answer = JSON.stringify(this.ruleForm.multiple);
+             writerQA.answer = JSON.stringify(this.ruleForm.multiple.sort());
           }else {  // 判断题
              writerQA.options = this.ruleForm.judgeOptions;
              writerQA.answer = this.ruleForm.judge;
