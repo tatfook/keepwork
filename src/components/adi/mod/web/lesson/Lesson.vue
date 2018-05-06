@@ -289,7 +289,7 @@ export default {
           let lessonGet = getMod('ModLessonGet')
           let lessonPerformance = ''
           if(lessonGet) {
-            let eles = lessonGet.getElementsByTagName('div')
+            let eles = lessonGet.getElementsByTagName('pre')
             for(let i =0; i < eles.length; i++) {
               let ele = eles[i]
               if(ele.getAttribute('class')=='content'){
@@ -334,7 +334,7 @@ export default {
         let lessonGet = getMod('ModLessonGet')
         let lessonPerformance = ''
         if(lessonGet) {
-          let eles = lessonGet.getElementsByTagName('div')
+          let eles = lessonGet.getElementsByTagName('pre')
           for(let i =0; i < eles.length; i++) {
             let ele = eles[i]
             if(ele.getAttribute('class')=='content'){

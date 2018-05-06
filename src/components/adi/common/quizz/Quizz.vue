@@ -188,7 +188,7 @@ export default {
             }
           }
         } else {
-          this.$message.error("课堂已关闭或数据异常~");
+          this.$message.error("课堂已关闭~");
         }
       })
     }
