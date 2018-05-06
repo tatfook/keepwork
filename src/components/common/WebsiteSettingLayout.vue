@@ -36,11 +36,22 @@
                     :class="{is_default: unsavedDefaultLayoutId==layout.id}"
                     size="mini" type="text"
                     @click.stop="setDefault(layout)"
+                    icon="iconfont icon-sheweimoren"
                     title="默认">
-                    默认
                   </el-button>
-                  <el-button size="mini" type="text" @click.stop="editLayout(layout)" title="编辑">编辑</el-button>
-                  <el-button size="mini" type="text" @click.stop="removeLayout(layout)" title="删除">删除</el-button>
+                  <el-button
+                    size="mini" type="text"
+                    @click.stop="editLayout(layout)"
+                    icon="iconfont icon-zhongmingming-copy"
+                    title="重命名">
+                  </el-button>
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click.stop="removeLayout(layout)"
+                    icon="iconfont icon-shanchu-copy"
+                    title="删除">
+                  </el-button>
                 </span>
               </div>
             </div>
@@ -439,11 +450,33 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 0 10px;
+      label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     .display-state-btns {
+      flex: 0 0 60px;
+      .el-button {
+        margin: 0 !important;
+      }
+      .iconfont {
+        color: #515151;
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        &:hover {
+          background: #ECEDF0;
+        }
+      }
       .default-btn {
         &.is_default {
-          background: pink;
+          .iconfont {
+            color: red;
+          }
         }
       }
     }
@@ -526,8 +559,9 @@ export default {
     .el-main {
       background: #E4EEF3;
     }
-    .basic-template {
+    .maxwidth-template {
       .el-main {
+        margin: 0 !important;
         border-left: 40px solid white;
         border-right: 40px solid white;
       }

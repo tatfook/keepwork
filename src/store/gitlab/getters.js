@@ -1,6 +1,9 @@
 import _ from 'lodash'
 import { newGitlabAPI } from '@/api'
-import { getFileFullPathByPath, EMPTY_GIT_FOLDER_KEEPER } from '@/lib/utils/gitlab'
+import {
+  getFileFullPathByPath,
+  EMPTY_GIT_FOLDER_KEEPER
+} from '@/lib/utils/gitlab'
 
 const gitlabAPICache = {}
 const getGitlabAPI = config => {
@@ -17,10 +20,14 @@ const getGitlabAPI = config => {
   we use 'master' as default ref usually
 */
 const getGitFileOptionsByPath = (rootGetters, path) => {
-  let personalAndContributedSitePathMap = rootGetters['user/personalAndContributedSitePathMap']
+  let personalAndContributedSitePathMap =
+    rootGetters['user/personalAndContributedSitePathMap']
   let [username, sitename] = path.split('/').filter(x => x)
 
-  let {projectId, lastCommitId: ref = 'master'} = _.get(personalAndContributedSitePathMap, `${username}/${sitename}`)
+  let { projectId, lastCommitId: ref = 'master' } = _.get(
+    personalAndContributedSitePathMap,
+    `${username}/${sitename}`
+  )
   let gitFileParams = { projectId, ref }
 
   return gitFileParams
@@ -56,17 +63,16 @@ const getters = {
     }, [])
     return allFiles
   },
-  childNamesByPath: (state, { repositoryTreesAllFiles: files = [] }) => path => {
+  childNamesByPath: (
+    state,
+    { repositoryTreesAllFiles: files = [] }
+  ) => path => {
     let repositoryTreesAllFilePaths = files.map(file => file.path)
-    let names = repositoryTreesAllFilePaths.filter(
-      filePath => filePath.indexOf(path) === 0 && filePath !== path
-    ).map(
-      filePath => filePath.replace(path + '/', '').split('/')[0]
-    ).filter(
-      name => name && name !== EMPTY_GIT_FOLDER_KEEPER
-    ).map(
-      name => name.replace(/\.md$/, '')
-    )
+    let names = repositoryTreesAllFilePaths
+      .filter(filePath => filePath.indexOf(path) === 0 && filePath !== path)
+      .map(filePath => filePath.replace(path + '/', '').split('/')[0])
+      .filter(name => name && name !== EMPTY_GIT_FOLDER_KEEPER)
+      .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
   },
   files: state => state.files,

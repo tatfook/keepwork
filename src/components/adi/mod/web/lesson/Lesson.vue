@@ -108,63 +108,47 @@ const timer = {
         })
         .then(response => {
           let r = response.data;
-          let studentMod = getMod('ModStudent');
+          let theadHtm = '', tbodyHtm = '', quizzHtm = [''], myanswer = '', quizzNo = '';  //thead tbody 题目答案 题目编号
+          let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
 
           if(r.data) {
             let data = r.data;
-            let theadHtm = '', tbodyHtm = '', quizzHtm = '', myanswer = '';  //thead tbody 题目答案
-            let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
-
             for(var i in data) {
               let answerItem = data[i].answerSheet;
               if(answerItem) {
                 for(let j = 0; j < answerItem.length; j++) {
-                  theadHtm += '<td><div class="sort-btn"><span>Quiz'+ parseInt(j+1) +'</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
                   myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
-
-                  quizzHtm += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>';
-
-                  total = answerItem.length;
+                  quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
+                  total = answerItem.length; // 题目总计
                 }
               }
 
              if(data[i].rightCount || data[i].wrongCount) {
                count =  parseInt(data[i].rightCount) + parseInt(data[i].wrongCount);
              }
-
-              progress = count + '/' + total;
+              progress = count + '/' + total; // 完成进度
               if(total != 0 && count === total) {
                 progress = "finished";
               }
 
-              tbodyHtm += '<tr class="tbl-body"><td>'+ data[i].username +'</td>'
+              tbodyHtm += '<tr><td>'+ data[i].username +'</td>'
                              + '<td>'+ data[i].studentNo +'</td>'
                              + '<td>'+ progress +'</td>'
-                             + quizzHtm
+                             + quizzHtm[i]
                         + '</tr>';
             }
 
-            let studetDataHtm = '<div class="student-taughted-details">'
-                  + '<div class="express">'
-                    + '<span class="r">right</span>'
-                    + '<span class="w">wrong</span>'
-                + '</div>'
-                + '<table class="table-wrap" cellspacing="0" border="0">'
-                    + '<thead>'
-                      + '<tr class="tbl-head">'
-                          + '<td><div class="sort-btn"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-                          + '<td><div class="sort-btn"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-                          + '<td><div class="sort-btn"><span>Quizzes(Total:'+ total +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-                          + theadHtm
-                      + '</tr>'
-                    + '</thead>'
-                    + '<tbody>'
-                        + tbodyHtm
-                    + '</tbody>'
-                + '</table>'
-            + '</div>';
+            theadHtm = '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                              + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+                              + '<td><div class="sort-btn sort-by-total"><span>Quizzes(Total:'+ total +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>';
 
-            studentMod.innerHTML = studetDataHtm;
+            for(let i = 0; i < total; i++) { // 题目序号
+              quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'"><span>Quiz'+ parseInt(i+1) +'</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>';
+            }
+
+            document.querySelector(".student-taughted-details .tbl-head").innerHTML = theadHtm + quizzNo;  // 表格头部
+            document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
+
           }
         })
     }, this.timeout)
@@ -370,7 +354,24 @@ export default {
                     showClose: false
                   })
                 }
-              })
+              });
+
+               let studentMod = getMod('ModStudent');
+               let studetDataHtm = '<div class="student-taughted-details">'
+                      + '<div class="express">'
+                        + '<span class="r">right</span>'
+                        + '<span class="w">wrong</span>'
+                    + '</div>'
+                    + '<table class="table-wrap" cellspacing="0" border="0">'
+                        + '<thead>'
+                          + '<tr class="tbl-head"></tr>'
+                        + '</thead>'
+                        + '<tbody class="tbl-body"></tbody>'
+                    + '</table>'
+                + '</div>';
+
+                studentMod.innerHTML = studetDataHtm;
+
             } else {
               // error
             }

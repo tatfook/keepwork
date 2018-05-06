@@ -1,8 +1,5 @@
 <template>
-  <el-container class="fullscreen-template">
-    <el-header height='auto'>
-      <slot name="header"></slot>
-    </el-header>
+  <el-container class="maxwidth-template">
     <el-main>
       <slot> </slot>
     </el-main>
@@ -14,9 +11,11 @@ export default {}
 </script>
 
 <style lang="scss">
-.fullscreen-template{
-  .el-header, .el-main{
+.maxwidth-template{
+  .el-main{
     padding: 0;
+    max-width: 1080px;
+    margin: 0 auto;
   }
 }
 </style>
