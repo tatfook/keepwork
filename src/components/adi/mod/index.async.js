@@ -11,6 +11,7 @@ const ModText = () => import('./web/text')
 const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
+const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 
 export const modList = {
@@ -27,6 +28,7 @@ export const modList = {
   ModVipRead,
   ModComment,
   ModBoard,
+  ModTextBoard,
   ModPageList
 }
 

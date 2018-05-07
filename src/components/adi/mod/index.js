@@ -11,6 +11,7 @@ import ModText from './web/text'
 import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
+import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 
 export const modList = {
@@ -27,6 +28,7 @@ export const modList = {
   ModBoard,
   ModVipRead,
   ModComment,
+  ModTextBoard,
   ModPageList
 }
 
