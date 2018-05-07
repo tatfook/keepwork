@@ -11,6 +11,7 @@ import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
 import AdiPageList from './pageList/pageList'
+import AdiFooter from './footer/footer'
 
 export default {
   AdiImgLoop,
@@ -25,5 +26,6 @@ export default {
   AdiVipRead,
   AdiComment,
   AdiInnerModal,
-  AdiPageList
+  AdiPageList,
+  AdiFooter
 }

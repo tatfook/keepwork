@@ -62,6 +62,14 @@ export default {
           mode={this.mode}
           background-color={this.options.menuBackground}
           text-color={this.options.fontColor}
+          style={
+            'display:' +
+            this.options.display +
+            ';' +
+            'justify-content:' +
+            this.options.justifyContent +
+            ';'
+          }
           active-text-color={this.options.fontColor}
         >
           {renderTemplate(h, this)}
@@ -89,13 +97,24 @@ a {
   text-decoration: none;
   color: unset;
 }
-
 .comp-menu {
   height: 100%;
-
+  a:hover {
+    color: #1780dc;
+  }
   .el-menu {
-    height: 100%;
-
+    .el-submenu {
+      height: 100%;
+      float: right;
+    }
+    .el-submenu__title {
+      height: 100%;
+      line-height: 50px;
+      border: 0;
+      a {
+        font-weight: bold;
+      }
+    }
     .el-menu-item {
       height: 100%;
       line-height: 50px;
@@ -103,30 +122,6 @@ a {
     }
   }
 }
-.el-menu--horizontal {
-  border: none;
-}
-</style>
-<style lang="scss">
-.comp-menu {
-  a {
-    text-decoration: none;
-    color: unset;
-  }
-
-  .el-menu {
-    .el-submenu {
-      height: 100%;
-    }
-
-    .el-submenu__title {
-      height: 100%;
-      line-height: 50px;
-      border: 0;
-    }
-  }
-}
-
 .el-menu--horizontal {
   border: 0;
 }

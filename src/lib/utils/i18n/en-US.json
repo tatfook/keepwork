@@ -218,6 +218,7 @@
     "vipRead": "VIP read privileges",
     "openBoard": "Open board",
     "switchComment": "Comment is on",
-    "pageList": "Page list"
+    "pageList": "Page list",
+    "footer": "Footer"
   }
 }
