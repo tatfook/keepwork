@@ -368,7 +368,9 @@ export default [
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_4'
+          footerBackground: 'bg_color_4',
+          itemTop: 'font_5',
+          itemOther: 'font_8'
         }
       },
       config: {
@@ -404,7 +406,9 @@ export default [
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_4'
+          footerBackground: 'bg_color_4',
+          itemTop: 'font_5',
+          itemOther: 'font_8'
         }
       },
       config: {
@@ -480,7 +484,9 @@ export default [
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_0'
+          footerBackground: 'bg_color_0',
+          itemTop: 'font_5',
+          itemOther: 'font_8'
         }
       },
       config: {
@@ -517,7 +523,9 @@ export default [
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_0'
+          footerBackground: 'bg_color_0',
+          itemTop: 'font_5',
+          itemOther: 'font_8'
         }
       },
       config: {
@@ -554,7 +562,9 @@ export default [
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_0'
+          footerBackground: 'bg_color_0',
+          itemTop: 'font_5',
+          itemOther: 'font_8'
         }
       },
       config: {
