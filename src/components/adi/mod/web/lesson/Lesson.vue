@@ -11,9 +11,9 @@ const hideMod = function(name, flag) {
     let ele = eles[i]
     if(ele.getAttribute('data-mod')==name){
       if(flag) {
-        ele.setAttribute('hidden', 'hidden')
+        ele.setAttribute('style', 'display:none')
       }else {
-        ele.removeAttribute('hidden')
+        ele.setAttribute('style', 'display:block')
       }
     }
   }
@@ -88,7 +88,7 @@ const init = function(){
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
                       + '</div>';
       let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">no summary.</div>'
+                        + '<div class="no-data">Teaching is not started yet. There is no summary here.</div>'
                       + '</div>';
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
       lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
@@ -97,17 +97,19 @@ const init = function(){
     let params = {}
     params.username = self.username
     params.lessonUrl = self.activePageUrl
-    axios.post(lessonHost + '/api/class/resurme', qs.stringify(params),
-    {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(response => {
-      let r = response.data
-      if(r.err === 0) {
-        // 可以恢复状态
-        beginClass(r.data.classId)
-      }
-    })
+    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+      axios.post(lessonHost + '/api/class/resurme', qs.stringify(params),
+      {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(response => {
+        let r = response.data
+        if(r.err === 0) {
+          // 可以恢复状态
+          beginClass(r.data.classId)
+        }
+      })
+    }
   }
 }
 
@@ -302,6 +304,11 @@ const beginClass = function(classId) {
       + '</table>'
   + '</div>';
   studentMod.innerHTML = studetDataHtm;
+  // Please wait… The summary will be generated after the teaching is finished.
+  let summaryMod = getMod('ModSummary');
+  summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
+                        + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
+                      + '</div>';
   document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
 }
 
@@ -359,7 +366,7 @@ export default {
           if(lessonMod && lessonMod.parentNode != null) {
             if(len == 0) {
               let htm = '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">no animations</div>'
+                        + '<div class="no-data">There are no related animations.</div>'
                       + '</div>'
               lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
@@ -367,7 +374,7 @@ export default {
               for(let i = 0; i < len; i++) {
                 let item = animations[i];
                 html += '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
-                          + '<a href="'+ item.animation +'" class="animations-cover">'
+                          + '<a href="'+ item.animation +'" target="_blank" class="animations-cover">'
                            + '<div style="background-image: url('+ item.coverImage +')"></div>'
                           + '</a>'
                           + '<a href="'+ item.animation +'" target="_blank" class="animations-title">'+ item.title +'</a>'

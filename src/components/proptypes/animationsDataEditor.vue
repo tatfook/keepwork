@@ -4,7 +4,7 @@
       <el-collapse-item v-for="e in animationsDataCopy" :name="e.id" :key="e.id">
         <template slot="title">
           <img class="cover" :src="e.coverImage"/>
-          <span>{{e.title}}</span>
+          <span class="title">{{e.title}}</span>
           <a :href="e.animation" target="_blank" class="link">{{e.animation}}</a>
           <span class="delete">
             <el-button type="danger" size="small" icon="el-icon-delete" @click="removeItem(e.id)" circle></el-button>
@@ -127,8 +127,19 @@ export default {
   vertical-align: middle;
 }
 .tree-data-dialog .link {
-    text-decoration: none;
-    margin-left: 10px;
-    color: #409eff;
+  text-decoration: none;
+  margin-left: 10px;
+  color: #409eff;
+  width: 60px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tree-data-dialog .title {
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  -o-text-overflow: ellipsis;
+  white-space:nowrap;
+  width:40px;
 }
 </style>
