@@ -8,7 +8,7 @@
           <div class="lesson-goals-title">
             Lesson Goals:
             <ol class="lesson-goals">
-              <li>{{properties.LessonGoals}}</li>
+              <pre>{{properties.LessonGoals}}</pre>
             </ol>
           </div>
           <el-row class="lesson-button">
@@ -22,7 +22,7 @@
     </el-row>
     <el-row>
       <el-tabs class="tabs" value="first" @tab-click="tabClick">
-        <div v-if="properties.vip" class="student-info">learning:<span>20</span>,&nbsp;&nbsp;Leave learning page:<span>10</span>, &nbsp;&nbsp;Offline:<span>4</span></div>
+        <div v-if="properties.vip" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>

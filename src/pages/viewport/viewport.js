@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
-import '@/assets/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import Viewport from './Viewport.vue'
 import { editorModule, userModule, gitlabModule } from '@/store'

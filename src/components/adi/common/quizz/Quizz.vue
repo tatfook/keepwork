@@ -31,7 +31,7 @@
           </el-radio-group>
         </div>
 
-        <div v-if="!isOperate">
+        <div v-if="!isOperate" :data-answer="item.answer">
           <div class="opt-item" v-for="(opt, index) in item.options">
               {{serialNo[index]}} {{opt.item}}
           </div>
@@ -188,7 +188,7 @@ export default {
             }
           }
         } else {
-          this.$message.error("课堂已关闭或数据异常~");
+          this.$message.error("课堂已关闭~");
         }
       })
     }

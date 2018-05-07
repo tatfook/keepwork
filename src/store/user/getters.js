@@ -198,7 +198,11 @@ const getters = {
   allLayoutContentFilePathsBySitePath: (state, { siteLayoutsBySitePath }) => sitePath => {
     let allLayouts = siteLayoutsBySitePath(sitePath)
     let allLayoutContentFilePaths = _.flatten(allLayouts.map(
-      ({content}) => _.keys(content).map(key => `${key}s/${content[key]}`)
+      ({content}) => _.keys(content).filter(
+        key => (content[key] || '').trim()
+      ).map(
+        key => `${key}s/${content[key]}`
+      )
     ))
     return allLayoutContentFilePaths
   },
