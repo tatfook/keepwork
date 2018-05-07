@@ -18,9 +18,13 @@ const renderTemplate = (h, m, data, parentIndex) => {
   return _.map(data, menuData => {
     index++
 
+    if(!parentIndex) {
+      parentIndex = index
+    }
+
     if (!menuData.child) {
       return (
-        <el-menu-item index={getIndexString(index)} style={m.options.itemStyle}>
+        <el-menu-item index={getIndexString(index)} style={parentIndex == 1 && m.itemStyle}>
           <a
             target={
               m.properties.target ? m.properties.target : m.options.emptyTarget
@@ -33,7 +37,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
       )
     } else {
       return (
-        <el-submenu index={getIndexString(index)} style={m.options.itemStyle}>
+        <el-submenu index={getIndexString(index)} style={parentIndex == 1 && m.itemStyle}>
           <template slot="title">
             <a
               target={
@@ -62,15 +66,8 @@ export default {
           mode={this.mode}
           background-color={this.options.menuBackground}
           text-color={this.options.fontColor}
-          style={
-            'display:' +
-            this.options.display +
-            ';' +
-            'justify-content:' +
-            this.options.justifyContent +
-            ';'
-          }
           active-text-color={this.options.fontColor}
+          style={this.menuStyle}
         >
           {renderTemplate(h, this)}
         </el-menu>
@@ -79,6 +76,12 @@ export default {
   },
   mixins: [compBaseMixin],
   computed: {
+    menuStyle() {
+      return this.generateStyleString(this.options.menuStyle)
+    },
+    itemStyle() {
+      return this.generateStyleString(this.options.itemStyle)
+    },
     mode() {
       return this.options.mode
     },
@@ -97,24 +100,13 @@ a {
   text-decoration: none;
   color: unset;
 }
+
 .comp-menu {
   height: 100%;
-  a:hover {
-    color: #1780dc;
-  }
+
   .el-menu {
-    .el-submenu {
-      height: 100%;
-      float: right;
-    }
-    .el-submenu__title {
-      height: 100%;
-      line-height: 50px;
-      border: 0;
-      a {
-        font-weight: bold;
-      }
-    }
+    height: 100%;
+
     .el-menu-item {
       height: 100%;
       line-height: 50px;
@@ -122,6 +114,30 @@ a {
     }
   }
 }
+.el-menu--horizontal {
+  border: none;
+}
+</style>
+<style lang="scss">
+.comp-menu {
+  a {
+    text-decoration: none;
+    color: unset;
+  }
+
+  .el-menu {
+    .el-submenu {
+      height: 100%;
+    }
+
+    .el-submenu__title {
+      height: 100%;
+      line-height: 50px;
+      border: 0;
+    }
+  }
+}
+
 .el-menu--horizontal {
   border: 0;
 }
