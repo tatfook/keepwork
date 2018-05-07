@@ -132,7 +132,7 @@ export default {
         !Parser.isModMarkdown(mod, removed) ||
         !Parser.isModMarkdown(mod, text)
       ) {
-        // if there are some changes affect the mod data, will try to build all
+        // if there are some changes affect the mod data, will try to rebuild all
         return this.$store.dispatch('updateMarkDown', code)
       }
       const key = mod.key

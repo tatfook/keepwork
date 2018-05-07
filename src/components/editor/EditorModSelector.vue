@@ -27,9 +27,6 @@ export default {
       gConst
     }
   },
-  mounted() {
-    if (this.isActive) this.scrollToCurrentMod()
-  },
   watch: {
     isActive(newVal) {
       if (newVal) this.scrollToCurrentMod()
