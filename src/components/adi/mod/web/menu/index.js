@@ -31,7 +31,8 @@ import templates from './menu.templates'
 const name = 'ModMenu'
 
 const components = {
-  menu: 'AdiMenu'
+  menu: 'AdiMenu',
+  footer: 'AdiFooter'
 }
 
 const properties = generateProperties(name, components)
