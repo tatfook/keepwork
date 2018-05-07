@@ -212,7 +212,7 @@ const actions = {
     config = _.isString(content) ? JSON.parse(content) : content
     commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
   },
-  async saveSiteLayoutConfig(context, { sitePath, layoutConfig }) {
+  async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
     let unsavedConfig = {
@@ -220,7 +220,8 @@ const actions = {
       layoutConfig: {
         ..._.get(config, 'layoutConfig'),
         ...layoutConfig
-      }
+      },
+      pages: _.merge({}, config.pages, pages)
     }
     let content = JSON.stringify(unsavedConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)

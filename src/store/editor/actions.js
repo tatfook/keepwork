@@ -32,7 +32,7 @@ const {
   UPDATE_THEME_BG_COLOR,
   UPDATE_THEME_FONT,
 
-  UPDATE_WIN_TYPE,
+  UPDATE_MANAGE_PANE_COMPONENT,
   UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
@@ -154,7 +154,7 @@ const actions = {
     dispatch('updateCode', payload)
     if (payload.modType !== 'ModMarkdown') {
       commit(SET_ACTIVE_MOD, payload.key)
-      commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
       commit(SET_ACTIVE_PROPERTY, null)
     }
     commit(REFRESH_MOD_ATTRIBUTES, payload)
@@ -163,7 +163,7 @@ const actions = {
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(MOVE_MOD, payload)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')
   },
   addMod({ commit, dispatch, getters }, payload) {
@@ -187,7 +187,7 @@ const actions = {
       key: payload.preModKey,
       cmd: Parser.getCmd(payload.modName)
     })
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')
   },
   async addModToMarkdown({ commit, dispatch, getters }, payload) {
@@ -203,7 +203,7 @@ const actions = {
     const mod = Parser.getActiveBlock(getters.modList, position + 3)
     commit(SET_ACTIVE_MOD, mod.key)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setAddingArea({ commit }, payload) {
     commit(SET_EDITING_AREA, payload)
@@ -211,12 +211,12 @@ const actions = {
   setActiveMod({ commit }, key) {
     commit(SET_ACTIVE_MOD, key)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setActiveProperty({ commit, dispatch }, payload) {
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')
   },
   setActivePropertyTabType({ commit }, type) {
@@ -252,7 +252,7 @@ const actions = {
     commit(SET_ACTIVE_AREA, area)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_WIN_TYPE, 'ModsList')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     await dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {
@@ -260,7 +260,7 @@ const actions = {
     if (key === state.activePage.activeMod.key) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
-      commit(UPDATE_WIN_TYPE, 'ModsList')
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     }
     dispatch('refreshCode')
   },
@@ -290,8 +290,8 @@ const actions = {
   changeThemeFont({ commit }, fontID) {
     commit(UPDATE_THEME_FONT, fontID)
   },
-  setActiveWinType({ commit }, componentType) {
-    commit(UPDATE_WIN_TYPE, componentType)
+  setActiveManagePaneComponent({ commit }, payload) {
+    commit(UPDATE_MANAGE_PANE_COMPONENT, payload)
   },
   resetShowingCol({ commit }, showingColObj) {
     commit(RESET_SHOWING_COL, showingColObj)

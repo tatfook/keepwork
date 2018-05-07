@@ -26,7 +26,7 @@ const UPDATE_THEME_COLOR = 'UPDATE_THEME_COLOR'
 const UPDATE_THEME_BG_COLOR = 'UPDATE_THEME_BG_COLOR'
 const UPDATE_THEME_FONT = 'UPDATE_THEME_FONT'
 
-const UPDATE_WIN_TYPE = 'UPDATE_WIN_TYPE'
+const UPDATE_MANAGE_PANE_COMPONENT = 'UPDATE_MANAGE_PANE_COMPONENT'
 const UPDATE_PROPERTY_TAB_TYPE = 'UPDATE_PROPERTY_TAB_TYPE'
 const RESET_SHOWING_COL = 'RESET_SHOWING_COL'
 
@@ -63,7 +63,7 @@ export const props = {
   UPDATE_THEME_BG_COLOR,
   UPDATE_THEME_FONT,
 
-  UPDATE_WIN_TYPE,
+  UPDATE_MANAGE_PANE_COMPONENT,
   UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
@@ -190,8 +190,11 @@ const mutations = {
   [UPDATE_THEME_FONT](state, fontID) {
     Vue.set(state.activePage.theme, 'fontID', fontID)
   },
-  [UPDATE_WIN_TYPE](state, componentType) {
-    Vue.set(state, 'activeWinType', componentType)
+  [UPDATE_MANAGE_PANE_COMPONENT](state, payload) {
+    // for the usage of manage pane component
+    // payload should be {name, props}
+    payload = _.isString(payload) ? {name: payload} : payload
+    Vue.set(state, 'activeManagePaneComponent', payload)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
     Vue.set(state.activePage, 'activePropertyTabType', componentType)

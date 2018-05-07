@@ -95,7 +95,7 @@ export default {
         area: gConst.ADDING_AREA_MARKDOWN,
         cursorPosition: this.activeCursorLine
       })
-      this.$store.dispatch('setActiveWinType', 'ModsList') // TODO: move wintype defination to gConst
+      this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()

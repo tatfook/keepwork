@@ -9,7 +9,6 @@ export const initPageState = () => {
     activeProperty: null,
     activeArea: 'main',
     undoManager: new SimpleUndo(),
-    activeComponentType: '',
     addingArea: gConst.ADDING_AREA_ADI,
     cursorPosition: 0,
     newModPosition: gConst.POSITION_AFTER // after active mod
@@ -43,6 +42,11 @@ const state = () => ({
   openedFiles: {},
   siteSettings: {},
   filemanagerTreeNodeExpandMapByPath: {},
+
+  activeManagePaneComponent: {
+    name: '',
+    props: {}
+  },
 
   showingCol: {
     isManagerShow: true,

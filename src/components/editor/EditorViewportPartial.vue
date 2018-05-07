@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     openModSelector(key) {
-      this.$store.dispatch('setActiveWinType', 'ModsList')
+      this.$store.dispatch('setActiveManagePaneComponent', 'ModsList')
     },
     changeDraggableList(evt) {
       if (evt.moved) {

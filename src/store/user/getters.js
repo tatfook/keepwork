@@ -206,12 +206,22 @@ const getters = {
     ))
     return allLayoutContentFilePaths
   },
-  layoutContentFilePathsByPath: (state, { siteLayoutConfigBySitePath }) => path => {
+  getLayoutByPath: (state, { siteLayoutConfigBySitePath }) => path => {
     let sitePath = getFileSitePathByPath(path)
     let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
     let layout = LayoutHelper.getLayoutByPath(siteLayoutConfig, path)
+    return layout
+  },
+  layoutContentFilePathsByPath: (state, { getLayoutByPath }) => path => {
+    let layout = getLayoutByPath(path)
     let layoutContentFilePaths = _.keys(layout.content).map(key => `${key}s/${layout.content[key]}`)
     return layoutContentFilePaths
+  },
+  getSettedPageLayoutByPath: (state, { siteLayoutConfigBySitePath }) => path => {
+    let sitePath = getFileSitePathByPath(path)
+    let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    let layout = LayoutHelper.getSettedPageLayoutByPath(siteLayoutConfig, path)
+    return layout
   }
 }
 

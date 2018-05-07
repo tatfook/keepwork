@@ -118,6 +118,19 @@ export const getRelativePathByPath = path => {
   return subPaths.join('/')
 }
 
+export const getPageInfoByPath = path => {
+  let pageInfos = path.split('/').filter(x => x)
+  let [username, sitename] = pageInfos
+  let isLegal = username && sitename
+  let sitepath = isLegal ? `${username}/${sitename}` : ''
+  let fullPath = isLegal ? getFileFullPathByPath(path) : ''
+  let barePath = fullPath.replace(/\.md$/, '')
+  let [, , ...paths] = fullPath.split('/').filter(x => x)
+  let relativePath = paths.join('/')
+  let bareRelativePath = relativePath.replace(/\.md$/, '')
+  return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   CONFIG_FOLDER_NAME,
@@ -126,5 +139,6 @@ export default {
   suffixFileExtension,
   getFileFullPathByPath,
   getFileSitePathByPath,
-  getRelativePathByPath
+  getRelativePathByPath,
+  getPageInfoByPath
 }

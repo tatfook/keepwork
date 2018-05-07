@@ -1,10 +1,10 @@
 import _ from 'lodash'
 // import { mdToJson } from '../parser/mdParser'
-import { getRelativePathByPath } from '@/lib/utils/gitlab'
+import { getPageInfoByPath } from '@/lib/utils/gitlab'
 import uuid from '@/lib/utils/uuid'
 import Const from './const'
 
-export default {
+const LayoutHelper = {
   Const,
   newLayout(index) {
     return {
@@ -47,21 +47,30 @@ export default {
   //     }
   //   }
   // }
+  getSettedPageLayoutByPath(siteLayoutConfig, path) {
+    let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
+    let allLayoutsMap = _.keyBy(allLayouts, 'id')
+    let { relativePath } = getPageInfoByPath(path)
+    let settedPageLayoutId = _.get(siteLayoutConfig, ['pages', relativePath, 'layout'])
+
+    console.log('getSettedPageLayoutByPath', path, siteLayoutConfig, allLayoutsMap, settedPageLayoutId, relativePath)
+    let settedPageLayout = allLayoutsMap[settedPageLayoutId]
+    return settedPageLayout
+  },
+
   getLayoutByPath(siteLayoutConfig, path) {
     let defaultLayoutId = _.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0).toString()
     let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
     let allLayoutsMap = _.keyBy(allLayouts, 'id')
 
     // try to find targetLayout in config.pages
-    let relativePath = getRelativePathByPath(path)
-    let targetPageLayoutId = _.get(siteLayoutConfig, ['pages', relativePath, 'layout'])
-    let targetLayout = allLayoutsMap[targetPageLayoutId]
+    let targetLayout = this.getSettedPageLayoutByPath(siteLayoutConfig, path)
     if (targetLayout) return targetLayout
 
     // try to find matched layout
-    let relativeMatchPath = relativePath.replace(/\.md$/, '')
+    let { bareRelativePath } = getPageInfoByPath(path)
     targetLayout = _.last(allLayouts.filter(
-      ({match = ''}) => match.split('\n').map(s => s.trim()).indexOf(relativeMatchPath) > -1
+      ({match = ''}) => match.split('\n').map(s => s.trim()).indexOf(bareRelativePath) > -1
     ))
     if (targetLayout) return targetLayout
 
@@ -89,3 +98,5 @@ export default {
     return this.layoutPagePath(sitePath, `${contentKey}s`)
   }
 }
+
+export default LayoutHelper

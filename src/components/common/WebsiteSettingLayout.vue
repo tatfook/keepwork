@@ -146,8 +146,7 @@ import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
-import layoutTemplates from '@/components/adi/layout/templates'
-const stylesList = layoutTemplates
+import stylesList from '@/components/adi/layout/templates'
 
 export default {
   name: 'WebsiteSettingLayout',

@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import {
   getFileFullPathByPath,
-  getFileSitePathByPath
+  getFileSitePathByPath,
+  getPageInfoByPath
 } from '@/lib/utils/gitlab'
 import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
@@ -15,14 +16,10 @@ const getters = {
   activePage: state => state.activePage,
   activePageUrl: state => state.activePageUrl,
   activePageInfo: (state, { activePageUrl, openedFiles }) => {
-    let pageInfos = activePageUrl.split('/').filter(x => x)
-    let [username, sitename] = pageInfos
-    let isLegal = username && sitename
-    let sitepath = isLegal ? `${username}/${sitename}` : ''
-    let fullPath = isLegal ? getFileFullPathByPath(activePageUrl) : ''
-    let [, , ...paths] = fullPath.split('/').filter(x => x)
+    let pageInfo = getPageInfoByPath(activePageUrl)
+    let { fullPath } = pageInfo
     let { saved } = openedFiles[fullPath] || {}
-    return { username, sitename, isLegal, fullPath, sitepath, paths, saved }
+    return {...pageInfo, saved}
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
   code: (state, { activeAreaData }) =>
@@ -55,7 +52,11 @@ const getters = {
   hasActiveMod: state => state.activePage && state.activePage.activeMod,
   hasActiveProperty: state =>
     state.activePage && state.activePage.activeProperty,
-  activeComponentType: state => state.activeWinType,
+
+  activeManagePaneComponent: state => state.activeManagePaneComponent,
+  activeManagePaneComponentName: (state, { activeManagePaneComponent = {} }) => activeManagePaneComponent.name,
+  activeManagePaneComponentProps: (state, { activeManagePaneComponent = {} }) => activeManagePaneComponent.props,
+
   activePropertyTabType: state => {
     if (state.activePage) return state.activePage.activePropertyTabType
   },

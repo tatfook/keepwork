@@ -7819,7 +7819,7 @@ vue-router@^3.0.1:
 
 vue-scrollto@^2.11.0:
   version "2.11.0"
-  resolved "https://registry.yarnpkg.com/vue-scrollto/-/vue-scrollto-2.11.0.tgz#0657f127faded60a71fbcc841f393279a49aed55"
+  resolved "http://registry.npm.taobao.org/vue-scrollto/download/vue-scrollto-2.11.0.tgz#0657f127faded60a71fbcc841f393279a49aed55"
   dependencies:
     bezier-easing "^2.0.3"
 
