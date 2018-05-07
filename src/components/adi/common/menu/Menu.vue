@@ -64,7 +64,7 @@ export default {
           text-color={this.options.fontColor}
           style={
             'display:' +
-            this.options.disPlay +
+            this.options.display +
             ';' +
             'justify-content:' +
             this.options.justifyContent +
