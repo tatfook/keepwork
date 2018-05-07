@@ -81,13 +81,20 @@ export default {
       let { username: siteUsername, sitename } = this.activePageInfo
       window.socialShare('.kp-social-share', {
         mode: 'prepend',
-        description: `我将${siteUsername}在KEEPWORK.COM制作的网站分享给你`,
-        title: `${
-          this.displayUsername
-        }分享给你${siteUsername}制作的${siteUsername}网站`,
+        description:
+          this.$t('common.iShare') +
+          `${siteUsername}` +
+          this.$t('common.shareToYouA'),
+        title:
+          `${this.displayUsername}` +
+          this.$t('common.shareToYouB') +
+          `${siteUsername}` +
+          this.$t('common.maded') +
+          `${siteUsername}` +
+          this.$t('common.websiteB'),
         sites: ['qq', 'qzone', 'weibo', 'wechat'],
         wechatQrcodeTitle: '', // 微信二维码提示文字
-        wechatQrcodeHelper: '扫描二维码打开网页'
+        wechatQrcodeHelper: this.$t('common.QR')
       })
     },
     async togglePageStar() {
@@ -98,7 +105,7 @@ export default {
         console.log(e)
         this.$message({
           showClose: true,
-          message: '出错啦，请重试',
+          message: this.$t('common.error'),
           type: 'error'
         })
       })

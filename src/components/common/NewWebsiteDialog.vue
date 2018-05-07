@@ -29,38 +29,37 @@
     <div v-if="stepIndex===1">
       <el-form class="website-name" :model="websiteNameForm" :rules="websiteNameFormRules" ref="websiteNameForm">
         <el-form-item prop="value">
-          <el-input placeholder="例如：mysite123" v-model="websiteNameForm.value">
+          <el-input :placeholder="forExample.forExample" v-model="websiteNameForm.value">
             <template slot="prepend">http(s)://keepwork.com/{{ username }}/</template>
           </el-input>
         </el-form-item>
       </el-form>
       <p class="info">
-        可使用小写字母、数字（例如：mysite123）<br/> 设定后不可修改
-        <br/> VIP可在网站设置中设置cname转发
+        {{$t('editor.lowerCaseLetters')}}<br/> {{$t('editor.unchangeable')}}
+        <br/> {{$t('editor.vipForwarding')}}
       </p>
     </div>
     <div v-if="stepIndex===2" class="success-info">
       <i class="el-icon-success"></i>
       <h1>
-        恭喜您，网站创建成功
+        {{$t('editor.createdSuccessfully')}}
       </h1>
-      <p>网址：
+      <p>{{$t('editor.URL')}}
         <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
-        <br/> 您还可以在 网站设置 页面设置网站名称
-        <br/>
-        开启VIP ，额外支持私有权限以及权限管理等特权
+        <br/> {{$t('editor.setWebsiteName')}}
+        <br/> {{$t('editor.privatePermissions')}}
       </p>
     </div>
     <span slot="footer" class="dialog-footer">
       <span v-if="stepIndex===0">
-        <el-button type="primary" @click="handleNextStep">下一步</el-button>
+        <el-button type="primary" @click="handleNextStep">{{$t('editor.theNextStep')}}</el-button>
       </span>
       <span v-if="stepIndex===1">
-        <el-button @click="handlePrevStep">上一步</el-button>
-        <el-button type="primary" @click="handleSubmit" :disabled='isNameIllegal'>创 建</el-button>
+        <el-button @click="handlePrevStep">{{$t('editor.previous')}}</el-button>
+        <el-button type="primary" @click="handleSubmit" :disabled='isNameIllegal'>{{$t('editor.create')}}</el-button>
       </span>
       <span v-if="stepIndex===2">
-        <el-button type="primary" @click="handleEdit">开始编辑</el-button>
+        <el-button type="primary" @click="handleEdit">{{$t('editor.startEditing')}}</el-button>
       </span>
     </span>
   </el-dialog>
@@ -79,19 +78,21 @@ export default {
       let trimmedValue = value.trim()
       if (!trimmedValue) {
         this.isNameIllegal = true
-        return callback(new Error('不能为空'))
+        return callback(new Error(this.$t('editor.canNotBeEmpty')))
       }
       if (!/^[A-Za-z0-9_]+$/.test(trimmedValue)) {
         this.isNameIllegal = true
-        return callback(new Error('网站名只能由字母，数字和下划线组成'))
+        return callback(new Error(this.$t('editor.websiteNameCanOnly')))
       }
       if (/^[_]/.test(trimmedValue)) {
         this.isNameIllegal = true
-        return callback(new Error('网站名不能以下划线开头'))
+        return callback(
+          new Error(this.$t('editor.cannotBeginWithAnUnderscore'))
+        )
       }
       if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1) {
         this.isNameIllegal = true
-        return callback(new Error('同名网站已经存在'))
+        return callback(new Error(this.$t('editor.alreadyExists')))
       }
       this.isNameIllegal = false
       callback()
@@ -102,10 +103,10 @@ export default {
       stepIndex: 0,
       steps: [
         {
-          title: '选择网站模板'
+          title: this.$t('editor.selectSiteTemplate')
         },
         {
-          title: '设定网站的访问地址'
+          title: this.$t('editor.setAccessAddress')
         },
         {
           title: ''
@@ -122,7 +123,10 @@ export default {
         }
       },
       isNameIllegal: true,
-      locationOrigin: window.location.origin
+      locationOrigin: window.location.origin,
+      forExample: {
+        forExample: this.$t('editor.forExample')
+      }
     }
   },
   computed: {
@@ -159,7 +163,7 @@ export default {
         type: categoryName, // seems useless
         templateName,
         logoUrl, // todo: add for new templates solution
-        styleName: '默认样式' // seems useless
+        styleName: this.$t('editor.defaultStyle') // seems useless
       }
     },
     newSiteUrl() {
@@ -319,7 +323,7 @@ export default {
     font-size: 16px;
     color: #606266;
   }
-  .el-input-group--prepend .el-input__inner{
+  .el-input-group--prepend .el-input__inner {
     border-radius: 4px;
   }
   .el-input-group {
