@@ -7,9 +7,14 @@
       <el-aside width="400px">
         <slot name="sidebar"></slot>
       </el-aside>
-      <el-main>
-        <slot> </slot>
-      </el-main>
+      <el-container>
+        <el-main>
+          <slot></slot>
+        </el-main>
+        <el-footer height='auto'>
+          <slot name="footer"></slot>
+        </el-footer>
+      </el-container>
     </el-container>
   </el-container>
 </template>
@@ -22,7 +27,8 @@ export default {}
 .fullscreen-template{
   .el-header,
   .el-main,
-  .el-aside{
+  .el-aside,
+  .el-footer{
     padding: 0;
   }
 }

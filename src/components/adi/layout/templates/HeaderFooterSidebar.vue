@@ -11,6 +11,9 @@
         <slot> </slot>
       </el-main>
     </el-container>
+    <el-footer height='auto'>
+      <slot name="footer"></slot>
+    </el-footer>
   </el-container>
 </template>
 
@@ -19,10 +22,11 @@ export default {}
 </script>
 
 <style lang="scss">
-.fullscreen-template{
+.fullscreen-template {
   .el-header,
   .el-main,
-  .el-aside{
+  .el-aside,
+  .el-footer {
     padding: 0;
   }
 }
