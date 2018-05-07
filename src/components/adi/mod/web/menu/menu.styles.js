@@ -4,34 +4,33 @@ export default [
     templateID: 0,
     data: {
       menu: {
+        height: '50px',
         margin: 'auto'
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
       menu: ['mod-full-width', 'font_3'],
-      colMenu: ['bg_color_4']
+      colMenu: ['bg_color_7']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_4',
+          menuBackground: 'bg_color_7',
           fontColor: 'color_0'
         }
       },
       config: {
         menu: {
           mode: 'horizontal',
-          emptyTarget: '_blank',
-          disPlay: 'flex',
-          justifyContent: 'flex-start'
+          emptyTarget: '_blank'
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
+    cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
         height: '14px'
@@ -48,7 +47,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -66,8 +65,8 @@ export default [
         menu: {
           mode: 'horizontal',
           emptyTarget: '_blank',
-          disPlay: 'flex',
-          justifyContent: 'center'
+          display: 'flex',
+          justifyContent: 'flex-start'
         }
       }
     },
@@ -88,7 +87,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -105,7 +104,9 @@ export default [
       config: {
         menu: {
           mode: 'horizontal',
-          emptyTarget: '_blank'
+          emptyTarget: '_blank',
+          display: 'flex',
+          justifyContent: 'center'
         }
       }
     },
@@ -126,26 +127,26 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
       menu: ['mod-full-width', 'font_3'],
-      colMenu: ['bg_color_0']
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_0',
-          fontColor: 'color_4'
+          menuBackground: 'bg_color_4',
+          fontColor: 'color_0'
         }
       },
       config: {
         menu: {
           mode: 'horizontal',
           emptyTarget: '_blank',
-          disPlay: 'flex',
-          justifyContent: 'flex-start'
+          display: 'flex',
+          justifyContent: 'flex-end'
         }
       }
     },
@@ -166,7 +167,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -184,8 +185,8 @@ export default [
         menu: {
           mode: 'horizontal',
           emptyTarget: '_blank',
-          disPlay: 'flex',
-          justifyContent: 'center'
+          display: 'flex',
+          justifyContent: 'flex-start'
         }
       }
     },
@@ -206,7 +207,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -223,7 +224,9 @@ export default [
       config: {
         menu: {
           mode: 'horizontal',
-          emptyTarget: '_blank'
+          emptyTarget: '_blank',
+          display: 'flex',
+          justifyContent: 'center'
         }
       }
     },
@@ -237,35 +240,33 @@ export default [
 
   // style 6
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
-      colFooterRow: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'font_3'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
-          footerBackground: 'bg_color_4'
-          // fontColor: 'color_0'
+        menu: {
+          menuBackground: 'bg_color_0',
+          fontColor: 'color_4'
         }
       },
       config: {
-        footer: {
-          // mode: 'horizontal',
+        menu: {
+          mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'left'
-          disPlay: 'flex',
-          justifyContent: 'flex-start'
+          display: 'flex',
+          justifyContent: 'flex-end'
         }
       }
     },
@@ -286,12 +287,11 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
-      // colFooterRow: { gutter: 10 },
-      // footerRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
+      colFooterRow: [],
       footer: ['mod-full-width', 'font_3', 'color_0'],
       colFooter: ['bg_color_4']
     },
@@ -299,16 +299,13 @@ export default [
       theme: {
         footer: {
           footerBackground: 'bg_color_4'
-          // fontColor: 'color_0'
         }
       },
       config: {
         footer: {
-          // mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'center'
-          disPlay: 'flex',
-          justifyContent: 'center'
+          display: 'flex',
+          justifyContent: 'flex-start'
         }
       }
     },
@@ -329,7 +326,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -340,16 +337,13 @@ export default [
       theme: {
         footer: {
           footerBackground: 'bg_color_4'
-          // fontColor: 'color_0'
         }
       },
       config: {
         footer: {
-          // mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'right'
-          disPlay: 'flex',
-          justifyContent: 'flex-end'
+          display: 'flex',
+          justifyContent: 'center'
         }
       }
     },
@@ -370,27 +364,24 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
-      colFooter: ['bg_color_0']
+      footer: ['mod-full-width', 'font_3', 'color_0'],
+      colFooter: ['bg_color_4']
     },
     options: {
       theme: {
         footer: {
-          footerBackground: 'bg_color_0'
-          // fontColor: 'color_0'
+          footerBackground: 'bg_color_4'
         }
       },
       config: {
         footer: {
-          // mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'left'
-          disPlay: 'flex',
-          justifyContent: 'flex-start'
+          display: 'flex',
+          justifyContent: 'flex-end'
         }
       }
     },
@@ -411,9 +402,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
-      // colFooterRow: { gutter: 10 },
-      // footerRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -424,16 +413,13 @@ export default [
       theme: {
         footer: {
           footerBackground: 'bg_color_0'
-          // fontColor: 'color_0'
         }
       },
       config: {
         footer: {
-          // mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'center'
-          disPlay: 'flex',
-          justifyContent: 'center'
+          display: 'flex',
+          justifyContent: 'flex-start'
         }
       }
     },
@@ -454,7 +440,7 @@ export default [
       }
     },
     props: {
-      // rootRow: { gutter: 10 }
+      rootRow: { gutter: 10 }
     },
     theme: {
       root: [],
@@ -465,15 +451,50 @@ export default [
       theme: {
         footer: {
           footerBackground: 'bg_color_0'
-          // fontColor: 'color_0'
         }
       },
       config: {
         footer: {
-          // mode: 'horizontal',
           emptyTarget: '_blank',
-          // textAlign: 'right'
-          disPlay: 'flex',
+          display: 'flex',
+          justifyContent: 'center'
+        }
+      }
+    },
+    // cover: require('@/../static/adi/menu/menu.png'),
+    preview: {
+      outter: {
+        height: '14px'
+      }
+    }
+  },
+
+  // style 12
+  {
+    templateID: 1,
+    data: {
+      footer: {
+        margin: 'auto'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 }
+    },
+    theme: {
+      root: [],
+      footer: ['mod-full-width', 'font_3', 'color_4'],
+      colFooter: ['bg_color_0']
+    },
+    options: {
+      theme: {
+        footer: {
+          footerBackground: 'bg_color_0'
+        }
+      },
+      config: {
+        footer: {
+          emptyTarget: '_blank',
+          display: 'flex',
           justifyContent: 'flex-end'
         }
       }

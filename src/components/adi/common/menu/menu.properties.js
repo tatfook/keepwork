@@ -2,7 +2,7 @@ export default {
   data: [
     {
       name: 'MENU',
-      link: 'http://keepwork.com'
+      link: ''
     }
   ],
   target: '_self'

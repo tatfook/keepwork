@@ -67,7 +67,7 @@ export default {
           background-color={this.options.footerBackground}
           style={
             'display:' +
-            this.options.disPlay +
+            this.options.display +
             ';' +
             'justify-content:' +
             this.options.justifyContent +
