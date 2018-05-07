@@ -130,7 +130,7 @@ const timer = {
         })
         .then(response => {
           let r = response.data;
-          let theadHtm = '', tbodyHtm = '', quizzHtm = [''], myanswer = '', quizzNo = '';  //thead tbody 题目答案 题目编号
+          let theadHtm = '', tbodyHtm = '', quizzHtm = [''], myanswer = '';  //thead tbody 题目答案
           let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
 
           if(r.data) {
@@ -164,10 +164,12 @@ const timer = {
                 progress = "finished";
               }
 
+              let quiz = quizzHtm[i] == undefined ? " " : quizzHtm[i];
+
               tbodyHtm += '<tr><td>'+ data[i].username +'</td>'
                              + '<td>'+ data[i].studentNo +'</td>'
                              + '<td>'+ progress +'</td>'
-                             + quizzHtm[i]
+                             + quiz
                         + '</tr>';
             }
             if(currentTab === 'ModStudent') {
@@ -181,14 +183,6 @@ const timer = {
               document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
             }
 
-            theadHtm = '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-                              + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-                              + '<td><div class="sort-btn sort-by-total"><span>Quizzes(Total:'+ total +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>';
-
-            for(let i = 0; i < total; i++) { // 题目序号
-              quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'"><span>Quiz'+ parseInt(i+1) +'</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>';
-            }
-            document.querySelector(".student-taughted-details .tbl-head").innerHTML = theadHtm + quizzNo;  // 表格头部
             document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
           }
           // Sort Start
@@ -291,6 +285,16 @@ const beginClass = function(classId) {
   });
 
   let studentMod = getMod('ModStudent');
+  let quizzNo = ''; // 题目编号
+  let quizLen = getMods('ModQuizz').length;
+  for(let i = 0; i < quizLen; i++) { // 题目序号
+    quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'">'
+            + '<span>Quiz'+ parseInt(i+1) +'</span>'
+            + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
+            + '<div class="quizContent">' + getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0].innerHTML + '</div>'
+            + '</div></td>';
+  }
+
   let studetDataHtm = '<div class="student-taughted-details">'
         + '<div class="express">'
           + '<span class="r">right</span>'
@@ -298,7 +302,12 @@ const beginClass = function(classId) {
       + '</div>'
       + '<table class="table-wrap" cellspacing="0" border="0">'
           + '<thead>'
-            + '<tr class="tbl-head"></tr>'
+            + '<tr class="tbl-head">'
+              + '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+              + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+              + '<td><div class="sort-btn sort-by-total"><span>Quizzes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+              + quizzNo
+            +'</tr>'
           + '</thead>'
           + '<tbody class="tbl-body"></tbody>'
       + '</table>'
@@ -510,8 +519,10 @@ export default {
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
-                let htm = ''
-                summaryMod.innerHTML = JSON.stringify(r.data)
+                document.domain = 'localhost';
+                let host = 'http://localhost:3000';
+                let link = host + '/taughtedRecord/' + classId;
+                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
             })
             btnClass.setAttribute('disabled','true')
@@ -596,7 +607,8 @@ export default {
   text-align: center;
 }
 .student-taughted-details {
-    margin-top: 40px;
+    margin: 40px 0;
+    min-height: 500px;
 }
 .express >span {
     margin-right: 10px;
@@ -633,10 +645,55 @@ span.w::before {
 }
 
 .table-wrap thead td {
+    position: relative;
     border-right:1px solid #BFBFBF;
     border-bottom: 2px solid #bfbfbf;
     font-size: 16px;
     color:#333;
+}
+.table-wrap thead td:hover .quizContent {
+  display:block;
+}
+
+.table-wrap .quizContent {
+    display: none;
+    position: absolute;
+    top: 70px;
+    background-color: #fff;
+    border: 2px solid #98CBFF;
+    border-radius: 40px;
+    width: 100%;
+    min-width: 380px;
+    right: 0;
+    padding: 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #101010;
+}
+.table-wrap .quizContent .title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.table-wrap .quizContent .opt-item {
+  margin: 15px 0;
+}
+.table-wrap .quizContent .opt-item.state {
+  color: #27CE2F;
+}
+
+.table-wrap .quizContent.quizContent::before {
+    content: "";
+    position: absolute;
+    border: 2px solid #98cbff;
+    width: 30px;
+    height: 50px;
+    border-left: 0;
+    border-bottom: 0;
+    transform: rotate(-59deg);
+    right: 50px;
+    background-color: #fff;
+    top: -28px;
 }
 
 .table-wrap thead td:last-child {
