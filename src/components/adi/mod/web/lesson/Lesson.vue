@@ -395,8 +395,10 @@ export default {
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
-                let htm = ''
-                summaryMod.innerHTML = JSON.stringify(r.data)
+                document.domain = 'localhost';
+                let host = 'http://localhost:3000';
+                let link = host + '/taughtedRecord/' + classId;
+                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
             })
             btnClass.setAttribute('disabled','true')
@@ -481,7 +483,7 @@ export default {
   text-align: center;
 }
 .student-taughted-details {
-    margin-top: 40px;
+    margin: 40px 0;
 }
 .express >span {
     margin-right: 10px;
