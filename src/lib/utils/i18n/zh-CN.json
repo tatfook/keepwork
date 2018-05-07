@@ -1,7 +1,38 @@
 {
   "common": {
     "welcomeToKeepwork": "欢迎来到 Keepwork",
-    "createNewWebsite": "创建新网站"
+    "createNewWebsite": "创建新网站",
+
+    "features": "功能",
+    "applicationCenter": "应用中心",
+    "myHomePage": "我的主页",
+    "websiteManagement": "网站管理",
+    "pageEditor": "页面编辑器",
+    "myWebDisk": "我的网盘",
+    "dynamic": "动态",
+    "attention": "关注",
+    "history": "历史",
+    "help": "帮助",
+
+    "openPlatform": "开放平台",
+    "joinUs": "加入我们",
+    "websiteStatistics": "网站统计",
+    "updateInformation": "更新信息",
+    "feedback": "问题反馈",
+    "complaintPage": "投诉本页",
+    "poweredByNPL": "由NPL提供支持",
+    "simplifiedChinese": "简体中文",
+
+    "caseNumberA": "粤ICP备14002196号-2",
+    "caseNumberB": "© Tatfook",
+
+    "iShare": "我将",
+    "shareToYouA": "在KEEPWORK.COM制作的网站分享给你",
+    "shareToYouB": "分享给你",
+    "maded": "制作的",
+    "websiteB": "网站",
+    "QR": "扫描二维码打开网页",
+    "error": "出错啦，请重试"
   },
   "editor": {
     "save": "保存",
@@ -84,7 +115,27 @@
     "title": "标题",
     "bold": "加粗",
     "italic": "斜体",
-    "horizontalDiv": "水平分割线"
+    "horizontalDiv": "水平分割线",
+
+    "selectSiteTemplate": "选择网站模板",
+    "setAccessAddress": "设定网站的访问地址",
+    "theNextStep": "下一步",
+    "Previous": "上一步",
+    "startEditing": "开始编辑",
+    "unchangeable": "设定后不可修改",
+    "vipForwarding": "VIP可在网站设置中设置cname转发",
+    "URL": "网址:",
+    "canNotBeEmpty": "不能为空",
+    "alreadyExists": "同名网站已经存在",
+    "defaultStyle": "默认样式",
+    "forExample": "例如：mysite123",
+
+    "websiteNameCanOnly": "网站名只能由字母，数字和下划线组成",
+    "setWebsiteName": "您还可以在 网站设置 页面设置网站名称",
+    "privatePermissions": "开启VIP ，额外支持私有权限以及权限管理等特权",
+    "createdSuccessfully": "恭喜您，网站创建成功",
+    "lowerCaseLetters": "可使用小写字母、数字（例如：mysite123）",
+    "cannotBeginWithAnUnderscore": "网站名不能以下划线开头"
   },
   "modList": {
     "recent": "常用",

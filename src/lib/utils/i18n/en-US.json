@@ -1,7 +1,38 @@
 {
   "common": {
     "welcomeToKeepwork": "Welcome to Keepwork",
-    "createNewWebsite": "Create New Website"
+    "createNewWebsite": "Create New Website",
+
+    "features": "Features",
+    "applicationCenter": "Application center",
+    "myHomePage": "My home page",
+    "websiteManagement": "Website Management",
+    "pageEditor": "Page editor",
+    "myWebDisk": "My web disk",
+    "dynamic": "Dynamic",
+    "attention": "Attention",
+    "history": "History",
+    "help": "Help",
+
+    "openPlatform": "Open platform",
+    "joinUs": "Join us",
+    "websiteStatistics": "Website statistics",
+    "updateInformation": "Update information",
+    "feedback": "Feedback",
+    "complaintPage": "Complaint page",
+    "poweredByNPL": "Powered By NPL",
+    "simplifiedChinese": "Simplified Chinese",
+
+    "caseNumberA": "ICP 14002196 -2, Guangdong Province",
+    "caseNumberB": "© Tatfook",
+
+    "iShare": "I share",
+    "shareToYouA": "with you on the website created by KEEPWORK.COM",
+    "shareToYouB": "Share to you",
+    "maded": "maded",
+    "websiteB": "website",
+    "QR": "Scan QR to share",
+    "error": "Error, please try again"
   },
   "editor": {
     "save": "Save",
@@ -87,7 +118,33 @@
     "title": "Title",
     "bold": "Bold",
     "italic": "Italic",
-    "horizontalDiv": "Horizontal Dividingline"
+    "horizontalDiv": "Horizontal Dividingline",
+
+    "selectSiteTemplate": "Select site template",
+    "setAccessAddress": "Set the website's access address",
+    "theNextStep": "Next",
+    "previous": "Previous",
+    "startEditing": "Start editing",
+    "unchangeable": "Cannot be modified after setting",
+    "vipForwarding": "VIP can set cname forwarding in website settings",
+    "URL": "URL:",
+    "canNotBeEmpty": "Can not be empty",
+    "alreadyExists": "Website with the same name already exists",
+    "defaultStyle": "Default style",
+    "forExample": "For example: mysite123",
+
+    "websiteNameCanOnly":
+      "Website name can only consist of letters, numbers and underscores",
+    "setWebsiteName":
+      "You can also set the site name on the site settings page",
+    "privatePermissions":
+      "Open VIP, additional support for privileges such as private permissions and rights management",
+    "createdSuccessfully":
+      "Congratulations, the website was created successfully",
+    "lowerCaseLetters":
+      "Can use lowercase letters, numbers (example: mysite123)",
+    "cannotBeginWithAnUnderscore":
+      "Website name cannot start with an underscore"
   },
   "modList": {
     "recent": "Commonly used",
