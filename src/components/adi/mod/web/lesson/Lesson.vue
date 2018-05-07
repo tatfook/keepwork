@@ -186,20 +186,81 @@ const timer = {
             for(let i = 0; i < total; i++) { // 题目序号
               quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'"><span>Quiz'+ parseInt(i+1) +'</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>';
             }
-
             document.querySelector(".student-taughted-details .tbl-head").innerHTML = theadHtm + quizzNo;  // 表格头部
             document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
-            // Sort Start
-            document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
-              console.log('SortByName');
-            });
-            document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
-              console.log('SortByNo.');
-            });
-            document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
-              console.log('SortByTotal')
-            });
           }
+          // Sort Start
+          let nameSortFlag = false,
+              noSortFlag = false,
+              totalSortFlag = false,
+              quizzSortFlag = []; //数组存储题目排序
+          const active = function(p, c) {
+            function hasClass(ele, cls) {
+              cls = cls || '';
+              if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+              return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+            }
+            function addClass(ele, cls) {
+              if (!hasClass(ele, cls)) {
+                ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+              }
+            }
+            function removeClass(ele, cls) {
+              if (hasClass(ele, cls)) {
+                var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+                while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+                  newClass = newClass.replace(' ' + cls + ' ', ' ');
+                }
+                ele.className = newClass.replace(/^\s+|\s+$/g, '');
+              }
+            }
+            let childEles = p.getElementsByClassName('sort-icon');
+            for(let i = 0; i < childEles[0].childNodes.length; i++) {
+              let ele = childEles[0].childNodes[i];
+              if(ele.getAttribute('class') == c) {
+                addClass(ele, 'active');
+              }else {
+                removeClass(ele, 'active');
+              }
+            }
+          }
+          document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
+            console.log('SortByName');
+            if(nameSortFlag) {
+              // 倒序
+              active(this, 'el-icon-caret-top')
+              nameSortFlag = false
+            } else {
+              // 正序
+              active(this, 'el-icon-caret-bottom')
+              nameSortFlag = true
+            }
+          });
+          document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
+            console.log('SortByNo.');
+            if(noSortFlag) {
+              // 倒序
+              active(this, 'el-icon-caret-top')
+              noSortFlag = false
+            } else {
+              // 正序
+              active(this, 'el-icon-caret-bottom')
+              noSortFlag = true
+            }
+          });
+          document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
+            console.log('SortByTotal')
+            if(totalSortFlag) {
+              // 倒序
+              active(this, 'el-icon-caret-top')
+              totalSortFlag = false
+            } else {
+              // 正序
+              active(this, 'el-icon-caret-bottom')
+              totalSortFlag = true
+            }
+          });
+          // Sort End
         })
     }, this.timeout)
   },
@@ -209,8 +270,6 @@ const timer = {
 }
 
 const beginClass = function(classId) {
-  btnClass = document.getElementById('btnClass')
-  btnClass.lastChild.innerText = 'Dismiss the Class'
   // tipClass.innerText = '(Click here to dismiss the class)'
   classState = 1
   classId = classId
@@ -242,8 +301,8 @@ const beginClass = function(classId) {
           + '<tbody class="tbl-body"></tbody>'
       + '</table>'
   + '</div>';
-
   studentMod.innerHTML = studetDataHtm;
+  document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
 }
 
 export default {
@@ -596,7 +655,7 @@ span.w::before {
    color: #CCC;
 }
 
-.table-wrap .sort-icon.active i{
+.table-wrap .sort-icon i.active{
     color: #49A5F8;
 }
 
