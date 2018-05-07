@@ -53,7 +53,6 @@ const LayoutHelper = {
     let { relativePath } = getPageInfoByPath(path)
     let settedPageLayoutId = _.get(siteLayoutConfig, ['pages', relativePath, 'layout'])
 
-    console.log('getSettedPageLayoutByPath', path, siteLayoutConfig, allLayoutsMap, settedPageLayoutId, relativePath)
     let settedPageLayout = allLayoutsMap[settedPageLayoutId]
     return settedPageLayout
   },
