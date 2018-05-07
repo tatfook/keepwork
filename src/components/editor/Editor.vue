@@ -62,7 +62,7 @@
           <el-button class="iconfont icon-fenxianglianjie" :title="$t('editor.link')" @click="insertLink"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont" title="MOD" @click="addModToMarkdown">MOD</el-button>
+          <el-button class="iconfont icon-tianjiamokuai" title="MOD" @click="addModToMarkdown"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown ref='codemirror' />
@@ -79,7 +79,6 @@ import { gConst } from '@/lib/global'
 import fullscreen from 'vue-fullscreen'
 import EditorMarkdown from './EditorMarkdown'
 import EditorWelcome from './EditorWelcome'
-// import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
@@ -120,7 +119,6 @@ export default {
   components: {
     EditorMarkdown,
     EditorWelcome,
-    // EditorViewport,
     ModPropertyManager,
     Search,
     ModsList,

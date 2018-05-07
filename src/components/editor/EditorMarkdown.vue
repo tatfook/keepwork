@@ -144,8 +144,10 @@ export default {
         // function isOnEdit only check the content of a mod, doesn't include the mod cmd
         // and cm.firstLine() equal to 0, but the line number start with 1,
         // that's why we use l + 2 here to check if it is the cmd line
-        if (!this.activeMod || !BlockHelper.isOnEdit(this.activeMod, l + 2))
-          cm.foldCode({ line: l, ch: 0 }, null, 'fold')
+        // if (!this.activeMod || !BlockHelper.isOnEdit(this.activeMod, l + 2))
+
+        // fold all
+        cm.foldCode({ line: l, ch: 0 }, null, 'fold')
       }
     },
     wikiCmdFold(cm, start) {

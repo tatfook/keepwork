@@ -234,7 +234,7 @@ const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
   let mdLines = code.trim().split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
   // TODO: hard code here
-  if (styleID) cmdCode += '- styleID : ' + styleID + '\n'
+  cmdCode += '- styleID : ' + styleID + '\n'
   cmdCode += '```\n'
   mdLines.splice(position + 1, 0, cmdCode)
   return mdLines.join('\n')
