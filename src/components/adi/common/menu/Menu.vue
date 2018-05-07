@@ -18,13 +18,16 @@ const renderTemplate = (h, m, data, parentIndex) => {
   return _.map(data, menuData => {
     index++
 
-    if(!parentIndex) {
+    if (!parentIndex) {
       parentIndex = index
     }
 
     if (!menuData.child) {
       return (
-        <el-menu-item index={getIndexString(index)} style={parentIndex == 1 && m.itemStyle}>
+        <el-menu-item
+          index={getIndexString(index)}
+          style={parentIndex == 1 && m.itemStyle}
+        >
           <a
             target={
               m.properties.target ? m.properties.target : m.options.emptyTarget
@@ -37,7 +40,10 @@ const renderTemplate = (h, m, data, parentIndex) => {
       )
     } else {
       return (
-        <el-submenu index={getIndexString(index)} style={parentIndex == 1 && m.itemStyle}>
+        <el-submenu
+          index={getIndexString(index)}
+          style={parentIndex == 1 && m.itemStyle}
+        >
           <template slot="title">
             <a
               target={

@@ -26,7 +26,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
   return _.map(data, footerData => {
     index++
 
-    if(!parentIndex) {
+    if (!parentIndex) {
       parentIndex = index
     }
 
@@ -41,9 +41,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             target={
               m.properties.target ? m.properties.target : m.options.emptyTarget
             }
-            style={
-              parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle
-            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
             href={footerData.link}
           >
             {m.isEmptyData ? m.$t(footerData.name) : footerData.name}
@@ -62,9 +60,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             target={
               m.properties.target ? m.properties.target : m.options.emptyTarget
             }
-            style={
-              parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle
-            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
             href={footerData.link}
           >
             {m.isEmptyData ? m.$t(footerData.name) : footerData.name}
@@ -102,7 +98,6 @@ export default {
 
   computed: {
     getItemTopStyle() {
-      console.log(this.options)
       return this.generateStyleString({
         'font-size': this.options.itemTop
       })
