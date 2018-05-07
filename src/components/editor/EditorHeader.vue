@@ -144,7 +144,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveWinType']),
+    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveManagePaneComponent']),
     async save() {
       let self = this
 
@@ -198,7 +198,7 @@ export default {
       )
     },
     changeView(type) {
-      this.setActiveWinType(type)
+      this.setActiveManagePaneComponent(type)
     }
   },
   components: {

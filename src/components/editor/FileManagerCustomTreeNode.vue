@@ -13,7 +13,7 @@
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="openWebsiteSettingDialog" :title='$t("editor.setting")'>
+      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      setActiveManagePaneComponent: 'setActiveManagePaneComponent',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
@@ -108,6 +109,19 @@ export default {
         })
         .catch(e => console.error(e))
     },
+    goSetting() {
+      if (this.isWebsite) {
+        this.openWebsiteSettingDialog()
+      }
+      if (this.isFile) {
+        this.setActiveManagePaneComponent({
+          name: 'PageSetting',
+          props: {
+            pagePath: this.currentPath
+          }
+        })
+      }
+    },
     openWebsiteSettingDialog() {
       this.isWebsiteSettingShow = true
     },
@@ -128,7 +142,7 @@ export default {
     isFolder() {
       return this.data.type === 'tree'
     },
-    isFirstLevel() {
+    isWebsite() {
       return this.node.level === 1
     },
     isAddable() {
@@ -138,15 +152,15 @@ export default {
       return this.isFile
     },
     isSettable() {
-      return this.isFirstLevel
+      return this.isWebsite || this.isFile
     },
     currentPath() {
-      return this.isFirstLevel
+      return this.isWebsite
         ? `${this.data.username}/${this.data.name}`
         : this.data.path
     },
     sitePath() {
-      if (this.isFirstLevel) return `${this.data.username}/${this.data.name}`
+      if (this.isWebsite) return `${this.data.username}/${this.data.name}`
 
       let [username, name] = this.data.path.split('/')
       return `${username}/${name}`

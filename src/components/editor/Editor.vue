@@ -3,14 +3,14 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
-          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
-          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
+          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
+          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
       <el-row class="manager-content-box">
-        <component :is='activeComponent'></component>
+        <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
       </el-row>
     </el-col>
     <div class="col-between"></div>
@@ -83,6 +83,7 @@ import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
 import Search from './Search'
+import PageSetting from './PageSetting'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -122,14 +123,16 @@ export default {
     ModPropertyManager,
     Search,
     ModsList,
-    FileManager
+    FileManager,
+    PageSetting
   },
   computed: {
     ...mapGetters({
       activePage: 'activePage',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
-      activeComponent: 'activeComponentType',
+      activeManagePaneComponentName: 'activeManagePaneComponentName',
+      activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo'
     }),
@@ -202,7 +205,7 @@ export default {
       resetShowingCol: 'resetShowingCol'
     }),
     changeView(type) {
-      this.$store.dispatch('setActiveWinType', type)
+      this.$store.dispatch('setActiveManagePaneComponent', type)
     },
     toggleCodeWin(isCodeWinShow) {
       if (isCodeWinShow) {
