@@ -2,33 +2,33 @@
   <div class="footer-container">
     <ul>
       <li>
-        <a href="#" target="_blank">开放平台</a>
+        <a href="#" target="_blank">{{$t('common.openPlatform')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">加入我们</a>
+        <a href="#" target="_blank">{{$t('common.joinUs')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">网站统计</a>
+        <a href="#" target="_blank">{{$t('common.websiteStatistics')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">更新信息</a>
+        <a href="#" target="_blank">{{$t('common.updateInformation')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">问题反馈</a>
+        <a href="#" target="_blank">{{$t('common.feedback')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">投诉本页</a>
+        <a href="#" target="_blank">{{$t('common.complaintPage')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">Powered By NPL</a>
+        <a href="#" target="_blank">{{$t('common.poweredByNPL')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">简体中文</a>
+        <a href="#" target="_blank">{{$t('common.simplifiedChinese')}}</a>
       </li>
     </ul>
     <p>
-      <span>粤ICP备14002196号-2</span>
-      <span>© Tatfook</span>
+      <span>{{$t('common.caseNumberA')}}</span>
+      <span>{{$t('common.caseNumberB')}}</span>
     </p>
   </div>
 </template>
@@ -59,14 +59,14 @@ a {
 a:hover {
   border-bottom: 2px solid #3977ad;
 }
-p{
+p {
   margin: 0;
 }
-.footer-container span{
+.footer-container span {
   font-size: 14px;
 }
-@media(max-width: 768px){
-  a{
+@media (max-width: 768px) {
+  a {
     margin: 0;
   }
 }
