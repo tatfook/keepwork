@@ -381,7 +381,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   },
@@ -418,7 +418,7 @@ export default [
     // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   },
@@ -457,7 +457,7 @@ export default [
     // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   },
@@ -494,7 +494,7 @@ export default [
     // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   },
@@ -531,7 +531,7 @@ export default [
     // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   },
@@ -568,7 +568,7 @@ export default [
     // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '26px'
       }
     }
   }
