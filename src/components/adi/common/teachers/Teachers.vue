@@ -21,7 +21,7 @@ const getMods = function(name) {
   }
   return rets
 }
-
+let self
 const init = function(){
   let lessonMod = getMods('ModLesson');
   let overviewDom = document.getElementById("pane-first");
@@ -100,6 +100,25 @@ export default {
       } else {
         this.teacherShow = false
       }
+      this.$forceUpdate()
+    } else{
+      // Editor
+      this.teacherShow = true
+    }
+    let device
+    let query = location.href.split('?')[1]
+    if (query) {
+        query = query.split('&');
+        for (var i = 0; i < query.length; i++) {
+            var ary = query[i].split('=');
+            if (ary[0] == 'device' && ary[1]) {
+                device = ary[1];
+                break;
+            }
+        }
+    }
+    if (device == 'pc' || device == 'pad') {
+      this.teacherShow = false
       this.$forceUpdate()
     }
   }
