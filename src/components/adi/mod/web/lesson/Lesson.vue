@@ -57,8 +57,12 @@ let firstInFlag = true
 let self
 let btnClass
 let classState = 0 // 0 未开始 1 已开始 2 已结束
-let classId
-let currentTab = 'ModOverview'
+let classId // classID
+let currentTab = 'ModOverview' // 当前选中的页卡
+let quizLen
+let orderBy // 当前排序
+let sortFlag // 'false' 正序 'true' 倒序
+let lastResponse
 
 const init = function(){
   console.log('init')
@@ -120,149 +124,232 @@ const timer = {
     clearInterval(this.timeoutObj)
     return this
   },
-  start: function(username) {
+  start: function() {
     this.timeoutObj = setInterval( function () {
       // /class/performance 获取数据后 DOM 操作
-      let params = {username: username}
+      let params = {username: self.username}
       axios.post(lessonHost + '/api/class/performance', qs.stringify(params),
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
         .then(response => {
           let r = response.data;
-          let theadHtm = '', tbodyHtm = '', quizzHtm = [''], myanswer = '';  //thead tbody 题目答案
-          let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
-
-          if(r.data) {
-            let learningCount = 0; // 正在学习人数
-            let leaveCount = 0; // 离开的人数
-            let offlineCount = 0; // 离线的人数
-            let data = r.data;
-            for(let i  = 0; i < data.length; i++) {
-              let item = data[i];
-              if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
-                learningCount++;
-              } else if(item.state === 2) {
-                leaveCount++;
-              } else if(item.state === 3) {
-                offlineCount++;
-              }
-              let answerItem = item.answerSheet;
-              if(answerItem) {
-                for(let j = 0; j < answerItem.length; j++) {
-                  myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
-                  quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
-                  total = answerItem.length; // 题目总计
-                }
-              }
-
-              if(data[i].rightCount || data[i].wrongCount) {
-                count =  parseInt(data[i].rightCount) + parseInt(data[i].wrongCount);
-              }
-              progress = count + '/' + total; // 完成进度
-              if(total != 0 && count === total) {
-                progress = "finished";
-              }
-
-              let quiz = quizzHtm[i] == undefined ? " " : quizzHtm[i];
-
-              tbodyHtm += '<tr><td>'+ data[i].username +'</td>'
-                             + '<td>'+ data[i].studentNo +'</td>'
-                             + '<td>'+ progress +'</td>'
-                             + quiz
-                        + '</tr>';
-            }
-            if(currentTab === 'ModStudent') {
-              // 隐藏学习信息
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
-            } else {
-              // 显示学习信息
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
-              document.getElementsByClassName('student-learning')[0].innerText = learningCount;
-              document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
-              document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
-            }
-
-            document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
-          }
-          // Sort Start
-          let nameSortFlag = false,
-              noSortFlag = false,
-              totalSortFlag = false,
-              quizzSortFlag = []; //数组存储题目排序
-          const active = function(p, c) {
-            function hasClass(ele, cls) {
-              cls = cls || '';
-              if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
-              return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
-            }
-            function addClass(ele, cls) {
-              if (!hasClass(ele, cls)) {
-                ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
-              }
-            }
-            function removeClass(ele, cls) {
-              if (hasClass(ele, cls)) {
-                var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
-                while (newClass.indexOf(' ' + cls + ' ') >= 0) {
-                  newClass = newClass.replace(' ' + cls + ' ', ' ');
-                }
-                ele.className = newClass.replace(/^\s+|\s+$/g, '');
-              }
-            }
-            let childEles = p.getElementsByClassName('sort-icon');
-            for(let i = 0; i < childEles[0].childNodes.length; i++) {
-              let ele = childEles[0].childNodes[i];
-              if(ele.getAttribute('class') == c) {
-                addClass(ele, 'active');
-              }else {
-                removeClass(ele, 'active');
-              }
-            }
-          }
-          document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
-            console.log('SortByName');
-            if(nameSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              nameSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              nameSortFlag = true
-            }
-          });
-          document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
-            console.log('SortByNo.');
-            if(noSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              noSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              noSortFlag = true
-            }
-          });
-          document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
-            console.log('SortByTotal')
-            if(totalSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              totalSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              totalSortFlag = true
-            }
-          });
-          // Sort End
+          lastResponse = r;
+          updateStudentsView(r);
         })
     }, this.timeout)
   },
   stop: function() {
     clearInterval(this.timeoutObj)
   }
+}
+
+// 更新 Students'Performance 下的视图
+const updateStudentsView = function(r) {
+  r = (typeof r !== 'undefined') ?  r : lastResponse; // r 缺省时为 lastResponse
+  let theadHtm = '', tbodyHtm = '', quizzHtm = [], myanswer = '';  //thead tbody 题目答案
+  let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
+  if(r.data) {
+    let data = r.data;
+    for(let i = 0; i < data.length; i++) {
+      let item = data[i]
+      item.count = 0
+      item.total = (item.answerSheet ? item.answerSheet.length : quizLen)
+      if(item.rightCount || item.wrongCount) {
+        item.count =  parseInt(item.rightCount) + parseInt(item.wrongCount)
+      }
+    }
+    if(orderBy) { // 需要排序该数据
+      const compare = function(prop, ascFlag) {
+         String.prototype.startWith = function(s) {
+          if (s == null || s == "" || this.length == 0 || s.length > this.length)
+            return false
+          if (this.substr(0, s.length) == s)
+            return true
+          else
+            return false
+          return true
+        }
+        return function(a,b){
+          let value1 = a[prop];
+          let value2 = b[prop];
+          if( prop.startWith('quizz') ) {
+            let idx = parseInt(prop.split('-')[1]) - 1
+            value1 = 0
+            value2 = 0
+            if(a && a.answerSheet && a.answerSheet[idx]) {
+              value1 = a.answerSheet[idx].trueFlag ? 2 : 1
+            }
+            if(b && b.answerSheet && b.answerSheet[idx]) {
+              value2 = b.answerSheet[idx].trueFlag ? 2 : 1
+            }
+          }
+          let ret = 0;
+          value1 > value2 ? ret = 1 : ret = -1;
+          return ascFlag ? ret : -ret;
+        }
+      }
+      const sortList = function(prop, ascFlag) {
+        data.sort(compare(prop, ascFlag));
+      }
+      sortList(orderBy, sortFlag)
+    }
+    let learningCount = 0; // 正在学习人数
+    let leaveCount = 0; // 离开的人数
+    let offlineCount = 0; // 离线的人数
+    for(let i  = 0; i < data.length; i++) {
+      let item = data[i];
+      quizzHtm[i] = '';
+      if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
+        learningCount++;
+      } else if(item.state === 2) {
+        leaveCount++;
+      } else if(item.state === 3) {
+        offlineCount++;
+      }
+      let answerItem = item.answerSheet;
+      if(answerItem) {
+        for(let j = 0; j < answerItem.length; j++) {
+          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
+          quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
+        }
+      } else {
+        for(let j = 0; j < quizLen; j++) {
+          quizzHtm[i] += '<td></td>';
+        }
+      }
+      progress = item.count + '/' + item.total; // 完成进度
+      if(item.total != 0 && item.count === item.total) {
+        progress = "finished";
+      }
+
+      let quiz = quizzHtm[i] == undefined ? " " : quizzHtm[i];
+
+      tbodyHtm += '<tr><td>'+ item.username +'</td>'
+                      + '<td>'+ item.studentNo +'</td>'
+                      + '<td>'+ progress +'</td>'
+                      + quiz
+                + '</tr>';
+    }
+    if(currentTab === 'ModStudent') {
+      // 隐藏学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+    } else {
+      // 显示学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
+      document.getElementsByClassName('student-learning')[0].innerText = learningCount;
+      document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
+      document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
+    }
+    document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
+  }
+}
+
+const bindSortEvent = function() {
+  // Sort Start
+  let nameSortFlag = false,
+      noSortFlag = false,
+      totalSortFlag = false,
+      quizzSortFlag = []; //数组存储题目排序
+  for(let i = 0; i < quizLen; i++) {
+    quizzSortFlag.push(false)
+  }
+  const active = function(p, c) {
+    function hasClass(ele, cls) {
+      cls = cls || '';
+      if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+      return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+    }
+    function addClass(ele, cls) {
+      if (!hasClass(ele, cls)) {
+        ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+      }
+    }
+    function removeClass(ele, cls) {
+      if (hasClass(ele, cls)) {
+        var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+        while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+          newClass = newClass.replace(' ' + cls + ' ', ' ');
+        }
+        ele.className = newClass.replace(/^\s+|\s+$/g, '');
+      }
+    }
+    let childEles = p.getElementsByClassName('sort-icon');
+    for(let i = 0; i < childEles[0].childNodes.length; i++) {
+      let ele = childEles[0].childNodes[i];
+      if(ele.getAttribute('class') == c) {
+        addClass(ele, 'active');
+      }else {
+        removeClass(ele, 'active');
+      }
+    }
+  }
+  document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
+    console.log('SortByName');
+    orderBy = 'username'
+    if(nameSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      nameSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      nameSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
+    orderBy = 'studentNo'
+    if(noSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      noSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      noSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
+    orderBy = 'count'
+    if(totalSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      totalSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      totalSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  let quizzSortEles = document.getElementsByClassName('sort-by-quizz');
+  for(let i = 0; i < quizzSortEles.length; i++) {
+    quizzSortEles[i].addEventListener('click', function(e) {
+      let idx = parseInt( this.getAttribute('idx') )
+      orderBy = 'quizz-' + idx
+      if(quizzSortFlag[idx]) {
+        // 倒序
+        active(this, 'el-icon-caret-top')
+        quizzSortFlag[idx] = false
+        sortFlag = false
+      } else {
+        // 正序
+        active(this, 'el-icon-caret-bottom')
+        quizzSortFlag[idx] = true
+        sortFlag = true
+      }
+      updateStudentsView()
+    });
+  }
+  // Sort End
 }
 
 const beginClass = function(classId) {
@@ -286,9 +373,9 @@ const beginClass = function(classId) {
 
   let studentMod = getMod('ModStudent');
   let quizzNo = ''; // 题目编号
-  let quizLen = getMods('ModQuizz').length;
+  quizLen = getMods('ModQuizz').length;
   for(let i = 0; i < quizLen; i++) { // 题目序号
-    quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'">'
+    quizzNo += '<td><div class="sort-btn sort-by-quizz" idx="'+ parseInt(i+1) +'">'
             + '<span>Quiz'+ parseInt(i+1) +'</span>'
             + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
             + '<div class="quizContent">' + getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0].innerHTML + '</div>'
@@ -313,7 +400,7 @@ const beginClass = function(classId) {
       + '</table>'
   + '</div>';
   studentMod.innerHTML = studetDataHtm;
-  // Please wait… The summary will be generated after the teaching is finished.
+  bindSortEvent();
   let summaryMod = getMod('ModSummary');
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
                         + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
