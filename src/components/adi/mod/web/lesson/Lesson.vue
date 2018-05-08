@@ -375,10 +375,24 @@ const beginClass = function(classId) {
   let quizzNo = ''; // 题目编号
   quizLen = getMods('ModQuizz').length;
   for(let i = 0; i < quizLen; i++) { // 题目序号
+    let quizContent = getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0];
+    let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer");
+    let optItem = quizContent.getElementsByClassName("opt-item"); //获取所有题目选项
+    let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(","); // 将字符串转换成数组
+
+    for(let j = 0; j < optItem.length; j++) {
+      let resetHtm = optItem[j].innerHTML.replace(/\s+/g,"")[0];
+      for(let k = 0; k < resetData.length; k++) {
+        if(resetData[k] == resetHtm) {
+          optItem[j].className += ' state';
+        }
+      }
+    }
+
     quizzNo += '<td><div class="sort-btn sort-by-quizz" idx="'+ parseInt(i+1) +'">'
             + '<span>Quiz'+ parseInt(i+1) +'</span>'
             + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
-            + '<div class="quizContent">' + getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0].innerHTML + '</div>'
+            + '<div class="quizContent">' + quizContent.innerHTML + '</div>'
             + '</div></td>';
   }
 
@@ -752,7 +766,7 @@ span.w::before {
     width: 100%;
     min-width: 380px;
     right: 0;
-    padding: 20px;
+    padding: 25px 20px 15px;
     text-align: left;
     font-size: 14px;
     color: #101010;
