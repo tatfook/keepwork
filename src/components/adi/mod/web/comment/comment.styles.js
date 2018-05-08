@@ -21,6 +21,7 @@ export default [
         }
       }
     },
+    useImage: true,
     cover: require('@/../static/adi/comment/comment.png'),
     preview: {
       outter: {
