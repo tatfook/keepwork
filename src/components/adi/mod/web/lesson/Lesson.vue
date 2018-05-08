@@ -51,7 +51,7 @@ const getMod = function(name) {
   return null
 }
 
-const lessonHost = 'http://127.0.0.1:3000'
+const lessonHost = 'http://localhost:3000'
 let vuex = {}
 let firstInFlag = true
 let self
@@ -526,6 +526,7 @@ export default {
         // 生成一个 Record，返回做题的地址
         // 如存在课程总结 params 追加一个 lessonPerformance
         if(self.isLogined) {
+          let btnPaly = document.getElementById('btnPlay');
           let params = {}
           params.username = self.username
           params.lessonUrl = self.activePageUrl
@@ -554,19 +555,38 @@ export default {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             })
             .then(response => {
-              console.log(response)
               let r = response.data
               if(r.err == 0) {
-                // TODO:open客户端传递我们的地址
-                window.location = r.data.url + '?device=pc&sn=' + r.data.recordSn
+                // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
+                let mRecordSn =  r.data.recordSn
+                btnPaly.setAttribute("disabled","true")
+                window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
+                let timerLearnState = setInterval( function () {
+                  // record/learnDetailBySn 获取数据后 DOM 操作
+                  let params = {
+                    params: {sn: mRecordSn }
+                  }
+                  axios.get(lessonHost + '/api/record/learnDetailBySn', params)
+                    .then(response => {
+                      let r = response.data
+                      if(r.data.state == 2) {
+                        // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
+                        let summaryMod = getMod('ModSummary')
+                        document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
+                        let link = lessonHost + '/learnedRecord/' + mRecordSn;
+                        summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                        clearInterval(timerLearnState)
+                      }
+                    })
+                }, 5000) // 5s
               }
             })
         } else {
-          console.log('未登录')
+          self.$message.error("未登录~");
         }
       }
       options.classOpClick = function() {
-        console.log('class Op Click')
+        btnClass = document.getElementById('btnClass');
         let params = {}
         // let tipClass = document.getElementById('tipClass')
         params.username = self.username
@@ -586,6 +606,7 @@ export default {
             }
           }
           params.lessonPerformance = lessonPerformance
+          params.quizzNum = getMods('ModQuizz').length
         }
         if( classState == 0 ) {
           // begin class
@@ -603,6 +624,7 @@ export default {
           })
         } else if ( classState == 1 ) {
           // finish class
+          btnClass.lastChild.innerText = 'Dismiss the Class';
           self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
@@ -615,14 +637,12 @@ export default {
             })
             .then(response => {
               let r = response.data
-              console.log(r)
-              // TODO: 展现 Summary 数据
+              // 展现 Summary 数据
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
-                document.domain = 'localhost';
-                let host = 'http://localhost:3000';
-                let link = host + '/taughtedRecord/' + classId;
+                document.domain = 'localhost';// TODO: 后面需要修改为 keepwork
+                let link = lessonHost + '/taughtedRecord/' + r.data.classId;
                 summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
             })

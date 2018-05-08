@@ -165,9 +165,9 @@ export default {
           if(r.data.u){
             sn = r.data.u.recordSn
             let ans = r.data.u.answerSheet
-            if(ans) {
+            if(ans && ans[0].id) {
               answerSheet = ans;
-              // TODO: 恢复答题状态
+              // 恢复答题状态
               for(let i = 0; i < ans.length; i++) {
                 var item  = ans[i];
                 let data = this.properties.data;

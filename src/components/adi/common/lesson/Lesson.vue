@@ -12,7 +12,7 @@
             </ol>
           </div>
           <el-row class="lesson-button">
-            <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
+            <el-button class="btn-play" @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
             <el-tooltip class="item" effect="dark" content="(Click here to begin the class)" v-if="properties.vip" placement="top">
               <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">Begin the Class</el-button>
             </el-tooltip>
@@ -22,7 +22,7 @@
     </el-row>
     <el-row>
       <el-tabs class="tabs" value="first" @tab-click="tabClick">
-        <div v-if="properties.vip" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
+        <div v-if="properties.vip" style="display: none" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
@@ -133,36 +133,38 @@ export default {
   .tabs {
     padding-top: 20px;
   }
-  .btn-begin:disabled {
+
+  .el-button:disabled {
     background:#D2D2D2;
+    border: 1px solid #D2D2D2;
     cursor: not-allowed;
     color: white;
     pointer-events: none;
   }
 
-.el-tabs__item {
-  font-size: 20px;
-  height: 53px;
-  line-height:40px;
+  .el-tabs__item {
+    font-size: 20px;
+    height: 53px;
+    line-height:40px;
 
-}
-.el-tabs__content {
-  overflow: inherit;
-}
+  }
+  .el-tabs__content {
+    overflow: inherit;
+  }
 
-.student-info {
-  position: absolute;
-  top: -35px;
-  left: 315px;
-  z-index: 99;
-  color: #000;
-  font-size: 12px;
-  color: #409EFE;
-}
+  .student-info {
+    position: absolute;
+    top: -35px;
+    left: 315px;
+    z-index: 99;
+    color: #000;
+    font-size: 12px;
+    color: #409EFE;
+  }
 
-.student-info span {
-  color: #FF414A;
-}
+  .student-info span {
+    color: #FF414A;
+  }
 
 </style>
 
