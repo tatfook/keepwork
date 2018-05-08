@@ -84,7 +84,7 @@ export default {
       let mod = modLoader.load(modType)
       let modComponents = mod.components
       let currentStyle = mod.styles[modStyleID]
-      let currentTemplate = mod.templates[currentStyle.templateID || 0]
+      let currentTemplate = mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
 
       let checkKeys = (item, thisProp) => {
         if(typeof(item) == 'object') {
