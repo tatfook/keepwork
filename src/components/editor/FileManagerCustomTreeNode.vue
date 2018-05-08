@@ -12,6 +12,7 @@
       <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+      <!-- <el-button  class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'> -->
       </el-button>
       <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
@@ -47,7 +48,8 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      gitlabRemoveFolder: 'gitlab/removeFolder'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -92,7 +94,39 @@ export default {
 
       return newFileName && newFileName.trim()
     },
+    removeFolder(data) {
+      const self = this
+      let pathArr = this.data.path.split('/')
+      let folderName = pathArr[pathArr.length - 1]
+      const toRemoveFiles = []
+      const recursionFile = (data) => {
+        if (!/.md$/.test(data.path)) {
+          toRemoveFiles.push(`${data.path}/.gitignore.md`)
+        } else {
+          toRemoveFiles.push(data.path)
+        }
+        data.children && data.children.forEach(item => recursionFile(item))
+      }
+      recursionFile(data)
+
+      this.$confirm(toRemoveFiles.length - 1 > 0 ? `确定要删除该文件夹及里面的${toRemoveFiles.length - 1}个文件吗?` : `确定要删除该文件夹?`,self.$t('editor.delete'), {
+        confirmButtonText: self.$t('el.messagebox.confirm'),
+        cancelButtonText: self.$t('el.messagebox.cancel'),
+        type: 'error'
+      })
+      .then(async () => {
+        this.removePending = true
+        await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+        this.removePending = false
+      })
+      .catch(e => console.error(e))
+    },
     removeFile() {
+      if (this.data.type === 'tree') {
+        this.removeFolder(this.data)
+        return
+      }
+
       let self = this
 
       let pathArr = this.data.path.split('/')
@@ -105,7 +139,7 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
-          this.removePending = false
+          this.removePending = true
         })
         .catch(e => console.error(e))
     },
@@ -149,7 +183,8 @@ export default {
       return !this.isFile
     },
     isRemovable() {
-      return this.isFile
+      // return this.isFile
+      return !this.isFirstLevel
     },
     isSettable() {
       return this.isWebsite || this.isFile
