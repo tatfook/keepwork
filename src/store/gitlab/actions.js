@@ -177,6 +177,46 @@ const actions = {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`
     await dispatch('createFile', { path: newEmptyFilePath })
   },
+  async removeFolder(context, { paths }) {
+    let { commit, dispatch } = context
+
+    for (let i = 0; i < paths.length; i++) {
+      let {
+        branch,
+        gitlab,
+        projectId,
+        options
+      } = await getGitlabFileParams(context, { path: paths[i] })
+      try {
+        await gitlab.projects.repository.files.remove(projectId, paths[i], branch, options)
+        dispatch('closeOpenedFile', { path: paths[i] }, {root: true})
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // await Promise.all(paths.map(async path => {
+    //   let {
+    //     branch,
+    //     gitlab,
+    //     projectId,
+    //     options
+    //   } = await getGitlabFileParams(context, { path })
+    //   return gitlab.projects.repository.files.remove(projectId, path, branch, options)
+    // }))
+    let path = paths[0]
+    let {
+      username,
+      name,
+      branch
+    } = await getGitlabFileParams(context, {path: paths[0]})
+    let payload = { path, branch }
+    commit(REMOVE_FILE_SUCCESS, payload)
+
+    await dispatch('getRepositoryTree', {
+      path: `${username}/${name}`,
+      useCache: false
+    })
+  },
   async removeFile(context, { path }) {
     let { commit, dispatch } = context
     let {
