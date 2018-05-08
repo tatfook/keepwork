@@ -45,6 +45,9 @@ const getters = {
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
   },
+  activePropertyOptions: state => {
+    if (state.activePropertyOptions) return state.activePropertyOptions
+  },
   activePropertyData: (state, { activeProperty }) => {
     return _.get(state, ['activePage', 'activeMod', 'data', activeProperty], {})
   },
