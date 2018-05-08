@@ -1,8 +1,7 @@
 export default [
   {
     theme: {
-      root: ['mod-space'],
-      rootRow: ['mod-full-width']
+      root: ['mod-space']
     },
     options: {
       config: {

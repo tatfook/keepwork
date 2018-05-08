@@ -108,11 +108,20 @@ export default {
 </script>
 
 <style>
-.el-collapse-item__header .el-collapse-item__arrow {
-  float: left;
+
+.el-collapse-item__header {
+  display: flex;
+  align-items: center;
+  padding-right: 45px;
+  line-height:18px;
+  position: relative;
 }
+
 .el-collapse-item__header .delete {
-  float:right;
+  position: absolute;
+  right: 0;
+  top: 5px;
+  z-index: 2;
 }
 
 .animationForm{
@@ -126,20 +135,15 @@ export default {
   margin-right:10px;
   vertical-align: middle;
 }
+
 .tree-data-dialog .link {
+  flex:1;
   text-decoration: none;
   margin-left: 10px;
   color: #409eff;
-  width: 60px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.tree-data-dialog .title {
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  -o-text-overflow: ellipsis;
-  white-space:nowrap;
-  width:40px;
-}
+
 </style>

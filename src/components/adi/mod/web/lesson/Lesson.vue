@@ -106,7 +106,7 @@ const init = function(){
         let r = response.data
         if(r.err === 0) {
           // 可以恢复状态
-          beginClass(r.data.classId)
+          beginClass(r.data.classId);
         }
       })
     }
@@ -153,7 +153,6 @@ const timer = {
                   myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
                   quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
                   total = answerItem.length; // 题目总计
-                  console.log(quizzHtm[i], myanswer);
                 }
               }
 
@@ -272,13 +271,17 @@ const beginClass = function(classId) {
   classId = classId
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
-  self.$alert("The class ID is " + classId + ".<br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Students' Performance.OK<br/>Attention: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.", 'Info', {
+  self.$alert("<div class='txt-one'>The class ID is <span>" + classId + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <a href='javascript:;'>Students' Performance</a></div>"
+            + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
     confirmButtonText: 'OK',
     callback: action => {
-      self.$notify({
-        title: 'ClassId:',
-        message: classId,
+      self.$notify.info({
+        title: 'Class ID:',
+        dangerouslyUseHTMLString: true,
+        message: '<div class="showMessage"><strong>'+ classId +'</strong><div class="prompt el-popover">Class ID is the unique identifier for this class.'
+                  + 'Students in this class need to login with this identifier to start learning the lesson. '
+                  + 'This ensures the student learning data is sent to the system correctly.</div></div>',
         duration: 0,
         showClose: false
       })
@@ -310,7 +313,7 @@ const beginClass = function(classId) {
             + '</div></td>';
   }
 
-  let studetDataHtm = '<div class="student-taughted-details">'
+  let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-32">'
         + '<div class="express">'
           + '<span class="r">right</span>'
           + '<span class="w">wrong</span>'
@@ -333,6 +336,7 @@ const beginClass = function(classId) {
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
                         + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
                       + '</div>';
+
   document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
 }
 
@@ -510,7 +514,7 @@ export default {
           .then(response => {
             let r = response.data
             if(r.err == 0) {
-              beginClass(r.data.classId)
+              beginClass(r.data.classId);
             } else {
               // error
             }
@@ -595,7 +599,7 @@ export default {
     transform: translate(-50%,-50%);
     z-index: 2;
     background: url('/static/adi/lesson/play_btn_action.png') center center no-repeat;
-    background-size: contain
+    background-size: contain;
 }
 
 .animations-title {
@@ -757,5 +761,57 @@ span.w::before {
 .table-wrap .wrong {
     color: #F53838;
 }
-
+.el-notification {
+    overflow: inherit;
+}
+.el-notification:hover .showMessage .prompt{
+    display: block;
+}
+.el-notification__content .showMessage {
+    position: relative;
+}
+.el-notification__content .showMessage .prompt {
+    display: none;
+    top: 40px;
+    left: 0;
+    z-index: 9;
+}
+.el-notification__content .showMessage .prompt::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 8px;
+    -webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+    border-bottom-color: #b3b4b7;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: #fff;
+}
+.el-notification__content .showMessage > strong{
+    color: #FF414A;
+    font-weight: bold;
+}
+.txt-one {
+  padding: 10px 10px 15px;
+  font-size: 16px;
+  color: #000;
+}
+.txt-two {
+  padding: 10px 10px 15px;
+  font-size: 14px;
+  color:#999;
+}
+.txt-one a {
+  text-decoration: none;
+  color: #409EFF;
+}
+.txt-one span, .txt-two span {
+  color: #F75858;
+}
 </style>
