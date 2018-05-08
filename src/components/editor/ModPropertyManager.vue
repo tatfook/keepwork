@@ -6,7 +6,7 @@
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
-        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :isCardActive='key === activeProperty'></PropTypeCard>
+        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class='styles-container'>
@@ -72,6 +72,7 @@ export default {
     ...mapGetters({
       activeMod: 'activeMod',
       activeProperty: 'activeProperty',
+      activePropertyOptions: 'activePropertyOptions',
       activePropertyData: 'activePropertyData',
       hasActiveMod: 'hasActiveMod',
       hasActiveProperty: 'hasActiveProperty',

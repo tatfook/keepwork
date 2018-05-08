@@ -15,6 +15,7 @@ const MOVE_MOD = 'MOVE_MOD'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
+const SET_ACTIVE_PROPERTY_OPTIONS = 'SET_ACTIVE_PROPERTY_OPTIONS'
 const REFRESH_MOD_ATTRIBUTES = 'REFRESH_MOD_ATTRIBUTES'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
 const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
@@ -52,6 +53,7 @@ export const props = {
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
+  SET_ACTIVE_PROPERTY_OPTIONS,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
@@ -142,6 +144,9 @@ const mutations = {
   [SET_ACTIVE_PROPERTY](state, property) {
     if (!state.activePage.activeMod) return
     Vue.set(state.activePage, 'activeProperty', property)
+  },
+  [SET_ACTIVE_PROPERTY_OPTIONS](state, playload) {
+    Vue.set(state, 'activePropertyOptions', playload)
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
     const modList = activeModList(state)

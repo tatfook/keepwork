@@ -21,6 +21,7 @@ const {
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
+  SET_ACTIVE_PROPERTY_OPTIONS,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
@@ -218,6 +219,9 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')
+  },
+  setActivePropertyOptions({ commit }, playload) {
+    commit(SET_ACTIVE_PROPERTY_OPTIONS, playload)
   },
   setActivePropertyTabType({ commit }, type) {
     commit(UPDATE_PROPERTY_TAB_TYPE, type)
