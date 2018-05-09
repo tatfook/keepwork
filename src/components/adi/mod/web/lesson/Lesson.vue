@@ -51,14 +51,18 @@ const getMod = function(name) {
   return null
 }
 
-const lessonHost = 'http://127.0.0.1:3000'
+const lessonHost = 'http://localhost:3000'
 let vuex = {}
 let firstInFlag = true
 let self
 let btnClass
 let classState = 0 // 0 未开始 1 已开始 2 已结束
-let classId
-let currentTab = 'ModOverview'
+let classId // classID
+let currentTab = 'ModOverview' // 当前选中的页卡
+let quizLen
+let orderBy // 当前排序
+let sortFlag // 'false' 正序 'true' 倒序
+let lastResponse
 
 const init = function(){
   console.log('init')
@@ -88,7 +92,7 @@ const init = function(){
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
                       + '</div>';
       let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">Teaching is not started yet. There is no summary here.</div>'
+                        + '<div class="no-data">Learning is not started yet. There is no summary here.</div>'
                       + '</div>';
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
       lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
@@ -120,149 +124,232 @@ const timer = {
     clearInterval(this.timeoutObj)
     return this
   },
-  start: function(username) {
+  start: function() {
     this.timeoutObj = setInterval( function () {
       // /class/performance 获取数据后 DOM 操作
-      let params = {username: username}
+      let params = {username: self.username}
       axios.post(lessonHost + '/api/class/performance', qs.stringify(params),
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
         .then(response => {
           let r = response.data;
-          let theadHtm = '', tbodyHtm = '', quizzHtm = [''], myanswer = '';  //thead tbody 题目答案
-          let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
-
-          if(r.data) {
-            let learningCount = 0; // 正在学习人数
-            let leaveCount = 0; // 离开的人数
-            let offlineCount = 0; // 离线的人数
-            let data = r.data;
-            for(let i  = 0; i < data.length; i++) {
-              let item = data[i];
-              if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
-                learningCount++;
-              } else if(item.state === 2) {
-                leaveCount++;
-              } else if(item.state === 3) {
-                offlineCount++;
-              }
-              let answerItem = item.answerSheet;
-              if(answerItem) {
-                for(let j = 0; j < answerItem.length; j++) {
-                  myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
-                  quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
-                  total = answerItem.length; // 题目总计
-                }
-              }
-
-              if(data[i].rightCount || data[i].wrongCount) {
-                count =  parseInt(data[i].rightCount) + parseInt(data[i].wrongCount);
-              }
-              progress = count + '/' + total; // 完成进度
-              if(total != 0 && count === total) {
-                progress = "finished";
-              }
-
-              let quiz = quizzHtm[i] == undefined ? " " : quizzHtm[i];
-
-              tbodyHtm += '<tr><td>'+ data[i].username +'</td>'
-                             + '<td>'+ data[i].studentNo +'</td>'
-                             + '<td>'+ progress +'</td>'
-                             + quiz
-                        + '</tr>';
-            }
-            if(currentTab === 'ModStudent') {
-              // 隐藏学习信息
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
-            } else {
-              // 显示学习信息
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
-              document.getElementsByClassName('student-learning')[0].innerText = learningCount;
-              document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
-              document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
-            }
-
-            document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
-          }
-          // Sort Start
-          let nameSortFlag = false,
-              noSortFlag = false,
-              totalSortFlag = false,
-              quizzSortFlag = []; //数组存储题目排序
-          const active = function(p, c) {
-            function hasClass(ele, cls) {
-              cls = cls || '';
-              if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
-              return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
-            }
-            function addClass(ele, cls) {
-              if (!hasClass(ele, cls)) {
-                ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
-              }
-            }
-            function removeClass(ele, cls) {
-              if (hasClass(ele, cls)) {
-                var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
-                while (newClass.indexOf(' ' + cls + ' ') >= 0) {
-                  newClass = newClass.replace(' ' + cls + ' ', ' ');
-                }
-                ele.className = newClass.replace(/^\s+|\s+$/g, '');
-              }
-            }
-            let childEles = p.getElementsByClassName('sort-icon');
-            for(let i = 0; i < childEles[0].childNodes.length; i++) {
-              let ele = childEles[0].childNodes[i];
-              if(ele.getAttribute('class') == c) {
-                addClass(ele, 'active');
-              }else {
-                removeClass(ele, 'active');
-              }
-            }
-          }
-          document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
-            console.log('SortByName');
-            if(nameSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              nameSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              nameSortFlag = true
-            }
-          });
-          document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
-            console.log('SortByNo.');
-            if(noSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              noSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              noSortFlag = true
-            }
-          });
-          document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
-            console.log('SortByTotal')
-            if(totalSortFlag) {
-              // 倒序
-              active(this, 'el-icon-caret-top')
-              totalSortFlag = false
-            } else {
-              // 正序
-              active(this, 'el-icon-caret-bottom')
-              totalSortFlag = true
-            }
-          });
-          // Sort End
+          lastResponse = r;
+          updateStudentsView(r);
         })
     }, this.timeout)
   },
   stop: function() {
     clearInterval(this.timeoutObj)
   }
+}
+
+// 更新 Students'Performance 下的视图
+const updateStudentsView = function(r) {
+  r = (typeof r !== 'undefined') ?  r : lastResponse; // r 缺省时为 lastResponse
+  let theadHtm = '', tbodyHtm = '', quizHtm = [], myanswer = '';  //thead tbody 题目答案
+  let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
+  if(r.data) {
+    let data = r.data;
+    for(let i = 0; i < data.length; i++) {
+      let item = data[i]
+      item.count = 0
+      item.total = (item.answerSheet ? item.answerSheet.length : quizLen)
+      if(item.rightCount || item.wrongCount) {
+        item.count =  parseInt(item.rightCount) + parseInt(item.wrongCount)
+      }
+    }
+    if(orderBy) { // 需要排序该数据
+      const compare = function(prop, ascFlag) {
+         String.prototype.startWith = function(s) {
+          if (s == null || s == "" || this.length == 0 || s.length > this.length)
+            return false
+          if (this.substr(0, s.length) == s)
+            return true
+          else
+            return false
+          return true
+        }
+        return function(a,b){
+          let value1 = a[prop];
+          let value2 = b[prop];
+          if( prop.startWith('quiz') ) {
+            let idx = parseInt(prop.split('-')[1]) - 1
+            value1 = 0
+            value2 = 0
+            if(a && a.answerSheet && a.answerSheet[idx]) {
+              value1 = a.answerSheet[idx].trueFlag ? 2 : 1
+            }
+            if(b && b.answerSheet && b.answerSheet[idx]) {
+              value2 = b.answerSheet[idx].trueFlag ? 2 : 1
+            }
+          }
+          let ret = 0;
+          value1 > value2 ? ret = 1 : ret = -1;
+          return ascFlag ? ret : -ret;
+        }
+      }
+      const sortList = function(prop, ascFlag) {
+        data.sort(compare(prop, ascFlag));
+      }
+      sortList(orderBy, sortFlag)
+    }
+    let learningCount = 0; // 正在学习人数
+    let leaveCount = 0; // 离开的人数
+    let offlineCount = 0; // 离线的人数
+    for(let i  = 0; i < data.length; i++) {
+      let item = data[i];
+      quizHtm[i] = '';
+      if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
+        learningCount++;
+      } else if(item.state === 2) {
+        leaveCount++;
+      } else if(item.state === 3) {
+        offlineCount++;
+      }
+      let answerItem = item.answerSheet;
+      if(answerItem) {
+        for(let j = 0; j < answerItem.length; j++) {
+          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
+          quizHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
+        }
+      } else {
+        for(let j = 0; j < quizLen; j++) {
+          quizHtm[i] += '<td></td>';
+        }
+      }
+      progress = item.count + '/' + item.total; // 完成进度
+      if(item.total != 0 && item.count === item.total) {
+        progress = "finished";
+      }
+
+      let quiz = quizHtm[i] == undefined ? " " : quizHtm[i];
+
+      tbodyHtm += '<tr><td>'+ item.username +'</td>'
+                      + '<td>'+ item.studentNo +'</td>'
+                      + '<td>'+ progress +'</td>'
+                      + quiz
+                + '</tr>';
+    }
+    if(currentTab === 'ModStudent') {
+      // 隐藏学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+    } else {
+      // 显示学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
+      document.getElementsByClassName('student-learning')[0].innerText = learningCount;
+      document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
+      document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
+    }
+    document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
+  }
+}
+
+const bindSortEvent = function() {
+  // Sort Start
+  let nameSortFlag = false,
+      noSortFlag = false,
+      totalSortFlag = false,
+      quizSortFlag = []; //数组存储题目排序
+  for(let i = 0; i < quizLen; i++) {
+    quizSortFlag.push(false)
+  }
+  const active = function(p, c) {
+    function hasClass(ele, cls) {
+      cls = cls || '';
+      if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+      return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+    }
+    function addClass(ele, cls) {
+      if (!hasClass(ele, cls)) {
+        ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+      }
+    }
+    function removeClass(ele, cls) {
+      if (hasClass(ele, cls)) {
+        var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+        while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+          newClass = newClass.replace(' ' + cls + ' ', ' ');
+        }
+        ele.className = newClass.replace(/^\s+|\s+$/g, '');
+      }
+    }
+    let childEles = p.getElementsByClassName('sort-icon');
+    for(let i = 0; i < childEles[0].childNodes.length; i++) {
+      let ele = childEles[0].childNodes[i];
+      if(ele.getAttribute('class') == c) {
+        addClass(ele, 'active');
+      }else {
+        removeClass(ele, 'active');
+      }
+    }
+  }
+  document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
+    console.log('SortByName');
+    orderBy = 'username'
+    if(nameSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      nameSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      nameSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
+    orderBy = 'studentNo'
+    if(noSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      noSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      noSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
+    orderBy = 'count'
+    if(totalSortFlag) {
+      // 倒序
+      active(this, 'el-icon-caret-top')
+      totalSortFlag = false
+      sortFlag = false
+    } else {
+      // 正序
+      active(this, 'el-icon-caret-bottom')
+      totalSortFlag = true
+      sortFlag = true
+    }
+    updateStudentsView()
+  });
+  let quizSortEles = document.getElementsByClassName('sort-by-quiz');
+  for(let i = 0; i < quizSortEles.length; i++) {
+    quizSortEles[i].addEventListener('click', function(e) {
+      let idx = parseInt( this.getAttribute('idx') )
+      orderBy = 'quiz-' + idx
+      if(quizSortFlag[idx]) {
+        // 倒序
+        active(this, 'el-icon-caret-top')
+        quizSortFlag[idx] = false
+        sortFlag = false
+      } else {
+        // 正序
+        active(this, 'el-icon-caret-bottom')
+        quizSortFlag[idx] = true
+        sortFlag = true
+      }
+      updateStudentsView()
+    });
+  }
+  // Sort End
 }
 
 const beginClass = function(classId) {
@@ -289,10 +376,10 @@ const beginClass = function(classId) {
   });
 
   let studentMod = getMod('ModStudent');
-  let quizzNo = ''; // 题目编号
-  let quizLen = getMods('ModQuizz').length;
+  let quizNo = ''; // 题目编号
+  quizLen = getMods('ModQuiz').length;
   for(let i = 0; i < quizLen; i++) { // 题目序号
-    let quizContent = getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0];
+    let quizContent = getMods('ModQuiz')[i].getElementsByClassName("quiz-content")[0];
     let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer");
     let optItem = quizContent.getElementsByClassName("opt-item"); //获取所有题目选项
     let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(","); // 将字符串转换成数组
@@ -306,7 +393,7 @@ const beginClass = function(classId) {
       }
     }
 
-    quizzNo += '<td><div class="sort-btn sort-by-quizz'+ parseInt(i+1) +'">'
+    quizNo += '<td><div class="sort-btn sort-by-quiz" idx="'+ parseInt(i+1) +'">'
             + '<span>Quiz'+ parseInt(i+1) +'</span>'
             + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
             + '<div class="quizContent">' + quizContent.innerHTML + '</div>'
@@ -323,15 +410,15 @@ const beginClass = function(classId) {
             + '<tr class="tbl-head">'
               + '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
               + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + '<td><div class="sort-btn sort-by-total"><span>Quizzes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + quizzNo
+              + '<td><div class="sort-btn sort-by-total"><span>Quizes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+              + quizNo
             +'</tr>'
           + '</thead>'
           + '<tbody class="tbl-body"></tbody>'
       + '</table>'
   + '</div>';
   studentMod.innerHTML = studetDataHtm;
-  // Please wait… The summary will be generated after the teaching is finished.
+  bindSortEvent();
   let summaryMod = getMod('ModSummary');
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
                         + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
@@ -365,7 +452,7 @@ export default {
         // 切换显示的页卡
         const sliceMod = function(name) {
           currentTab = name
-           // ["ModLesson", "ModMarkdown", "ModQuizz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
+           // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
           if(name == 'ModOverview') {
             // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
             for(let i = 0; i < mods.length; i ++) {
@@ -444,6 +531,7 @@ export default {
         // 生成一个 Record，返回做题的地址
         // 如存在课程总结 params 追加一个 lessonPerformance
         if(self.isLogined) {
+          let btnPaly = document.getElementById('btnPlay');
           let params = {}
           params.username = self.username
           params.lessonUrl = self.activePageUrl
@@ -451,7 +539,7 @@ export default {
           params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
           params.goals = self.modData.lesson.LessonGoals
           params.lessonNo = self.modData.lesson.LessonNo
-          let quizzs = getMods('ModQuizz')
+          let quizs = getMods('ModQuiz')
           let lessonGet = getMod('ModLessonGet')
           let lessonPerformance = ''
           if(lessonGet) {
@@ -464,7 +552,7 @@ export default {
             }
             params.lessonPerformance = lessonPerformance
           }
-          console.log(quizzs)
+          console.log(quizs)
           // lessonPerformance、
           console.log(params)
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
@@ -472,19 +560,38 @@ export default {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             })
             .then(response => {
-              console.log(response)
               let r = response.data
               if(r.err == 0) {
-                // TODO:open客户端传递我们的地址
-                window.location = r.data.url + '?device=pc&sn=' + r.data.recordSn
+                // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
+                let mRecordSn =  r.data.recordSn
+                btnPaly.setAttribute("disabled","true")
+                window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
+                let timerLearnState = setInterval( function () {
+                  // record/learnDetailBySn 获取数据后 DOM 操作
+                  let params = {
+                    params: {sn: mRecordSn }
+                  }
+                  axios.get(lessonHost + '/api/record/learnDetailBySn', params)
+                    .then(response => {
+                      let r = response.data
+                      if(r.data.state == 2) {
+                        // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
+                        let summaryMod = getMod('ModSummary')
+                        document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
+                        let link = lessonHost + '/learnedRecord/' + mRecordSn;
+                        summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                        clearInterval(timerLearnState)
+                      }
+                    })
+                }, 5000) // 5s
               }
             })
         } else {
-          console.log('未登录')
+          self.$message.error("未登录~");
         }
       }
       options.classOpClick = function() {
-        console.log('class Op Click')
+        btnClass = document.getElementById('btnClass');
         let params = {}
         // let tipClass = document.getElementById('tipClass')
         params.username = self.username
@@ -504,6 +611,7 @@ export default {
             }
           }
           params.lessonPerformance = lessonPerformance
+          params.quizNum = getMods('ModQuiz').length
         }
         if( classState == 0 ) {
           // begin class
@@ -521,6 +629,8 @@ export default {
           })
         } else if ( classState == 1 ) {
           // finish class
+          console.log(this);
+          btnClass.lastChild.innerText = 'Dismiss the Class';
           self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
@@ -533,14 +643,12 @@ export default {
             })
             .then(response => {
               let r = response.data
-              console.log(r)
-              // TODO: 展现 Summary 数据
+              // 展现 Summary 数据
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
-                document.domain = 'localhost';
-                let host = 'http://localhost:3000';
-                let link = host + '/taughtedRecord/' + classId;
+                document.domain = 'localhost';// TODO: 后面需要修改为 keepwork
+                let link = lessonHost + '/taughtedRecord/' + r.data.classId;
                 summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
             })
@@ -626,8 +734,9 @@ export default {
   text-align: center;
 }
 .student-taughted-details {
-    margin: 40px 0;
+    padding: 40px 20px;
     min-height: 500px;
+    box-sizing: border-box;
 }
 .express >span {
     margin-right: 10px;
@@ -680,11 +789,11 @@ span.w::before {
     top: 70px;
     background-color: #fff;
     border: 2px solid #98CBFF;
-    border-radius: 40px;
+    border-radius: 4px;
     width: 100%;
     min-width: 380px;
     right: 0;
-    padding: 25px 20px 15px;
+    padding: 15px 10px 0;
     text-align: left;
     font-size: 14px;
     color: #101010;
@@ -702,17 +811,17 @@ span.w::before {
 }
 
 .table-wrap .quizContent.quizContent::before {
-    content: "";
-    position: absolute;
-    border: 2px solid #98cbff;
-    width: 30px;
-    height: 50px;
-    border-left: 0;
-    border-bottom: 0;
-    transform: rotate(-59deg);
-    right: 50px;
-    background-color: #fff;
-    top: -28px;
+  content: "";
+  position: absolute;
+  border: 2px solid #98cbff;
+  width: 20px;
+  height: 20px;
+  border-left: 0;
+  border-bottom: 0;
+  transform: rotate(-45deg);
+  right: 60px;
+  background-color: #fff;
+  top: -13px;
 }
 
 .table-wrap thead td:last-child {
@@ -740,6 +849,13 @@ span.w::before {
 
 .table-wrap .sort-icon i.active{
     color: #49A5F8;
+}
+
+.table-wrap .sort-by-quiz i {
+    color: #F53838;
+}
+.table-wrap .sort-by-quiz i.active {
+    color: #27CE2F;
 }
 
 .table-wrap tbody tr:nth-child(even) {

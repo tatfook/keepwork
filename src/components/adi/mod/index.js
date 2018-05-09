@@ -12,7 +12,7 @@ import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModLesson from './web/lesson'
-import ModQuizz from './web/quizz'
+import ModQuiz from './web/quiz'
 import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
 import ModPageList from './web/pageList'
@@ -32,7 +32,7 @@ export const modList = {
   ModVipRead,
   ModComment,
   ModLesson,
-  ModQuizz,
+  ModQuiz,
   ModTeachers,
   ModLessonGet,
   ModPageList

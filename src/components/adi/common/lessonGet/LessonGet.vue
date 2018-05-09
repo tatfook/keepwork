@@ -18,5 +18,8 @@ export default {
     margin-top:25px;
     font-size: 16px;
     color:#333;
+    font-family: inherit;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 </style>

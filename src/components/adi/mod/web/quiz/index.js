@@ -1,12 +1,12 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
-import styles from './quizz.styles'
-import templates from './quizz.templates'
+import styles from './quiz.styles'
+import templates from './quiz.templates'
 
-const name = 'ModQuizz'
+const name = 'ModQuiz'
 
 const components = {
-  quizz: 'AdiQuizz'
+  quiz: 'AdiQuiz'
 }
 
 const properties = generateProperties(name, components)

@@ -5,7 +5,7 @@ import board from './BoardType'
 import autoSizeInput from './AutoSizeInputType'
 import linkTarget from './LinkTargetType'
 import switchButton from './SwitchButtonType'
-import quizz from './QuizzType'
+import quiz from './QuizType'
 import animations from './AnimationsType'
 import gallery from './GalleryType'
 
@@ -17,7 +17,7 @@ export default {
   autoSizeInput,
   linkTarget,
   switchButton,
-  quizz,
+  quiz,
   animations,
   gallery
 }

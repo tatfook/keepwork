@@ -15,14 +15,12 @@
             <div class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</div>
             <div class="lesson-goals-title">
               Lesson Goals:
-              <ol class="lesson-goals">
-                <pre>{{properties.LessonGoals}}</pre>
-              </ol>
+              <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
             </div>
             <el-row class="lesson-button">
               <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
-              <el-tooltip class="item" effect="dark" content="(Click here to begin the class)" v-if="properties.vip" placement="top">
-                <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">Begin the Class</el-button>
+              <el-tooltip class="item" effect="dark" :content="btnTip" v-if="properties.vip" placement="top">
+                <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">{{btnInfo}}</el-button>
               </el-tooltip>
             </el-row>
           </div>
@@ -32,7 +30,7 @@
 
     <el-row class="lesson-tab mod-full-width-0-0-32">
       <el-tabs value="first" @tab-click="tabClick">
-        <div v-if="properties.vip" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
+        <div v-if="properties.vip" style="display: none" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
@@ -49,7 +47,9 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      dialogVisible: false
+      dialogVisible: false,
+      btnInfo: 'Begin the Class',
+      btnTip: '(Click here to begin the class)'
     };
   },
   computed: {
@@ -169,8 +169,11 @@ export default {
     color:#4C4C4C;
   }
   .lesson-goals {
-    padding-left: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
+    font-family: inherit;
+    font-size: 16px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 
   .lesson-goals li {
@@ -179,9 +182,9 @@ export default {
     font-size:16px;
     margin-bottom: 10px;
   }
-
-  .btn-begin:disabled {
+  .el-button:disabled {
     background:#D2D2D2;
+    border: 1px solid #D2D2D2;
     cursor: not-allowed;
     color: white;
     pointer-events: none;
