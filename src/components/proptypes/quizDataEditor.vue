@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="Quiz" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="128px" class="demo-ruleForm">
       <el-form-item label="Type:" prop="type">
         <el-radio-group v-model="ruleForm.type">
           <el-radio label="0">Single Choice</el-radio>
@@ -29,11 +29,12 @@
       </el-form-item>
 
       <!-- 多选题 -->
-      <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1">
+      <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1" >
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
         <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
-          <div class="flex-center-between" v-for="(opt, index) in ruleForm.multipleOptions">
+          <div class="flex-center-between"
+            v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
@@ -108,31 +109,31 @@ function uuid(len, radix) {
 }
 
 export default {
-  name: 'quizzDataEditor',
+  name: 'quizDataEditor',
   props: {
     isEditorShow: Boolean
   },
 
   data() {
-    var checkScore = (rule, value, callback) => {
+    const checkScore = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('please input score'));
+        return callback(new Error('please input an integer greater than 0'));
       }
       setTimeout(() => {
         if (!Number.isInteger(value)) {
-          callback(new Error('please input number type'));
+          callback(new Error('please input an integer greater than 0'));
         } else {
           if (value < 0) {
-            callback(new Error('an integer greater than 0'));
+            callback(new Error('please input an integer greater than 0'));
           } else {
             callback();
           }
         }
-      }, 1000);
+      }, 200);
     };
 
     return {
-      quizzData: [],
+      quizData: [],
 
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
 
@@ -181,6 +182,9 @@ export default {
         single: [
           { required: true, message: 'please select', trigger: 'change'}
         ],
+        singleInput: [
+          { required: true, message: 'please input', trigger: 'blur' }
+        ],
         multiple: [
           { type: 'array', required: true, message: 'please select', trigger: 'change'}
         ],
@@ -188,7 +192,7 @@ export default {
           { required: true, message: 'please select', trigger: 'change' }
         ],
         score: [
-          { validator: checkScore, trigger: 'blur' }
+          { required: true, validator: checkScore, trigger: 'blur' }
         ],
         desc: [
           { required: true, message: 'please input explanation', trigger: 'blur' }
@@ -203,6 +207,12 @@ export default {
     }
   },
   methods: {
+    addDomain() {
+        this.ruleForm.singleOptions.push({
+          value: '',
+          key: Date.now()
+        });
+      },
     handleClose() {
       this.$emit('cancel', null)
     },
@@ -255,9 +265,9 @@ export default {
              writerQA.answer = this.ruleForm.judge;
           }
 
-          this.quizzData = [writerQA];
+          this.quizData = [writerQA];
           this.handleClose();
-          this.$emit('finishEditing', this.quizzData);
+          this.$emit('finishEditing', this.quizData);
         } else {
           console.log('error submit!!');
           return false;

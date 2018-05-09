@@ -1,12 +1,12 @@
-## @Quizz
+## @Quiz
 
 ## 参数说明
 
 ```
 - styleID :  //样式ID
 
-# quizz
+# quiz
 
-# quizz.data
+# quiz.data
 
 ```

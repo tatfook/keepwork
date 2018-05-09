@@ -12,7 +12,7 @@ const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
 const ModLesson = () => import('./web/lesson')
-const ModQuizz = () => import('./web/quizz')
+const ModQuiz = () => import('./web/quiz')
 const ModTeachers = () => import('./web/teachers')
 const ModLessonGet = () => import('./web/lessonGet')
 const ModPageList = () => import('./web/pageList')
@@ -32,7 +32,7 @@ export const modList = {
   ModComment,
   ModBoard,
   ModLesson,
-  ModQuizz,
+  ModQuiz,
   ModTeachers,
   ModLessonGet,
   ModPageList

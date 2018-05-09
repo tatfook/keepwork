@@ -11,7 +11,7 @@ import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
 import AdiTabs from './tabs/Tabs'
-import AdiQuizz from './quizz/Quizz'
+import AdiQuiz from './quiz/Quiz'
 import AdiLesson from './lesson/Lesson'
 import AdiTeachers from './teachers/Teachers'
 import AdiLessonGet from './lessonGet/LessonGet'
@@ -31,7 +31,7 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiTabs,
-  AdiQuizz,
+  AdiQuiz,
   AdiLesson,
   AdiTeachers,
   AdiLessonGet,

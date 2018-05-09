@@ -1,5 +1,5 @@
 export default [
   [
-    { colQuizz: 'quizz' }
+    { colQuiz: 'quiz' }
   ]
 ]

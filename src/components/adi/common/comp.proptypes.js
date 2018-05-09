@@ -12,7 +12,7 @@ import AdiComment from './comment/comment.proptypes'
 import AdiInnerModal from './innerModal/innerModal.proptypes'
 import AdiNumber from './number/number.proptypes'
 import AdiTabs from './tabs/tabs.proptypes'
-import AdiQuizz from './quizz/quizz.proptypes'
+import AdiQuiz from './quiz/quiz.proptypes'
 import AdiLesson from './lesson/lesson.proptypes'
 import AdiTeachers from './teachers/teachers.proptypes'
 import AdiLessonGet from './lessonGet/lessonGet.proptypes'
@@ -33,7 +33,7 @@ export default {
   AdiInnerModal,
   AdiNumber,
   AdiTabs,
-  AdiQuizz,
+  AdiQuiz,
   AdiLesson,
   AdiTeachers,
   AdiLessonGet,

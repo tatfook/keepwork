@@ -1,30 +1,30 @@
 <template>
-  <div class="comp-quizz" v-bind:class="{'error': !isRight }">
+  <div class="comp-quiz" v-bind:class="{'error': !isRight }">
       <div v-if="!isOperate" class="splic"></div>
 
     <div v-for="item in properties.data" :data-id="item.id">
       <div class="no"><i class="el-icon-edit-outline"></i> Quiz </div>
 
-      <div class="quizz-content">
+      <div class="quiz-content">
         <div class="title">{{ item.title }} <span v-if="item.type == 1">(<em>multiple choices</em>)</span></div>
 
         <div v-if="isOperate">
           <!-- 单选题 -->
-          <el-radio-group v-if="item.type == 0" v-model="quizz.single">
+          <el-radio-group v-if="item.type == 0" v-model="quiz.single">
             <div class="opt-item" v-for="(opt, index) in item.options">
               <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
           </el-radio-group>
 
           <!-- 多选题 -->
-          <el-checkbox-group v-if="item.type == 1" v-model="quizz.multiple">
+          <el-checkbox-group v-if="item.type == 1" v-model="quiz.multiple">
             <div class="opt-item" v-for="(opt, index) in item.options">
               <el-checkbox name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
             </div>
           </el-checkbox-group>
 
           <!-- 判断题 -->
-          <el-radio-group v-if="item.type == 2" v-model="quizz.judge">
+          <el-radio-group v-if="item.type == 2" v-model="quiz.judge">
               <div class="opt-item" v-for="(opt, index) in item.options">
                 <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
               </div>
@@ -36,7 +36,7 @@
               {{serialNo[index]}} {{opt.item}}
           </div>
         </div>
-        <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuizz">submit</el-button>
+        <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuiz">submit</el-button>
       </div>
 
       <div v-if="isShow" class="submit-show">
@@ -67,7 +67,7 @@ const hideMod = function(name, flag) {
 }
 
 const saveQuiz = []; // 保存所提交的题型
-const quizzList = []; // 试题集合
+const quizList = []; // 试题集合
 let answerSheet = []; // 保存当前答题卡
 const lessonHost = 'http://127.0.0.1:3000'
 let device; // 设备 pc 电脑自学 pad 课堂学习
@@ -101,7 +101,7 @@ const timer = {
 }
 
 export default {
-  name: 'AdiQuizz',
+  name: 'AdiQuiz',
   mixins: [compBaseMixin],
   data() {
     return {
@@ -109,7 +109,7 @@ export default {
       isShow: false,
       isRight: true,
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
-      quizz: {
+      quiz: {
         single: '',
         multiple: [],
         judge: ''
@@ -137,10 +137,10 @@ export default {
     }
     if (device == 'pc' || device == 'pad') {
       let _this = this.properties.data[0];
-      quizzList.push(_this);
+      quizList.push(_this);
       let answer = {};
-      answer.quizzId = _this.id;
-      answer.quizzScore = _this.score;
+      answer.quizId = _this.id;
+      answer.quizScore = _this.score;
       answerSheet.push(answer);
       timer.reset().start();
     }
@@ -171,16 +171,16 @@ export default {
               for(let i = 0; i < ans.length; i++) {
                 var item  = ans[i];
                 let data = this.properties.data;
-                if(item.quizzId == data[0].id && item.myAnswer) {
+                if(item.quizId == data[0].id && item.myAnswer) {
                   // 找到了该题目
                   this.isShow = true;
                   this.isRight = item.trueFlag;
                   if(data[0].type == 0){// 单选
-                    this.quizz.single = item.myAnswer;
+                    this.quiz.single = item.myAnswer;
                   } else if(data[0].type == 1) {
-                    this.quizz.multiple = item.myAnswer.split(',');
+                    this.quiz.multiple = item.myAnswer.split(',');
                   } else if(data[0].type == 2) {
-                    this.quizz.judge = item.myAnswer;
+                    this.quiz.judge = item.myAnswer;
                   }
                   break;
                 }
@@ -194,13 +194,13 @@ export default {
     }
   },
   methods: {
-    submitQuizz() {
+    submitQuiz() {
       this.isShow = true;
       let data = this.properties.data;
       let trueFlag = false;
       let myAnswer;
       if(data[0].type == 0) {  // 单选
-        myAnswer = this.quizz.single;
+        myAnswer = this.quiz.single;
         if(myAnswer === data[0].answer) {
           trueFlag = true;
           this.isRight = true;
@@ -209,7 +209,7 @@ export default {
           this.isRight = false;
         }
       }else if(data[0].type == 2) { // 判断
-        myAnswer = this.quizz.judge;
+        myAnswer = this.quiz.judge;
         if(myAnswer === data[0].answer) {
           trueFlag = true;
           this.isRight = true;
@@ -218,7 +218,7 @@ export default {
           this.isRight = false;
         }
       }else if(data[0].type == 1) { // 多选
-        myAnswer = this.quizz.multiple.sort();
+        myAnswer = this.quiz.multiple.sort();
         let answer = JSON.parse(data[0].answer).sort();
         if(JSON.stringify(myAnswer) === JSON.stringify(answer)) {
           trueFlag = true;
@@ -238,7 +238,7 @@ export default {
       // }
       for(let i = 0; i < answerSheet.length; i++) {
         let item = answerSheet[i];
-        if(item.quizzId === data[0].id) {
+        if(item.quizId === data[0].id) {
           item.trueFlag = trueFlag;
           if(myAnswer instanceof Array) {
             item.myAnswer = myAnswer.join(',');
@@ -261,7 +261,7 @@ export default {
         if(item.myAnswer) {
           if(item.trueFlag) {
             params.rightCount++;
-            params.totalScore += parseInt(item.quizzScore);
+            params.totalScore += parseInt(item.quizScore);
           } else {
             params.wrongCount++;
           }
@@ -301,16 +301,16 @@ export default {
     counter-reset: no;
   }
 
-  [data-mod="ModQuizz"] {
+  [data-mod="ModQuiz"] {
     padding-top: 0;
     padding-bottom: 0;
   }
 
-  [data-mod="ModQuizz"] .no {
+  [data-mod="ModQuiz"] .no {
     font-weight: 600;
   }
 
-  [data-mod="ModQuizz"] .no>i {
+  [data-mod="ModQuiz"] .no>i {
     color: #1982FF;
     font-size:22px;
     font-weight: 600;
@@ -318,12 +318,12 @@ export default {
     vertical-align: middle;
   }
 
-  [data-mod="ModQuizz"] .no:after {
+  [data-mod="ModQuiz"] .no:after {
     content: counters(no, '-');
     counter-increment: no;
   }
 
-  .quizz-content {
+  .quiz-content {
     margin-left: 40px;
   }
 
@@ -333,11 +333,11 @@ export default {
     border-bottom: 1px dashed #BFBFBF;
   }
 
-  [data-mod="ModQuizz"]:last-child {
+  [data-mod="ModQuiz"]:last-child {
     padding-bottom: 40px;
   }
 
-  .comp-quizz {
+  .comp-quiz {
     margin-top: 10px;
     padding: 10px;
     font-size: 16px;
@@ -345,11 +345,11 @@ export default {
     color: #4c4c4c;
   }
 
-  .comp-quizz .title {
+  .comp-quiz .title {
     margin: 20px 0;
   }
 
-  .comp-quizz .title span {
+  .comp-quiz .title span {
     padding-left:10px;
   }
 
@@ -358,21 +358,21 @@ export default {
     font-style: normal;
   }
 
-  .comp-quizz .opt-item{
+  .comp-quiz .opt-item{
     margin-top: 20px;
   }
 
-  .quizz-content .el-radio__label,
-  .quizz-content .el-checkbox__label {
+  .quiz-content .el-radio__label,
+  .quiz-content .el-checkbox__label {
     font-size: 16px;
   }
-  .quizz-content .el-radio__input.is-checked+.el-radio__label,
-  .quizz-content .el-checkbox__input.is-checked+.el-checkbox__label {
+  .quiz-content .el-radio__input.is-checked+.el-radio__label,
+  .quiz-content .el-checkbox__input.is-checked+.el-checkbox__label {
       color: #4C4C4C;
       font-weight: 600;
   }
 
-  .quizz-content .el-button {
+  .quiz-content .el-button {
     margin: 20px 0;
   }
 
@@ -392,13 +392,13 @@ export default {
     color: #111;
   }
 
-  .comp-quizz.error {
+  .comp-quiz.error {
     margin-bottom: 20px;
     background: rgba(245,56,56,0.05);
     border: 1px solid #F53838;
   }
 
-  .comp-quizz.error .submit-show {
+  .comp-quiz.error .submit-show {
     background: none;
     color: #FF414A;
     margin-bottom: 0;

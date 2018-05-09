@@ -111,7 +111,7 @@ const init = function(){
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
                       + '</div>';
       let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">Teaching is not started yet. There is no summary here.</div>'
+                        + '<div class="no-data">Learning is not started yet. There is no summary here.</div>'
                       + '</div>';
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
       lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
@@ -129,7 +129,7 @@ const init = function(){
         let r = response.data
         if(r.err === 0) {
           // 可以恢复状态
-          beginClass(r.data.classId)
+          beginClass(r.data.classId);
         }
       })
     }
@@ -166,7 +166,7 @@ const timer = {
 // 更新 Students'Performance 下的视图
 const updateStudentsView = function(r) {
   r = (typeof r !== 'undefined') ?  r : lastResponse; // r 缺省时为 lastResponse
-  let theadHtm = '', tbodyHtm = '', quizzHtm = [], myanswer = '';  //thead tbody 题目答案
+  let theadHtm = '', tbodyHtm = '', quizHtm = [], myanswer = '';  //thead tbody 题目答案
   let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
   if(r.data) {
     let data = r.data;
@@ -192,7 +192,7 @@ const updateStudentsView = function(r) {
         return function(a,b){
           let value1 = a[prop];
           let value2 = b[prop];
-          if( prop.startWith('quizz') ) {
+          if( prop.startWith('quiz') ) {
             let idx = parseInt(prop.split('-')[1]) - 1
             value1 = 0
             value2 = 0
@@ -218,7 +218,7 @@ const updateStudentsView = function(r) {
     let offlineCount = 0; // 离线的人数
     for(let i  = 0; i < data.length; i++) {
       let item = data[i];
-      quizzHtm[i] = '';
+      quizHtm[i] = '';
       if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
         learningCount++;
       } else if(item.state === 2) {
@@ -230,11 +230,11 @@ const updateStudentsView = function(r) {
       if(answerItem) {
         for(let j = 0; j < answerItem.length; j++) {
           myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
-          quizzHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
+          quizHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
         }
       } else {
         for(let j = 0; j < quizLen; j++) {
-          quizzHtm[i] += '<td></td>';
+          quizHtm[i] += '<td></td>';
         }
       }
       progress = item.count + '/' + item.total; // 完成进度
@@ -242,7 +242,7 @@ const updateStudentsView = function(r) {
         progress = "finished";
       }
 
-      let quiz = quizzHtm[i] == undefined ? " " : quizzHtm[i];
+      let quiz = quizHtm[i] == undefined ? " " : quizHtm[i];
 
       tbodyHtm += '<tr><td>'+ item.username +'</td>'
                       + '<td>'+ item.studentNo +'</td>'
@@ -269,9 +269,9 @@ const bindSortEvent = function() {
   let nameSortFlag = false,
       noSortFlag = false,
       totalSortFlag = false,
-      quizzSortFlag = []; //数组存储题目排序
+      quizSortFlag = []; //数组存储题目排序
   for(let i = 0; i < quizLen; i++) {
-    quizzSortFlag.push(false)
+    quizSortFlag.push(false)
   }
   const active = function(p, c) {
     function hasClass(ele, cls) {
@@ -349,20 +349,20 @@ const bindSortEvent = function() {
     }
     updateStudentsView()
   });
-  let quizzSortEles = document.getElementsByClassName('sort-by-quizz');
-  for(let i = 0; i < quizzSortEles.length; i++) {
-    quizzSortEles[i].addEventListener('click', function(e) {
+  let quizSortEles = document.getElementsByClassName('sort-by-quiz');
+  for(let i = 0; i < quizSortEles.length; i++) {
+    quizSortEles[i].addEventListener('click', function(e) {
       let idx = parseInt( this.getAttribute('idx') )
-      orderBy = 'quizz-' + idx
-      if(quizzSortFlag[idx]) {
+      orderBy = 'quiz-' + idx
+      if(quizSortFlag[idx]) {
         // 倒序
         active(this, 'el-icon-caret-top')
-        quizzSortFlag[idx] = false
+        quizSortFlag[idx] = false
         sortFlag = false
       } else {
         // 正序
         active(this, 'el-icon-caret-bottom')
-        quizzSortFlag[idx] = true
+        quizSortFlag[idx] = true
         sortFlag = true
       }
       updateStudentsView()
@@ -377,13 +377,17 @@ const beginClass = function(classId) {
   classId = classId
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
-  self.$alert("The class ID is " + classId + ".<br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Students' Performance.OK<br/>Attention: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.", 'Info', {
+  self.$alert("<div class='txt-one'>The class ID is <span>" + classId + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <a href='javascript:;'>Students' Performance</a></div>"
+            + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
     confirmButtonText: 'OK',
     callback: action => {
-      self.$notify({
-        title: 'ClassId:',
-        message: classId,
+      self.$notify.info({
+        title: 'Class ID:',
+        dangerouslyUseHTMLString: true,
+        message: '<div class="showMessage"><strong>'+ classId +'</strong><div class="prompt el-popover">Class ID is the unique identifier for this class.'
+                  + 'Students in this class need to login with this identifier to start learning the lesson. '
+                  + 'This ensures the student learning data is sent to the system correctly.</div></div>',
         duration: 0,
         showClose: false
       })
@@ -391,10 +395,10 @@ const beginClass = function(classId) {
   });
 
   let studentMod = getMod('ModStudent');
-  let quizzNo = ''; // 题目编号
-  quizLen = getMods('ModQuizz').length;
+  let quizNo = ''; // 题目编号
+  quizLen = getMods('ModQuiz').length;
   for(let i = 0; i < quizLen; i++) { // 题目序号
-    let quizContent = getMods('ModQuizz')[i].getElementsByClassName("quizz-content")[0];
+    let quizContent = getMods('ModQuiz')[i].getElementsByClassName("quiz-content")[0];
     let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer");
     let optItem = quizContent.getElementsByClassName("opt-item"); //获取所有题目选项
     let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(","); // 将字符串转换成数组
@@ -408,14 +412,14 @@ const beginClass = function(classId) {
       }
     }
 
-    quizzNo += '<td><div class="sort-btn sort-by-quizz" idx="'+ parseInt(i+1) +'">'
+    quizNo += '<td><div class="sort-btn sort-by-quiz" idx="'+ parseInt(i+1) +'">'
             + '<span>Quiz'+ parseInt(i+1) +'</span>'
             + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
             + '<div class="quizContent">' + quizContent.innerHTML + '</div>'
             + '</div></td>';
   }
 
-  let studetDataHtm = '<div class="student-taughted-details">'
+  let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-32">'
         + '<div class="express">'
           + '<span class="r">right</span>'
           + '<span class="w">wrong</span>'
@@ -425,8 +429,8 @@ const beginClass = function(classId) {
             + '<tr class="tbl-head">'
               + '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
               + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + '<td><div class="sort-btn sort-by-total"><span>Quizzes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + quizzNo
+              + '<td><div class="sort-btn sort-by-total"><span>Quizes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
+              + quizNo
             +'</tr>'
           + '</thead>'
           + '<tbody class="tbl-body"></tbody>'
@@ -438,6 +442,7 @@ const beginClass = function(classId) {
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
                         + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
                       + '</div>';
+
   document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
 }
 
@@ -466,7 +471,7 @@ export default {
         // 切换显示的页卡
         const sliceMod = function(name) {
           currentTab = name
-           // ["ModLesson", "ModMarkdown", "ModQuizz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
+           // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
           if(name == 'ModOverview') {
             // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
             for(let i = 0; i < mods.length; i ++) {
@@ -553,7 +558,7 @@ export default {
           params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
           params.goals = self.modData.lesson.LessonGoals
           params.lessonNo = self.modData.lesson.LessonNo
-          let quizzs = getMods('ModQuizz')
+          let quizs = getMods('ModQuiz')
           let lessonGet = getMod('ModLessonGet')
           let lessonPerformance = ''
           if(lessonGet) {
@@ -566,7 +571,7 @@ export default {
             }
             params.lessonPerformance = lessonPerformance
           }
-          console.log(quizzs)
+          console.log(quizs)
           // lessonPerformance、
           console.log(params)
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
@@ -625,7 +630,7 @@ export default {
             }
           }
           params.lessonPerformance = lessonPerformance
-          params.quizzNum = getMods('ModQuizz').length
+          params.quizNum = getMods('ModQuiz').length
         }
         if( classState == 0 ) {
           // begin class
@@ -636,13 +641,14 @@ export default {
           .then(response => {
             let r = response.data
             if(r.err == 0) {
-              beginClass(r.data.classId)
+              beginClass(r.data.classId);
             } else {
               // error
             }
           })
         } else if ( classState == 1 ) {
           // finish class
+          console.log(this);
           btnClass.lastChild.innerText = 'Dismiss the Class';
           self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
             confirmButtonText: 'Yes',
@@ -720,7 +726,7 @@ export default {
     transform: translate(-50%,-50%);
     z-index: 2;
     background: url('/static/adi/lesson/play_btn_action.png') center center no-repeat;
-    background-size: contain
+    background-size: contain;
 }
 
 .animations-title {
@@ -747,8 +753,9 @@ export default {
   text-align: center;
 }
 .student-taughted-details {
-    margin: 40px 0;
+    padding: 40px 20px;
     min-height: 500px;
+    box-sizing: border-box;
 }
 .express >span {
     margin-right: 10px;
@@ -801,11 +808,11 @@ span.w::before {
     top: 70px;
     background-color: #fff;
     border: 2px solid #98CBFF;
-    border-radius: 40px;
+    border-radius: 4px;
     width: 100%;
     min-width: 380px;
     right: 0;
-    padding: 25px 20px 15px;
+    padding: 15px 10px 0;
     text-align: left;
     font-size: 14px;
     color: #101010;
@@ -823,17 +830,17 @@ span.w::before {
 }
 
 .table-wrap .quizContent.quizContent::before {
-    content: "";
-    position: absolute;
-    border: 2px solid #98cbff;
-    width: 30px;
-    height: 50px;
-    border-left: 0;
-    border-bottom: 0;
-    transform: rotate(-59deg);
-    right: 50px;
-    background-color: #fff;
-    top: -28px;
+  content: "";
+  position: absolute;
+  border: 2px solid #98cbff;
+  width: 20px;
+  height: 20px;
+  border-left: 0;
+  border-bottom: 0;
+  transform: rotate(-45deg);
+  right: 60px;
+  background-color: #fff;
+  top: -13px;
 }
 
 .table-wrap thead td:last-child {
@@ -863,6 +870,13 @@ span.w::before {
     color: #49A5F8;
 }
 
+.table-wrap .sort-by-quiz i {
+    color: #F53838;
+}
+.table-wrap .sort-by-quiz i.active {
+    color: #27CE2F;
+}
+
 .table-wrap tbody tr:nth-child(even) {
     background:rgba(64,158,254, .1);
 }
@@ -882,5 +896,57 @@ span.w::before {
 .table-wrap .wrong {
     color: #F53838;
 }
-
+.el-notification {
+    overflow: inherit;
+}
+.el-notification:hover .showMessage .prompt{
+    display: block;
+}
+.el-notification__content .showMessage {
+    position: relative;
+}
+.el-notification__content .showMessage .prompt {
+    display: none;
+    top: 40px;
+    left: 0;
+    z-index: 9;
+}
+.el-notification__content .showMessage .prompt::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 8px;
+    -webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+    border-bottom-color: #b3b4b7;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: #fff;
+}
+.el-notification__content .showMessage > strong{
+    color: #FF414A;
+    font-weight: bold;
+}
+.txt-one {
+  padding: 10px 10px 15px;
+  font-size: 16px;
+  color: #000;
+}
+.txt-two {
+  padding: 10px 10px 15px;
+  font-size: 14px;
+  color:#999;
+}
+.txt-one a {
+  text-decoration: none;
+  color: #409EFF;
+}
+.txt-one span, .txt-two span {
+  color: #F75858;
+}
 </style>

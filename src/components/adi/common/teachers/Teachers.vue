@@ -131,8 +131,7 @@ export default {
     padding-bottom: 0;
   }
   .comp-teachers {
-    margin-left: 40px;
-    margin-top:25px;
+    margin: 25px 40px;
     padding: 5px 3px;
     background:rgba(238,238,238, 0.5);
     border-radius: 4px;
@@ -145,8 +144,11 @@ export default {
 
   .comp-teachers .content {
     margin:20px 0 0;
-    color: #676767;
-    font-family:MicrosoftYaHeiLight;
+    font-size: 16px;
+    color:#333;
+    font-family: inherit;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 
 #isTeachersContent{

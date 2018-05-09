@@ -1,14 +1,14 @@
 <template>
   <div class="menu-type">
-    <el-button plain type='primary' size='mini' @click='isQAEditorShow = true'>Open Quizz Editor</el-button>
-    <quizzDataEditor :isEditorShow='isQAEditorShow' @finishEditing='finishEditing' @cancel='cancel'></quizzDataEditor>
+    <el-button plain type='primary' size='mini' @click='isQAEditorShow = true'>Open Quiz Editor</el-button>
+    <quizDataEditor :isEditorShow='isQAEditorShow' @finishEditing='finishEditing' @cancel='cancel'></quizDataEditor>
   </div>
 
 </template>
 <script>
-import quizzDataEditor from "./quizzDataEditor";
+import quizDataEditor from "./quizDataEditor";
 export default {
-  name: 'QuizzType',
+  name: 'QuizType',
   props: {
     editingKey: String
   },
@@ -29,7 +29,7 @@ export default {
     }
   },
   components: {
-    quizzDataEditor
+    quizDataEditor
   }
 }
 </script>
