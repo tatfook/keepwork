@@ -134,7 +134,7 @@
       </el-col>
       <el-col :span="3" class="website-setting-btns">
         <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
-        <el-button @click="handleClose">{{$t('editor.giveUp')}}</el-button>
+        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
       </el-col>
     </el-row>
   </div>
