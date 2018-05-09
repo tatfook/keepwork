@@ -159,7 +159,7 @@
 
     "layoutParameters": "3. Layout parameters",
     "match": "match",
-    "giveUp": "give up",
+    "cancel": "Cancel",
 
     "deleteFolder": "Be sure to delete the folder and inside ",
     "documents": " documents ?",

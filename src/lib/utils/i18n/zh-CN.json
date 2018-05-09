@@ -150,7 +150,7 @@
 
     "layoutParameters": "3. 布局参数",
     "match": "匹配",
-    "giveUp": "放弃",
+    "cancel": "取消",
 
     "deleteFolder": "确定要删除该文件夹及里面的",
     "documents": "个文件吗？",
