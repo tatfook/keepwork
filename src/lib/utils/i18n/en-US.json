@@ -144,7 +144,26 @@
     "lowerCaseLetters":
       "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore":
-      "Website name cannot start with an underscore"
+      "Website name cannot start with an underscore",
+
+    "layoutPlan": "1. Layout plan",
+    "addLayout": "Add layout",
+    "default": "Default",
+    "rename": "Rename",
+
+    "layoutStyle": "2. Layout style",
+    "header": "header",
+    "footer": "footer",
+    "aside": "aside",
+    "main": "main",
+
+    "layoutParameters": "3. Layout parameters",
+    "match": "match",
+    "giveUp": "give up",
+
+    "deleteFolder": "Be sure to delete the folder and inside ",
+    "documents": " documents ?",
+    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?"
   },
   "modList": {
     "recent": "Commonly used",
