@@ -81,10 +81,29 @@ const init = function(){
           }
       }
   }
+
   if (device == 'pc' || device == 'pad') {
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
+  } else if (device == 'print') {
+    document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
+    document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
+    hideMod('ModLesson', true)
+    document.domain = 'localhost'
+    // 计算页面的实际高度，iframe自适应会用到
+    function calcPageHeight(doc) {
+      let cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+      let sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+      let height  = Math.max(cHeight, sHeight)
+      return height
+    }
+    let timer = setInterval(function(){
+      var height = calcPageHeight(document)
+      var container = parent.document.getElementById('keepworkContainer')
+      container.style.height = height + 'px'
+      container.setAttribute('height', height)
+    },1000)
   } else {
     let lessonMod = getMod('ModLesson')
     if(lessonMod && lessonMod.parentNode != null) {
