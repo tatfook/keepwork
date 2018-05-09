@@ -109,7 +109,7 @@ export default {
       }
       recursionFile(data)
 
-      this.$confirm(toRemoveFiles.length - 1 > 0 ? `确定要删除该文件夹及里面的${toRemoveFiles.length - 1}个文件吗?` : `确定要删除该文件夹?`,self.$t('editor.delete'), {
+      this.$confirm(toRemoveFiles.length - 1 > 0 ? self.$t('editor.deleteFolder') + `${toRemoveFiles.length - 1}` + self.$t('editor.documents') :  self.$t('editor.areYouSureYouWantToDeleteThisFolder') ,self.$t('editor.delete'), {
         confirmButtonText: self.$t('el.messagebox.confirm'),
         cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
