@@ -150,6 +150,7 @@ export default {
       })
     },
     openEditor() {
+      this.$emit('onChangeValue')
       this.visible = true
     },
     closeEditor() {
