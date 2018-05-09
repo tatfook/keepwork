@@ -23,6 +23,7 @@ import 'codemirror/addon/fold/foldgutter.js'
 import 'codemirror/addon/fold/xml-fold'
 import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/lint/json-lint'
+import 'codemirror/addon/selection/active-line.js'
 
 const CodeMirror = window.CodeMirror || _CodeMirror
 
@@ -57,6 +58,7 @@ export default {
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        styleActiveLine: true,
         foldGutter: true,
         foldOptions: {
           rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.wikiCmdFold),
