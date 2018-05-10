@@ -13,6 +13,7 @@
 
 <script>
 import ModLoader from '@/components/adi/mod'
+import VueScrollTo from 'vue-scrollto'
 import { mapGetters } from 'vuex'
 import { gConst } from '@/lib/global'
 
@@ -24,6 +25,11 @@ export default {
   data() {
     return {
       gConst
+    }
+  },
+  watch: {
+    isActive(newVal) {
+      if (newVal) this.scrollToCurrentMod()
     }
   },
   computed: {
@@ -50,6 +56,15 @@ export default {
     },
     setActive() {
       this.$store.dispatch('setActiveMod', this.mod.key)
+    },
+    scrollToCurrentMod() {
+      const options = {
+        easing: 'ease-in',
+        offset: -30,
+        x: false,
+        y: true
+      }
+      VueScrollTo.scrollTo(this.$el, 500, options)
     }
   }
 }

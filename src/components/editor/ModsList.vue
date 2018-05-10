@@ -36,7 +36,7 @@ export default {
       _.forEach(data, (item, key) => {
         item.label = self.$t(item.label)
 
-        if(item.children) {
+        if (item.children) {
           i18n(item.children)
         }
       })
@@ -81,7 +81,7 @@ export default {
     generateStyleString(style) {
       let string = ''
 
-      if(style) {
+      if (style) {
         _.forEach(style, (value, key) => {
           string = string + key + ':' + value + ';'
         })
@@ -104,7 +104,7 @@ export default {
       })
     },
     modFactory(mod) {
-      if(mod.name && mod.name != 'ModMarkdown') {
+      if (mod.name && mod.name != 'ModMarkdown') {
         return modFactory.generate(mod.name)
       }
     },
@@ -129,8 +129,8 @@ export default {
   margin-bottom: 12px;
   border: 2px solid transparent;
 }
-.style-cover:hover{
-    border: 2px solid #bcbcbc;
+.style-cover:hover {
+  border: 2px solid #bcbcbc;
 }
 .mods-treeview {
   border-right: 2px solid #c0c4cc;
@@ -161,7 +161,7 @@ export default {
     z-index: 1;
   }
 
-  .render-mod-container{
+  .render-mod-container {
     border: 10px solid white;
     height: 300px;
     width: 275px;
@@ -173,7 +173,6 @@ export default {
       transform-origin: top left;
     }
   }
-  
 }
 </style>
 

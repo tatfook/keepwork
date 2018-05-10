@@ -11,6 +11,7 @@ import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
+import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 
 var modsList = [
@@ -60,6 +61,11 @@ var modsList = [
       },
       {
         id: '1-9',
+        label: 'modList.textBoard',
+        mods: [ModTextBoard]
+      },
+      {
+        id: '1-10',
         label: 'modList.pageList',
         mods: [ModPageList]
       }

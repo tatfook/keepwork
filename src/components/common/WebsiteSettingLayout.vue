@@ -3,10 +3,10 @@
     <el-row class="website-setting-layout">
       <el-col :span="6" class="website-setting-layouts">
         <header>
-          <h1>1. 布局方案</h1>
+          <h1>{{$t('editor.layoutPlan')}}</h1>
         </header>
         <main>
-          <el-button class="add-layout-btn" icon="el-icon-plus" type="text" @click.stop="addLayout">添加布局</el-button>
+          <el-button class="add-layout-btn" icon="el-icon-plus" type="text" @click.stop="addLayout">{{$t('editor.addLayout')}}</el-button>
           <div class="website-setting-layout-list">
             <div
               v-for='(layout) in siteLayoutsMap'
@@ -37,20 +37,20 @@
                     size="mini" type="text"
                     @click.stop="setDefault(layout)"
                     icon="iconfont icon-sheweimoren"
-                    title="默认">
+                    :title="$t('editor.default')">
                   </el-button>
                   <el-button
                     size="mini" type="text"
                     @click.stop="editLayout(layout)"
                     icon="iconfont icon-zhongmingming-copy"
-                    title="重命名">
+                    :title="$t('editor.rename')">
                   </el-button>
                   <el-button
                     size="mini"
                     type="text"
                     @click.stop="removeLayout(layout)"
                     icon="iconfont icon-shanchu-copy"
-                    title="删除">
+                    :title="$t('editor.delete')">
                   </el-button>
                 </span>
               </div>
@@ -60,7 +60,7 @@
       </el-col>
       <el-col :span="7" class="website-setting-styles">
         <header>
-          <h1>2. 布局样式</h1>
+          <h1>{{$t('editor.layoutStyle')}}</h1>
         </header>
         <main>
           <div class="website-setting-styles-main">
@@ -72,10 +72,10 @@
               @click.stop="selectStyle(name)"
               >
               <component :is='styleComponent'>
-                <div slot='header'>header</div>
-                <div slot='footer'>footer</div>
-                <div slot='sidebar'>aside</div>
-                main
+                <div slot='header'>{{$t('editor.header')}}</div>
+                <div slot='footer'>{{$t('editor.footer')}}</div>
+                <div slot='sidebar'>{{$t('editor.aside')}}</div>
+                {{$t('editor.main')}}
               </component>
             </div>
           </div>
@@ -83,12 +83,12 @@
       </el-col>
       <el-col :span="8" class="website-setting-layoutconfig">
         <header>
-          <h1>3. 布局参数</h1>
+          <h1>{{$t('editor.layoutParameters')}}</h1>
         </header>
         <main>
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item prop="header">
-              <label>header</label>
+              <label>{{$t('editor.header')}}</label>
               <el-select size="small" v-model="layoutForm.header" filterable placeholder="Select">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
@@ -100,7 +100,7 @@
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('header')"></el-button>
             </el-form-item>
             <el-form-item prop="sidebar">
-              <label>sidebar</label>
+              <label>{{$t('editor.aside')}}</label>
               <el-select size="small" v-model="layoutForm.sidebar" filterable placeholder="Select">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('sidebar')"
@@ -112,7 +112,7 @@
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('sidebar')"></el-button>
             </el-form-item>
             <el-form-item prop="footer">
-              <label>footer</label>
+              <label>{{$t('editor.footer')}}</label>
               <el-select size="small" v-model="layoutForm.footer" filterable placeholder="Select">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('footer')"
@@ -124,7 +124,7 @@
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('footer')"></el-button>
             </el-form-item>
             <el-form-item prop="match">
-              <label>match</label>
+              <label>{{$t('editor.match')}}</label>
               <el-input size="small" placeholder="match" type="textarea" v-model="layoutForm.match">
               </el-input>
               <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
@@ -133,8 +133,8 @@
         </main>
       </el-col>
       <el-col :span="3" class="website-setting-btns">
-        <el-button type="primary" @click="handleSave">保存</el-button>
-        <el-button @click="handleClose">放弃</el-button>
+        <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
+        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -146,8 +146,7 @@ import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
-import layoutTemplates from '@/components/adi/layout/templates'
-const stylesList = layoutTemplates
+import stylesList from '@/components/adi/layout/templates'
 
 export default {
   name: 'WebsiteSettingLayout',

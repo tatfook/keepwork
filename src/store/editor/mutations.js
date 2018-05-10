@@ -15,6 +15,7 @@ const MOVE_MOD = 'MOVE_MOD'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
+const SET_ACTIVE_PROPERTY_OPTIONS = 'SET_ACTIVE_PROPERTY_OPTIONS'
 const REFRESH_MOD_ATTRIBUTES = 'REFRESH_MOD_ATTRIBUTES'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
 const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
@@ -26,7 +27,7 @@ const UPDATE_THEME_COLOR = 'UPDATE_THEME_COLOR'
 const UPDATE_THEME_BG_COLOR = 'UPDATE_THEME_BG_COLOR'
 const UPDATE_THEME_FONT = 'UPDATE_THEME_FONT'
 
-const UPDATE_WIN_TYPE = 'UPDATE_WIN_TYPE'
+const UPDATE_MANAGE_PANE_COMPONENT = 'UPDATE_MANAGE_PANE_COMPONENT'
 const UPDATE_PROPERTY_TAB_TYPE = 'UPDATE_PROPERTY_TAB_TYPE'
 const RESET_SHOWING_COL = 'RESET_SHOWING_COL'
 
@@ -34,6 +35,7 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
   'UPDATE_FILEMANAGER_TREE_NODE_EXPANDED'
 
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
+const SET_EDITING_AREA = 'SET_EDITING_AREA'
 
 const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
@@ -51,6 +53,7 @@ export const props = {
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
+  SET_ACTIVE_PROPERTY_OPTIONS,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
@@ -62,13 +65,14 @@ export const props = {
   UPDATE_THEME_BG_COLOR,
   UPDATE_THEME_FONT,
 
-  UPDATE_WIN_TYPE,
+  UPDATE_MANAGE_PANE_COMPONENT,
   UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
 
   SET_NEW_MOD_POSITION,
+  SET_EDITING_AREA,
 
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
@@ -141,6 +145,9 @@ const mutations = {
     if (!state.activePage.activeMod) return
     Vue.set(state.activePage, 'activeProperty', property)
   },
+  [SET_ACTIVE_PROPERTY_OPTIONS](state, playload) {
+    Vue.set(state, 'activePropertyOptions', playload)
+  },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
     const modList = activeModList(state)
     Parser.updateBlock(modList, key, code)
@@ -157,6 +164,10 @@ const mutations = {
   },
   [SET_ACTIVE_AREA](state, area) {
     Vue.set(state.activePage, 'activeArea', area)
+  },
+  [SET_EDITING_AREA](state, payload) {
+    Vue.set(state.activePage, 'addingArea', payload.area)
+    Vue.set(state.activePage, 'cursorPosition', payload.cursorPosition)
   },
   [UPDATE_ACTIVE_MOD_ATTRIBUTES](state, { key, value }) {
     const modList = activeModList(state)
@@ -184,8 +195,11 @@ const mutations = {
   [UPDATE_THEME_FONT](state, fontID) {
     Vue.set(state.activePage.theme, 'fontID', fontID)
   },
-  [UPDATE_WIN_TYPE](state, componentType) {
-    Vue.set(state, 'activeWinType', componentType)
+  [UPDATE_MANAGE_PANE_COMPONENT](state, payload) {
+    // for the usage of manage pane component
+    // payload should be {name, props}
+    payload = _.isString(payload) ? {name: payload} : payload
+    Vue.set(state, 'activeManagePaneComponent', payload)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
     Vue.set(state.activePage, 'activePropertyTabType', componentType)
@@ -248,7 +262,10 @@ const mutations = {
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)
   },
-  [UPDATE_OPENED_LAYOUT_FILE](state, { sitePath, layoutContentFilePath, data }) {
+  [UPDATE_OPENED_LAYOUT_FILE](
+    state,
+    { sitePath, layoutContentFilePath, data }
+  ) {
     let siteSetting = state.siteSettings[sitePath]
     _.merge(siteSetting.pages[layoutContentFilePath], data)
   }

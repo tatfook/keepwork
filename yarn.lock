@@ -1070,6 +1070,10 @@ better-assert@~1.0.0:
   dependencies:
     callsite "1.0.0"
 
+bezier-easing@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.0.3.tgz#cb493fddb7f8920ecca00973344ce0518885f17e"
+
 bfj-node4@^5.2.0:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/bfj-node4/-/bfj-node4-5.3.1.tgz#e23d8b27057f1d0214fc561142ad9db998f26830"
@@ -4230,7 +4234,7 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-js-yaml@3.x, js-yaml@^3.4.3, js-yaml@^3.9.1:
+js-yaml@3.x, js-yaml@^3.11.0, js-yaml@^3.4.3, js-yaml@^3.9.1:
   version "3.11.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
   dependencies:
@@ -6140,6 +6144,10 @@ q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
 
+qiniu-js@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/qiniu-js/-/qiniu-js-2.2.2.tgz#1901f60207e5f0985c6dc73fb0ef0067fef1350d"
+
 qjobs@^1.1.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/qjobs/-/qjobs-1.2.0.tgz#c45e9c61800bd087ef88d7e256423bdd49e5d071"
@@ -7812,6 +7820,12 @@ vue-markdown@^2.2.4:
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
+
+vue-scrollto@^2.11.0:
+  version "2.11.0"
+  resolved "http://registry.npm.taobao.org/vue-scrollto/download/vue-scrollto-2.11.0.tgz#0657f127faded60a71fbcc841f393279a49aed55"
+  dependencies:
+    bezier-easing "^2.0.3"
 
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.1.2"
