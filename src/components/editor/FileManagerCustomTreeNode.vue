@@ -183,8 +183,7 @@ export default {
       return !this.isFile
     },
     isRemovable() {
-      // return this.isFile
-      return !this.isFirstLevel
+      return this.node.level !== 1
     },
     isSettable() {
       return this.isWebsite || this.isFile
