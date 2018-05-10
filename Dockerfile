@@ -1,4 +1,4 @@
-From xuntian/node-yarn as builder
+FROM xuntian/node-yarn as builder
 MAINTAINER xuntian "li.zq@foxmail.com"
 COPY ./ /code/
 WORKDIR /code
