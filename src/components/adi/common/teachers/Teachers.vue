@@ -10,6 +10,7 @@ import compBaseMixin from '../comp.base.mixin'
 import  { mapGetters} from 'vuex'
 import axios from 'axios'
 
+let teacherShow = false
 const getMods = function(name) {
   let eles = document.getElementsByTagName('div')
   let rets = []

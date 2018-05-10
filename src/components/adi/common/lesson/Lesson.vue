@@ -95,6 +95,7 @@ export default {
         }).then(response => {
           let r = response.data
           if (r.data && r.data.vipDay >= 0) {
+            this.options.updateVipView()
             this.properties.vip = true
           } else {
             this.properties.vip = false
@@ -174,6 +175,7 @@ export default {
     font-size: 16px;
     word-wrap: break-word;
     white-space: pre-wrap;
+    line-height: 1.5;
   }
 
   .lesson-goals li {
