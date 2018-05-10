@@ -12,6 +12,7 @@ import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
 import AdiPageList from './pageList/pageList'
 import AdiFooter from './footer/footer'
+import AdiToc from './toc/toc'
 
 export default {
   AdiImgLoop,
@@ -27,5 +28,6 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiPageList,
-  AdiFooter
+  AdiFooter,
+  AdiToc
 }
