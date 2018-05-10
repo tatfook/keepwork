@@ -1,5 +1,5 @@
 <template>
-  <div class="el-tree-node__label">
+  <div class="el-tree-node__label" v-loading="removePending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
       <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
@@ -109,7 +109,7 @@ export default {
       }
       recursionFile(data)
 
-      this.$confirm(toRemoveFiles.length - 1 > 0 ? self.$t('editor.deleteFolder') + `${toRemoveFiles.length - 1}` + self.$t('editor.documents') :  self.$t('editor.areYouSureYouWantToDeleteThisFolder') ,self.$t('editor.delete'), {
+      this.$confirm(self.$t('editor.deleteFolder') ,self.$t('editor.delete'), {
         confirmButtonText: self.$t('el.messagebox.confirm'),
         cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
