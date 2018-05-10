@@ -161,7 +161,7 @@
     "match": "match",
     "cancel": "Cancel",
 
-    "deleteFolder": "Be sure to delete the folder and inside ",
+    "deleteFolder": "Be sure to delete the folder and inside documents ?",
     "documents": " documents ?",
     "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?"
   },
