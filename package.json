@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha-webpack --webpack-config build/webpack.test.conf.js --require test/setup.js test/**/*.spec.js",
+    "unit": "cross-env NODE_ENV=test MOCHA_FILE=./jenkins-test-results.xml nyc --reporter=lcov --reporter=text mocha-webpack --webpack-config build/webpack.test.conf.js --reporter=mocha-junit-reporter --require test/setup.js test/**/*.spec.js",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js"
@@ -84,6 +84,7 @@
     "jsdom": "^11.10.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.2.0",
+    "mocha-junit-reporter": "^1.17.0",
     "mocha-webpack": "^1.0.0-rc.1",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.8.3",
