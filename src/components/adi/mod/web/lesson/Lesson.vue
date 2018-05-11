@@ -34,7 +34,7 @@ const getMods = function(name) {
 const createMod = function(name, html) {
   let ele = document.createElement('div')
   ele.setAttribute('data-mod', name)
-  ele.setAttribute('hidden', 'true')
+  ele.setAttribute('style', 'display:none')
   ele.innerHTML = html
   return ele
 }
@@ -52,6 +52,7 @@ const getMod = function(name) {
 }
 
 const lessonHost = 'http://localhost:3000'
+document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
 let vuex = {}
 let firstInFlag = true
 let self
@@ -92,7 +93,6 @@ const init = function(){
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
-    document.domain = 'localhost'
     // 计算页面的实际高度，iframe自适应会用到
     function calcPageHeight(doc) {
       let cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
@@ -378,6 +378,8 @@ const bindSortEvent = function() {
   // Sort End
 }
 
+let summaryContainer = document.getElementById("summaryContainer");
+
 const beginClass = function(classId) {
   classState = 1
   classId = classId
@@ -458,7 +460,6 @@ const beginClass = function(classId) {
     }
   }
 }
-
 export default {
   computed: {
     ...mapGetters({
@@ -511,7 +512,14 @@ export default {
             } else {
               document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
             }
+
+            if(name == 'ModSummary') {
+              if(summaryContainer) {
+                summaryContainer.style.display = "block";
+              }
+            }
           }
+
         }
         if(firstInFlag) {
           let lessonMod = getMod('ModLesson')
@@ -617,7 +625,6 @@ export default {
                       if(r.data.state == 2) {
                         // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
                         let summaryMod = getMod('ModSummary')
-                        document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
                         let link = lessonHost + '/learnedRecord/' + mRecordSn;
                         summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
                         clearInterval(timerLearnState)
@@ -687,9 +694,19 @@ export default {
               let summaryMod = getMod('ModSummary')
               if(r.data) {
                 notify.close();
-                document.domain = 'localhost';// TODO: 后面需要修改为 keepwork
                 let link = lessonHost + '/taughtedRecord/' + r.data.classId;
-                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                if(summaryMod.getAttribute("style") == "display:none") {
+                  summaryMod.setAttribute("style", "display:block");
+                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                  let timerLearnState = settimeout( function () {
+                    if(summaryContainer.height !== '0px') {
+                      summaryContainer.style.display = "none";
+                    }
+                  }, 200);
+                }else{
+                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                }
+
               }
             })
             btnClass.setAttribute('disabled','true')
@@ -978,5 +995,12 @@ span.w::before {
 }
 .txt-one span, .txt-two span {
   color: #F75858;
+}
+#pane-first {
+  padding: 10px 20px 10px;
+}
+.recordWrapper {
+  width: 1080px;
+  padding: 40px 2%;
 }
 </style>
