@@ -233,10 +233,8 @@ const updateStudentsView = function(r) {
     }
     if(currentTab === 'ModStudent') {
       // 隐藏学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
     } else {
       // 显示学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
       document.getElementsByClassName('student-learning')[0].innerText = learningCount;
       document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
       document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
