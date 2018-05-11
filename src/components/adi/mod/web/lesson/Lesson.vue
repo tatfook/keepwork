@@ -378,8 +378,6 @@ const bindSortEvent = function() {
   // Sort End
 }
 
-let summaryContainer = document.getElementById("summaryContainer");
-
 const beginClass = function(classId) {
   classState = 1
   classId = classId
@@ -514,6 +512,7 @@ export default {
             }
 
             if(name == 'ModSummary') {
+              let summaryContainer = document.getElementById("summaryContainer");
               if(summaryContainer) {
                 summaryContainer.style.display = "block";
               }
@@ -621,7 +620,7 @@ export default {
                   }
                   axios.get(lessonHost + '/api/record/learnDetailBySn', params)
                     .then(response => {
-                      let r = response.data
+                      let r = response.data;
                       if(r.data.state == 2) {
                         // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
                         let summaryMod = getMod('ModSummary')
@@ -698,7 +697,8 @@ export default {
                 if(summaryMod.getAttribute("style") == "display:none") {
                   summaryMod.setAttribute("style", "display:block");
                   summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
-                  let timerLearnState = settimeout( function () {
+                  let timerLearnState = setTimeout( function () {
+                    let summaryContainer = document.getElementById("summaryContainer");
                     if(summaryContainer.height !== '0px') {
                       summaryContainer.style.display = "none";
                     }
