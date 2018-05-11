@@ -63,6 +63,8 @@ let quizLen
 let orderBy // 当前排序
 let sortFlag // 'false' 正序 'true' 倒序
 let lastResponse
+let vipFlag = false //false 普通用户 true vip用户
+let notify
 
 const init = function(){
   console.log('init')
@@ -81,10 +83,29 @@ const init = function(){
           }
       }
   }
+
   if (device == 'pc' || device == 'pad') {
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
+  } else if (device == 'print') {
+    document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
+    document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
+    hideMod('ModLesson', true)
+    document.domain = 'localhost'
+    // 计算页面的实际高度，iframe自适应会用到
+    function calcPageHeight(doc) {
+      let cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+      let sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+      let height  = Math.max(cHeight, sHeight)
+      return height
+    }
+    let timer = setInterval(function(){
+      var height = calcPageHeight(document)
+      var container = parent.document.getElementById('keepworkContainer')
+      container.style.height = height + 'px'
+      container.setAttribute('height', height)
+    },1000)
   } else {
     let lessonMod = getMod('ModLesson')
     if(lessonMod && lessonMod.parentNode != null) {
@@ -92,7 +113,7 @@ const init = function(){
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
                       + '</div>';
       let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">Learning is not started yet. There is no summary here.</div>'
+                        + '<div class="no-data summary-tip">' + (vipFlag? 'Teaching': 'Learning') + ' is not started yet. There is no summary here.</div>'
                       + '</div>';
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
       lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
@@ -137,6 +158,13 @@ const timer = {
           lastResponse = r;
           updateStudentsView(r);
         })
+      if(classState == 1) {
+        document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
+        let eleTip = document.getElementsByClassName('is-dark')[0];
+        if(eleTip) {
+          eleTip.innerText = '(Click here to dismiss the class)';
+        }
+      }
     }, this.timeout)
   },
   stop: function() {
@@ -351,20 +379,20 @@ const bindSortEvent = function() {
 }
 
 const beginClass = function(classId) {
-  // tipClass.innerText = '(Click here to dismiss the class)'
   classState = 1
   classId = classId
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
-  self.$alert("<div class='txt-one'>The class ID is <span>" + classId + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <a href='javascript:;'>Students' Performance</a></div>"
+  let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3);
+  self.$alert("<div class='txt-one'>The class ID is <span>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
             + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
     confirmButtonText: 'OK',
     callback: action => {
-      self.$notify.info({
+      notify = self.$notify.info({
         title: 'Class ID:',
         dangerouslyUseHTMLString: true,
-        message: '<div class="showMessage"><strong>'+ classId +'</strong><div class="prompt el-popover">Class ID is the unique identifier for this class.'
+        message: '<div class="showMessage"><strong>'+ classIdStr +'</strong><div class="prompt el-popover">Class ID is the unique identifier for this class.'
                   + 'Students in this class need to login with this identifier to start learning the lesson. '
                   + 'This ensures the student learning data is sent to the system correctly.</div></div>',
         duration: 0,
@@ -421,8 +449,14 @@ const beginClass = function(classId) {
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
                         + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
                       + '</div>';
-
-  document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
+  let btnClass = document.getElementById('btnClass');
+  if(document.readyState == 'complete' && btnClass && btnClass.lastChild) {
+    btnClass.lastChild.innerText = 'Dismiss the Class';
+    let eleTip = document.getElementsByClassName('is-dark')[0];
+    if(eleTip) {
+      eleTip.innerText = '(Click here to dismiss the class)';
+    }
+  }
 }
 
 export default {
@@ -469,6 +503,13 @@ export default {
               }else {
                 hideMod(t, true)
               }
+            }
+          }
+          if(classState == 1) {
+            if(name == 'ModStudent') {
+              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+            } else {
+              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
             }
           }
         }
@@ -563,6 +604,7 @@ export default {
                 // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
                 let mRecordSn =  r.data.recordSn
                 btnPaly.setAttribute("disabled","true")
+                document.getElementsByClassName('summary-tip')[0].innerText = 'Please wait…The summary will be generated after the learning is finished.'
                 window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
                 let timerLearnState = setInterval( function () {
                   // record/learnDetailBySn 获取数据后 DOM 操作
@@ -627,7 +669,6 @@ export default {
           })
         } else if ( classState == 1 ) {
           // finish class
-          console.log(this);
           btnClass.lastChild.innerText = 'Dismiss the Class';
           self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
             confirmButtonText: 'Yes',
@@ -645,15 +686,25 @@ export default {
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
+                notify.close();
                 document.domain = 'localhost';// TODO: 后面需要修改为 keepwork
                 let link = lessonHost + '/taughtedRecord/' + r.data.classId;
                 summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
             })
             btnClass.setAttribute('disabled','true')
+            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
           }).catch(() => {
             // cancel
           })
+        }
+      }
+      options.updateVipView = function() {
+        // vip 权限用户
+        vipFlag = true
+        let summaryTip = document.getElementsByClassName('summary-tip')[0];
+        if(summaryTip) {
+          summaryTip.innerText = 'Teaching is not started yet. There is no summary here.'
         }
       }
       return options
