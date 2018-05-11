@@ -165,7 +165,7 @@ export default {
           if(r.data.u){
             sn = r.data.u.recordSn
             let ans = r.data.u.answerSheet
-            if(ans && ans[0].id) {
+            if(ans && ans[0].quizId) {
               answerSheet = ans;
               // 恢复答题状态
               for(let i = 0; i < ans.length; i++) {
