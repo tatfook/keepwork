@@ -13,8 +13,8 @@ import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
-import ModToc from './web/toc'
-
+import ModToc from './web/Toc'
+console.log(ModToc)
 var modsList = [
   {
     id: 1,

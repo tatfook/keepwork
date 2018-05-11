@@ -4,7 +4,14 @@
   </div>
 </template>
 <script>
-export default {}
+import compBaseMixin from '../comp.base.mixin'
+
+export default {
+  name: 'AdiToc',
+  mixins: [compBaseMixin],
+  computed: {},
+  methods: {}
+}
 </script>
 <style lang="scss" scoped>
 </style>
