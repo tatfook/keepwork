@@ -29,37 +29,35 @@ const init = function(){
   let operate = document.getElementById("isTeachersContent");
   let teachersMod = getMods('ModTeachers');
   if(lessonMod.length > 0) {
-      if(operate == null || operate == undefined) {
-        let div = document.createElement("div");
-        let button = document.createElement("button");
-        div.setAttribute("class", "text-right");
-        button.setAttribute("class", "el-button el-button--primary el-button--small");
-        button.setAttribute("data-tip", "Click to hide all notes for teachers");
-        button.setAttribute("id", "isTeachersContent");
-        button.style.display = "none";
-        button.innerHTML = "Hide All";
-        div.appendChild(button);
-        overviewDom.appendChild(div);
-      }
+    if(operate == null || operate == undefined) {
+      let div = document.createElement("div");
+      let button = document.createElement("button");
+      div.setAttribute("class", "text-right");
+      button.setAttribute("class", "el-button el-button--primary el-button--small");
+      button.setAttribute("data-tip", "Click to hide all notes for teachers");
+      button.setAttribute("id", "isTeachersContent");
+      button.style.display = "none";
+      button.innerHTML = "Hide All";
+      div.appendChild(button);
+      overviewDom.appendChild(div);
+    }
 
-      if(teachersMod.length > 0) {
-        let operate = document.getElementById("isTeachersContent");
-        operate.addEventListener("click", function(){
+    let operate = document.getElementById("isTeachersContent");
+    if(teachersMod.length > 0) {
+        operate.onclick = function () {
+          operate.innerHTML == "Show All" ? operate.innerText = "Hide All" : operate.innerText = "Show All";
           if(operate.innerHTML == "Show All") {
-            operate.innerHTML = "Hide All";
             for(let i = 0, len = teachersMod.length; i < len; i++) {
               teachersMod[i].style.display = "block";
             }
             operate.setAttribute("data-tip", "Click to hide all notes for teachers");
-
           }else {
-            operate.innerHTML = "Show All";
             for(let i = 0, len = teachersMod.length; i < len; i++) {
               teachersMod[i].style.display = "none";
             }
             operate.setAttribute("data-tip", "Click to show all notes for teachers");
           }
-        });
+        }
     }
   }
 
