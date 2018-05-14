@@ -30,7 +30,7 @@
 
     <el-row class="lesson-tab mod-full-width-0-0-32">
       <el-tabs value="first" @tab-click="tabClick">
-        <div v-if="properties.vip || isShowStudent" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
+        <div v-if="properties.vip" class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
         <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
@@ -48,7 +48,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      isShowStudent: false,
       btnInfo: 'Begin the Class',
       btnTip: '(Click here to begin the class)'
     };
@@ -74,11 +73,6 @@ export default {
     },
     tabClick(tab) {
       this.options.tabClick(tab);
-      if(tab.name !== 'third') {
-          this.isShowStudent = true;
-      }else{
-          this.isShowStudent = false;
-      }
     },
     playClick() {
       this.options.playClick()
