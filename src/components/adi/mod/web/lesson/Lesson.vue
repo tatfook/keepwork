@@ -705,20 +705,35 @@ export default {
                 if(summaryMod.getAttribute("style") == "display:none") {
                   summaryMod.setAttribute("style", "display:block");
                   summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
-                  let timerLearnState = setTimeout( function () {
-                    let summaryContainer = document.getElementById("summaryContainer");
-                    if(summaryContainer.height !== '0px') {
-                      summaryContainer.style.display = "none";
+                  let dataMod = summaryMod.parentNode.childNodes;
+                  for(let i = 0; i < dataMod.length; i++) {
+                    let modItem = dataMod[i].getAttribute("data-mod")
+                    if(modItem != "ModSummary" && modItem != "ModLesson") {
+                      dataMod[i].setAttribute("style", "display: none");
                     }
-                  }, 200);
+                  }
+
+                  // let timerLearnState = setTimeout( function () {
+                  //   let summaryContainer = document.getElementById("summaryContainer");
+                  //   if(summaryContainer.height !== '0px') {
+                  //     summaryContainer.style.display = "none";
+                  //   }
+                  // }, 200);
                 }else{
                   summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
                 }
 
               }
-            })
-            btnClass.setAttribute('disabled','true')
-            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+            });
+            btnClass.setAttribute('disabled','true');
+            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+
+            let tabItem = document.getElementsByClassName("el-tabs__item");
+            for(let i = 0; i < tabItem.length; i++) {
+              tabItem[i].setAttribute("class", "el-tabs__item is-top");
+            }
+            document.getElementById("tab-fourth").className += ' is-active';
+
           }).catch(() => {
             // cancel
           })
