@@ -13,6 +13,7 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
+import ModToc from './web/toc'
 
 export const modList = {
   ModMarkdown,
@@ -29,7 +30,8 @@ export const modList = {
   ModVipRead,
   ModComment,
   ModTextBoard,
-  ModPageList
+  ModPageList,
+  ModToc
 }
 
 export const load = modName => {

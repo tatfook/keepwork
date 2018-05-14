@@ -6,7 +6,7 @@ export default [
     },
     props: {},
     theme: {
-      root: {}
+      root: []
     },
     options: {},
     useImage: false,

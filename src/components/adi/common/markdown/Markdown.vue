@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown class="markdown-body comp-markdown" :source='properties.data ? properties.data : $t(options.emptyData)' />
+  <vue-markdown class="markdown-body comp-markdown" :toc="true" :source='properties.data ? properties.data : $t(options.emptyData)' />
 </template>
 
 <script>
