@@ -86,7 +86,8 @@ const getters = {
   mainModList: state => (state.activePage ? state.activePage.modList : []),
   headerModList: (state, { header }) => header && header.modList,
   footerModList: (state, { footer }) => footer && footer.modList,
-  sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList
+  sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
+  code: (state) => state && state.code
 }
 
 const actions = {
@@ -146,6 +147,8 @@ const mutations = {
     Vue.set(state, 'activePageUrl', path)
   },
   UPDATE_MODS(state, code) {
+    console.log(code)
+    Vue.set(state, 'code', code)
     let blockList = Parser.buildBlockList(code)
     Parser.updateBlockList(state.modList, blockList)
   },

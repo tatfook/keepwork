@@ -187,7 +187,8 @@
     "comment": "Comment",
     "setting": "Setting",
     "pageList": "Page list",
-    "textBoard": "Text Board"
+    "textBoard": "Text Board",
+    "toc": "Toc"
   },
   "adi": {
     "markdown": {
@@ -295,6 +296,7 @@
     "openBoard": "Open board",
     "switchComment": "Comment is on",
     "pageList": "Page list",
-    "footer": "Footer"
+    "footer": "Footer",
+    "toc": "TOC Setting"
   }
 }
