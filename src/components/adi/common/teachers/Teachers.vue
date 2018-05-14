@@ -100,6 +100,10 @@ export default {
             this.teacherShow = false
           }
           this.$forceUpdate()
+          if (device == 'pc' || device == 'pad') {
+            this.teacherShow = false
+            this.$forceUpdate()
+          }
         })
       } else {
         this.teacherShow = false
@@ -120,10 +124,6 @@ export default {
                 break;
             }
         }
-    }
-    if (device == 'pc' || device == 'pad') {
-      this.teacherShow = false
-      this.$forceUpdate()
     }
   }
 }
