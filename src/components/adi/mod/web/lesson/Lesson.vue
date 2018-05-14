@@ -494,6 +494,8 @@ export default {
           currentTab = name
            // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
           if(name == 'ModOverview') {
+            document.getElementById("isTeachersContent").style.display = "block";
+
             // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
             for(let i = 0; i < mods.length; i ++) {
               let t = mods[i]
@@ -526,6 +528,7 @@ export default {
                 summaryContainer.style.display = "block";
               }
             }
+
           }
 
         }

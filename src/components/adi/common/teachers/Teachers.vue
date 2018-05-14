@@ -36,6 +36,7 @@ const init = function(){
         button.setAttribute("class", "el-button el-button--primary el-button--small");
         button.setAttribute("data-tip", "Click to hide all notes for teachers");
         button.setAttribute("id", "isTeachersContent");
+        button.style.display = "none";
         button.innerHTML = "Hide All";
         div.appendChild(button);
         overviewDom.appendChild(div);
