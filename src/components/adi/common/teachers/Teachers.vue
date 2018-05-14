@@ -1,7 +1,7 @@
 <template>
   <div class="comp-teachers" v-if="teacherShow">
     <span>Teachers:</span>
-    <pre class="content"> {{properties.content ? properties.content : $t(options.content)}}</pre>
+    <pre class="content">{{properties.content ? properties.content : $t(options.content)}}</pre>
   </div>
 </template>
 

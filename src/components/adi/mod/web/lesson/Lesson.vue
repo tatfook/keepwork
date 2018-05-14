@@ -505,6 +505,7 @@ export default {
             }
           }
           if(classState == 1) {
+            console.log(name);
             if(name == 'ModStudent') {
               document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
             } else {

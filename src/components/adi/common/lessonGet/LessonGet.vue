@@ -1,6 +1,6 @@
 <template>
   <div class="comp-lesson-get">
-    <pre class="content"> {{properties.content ? properties.content : $t(options.content)}}</pre>
+    <pre class="content">{{properties.content ? properties.content : $t(options.content)}}</pre>
   </div>
 </template>
 
@@ -14,6 +14,15 @@ export default {
 </script>
 
 <style>
+  [data-mod="ModLessonGet"]{
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .comp-lesson-get {
+    margin: 25px 40px;
+  }
+
   .comp-lesson-get .content {
     margin-top:25px;
     font-size: 16px;
@@ -22,4 +31,5 @@ export default {
     word-wrap: break-word;
     white-space: pre-wrap;
   }
+
 </style>
