@@ -20,7 +20,7 @@
         <el-radio-group :style="{width: '100%'}" v-model="ruleForm.single">
           <div class="flex-center-between" v-for="(opt, index) in ruleForm.singleOptions">
             <el-radio :label="serialNo[index]"></el-radio>
-            <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
           </div>
           <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
@@ -36,7 +36,7 @@
           <div class="flex-center-between"
             v-for="(opt, index) in ruleForm.multipleOptions">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
-            <el-input v-model="opt.item" placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
           </div>
           <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
@@ -243,7 +243,19 @@ export default {
       }
 
     },
+
     submitForm(formName, type) {
+      let opeInput = document.getElementsByClassName("writer-input");
+      for(let i = 0; i < opeInput.length; i++) {
+        let input = opeInput[i].children[0];
+        if(input.value == undefined || input.value == "") {
+           input.style.borderColor = "#f56c6c";
+           return;
+        }else{
+           input.style.borderColor = "#67c23a";
+        }
+      }
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let writerQA = {
@@ -274,6 +286,7 @@ export default {
         }
       });
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
@@ -292,6 +305,10 @@ export default {
 
   .flex-center-between .el-input {
       margin: 0 20px;
+  }
+
+  .el-form-item .writer-input .el-input__inner {
+    border-color: rgb(245, 108, 108);
   }
 </style>
 

@@ -269,10 +269,8 @@ const updateStudentsView = function(r) {
     }
     if(currentTab === 'ModStudent') {
       // 隐藏学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
     } else {
       // 显示学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
       document.getElementsByClassName('student-learning')[0].innerText = learningCount;
       document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
       document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
@@ -468,7 +466,6 @@ const beginClass = function(classId) {
     }
   }
 }
-
 export default {
   computed: {
     ...mapGetters({
@@ -521,7 +518,15 @@ export default {
             } else {
               document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
             }
+
+            if(name == 'ModSummary') {
+              let summaryContainer = document.getElementById("summaryContainer");
+              if(summaryContainer) {
+                summaryContainer.style.display = "block";
+              }
+            }
           }
+
         }
         if(firstInFlag) {
           let lessonMod = getMod('ModLesson')
@@ -623,7 +628,7 @@ export default {
                   }
                   axios.get(lessonHost + '/api/record/learnDetailBySn', params)
                     .then(response => {
-                      let r = response.data
+                      let r = response.data;
                       if(r.data.state == 2) {
                         // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
                         let summaryMod = getMod('ModSummary')
@@ -649,8 +654,9 @@ export default {
         params.lessonTitle = self.modData.lesson.Title
         params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
         params.goals = self.modData.lesson.LessonGoals
-        let lessonGet = getMod('ModLessonGet')
-        let lessonPerformance = ''
+        let lessonGet = getMod('ModLessonGet');
+        let lessonPerformance = '';
+
         if(lessonGet) {
           let eles = lessonGet.getElementsByTagName('pre')
           for(let i =0; i < eles.length; i++) {
@@ -662,6 +668,7 @@ export default {
           params.lessonPerformance = lessonPerformance
           params.quizNum = getMods('ModQuiz').length
         }
+
         if( classState == 0 ) {
           // begin class
           axios.post(lessonHost + '/api/class/begin', qs.stringify(params),
@@ -673,8 +680,14 @@ export default {
             if(r.err == 0) {
               beginClass(r.data.classId);
             } else {
-              // error
-            }
+              self.$alert('<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' + r.data.lessonNo + 'is ongoing.</div>', {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: 'Click to view',
+                center: true
+              }).then(() => {
+                window.open(r.data.lessonUrl);
+              });
+             }
           })
         } else if ( classState == 1 ) {
           // finish class
@@ -697,11 +710,38 @@ export default {
               if(r.data) {
                 notify.close();
                 let link = lessonHost + '/taughtedRecord/' + r.data.classId;
-                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                if(summaryMod.getAttribute("style") == "display:none") {
+                  summaryMod.setAttribute("style", "display:block");
+                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                  let dataMod = summaryMod.parentNode.childNodes;
+                  for(let i = 0; i < dataMod.length; i++) {
+                    let modItem = dataMod[i].getAttribute("data-mod")
+                    if(modItem != "ModSummary" && modItem != "ModLesson") {
+                      dataMod[i].setAttribute("style", "display: none");
+                    }
+                  }
+
+                  // let timerLearnState = setTimeout( function () {
+                  //   let summaryContainer = document.getElementById("summaryContainer");
+                  //   if(summaryContainer.height !== '0px') {
+                  //     summaryContainer.style.display = "none";
+                  //   }
+                  // }, 200);
+                }else{
+                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                }
+
               }
-            })
-            btnClass.setAttribute('disabled','true')
-            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+            });
+            btnClass.setAttribute('disabled','true');
+            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+
+            let tabItem = document.getElementsByClassName("el-tabs__item");
+            for(let i = 0; i < tabItem.length; i++) {
+              tabItem[i].setAttribute("class", "el-tabs__item is-top");
+            }
+            document.getElementById("tab-fourth").className += ' is-active';
+
           }).catch(() => {
             // cancel
           })
@@ -986,5 +1026,12 @@ span.w::before {
 }
 .txt-one span, .txt-two span {
   color: #F75858;
+}
+#pane-first {
+  padding: 10px 20px 10px;
+}
+.recordWrapper {
+  width: 1080px;
+  padding: 40px 2%;
 }
 </style>

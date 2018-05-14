@@ -346,7 +346,7 @@ export default {
   }
 
   .comp-quiz .title {
-    margin: 20px 0;
+    margin: 15px 0 5px;
   }
 
   .comp-quiz .title span {
