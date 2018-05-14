@@ -51,7 +51,6 @@
 import compBaseMixin from '../comp.base.mixin'
 import axios from 'axios'
 import qs from 'qs'
-import { mapGetters } from 'vuex'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div');
@@ -102,11 +101,6 @@ const timer = {
 }
 
 export default {
-  computed: {
-    ...mapGetters({
-      userInfo: 'user/info'
-    })
-  },
   name: 'AdiQuiz',
   mixins: [compBaseMixin],
   data() {
@@ -158,8 +152,7 @@ export default {
         device: 'pad',
         classId: classId,
         username: username,
-        studentNo: studentNo,
-        portrait: this.userInfo.userinfo.portrait
+        studentNo: studentNo
       }
       axios.post(lessonHost + '/api/class/enter', qs.stringify(params),
       {
@@ -202,6 +195,10 @@ export default {
   },
   methods: {
     submitQuiz() {
+      if(!this.quiz.single && !this.quiz.judge && !this.quiz.multiple.join(',')) {
+        this.$message.error("Please select one answer!")
+        return;
+      }
       this.isShow = true;
       let data = this.properties.data;
       let trueFlag = false;
