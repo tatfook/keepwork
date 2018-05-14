@@ -106,6 +106,16 @@ export default {
       this.save()
       return false
     })
+    Mousetrap.unbind('mod+z')
+    Mousetrap.bind('mod+z', () => {
+      this.undo()
+      return false
+    })
+    Mousetrap.unbind('mod+y')
+    Mousetrap.bind('mod+y', () => {
+      this.redo()
+      return false
+    })
   },
   computed: {
     ...mapGetters({

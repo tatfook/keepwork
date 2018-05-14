@@ -94,6 +94,7 @@ const actions = {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     commit(SET_ACTIVE_PAGE, { path, username })
+    UndoHelper.init(getters.activeAreaData.undoManager, getters.code)
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters

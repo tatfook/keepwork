@@ -52,7 +52,9 @@ export default {
       activeMod: 'activeMod'
     }),
     options() {
-      let save = () => Mousetrap.trigger('mod+s')
+      const save = () => Mousetrap.trigger('mod+s')
+      const undo = () => Mousetrap.trigger('mod+z')
+      const redo = () => Mousetrap.trigger('mod+y')
       return {
         mode: 'markdown',
         lineNumbers: true,
@@ -70,11 +72,16 @@ export default {
           'CodeMirror-lint-markers'
         ],
         matchBrackets: true,
+        undoDepth: 0,
         dragDrop: true,
         allowDropFileTypes: ['jpg', 'jpeg'], // codemirror will automatically parse the dropped file and insert the content into editing area, eg: js, svg, xml...
         extraKeys: {
           'Ctrl-S': save,
           'Cmd-S': save,
+          'Ctrl-Z': undo,
+          'Cmd-Z': undo,
+          'Ctrl-Y': redo,
+          'Cmd-Y': redo,
           'Ctrl-Space': 'autocomplete',
           'Cmd-Space': 'autocomplete'
         }
