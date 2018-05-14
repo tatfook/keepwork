@@ -52,8 +52,8 @@ const getMod = function(name) {
 }
 
 const lessonHost = 'http://localhost:3000'
-// document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
-document.domain = top.location.origin.replace(/\:(\d)+/,'').replace(/http\:\/\//, '');
+document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
+// document.domain = top.location.origin.replace(/\:(\d)+/,'').replace(/http\:\/\//, '');
 
 // console.debug('***************************')
 // console.debug(top.location.origin);
@@ -471,7 +471,8 @@ export default {
     ...mapGetters({
       username: 'user/username',
       isLogined: 'user/isLogined',
-      activePageUrl: 'activePageUrl'
+      activePageUrl: 'activePageUrl',
+      userInfo: 'user/info'
     })
   },
   mounted: function(){
@@ -649,6 +650,7 @@ export default {
         let params = {}
         // let tipClass = document.getElementById('tipClass')
         params.username = self.username
+        params.portrait = self.userInfo.userinfo.portrait
         params.lessonNo = self.modData.lesson.LessonNo
         params.lessonUrl = self.activePageUrl
         params.lessonTitle = self.modData.lesson.Title

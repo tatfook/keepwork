@@ -69,7 +69,8 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     ...mapGetters({
-      username: 'user/username'
+      username: 'user/username',
+      userInfo: 'user/info'
     })
   },
   data () {
@@ -87,7 +88,8 @@ export default {
       if (username) {
         axios.get(lessonHost + '/api/member/auth', {
           params: {
-            username: username
+            username: username,
+            portrait: this.userInfo.userinfo.portrait
           }
         }).then(response => {
           let r = response.data
