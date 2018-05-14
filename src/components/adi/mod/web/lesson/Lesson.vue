@@ -54,13 +54,6 @@ const getMod = function(name) {
 const lessonHost = 'http://localhost:3000'
 // document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
 document.domain = top.location.origin.replace(/\:(\d)+/,'').replace(/http\:\/\//, '');
-
-// console.debug('***************************')
-// console.debug(top.location.origin);
-// console.debug(document.referrer);
-// console.debug(window.location.ancestorOrigins[0]);
-// console.debug('***************************')
-
 let vuex = {}
 let firstInFlag = true
 let self
@@ -513,7 +506,6 @@ export default {
             }
           }
           if(classState == 1) {
-            console.log(name);
             if(name == 'ModStudent') {
               document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
             } else {
