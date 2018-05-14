@@ -269,8 +269,10 @@ const updateStudentsView = function(r) {
     }
     if(currentTab === 'ModStudent') {
       // 隐藏学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
     } else {
       // 显示学习信息
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
       document.getElementsByClassName('student-learning')[0].innerText = learningCount;
       document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
       document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
@@ -455,7 +457,7 @@ const beginClass = function(classId) {
   bindSortEvent();
   let summaryMod = getMod('ModSummary');
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
-                        + '<div class="no-data">Please wait… The summary will be generated after the teaching is finished.</div>'
+                        + '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>'
                       + '</div>';
   let btnClass = document.getElementById('btnClass');
   if(document.readyState == 'complete' && btnClass && btnClass.lastChild) {
