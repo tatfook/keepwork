@@ -712,6 +712,8 @@ export default {
             .then(response => {
               let r = response.data
               // 展现 Summary 数据
+              classState = 2
+              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
               timer.stop()
               let summaryMod = getMod('ModSummary')
               if(r.data) {
