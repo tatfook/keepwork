@@ -646,8 +646,9 @@ export default {
         params.lessonTitle = self.modData.lesson.Title
         params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
         params.goals = self.modData.lesson.LessonGoals
-        let lessonGet = getMod('ModLessonGet')
-        let lessonPerformance = ''
+        let lessonGet = getMod('ModLessonGet');
+        let lessonPerformance = '';
+
         if(lessonGet) {
           let eles = lessonGet.getElementsByTagName('pre')
           for(let i =0; i < eles.length; i++) {
@@ -659,6 +660,7 @@ export default {
           params.lessonPerformance = lessonPerformance
           params.quizNum = getMods('ModQuiz').length
         }
+
         if( classState == 0 ) {
           // begin class
           axios.post(lessonHost + '/api/class/begin', qs.stringify(params),
@@ -670,8 +672,14 @@ export default {
             if(r.err == 0) {
               beginClass(r.data.classId);
             } else {
-              // error
-            }
+              self.$alert('<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' + r.data.lessonNo + 'is ongoing.</div>', {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: 'Click to view',
+                center: true
+              }).then(() => {
+                window.open(r.data.lessonUrl);
+              });
+             }
           })
         } else if ( classState == 1 ) {
           // finish class
