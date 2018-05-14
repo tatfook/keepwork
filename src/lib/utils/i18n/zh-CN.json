@@ -178,7 +178,8 @@
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
-    "textBoard": "文本与绘图板"
+    "textBoard": "文本与绘图板",
+    "toc": "Markdown 列表"
   },
   "adi": {
     "markdown": {
@@ -286,6 +287,7 @@
     "openBoard": "打开绘图板",
     "switchComment": "评论是否开启",
     "pageList": "页面列表",
-    "footer": "页脚"
+    "footer": "页脚",
+    "toc": "TOC设置"
   }
 }
