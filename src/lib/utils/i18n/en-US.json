@@ -97,7 +97,7 @@
     "modDelMsg": "Are you sure to delete this module?",
     "modDelMsgTitle": "Delete prompt",
 
-    "select": "please choose",
+    
     "selfWindowOpen": "This window opens",
     "newWindowOpen": "open in a new window",
     "openMenuEditor": "Open the menu editor",
@@ -298,5 +298,14 @@
     "pageList": "Page list",
     "footer": "Footer",
     "toc": "TOC Setting"
+  },
+  "field": {
+    "link": "link",
+    "src": "src",
+    "name": "name",
+    "data": "data",
+    "text": "text",
+    "desc": "desc",
+    "select": "please choose"
   }
 }
