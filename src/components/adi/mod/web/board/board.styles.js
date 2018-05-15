@@ -10,7 +10,7 @@ export default [
       colBoard: { span: 24 }
     },
     theme: {
-      root: ['font_0', 'color_0', 'mod-space'],
+      root: ['font_0', 'color_0'],
       rootRow: ['mod-full-width'],
       title: ['color_0']
     },
