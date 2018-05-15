@@ -214,6 +214,9 @@ export default {
     firstLayout() {
       return _.values(this.siteLayoutsMap)[0]
     },
+    defaultLayout() {
+      return _.values(this.siteLayoutsMap).filter(i => i.id === this.userSiteDefaultLayoutId)[0]
+    },
     unsavedDefaultLayoutId() {
       const defaultLayoutIdIsLegal = id => {
         // lodash keys return a string array
@@ -226,7 +229,9 @@ export default {
         firstLayoutId
       ]
       for (let i in idCandidates) {
-        if (defaultLayoutIdIsLegal(idCandidates[i])) return idCandidates[i]
+        if (defaultLayoutIdIsLegal(idCandidates[i])) {
+          return idCandidates[i]
+        }
       }
       return this.userSiteDefaultLayoutId
     },
@@ -261,7 +266,8 @@ export default {
       console.error(e)
       this.loading = false
     })
-    this.selectFirstLayout()
+    // this.selectFirstLayout()
+    this.selectDefaultLayout()
     this.loading = false
   },
   watch: {
@@ -307,6 +313,9 @@ export default {
     },
     selectFirstLayout() {
       this.firstLayout && this.selectLayout(this.firstLayout)
+    },
+    selectDefaultLayout() {
+      this.defaultLayout ? this.selectLayout(this.defaultLayout) : this.selectFirstLayout()
     },
     resetLayoutForm() {
       _.merge(this.layoutForm, this.selectedLayoutForm)
