@@ -1,4 +1,4 @@
-From xuntian/node-yarn as builder
+FROM xuntian/node-yarn as builder
 MAINTAINER xuntian "li.zq@foxmail.com"
 COPY ./ /code/
 WORKDIR /code
@@ -6,9 +6,10 @@ WORKDIR /code
 # RUN npm --registry https://registry.npm.taobao.org update
 # RUN npm run build
 ARG BUILD_ENV
+ARG KEEPWORK_LOCALE
 RUN yarn config set registry https://registry.npm.taobao.org/
 RUN yarn install --ignore-optional
-RUN NODE_ENV=${BUILD_ENV} TZ=Asia/Shanghai yarn build
+RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} TZ=Asia/Shanghai yarn build
 
 FROM nginx
 WORKDIR /usr/share/nginx/html

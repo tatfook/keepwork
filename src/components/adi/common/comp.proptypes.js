@@ -17,6 +17,7 @@ import AdiLesson from './lesson/lesson.proptypes'
 import AdiTeachers from './teachers/teachers.proptypes'
 import AdiLessonGet from './lessonGet/lessonGet.proptypes'
 import AdiPageList from './pageList/pageList.proptypes'
+import AdiFooter from './footer/footer.proptypes'
 
 export default {
   AdiImgLoop,
@@ -37,5 +38,6 @@ export default {
   AdiLesson,
   AdiTeachers,
   AdiLessonGet,
-  AdiPageList
+  AdiPageList,
+  AdiFooter
 }

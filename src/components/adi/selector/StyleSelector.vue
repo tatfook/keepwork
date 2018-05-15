@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if='modConf.name != "ModMarkdown"' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
+    <div v-if='modConf.name == "ModMarkdown" || !style.useImage' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
       <div class="render-mod-container--click-prevent"></div>
       <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [], true)">
         <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <!-- <img class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index"> -->
+    <img v-if='style.useImage && modConf.name != "ModMarkdown"' class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in modConf.styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
   </div>
 </template>
 

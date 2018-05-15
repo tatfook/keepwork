@@ -6,7 +6,7 @@
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
-        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :isCardActive='key === activeProperty'></PropTypeCard>
+        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class='styles-container'>
@@ -72,15 +72,43 @@ export default {
     ...mapGetters({
       activeMod: 'activeMod',
       activeProperty: 'activeProperty',
+      activePropertyOptions: 'activePropertyOptions',
       activePropertyData: 'activePropertyData',
       hasActiveMod: 'hasActiveMod',
       hasActiveProperty: 'hasActiveProperty',
       activePropertyTabType: 'activePropertyTabType'
     }),
     editingProps() {
-      var modType = 'Mod' + this.activeMod.cmd
-      var modComponents = modLoader.load(modType).components
-      return modComponents
+      let modType = 'Mod' + this.activeMod.cmd
+      let modStyleID = this.activeMod.data.styleID
+      let mod = modLoader.load(modType)
+      let modComponents = mod.components
+      let currentStyle = mod.styles[modStyleID]
+      let currentTemplate = mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
+
+      let checkKeys = (item, thisProp) => {
+        if(typeof(item) == 'object') {
+            _.forEach(item, (itemA, keyA) => {
+              checkKeys(itemA, thisProp)
+            })
+        } else if (item == thisProp.key) {
+          thisProp.hasProp = true
+        }
+      }
+
+      let filterModComponents = {}
+
+      _.forEach(modComponents, (item, key) => {
+        let thisProp = {key: key, hasProp: false}
+
+        checkKeys(currentTemplate, thisProp)
+
+        if(thisProp.hasProp) {
+          filterModComponents[key] = item
+        }
+      })
+
+      return filterModComponents
     },
     cardValues() {
       var modType = 'Mod' + this.activeMod.cmd

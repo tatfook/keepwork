@@ -3,6 +3,7 @@ import ModFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
+import { gConst } from '@/lib/global'
 import { props } from './mutations'
 import {
   getFileFullPathByPath,
@@ -20,6 +21,7 @@ const {
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
+  SET_ACTIVE_PROPERTY_OPTIONS,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
@@ -31,7 +33,7 @@ const {
   UPDATE_THEME_BG_COLOR,
   UPDATE_THEME_FONT,
 
-  UPDATE_WIN_TYPE,
+  UPDATE_MANAGE_PANE_COMPONENT,
   UPDATE_PROPERTY_TAB_TYPE,
   RESET_SHOWING_COL,
 
@@ -40,6 +42,9 @@ const {
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE,
+
+  SET_EDITING_AREA,
+  SET_NEW_MOD_POSITION,
 
   REFRESH_SITE_SETTINGS,
   UPDATE_OPENED_LAYOUT_FILE
@@ -138,19 +143,19 @@ const actions = {
   },
 
   // rebuild all mods, will takes a little bit more time
-  updateMarkDown({ commit, dispatch }, payload) {
+  async updateMarkDown({ commit, dispatch }, payload) {
     if (payload.code === undefined) payload = { code: payload }
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MODS, payload.code)
-    dispatch('updateCode', payload)
+    await dispatch('updateCode', payload)
   },
   // only update a particular mod
   updateMarkDownBlock({ commit, dispatch }, payload) {
     dispatch('updateCode', payload)
     if (payload.modType !== 'ModMarkdown') {
       commit(SET_ACTIVE_MOD, payload.key)
-      commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
       commit(SET_ACTIVE_PROPERTY, null)
     }
     commit(REFRESH_MOD_ATTRIBUTES, payload)
@@ -159,10 +164,17 @@ const actions = {
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(MOVE_MOD, payload)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')
   },
-  addMod({ commit, dispatch }, payload) {
+  addMod({ commit, dispatch, getters }, payload) {
+    if (getters.activePage.addingArea === gConst.ADDING_AREA_ADI) {
+      dispatch('addModToAdi', payload)
+    } else {
+      dispatch('addModToMarkdown', payload)
+    }
+  },
+  addModToAdi({ commit, dispatch }, payload) {
     const modProperties = ModFactory.generate(payload.modName)
     var modPropertiesStyle
     if (payload.styleID) {
@@ -176,19 +188,40 @@ const actions = {
       key: payload.preModKey,
       cmd: Parser.getCmd(payload.modName)
     })
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')
+  },
+  async addModToMarkdown({ commit, dispatch, getters }, payload) {
+    const position = getters.activePage.cursorPosition
+    const newCode = Parser.addBlockToMarkdown(
+      getters.code,
+      position,
+      payload.modName,
+      payload.styleID
+    )
+    commit(SET_EDITING_AREA, { area: gConst.ADDING_AREA_ADI }) // reset editing area after mod added
+    await dispatch('updateMarkDown', { code: newCode })
+    const mod = Parser.getActiveBlock(getters.modList, position + 3)
+    commit(SET_ACTIVE_MOD, mod.key)
+    commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
+  },
+  setAddingArea({ commit }, payload) {
+    commit(SET_EDITING_AREA, payload)
   },
   setActiveMod({ commit }, key) {
     commit(SET_ACTIVE_MOD, key)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setActiveProperty({ commit, dispatch }, payload) {
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
-    commit(UPDATE_WIN_TYPE, 'ModPropertyManager')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')
+  },
+  setActivePropertyOptions({ commit }, playload) {
+    commit(SET_ACTIVE_PROPERTY_OPTIONS, playload)
   },
   setActivePropertyTabType({ commit }, type) {
     commit(UPDATE_PROPERTY_TAB_TYPE, type)
@@ -223,7 +256,7 @@ const actions = {
     commit(SET_ACTIVE_AREA, area)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_WIN_TYPE, 'ModsList')
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     await dispatch('refreshCode')
   },
   deleteMod({ commit, dispatch, state }, key) {
@@ -231,7 +264,7 @@ const actions = {
     if (key === state.activePage.activeMod.key) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
-      commit(UPDATE_WIN_TYPE, 'ModsList')
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     }
     dispatch('refreshCode')
   },
@@ -261,8 +294,8 @@ const actions = {
   changeThemeFont({ commit }, fontID) {
     commit(UPDATE_THEME_FONT, fontID)
   },
-  setActiveWinType({ commit }, componentType) {
-    commit(UPDATE_WIN_TYPE, componentType)
+  setActiveManagePaneComponent({ commit }, payload) {
+    commit(UPDATE_MANAGE_PANE_COMPONENT, payload)
   },
   resetShowingCol({ commit }, showingColObj) {
     commit(RESET_SHOWING_COL, showingColObj)
@@ -282,9 +315,12 @@ const actions = {
     )
   },
   setNewModPosition({ commit }, position) {
-    commit('SET_NEW_MOD_POSITION', position)
+    commit(SET_NEW_MOD_POSITION, position)
   },
-  async refreshSiteSettings({ commit, dispatch, getters, rootGetters }, { sitePath }) {
+  async refreshSiteSettings(
+    { commit, dispatch, getters, rootGetters },
+    { sitePath }
+  ) {
     let siteSetting = initSiteState()
     await dispatch('user/getSiteLayoutConfig', { path: sitePath })
     let {
@@ -293,25 +329,32 @@ const actions = {
       'gitlab/getFileByPath': gitlabGetFileByPath
     } = rootGetters
     siteSetting.siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
-    let allLayoutContentFilePaths = allLayoutContentFilePathsBySitePath(sitePath)
+    let allLayoutContentFilePaths = allLayoutContentFilePathsBySitePath(
+      sitePath
+    )
 
-    await Promise.all(allLayoutContentFilePaths.map(async layoutContentFilePath => {
-      let fileName = layoutContentFilePath.split('/').slice(1).join('/')
-      let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
-      await dispatch(
-        'gitlab/readFile',
-        { path: filePath, editorMode: true },
-        { root: true }
-      )
-      let { content } = gitlabGetFileByPath(filePath)
-      siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
-      _.merge(siteSetting.pages[layoutContentFilePath], {
-        content,
-        modList: Parser.buildBlockList(content),
-        path: filePath,
-        fileName: fileName
+    await Promise.all(
+      allLayoutContentFilePaths.map(async layoutContentFilePath => {
+        let fileName = layoutContentFilePath
+          .split('/')
+          .slice(1)
+          .join('/')
+        let filePath = `${sitePath}/${CONFIG_FOLDER_NAME}/pages/${layoutContentFilePath}`
+        await dispatch(
+          'gitlab/readFile',
+          { path: filePath, editorMode: true },
+          { root: true }
+        )
+        let { content } = gitlabGetFileByPath(filePath)
+        siteSetting.pages[layoutContentFilePath] = initLayoutPageState()
+        _.merge(siteSetting.pages[layoutContentFilePath], {
+          content,
+          modList: Parser.buildBlockList(content),
+          path: filePath,
+          fileName: fileName
+        })
       })
-    }))
+    )
 
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
   },

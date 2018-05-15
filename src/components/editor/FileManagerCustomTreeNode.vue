@@ -1,5 +1,5 @@
 <template>
-  <div class="el-tree-node__label">
+  <div class="el-tree-node__label" v-loading="removePending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
       <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
@@ -12,8 +12,9 @@
       <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+      <!-- <el-button  class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'> -->
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="openWebsiteSettingDialog" :title='$t("editor.setting")'>
+      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -43,10 +44,12 @@ export default {
   },
   methods: {
     ...mapActions({
+      setActiveManagePaneComponent: 'setActiveManagePaneComponent',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      gitlabRemoveFolder: 'gitlab/removeFolder'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -91,7 +94,39 @@ export default {
 
       return newFileName && newFileName.trim()
     },
+    removeFolder(data) {
+      const self = this
+      let pathArr = this.data.path.split('/')
+      let folderName = pathArr[pathArr.length - 1]
+      const toRemoveFiles = []
+      const recursionFile = (data) => {
+        if (!/.md$/.test(data.path)) {
+          toRemoveFiles.push(`${data.path}/.gitignore.md`)
+        } else {
+          toRemoveFiles.push(data.path)
+        }
+        data.children && data.children.forEach(item => recursionFile(item))
+      }
+      recursionFile(data)
+
+      this.$confirm(self.$t('editor.deleteFolder') ,self.$t('editor.delete'), {
+        confirmButtonText: self.$t('el.messagebox.confirm'),
+        cancelButtonText: self.$t('el.messagebox.cancel'),
+        type: 'error'
+      })
+      .then(async () => {
+        this.removePending = true
+        await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+        this.removePending = false
+      })
+      .catch(e => console.error(e))
+    },
     removeFile() {
+      if (this.data.type === 'tree') {
+        this.removeFolder(this.data)
+        return
+      }
+
       let self = this
 
       let pathArr = this.data.path.split('/')
@@ -104,9 +139,22 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
-          this.removePending = false
+          this.removePending = true
         })
         .catch(e => console.error(e))
+    },
+    goSetting() {
+      if (this.isWebsite) {
+        this.openWebsiteSettingDialog()
+      }
+      if (this.isFile) {
+        this.setActiveManagePaneComponent({
+          name: 'PageSetting',
+          props: {
+            pagePath: this.currentPath
+          }
+        })
+      }
     },
     openWebsiteSettingDialog() {
       this.isWebsiteSettingShow = true
@@ -128,25 +176,25 @@ export default {
     isFolder() {
       return this.data.type === 'tree'
     },
-    isFirstLevel() {
+    isWebsite() {
       return this.node.level === 1
     },
     isAddable() {
       return !this.isFile
     },
     isRemovable() {
-      return this.isFile
+      return this.node.level !== 1
     },
     isSettable() {
-      return this.isFirstLevel
+      return this.isWebsite || this.isFile
     },
     currentPath() {
-      return this.isFirstLevel
+      return this.isWebsite
         ? `${this.data.username}/${this.data.name}`
         : this.data.path
     },
     sitePath() {
-      if (this.isFirstLevel) return `${this.data.username}/${this.data.name}`
+      if (this.isWebsite) return `${this.data.username}/${this.data.name}`
 
       let [username, name] = this.data.path.split('/')
       return `${username}/${name}`

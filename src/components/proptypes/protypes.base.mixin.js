@@ -1,7 +1,8 @@
 export default {
   props: {
     editingKey: String,
-    originValue: String
+    originValue: String,
+    activePropertyOptions: Object
   },
   data() {
     return {}

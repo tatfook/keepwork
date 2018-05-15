@@ -3,14 +3,14 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeComponent=="FileManager"}' @click="changeView('FileManager')"></el-button>
-          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeComponent=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeComponent=="ModsList"}' @click="changeView('ModsList')"></el-button>
-          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeComponent=="Search"}' @click="changeView('Search')"></el-button> -->
+          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
+          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
       <el-row class="manager-content-box">
-        <component :is='activeComponent'></component>
+        <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
       </el-row>
     </el-col>
     <div class="col-between"></div>
@@ -58,10 +58,11 @@
           <el-button class="iconfont icon-yinyong" title="引用内容"></el-button> -->
           <!-- <el-button class="iconfont icon-biaoge" title="表格"></el-button> -->
           <el-button class="iconfont icon-ziyuanfengexian" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-        </el-button-group>
-        <el-button-group>
           <el-button class="iconfont icon-daima" :title="$t('editor.code')" @click="insertCode"></el-button>
           <el-button class="iconfont icon-fenxianglianjie" :title="$t('editor.link')" @click="insertLink"></el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button class="iconfont icon-tianjiamokuai" title="MOD" @click="addModToMarkdown"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown ref='codemirror' />
@@ -74,14 +75,15 @@
 
 <script>
 import _ from 'lodash'
+import { gConst } from '@/lib/global'
 import fullscreen from 'vue-fullscreen'
 import EditorMarkdown from './EditorMarkdown'
 import EditorWelcome from './EditorWelcome'
-// import EditorViewport from './EditorViewport'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
 import Search from './Search'
+import PageSetting from './PageSetting'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -99,7 +101,8 @@ export default {
         rightColWidthParam: ''
       },
       isCodeWinShow: true,
-      isFullscreen: false
+      isFullscreen: false,
+      gConst
     }
   },
   created() {
@@ -117,18 +120,19 @@ export default {
   components: {
     EditorMarkdown,
     EditorWelcome,
-    // EditorViewport,
     ModPropertyManager,
     Search,
     ModsList,
-    FileManager
+    FileManager,
+    PageSetting
   },
   computed: {
     ...mapGetters({
       activePage: 'activePage',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
-      activeComponent: 'activeComponentType',
+      activeManagePaneComponentName: 'activeManagePaneComponentName',
+      activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo'
     }),
@@ -201,13 +205,16 @@ export default {
       resetShowingCol: 'resetShowingCol'
     }),
     changeView(type) {
-      this.$store.dispatch('setActiveWinType', type)
+      this.$store.dispatch('setActiveManagePaneComponent', type)
     },
     toggleCodeWin(isCodeWinShow) {
       if (isCodeWinShow) {
         this.resetShowingCol({
           isCodeShow: true,
           isPreviewShow: true
+        })
+        this.$store.dispatch('setAddingArea', {
+          area: this.gConst.ADDING_AREA_ADI
         })
       } else {
         this.resetShowingCol({
@@ -276,6 +283,9 @@ export default {
     },
     insertImage() {
       this.$refs.codemirror.insertFile()
+    },
+    addModToMarkdown() {
+      this.$refs.codemirror.addMod()
     }
   }
 }

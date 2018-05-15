@@ -1,5 +1,5 @@
 <template>
-  <div v-if='editMode' @click.stop.prevent='onEditProperty' :class='classes'>
+  <div v-if='editMode' @click.stop.prevent='onEditProperty' @dblclick='onDblclickProperty' :class='classes'>
     <component v-if='isDisplay' :is='basicComp' :source='source' :editMode='editMode' :options='options' />
   </div>
   <div v-else :class='classes'>
@@ -26,6 +26,13 @@ export default {
         key: this.mod.key,
         property: this.property
       })
+    },
+    onDblclickProperty() {
+      let comp = BasicComponents[this.compType]
+
+      if(comp.bedbclick){
+        comp.dblclick(this)
+      }
     }
   },
   computed: {
