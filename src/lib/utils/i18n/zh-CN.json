@@ -120,7 +120,7 @@
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
     "theNextStep": "下一步",
-    "Previous": "上一步",
+    "previous": "上一步",
     "startEditing": "开始编辑",
     "unchangeable": "设定后不可修改",
     "vipForwarding": "VIP可在网站设置中设置cname转发",
