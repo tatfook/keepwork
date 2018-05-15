@@ -46,7 +46,7 @@ const init = function(){
     if(teachersMod.length > 0) {
         operate.onclick = function () {
           operate.innerHTML == "Show All" ? operate.innerText = "Hide All" : operate.innerText = "Show All";
-          if(operate.innerHTML == "Show All") {
+          if(operate.innerHTML == "Hide All") {
             for(let i = 0, len = teachersMod.length; i < len; i++) {
               teachersMod[i].style.display = "block";
             }
