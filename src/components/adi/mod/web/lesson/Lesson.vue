@@ -117,10 +117,10 @@ const init = function(){
   } else {
     let lessonMod = getMod('ModLesson')
     if(lessonMod && lessonMod.parentNode != null) {
-      let studentHtm =  '<div class="el-row mod-full-width-0-0-32">'
+      let studentHtm =  '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
                       + '</div>';
-      let summaryHtm =  '<div class="el-row mod-full-width-0-0-32">'
+      let summaryHtm =  '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data summary-tip">' + (vipFlag? 'Teaching': 'Learning') + ' is not started yet. There is no summary here.</div>'
                       + '</div>';
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
@@ -436,7 +436,7 @@ const beginClass = function(classId) {
             + '</div></td>';
   }
 
-  let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-32">'
+  let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-65">'
         + '<div class="express">'
           + '<span class="r">right</span>'
           + '<span class="w">wrong</span>'
@@ -456,7 +456,7 @@ const beginClass = function(classId) {
   studentMod.innerHTML = studetDataHtm;
   bindSortEvent();
   let summaryMod = getMod('ModSummary');
-  summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-32">'
+  summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>'
                       + '</div>';
   let btnClass = document.getElementById('btnClass');
@@ -537,12 +537,12 @@ export default {
           let len = animations.length
           if(lessonMod && lessonMod.parentNode != null) {
             if(len == 0) {
-              let htm = '<div class="el-row mod-full-width-0-0-32">'
+              let htm = '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data">There are no related animations.</div>'
                       + '</div>'
               lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
-              let html = '<div class="el-row mod-full-width-0-0-32 animations-list">'
+              let html = '<div class="el-row mod-full-width-0-0-65 animations-list">'
               for(let i = 0; i < len; i++) {
                 let item = animations[i];
                 html += '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
