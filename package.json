@@ -43,7 +43,6 @@
     "vuedraggable": "^2.16.0",
     "vuex": "^2.4.0",
     "vuex-iframe-sync": "^1.4.1",
-<<<<<<< HEAD
     "vuex-persistedstate": "^2.5.1",
     "jsbn": "~0.1.0",
     "tweetnacl": "~0.14.0",
@@ -58,10 +57,8 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.31",
     "karma-webpack": "^2.0.2",
-    "mocha": "^3.2.0"
-=======
+    "mocha": "^3.2.0",
     "vuex-persistedstate": "^2.5.1"
->>>>>>> a3ee3add0221ebc8144473c72f75c561da9175bf
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

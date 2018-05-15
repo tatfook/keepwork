@@ -31,15 +31,11 @@ export default {
   AdiVipRead,
   AdiComment,
   AdiInnerModal,
-<<<<<<< HEAD
   AdiTabs,
   AdiQuiz,
   AdiLesson,
   AdiTeachers,
   AdiLessonGet,
-  AdiPageList
-=======
   AdiPageList,
   AdiFooter
->>>>>>> a3ee3add0221ebc8144473c72f75c561da9175bf
 }
