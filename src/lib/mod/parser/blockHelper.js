@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import md5 from 'blueimp-md5'
-import { mdToJson, jsonToMd } from './mdParser'
+import { mdToJson, jsonToMd } from './mdParser/yaml'
 const MARKDOWN_CMD = 'Markdown'
 const MOD_CMD_BEGIN = '```@'
 const MOD_CMD_END = '```'
@@ -70,7 +70,7 @@ const blockHelper = {
   },
 
   textLength(block) {
-    return block.md.length + 2
+    return this.lines(block).length
   },
 
   lines(block) {
@@ -84,7 +84,7 @@ const blockHelper = {
   },
 
   endLine(block) {
-    return block.lineBegin + this.textLength(block)
+    return block.lineBegin + this.lines(block).length
   },
 
   text(block) {

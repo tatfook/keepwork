@@ -55,11 +55,22 @@ export default {
       const save = () => Mousetrap.trigger('mod+s')
       const undo = () => Mousetrap.trigger('mod+z')
       const redo = () => Mousetrap.trigger('mod+y')
+
+      const newTab = (cm) => {
+        if (cm.somethingSelected()) {
+          cm.indentSelection('add')
+        } else {
+          const str = cm.getOption() ? "\t" : Array(cm.getOption("indentUnit") + 1).join(" ")
+          cm.replaceSelection(str, "end", "+input")
+        }
+      }
       return {
         mode: 'markdown',
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        tabSize: 2,
+        indentWithTabs: false,
         styleActiveLine: true,
         foldGutter: true,
         foldOptions: {
@@ -83,7 +94,8 @@ export default {
           'Ctrl-Y': redo,
           'Cmd-Y': redo,
           'Ctrl-Space': 'autocomplete',
-          'Cmd-Space': 'autocomplete'
+          'Cmd-Space': 'autocomplete',
+          'Tab': newTab
         }
       }
     },
@@ -138,8 +150,8 @@ export default {
       }
 
       if (
-        !Parser.isModMarkdown(mod, removed) ||
-        !Parser.isModMarkdown(mod, text)
+        Parser.willAffectModData(mod, removed) ||
+        Parser.willAffectModData(mod, text)
       ) {
         // if there are some changes affect the mod data, will try to rebuild all
         return this.$store.dispatch('updateMarkDown', code)
