@@ -147,7 +147,6 @@ const mutations = {
     Vue.set(state, 'activePageUrl', path)
   },
   UPDATE_MODS(state, code) {
-    console.log(code)
     Vue.set(state, 'code', code)
     let blockList = Parser.buildBlockList(code)
     Parser.updateBlockList(state.modList, blockList)
