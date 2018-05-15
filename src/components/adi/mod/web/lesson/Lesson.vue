@@ -108,12 +108,16 @@ const init = function(){
       let height  = Math.max(cHeight, sHeight)
       return height
     }
-    let timer = setInterval(function(){
-      var height = calcPageHeight(document)
-      var container = parent.document.getElementById('keepworkContainer')
-      container.style.height = height + 'px'
-      container.setAttribute('height', height)
-    },1000)
+    let iframeTimer = setInterval(function(){
+      if(document.readyState == 'complete') {
+        var height = calcPageHeight(document)
+        var container = parent.document.getElementById('keepworkContainer')
+        container.style.height = height + 'px'
+        container.setAttribute('height', height)
+        container.setAttribute('ready', 'ready')
+        clearInterval(iframeTimer)
+      }
+    },500)
   } else {
     let lessonMod = getMod('ModLesson')
     if(lessonMod && lessonMod.parentNode != null) {
@@ -321,7 +325,6 @@ const bindSortEvent = function() {
     }
   }
   document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
-    console.log('SortByName');
     orderBy = 'username'
     if(nameSortFlag) {
       // 倒序
@@ -394,7 +397,7 @@ const beginClass = function(classId) {
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
   let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3);
-  self.$alert("<div class='txt-one'>The class ID is <span>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
+  self.$alert("<div class='txt-one'>The class ID is <span style='font-size: 26px'>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
             + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
     confirmButtonText: 'OK',
@@ -584,7 +587,6 @@ export default {
       }
 
       options.playClick = function() {
-        console.log('Play Click')
         // 生成一个 Record，返回做题的地址
         // 如存在课程总结 params 追加一个 lessonPerformance
         if(self.isLogined) {
@@ -609,9 +611,7 @@ export default {
             }
             params.lessonPerformance = lessonPerformance
           }
-          console.log(quizs)
-          // lessonPerformance、
-          console.log(params)
+          // lessonPerformance
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
             {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
