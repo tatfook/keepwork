@@ -1,5 +1,5 @@
 import axios from 'axios'
-import gitLabAPIGenerator from 'node-gitlab-api'
+import gitLabAPIGenerator from './node-gitlab-api'
 import { Base64 } from 'js-base64'
 import es from './elasticsearch'
 
