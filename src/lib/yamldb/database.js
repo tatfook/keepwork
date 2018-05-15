@@ -87,9 +87,10 @@ export class YamlDB {
   async upsert(tableName, data) {
     if (!tableName || !data) return
     data.key = data.key || this.newKey()
-    return this.gitClient.upsertFile(this.path(tableName, data.key), {
+    await this.gitClient.upsertFile(this.path(tableName, data.key), {
       content: this.yamlData(data)
     })
+    return data
   }
 
   async delete(tableName, key) {

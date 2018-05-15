@@ -6,7 +6,11 @@ module.exports = {
     parser: 'babel-eslint'
   },
   env: {
-    browser: true
+    browser: true,
+    mocha: true
+  },
+  globals: {
+    expect: true
   },
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
@@ -27,7 +31,9 @@ module.exports = {
         asyncArrow: 'always'
       }
     ],
-    'spaced-comment': [2, 'always', { exceptions: ['doc'] }],
+    'spaced-comment': [2, 'always', {
+      exceptions: ['doc']
+    }],
     'brace-style': 2,
     // allow async-await
     'generator-star-spacing': 'off',

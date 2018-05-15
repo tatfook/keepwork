@@ -1,5 +1,7 @@
 'use strict'
 
+const DEFAULT_STACK_SIZE = 100
+
 class SimpleUndo {
   /**
    * SimpleUndo is a very basic javascript undo/redo stack for managing histories of basically anything.
@@ -11,7 +13,7 @@ class SimpleUndo {
    */
   constructor(maxLength) {
     this.initialItem = null
-    this.maxLength = maxLength || 30
+    this.maxLength = maxLength || DEFAULT_STACK_SIZE
     this.stack = [this.initialItem]
     this.position = 0
   }

@@ -15,8 +15,10 @@ import AdiQuiz from './quiz/Quiz'
 import AdiLesson from './lesson/Lesson'
 import AdiTeachers from './teachers/Teachers'
 import AdiLessonGet from './lessonGet/LessonGet'
+import AdiNumber from './number/number'
 import AdiPageList from './pageList/pageList'
 import AdiFooter from './footer/footer'
+import AdiToc from './toc/Toc'
 
 export default {
   AdiImgLoop,
@@ -36,6 +38,8 @@ export default {
   AdiLesson,
   AdiTeachers,
   AdiLessonGet,
+  AdiNumber,
   AdiPageList,
-  AdiFooter
+  AdiFooter,
+  AdiToc
 }

@@ -17,6 +17,7 @@ import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
+import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -72,6 +73,11 @@ var modsList = [
         id: '1-10',
         label: 'modList.pageList',
         mods: [ModPageList]
+      },
+      {
+        id: '1-11',
+        label: 'modList.toc',
+        mods: [ModToc]
       }
     ]
   },

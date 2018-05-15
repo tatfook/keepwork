@@ -2,10 +2,12 @@
 node_modules/
 /dist/
 /docs/
+/coverage/
+.nyc_output/
+jenkins-test-results.xml
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/test/unit/coverage/
 *.log
 .keep
 package-lock.json

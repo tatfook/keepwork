@@ -172,7 +172,12 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
 
 const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
   let preBlock = blockList[index]
-  let beginLine = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
+  let beginLine = 1
+  if (preBlock) {
+    beginLine = BlockHelper.endLine(preBlock)
+    // just for beautify, see also in buildMarkdown function(line 196)
+    if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 1
+  }
   let block = new ModBlock(cmd, beginLine)
   BlockHelper.updateJson(block, jsonData)
   blockList.splice(index + 1, 0, block)
@@ -192,7 +197,7 @@ const buildMarkdown = blockList => {
   let lines = []
   _.forEach(blockList, block => {
     lines.push(BlockHelper.lines(block))
-    lines.push('')
+    if (!BlockHelper.isMarkdownMod(block)) lines.push('')
   })
   return _.flatten(lines).join('\n')
 }
@@ -217,17 +222,17 @@ const getActiveBlock = (blockList, beginLine) => {
   }
 }
 
-const isModMarkdown = (block, mdLines) => {
+const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
     let line = mdLines[i]
     if (
       (line.match(MOD_CMD_END_REG) && !BlockHelper.isMarkdownMod(block)) ||
       line.match(MOD_CMD_BEGIN_REG)
     ) {
-      return false
+      return true
     }
   }
-  return true
+  return false
 }
 
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
@@ -253,6 +258,6 @@ export default {
   addBlockByKey,
   getCmd,
   getActiveBlock,
-  isModMarkdown,
+  willAffectModData,
   addBlockToMarkdown
 }

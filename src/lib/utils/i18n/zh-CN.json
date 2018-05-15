@@ -38,6 +38,7 @@
     "save": "保存",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",
 
@@ -120,7 +121,7 @@
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
     "theNextStep": "下一步",
-    "Previous": "上一步",
+    "previous": "上一步",
     "startEditing": "开始编辑",
     "unchangeable": "设定后不可修改",
     "vipForwarding": "VIP可在网站设置中设置cname转发",
@@ -178,7 +179,8 @@
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
-    "textBoard": "文本与绘图板"
+    "textBoard": "文本与绘图板",
+    "toc": "Markdown 列表"
   },
   "adi": {
     "markdown": {
@@ -289,6 +291,15 @@
     "openBoard": "打开绘图板",
     "switchComment": "评论是否开启",
     "pageList": "页面列表",
-    "footer": "页脚"
+    "footer": "页脚",
+    "toc": "TOC设置"
+  },
+  "field": {
+    "link": "链接",
+    "src": "地址",
+    "name": "名字",
+    "text": "文本",
+    "desc": "描述",
+    "data": "数据"
   }
 }

@@ -8,7 +8,8 @@ WORKDIR /code
 ARG BUILD_ENV
 ARG KEEPWORK_LOCALE
 RUN yarn config set registry https://registry.npm.taobao.org/
-RUN yarn install --ignore-optional
+# RUN yarn install --ignore-optional
+RUN yarn install
 RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} TZ=Asia/Shanghai yarn build
 
 FROM nginx
