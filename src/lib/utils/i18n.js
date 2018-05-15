@@ -8,7 +8,12 @@ export const messages = {
   'en-US': { ...enLocale, ...enUS }
 }
 
-export const locale = (navigator.language || 'zh-CN')
+export const locale = (() => {
+  let oldVersionKeepworkLocale = localStorage['keepwork-language-locale']
+  let result = oldVersionKeepworkLocale || navigator.language || 'zh-CN'
+  result = /^zh/.test(result) ? 'zh-CN' : 'en-US'
+  return result
+})()
 
 export default {
   locale,
