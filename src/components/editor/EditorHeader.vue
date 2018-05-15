@@ -153,7 +153,7 @@ export default {
     },
     isActivePageSaved() {
       let { saved } = this.activePageInfo
-      return saved
+      return saved === false ? false : true
     }
   },
   methods: {
