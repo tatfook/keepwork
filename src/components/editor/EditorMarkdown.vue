@@ -6,6 +6,7 @@
 
 <script>
 import Parser from '@/lib/mod/parser'
+import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
@@ -173,14 +174,14 @@ export default {
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)
-      if (!line || !line.match(/^```[@\/]/)) return
+      if (!line || !CmdHelper.isCmdLine(line)) return
       let end = start.line + 1
       let lastLineNo = cm.lastLine()
       while (end < lastLineNo) {
         line = cm.getLine(end)
         if (line) {
-          if (line.match(/^```$/)) break
-          else if (line.match(/^```@/)) {
+          if (CmdHelper.isCmdEnd(line)) break
+          else if (CmdHelper.isCmdLine(line)) {
             end--
             break
           }
