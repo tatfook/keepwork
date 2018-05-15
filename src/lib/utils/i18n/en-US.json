@@ -38,6 +38,7 @@
     "save": "Save",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
+    "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
     "copyFail": "Link copy failed",
 
