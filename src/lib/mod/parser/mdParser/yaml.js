@@ -7,7 +7,7 @@ export const mdToJson = (md) => {
   } catch (e) {
     console.error(e)
   }
-  return result
+  return result || {}
 }
 
 export const jsonToMd = (json) => {

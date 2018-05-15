@@ -80,7 +80,7 @@ export default {
     }),
     editingProps() {
       let modType = 'Mod' + this.activeMod.cmd
-      let modStyleID = this.activeMod.data.styleID
+      let modStyleID = this.activeMod.data.styleID || 0
       let mod = modLoader.load(modType)
       let modComponents = mod.components
       let currentStyle = mod.styles[modStyleID]
