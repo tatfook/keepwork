@@ -38,6 +38,7 @@
     "save": "保存",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",
 

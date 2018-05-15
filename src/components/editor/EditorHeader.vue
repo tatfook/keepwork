@@ -52,7 +52,7 @@
           <a href='/'>{{$t('editor.backHomePage')}}</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='3' class='li-btn' :disabled='isActivePageSaved'>
+      <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
         <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
@@ -78,7 +78,10 @@
         <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
         <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
       </el-menu-item>
-      <el-menu-item index='7 ' class='pull-right user-profile-box'>
+      <el-menu-item index='8' class='unsaved-tip'>
+        <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
+      </el-menu-item>
+      <el-menu-item index='7' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
@@ -221,6 +224,22 @@ export default {
 .el-menu-item.is-active {
   border-bottom: none;
 }
+.unsaved-tip {
+  display: inline-flex;
+  align-items: center;
+}
+.unsaved-tip span {
+  line-height: 1.7em;
+  position: relative;
+  top: .3em;
+  border-bottom: 2px solid #F7BC2A !important;
+}
+.save-btn:not(.is-disabled) .icon-baocun {
+  background: #F7BC2A;
+  border-color: #F7BC2A;
+  color: white;
+}
+
 .kp-logo {
   width: 127px;
 }
