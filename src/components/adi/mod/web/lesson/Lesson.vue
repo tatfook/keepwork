@@ -172,7 +172,6 @@ const timer = {
         if(eleTip) {
           eleTip.innerText = '(Click here to dismiss the class)';
         }
-        document.getElementById("isTeachersContent").style.display = "inline-block";
       }
     }, this.timeout)
   },
@@ -497,7 +496,6 @@ export default {
           currentTab = name
            // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
           if(name == 'ModOverview') {
-            document.getElementById("isTeachersContent").style.display = "inline-block";
 
             // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
             for(let i = 0; i < mods.length; i ++) {
@@ -531,11 +529,7 @@ export default {
                 summaryContainer.style.display = "block";
               }
             }
-
-            document.getElementById("isTeachersContent").style.display = "inline-block";
-
           }
-
         }
         if(firstInFlag) {
           let lessonMod = getMod('ModLesson')
@@ -747,7 +741,6 @@ export default {
             });
             btnClass.setAttribute('disabled','true');
             document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
-            document.getElementById("isTeachersContent").style.display = "inline-block";
 
             let tabItem = document.getElementsByClassName("el-tabs__item");
             for(let i = 0; i < tabItem.length; i++) {

@@ -93,9 +93,11 @@ export default {
         }).then(response => {
           let r = response.data
           if (r.data && r.data.vipDay >= 0) {
-            this.teacherShow = true
+            this.teacherShow = true;
+            document.getElementById("isTeachersContent").style.display = "inline-block";
           } else {
-            this.teacherShow = false
+            this.teacherShow = false;
+            document.getElementById("isTeachersContent").style.display = "none";
           }
           this.$forceUpdate()
           if (device == 'pc' || device == 'pad') {
@@ -104,12 +106,14 @@ export default {
           }
         })
       } else {
-        this.teacherShow = false
+        this.teacherShow = false;
+        document.getElementById("isTeachersContent").style.display = "none";
       }
       this.$forceUpdate()
     } else{
       // Editor
-      this.teacherShow = true
+      this.teacherShow = true;
+      document.getElementById("isTeachersContent").style.display = "inline-block";
     }
     let device
     let query = location.href.split('?')[1]
