@@ -17,6 +17,7 @@ const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
 const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
+const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -34,7 +35,8 @@ export const props = {
   GET_WEB_TEMPLATE_FILE_SUCCESS,
   SET_PAGE_STAR_DETAIL,
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
-  SAVE_SITE_LAYOUT_CONFIG_SUCCESS
+  SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
+  GET_FROM_SKY_DRIVE_SUCCESS
 }
 
 const doNothing = state => {
@@ -110,6 +112,16 @@ const mutations = {
     Vue.set(state, 'siteLayoutConfigs', {
       ...state.siteLayoutConfigs,
       [sitePath]: config
+    })
+  },
+  [GET_FROM_SKY_DRIVE_SUCCESS](state, payload) {
+    let { username } = payload
+    Vue.set(state, 'skyDrive', {
+      ...state.skyDrive,
+      [username]: {
+        ..._.get(state, ['skyDrive', username]),
+        ...payload
+      }
     })
   }
 }

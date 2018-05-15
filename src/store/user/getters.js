@@ -223,7 +223,11 @@ const getters = {
     let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
     let layout = LayoutHelper.getSettedPageLayoutByPath(siteLayoutConfig, path)
     return layout
-  }
+  },
+
+  skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
+  skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
 }
 
 export default getters
