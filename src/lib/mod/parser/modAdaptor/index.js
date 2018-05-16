@@ -1,9 +1,9 @@
-import board from './board'
-import paracraft from './paracraft'
+import Board from './board'
+import Paracraft from './paracraft'
 
 const parsers = {
-  board,
-  paracraft
+  Board,
+  Paracraft
 }
 
 const transfer = (md, cmd, targetCmd) => {
@@ -11,4 +11,4 @@ const transfer = (md, cmd, targetCmd) => {
   if (parser) return parser.transfer(md, cmd)
 }
 
-export default transfer
+export default { transfer }

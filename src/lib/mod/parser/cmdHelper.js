@@ -17,10 +17,12 @@ export const cmdList = [
   'Comment',
   'TextBoard',
   'PageList',
-  'Toc']
+  'Toc'
+]
 
 export const oldCmdMapper = {
-  'paraCraft': 'Paracraft'
+  'paracraft': 'Paracraft',
+  'board/main': 'Board'
 }
 
 export const isValidCmd = (cmd) => {
