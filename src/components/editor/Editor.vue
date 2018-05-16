@@ -85,6 +85,7 @@ import ModsList from './ModsList'
 import Search from './Search'
 import PageSetting from './PageSetting'
 import { mapGetters, mapActions } from 'vuex'
+import handleMessage from '@/lib/iframe'
 
 export default {
   name: 'Editor',
@@ -110,6 +111,9 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
+	console.log(window.frames["frameViewport"]);
+      const frameViewport = window.frames["frameViewport"]
+	  frameViewport && frameViewport.contentWindow.addEventListener("message", handleMessage)
       window.addEventListener('resize', function(e) {
         _.throttle(function() {
           this.bodyWidth = document.body.clientWidth
