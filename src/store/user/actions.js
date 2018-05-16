@@ -227,6 +227,7 @@ const actions = {
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
+    dispatch('refreshSiteSettings', {sitePath}, {root: true})
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context

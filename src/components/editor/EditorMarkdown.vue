@@ -6,6 +6,7 @@
 
 <script>
 import Parser from '@/lib/mod/parser'
+import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
@@ -23,6 +24,7 @@ import 'codemirror/addon/fold/foldgutter.js'
 import 'codemirror/addon/fold/xml-fold'
 import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/lint/json-lint'
+import 'codemirror/addon/selection/active-line.js'
 
 const CodeMirror = window.CodeMirror || _CodeMirror
 
@@ -51,12 +53,26 @@ export default {
       activeMod: 'activeMod'
     }),
     options() {
-      let save = () => Mousetrap.trigger('mod+s')
+      const save = () => Mousetrap.trigger('mod+s')
+      const undo = () => Mousetrap.trigger('mod+z')
+      const redo = () => Mousetrap.trigger('mod+y')
+
+      const newTab = (cm) => {
+        if (cm.somethingSelected()) {
+          cm.indentSelection('add')
+        } else {
+          const str = cm.getOption() ? "\t" : Array(cm.getOption("indentUnit") + 1).join(" ")
+          cm.replaceSelection(str, "end", "+input")
+        }
+      }
       return {
         mode: 'markdown',
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        tabSize: 2,
+        indentWithTabs: false,
+        styleActiveLine: true,
         foldGutter: true,
         foldOptions: {
           rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.wikiCmdFold),
@@ -68,13 +84,19 @@ export default {
           'CodeMirror-lint-markers'
         ],
         matchBrackets: true,
+        undoDepth: 0,
         dragDrop: true,
         allowDropFileTypes: ['jpg', 'jpeg'], // codemirror will automatically parse the dropped file and insert the content into editing area, eg: js, svg, xml...
         extraKeys: {
           'Ctrl-S': save,
           'Cmd-S': save,
+          'Ctrl-Z': undo,
+          'Cmd-Z': undo,
+          'Ctrl-Y': redo,
+          'Cmd-Y': redo,
           'Ctrl-Space': 'autocomplete',
-          'Cmd-Space': 'autocomplete'
+          'Cmd-Space': 'autocomplete',
+          'Tab': newTab
         }
       }
     },
@@ -129,8 +151,8 @@ export default {
       }
 
       if (
-        !Parser.isModMarkdown(mod, removed) ||
-        !Parser.isModMarkdown(mod, text)
+        Parser.willAffectModData(mod, removed) ||
+        Parser.willAffectModData(mod, text)
       ) {
         // if there are some changes affect the mod data, will try to rebuild all
         return this.$store.dispatch('updateMarkDown', code)
@@ -152,14 +174,14 @@ export default {
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)
-      if (!line || !line.match(/^```[@\/]/)) return
+      if (!line || !CmdHelper.isCmdLine(line)) return
       let end = start.line + 1
       let lastLineNo = cm.lastLine()
       while (end < lastLineNo) {
         line = cm.getLine(end)
         if (line) {
-          if (line.match(/^```$/)) break
-          else if (line.match(/^```@/)) {
+          if (CmdHelper.isCmdEnd(line)) break
+          else if (CmdHelper.isCmdLine(line)) {
             end--
             break
           }

@@ -10,8 +10,10 @@ import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
 import AdiComment from './comment/Comment'
 import AdiInnerModal from './innerModal/InnerModal'
+import AdiNumber from './number/number'
 import AdiPageList from './pageList/pageList'
 import AdiFooter from './footer/footer'
+import AdiToc from './toc/Toc'
 
 export default {
   AdiImgLoop,
@@ -26,6 +28,8 @@ export default {
   AdiVipRead,
   AdiComment,
   AdiInnerModal,
+  AdiNumber,
   AdiPageList,
-  AdiFooter
+  AdiFooter,
+  AdiToc
 }

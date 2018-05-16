@@ -1,5 +1,5 @@
 <template>
-  <div class="el-tree-node__label">
+  <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
       <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
@@ -12,12 +12,13 @@
       <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+        <!-- <el-button  class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'> -->
       </el-button>
       <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
-      <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'/>
+      <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
     </div>
   </div>
 </template>
@@ -47,7 +48,10 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      gitlabRemoveFolder: 'gitlab/removeFolder',
+      updateFilemanagerTreeNodeExpandMapByPath:
+        'updateFilemanagerTreeNodeExpandMapByPath'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -55,19 +59,23 @@ export default {
       let newFilePath = `${this.currentPath}/${newFileName}`
       this.addFilePending = true
       await this.gitlabCreateFile({ path: newFilePath })
+      this.expandFolder(newFilePath)
       this.addFilePending = false
     },
     async addFolder() {
       let self = this
 
-      let newFolderName = await this.newFileNamePrompt({what: self.$t('editor.folder')})
+      let newFolderName = await this.newFileNamePrompt({
+        what: self.$t('editor.folder')
+      })
       if (!newFolderName) return
       let newFolderPath = `${this.currentPath}/${newFolderName}`
       this.addFolderPending = true
       await this.gitlabAddFolder({ path: newFolderPath })
+      this.expandFolder(newFolderPath)
       this.addFolderPending = false
     },
-    async newFileNamePrompt({what = this.$t('editor.website')} = {}) {
+    async newFileNamePrompt({ what = this.$t('editor.website') } = {}) {
       let self = this
 
       await this.gitlabGetRepositoryTree({ path: this.sitePath })
@@ -82,8 +90,10 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what}${self.$t('nameRule')}`
-            if (/^[_]/.test(value)) return `${what}${self.$t('editor.nameUnderline')}`
+            if (!/^[A-Za-z0-9_]+$/.test(value))
+              return `${what}${self.$t('nameRule')}`
+            if (/^[_]/.test(value))
+              return `${what}${self.$t('editor.nameUnderline')}`
             if (childNames.indexOf(value) > -1) return self.$t('nameExist')
             return true
           }
@@ -92,20 +102,63 @@ export default {
 
       return newFileName && newFileName.trim()
     },
-    removeFile() {
-      let self = this
-
+    expandFolder(path) {
+      let parentPath = path.split('/')
+      parentPath.pop()
+      this.updateFilemanagerTreeNodeExpandMapByPath({path: parentPath.join('/'), expanded: true})
+    },
+    removeFolder(data) {
+      const self = this
       let pathArr = this.data.path.split('/')
-      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(`${self.$t('editor.delConfirm')} ${pageName} ${self.$t('editor.page')}？`, self.$t('editor.delete'), {
+      let folderName = pathArr[pathArr.length - 1]
+      const toRemoveFiles = []
+      const recursionFile = data => {
+        if (!/.md$/.test(data.path)) {
+          toRemoveFiles.push(`${data.path}/.gitignore.md`)
+        } else {
+          toRemoveFiles.push(data.path)
+        }
+        data.children && data.children.forEach(item => recursionFile(item))
+      }
+      recursionFile(data)
+
+      this.$confirm(self.$t('editor.deleteFolder'), self.$t('editor.delete'), {
         confirmButtonText: self.$t('el.messagebox.confirm'),
         cancelButtonText: self.$t('el.messagebox.cancel'),
         type: 'error'
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFile({ path: this.currentPath })
+          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
           this.removePending = false
+        })
+        .catch(e => console.error(e))
+    },
+    removeFile() {
+      if (this.data.type === 'tree') {
+        this.removeFolder(this.data)
+        return
+      }
+
+      let self = this
+
+      let pathArr = this.data.path.split('/')
+      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
+      this.$confirm(
+        `${self.$t('editor.delConfirm')} ${pageName} ${self.$t(
+          'editor.page'
+        )}？`,
+        self.$t('editor.delete'),
+        {
+          confirmButtonText: self.$t('el.messagebox.confirm'),
+          cancelButtonText: self.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
+        .then(async () => {
+          this.removePending = true
+          await this.gitlabRemoveFile({ path: this.currentPath })
+          this.removePending = true
         })
         .catch(e => console.error(e))
     },
@@ -149,7 +202,7 @@ export default {
       return !this.isFile
     },
     isRemovable() {
-      return this.isFile
+      return this.node.level !== 1
     },
     isSettable() {
       return this.isWebsite || this.isFile

@@ -49,7 +49,6 @@ export default {
   },
   data() {
     return {
-      treeData: this.originalTreeData,
       defaultProps: {
         children: 'child',
         label: 'name'
@@ -57,6 +56,9 @@ export default {
     }
   },
   computed: {
+    treeData() {
+      return this.originalTreeData
+    },
     isDialogShow() {
       return this.isEditorShow
     }

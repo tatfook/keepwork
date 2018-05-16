@@ -1,15 +1,28 @@
 import _ from 'lodash'
 import md5 from 'blueimp-md5'
-import { mdToJson, jsonToMd } from './mdParser'
+import { mdToJson, jsonToMd } from './mdParser/yaml'
+import CmdHelper from './cmdHelper'
+import ModAdaptor from './modAdaptor'
+
 const MARKDOWN_CMD = 'Markdown'
 const MOD_CMD_BEGIN = '```@'
 const MOD_CMD_END = '```'
 
 const blockHelper = {
   buildJson(block) {
-    block.data = this.isMarkdownMod(block)
-      ? { md: { data: this.mdText(block) } }
-      : mdToJson(this.mdText(block))
+    if (CmdHelper.isValidCmd(block.cmd)) {
+      if (CmdHelper.isOldCmd(block.cmd)) {
+        const targetCmd = CmdHelper.targetCmd(block.cmd)
+        block.data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
+        this.updateCmd(block, targetCmd)
+      } else {
+        block.data = this.isMarkdownMod(block)
+          ? { md: { data: this.mdText(block) } }
+          : mdToJson(this.mdText(block))
+      }
+    } else {
+      block.data = {}
+    }
   },
 
   buildKey(block) {
@@ -39,8 +52,9 @@ const blockHelper = {
     )
   },
 
-  contentBegin(block) {
-    return this.isMarkdownMod(block) ? block.lineBegin : block.lineBegin + 1
+  updateCmd(block, cmd) {
+    block.cmd = cmd
+    block.modType = 'Mod' + block.cmd
   },
 
   updateJson(block, jsonData) {
@@ -69,8 +83,12 @@ const blockHelper = {
     this.buildKey(block)
   },
 
+  contentBegin(block) {
+    return this.isMarkdownMod(block) ? block.lineBegin : block.lineBegin + 1
+  },
+
   textLength(block) {
-    return block.md.length + 2
+    return this.lines(block).length
   },
 
   lines(block) {
@@ -84,7 +102,7 @@ const blockHelper = {
   },
 
   endLine(block) {
-    return block.lineBegin + this.textLength(block)
+    return block.lineBegin + this.lines(block).length
   },
 
   text(block) {

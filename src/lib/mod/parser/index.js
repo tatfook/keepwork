@@ -1,14 +1,12 @@
 import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
+import CmdHelper from './cmdHelper'
 import { gConst } from '@/lib/global'
-
-const MOD_CMD_BEGIN_REG = /^```@\w*$/
-const MOD_CMD_END_REG = /^```$/
 
 const beginModBlock = (line, lineNumber) => {
   let cmd
-  if (line.match(MOD_CMD_BEGIN_REG)) {
+  if (CmdHelper.isCmdLine(line)) {
     cmd = line.split('@')[1]
   }
   let curModBlock = new ModBlock(cmd, lineNumber)
@@ -31,12 +29,12 @@ const buildBlockList = mdText => {
   _.forEach(mdLines, (line, lineNumber) => {
     if (curModBlock) {
       if (
-        line.match(MOD_CMD_END_REG) &&
+        CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
-      ) {
+      ) { // markdown mod will ignore the cmd end
         endModBlock(blockList, curModBlock)
         curModBlock = null
-      } else if (line.match(MOD_CMD_BEGIN_REG)) {
+      } else if (CmdHelper.isCmdLine(line)) {
         endModBlock(blockList, curModBlock)
         curModBlock = beginModBlock(line, lineNumber + 1)
       } else {
@@ -92,9 +90,9 @@ const getBlockLines = (mdText, block) => {
   let blockLines = []
   for (let i = BlockHelper.contentBegin(block) - 1; i < mdLines.length; i++) {
     if (
-      (mdLines[i].match(MOD_CMD_END_REG) &&
+      (CmdHelper.isCmdEnd(mdLines[i]) &&
         !BlockHelper.isMarkdownMod(block)) ||
-      mdLines[i].match(MOD_CMD_BEGIN_REG)
+        CmdHelper.isCmdLine(mdLines[i])
     ) {
       break
     }
@@ -172,7 +170,12 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
 
 const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
   let preBlock = blockList[index]
-  let beginLine = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
+  let beginLine = 1
+  if (preBlock) {
+    beginLine = BlockHelper.endLine(preBlock)
+    // just for beautify, see also in buildMarkdown function(line 196)
+    if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 1
+  }
   let block = new ModBlock(cmd, beginLine)
   BlockHelper.updateJson(block, jsonData)
   blockList.splice(index + 1, 0, block)
@@ -192,7 +195,7 @@ const buildMarkdown = blockList => {
   let lines = []
   _.forEach(blockList, block => {
     lines.push(BlockHelper.lines(block))
-    lines.push('')
+    if (!BlockHelper.isMarkdownMod(block)) lines.push('')
   })
   return _.flatten(lines).join('\n')
 }
@@ -217,17 +220,17 @@ const getActiveBlock = (blockList, beginLine) => {
   }
 }
 
-const isModMarkdown = (block, mdLines) => {
+const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
-    let line = mdLines[i]
     if (
-      (line.match(MOD_CMD_END_REG) && !BlockHelper.isMarkdownMod(block)) ||
-      line.match(MOD_CMD_BEGIN_REG)
+      (CmdHelper.isCmdEnd(mdLines[i]) &&
+        !BlockHelper.isMarkdownMod(block)) ||
+        CmdHelper.isCmdLine(mdLines[i])
     ) {
-      return false
+      return true
     }
   }
-  return true
+  return false
 }
 
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
@@ -253,6 +256,6 @@ export default {
   addBlockByKey,
   getCmd,
   getActiveBlock,
-  isModMarkdown,
+  willAffectModData,
   addBlockToMarkdown
 }

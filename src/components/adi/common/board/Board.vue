@@ -55,6 +55,10 @@ const initPreview = (data, callback) => {
 
 export default {
   name: 'AdiBoard',
+  bedbclick: true,
+  dblclick(context) {
+    context.$store.dispatch('setActivePropertyOptions', {visible: true})
+  },
   render(h) {
     let self = this
 

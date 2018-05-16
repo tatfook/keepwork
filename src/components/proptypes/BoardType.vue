@@ -92,9 +92,7 @@ export default {
     )
   },
   data() {
-    return {
-      visible: false
-    }
+    return {}
   },
   computed: {
     inputTypeValue: {
@@ -120,11 +118,20 @@ export default {
       }
 
       return { props, on }
+    },
+    visible: {
+      get() {
+        return this.activePropertyOptions ? this.activePropertyOptions.visible : false
+      },
+      set(state) {
+        this.setActivePropertyOptions({visible:state})
+      }
     }
   },
   methods: {
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
+      setActivePropertyOptions: 'setActivePropertyOptions',
       setActivePropertyData: 'setActivePropertyData'
     }),
     ...mapGetters({
@@ -138,12 +145,12 @@ export default {
       }
     },
     changeProptyData(changedData) {
-      // this.changeActivePropty()
       this.setActivePropertyData({
         data: changedData
       })
     },
     openEditor() {
+      this.$emit('onChangeValue')
       this.visible = true
     },
     closeEditor() {

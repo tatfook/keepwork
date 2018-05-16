@@ -21,6 +21,7 @@ const {
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
+  SET_ACTIVE_PROPERTY_OPTIONS,
   REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
@@ -92,7 +93,10 @@ const actions = {
     if (!cacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
+    await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
+
     commit(SET_ACTIVE_PAGE, { path, username })
+    UndoHelper.init(getters.activeAreaData.undoManager, getters.code)
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters
@@ -218,6 +222,9 @@ const actions = {
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')
+  },
+  setActivePropertyOptions({ commit }, playload) {
+    commit(SET_ACTIVE_PROPERTY_OPTIONS, playload)
   },
   setActivePropertyTabType({ commit }, type) {
     commit(UPDATE_PROPERTY_TAB_TYPE, type)

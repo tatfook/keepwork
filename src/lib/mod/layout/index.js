@@ -1,5 +1,4 @@
 import _ from 'lodash'
-// import { mdToJson } from '../parser/mdParser'
 import { getPageInfoByPath } from '@/lib/utils/gitlab'
 import uuid from '@/lib/utils/uuid'
 import Const from './const'

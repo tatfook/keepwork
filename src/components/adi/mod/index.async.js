@@ -13,6 +13,7 @@ const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
 const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
+const ModToc = () => import('./web/toc')
 
 export const modList = {
   ModMarkdown,
@@ -29,7 +30,8 @@ export const modList = {
   ModComment,
   ModBoard,
   ModTextBoard,
-  ModPageList
+  ModPageList,
+  ModToc
 }
 
 export const load = async modName => {

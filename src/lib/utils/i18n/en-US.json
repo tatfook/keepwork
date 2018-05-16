@@ -38,6 +38,7 @@
     "save": "Save",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
+    "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
     "copyFail": "Link copy failed",
 
@@ -88,7 +89,7 @@
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create Website Now",
 
-    "addMod": "Please click to add content",
+    "addMod": "Please click to add module",
     "showCode": "Display code",
 
     "modAttr": "Attributes",
@@ -97,7 +98,7 @@
     "modDelMsg": "Are you sure to delete this module?",
     "modDelMsgTitle": "Delete prompt",
 
-    "select": "please choose",
+    
     "selfWindowOpen": "This window opens",
     "newWindowOpen": "open in a new window",
     "openMenuEditor": "Open the menu editor",
@@ -152,7 +153,25 @@
     "supportWildcard":
       "Support wildcard: * (represents lots of charachter) , ? (represents a charachter)",
     "supportBooleanCalculation":
-      "Support Boolean calculation: || (or)、&& (and)、! (not)"
+      "Support Boolean calculation: || (or)、&& (and)、! (not)",
+    "layoutPlan": "1. Layout plan",
+    "addLayout": "Add layout",
+    "default": "Default",
+    "rename": "Rename",
+
+    "layoutStyle": "2. Layout style",
+    "header": "header",
+    "footer": "footer",
+    "aside": "aside",
+    "main": "main",
+
+    "layoutParameters": "3. Layout parameters",
+    "match": "match",
+    "cancel": "Cancel",
+
+    "deleteFolder": "Be sure to delete the folder and inside documents ?",
+    "documents": " documents ?",
+    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?"
   },
   "modList": {
     "recent": "Commonly used",
@@ -176,7 +195,8 @@
     "comment": "Comment",
     "setting": "Setting",
     "pageList": "Page list",
-    "textBoard": "Text Board"
+    "textBoard": "Text Board",
+    "toc": "Toc"
   },
   "adi": {
     "markdown": {
@@ -284,6 +304,19 @@
     "openBoard": "Open board",
     "switchComment": "Comment is on",
     "pageList": "Page list",
-    "footer": "Footer"
+    "footer": "Footer",
+    "toc": "TOC Setting",
+    "download": "Download",
+    "enter": "Enter",
+    "innerModal": "Inner modal"
+  },
+  "field": {
+    "link": "link",
+    "src": "src",
+    "name": "name",
+    "data": "data",
+    "text": "text",
+    "desc": "desc",
+    "select": "please choose"
   }
 }

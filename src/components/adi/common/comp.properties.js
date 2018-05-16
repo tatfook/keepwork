@@ -13,6 +13,7 @@ import AdiInnerModal from './innerModal/innerModal.properties'
 import AdiNumber from './number/number.properties'
 import AdiPageList from './pageList/pageList.properties'
 import AdiFooter from './footer/footer.properties'
+import AdiToc from './toc/toc.properties'
 
 export default {
   AdiImgLoop,
@@ -29,5 +30,6 @@ export default {
   AdiInnerModal,
   AdiNumber,
   AdiPageList,
-  AdiFooter
+  AdiFooter,
+  AdiToc
 }

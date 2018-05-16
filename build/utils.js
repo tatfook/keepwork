@@ -124,7 +124,7 @@ exports.entries = function() {
       filePath.lastIndexOf('/') + 1,
       filePath.lastIndexOf('.')
     )
-    map[filename] = filePath
+    map[filename] = ['./node_modules/babel-polyfill/dist/polyfill.js', filePath]
   })
   return map
 }

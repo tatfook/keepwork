@@ -38,6 +38,7 @@
     "save": "保存",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",
 
@@ -86,7 +87,7 @@
     "noPersonalWebsite": "还没有创建网站",
     "createWebsiteNow": "现在创建",
 
-    "addMod": "请点击添加内容",
+    "addMod": "请点击添加模块",
     "showCode": "显示代码",
 
     "modAttr": "属性",
@@ -120,7 +121,7 @@
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
     "theNextStep": "下一步",
-    "Previous": "上一步",
+    "previous": "上一步",
     "startEditing": "开始编辑",
     "unchangeable": "设定后不可修改",
     "vipForwarding": "VIP可在网站设置中设置cname转发",
@@ -141,7 +142,25 @@
     "matchingRule": "匹配规则：",
     "pageListLogic": "页面列表逻辑",
     "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
-    "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)"
+    "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
+    "layoutPlan": "1. 布局方案",
+    "addLayout": "添加方案",
+    "default": "默认",
+    "rename": "重命名",
+
+    "layoutStyle": "2. 布局风格",
+    "header": "页头",
+    "footer": "页脚",
+    "aside": "侧边栏",
+    "main": "主内容",
+
+    "layoutParameters": "3. 布局参数",
+    "match": "匹配",
+    "cancel": "取消",
+
+    "deleteFolder": "删除文件夹及其中的所有内容么?",
+    "documents": "个文件吗？",
+    "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？"
   },
   "modList": {
     "recent": "常用",
@@ -165,7 +184,8 @@
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
-    "textBoard": "文本与绘图板"
+    "textBoard": "文本与绘图板",
+    "toc": "Markdown 列表"
   },
   "adi": {
     "markdown": {
@@ -273,6 +293,19 @@
     "openBoard": "打开绘图板",
     "switchComment": "评论是否开启",
     "pageList": "页面列表",
-    "footer": "页脚"
+    "footer": "页脚",
+    "toc": "TOC设置",
+    "download": "下载",
+    "enter": "进入",
+    "innerModal": "内部模态框"
+   
+  },
+  "field": {
+    "link": "链接",
+    "src": "地址",
+    "name": "名字",
+    "text": "文本",
+    "desc": "描述",
+    "data": "数据"
   }
 }

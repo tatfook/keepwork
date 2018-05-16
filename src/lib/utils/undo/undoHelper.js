@@ -4,6 +4,10 @@ export default {
       undoManager.stack.shift()
     }
   },
+  init(undoManager, initialItem) {
+    undoManager.initialItem = initialItem
+    this.clear(undoManager)
+  },
   clear(undoManager) {
     undoManager.stack = [undoManager.initialItem]
     undoManager.position = 0
