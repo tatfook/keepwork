@@ -1,7 +1,7 @@
 <template>
   <div class='comp-pagelist'>
     <el-collapse-transition>
-      <el-tree :data="filter(data)" :props="defaultProps" :render-content="renderContent" :filter-node-method="filterNode" ref="tree2" default-expand-all></el-tree>
+      <el-tree :data="filter(data)" :props="defaultProps" :render-content="renderContent" :filter-node-method="filterNode" ref="tree" default-expand-all></el-tree>
     </el-collapse-transition>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
   },
   watch: {
     filterText(val) {
-      this.$refs.tree2.filter(val)
+      this.$refs.tree.filter(val)
     }
   },
   methods: {
@@ -70,75 +70,86 @@ export default {
       return <div>{data.name}</div>
     },
     filter(data) {
-      let p = this.properties.input
+      let regString = this.properties.input
+      let regStringB
 
-      if (p.indexOf(' ') !== -1) {
-        p = p.split(' ').join('.*')
-      }
-      if (p.indexOf('*') !== -1) {
-        p = p.split('*').join('.*')
-      }
-      if (p.indexOf('?') !== -1) {
-        p = p.split('?').join('.')
-      }
-      if (p.indexOf('||') !== -1) {
-        let index = p.indexOf('||')
-        let stringA = p.substring(0, index)
-        let stringB = p.substring(index + 2)
-        p = stringA
-        var pB = stringB
-      }
-      if (p.indexOf('&&') !== -1) {
-        let index = p.indexOf('&&')
-        let stringA = p.substring(0, index)
-        let stringB = p.substring(index + 2)
-        p = stringA + stringB
-        var pB = stringB + stringA
-      }
-      if (p.indexOf('!') !== -1) {
-        let index = p.indexOf('!')
-        let stringA = p.substring(0, index)
-        let stringB = p.substring(index + 1)
-        p = stringA.split(stringB).join('')
+      if (regString === '') {
+        return data
       }
 
-      if (p === '') {
-        var temp = null
-        var tempB = null
-      } else {
-        var temp = `^${p}$`
-        var tempB = `^${pB}$`
+      if (regString.indexOf('*') !== -1) {
+        regString = regString.split('*').join('.*')
+      }
+      if (regString.indexOf('?') !== -1) {
+        regString = regString.split('?').join('.')
+      }
+      if (regString.indexOf('||') !== -1) {
+        let index = regString.indexOf('||')
+        let stringA = regString.substring(0, index)
+        let stringB = regString.substring(index + 2)
+
+        regString = stringA
+        regStringB = stringB
+      }
+      if (regString.indexOf('&&') !== -1) {
+        let index = regString.indexOf('&&')
+        let stringA = regString.substring(0, index)
+        let stringB = regString.substring(index + 2)
+
+        regString = stringA + stringB
+        regStringB = stringB + stringA
+      }
+      if (regString.indexOf('!') !== -1) {
+        let index = regString.indexOf('!')
+        let stringA = regString.substring(0, index)
+        let stringB = regString.substring(index + 1)
+
+        regString = stringA.split(stringB).join('')
       }
 
-      let reg = new RegExp(temp, 'i')
-      let regB = new RegExp(tempB, 'i')
+      let reg = new RegExp(`^${regString}$`, 'i')
+      let regB = new RegExp(`^${regStringB}$`, 'i')
 
-      let arr = []
+      let newData = []
 
-      let find = data => {
-        for (let i in data) {
-          if (data[i].type == 'blob') {
-            if (data[i].name.match(reg) || data[i].name.match(regB)) {
-              arr.push(data[i])
-            } else {
-              continue
+      let find = (data, isSub) => {
+        let insertItems = []
+        let tempData
+        let hasSub = false
+
+        if(isSub) {
+          tempData = data.children
+        } else {
+          tempData = data
+        }
+
+        _.forEach(tempData, (item, key) => {
+          if (item.type == 'blob') {
+            if (item.name.match(reg) || item.name.match(regB)) {
+              if(isSub){
+                hasSub = true
+                insertItems.push(item)
+              } else {
+                newData.push(item)
+              }
             }
-          } else {
-            //如果是文件夹就递归
-            if (data[i].children) {
-              find(data[i].children)
-            } else {
-              continue
+          } else if (item.type == 'tree'){
+            if (item.children && item.children.length > 0) {
+              find(item, true)
             }
           }
+        })
+
+        if(isSub && hasSub){
+          let cloneData = _.cloneDeep(data)
+          cloneData.children = insertItems
+          newData.push(cloneData)
         }
       }
+
       find(data)
-      if (p === '') {
-        return data
-      } else {
-        return arr
-      }
+
+      return newData
     },
     filterNode(value, data) {
       if (!value) return true
