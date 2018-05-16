@@ -93,6 +93,8 @@ const actions = {
     if (!cacheAvailable(pageData)) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
+    await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
+
     commit(SET_ACTIVE_PAGE, { path, username })
     UndoHelper.init(getters.activeAreaData.undoManager, getters.code)
   },
