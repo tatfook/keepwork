@@ -28,7 +28,6 @@
     "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
     "mousetrap": "^1.6.1",
-    "node-gitlab-api": "^2.2.6",
     "qiniu-js": "^2.2.2",
     "social-share.js": "^1.0.16",
     "tweetnacl": "~0.14.0",

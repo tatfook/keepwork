@@ -1,4 +1,11 @@
 import axios from 'axios'
+import { Base64 } from 'js-base64'
+import es from './esGateway'
+
+const defaultConfig = {
+  url: process.env.GITLAB_API_PREFIX,
+  token: ' '
+}
 
 const gitLabAPIGenerator = ({ url, token }) => {
   const instance = axios.create({
@@ -92,5 +99,84 @@ const gitLabAPIGenerator = ({ url, token }) => {
     }
   }
 }
+export class GitAPI {
+  constructor(config) {
+    this.config = config
+    this.client = gitLabAPIGenerator({
+      ...defaultConfig,
+      url: this.config.url,
+      token: this.config.token
+    })
+  }
 
-export default gitLabAPIGenerator
+  async getTree(options) {
+    return this.client.projects.repository.tree(options.projectId || this.config.projectId, options)
+  }
+
+  async getFile(path, options) {
+    return this.client.projects.repository.files
+      .show(options.projectId || this.config.projectId, path, options.ref || this.config.ref || 'master')
+      .then(file => file)
+  }
+
+  async getContent(path, options) {
+    return this.client.projects.repository.files
+      .show(options.projectId || this.config.projectId, path, options.ref || this.config.ref || 'master')
+      .then(file => Base64.decode(file.content))
+  }
+
+  async createFile(path, options) {
+    options = { ...(options || {}), commit_message: 'create' }
+    this.client.projects.repository.files.create(
+      options.projectId || this.config.projectId,
+      path,
+      options.branch || this.config.branch || 'master',
+      options
+    ).then((data) => {
+      this.commitToES(path, 'create', options.content, {})
+      return data
+    })
+  }
+
+  async editFile(path, options) {
+    options = { ...(options || {}), commit_message: 'edit' }
+    this.client.projects.repository.files.edit(
+      options.projectId || this.config.projectId,
+      path,
+      options.branch || this.config.branch || 'master',
+      options
+    ).then((data) => {
+      this.commitToES(path, 'edit', options.content, {})
+      return data
+    })
+  }
+
+  async deleteFile(path, options) {
+    options = { ...(options || {}), commit_message: 'delete' }
+    this.client.projects.repository.files.remove(
+      options.projectId || this.config.projectId,
+      path,
+      options.branch || this.config.branch || 'master',
+      options
+    ).then((data) => {
+      this.commitToES(path, 'delete', '', {})
+      return data
+    })
+  }
+
+  async upsertFile(path, options) {
+    options = { ...(options || {}) }
+    const file = await this.getFile(path).catch(e => {})
+    return file ? this.editFile(path, options) : this.createFile(path, options)
+  }
+
+  getFileGitUrl(path) {
+    return `${this.config.url}/${this.config.externalUsername}/${this.config.projectName}/blob/master/${path}`
+  }
+
+  async commitToES(path, action, content, options) {
+    return es.submitGitData(path, action, content, options)
+  }
+}
+
+export default GitAPI
