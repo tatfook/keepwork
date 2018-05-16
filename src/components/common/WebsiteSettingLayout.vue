@@ -89,7 +89,7 @@
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select size="small" v-model="layoutForm.header" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.header" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
                   :key="fileName"
@@ -101,7 +101,7 @@
             </el-form-item>
             <el-form-item prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
-              <el-select size="small" v-model="layoutForm.sidebar" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.sidebar" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('sidebar')"
                   :key="fileName"
@@ -113,7 +113,7 @@
             </el-form-item>
             <el-form-item prop="footer">
               <label>{{$t('editor.footer')}}</label>
-              <el-select size="small" v-model="layoutForm.footer" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.footer" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('footer')"
                   :key="fileName"
@@ -125,7 +125,7 @@
             </el-form-item>
             <el-form-item prop="match">
               <label>{{$t('editor.match')}}</label>
-              <el-input size="small" placeholder="match" type="textarea" v-model="layoutForm.match">
+              <el-input size="small" :placeholder="this.$t('editor.match')" type="textarea" v-model="layoutForm.match">
               </el-input>
               <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
             </el-form-item>
