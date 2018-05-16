@@ -1,7 +1,8 @@
 export default [
+  // template 0
   [
     {
-      colPageList: 'pageList'
+      colGroup: [{ colPageList: 'pageList' }]
     }
   ]
 ]

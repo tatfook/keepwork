@@ -6,6 +6,7 @@ import autoSizeInput from './AutoSizeInputType'
 import linkTarget from './LinkTargetType'
 import switchButton from './SwitchButtonType'
 import gallery from './GalleryType'
+import filter from './FilterType'
 
 export default {
   input,
@@ -15,5 +16,6 @@ export default {
   autoSizeInput,
   linkTarget,
   switchButton,
-  gallery
+  gallery,
+  filter
 }

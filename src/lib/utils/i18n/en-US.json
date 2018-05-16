@@ -144,7 +144,15 @@
     "lowerCaseLetters":
       "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore":
-      "Website name cannot start with an underscore"
+      "Website name cannot start with an underscore",
+
+    "openRegularExpressionEditor": "Editor",
+    "matchingRule": "The matching rule：",
+    "pageListLogic": "The page list logic",
+    "supportWildcard":
+      "Support wildcard: * (represents lots of charachter) , ? (represents a charachter)",
+    "supportBooleanCalculation":
+      "Support Boolean calculation: || (or)、&& (and)、! (not)"
   },
   "modList": {
     "recent": "Commonly used",

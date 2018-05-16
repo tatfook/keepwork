@@ -135,7 +135,13 @@
     "privatePermissions": "开启VIP ，额外支持私有权限以及权限管理等特权",
     "createdSuccessfully": "恭喜您，网站创建成功",
     "lowerCaseLetters": "可使用小写字母、数字（例如：mysite123）",
-    "cannotBeginWithAnUnderscore": "网站名不能以下划线开头"
+    "cannotBeginWithAnUnderscore": "网站名不能以下划线开头",
+
+    "openRegularExpressionEditor": "编辑器",
+    "matchingRule": "匹配规则：",
+    "pageListLogic": "页面列表逻辑",
+    "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
+    "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)"
   },
   "modList": {
     "recent": "常用",
