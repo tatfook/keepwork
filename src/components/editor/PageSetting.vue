@@ -1,7 +1,7 @@
 <template>
   <div class='page-setting' v-loading='loading'>
     <h1>{{ barePath }}</h1>
-    <el-select size="small" v-model="selectedLayoutId" filterable placeholder="Select" @change="selectPageLayout">
+    <el-select size="small" v-model="selectedLayoutId" filterable :placeholder="this.$t('editor.select')" @change="selectPageLayout">
       <el-option
         v-for="(layout) in userSiteLayoutsMap"
         :key="layout.id"

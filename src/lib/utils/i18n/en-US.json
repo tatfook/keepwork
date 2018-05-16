@@ -89,7 +89,7 @@
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create Website Now",
 
-    "addMod": "Please click to add content",
+    "addMod": "Please click to add module",
     "showCode": "Display code",
 
     "modAttr": "Attributes",
@@ -298,7 +298,10 @@
     "switchComment": "Comment is on",
     "pageList": "Page list",
     "footer": "Footer",
-    "toc": "TOC Setting"
+    "toc": "TOC Setting",
+    "download": "Download",
+    "enter": "Enter",
+    "innerModal": "Inner modal"
   },
   "field": {
     "link": "link",

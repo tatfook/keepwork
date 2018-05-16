@@ -87,7 +87,7 @@
     "noPersonalWebsite": "还没有创建网站",
     "createWebsiteNow": "现在创建",
 
-    "addMod": "请点击添加内容",
+    "addMod": "请点击添加模块",
     "showCode": "显示代码",
 
     "modAttr": "属性",
@@ -289,7 +289,11 @@
     "switchComment": "评论是否开启",
     "pageList": "页面列表",
     "footer": "页脚",
-    "toc": "TOC设置"
+    "toc": "TOC设置",
+    "download": "下载",
+    "enter": "进入",
+    "innerModal": "内部模态框"
+   
   },
   "field": {
     "link": "链接",
