@@ -9,7 +9,7 @@ const components = {
 
 const styles = [{
   theme: {
-    root: ['mod-space'],
+    root: [],
     rootRow: ['mod-full-width']
   },
   options: {
