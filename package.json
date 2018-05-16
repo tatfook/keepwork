@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
     "bcrypt-pbkdf": "^1.0.0",
     "blueimp-md5": "^2.10.0",
     "ecc-jsbn": "~0.1.1",
