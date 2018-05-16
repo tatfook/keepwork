@@ -1,4 +1,4 @@
-const MOD_CMD_BEGIN_REG = /^```@\w*$/
+const MOD_CMD_BEGIN_REG = /^```@[\w/]*$/
 const MOD_CMD_END_REG = /^```$/
 
 export const cmdList = [

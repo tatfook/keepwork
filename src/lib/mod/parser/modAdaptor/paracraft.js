@@ -1,3 +1,5 @@
+import mdParse from '../mdParser/md'
+
 export const transfer = (md, cmd) => {
   let newData = {
     styleID: 0,
@@ -68,16 +70,26 @@ export const transfer = (md, cmd) => {
 
   let oldData = {}
 
-  if (md[0]) {
+  if (md[0] && md.length === 1) {
     try { oldData = JSON.parse(md[0]) } catch (e) {}
-  }
 
-  if (Object.keys(oldData).length) {
     newData.worldName.name = String(oldData.link_world_name)
     newData.version.text = String(oldData.link_version)
     newData.updateTime.text = String(oldData.link_update_date)
     newData.author.text = String(oldData.link_username)
     newData.size.text = String(oldData.link_files_totals)
+
+    return newData
+  } else if (md.length > 1) {
+    let mdString = md.join('\n')
+
+    oldData = mdParse.mdToJson(mdString)
+
+    newData.worldName.name = String(oldData.link_world_name.text)
+    newData.version.text = String(oldData.link_version.text)
+    newData.updateTime.text = String(oldData.link_update_date.text)
+    newData.author.text = String(oldData.link_username.text)
+    newData.size.text = String(oldData.link_files_totals.text)
 
     return newData
   } else {
