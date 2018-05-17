@@ -164,7 +164,7 @@
   },
   "modList": {
     "recent": "常用",
-    "markdown": "文本",
+    "markdown": "文本(Markdown)",
 
     "text": "文本",
     "navigation": "导航",
@@ -190,7 +190,7 @@
     "setting": "设置",
     "pageList": "页面列表",
     "textBoard": "文本与绘图板",
-    "toc": "Markdown 列表",
+    "toc": "Markdown 目录",
 
     "other": "其他"
   },
