@@ -2,7 +2,7 @@
   <div class="filter-type">
     <p>{{$t('editor.matchingRule')}}</p>
     <el-button plain type="info" @click='editorShow'>{{$t('editor.openRegularExpressionEditor')}}</el-button>
-    <el-input type='textarea' :autosize="{ minRows:7, maxRows: 14 }" :placeholder='editingKey' v-model='inputTypeValue' @change='updateValue' @focus='getFocus'></el-input>
+    <el-input type='textarea' :autosize="{ minRows:7, maxRows: 14 }" v-model='inputTypeValue' @change='updateValue' @focus='getFocus'></el-input>
     <filterDataEditor :isEditorShow='isEditorShow' :originalTreeData='originValue' @confirm='finishData' @cancel='cancel'></filterDataEditor>
   </div>
 </template>

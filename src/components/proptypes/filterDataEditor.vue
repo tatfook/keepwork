@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="tree-data-dialog" :title="$t('editor.pageListLogic')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose" center>
+  <el-dialog class="tree-data-dialog" :title="$t('editor.pageListLogic')" :visible.sync="isDialogShow" :before-close="handleClose" center>
     <p>{{$t('editor.supportWildcard')}}</p>
     <p>{{$t('editor.supportBooleanCalculation')}}</p>
     <el-input type="textarea" :rows="20" v-model='originalTreeData' @change='updateValue' @focus='getFocus'></el-input>
@@ -55,4 +55,7 @@ export default {
 </script>
 
 <style lang='scss'>
+.el-dialog{
+  width: 900px;
+}
 </style>
