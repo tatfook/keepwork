@@ -13,7 +13,7 @@ import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 // import ModPageList from './web/pageList'
-import ModToc from './web/toc'
+// import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -78,18 +78,18 @@ var modsList = [
         label: 'modList.markdown',
         mods: [ModMarkdown]
       },
+      // {
+      //   id: '4-2',
+      //   label: 'modList.toc',
+      //   mods: [ModToc]
+      // },
       {
         id: '4-2',
-        label: 'modList.toc',
-        mods: [ModToc]
-      },
-      {
-        id: '4-3',
         label: 'modList.text',
         mods: [ModText]
       },
       {
-        id: '4-4',
+        id: '4-3',
         label: 'modList.menu',
         mods: [ModMenu]
       }
