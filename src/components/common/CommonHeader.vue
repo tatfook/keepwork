@@ -40,7 +40,7 @@
       </el-menu-item>
       <el-submenu index='1' class="pull-right">
         <template slot="title">
-          <img class="user-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="username">
+          <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
         <el-menu-item index='1-1'>{{$t('common.features')}}</el-menu-item>
         <el-menu-item index='1-2'>{{$t('common.applicationCenter')}}</el-menu-item>
