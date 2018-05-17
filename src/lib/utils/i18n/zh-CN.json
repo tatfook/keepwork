@@ -159,28 +159,35 @@
   },
   "modList": {
     "recent": "常用",
-    "markdown": "Markdown",
+    "markdown": "文本",
+
     "text": "文本",
+    "navigation": "导航",
+    "menu": "导航菜单",
+    "headNavigation": "头部导航",
+
+    "graphic": "图形",
     "carousel": "图片轮播",
+    "widescreenImage": "宽屏图像",
+    "board": "绘图板",
+
     "mixLayer": "图文叠加",
     "mixPosition": "图文拼接",
-    "menu": "导航菜单",
-    "title": "标题",
-    "graphic": "图形",
-    "widescreenImage": "宽屏图像",
     "interative": "交互",
     "qq": "调用QQ聊天",
     "mixAndMatch": "混合搭配",
     "paracraft": "Paracraft作品",
     "works": "作品",
     "specialPerformance": "特殊表现",
-    "board": "绘图板",
+    
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
     "textBoard": "文本与绘图板",
-    "toc": "Markdown 列表"
+    "toc": "Markdown 列表",
+
+    "other": "其他"
   },
   "adi": {
     "markdown": {
@@ -214,6 +221,15 @@
     },
     "paracraft": {
       "worldName": "默认名字",
+      "paracraftTitle": {
+        "titleA": "心和手",
+        "titleB": "作品介绍",
+        "titleC": "主要功能",
+        "titleD": "相关帮助"
+      },
+      "paracraftSubTitle": {
+        "subtitle": " —— 分享自\"paracraftcreative空间\""
+      },
       "author": {
         "desc": "作者:",
         "text": "你的名字"
