@@ -1,9 +1,9 @@
 import sinon from 'sinon'
 import YamlTable from '@/lib/yamldb/table'
-import { GitlabClient } from '@/api/gitlab'
+import { GitAPI } from '@/api/gitlab'
 
 const gitConfig = {
-  rawBaseUrl: 'http://git.release.keepwork.com',
+  url: 'http://git.release.keepwork.com',
   projectId: 626,
   projectName: 'keepworkheader',
   branch: 'master',
@@ -18,7 +18,7 @@ describe('Yaml table', () => {
   let sandbox
   before(() => {
     sandbox = sinon.createSandbox()
-    sandbox.stub(GitlabClient.prototype, 'upsertFile').returns(true)
+    sandbox.stub(GitAPI.prototype, 'upsertFile').returns(true)
   })
   after(() => {
     sandbox.restore()

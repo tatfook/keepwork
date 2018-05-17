@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { newGitlabAPI } from '@/api'
+import { GitAPI } from '@/api'
 import {
   getFileFullPathByPath,
   EMPTY_GIT_FOLDER_KEEPER
@@ -8,10 +8,10 @@ import {
 const gitlabAPICache = {}
 const getGitlabAPI = config => {
   let cacheKey = JSON.stringify(config)
-  let getlabAPI =
+  let gitlabAPI =
     gitlabAPICache[cacheKey] ||
-    (gitlabAPICache[cacheKey] = newGitlabAPI(config))
-  return getlabAPI
+    (gitlabAPICache[cacheKey] = new GitAPI(config))
+  return gitlabAPI
 }
 
 /*doc

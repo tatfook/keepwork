@@ -1,5 +1,4 @@
-import es from '@/api/elasticsearch'
-import { GitlabClient } from '@/api/gitlab'
+import { es, GitAPI } from '@/api'
 import uuid from '@/lib/utils/uuid'
 import yaml from 'js-yaml'
 
@@ -24,7 +23,7 @@ category: YamlDB
 import { YamlDB } from '@/lib/yamldb'
 
 const gitConfig = {
-  rawBaseUrl: 'http://git.release.keepwork.com',
+  url: 'http://git.release.keepwork.com',
   projectId: ***,
   projectName: '****',
   branch: 'master',
@@ -49,7 +48,7 @@ testDB.find('tablename', key)
 export class YamlDB {
   constructor(gitConfig, tableConfig) {
     this.tableConfig = tableConfig || DEFAULT_TABLE_CONFIG
-    this.gitClient = new GitlabClient(gitConfig)
+    this.gitClient = new GitAPI(gitConfig)
   }
 
   newKey() {

@@ -1,9 +1,10 @@
 import _ from 'lodash'
-import { keepwork } from '@/api'
+import { keepwork, GitAPI } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
-import { showRawForGuest as gitlabShowRawForGuest, newGitlabAPI } from '@/api/gitlab'
+import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
+import Cookies from 'js-cookie'
 
 const {
   LOGIN_SUCCESS,
@@ -46,6 +47,7 @@ const actions = {
       getProfilePromise = getProfilePromise || new Promise(resolve => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
           commit(GET_PROFILE_SUCCESS, {...profile, token})
+          Cookies.set('token', token)
           resolve()
         }).catch(async e => {
           alert('尚未登陆，请登陆后访问！')
@@ -131,8 +133,8 @@ const actions = {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = newGitlabAPI({url: rawBaseUrl, token: ' '})
-    fileList = await gitlabForGuest.projects.repository.tree(projectId, {path: `templates/${folder}`, recursive: true})
+    let gitlabForGuest = new GitAPI({url: rawBaseUrl, token: ' '})
+    fileList = await gitlabForGuest.getTree(projectId, {path: `templates/${folder}`, recursive: true})
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
