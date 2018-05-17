@@ -150,6 +150,7 @@ const getters = {
         dataSource.username === username && dataSource.sitename === sitename
       )
     })[0]
+    targetDataSource.rawBaseUrl = process.env.GITLAB_API_PREFIX
     return targetDataSource
   },
 
