@@ -376,8 +376,8 @@ export default {
 
       let what = contentKey
       let { value: newFileName } = await this.$prompt(
-        `${what} ${self.$t('editor.nameSingle')}`,
-        `${self.$t('editor.create')} ${what}`,
+        `${self.$t(`editor.${contentKey}`)} ${self.$t('editor.nameSingle')}`,
+        `${self.$t('editor.create')} ${self.$t(`editor.${contentKey}`)}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
           confirmButtonText: self.$t('el.messagebox.confirm'),
