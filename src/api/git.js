@@ -17,82 +17,58 @@ const gitLabAPIGenerator = ({ url, token }) => {
     projects: {
       repository: {
         async tree(projectId, options) {
-          try {
-            const [pId, path] = [projectId, options.path].map(
-              encodeURIComponent
-            )
-            let res = await instance.get(
-              `projects/${pId}/repository/tree?id=${pId}&path=${path}&per_page=30&recursive=${options.recursive ||
+          const [pId, path] = [projectId, options.path].map(
+            encodeURIComponent
+          )
+          let res = await instance.get(
+            `projects/${pId}/repository/tree?id=${pId}&path=${path}&per_page=30&recursive=${options.recursive ||
                 true}`
-            )
-            return res.data
-          } catch (error) {
-            return error
-          }
+          )
+          return res.data
         },
         files: {
           remove: async (projectId, filePath, branch, options) => {
-            try {
-              const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-              await instance.delete(
-                `projects/${pId}/repository/files/${path}?branch=master&content=%0A&commit_message=keepwork%20commit%3A%20${path}`
-              )
-              return true
-            } catch (error) {
-              return error
-            }
+            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+            await instance.delete(
+              `projects/${pId}/repository/files/${path}?branch=master&content=%0A&commit_message=keepwork%20commit%3A%20${path}`
+            )
+            return true
           },
           async show(projectId, filePath, ref) {
-            try {
-              const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-              let res = await instance.get(
-                `projects/${pId}/repository/files/${path}?ref=${ref}`
-              )
-              return res.data
-            } catch (error) {
-              return error
-            }
+            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+            let res = await instance.get(
+              `projects/${pId}/repository/files/${path}?ref=${ref}`
+            )
+            return res.data
           },
           async showRaw(projectId, filePath, ref) {
-            try {
-              const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-              let res = await instance.get(
-                `projects/${pId}/repository/files/${path}/raw?ref=${ref}`
-              )
-              return res.data
-            } catch (error) {
-              return error
-            }
+            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+            let res = await instance.get(
+              `projects/${pId}/repository/files/${path}/raw?ref=${ref}`
+            )
+            return res.data
           },
           async create(projectId, filePath, branch = 'master', options) {
-            try {
-              const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-              let res = await instance.post(
-                `projects/${pId}/repository/files/${path}`,
-                {
-                  branch,
-                  ...options
-                }
-              )
-              return res.data
-            } catch (error) {
-              return error
-            }
+            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+            let res = await instance.post(
+              `projects/${pId}/repository/files/${path}`,
+              {
+                branch,
+                ...options
+              }
+            )
+            return res.data
           },
           async edit(projectId, filePath, branch = 'master', options) {
-            try {
-              const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-              let res = await instance.put(
-                `projects/${pId}/repository/files/${path}`,
-                {
-                  branch,
-                  ...options
-                }
-              )
-              return res.data
-            } catch (error) {
-              return error
-            }
+            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+            let res = await instance.put(
+              `projects/${pId}/repository/files/${path}`,
+              {
+                branch,
+                ...options
+              }
+            )
+            return res.data
           }
         }
       }

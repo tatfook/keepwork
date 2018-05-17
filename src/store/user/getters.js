@@ -28,7 +28,7 @@ const getters = {
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
-    url: _.get(defaultSiteDataSource, 'rawBaseUrl'),
+    url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
 

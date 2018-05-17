@@ -157,7 +157,7 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
-          this.removePending = true
+          this.removePending = false
         })
         .catch(e => console.error(e))
     },
