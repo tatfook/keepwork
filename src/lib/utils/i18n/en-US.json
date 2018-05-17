@@ -326,6 +326,7 @@
     "data": "data",
     "text": "text",
     "desc": "desc",
-    "select": "please choose"
+    "select": "please choose",
+    "title": "title"
   }
 }
