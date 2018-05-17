@@ -59,7 +59,7 @@ var modsList = [
       },
       {
         id: '3-2',
-        label: 'modList.headNavigation',
+        label: 'modList.widescreenImage',
         mods: [ModImg]
       },
       {
