@@ -1,9 +1,11 @@
 import Board from './board'
 import Paracraft from './paracraft'
+import BigFile from './bigFile'
 
 const parsers = {
   Board,
-  Paracraft
+  Paracraft,
+  BigFile
 }
 
 const transfer = (md, cmd, targetCmd) => {

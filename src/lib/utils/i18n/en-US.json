@@ -172,7 +172,9 @@
 
     "deleteFolder": "Be sure to delete the folder and inside documents ?",
     "documents": " documents ?",
-    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?"
+    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?",
+    "videoNotSupport": "Your browser does not support the video tag.",
+    "notFound": "Content cannot be found"
   },
   "modList": {
     "recent": "Commonly used",

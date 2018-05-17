@@ -138,6 +138,31 @@ export const sensitiveWords = {
   query: (...args) => post('sensitive_words/query', ...args)
 }
 
+/*doc
+---
+title: bigFile
+name: bigFile
+category: API
+parent: Keepwork API
+---
+**getDownloadUrlById:**
+```
+payload: {
+  "_id":"123"
+}
+```
+*/
+export const bigFile = {
+  getDownloadUrlById: (token, ...args) => {
+    return axios.create({
+      baseURL: process.env.KEEPWORK_API_PREFIX,
+      headers: {'Authorization': 'Bearer ' + token}
+    })
+      .post('bigfile/getDownloadUrlById', ...args)
+      .then(res => res.data.data)
+  }
+}
+
 export const keepwork = {
   user,
   website,
@@ -145,7 +170,8 @@ export const keepwork = {
   siteDataSource,
   websiteComment,
   sensitiveWords,
-  pages
+  pages,
+  bigFile
 }
 
 export default keepwork
