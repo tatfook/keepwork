@@ -327,9 +327,12 @@
     "toc": "TOC Setting",
     "download": "Download",
     "enter": "Enter",
-    "innerModal": "Inner modal"
+    "innerModal": "Inner modal",
+    "bigFile": "Big file"
   },
   "field": {
+    "field": "field",
+    "fieldType": "Field type",
     "link": "link",
     "src": "src",
     "name": "name",
@@ -337,6 +340,8 @@
     "text": "text",
     "desc": "desc",
     "select": "please choose",
-    "title": "title"
+    "title": "title",
+    "extraMsg": "Extra msg",
+    "channel": "channel"
   }
 }
