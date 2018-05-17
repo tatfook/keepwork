@@ -161,7 +161,9 @@
 
     "deleteFolder": "删除文件夹及其中的所有内容么?",
     "documents": "个文件吗？",
-    "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？"
+    "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
+    "videoNotSupport": "您的浏览器不支持 video 标签。",
+    "notFound": "内容找不到了"
   },
   "modList": {
     "recent": "常用",

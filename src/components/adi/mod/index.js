@@ -14,6 +14,7 @@ import ModComment from './web/comment'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
+import ModBigFile from './web/bigFile'
 
 export const modList = {
   ModMarkdown,
@@ -31,7 +32,8 @@ export const modList = {
   ModComment,
   ModTextBoard,
   ModPageList,
-  ModToc
+  ModToc,
+  ModBigFile
 }
 
 export const load = modName => {
