@@ -375,10 +375,8 @@ export default {
       let childNames = this.getAvailableContentFileNames(contentKey)
 
       let what = contentKey
-      console.log(contentKey)
       let { value: newFileName } = await this.$prompt(
         `${self.$t(`editor.${contentKey}`)} ${self.$t('editor.nameSingle')}`,
-        // `${self.$t('editor.create')} ${what}`,
         `${self.$t('editor.create')} ${self.$t(`editor.${contentKey}`)}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
