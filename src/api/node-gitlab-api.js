@@ -3,7 +3,7 @@ import axios from 'axios'
 const gitLabAPIGenerator = ({ url, token }) => {
   const instance = axios.create({
     baseURL: url + '/api/v4/',
-    timeout: 2000,
+    timeout: 30 * 1000,
     headers: { 'private-token': token }
   })
   return {
