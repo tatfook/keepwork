@@ -76,7 +76,7 @@
 
     "emptyName": "name cannot be empty",
     "nameRule":
-      "naame can only be composed of letters, numbers and underscores",
+      "name can only be composed of letters, numbers and underscores",
     "nameUnderline": "name cannot begin with an underscore",
     "nameExist": "a file of the same name already exists",
 
@@ -154,6 +154,7 @@
 
     "layoutStyle": "2. Layout style",
     "header": "header",
+    "sidebar": "sidebar",
     "footer": "footer",
     "aside": "aside",
     "main": "main",

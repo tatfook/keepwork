@@ -145,6 +145,7 @@
 
     "layoutStyle": "2. 布局风格",
     "header": "页头",
+    "sidebar": "侧边栏",
     "footer": "页脚",
     "aside": "侧边栏",
     "main": "主内容",
