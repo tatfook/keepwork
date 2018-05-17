@@ -103,7 +103,7 @@ export class GitAPI {
 
   async createFile(path, options) {
     options = { ...(options || {}), commit_message: 'create' }
-    this.client.projects.repository.files.create(
+    return this.client.projects.repository.files.create(
       options.projectId || this.config.projectId,
       path,
       options.branch || this.config.branch || 'master',
@@ -116,7 +116,7 @@ export class GitAPI {
 
   async editFile(path, options) {
     options = { ...(options || {}), commit_message: 'edit' }
-    this.client.projects.repository.files.edit(
+    return this.client.projects.repository.files.edit(
       options.projectId || this.config.projectId,
       path,
       options.branch || this.config.branch || 'master',
@@ -129,7 +129,7 @@ export class GitAPI {
 
   async deleteFile(path, options) {
     options = { ...(options || {}), commit_message: 'delete' }
-    this.client.projects.repository.files.remove(
+    return this.client.projects.repository.files.remove(
       options.projectId || this.config.projectId,
       path,
       options.branch || this.config.branch || 'master',
