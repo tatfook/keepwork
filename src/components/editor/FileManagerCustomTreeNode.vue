@@ -12,7 +12,6 @@
       <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
-        <!-- <el-button  class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'> -->
       </el-button>
       <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
@@ -229,3 +228,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.el-tree-node__label::before {
+  content: ' ';
+  display: inline-block;
+  position: absolute;
+  margin-left: -50px;
+  height: 30px;
+  width: 30px;
+}
+</style>
