@@ -14,7 +14,6 @@ import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
-import ModBigFile from './web/bigFile'
 
 var modsList = [
   {
@@ -30,11 +29,6 @@ var modsList = [
         id: '1-2',
         label: 'modList.board',
         mods: [ModBoard]
-      },
-      {
-        id: '1-3',
-        label: 'modList.bigFile',
-        mods: [ModBigFile]
       }
     ]
   },
