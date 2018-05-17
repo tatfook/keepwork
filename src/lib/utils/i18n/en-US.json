@@ -179,6 +179,7 @@
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
+    "bigFile": "Big file",
     
     "text": "Text",
     "navigation": "Navigation",
@@ -331,8 +332,8 @@
     "bigFile": "Big file"
   },
   "field": {
-    "field": "field",
-    "fieldType": "Field type",
+    "fileId": "file Id",
+    "fileType": "Field type",
     "link": "link",
     "src": "src",
     "name": "name",

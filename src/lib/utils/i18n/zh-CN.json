@@ -168,6 +168,7 @@
   "modList": {
     "recent": "常用",
     "markdown": "文本(Markdown)",
+    "bigFile": "大文件",
 
     "text": "文本",
     "navigation": "导航",
@@ -320,8 +321,8 @@
     "bigFile": "大文件"
   },
   "field": {
-    "field": "字段",
-    "fieldType": "字段类型",
+    "fileId": "字段",
+    "fileType": "字段类型",
     "link": "链接",
     "src": "地址",
     "name": "名字",
