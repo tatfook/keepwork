@@ -4,5 +4,5 @@ module.exports = {
   NODE_ENV: '"production"',
   KEEPWORK_API_PREFIX: '"https://keepwork.com/api/wiki/models"',
   GITLAB_API_PREFIX: '"https://git.keepwork.com"',
-  ES_GATEWAY_BASE_URL: '"https://esgateway.keepwork.com/"'
+  ES_GATEWAY_BASE_URL: '"https://api.keepwork.com/es"'
 }
