@@ -169,27 +169,34 @@
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
+    
     "text": "Text",
+    "navigation": "Navigation",
+    "menu": "Menu",
+    "headNavigation": "Head navigation",
+    
+    "graphic": "Graphic",
     "carousel": "Carousel",
+    "widescreenImage": "Widescreen image",
+    "board": "Board",
+
     "mixLayer": "Mix layer",
     "mixPosition": "Mix position",
-    "menu": "Menu",
-    "title": "Title",
-    "graphic": "Graphic",
-    "widescreenImage": "Widescreen image",
     "interative": "Interactive",
     "qq": "Call QQ chat",
     "mixAndMatch": "Mix and match",
     "paracraft": "Paracraft works",
     "works": "Works",
     "specialPerformance": "Special performance",
-    "board": "Board",
+    
     "vipRead": "VIP Read",
     "comment": "Comment",
     "setting": "Setting",
     "pageList": "Page list",
     "textBoard": "Text Board",
-    "toc": "Toc"
+    "toc": "Toc",
+
+    "other": "Other"
   },
   "adi": {
     "markdown": {
@@ -223,6 +230,15 @@
     },
     "paracraft": {
       "worldName": "Default name",
+      "paracraftTitle": {
+        "titleA": "Heart And Hands",
+        "titleB": "Introduction of works",
+        "titleC": "major function",
+        "titleD": "Related help"
+      },
+      "paracraftSubTitle": {
+        "subtitle": " —— Share from \"paracraftcreative space\""
+      },
       "author": {
         "desc": "Author:",
         "text": "Your name"
