@@ -2,8 +2,9 @@
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
-      <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
-      <i class="iconfont icon-siyouwangzhan" v-else-if="data.visibility === 'private'"></i>
+      <i class="iconfont icon-wenjian" v-if="isFile"></i>
+      <i class="iconfont icon-folder" v-else-if="isFolder"></i>
+      <i class="iconfont icon-siyouwangzhan" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-gongyouwangzhan" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
@@ -253,5 +254,9 @@ export default {
   margin-left: -50px;
   height: 30px;
   width: 30px;
+}
+.icon-folder::before {
+  font-size: .8em;
+  color: #FFAC33;
 }
 </style>
