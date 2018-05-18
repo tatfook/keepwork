@@ -90,7 +90,7 @@ export default {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
             if (!/^[A-Za-z0-9_]+$/.test(value))
-              return `${what}${self.$t('nameRule')}`
+              return `${what}${self.$t('editor.nameRule')}`
             if (/^[_]/.test(value))
               return `${what}${self.$t('editor.nameUnderline')}`
             if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')

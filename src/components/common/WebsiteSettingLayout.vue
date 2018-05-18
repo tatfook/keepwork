@@ -299,7 +299,14 @@ export default {
       this.editLayout(newLayout)
     },
     removeLayout(layout) {
-      if (this.siteLayoutsLength <= 1) return alert('Keep one layout at least!')
+      if (this.siteLayoutsLength <= 1) {
+        return this.$message({
+          message: this.$t('editor.keepOneLayout'),
+          type: 'warning',
+          center:true
+        })
+        // return alert('Keep one layout at least!')
+      }
       Vue.set(this.updatedLayoutsMap, layout.id, {
         ...this.updatedLayoutsMap[layout.id],
         deleted: true
@@ -374,9 +381,9 @@ export default {
       let self = this
       let childNames = this.getAvailableContentFileNames(contentKey)
 
-      let what = contentKey
+      let what = this.$t(`editor.${contentKey}`)
       let { value: newFileName } = await this.$prompt(
-        `${self.$t(`editor.${contentKey}`)} ${self.$t('editor.nameSingle')}`,
+        `${what} ${self.$t('editor.nameSingle')}`,
         `${self.$t('editor.create')} ${self.$t(`editor.${contentKey}`)}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
