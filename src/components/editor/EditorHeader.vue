@@ -127,7 +127,7 @@ export default {
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
-      activePageInfo: 'activePageInfo',
+      activeAreaData: 'activeAreaData',
       openedFiles: 'openedFiles',
       userProfile: 'user/profile'
     }),
@@ -152,7 +152,7 @@ export default {
       }
     },
     isActivePageSaved() {
-      let { saved } = this.activePageInfo
+      let { saved } = this.activeAreaData || {}
       return saved === false ? false : true
     }
   },
