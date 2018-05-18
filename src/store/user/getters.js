@@ -190,7 +190,7 @@ const getters = {
   activePageStarInfo: state => state.activePageStarInfo,
 
   siteLayoutConfigs: state => state.siteLayoutConfigs,
-  siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath],
+  siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {
     let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
     let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])

@@ -168,6 +168,7 @@
     "layoutParameters": "3. Layout parameters",
     "match": "match",
     "cancel": "Cancel",
+    "keepOneLayout": "Keep one layout at least",
 
     "deleteFolder": "Be sure to delete the folder and inside documents ?",
     "documents": " documents ?",

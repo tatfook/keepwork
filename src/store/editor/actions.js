@@ -105,11 +105,7 @@ const actions = {
     for (let i = 0; i < layoutPages.length; i++) {
       let pageData = layoutPages[i]
       if (!pageData.saved) {
-        await dispatch(
-          'gitlab/saveFile',
-          { content: pageData.content, path: pageData.path },
-          { root: true }
-        )
+        await dispatch('saveSiteConfigPage', pageData)
       }
     }
   },
@@ -121,9 +117,11 @@ const actions = {
     path
   ) {
     if (!path) return
-    let { content } = getOpenedFileByPath(path)
-    await dispatch('gitlab/saveFile', { content, path }, { root: true })
-    dispatch('updateOpenedFile', { saved: true, path })
+    let { content, saved } = getOpenedFileByPath(path)
+    if (!saved) {
+      await dispatch('gitlab/saveFile', { content, path }, { root: true })
+      dispatch('updateOpenedFile', { saved: true, path })
+    }
   },
   updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
     let {
@@ -150,6 +148,7 @@ const actions = {
     if (payload.code === undefined) payload = { code: payload }
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
     commit(UPDATE_MODS, payload.code)
     await dispatch('updateCode', payload)
   },
@@ -250,17 +249,23 @@ const actions = {
       activeArea !== LayoutHelper.Const.MAIN_AREA &&
       !activeAreaData.saved
     ) {
-      await dispatch(
-        'gitlab/saveFile',
-        { content: activeAreaData.content, path: activeAreaData.path },
-        { root: true }
-      )
+      await dispatch('saveSiteConfigPage', activeAreaData)
     }
     commit(SET_ACTIVE_AREA, area)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     await dispatch('refreshCode')
+  },
+  async saveSiteConfigPage({ commit, getters, dispatch }, { content, path }) {
+    await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    let [username, sitename, , , areanames, filename] = path.split('/')
+    commit(UPDATE_OPENED_LAYOUT_FILE, {
+      sitePath: `${username}/${sitename}`,
+      layoutContentFilePath: `${areanames}/${filename}`,
+      data: { saved: true }
+    })
+    console.log('saveSiteConfigPage ', UPDATE_OPENED_LAYOUT_FILE, true)
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)

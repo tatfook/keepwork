@@ -76,7 +76,7 @@
       </el-menu-item> -->
       <el-menu-item index='2' class="link-box">
         <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
-        <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
+        <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='8' class='unsaved-tip'>
         <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
@@ -123,11 +123,11 @@ export default {
   computed: {
     ...mapGetters({
       showingCol: 'showingCol',
-      activePageUrl: 'activePageUrl',
+      activePageInfo: 'activePageInfo',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
-      activePageInfo: 'activePageInfo',
+      activeAreaData: 'activeAreaData',
       openedFiles: 'openedFiles',
       userProfile: 'user/profile'
     }),
@@ -151,8 +151,13 @@ export default {
         return this.$t('editor.splitScreen')
       }
     },
+    activePageFullUrl() {
+      let { fullPath = '' } = this.activePageInfo
+      let url = `${this.nowOrigin}/${fullPath}`
+      return (url || '').replace(/\.md$/,'')
+    },
     isActivePageSaved() {
-      let { saved } = this.activePageInfo
+      let { saved } = this.activeAreaData || {}
       return saved === false ? false : true
     }
   },
@@ -191,7 +196,7 @@ export default {
     },
     doCopyLink() {
       let that = this
-      let toCopyLink = this.nowOrigin + this.activePageUrl
+      let toCopyLink = this.activePageFullUrl
       this.$copyText(toCopyLink).then(
         function(e) {
           that.$message({

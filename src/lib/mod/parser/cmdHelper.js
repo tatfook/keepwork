@@ -23,6 +23,7 @@ export const cmdList = [
 
 export const oldCmdMapper = {
   'paracraft': 'Paracraft',
+  'wiki/js/world3D': 'Paracraft',
   'board/main': 'Board',
   'wiki/js/bigfile': 'BigFile'
 }

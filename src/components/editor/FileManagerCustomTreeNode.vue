@@ -2,8 +2,9 @@
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
-      <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
-      <i class="iconfont icon-siyouwangzhan" v-else-if="data.visibility === 'private'"></i>
+      <i class="iconfont icon-wenjian" v-if="isFile"></i>
+      <i class="iconfont icon-folder" v-else-if="isFolder"></i>
+      <i class="iconfont icon-siyouwangzhan" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-gongyouwangzhan" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
@@ -90,10 +91,10 @@ export default {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
             if (!/^[A-Za-z0-9_]+$/.test(value))
-              return `${what}${self.$t('nameRule')}`
+              return `${what}${self.$t('editor.nameRule')}`
             if (/^[_]/.test(value))
               return `${what}${self.$t('editor.nameUnderline')}`
-            if (childNames.indexOf(value) > -1) return self.$t('nameExist')
+            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }
         }
@@ -129,6 +130,7 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          this.resetPage({toRemoveFiles})
           this.removePending = false
         })
         .catch(e => console.error(e))
@@ -157,9 +159,24 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
+          this.resetPage({currentPath: this.currentPath})
           this.removePending = false
         })
         .catch(e => console.error(e))
+    },
+    resetPage({currentPath = null, toRemoveFiles = null }) {
+      if (toRemoveFiles && toRemoveFiles.length > 0) {
+        let currentRoutePath = this.$route.path.substring(1)
+        let isRestPage = toRemoveFiles.some(item => {
+          return item.split('.')[0] === currentRoutePath
+        })
+        if (isRestPage){
+          return this.$router.push('/')
+        }
+      }
+      if (currentPath && currentPath.split('.')[0] === this.$route.path.substring(1)) {
+        return this.$router.push('/')
+      }
     },
     goSetting() {
       if (this.isWebsite) {
@@ -237,5 +254,9 @@ export default {
   margin-left: -50px;
   height: 30px;
   width: 30px;
+}
+.icon-folder::before {
+  font-size: .8em;
+  color: #FFAC33;
 }
 </style>

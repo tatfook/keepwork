@@ -223,7 +223,7 @@ const actions = {
         ..._.get(config, 'layoutConfig'),
         ...layoutConfig
       },
-      pages: _.merge({}, config.pages, pages)
+      pages: _.merge({}, _.get(config, 'pages'), pages)
     }
     let content = JSON.stringify(unsavedConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
