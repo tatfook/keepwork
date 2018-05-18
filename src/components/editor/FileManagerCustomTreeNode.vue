@@ -93,7 +93,7 @@ export default {
               return `${what}${self.$t('nameRule')}`
             if (/^[_]/.test(value))
               return `${what}${self.$t('editor.nameUnderline')}`
-            if (childNames.indexOf(value) > -1) return self.$t('nameExist')
+            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }
         }
@@ -129,6 +129,7 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          this.resetPage({toRemoveFiles})
           this.removePending = false
         })
         .catch(e => console.error(e))
@@ -157,9 +158,24 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
+          this.resetPage({currentPath: this.currentPath})
           this.removePending = true
         })
         .catch(e => console.error(e))
+    },
+    resetPage({currentPath = null, toRemoveFiles = null }) {
+      if (toRemoveFiles && toRemoveFiles.length > 0) {
+        let currentRoutePath = this.$route.path.substring(1)
+        let isRestPage = toRemoveFiles.some(item => {
+          return item.split('.')[0] === currentRoutePath
+        })
+        if (isRestPage){
+          return this.$router.push('/')
+        }
+      }
+      if (currentPath && currentPath.split('.')[0] === this.$route.path.substring(1)) {
+        return this.$router.push('/')
+      }
     },
     goSetting() {
       if (this.isWebsite) {
