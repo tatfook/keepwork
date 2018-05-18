@@ -132,7 +132,6 @@ const mutations = {
   },
   [SET_ACTIVE_MOD](state, key) {
     if (!key) {
-      this.commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
       return Vue.set(state.activePage, 'activeMod', null)
     }
     if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
