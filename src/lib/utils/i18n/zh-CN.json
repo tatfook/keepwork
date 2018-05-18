@@ -13,6 +13,7 @@
     "attention": "关注",
     "history": "历史",
     "help": "帮助",
+    "iicc": "国际智能创意大赛",
 
     "openPlatform": "开放平台",
     "joinUs": "加入我们",
@@ -167,7 +168,7 @@
   },
   "modList": {
     "recent": "常用",
-    "markdown": "文本(Markdown)",
+    "markdown": "文本(Md)",
     "bigFile": "大文件",
 
     "text": "文本",
@@ -188,7 +189,7 @@
     "paracraft": "Paracraft作品",
     "works": "作品",
     "specialPerformance": "特殊表现",
-    
+
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
     "setting": "设置",
@@ -331,6 +332,7 @@
     "data": "数据",
     "title": "标题",
     "extraMsg": "额外信息",
-    "channel": "渠道"
+    "channel": "渠道",
+    "number": "数字"
   }
 }

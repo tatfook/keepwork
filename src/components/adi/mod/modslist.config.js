@@ -12,8 +12,8 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
-import ModPageList from './web/pageList'
-import ModToc from './web/toc'
+// import ModPageList from './web/pageList'
+// import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -59,7 +59,7 @@ var modsList = [
       },
       {
         id: '3-2',
-        label: 'modList.headNavigation',
+        label: 'modList.widescreenImage',
         mods: [ModImg]
       },
       {
@@ -78,26 +78,26 @@ var modsList = [
         label: 'modList.markdown',
         mods: [ModMarkdown]
       },
+      // {
+      //   id: '4-2',
+      //   label: 'modList.toc',
+      //   mods: [ModToc]
+      // },
       {
         id: '4-2',
-        label: 'modList.toc',
-        mods: [ModToc]
-      },
-      {
-        id: '4-3',
         label: 'modList.text',
         mods: [ModText]
       },
       {
-        id: '4-4',
+        id: '4-3',
         label: 'modList.menu',
         mods: [ModMenu]
-      },
-      {
-        id: '4-5',
-        label: 'modList.pageList',
-        mods: [ModPageList]
       }
+      // {
+      //   id: '4-5',
+      //   label: 'modList.pageList',
+      //   mods: [ModPageList]
+      // }
     ]
   },
   {
@@ -109,13 +109,13 @@ var modsList = [
         label: 'modList.comment',
         mods: [ModComment]
       },
+      // {
+      //   id: '5-2',
+      //   label: 'modList.pageList',
+      //   mods: [ModPageList]
+      // },
       {
         id: '5-2',
-        label: 'modList.pageList',
-        mods: [ModPageList]
-      },
-      {
-        id: '5-3',
         label: 'modList.qq',
         mods: [ModQQ]
       }

@@ -13,6 +13,11 @@
       <el-menu-item index='4'>
         <a href='/official/help/index'>{{$t('common.help')}}</a>
       </el-menu-item>
+      <el-menu-item index='6'>
+        <a href='http://iicc.keepwork.com' target="_blank">
+          <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
+        </a>
+      </el-menu-item>
 
       <!-- <el-menu-item index='7' class="pull-right">历史</el-menu-item>
       <el-menu-item index='8' class="pull-right">关注</el-menu-item>
@@ -42,21 +47,32 @@
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
-        <el-menu-item index='1-1'>{{$t('common.features')}}</el-menu-item>
-        <el-menu-item index='1-2'>{{$t('common.applicationCenter')}}</el-menu-item>
-        <el-menu-item index='1-3'>{{$t('common.help')}}</el-menu-item>
-        <el-menu-item index='1-4'>{{$t('common.dynamic')}}</el-menu-item>
-        <el-menu-item index='1-5'>{{$t('common.attention')}}</el-menu-item>
-        <el-menu-item index='1-6'>{{$t('common.history')}}</el-menu-item>
+        <el-menu-item index='1-1'>
+          <a href="/wiki/home">{{$t('common.features')}}</a>
+        </el-menu-item>
+        <el-menu-item index='1-2'>
+          <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
+        </el-menu-item>
+        <el-menu-item index='1-3'>
+          <a href='/official/help/index'>{{$t('common.help')}}</a>
+        </el-menu-item>
+        <el-menu-item index='1-6'>
+          <a href='http://iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
+        </el-menu-item>
       </el-submenu>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
           <i class="el-icon-menu"></i>
         </template>
-        <el-menu-item index='2-1'>{{$t('common.myHomePage')}}</el-menu-item>
-        <el-menu-item index='2-2'>{{$t('common.websiteManagement')}}</el-menu-item>
-        <el-menu-item index='2-3'>{{$t('common.pageEditor')}}</el-menu-item>
-        <el-menu-item index='2-4'>{{$t('common.myWebDisk')}}</el-menu-item>
+        <el-menu-item index='2-1'>
+          <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
+        </el-menu-item>
+        <el-menu-item index='2-2'>
+          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
+        </el-menu-item>
+        <el-menu-item index='2-3'>
+          <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
@@ -85,6 +101,7 @@ export default {
 
 .el-menu a {
   text-decoration: none;
+  color: inherit;
 }
 
 .menu-left {
@@ -116,6 +133,11 @@ export default {
   a {
     color: inherit;
   }
+}
+.iicc-logo{
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
 }
 </style>
 

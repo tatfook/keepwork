@@ -28,7 +28,7 @@ const getters = {
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
-    url: _.get(defaultSiteDataSource, 'rawBaseUrl'),
+    url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
 
@@ -150,6 +150,7 @@ const getters = {
         dataSource.username === username && dataSource.sitename === sitename
       )
     })[0]
+    targetDataSource.rawBaseUrl = process.env.GITLAB_API_PREFIX
     return targetDataSource
   },
 
@@ -189,7 +190,7 @@ const getters = {
   activePageStarInfo: state => state.activePageStarInfo,
 
   siteLayoutConfigs: state => state.siteLayoutConfigs,
-  siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath],
+  siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {
     let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
     let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
