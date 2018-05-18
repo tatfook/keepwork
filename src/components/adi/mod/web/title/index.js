@@ -4,63 +4,43 @@ title: Title Mod
 name: Title Mod
 category: Adi Mod
 ---
-## @Title
 
-## 参数说明
+This is the Title Mod for usage.
+
+```@Title
+styleID: // 样式ID
+logo:
+  src: // logo图片来源地址链接
+  link: // logo图片点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+businessName:
+  name: // 公司名称
+  link: // 公司网址
+  target: // 链接从新窗口打开或本窗口打开
+tagline:
+  name: // 宣传词名称
+  link: // 宣传词点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+menu:
+  data:
+    - name: // 菜单1名称
+      link: // 菜单1点击跳转链接
+      child:
+        - name: // 子菜单1.1名称
+          link: // 子菜单1.1点击跳转链接
+        - name: // 子菜单1.2名称
+          link: // 子菜单1.2点击跳转链接
+    - name: // 菜单2名称
+      link: // 菜单2点击跳转链接
+      child:
+        - name: // 子菜单2.1名称
+          link: // 子菜单2.1点击跳转链接
+        - name: // 子菜单2.2名称
+          link: // 子菜单2.2点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
 
 ```
-- styleID :  //样式ID
 
-# logo
-- src : // logo 图片地址
-- link : // logo 链接
-
-# businessName
-- name : // 公司名字
-- link : // 公司网址
-
-# tagline
-- name : // 宣传词
-- link : // 宣传词链接
-
-# menu
-
-# menu.data
-
-# menu.data.0
-- name : 菜单1
-- link : http://keepwork.com
-
-# menu.data.1
-- name : 菜单2
-- link : http://keepwork.com
-
-# menu.data.1.child
-
-# menu.data.1.child.0
-- name : 菜单2.1
-- link : http://keepwork.com
-
-# menu.data.1.child.1
-- name : 菜单2.2
-- link : http://keepwork.com
-
-# menu.data.1.child.1.child
-
-# menu.data.1.child.1.child.0
-- name : 菜单2.2.1
-- link : http://keepwork.com
-
-# menu.data.1.child.1.child.1
-- name : 菜单2.2.2
-- link : http://keepwork.com
-
-# menu.data.1.child.1.child.1.child
-
-# menu.data.1.child.1.child.1.child.0
-- name : 菜单2.2.2.1
-- link : http://keepwork.com
-```
 */
 
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
