@@ -21,7 +21,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             encodeURIComponent
           )
           let res = await instance.get(
-            `projects/${pId}/repository/tree?id=${pId}&path=${path}&per_page=30&recursive=${options.recursive ||
+            `projects/${pId}/repository/tree?id=${pId}&path=${path}&per_page=1000000&recursive=${options.recursive ||
                 true}`
           )
           return res.data
