@@ -15,45 +15,6 @@ import compBaseMixin from '../comp.base.mixin'
 export default {
   name: 'AdiInnerModal',
   mixins: [compBaseMixin],
-  // render(h) {
-  //   let self = this
-
-  //   return (
-  //     <div class="comp-inner-modal" v-show={self.options.isShowInnerModal}>
-  //       <div class="innerModal" style={self.style}>
-  //         {(() => {
-  //           return h('a', {
-  //             on: {
-  //               click: self.setInnerModalHide
-  //             },
-  //             domProps: {
-  //               className: 'el-icon-close close'
-  //             }
-  //           })
-  //         })()}
-
-  //         {(() => {
-  //           return h(
-  //             'component',
-  //             {
-  //               is: self.innerModalComponent,
-  //               domProps: {}
-  //             },
-  //             []
-  //           )
-  //         })()}
-  //       </div>
-  //       {(() => {
-  //         // setTimeout(() => {
-  //         //   let compInnerModal = document.querySelectorAll('.comp-inner-modal')
-  //         //   _.forEach(compInnerModal, element => {
-  //         //     element.parentNode.style.height = '100%'
-  //         //   })
-  //         // }, 0)
-  //       })()}
-  //     </div>
-  //   )
-  // },
   methods: {
     setInnerModalHide() {
       this.options.hideModal()
