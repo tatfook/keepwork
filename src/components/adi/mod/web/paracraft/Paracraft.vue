@@ -15,7 +15,7 @@ preview:
   link: // 预览图点击跳转链接
   target: // 链接从新窗口打开或本窗口打开
 desc:
-  data:
+  data: //作品描述内容
 worldName:
   name: // 作品标题名称
   link: // 作品标题链接
@@ -56,7 +56,8 @@ enter:
   name: // 进入按钮名称
   link: // 进入按钮链接
   target: // 链接从新窗口打开或本窗口打开
-innerModal: {}
+innerModal:
+  hidden: //内部模态框隐藏与否
 paracraftInfo:
   text: // 未安装Paracraft客户端提示文字
   link: // 下载Paracraft客户端链接

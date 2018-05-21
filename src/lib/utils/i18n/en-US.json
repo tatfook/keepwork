@@ -308,6 +308,7 @@
     "worldName": "name",
     "author": "author",
     "version": "version",
+    "viewTimesImg": "view Times Image",
     "updateTime": "update time",
     "viewTimes": "view times",
     "size": "size",

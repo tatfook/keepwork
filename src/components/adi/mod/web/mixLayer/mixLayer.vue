@@ -6,7 +6,7 @@ name: MixLayer Mod
 category: Adi Mod
 ---
 
-This is the MixPosition Mod for usage.
+This is the MixLayer Mod for usage.
 
 ```@MixLayer
 styleID: // 样式ID
