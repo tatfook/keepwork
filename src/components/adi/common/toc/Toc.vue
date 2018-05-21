@@ -49,6 +49,10 @@ export default {
   }
 
   #toc {
+    ul.table-of-contents{
+      padding: 0;
+    }
+
     ul {
       list-style: none;
 

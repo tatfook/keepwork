@@ -6,7 +6,7 @@ export default [
     },
     props: {},
     theme: {
-      root: ['mod-full-width']
+      root: ['mod-full-width', 'mod-space']
     },
     options: {},
     useImage: false,
