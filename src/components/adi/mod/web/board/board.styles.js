@@ -8,7 +8,7 @@ export default [
         'padding-bottom': '10px'
       },
       board: {
-        'overflow-x': 'scroll'
+        'overflow-x': 'auto'
       }
     },
     props: {
