@@ -95,6 +95,7 @@ export default {
   computed: {
     ...mapGetters({
       personalSiteList: 'user/personalSiteList',
+      personalSitePaths: 'user/personalSitePathMap',
       contributedSiteList: 'user/contributedSiteList',
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
@@ -134,7 +135,10 @@ export default {
     }),
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
-      if (!isLegal) return
+      if (!isLegal) {
+        let closeAllFolder = this.personalSitePaths ? Object.keys(this.personalSitePaths).map(path => ({path, expanded: false})) : []
+        return this.updateFilemanagerTreeNodeExpandMapByPath(closeAllFolder)
+      }
       await this.getRepositoryTree({ path: sitepath })
 
       let folderPaths = paths.slice(0, paths.length - 1)
@@ -143,9 +147,9 @@ export default {
         return prev.concat(expanededPath)
       }, [])
       expandedFolderPaths.unshift(sitepath)
-
       let expandedFolderPathsList = expandedFolderPaths.map(path => ({path, expanded: true}))
-      this.updateFilemanagerTreeNodeExpandMapByPath(expandedFolderPathsList)
+      let appendCloseFolderPathsList = this.personalSitePaths ? Object.keys(this.personalSitePaths).filter(i => i !== sitepath).map(path => ({path, expanded: false})) : []
+      this.updateFilemanagerTreeNodeExpandMapByPath([...expandedFolderPathsList, ...appendCloseFolderPathsList])
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
