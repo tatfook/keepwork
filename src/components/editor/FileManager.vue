@@ -9,17 +9,17 @@
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
           <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
             <span class="node-icon">
-              <i class="iconfont icon-dakaidewenjian" :class="{'is-modified': data.isModified}"></i>
+              <i class="iconfont icon-edited_file" :class="{'is-modified': data.isModified}"></i>
             </span>
             <span class=''>{{ node.label }}</span>
             <span class="file-manager-buttons-container">
-              <el-button v-if='isSaveble(data)' v-loading='data.savePending' class="iconfont icon-baocun" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+              <el-button v-if='isSaveble(data)' v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
               </el-button>
-              <el-button class="iconfont icon-shuaxin" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
+              <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-guanxi" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
+              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-shanchu" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
+              <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
             </span>
           </span>
@@ -302,14 +302,14 @@ export default {
   .el-button + .el-button {
     margin-left: 5px;
   }
-  .icon-ziyuan9 {
+  .icon-file__ {
     font-weight: bold;
     color: #000;
   }
-  .icon-siyouwangzhan {
+  .icon-private {
     color: #f48622;
   }
-  .icon-gongyouwangzhan {
+  .icon-common_websites {
     color: #4c97d1;
   }
 
@@ -333,7 +333,7 @@ export default {
     padding-left: 35px;
   }
 
-  .icon-dakaidewenjian.is-modified {
+  .icon-edited_file.is-modified {
     color: #f4b622;
   }
   .el-loading-spinner .circular {

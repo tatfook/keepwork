@@ -1,7 +1,7 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-      <i class="iconfont icon-bianjiqi-shanchu"></i>
+      <i class="iconfont icon-delete"></i>
       {{$t('editor.modDel')}}
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>

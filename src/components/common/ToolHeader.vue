@@ -46,7 +46,7 @@
         <div class="kp-social-share"></div>
       </el-popover>
       <span class="icon-item" v-loading='starPending'>
-        <i class="iconfont icon-dianzan" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
+        <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
         <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
       </span>
     </div>
