@@ -1,23 +1,48 @@
 /*doc
 ---
-title: menu Mod
-name: menu Mod
+title: Menu Mod
+name: Menu Mod
 category: Adi Mod
 ---
 
-This is the menu for usage.
+This is the Menu Mod for usage.
 
-## @menu
-
-## 参数说明
-
-```
-- styleID : //当前样式id
-
-# menu
-- target : //是否在新窗口
-
-# menu.data //菜单数据
+```@Menu
+styleID: // 样式ID
+menu:
+  data:
+    - name: // 菜单1名称
+      link: // 菜单1点击跳转链接
+      child:
+        - name: // 子菜单1.1名称
+          link: // 子菜单1.1点击跳转链接
+        - name: // 子菜单1.2名称
+          link: // 子菜单1.2点击跳转链接
+    - name: // 菜单2名称
+      link: // 菜单2点击跳转链接
+      child:
+        - name: // 子菜单2.1名称
+          link: // 子菜单2.1点击跳转链接
+        - name: // 子菜单2.2名称
+          link: // 子菜单2.2点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+footer:
+  data:
+    - name: // 菜单1名称
+      link: // 菜单1点击跳转链接
+      child:
+        - name: // 子菜单1.1名称
+          link: // 子菜单1.1点击跳转链接
+        - name: // 子菜单1.2名称
+          link: // 子菜单1.2点击跳转链接
+    - name: // 菜单2名称
+      link: // 菜单2点击跳转链接
+      child:
+        - name: // 子菜单2.1名称
+          link: // 子菜单2.1点击跳转链接
+        - name: // 子菜单2.2名称
+          link: // 子菜单2.2点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
 
 ```
 

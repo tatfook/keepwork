@@ -11,7 +11,8 @@ const state = () => ({
   comments: {},
   siteDetailInfo: {},
   webTemplateConfig: [],
-  siteLayoutConfigs: {}
+  siteLayoutConfigs: {},
+  skyDrive: {}
 })
 
 export default {
