@@ -24,6 +24,7 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let treeWithChildren = {}
 
   files.forEach(file => {
+    if (file.path.indexOf(rootPath) !== 0 || file.path === rootPath) return
     let setKeys = file.path
       .substr(rootPath.length + 1)
       .split('/')
