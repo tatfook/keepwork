@@ -3,9 +3,9 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-mulu" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage' class="iconfont icon-tianjiamokuai" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button v-if='activePage' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
       </el-row>
@@ -17,8 +17,8 @@
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
-          <el-button class="iconfont icon-diannaomoshi" title="电脑"></el-button>
-          <el-button class="iconfont icon-shoujimoshi" title="手机"></el-button>
+          <el-button class="iconfont icon-computer" title="电脑"></el-button>
+          <el-button class="iconfont icon-phone" title="手机"></el-button>
         </el-button-group> -->
         <!-- <el-button-group>
           <el-button class="btn-scale" title="缩小"></el-button>
@@ -26,8 +26,8 @@
         </el-button-group> -->
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <!-- <el-button class="iconfont icon-xinchuangkouyulan" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-xinchuangkouyulan" :title="$t('editor.newWindowOpen')" @click='showPage'></el-button>
+          <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
+          <el-button class="iconfont icon-new_open_window" :title="$t('editor.newWindowOpen')" @click='showPage'></el-button>
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
@@ -46,23 +46,23 @@
           <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-H" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-          <el-button class="iconfont icon-h1" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-          <el-button class="iconfont icon-zihyuan" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-          <el-button class="iconfont icon-jiacu" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-          <el-button class="iconfont icon-qingxie" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+          <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
+          <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
+          <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
+          <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
+          <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
         </el-button-group>
         <el-button-group>
-          <!-- <el-button class="iconfont icon-xuliebiao" title="无序列表"></el-button>
-          <el-button class="iconfont icon-xulie" title="有序列表"></el-button>
-          <el-button class="iconfont icon-yinyong" title="引用内容"></el-button> -->
-          <!-- <el-button class="iconfont icon-biaoge" title="表格"></el-button> -->
-          <el-button class="iconfont icon-ziyuanfengexian" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-          <el-button class="iconfont icon-daima" :title="$t('editor.code')" @click="insertCode"></el-button>
-          <el-button class="iconfont icon-fenxianglianjie" :title="$t('editor.link')" @click="insertLink"></el-button>
+          <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
+          <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
+          <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
+          <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
+          <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
+          <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
+          <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
         </el-button-group>
         <el-button-group>
-          <el-button class="iconfont icon-tianjiamokuai" title="MOD" @click="addModToMarkdown"></el-button>
+          <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
         </el-button-group>
       </el-row>
       <editor-markdown ref='codemirror' />
@@ -141,8 +141,8 @@ export default {
     },
     fullscreenIcon() {
       return this.isFullscreen
-        ? 'iconfont icon-tuichuquanping'
-        : 'iconfont icon-quanping1'
+        ? 'iconfont icon-full_screen_exit'
+        : 'iconfont icon-full-screen_'
     }
   },
   watch: {
