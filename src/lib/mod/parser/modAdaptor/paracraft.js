@@ -76,16 +76,19 @@ export const transfer = (md, cmd) => {
         oldData = JSON.parse(md[0])
       } catch (e) {}
 
-      newData.worldName.name = String(oldData.link_world_name)
-      newData.version.text = String(oldData.link_version)
-      newData.updateTime.text = String(oldData.link_update_date)
-      newData.author.text = String(oldData.link_username)
-      newData.size.text = String(oldData.link_files_totals)
-      newData.download.link = String(oldData.link_world_url)
-      newData.preview.src = String(oldData.media_logo)
-      newData.paracraftInfo.desc_info = String(oldData.paracraft_info.desc_info)
+      newData.worldName.name = String(oldData.link_world_name || '')
+      newData.version.text = String(oldData.link_version || '')
+      newData.updateTime.text = String(oldData.link_update_date || '')
+      newData.author.text = String(oldData.link_username || '')
+      newData.size.text = String(oldData.link_files_totals || '')
+      newData.download.link = String(oldData.link_world_url || '')
+      newData.enter.link = String(oldData.link_world_url || '')
+      newData.preview.src = String(oldData.media_logo || '')
+      newData.paracraftInfo.desc_info = String(
+        (oldData.paracraft_info && oldData.paracraft_info.desc_info) || ''
+      )
       newData.paracraftInfo.download_info = String(
-        oldData.paracraft_info.desc_download
+        (oldData.paracraft_info && oldData.paracraft_info.desc_download) || ''
       )
 
       return newData
@@ -94,16 +97,19 @@ export const transfer = (md, cmd) => {
 
       oldData = mdParse.mdToJson(mdString)
 
-      newData.worldName.name = String(oldData.link_world_name.text)
-      newData.version.text = String(oldData.link_version.text)
-      newData.updateTime.text = String(oldData.link_update_date.text)
-      newData.author.text = String(oldData.link_username.text)
-      newData.size.text = String(oldData.link_files_totals.text)
-      newData.download.link = String(oldData.link_world_url.text)
-      newData.preview.src = String(oldData.media_logo.text)
-      newData.paracraftInfo.desc_info = String(oldData.paracraft_info.desc_info)
+      newData.worldName.name = String(oldData.link_world_name.text || '')
+      newData.version.text = String(oldData.link_version.text || '')
+      newData.updateTime.text = String(oldData.link_update_date.text || '')
+      newData.author.text = String(oldData.link_username.text || '')
+      newData.size.text = String(oldData.link_files_totals.text || '')
+      newData.download.link = String(oldData.link_world_url.text || '')
+      newData.enter.link = String(oldData.link_world_url.text || '')
+      newData.preview.src = String(oldData.media_logo.text || '')
+      newData.paracraftInfo.desc_info = String(
+        (oldData.paracraft_info && oldData.paracraft_info.desc_info) || ''
+      )
       newData.paracraftInfo.download_info = String(
-        oldData.paracraft_info.desc_download
+        (oldData.paracraft_info && oldData.paracraft_info.desc_download) || ''
       )
 
       return newData
