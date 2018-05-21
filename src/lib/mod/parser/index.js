@@ -234,7 +234,7 @@ const willAffectModData = (block, mdLines) => {
 }
 
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
-  let mdLines = code.trim().split('\n')
+  let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
   // TODO: hard code here
   cmdCode += '- styleID : ' + styleID + '\n'
