@@ -46,6 +46,11 @@ export default {
     this.editor.on('drop', this.onDropFile)
     this.editor.on('paste', this.onPaste)
   },
+  watch: {
+    activeMod(newActiveMod, oldActiveMod){
+      newActiveMod && this.editor.setCursor(CodeMirror.Pos(newActiveMod.lineBegin || 1, 0))
+    }
+  },
   computed: {
     ...mapGetters({
       code: 'code',
