@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.15",
+    "Cortana": "leopoldchen/Cortana",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
@@ -78,7 +79,6 @@
     "file-loader": "^1.1.11",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "glob": "^7.0.3",
-    "hologram-github-theme": "^0.1.4",
     "html-webpack-plugin": "^2.30.1",
     "inject-loader": "^3.0.0",
     "jsdom": "^11.10.0",

@@ -2,8 +2,8 @@ import YamlDB from './database'
 
 /*doc
 ---
-title: YamlTable
-name: YamlTable
+title: table
+name: table
 category: YamlDB
 ---
 

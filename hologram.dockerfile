@@ -9,5 +9,4 @@ RUN gem install bundle && gem install hologram && hologram hologram.yml
 FROM nginx
 WORKDIR /usr/share/nginx/html
 COPY --from=hologram_builder /build/docs .
-RUN rm index.html && mv Index.html index.html
 CMD ["nginx", "-g", "daemon off;"]
