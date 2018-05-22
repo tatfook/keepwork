@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     backEditArea(){
-      // this.$router.push('/editor.html#/'+this.$route.path)
       this.$router.push('/wiki/wikieditor/#/'+this.$route.path)
       window.location.reload();
     }
