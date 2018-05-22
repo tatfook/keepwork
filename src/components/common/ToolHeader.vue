@@ -1,42 +1,23 @@
 <template>
   <div class="tool-header">
-    <!-- <el-breadcrumb separator='/'>
-      <el-breadcrumb-item>http://keepwork.com</el-breadcrumb-item>
-      <el-breadcrumb-item>{{activePageInfo.username}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{activePageInfo.sitename}}</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="path in activePageInfo.paths" :key="path">{{path}}</el-breadcrumb-item>
-    </el-breadcrumb> -->
-    <!-- <div class="breadcrumb">
-      <a class="breadcrumb-item" href="/">http://keepwork.com</a>
+    <div class="breadcrumb">
+      <a class="breadcrumb-item" href="/">{{ locationOrigin }}</a>
       <span class="breadcrumb-separator" role="presentation">/</span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
-      <el-dropdown class="breadcrumb-item">
+
+      <el-dropdown v-for='(fileList, index) in breadcrumbs' :key='index' class="breadcrumb-item" @command='handleBreadcrumbClick'>
         <span class="el-dropdown-link">
-          <span class="breadcrumb-separator" role="presentation">/</span> {{activePageInfo.sitename}}
+          <span class="breadcrumb-separator" role="presentation">/</span> {{activePageInfo.paths[index] | hideMarkdownExt}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-          <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+          <el-dropdown-item v-for='file in fileList' :key='file.name' :command='file'>
+            {{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-dropdown class="breadcrumb-item" v-for="path in activePageInfo.paths" :key="path">
-        <span class="el-dropdown-link">
-          <span class="breadcrumb-separator" role="presentation">/</span> {{path}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-          <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div> -->
+    </div>
+
     <div class="icons">
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
@@ -62,20 +43,43 @@ export default {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
-      username: 'user/username',
       displayUsername: 'user/displayUsername',
-      activePageStarInfo: 'user/activePageStarInfo'
-    })
+      activePageStarInfo: 'user/activePageStarInfo',
+      gitlabChildrenByPath: 'gitlab/childrenByPath'
+    }),
+    sitePath() {
+      let { sitepath } = this.activePageInfo
+      return sitepath
+    },
+    breadcrumbs() {
+      let { username, sitename, paths = [] } = this.activePageInfo
+      if (paths.length <= 0) return []
+      let breadcrumbs = paths.map((path, index) => {
+        let currentPath = [username, sitename, ...paths.slice(0, index)].join('/')
+        return this.gitlabChildrenByPath(currentPath)
+      })
+      return breadcrumbs
+    },
+    locationOrigin() {
+      return location.origin
+    }
   },
-  mounted() {},
+  mounted() {
+  },
   data() {
     return {
       starPending: false
     }
   },
+  watch: {
+    sitePath(sitePath) {
+      sitePath && this.gitlabGetRepositoryTree({ path: sitePath, editorMode: false })
+    }
+  },
   methods: {
     ...mapActions({
-      starPages: 'user/starPages'
+      starPages: 'user/starPages',
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree'
     }),
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo
@@ -110,7 +114,14 @@ export default {
         })
       })
       this.starPending = false
+    },
+    handleBreadcrumbClick(file) {
+      let url = file.type === 'tree' ? `${file.path}/index` : file.path.replace(/\.md$/, '')
+      location.pathname = url
     }
+  },
+  filters: {
+    hideMarkdownExt: (str = '') => str.replace(/\.md$/, '')
   }
 }
 </script>

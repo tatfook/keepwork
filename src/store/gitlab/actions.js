@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import uuid from '@/lib/utils/uuid'
 import { Base64 } from 'js-base64'
+import { GitAPI } from '@/api'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import { props } from './mutations'
 import {
@@ -61,14 +62,30 @@ const getGitlabFileParams = async (
 
 const actions = {
   async getRepositoryTree(context, payload) {
-    let { path, useCache = true, recursive = true } = payload
+    let { path, useCache = true, recursive = true, editorMode = true } = payload
     let {
       commit,
-      getters: { repositoryTrees }
+      dispatch,
+      getters: { repositoryTrees },
+      rootGetters
     } = context
-    let { gitlab, projectId } = await getGitlabParams(context, { path })
-    let children = _.get(repositoryTrees, [projectId, path])
 
+    let gitlab, projectId
+    if (editorMode) {
+      let gitlabParams = await getGitlabParams(context, { path })
+      gitlab = gitlabParams.gitlab
+      projectId = gitlabParams.projectId
+    } else {
+      await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
+      let {
+        'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+      } = rootGetters
+      let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
+      projectId = siteDetailInfoDataSource.projectId
+      gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
+    }
+
+    let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return
 
     let list = await gitlab.getTree({

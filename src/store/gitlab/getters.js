@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import { GitAPI } from '@/api'
 import {
+  gitTree2NestedArray,
   getFileFullPathByPath,
-  EMPTY_GIT_FOLDER_KEEPER
+  EMPTY_GIT_FOLDER_KEEPER,
+  CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
 const gitlabAPICache = {}
@@ -74,6 +76,15 @@ const getters = {
       .filter(name => name && name !== EMPTY_GIT_FOLDER_KEEPER)
       .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
+  },
+  childrenByPath: (
+    state,
+    { repositoryTreesAllFiles = [] }
+  ) => path => {
+    let children = gitTree2NestedArray(repositoryTreesAllFiles, path).filter(
+      ({ name, path: filePath }) => name !== CONFIG_FOLDER_NAME && name !== EMPTY_GIT_FOLDER_KEEPER
+    )
+    return children
   },
   files: state => state.files,
 
