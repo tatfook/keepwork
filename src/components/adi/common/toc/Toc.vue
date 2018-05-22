@@ -1,8 +1,8 @@
 <template>
   <div class="comp-toc">
     <div class="title">{{properties.title}}</div>
-    <div id="toc"></div>
-    <vue-markdown class="toc-source" :watches='["toc"]' :show="show" :source="code" toc-id="toc" :toc="toc" :toc-first-level="1" :toc-last-level="5" />
+    <div :id="tocId" class="toc"></div>
+    <vue-markdown class="toc-source" :watches='["toc"]' :show="show" :source="code" :toc-id="tocId" :toc="toc" :toc-first-level="1" :toc-last-level="5" />
   </div>
 </template>
 <script>
@@ -25,7 +25,10 @@ export default {
   computed: {
     ...mapGetters({
       code: 'code'
-    })
+    }),
+    tocId() {
+      return 'toc' + Math.random().toString(10).substr(2, 4)
+    }
   },
   methods: {},
   created() {
@@ -35,7 +38,11 @@ export default {
       self.toc = true
       self.show = true
 
-      document.querySelector(".toc-source").remove()
+      let dom = document.querySelector(".toc-source")
+
+      if(dom) {
+        document.querySelector(".toc-source").remove()
+      }
     }, 0)
   }
 }
@@ -48,7 +55,7 @@ export default {
     color: #333;
   }
 
-  #toc {
+  .toc {
     ul.table-of-contents{
       padding: 0;
     }
