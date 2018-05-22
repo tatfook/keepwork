@@ -40,10 +40,14 @@ export default {
       return BasicComponents[this.compType]
     },
     isDisplay() {
-      return !this.modData[this.property].hidden
+      return this.modData[this.property] && !this.modData[this.property].hidden
     },
     source() {
-      return this.modData[this.property]
+      if(this.modData[this.property] && typeof(this.modData[this.property]) == 'object') {
+        return this.modData[this.property]
+      } else {
+        return {}
+      }
     }
   }
 }

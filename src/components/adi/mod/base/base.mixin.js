@@ -166,7 +166,7 @@ export default {
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct
-      return _.merge({}, this.conf.properties, this.mod ? this.mod.data : '')
+      return _.merge({}, this.conf.properties, this.mod ? this.mod.data : {})
     }
   }
 }
