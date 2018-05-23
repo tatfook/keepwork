@@ -36,20 +36,20 @@
                     :class="{is_default: unsavedDefaultLayoutId==layout.id}"
                     size="mini" type="text"
                     @click.stop="setDefault(layout)"
-                    icon="iconfont icon-sheweimoren"
+                    icon="iconfont icon-default"
                     :title="$t('editor.default')">
                   </el-button>
                   <el-button
                     size="mini" type="text"
                     @click.stop="editLayout(layout)"
-                    icon="iconfont icon-zhongmingming-copy"
+                    icon="iconfont icon-edit-"
                     :title="$t('editor.rename')">
                   </el-button>
                   <el-button
                     size="mini"
                     type="text"
                     @click.stop="removeLayout(layout)"
-                    icon="iconfont icon-shanchu-copy"
+                    icon="iconfont icon-delete"
                     :title="$t('editor.delete')">
                   </el-button>
                 </span>
@@ -89,7 +89,7 @@
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select size="small" v-model="layoutForm.header" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.header" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
                   :key="fileName"
@@ -101,7 +101,7 @@
             </el-form-item>
             <el-form-item prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
-              <el-select size="small" v-model="layoutForm.sidebar" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.sidebar" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('sidebar')"
                   :key="fileName"
@@ -113,7 +113,7 @@
             </el-form-item>
             <el-form-item prop="footer">
               <label>{{$t('editor.footer')}}</label>
-              <el-select size="small" v-model="layoutForm.footer" filterable placeholder="Select">
+              <el-select size="small" v-model="layoutForm.footer" filterable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('footer')"
                   :key="fileName"
@@ -125,7 +125,7 @@
             </el-form-item>
             <el-form-item prop="match">
               <label>{{$t('editor.match')}}</label>
-              <el-input size="small" placeholder="match" type="textarea" v-model="layoutForm.match">
+              <el-input size="small" :placeholder="this.$t('editor.match')" type="textarea" v-model="layoutForm.match">
               </el-input>
               <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
             </el-form-item>
@@ -299,7 +299,14 @@ export default {
       this.editLayout(newLayout)
     },
     removeLayout(layout) {
-      if (this.siteLayoutsLength <= 1) return alert('Keep one layout at least!')
+      if (this.siteLayoutsLength <= 1) {
+        return this.$message({
+          message: this.$t('editor.keepOneLayout'),
+          type: 'warning',
+          center:true
+        })
+        // return alert('Keep one layout at least!')
+      }
       Vue.set(this.updatedLayoutsMap, layout.id, {
         ...this.updatedLayoutsMap[layout.id],
         deleted: true
@@ -374,10 +381,10 @@ export default {
       let self = this
       let childNames = this.getAvailableContentFileNames(contentKey)
 
-      let what = contentKey
+      let what = this.$t(`editor.${contentKey}`)
       let { value: newFileName } = await this.$prompt(
         `${what} ${self.$t('editor.nameSingle')}`,
-        `${self.$t('editor.create')} ${what}`,
+        `${self.$t('editor.create')} ${self.$t(`editor.${contentKey}`)}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
           confirmButtonText: self.$t('el.messagebox.confirm'),

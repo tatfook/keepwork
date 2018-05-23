@@ -14,6 +14,7 @@ import AdiNumber from './number/number.properties'
 import AdiPageList from './pageList/pageList.properties'
 import AdiFooter from './footer/footer.properties'
 import AdiToc from './toc/toc.properties'
+import AdiBigFile from './bigFile/bigFile.properties'
 
 export default {
   AdiImgLoop,
@@ -31,5 +32,6 @@ export default {
   AdiNumber,
   AdiPageList,
   AdiFooter,
-  AdiToc
+  AdiToc,
+  AdiBigFile
 }

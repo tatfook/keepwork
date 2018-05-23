@@ -12,8 +12,8 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
-import ModPageList from './web/pageList'
-import ModToc from './web/toc'
+// import ModPageList from './web/pageList'
+// import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -22,193 +22,152 @@ var modsList = [
     children: [
       {
         id: '1-1',
-        label: 'modList.title',
-        mods: [ModTitle]
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
       },
       {
         id: '1-2',
-        label: 'modList.menu',
-        mods: [ModMenu]
-      },
-      {
-        id: '1-3',
-        label: 'modList.widescreenImage',
-        mods: [ModImg]
-      },
-      {
-        id: '1-4',
-        label: 'modList.text',
-        mods: [ModText]
-      },
-      {
-        id: '1-5',
-        label: 'modList.markdown',
-        mods: [ModMarkdown]
-      },
-      {
-        id: '1-6',
-        label: 'modList.mixPosition',
-        mods: [ModMixPositon]
-      },
-      {
-        id: '1-7',
-        label: 'modList.mixLayer',
-        mods: [ModMixLayer]
-      },
-      {
-        id: '1-8',
-        label: 'modList.carousel',
-        mods: [ModImgLoop]
-      },
-      {
-        id: '1-9',
-        label: 'modList.textBoard',
-        mods: [ModTextBoard]
-      },
-      {
-        id: '1-10',
-        label: 'modList.pageList',
-        mods: [ModPageList]
-      },
-      {
-        id: '1-11',
-        label: 'modList.toc',
-        mods: [ModToc]
+        label: 'modList.board',
+        mods: [ModBoard]
       }
     ]
   },
   {
-    id: '2',
-    label: 'modList.graphic',
+    id: 2,
+    label: 'modList.navigation',
     children: [
       {
         id: '2-1',
+        label: 'modList.menu',
+        mods: [ModMenu]
+      },
+      {
+        id: '2-2',
+        label: 'modList.headNavigation',
+        mods: [ModTitle]
+      }
+    ]
+  },
+  {
+    id: 3,
+    label: 'modList.graphic',
+    children: [
+      {
+        id: '3-1',
+        label: 'modList.carousel',
+        mods: [ModImgLoop]
+      },
+      {
+        id: '3-2',
         label: 'modList.widescreenImage',
         mods: [ModImg]
       },
       {
-        id: '2-2',
-        label: 'modList.carousel',
-        mods: [ModImgLoop]
-      },
-      {
-        id: '2-3',
+        id: '3-3',
         label: 'modList.board',
         mods: [ModBoard]
       }
     ]
   },
   {
-    id: '3',
+    id: 4,
     label: 'modList.text',
     children: [
       {
-        id: '3-1',
+        id: '4-1',
+        label: 'modList.markdown',
+        mods: [ModMarkdown]
+      },
+      // {
+      //   id: '4-2',
+      //   label: 'modList.toc',
+      //   mods: [ModToc]
+      // },
+      {
+        id: '4-2',
         label: 'modList.text',
         mods: [ModText]
       },
       {
-        id: '3-2',
-        label: 'modList.markdown',
-        mods: [ModMarkdown]
-      },
-      {
-        id: '3-3',
+        id: '4-3',
         label: 'modList.menu',
         mods: [ModMenu]
       }
+      // {
+      //   id: '4-5',
+      //   label: 'modList.pageList',
+      //   mods: [ModPageList]
+      // }
     ]
   },
   {
-    id: '4',
+    id: 5,
     label: 'modList.interative',
     children: [
       {
-        id: '4-1',
+        id: '5-1',
         label: 'modList.comment',
         mods: [ModComment]
       },
+      // {
+      //   id: '5-2',
+      //   label: 'modList.pageList',
+      //   mods: [ModPageList]
+      // },
       {
-        id: '4-3',
+        id: '5-2',
         label: 'modList.qq',
         mods: [ModQQ]
       }
     ]
   },
   {
-    id: '5',
+    id: 6,
     label: 'modList.mixAndMatch',
     children: [
       {
-        id: '5-1',
-        label: 'modList.title',
+        id: '6-1',
+        label: 'modList.headNavigation',
         mods: [ModTitle]
       },
       {
-        id: '5-2',
-        label: 'modList.paracraft',
-        mods: [ModParacraft]
-      },
-      {
-        id: '5-3',
+        id: '6-2',
         label: 'modList.text',
         mods: [ModText]
       },
       {
-        id: '5-4',
+        id: '6-3',
         label: 'modList.mixPosition',
         mods: [ModMixPositon]
       },
       {
-        id: '5-5',
+        id: '6-4',
         label: 'modList.mixLayer',
         mods: [ModMixLayer]
-      }
-    ]
-  },
-  {
-    id: '6',
-    label: 'modList.works',
-    children: [
+      },
       {
-        id: '6-1',
+        id: '6-5',
         label: 'modList.paracraft',
         mods: [ModParacraft]
+      },
+      {
+        id: '6-6',
+        label: 'modList.textBoard',
+        mods: [ModTextBoard]
       }
     ]
   },
   {
-    id: '7',
-    label: 'modList.specialPerformance',
+    id: 7,
+    label: 'modList.other',
     children: [
       {
         id: '7-1',
-        label: 'modList.board',
-        mods: [ModBoard]
+        label: 'modList.paracraft',
+        mods: [ModParacraft]
       },
       {
         id: '7-2',
-        label: 'modList.carousel',
-        mods: [ModImgLoop]
-      },
-      {
-        id: '7-3',
-        label: 'modList.markdown',
-        mods: [ModMarkdown]
-      }
-    ]
-  },
-  {
-    id: '8',
-    label: 'modList.setting',
-    children: [
-      {
-        id: '8-1',
-        label: 'modList.qq',
-        mods: [ModQQ]
-      },
-      {
-        id: '8-3',
         label: 'modList.vipRead',
         mods: [ModVipRead]
       }

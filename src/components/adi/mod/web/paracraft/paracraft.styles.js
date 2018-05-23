@@ -96,9 +96,24 @@ export default [
         'margin-top': '10px',
         'padding-left': '10px'
       },
-      '@media only screen and (max-width: 787px)': {
+      colDownload: {
+        'min-width': '80px'
+      },
+      colEnter: {
+        'min-width': '80px'
+      },
+      '@media only screen and (max-width: 767px)': {
         preview: {
           height: '250px'
+        },
+        colGroupCA: {
+          'margin-top': '12px'
+        },
+        colSize: {
+          'margin-top': '10px'
+        },
+        colEnter: {
+          'margin-top': '5px'
         }
       }
     },
@@ -117,38 +132,49 @@ export default [
         xs: { span: 24 }
       },
       colWorldName: {
-        span: 8
+        span: 12
       },
       colGroupVersionAndUpdateTime: {
-        offset: 8,
-        span: 8
+        offset: 2,
+        span: 9
       },
       colAuthor: {
         span: 8
       },
       colGroupCA: {
-        span: 15
+        span: 12
       },
       colGroupCARow: {
         gutter: 5
       },
       colViewTimes: {
-        span: 6
+        xs: { span: 20 },
+        sm: { span: 11 }
       },
       colSize: {
-        span: 6
+        xs: { span: 24 },
+        sm: { span: 9 }
       },
       colGroupCB: {
-        span: 9
+        offset: 1,
+        span: 11
       },
       colGroupCBRow: {
         gutter: 10
       },
       colDownload: {
-        span: 11
+        xs: {
+          offset: 2,
+          span: 14
+        },
+        sm: { span: 11 }
       },
       colEnter: {
-        span: 11
+        xs: {
+          offset: 2,
+          span: 14
+        },
+        sm: { span: 11 }
       }
     },
     theme: {

@@ -37,7 +37,7 @@ export default {
     }),
     isModShow: {
       get() {
-        return !this.cardValue.hidden
+        return this.cardValue && !this.cardValue.hidden
       },
       set() {}
     }

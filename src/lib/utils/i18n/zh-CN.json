@@ -13,6 +13,7 @@
     "attention": "关注",
     "history": "历史",
     "help": "帮助",
+    "iicc": "国际智能创意大赛",
 
     "openPlatform": "开放平台",
     "joinUs": "加入我们",
@@ -87,7 +88,7 @@
     "noPersonalWebsite": "还没有创建网站",
     "createWebsiteNow": "现在创建",
 
-    "addMod": "请点击添加内容",
+    "addMod": "请点击添加模块",
     "showCode": "显示代码",
 
     "modAttr": "属性",
@@ -138,6 +139,11 @@
     "lowerCaseLetters": "可使用小写字母、数字（例如：mysite123）",
     "cannotBeginWithAnUnderscore": "网站名不能以下划线开头",
 
+    "openRegularExpressionEditor": "编辑器",
+    "matchingRule": "匹配规则：",
+    "pageListLogic": "页面列表逻辑",
+    "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
+    "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. 布局方案",
     "addLayout": "添加方案",
     "default": "默认",
@@ -145,6 +151,7 @@
 
     "layoutStyle": "2. 布局风格",
     "header": "页头",
+    "sidebar": "侧边栏",
     "footer": "页脚",
     "aside": "侧边栏",
     "main": "主内容",
@@ -152,35 +159,46 @@
     "layoutParameters": "3. 布局参数",
     "match": "匹配",
     "cancel": "取消",
+    "keepOneLayout": "至少保留一个布局",
 
     "deleteFolder": "删除文件夹及其中的所有内容么?",
     "documents": "个文件吗？",
-    "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？"
+    "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
+    "videoNotSupport": "您的浏览器不支持 video 标签。",
+    "notFound": "内容找不到了"
   },
   "modList": {
     "recent": "常用",
-    "markdown": "Markdown",
+    "markdown": "文本(Md)",
+    "bigFile": "大文件",
+
     "text": "文本",
+    "navigation": "导航",
+    "menu": "导航菜单",
+    "headNavigation": "头部导航",
+
+    "graphic": "图形",
     "carousel": "图片轮播",
+    "widescreenImage": "宽屏图像",
+    "board": "绘图板",
+
     "mixLayer": "图文叠加",
     "mixPosition": "图文拼接",
-    "menu": "导航菜单",
-    "title": "标题",
-    "graphic": "图形",
-    "widescreenImage": "宽屏图像",
     "interative": "交互",
     "qq": "调用QQ聊天",
     "mixAndMatch": "混合搭配",
     "paracraft": "Paracraft作品",
     "works": "作品",
     "specialPerformance": "特殊表现",
-    "board": "绘图板",
+
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
     "textBoard": "文本与绘图板",
-    "toc": "Markdown 列表"
+    "toc": "Markdown 目录",
+
+    "other": "其他"
   },
   "adi": {
     "markdown": {
@@ -214,6 +232,15 @@
     },
     "paracraft": {
       "worldName": "默认名字",
+      "paracraftTitle": {
+        "titleA": "心和手",
+        "titleB": "作品介绍",
+        "titleC": "主要功能",
+        "titleD": "相关帮助"
+      },
+      "paracraftSubTitle": {
+        "subtitle": " —— 分享自\"paracraftcreative空间\""
+      },
       "author": {
         "desc": "作者:",
         "text": "你的名字"
@@ -272,6 +299,7 @@
     "author": "作者",
     "version": "版本",
     "updateTime": "更新时间",
+    "viewTimesImg": "浏览次数图标",
     "viewTimes": "浏览次数",
     "size": "大小",
     "menu": "菜单",
@@ -289,14 +317,24 @@
     "switchComment": "评论是否开启",
     "pageList": "页面列表",
     "footer": "页脚",
-    "toc": "TOC设置"
+    "toc": "TOC设置",
+    "download": "下载",
+    "enter": "进入",
+    "innerModal": "内部模态框",
+    "bigFile": "大文件"
   },
   "field": {
+    "fileId": "字段",
+    "fileType": "字段类型",
     "link": "链接",
     "src": "地址",
     "name": "名字",
     "text": "文本",
     "desc": "描述",
-    "data": "数据"
+    "data": "数据",
+    "title": "标题",
+    "extraMsg": "额外信息",
+    "channel": "渠道",
+    "number": "数字"
   }
 }
