@@ -1,0 +1,13 @@
+FROM xuntian/node-yarn as builder
+
+ARG BUILD_ENV
+ARG KEEPWORK_LOCALE
+COPY ./ /code/
+WORKDIR /code
+RUN yarn install
+RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} yarn build
+
+FROM nginx
+WORKDIR /usr/share/nginx/html
+COPY --from=builder /code/dist .
+CMD ["nginx", "-g", "daemon off;"]
