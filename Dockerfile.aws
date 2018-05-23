@@ -1,11 +1,16 @@
 FROM xuntian/node-yarn as builder
 
+ADD package.json /tmp/package.json
+RUN cd /tmp && yarn install
+RUN mkdir -p /code/ && cp -a /tmp/node_modules /code/
+
 ARG BUILD_ENV
 ARG KEEPWORK_LOCALE
+
 COPY ./ /code/
 WORKDIR /code
-RUN yarn install
 RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} yarn build
+
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
