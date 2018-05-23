@@ -11,7 +11,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import handleMessage from '@/lib/iframe'
-window.addEventListener("message", handleMessage);
+window.addEventListener('message', handleMessage)
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
