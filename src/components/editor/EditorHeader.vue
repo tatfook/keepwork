@@ -53,13 +53,13 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
+        <span v-loading='savePending' class='iconfont icon-save' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-fanhui' :title='$t("editor.revoke")'></span>
+        <span class='iconfont icon-return' :title='$t("editor.revoke")'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-chongzuo' :title='$t("editor.redo")'></span>
+        <span class='iconfont icon-revocation' :title='$t("editor.redo")'></span>
       </el-menu-item>
       <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -75,8 +75,8 @@
         </el-dropdown>
       </el-menu-item> -->
       <el-menu-item index='2' class="link-box">
-        <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
-        <a :href='activePageUrl' target='_blank'>{{nowOrigin + activePageUrl}}</a>
+        <i class="iconfont icon-copy" @click='doCopyLink'></i>
+        <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='8' class='unsaved-tip'>
         <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
@@ -123,11 +123,11 @@ export default {
   computed: {
     ...mapGetters({
       showingCol: 'showingCol',
-      activePageUrl: 'activePageUrl',
+      activePageInfo: 'activePageInfo',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
-      activePageInfo: 'activePageInfo',
+      activeAreaData: 'activeAreaData',
       openedFiles: 'openedFiles',
       userProfile: 'user/profile'
     }),
@@ -151,8 +151,13 @@ export default {
         return this.$t('editor.splitScreen')
       }
     },
+    activePageFullUrl() {
+      let { fullPath = '' } = this.activePageInfo
+      let url = `${this.nowOrigin}/${fullPath}`
+      return (url || '').replace(/\.md$/,'')
+    },
     isActivePageSaved() {
-      let { saved } = this.activePageInfo
+      let { saved } = this.activeAreaData || {}
       return saved === false ? false : true
     }
   },
@@ -191,7 +196,7 @@ export default {
     },
     doCopyLink() {
       let that = this
-      let toCopyLink = this.nowOrigin + this.activePageUrl
+      let toCopyLink = this.activePageFullUrl
       this.$copyText(toCopyLink).then(
         function(e) {
           that.$message({
@@ -234,7 +239,7 @@ export default {
   top: .3em;
   border-bottom: 2px solid #F7BC2A !important;
 }
-.save-btn:not(.is-disabled) .icon-baocun {
+.save-btn:not(.is-disabled) .icon-save {
   background: #F7BC2A;
   border-color: #F7BC2A;
   color: white;

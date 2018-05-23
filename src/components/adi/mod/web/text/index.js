@@ -5,20 +5,19 @@ name: Text Mod
 category: Adi Mod
 ---
 
-## @Text
+This is the Text Mod for usage.
 
-## 参数说明
+```@Text
+styleID: // 样式ID
+title:
+  name: // 标题名称
+  link: // 标题点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+paragraph:
+  data: // 文章内容
 
 ```
-- styleID :  //样式ID
 
-# title
-- name : // 标题名称
-- link : // 标题链接
-
-# paragraph
-- data : // 文章内容
-```
 */
 
 import { generateProperties } from '@/components/adi/mod/base/base.utils'

@@ -2,19 +2,19 @@
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
-      <i class="iconfont icon-wenjian" v-if="node.isLeaf"></i>
-      <i class="iconfont icon-siyouwangzhan" v-else-if="data.visibility === 'private'"></i>
-      <i class="iconfont icon-gongyouwangzhan" v-else></i>
+      <i class="iconfont icon-file_" v-if="isFile"></i>
+      <i class="iconfont icon-folder" v-else-if="isFolder"></i>
+      <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
+      <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
-      <el-button v-if="isAddable" class="iconfont icon-tianjiawenjian" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
+      <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
+      <el-button v-if="isAddable" class="iconfont icon-folder_" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
-        <!-- <el-button  class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'> -->
+      <el-button v-if="isRemovable" class="iconfont icon-delete" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
+      <el-button v-if="isSettable" class="iconfont icon-set_up" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -91,10 +91,10 @@ export default {
             let value = (str || '').trim()
             if (!value) return `${what}${self.$t('editor.emptyName')}`
             if (!/^[A-Za-z0-9_]+$/.test(value))
-              return `${what}${self.$t('nameRule')}`
+              return `${what}${self.$t('editor.nameRule')}`
             if (/^[_]/.test(value))
               return `${what}${self.$t('editor.nameUnderline')}`
-            if (childNames.indexOf(value) > -1) return self.$t('nameExist')
+            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }
         }
@@ -130,6 +130,7 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          this.resetPage({toRemoveFiles})
           this.removePending = false
         })
         .catch(e => console.error(e))
@@ -158,9 +159,24 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath })
-          this.removePending = true
+          this.resetPage({currentPath: this.currentPath})
+          this.removePending = false
         })
         .catch(e => console.error(e))
+    },
+    resetPage({currentPath = null, toRemoveFiles = null }) {
+      if (toRemoveFiles && toRemoveFiles.length > 0) {
+        let currentRoutePath = this.$route.path.substring(1)
+        let isRestPage = toRemoveFiles.some(item => {
+          return item.split('.')[0] === currentRoutePath
+        })
+        if (isRestPage){
+          return this.$router.push('/')
+        }
+      }
+      if (currentPath && currentPath.split('.')[0] === this.$route.path.substring(1)) {
+        return this.$router.push('/')
+      }
     },
     goSetting() {
       if (this.isWebsite) {
@@ -229,3 +245,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.el-tree-node__label::before {
+  content: ' ';
+  display: inline-block;
+  position: absolute;
+  margin-left: -50px;
+  height: 30px;
+  width: 30px;
+}
+.icon-folder::before {
+  font-size: .8em;
+  color: #FFAC33;
+}
+</style>

@@ -13,6 +13,7 @@
     "attention": "Attention",
     "history": "History",
     "help": "Help",
+    "iicc": "IICC",
 
     "openPlatform": "Open platform",
     "joinUs": "Join us",
@@ -75,8 +76,7 @@
     "website": "Web page",
 
     "emptyName": "name cannot be empty",
-    "nameRule":
-      "naame can only be composed of letters, numbers and underscores",
+    "nameRule": "name can only be composed of letters, numbers and underscores",
     "nameUnderline": "name cannot begin with an underscore",
     "nameExist": "a file of the same name already exists",
 
@@ -89,7 +89,7 @@
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create Website Now",
 
-    "addMod": "Please click to add content",
+    "addMod": "Please click to add module",
     "showCode": "Display code",
 
     "modAttr": "Attributes",
@@ -98,7 +98,6 @@
     "modDelMsg": "Are you sure to delete this module?",
     "modDelMsgTitle": "Delete prompt",
 
-    
     "selfWindowOpen": "This window opens",
     "newWindowOpen": "open in a new window",
     "openMenuEditor": "Open the menu editor",
@@ -147,6 +146,13 @@
     "cannotBeginWithAnUnderscore":
       "Website name cannot start with an underscore",
 
+    "openRegularExpressionEditor": "Editor",
+    "matchingRule": "The matching rule：",
+    "pageListLogic": "The page list logic",
+    "supportWildcard":
+      "Support wildcard: * (represents lots of charachter) , ? (represents a charachter)",
+    "supportBooleanCalculation":
+      "Support Boolean calculation: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. Layout plan",
     "addLayout": "Add layout",
     "default": "Default",
@@ -154,6 +160,7 @@
 
     "layoutStyle": "2. Layout style",
     "header": "header",
+    "sidebar": "sidebar",
     "footer": "footer",
     "aside": "aside",
     "main": "main",
@@ -161,35 +168,47 @@
     "layoutParameters": "3. Layout parameters",
     "match": "match",
     "cancel": "Cancel",
+    "keepOneLayout": "Keep one layout at least",
 
     "deleteFolder": "Be sure to delete the folder and inside documents ?",
     "documents": " documents ?",
-    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?"
+    "areYouSureYouWantToDeleteThisFolder":
+      "Are you sure you want to delete this folder ?",
+    "videoNotSupport": "Your browser does not support the video tag.",
+    "notFound": "Content cannot be found"
   },
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
+    "bigFile": "Big file",
+
     "text": "Text",
+    "navigation": "Navigation",
+    "menu": "Menu",
+    "headNavigation": "Head navigation",
+
+    "graphic": "Graphic",
     "carousel": "Carousel",
+    "widescreenImage": "Widescreen image",
+    "board": "Board",
+
     "mixLayer": "Mix layer",
     "mixPosition": "Mix position",
-    "menu": "Menu",
-    "title": "Title",
-    "graphic": "Graphic",
-    "widescreenImage": "Widescreen image",
     "interative": "Interactive",
     "qq": "Call QQ chat",
     "mixAndMatch": "Mix and match",
     "paracraft": "Paracraft works",
     "works": "Works",
     "specialPerformance": "Special performance",
-    "board": "Board",
+
     "vipRead": "VIP Read",
     "comment": "Comment",
     "setting": "Setting",
     "pageList": "Page list",
     "textBoard": "Text Board",
-    "toc": "Toc"
+    "toc": "Markdown list",
+
+    "other": "Other"
   },
   "adi": {
     "markdown": {
@@ -223,6 +242,15 @@
     },
     "paracraft": {
       "worldName": "Default name",
+      "paracraftTitle": {
+        "titleA": "Heart And Hands",
+        "titleB": "Introduction of works",
+        "titleC": "major function",
+        "titleD": "Related help"
+      },
+      "paracraftSubTitle": {
+        "subtitle": " —— Share from \"paracraftcreative space\""
+      },
       "author": {
         "desc": "Author:",
         "text": "Your name"
@@ -283,6 +311,7 @@
     "worldName": "name",
     "author": "author",
     "version": "version",
+    "viewTimesImg": "view Times Image",
     "updateTime": "update time",
     "viewTimes": "view times",
     "size": "size",
@@ -301,15 +330,25 @@
     "switchComment": "Comment is on",
     "pageList": "Page list",
     "footer": "Footer",
-    "toc": "TOC Setting"
+    "toc": "TOC Setting",
+    "download": "Download",
+    "enter": "Enter",
+    "innerModal": "Inner modal",
+    "bigFile": "Big file"
   },
   "field": {
+    "fileId": "file Id",
+    "fileType": "Field type",
     "link": "link",
     "src": "src",
     "name": "name",
     "data": "data",
     "text": "text",
     "desc": "desc",
-    "select": "please choose"
+    "select": "please choose",
+    "title": "title",
+    "extraMsg": "Extra msg",
+    "channel": "channel",
+    "number": "number"
   }
 }

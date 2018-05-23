@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import uuid from '@/lib/utils/uuid'
 import { Base64 } from 'js-base64'
+import { GitAPI } from '@/api'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import { props } from './mutations'
 import {
@@ -34,9 +35,9 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   await dispatch('user/getAllPersonalAndContributedSite', null, { root: true })
   let { projectId } = getGitFileOptionsByPath(path)
   let gitlab = getGitlabAPI()
-  let options = { content, commit_message: `keepwork commit: ${path}` }
+  let options = { projectId, ref, branch, content, commit_message: `keepwork commit: ${path}` }
 
-  return { username, name, ref, branch, gitlab, projectId, options }
+  return { username, name, gitlab, options, projectId }
 }
 
 /*doc
@@ -51,30 +52,44 @@ const getGitlabFileParams = async (
   let {
     username,
     name,
-    ref,
-    branch,
     gitlab,
-    projectId,
     options
   } = await getGitlabParams(context, { path: inputPath, content })
   let path = getFileFullPathByPath(inputPath)
 
-  return { username, name, ref, branch, gitlab, projectId, options, path }
+  return { username, name, gitlab, options, path }
 }
 
 const actions = {
   async getRepositoryTree(context, payload) {
-    let { path, useCache = true, recursive = true } = payload
+    let { path, useCache = true, recursive = true, editorMode = true } = payload
     let {
       commit,
-      getters: { repositoryTrees }
+      dispatch,
+      getters: { repositoryTrees },
+      rootGetters
     } = context
-    let { gitlab, projectId } = await getGitlabParams(context, { path })
-    let children = _.get(repositoryTrees, [projectId, path])
 
+    let gitlab, projectId
+    if (editorMode) {
+      let gitlabParams = await getGitlabParams(context, { path })
+      gitlab = gitlabParams.gitlab
+      projectId = gitlabParams.projectId
+    } else {
+      await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
+      let {
+        'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+      } = rootGetters
+      let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
+      projectId = siteDetailInfoDataSource.projectId
+      gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
+    }
+
+    let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return
 
-    let list = await gitlab.projects.repository.tree(projectId, {
+    let list = await gitlab.getTree({
+      projectId,
       path,
       recursive
     })
@@ -87,10 +102,10 @@ const actions = {
   },
   async readFileForOwner(context, { path: inputPath }) {
     let { commit } = context
-    let { gitlab, projectId, ref, path } = await getGitlabFileParams(context, {
+    let { gitlab, path, options } = await getGitlabFileParams(context, {
       path: inputPath
     })
-    let file = await gitlab.projects.repository.files.show(projectId, path, ref)
+    let file = await gitlab.getFile(path, options)
 
     let payload = {
       path,
@@ -127,19 +142,16 @@ const actions = {
     let { commit, dispatch } = context
     let {
       gitlab,
-      projectId,
-      branch,
       path,
       options
     } = await getGitlabFileParams(context, { path: inputPath, content })
-    await gitlab.projects.repository.files
-      .edit(projectId, path, branch, options)
+    await gitlab.editFile(path, options)
       .catch(async e => {
         console.error(e)
         // try create a new file
         await dispatch('createFile', { path: inputPath, content })
       })
-    let payload = { path, branch }
+    let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
   },
   async createFile(
@@ -150,20 +162,16 @@ const actions = {
     let {
       username,
       name,
-      branch,
       gitlab,
-      projectId,
       options
     } = await getGitlabParams(context, { path, content })
 
-    await gitlab.projects.repository.files.create(
-      projectId,
+    await gitlab.createFile(
       path,
-      branch,
       options
     )
 
-    let payload = { path, branch }
+    let payload = { path, branch: options.branch }
     commit(CREATE_FILE_CONTENT_SUCCESS, payload)
 
     if (refreshRepositoryTree) {
@@ -182,34 +190,23 @@ const actions = {
 
     for (let i = 0; i < paths.length; i++) {
       let {
-        branch,
         gitlab,
-        projectId,
         options
       } = await getGitlabFileParams(context, { path: paths[i] })
       try {
-        await gitlab.projects.repository.files.remove(projectId, paths[i], branch, options)
+        await gitlab.deleteFile(paths[i], options)
         dispatch('closeOpenedFile', { path: paths[i] }, {root: true})
       } catch (error) {
         console.error(error)
       }
     }
-    // await Promise.all(paths.map(async path => {
-    //   let {
-    //     branch,
-    //     gitlab,
-    //     projectId,
-    //     options
-    //   } = await getGitlabFileParams(context, { path })
-    //   return gitlab.projects.repository.files.remove(projectId, path, branch, options)
-    // }))
     let path = paths[0]
     let {
       username,
       name,
-      branch
+      options
     } = await getGitlabFileParams(context, {path: paths[0]})
-    let payload = { path, branch }
+    let payload = { path, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
     await dispatch('getRepositoryTree', {
@@ -222,19 +219,15 @@ const actions = {
     let {
       username,
       name,
-      branch,
       gitlab,
-      projectId,
       options
     } = await getGitlabParams(context, { path })
-    await gitlab.projects.repository.files.remove(
-      projectId,
+    await gitlab.deleteFile(
       path,
-      branch,
       options
     )
 
-    let payload = { path, branch }
+    let payload = { path, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
     dispatch('closeOpenedFile', { path }, { root: true })
@@ -260,13 +253,6 @@ const actions = {
     } else {
       return // invalid file
     }
-    let { getGitlabAPI, getProjectIdByPath } = getters
-    let gitlab = getGitlabAPI()
-    let options = {
-      content,
-      commit_message: `keepwork commit: ${path}`,
-      encoding: 'base64'
-    }
 
     await dispatch(
       'user/getWebsiteDetailInfoByPath',
@@ -279,14 +265,17 @@ const actions = {
       projectName
     } = getSiteDetailInfoDataSourceByPath(activePageUrl)
 
+    let { getGitlabAPI, getProjectIdByPath } = getters
     let projectId = getProjectIdByPath(activePageUrl)
+    let options = {
+      projectId,
+      content,
+      commit_message: `keepwork commit: ${path}`,
+      encoding: 'base64'
+    }
+    let gitlab = getGitlabAPI()
     try {
-      await gitlab.projects.repository.files.create(
-        projectId,
-        path,
-        'master',
-        options
-      )
+      await gitlab.createFile(path, options)
       return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
     } catch (e) {
       console.error(e)

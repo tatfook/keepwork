@@ -1,14 +1,12 @@
 import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
+import CmdHelper from './cmdHelper'
 import { gConst } from '@/lib/global'
-
-const MOD_CMD_BEGIN_REG = /^```@\w*$/
-const MOD_CMD_END_REG = /^```$/
 
 const beginModBlock = (line, lineNumber) => {
   let cmd
-  if (line.match(MOD_CMD_BEGIN_REG)) {
+  if (CmdHelper.isCmdLine(line)) {
     cmd = line.split('@')[1]
   }
   let curModBlock = new ModBlock(cmd, lineNumber)
@@ -31,12 +29,12 @@ const buildBlockList = mdText => {
   _.forEach(mdLines, (line, lineNumber) => {
     if (curModBlock) {
       if (
-        line.match(MOD_CMD_END_REG) &&
+        CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
-      ) {
+      ) { // markdown mod will ignore the cmd end
         endModBlock(blockList, curModBlock)
         curModBlock = null
-      } else if (line.match(MOD_CMD_BEGIN_REG)) {
+      } else if (CmdHelper.isCmdLine(line)) {
         endModBlock(blockList, curModBlock)
         curModBlock = beginModBlock(line, lineNumber + 1)
       } else {
@@ -92,9 +90,9 @@ const getBlockLines = (mdText, block) => {
   let blockLines = []
   for (let i = BlockHelper.contentBegin(block) - 1; i < mdLines.length; i++) {
     if (
-      (mdLines[i].match(MOD_CMD_END_REG) &&
+      (CmdHelper.isCmdEnd(mdLines[i]) &&
         !BlockHelper.isMarkdownMod(block)) ||
-      mdLines[i].match(MOD_CMD_BEGIN_REG)
+        CmdHelper.isCmdLine(mdLines[i])
     ) {
       break
     }
@@ -224,10 +222,10 @@ const getActiveBlock = (blockList, beginLine) => {
 
 const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
-    let line = mdLines[i]
     if (
-      (line.match(MOD_CMD_END_REG) && !BlockHelper.isMarkdownMod(block)) ||
-      line.match(MOD_CMD_BEGIN_REG)
+      (CmdHelper.isCmdEnd(mdLines[i]) &&
+        !BlockHelper.isMarkdownMod(block)) ||
+        CmdHelper.isCmdLine(mdLines[i])
     ) {
       return true
     }
@@ -236,7 +234,7 @@ const willAffectModData = (block, mdLines) => {
 }
 
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
-  let mdLines = code.trim().split('\n')
+  let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
   // TODO: hard code here
   cmdCode += '- styleID : ' + styleID + '\n'

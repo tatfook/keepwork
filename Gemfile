@@ -1,3 +1,2 @@
-source "http://rubygems.org"
-gem "compass"
+source "https://gems.ruby-china.org/"
 gem "hologram"

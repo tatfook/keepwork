@@ -1,11 +1,12 @@
 <template>
   <div class='kp-md-editor'>
-    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
+    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' @cursorActivity="handleClick" />
   </div>
 </template>
 
 <script>
 import Parser from '@/lib/mod/parser'
+import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
@@ -45,6 +46,13 @@ export default {
     this.editor.on('drop', this.onDropFile)
     this.editor.on('paste', this.onPaste)
   },
+  watch: {
+    activeMod(newActiveMod, oldActiveMod) {
+      if (newActiveMod) {
+        this.higthLightCodeByMod(newActiveMod)
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       code: 'code',
@@ -56,12 +64,14 @@ export default {
       const undo = () => Mousetrap.trigger('mod+z')
       const redo = () => Mousetrap.trigger('mod+y')
 
-      const newTab = (cm) => {
+      const newTab = cm => {
         if (cm.somethingSelected()) {
           cm.indentSelection('add')
         } else {
-          const str = cm.getOption() ? "\t" : Array(cm.getOption("indentUnit") + 1).join(" ")
-          cm.replaceSelection(str, "end", "+input")
+          const str = cm.getOption()
+            ? '\t'
+            : Array(cm.getOption('indentUnit') + 1).join(' ')
+          cm.replaceSelection(str, 'end', '+input')
         }
       }
       return {
@@ -95,7 +105,7 @@ export default {
           'Cmd-Y': redo,
           'Ctrl-Space': 'autocomplete',
           'Cmd-Space': 'autocomplete',
-          'Tab': newTab
+          Tab: newTab
         }
       }
     },
@@ -109,7 +119,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      gitlabUploadFile: 'gitlab/uploadFile'
+      gitlabUploadFile: 'gitlab/uploadFile',
+      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
+      setActiveMod: 'setActiveMod'
     }),
     addMod() {
       this.$store.dispatch('setAddingArea', {
@@ -117,6 +129,35 @@ export default {
         cursorPosition: this.activeCursorLine
       })
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
+    },
+    higthLightCodeByMod(mod) {
+      this.setActiveMod(mod.key)
+      let lineBegin = mod.lineBegin
+      let length = mod.md.length + lineBegin
+      this.clearHigthLight()
+      for (let i = lineBegin - 1; i <= length; i++) {
+        this.editor.addLineClass(i, 'gutter', 'mark-text')
+      }
+    },
+    clearHigthLight() {
+      let lineCount = this.editor.lineCount()
+      while (lineCount--) {
+        this.editor.removeLineClass(lineCount, 'gutter', 'mark-text')
+      }
+    },
+    handleClick(codeMirror) {
+      this.clearHigthLight()
+      let line = codeMirror.getCursor().line
+      let mod = this.checkInModCode(line)
+      mod && this.higthLightCodeByMod(mod)
+    },
+    checkInModCode(line) {
+      let mod = this.modList.filter(mod => {
+        return (
+          mod.lineBegin - 1 <= line && line <= mod.lineBegin + mod.md.length
+        )
+      })
+      return mod[0] || false
     },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
@@ -173,14 +214,14 @@ export default {
     },
     wikiCmdFold(cm, start) {
       let line = cm.getLine(start.line)
-      if (!line || !line.match(/^```[@\/]/)) return
+      if (!line || !CmdHelper.isCmdLine(line)) return
       let end = start.line + 1
       let lastLineNo = cm.lastLine()
       while (end < lastLineNo) {
         line = cm.getLine(end)
         if (line) {
-          if (line.match(/^```$/)) break
-          else if (line.match(/^```@/)) {
+          if (CmdHelper.isCmdEnd(line)) break
+          else if (CmdHelper.isCmdLine(line)) {
             end--
             break
           }
@@ -311,24 +352,40 @@ export default {
         CodeMirror.Pos(lineNo, offsetX)
       )
     },
-    uploadFile(file, coords) {
+    async uploadFile(file, coords) {
       if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
-        // gitlab
-        let fileReader = new FileReader()
-        fileReader.onload = async () => {
-          const path = await this.gitlabUploadFile({
-            fileName: file.name,
-            content: fileReader.result
-          })
-          if (!path) {
-            this.insertLink(null, '***Upload Failed!***', coords)
-          } else if (/image\/\w+/.test(file.type)) {
-            this.insertFile(null, path, coords)
-          } else {
-            this.insertLink(file.name, path, coords)
+        // use skyDrive
+        let url = await this.userUploadFileToSkyDrive({
+          file,
+          onProgress(progress) {
+            console.log(progress)
           }
+        }).catch(err => console.error(err))
+
+        if (!url) {
+          this.insertLink(null, '***Upload Failed!***', coords)
+        } else if (/image\/\w+/.test(file.type)) {
+          this.insertFile(null, url, coords)
+        } else {
+          this.insertLink(file.name, url, coords)
         }
-        fileReader.readAsDataURL(file)
+
+        // gitlab
+        // let fileReader = new FileReader()
+        // fileReader.onload = async () => {
+        //   const path = await this.gitlabUploadFile({
+        //     fileName: file.name,
+        //     content: fileReader.result
+        //   })
+        //   if (!path) {
+        //     this.insertLink(null, '***Upload Failed!***', coords)
+        //   } else if (/image\/\w+/.test(file.type)) {
+        //     this.insertFile(null, path, coords)
+        //   } else {
+        //     this.insertLink(file.name, path, coords)
+        //   }
+        // }
+        // fileReader.readAsDataURL(file)
       }
     },
     onDropFile(cm, evt) {
@@ -368,4 +425,11 @@ export default {
   background-color: transparent;
   border: none;
 }
+.mark-text {
+  border-right: 4px solid #ffac36;
+}
+.mark-bg {
+  background: #ffe193;
+}
 </style>
+

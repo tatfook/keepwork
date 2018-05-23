@@ -4,8 +4,8 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  KEEPWORK_API_PREFIX: '"http://stage.keepwork.com/api/wiki/models"',
-  GITLAB_API_PREFIX: '"http://git.stage.keepwork.com"',
-  ELASTICSEARCH_BASE_URL: '"http://es.keepwork.com/api/v0/"',
-  QINIU_SERVICE_BASE_URL: '"http://es.keepwork.com/api/v0/"'
+  HOST_ENV: '"localhost"',
+  KEEPWORK_API_PREFIX: '"https://stage.keepwork.com/api/wiki/models"',
+  GITLAB_API_PREFIX: '"https://stgapi.keepwork.com/git"',
+  ES_GATEWAY_BASE_URL: '"https://stgapi.keepwork.com/es"'
 })

@@ -3,7 +3,12 @@ export default [
   {
     data: {
       root: {
-        width: '100%'
+        width: '100%',
+        'padding-top': '10px',
+        'padding-bottom': '10px'
+      },
+      board: {
+        'overflow-x': 'auto'
       }
     },
     props: {

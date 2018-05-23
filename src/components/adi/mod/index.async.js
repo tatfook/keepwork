@@ -18,6 +18,7 @@ const ModLessonGet = () => import('./web/lessonGet')
 const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
+const ModBigFile = () => import('./web/bigFile')
 
 export const modList = {
   ModMarkdown,
@@ -39,7 +40,8 @@ export const modList = {
   ModLessonGet,
   ModTextBoard,
   ModPageList,
-  ModToc
+  ModToc,
+  ModBigFile
 }
 
 export const load = async modName => {

@@ -2,8 +2,8 @@ import YamlDB from './database'
 
 /*doc
 ---
-title: YamlTable
-name: YamlTable
+title: table
+name: table
 category: YamlDB
 ---
 
@@ -13,7 +13,7 @@ category: YamlDB
 import { YamlTable } from '@/lib/yamldb'
 
 const gitConfig = {
-  rawBaseUrl: 'http://git.release.keepwork.com',
+  url: 'http://git.release.keepwork.com',
   projectId: ***,
   projectName: '****',
   branch: 'master',

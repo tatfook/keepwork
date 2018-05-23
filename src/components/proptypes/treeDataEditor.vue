@@ -22,16 +22,16 @@
           <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-houmiantianjia' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
-          <el-button icon='iconfont icon-qianmiantianjia' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
-          <el-button icon='iconfont icon-tianjiazixiang' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
-          <el-button icon='iconfont icon-shanchu' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
+          <el-button icon='iconfont icon-add-later' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
+          <el-button icon='iconfont icon-add-before' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
+          <el-button icon='iconfont icon-add_subitem' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
+          <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
         </span>
       </span>
     </el-tree>
     <p class="empty" v-if="treeData.length <= 0" @click="insert()">
       {{$t('editor.noData')}}
-      <span class="iconfont icon-tianjia"></span>
+      <span class="iconfont icon-add"></span>
     </p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>

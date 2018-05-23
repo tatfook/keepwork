@@ -131,7 +131,9 @@ const mutations = {
     Vue.set(state.activePage, 'activeMod', modList[newIndex])
   },
   [SET_ACTIVE_MOD](state, key) {
-    if (!key) return Vue.set(state.activePage, 'activeMod', null)
+    if (!key) {
+      return Vue.set(state.activePage, 'activeMod', null)
+    }
     if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
       return
     }
@@ -145,8 +147,8 @@ const mutations = {
     if (!state.activePage.activeMod) return
     Vue.set(state.activePage, 'activeProperty', property)
   },
-  [SET_ACTIVE_PROPERTY_OPTIONS](state, playload) {
-    Vue.set(state, 'activePropertyOptions', playload)
+  [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
+    Vue.set(state, 'activePropertyOptions', payload)
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
     const modList = activeModList(state)

@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <div id="toc"></div>
-    <vue-markdown class="toc-source" :watches='["toc"]' :show="show" :source="code" toc-id="toc" :toc="toc" :toc-first-level="1"/>
+  <div class="comp-toc">
+    <div class="title">{{properties.title}}</div>
+    <div :id="tocId" class="toc"></div>
+    <vue-markdown class="toc-source" :watches='["toc"]' :show="show" :source="code" :toc-id="tocId" :toc="toc" :toc-first-level="1" :toc-last-level="5" />
   </div>
 </template>
 <script>
@@ -24,7 +25,10 @@ export default {
   computed: {
     ...mapGetters({
       code: 'code'
-    })
+    }),
+    tocId() {
+      return 'toc' + Math.random().toString(10).substr(2, 4)
+    }
   },
   methods: {},
   created() {
@@ -34,10 +38,45 @@ export default {
       self.toc = true
       self.show = true
 
-      document.querySelector(".toc-source").remove()
+      let dom = document.querySelector(".toc-source")
+
+      if(dom) {
+        document.querySelector(".toc-source").remove()
+      }
     }, 0)
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.comp-toc{
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .toc {
+    ul.table-of-contents{
+      padding: 0;
+    }
+
+    ul {
+      list-style: none;
+
+      li {
+        padding-top: 15px;
+        font-size: 18px;
+
+        a {
+          color: #3977AD;
+          text-decoration: none;
+        }
+
+        a:hover{
+          color: #64ADEC;
+        }
+      }
+    }
+  }
+}
 </style>
