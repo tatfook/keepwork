@@ -4,6 +4,8 @@
       <a class="breadcrumb-item" href="/">{{ locationOrigin }}</a>
       <span class="breadcrumb-separator" role="presentation">/</span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
+      <span class="breadcrumb-separator" role="presentation">/</span>
+      <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a>
 
       <el-dropdown v-for='(fileList, index) in breadcrumbs' :key='index' class="breadcrumb-item" @command='handleBreadcrumbClick'>
         <span class="el-dropdown-link">
