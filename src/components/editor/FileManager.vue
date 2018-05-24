@@ -86,10 +86,11 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getAllPersonalAndContributedSite().then(() => {
-      this.loading = false
+  async mounted() {
+    await this.getAllPersonalAndContributedSite().catch(err => {
+      console.error(err)
     })
+    this.loading = false
     this.initUrlExpandSelect()
   },
   computed: {

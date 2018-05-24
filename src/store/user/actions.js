@@ -188,6 +188,8 @@ const actions = {
     if (useCache && !_.isEmpty(contributedSiteList)) return
 
     let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
+    list = _.values(list).filter(({siteinfo, siteuser} = {}) => siteinfo && siteuser)
+
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
