@@ -74,20 +74,21 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import { gConst } from '@/lib/global'
-import fullscreen from 'vue-fullscreen'
-import EditorMarkdown from './EditorMarkdown'
-import EditorWelcome from './EditorWelcome'
-import ModPropertyManager from './ModPropertyManager'
-import FileManager from './FileManager'
-import ModsList from './ModsList'
-import Search from './Search'
-import PageSetting from './PageSetting'
-import { mapGetters, mapActions } from 'vuex'
+import _ from "lodash";
+import { gConst } from "@/lib/global";
+import fullscreen from "vue-fullscreen";
+import EditorMarkdown from "./EditorMarkdown";
+import EditorWelcome from "./EditorWelcome";
+import ModPropertyManager from "./ModPropertyManager";
+import FileManager from "./FileManager";
+import ModsList from "./ModsList";
+import Search from "./Search";
+import PageSetting from "./PageSetting";
+import { mapGetters, mapActions } from "vuex";
+import handleMessage from "@/lib/iframe";
 
 export default {
-  name: 'Editor',
+  name: "Editor",
   data() {
     return {
       bodyWidth: document.body.clientWidth,
@@ -97,25 +98,29 @@ export default {
       resizeWinParams: {
         mouseStartX: 0,
         isResizing: false,
-        leftColWidthParam: '',
-        rightColWidthParam: ''
+        leftColWidthParam: "",
+        rightColWidthParam: ""
       },
       isCodeWinShow: true,
       isFullscreen: false,
       gConst
-    }
+    };
   },
   created() {
-    this.changeView('FileManager')
+    this.changeView("FileManager");
   },
   mounted() {
     this.$nextTick(function() {
-      window.addEventListener('resize', function(e) {
+      console.log(window.frames["frameViewport"]);
+      const frameViewport = window.frames["frameViewport"];
+      frameViewport &&
+        frameViewport.contentWindow.addEventListener("message", handleMessage);
+      window.addEventListener("resize", function(e) {
         _.throttle(function() {
-          this.bodyWidth = document.body.clientWidth
-        }, 1000)
-      })
-    })
+          this.bodyWidth = document.body.clientWidth;
+        }, 1000);
+      });
+    });
   },
   components: {
     EditorMarkdown,
@@ -128,16 +133,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activePage: 'activePage',
-      activePageUrl: 'activePageUrl',
-      personalSiteList: 'user/personalSiteList',
-      activeManagePaneComponentName: 'activeManagePaneComponentName',
-      activeManagePaneComponentProps: 'activeManagePaneComponentProps',
-      showingCol: 'showingCol',
-      activePageInfo: 'activePageInfo'
+      activePage: "activePage",
+      activePageUrl: "activePageUrl",
+      personalSiteList: "user/personalSiteList",
+      activeManagePaneComponentName: "activeManagePaneComponentName",
+      activeManagePaneComponentProps: "activeManagePaneComponentProps",
+      showingCol: "showingCol",
+      activePageInfo: "activePageInfo"
     }),
     isWelcomeShow() {
-      return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
+      return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename;
     },
     fullscreenIcon() {
       return this.isFullscreen
@@ -146,55 +151,55 @@ export default {
     }
   },
   watch: {
-    'showingCol.isPreviewShow': {
+    "showingCol.isPreviewShow": {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return
+          return;
         }
         if (newVal === false) {
-          this.previewWinWidth = 0
-          this.codeWinWidth = 100 - this.managerWinWidth
+          this.previewWinWidth = 0;
+          this.codeWinWidth = 100 - this.managerWinWidth;
         } else if (this.showingCol.isCodeShow === false) {
-          this.previewWinWidth = 100 - this.managerWinWidth
+          this.previewWinWidth = 100 - this.managerWinWidth;
         } else {
-          var halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
+          var halfWidth = (100 - this.managerWinWidth) / 2;
+          this.previewWinWidth = halfWidth;
+          this.codeWinWidth = halfWidth;
         }
       },
       deep: true
     },
-    'showingCol.isCodeShow': {
+    "showingCol.isCodeShow": {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return
+          return;
         }
         if (newVal === false) {
-          this.codeWinWidth = 0
-          this.previewWinWidth = 100 - this.managerWinWidth
+          this.codeWinWidth = 0;
+          this.previewWinWidth = 100 - this.managerWinWidth;
         } else if (this.showingCol.isPreviewShow === false) {
-          this.codeWinWidth = 100 - this.managerWinWidth
+          this.codeWinWidth = 100 - this.managerWinWidth;
         } else {
-          var halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
+          var halfWidth = (100 - this.managerWinWidth) / 2;
+          this.previewWinWidth = halfWidth;
+          this.codeWinWidth = halfWidth;
         }
       },
       deep: true
     },
-    'showingCol.isManagerShow': {
+    "showingCol.isManagerShow": {
       handler(newVal, oldVal) {
         if (newVal === oldVal) {
-          return
+          return;
         }
         if (newVal === false) {
-          this.managerWinWidth = 0
-          this.previewWinWidth = 100 - this.codeWinWidth
+          this.managerWinWidth = 0;
+          this.previewWinWidth = 100 - this.codeWinWidth;
         } else {
-          var halfWidth = (100 - this.codeWinWidth) / 2
-          var minusWidth = halfWidth > 25 ? 25 : halfWidth
-          this.managerWinWidth = minusWidth
-          this.previewWinWidth = halfWidth - minusWidth
+          var halfWidth = (100 - this.codeWinWidth) / 2;
+          var minusWidth = halfWidth > 25 ? 25 : halfWidth;
+          this.managerWinWidth = minusWidth;
+          this.previewWinWidth = halfWidth - minusWidth;
         }
       },
       deep: true
@@ -202,93 +207,93 @@ export default {
   },
   methods: {
     ...mapActions({
-      resetShowingCol: 'resetShowingCol'
+      resetShowingCol: "resetShowingCol"
     }),
     changeView(type) {
-      this.$store.dispatch('setActiveManagePaneComponent', type)
+      this.$store.dispatch("setActiveManagePaneComponent", type);
     },
     toggleCodeWin(isCodeWinShow) {
       if (isCodeWinShow) {
         this.resetShowingCol({
           isCodeShow: true,
           isPreviewShow: true
-        })
-        this.$store.dispatch('setAddingArea', {
+        });
+        this.$store.dispatch("setAddingArea", {
           area: this.gConst.ADDING_AREA_ADI
-        })
+        });
       } else {
         this.resetShowingCol({
           isCodeShow: false,
           isPreviewShow: true
-        })
+        });
       }
     },
     toggleFullscreen() {
-      this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
+      this.$fullscreen.toggle(this.$el.querySelector("#codeWin"), {
         wrap: false,
-        fullscreenClass: 'code-win-fullscreen',
+        fullscreenClass: "code-win-fullscreen",
         callback: this.fullscreenChange
-      })
+      });
     },
     fullscreenChange(fullscreen) {
-      this.isFullscreen = fullscreen
+      this.isFullscreen = fullscreen;
     },
     resizeCol(event, leftColWidthParam, rightColWidthParam) {
       if (!(event && event.clientX)) {
-        return
+        return;
       }
-      this.resizeWinParams.isResizing = true
-      this.resizeWinParams.mouseStartX = event.clientX
-      this.resizeWinParams.leftColWidthParam = leftColWidthParam
-      this.resizeWinParams.rightColWidthParam = rightColWidthParam
+      this.resizeWinParams.isResizing = true;
+      this.resizeWinParams.mouseStartX = event.clientX;
+      this.resizeWinParams.leftColWidthParam = leftColWidthParam;
+      this.resizeWinParams.rightColWidthParam = rightColWidthParam;
     },
     dragMouseMove(event) {
       if (!(this.resizeWinParams.isResizing && event && event.clientX)) {
-        return
+        return;
       }
-      var mouseNowX = event.clientX
-      var diffClientX = mouseNowX - this.resizeWinParams.mouseStartX
-      var diffPercent = diffClientX / this.bodyWidth * 100
-      this.resizeWinParams.mouseStartX = mouseNowX
-      var leftColName = this.resizeWinParams.leftColWidthParam
-      var rightColName = this.resizeWinParams.rightColWidthParam
-      this[leftColName] = this[leftColName] + diffPercent
-      this[rightColName] -= diffPercent
+      var mouseNowX = event.clientX;
+      var diffClientX = mouseNowX - this.resizeWinParams.mouseStartX;
+      var diffPercent = diffClientX / this.bodyWidth * 100;
+      this.resizeWinParams.mouseStartX = mouseNowX;
+      var leftColName = this.resizeWinParams.leftColWidthParam;
+      var rightColName = this.resizeWinParams.rightColWidthParam;
+      this[leftColName] = this[leftColName] + diffPercent;
+      this[rightColName] -= diffPercent;
     },
     // showPreview() {
     //   this.$emit('showPreview')
     // },
     showPage() {
-      window.open(this.activePageUrl)
+      window.open(this.activePageUrl);
     },
     dragMouseUp() {
-      this.resizeWinParams.isResizing = false
-      this.resizeWinParams.leftColWidthParam = ''
-      this.resizeWinParams.rightColWidthParam = ''
+      this.resizeWinParams.isResizing = false;
+      this.resizeWinParams.leftColWidthParam = "";
+      this.resizeWinParams.rightColWidthParam = "";
     },
     setFontStyle(style) {
-      this.$refs.codemirror.setFontStyle(style)
+      this.$refs.codemirror.setFontStyle(style);
     },
     insertHeadline(level) {
-      this.$refs.codemirror.insertHeadline(level)
+      this.$refs.codemirror.insertHeadline(level);
     },
     insertCode() {
-      this.$refs.codemirror.insertCode()
+      this.$refs.codemirror.insertCode();
     },
     insertLine() {
-      this.$refs.codemirror.insertLine()
+      this.$refs.codemirror.insertLine();
     },
     insertLink() {
-      this.$refs.codemirror.insertLink()
+      this.$refs.codemirror.insertLink();
     },
     insertImage() {
-      this.$refs.codemirror.insertFile()
+      this.$refs.codemirror.insertFile();
     },
     addModToMarkdown() {
-      this.$refs.codemirror.addMod()
+      this.$refs.codemirror.addMod();
     }
   }
-}
+};
 </script>
 
 <style scoped>
