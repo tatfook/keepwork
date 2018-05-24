@@ -163,6 +163,9 @@ const actions = {
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
     await dispatch('updateCode', payload)
   },
+  async insertNewLine({ dispatch, getters: { code } }, { newline }) {
+    await dispatch('updateMarkDown', { code: `${code}\n${newline}` })
+  },
   // only update a particular mod
   updateMarkDownBlock({ commit, dispatch }, payload) {
     dispatch('updateCode', payload)
