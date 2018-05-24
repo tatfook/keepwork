@@ -154,6 +154,16 @@ const getters = {
     return targetDataSource
   },
 
+  getGitFileProjectIdAndRefByPath: (state, { personalAndContributedSitePathMap, defaultSiteDataSource }) => path => {
+    let [username, sitename] = path.split('/').filter(x => x)
+    let { projectId, lastCommitId: ref = 'master' } = _.get(
+      personalAndContributedSitePathMap,
+      `${username}/${sitename}`,
+      defaultSiteDataSource
+    )
+    return { projectId, ref }
+  },
+
   comments: state => state.comments,
   getCommentListByPath: (
     state,

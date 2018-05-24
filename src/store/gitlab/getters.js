@@ -16,25 +16,6 @@ const getGitlabAPI = config => {
   return gitlabAPI
 }
 
-/*doc
-  getGitFileOptionsByPath
-  we need {projectId, ref} to access file in gitlab server
-  we use 'master' as default ref usually
-*/
-const getGitFileOptionsByPath = (rootGetters, path) => {
-  let personalAndContributedSitePathMap =
-    rootGetters['user/personalAndContributedSitePathMap']
-  let [username, sitename] = path.split('/').filter(x => x)
-
-  let { projectId, lastCommitId: ref = 'master' } = _.get(
-    personalAndContributedSitePathMap,
-    `${username}/${sitename}`
-  )
-  let gitFileParams = { projectId, ref }
-
-  return gitFileParams
-}
-
 const getProjectIdByPath = (rootGetters, path) => {
   let [username, name] = path.split('/').filter(x => x)
   let personalSitePathMap = rootGetters['user/personalSitePathMap']
@@ -91,9 +72,6 @@ const getters = {
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']
     return getGitlabAPI(config)
-  },
-  getGitFileOptionsByPath: (state, getters, rootState, rootGetters) => path => {
-    return getGitFileOptionsByPath(rootGetters, path)
   },
 
   getProjectIdByPath: (state, getters, rootState, rootGetters) => path => {
