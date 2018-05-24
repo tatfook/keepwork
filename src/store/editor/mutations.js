@@ -44,6 +44,8 @@ const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 const REFRESH_SITE_SETTINGS = 'REFRESH_SITE_SETTINGS'
 const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
 
+const UPDATE_CURSOR_POSITION = 'UPDATE_CURSOR_POSITION'
+
 export const props = {
   SET_ACTIVE_PAGE,
 
@@ -79,7 +81,9 @@ export const props = {
   CLOSE_OPENED_FILE,
 
   REFRESH_SITE_SETTINGS,
-  UPDATE_OPENED_LAYOUT_FILE
+  UPDATE_OPENED_LAYOUT_FILE,
+
+  UPDATE_CURSOR_POSITION
 }
 
 const activeModList = state => {
@@ -239,7 +243,9 @@ const mutations = {
   [SET_NEW_MOD_POSITION](state, position) {
     state.activePage.newModPosition = position
   },
-
+  [UPDATE_CURSOR_POSITION](state, cursor) {
+    Vue.set(state.activePage, 'cursorPos', cursor)
+  },
   [RESET_OPENED_FILE](state, { username, path, data }) {
     Vue.set(state.openedFiles, username, {
       ..._.get(state, ['openedFiles', username]),

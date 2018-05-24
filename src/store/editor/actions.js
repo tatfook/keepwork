@@ -47,7 +47,9 @@ const {
   SET_NEW_MOD_POSITION,
 
   REFRESH_SITE_SETTINGS,
-  UPDATE_OPENED_LAYOUT_FILE
+  UPDATE_OPENED_LAYOUT_FILE,
+
+  UPDATE_CURSOR_POSITION
 } = props
 
 const cacheAvailable = pageData => {
@@ -96,7 +98,7 @@ const actions = {
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
 
     commit(SET_ACTIVE_PAGE, { path, username })
-    UndoHelper.init(getters.activeAreaData.undoManager, getters.code)
+    UndoHelper.init(getters.activeAreaData.undoManager, {newCode: getters.code, cursor: {line: 1, ch: 0}})
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters
@@ -123,7 +125,10 @@ const actions = {
       dispatch('updateOpenedFile', { saved: true, path })
     }
   },
-  updateCode({ dispatch, getters }, { code: newCode, historyDisabled }) {
+  updateCode(
+    { dispatch, getters },
+    { code: newCode, historyDisabled, cursor }
+  ) {
     let {
       code: oldCode,
       activePageUrl: path,
@@ -136,21 +141,24 @@ const actions = {
     } else {
       dispatch('updateOpenedLayoutFile', { content: newCode, saved: false })
     }
-    !historyDisabled && UndoHelper.save(activeAreaData.undoManager, newCode)
+    !historyDisabled &&
+      UndoHelper.save(activeAreaData.undoManager, { newCode, cursor })
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
     dispatch('updateCode', { code })
   },
-
+  updateCursor({ commit, dispatch }, payload) {
+    commit(UPDATE_CURSOR_POSITION, payload.cursor)
+  },
   // rebuild all mods, will takes a little bit more time
   async updateMarkDown({ commit, dispatch }, payload) {
     if (payload.code === undefined) payload = { code: payload }
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MODS, payload.code)
-    await dispatch('updateCode', payload)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
+    await dispatch('updateCode', payload)
   },
   // only update a particular mod
   updateMarkDownBlock({ commit, dispatch }, payload) {
@@ -313,13 +321,17 @@ const actions = {
   },
 
   undo({ getters, dispatch }) {
-    UndoHelper.undo(getters.activeAreaData.undoManager, (code = '') =>
+    UndoHelper.undo(getters.activeAreaData.undoManager, (code = '', cursor = {}) => {
       dispatch('updateMarkDown', { code, historyDisabled: true })
+      dispatch('updateCursor', { cursor })
+    }
     )
   },
   redo({ getters, dispatch }) {
-    UndoHelper.redo(getters.activeAreaData.undoManager, (code = '') =>
+    UndoHelper.redo(getters.activeAreaData.undoManager, (code = '', cursor = {}) => {
       dispatch('updateMarkDown', { code, historyDisabled: true })
+      dispatch('updateCursor', { cursor })
+    }
     )
   },
   setNewModPosition({ commit }, position) {

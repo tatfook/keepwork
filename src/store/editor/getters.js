@@ -24,6 +24,7 @@ const getters = {
   activePageUsername: (state, { activePageInfo: { username } }) => username,
   code: (state, { activeAreaData }) =>
     (activeAreaData && activeAreaData.content) || '',
+  line: (state, { activePage }) => activePage.line || 1,
   themeConf: (state, { siteSetting }) => {
     if (siteSetting) return siteSetting.theme
     return {}
@@ -70,7 +71,7 @@ const getters = {
     activeAreaData && UndoHelper.canRedo(activeAreaData.undoManager),
   filemanagerTreeNodeExpandMapByPath: state =>
     state.filemanagerTreeNodeExpandMapByPath,
-
+  cursorPos: state => state.activePage.cursorPos,
   allSiteSettings: state => state.siteSettings,
   sitePath: state => getFileSitePathByPath(state.activePageUrl),
   siteSetting: (state, { allSiteSettings, sitePath }) =>
