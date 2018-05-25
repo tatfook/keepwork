@@ -149,7 +149,7 @@ const actions = {
       .catch(async e => {
         console.error(e)
         // try create a new file
-        await dispatch('createFile', { path: inputPath, content })
+        await dispatch('createFile', { path: getFileFullPathByPath(inputPath), content })
       })
     let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
@@ -165,7 +165,6 @@ const actions = {
       gitlab,
       options
     } = await getGitlabParams(context, { path, content })
-
     await gitlab.createFile(
       path,
       options

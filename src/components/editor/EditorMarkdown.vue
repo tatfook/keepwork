@@ -158,8 +158,10 @@ export default {
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
         let mod = Parser.getActiveBlock(this.modList, line)
-        mod && this.highlightCodeByMod(mod)
-        mod.key && this.setActiveMod(mod.key)
+        if (mod) {
+          this.highlightCodeByMod(mod)
+          mod.key && this.setActiveMod(mod.key)
+        }
       })
     },
     checkInModCode(line) {
