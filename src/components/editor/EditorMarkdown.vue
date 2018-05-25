@@ -1,7 +1,6 @@
 <template>
   <div class='kp-md-editor'>
-    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' @cursorActivity="handleClick" />
-    <!-- <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' @click="handleClick" /> -->
+    <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' />
   </div>
 </template>
 
@@ -46,17 +45,25 @@ export default {
     this.foldCodes(this.editor)
     this.editor.on('drop', this.onDropFile)
     this.editor.on('paste', this.onPaste)
+    this.editor.on('mousedown', this.handleClick)
   },
   watch: {
     activeMod(newActiveMod, oldActiveMod) {
       newActiveMod && this.highlightCodeByMod(newActiveMod)
+    },
+    cursorPos(newCursor, oldCursor) {
+      this.$nextTick(() => {
+        this.editor.setCursor(CodeMirror.Pos(newCursor.line, newCursor.ch))
+      })
     }
   },
   computed: {
     ...mapGetters({
       code: 'code',
+      line: 'line',
       modList: 'modList',
-      activeMod: 'activeMod'
+      activeMod: 'activeMod',
+      cursorPos: 'cursorPos'
     }),
     options() {
       const save = () => Mousetrap.trigger('mod+s')
@@ -147,25 +154,22 @@ export default {
       }
     },
     handleClick(codeMirror) {
-      if (codeMirror.state.focused) {
-        this.clearHighlight()
+      this.clearHighlight()
+      this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = this.checkInModCode(line)
-        mod && this.highlightCodeByMod(mod)
-        mod.key && this.setActiveMod(mod.key)
-      }
+        let mod = Parser.getActiveBlock(this.modList, line)
+        if (mod) {
+          this.highlightCodeByMod(mod)
+          mod.key && this.setActiveMod(mod.key)
+        }
+      })
     },
     checkInModCode(line) {
-      let mod = this.modList.filter(mod => {
-        return (
-          mod.lineBegin - 1 <= line && line <= mod.lineBegin + mod.md.length
-        )
-      })
-      return mod[0] || false
+      return Parser.getActiveBlock(this.modList, line)
     },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
-
+      let cursor = editor.getCursor()
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
@@ -173,14 +177,22 @@ export default {
         return
       }
 
-      if (changes.length > 1)
-        return this.$store.dispatch('updateMarkDown', code)
+      if (changes.length > 1) {
+        return this.$store.dispatch('updateMarkDown', {
+          code,
+          cursor
+        })
+      }
 
       let change = changes[0]
       let mod = Parser.getActiveBlock(this.modList, change.from.line)
 
-      if (!mod) return this.$store.dispatch('updateMarkDown', code)
-
+      if (!mod) {
+        return this.$store.dispatch('updateMarkDown', {
+          code,
+          cursor
+        })
+      }
       // the new input might create a new cmd
       let text = _.cloneDeep(change.text)
       if (text[0] !== '') text[0] = editor.getLine(change.from.line)
@@ -193,17 +205,24 @@ export default {
         let oldMdLines = this.code.split('\n')
         removed[removed.length - 1] = oldMdLines[change.to.line]
       }
-
       if (
         Parser.willAffectModData(mod, removed) ||
         Parser.willAffectModData(mod, text)
       ) {
         // if there are some changes affect the mod data, will try to rebuild all
-        return this.$store.dispatch('updateMarkDown', code)
+        return this.$store.dispatch('updateMarkDown', {
+          code,
+          cursor
+        })
       }
       const key = mod.key
       const modType = mod.modType
-      this.$store.dispatch('updateMarkDownBlock', { code, key, modType })
+      this.$store.dispatch('updateMarkDownBlock', {
+        code,
+        key,
+        modType,
+        cursor
+      })
     },
     foldCodes(cm) {
       for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {

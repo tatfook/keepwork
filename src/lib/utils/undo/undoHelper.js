@@ -29,7 +29,7 @@ export default {
     if (this.canUndo(undoManager)) {
       var item = undoManager.stack[--undoManager.position]
       if (callback) {
-        callback(item)
+        callback(item.newCode, item.cursor)
       }
     }
   },
@@ -38,7 +38,7 @@ export default {
       var item = undoManager.stack[++undoManager.position]
 
       if (callback) {
-        callback(item)
+        callback(item.newCode, item.cursor)
       }
     }
   },
