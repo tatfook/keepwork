@@ -10,7 +10,9 @@
         </el-button-group>
       </el-row>
       <el-row class="manager-content-box">
-        <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+        <keep-alive>
+          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+        </keep-alive>
       </el-row>
     </el-col>
     <div class="col-between"></div>
