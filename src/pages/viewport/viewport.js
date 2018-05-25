@@ -9,6 +9,9 @@ import { editorModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import { transfer } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
+import handleMessage from '@/lib/iframe'
+
+window.addEventListener('message', handleMessage)
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
