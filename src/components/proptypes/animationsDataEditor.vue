@@ -1,7 +1,7 @@
 <template>
   <el-dialog class="tree-data-dialog" title="Add animations" :visible.sync="show" width="600px" :before-close="handleClose">
-    <draggable element="el-collapse" :list="animationsDataCopy" accordion>
-      <el-collapse-item v-for="e in animationsDataCopy" :name="e.id" :key="e.id">
+    <draggable element="el-collapse" :list="animationsData" accordion>
+      <el-collapse-item v-for="e in animationsData" :name="e.id" :key="e.id">
         <template slot="title">
           <img class="cover" :src="e.coverImage"/>
           <span class="title">{{e.title}}</span>
@@ -71,29 +71,29 @@ export default {
     animationsData: Array,
     show: Boolean
   },
-  data() {
-    return {
-      animationsDataCopy: this.animationsData
-    }
-  },
+  // data() {
+  //   return {
+  //     animationsData: this.animationsData
+  //   }
+  // },
   methods: {
     handleClose() {
       this.$emit('cancel', null)
     },
     removeItem(id) {
-      for(let i = 0; i < this.animationsDataCopy.length; i++) {
-        if(this.animationsDataCopy[i].id == id) {
-          this.animationsDataCopy.splice(i, 1)
+      for(let i = 0; i < this.animationsData.length; i++) {
+        if(this.animationsData[i].id == id) {
+          this.animationsData.splice(i, 1)
         }
       }
     },
     handleSave() {
       this.handleClose();
-      this.$emit('finish', this.animationsDataCopy);
+      this.$emit('finish', this.animationsData);
     },
     addAnimation() {
       let uid = uuid(8, 16)
-      this.animationsDataCopy.push({
+      this.animationsData.push({
         id: uid,
         title: '',
         coverImage: '',

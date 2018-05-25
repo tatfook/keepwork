@@ -205,7 +205,7 @@ export default {
       let myAnswer;
       if(data[0].type == 0) {  // 单选
         myAnswer = this.quiz.single;
-        if(myAnswer === data[0].answer) {
+        if(myAnswer === data[0].answer[0]) {
           trueFlag = true;
           this.isRight = true;
         }else {
@@ -214,7 +214,7 @@ export default {
         }
       }else if(data[0].type == 2) { // 判断
         myAnswer = this.quiz.judge;
-        if(myAnswer === data[0].answer) {
+        if(myAnswer === data[0].answer[0]) {
           trueFlag = true;
           this.isRight = true;
         }else {

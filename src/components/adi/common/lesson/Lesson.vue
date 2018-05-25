@@ -54,8 +54,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      username: 'user/username',
-      userInfo: 'user/info'
+      username: 'user/username'
     })
   },
   name: 'AdiLesson',
@@ -91,9 +90,9 @@ export default {
       if (username) {
         axios.get(lessonHost + '/api/member/auth', {
           params: {
-            username: username,
-            portrait: this.userInfo.userinfo.portrait
-          }
+            username: username
+          },
+          withCredentials: true
         }).then(response => {
           let r = response.data
           if (r.data && r.data.vipDay >= 0) {

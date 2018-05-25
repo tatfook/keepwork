@@ -12,12 +12,12 @@
       <el-form-item label="Question:" prop="title">
         <el-input v-model="quizData.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
-
+      #aaaaaaaaaaaaaaaaaaaaaaa{{quizData}}<br>
+      #bbbbbbbbbbbbbbbbbbbbbbb{{originalQuizData}}
       <!-- 单选题 -->
       <el-form-item label="Answer options:" v-if="quizData.type == 0">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
-
-        <el-radio-group :style="{width: '100%'}" v-model="quizData.answer">
+        <el-radio-group :style="{width: '100%'}" v-model="quizData.answer[0]">
           <div class="flex-center-between" v-for="(opt, index) in quizData.options">
             <el-radio :label="serialNo[index]"></el-radio>
             <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
@@ -48,7 +48,7 @@
       <el-form-item label="Answer options:" v-if="quizData.type == 2">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-        <el-radio-group v-model="quizData.answer">
+        <el-radio-group v-model="quizData.answer[0]">
           <span class="el-radio" v-for="(opt, index) in judgeOptions">
             <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
           </span>
@@ -181,14 +181,6 @@ export default {
       }
     }
   },
-  mounted: function () {
-    let originData = this.originalQuizData[0];
-    if(originData.type == 0 || originData.type == 2) {
-       originData.answer = this.originalQuizData[0].answer[0];
-       this.originalQuizData[0].answer = [];
-    }
-
-  },
   computed: {
     quizData() {
       return this.originalQuizData[0]
@@ -234,17 +226,17 @@ export default {
 
     submitForm(formName, type) {
       checkInputEmpty();
-
-      console.log(this.quizData);
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.quizData.id === 0 ? this.quizData.id = uuid(8, 16) : this.quizData.id;
           type == 2 ?  this.quizData.options = this.judgeOptions : this.quizData.options; // 判断
-          console.log(this.quizData);
-          type == 1 ? JSON.stringify([this.quizData.answer].sort()) : JSON.stringify([this.quizData.answer]); // 多选
-          console.log(this.quizData);
-
+          if( (type == 0 || type == 2) && this.quizData.answer ) {
+            let singleAns =  this.quizData.answer[0];
+            this.quizData.answer = [singleAns];
+          } else if(type == 1) {
+            // 多选
+            JSON.stringify([this.quizData.answer].sort())
+          }
           this.handleClose();
           this.$emit('finishEditing', [this.quizData]);
         } else {
