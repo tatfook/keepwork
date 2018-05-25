@@ -146,7 +146,7 @@ export default {
     };
 
     return {
-      quizData: this.originalQuizData[0],
+      // quizData: this.originalQuizData[0],
 
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
 
@@ -190,6 +190,9 @@ export default {
 
   },
   computed: {
+    quizData() {
+      return this.originalQuizData[0]
+    },
     isDialogShow() {
       return this.isEditorShow
     }
