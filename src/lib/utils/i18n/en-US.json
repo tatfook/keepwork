@@ -331,7 +331,8 @@
     "download": "Download",
     "enter": "Enter",
     "innerModal": "Inner modal",
-    "bigFile": "Big file"
+    "bigFile": "Big file",
+    "iframe": "iframe"
   },
   "field": {
     "fileId": "file Id",
@@ -346,6 +347,8 @@
     "title": "title",
     "extraMsg": "Extra msg",
     "channel": "channel",
-    "number": "number"
+    "number": "number",
+    "width": "width",
+    "height": "height"
   }
 }

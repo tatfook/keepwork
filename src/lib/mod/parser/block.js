@@ -1,3 +1,5 @@
+import uuid from '@/lib/utils/uuid'
+
 const MARKDOWN_CMD = 'Markdown'
 
 class ModBlock {
@@ -10,6 +12,7 @@ class ModBlock {
     this.data = null // data-binding
     this.key = null // data-binding
     this.modKey = null
+    this.uuid = uuid()
   }
 }
 
