@@ -113,7 +113,9 @@ export default {
     } else{
       // Editor
       this.teacherShow = true;
-      document.getElementById("isTeachersContent").style.display = "inline-block";
+      if(document.getElementById("isTeachersContent"))  {
+        document.getElementById("isTeachersContent").style.display = "inline-block";
+      }
     }
     let device
     let query = location.href.split('?')[1]

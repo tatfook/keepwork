@@ -1,8 +1,8 @@
 <template>
   <el-dialog title="Quiz" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="128px" class="demo-ruleForm">
+    <el-form :model="quizData" :rules="rules" ref="quizData" label-width="128px" class="demo-ruleForm">
       <el-form-item label="Type:" prop="type">
-        <el-radio-group v-model="ruleForm.type">
+        <el-radio-group v-model="quizData.type" id="quizType">
           <el-radio label="0">Single Choice</el-radio>
           <el-radio label="1">Multiple Choices</el-radio>
           <el-radio label="2">True or False</el-radio>
@@ -10,47 +10,46 @@
       </el-form-item>
 
       <el-form-item label="Question:" prop="title">
-        <el-input v-model="ruleForm.title" maxlength="255" placeholder="Please Input..."></el-input>
+        <el-input v-model="quizData.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
 
       <!-- 单选题 -->
-      <el-form-item label="Answer options:" prop="single" v-if="ruleForm.type == 0">
+      <el-form-item label="Answer options:" v-if="quizData.type == 0">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-        <el-radio-group :style="{width: '100%'}" v-model="ruleForm.single">
-          <div class="flex-center-between" v-for="(opt, index) in ruleForm.singleOptions">
+        <el-radio-group :style="{width: '100%'}" v-model="quizData.answer">
+          <div class="flex-center-between" v-for="(opt, index) in quizData.options">
             <el-radio :label="serialNo[index]"></el-radio>
             <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
-            <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
+            <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
           </div>
-          <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
+          <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More Options</el-button>
         </el-radio-group>
 
       </el-form-item>
 
       <!-- 多选题 -->
-      <el-form-item label="Answer options:" prop="multiple" v-if="ruleForm.type == 1" >
+      <el-form-item label="Answer options:" v-if="quizData.type == 1" >
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-        <el-checkbox-group :style="{width: '100%'}" v-model="ruleForm.multiple">
+        <el-checkbox-group :style="{width: '100%'}" v-model="quizData.answer">
           <div class="flex-center-between"
-            v-for="(opt, index) in ruleForm.multipleOptions">
+            v-for="(opt, index) in quizData.options">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
-            <el-button type="danger" @click.prevent="removeOption(opt, ruleForm.type)" icon="el-icon-delete" circle></el-button>
+            <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
           </div>
-          <el-button type="primary" round size="small" @click="addOption(ruleForm.type)">Add More Options</el-button>
+          <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More Options</el-button>
         </el-checkbox-group>
 
       </el-form-item>
 
-
       <!-- 判断题 -->
-      <el-form-item label="Answer options:" prop="judge" v-if="ruleForm.type == 2">
+      <el-form-item label="Answer options:" v-if="quizData.type == 2">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
 
-        <el-radio-group v-model="ruleForm.judge">
-          <span class="el-radio" v-for="(opt, index) in ruleForm.judgeOptions">
+        <el-radio-group v-model="quizData.answer">
+          <span class="el-radio" v-for="(opt, index) in judgeOptions">
             <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
           </span>
         </el-radio-group>
@@ -58,17 +57,17 @@
       </el-form-item>
 
       <el-form-item label="Score:" prop="score">
-        <el-input v-model.number="ruleForm.score" placeholder="Please Input..." :style="{ width: '20%'}"></el-input>
+        <el-input v-model.number="quizData.score" placeholder="Please Input..." :style="{ width: '20%'}"></el-input>
       </el-form-item>
 
       <el-form-item label="Explanation:" prop="desc">
-        <el-input type="textarea" maxlength="512" v-model="ruleForm.desc" placeholder="Please Input..."></el-input>
+        <el-input type="textarea" maxlength="512" v-model="quizData.desc" placeholder="Please Input..."></el-input>
       </el-form-item>
 
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitForm('ruleForm', ruleForm.type)">submit</el-button>
+      <el-button type="primary" @change="validInput" @click="submitForm('quizData', quizData.type)">submit</el-button>
       <el-button @click="handleClose">cancel</el-button>
     </span>
   </el-dialog>
@@ -108,10 +107,24 @@ function uuid(len, radix) {
   return uuid.join('');
 }
 
+const checkInputEmpty = () => {
+  let opeInput = document.getElementsByClassName("writer-input");
+    for(let i = 0; i < opeInput.length; i++) {
+      let input = opeInput[i].children[0];
+      if(input.value == undefined || input.value == "") {
+          input.style.borderColor = "#f56c6c";
+          return;
+      }else{
+          input.style.borderColor = "#67c23a";
+      }
+    }
+}
+
 export default {
   name: 'quizDataEditor',
   props: {
-    isEditorShow: Boolean
+    isEditorShow: Boolean,
+    originalQuizData: Array,
   },
 
   data() {
@@ -133,48 +146,16 @@ export default {
     };
 
     return {
-      quizData: [],
+      quizData: this.originalQuizData[0],
 
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
 
-      ruleForm: {
-        type: '0',
-        title: '',
-        single: '',
-        multiple: [],
-        judge: '',
-        singleOptions: [{
-          item: ''
-        },
-        {
-          item: ''
-        },
-        {
-          item: ''
-        },
-        {
-          item: ''
-        }],
-        multipleOptions: [{
-          item: ''
-        },
-        {
-          item: ''
-        },
-        {
-          item: ''
-        },
-        {
-          item: ''
-        }],
-        judgeOptions: [{
-          item: 'True'
-        },{
-          item: 'False'
-        }],
-        score: '',
-        desc: '',
-      },
+      judgeOptions: [{
+        item: 'True'
+      },{
+        item: 'False'
+      }],
+
       rules: {
         title: [
           { required: true, message: 'please input title', trigger: 'blur' }
@@ -198,8 +179,15 @@ export default {
           { required: true, message: 'please input explanation', trigger: 'blur' }
         ]
       }
-
     }
+  },
+  mounted: function () {
+    let originData = this.originalQuizData[0];
+    if(originData.type == 0 || originData.type == 2) {
+       originData.answer = this.originalQuizData[0].answer[0];
+       this.originalQuizData[0].answer = [];
+    }
+
   },
   computed: {
     isDialogShow() {
@@ -207,79 +195,55 @@ export default {
     }
   },
   methods: {
-    addDomain() {
-        this.ruleForm.singleOptions.push({
-          value: '',
-          key: Date.now()
-        });
-      },
     handleClose() {
       this.$emit('cancel', null)
     },
     removeOption(item, type) {  // 移除选项
       // 多选
       if(type == 1) {
-        var index = this.ruleForm.multipleOptions.indexOf(item)
+        var index = this.quizData.options.indexOf(item)
         if (index !== -1) {
-          this.ruleForm.multipleOptions.splice(index, 1)
+          this.quizData.options.splice(index, 1)
         }
       }else{ // 单选
-        var index = this.ruleForm.singleOptions.indexOf(item)
+        var index = this.quizData.options.indexOf(item)
         if (index !== -1) {
-          this.ruleForm.singleOptions.splice(index, 1)
+          this.quizData.options.splice(index, 1)
         }
       }
     },
     addOption(type) {  // 添加选项
       // 多选
       if(type == 1) {
-        this.ruleForm.multipleOptions.push({
+        this.quizData.options.push({
           item: ''
         });
       }else{ // 单选
-        this.ruleForm.singleOptions.push({
+        this.quizData.options.push({
           item: ''
         });
       }
+    },
 
+    validInput () {
+      checkInputEmpty();
     },
 
     submitForm(formName, type) {
-      let opeInput = document.getElementsByClassName("writer-input");
-      for(let i = 0; i < opeInput.length; i++) {
-        let input = opeInput[i].children[0];
-        if(input.value == undefined || input.value == "") {
-           input.style.borderColor = "#f56c6c";
-           return;
-        }else{
-           input.style.borderColor = "#67c23a";
-        }
-      }
+      checkInputEmpty();
+
+      console.log(this.quizData);
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let writerQA = {
-            id: uuid(8, 16),
-            type: this.ruleForm.type,
-            title: this.ruleForm.title,
-            score: this.ruleForm.score,
-            desc: this.ruleForm.desc,
-          }
+          this.quizData.id === 0 ? this.quizData.id = uuid(8, 16) : this.quizData.id;
+          type == 2 ?  this.quizData.options = this.judgeOptions : this.quizData.options; // 判断
+          console.log(this.quizData);
+          type == 1 ? JSON.stringify([this.quizData.answer].sort()) : JSON.stringify([this.quizData.answer]); // 多选
+          console.log(this.quizData);
 
-          if(type == 0) { //单选
-            writerQA.options = this.ruleForm.singleOptions;
-            writerQA.answer = this.ruleForm.single;
-          }else if(type == 1) { // 多选
-             writerQA.options = this.ruleForm.multipleOptions;
-             writerQA.answer = JSON.stringify(this.ruleForm.multiple.sort());
-          }else {  // 判断题
-             writerQA.options = this.ruleForm.judgeOptions;
-             writerQA.answer = this.ruleForm.judge;
-          }
-
-          this.quizData = [writerQA];
           this.handleClose();
-          this.$emit('finishEditing', this.quizData);
+          this.$emit('finishEditing', [this.quizData]);
         } else {
           console.log('error submit!!');
           return false;
@@ -308,7 +272,7 @@ export default {
   }
 
   .el-form-item .writer-input .el-input__inner {
-    border-color: rgb(245, 108, 108);
+    border-color: #dcdfe6;
   }
 </style>
 
