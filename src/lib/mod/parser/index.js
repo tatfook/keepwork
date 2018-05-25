@@ -23,7 +23,8 @@ const endModBlock = (blockList, curModBlock) => {
 
 const buildBlockList = mdText => {
   if (!mdText) return []
-  let mdLines = mdText.trim().split('\n')
+  // let mdLines = mdText.trim().split('\n')
+  let mdLines = mdText.split('\n')
   let blockList = []
   let curModBlock = null
   _.forEach(mdLines, (line, lineNumber) => {

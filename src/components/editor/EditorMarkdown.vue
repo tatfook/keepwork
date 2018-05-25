@@ -1,6 +1,7 @@
 <template>
   <div class='kp-md-editor'>
     <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' @cursorActivity="handleClick" />
+    <!-- <codemirror ref='mdEditor' :options='options' :value='code' @changes='updateMarkdown' @click="handleClick" /> -->
   </div>
 </template>
 
@@ -48,9 +49,7 @@ export default {
   },
   watch: {
     activeMod(newActiveMod, oldActiveMod) {
-      if (newActiveMod) {
-        this.higthLightCodeByMod(newActiveMod)
-      }
+      newActiveMod && this.highlightCodeByMod(newActiveMod)
     }
   },
   computed: {
@@ -130,26 +129,31 @@ export default {
       })
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
-    higthLightCodeByMod(mod) {
-      this.setActiveMod(mod.key)
+    highlightCodeByMod(mod) {
       let lineBegin = mod.lineBegin
-      let length = mod.md.length + lineBegin
-      this.clearHigthLight()
-      for (let i = lineBegin - 1; i <= length; i++) {
+      let lineEnd = mod.md.length + lineBegin
+      if (mod.modType === 'ModMarkdown' && mod.md[0] === '```') {
+        lineEnd -= 2
+      }
+      this.clearHighlight()
+      for (let i = lineBegin - 1; i <= lineEnd; i++) {
         this.editor.addLineClass(i, 'gutter', 'mark-text')
       }
     },
-    clearHigthLight() {
+    clearHighlight() {
       let lineCount = this.editor.lineCount()
       while (lineCount--) {
         this.editor.removeLineClass(lineCount, 'gutter', 'mark-text')
       }
     },
     handleClick(codeMirror) {
-      this.clearHigthLight()
-      let line = codeMirror.getCursor().line
-      let mod = this.checkInModCode(line)
-      mod && this.higthLightCodeByMod(mod)
+      if (codeMirror.state.focused) {
+        this.clearHighlight()
+        let line = codeMirror.getCursor().line
+        let mod = this.checkInModCode(line)
+        mod && this.highlightCodeByMod(mod)
+        mod.key && this.setActiveMod(mod.key)
+      }
     },
     checkInModCode(line) {
       let mod = this.modList.filter(mod => {

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: keepwork-stage-en
+  labels:
+    app: keepwork-stage-en
+spec:
+  containers:
+  - name: keepwork-stage-en
+    image: 10.28.18.13/xuntian/keepwork-stage-en:1
+    ports:
+      - containerPort: 80
