@@ -96,9 +96,7 @@ const actions = {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
-
     commit(SET_ACTIVE_PAGE, { path, username })
-    UndoHelper.init(getters.activeAreaData.undoManager, {newCode: getters.code, cursor: {line: 1, ch: 0}})
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters

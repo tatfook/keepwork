@@ -2,6 +2,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 import LayoutHelper from '@/lib/mod/layout'
+import UndoHelper from '@/lib/utils/undo/undoHelper'
 import {
   getFileFullPathByPath,
   getFileSitePathByPath
@@ -109,6 +110,14 @@ const mutations = {
   [SET_ACTIVE_PAGE](state, { username, path }) {
     Vue.set(state, 'activePageUrl', path)
     if (!state.openedFiles[username]) return
+    if (!_.hasIn(state.openedFiles[username], `${path.substr(1)}.md`)) {
+      console.log('no hasIn')
+      let { undoManager, content = '' } = state.activePage
+      UndoHelper.init(undoManager, {
+        newCode: content,
+        cursor: { line: 1, ch: 0 }
+      })
+    }
     const pageData = state.openedFiles[username][getFileFullPathByPath(path)]
     Vue.set(state, 'activePage', pageData)
     if (pageData) {
@@ -204,7 +213,7 @@ const mutations = {
   [UPDATE_MANAGE_PANE_COMPONENT](state, payload) {
     // for the usage of manage pane component
     // payload should be {name, props}
-    payload = _.isString(payload) ? {name: payload} : payload
+    payload = _.isString(payload) ? { name: payload } : payload
     Vue.set(state, 'activeManagePaneComponent', payload)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
