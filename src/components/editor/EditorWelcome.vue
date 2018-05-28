@@ -5,20 +5,17 @@
     <div>
       <el-button type='primary' @click="openNewWebsiteDialog">{{ $t('common.createNewWebsite') }}</el-button>
     </div>
-    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
   </div>
 </template>
 
 <script>
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
-import SkyDriveManager from '@/components/common/SkyDriveManager'
 
 export default {
   name: 'EditorWelcome',
   data() {
     return {
-      isNewWebsiteDialogShow: false,
-      showSkyDriveManager: process.env.HOST_ENV === 'localhost'
+      isNewWebsiteDialogShow: false
     }
   },
   methods: {
@@ -30,8 +27,7 @@ export default {
     }
   },
   components: {
-    NewWebsiteDialog,
-    SkyDriveManager
+    NewWebsiteDialog
   }
 }
 </script>
