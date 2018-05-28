@@ -63,7 +63,7 @@ const updateBlockList = (blockList, newBlockList) => {
     } else if (block.key !== newBlock.key) {
       if (block.modType === newBlock.modType) {
         if (block.modKey === newBlock.modKey) {
-          // if block data wasn't changed, update the lineBegin value
+          // if block data wasn't changed, keep the old mod and old uuid, just update the lineBegin value
           BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
         } else {
           // if block data was changed, remove and replace with the new one
@@ -237,8 +237,6 @@ const willAffectModData = (block, mdLines) => {
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
   let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
-  // TODO: hard code here
-  cmdCode += '- styleID : ' + styleID + '\n'
   cmdCode += '```\n'
   mdLines.splice(position + 1, 0, cmdCode)
   return mdLines.join('\n')

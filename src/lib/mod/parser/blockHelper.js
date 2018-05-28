@@ -26,7 +26,7 @@ const blockHelper = {
   },
 
   buildKey(block) {
-    block.key = md5(this.text(block), block.lineBegin)
+    block.key = md5(this.text(block), block.uuid)
     block.modKey = md5(this.text(block))
   },
 
@@ -80,7 +80,6 @@ const blockHelper = {
 
   modifyBegin(block, diff) {
     block.lineBegin += diff
-    this.buildKey(block)
   },
 
   contentBegin(block) {

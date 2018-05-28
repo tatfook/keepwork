@@ -3,6 +3,7 @@ const MOD_CMD_END_REG = /^```$/
 
 export const cmdList = [
   'Markdown',
+  'IFrame',
   'Title',
   'MixPosition',
   'MixLayer',

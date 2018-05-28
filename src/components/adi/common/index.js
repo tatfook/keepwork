@@ -1,10 +1,11 @@
+import AdiMarkdown from './markdown/Markdown'
+import AdiIFrame from './iframe/IFrame'
 import AdiImgLoop from './imgLoop/ImgLoop'
 import AdiTitle from './title/Title'
 import AdiButton from './button/Button'
 import AdiMenu from './menu/Menu'
 import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
-import AdiMarkdown from './markdown/Markdown'
 import AdiBoard from './board/Board'
 import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
@@ -17,13 +18,14 @@ import AdiToc from './toc/Toc'
 import AdiBigFile from './bigFile/BigFile'
 
 export default {
+  AdiMarkdown,
+  AdiIFrame,
   AdiImgLoop,
   AdiTitle,
   AdiButton,
   AdiMenu,
   AdiMedia,
   AdiLabel,
-  AdiMarkdown,
   AdiBoard,
   AdiDescLabel,
   AdiVipRead,
