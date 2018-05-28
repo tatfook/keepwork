@@ -204,7 +204,7 @@ const mutations = {
   [UPDATE_MANAGE_PANE_COMPONENT](state, payload) {
     // for the usage of manage pane component
     // payload should be {name, props}
-    payload = _.isString(payload) ? {name: payload} : payload
+    payload = _.isString(payload) ? { name: payload } : payload
     Vue.set(state, 'activeManagePaneComponent', payload)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {

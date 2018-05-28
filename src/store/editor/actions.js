@@ -82,7 +82,6 @@ const actions = {
     } = context
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
-
     const fullPath = getFileFullPathByPath(path)
     const sitePath = getFileSitePathByPath(path)
     const siteData = state.siteSettings[sitePath]
@@ -96,9 +95,13 @@ const actions = {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
-
+    if (!_.get(getters.openedFiles, fullPath)) {
+      UndoHelper.init(getters.activeAreaData.undoManager, {
+        newCode: getters.code,
+        cursor: { line: 1, ch: 0 }
+      })
+    }
     commit(SET_ACTIVE_PAGE, { path, username })
-    UndoHelper.init(getters.activeAreaData.undoManager, {newCode: getters.code, cursor: {line: 1, ch: 0}})
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters
@@ -273,7 +276,6 @@ const actions = {
       layoutContentFilePath: `${areanames}/${filename}`,
       data: { saved: true }
     })
-    console.log('saveSiteConfigPage ', UPDATE_OPENED_LAYOUT_FILE, true)
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
@@ -321,17 +323,21 @@ const actions = {
   },
 
   undo({ getters, dispatch }) {
-    UndoHelper.undo(getters.activeAreaData.undoManager, (code = '', cursor = {}) => {
-      dispatch('updateMarkDown', { code, historyDisabled: true })
-      dispatch('updateCursor', { cursor })
-    }
+    UndoHelper.undo(
+      getters.activeAreaData.undoManager,
+      (code = '', cursor = { line: 1, ch: 0 }) => {
+        dispatch('updateMarkDown', { code, historyDisabled: true })
+        dispatch('updateCursor', { cursor })
+      }
     )
   },
   redo({ getters, dispatch }) {
-    UndoHelper.redo(getters.activeAreaData.undoManager, (code = '', cursor = {}) => {
-      dispatch('updateMarkDown', { code, historyDisabled: true })
-      dispatch('updateCursor', { cursor })
-    }
+    UndoHelper.redo(
+      getters.activeAreaData.undoManager,
+      (code = '', cursor = { line: 1, ch: 0 }) => {
+        dispatch('updateMarkDown', { code, historyDisabled: true })
+        dispatch('updateCursor', { cursor })
+      }
     )
   },
   setNewModPosition({ commit }, position) {

@@ -169,24 +169,26 @@ export default {
       if (this.isActivePageSaved) {
         return
       }
-      this.savePending = true
-      await this.saveActivePage()
-        .then(() => {
-          this.$message({
-            showClose: true,
-            message: self.$t('editor.saveSuccess'),
-            type: 'success'
+      if(!this.savePending) {
+        this.savePending = true
+        await this.saveActivePage()
+          .then(() => {
+            this.$message({
+              showClose: true,
+              message: self.$t('editor.saveSuccess'),
+              type: 'success'
+            })
           })
-        })
-        .catch(e => {
-          console.log(e)
-          this.$message({
-            showClose: true,
-            message: self.$t('editor.saveFail'),
-            type: 'error'
+          .catch(e => {
+            console.log(e)
+            this.$message({
+              showClose: true,
+              message: self.$t('editor.saveFail'),
+              type: 'error'
+            })
           })
-        })
-      this.savePending = false
+        this.savePending = false
+      }
     },
     openNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = true
