@@ -52,15 +52,15 @@ export default {
       newActiveMod && this.highlightCodeByMod(newActiveMod)
     },
     cursorPos(newCursor, oldCursor) {
-      this.$nextTick(() => {
-        this.editor.setCursor(CodeMirror.Pos(newCursor.line, newCursor.ch))
-      })
+      newCursor &&
+        this.$nextTick(() => {
+          this.editor.setCursor(CodeMirror.Pos(newCursor.line, newCursor.ch))
+        })
     }
   },
   computed: {
     ...mapGetters({
       code: 'code',
-      line: 'line',
       modList: 'modList',
       activeMod: 'activeMod',
       cursorPos: 'cursorPos'
