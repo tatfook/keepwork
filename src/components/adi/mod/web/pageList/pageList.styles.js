@@ -7,18 +7,18 @@ export default [
         float: 'left'
       }
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
     preview: {
       outter: {
-        height: '30px'
+        height: '25.62px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -32,18 +32,18 @@ export default [
         'justify-content': 'center'
       }
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
     preview: {
       outter: {
-        height: '30px'
+        height: '25.62px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -56,18 +56,18 @@ export default [
         float: 'right'
       }
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
     preview: {
       outter: {
-        height: '30px'
+        height: '25.62px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
       }
     }
   }

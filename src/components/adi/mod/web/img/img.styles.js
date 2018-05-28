@@ -32,10 +32,9 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/img/cover/imgOne.png'),
     preview: {
       outter: {
-        height: '157px'
+        height: '190.56px'
       }
     }
   },
@@ -66,10 +65,9 @@ export default [
       theme: {},
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/img/cover/imgTwo.png'),
     preview: {
       outter: {
-        height: '209px'
+        height: '260.74px'
       }
     }
   }

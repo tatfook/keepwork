@@ -60,7 +60,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colLogo: { span: 10 },
       colCouple: { span: 16 },
       colGroupARow: { gutter: 10 }
@@ -89,10 +88,9 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '42.11px'
       }
     }
   },
@@ -128,7 +126,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colLogo: { span: 10 },
       colCouple: { span: 16 },
       colGroupARow: { gutter: 10 }
@@ -156,10 +153,9 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '42.11px'
       }
     }
   },
@@ -197,8 +193,7 @@ export default [
     },
     props: {
       colLogo: { span: 24 },
-      colCouple: { span: 24 },
-      rootRow: { gutter: 10 }
+      colCouple: { span: 24 }
     },
     theme: {
       root: [],
@@ -223,10 +218,9 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '61.77px'
       }
     }
   },
@@ -264,8 +258,7 @@ export default [
     },
     props: {
       colLogo: { span: 24 },
-      colCouple: { span: 24 },
-      rootRow: { gutter: 10 }
+      colCouple: { span: 24 }
     },
     theme: {
       root: [],
@@ -290,10 +283,9 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '61.77px'
       }
     }
   }

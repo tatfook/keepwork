@@ -57,7 +57,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 24 },
@@ -95,13 +94,12 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectOne.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '194.42px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -140,7 +138,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colGroupARow: { gutter: 24 },
       colMedia: {
         xs: { span: 24 },
@@ -178,13 +175,12 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectTwo.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '194.42px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -249,7 +245,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colGroupARow: { gutter: 14 },
       colTitle: {
         xs: { span: 24 },
@@ -296,13 +291,12 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectThree.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '225.65px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -337,7 +331,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
         sm: { span: 24 }
@@ -361,13 +354,12 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectFour.png'),
     preview: {
       outter: {
-        height: '186px'
+        height: '246.36px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-21.06px'
       }
     }
   },
@@ -402,7 +394,6 @@ export default [
       }
     },
     props: {
-      rootRow: { gutter: 10 },
       colMedia: {
         xs: { span: 24 },
         sm: { span: 24 }
@@ -426,13 +417,12 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectFive.png'),
     preview: {
       outter: {
-        height: '189px'
+        height: '246.36px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-21.06px'
       }
     }
   }

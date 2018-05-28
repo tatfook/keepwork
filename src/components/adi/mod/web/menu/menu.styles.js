@@ -32,7 +32,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -73,7 +73,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -113,7 +113,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -147,10 +147,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -190,7 +189,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -229,7 +228,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.45px'
       }
     }
   },
@@ -265,7 +264,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.1px'
       }
     }
   },
@@ -305,7 +304,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.1px'
       }
     }
   },
@@ -344,7 +343,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '14px'
+        height: '-2.1px'
       }
     }
   },
@@ -383,7 +382,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   },
@@ -419,10 +418,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   },
@@ -458,10 +456,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   },
@@ -497,10 +494,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   },
@@ -536,10 +532,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   },
@@ -575,10 +570,9 @@ export default [
         }
       }
     },
-    // cover: require('@/../static/adi/menu/menu.png'),
     preview: {
       outter: {
-        height: '26px'
+        height: '19.3px'
       }
     }
   }

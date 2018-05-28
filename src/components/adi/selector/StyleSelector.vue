@@ -34,9 +34,6 @@ export default {
 
       return globalTheme
     }
-    // styles() {
-    //   return mods[this.mod.modType].styles
-    // }
   },
   methods: {
     ...mapActions({
@@ -48,7 +45,7 @@ export default {
       if (style) {
         _.forEach(style, (value, key) => {
           if (isOutter) {
-            string = string + key + ':' + (parseInt(value) + 20) + 'px;'
+            string = string + key + ':' + (parseInt(value) + 21.06) + 'px;' // 21.06 = 60 x 0.35093
           } else {
             string = string + key + ':' + value + ';'
           }
@@ -88,7 +85,7 @@ export default {
 }
 
 .render {
-  // width: 295px;
+  width: 403px;
   height: auto;
   background-color: white;
   overflow: hidden;
@@ -105,13 +102,12 @@ export default {
 
   .render-mod-container {
     border: 10px solid white;
-    // width: 275px;
-    height: 290px;
+    width: 379px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.357);
+      transform: scale(0.35093); // 0.35093 = 379px / 1080px
       transform-origin: top left;
     }
   }

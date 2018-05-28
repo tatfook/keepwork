@@ -8,7 +8,7 @@
       <div v-for='mod in activeModsList' :key='mod.name'>
         <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
           <div class="render-mod-container--click-prevent"></div>
-          <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [])">
+          <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [], true)">
             <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
               <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
             </div>
@@ -78,12 +78,17 @@ export default {
     }
   },
   methods: {
-    generateStyleString(style) {
+    generateStyleString(style, isOutter) {
       let string = ''
 
       if (style) {
         _.forEach(style, (value, key) => {
-          string = string + key + ':' + value + ';'
+          if (isOutter) {
+            string =
+              string + key + ':' + (parseInt(value) * 0.72559 + 15.2778) + 'px;' //0.72559 = 275px / 379px , 15.2778 = 60 x 0.25463
+          } else {
+            string = string + key + ':' + parseInt(value) * 0.72559 + 'px;'
+          }
         })
       }
 
@@ -163,13 +168,12 @@ export default {
 
   .render-mod-container {
     border: 10px solid white;
-    height: 300px;
     width: 275px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.26);
+      transform: scale(0.25463); //0.25463 = 275px / 1080px
       transform-origin: top left;
     }
   }

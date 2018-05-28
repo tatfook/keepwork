@@ -35,9 +35,7 @@ export default [
         'text-align': 'center'
       }
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
@@ -48,6 +46,14 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '198.98px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
+      }
     }
   },
   {
@@ -66,9 +72,7 @@ export default [
         'margin-bottom': '10px'
       }
     },
-    props: {
-      rootRow: { gutter: 10 }
-    },
+    props: {},
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
@@ -79,6 +83,14 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '198.98px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
+      }
     }
   },
   {
@@ -123,6 +135,14 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '141.78px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
+      }
     }
   },
   {
@@ -167,6 +187,14 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '141.78px'
+      },
+      inner: {
+        'margin-top': '-21.06px'
+      }
     }
   }
 ]
