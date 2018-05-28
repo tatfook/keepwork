@@ -118,7 +118,17 @@ export default {
       this.starPending = false
     },
     handleBreadcrumbClick(file) {
-      let url = file.type === 'tree' ? `${file.path}/index` : file.path.replace(/\.md$/, '')
+      let targetFile = file
+
+      if (file.type === 'tree') {
+        let children = this.gitlabChildrenByPath(file.path)
+        let indexChild = children.filter(file => file.name === 'index.md')[0]
+        let targetFile = indexChild || children[0] || targetFile
+        console.log('handleBreadcrumbClick targetFile: ', targetFile)
+      }
+
+      let url = targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
+      if (!url) return
       location.pathname = url
     }
   },
