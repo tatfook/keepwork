@@ -75,10 +75,9 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverOne.png'),
     preview: {
       outter: {
-        height: '40px'
+        height: '36px'
       }
     }
   },
@@ -154,10 +153,9 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png'),
     preview: {
       outter: {
-        height: '40px'
+        height: '27px'
       }
     }
   }
