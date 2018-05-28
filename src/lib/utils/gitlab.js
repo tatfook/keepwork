@@ -49,7 +49,7 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let nestedArray = convertChildren2ArrayInTree({
     [temporaryChildrenKey]: treeWithChildren
   })['children']
-  return nestedArray
+  return _.isEmpty(nestedArray) ? [] : nestedArray
 }
 
 /*doc
