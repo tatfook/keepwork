@@ -159,7 +159,8 @@ const actions = {
     if (payload.code === undefined) payload = { code: payload }
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
-    commit(UPDATE_MODS, payload.code)
+    let blockList = Parser.buildBlockList(payload.code)
+    commit(UPDATE_MODS, blockList)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
     await dispatch('updateCode', payload)
   },
@@ -197,12 +198,12 @@ const actions = {
       modPropertiesStyle = modProperties
       modPropertiesStyle.styleID = payload.styleID
     }
+    let newMod = Parser.buildBlock(Parser.getCmd(payload.modName), modPropertiesStyle || modProperties)
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(ADD_MOD, {
-      modProperties: modPropertiesStyle || modProperties,
-      key: payload.preModKey,
-      cmd: Parser.getCmd(payload.modName)
+      newMod: newMod,
+      key: payload.preModKey
     })
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')

@@ -116,12 +116,11 @@ const mutations = {
       Vue.set(state.activePage, 'activeProperty', null)
     }
   },
-  [ADD_MOD](state, { modProperties, key, cmd }) {
+  [ADD_MOD](state, { newMod, key }) {
     const mod = Parser.addBlockByKey(
       activeModList(state),
       key,
-      modProperties,
-      cmd,
+      newMod,
       state.activePage.newModPosition
     )
     Vue.set(state.activePage, 'activeMod', mod)
@@ -184,9 +183,8 @@ const mutations = {
       value
     )
   },
-  [UPDATE_MODS](state, code) {
+  [UPDATE_MODS](state, blockList) {
     const modList = activeModList(state)
-    let blockList = Parser.buildBlockList(code)
     Parser.updateBlockList(modList, blockList)
   },
   [UPDATE_THEME_NAME](state, themeName) {

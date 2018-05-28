@@ -21,6 +21,12 @@ const endModBlock = (blockList, curModBlock) => {
   blockList.push(_.cloneDeep(curModBlock))
 }
 
+const buildBlock = (cmd, jsonData, beginLine) => {
+  let block = new ModBlock(cmd, beginLine || 1)
+  BlockHelper.updateJson(block, jsonData)
+  return block
+}
+
 const buildBlockList = mdText => {
   if (!mdText) return []
   // let mdLines = mdText.trim().split('\n')
@@ -131,8 +137,6 @@ const deleteBlock = (blockList, key) => {
     -1 - BlockHelper.textLength(block)
   )
   blockList.splice(blockIndex, 1)
-
-  return block
 }
 
 const moveBlock = (blockList, oldIndex, newIndex) => {
@@ -169,27 +173,26 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
   }
 }
 
-const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
+const addBlockAfterIndex = (blockList, index, newBlock) => {
   let preBlock = blockList[index]
   let beginLine = 1
   if (preBlock) {
     beginLine = BlockHelper.endLine(preBlock)
-    // just for beautify, see also in buildMarkdown function(line 196)
+    // just for beautify, see also in buildMarkdown function
     if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 1
   }
-  let block = new ModBlock(cmd, beginLine)
-  BlockHelper.updateJson(block, jsonData)
-  blockList.splice(index + 1, 0, block)
-  updateBlocksBeginLine(blockList, index + 2, BlockHelper.textLength(block) + 1)
+  BlockHelper.modifyBegin(newBlock, beginLine - newBlock.lineBegin)
+  blockList.splice(index + 1, 0, newBlock)
+  updateBlocksBeginLine(blockList, index + 2, BlockHelper.textLength(newBlock) + 1)
 
-  return block
+  return newBlock
 }
 
-const addBlockByKey = (blockList, key, jsonData, cmd, position) => {
+const addBlockByKey = (blockList, key, newBlock, position) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
   if (position === gConst.POSITION_BEFORE) index = index - 1
-  return addBlockAfterIndex(blockList, index, jsonData, cmd)
+  return addBlockAfterIndex(blockList, index, newBlock)
 }
 
 const buildMarkdown = blockList => {
@@ -243,6 +246,7 @@ const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
 }
 
 export default {
+  buildBlock,
   buildBlockList,
   buildMarkdown,
   buildJsonData,
