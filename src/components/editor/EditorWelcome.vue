@@ -1,6 +1,5 @@
 <template>
   <div class="guid-content">
-    <SkyDriveManager v-if='showSkyDriveManager'/>
     <h1>{{ $t('common.welcomeToKeepwork') }}</h1>
     <div>
       <el-button type='primary' @click="openNewWebsiteDialog">{{ $t('common.createNewWebsite') }}</el-button>
