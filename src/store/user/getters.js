@@ -227,7 +227,7 @@ const getters = {
   },
   layoutContentFilePathsByPath: (state, { getLayoutByPath }) => path => {
     let layout = getLayoutByPath(path)
-    let layoutContentFilePaths = _.keys(layout.content).map(key => `${key}s/${layout.content[key]}`)
+    let layoutContentFilePaths = _.keys(layout.content).filter(key => layout.content[key]).map(key => `${key}s/${layout.content[key]}`)
     return layoutContentFilePaths
   },
   getSettedPageLayoutByPath: (state, { siteLayoutConfigBySitePath }) => path => {
