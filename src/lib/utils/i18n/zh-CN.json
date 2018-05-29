@@ -317,6 +317,8 @@
     "size": "大小",
     "menu": "菜单",
     "logo": "图标",
+    "logoB": "logo图标",
+    "breadCrumb": "面包屑菜单",
     "businessName": "主标题",
     "tagline": "副标题",
     "qq": "QQ号",

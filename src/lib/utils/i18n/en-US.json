@@ -327,6 +327,8 @@
     "size": "size",
     "menu": "menu",
     "logo": "icon",
+    "logoB": "logo icon",
+    "breadCrumb": "breadCrumb",
     "businessName": "main title",
     "tagline": "subtitle",
     "qq": "QQ number",

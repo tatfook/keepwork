@@ -18,6 +18,7 @@ export default [
     },
     { colMenu: 'menu' }
   ],
+
   // template 1
   [
     { colLogo: 'logo' },
@@ -28,5 +29,12 @@ export default [
       ]
     },
     { colMenu: 'menu' }
+  ],
+
+  // template 2
+  [
+    {
+      colGroup: [{ colLogoB: 'logoB' }, { colBreadCrumb: 'breadCrumb' }]
+    }
   ]
 ]
