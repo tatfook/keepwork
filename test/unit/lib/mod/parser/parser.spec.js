@@ -276,6 +276,11 @@ describe('mod parser', () => {
       expect(newBlockList[4].modType).toEqual('ModTitle')
       expect(newBlockList[4].data.styleID).toBeUndefined()
     })
+
+    test('should not add markdown mod', () => {
+      let newCode = Parser.addBlockToMarkdown(code, 8, 'ModMarkdown')
+      expect(newCode).toEqual(code)
+    })
   })
 
   describe('#getCmd', () => {

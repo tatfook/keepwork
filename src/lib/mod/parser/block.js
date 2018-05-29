@@ -1,6 +1,5 @@
 import uuid from '@/lib/utils/uuid'
-
-const MARKDOWN_CMD = 'Markdown'
+import { MARKDOWN_CMD } from './cmdHelper'
 
 class ModBlock {
   constructor(cmd, lineBegin) {

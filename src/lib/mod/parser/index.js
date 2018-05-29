@@ -256,6 +256,8 @@ const getActiveBlock = (blockList, beginLine) => {
 }
 
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
+  if (CmdHelper.isMarkdownCmd(getCmd(modName))) return code
+
   let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
   if (styleID) cmdCode += 'styleID: ' + styleID

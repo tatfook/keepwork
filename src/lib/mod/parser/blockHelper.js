@@ -1,12 +1,8 @@
 import _ from 'lodash'
 import md5 from 'blueimp-md5'
 import { mdToJson, jsonToMd } from './mdParser/yaml'
-import CmdHelper from './cmdHelper'
+import CmdHelper, { MARKDOWN_CMD, MOD_CMD_BEGIN, MOD_CMD_END} from './cmdHelper'
 import ModAdaptor from './modAdaptor'
-
-const MARKDOWN_CMD = 'Markdown'
-const MOD_CMD_BEGIN = '```@'
-const MOD_CMD_END = '```'
 
 const blockHelper = {
   buildJson(block) {
