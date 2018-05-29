@@ -25,6 +25,11 @@ let defaultData = {
     emptyName: 'adi.title.tagLine',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
+  },
+  logoB: {
+    emptySrc: require('@/../static/adi/CreativeSpace/logo.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 export default [
@@ -294,6 +299,62 @@ export default [
     preview: {
       outter: {
         height: '63px'
+      }
+    }
+  },
+
+  // style 4
+  {
+    templateID: 2,
+    data: {
+      root: {},
+      colLogoB: {
+        display: 'flex',
+        'justify-content': 'center'
+      },
+      logoB: {
+        height: '64px',
+        width: '180px'
+      },
+      colBreadCrumb: {
+        height: '64px',
+        display: 'flex',
+        'justify-content': 'center',
+        'align-items': 'center'
+      },
+      breadCrumb: {
+        width: 'auto'
+      }
+    },
+    props: {
+      colGroupRow: { gutter: 10 },
+      colLogoB: {
+        xs: { span: 24 },
+        sm: { span: 9 }
+      },
+      colBreadCrumb: {
+        xs: { span: 24 },
+        sm: { span: 15 }
+      }
+    },
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width']
+    },
+    options: {
+      theme: {
+        breadCrumb: {
+          fontSize: 'font_4',
+          fontColor: 'color_3'
+        }
+      },
+      config: {
+        ...defaultData
+      }
+    },
+    preview: {
+      outter: {
+        height: '64px'
       }
     }
   }
