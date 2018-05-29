@@ -6,14 +6,13 @@
           <el-radio label="0">Single Choice</el-radio>
           <el-radio label="1">Multiple Choices</el-radio>
           <el-radio label="2">True or False</el-radio>
+          <el-radio label="3">Text Match</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="Question:" prop="title">
         <el-input v-model="quizData.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
-      #aaaaaaaaaaaaaaaaaaaaaaa{{quizData}}<br>
-      #bbbbbbbbbbbbbbbbbbbbbbb{{originalQuizData}}
       <!-- 单选题 -->
       <el-form-item label="Answer options:" v-if="quizData.type == 0">
         <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
@@ -54,6 +53,15 @@
           </span>
         </el-radio-group>
 
+      </el-form-item>
+
+      <!-- 文本匹配题 -->
+      <el-form-item label="Answers:" v-if="quizData.type == 3">
+        <div class="flex-center-between" v-for="(opt, index) in quizData.options">
+          <el-input type="textarea" v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
+          <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
+        </div>
+        <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More</el-button>
       </el-form-item>
 
       <el-form-item label="Score:" prop="score">
