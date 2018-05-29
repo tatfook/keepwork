@@ -155,7 +155,7 @@ const mutations = {
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
     const modList = activeModList(state)
-    Parser.updateBlock(modList, key, code)
+    Parser.updateBlockCode(modList, key, code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }

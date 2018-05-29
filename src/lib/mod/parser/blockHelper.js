@@ -42,7 +42,7 @@ const blockHelper = {
   },
 
   isMarkdownMod(block) {
-    return block.cmd === MARKDOWN_CMD
+    return block && block.cmd === MARKDOWN_CMD
   },
 
   isOnEdit(block, lineNumber) {
