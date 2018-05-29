@@ -132,6 +132,19 @@ export const getPageInfoByPath = path => {
   return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
 }
 
+/**
+ * @param {*} filename string
+ * @param {*} ext string
+ * ('filename', 'ext') => 'filename.ext'
+ * ('filename.ext', 'ext') => 'filename.ext'
+ */
+export const getFilenameWithExt = (filename, ext) => {
+  let filenameExt = /.+\./.test(filename) ? filename.split('.').pop() : ''
+  filenameExt = filenameExt.toLowerCase()
+  filename = filenameExt !== ext ? `${filename}.${ext}` : filename
+  return filename
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   CONFIG_FOLDER_NAME,
@@ -141,5 +154,6 @@ export default {
   getFileFullPathByPath,
   getFileSitePathByPath,
   getRelativePathByPath,
-  getPageInfoByPath
+  getPageInfoByPath,
+  getFilenameWithExt
 }

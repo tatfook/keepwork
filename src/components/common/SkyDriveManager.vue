@@ -70,6 +70,7 @@
           <span class='el-icon-delete' @click='handleRemove(scope.row)'></span>
           <span class='iconfont icon-copy' @click='handleCopy(scope.row.file.download_url)'></span>
           <span class='iconfont icon-insert' @click='handleInsert(scope.row)'></span>
+          <span class='el-icon-edit' @click='handleRename(scope.row)'></span>
         </template>
       </el-table-column>
     </el-table>
@@ -92,6 +93,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import _ from 'lodash'
 
 export default {
@@ -118,11 +120,12 @@ export default {
         let { file, checked } = item
         let { size, filename, type } = file
         let ext = /.+\./.test(filename) ? filename.split('.').pop() : type
+        ext = (ext || '').toLowerCase()
         checked = Number(checked)
         size = this.biteToM(size) + 'MB'
         let checkedState = checked === 1 ? '通过' : checked === 2 ? '未通过' : '审核中'
         return {...item, size, type, ext, checkedState }
-      })
+      }).filter(this.itemFilterBySearchWord)
     },
     info() {
       let {total = 0, used = 0} = this.userSkyDriveInfo
@@ -197,7 +200,26 @@ export default {
       await this.editorInsertNewLine({ newline })
       this.$emit('close')
     },
-    async changeFileName(_id, filename) {
+    async handleRename(item) {
+      let { _id, ext } = item
+      let { value: newname } = await this.$prompt('Please input new filename', 'Tip', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        inputValidator: str => {
+          let newname = getFilenameWithExt(str, ext)
+          let errMsg = '文件名和现有名字重复'
+          return this.userSkyDriveFileList.filter(({ filename }) => filename === newname).length ? errMsg : true
+        }
+      })
+
+      newname = (newname || '').trim()
+      if (!newname) return
+
+      let newnameExt = /.+\./.test(newname) ? newname.split('.').pop() : ''
+      newnameExt = newnameExt.toLowerCase()
+      newname = newnameExt !== ext ? `${newname}.${ext}` : newname
+
+      let filename = newname
       this.loading = true
       await this.userChangeFileNameInSkyDrive({_id, filename}).catch(err => console.error(err))
       this.loading = false
@@ -239,7 +261,13 @@ export default {
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
     },
-    biteToM: (bite = 0) => (bite/(1024*1024)).toFixed(2).toString().replace(/\.*0*$/, '')
+    biteToM: (bite = 0) => (bite/(1024*1024)).toFixed(2).toString().replace(/\.*0*$/, ''),
+    itemFilterBySearchWord({ filename }) {
+      let searchWord = this.searchWord && this.searchWord.trim().toLowerCase()
+      if (!searchWord) return true
+      let filenameLowerCase = (filename || '').toLowerCase()
+      return filenameLowerCase.indexOf(searchWord) >= 0
+    }
   },
   filters: {
     biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, '')
