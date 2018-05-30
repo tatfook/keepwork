@@ -66,11 +66,32 @@
         class-name="skydrive-manager-cell-actions"
         label="操作">
         <template slot-scope="scope">
-          <a class='el-icon-download' target='_blank' :href='scope.row.file.download_url'></a>
-          <span class='el-icon-delete' @click='handleRemove(scope.row)'></span>
           <span class='iconfont icon-copy' @click='handleCopy(scope.row.file.download_url)'></span>
           <span class='iconfont icon-insert' @click='handleInsert(scope.row)'></span>
-          <span class='el-icon-edit' @click='handleRename(scope.row)'></span>
+          <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' @click='download(scope.row.file)'></span>
+
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="el-icon-more el-icon--right"></i>
+            </span>
+            <el-dropdown-menu class='skydrive-manager-cell-actions-menu' slot="dropdown">
+              <el-dropdown-item>
+                <label class='el-icon-refresh'>
+                  <input type="file" :accept="'.' + scope.row.ext" style="display:none;" @change='e => handleUpdateFile(e, scope.row)'>
+                  <span>更新</span>
+                </label>
+              </el-dropdown-item>
+              <el-dropdown-item @click.native='handleRename(scope.row)'>
+                <span class='el-icon-edit'></span>
+                重命名
+              </el-dropdown-item>
+              <el-dropdown-item @click.native='handleRemove(scope.row)'>
+                <span class='el-icon-delete'></span>
+                删除
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
         </template>
       </el-table-column>
     </el-table>
@@ -106,7 +127,7 @@ export default {
     }
   },
   async mounted() {
-    await this.userRefreshSkyDrive()
+    await this.userRefreshSkyDrive({useCache: false})
     this.loading = false
   },
   computed: {
@@ -138,6 +159,7 @@ export default {
     ... mapActions({
       userRefreshSkyDrive: 'user/refreshSkyDrive',
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
+      userUpdateFileInSkyDrive: 'user/updateFileInSkyDrive',
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       editorInsertNewLine: 'insertNewLine'
@@ -152,8 +174,24 @@ export default {
     },
     async uploadFile(file) {
       if (!file) return
+
+      let filenameValidateResult = this.filenameValidator(file.name)
+      if (filenameValidateResult !== true) throw new Error(filenameValidateResult)
+
       this.loading = true
       await this.userUploadFileToSkyDrive({file, onProgress(progress) {
+        console.log(progress)
+      }}).catch(err => console.error(err))
+      await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      this.loading = false
+    },
+    async handleUpdateFile(e, bigfileToUpdate) {
+      let file = _.get(e, ['target', 'files', 0])
+      console.log('handleUpdateFile: ', file, bigfileToUpdate)
+      if (file.type !== bigfileToUpdate.file.type) throw new Error('file type don\'t match')
+
+      this.loading = true
+      await this.userUpdateFileInSkyDrive({file, bigfileToUpdate, onProgress(progress) {
         console.log(progress)
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
@@ -205,11 +243,7 @@ export default {
       let { value: newname } = await this.$prompt('Please input new filename', 'Tip', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        inputValidator: str => {
-          let newname = getFilenameWithExt(str, ext)
-          let errMsg = '文件名和现有名字重复'
-          return this.userSkyDriveFileList.filter(({ filename }) => filename === newname).length ? errMsg : true
-        }
+        inputValidator: str => this.filenameValidator(getFilenameWithExt(str, ext))
       })
 
       newname = (newname || '').trim()
@@ -224,6 +258,10 @@ export default {
       await this.userChangeFileNameInSkyDrive({_id, filename}).catch(err => console.error(err))
       this.loading = false
     },
+    filenameValidator(newFilename) {
+      let errMsg = '文件名和现有名字重复'
+      return this.userSkyDriveFileList.filter(({ filename }) => filename === newFilename).length ? errMsg : true
+    },
     handleSelectionChange(selectionResults) {
       this.multipleSelectionResults = selectionResults
     },
@@ -234,6 +272,7 @@ export default {
       })
     },
     async download({ filename, download_url }) {
+      if (!download_url) return
       await new Promise((resolve, reject) => {
         let a = document.createElement('a')
         a.style.display = 'none'
@@ -308,16 +347,37 @@ export default {
       white-space: nowrap;
     }
   }
-  &-cell-actions [class*="icon"] {
-    display: inline-block;
-    margin-right: 10px;
-    font-size: 20px;
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  &-cell-actions [class*="iconfont"] {
-    font-size: 16px;
+  &-cell-actions, &-cell-actions-menu {
+    [class*="icon"] {
+      display: inline-block;
+      margin-right: 10px;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      &.disabled {
+        color: #bbb;
+        cursor: not-allowed;
+      }
+      &::before {
+        font-size: 16px;
+      }
+      &.el-icon-refresh::before {
+        margin-right: 10px;
+      }
+      &.el-icon-download:before {
+        font-size: 18px;
+      }
+    }
+    [class*="iconfont"]::before {
+      font-size: 16px;
+    }
+    .el-dropdown {
+      float: right;
+    }
+    .el-icon-more {
+      color: #858585;
+      transform: rotate(90deg);
+    }
   }
 }
 </style>
