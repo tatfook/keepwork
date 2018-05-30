@@ -77,7 +77,7 @@ export default {
       return _.get(this.settedPageLayout, 'id', NaN)
     },
     selectedLayout() {
-      return this.userSiteLayoutsMap[this.selectedLayoutId || this.selectedLayoutId]
+      return this.userSiteLayoutsMap[this.selectedLayoutId]
     },
     selectedStyleComponent() {
       return stylesList[_.get(this.selectedLayout, 'styleName', 'basic')]
