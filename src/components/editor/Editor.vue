@@ -297,8 +297,12 @@ export default {
     openSkyDriveManagerDialog() {
       this.isSkyDriveManagerDialogShow = true
     },
-    closeSkyDriveManagerDialog() {
+    closeSkyDriveManagerDialog({ file, url }) {
       this.isSkyDriveManagerDialogShow = false
+      if (url) {
+        let filename = file.filename || url
+        this.$refs.codemirror.insertFile(filename, url)
+      }
     }
   }
 }

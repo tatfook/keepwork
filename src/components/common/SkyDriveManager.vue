@@ -66,8 +66,8 @@
         class-name="skydrive-manager-cell-actions"
         label="操作">
         <template slot-scope="scope">
-          <span class='iconfont icon-copy' @click='handleCopy(scope.row.file.download_url)'></span>
-          <span class='iconfont icon-insert' @click='handleInsert(scope.row)'></span>
+          <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' @click='handleCopy(scope.row.file.download_url)'></span>
+          <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' @click='handleInsert(scope.row)'></span>
           <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' @click='download(scope.row.file)'></span>
 
           <el-dropdown>
@@ -127,7 +127,7 @@ export default {
     }
   },
   async mounted() {
-    await this.userRefreshSkyDrive({useCache: false})
+    await this.userRefreshSkyDrive()
     this.loading = false
   },
   computed: {
@@ -161,8 +161,7 @@ export default {
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
       userUpdateFileInSkyDrive: 'user/updateFileInSkyDrive',
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
-      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
-      editorInsertNewLine: 'insertNewLine'
+      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive'
     }),
     handleUploadFile(e) {
       let file = _.get(e, ['target', 'files', 0])
@@ -232,11 +231,8 @@ export default {
         message: '文件尚未通过审核',
         type: 'error'
       })
-
       let url = file.download_url
-      let newline = `${/image\/\w+/.test(file.type) ? '!' : ''}[${file.filename}](${url})`
-      await this.editorInsertNewLine({ newline })
-      this.$emit('close')
+      this.$emit('close', { file, url })
     },
     async handleRename(item) {
       let { _id, ext } = item
