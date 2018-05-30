@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, GitAPI, skyDrive } from '@/api'
+import { keepwork, GitAPI, skyDrive, sensitiveWord } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
@@ -331,6 +331,10 @@ const actions = {
   async changeFileNameInSkyDrive(context, {_id, filename}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.changeFileName({_id, filename}, authRequestConfig)
+  },
+  async checkSensitive(context, {checkedWords}) {
+    let result = await sensitiveWord.checkSensitiveWords(checkedWords)
+    return result
   }
 }
 

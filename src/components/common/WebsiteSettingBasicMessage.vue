@@ -59,7 +59,8 @@ export default {
     ...mapActions({
       gitlabUploadFile: 'gitlab/uploadFile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
-      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
+      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
+      userCheckSensitive: 'user/checkSensitive'
     }),
     async siteLogoUpload(e) {
       this.loading = true
@@ -92,29 +93,34 @@ export default {
         }
       })
     },
-    async checkSensitive() {},
+    async checkSensitive() {
+      let checkedWords = [this.basicMessage.displayName, this.basicMessage.desc]
+      let result = await this.userCheckSensitive({ checkedWords })
+      return result && result.length > 0
+    },
     async submitChange() {
       this.loading = true
+      let isSensitive = await this.checkSensitive()
+      if (isSensitive) {
+        this.showErrorMsg('您输入的内容不符合互联网安全规范，请修改')
+        return
+      }
       await this.userSaveSiteBasicSetting({
         newBasicMessage: this.basicMessage
       })
-      this.loading = false
       this.showResultInfo()
     },
-    showResultInfo(type) {
-      let showMessage = ''
-      type = type === 'error' ? type : 'success'
-      switch (type) {
-        case 'error':
-          showMessage = '保存失败，请稍后再试'
-          break
-        default:
-          showMessage = '恭喜你，保存成功'
-          break
-      }
+    showResultInfo() {
+      this.loading = false
       this.$message({
-        message: showMessage,
-        type: type
+        message: '恭喜你，保存成功',
+        type: 'success'
+      })
+    },
+    showErrorMsg(errorMsg) {
+      this.loading = false
+      this.$alert(errorMsg, '错误提示', {
+        confirmButtonText: '确定'
       })
     },
     handleClose() {

@@ -14,6 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "aho-corasick.js": "0.0.1",
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "element-ui": "^2.3.0",
