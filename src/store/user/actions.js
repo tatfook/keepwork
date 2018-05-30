@@ -311,6 +311,12 @@ const actions = {
     let url = await skyDrive.upload({file, onProgress}, authRequestConfig)
     return url
   },
+  async updateFileInSkyDrive(context, {file, onProgress, bigfileToUpdate}) {
+    let { dispatch, getters: { authRequestConfig } } = context
+    await dispatch('getProfile')
+    let url = await skyDrive.update({file, onProgress, bigfileToUpdate}, authRequestConfig)
+    return url
+  },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.remove({file}, authRequestConfig)

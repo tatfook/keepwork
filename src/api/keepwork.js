@@ -160,6 +160,7 @@ export const bigfile = {
   getByUsername: (...args) => post('bigfile/getByUsername', ...args),
   getUserStoreInfo: (...args) => post('bigfile/getUserStoreInfo', ...args),
   deleteById: (...args) => post('bigfile/deleteById', ...args),
+  updateById: (...args) => post('bigfile/updateById', ...args),
   getByFilenameList: (...args) => post('bigfile/getByFilenameList', args),
   changeFilename: (...args) => post('bigfile/changeFilename', ...args),
   getDownloadUrlById: (...args) => post('bigfile/getDownloadUrlById', ...args),
