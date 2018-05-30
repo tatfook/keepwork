@@ -24,7 +24,6 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import stylesList from '@/components/adi/layout/templates'
-import stylesList1 from '@/components/adi/layout/templates'
 import { getPageInfoByPath } from '@/lib/utils/gitlab'
 
 export default {
