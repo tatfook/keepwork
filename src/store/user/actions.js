@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, GitAPI } from '@/api'
+import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
@@ -22,7 +22,8 @@ const {
   GET_WEB_TEMPLATE_FILE_SUCCESS,
   SET_PAGE_STAR_DETAIL,
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
-  SAVE_SITE_LAYOUT_CONFIG_SUCCESS
+  SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
+  GET_FROM_SKY_DRIVE_SUCCESS
 } = props
 
 const actions = {
@@ -52,7 +53,7 @@ const actions = {
         }).catch(async e => {
           alert('尚未登陆，请登陆后访问！')
           // login for localhost test
-          if (location.hostname === 'localhost') {
+          if (process.env.HOST_ENV === 'localhost') {
             let payload = {
               username: prompt('username: '),
               password: prompt('password: ')
@@ -187,6 +188,8 @@ const actions = {
     if (useCache && !_.isEmpty(contributedSiteList)) return
 
     let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
+    list = _.values(list).filter(({siteinfo, siteuser} = {}) => siteinfo && siteuser)
+
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
@@ -279,6 +282,42 @@ const actions = {
     let { commit } = context
     let pageDetail = await keepwork.pages.getDetail({url, visitor})
     commit(SET_PAGE_STAR_DETAIL, pageDetail)
+  },
+  async refreshSkyDrive({ dispatch }, {useCache = true} = {}) {
+    await Promise.all([
+      dispatch('getInfoFromSkyDrive', {useCache}),
+      dispatch('getFileListFromSkyDrive', {useCache})
+    ])
+  },
+  async getInfoFromSkyDrive(context, {useCache = true} = {}) {
+    let { commit, getters } = context
+    let { username, skyDriveInfo, authRequestConfig } = getters
+    if (useCache && !_.isEmpty(skyDriveInfo)) return
+
+    let info = await skyDrive.info(null, authRequestConfig)
+    commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
+  },
+  async getFileListFromSkyDrive(context, {useCache = true} = {}) {
+    let { commit, getters } = context
+    let { username, skyDriveFileList, authRequestConfig } = getters
+    if (useCache && !_.isEmpty(skyDriveFileList)) return
+
+    let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
+    commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
+  },
+  async uploadFileToSkyDrive(context, {file, onProgress}) {
+    let { dispatch, getters: { authRequestConfig } } = context
+    await dispatch('getProfile')
+    let url = await skyDrive.upload({file, onProgress}, authRequestConfig)
+    return url
+  },
+  async removeFileFromSkyDrive(context, {file}) {
+    let { getters: { authRequestConfig } } = context
+    await skyDrive.remove({file}, authRequestConfig)
+  },
+  async changeFileNameInSkyDrive(context, {_id, filename}) {
+    let { getters: { authRequestConfig } } = context
+    await skyDrive.changeFileName({_id, filename}, authRequestConfig)
   }
 }
 

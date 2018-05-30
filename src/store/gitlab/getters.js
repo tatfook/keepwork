@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import { GitAPI } from '@/api'
 import {
+  gitTree2NestedArray,
   getFileFullPathByPath,
-  EMPTY_GIT_FOLDER_KEEPER
+  EMPTY_GIT_FOLDER_KEEPER,
+  CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
 const gitlabAPICache = {}
@@ -12,25 +14,6 @@ const getGitlabAPI = config => {
     gitlabAPICache[cacheKey] ||
     (gitlabAPICache[cacheKey] = new GitAPI(config))
   return gitlabAPI
-}
-
-/*doc
-  getGitFileOptionsByPath
-  we need {projectId, ref} to access file in gitlab server
-  we use 'master' as default ref usually
-*/
-const getGitFileOptionsByPath = (rootGetters, path) => {
-  let personalAndContributedSitePathMap =
-    rootGetters['user/personalAndContributedSitePathMap']
-  let [username, sitename] = path.split('/').filter(x => x)
-
-  let { projectId, lastCommitId: ref = 'master' } = _.get(
-    personalAndContributedSitePathMap,
-    `${username}/${sitename}`
-  )
-  let gitFileParams = { projectId, ref }
-
-  return gitFileParams
 }
 
 const getProjectIdByPath = (rootGetters, path) => {
@@ -75,14 +58,20 @@ const getters = {
       .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
   },
+  childrenByPath: (
+    state,
+    { repositoryTreesAllFiles = [] }
+  ) => path => {
+    let children = gitTree2NestedArray(repositoryTreesAllFiles, path).filter(
+      ({ name, path: filePath }) => name !== CONFIG_FOLDER_NAME && name !== EMPTY_GIT_FOLDER_KEEPER
+    )
+    return children
+  },
   files: state => state.files,
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']
     return getGitlabAPI(config)
-  },
-  getGitFileOptionsByPath: (state, getters, rootState, rootGetters) => path => {
-    return getGitFileOptionsByPath(rootGetters, path)
   },
 
   getProjectIdByPath: (state, getters, rootState, rootGetters) => path => {

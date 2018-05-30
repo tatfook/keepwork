@@ -28,17 +28,16 @@ export default {
   undo(undoManager, callback) {
     if (this.canUndo(undoManager)) {
       var item = undoManager.stack[--undoManager.position]
-      if (callback) {
-        callback(item)
+      if (callback && item) {
+        callback(item.newCode, item.cursor)
       }
     }
   },
   redo(undoManager, callback) {
     if (this.canRedo(undoManager)) {
       var item = undoManager.stack[++undoManager.position]
-
-      if (callback) {
-        callback(item)
+      if (callback && item) {
+        callback(item.newCode, item.cursor)
       }
     }
   },

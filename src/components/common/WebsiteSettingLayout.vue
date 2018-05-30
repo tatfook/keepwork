@@ -36,20 +36,20 @@
                     :class="{is_default: unsavedDefaultLayoutId==layout.id}"
                     size="mini" type="text"
                     @click.stop="setDefault(layout)"
-                    icon="iconfont icon-sheweimoren"
+                    icon="iconfont icon-default"
                     :title="$t('editor.default')">
                   </el-button>
                   <el-button
                     size="mini" type="text"
                     @click.stop="editLayout(layout)"
-                    icon="iconfont icon-zhongmingming-copy"
+                    icon="iconfont icon-edit-"
                     :title="$t('editor.rename')">
                   </el-button>
                   <el-button
                     size="mini"
                     type="text"
                     @click.stop="removeLayout(layout)"
-                    icon="iconfont icon-shanchu-copy"
+                    icon="iconfont icon-delete"
                     :title="$t('editor.delete')">
                   </el-button>
                 </span>

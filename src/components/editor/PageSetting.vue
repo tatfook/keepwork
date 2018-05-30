@@ -68,7 +68,7 @@ export default {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)
     },
     userSiteLayoutsMap() {
-      return _.keyBy(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), 'id')
+      return _.filter(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), o => !o.deleted)
     },
     settedPageLayout() {
       return this.userGetSettedPageLayoutByPath(this.pagePath)

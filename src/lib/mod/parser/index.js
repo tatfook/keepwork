@@ -21,9 +21,15 @@ const endModBlock = (blockList, curModBlock) => {
   blockList.push(_.cloneDeep(curModBlock))
 }
 
+const buildBlock = (cmd, jsonData, beginLine) => {
+  let block = new ModBlock(cmd, beginLine || 1)
+  if (jsonData) BlockHelper.updateJson(block, jsonData)
+  return block
+}
+
 const buildBlockList = mdText => {
   if (!mdText) return []
-  let mdLines = mdText.trim().split('\n')
+  let mdLines = mdText.split('\n')
   let blockList = []
   let curModBlock = null
   _.forEach(mdLines, (line, lineNumber) => {
@@ -62,7 +68,7 @@ const updateBlockList = (blockList, newBlockList) => {
     } else if (block.key !== newBlock.key) {
       if (block.modType === newBlock.modType) {
         if (block.modKey === newBlock.modKey) {
-          // if block data wasn't changed, update the lineBegin value
+          // if block data wasn't changed, keep the old mod and old uuid, just update the lineBegin value
           BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
         } else {
           // if block data was changed, remove and replace with the new one
@@ -75,6 +81,7 @@ const updateBlockList = (blockList, newBlockList) => {
   })
 
   blockList.splice(newBlockList.length, blockList.length - newBlockList.length)
+  return blockList
 }
 
 const updateBlocksBeginLine = (blockList, beginIndex, lengthDiff) => {
@@ -86,7 +93,7 @@ const updateBlocksBeginLine = (blockList, beginIndex, lengthDiff) => {
 }
 
 const getBlockLines = (mdText, block) => {
-  let mdLines = mdText.trim().split('\n')
+  let mdLines = mdText.split('\n')
   let blockLines = []
   for (let i = BlockHelper.contentBegin(block) - 1; i < mdLines.length; i++) {
     if (
@@ -101,7 +108,22 @@ const getBlockLines = (mdText, block) => {
   return blockLines
 }
 
-const updateBlock = (blockList, key, mdText) => {
+// make sure to check this func before update block code
+// ONLY update block code if the changed lines are safe(no insert and no delete)
+const willAffectModData = (block, mdLines) => {
+  for (let i = 0; i < mdLines.length; i++) {
+    if (
+      (CmdHelper.isCmdEnd(mdLines[i]) &&
+        !BlockHelper.isMarkdownMod(block)) ||
+        CmdHelper.isCmdLine(mdLines[i])
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
+const updateBlockCode = (blockList, key, mdText) => {
   let blockIndex = blockList.map(el => el.key).indexOf(key)
   if (blockIndex === -1) return
   let block = blockList[blockIndex]
@@ -118,7 +140,19 @@ const updateBlockAttribute = (blockList, blockKey, key, value) => {
   if (blockIndex === -1) return
   let block = blockList[blockIndex]
   BlockHelper.updateJsonValue(block, key, value)
+  updateBlocksBeginLine(blockList, blockIndex + 1, block.lengthDiff)
   return block
+}
+
+const tryToMergeBlock = (blockList, index) => {
+  let block = blockList[index]
+  let nextBlock = blockList[index + 1]
+
+  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock)) return
+
+  BlockHelper.updateMarkdown(block, _.concat([], block.md, nextBlock.md))
+  deleteBlock(blockList, nextBlock.key)
+  updateBlocksBeginLine(blockList, index + 1, block.lengthDiff)
 }
 
 const deleteBlock = (blockList, key) => {
@@ -130,8 +164,7 @@ const deleteBlock = (blockList, key) => {
     -1 - BlockHelper.textLength(block)
   )
   blockList.splice(blockIndex, 1)
-
-  return block
+  if (!BlockHelper.isMarkdownMod(block)) tryToMergeBlock(blockList, blockIndex - 1)
 }
 
 const moveBlock = (blockList, oldIndex, newIndex) => {
@@ -166,50 +199,52 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
     BlockHelper.modifyBegin(curBlock, position - curBlock.lineBegin)
     tempIndex++
   }
+
+  // step 3 try to merge mods
+  tryToMergeBlock(blockList, newIndex)
+  tryToMergeBlock(blockList, newIndex - 1)
+  tryToMergeBlock(blockList, oldIndex)
+  tryToMergeBlock(blockList, oldIndex - 1)
 }
 
-const addBlockAfterIndex = (blockList, index, jsonData, cmd) => {
+const addBlockAfterIndex = (blockList, index, newBlock) => {
   let preBlock = blockList[index]
   let beginLine = 1
   if (preBlock) {
     beginLine = BlockHelper.endLine(preBlock)
-    // just for beautify, see also in buildMarkdown function(line 196)
+    // just for beautify, see also in buildMarkdown function
     if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 1
   }
-  let block = new ModBlock(cmd, beginLine)
-  BlockHelper.updateJson(block, jsonData)
-  blockList.splice(index + 1, 0, block)
-  updateBlocksBeginLine(blockList, index + 2, BlockHelper.textLength(block) + 1)
+  BlockHelper.modifyBegin(newBlock, beginLine - newBlock.lineBegin)
+  blockList.splice(index + 1, 0, newBlock)
+  updateBlocksBeginLine(blockList, index + 2, BlockHelper.textLength(newBlock) + 1)
 
-  return block
+  if (BlockHelper.isMarkdownMod(newBlock)) {
+    tryToMergeBlock(blockList, index)
+    tryToMergeBlock(blockList, index + 1)
+  }
+  return newBlock
 }
 
-const addBlockByKey = (blockList, key, jsonData, cmd, position) => {
+const addBlockByKey = (blockList, key, newBlock, position) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
   if (position === gConst.POSITION_BEFORE) index = index - 1
-  return addBlockAfterIndex(blockList, index, jsonData, cmd)
+  return addBlockAfterIndex(blockList, index, newBlock)
 }
 
 const buildMarkdown = blockList => {
   let lines = []
   _.forEach(blockList, block => {
-    lines.push(BlockHelper.lines(block))
-    if (!BlockHelper.isMarkdownMod(block)) lines.push('')
+    while (block.lineBegin > lines.length + 1) lines.push('') // keep the empty lines
+    lines = _.concat(lines, BlockHelper.lines(block))
   })
   return _.flatten(lines).join('\n')
 }
 
-const buildJsonData = blockList => {
-  let modList = []
-  _.forEach(blockList, block => {
-    modList.push(block.jsonData)
-  })
-  return modList
-}
-
 const getCmd = modName => {
-  return modName.slice(3, modName.length)
+  let cmd = modName.slice(3, modName.length)
+  return CmdHelper.isValidCmd(cmd) ? cmd : ''
 }
 
 const getActiveBlock = (blockList, beginLine) => {
@@ -220,42 +255,30 @@ const getActiveBlock = (blockList, beginLine) => {
   }
 }
 
-const willAffectModData = (block, mdLines) => {
-  for (let i = 0; i < mdLines.length; i++) {
-    if (
-      (CmdHelper.isCmdEnd(mdLines[i]) &&
-        !BlockHelper.isMarkdownMod(block)) ||
-        CmdHelper.isCmdLine(mdLines[i])
-    ) {
-      return true
-    }
-  }
-  return false
-}
-
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
-  let mdLines = code.trim().split('\n')
+  if (CmdHelper.isMarkdownCmd(getCmd(modName))) return code
+
+  let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
-  // TODO: hard code here
-  cmdCode += '- styleID : ' + styleID + '\n'
-  cmdCode += '```\n'
+  if (styleID) cmdCode += 'styleID: ' + styleID
+  cmdCode += '\n```\n'
   mdLines.splice(position + 1, 0, cmdCode)
   return mdLines.join('\n')
 }
 
 export default {
+  buildBlock,
   buildBlockList,
   buildMarkdown,
-  buildJsonData,
   updateBlockList,
-  updateBlock,
+  willAffectModData,
+  updateBlockCode,
   updateBlockAttribute,
   deleteBlock,
   moveBlock,
   addBlockAfterIndex,
   addBlockByKey,
+  addBlockToMarkdown,
   getCmd,
-  getActiveBlock,
-  willAffectModData,
-  addBlockToMarkdown
+  getActiveBlock
 }

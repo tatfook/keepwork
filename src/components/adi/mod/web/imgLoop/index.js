@@ -1,29 +1,24 @@
 /*doc
 ---
-title: imgLoop Mod
-name: imgLoop Mod
+title: ImgLoop Mod
+name: ImgLoop Mod
 category: Adi Mod
 ---
 
-## @ImgLoop
+This is the ImgLoop Mod for usage.
 
-## 参数说明
+```@ImgLoop
+styleID: // 样式ID
+imgLoop:
+  data:
+    - img: // 轮播图1来源地址链接
+      link: // 轮播图1点击跳转链接
+    - img: // 轮播图2来源地址链接
+      link: // 轮播图2点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
 
 ```
-- styleID :  //样式ID
 
-# imgLoop
-
-# imgLoop.data
-
-# imgLoop.data.0
-- img : // 轮播图1 图片地址
-- link : // 轮播图1 图片链接
-
-# imgLoop.data.1
-- img : // 轮播图2 图片地址
-- link : // 轮播图2 图片链接
-```
 */
 
 import { generateProperties } from '@/components/adi/mod/base/base.utils'

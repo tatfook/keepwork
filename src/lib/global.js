@@ -24,7 +24,7 @@ export const gTheme = {
       'padding-bottom': gThemeData['mod-space-computer']
     }
   },
-  '@media only screen and (max-width: 1080px)': {
+  '@media only screen and (max-width: 1079px)': {
     'mod-full-width': {
       padding: '0 20px'
     },

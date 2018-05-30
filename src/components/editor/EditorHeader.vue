@@ -53,13 +53,13 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-baocun' :title='$t("editor.save")' @click='save'></span>
+        <span v-loading='savePending' class='iconfont icon-save' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-fanhui' :title='$t("editor.revoke")'></span>
+        <span class='iconfont icon-return' :title='$t("editor.revoke")'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-chongzuo' :title='$t("editor.redo")'></span>
+        <span class='iconfont icon-revocation' :title='$t("editor.redo")'></span>
       </el-menu-item>
       <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -75,7 +75,7 @@
         </el-dropdown>
       </el-menu-item> -->
       <el-menu-item index='2' class="link-box">
-        <i class="iconfont icon-fuzhi1" @click='doCopyLink'></i>
+        <i class="iconfont icon-copy" @click='doCopyLink'></i>
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='8' class='unsaved-tip'>
@@ -169,24 +169,26 @@ export default {
       if (this.isActivePageSaved) {
         return
       }
-      this.savePending = true
-      await this.saveActivePage()
-        .then(() => {
-          this.$message({
-            showClose: true,
-            message: self.$t('editor.saveSuccess'),
-            type: 'success'
+      if(!this.savePending) {
+        this.savePending = true
+        await this.saveActivePage()
+          .then(() => {
+            this.$message({
+              showClose: true,
+              message: self.$t('editor.saveSuccess'),
+              type: 'success'
+            })
           })
-        })
-        .catch(e => {
-          console.log(e)
-          this.$message({
-            showClose: true,
-            message: self.$t('editor.saveFail'),
-            type: 'error'
+          .catch(e => {
+            console.log(e)
+            this.$message({
+              showClose: true,
+              message: self.$t('editor.saveFail'),
+              type: 'error'
+            })
           })
-        })
-      this.savePending = false
+        this.savePending = false
+      }
     },
     openNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = true
@@ -239,7 +241,7 @@ export default {
   top: .3em;
   border-bottom: 2px solid #F7BC2A !important;
 }
-.save-btn:not(.is-disabled) .icon-baocun {
+.save-btn:not(.is-disabled) .icon-save {
   background: #F7BC2A;
   border-color: #F7BC2A;
   color: white;

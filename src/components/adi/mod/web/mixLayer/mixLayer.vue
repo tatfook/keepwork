@@ -1,33 +1,32 @@
 <script>
 /*doc
 ---
-title: mixLayer Mod
-name: mixLayer Mod
+title: MixLayer Mod
+name: MixLayer Mod
 category: Adi Mod
 ---
 
-## @mixLayer
+This is the MixLayer Mod for usage.
 
-## 参数说明
+```@MixLayer
+styleID: // 样式ID
+media:
+  src: // 图片来源地址链接
+  link: // 图片点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+title:
+  name: // 标题名称
+  link: // 标题点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+subtitle:
+  name: // 副标题名称
+  link: // 副标题点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+paragraph:
+  data: // 文档内容
 
 ```
-- styleID : //当前样式id
 
-#media
-- src  : //当前图片地址
-- link : //当前图片跳转链接
-
-#title
-- name : //当前标题内容
-- link : //当前标题跳转链接
-
-#subtitle
-- name : //当前副标题内容
-- link : //当前副标题跳转链接
-
-#paragraph
-- data : //当前文档内容
-```
 */
 
 import baseMixin from '../../base/base.mixin'

@@ -308,6 +308,7 @@
     "worldName": "name",
     "author": "author",
     "version": "version",
+    "viewTimesImg": "view Times Image",
     "updateTime": "update time",
     "viewTimes": "view times",
     "size": "size",
@@ -330,7 +331,8 @@
     "download": "Download",
     "enter": "Enter",
     "innerModal": "Inner modal",
-    "bigFile": "Big file"
+    "bigFile": "Big file",
+    "iframe": "iframe"
   },
   "field": {
     "fileId": "file Id",
@@ -345,6 +347,8 @@
     "title": "title",
     "extraMsg": "Extra msg",
     "channel": "channel",
-    "number": "number"
+    "number": "number",
+    "width": "width",
+    "height": "height"
   }
 }

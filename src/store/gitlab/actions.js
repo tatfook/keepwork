@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import uuid from '@/lib/utils/uuid'
 import { Base64 } from 'js-base64'
+import { GitAPI } from '@/api'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import { props } from './mutations'
 import {
@@ -26,13 +27,14 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   let ref = branch
   let {
     dispatch,
-    getters: { getGitlabAPI, getGitFileOptionsByPath }
+    getters: { getGitlabAPI },
+    rootGetters: { 'user/getGitFileProjectIdAndRefByPath': getGitFileProjectIdAndRefByPath }
   } = context
   let [username, name] = path.split('/').filter(x => x)
 
   // call user/getAllPersonalAndContributedSite then we can get git file options
   await dispatch('user/getAllPersonalAndContributedSite', null, { root: true })
-  let { projectId } = getGitFileOptionsByPath(path)
+  let { projectId } = getGitFileProjectIdAndRefByPath(path)
   let gitlab = getGitlabAPI()
   let options = { projectId, ref, branch, content, commit_message: `keepwork commit: ${path}` }
 
@@ -61,14 +63,30 @@ const getGitlabFileParams = async (
 
 const actions = {
   async getRepositoryTree(context, payload) {
-    let { path, useCache = true, recursive = true } = payload
+    let { path, useCache = true, recursive = true, editorMode = true } = payload
     let {
       commit,
-      getters: { repositoryTrees }
+      dispatch,
+      getters: { repositoryTrees },
+      rootGetters
     } = context
-    let { gitlab, projectId } = await getGitlabParams(context, { path })
-    let children = _.get(repositoryTrees, [projectId, path])
 
+    let gitlab, projectId
+    if (editorMode) {
+      let gitlabParams = await getGitlabParams(context, { path })
+      gitlab = gitlabParams.gitlab
+      projectId = gitlabParams.projectId
+    } else {
+      await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
+      let {
+        'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+      } = rootGetters
+      let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
+      projectId = siteDetailInfoDataSource.projectId
+      gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
+    }
+
+    let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return
 
     let list = await gitlab.getTree({
@@ -132,7 +150,7 @@ const actions = {
       .catch(async e => {
         console.error(e)
         // try create a new file
-        await dispatch('createFile', { path: inputPath, content })
+        await dispatch('createFile', { path: getFileFullPathByPath(inputPath), content })
       })
     let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
@@ -148,7 +166,6 @@ const actions = {
       gitlab,
       options
     } = await getGitlabParams(context, { path, content })
-
     await gitlab.createFile(
       path,
       options

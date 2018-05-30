@@ -1,12 +1,12 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-      <i class="iconfont icon-bianjiqi-shanchu"></i>
+      <i class="iconfont icon-delete"></i>
       {{$t('editor.modDel')}}
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
-        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues[key]' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
+        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class='styles-container'>
@@ -63,7 +63,22 @@ export default {
     tabClickHandle(tabItem) {
       let activeName = tabItem.name
       this.setActivePropertyTabType(activeName)
-    }
+    },
+    cardValues(key) {
+      let modType = 'Mod' + this.activeMod.cmd
+      let activeModDafaultDatas = modLoader.load(modType).properties
+      let activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
+
+      if(activeModDatas && typeof(activeModDatas[key]) == 'object') {
+        _.forEach(activeModDatas[key], (itemA, keyA) => {
+          if(typeof(itemA) == 'number') {
+            activeModDatas[key][keyA] = String(itemA)
+          }
+        })
+
+        return activeModDatas[key] || null
+      }
+    },
   },
   computed: {
     activePropertyDataCopy() {
@@ -109,12 +124,6 @@ export default {
       })
 
       return filterModComponents
-    },
-    cardValues() {
-      var modType = 'Mod' + this.activeMod.cmd
-      var activeModDafaultDatas = modLoader.load(modType).properties
-      var activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
-      return activeModDatas
     },
     activeTab: {
       get() {

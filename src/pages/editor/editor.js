@@ -12,6 +12,9 @@ import { editorModule, userModule, gitlabModule, createPersistedState } from '@/
 import ElementUI from 'element-ui'
 import { broadcast } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
+import handleMessage from '@/lib/iframe'
+
+window.addEventListener('message', handleMessage)
 
 Vue.use(fullscreen)
 Vue.use(VueClipboard)

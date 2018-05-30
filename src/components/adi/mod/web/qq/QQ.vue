@@ -8,24 +8,19 @@ category: Adi Mod
 
 This is the QQ Mod for usage.
 
-## @QQ
+```@QQ
+styleID: // 样式ID
+qq:
+  number: // 填写QQ号码
+pic:
+  src: // 图片来源地址链接
+  link: // 图片点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
+desc:
+  name: // 描述名称
+  link: // 描述点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
 
-## 参数说明
-
-```
-- styleID :  //当前样式id
-
-# qq
-- number :  //填写QQ号码
-
-# pic
-- src : //图片来源地址
-- link : //图片点击跳转链接
-
-# desc  //文本描述
-- name :  //文本名称
-- link :  //文本点击跳转链接
-- target :  //链接从新窗口打开或本窗口打开
 ```
 
 */

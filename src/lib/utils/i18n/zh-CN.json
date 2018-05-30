@@ -299,6 +299,7 @@
     "author": "作者",
     "version": "版本",
     "updateTime": "更新时间",
+    "viewTimesImg": "浏览次数图标",
     "viewTimes": "浏览次数",
     "size": "大小",
     "menu": "菜单",
@@ -320,7 +321,8 @@
     "download": "下载",
     "enter": "进入",
     "innerModal": "内部模态框",
-    "bigFile": "大文件"
+    "bigFile": "大文件",
+    "iframe": "iframe"
   },
   "field": {
     "fileId": "字段",
@@ -334,6 +336,8 @@
     "title": "标题",
     "extraMsg": "额外信息",
     "channel": "渠道",
-    "number": "数字"
+    "number": "数字",
+    "width": "宽度",
+    "height": "高度"
   }
 }
