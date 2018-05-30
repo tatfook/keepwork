@@ -22,8 +22,8 @@ export default {
   computed: {
   },
   methods: {
-    handleClose() {
-      this.$emit('close')
+    handleClose(event) {
+      this.$emit('close', event)
     }
   },
   components: {
