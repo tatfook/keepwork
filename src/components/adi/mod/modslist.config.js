@@ -15,6 +15,7 @@ import ModMenu from './web/menu'
 import ModQuiz from './web/quiz'
 import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
+import ModLessonPackage from './web/lessonPackage'
 import ModTextBoard from './web/textBoard'
 // import ModPageList from './web/pageList'
 // import ModToc from './web/toc'
@@ -200,6 +201,11 @@ var modsList = [
         id: '9-4',
         label: 'ModLessonGet',
         mods: [ModLessonGet]
+      },
+      {
+        id: '9-5',
+        label: 'ModLessonPackage',
+        mods: [ModLessonPackage]
       }
     ]
   }

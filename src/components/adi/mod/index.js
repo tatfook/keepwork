@@ -15,6 +15,7 @@ import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModTeachers from './web/teachers'
 import ModLessonGet from './web/lessonGet'
+import ModLessonPackage from './web/lessonPackage'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
@@ -38,6 +39,7 @@ export const modList = {
   ModQuiz,
   ModTeachers,
   ModLessonGet,
+  ModLessonPackage,
   ModTextBoard,
   ModPageList,
   ModToc,
