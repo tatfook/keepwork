@@ -5,5 +5,8 @@ export default {
   CoverImageOfTheLesson: require('@/../static/adi/mixPosition/stitching.png'),
   AnimationOfTheLesson: '',
   animations: [],
-  vip: false
+  vip: false,
+  CodeReadLine: 0,
+  CodeWriteLine: 0,
+  Commands: 0
 }
