@@ -34,7 +34,7 @@ export default [
   // template 2
   [
     {
-      colGroup: [{ colLogoB: 'logoB' }, { colBreadCrumb: 'breadCrumb' }]
+      colGroup: [{ colLogoB: 'logoB' }, { colMenuB: 'menuB' }]
     }
   ]
 ]
