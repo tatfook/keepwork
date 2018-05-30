@@ -24,6 +24,7 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import stylesList from '@/components/adi/layout/templates'
+import stylesList1 from '@/components/adi/layout/templates'
 import { getPageInfoByPath } from '@/lib/utils/gitlab'
 
 export default {
@@ -68,7 +69,7 @@ export default {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)
     },
     userSiteLayoutsMap() {
-      return _.filter(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), o => !o.deleted)
+      return _.keyBy(_.filter(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), o => !o.deleted), 'id')
     },
     settedPageLayout() {
       return this.userGetSettedPageLayoutByPath(this.pagePath)
