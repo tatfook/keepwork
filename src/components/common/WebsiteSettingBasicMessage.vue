@@ -35,9 +35,11 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingBasicMessage',
+  props: {
+    sitePath: String
+  },
   async mounted() {
-    let path = 'kaitlyn/basic'
-    this.basicMessage = await this.getPersonalSiteInfoByPath(path)
+    this.basicMessage = await this.getPersonalSiteInfoByPath(this.sitePath)
     this.loading = false
   },
   data() {
@@ -59,27 +61,36 @@ export default {
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
       userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
     }),
-    siteLogoUpload(e) {
+    async siteLogoUpload(e) {
       this.loading = true
       let uploadingFile = e.target.files[0]
-      let fileReader = new FileReader()
+      let fileDetail = await this.readFileFromLocal(uploadingFile)
+      await this.uploadFileToGitlab(fileDetail, uploadingFile.name)
+      this.loading = false
+    },
+    async uploadFileToGitlab(fileDetail, fileName) {
       let that = this
+      let imgBase64 = fileDetail.target.result
+      await that
+        .gitlabUploadFile({
+          fileName: fileName,
+          content: imgBase64
+        })
+        .then(result => {
+          that.basicMessage.logoUrl = result
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    async readFileFromLocal(uploadingFile) {
+      let fileReader = new FileReader()
       fileReader.readAsDataURL(uploadingFile)
-      fileReader.onload = async function(fileDetail) {
-        let imgBase64 = fileDetail.target.result
-        await that
-          .gitlabUploadFile({
-            fileName: uploadingFile.name,
-            content: imgBase64
-          })
-          .then(result => {
-            that.basicMessage.logoUrl = result
-          })
-          .catch(error => {
-            console.log(error)
-          })
-        that.loading = false
-      }
+      return new Promise((resolve, reject) => {
+        fileReader.onload = function(fileDetail) {
+          resolve(fileDetail)
+        }
+      })
     },
     async checkSensitive() {},
     async submitChange() {
