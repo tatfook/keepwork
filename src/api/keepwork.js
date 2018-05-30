@@ -68,7 +68,8 @@ export const website = {
   upsert: (...args) => post('website/upsert', ...args),
   getByName: (...args) => post('website/getByName', ...args),
   getAllByUsername: (...args) => post('website/getAllByUsername', ...args),
-  getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
+  getDetailInfo: (...args) => post('website/getDetailInfo', ...args),
+  updateByName: (...args) => post('website/updateByName', ...args)
 }
 
 /*doc

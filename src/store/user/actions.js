@@ -23,6 +23,7 @@ const {
   SET_PAGE_STAR_DETAIL,
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
+  UPDATE_SITE_MSG_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS
 } = props
 
@@ -233,6 +234,12 @@ const actions = {
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
     dispatch('refreshSiteSettings', {sitePath}, {root: true})
+  },
+  async saveSiteBasicSetting(context, {newBasicMessage}) {
+    let { commit, getters } = context
+    let { authRequestConfig } = getters
+    await keepwork.website.updateByName(newBasicMessage, authRequestConfig)
+    commit(UPDATE_SITE_MSG_SUCCESS, {newBasicMessage})
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context

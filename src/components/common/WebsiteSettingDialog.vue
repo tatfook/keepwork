@@ -8,7 +8,7 @@
       </ul>
     </div>
     <div class="website-setting-content">
-      <component :is='activeSettingComp'></component>
+      <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
     </div>
   </el-dialog>
 </template>

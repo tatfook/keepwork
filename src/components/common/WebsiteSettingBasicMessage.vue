@@ -1,5 +1,5 @@
 <template>
-  <div class="website-basic-message">
+  <div class="website-basic-message" v-loading='loading'>
     <div class="website-basic-message-content">
       <el-form label-position='left' ref='basicMessageForm' :model='basicMessage' label-width='82px'>
         <el-form-item class="display-name-item" label='网站名称：'>
@@ -25,8 +25,8 @@
       </el-form>
     </div>
     <div class="website-basic-message-buttons">
-      <el-button type='primary'>{{$t('editor.save')}}</el-button>
-      <el-button>{{$t('editor.cancel')}}</el-button>
+      <el-button type='primary' @click="submitChange">{{$t('editor.save')}}</el-button>
+      <el-button @click='handleClose'>{{$t('editor.cancel')}}</el-button>
     </div>
 
   </div>
@@ -35,36 +35,79 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingBasicMessage',
-  mounted() {
-    this.basicMessage = this.getPersonalSiteInfoByPath('kaitlyn/basic')
+  async mounted() {
+    let path = 'kaitlyn/basic'
+    this.basicMessage = await this.getPersonalSiteInfoByPath(path)
+    this.loading = false
   },
   data() {
     return {
-      basicMessage: {}
+      basicMessage: {},
+      loading: true
     }
   },
   computed: {
     ...mapGetters({
-      getPersonalSiteInfoByPath: 'user/getPersonalSiteInfoByPath'
+      getPersonalSiteInfoByPath: 'user/getPersonalSiteInfoByPath',
+      getSiteDetailInfoDataSourceByPath:
+        'user/getSiteDetailInfoDataSourceByPath'
     })
   },
   methods: {
     ...mapActions({
-      gitlabSaveFile: 'gitlab/saveFile'
+      gitlabUploadFile: 'gitlab/uploadFile',
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
+      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
     }),
     siteLogoUpload(e) {
+      this.loading = true
       let uploadingFile = e.target.files[0]
       let fileReader = new FileReader()
+      let that = this
       fileReader.readAsDataURL(uploadingFile)
-      fileReader.onload = function(fileDetail) {
+      fileReader.onload = async function(fileDetail) {
         let imgBase64 = fileDetail.target.result
-        console.log(imgBase64)
-        // let savePath =  '/'+ self.dataSource.username +'_images/' + 'img_' + (new Date()).getTime();
-        // this.gitlabSaveFile({
-        //   inputPath: '',
-        //   content: imgBase64
-        // })
+        await that
+          .gitlabUploadFile({
+            fileName: uploadingFile.name,
+            content: imgBase64
+          })
+          .then(result => {
+            that.basicMessage.logoUrl = result
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        that.loading = false
       }
+    },
+    async checkSensitive() {},
+    async submitChange() {
+      this.loading = true
+      await this.userSaveSiteBasicSetting({
+        newBasicMessage: this.basicMessage
+      })
+      this.loading = false
+      this.showResultInfo()
+    },
+    showResultInfo(type) {
+      let showMessage = ''
+      type = type === 'error' ? type : 'success'
+      switch (type) {
+        case 'error':
+          showMessage = '保存失败，请稍后再试'
+          break
+        default:
+          showMessage = '恭喜你，保存成功'
+          break
+      }
+      this.$message({
+        message: showMessage,
+        type: type
+      })
+    },
+    handleClose() {
+      this.$emit('close')
     }
   }
 }
@@ -131,7 +174,7 @@ export default {
     .profile {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
     .vue-cropper {
       width: 340px;
