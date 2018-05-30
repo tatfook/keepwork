@@ -316,13 +316,12 @@ export default [
         height: '64px',
         width: '180px'
       },
-      colBreadCrumb: {
-        height: '64px',
+      colMenuB: {
         display: 'flex',
         'justify-content': 'center',
         'align-items': 'center'
       },
-      breadCrumb: {
+      menuB: {
         width: 'auto'
       }
     },
@@ -332,18 +331,17 @@ export default [
         xs: { span: 24 },
         sm: { span: 9 }
       },
-      colBreadCrumb: {
+      colMenuB: {
         xs: { span: 24 },
         sm: { span: 15 }
       }
     },
     theme: {
-      root: [],
-      colGroupRow: ['mod-full-width']
+      root: []
     },
     options: {
       theme: {
-        breadCrumb: {
+        menuB: {
           fontSize: 'font_4',
           fontColor: 'color_3'
         }
@@ -354,7 +352,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '64px'
+        height: '13px'
       }
     }
   }
