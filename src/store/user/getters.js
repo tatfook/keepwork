@@ -25,7 +25,7 @@ const getters = {
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
-  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) =>
+  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),

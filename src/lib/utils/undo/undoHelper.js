@@ -42,7 +42,7 @@ export default {
     }
   },
   canUndo(undoManager) {
-    return undoManager.position > 0
+    return undoManager ? undoManager.position > 0 : false
   },
   canRedo(undoManager) {
     return undoManager.position < this.count(undoManager)

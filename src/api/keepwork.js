@@ -68,7 +68,8 @@ export const website = {
   upsert: (...args) => post('website/upsert', ...args),
   getByName: (...args) => post('website/getByName', ...args),
   getAllByUsername: (...args) => post('website/getAllByUsername', ...args),
-  getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
+  getDetailInfo: (...args) => post('website/getDetailInfo', ...args),
+  updateByName: (...args) => post('website/updateByName', ...args)
 }
 
 /*doc
@@ -160,6 +161,7 @@ export const bigfile = {
   getByUsername: (...args) => post('bigfile/getByUsername', ...args),
   getUserStoreInfo: (...args) => post('bigfile/getUserStoreInfo', ...args),
   deleteById: (...args) => post('bigfile/deleteById', ...args),
+  updateById: (...args) => post('bigfile/updateById', ...args),
   getByFilenameList: (...args) => post('bigfile/getByFilenameList', args),
   changeFilename: (...args) => post('bigfile/changeFilename', ...args),
   getDownloadUrlById: (...args) => post('bigfile/getDownloadUrlById', ...args),

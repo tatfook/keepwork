@@ -16,6 +16,7 @@ const GET_WEB_TEMPLATE_FILELIST_SUCCESS = 'GET_WEB_TEMPLATE_FILELIST_SUCCESS'
 const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
 const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
+const UPDATE_SITE_MSG_SUCCESS = 'UPDATE_SITE_MSG_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 
@@ -36,6 +37,7 @@ export const props = {
   SET_PAGE_STAR_DETAIL,
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
+  UPDATE_SITE_MSG_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS
 }
 
@@ -112,6 +114,13 @@ const mutations = {
     Vue.set(state, 'siteLayoutConfigs', {
       ...state.siteLayoutConfigs,
       [sitePath]: config
+    })
+  },
+  [UPDATE_SITE_MSG_SUCCESS](state, {newBasicMessage}) {
+    let { username, name } = newBasicMessage
+    Vue.set(state.website, username, {
+      ...state.website[username],
+      [name]: newBasicMessage
     })
   },
   [GET_FROM_SKY_DRIVE_SUCCESS](state, payload) {

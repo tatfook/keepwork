@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, GitAPI, skyDrive } from '@/api'
+import { keepwork, GitAPI, skyDrive, sensitiveWord } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
@@ -23,6 +23,7 @@ const {
   SET_PAGE_STAR_DETAIL,
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
+  UPDATE_SITE_MSG_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS
 } = props
 
@@ -234,6 +235,12 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
     dispatch('refreshSiteSettings', {sitePath}, {root: true})
   },
+  async saveSiteBasicSetting(context, {newBasicMessage}) {
+    let { commit, getters } = context
+    let { authRequestConfig } = getters
+    await keepwork.website.updateByName(newBasicMessage, authRequestConfig)
+    commit(UPDATE_SITE_MSG_SUCCESS, {newBasicMessage})
+  },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context
     let fullPath = getFileFullPathByPath(path)
@@ -311,6 +318,12 @@ const actions = {
     let url = await skyDrive.upload({file, onProgress}, authRequestConfig)
     return url
   },
+  async updateFileInSkyDrive(context, {file, onProgress, bigfileToUpdate}) {
+    let { dispatch, getters: { authRequestConfig } } = context
+    await dispatch('getProfile')
+    let url = await skyDrive.update({file, onProgress, bigfileToUpdate}, authRequestConfig)
+    return url
+  },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.remove({file}, authRequestConfig)
@@ -318,6 +331,10 @@ const actions = {
   async changeFileNameInSkyDrive(context, {_id, filename}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.changeFileName({_id, filename}, authRequestConfig)
+  },
+  async checkSensitive(context, {checkedWords}) {
+    let result = await sensitiveWord.checkSensitiveWords(checkedWords)
+    return result
   }
 }
 
