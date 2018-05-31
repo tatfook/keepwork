@@ -337,7 +337,8 @@ export default [
       }
     },
     theme: {
-      root: []
+      root: [],
+      rootRow: ['mod-full-width']
     },
     options: {
       theme: {
