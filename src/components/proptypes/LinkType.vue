@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <el-input class="link-type" :placeholder='$t("field."+editingKey)' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'>
-      <i v-if="editingKey==='src'" @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
+  <div ref='inputWrapper'>
+    <el-input class="link-type" :placeholder='$t("field."+editingKey)' :clearable='!isMediaSrc' v-model='inputTypeValue' @focus='getFocus'>
+      <i v-if="isMediaSrc" @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
     </el-input>
-    <SkyDriveManagerDialog v-if="editingKey==='src'" :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <SkyDriveManagerDialog v-if="isMediaSrc" :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
   </div>
 </template>
 <script>
@@ -18,25 +18,27 @@ export default {
   },
   data() {
     return {
+      lastUpdatedValue: this.originValue,
+      inputTypeValue: this.originValue,
+      isMediaSrc: this.editingKey==='src',
       isSkyDriveManagerDialogShow: false
     }
   },
-  computed: {
-    inputTypeValue: {
-      get() {
-        return this.originValue
-      },
-      set() {}
+  watch: {
+    inputTypeValue(newVal) {
+      this.updateValue(newVal)
     }
   },
   methods: {
     updateValue(newVal) {
+      if (this.lastUpdatedValue === newVal) return
+      this.lastUpdatedValue = newVal
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
-      this.$emit('onChangeValue')
+      this.updateValue(this.inputTypeValue)
     },
     insertImg() {
       this.openSkyDriveManagerDialog()
@@ -47,7 +49,7 @@ export default {
     closeSkyDriveManagerDialog({ url }) {
       this.isSkyDriveManagerDialogShow = false
       if (!url) return
-      this.updateValue(url)
+      this.inputTypeValue = url
     }
   },
   components: {
