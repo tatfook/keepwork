@@ -328,6 +328,7 @@ export default {
       if (!download_url) return
       await new Promise((resolve, reject) => {
         let a = document.createElement('a')
+        a.target = '_blank'
         a.style.display = 'none'
         a.href = `${download_url};attname=${filename}`
         a.download = filename || ""
