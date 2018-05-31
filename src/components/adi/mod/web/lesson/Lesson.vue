@@ -76,7 +76,6 @@ let vipFlag = false //false 普通用户 true vip用户
 let notify
 
 const init = function(){
-  console.log('init')
   if (localStorage && localStorage.vuex) {
     vuex = JSON.parse(localStorage.vuex)
   }
