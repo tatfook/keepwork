@@ -70,7 +70,7 @@ const getters = {
     activeAreaData && UndoHelper.canRedo(activeAreaData.undoManager),
   filemanagerTreeNodeExpandMapByPath: state =>
     state.filemanagerTreeNodeExpandMapByPath,
-
+  cursorPos: state => state.activePage && (state.activePage.cursorPos || { line: 1, ch: 0 }),
   allSiteSettings: state => state.siteSettings,
   sitePath: state => getFileSitePathByPath(state.activePageUrl),
   siteSetting: (state, { allSiteSettings, sitePath }) =>

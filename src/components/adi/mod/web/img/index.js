@@ -1,22 +1,19 @@
 /*doc
 ---
-title: img Mod
-name: img Mod
+title: Img Mod
+name: Img Mod
 category: Adi Mod
 ---
 
-This is the img for usage.
-
-## @Img
-
-## 参数说明
+This is the Img Mod for usage.
 
 ```@Img
-- styleID : //当前样式id
+styleID: // 样式ID
+img:
+  src: // 图像来源地址链接
+  link: // 图像点击跳转链接
+  target: // 链接从新窗口打开或本窗口打开
 
-# img
-- src : //图像地址
-- link : //图像点击跳转链接
 ```
 
 */

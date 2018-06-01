@@ -1,8 +1,12 @@
-const MOD_CMD_BEGIN_REG = /^```@[\w/]*$/
-const MOD_CMD_END_REG = /^```$/
+export const MOD_CMD_BEGIN_REG = /^```@[\w/]*$/
+export const MOD_CMD_END_REG = /^```$/
+export const MARKDOWN_CMD = 'Markdown'
+export const MOD_CMD_BEGIN = '```@'
+export const MOD_CMD_END = '```'
 
 export const cmdList = [
   'Markdown',
+  'IFrame',
   'Title',
   'MixPosition',
   'MixLayer',
@@ -40,6 +44,10 @@ export const isOldCmd = (cmd) => {
   return !!oldCmdMapper[cmd]
 }
 
+export const isMarkdownCmd = (cmd) => {
+  return cmd === MARKDOWN_CMD
+}
+
 export const targetCmd = (cmd) => {
   return oldCmdMapper[cmd]
 }
@@ -59,6 +67,7 @@ export const isCmdEnd = (line) => {
 export default {
   isValidCmd,
   isOldCmd,
+  isMarkdownCmd,
   targetCmd,
   isCmdLine,
   isCmdEnd

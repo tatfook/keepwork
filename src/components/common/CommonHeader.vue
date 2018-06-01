@@ -33,7 +33,7 @@
           <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
         </el-menu-item>
         <el-menu-item index="5-3">
-          <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
+          <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
         <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
       </el-submenu>
@@ -87,6 +87,12 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile'
     })
+  },
+  methods: {
+    backEditArea(){
+      this.$router.push('/wiki/wikieditor/#/'+this.$route.path)
+      window.location.reload();
+    }
   }
 }
 </script>

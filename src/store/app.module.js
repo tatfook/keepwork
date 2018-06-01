@@ -3,8 +3,8 @@ import Vue from 'vue'
 import Parser from '@/lib/mod/parser'
 import LayoutHelper from '@/lib/mod/layout'
 import {
-  getFileFullPathByPath,
   getFileSitePathByPath,
+  getPageInfoByPath,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
@@ -34,20 +34,12 @@ const initLayoutPageState = () => {
 
 const getters = {
   activePageUrl: state => state.activePageUrl,
-  activePageInfo: (state, { activePageUrl }) => {
-    let pageInfos = activePageUrl.split('/').filter(x => x)
-    let [username, sitename] = pageInfos
-    let isLegal = username && sitename
-    let sitepath = isLegal ? `${username}/${sitename}` : ''
-    let fullPath = isLegal ? getFileFullPathByPath(activePageUrl) : ''
-    let [, , ...paths] = fullPath.split('/').filter(x => x)
-    return { username, sitename, isLegal, fullPath, sitepath, paths }
-  },
+  activePageInfo: (state, { activePageUrl }) => getPageInfoByPath(activePageUrl),
   modList: state => state.modList,
   themeConf: (state, {siteSetting}) => _.get(siteSetting, 'theme', {}),
 
   allSiteSettings: state => state.siteSettings,
-  sitePath: state => getFileSitePathByPath(state.activePageUrl),
+  sitePath: (state, { activePageInfo }) => activePageInfo.sitepath,
   siteSetting: (state, { allSiteSettings, sitePath }) =>
     allSiteSettings[sitePath],
   layout: (state, { siteSetting, activePageUrl }) => {

@@ -44,6 +44,8 @@ const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 const REFRESH_SITE_SETTINGS = 'REFRESH_SITE_SETTINGS'
 const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
 
+const UPDATE_CURSOR_POSITION = 'UPDATE_CURSOR_POSITION'
+
 export const props = {
   SET_ACTIVE_PAGE,
 
@@ -79,7 +81,9 @@ export const props = {
   CLOSE_OPENED_FILE,
 
   REFRESH_SITE_SETTINGS,
-  UPDATE_OPENED_LAYOUT_FILE
+  UPDATE_OPENED_LAYOUT_FILE,
+
+  UPDATE_CURSOR_POSITION
 }
 
 const activeModList = state => {
@@ -112,12 +116,11 @@ const mutations = {
       Vue.set(state.activePage, 'activeProperty', null)
     }
   },
-  [ADD_MOD](state, { modProperties, key, cmd }) {
+  [ADD_MOD](state, { newMod, key }) {
     const mod = Parser.addBlockByKey(
       activeModList(state),
       key,
-      modProperties,
-      cmd,
+      newMod,
       state.activePage.newModPosition
     )
     Vue.set(state.activePage, 'activeMod', mod)
@@ -147,12 +150,12 @@ const mutations = {
     if (!state.activePage.activeMod) return
     Vue.set(state.activePage, 'activeProperty', property)
   },
-  [SET_ACTIVE_PROPERTY_OPTIONS](state, playload) {
-    Vue.set(state, 'activePropertyOptions', playload)
+  [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
+    Vue.set(state, 'activePropertyOptions', payload)
   },
   [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
     const modList = activeModList(state)
-    Parser.updateBlock(modList, key, code)
+    Parser.updateBlockCode(modList, key, code)
   },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }
@@ -180,9 +183,8 @@ const mutations = {
       value
     )
   },
-  [UPDATE_MODS](state, code) {
+  [UPDATE_MODS](state, blockList) {
     const modList = activeModList(state)
-    let blockList = Parser.buildBlockList(code)
     Parser.updateBlockList(modList, blockList)
   },
   [UPDATE_THEME_NAME](state, themeName) {
@@ -200,7 +202,7 @@ const mutations = {
   [UPDATE_MANAGE_PANE_COMPONENT](state, payload) {
     // for the usage of manage pane component
     // payload should be {name, props}
-    payload = _.isString(payload) ? {name: payload} : payload
+    payload = _.isString(payload) ? { name: payload } : payload
     Vue.set(state, 'activeManagePaneComponent', payload)
   },
   [UPDATE_PROPERTY_TAB_TYPE](state, componentType) {
@@ -239,7 +241,9 @@ const mutations = {
   [SET_NEW_MOD_POSITION](state, position) {
     state.activePage.newModPosition = position
   },
-
+  [UPDATE_CURSOR_POSITION](state, cursor) {
+    Vue.set(state.activePage, 'cursorPos', cursor)
+  },
   [RESET_OPENED_FILE](state, { username, path, data }) {
     Vue.set(state.openedFiles, username, {
       ..._.get(state, ['openedFiles', username]),

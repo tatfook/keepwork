@@ -33,7 +33,20 @@
     "maded": "制作的",
     "websiteB": "网站",
     "QR": "扫描二维码打开网页",
-    "error": "出错啦，请重试"
+    "error": "出错啦，请重试",
+
+    "OK": "确认",
+    "Cancel": "取消",
+
+    "action": "操作",
+    "search": "搜索",
+    "copy": "复制",
+    "insert": "插入",
+    "download": "下载",
+    "update": "更新",
+    "rename": "重命名",
+    "remove": "删除",
+    "apply": "应用"
   },
   "editor": {
     "save": "保存",
@@ -299,6 +312,7 @@
     "author": "作者",
     "version": "版本",
     "updateTime": "更新时间",
+    "viewTimesImg": "浏览次数图标",
     "viewTimes": "浏览次数",
     "size": "大小",
     "menu": "菜单",
@@ -320,7 +334,8 @@
     "download": "下载",
     "enter": "进入",
     "innerModal": "内部模态框",
-    "bigFile": "大文件"
+    "bigFile": "大文件",
+    "iframe": "iframe"
   },
   "field": {
     "fileId": "字段",
@@ -334,6 +349,33 @@
     "title": "标题",
     "extraMsg": "额外信息",
     "channel": "渠道",
-    "number": "数字"
+    "number": "数字",
+    "width": "宽度",
+    "height": "高度"
+  },
+  "skydrive": {
+    "mediaLibrary": "图库",
+    "skyDrive": "网盘",
+    "usage": "当前使用",
+
+    "filename": "文件名",
+    "filetype": "类型",
+    "filesize": "大小",
+    "updateDate": "更新时间",
+
+    "checkedState": "状态",
+    "checkPassed": "通过",
+    "checkUnpassed": "未通过",
+    "checking": "审核中",
+    "fileUnapprovedError": "文件尚未通过审核",
+
+    "downloadSelected": "下载选中",
+    "removeSelected": "删除选中",
+    "dragAndDrop": "拖拽到本窗口上传",
+    "uploadFile": "上传文件",
+    "notImageFileError": "文件不是图片类型",
+    "removeFileConfirmMsg": "确认删除文件？",
+    "newFilenamePromptMsg": "请输入新的文件名",
+    "nameConflictError": "文件名和现有名字重复"
   }
 }

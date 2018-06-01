@@ -11,7 +11,12 @@ export const keepworkEndpoint = axios.create({
   baseURL: process.env.KEEPWORK_API_PREFIX
 })
 
-export const post = (...args) => keepworkEndpoint.post(...args).then(res => res.data.data)
+export const post = (...args) => {
+  let [url, payload, config, returnOriginalData = false] = args
+  return keepworkEndpoint.post(url, payload, config).then(
+    res => returnOriginalData ? res.data : res.data.data
+  )
+}
 
 export const user = {
   login: (...args) => post('/user/login', ...args),
@@ -63,7 +68,8 @@ export const website = {
   upsert: (...args) => post('website/upsert', ...args),
   getByName: (...args) => post('website/getByName', ...args),
   getAllByUsername: (...args) => post('website/getAllByUsername', ...args),
-  getDetailInfo: (...args) => post('website/getDetailInfo', ...args)
+  getDetailInfo: (...args) => post('website/getDetailInfo', ...args),
+  updateByName: (...args) => post('website/updateByName', ...args)
 }
 
 /*doc
@@ -138,20 +144,7 @@ export const sensitiveWords = {
   query: (...args) => post('sensitive_words/query', ...args)
 }
 
-/*doc
----
-title: bigFile
-name: bigFile
-category: API
-parent: Keepwork API
----
-**getDownloadUrlById:**
-```
-payload: {
-  "_id":"123"
-}
-```
-*/
+// todo merge bigFile and bigfile
 export const bigFile = {
   getDownloadUrlById: (token, ...args) => {
     return axios.create({
@@ -163,6 +156,24 @@ export const bigFile = {
   }
 }
 
+export const bigfile = {
+  upload: (...args) => post('bigfile/upload', ...args),
+  getByUsername: (...args) => post('bigfile/getByUsername', ...args),
+  getUserStoreInfo: (...args) => post('bigfile/getUserStoreInfo', ...args),
+  deleteById: (...args) => post('bigfile/deleteById', ...args),
+  updateById: (...args) => post('bigfile/updateById', ...args),
+  getByFilenameList: (...args) => post('bigfile/getByFilenameList', args),
+  changeFilename: (...args) => post('bigfile/changeFilename', ...args),
+  getDownloadUrlById: (...args) => post('bigfile/getDownloadUrlById', ...args),
+  getDownloadUrlByKey: (...args) => post('bigfile/getDownloadUrlByKey', ...args)
+}
+
+export const qiniu = {
+  uploadToken: (...args) => post('qiniu/uploadToken', ...args),
+  deleteFile: (...args) => post('qiniu/deleteFile', ...args),
+  getUid: (...args) => post('qiniu/getUid', ...args)
+}
+
 export const keepwork = {
   user,
   website,
@@ -171,7 +182,9 @@ export const keepwork = {
   websiteComment,
   sensitiveWords,
   pages,
-  bigFile
+  bigFile,
+  qiniu,
+  bigfile
 }
 
 export default keepwork

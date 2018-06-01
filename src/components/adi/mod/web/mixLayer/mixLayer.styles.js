@@ -63,6 +63,12 @@ export default [
           'padding-left': '20px',
           'padding-right': '20px'
         }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '490px',
+          'overflow': 'auto'
+        }
       }
     },
     props: {
@@ -134,6 +140,12 @@ export default [
         colCoupleRow: {
           'padding-left': '20px',
           'padding-right': '20px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '490px',
+          'overflow': 'auto'
         }
       }
     },
@@ -207,6 +219,12 @@ export default [
           'padding-left': '20px',
           'padding-right': '20px'
         }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '490px',
+          'overflow': 'auto'
+        }
       }
     },
     props: {
@@ -276,6 +294,12 @@ export default [
         colCoupleRow: {
           'padding-left': '20px',
           'padding-right': '20px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '300px',
+          'overflow': 'auto'
         }
       }
     },
@@ -348,6 +372,12 @@ export default [
           'padding-left': '20px',
           'padding-right': '20px'
         }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '300px',
+          'overflow': 'auto'
+        }
       }
     },
     props: {
@@ -419,6 +449,12 @@ export default [
           'padding-left': '20px',
           'padding-right': '20px'
         }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '300px',
+          'overflow': 'auto'
+        }
       }
     },
     props: {
@@ -488,6 +524,12 @@ export default [
         colCoupleRow: {
           'padding-left': '20px',
           'padding-right': '20px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '150px',
+          'overflow': 'auto'
         }
       }
     },
@@ -560,6 +602,12 @@ export default [
           'padding-left': '20px',
           'padding-right': '20px'
         }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '150px',
+          'overflow': 'auto'
+        }
       }
     },
     props: {
@@ -630,6 +678,12 @@ export default [
         colCoupleRow: {
           'padding-left': '20px',
           'padding-right': '20px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colParagraph: {
+          height: '150px',
+          'overflow': 'auto'
         }
       }
     },

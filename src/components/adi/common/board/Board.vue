@@ -57,7 +57,11 @@ export default {
   name: 'AdiBoard',
   bedbclick: true,
   dblclick(context) {
-    context.$store.dispatch('setActivePropertyOptions', {visible: true})
+    if (Boolean(window.mxClient)) {
+      context.$store.dispatch('setActivePropertyOptions', {visible: true})
+    } else {
+      setTimeout(this.dblclick(context), 500)
+    }
   },
   render(h) {
     let self = this

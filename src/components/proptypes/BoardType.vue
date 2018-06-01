@@ -124,7 +124,7 @@ export default {
         return this.activePropertyOptions ? this.activePropertyOptions.visible : false
       },
       set(state) {
-        this.setActivePropertyOptions({visible:state})
+        this.setActivePropertyOptions({visible: state})
       }
     }
   },
@@ -138,10 +138,12 @@ export default {
       activeProperty: 'activeProperty'
     }),
     loadBoardEditor() {
-      if (!isInitEditor) {
+      if (window.mxClient && !isInitEditor) {
         initEditor(this.inputTypeValue, ui => {
           this.ui = ui
         })
+      } else {
+        setTimeout(this.loadBoardEditor, 500)
       }
     },
     changeProptyData(changedData) {
@@ -150,10 +152,18 @@ export default {
       })
     },
     openEditor() {
-      this.$emit('onChangeValue')
-      this.visible = true
+      if (Boolean(window.mxClient)) {
+        this.$emit('onChangeValue')
+        this.visible = true
+      } else {
+        setTimeout(this.openEditor, 500)
+      }
     },
     closeEditor() {
+      if(!this.ui || !this.ui.getCurrentCompressData) {
+        return
+      }
+
       this.visible = false
       isInitEditor = false
 

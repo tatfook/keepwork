@@ -37,7 +37,7 @@ export default [
         'margin-top': '20px'
       },
       logo: {
-        'max-height': '87px',
+        height: '87px',
         width: '87px'
       },
       colLogo: {
@@ -105,7 +105,7 @@ export default [
         'margin-top': '20px'
       },
       logo: {
-        'max-height': '87px',
+        height: '87px',
         width: '87px'
       },
       colLogo: {
@@ -153,7 +153,7 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, {itemStyle: {float: 'right'}})
+        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
     cover: require('@/../static/adi/title/title1.png'),
@@ -287,7 +287,7 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, {itemStyle: {float: 'right'}})
+        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
     cover: require('@/../static/adi/title/title2.png'),

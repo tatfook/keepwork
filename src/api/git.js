@@ -20,11 +20,19 @@ const gitLabAPIGenerator = ({ url, token }) => {
           const [pId, path] = [projectId, options.path].map(
             encodeURIComponent
           )
-          let res = await instance.get(
-            `projects/${pId}/repository/tree?id=${pId}&path=${path}&per_page=1000000&recursive=${options.recursive ||
-                true}`
-          )
-          return res.data
+          let total = []
+          let page = 0
+          while (true) {
+            let res = await instance.get(
+              `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
+                  true}`
+            )
+            total = [...total, ...res.data]
+            if (res.data.length < 100) {
+              break
+            }
+          }
+          return total
         },
         files: {
           remove: async (projectId, filePath, branch, options) => {

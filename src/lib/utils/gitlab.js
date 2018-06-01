@@ -24,6 +24,7 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let treeWithChildren = {}
 
   files.forEach(file => {
+    if (file.path.indexOf(rootPath) !== 0 || file.path === rootPath) return
     let setKeys = file.path
       .substr(rootPath.length + 1)
       .split('/')
@@ -48,7 +49,7 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let nestedArray = convertChildren2ArrayInTree({
     [temporaryChildrenKey]: treeWithChildren
   })['children']
-  return nestedArray
+  return _.isEmpty(nestedArray) ? [] : nestedArray
 }
 
 /*doc
@@ -131,6 +132,19 @@ export const getPageInfoByPath = path => {
   return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
 }
 
+/**
+ * @param {*} filename string
+ * @param {*} ext string
+ * ('filename', 'ext') => 'filename.ext'
+ * ('filename.ext', 'ext') => 'filename.ext'
+ */
+export const getFilenameWithExt = (filename, ext) => {
+  let filenameExt = /.+\./.test(filename) ? filename.split('.').pop() : ''
+  filenameExt = filenameExt.toLowerCase()
+  filename = filenameExt !== ext ? `${filename}.${ext}` : filename
+  return filename
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   CONFIG_FOLDER_NAME,
@@ -140,5 +154,6 @@ export default {
   getFileFullPathByPath,
   getFileSitePathByPath,
   getRelativePathByPath,
-  getPageInfoByPath
+  getPageInfoByPath,
+  getFilenameWithExt
 }

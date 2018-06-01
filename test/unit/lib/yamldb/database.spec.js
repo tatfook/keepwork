@@ -1,6 +1,6 @@
 import sinon from 'sinon'
 import YamlDB from '@/lib/yamldb/database'
-import { GitAPI } from '@/api/gitlab'
+import { GitAPI } from '@/api/git'
 
 const gitConfig = {
   url: 'http://git.release.keepwork.com',
@@ -16,23 +16,23 @@ const testDB = new YamlDB(gitConfig)
 
 describe('Yaml database', () => {
   let sandbox
-  before(() => {
+  beforeEach(() => {
     sandbox = sinon.createSandbox()
     sandbox.stub(GitAPI.prototype, 'upsertFile').returns(true)
   })
-  after(() => {
+  afterEach(() => {
     sandbox.restore()
   })
-  it('should create instance with new key', async () => {
+  test('should create instance with new key', async () => {
     let result = await testDB.create('test', { hello: 'world' })
-    expect(result.key).to.be.a('string')
+    expect(typeof (result.key)).toBe('string')
   })
-  it('should failed to update instance without a key', async () => {
+  test('should failed to update instance without a key', async () => {
     let result = await testDB.update('test', { hello: 'world' })
-    expect(!result).to.equal(true)
+    expect(!result).toEqual(true)
   })
-  it('should upserct instance with new key', async () => {
+  test('should upserct instance with new key', async () => {
     let result = await testDB.create('test', { hello: 'world' })
-    expect(result.key).to.be.a('string')
+    expect(typeof (result.key)).toBe('string')
   })
 })

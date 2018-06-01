@@ -1,4 +1,5 @@
 import ModMarkdown from './common/markdown'
+import ModIFrame from './common/iframe'
 import ModTitle from './web/title'
 import ModMixPosition from './web/mixPosition'
 import ModMixLayer from './web/mixLayer'
@@ -18,6 +19,7 @@ import ModBigFile from './web/bigFile'
 
 export const modList = {
   ModMarkdown,
+  ModIFrame,
   ModTitle,
   ModMixPosition,
   ModMixLayer,

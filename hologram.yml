@@ -8,7 +8,8 @@ source: ./src
 destination: ./docs
 
 # The assets needed to build the docs (includes header.html, footer.html, etc)
-documentation_assets: ./node_modules/hologram-github-theme
+documentation_assets: ./node_modules/Cortana
+custom_markdown: ./node_modules/Cortana/CortanaMarkdownRenderer.rb
 
 # This is a custom markdown renderer (see Redcarpet documentation for
 # how to do this)

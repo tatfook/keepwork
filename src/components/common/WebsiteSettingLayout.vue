@@ -1,6 +1,6 @@
 <template>
   <div v-loading='loading' @click.stop="handleDialogClick">
-    <el-row class="website-setting-layout">
+    <el-row class="website-setting-layout" type="flex">
       <el-col :span="6" class="website-setting-layouts">
         <header>
           <h1>{{$t('editor.layoutPlan')}}</h1>
@@ -36,20 +36,20 @@
                     :class="{is_default: unsavedDefaultLayoutId==layout.id}"
                     size="mini" type="text"
                     @click.stop="setDefault(layout)"
-                    icon="iconfont icon-sheweimoren"
+                    icon="iconfont icon-default"
                     :title="$t('editor.default')">
                   </el-button>
                   <el-button
                     size="mini" type="text"
                     @click.stop="editLayout(layout)"
-                    icon="iconfont icon-zhongmingming-copy"
+                    icon="iconfont icon-edit-"
                     :title="$t('editor.rename')">
                   </el-button>
                   <el-button
                     size="mini"
                     type="text"
                     @click.stop="removeLayout(layout)"
-                    icon="iconfont icon-shanchu-copy"
+                    icon="iconfont icon-delete"
                     :title="$t('editor.delete')">
                   </el-button>
                 </span>
@@ -427,7 +427,7 @@ export default {
 
 <style lang='scss'>
 .website-setting {
-  $column-height: 650px;
+  $column-height: auto;
 
   &-layout {
     cursor: default;
@@ -471,7 +471,6 @@ export default {
       }
     }
     .display-state-btns {
-      flex: 0 0 60px;
       .el-button {
         margin: 0 !important;
       }

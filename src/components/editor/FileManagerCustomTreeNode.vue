@@ -2,19 +2,19 @@
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
     {{node.label | hideMDFileExtension}}
     <span class="node-icon">
-      <i class="iconfont icon-wenjian" v-if="isFile"></i>
+      <i class="iconfont icon-file_" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
-      <i class="iconfont icon-siyouwangzhan" v-else-if="isWebsite && data.visibility === 'private'"></i>
-      <i class="iconfont icon-gongyouwangzhan" v-else></i>
+      <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
+      <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container">
-      <el-button v-if="isAddable" class="iconfont icon-tianjiawenjian" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
+      <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-xinjianwenjianjia" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
+      <el-button v-if="isAddable" class="iconfont icon-folder_" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-shanchu" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+      <el-button v-if="isRemovable" class="iconfont icon-delete" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-shezhi" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
+      <el-button v-if="isSettable" class="iconfont icon-set_up" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>

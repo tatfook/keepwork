@@ -12,8 +12,8 @@ const DEFAULT_TABLE_CONFIG = {
 
 /*doc
 ---
-title: YamlDB
-name: YamlDB
+title: database
+name: database
 category: YamlDB
 ---
 

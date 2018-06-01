@@ -28,22 +28,21 @@ export default {
   undo(undoManager, callback) {
     if (this.canUndo(undoManager)) {
       var item = undoManager.stack[--undoManager.position]
-      if (callback) {
-        callback(item)
+      if (callback && item) {
+        callback(item.newCode, item.cursor)
       }
     }
   },
   redo(undoManager, callback) {
     if (this.canRedo(undoManager)) {
       var item = undoManager.stack[++undoManager.position]
-
-      if (callback) {
-        callback(item)
+      if (callback && item) {
+        callback(item.newCode, item.cursor)
       }
     }
   },
   canUndo(undoManager) {
-    return undoManager.position > 0
+    return undoManager ? undoManager.position > 0 : false
   },
   canRedo(undoManager) {
     return undoManager.position < this.count(undoManager)

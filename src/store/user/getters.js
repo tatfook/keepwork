@@ -25,7 +25,7 @@ const getters = {
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
 
-  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource } }) =>
+  defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { defaultSiteDataSource }) => ({
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
@@ -35,20 +35,21 @@ const getters = {
   siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (
     state,
-    { siteDataSourcesMap },
+    { siteDataSourcesMap, defaultSiteDataSource },
     rootState,
     rootGetters
   ) => username => {
     let { 'gitlab/repositoryTrees': repositoryTrees } = rootGetters
     let websitesMap = _.get(state, ['website', username])
+    let { projectId: defaultProjectId, lastCommitId: defaultLastCommitId } = defaultSiteDataSource
 
     // use websitesMap to generate personal website list
     let websiteNames = _.keys(websitesMap)
 
     let personalSiteList = websiteNames.map(name => {
       // use siteDataSourcesMap to get projectId and lastCommitId
-      let projectId = _.get(siteDataSourcesMap, [name, 'projectId'])
-      let lastCommitId = _.get(siteDataSourcesMap, [name, 'lastCommitId'])
+      let projectId = _.get(siteDataSourcesMap, [name, 'projectId'], defaultProjectId)
+      let lastCommitId = _.get(siteDataSourcesMap, [name, 'lastCommitId'], defaultLastCommitId)
 
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
@@ -143,15 +144,26 @@ const getters = {
   ) => path => {
     let [username, sitename] = path.split('/').filter(x => x)
     let {
-      userinfo: { dataSource: dataSourceList = [] }
+      userinfo: { dataSource: dataSourceList = [], defaultDataSourceSitename }
     } = getSiteDetailInfoByPath(path)
-    let targetDataSource = dataSourceList.filter(dataSource => {
-      return (
-        dataSource.username === username && dataSource.sitename === sitename
-      )
-    })[0]
-    targetDataSource.rawBaseUrl = process.env.GITLAB_API_PREFIX
-    return targetDataSource
+    let defaultDataSource = dataSourceList.filter(dataSource => dataSource.sitename === defaultDataSourceSitename)[0]
+    let targetDataSource = dataSourceList.filter(
+      dataSource => dataSource.username === username && dataSource.sitename === sitename
+    )[0] || defaultDataSource
+    return {
+      ...targetDataSource,
+      rawBaseUrl: process.env.GITLAB_API_PREFIX
+    }
+  },
+
+  getGitFileProjectIdAndRefByPath: (state, { personalAndContributedSitePathMap, defaultSiteDataSource }) => path => {
+    let [username, sitename] = path.split('/').filter(x => x)
+    let { projectId, lastCommitId: ref = 'master' } = _.get(
+      personalAndContributedSitePathMap,
+      `${username}/${sitename}`,
+      defaultSiteDataSource
+    )
+    return { projectId, ref }
   },
 
   comments: state => state.comments,
@@ -215,7 +227,7 @@ const getters = {
   },
   layoutContentFilePathsByPath: (state, { getLayoutByPath }) => path => {
     let layout = getLayoutByPath(path)
-    let layoutContentFilePaths = _.keys(layout.content).map(key => `${key}s/${layout.content[key]}`)
+    let layoutContentFilePaths = _.keys(layout.content).filter(key => layout.content[key]).map(key => `${key}s/${layout.content[key]}`)
     return layoutContentFilePaths
   },
   getSettedPageLayoutByPath: (state, { siteLayoutConfigBySitePath }) => path => {
@@ -223,7 +235,11 @@ const getters = {
     let siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
     let layout = LayoutHelper.getSettedPageLayoutByPath(siteLayoutConfig, path)
     return layout
-  }
+  },
+
+  skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
+  skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
 }
 
 export default getters
