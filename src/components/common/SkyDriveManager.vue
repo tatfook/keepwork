@@ -3,7 +3,7 @@
     <el-row class="skydrive-manager-header">
       <el-col :span="18">
         <div>
-          当前使用: 
+          {{ $t('skydrive.usage') }}
           <span class="skydrive-manager-total">
             <span class="skydrive-manager-total-used" :style="{ width: info.usedPercent + '%' }"></span>
           </span>
@@ -11,7 +11,7 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <el-input placeholder="搜索" size="mini" v-model="searchWord">
+        <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
           <i slot="suffix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column
           prop="filename"
-          label="文件名"
+          :label="$t('skydrive.filename')"
           class-name="skydrive-manager-cell-filename"
           sortable
           width="280">
@@ -40,36 +40,36 @@
         <el-table-column
           prop="ext"
           sortable
-          label="类型"
+          :label="$t('skydrive.filetype')"
           width="80">
         </el-table-column>
         <el-table-column
           prop="size"
           sortable
-          label="大小"
+          :label="$t('skydrive.filesize')"
           width="80"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           prop="updateDate"
           sortable
-          label="更新时间"
+          :label="$t('skydrive.updateDate')"
           width="150">
         </el-table-column>
         <el-table-column
           prop="checkedState"
           sortable
-          label="审核状态"
+          :label="$t('skydrive.checkedState')"
           width="100"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           class-name="skydrive-manager-cell-actions"
-          label="操作">
+          :label="$t('common.action')">
           <template slot-scope="scope">
-            <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' title='复制' @click='handleCopy(scope.row.file.download_url)'></span>
-            <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' title='插入' @click='handleInsert(scope.row)'></span>
-            <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' title='下载' @click='download(scope.row.file)'></span>
+            <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.copy')" @click='handleCopy(scope.row.file.download_url)'></span>
+            <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
+            <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.download')" @click='download(scope.row.file)'></span>
 
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -79,16 +79,16 @@
                 <el-dropdown-item>
                   <label class='el-icon-refresh'>
                     <input type="file" :accept="'.' + scope.row.ext" style="display:none;" @change='e => handleUpdateFile(e, scope.row)'>
-                    <span>更新</span>
+                    <span>{{ $t('common.update') }}</span>
                   </label>
                 </el-dropdown-item>
                 <el-dropdown-item @click.native='handleRename(scope.row)'>
                   <span class='el-icon-edit'></span>
-                  重命名
+                  {{ $t('common.rename') }}
                 </el-dropdown-item>
                 <el-dropdown-item @click.native='handleRemove(scope.row)'>
                   <span class='el-icon-delete'></span>
-                  删除
+                  {{ $t('common.remove') }}
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -98,13 +98,13 @@
       </el-table>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
-          <el-button size="small" round @click="downloadAllSelected">下载选中</el-button>
-          <el-button size="small" round @click="removeAllSelected">删除选中</el-button>
+          <el-button size="small" :disabled="!approvedMultipleSelectionResults.length" round @click="downloadAllSelected">{{ $t('skydrive.downloadSelected') }}</el-button>
+          <el-button size="small" :disabled="!multipleSelectionResults.length" round @click="removeAllSelected">{{ $t('skydrive.removeSelected') }}</el-button>
         </el-col>
         <el-col :span="10" :offset="8" class="skydrive-manager-upload">
-          拖拽到本窗口上传
+          {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
-            <span>上传文件</span>
+            <span>{{ $t('skydrive.uploadFile') }}</span>
             <input type="file" style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
@@ -124,7 +124,7 @@
           <div class='skydrive-manager-media-item-cover'>
             <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span>
           </div>
-          <span title='删除' class='el-icon-delete' @click="handleRemove(mediaItem)"></span>
+          <span :title="$t('common.remove')" class='el-icon-delete' @click="handleRemove(mediaItem)"></span>
         </div>
       </div>
       <el-row class="skydrive-manager-footer">
@@ -132,12 +132,12 @@
           <el-button size="small" 
             :disabled='!availableSelectedMediaItem' round 
             @click="handleInsert(availableSelectedMediaItem)"
-          >应用</el-button>
+          >{{ $t('common.apply') }}</el-button>
         </el-col>
         <el-col :span="10" :offset="8" class="skydrive-manager-upload">
-          拖拽到本窗口上传
+          {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
-            <span>上传文件</span>
+            <span>{{ $t('skydrive.uploadFile') }}</span>
             <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
@@ -187,7 +187,7 @@ export default {
 
         checked = Number(checked)
         let checkPassed = checked === 1
-        let checkedState = checkPassed ? '通过' : checked === 2 ? '未通过' : '审核中'
+        let checkedState = checkPassed ? this.$t('skydrive.checkPassed') : checked === 2 ? this.$t('skydrive.checkUnpassed') : this.$t('skydrive.checking')
         return {...item, size, type, ext, checkedState, checkPassed }
       }).filter(this.itemFilterBySearchWord)
     },
@@ -203,6 +203,9 @@ export default {
     availableSelectedMediaItem() {
       let item = this.itemFilterBySearchWord(this.selectedMediaItem) ? this.selectedMediaItem : null
       return item && item.checkPassed ? item : null
+    },
+    approvedMultipleSelectionResults() {
+      return this.multipleSelectionResults.filter(({ checked }) => Number(checked) === 1)
     }
   },
   methods: {
@@ -225,7 +228,7 @@ export default {
       if (!file) return
       if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) return this.$message({
         showClose: true,
-        message: this.$t('文件不是图片类型'),
+        message: this.$t('skydrive.notImageFileError'),
         type: 'error'
       })
 
@@ -252,9 +255,9 @@ export default {
       this.loading = false
     },
     async handleRemove(file) {
-      await this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+      await this.$confirm(this.$t('skydrive.removeFileConfirmMsg'), 'Warning', {
+        confirmButtonText: this.$t('common.OK'),
+        cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
 
@@ -284,7 +287,7 @@ export default {
       let { file, checked } = item
       if (Number(checked) !== 1) return this.$message({
         showClose: true,
-        message: '文件尚未通过审核',
+        message: this.$t('skydrive.fileUnapprovedError'),
         type: 'error'
       })
       let url = file.download_url
@@ -292,7 +295,7 @@ export default {
     },
     async handleRename(item) {
       let { _id, ext } = item
-      let { value: newname } = await this.$prompt('Please input new filename', 'Tip', {
+      let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         inputValidator: str => this.filenameValidator(getFilenameWithExt(str, ext))
@@ -312,17 +315,14 @@ export default {
       this.loading = false
     },
     filenameValidator(newFilename) {
-      let errMsg = '文件名和现有名字重复'
+      let errMsg = this.$t('skydrive.nameConflictError')
       return this.userSkyDriveFileList.filter(({ filename }) => filename === newFilename).length ? errMsg : true
     },
     handleSelectionChange(selectionResults) {
       this.multipleSelectionResults = selectionResults
     },
     async downloadAllSelected() {
-      this.multipleSelectionResults.map(async ({ checked, file }) => {
-        if (Number(checked) !== 1) return
-        await this.download(file)
-      })
+      this.approvedMultipleSelectionResults.map(({ file }) => this.download(file))
     },
     async download({ filename, download_url }) {
       if (!download_url) return
@@ -341,9 +341,9 @@ export default {
       }).catch(e => console.error(e))
     },
     async removeAllSelected() {
-      await this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+      await this.$confirm(this.$t('skydrive.removeFileConfirmMsg'), 'Warning', {
+        confirmButtonText: this.$t('common.OK'),
+        cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
 
