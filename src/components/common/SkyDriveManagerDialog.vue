@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      title: this.mediaLibrary ? '图库' : '网盘'
+      title: this.mediaLibrary ? this.$t('skydrive.mediaLibrary') : this.$t('skydrive.skyDrive')
     }
   },
   async mounted() {

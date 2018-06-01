@@ -378,37 +378,37 @@ export default {
     async uploadFile(file, coords) {
       if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
         // use skyDrive
-        let url = await this.userUploadFileToSkyDrive({
-          file,
-          onProgress(progress) {
-            console.log(progress)
-          }
-        }).catch(err => console.error(err))
+        // let url = await this.userUploadFileToSkyDrive({
+        //   file,
+        //   onProgress(progress) {
+        //     console.log(progress)
+        //   }
+        // }).catch(err => console.error(err))
 
-        if (!url) {
-          this.insertLink(null, '***Upload Failed!***', coords)
-        } else if (/image\/\w+/.test(file.type)) {
-          this.insertFile(null, url, coords)
-        } else {
-          this.insertLink(file.name, url, coords)
-        }
+        // if (!url) {
+        //   this.insertLink(null, '***Upload Failed!***', coords)
+        // } else if (/image\/\w+/.test(file.type)) {
+        //   this.insertFile(null, url, coords)
+        // } else {
+        //   this.insertLink(file.name, url, coords)
+        // }
 
         // gitlab
-        // let fileReader = new FileReader()
-        // fileReader.onload = async () => {
-        //   const path = await this.gitlabUploadFile({
-        //     fileName: file.name,
-        //     content: fileReader.result
-        //   })
-        //   if (!path) {
-        //     this.insertLink(null, '***Upload Failed!***', coords)
-        //   } else if (/image\/\w+/.test(file.type)) {
-        //     this.insertFile(null, path, coords)
-        //   } else {
-        //     this.insertLink(file.name, path, coords)
-        //   }
-        // }
-        // fileReader.readAsDataURL(file)
+        let fileReader = new FileReader()
+        fileReader.onload = async () => {
+          const path = await this.gitlabUploadFile({
+            fileName: file.name,
+            content: fileReader.result
+          })
+          if (!path) {
+            this.insertLink(null, '***Upload Failed!***', coords)
+          } else if (/image\/\w+/.test(file.type)) {
+            this.insertFile(null, path, coords)
+          } else {
+            this.insertLink(file.name, path, coords)
+          }
+        }
+        fileReader.readAsDataURL(file)
       }
     },
     onDropFile(cm, evt) {

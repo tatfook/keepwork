@@ -33,7 +33,20 @@
     "maded": "maded",
     "websiteB": "website",
     "QR": "Scan QR to share",
-    "error": "Error, please try again"
+    "error": "Error, please try again",
+
+    "OK": "OK",
+    "Cancel": "Cancel",
+
+    "action": "Action",
+    "search": "Search",
+    "copy": "Copy",
+    "insert": "Insert",
+    "download": "Download",
+    "update": "Update",
+    "rename": "Rename",
+    "remove": "Remove",
+    "apply": "Apply"
   },
   "editor": {
     "save": "Save",
@@ -350,5 +363,30 @@
     "number": "number",
     "width": "width",
     "height": "height"
+  },
+  "skydrive": {
+    "mediaLibrary": "Image Library",
+    "skyDrive": "Sky Drive",
+    "usage": "Usage",
+
+    "filename": "Name",
+    "filetype": "Type",
+    "filesize": "Size",
+    "updateDate": "Update At",
+
+    "checkedState": "State",
+    "checkPassed": "Approved",
+    "checkUnpassed": "Rejected",
+    "checking": "Processing",
+    "fileUnapprovedError": "File is not approved yet!",
+
+    "downloadSelected": "Download",
+    "removeSelected": "Remove",
+    "dragAndDrop": "Drag And Drop",
+    "uploadFile": "Upload",
+    "notImageFileError": "File is not image!",
+    "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
+    "newFilenamePromptMsg": "Please input new filename",
+    "nameConflictError": "The name already exists."
   }
 }
