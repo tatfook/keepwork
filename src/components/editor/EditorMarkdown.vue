@@ -137,13 +137,11 @@ export default {
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     highlightCodeByMod(mod) {
-      let lineBegin = mod.lineBegin
-      let lineEnd = mod.md.length + lineBegin
-      if (mod.modType === 'ModMarkdown' && mod.md[0] === '```') {
-        lineEnd -= 2
-      }
+      if(mod.modType === 'ModMarkdown') return
+      let lineBegin = mod.lineBegin - 1
+      let lineEnd = BlockHelper.endLine(mod) - 1
       this.clearHighlight()
-      for (let i = lineBegin - 1; i <= lineEnd; i++) {
+      for (let i = lineBegin; i < lineEnd; i++) {
         this.editor.addLineClass(i, 'gutter', 'mark-text')
       }
     },
@@ -160,7 +158,7 @@ export default {
         let mod = Parser.getActiveBlock(this.modList, line)
         if (mod) {
           this.highlightCodeByMod(mod)
-          mod.key && this.setActiveMod(mod.key)
+          if(mod.key !== activeMod.key) this.setActiveMod(mod.key)
         }
       })
     },
