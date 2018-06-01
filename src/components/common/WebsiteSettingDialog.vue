@@ -30,10 +30,6 @@ export default {
       title: `//${location.host}/${this.sitePath}`,
       websiteSettingNavs: [
         {
-          text: '网站信息',
-          comp: WebsiteSettingBasicMessage
-        },
-        {
           text: '网站布局',
           comp: WebsiteSettingLayout
         }
