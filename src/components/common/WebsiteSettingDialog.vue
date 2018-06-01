@@ -63,7 +63,7 @@ export default {
     .el-dialog {
       width: 96%;
       min-width: 1180px;
-      max-width: 1920px;
+      max-width: 1200px;
     }
     .el-dialog__header {
       box-shadow: 0 2px 2px #b5b5b5;
