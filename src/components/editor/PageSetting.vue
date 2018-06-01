@@ -37,7 +37,7 @@ export default {
       selectedLayoutId: ''
     }
   },
-  async mounted() {
+  async activated() {
     await Promise.all([
       this.gitlabGetRepositoryTree({path: this.sitePath}),
       this.userGetSiteLayoutConfig({path: this.sitePath})
@@ -74,7 +74,7 @@ export default {
       return this.userGetSettedPageLayoutByPath(this.pagePath)
     },
     settedPageLayoutId() {
-      return _.get(this.settedPageLayout, 'id', NaN)
+      return _.get(this.settedPageLayout, 'id', '')
     },
     selectedLayout() {
       return this.userSiteLayoutsMap[this.selectedLayoutId]
