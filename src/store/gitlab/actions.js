@@ -125,8 +125,16 @@ const actions = {
     let {
       rawBaseUrl,
       dataSourceUsername,
-      projectName
+      projectName,
+      visibility
     } = getSiteDetailInfoDataSourceByPath(path)
+
+    // this is special for private website
+    let isPrivateWebsite = visibility === 'private'
+    if (isPrivateWebsite) {
+      await dispatch('readFileForOwner', { path })
+      return
+    }
 
     let fullPath = getFileFullPathByPath(path)
     let content = await gitlabShowRawForGuest(

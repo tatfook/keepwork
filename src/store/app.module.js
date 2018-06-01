@@ -84,6 +84,7 @@ const getters = {
 
 const actions = {
   async setActivePage(context, { path }) {
+    path = decodeURIComponent(path)
     let { rootGetters, commit, dispatch } = context
     commit('SET_ACTIVE_PAGE', path)
 
