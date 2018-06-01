@@ -67,7 +67,6 @@
         </el-col>
       </el-row>
       <!-- 选择课程包的课程 -->
-      <div>{{lessonsSelect}}</div>
       <el-form-item label="Lessons:" class="lesson-list" v-bind:class="{'unempty': lessonsSelect.length == 0 }">
         <el-transfer
           filterable
@@ -81,6 +80,8 @@
           <a class="lesson-link" v-bind:href="option.lessonUrl">{{ option.lessonUrl }}</a>
          </span>
         </el-transfer>
+        <el-alert title="selected lesson greater than 0" type="error" v-if="lessonsSelect.length == 0" >
+  </el-alert>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -157,6 +158,7 @@ const parseMarkDown = (item) => {
         itemData.lessonUrl = keepworkHost + item.url;
         itemData.lessonCover = lessonData.split('CoverImageOfTheLesson:')[1].split('\n')[0];
         itemData.lessonNo = lessonData.split('LessonNo:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
+        itemData.LessonGoals = lessonData.split('LessonGoals:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
     }
     return itemData;
 }
@@ -254,7 +256,7 @@ export default {
     submitForm(formName) {
       checkInputEmpty();
       this.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (valid && this.lessonsSelect.length != 0) {
           //课程包id
           this.lessonsData.id === '' ? this.lessonsData.id = uuid(32, 16) : this.lessonsData.id;
           //设置年龄段
@@ -289,6 +291,7 @@ export default {
           .then(response => {
             if( response.data.err == 0 ){
               this.handleClose();
+              this.$emit('finishEditing', this.lessonsData);
             }else{
               console.log( response.data.msg )
             }
@@ -305,6 +308,12 @@ export default {
     }
   },
   created: function(){
+    //获取选中课程的数据
+    if( this.lessonsData.lessons ){
+      this.lessonsData.lessons.forEach((lesson, index ) => {
+        this.lessonsSelect.push(lesson.key)
+      })
+    }
     //获取课程列表
     axios.get(lessonHost + '/api/class/lesson').then(response => {
       const lessonsData = response.data.hits.hits;
@@ -339,6 +348,9 @@ export default {
   }
   .lesson-list .el-transfer-panel{
     width: 360px;
+  }
+  .lesson-list .el-alert--error{
+    margin-top: 10px;
   }
   .lessonsTitle{
     word-wrap: break-word;
