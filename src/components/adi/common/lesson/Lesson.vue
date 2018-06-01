@@ -89,13 +89,10 @@ export default {
     if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
       if (username) {
         axios.get(lessonHost + '/api/member/auth', {
-          params: {
-            username: username
-          },
           withCredentials: true
         }).then(response => {
           let r = response.data
-          if (r.data && r.data.vipDay >= 0) {
+          if (r.data && r.data.identity === 2) {
             this.options.updateVipView()
             this.properties.vip = true
           } else {
