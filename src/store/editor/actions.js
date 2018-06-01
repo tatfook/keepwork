@@ -73,6 +73,7 @@ const cacheAvailable = pageData => {
 
 const actions = {
   async setActivePage(context, { path, editorMode = true }) {
+    path = decodeURIComponent(path)
     let {
       state,
       getters,

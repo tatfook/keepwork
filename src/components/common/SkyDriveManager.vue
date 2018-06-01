@@ -49,6 +49,7 @@
           :label="$t('skydrive.filesize')"
           width="80"
           show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.displaySize }}</template>
         </el-table-column>
         <el-table-column
           prop="updateDate"
@@ -183,12 +184,12 @@ export default {
         let { size, filename, type } = file
         let ext = /.+\./.test(filename) ? filename.split('.').pop() : type
         ext = (ext || '').toLowerCase()
-        size = this.biteToM(size) + 'MB'
+        let displaySize = this.biteToM(size) + 'MB'
 
         checked = Number(checked)
         let checkPassed = checked === 1
         let checkedState = checkPassed ? this.$t('skydrive.checkPassed') : checked === 2 ? this.$t('skydrive.checkUnpassed') : this.$t('skydrive.checking')
-        return {...item, size, type, ext, checkedState, checkPassed }
+        return {...item, size, displaySize, type, ext, checkedState, checkPassed }
       }).filter(this.itemFilterBySearchWord)
     },
     skyDriveMediaLibraryData() {
