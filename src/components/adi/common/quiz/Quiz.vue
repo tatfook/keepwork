@@ -2,7 +2,7 @@
   <div class="comp-quiz" v-bind:class="{'error': !isRight }">
       <div v-if="!isOperate" class="splic"></div>
 
-    <div v-for="item in properties.data" :data-id="item.id">
+    <div v-for="item in properties.data" :id="item.id">
       <div class="no"><i class="el-icon-edit-outline"></i> Quiz </div>
 
       <div class="quiz-content">
@@ -154,6 +154,7 @@ export default {
     }
     if (device == 'pc' || device == 'pad') {
       // 答题模式下不允许复制粘贴功能
+      document.getElementsByTagName('body')[0].setAttribute('style', 'margin-top: 60px !important');
       document.oncontextmenu=new Function("event.returnValue=false");
       document.onselectstart=new Function("event.returnValue=false");
       document.onkeydown = function(){
@@ -170,16 +171,23 @@ export default {
       let _this = this.properties.data[0];
       // console.log(_this);
       quizList.push(_this);
-      console.log(quizList)
       let body = document.getElementsByClassName('el-main')[0];
-      let nodeAnswerSheet = document.createElement('ul');
+      let ansSheet = document.getElementsByClassName('answer-sheet');
+      let nodeAnswerSheet = ansSheet.length > 0 ? ansSheet[0] : document.createElement('ul');
       let ansEle = ''
       for(let i = 0; i < quizList.length; i++) {
-        ansEle += '<li data-index="' + i + '"><a href="#quiz_' + i + '">' + (i + 1) + '</a></li>';
+        ansEle += '<li data-index="' + i + '"><a class="quiz-item el-button" data-id="' + quizList[i].id + '" href="#quiz_' + quizList[i].id + '">Quiz ' + (i + 1) + '</a></li>';
       }
-      nodeAnswerSheet.setAttribute('class', 'answer-sheet')
-      nodeAnswerSheet.innerHTML = ansEle
+      nodeAnswerSheet.setAttribute('class', 'answer-sheet');
+      nodeAnswerSheet.innerHTML = ansEle;
       body.insertBefore(nodeAnswerSheet, body.childNodes[0]);
+      let quizItems = document.getElementsByClassName('quiz-item');
+      for(let i = 0; i < quizItems.length; i++) {
+        quizItems[i].onclick = function(){
+          let quizId = this.getAttribute('data-id');
+          window.location.hash="#" + quizId;
+        }
+      }
       // 生成一个答题卡在顶部
       let answer = {};
       answer.quizId = _this.id;
@@ -269,7 +277,7 @@ export default {
         }
       }else if(data[0].type == 1) { // 多选
         myAnswer = this.quiz.multiple.sort();
-        let answer = JSON.parse(data[0].answer).sort();
+        let answer = data[0].answer.sort();
         if(JSON.stringify(myAnswer) === JSON.stringify(answer)) {
           trueFlag = true;
           this.isRight = true;
@@ -281,11 +289,8 @@ export default {
         // 去掉所有空格回车和其他空符号之后转换为小写
         let flag = false;
         myAnswer = this.textAnswer.replace(/\r|\n|\\s/g, "").toLowerCase();
-        console.log('mAnswer:', myAnswer);
-        console.log(data[0]);
         for(let i = 0; i < data[0].options.length; i ++) {
           let opAnswer = data[0].options[i].item.replace(/\r|\n|\\s/g, "").toLowerCase();
-          console.log('opAnswer:', opAnswer);
           if(opAnswer === myAnswer) {
             flag = true;
             break;
@@ -302,6 +307,13 @@ export default {
       // } else {
       //   this.$message.error("很遗憾，答错了~");
       // }
+      let ansArr = document.getElementsByTagName('a');
+      for(let i = 0; i < ansArr.length; i++) {
+        console.log(data);
+        if(ansArr[i].getAttribute('data-id') === data[0].id) {
+          ansArr[i].classList.add('quiz-item-done');
+        }
+      }
       for(let i = 0; i < answerSheet.length; i++) {
         let item = answerSheet[i];
         if(item.quizId === data[0].id) {
@@ -475,30 +487,49 @@ export default {
     position: fixed;
     /*固定定位*/
     top: 0;
-    right: 0;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
     height: 60px;
+    transform:translate(-50%,-50%);
+    z-index: 100;
+    list-style-type: none;
+    padding-top: 20px;
+    /* overflow: hidden; */
   }
 
-  .answer-sheet ul{
+  /* .answer-sheet{
     max-height: 600px;
     text-align: center;
     margin: 20px 0;
     padding: 0 10px;
     overflow: hidden;
     box-sizing: border-box;
-  }
+    list-style-type: none;
+  } */
   .answer-sheet li{
-    font-size: 15px;
-    width: 45px;
+    font-size: 16px;
+    width: 70px;
     height: 25px;
-    margin: 5px 3px;
+    margin: 5px 10px;
     float: left;
     line-height: 1.5;
     background-color: #F2F2F2;
     border-radius:4px;
+  }
+
+  .answer-sheet a {
+    text-decoration: none
+  }
+
+  .quiz-item-done {
+    background: #409efe;
+    color: white;
+  }
+
+  .el-button:hover {
+    background: #f99523;
+    border: 1px solid #f99523;
+    color: white;
   }
 </style>
 
