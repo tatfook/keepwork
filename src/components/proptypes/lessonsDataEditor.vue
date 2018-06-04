@@ -1,22 +1,13 @@
 <template>
-<<<<<<< HEAD
-  <el-dialog title="Lessons" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
-=======
   <el-dialog title="Lessons" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
     <el-form :model="lessonsData" :rules="rules" ref="lessonsData" label-width="128px" class="demo-ruleForm">
       <!-- 课程包名称 -->
       <el-form-item label="LessonsTitle:" prop="title">
         <el-input v-model="lessonsData.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
       <!-- 课程包封面图的URL地址 -->
-<<<<<<< HEAD
-      <el-form-item label="CoverImage(URL)" prop="coverImage">
-        <el-input v-model="lessonsData.coverImage" maxlength="512" placeholder="Please Input..."></el-input>
-=======
       <el-form-item label="CoverImage(URL)" prop="cover">
         <el-input v-model="lessonsData.cover" maxlength="512" placeholder="Please Input..."></el-input>
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
       </el-form-item>
       <!-- 课程包技能点 -->
       <el-form-item label="Skills:" prop="skills">
@@ -25,13 +16,8 @@
       <!-- 课程包的适用年龄段 -->
       <el-form-item label="Ages:" prop="ages">
         <el-row>
-<<<<<<< HEAD
-          <el-col :span="10">
-            <el-radio-group v-model="ages">
-=======
           <el-col :span="8">
             <el-radio-group v-model="ages" @change="changeAge">
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
               <el-radio label="0">Suitable for all</el-radio>
               <el-radio label="1">Self-define</el-radio>
             </el-radio-group>
@@ -40,23 +26,14 @@
             <el-row :gutter="20">
               <el-form-item v-if="ages == 1">
                 <!-- 自定义年龄最小值 -->
-<<<<<<< HEAD
-                <el-col :span="12">
-=======
                 <el-col :span="11">
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
                   <el-form-item prop="agesMin">
                     <el-input  v-model.number="lessonsData.agesMin" placeholder="Please Input..." min="1"></el-input>
                   </el-form-item>
                 </el-col>
-<<<<<<< HEAD
-                <!-- 自定义年龄最大值 -->
-                <el-col :span="12">
-=======
                 <el-col :span="2">-</el-col>
                 <!-- 自定义年龄最大值 -->
                 <el-col :span="11">
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
                   <el-form-item prop="agesMax">
                     <el-input v-model.number="lessonsData.agesMax" placeholder="Please Input..." :min=" lessonsData.agesMin + 1"></el-input>
                   </el-form-item>  
@@ -66,8 +43,6 @@
           </el-col>
         </el-row>
       </el-form-item>
-<<<<<<< HEAD
-=======
       <!-- 课程包金币花费和获得设置 -->
       <el-row>
         <el-col :span="10">
@@ -108,7 +83,6 @@
         <el-alert title="selected lesson greater than 0" type="error" v-if="lessonsSelect.length == 0" >
   </el-alert>
       </el-form-item>
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @change="validInput" @click="submitForm('lessonsData')">submit</el-button>
@@ -117,12 +91,9 @@
   </el-dialog>
 </template>
 <script>
-<<<<<<< HEAD
-=======
 import axios from 'axios'
 import qs from 'qs'
 import { mapGetters } from 'vuex'
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
 
 /* GUID 算法
   len: 指定长度
@@ -169,8 +140,6 @@ const checkInputEmpty = () => {
       }
     }
 }
-<<<<<<< HEAD
-=======
 const keepworkHost = 'http://localhost:8080';
 const lessonHost = 'http://localhost:3000'
 //markdown转json
@@ -193,7 +162,6 @@ const parseMarkDown = (item) => {
     }
     return itemData;
 }
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
 
 export default {
   name: 'lessonsDataEditor',
@@ -203,10 +171,7 @@ export default {
   },
 
   data() {
-<<<<<<< HEAD
-=======
     //校验数值是否是整数
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
     const checkScore = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('please input an integer greater than 0'));
@@ -240,11 +205,7 @@ export default {
         score: [
           { required: true, validator: checkScore, trigger: 'blur' }
         ],
-<<<<<<< HEAD
-        coverImage: [
-=======
         cover: [
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
           { required: true, message: 'please input coverImage(url)', trigger: 'blur' }
         ],
         skills: [
@@ -258,13 +219,6 @@ export default {
         ]
       },
       //年龄段默认值
-<<<<<<< HEAD
-      ages: '0'
-
-    }
-  },
-  computed: {
-=======
       ages: '0',
       //选中课程
       lessonsListData: [],
@@ -278,7 +232,6 @@ export default {
     ...mapGetters({
       activePageUrl: 'activePageUrl'
     }),
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
     lessonsData() {
       return this.originalLessonsData
     },
@@ -293,17 +246,6 @@ export default {
     validInput () {
       checkInputEmpty();
     },
-<<<<<<< HEAD
-
-    submitForm(formName) {
-      checkInputEmpty();
-      this.$refs[formName].validate((valid) => {
-        // if (valid) {
-        // } else {
-        //   console.log('error submit!!');
-        //   return false;
-        // }
-=======
     //切换年龄清空自定义的年龄
     changeAge() {
       if( this.ages == 1 ){
@@ -358,15 +300,12 @@ export default {
           console.log('error submit!!');
           return false;
         }
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
       });
     },
 
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
-<<<<<<< HEAD
-=======
   },
   created: function(){
     //获取选中课程的数据
@@ -390,13 +329,11 @@ export default {
       })
 
     })
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
   }
 }
 </script>
 
 <style scope>
-<<<<<<< HEAD
   .flex-center-between{
     width: 100%;
     margin: 10px 0;
@@ -411,7 +348,7 @@ export default {
 
   .el-form-item .writer-input .el-input__inner {
     border-color: #dcdfe6;
-=======
+  }
   .lessons .el-form-item__label:before{
     content: '*';
     color: #f56c6c;
@@ -439,7 +376,6 @@ export default {
   }
   .lesson-link:hover{
     color: #66b1ff
->>>>>>> 3c01d78d4a182622603a5e3610fd271339e2f904
   }
 </style>
 
