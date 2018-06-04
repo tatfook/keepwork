@@ -334,6 +334,21 @@ export default {
 </script>
 
 <style scope>
+  .flex-center-between{
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .flex-center-between .el-input {
+      margin: 0 20px;
+  }
+
+  .el-form-item .writer-input .el-input__inner {
+    border-color: #dcdfe6;
+  }
   .lessons .el-form-item__label:before{
     content: '*';
     color: #f56c6c;
