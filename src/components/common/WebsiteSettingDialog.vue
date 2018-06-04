@@ -34,7 +34,7 @@ export default {
           comp: WebsiteSettingLayout
         }
       ],
-      activeSettingIndex: 1
+      activeSettingIndex: 0
     }
   },
   computed: {
