@@ -194,6 +194,7 @@
     "recent": "Commonly used",
     "markdown": "Markdown",
     "bigFile": "Big file",
+    "pagePath": "Page path",
 
     "text": "Text",
     "navigation": "Navigation",
@@ -347,7 +348,8 @@
     "enter": "Enter",
     "innerModal": "Inner modal",
     "bigFile": "Big file",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "pageRoute": "Page route"
   },
   "field": {
     "fileId": "file Id",

@@ -16,6 +16,7 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
+const ModPagePath = () => import('./web/pagePath')
 const ModTab = () => import('./web/tab')
 
 export const modList = {
@@ -37,6 +38,7 @@ export const modList = {
   ModPageList,
   ModToc,
   ModBigFile,
+  ModPagePath,
   ModTab
 }
 

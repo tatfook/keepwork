@@ -14,6 +14,7 @@ import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 // import ModPageList from './web/pageList'
 // import ModToc from './web/toc'
+import ModPagePath from './web/pagePath'
 
 var modsList = [
   {
@@ -45,6 +46,11 @@ var modsList = [
         id: '2-2',
         label: 'modList.headNavigation',
         mods: [ModTitle]
+      },
+      {
+        id: '2-3',
+        label: 'modList.pagePath',
+        mods: [ModPagePath]
       }
     ]
   },

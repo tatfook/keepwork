@@ -184,6 +184,7 @@
     "recent": "常用",
     "markdown": "文本(Md)",
     "bigFile": "大文件",
+    "pagePath": "页面路径",
 
     "text": "文本",
     "navigation": "导航",
@@ -337,7 +338,8 @@
     "enter": "进入",
     "innerModal": "内部模态框",
     "bigFile": "大文件",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "pageRoute": "页面路径"
   },
   "field": {
     "fileId": "字段",

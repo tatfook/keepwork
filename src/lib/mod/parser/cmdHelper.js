@@ -23,6 +23,7 @@ export const cmdList = [
   'PageList',
   'Toc',
   'BigFile',
+  'PagePath',
   'Tab'
 ]
 

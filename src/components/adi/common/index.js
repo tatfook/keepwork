@@ -17,6 +17,7 @@ import AdiFooter from './footer/footer'
 import AdiToc from './toc/Toc'
 import AdiBigFile from './bigFile/BigFile'
 import AdiBreadCrumb from './breadCrumb/BreadCrumb'
+import AdiPagePath from './pagePath/PagePath'
 import AdiTab from './tab/Tab'
 
 export default {
@@ -39,5 +40,6 @@ export default {
   AdiToc,
   AdiBigFile,
   AdiBreadCrumb,
+  AdiPagePath,
   AdiTab
 }
