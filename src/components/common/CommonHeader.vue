@@ -37,16 +37,16 @@
         </el-menu-item>
         <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
       </el-submenu>
-      <el-menu-item index='8' class="pull-right">
+      <el-menu-item index='8' class="pull-right" v-if="!userIsLogined">
         <a href="/wiki/join">注册</a>
       </el-menu-item>
-      <el-menu-item index='9' class="pull-right">
+      <el-menu-item index='9' class="pull-right" v-if="!userIsLogined">
         <a href="/wiki/login" class="login-btn">登录</a>
       </el-menu-item>
     </el-menu>
 
     <el-menu mode='horizontal' class="hidden-sm-and-up">
-      <el-menu-item index='0'>
+      <el-menu-item index='0' class="profile-menu-item">
         <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
       </el-menu-item>
       <el-submenu index='1' class="pull-right">
@@ -151,6 +151,9 @@ export default {
   .hidden-sm-and-up .el-submenu {
     margin: 0 -10px;
   }
+  .profile-menu-item{
+    padding-left: 0;
+  }
 }
 </style>
 <style lang="scss">
@@ -163,6 +166,11 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+@media(max-width: 768px){
+  .el-submenu__title{
+    padding: 0 15px;
+  }
 }
 </style>
 

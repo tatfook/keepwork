@@ -57,7 +57,9 @@ export default {
       let { username, sitename, paths = [] } = this.activePageInfo
       if (paths.length <= 0) return []
       let breadcrumbs = paths.map((path, index) => {
-        let currentPath = [username, sitename, ...paths.slice(0, index)].join('/')
+        let currentPath = [username, sitename, ...paths.slice(0, index)].join(
+          '/'
+        )
         return this.gitlabChildrenByPath(currentPath)
       })
       return breadcrumbs
@@ -128,7 +130,8 @@ export default {
         targetFile = indexChild || children[0] || targetFile
       }
 
-      let url = targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
+      let url =
+        targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
       if (!url) return
       location.pathname = url
     }
@@ -206,6 +209,31 @@ export default {
     }
     h4 {
       display: none;
+    }
+  }
+}
+</style>
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .tool-header {
+    height: auto;
+    .breadcrumb {
+      height: 40px;
+      line-height: 40px;
+    }
+    .icons {
+      position: relative;
+      text-align: right;
+      padding-right: 15px;
+    }
+    .icon-item {
+      padding: 0 8px;
+    }
+    img {
+      width: 20px;
+    }
+    .icon-like- {
+      font-size: 20px;
     }
   }
 }
