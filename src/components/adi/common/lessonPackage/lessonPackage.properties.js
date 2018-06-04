@@ -8,6 +8,7 @@ export default {
     agesMax: 0,
     cost: '0',
     reward: '0',
-    lessons: []
+    lessons: [],
+    lessonCount: 0
   }
 }

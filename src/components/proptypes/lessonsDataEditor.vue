@@ -140,7 +140,6 @@ const checkInputEmpty = () => {
       }
     }
 }
-const keepworkHost = 'http://localhost:8080';
 const lessonHost = 'http://localhost:3000'
 //markdown转json
 const parseMarkDown = (item) => {
@@ -155,7 +154,7 @@ const parseMarkDown = (item) => {
     }
     if(lessonData) {
         itemData.lessonTitle = lessonData.split('Title:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
-        itemData.lessonUrl = keepworkHost + item.url;
+        itemData.lessonUrl = item.url;
         itemData.lessonCover = lessonData.split('CoverImageOfTheLesson:')[1].split('\n')[0];
         itemData.lessonNo = lessonData.split('LessonNo:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
         itemData.LessonGoals = lessonData.split('LessonGoals:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
@@ -266,11 +265,14 @@ export default {
           }
           //选择课程包的课程
           if( this.lessonsSelect.length > 0 ){
+            this.lessonsData.lessons = []
             for( var i = 0; i < this.lessonsSelect.length ; i++ ){
               let index = this.lessonsSelect[i];
               this.lessonsData.lessons.push(this.lessonsListData[index]);
             }
           }
+          //更新课程数量
+          this.lessonsData.lessonCount = this.lessonsSelect.length;
           let params = {
             id: this.lessonsData.id,
             title: this.lessonsData.id,
@@ -293,7 +295,7 @@ export default {
               this.handleClose();
               this.$emit('finishEditing', this.lessonsData);
             }else{
-              console.log( response.data.msg )
+              this.$message.error( response.data.msg )
             }
           })
         } else {
@@ -314,6 +316,8 @@ export default {
         this.lessonsSelect.push(lesson.key)
       })
     }
+    //更新课程数量
+    this.lessonsData.lessonCount = this.lessonsData.lessons.length;
     //获取课程列表
     axios.get(lessonHost + '/api/class/lesson').then(response => {
       const lessonsData = response.data.hits.hits;
