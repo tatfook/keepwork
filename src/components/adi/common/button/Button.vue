@@ -1,12 +1,12 @@
 <template>
   <div class="comp-button">
-    <a v-if="!options.clickEvent" :class="getClassStyle" :target='properties.target ? properties.target : options.emptyTarget' :href="properties.link ? properties.link : options.emptyLink" :style="buttonStyle">
-      <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{ properties.name ? properties.name : $t(options.emptyName) }}
+    <a v-if="!options.clickEvent" :class="getClassStyle" :target='getTarget' :href="getLink" :style="buttonStyle">
+      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+      {{ getButtonName }}
     </a>
     <a v-if="options.clickEvent" :class="getClassStyle" @click='callback' :style="buttonStyle">
-      <div v-if="options.img && options.img.src" class="img" :style="buttonImgStyle"></div>
-      {{ properties.name ? properties.name : $t(options.emptyName) }}
+      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+      {{ getButtonName }}
     </a>
   </div>
 </template>
@@ -22,14 +22,41 @@ export default {
     }
   },
   computed: {
+    getButtonName() {
+      let properties = this.properties
+      let options = this.options
+      return properties.name ? properties.name : this.$t(options.emptyName)
+    },
+    getLink() {
+      let properties = this.properties
+      let options = this.options
+      return properties.link ? properties.link : options.emptyLink
+    },
+    getTarget() {
+      let properties = this.properties
+      let options = this.options
+      return properties.target ? properties.target : options.emptyTarget
+    },
+    hasImg() {
+      return this.options.img && this.options.img.src
+    },
     buttonStyle() {
-      return this.generateStyleString(this.options.buttonStyle)
+      console.log(this.properties)
+
+      let style = {
+        width: this.properties.width && parseInt(this.properties.width) + 'px',
+        height: this.properties.height && parseInt(this.properties.height) + 'px',
+        'background-image': 'url(' + this.properties.src || '' + ')',
+        'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px'
+      }
+
+      return this.generateStyleString(_.merge({}, style, this.options.buttonStyle))
     },
     buttonImgStyle() {
       return this.generateStyleString({
-        width: this.options.img.width,
-        height: this.options.img.height,
-        'background-image': 'url(' + this.options.img.src + ')'
+        width: this.options.img && this.options.img.width,
+        height: this.options.img && this.options.img.height,
+        'background-image': 'url(' + this.options.img && this.options.img.src || '' + ')'
       })
     },
     getClassStyle() {
@@ -85,6 +112,7 @@ export default {
     justify-content: center;
     line-height: unset;
     color: unset;
+    background-repeat: no-repeat;
   }
 }
 </style>
