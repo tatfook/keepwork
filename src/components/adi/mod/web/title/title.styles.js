@@ -308,9 +308,13 @@ export default [
     templateID: 2,
     data: {
       root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center'
+      },
       colLogoB: {
         display: 'flex',
-        'justify-content': 'center'
+        'justify-content': 'flex-start'
       },
       logoB: {
         height: '64px',
@@ -318,11 +322,19 @@ export default [
       },
       colMenuB: {
         display: 'flex',
-        'justify-content': 'center',
+        'justify-content': 'flex-end',
         'align-items': 'center'
       },
       menuB: {
         width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        colLogoB: {
+          'justify-content': 'center'
+        },
+        colMenuB: {
+          'justify-content': 'center'
+        }
       }
     },
     props: {
@@ -343,7 +355,7 @@ export default [
     options: {
       theme: {
         menuB: {
-          fontSize: 'font_4',
+          fontSize: 'font_6',
           fontColor: 'color_3'
         }
       },
