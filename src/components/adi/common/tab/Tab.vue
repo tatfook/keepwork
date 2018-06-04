@@ -11,7 +11,7 @@
             </div>
             <div class="tab-article-title">
               <div v-for="(itemA, indexA) in item.list" :key="indexA">
-                <a href="">
+                <a :href="'/' + itemA.link">
                   <div>[{{item.label}}]</div>
                   <div>{{ itemA.title }}</div>
                   <div class="tab-news-release-time">{{ itemA.date }}</div>
@@ -37,19 +37,7 @@ export default {
   mixins: [compBaseMixin],
   data() {
     return {
-      tabList: [
-        // {
-        //   label: '新闻',
-        //   name: 'news',
-        //   notice: '2018年3月20日维护公告',
-        //   list: [
-        //     {title: '2018年3月20日维护公告', date: '03/20'},
-        //     {title: '2018年3月20日维护公告', date: '03/20'},
-        //     {title: '2018年3月20日维护公告', date: '03/20'},
-        //     {title: '2018年3月20日维护公告', date: '03/20'},
-        //   ]
-        // }
-      ],
+      tabList: [],
       allFiles: []
     }
   },
@@ -63,6 +51,11 @@ export default {
     handleClick(tabsComponent) {
       console.log(tabsComponent)
       return
+    },
+    getChildrenByPath(path) {
+      return this.gitlabChildrenByPath({
+        repositoryTreesAllFiles: this.repositoryTreesAllFiles
+      })(this.activePageInfo.sitepath + '/' + (path || ''))
     }
   },
   computed: {
@@ -88,16 +81,13 @@ export default {
   },
   async created() {
     await this.getRepositoryTree({ path: this.activePageInfo.sitepath })
-    this.allFiles = this.gitlabChildrenByPath({
-      repositoryTreesAllFiles: this.repositoryTreesAllFiles
-    })(this.activePageInfo.sitepath)
 
     let tabListHandle = this.properties.source.split('|')
 
     _.forEach(tabListHandle, (element, key) => {
-      let curEleHandle = element.split(" ")
+      let curEleHandle = element.split(' ')
 
-      if(curEleHandle.length == 4) {
+      if (curEleHandle.length == 4) {
         let curEle = {
           label: '',
           name: '',
@@ -108,10 +98,26 @@ export default {
         curEle['label'] = curEleHandle[0]
         curEle['name'] = curEleHandle[2]
         curEle['notice'] = curEleHandle[3]
+        curEle['list'] = []
+
+        let curFiles = this.getChildrenByPath(curEleHandle[1])
+
+        _.forEach(curFiles, item => {
+          console.log(item)
+          if (item.type == 'blob') {
+            let thisItem = {
+              title: (item.name || '').replace('.md', ''),
+              link: item.path,
+              date: '暂无时间'
+            }
+
+            curEle['list'].push(thisItem)
+          }
+        })
 
         this.tabList.push(curEle)
       }
-    });
+    })
   }
 }
 </script>
