@@ -366,7 +366,9 @@
     "channel": "channel",
     "number": "number",
     "width": "width",
-    "height": "height"
+    "height": "height",
+    "webHeight": "web height",
+    "mobileHeight": "mobile height"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

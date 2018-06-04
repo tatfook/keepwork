@@ -355,7 +355,9 @@
     "channel": "渠道",
     "number": "数字",
     "width": "宽度",
-    "height": "高度"
+    "height": "高度",
+    "webHeight": "web高度",
+    "mobileHeight": "手机高度"
   },
   "skydrive": {
     "mediaLibrary": "图库",
