@@ -1,6 +1,6 @@
 <template>
   <div class="tool-header">
-    <div class="breadcrumb">
+    <div class="breadcrumb" v-loading='breadcrumbsLoading'>
       <a class="breadcrumb-item" href="/">{{ locationOrigin }}</a>
       <span class="breadcrumb-separator" role="presentation">/</span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
@@ -66,16 +66,18 @@ export default {
       return location.origin
     }
   },
-  mounted() {
-  },
   data() {
     return {
-      starPending: false
+      starPending: false,
+      breadcrumbsLoading: true
     }
   },
   watch: {
-    sitePath(sitePath) {
-      sitePath && this.gitlabGetRepositoryTree({ path: sitePath, editorMode: false })
+    async sitePath(sitePath) {
+      if (!sitePath) return
+      this.breadcrumbsLoading = true
+      await this.gitlabGetRepositoryTree({ path: sitePath, editorMode: false }).catch(e => console.error(e))
+      this.breadcrumbsLoading = false
     }
   },
   methods: {
@@ -123,8 +125,7 @@ export default {
       if (file.type === 'tree') {
         let children = this.gitlabChildrenByPath(file.path)
         let indexChild = children.filter(file => file.name === 'index.md')[0]
-        let targetFile = indexChild || children[0] || targetFile
-        console.log('handleBreadcrumbClick targetFile: ', targetFile)
+        targetFile = indexChild || children[0] || targetFile
       }
 
       let url = targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
@@ -142,9 +143,14 @@ export default {
   position: relative;
   height: 50px;
   .breadcrumb {
+    display: inline-block;
     padding: 0 20px;
     height: 50px;
     line-height: 50px;
+    .el-loading-spinner {
+      top: 35%;
+      transform: scale(.4);
+    }
   }
   .icons {
     position: absolute;
