@@ -18,11 +18,7 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-
-      <!-- <el-menu-item index='7' class="pull-right">历史</el-menu-item>
-      <el-menu-item index='8' class="pull-right">关注</el-menu-item>
-      <el-menu-item index='6' class="pull-right">动态(0)</el-menu-item> -->
-      <el-submenu index="5" class="pull-right" popper-class='profile-submenu'>
+      <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="userIsLogined">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
@@ -37,13 +33,19 @@
         </el-menu-item>
         <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
       </el-submenu>
+      <el-menu-item index='8' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/join">注册</a>
+      </el-menu-item>
+      <el-menu-item index='9' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/login" class="login-btn">登录</a>
+      </el-menu-item>
     </el-menu>
 
     <el-menu mode='horizontal' class="hidden-sm-and-up">
-      <el-menu-item index='0'>
+      <el-menu-item index='0' class="profile-menu-item">
         <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
       </el-menu-item>
-      <el-submenu index='1' class="pull-right">
+      <el-submenu index='1' class="pull-right" v-if="userIsLogined">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
@@ -57,6 +59,12 @@
           <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
+      <el-menu-item index='3' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/join">注册</a>
+      </el-menu-item>
+      <el-menu-item index='4' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/login" class="login-btn">登录</a>
+      </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
           <i class="el-icon-menu"></i>
@@ -85,13 +93,14 @@ export default {
   name: 'CommonHeader',
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      userIsLogined: 'user/isLogined'
     })
   },
   methods: {
-    backEditArea(){
-      this.$router.push('/wiki/wikieditor/#/'+this.$route.path)
-      window.location.reload();
+    backEditArea() {
+      this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
+      window.location.reload()
     }
   }
 }
@@ -108,6 +117,18 @@ export default {
 .el-menu a {
   text-decoration: none;
   color: inherit;
+}
+
+.el-menu .login-btn {
+  background-color: #3977ad;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 3px;
+}
+
+.el-menu .login-btn:hover {
+  background-color: #286090;
+  color: #fff;
 }
 
 .menu-left {
@@ -132,6 +153,12 @@ export default {
   .hidden-sm-and-up .el-submenu {
     margin: 0 -10px;
   }
+  .profile-menu-item {
+    padding-left: 0;
+  }
+  .el-menu .login-btn {
+    margin-right: -20px;
+  }
 }
 </style>
 <style lang="scss">
@@ -140,10 +167,15 @@ export default {
     color: inherit;
   }
 }
-.iicc-logo{
+.iicc-logo {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+@media (max-width: 768px) {
+  .el-submenu__title {
+    padding: 0 15px;
+  }
 }
 </style>
 
