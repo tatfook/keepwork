@@ -19,11 +19,11 @@ export default [
     options: {
       theme: {
         pageRoute: {
-          nameFontSize: 'font_2',
+          nameFontSize: 'font_3',
           nameFontColor: 'color_6',
           labelFontColor: 'color_3',
-          commonSize: 'font_4',
-          pageFontColor: 'color_9'
+          commonSize: 'font_5',
+          pageFontColor: 'color_8'
         }
       },
       config: {

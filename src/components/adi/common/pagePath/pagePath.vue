@@ -71,7 +71,7 @@ export default {
   }
 }
 @media only screen and (max-width: 767px) {
-  .comp-breadCrumbPage {
+  .comp-pagePath {
     padding: 0 10px;
   }
 }
