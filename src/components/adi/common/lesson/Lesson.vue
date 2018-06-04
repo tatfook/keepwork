@@ -18,7 +18,8 @@
               <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
             </div>
             <el-row class="lesson-button">
-              <el-button @click="playClick" type="primary" id="btnPlay" >Play Paracraft</el-button>
+              <el-button @click="playClick" type="primary" id="btnPlay"  v-if="!properties.vip" >Play Paracraft</el-button>
+              <el-button @click="previewClick" type="primary" id="btnPreview"  v-if="properties.vip" >Preview</el-button>
               <el-tooltip class="item" effect="dark" :content="btnTip" v-if="properties.vip" placement="top">
                 <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">{{btnInfo}}</el-button>
               </el-tooltip>
@@ -81,6 +82,9 @@ export default {
     },
     openAnimations() {
       this.dialogVisible = true;
+    },
+    previewClick() {
+      this.options.previewClick()
     }
   },
   created: function() {

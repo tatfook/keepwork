@@ -134,6 +134,7 @@ export default {
   },
   mounted: function() {
     let query = location.href.split('?')[1];
+    query = query.split('#')[0];
     if (query) {
         query = query.split('&');
         for (var i = 0; i < query.length; i++) {
@@ -167,7 +168,19 @@ export default {
         return false;
       }
       let _this = this.properties.data[0];
+      // console.log(_this);
       quizList.push(_this);
+      console.log(quizList)
+      let body = document.getElementsByClassName('el-main')[0];
+      let nodeAnswerSheet = document.createElement('ul');
+      let ansEle = ''
+      for(let i = 0; i < quizList.length; i++) {
+        ansEle += '<li data-index="' + i + '"><a href="#quiz_' + i + '">' + (i + 1) + '</a></li>';
+      }
+      nodeAnswerSheet.setAttribute('class', 'answer-sheet')
+      nodeAnswerSheet.innerHTML = ansEle
+      body.insertBefore(nodeAnswerSheet, body.childNodes[0]);
+      // 生成一个答题卡在顶部
       let answer = {};
       answer.quizId = _this.id;
       answer.quizScore = _this.score;
@@ -456,6 +469,36 @@ export default {
     color: #FF414A;
     margin-bottom: 0;
     padding: 15px 20px 0;
+  }
+  
+  .answer-sheet {
+    position: fixed;
+    /*固定定位*/
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+  }
+
+  .answer-sheet ul{
+    max-height: 600px;
+    text-align: center;
+    margin: 20px 0;
+    padding: 0 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .answer-sheet li{
+    font-size: 15px;
+    width: 45px;
+    height: 25px;
+    margin: 5px 3px;
+    float: left;
+    line-height: 1.5;
+    background-color: #F2F2F2;
+    border-radius:4px;
   }
 </style>
 

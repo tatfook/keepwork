@@ -80,6 +80,7 @@ const init = function(){
     vuex = JSON.parse(localStorage.vuex)
   }
   let query = location.href.split('?')[1]
+  query = query.split('#')[0]
   let device
   if (query) {
       query = query.split('&');
@@ -644,6 +645,11 @@ export default {
         } else {
           self.$message.error("未登录~");
         }
+      }
+      options.previewClick = function() {
+        // TODO:open客户端传递我们的地址
+        let btnPreview = document.getElementById('btnPreview');
+        window.open(self.activePageUrl + '?device=pc', '_blank')
       }
       options.classOpClick = function() {
         btnClass = document.getElementById('btnClass');
