@@ -18,10 +18,6 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-
-      <!-- <el-menu-item index='7' class="pull-right">历史</el-menu-item>
-      <el-menu-item index='8' class="pull-right">关注</el-menu-item>
-      <el-menu-item index='6' class="pull-right">动态(0)</el-menu-item> -->
       <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="userIsLogined">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
