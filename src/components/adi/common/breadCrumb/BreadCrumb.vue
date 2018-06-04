@@ -8,7 +8,12 @@ const renderTemplate = (h, m, data) => {
   return _.map(data, menuData => {
     return (
       <el-breadcrumb-item>
-        <a target={m.getTarget} href={menuData.link}>
+        <a
+          target={m.getTarget}
+          href={menuData.link}
+          onmouseover={m.onmouseover}
+          onmouseout={m.onmouseout}
+        >
           {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
         </a>
       </el-breadcrumb-item>
@@ -46,6 +51,25 @@ export default {
         'font-size': this.options.fontSize,
         color: this.options.fontColor
       })
+    },
+    onmouseover() {
+      return (
+        'this.style.color=' +
+        "'" +
+        this.options.color +
+        "';" +
+        'this.style.backgroundColor=' +
+        "'" +
+        this.options.backgroundColor +
+        "';" +
+        'this.style.borderBottomColor=' +
+        "'" +
+        this.options.borderBottomColor +
+        "'"
+      )
+    },
+    onmouseout() {
+      return "this.style.color='unset';this.style.backgroundColor='unset';this.style.borderBottomColor='unset'"
     }
   }
 }
@@ -71,9 +95,8 @@ export default {
     font-weight: normal;
   }
   a:hover {
-    color: #ff2121;
-    background-color: #ffefef;
-    border-bottom: #ff2121 4px solid;
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
   }
 }
 </style>

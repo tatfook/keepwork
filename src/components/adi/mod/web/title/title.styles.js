@@ -356,7 +356,10 @@ export default [
       theme: {
         menuB: {
           fontSize: 'font_6',
-          fontColor: 'color_3'
+          fontColor: 'color_3',
+          color: 'color_7',
+          backgroundColor: 'color_5',
+          borderBottomColor: 'color_7'
         }
       },
       config: {
