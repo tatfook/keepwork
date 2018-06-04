@@ -49,7 +49,7 @@
       <el-menu-item index='0' class="profile-menu-item">
         <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
       </el-menu-item>
-      <el-submenu index='1' class="pull-right">
+      <el-submenu index='1' class="pull-right" v-if="userIsLogined">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
@@ -63,6 +63,12 @@
           <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
+      <el-menu-item index='3' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/join">注册</a>
+      </el-menu-item>
+      <el-menu-item index='4' class="pull-right" v-if="!userIsLogined">
+        <a href="/wiki/login" class="login-btn">登录</a>
+      </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
           <i class="el-icon-menu"></i>
@@ -151,8 +157,11 @@ export default {
   .hidden-sm-and-up .el-submenu {
     margin: 0 -10px;
   }
-  .profile-menu-item{
+  .profile-menu-item {
     padding-left: 0;
+  }
+  .el-menu .login-btn {
+    margin-right: -20px;
   }
 }
 </style>
@@ -167,8 +176,8 @@ export default {
   height: 30px;
   margin-right: 5px;
 }
-@media(max-width: 768px){
-  .el-submenu__title{
+@media (max-width: 768px) {
+  .el-submenu__title {
     padding: 0 15px;
   }
 }
