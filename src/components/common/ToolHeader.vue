@@ -78,7 +78,10 @@ export default {
     async sitePath(sitePath) {
       if (!sitePath) return
       this.breadcrumbsLoading = true
-      await this.gitlabGetRepositoryTree({ path: sitePath, editorMode: false }).catch(e => console.error(e))
+      await this.gitlabGetRepositoryTree({
+        path: sitePath,
+        editorMode: false
+      }).catch(e => console.error(e))
       this.breadcrumbsLoading = false
     }
   },
@@ -152,7 +155,7 @@ export default {
     line-height: 50px;
     .el-loading-spinner {
       top: 35%;
-      transform: scale(.4);
+      transform: scale(0.4);
     }
   }
   .icons {
@@ -220,6 +223,10 @@ export default {
     .breadcrumb {
       height: 40px;
       line-height: 40px;
+      white-space: nowrap;
+      overflow-x: auto;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .icons {
       position: relative;
