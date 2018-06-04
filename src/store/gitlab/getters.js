@@ -3,7 +3,7 @@ import { GitAPI } from '@/api'
 import {
   gitTree2NestedArray,
   getFileFullPathByPath,
-  EMPTY_GIT_FOLDER_KEEPER,
+  EMPTY_GIT_FOLDER_KEEPER_REGEX,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
@@ -54,7 +54,7 @@ const getters = {
     let names = repositoryTreesAllFilePaths
       .filter(filePath => filePath.indexOf(path) === 0 && filePath !== path)
       .map(filePath => filePath.replace(path + '/', '').split('/')[0])
-      .filter(name => name && name !== EMPTY_GIT_FOLDER_KEEPER)
+      .filter(name => name && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name))
       .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
   },
@@ -63,7 +63,7 @@ const getters = {
     { repositoryTreesAllFiles = [] }
   ) => path => {
     let children = gitTree2NestedArray(repositoryTreesAllFiles, path).filter(
-      ({ name, path: filePath }) => name !== CONFIG_FOLDER_NAME && name !== EMPTY_GIT_FOLDER_KEEPER
+      ({ name, path: filePath }) => name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
     )
     return children
   },

@@ -182,6 +182,7 @@
     "match": "match",
     "cancel": "Cancel",
     "keepOneLayout": "Keep one layout at least",
+    "theLayoutIsInUse": "The layout is in use",
 
     "deleteFolder": "Be sure to delete the folder and inside documents ?",
     "documents": " documents ?",

@@ -218,16 +218,40 @@ const actions = {
     config = _.isString(content) ? JSON.parse(content) : content
     commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
   },
+  async deletePagesConfig(context, { sitePath, pages }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    let config = siteLayoutConfigBySitePath(sitePath)
+    config.pages = _.omit(config.pages, pages)
+    let unSaveLayoutConfig = {
+      ..._.get(config, 'layoutConfig')
+    }
+    let _pages = _.omit(config.pages, pages)
+    let unSavedConfig = {
+      ...config,
+      layoutConfig: unSaveLayoutConfig,
+      pages: _pages
+    }
+    let content = JSON.stringify(unSavedConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSavedConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
+  },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
+    let unSaveLayoutConfig = {
+      ..._.get(config, 'layoutConfig'),
+      ...layoutConfig
+    }
+    let _pages = _.merge({}, _.get(config, 'pages'), pages)
+    unSaveLayoutConfig.layouts = _.filter(unSaveLayoutConfig.layouts, layout => !layout.deleted)
+    const allLayoutId = _.map(unSaveLayoutConfig.layouts, layout => layout.id)
+    _pages = _.pickBy(_pages, page => allLayoutId.includes(page.layout))
     let unsavedConfig = {
       ...config,
-      layoutConfig: {
-        ..._.get(config, 'layoutConfig'),
-        ...layoutConfig
-      },
-      pages: _.merge({}, _.get(config, 'pages'), pages)
+      layoutConfig: unSaveLayoutConfig,
+      pages: _pages
     }
     let content = JSON.stringify(unsavedConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)

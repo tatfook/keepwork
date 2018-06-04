@@ -88,4 +88,16 @@ body {
 [mod-container] {
   overflow: hidden;
 }
+@media print {
+  @media (max-width: 767px) {
+    .hidden-xs-only {
+      display: none !important;
+    }
+  }
+  @media (min-width: 768px) {
+    .hidden-sm-and-up {
+      display: none !important;
+    }
+  }
+}
 </style>

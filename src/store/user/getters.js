@@ -4,7 +4,7 @@ import {
   gitTree2NestedArray,
   getFileFullPathByPath,
   getFileSitePathByPath,
-  EMPTY_GIT_FOLDER_KEEPER,
+  EMPTY_GIT_FOLDER_KEEPER_REGEX,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
@@ -54,7 +54,7 @@ const getters = {
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
       let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
-        ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
+        ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = gitTree2NestedArray(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
@@ -101,7 +101,7 @@ const getters = {
         dataSource: { lastCommitId }
       } = contributedWebsitesMapByRootpath[rootPath]
       let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
-        ({ name }) => name !== EMPTY_GIT_FOLDER_KEEPER
+        ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = gitTree2NestedArray(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME

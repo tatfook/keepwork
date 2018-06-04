@@ -51,7 +51,9 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile',
       gitlabRemoveFolder: 'gitlab/removeFolder',
       updateFilemanagerTreeNodeExpandMapByPath:
-        'updateFilemanagerTreeNodeExpandMapByPath'
+        'updateFilemanagerTreeNodeExpandMapByPath',
+      userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
+      userDeletePagesConfig: 'user/deletePagesConfig'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -129,7 +131,8 @@ export default {
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          await this.gitlabRemoveFolder({ paths: toRemoveFiles }),
+          await this.deletePagesFromLayout({ paths: toRemoveFiles })
           this.resetPage({toRemoveFiles})
           this.removePending = false
         })
@@ -158,11 +161,21 @@ export default {
       )
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFile({ path: this.currentPath })
+          await this.gitlabRemoveFile({ path: this.currentPath }),
+          await this.deletePagesFromLayout({ paths: [this.currentPath]})
           this.resetPage({currentPath: this.currentPath})
           this.removePending = false
         })
         .catch(e => console.error(e))
+    },
+    async deletePagesFromLayout({ paths = [] }) {
+      const re = /^\w+\/\w+\//
+      let sitePath = paths[0].match(re)
+      if (sitePath) sitePath = sitePath[0].replace(/\/$/, '')
+      let pages = _.map(paths, page => page.replace(re, ''))
+      await this.userGetSiteLayoutConfig({ path: sitePath})
+      let config =  this.getSiteLayoutConfigBySitePath(sitePath)
+      await this.userDeletePagesConfig({sitePath , pages})
     },
     resetPage({currentPath = null, toRemoveFiles = null }) {
       if (toRemoveFiles && toRemoveFiles.length > 0) {
@@ -200,7 +213,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      gitlabChildNamesByPath: 'gitlab/childNamesByPath'
+      gitlabChildNamesByPath: 'gitlab/childNamesByPath',
+      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath'
     }),
     pending() {
       return this.addFolderPending || this.addFilePending || this.removePending

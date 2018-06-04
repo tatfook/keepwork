@@ -1,6 +1,6 @@
 <template>
   <div class="tool-header">
-    <div class="breadcrumb">
+    <div class="breadcrumb" v-loading='breadcrumbsLoading'>
       <a class="breadcrumb-item" href="/">{{ locationOrigin }}</a>
       <span class="breadcrumb-separator" role="presentation">/</span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
@@ -57,7 +57,9 @@ export default {
       let { username, sitename, paths = [] } = this.activePageInfo
       if (paths.length <= 0) return []
       let breadcrumbs = paths.map((path, index) => {
-        let currentPath = [username, sitename, ...paths.slice(0, index)].join('/')
+        let currentPath = [username, sitename, ...paths.slice(0, index)].join(
+          '/'
+        )
         return this.gitlabChildrenByPath(currentPath)
       })
       return breadcrumbs
@@ -66,16 +68,21 @@ export default {
       return location.origin
     }
   },
-  mounted() {
-  },
   data() {
     return {
-      starPending: false
+      starPending: false,
+      breadcrumbsLoading: true
     }
   },
   watch: {
-    sitePath(sitePath) {
-      sitePath && this.gitlabGetRepositoryTree({ path: sitePath, editorMode: false })
+    async sitePath(sitePath) {
+      if (!sitePath) return
+      this.breadcrumbsLoading = true
+      await this.gitlabGetRepositoryTree({
+        path: sitePath,
+        editorMode: false
+      }).catch(e => console.error(e))
+      this.breadcrumbsLoading = false
     }
   },
   methods: {
@@ -123,11 +130,11 @@ export default {
       if (file.type === 'tree') {
         let children = this.gitlabChildrenByPath(file.path)
         let indexChild = children.filter(file => file.name === 'index.md')[0]
-        let targetFile = indexChild || children[0] || targetFile
-        console.log('handleBreadcrumbClick targetFile: ', targetFile)
+        targetFile = indexChild || children[0] || targetFile
       }
 
-      let url = targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
+      let url =
+        targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
       if (!url) return
       location.pathname = url
     }
@@ -142,9 +149,14 @@ export default {
   position: relative;
   height: 50px;
   .breadcrumb {
+    display: inline-block;
     padding: 0 20px;
     height: 50px;
     line-height: 50px;
+    .el-loading-spinner {
+      top: 35%;
+      transform: scale(0.4);
+    }
   }
   .icons {
     position: absolute;
@@ -200,6 +212,35 @@ export default {
     }
     h4 {
       display: none;
+    }
+  }
+}
+</style>
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .tool-header {
+    height: auto;
+    .breadcrumb {
+      height: 40px;
+      line-height: 40px;
+      white-space: nowrap;
+      overflow-x: auto;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .icons {
+      position: relative;
+      text-align: right;
+      padding-right: 15px;
+    }
+    .icon-item {
+      padding: 0 8px;
+    }
+    img {
+      width: 20px;
+    }
+    .icon-like- {
+      font-size: 20px;
     }
   }
 }

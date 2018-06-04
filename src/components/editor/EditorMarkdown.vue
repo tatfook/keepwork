@@ -158,7 +158,8 @@ export default {
         let mod = Parser.getActiveBlock(this.modList, line)
         if (mod) {
           this.highlightCodeByMod(mod)
-          if(mod.key !== activeMod.key) this.setActiveMod(mod.key)
+          let currentActiveModKey = this.activeMod && this.activeMod.key
+          if(mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
         }
       })
     },
