@@ -147,6 +147,12 @@ export const getFilenameWithExt = (filename, ext) => {
   return filename
 }
 
+export const gitFilenameValidator = (filename = '') => {
+  let validated = /^[^/\\:"*?<>|\s]+$/.test(filename)
+  validated = validated && /^[^_.]/.test(filename)
+  return validated
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   EMPTY_GIT_FOLDER_KEEPER_REGEX,
@@ -158,5 +164,6 @@ export default {
   getFileSitePathByPath,
   getRelativePathByPath,
   getPageInfoByPath,
-  getFilenameWithExt
+  getFilenameWithExt,
+  gitFilenameValidator
 }

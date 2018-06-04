@@ -144,7 +144,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import { suffixFileExtension } from '@/lib/utils/gitlab'
+import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import stylesList from '@/components/adi/layout/templates'
 
@@ -402,8 +402,7 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what} ${self.$t('editor.emptyName')}`
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what} ${self.$t('editor.nameRule')}`
-            if (/^[_]/.test(value)) return `${what} ${self.$t('editor.nameUnderline')}`
+            if (!gitFilenameValidator(value)) return `${what} ${self.$t('editor.nameRule')}`
             if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }

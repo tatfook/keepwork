@@ -89,8 +89,7 @@
     "website": "Web page",
 
     "emptyName": "name cannot be empty",
-    "nameRule": "name can only be composed of letters, numbers and underscores",
-    "nameUnderline": "name cannot begin with an underscore",
+    "nameRule": "name can't contain \\\/:\"*?<>| can't begin with _.",
     "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
