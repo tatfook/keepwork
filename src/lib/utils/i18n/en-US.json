@@ -373,6 +373,7 @@
     "height": "height",
     "webHeight": "web height",
     "mobileHeight": "mobile height",
+    "fontSize": "font size",
     "path": "page path"
   },
   "skydrive": {
