@@ -41,8 +41,6 @@ export default {
       return this.options.img && this.options.img.src
     },
     buttonStyle() {
-      console.log(this.properties)
-
       let style = {
         width: this.properties.width && parseInt(this.properties.width) + 'px',
         height: this.properties.height && parseInt(this.properties.height) + 'px',
