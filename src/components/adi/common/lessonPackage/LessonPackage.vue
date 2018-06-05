@@ -9,7 +9,7 @@
             <div class="lessons-include-title">
               <span class="lessons-content">
                 <span class="lessons-include">Includes:</span> 
-                <span class="lessons-count">{{properties.data.lessons ? properties.data.lessons.length : 0}}</span>
+                <span class="lessons-count">{{properties.data.lessonCount}}</span>
                 lessons
               </span>
               <span>
@@ -32,22 +32,51 @@
         </el-col>
       </el-row>
     </div>
+    <el-row type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
+      <el-col :span="20">
+        <el-progress :stroke-width="18" :percentage="lessonProgress"></el-progress>
+        <div class="progress-tip">Have learned {{doneCount}} lessons.</div>
+      </el-col>
+      <el-col :span="4">
+        <a class="el-button el-button--small el-button--primary" v-bind:href="nextLearnLesson">Continue</a>                    
+      </el-col>
+    </el-row>
     <div class="lessons-list">
       <div class="list-title">Catalogue：</div>
       <div class="list-content" v-for="lesson in properties.data.lessons">
         <div class="lesson-item">
           <el-row type="flex" class="mod-full-width-0-0-65">
             <el-col class="item-cover" :span="8">
-              <a class="item-cover-img" @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)" :style="lessonCover(lesson.lessonCover)"></a>
+              <a class="item-cover-img" @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)" :style="lessonCoverImg(lesson.lessonCover)"></a>
             </el-col>
             <el-col>
               <div class="lesson-item-desc">
-                <div class="lesson-title"><a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{lesson.lessonTitle}}</a></div>
-                <div class="lesson-item-goals">
-                  <span>Lesson Goals:</span>  
-                  <pre>{{lesson.LessonGoals}}</pre>
-                </div>
-                <div class="lesson-item-dur">Duration:45min</div>
+                <el-row type="flex" class="lesson-column" justify="space-between">
+                  <el-col>
+                    <el-row class="lesson-title">
+                      <el-col :span="21">
+                        <a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{lesson.lessonTitle}}</a>
+                      </el-col>
+                      <el-col :span="3" class="finished" v-if="lesson.learnedFlag > 0">
+                        <span>Finished</span><i class="el-icon-success"></i>
+                      </el-col>
+                    </el-row>
+                    <div class="lesson-item-goals">
+                      <span>Lesson Goals:</span>  
+                      <pre>{{lesson.LessonGoals}}</pre>
+                    </div>
+                  </el-col>
+                  <el-col>
+                    <div class="lesson-item-bottom">
+                      <div class="lesson-item-dur">
+                        Duration:45min
+                      </div>
+                      <div class="lesson-item-view">
+                        <a class="el-button el-button--small el-button--primary">View Summary</a>                    
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
               </div>
             </el-col>
           </el-row>
@@ -70,7 +99,10 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      isLessonsBuy: false
+      isLessonsBuy: false,
+      doneCount: 0,
+      lessonProgress : 0,
+      nextLearnLesson : ''
     }
   },
   methods: {
@@ -101,7 +133,7 @@ export default {
       }
     },
     //课程列表封面
-    lessonCover(imgcover) {
+    lessonCoverImg(imgcover) {
       return this.generateStyleString({
         background: 'url(' + imgcover + ')',
         'background-position': 'center',
@@ -154,10 +186,28 @@ export default {
         withCredentials: true
       })
       .then(response => {
-          console.log(response)
           if( response.data.err == 0 ){
             //已购买
             this.isLessonsBuy = true;
+            //学习进度以及学习情况
+            var proNum = parseInt((response.data.data.doneCount/response.data.data.lessonCount)*1000)/1000;;
+            if( proNum > 1 ){
+              this.lessonProgress = 100;
+            }else{
+               this.lessonProgress = proNum * 100;
+            }
+            //已完成课程
+            this.doneCount = response.data.data.doneCount;
+            // 继续学习链接
+            this.nextLearnLesson = response.data.data.nextLearnLesson;
+            //课程的完成度
+            for( var i = 0; i < this.properties.data.lessons.length;i++ ){
+              for( var j = 0; j < response.data.data.lessons.length ; j++ ){
+                if( this.properties.data.lessons[i].lessonUrl == response.data.data.lessons[j] ){
+                  this.properties.data.lessons[i].learnedFlag = response.data.data.lessons[j].learnedFlag;
+                }
+              }
+            }
           }else if(response.data.err == 102){
             this.$message.error("Sorry,please login !");
           }else if( response.data.err == 400 ){
@@ -193,11 +243,11 @@ export default {
     position: relative;
     height: 100%;
   }
-  .lessons-button {
+  /* .lessons-button {
     position: absolute;
     bottom: 0;
     z-index: 2;
-  }
+  } */
   .lessons-button .el-button {
     margin-right: 10px;
     margin-top: 10px;
@@ -238,12 +288,13 @@ export default {
     color: #4c4c4c;
   }
   .lessons-skills pre,.lesson-item .lesson-item-goals pre {
-    margin-top: 15px;
+    margin-top: 10px;
     font-family: inherit;
     word-wrap: break-word;
     white-space: pre-wrap;
     line-height: 1.5;
     font-weight: lighter;
+    word-break:break-all
   }
 
   .lessons-skills pre li {
@@ -258,6 +309,18 @@ export default {
     cursor: not-allowed;
     color: white;
     pointer-events: none;
+  }
+  /* 学习进度 */
+  .lessons-progress{
+    padding: 10px 30px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+  }
+  .lessons-progress .progress-tip{
+    color: #00E200;
+    margin-top: 10px;
+    font-size: 14px;
   }
   /* 课程列表 */
   .lessons-list{
@@ -310,8 +373,19 @@ export default {
     font-size: 14px;
     margin:0 20px 10px;
   }
+   .lesson-column{
+    flex-direction: column;
+  }
   .lesson-item-desc .lesson-title{
     margin-bottom: 15px;
+    color: #00E200;
+  }
+  .lesson-title span{
+    vertical-align: top;
+  }
+  .lesson-title .el-icon-success{
+    margin-left: 5px;
+    font-size: 22px;
   }
   .lesson-item-desc .lesson-title a{
     font-size: 18px;
@@ -329,11 +403,17 @@ export default {
     font-size: 14px;
     color: #333;
   }
-  .lesson-item-desc .lesson-item-dur{
+  /* .lesson-item-desc .lesson-item-bottom{
       position: absolute;
       bottom: 0;
       z-index: 2;
+  } */
+  .lesson-item-bottom .lesson-item-view{
+    margin-top: 24px;
   }
+  .lesson-item-bottom .lesson-item-view ..el-button--small{
+    padding: 9px 5px;
+  }  
 
 
 </style>
