@@ -11,7 +11,7 @@
             </div>
             <div class="tab-article-title">
               <div v-for="(itemA, indexA) in item.list" :key="indexA">
-                <a :href="'/' + itemA.link">
+                <a :href="'/' + itemA.link" target="_blank">
                   <div>[{{item.label}}]</div>
                   <div>{{ itemA.title }}</div>
                   <div class="tab-news-release-time">{{ itemA.date }}</div>
@@ -49,7 +49,6 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath'
     }),
     handleClick(tabsComponent) {
-      console.log(tabsComponent)
       return
     },
     getChildrenByPath(path) {
