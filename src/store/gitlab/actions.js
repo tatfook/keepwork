@@ -62,29 +62,46 @@ const getGitlabFileParams = async (
 }
 
 const actions = {
-  async getRepositoryTree(context, payload) {
-    let { path, useCache = true, recursive = true, editorMode = true } = payload
-    let {
-      commit,
-      dispatch,
-      getters: { repositoryTrees },
-      rootGetters
-    } = context
+  async getRepositoryTree({ dispatch }, payload) {
+    let { editorMode = true } = payload
+    editorMode
+      ? await dispatch('getRepositoryTreeForOwner', payload)
+      : await dispatch('getRepositoryTreeForGuest', payload)
+  },
+  async getRepositoryTreeForOwner(context, payload) {
+    let { commit, getters: { repositoryTrees } } = context
+    let { path, useCache = true, recursive = true } = payload
+    let { gitlab, projectId } = await getGitlabParams(context, { path })
 
-    let gitlab, projectId
-    if (editorMode) {
-      let gitlabParams = await getGitlabParams(context, { path })
-      gitlab = gitlabParams.gitlab
-      projectId = gitlabParams.projectId
-    } else {
-      await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
-      let {
-        'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
-      } = rootGetters
-      let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
-      projectId = siteDetailInfoDataSource.projectId
-      gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
+    let children = _.get(repositoryTrees, [projectId, path])
+    if (useCache && !_.isEmpty(children)) return
+
+    let list = await gitlab.getTree({
+      projectId,
+      path,
+      recursive
+    })
+    commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
+  },
+  async getRepositoryTreeForGuest(context, payload) {
+    let { commit, dispatch, getters: { repositoryTrees }, rootGetters } = context
+    let { path, useCache = true, recursive = true } = payload
+    await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
+    let {
+      'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+    } = rootGetters
+    let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
+    let { visibility } = siteDetailInfoDataSource
+
+    // this is special for private website
+    let isPrivateWebsite = visibility === 'private'
+    if (isPrivateWebsite) {
+      await dispatch('getRepositoryTreeForOwner', payload)
+      return
     }
+
+    let projectId = siteDetailInfoDataSource.projectId
+    let gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
 
     let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return

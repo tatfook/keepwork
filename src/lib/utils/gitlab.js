@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
+export const EMPTY_GIT_FOLDER_KEEPER_REGEX = /^\.(git|keep|gitignore)/ // for .gitkeep, .keep, .gitignore, .gitignore.md
 export const CONFIG_FOLDER_NAME = '_config'
 
 let protocol = location && location.protocol ? location.protocol : 'http:'
@@ -146,8 +147,15 @@ export const getFilenameWithExt = (filename, ext) => {
   return filename
 }
 
+export const gitFilenameValidator = (filename = '') => {
+  let validated = /^[^/\\:"*?<>|\s]+$/.test(filename)
+  validated = validated && /^[^_.]/.test(filename)
+  return validated
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
+  EMPTY_GIT_FOLDER_KEEPER_REGEX,
   CONFIG_FOLDER_NAME,
   webTemplateProject,
   gitTree2NestedArray,
@@ -156,5 +164,6 @@ export default {
   getFileSitePathByPath,
   getRelativePathByPath,
   getPageInfoByPath,
-  getFilenameWithExt
+  getFilenameWithExt,
+  gitFilenameValidator
 }
