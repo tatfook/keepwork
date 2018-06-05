@@ -32,13 +32,13 @@
         </el-col>
       </el-row>
     </div>
-    <el-row type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
+    <el-row :gutter="20" type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
       <el-col :span="20">
-        <el-progress :stroke-width="18" :percentage="lessonProgress"></el-progress>
+        <el-progress :stroke-width="18" :text-inside="true" :percentage="lessonProgress"></el-progress>
         <div class="progress-tip">Have learned {{doneCount}} lessons.</div>
       </el-col>
       <el-col :span="4">
-        <a class="el-button el-button--small el-button--primary" v-bind:href="nextLearnLesson">Continue</a>                    
+        <el-button class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Continue</el-button>                                       
       </el-col>
     </el-row>
     <div class="lessons-list">
@@ -102,7 +102,8 @@ export default {
       isLessonsBuy: false,
       doneCount: 0,
       lessonProgress : 0,
-      nextLearnLesson : ''
+      nextLearnLesson : '',
+      firstLessonUrl: ''
     }
   },
   methods: {
@@ -122,6 +123,11 @@ export default {
       if(this.isLessonsBuy ){
         return href;
       }
+    },
+    //继续学习
+    goStudy(){
+      var link = this.nextLearnLesson ? this.nextLearnLesson : this.firstLessonUrl;
+      window.location.href = link;
     },
     //未购买点击
     noBuyAlert(){
@@ -162,6 +168,8 @@ export default {
                 message: 'Add lessons of this package success!'
               });
               this.isLessonsBuy = true;
+              //调用该用户学习状态
+              this.UserState();
             }else if(response.data.err == 101){
               this.$message.error('Operation failed please retry!');
             }else if( response.data.err == 102 ){
@@ -174,47 +182,57 @@ export default {
             }
           })
         })
+    },
+    //用户学习状态
+    UserState(){
+      let packageId = this.properties.data.id;
+      if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+        axios.get(lessonHost + '/api/subscribe/state', {
+          params: {
+            packageId: packageId
+          },
+          withCredentials: true
+        })
+        .then(response => {
+            if( response.data.err == 0 ){
+              //已购买
+              this.isLessonsBuy = true;
+              //学习进度以及学习情况
+              var proNum = parseInt((response.data.data.doneCount/response.data.data.lessonCount)*1000)/1000;;
+              if( proNum > 1 ){
+                this.lessonProgress = 100;
+              }else{
+                this.lessonProgress = parseInt(proNum * 100 * 10)/10;
+              }
+              //是否已经完成
+              if( proNum >= 1 ){
+                this.isFinished = true;
+              }
+              //已完成课程
+              this.doneCount = response.data.data.doneCount;
+              // 继续学习链接
+              this.nextLearnLesson = response.data.data.nextLearnLesson;
+              this.firstLessonUrl = response.data.data.firstLessonUrl;
+              //课程的完成度
+              for( var i = 0; i < this.properties.data.lessons.length;i++ ){
+                for( var j = 0; j < response.data.data.lessons.length ; j++ ){
+                  if( this.properties.data.lessons[i].lessonUrl == response.data.data.lessons[j].lessonUrl ){
+                    this.properties.data.lessons[i].learnedFlag = response.data.data.lessons[j].learnedFlag;
+                  }
+                }
+              }
+            }else if(response.data.err == 102){
+              this.$message.error("Sorry,please login !");
+            }else if( response.data.err == 400 ){
+              //未购买
+            }
+          })
+      }
     }
   },
   created:function(){
-    let packageId = this.properties.data.id;
-    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
-      axios.get(lessonHost + '/api/subscribe/state', {
-        params: {
-          packageId: packageId
-        },
-        withCredentials: true
-      })
-      .then(response => {
-          if( response.data.err == 0 ){
-            //已购买
-            this.isLessonsBuy = true;
-            //学习进度以及学习情况
-            var proNum = parseInt((response.data.data.doneCount/response.data.data.lessonCount)*1000)/1000;;
-            if( proNum > 1 ){
-              this.lessonProgress = 100;
-            }else{
-               this.lessonProgress = proNum * 100;
-            }
-            //已完成课程
-            this.doneCount = response.data.data.doneCount;
-            // 继续学习链接
-            this.nextLearnLesson = response.data.data.nextLearnLesson;
-            //课程的完成度
-            for( var i = 0; i < this.properties.data.lessons.length;i++ ){
-              for( var j = 0; j < response.data.data.lessons.length ; j++ ){
-                if( this.properties.data.lessons[i].lessonUrl == response.data.data.lessons[j] ){
-                  this.properties.data.lessons[i].learnedFlag = response.data.data.lessons[j].learnedFlag;
-                }
-              }
-            }
-          }else if(response.data.err == 102){
-            this.$message.error("Sorry,please login !");
-          }else if( response.data.err == 400 ){
-            //未购买
-          }
-        })
-    }
+    //用户学习状态
+    this.UserState();
   }
 }
 </script>
@@ -243,11 +261,11 @@ export default {
     position: relative;
     height: 100%;
   }
-  /* .lessons-button {
+  .lessons-button {
     position: absolute;
     bottom: 0;
     z-index: 2;
-  } */
+  }
   .lessons-button .el-button {
     margin-right: 10px;
     margin-top: 10px;
@@ -312,10 +330,15 @@ export default {
   }
   /* 学习进度 */
   .lessons-progress{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     padding: 10px 30px;
     background-color: #fff;
     border: 1px solid #e5e5e5;
     border-bottom: none;
+  }
+  .lessons-progress .el-button--small{
+    text-decoration: none;
   }
   .lessons-progress .progress-tip{
     color: #00E200;
@@ -403,15 +426,10 @@ export default {
     font-size: 14px;
     color: #333;
   }
-  /* .lesson-item-desc .lesson-item-bottom{
-      position: absolute;
-      bottom: 0;
-      z-index: 2;
-  } */
   .lesson-item-bottom .lesson-item-view{
     margin-top: 24px;
   }
-  .lesson-item-bottom .lesson-item-view ..el-button--small{
+  .lesson-item-bottom .lesson-item-view .el-button--small{
     padding: 9px 5px;
   }  
 

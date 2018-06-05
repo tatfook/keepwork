@@ -268,6 +268,7 @@ export default {
             this.lessonsData.lessons = []
             for( var i = 0; i < this.lessonsSelect.length ; i++ ){
               let index = this.lessonsSelect[i];
+              this.lessonsListData[index].sortIdx = i;
               this.lessonsData.lessons.push(this.lessonsListData[index]);
             }
           }
@@ -275,7 +276,7 @@ export default {
           this.lessonsData.lessonCount = this.lessonsSelect.length;
           let params = {
             id: this.lessonsData.id,
-            title: this.lessonsData.id,
+            title: this.lessonsData.title,
             cover: this.lessonsData.cover,
             skills: this.lessonsData.skills,
             agesMin: this.lessonsData.agesMin,
@@ -328,6 +329,7 @@ export default {
           lessonUrl: tmp.lessonUrl,
           lessonCover: tmp.lessonCover,
           lessonNo: tmp.lessonNo,
+          LessonGoals: tmp.LessonGoals,
           key: index,
         });
       })
