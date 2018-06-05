@@ -21,7 +21,6 @@
               <span class="lessons-include">Skills:</span>
               <pre>{{properties.data.skills}}</pre>
             </div>
-                 
             <div class="lessons-button">
               <span class="lessons-coins">
                 <span class="lessons-cost">{{properties.data.cost}}</span>coins
@@ -71,7 +70,7 @@
                       <div class="lesson-item-dur">
                         Duration:45min
                       </div>
-                      <div class="lesson-item-view">
+                      <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
                         <a class="el-button el-button--small el-button--primary">View Summary</a>                    
                       </div>
                     </div>
