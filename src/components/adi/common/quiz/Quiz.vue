@@ -134,7 +134,9 @@ export default {
   },
   mounted: function() {
     let query = location.href.split('?')[1];
-    query = query.split('#')[0];
+    if(query && query.indexOf('#')!= -1 ) {
+      query = query.split('#')[0];
+    }
     if (query) {
         query = query.split('&');
         for (var i = 0; i < query.length; i++) {
