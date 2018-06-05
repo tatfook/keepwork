@@ -599,6 +599,10 @@ export default {
           params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
           params.goals = self.modData.lesson.LessonGoals
           params.lessonNo = self.modData.lesson.LessonNo
+          // 添加成就数据
+          params.codeReadLine = self.modData.lesson.CodeReadLine
+          params.codeWriteLine = self.modData.lesson.CodeWriteLine
+          params.commands = self.modData.lesson.Commands
           let quizs = getMods('ModQuiz')
           let lessonGet = getMod('ModLessonGet')
           let lessonPerformance = ''
@@ -663,6 +667,10 @@ export default {
         params.lessonTitle = self.modData.lesson.Title
         params.lessonCover = self.modData.lesson.CoverImageOfTheLesson
         params.goals = self.modData.lesson.LessonGoals
+        // 添加成就数据
+        params.codeReadLine = self.modData.lesson.CodeReadLine
+        params.codeWriteLine = self.modData.lesson.CodeWriteLine
+        params.commands = self.modData.lesson.Commands
         let lessonGet = getMod('ModLessonGet');
         let lessonPerformance = '';
 

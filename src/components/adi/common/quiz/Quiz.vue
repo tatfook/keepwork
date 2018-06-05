@@ -234,6 +234,8 @@ export default {
                     this.quiz.multiple = item.myAnswer.split(',');
                   } else if(data[0].type == 2) {
                     this.quiz.judge = item.myAnswer;
+                  } else if(data[0].type == 3) {
+                    this.textAnswer = item.myAnswer;
                   }
                   break;
                 }
@@ -528,7 +530,7 @@ export default {
     color: white;
   }
 
-  .el-button:hover {
+   .quiz-item:hover {
     background: #f99523;
     border: 1px solid #f99523;
     color: white;
