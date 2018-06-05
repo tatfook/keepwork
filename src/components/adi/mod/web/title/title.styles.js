@@ -25,6 +25,11 @@ let defaultData = {
     emptyName: 'adi.title.tagLine',
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
+  },
+  logoB: {
+    emptySrc: require('@/../static/adi/CreativeSpace/logo.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
   }
 }
 export default [
@@ -294,6 +299,76 @@ export default [
     preview: {
       outter: {
         height: '63px'
+      }
+    }
+  },
+
+  // style 4
+  {
+    templateID: 2,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center'
+      },
+      colLogoB: {
+        display: 'flex',
+        'justify-content': 'flex-start'
+      },
+      logoB: {
+        height: '64px',
+        width: '180px'
+      },
+      colMenuB: {
+        display: 'flex',
+        'justify-content': 'flex-end',
+        'align-items': 'center'
+      },
+      menuB: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        colLogoB: {
+          'justify-content': 'center'
+        },
+        colMenuB: {
+          'justify-content': 'center'
+        }
+      }
+    },
+    props: {
+      colGroupRow: { gutter: 10 },
+      colLogoB: {
+        xs: { span: 24 },
+        sm: { span: 9 }
+      },
+      colMenuB: {
+        xs: { span: 24 },
+        sm: { span: 15 }
+      }
+    },
+    theme: {
+      root: [],
+      rootRow: ['mod-full-width']
+    },
+    options: {
+      theme: {
+        menuB: {
+          fontSize: 'font_6',
+          fontColor: 'color_3',
+          color: 'color_7',
+          backgroundColor: 'color_5',
+          borderBottomColor: 'color_7'
+        }
+      },
+      config: {
+        ...defaultData
+      }
+    },
+    preview: {
+      outter: {
+        height: '13px'
       }
     }
   }

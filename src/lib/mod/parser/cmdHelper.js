@@ -22,7 +22,10 @@ export const cmdList = [
   'TextBoard',
   'PageList',
   'Toc',
-  'BigFile'
+  'BigFile',
+  'PagePath',
+  'Tab',
+  'Button'
 ]
 
 export const oldCmdMapper = {

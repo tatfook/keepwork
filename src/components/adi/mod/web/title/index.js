@@ -54,7 +54,9 @@ const components = {
   logo: 'AdiMedia',
   businessName: 'AdiTitle',
   tagline: 'AdiTitle',
-  menu: 'AdiMenu'
+  menu: 'AdiMenu',
+  logoB: 'AdiMedia',
+  menuB: 'AdiBreadCrumb'
 }
 
 const properties = generateProperties(name, components)
