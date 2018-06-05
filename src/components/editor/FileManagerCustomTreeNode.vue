@@ -25,7 +25,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
-import { suffixFileExtension } from '@/lib/utils/gitlab'
+import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 
 export default {
@@ -91,11 +91,8 @@ export default {
           confirmButtonText: self.$t('el.messagebox.confirm'),
           inputValidator: str => {
             let value = (str || '').trim()
-            if (!value) return `${what}${self.$t('editor.emptyName')}`
-            if (!/^[A-Za-z0-9_]+$/.test(value))
-              return `${what}${self.$t('editor.nameRule')}`
-            if (/^[_]/.test(value))
-              return `${what}${self.$t('editor.nameUnderline')}`
+            if (!value) return `${what} ${self.$t('editor.emptyName')}`
+            if (!gitFilenameValidator(value)) return `${what} ${self.$t('editor.nameRule')}`
             if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }
