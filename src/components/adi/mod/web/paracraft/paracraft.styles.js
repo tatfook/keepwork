@@ -11,6 +11,21 @@ let emptyData = {
     emptyLink: 'http://keepwork.com',
     emptyTarget: '_blank'
   },
+  backgroundImage: {
+    emptySrc: require('@/../static/adi/paracraft/backgroundImage.png'),
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  titleA: {
+    emptyName: 'adi.paracraft.paracraftTitle.titleA',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
+  subtitleA: {
+    emptyName: 'adi.paracraft.paracraftSubTitle.subtitle',
+    emptyLink: 'http://keepwork.com',
+    emptyTarget: '_blank'
+  },
   author: {
     emptyDesc: 'adi.paracraft.author.desc',
     emptyText: 'adi.paracraft.author.text',
@@ -422,6 +437,179 @@ export default [
     preview: {
       outter: {
         height: '79px'
+      },
+      inner: {
+        'margin-top': '-20px'
+      }
+    }
+  },
+  {
+    templateID: 3,
+    data: {
+      root: {
+        position: 'relative'
+      },
+      preview: {
+        height: '314px',
+        'border-radius': '5px',
+        overflow: 'hidden'
+      },
+      colTitle: {
+        width: 'auto'
+      },
+      viewTimesImg: {
+        width: '24px',
+        height: '17px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        colGroupBA: {
+          'margin-top': '10px'
+        },
+        colAuthor: {
+          'margin-top': '10px'
+        },
+        colDesc: {
+          'margin-top': '10px'
+        },
+        colGroupAA: {
+          'margin-top': '10px'
+        }
+      },
+      '@media only screen and (min-width: 768px)': {
+        colGroupA: {
+          'margin-top': '10px',
+          'margin-bottom': '10px'
+        },
+        colParacraft: {
+          position: 'relative',
+          'margin-top': '-505px'
+        },
+        backgroundImage: {
+          height: '510px'
+        },
+        colSubtitle: {
+          'margin-top': '20px',
+          'margin-left': '10px'
+        },
+        colGroupAA: {
+          'margin-top': '40px'
+        },
+        colGroupBA: {
+          'padding-left': '30px'
+        },
+        colDownload: {
+          'margin-top': '30px',
+          width: '150px',
+          position: 'relative',
+          'margin-left': '50%',
+          left: '-75px',
+          'border-radius': '30px',
+          overflow: 'hidden'
+        },
+        colGroupD: {
+          'margin-top': '10px'
+        },
+        colTitleDA: {
+          'margin-top': '10px',
+          'text-align': 'center'
+        },
+        colParagraphDB: {
+          'margin-top': '10px'
+        },
+        colGroupE: {
+          'margin-top': '30px'
+        },
+        colVersion: {
+          'margin-top': '10px'
+        },
+        colSize: {
+          'margin-top': '10px'
+        },
+        colAuthor: {
+          'margin-top': '10px'
+        },
+        colGroupCA: {
+          'margin-top': '162px'
+        }
+      }
+    },
+    props: {
+      colGroupRow: {
+        gutter: 30
+      },
+      colPreview: {
+        sm: {
+          span: 9
+        },
+        xs: {
+          span: 24
+        }
+      },
+      colGroupBA: {
+        sm: {
+          span: 15
+        }
+      },
+      colSubtitle: {
+        sm: {
+          span: 9
+        }
+      },
+      colViewTimesImg: {
+        sm: {
+          span: 1
+        }
+      },
+      colViewTimes: {
+        sm: {
+          span: 5
+        }
+      }
+    },
+    theme: {
+      root: ['font_6', 'mod-space'],
+      rootRow: ['mod-full-width'],
+      worldName: ['font_4', 'color_4'],
+      author: ['font_4', 'color_4'],
+      version: ['font_4', 'color_4'],
+      size: ['font_4', 'color_4'],
+      download: ['font_20', 'color_0'],
+      titleA: [ 'font_1' ],
+      subtitleA: [ 'font_20', 'color_3' ]
+    },
+    options: {
+      theme: {
+        download: {
+          buttonStyle: {
+            'background-color': 'color_7'
+          }
+        },
+        enter: {
+          buttonStyle: {
+            'background-color': 'color_8'
+          }
+        }
+      },
+      config: {
+        ...emptyData,
+        comment: {
+          title: 'adi.comment.title',
+          delete: 'adi.comment.delete',
+          commit: 'adi.comment.commit',
+          close: 'adi.comment.close',
+          notice: 'adi.comment.notice'
+        },
+        innerModal: {
+          width: '70%',
+          height: '80%',
+          'background-color': 'white'
+        }
+      }
+    },
+    cover: require('@/../static/adi/paracraft/paracraft1.png'),
+    preview: {
+      outter: {
+        height: '48px'
       },
       inner: {
         'margin-top': '-20px'
