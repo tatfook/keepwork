@@ -13,7 +13,7 @@ export default [
       colPageRoute: { span: 24 }
     },
     theme: {
-      root: [],
+      root: ['mod-space'],
       colGroupRow: ['mod-full-width']
     },
     options: {

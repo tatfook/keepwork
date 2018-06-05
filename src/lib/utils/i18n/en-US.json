@@ -188,7 +188,11 @@
     "areYouSureYouWantToDeleteThisFolder":
       "Are you sure you want to delete this folder ?",
     "videoNotSupport": "Your browser does not support the video tag.",
-    "notFound": "Content cannot be found"
+    "notFound": "Content cannot be found",
+
+    "yourPage": "Your page",
+    "yourPosition": "Your position：",
+    "defaultPage": "Default page"
   },
   "modList": {
     "recent": "Commonly used",
@@ -368,7 +372,8 @@
     "width": "width",
     "height": "height",
     "webHeight": "web height",
-    "mobileHeight": "mobile height"
+    "mobileHeight": "mobile height",
+    "path": "page path"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

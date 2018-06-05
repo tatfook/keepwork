@@ -178,7 +178,11 @@
     "documents": "个文件吗？",
     "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
     "videoNotSupport": "您的浏览器不支持 video 标签。",
-    "notFound": "内容找不到了"
+    "notFound": "内容找不到了",
+
+    "yourPage": "您的页面",
+    "yourPosition": "您所在的位置：",
+    "defaultPage": "首页"
   },
   "modList": {
     "recent": "常用",
@@ -357,7 +361,8 @@
     "width": "宽度",
     "height": "高度",
     "webHeight": "web高度",
-    "mobileHeight": "手机高度"
+    "mobileHeight": "手机高度",
+    "path": "页面路径"
   },
   "skydrive": {
     "mediaLibrary": "图库",

@@ -1,13 +1,13 @@
 <template>
   <div class="comp-pagePath">
     <div class="pathName" :style="nameStyle">
-      <a :target='target'>{{properties.name}}</a>
+      <a :target='target'>{{properties.name?properties.name:$t('editor.yourPage')}}</a>
     </div>
     <div class="wrapper-right">
-      <p :style="labelStyle">您所在的位置：</p>
+      <p :style="labelStyle">{{$t('editor.yourPosition')}}</p>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }" :style="labelStyle">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :style="pageStyle">{{properties.name}}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }" :style="labelStyle">{{properties.path?properties.path.split('>')[0]:$t('editor.defaultPage')}}</el-breadcrumb-item>
+        <el-breadcrumb-item :style="pageStyle">{{properties.path?properties.path.split('>')[1]:$t('editor.yourPage')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
   </div>

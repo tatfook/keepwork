@@ -1,4 +1,5 @@
 export default {
-  name: '新闻资讯',
+  name: '',
+  path: '',
   target: '_self'
 }
