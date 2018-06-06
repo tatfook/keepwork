@@ -34,6 +34,8 @@ const actions = {
   },
   /*doc
     getProfile
+
+    getProfile({forceLogin: false})
     can be called without username,
     only uses cookie info;
     dispatch this action first, in any action which depends on username.
@@ -42,16 +44,21 @@ const actions = {
     let getProfilePromise
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
-    return async (context) => {
+    return async (context, {forceLogin = true} = {}) => {
       let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
       if (isLogined) return
 
-      getProfilePromise = getProfilePromise || new Promise(resolve => {
+      getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
           commit(GET_PROFILE_SUCCESS, {...profile, token})
           Cookies.set('token', token)
           resolve()
         }).catch(async e => {
+          if (!forceLogin) {
+            reject(e)
+            return
+          }
+
           alert('尚未登陆，请登陆后访问！')
           // login for localhost test
           if (process.env.HOST_ENV === 'localhost') {

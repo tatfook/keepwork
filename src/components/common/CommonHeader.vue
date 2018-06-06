@@ -18,7 +18,7 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-      <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="userIsLogined">
+      <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="isLogin">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
@@ -33,10 +33,10 @@
         </el-menu-item>
         <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
       </el-submenu>
-      <el-menu-item index='8' class="pull-right" v-if="!userIsLogined">
+      <el-menu-item index='8' class="pull-right" v-if="!isLogin">
         <a href="/wiki/join">注册</a>
       </el-menu-item>
-      <el-menu-item index='9' class="pull-right" v-if="!userIsLogined">
+      <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a href="/wiki/login" class="login-btn">登录</a>
       </el-menu-item>
     </el-menu>
@@ -45,7 +45,7 @@
       <el-menu-item index='0' class="profile-menu-item">
         <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
       </el-menu-item>
-      <el-submenu index='1' class="pull-right" v-if="userIsLogined">
+      <el-submenu index='1' class="pull-right" v-if="isLogin">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
         </template>
@@ -59,10 +59,10 @@
           <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index='3' class="pull-right" v-if="!userIsLogined">
+      <el-menu-item index='3' class="pull-right" v-if="!isLogin">
         <a href="/wiki/join">注册</a>
       </el-menu-item>
-      <el-menu-item index='4' class="pull-right" v-if="!userIsLogined">
+      <el-menu-item index='4' class="pull-right" v-if="!isLogin">
         <a href="/wiki/login" class="login-btn">登录</a>
       </el-menu-item>
       <el-submenu index='2' class="pull-right">
@@ -88,16 +88,36 @@
 
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'CommonHeader',
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined'
-    })
+    }),
+    isLogin: {
+      get() {
+        return this.userIsLogined
+      },
+      set() {}
+    }
+  },
+  mounted() {
+    if (!this.userIsLogined) {
+      this.userGetProfile({ forceLogin: false })
+        .then(() => {
+          this.isLogin = true
+        })
+        .catch(() => {
+          this.isLogin = false
+        })
+    }
   },
   methods: {
+    ...mapActions({
+      userGetProfile: 'user/getProfile'
+    }),
     backEditArea() {
       this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
       window.location.reload()
