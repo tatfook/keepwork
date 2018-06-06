@@ -14,7 +14,7 @@ const ModBoard = () => import('./web/board')
 const ModLesson = () => import('./web/lesson')
 const ModQuiz = () => import('./web/quiz')
 const ModTeachers = () => import('./web/teachers')
-const ModLessonGet = () => import('./web/lessonGet')
+const ModLessonShare = () => import('./web/lessonShare')
 const ModLessonPackage = () => import('./web/lessonPackage')
 const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
@@ -38,7 +38,7 @@ export const modList = {
   ModLesson,
   ModQuiz,
   ModTeachers,
-  ModLessonGet,
+  ModLessonShare,
   ModLessonPackage,
   ModTextBoard,
   ModPageList,

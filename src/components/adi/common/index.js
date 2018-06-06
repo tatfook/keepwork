@@ -14,7 +14,7 @@ import AdiTabs from './tabs/Tabs'
 import AdiQuiz from './quiz/Quiz'
 import AdiLesson from './lesson/Lesson'
 import AdiTeachers from './teachers/Teachers'
-import AdiLessonGet from './lessonGet/LessonGet'
+import AdiLessonShare from './lessonShare/LessonShare'
 import AdiLessonPackage from './lessonPackage/lessonPackage'
 import AdiNumber from './number/number'
 import AdiPageList from './pageList/pageList'
@@ -39,7 +39,7 @@ export default {
   AdiQuiz,
   AdiLesson,
   AdiTeachers,
-  AdiLessonGet,
+  AdiLessonShare,
   AdiLessonPackage,
   AdiNumber,
   AdiPageList,

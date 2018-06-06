@@ -71,7 +71,7 @@
                         Duration:45min
                       </div>
                       <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
-                        <a class="el-button el-button--small el-button--primary">View Summary</a>                    
+                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">View Summary</a>                    
                       </div>
                     </div>
                   </el-col>
@@ -87,6 +87,7 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 import qs from 'qs'
 
@@ -104,6 +105,11 @@ export default {
       nextLearnLesson : '',
       firstLessonUrl: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      username: 'user/username'
+    })
   },
   methods: {
     //课程包封面
@@ -215,6 +221,8 @@ export default {
               this.firstLessonUrl = response.data.data.firstLessonUrl;
               //课程的完成度
               for( var i = 0; i < this.properties.data.lessons.length;i++ ){
+                let item = this.properties.data.lessons[i]
+                item.shareUrl = item.lessonUrl + '_share?username=' + this.username
                 for( var j = 0; j < response.data.data.lessons.length ; j++ ){
                   if( this.properties.data.lessons[i].lessonUrl == response.data.data.lessons[j].lessonUrl ){
                     this.properties.data.lessons[i].learnedFlag = response.data.data.lessons[j].learnedFlag;
