@@ -22,7 +22,7 @@ export const cmdList = [
   'Lesson',
   'Quiz',
   'Teachers',
-  'LessonGet',
+  'LessonShare',
   'LessonPackage'
 ]
 

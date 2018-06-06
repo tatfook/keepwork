@@ -12,8 +12,8 @@ export default [
     options: {
       theme: {},
       config: {
-        colLessonGet: {
-          content: 'adi.lessonGet.content'
+        colLessonShare: {
+          content: 'adi.lessonShare.content'
         }
       }
     },

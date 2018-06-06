@@ -1,12 +1,12 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
-import styles from './lessonGet.styles'
-import templates from './lessonGet.templates'
+import styles from './lessonShare.styles'
+import templates from './lessonShare.templates'
 
-const name = 'ModLessonGet'
+const name = 'ModLessonShare'
 
 const components = {
-  lessonGet: 'AdiLessonGet'
+  lessonShare: 'AdiLessonShare'
 }
 
 const properties = generateProperties(name, components)

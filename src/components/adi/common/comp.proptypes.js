@@ -15,7 +15,7 @@ import AdiTabs from './tabs/tabs.proptypes'
 import AdiQuiz from './quiz/quiz.proptypes'
 import AdiLesson from './lesson/lesson.proptypes'
 import AdiTeachers from './teachers/teachers.proptypes'
-import AdiLessonGet from './lessonGet/lessonGet.proptypes'
+import AdiLessonShare from './lessonShare/lessonShare.proptypes'
 import AdiLessonPackage from './lessonPackage/lessonPackage.proptypes'
 import AdiPageList from './pageList/pageList.proptypes'
 import AdiFooter from './footer/footer.proptypes'
@@ -40,7 +40,7 @@ export default {
   AdiQuiz,
   AdiLesson,
   AdiTeachers,
-  AdiLessonGet,
+  AdiLessonShare,
   AdiLessonPackage,
   AdiPageList,
   AdiFooter,

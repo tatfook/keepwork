@@ -87,11 +87,11 @@ const init = function(){
   if (query) {
       query = query.split('&');
       for (var i = 0; i < query.length; i++) {
-          var ary = query[i].split('=');
-          if (ary[0] == 'device' && ary[1]) {
-              device = ary[1];
-              break;
-          }
+        var ary = query[i].split('=');
+        if (ary[0] == 'device' && ary[1]) {
+            device = ary[1];
+            break;
+        }
       }
   }
 
@@ -604,18 +604,18 @@ export default {
           params.codeWriteLine = self.modData.lesson.CodeWriteLine
           params.commands = self.modData.lesson.Commands
           let quizs = getMods('ModQuiz')
-          let lessonGet = getMod('ModLessonGet')
-          let lessonPerformance = ''
-          if(lessonGet) {
-            let eles = lessonGet.getElementsByTagName('pre')
-            for(let i =0; i < eles.length; i++) {
-              let ele = eles[i]
-              if(ele.getAttribute('class')=='content'){
-                lessonPerformance = ele.innerText
-              }
-            }
-            params.lessonPerformance = lessonPerformance
-          }
+          // let lessonGet = getMod('ModLessonGet')
+          // let lessonPerformance = ''
+          // if(lessonGet) {
+          //   let eles = lessonGet.getElementsByTagName('pre')
+          //   for(let i =0; i < eles.length; i++) {
+          //     let ele = eles[i]
+          //     if(ele.getAttribute('class')=='content'){
+          //       lessonPerformance = ele.innerText
+          //     }
+          //   }
+          //   params.lessonPerformance = lessonPerformance
+          // }
           // lessonPerformance
           axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
             {
@@ -671,21 +671,20 @@ export default {
         params.codeReadLine = self.modData.lesson.CodeReadLine
         params.codeWriteLine = self.modData.lesson.CodeWriteLine
         params.commands = self.modData.lesson.Commands
-        let lessonGet = getMod('ModLessonGet');
-        let lessonPerformance = '';
+        // let lessonGet = getMod('ModLessonGet');
+        // let lessonPerformance = '';
 
-        if(lessonGet) {
-          let eles = lessonGet.getElementsByTagName('pre')
-          for(let i =0; i < eles.length; i++) {
-            let ele = eles[i]
-            if(ele.getAttribute('class')=='content'){
-              lessonPerformance = ele.innerText
-            }
-          }
-          params.lessonPerformance = lessonPerformance
-          params.quizNum = getMods('ModQuiz').length
-        }
-
+        // if(lessonGet) {
+        //   let eles = lessonGet.getElementsByTagName('pre')
+        //   for(let i =0; i < eles.length; i++) {
+        //     let ele = eles[i]
+        //     if(ele.getAttribute('class')=='content'){
+        //       lessonPerformance = ele.innerText
+        //     }
+        //   }
+        //   params.lessonPerformance = lessonPerformance
+        // }
+        params.quizNum = getMods('ModQuiz').length
         if( classState == 0 ) {
           // begin class
           axios.post(lessonHost + '/api/class/begin', qs.stringify(params),
