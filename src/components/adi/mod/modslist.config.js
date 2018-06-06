@@ -12,8 +12,6 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
-// import ModPageList from './web/pageList'
-// import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -78,11 +76,6 @@ var modsList = [
         label: 'modList.markdown',
         mods: [ModMarkdown]
       },
-      // {
-      //   id: '4-2',
-      //   label: 'modList.toc',
-      //   mods: [ModToc]
-      // },
       {
         id: '4-2',
         label: 'modList.text',
@@ -93,11 +86,6 @@ var modsList = [
         label: 'modList.menu',
         mods: [ModMenu]
       }
-      // {
-      //   id: '4-5',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // }
     ]
   },
   {
@@ -109,11 +97,6 @@ var modsList = [
         label: 'modList.comment',
         mods: [ModComment]
       },
-      // {
-      //   id: '5-2',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // },
       {
         id: '5-2',
         label: 'modList.qq',

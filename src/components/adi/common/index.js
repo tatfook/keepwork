@@ -20,6 +20,7 @@ import AdiBreadCrumb from './breadCrumb/BreadCrumb'
 import AdiPagePath from './pagePath/pagePath'
 import AdiTab from './tab/Tab'
 import AdiCategroyList from './categroyList/categroyList'
+import AdiPageSwitching from './pageSwitching/PageSwitching'
 
 export default {
   AdiMarkdown,
@@ -43,5 +44,6 @@ export default {
   AdiBreadCrumb,
   AdiPagePath,
   AdiTab,
-  AdiCategroyList
+  AdiCategroyList,
+  AdiPageSwitching
 }

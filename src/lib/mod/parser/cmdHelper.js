@@ -26,7 +26,8 @@ export const cmdList = [
   'Tab',
   'Button',
   'PagePath',
-  'CategoryList'
+  'CategoryList',
+  'PageSwitching'
 ]
 
 export const oldCmdMapper = {
