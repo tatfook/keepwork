@@ -197,14 +197,15 @@ export default {
               //已购买
               this.isLessonsBuy = true;
               //学习进度以及学习情况
-              var proNum = parseInt((response.data.data.doneCount/response.data.data.lessonCount)*1000)/1000;;
-              if( proNum > 1 ){
+              var proNum = Number(((response.data.data.doneCount/response.data.data.lessonCount)*100).toFixed(1));
+
+              if( proNum > 100 ){
                 this.lessonProgress = 100;
               }else{
-                this.lessonProgress = parseInt(proNum * 100 * 10)/10;
+                this.lessonProgress = proNum ;
               }
               //是否已经完成
-              if( proNum >= 1 ){
+              if( proNum >= 100 ){
                 this.isFinished = true;
               }
               //已完成课程
@@ -413,6 +414,7 @@ export default {
     font-size: 18px;
     color: #181818;
     text-decoration: none;
+    cursor: pointer;
   }
   .lesson-item-desc .lesson-title a:hover{
     color: #409EFE;
