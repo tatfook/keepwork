@@ -22,10 +22,8 @@
 
     <div class="icons">
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
-        <!-- <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt=""> -->
         <i class="iconfont icon-edit"></i>
       </a>
-      <!-- <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt=""> -->
       <span class="icon-item" v-popover:share>
         <i class="iconfont icon-Share"></i>
       </span>
