@@ -16,9 +16,10 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
-const ModPagePath = () => import('./web/pagePath')
 const ModTab = () => import('./web/tab')
 const ModButton = () => import('./web/button')
+const ModPagePath = () => import('./web/pagePath')
+const ModCategoryList = () => import('./web/categoryList')
 
 export const modList = {
   ModMarkdown,
@@ -39,9 +40,10 @@ export const modList = {
   ModPageList,
   ModToc,
   ModBigFile,
-  ModPagePath,
   ModTab,
-  ModButton
+  ModButton,
+  ModPagePath,
+  ModCategoryList
 }
 
 export const load = async modName => {

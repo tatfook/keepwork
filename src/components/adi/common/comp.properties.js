@@ -19,6 +19,7 @@ import AdiBigFile from './bigFile/bigFile.properties'
 import AdiBreadCrumb from './breadCrumb/breadCrumb.properties'
 import AdiPagePath from './pagePath/pagePath.properties'
 import AdiTab from './tab/tab.properties'
+import AdiCategroyList from './categroyList/categroyList.properties'
 
 export default {
   AdiMarkdown,
@@ -41,5 +42,6 @@ export default {
   AdiBigFile,
   AdiBreadCrumb,
   AdiPagePath,
-  AdiTab
+  AdiTab,
+  AdiCategroyList
 }
