@@ -345,7 +345,8 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径"
+    "pageRoute": "页面路径",
+    "tab": "标签"
   },
   "field": {
     "fileId": "字段",

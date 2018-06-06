@@ -355,7 +355,8 @@
     "innerModal": "Inner modal",
     "bigFile": "Big file",
     "iframe": "iframe",
-    "pageRoute": "Page route"
+    "pageRoute": "Page route",
+    "tab": "Tab"
   },
   "field": {
     "fileId": "file Id",
