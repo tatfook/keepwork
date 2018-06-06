@@ -262,7 +262,7 @@ const actions = {
       useCache: false
     })
   },
-  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content }) {
+  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content, sitePath }) {
     let {
       activePageUrl,
       'user/username': username,
@@ -279,19 +279,20 @@ const actions = {
       return // invalid file
     }
 
+    sitePath = sitePath || activePageUrl
     await dispatch(
       'user/getWebsiteDetailInfoByPath',
-      { path: activePageUrl },
+      { path: sitePath },
       { root: true }
     )
     const {
       rawBaseUrl,
       dataSourceUsername,
       projectName
-    } = getSiteDetailInfoDataSourceByPath(activePageUrl)
+    } = getSiteDetailInfoDataSourceByPath(sitePath)
 
     let { getGitlabAPI, getProjectIdByPath } = getters
-    let projectId = getProjectIdByPath(activePageUrl)
+    let projectId = getProjectIdByPath(sitePath)
     let options = {
       projectId,
       content,
