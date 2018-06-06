@@ -6,8 +6,7 @@
     <div class="wrapper-right">
       <p :style="labelStyle">{{$t('editor.yourPosition')}}</p>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }" :style="labelStyle">{{properties.path?properties.path.split('>')[0]:$t('editor.defaultPage')}}</el-breadcrumb-item>
-        <el-breadcrumb-item :style="pageStyle">{{properties.path?properties.path.split('>')[1]:$t('editor.yourPage')}}</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(item, index) in getPathData" :key="index" :style="selectStyle(index)">{{item}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
   </div>
@@ -18,7 +17,15 @@ import compBaseMixin from '../comp.base.mixin'
 export default {
   name: 'AdiPagePath',
   mixins: [compBaseMixin],
-  methods: {},
+  methods: {
+    selectStyle(index) {
+      if (index == this.getPathData.length - 1) {
+        return this.pageStyle
+      } else {
+        return this.labelStyle
+      }
+    }
+  },
   computed: {
     target() {
       return this.properties.target
@@ -40,6 +47,15 @@ export default {
         'font-size': this.options.commonSize,
         color: this.options.pageFontColor
       })
+    },
+    getPathData() {
+      let pathData
+      if (this.properties.path && this.properties.path.length == 0) {
+        pathData = [this.$t('editor.defaultPage'), this.$t('editor.yourPage')]
+      } else {
+        pathData = this.properties.path.split('>')
+      }
+      return pathData
     }
   }
 }
