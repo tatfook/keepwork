@@ -12,7 +12,6 @@ import AdiVipRead from './vipRead/vipRead.properties'
 import AdiComment from './comment/comment.properties'
 import AdiInnerModal from './innerModal/innerModal.properties'
 import AdiNumber from './number/number.properties'
-import AdiTabs from './tabs/tabs.properties'
 import AdiQuiz from './quiz/quiz.properties'
 import AdiLesson from './lesson/lesson.properties'
 import AdiTeachers from './teachers/teachers.properties'
@@ -41,7 +40,6 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiNumber,
-  AdiTabs,
   AdiQuiz,
   AdiLesson,
   AdiTeachers,
