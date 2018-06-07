@@ -1,11 +1,9 @@
 <template>
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
-    <!-- <el-input v-if="isRenameFile" placeholder="请输入内容" size="mini" class="input-with-select">
-      <el-button slot="append" icon="iconfont el-icon-check" type="text" size="mini"></el-button>
-      <el-button slot="append" icon="iconfont el-icon-check" type="text" size="mini"></el-button>
-    </el-input> -->
-    <span class="rename-wrapper" v-if="isRenameFile">
-      <input type="text">
+    <span class="rename-wrapper" v-if="isRenameFile" v-loading="isRenamePending">
+      <el-input @click.native.stop ref="input" v-if="isRenameFile" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newFileName" class="rename-input" size="mini"></el-input>
+      <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
+      <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
     <span v-else>{{node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
@@ -50,7 +48,8 @@ export default {
       removePending: false,
       isWebsiteSettingShow: false,
       isRenameFile: false,
-      isRenamePending: false
+      isRenamePending: false,
+      newFileName: ''
     }
   },
   methods: {
@@ -152,11 +151,54 @@ export default {
         })
         .catch(e => console.error(e))
     },
-    toggleRenameFile() {
-      this.isRenameFile = !this.isRenameFile
+    async toggleRenameFile() {
+      this.isRenameFile = true
+      this.newFileName = this.data.name.replace(/.md$/, '')
+      this.$nextTick(() => this.$refs.input.focus())
     },
-    renameFile() {
-      this.gitlabRenameFile({ currentFilePath: this.data.path })
+    async handleRenameConfirm() {
+      if (
+        !this.newFileName.trim() ||
+        this.newFileName.trim() === this.data.name.replace(/.md$/, '')
+      ) {
+        return (this.isRenameFile = false)
+      }
+      await this.gitlabGetRepositoryTree({ path: this.sitePath })
+      let childNames = await this.gitlabChildNamesByPath(
+        this.currentPath
+          .split('/')
+          .slice(0, -1)
+          .join('/')
+      )
+      if (childNames.indexOf(this.newFileName) > -1) {
+        return this.$message.error(this.$t('editor.nameExist'))
+      }
+      if (!gitFilenameValidator(this.newFileName)) {
+        return this.$message.error(
+          `${this.newFileName} ${this.$t('editor.nameRule')}`
+        )
+      }
+      this.isRenamePending = true
+      let parentPath = this.data.path
+        .split('/')
+        .slice(0, -1)
+        .join('/')
+      let newFilePath = `${parentPath}/${this.newFileName}.md`
+      await this.gitlabRenameFile({
+        currentFilePath: this.data.path,
+        newFilePath: newFilePath
+      })
+      this.isRenameFile = false
+      this.isRenamePending = false
+      this.resetPage({ currentPath: this.currentPath })
+      this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
+    },
+    handleRenameCancel() {
+      this.isRenameFile = false
+      this.newFileName = ''
+    },
+    delayCancel() {
+      setTimeout(() => !this.isRenamePending && this.handleRenameCancel(), 250)
     },
     removeFile() {
       if (this.data.type === 'tree') {
@@ -299,11 +341,17 @@ export default {
 .edit-hover:hover {
   color: #1780dc !important;
 }
+
 .rename-wrapper {
-  input {
-    border: none;
-    height: inherit;
-    width: 100%;
+  display: flex;
+  .rename-input {
+  }
+  .rename-btn {
+    width: 20px;
+    margin: 0 10px;
+    color: #8a8a8a;
+    font-weight: bold;
+    font-size: 1.2em;
   }
 }
 </style>

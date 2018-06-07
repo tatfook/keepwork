@@ -220,6 +220,7 @@ const actions = {
   },
   async deletePagesConfig(context, { sitePath, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    console.log(sitePath)
     let config = siteLayoutConfigBySitePath(sitePath)
     config.pages = _.omit(config.pages, pages)
     let unSaveLayoutConfig = {
@@ -237,8 +238,31 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSavedConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
-  async renamePageFromConfig(context, { sitePath, currentPageName, newPageName }) {
-    console.log(`currentPageName: ${currentPageName}, newPageName: ${newPageName}`)
+  async renamePageFromConfig(context, { currentFilePath, newFilePath }) {
+    let sitePath = currentFilePath.split('/').slice(0, -1).join('/')
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    let config = siteLayoutConfigBySitePath(sitePath)
+    if (!config && !config.pages) return
+    let pages = config.pages
+    console.log('pages', pages)
+    let currentPageName = currentFilePath.split('/').pop()
+    let newPageName = newFilePath.split('/').pop()
+    if (pages[currentPageName] && pages[currentPageName]['layout']) {
+      pages[newPageName] = {}
+      pages[newPageName]['layout'] = pages[currentPageName]['layout']
+    }
+    pages = _.omit(pages, [currentPageName])
+    let layoutConfig = _.get(config, 'layoutConfig')
+    let unSaveConfig = {
+      ...config,
+      layoutConfig,
+      pages: pages
+    }
+    let content = JSON.stringify(unSaveConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context

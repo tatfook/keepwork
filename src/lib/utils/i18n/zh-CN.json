@@ -89,7 +89,7 @@
     "website": "网页",
 
     "emptyName": "名不能为空",
-    "nameRule": "名称不能包含 \\\/:\"*?<>| 不能以 _. 开头",
+    "nameRule": "名称不能包含 \\\/:@&*=#\"*?<>| 不能以 _. 开头",
     "nameExist": "同名文件已经存在",
 
     "openedFiles": "已打开",
@@ -171,6 +171,7 @@
     "layoutParameters": "3. 布局参数",
     "match": "匹配",
     "cancel": "取消",
+    "confirm": "确认",
     "keepOneLayout": "至少保留一个布局",
     "theLayoutIsInUse": "布局正在使用",
 
