@@ -9,7 +9,7 @@ import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
 
-const lessonHost = 'http://localhost:3000'
+const lessonHost = 'http://lesson.keepwork.com/'
 export default {
   data() {
     return {

@@ -23,14 +23,14 @@ export const cmdList = [
   'PageList',
   'Toc',
   'BigFile',
+  'PagePath',
+  'Tab',
+  'Button',
   'Lesson',
   'Quiz',
   'Teachers',
   'LessonShare',
-  'LessonPackage',
-  'PagePath',
-  'Tab',
-  'Button'
+  'LessonPackage'
 ]
 
 export const oldCmdMapper = {

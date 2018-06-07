@@ -12,11 +12,6 @@ import ModText from './web/text'
 import ModBoard from './web/board'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
-import ModLesson from './web/lesson'
-import ModQuiz from './web/quiz'
-import ModTeachers from './web/teachers'
-import ModLessonShare from './web/lessonShare'
-import ModLessonPackage from './web/lessonPackage'
 import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
@@ -24,6 +19,11 @@ import ModBigFile from './web/bigFile'
 import ModPagePath from './web/pagePath'
 import ModTab from './web/tab'
 import ModButton from './web/button'
+import ModLesson from './web/lesson'
+import ModQuiz from './web/quiz'
+import ModTeachers from './web/teachers'
+import ModLessonShare from './web/lessonShare'
+import ModLessonPackage from './web/lessonPackage'
 
 export const modList = {
   ModMarkdown,
@@ -40,18 +40,18 @@ export const modList = {
   ModBoard,
   ModVipRead,
   ModComment,
-  ModLesson,
-  ModQuiz,
-  ModTeachers,
-  ModLessonShare,
-  ModLessonPackage,
   ModTextBoard,
   ModPageList,
   ModToc,
   ModBigFile,
   ModPagePath,
   ModTab,
-  ModButton
+  ModButton,
+  ModLesson,
+  ModQuiz,
+  ModTeachers,
+  ModLessonShare,
+  ModLessonPackage
 }
 
 export const load = modName => {

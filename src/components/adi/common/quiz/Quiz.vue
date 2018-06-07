@@ -84,7 +84,7 @@ const hideMod = function(name, flag) {
 const saveQuiz = []; // 保存所提交的题型
 const quizList = []; // 试题集合
 let answerSheet = []; // 保存当前答题卡
-const lessonHost = 'http://localhost:3000'
+const lessonHost = 'http://lesson.keepwork.com/'
 let device; // 设备 pc 电脑自学 pad 课堂学习
 let sn; // 试题的sn
 let classId; // 课堂 Id

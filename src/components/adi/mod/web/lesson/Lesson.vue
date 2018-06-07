@@ -51,8 +51,8 @@ const getMod = function(name) {
   return null
 }
 
-const lessonHost = 'http://localhost:3000'
-document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
+const lessonHost = 'http://lesson.keepwork.com/'
+document.domain = 'keepwork.com'; // TODO: 后面需要修改为 keepwork
 // document.domain = top.location.origin.replace(/\:(\d)+/,'').replace(/http\:\/\//, '');
 
 // console.debug('***************************')
