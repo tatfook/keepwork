@@ -1,13 +1,22 @@
 <template>
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
-    {{node.label | hideMDFileExtension}}
+    <!-- <el-input v-if="isRenameFile" placeholder="请输入内容" size="mini" class="input-with-select">
+      <el-button slot="append" icon="iconfont el-icon-check" type="text" size="mini"></el-button>
+      <el-button slot="append" icon="iconfont el-icon-check" type="text" size="mini"></el-button>
+    </el-input> -->
+    <span class="rename-wrapper" v-if="isRenameFile">
+      <input type="text">
+    </span>
+    <span v-else>{{node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
       <i class="iconfont icon-file_" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
       <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
-    <span class="file-manager-buttons-container">
+    <span class="file-manager-buttons-container" v-if="!isRenameFile">
+      <el-button v-if="isFile" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRenameFile" title="修改文件名">
+      </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-folder_" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
@@ -39,7 +48,9 @@ export default {
       addFolderPending: false,
       addFilePending: false,
       removePending: false,
-      isWebsiteSettingShow: false
+      isWebsiteSettingShow: false,
+      isRenameFile: false,
+      isRenamePending: false
     }
   },
   methods: {
@@ -49,6 +60,7 @@ export default {
       gitlabCreateFile: 'gitlab/createFile',
       gitlabAddFolder: 'gitlab/addFolder',
       gitlabRemoveFile: 'gitlab/removeFile',
+      gitlabRenameFile: 'gitlab/renameFile',
       gitlabRemoveFolder: 'gitlab/removeFolder',
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',
@@ -92,8 +104,10 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what} ${self.$t('editor.emptyName')}`
-            if (!gitFilenameValidator(value)) return `${what} ${self.$t('editor.nameRule')}`
-            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
+            if (!gitFilenameValidator(value))
+              return `${what} ${self.$t('editor.nameRule')}`
+            if (childNames.indexOf(value) > -1)
+              return self.$t('editor.nameExist')
             return true
           }
         }
@@ -104,7 +118,10 @@ export default {
     expandFolder(path) {
       let parentPath = path.split('/')
       parentPath.pop()
-      this.updateFilemanagerTreeNodeExpandMapByPath({path: parentPath.join('/'), expanded: true})
+      this.updateFilemanagerTreeNodeExpandMapByPath({
+        path: parentPath.join('/'),
+        expanded: true
+      })
     },
     removeFolder(data) {
       const self = this
@@ -129,11 +146,17 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles }),
-          await this.deletePagesFromLayout({ paths: toRemoveFiles })
-          this.resetPage({toRemoveFiles})
+            await this.deletePagesFromLayout({ paths: toRemoveFiles })
+          this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
         .catch(e => console.error(e))
+    },
+    toggleRenameFile() {
+      this.isRenameFile = !this.isRenameFile
+    },
+    renameFile() {
+      this.gitlabRenameFile({ currentFilePath: this.data.path })
     },
     removeFile() {
       if (this.data.type === 'tree') {
@@ -159,8 +182,8 @@ export default {
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath }),
-          await this.deletePagesFromLayout({ paths: [this.currentPath]})
-          this.resetPage({currentPath: this.currentPath})
+            await this.deletePagesFromLayout({ paths: [this.currentPath] })
+          this.resetPage({ currentPath: this.currentPath })
           this.removePending = false
         })
         .catch(e => console.error(e))
@@ -170,21 +193,24 @@ export default {
       let sitePath = paths[0].match(re)
       if (sitePath) sitePath = sitePath[0].replace(/\/$/, '')
       let pages = _.map(paths, page => page.replace(re, ''))
-      await this.userGetSiteLayoutConfig({ path: sitePath})
-      let config =  this.getSiteLayoutConfigBySitePath(sitePath)
-      await this.userDeletePagesConfig({sitePath , pages})
+      await this.userGetSiteLayoutConfig({ path: sitePath })
+      let config = this.getSiteLayoutConfigBySitePath(sitePath)
+      await this.userDeletePagesConfig({ sitePath, pages })
     },
-    resetPage({currentPath = null, toRemoveFiles = null }) {
+    resetPage({ currentPath = null, toRemoveFiles = null }) {
       if (toRemoveFiles && toRemoveFiles.length > 0) {
         let currentRoutePath = this.$route.path.substring(1)
         let isRestPage = toRemoveFiles.some(item => {
           return item.split('.')[0] === currentRoutePath
         })
-        if (isRestPage){
+        if (isRestPage) {
           return this.$router.push('/')
         }
       }
-      if (currentPath && currentPath.split('.')[0] === this.$route.path.substring(1)) {
+      if (
+        currentPath &&
+        currentPath.split('.')[0] === this.$route.path.substring(1)
+      ) {
         return this.$router.push('/')
       }
     },
@@ -267,7 +293,17 @@ export default {
   width: 30px;
 }
 .icon-folder::before {
-  font-size: .8em;
-  color: #FFAC33;
+  font-size: 0.8em;
+  color: #ffac33;
+}
+.edit-hover:hover {
+  color: #1780dc !important;
+}
+.rename-wrapper {
+  input {
+    border: none;
+    height: inherit;
+    width: 100%;
+  }
 }
 </style>

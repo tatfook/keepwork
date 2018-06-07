@@ -206,6 +206,18 @@ const actions = {
       })
     }
   },
+  async renameFile(context, { currentFilePath, newFilePath }) {
+    let {
+      // gitlab,
+      options
+    } = await getGitlabParams(context, { path: currentFilePath })
+    console.log(options)
+    // try {
+    //   await gitlab.renameFile(currentFilePath, newFilePath)
+    // } catch (error) {
+    //   console.error(error)
+    // }
+  },
   async addFolder({ dispatch }, { path }) {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`
     await dispatch('createFile', { path: newEmptyFilePath })
@@ -220,7 +232,7 @@ const actions = {
       } = await getGitlabFileParams(context, { path: paths[i] })
       try {
         await gitlab.deleteFile(paths[i], options)
-        dispatch('closeOpenedFile', { path: paths[i] }, {root: true})
+        dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
       } catch (error) {
         console.error(error)
       }

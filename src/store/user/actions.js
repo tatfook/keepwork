@@ -237,6 +237,9 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSavedConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
+  async renamePageFromConfig(context, { sitePath, currentPageName, newPageName }) {
+    console.log(`currentPageName: ${currentPageName}, newPageName: ${newPageName}`)
+  },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)

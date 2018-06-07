@@ -77,6 +77,12 @@ const gitLabAPIGenerator = ({ url, token }) => {
               }
             )
             return res.data
+          },
+          async rename(projectId, currentFilePath, newFilePath, payload) {
+            let res = await instance.post(
+              `projects/${projectId}/repository/commits`, payload
+            )
+            return res.data
           }
         }
       }
@@ -146,6 +152,22 @@ export class GitAPI {
       this.commitToES(path, 'delete', '', {})
       return data
     })
+  }
+
+  async getBase64Content(path, options) {
+    return this.client.projects.repository.files
+      .show(options.projectId || this.config.projectId, path, options.ref || this.config.ref || 'master')
+      .then(file => file)
+  }
+
+  async renameFile(currentFilePath, newFilePath, options) {
+    let base64Content = await this.getBase64Content(currentFilePath, options)
+    await this.client.repository.file.rename(currentFilePath, newFilePath, base64Content)
+      .then((data) => {
+        this.commitToES(currentFilePath, 'delete', '', {})
+        this.commitToES(newFilePath, 'create', Base64.decode(base64Content), {})
+        return data
+      })
   }
 
   async upsertFile(path, options) {
