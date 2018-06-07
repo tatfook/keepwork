@@ -11,6 +11,7 @@ const blockHelper = {
         const targetCmd = CmdHelper.targetCmd(block.cmd)
         block.data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
         this.updateCmd(block, targetCmd)
+        this.buildMarkdown(block)
       } else {
         block.data = this.isMarkdownMod(block)
           ? { md: { data: this.mdText(block) } }
