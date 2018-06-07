@@ -37,8 +37,8 @@ export default {
         for (var i = 0; i < query.length; i++) {
           var ary = query[i].split('=');
           if (ary[0] == 'username' && ary[1]) {
-              username = ary[1];
-              break;
+              username = ary[1]
+              break
           }
         }
       }

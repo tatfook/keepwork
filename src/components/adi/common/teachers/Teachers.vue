@@ -24,38 +24,38 @@ const getMods = function(name) {
 }
 let self
 const init = function(){
-  let lessonMod = getMods('ModLesson');
-  let overviewDom = document.getElementById("pane-first");
-  let operate = document.getElementById("isTeachersContent");
-  let teachersMod = getMods('ModTeachers');
+  let lessonMod = getMods('ModLesson')
+  let overviewDom = document.getElementById("pane-first")
+  let operate = document.getElementById("isTeachersContent")
+  let teachersMod = getMods('ModTeachers')
   if(lessonMod.length > 0) {
     if(operate == null || operate == undefined) {
-      let div = document.createElement("div");
-      let button = document.createElement("button");
-      div.setAttribute("class", "text-right");
-      button.setAttribute("class", "el-button el-button--primary el-button--small");
-      button.setAttribute("data-tip", "Click to hide all notes for teachers");
-      button.setAttribute("id", "isTeachersContent");
-      button.style.display = "none";
-      button.innerHTML = "Hide All";
-      div.appendChild(button);
-      overviewDom.appendChild(div);
+      let div = document.createElement("div")
+      let button = document.createElement("button")
+      div.setAttribute("class", "text-right")
+      button.setAttribute("class", "el-button el-button--primary el-button--small")
+      button.setAttribute("data-tip", "Click to hide all notes for teachers")
+      button.setAttribute("id", "isTeachersContent")
+      button.style.display = "none"
+      button.innerHTML = "Hide All"
+      div.appendChild(button)
+      overviewDom.appendChild(div)
     }
 
-    let operate = document.getElementById("isTeachersContent");
+    let operate = document.getElementById("isTeachersContent")
     if(teachersMod.length > 0) {
         operate.onclick = function () {
-          operate.innerHTML == "Show All" ? operate.innerText = "Hide All" : operate.innerText = "Show All";
+          operate.innerHTML == "Show All" ? operate.innerText = "Hide All" : operate.innerText = "Show All"
           if(operate.innerHTML == "Hide All") {
             for(let i = 0, len = teachersMod.length; i < len; i++) {
-              teachersMod[i].style.display = "block";
+              teachersMod[i].style.display = "block"
             }
-            operate.setAttribute("data-tip", "Click to hide all notes for teachers");
+            operate.setAttribute("data-tip", "Click to hide all notes for teachers")
           }else {
             for(let i = 0, len = teachersMod.length; i < len; i++) {
-              teachersMod[i].style.display = "none";
+              teachersMod[i].style.display = "none"
             }
-            operate.setAttribute("data-tip", "Click to show all notes for teachers");
+            operate.setAttribute("data-tip", "Click to show all notes for teachers")
           }
         }
     }
@@ -86,11 +86,11 @@ export default {
       if (username) {
         let r = await lessonAPI.auth()
         if (r.data && r.data.identity === 2) {
-          this.teacherShow = true;
-          document.getElementById("isTeachersContent").style.display = "inline-block";
+          this.teacherShow = true
+          document.getElementById("isTeachersContent").style.display = "inline-block"
         } else {
-          this.teacherShow = false;
-          document.getElementById("isTeachersContent").style.display = "none";
+          this.teacherShow = false
+          document.getElementById("isTeachersContent").style.display = "none"
         }
         this.$forceUpdate()
         if (device == 'pc' || device == 'pad') {
@@ -99,25 +99,25 @@ export default {
         }
       } else {
         this.teacherShow = false;
-        document.getElementById("isTeachersContent").style.display = "none";
+        document.getElementById("isTeachersContent").style.display = "none"
       }
       this.$forceUpdate()
     } else{
       // Editor
-      this.teacherShow = true;
+      this.teacherShow = true
       if(document.getElementById("isTeachersContent"))  {
-        document.getElementById("isTeachersContent").style.display = "inline-block";
+        document.getElementById("isTeachersContent").style.display = "inline-block"
       }
     }
     let device
     let query = location.href.split('?')[1]
     if (query) {
-        query = query.split('&');
+        query = query.split('&')
         for (var i = 0; i < query.length; i++) {
-            var ary = query[i].split('=');
+            var ary = query[i].split('=')
             if (ary[0] == 'device' && ary[1]) {
-                device = ary[1];
-                break;
+                device = ary[1]
+                break
             }
         }
     }

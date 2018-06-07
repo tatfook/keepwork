@@ -166,11 +166,11 @@ export default {
             });
             this.isLessonsBuy = true;
             //调用该用户学习状态
-            this.UserState();
+            this.UserState()
           }else if(r.err == 101){
-            this.$message.error('Operation failed please retry!');
+            this.$message.error('Operation failed please retry!')
           }else if( r.err == 102 ){
-            this.$message.error('Sorry,please login!');
+            this.$message.error('Sorry,please login!')
           }else if(r.err == 103){
               this.$message({
               type: warn,
@@ -181,41 +181,41 @@ export default {
     },
     //用户学习状态
     async UserState(){
-      let packageId = this.properties.data.id;
+      let packageId = this.properties.data.id
       if (!this.editMode) {
         let r = await lessonAPI.subscribeState(packageId)
         if(r.err == 0 ){
           //已购买
-          this.isLessonsBuy = true;
+          this.isLessonsBuy = true
           //学习进度以及学习情况
-          var proNum = Number(((r.data.doneCount/r.data.lessonCount)*100).toFixed(1));
+          var proNum = Number(((r.data.doneCount/r.data.lessonCount)*100).toFixed(1))
 
           if( proNum > 100 ){
-            this.lessonProgress = 100;
+            this.lessonProgress = 100
           }else{
-            this.lessonProgress = proNum ;
+            this.lessonProgress = proNum
           }
           //是否已经完成
           if( proNum >= 100 ){
-            this.isFinished = true;
+            this.isFinished = true
           }
           //已完成课程
-          this.doneCount = r.data.doneCount;
+          this.doneCount = r.data.doneCount
           // 继续学习链接
-          this.nextLearnLesson = r.data.nextLearnLesson;
-          this.firstLessonUrl = r.data.firstLessonUrl;
+          this.nextLearnLesson = r.data.nextLearnLesson
+          this.firstLessonUrl = r.data.firstLessonUrl
           //课程的完成度
           for( var i = 0; i < this.properties.data.lessons.length;i++ ){
             let item = this.properties.data.lessons[i]
             item.shareUrl = item.lessonUrl + '_share?username=' + this.username
             for( var j = 0; j < r.data.lessons.length ; j++ ){
               if( this.properties.data.lessons[i].lessonUrl == r.data.lessons[j].lessonUrl ){
-                this.properties.data.lessons[i].learnedFlag = r.data.lessons[j].learnedFlag;
+                this.properties.data.lessons[i].learnedFlag = r.data.lessons[j].learnedFlag
               }
             }
           }
         }else if(r.err == 102){
-          this.$message.error("Sorry,please login !");
+          this.$message.error("Sorry,please login !")
         }else if( r.err == 400 ){
           //未购买
         }
@@ -224,7 +224,7 @@ export default {
   },
   created:function(){
     //用户学习状态
-    this.UserState();
+    this.UserState()
   }
 }
 </script>

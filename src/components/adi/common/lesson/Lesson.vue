@@ -81,7 +81,7 @@ export default {
       this.options.classOpClick()
     },
     openAnimations() {
-      this.dialogVisible = true;
+      this.dialogVisible = true
     },
     previewClick() {
       this.options.previewClick()

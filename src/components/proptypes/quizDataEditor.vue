@@ -81,49 +81,17 @@
   </el-dialog>
 </template>
 <script>
-
-/* GUID 算法
-  len: 指定长度
-  radix: 基数
-*/
-function uuid(len, radix) {
-  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-  var uuid = [], i;
-  radix = radix || chars.length;
-
-  if (len) {
-    // Compact form
-    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
-  } else {
-    // rfc4122, version 4 form
-    var r;
-
-    // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-    uuid[14] = '4';
-
-    // Fill in random data.  At i==19 set the high bits of clock sequence as
-    // per rfc4122, sec. 4.1.5
-    for (i = 0; i < 36; i++) {
-      if (!uuid[i]) {
-        r = 0 | Math.random()*16;
-        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
-      }
-    }
-  }
-
-  return uuid.join('');
-}
+import uuid from 'uuid/v1'
 
 const checkInputEmpty = () => {
-  let opeInput = document.getElementsByClassName("writer-input");
+  let opeInput = document.getElementsByClassName("writer-input")
     for(let i = 0; i < opeInput.length; i++) {
-      let input = opeInput[i].children[0];
+      let input = opeInput[i].children[0]
       if(input.value == undefined || input.value == "") {
-          input.style.borderColor = "#f56c6c";
+          input.style.borderColor = "#f56c6c"
           return;
       }else{
-          input.style.borderColor = "#67c23a";
+          input.style.borderColor = "#67c23a"
       }
     }
 }
@@ -138,19 +106,19 @@ export default {
   data() {
     const checkScore = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('please input an integer greater than 0'));
+        return callback(new Error('please input an integer greater than 0'))
       }
       setTimeout(() => {
         if (!Number.isInteger(value)) {
-          callback(new Error('please input an integer greater than 0'));
+          callback(new Error('please input an integer greater than 0'))
         } else {
           if (value < 0) {
-            callback(new Error('please input an integer greater than 0'));
+            callback(new Error('please input an integer greater than 0'))
           } else {
-            callback();
+            callback()
           }
         }
-      }, 200);
+      }, 200)
     };
 
     return {
@@ -220,42 +188,41 @@ export default {
       if(type == 1) {
         this.quizData.options.push({
           item: ''
-        });
+        })
       }else{ // 单选
         this.quizData.options.push({
           item: ''
-        });
+        })
       }
     },
 
     validInput () {
-      checkInputEmpty();
+      checkInputEmpty()
     },
 
     submitForm(formName, type) {
-      checkInputEmpty();
+      checkInputEmpty()
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.quizData.id === 0 ? this.quizData.id = uuid(8, 16) : this.quizData.id;
-          type == 2 ?  this.quizData.options = this.judgeOptions : this.quizData.options; // 判断
+          this.quizData.id === 0 ? this.quizData.id = uuid() : this.quizData.id
+          type == 2 ?  this.quizData.options = this.judgeOptions : this.quizData.options // 判断
           if( (type == 0 || type == 2) && this.quizData.answer ) {
-            let singleAns =  this.quizData.answer[0];
-            this.quizData.answer = [singleAns];
+            let singleAns =  this.quizData.answer[0]
+            this.quizData.answer = [singleAns]
           } else if(type == 1) {
             // 多选
             JSON.stringify([this.quizData.answer].sort())
           }
           this.handleClose();
-          this.$emit('finishEditing', [this.quizData]);
+          this.$emit('finishEditing', [this.quizData])
         } else {
-          console.log('error submit!!');
-          return false;
+          return false
         }
       });
     },
 
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     }
   }
 }

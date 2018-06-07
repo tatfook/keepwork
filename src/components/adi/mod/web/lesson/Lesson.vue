@@ -50,8 +50,6 @@ const getMod = function(name) {
   return null
 }
 
-document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
-
 let vuex = {}
 let firstInFlag = true
 let self
@@ -91,6 +89,7 @@ const init = async function(){
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
   } else if (device == 'print') {
+    document.domain = 'localhost'
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
@@ -116,12 +115,12 @@ const init = async function(){
     if(lessonMod && lessonMod.parentNode != null) {
       let studentHtm =  '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
-                      + '</div>';
+                      + '</div>'
       let summaryHtm =  '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data summary-tip">' + (vipFlag? 'Teaching': 'Learning') + ' is not started yet. There is no summary here.</div>'
-                      + '</div>';
-      lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm));
-      lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm));
+                      + '</div>'
+      lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm))
+      lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm))
     }
     // 询问服务端是否存在可恢复的课堂内容
     let params = {}
@@ -149,13 +148,13 @@ const timer = {
       // /class/performance 获取数据后 DOM 操作
       let params = {username: self.username}
       let r = await lessonAPI.performanceClass(params)
-      lastResponse = r;
-      updateStudentsView(r);
+      lastResponse = r
+      updateStudentsView(r)
       if(classState == 1) {
-        document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
+        document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class'
         let eleTip = document.getElementsByClassName('is-dark')[0];
         if(eleTip) {
-          eleTip.innerText = '(Click here to dismiss the class)';
+          eleTip.innerText = '(Click here to dismiss the class)'
         }
       }
     }, this.timeout)
@@ -167,11 +166,11 @@ const timer = {
 
 // 更新 Students'Performance 下的视图
 const updateStudentsView = function(r) {
-  r = (typeof r !== 'undefined') ?  r : lastResponse; // r 缺省时为 lastResponse
-  let theadHtm = '', tbodyHtm = '', quizHtm = [], myanswer = '';  //thead tbody 题目答案
-  let total = 0, progress = 0, count = 0; // 题目总数 答题进度 答题数量
+  r = (typeof r !== 'undefined') ?  r : lastResponse // r 缺省时为 lastResponse
+  let theadHtm = '', tbodyHtm = '', quizHtm = [], myanswer = ''  //thead tbody 题目答案
+  let total = 0, progress = 0, count = 0 // 题目总数 答题进度 答题数量
   if(r.data) {
-    let data = r.data;
+    let data = r.data
     for(let i = 0; i < data.length; i++) {
       let item = data[i]
       item.count = 0
@@ -192,8 +191,8 @@ const updateStudentsView = function(r) {
           return true
         }
         return function(a,b){
-          let value1 = a[prop];
-          let value2 = b[prop];
+          let value1 = a[prop]
+          let value2 = b[prop]
           if( prop.startWith('quiz') ) {
             let idx = parseInt(prop.split('-')[1]) - 1
             value1 = 0
@@ -205,43 +204,43 @@ const updateStudentsView = function(r) {
               value2 = b.answerSheet[idx].trueFlag ? 2 : 1
             }
           }
-          let ret = 0;
-          value1 > value2 ? ret = 1 : ret = -1;
-          return ascFlag ? ret : -ret;
+          let ret = 0
+          value1 > value2 ? ret = 1 : ret = -1
+          return ascFlag ? ret : -ret
         }
       }
       const sortList = function(prop, ascFlag) {
-        data.sort(compare(prop, ascFlag));
+        data.sort(compare(prop, ascFlag))
       }
       sortList(orderBy, sortFlag)
     }
-    let learningCount = 0; // 正在学习人数
-    let leaveCount = 0; // 离开的人数
-    let offlineCount = 0; // 离线的人数
+    let learningCount = 0 // 正在学习人数
+    let leaveCount = 0 // 离开的人数
+    let offlineCount = 0 // 离线的人数
     for(let i  = 0; i < data.length; i++) {
-      let item = data[i];
-      quizHtm[i] = '';
+      let item = data[i]
+      quizHtm[i] = ''
       if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
-        learningCount++;
+        learningCount++
       } else if(item.state === 2) {
-        leaveCount++;
+        leaveCount++
       } else if(item.state === 3) {
-        offlineCount++;
+        offlineCount++
       }
-      let answerItem = item.answerSheet;
+      let answerItem = item.answerSheet
       if(answerItem) {
         for(let j = 0; j < answerItem.length; j++) {
-          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " ";
-          quizHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>'; // 对错样式
+          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " "
+          quizHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>' // 对错样式
         }
       } else {
         for(let j = 0; j < quizLen; j++) {
-          quizHtm[i] += '<td></td>';
+          quizHtm[i] += '<td></td>'
         }
       }
-      progress = item.count + '/' + item.total; // 完成进度
+      progress = item.count + '/' + item.total // 完成进度
       if(item.total != 0 && item.count === item.total) {
-        progress = "finished";
+        progress = "finished"
       }
 
       let quiz = quizHtm[i] == undefined ? " " : quizHtm[i];
@@ -250,17 +249,17 @@ const updateStudentsView = function(r) {
                       + '<td>'+ item.studentNo +'</td>'
                       + '<td>'+ progress +'</td>'
                       + quiz
-                + '</tr>';
+                + '</tr>'
     }
     if(currentTab === 'ModStudent') {
       // 隐藏学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
     } else {
       // 显示学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
-      document.getElementsByClassName('student-learning')[0].innerText = learningCount;
-      document.getElementsByClassName('student-leave')[0].innerText = leaveCount;
-      document.getElementsByClassName('student-offline')[0].innerText = offlineCount;
+      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block')
+      document.getElementsByClassName('student-learning')[0].innerText = learningCount
+      document.getElementsByClassName('student-leave')[0].innerText = leaveCount
+      document.getElementsByClassName('student-offline')[0].innerText = offlineCount
     }
     document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
   }
@@ -277,31 +276,31 @@ const bindSortEvent = function() {
   }
   const active = function(p, c) {
     function hasClass(ele, cls) {
-      cls = cls || '';
-      if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
-      return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+      cls = cls || ''
+      if (cls.replace(/\s/g, '').length == 0) return false //当cls没有参数时，返回false
+      return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ')
     }
     function addClass(ele, cls) {
       if (!hasClass(ele, cls)) {
-        ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+        ele.className = ele.className == '' ? cls : ele.className + ' ' + cls
       }
     }
     function removeClass(ele, cls) {
       if (hasClass(ele, cls)) {
-        var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+        var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' '
         while (newClass.indexOf(' ' + cls + ' ') >= 0) {
-          newClass = newClass.replace(' ' + cls + ' ', ' ');
+          newClass = newClass.replace(' ' + cls + ' ', ' ')
         }
-        ele.className = newClass.replace(/^\s+|\s+$/g, '');
+        ele.className = newClass.replace(/^\s+|\s+$/g, '')
       }
     }
-    let childEles = p.getElementsByClassName('sort-icon');
+    let childEles = p.getElementsByClassName('sort-icon')
     for(let i = 0; i < childEles[0].childNodes.length; i++) {
-      let ele = childEles[0].childNodes[i];
+      let ele = childEles[0].childNodes[i]
       if(ele.getAttribute('class') == c) {
-        addClass(ele, 'active');
+        addClass(ele, 'active')
       }else {
-        removeClass(ele, 'active');
+        removeClass(ele, 'active')
       }
     }
   }
@@ -377,7 +376,7 @@ const beginClass = function(classId) {
   classId = classId
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
-  let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3);
+  let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3)
   self.$alert("<div class='txt-one'>The class ID is <span style='font-size: 26px'>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
             + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
@@ -395,20 +394,20 @@ const beginClass = function(classId) {
     }
   });
 
-  let studentMod = getMod('ModStudent');
-  let quizNo = ''; // 题目编号
-  quizLen = getMods('ModQuiz').length;
+  let studentMod = getMod('ModStudent')
+  let quizNo = '' // 题目编号
+  quizLen = getMods('ModQuiz').length
   for(let i = 0; i < quizLen; i++) { // 题目序号
-    let quizContent = getMods('ModQuiz')[i].getElementsByClassName("quiz-content")[0];
-    let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer");
-    let optItem = quizContent.getElementsByClassName("opt-item"); //获取所有题目选项
-    let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(","); // 将字符串转换成数组
+    let quizContent = getMods('ModQuiz')[i].getElementsByClassName("quiz-content")[0]
+    let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer")
+    let optItem = quizContent.getElementsByClassName("opt-item") //获取所有题目选项
+    let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(",") // 将字符串转换成数组
 
     for(let j = 0; j < optItem.length; j++) {
-      let resetHtm = optItem[j].innerHTML.replace(/\s+/g,"")[0];
+      let resetHtm = optItem[j].innerHTML.replace(/\s+/g,"")[0]
       for(let k = 0; k < resetData.length; k++) {
         if(resetData[k] == resetHtm) {
-          optItem[j].className += ' state';
+          optItem[j].className += ' state'
         }
       }
     }
@@ -417,7 +416,7 @@ const beginClass = function(classId) {
             + '<span>Quiz'+ parseInt(i+1) +'</span>'
             + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
             + '<div class="quizContent">' + quizContent.innerHTML + '</div>'
-            + '</div></td>';
+            + '</div></td>'
   }
 
   let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-65">'
@@ -436,19 +435,19 @@ const beginClass = function(classId) {
           + '</thead>'
           + '<tbody class="tbl-body"></tbody>'
       + '</table>'
-  + '</div>';
-  studentMod.innerHTML = studetDataHtm;
-  bindSortEvent();
-  let summaryMod = getMod('ModSummary');
+  + '</div>'
+  studentMod.innerHTML = studetDataHtm
+  bindSortEvent()
+  let summaryMod = getMod('ModSummary')
   summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-65">'
                         + '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>'
-                      + '</div>';
-  let btnClass = document.getElementById('btnClass');
+                      + '</div>'
+  let btnClass = document.getElementById('btnClass')
   if(document.readyState == 'complete' && btnClass && btnClass.lastChild) {
-    btnClass.lastChild.innerText = 'Dismiss the Class';
-    let eleTip = document.getElementsByClassName('is-dark')[0];
+    btnClass.lastChild.innerText = 'Dismiss the Class'
+    let eleTip = document.getElementsByClassName('is-dark')[0]
     if(eleTip) {
-      eleTip.innerText = '(Click here to dismiss the class)';
+      eleTip.innerText = '(Click here to dismiss the class)'
     }
   }
 }
@@ -501,15 +500,15 @@ export default {
           }
           if(classState == 1) {
             if(name == 'ModStudent') {
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
+              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
             } else {
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block');
+              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block')
             }
 
             if(name == 'ModSummary') {
-              let summaryContainer = document.getElementById("summaryContainer");
+              let summaryContainer = document.getElementById("summaryContainer")
               if(summaryContainer) {
-                summaryContainer.style.display = "block";
+                summaryContainer.style.display = "block"
               }
             }
           }
@@ -527,15 +526,15 @@ export default {
             } else {
               let html = '<div class="el-row mod-full-width-0-0-65 animations-list">'
               for(let i = 0; i < len; i++) {
-                let item = animations[i];
+                let item = animations[i]
                 html += '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
                           + '<a href="'+ item.animation +'" target="_blank" class="animations-cover">'
                            + '<div style="background-image: url('+ item.coverImage +')"></div>'
                           + '</a>'
                           + '<a href="'+ item.animation +'" target="_blank" class="animations-title">'+ item.title +'</a>'
-                      + '</div>';
+                      + '</div>'
               }
-              html += '</div>';
+              html += '</div>'
 
               lessonMod.parentNode.appendChild(createMod('ModAnimations', html))
             }
@@ -553,16 +552,16 @@ export default {
         switch( tab.name ){
           case 'first': // Overview
             sliceMod('ModOverview')
-            break;
+            break
           case 'second': // Ralated Animations
             sliceMod('ModAnimations')
-            break;
+            break
           case 'third': // Student's Performance
             sliceMod('ModStudent')
-            break;
+            break
           case 'fourth': // Summary
             sliceMod('ModSummary')
-            break;
+            break
         }
       }
 
@@ -596,23 +595,23 @@ export default {
               if(r.data.state == 2) {
                 // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
                 let summaryMod = getMod('ModSummary')
-                let link = lessonAPI.lessonHost + '/learnedRecord/' + mRecordSn;
-                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                let link = lessonAPI.lessonHost + '/learnedRecord/' + mRecordSn + '?__keepwork__=1'
+                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
                 clearInterval(timerLearnState)
               }
             }, 5000) // 5s
           }
         } else {
-          self.$message.error("未登录~");
+          self.$message.error("未登录~")
         }
       }
       options.previewClick = function() {
         // TODO:open客户端传递我们的地址
-        let btnPreview = document.getElementById('btnPreview');
+        let btnPreview = document.getElementById('btnPreview')
         window.open(self.activePageUrl + '?device=pc', '_blank')
       }
       options.classOpClick = async function() {
-        btnClass = document.getElementById('btnClass');
+        btnClass = document.getElementById('btnClass')
         let params = {}
         params.username = self.username
         params.lessonNo = self.modData.lesson.LessonNo
@@ -655,31 +654,29 @@ export default {
             timer.stop()
             let summaryMod = getMod('ModSummary')
             if(r.data) {
-              notify.close();
-              let link = lessonAPI.lessonHost + '/taughtedRecord/' + r.data.classId;
+              notify.close()
+              let link = lessonAPI.lessonHost + '/taughtedRecord/' + r.data.classId + '?__keepwork__=1'
               if(summaryMod.getAttribute("style") == "display:none") {
-                summaryMod.setAttribute("style", "display:block");
-                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
-                let dataMod = summaryMod.parentNode.childNodes;
+                summaryMod.setAttribute("style", "display:block")
+                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
+                let dataMod = summaryMod.parentNode.childNodes
                 for(let i = 0; i < dataMod.length; i++) {
                   let modItem = dataMod[i].getAttribute("data-mod")
                   if(modItem != "ModSummary" && modItem != "ModLesson") {
-                    dataMod[i].setAttribute("style", "display: none");
+                    dataMod[i].setAttribute("style", "display: none")
                   }
                 }
               }else{
-                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
               }
             }
-            btnClass.setAttribute('disabled','true');
-            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
-
-            let tabItem = document.getElementsByClassName("el-tabs__item");
+            btnClass.setAttribute('disabled','true')
+            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+            let tabItem = document.getElementsByClassName("el-tabs__item")
             for(let i = 0; i < tabItem.length; i++) {
-              tabItem[i].setAttribute("class", "el-tabs__item is-top");
+              tabItem[i].setAttribute("class", "el-tabs__item is-top")
             }
-            document.getElementById("tab-fourth").className += ' is-active';
-
+            document.getElementById("tab-fourth").className += ' is-active'
           }).catch(() => {
             // cancel
           })
@@ -688,7 +685,7 @@ export default {
       options.updateVipView = function() {
         // vip 权限用户
         vipFlag = true
-        let summaryTip = document.getElementsByClassName('summary-tip')[0];
+        let summaryTip = document.getElementsByClassName('summary-tip')[0]
         if(summaryTip) {
           summaryTip.innerText = 'Teaching is not started yet. There is no summary here.'
         }

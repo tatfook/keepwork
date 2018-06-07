@@ -67,14 +67,14 @@ import compBaseMixin from '../comp.base.mixin'
 import { lessonAPI } from '@/api'
 
 const hideMod = function(name, flag) {
-  let eles = document.getElementsByTagName('div');
+  let eles = document.getElementsByTagName('div')
   for(let i =0; i < eles.length; i++) {
     let ele = eles[i];
     if(ele.getAttribute('data-mod')==name){
       if(flag) {
-        ele.setAttribute('hidden', 'hidden');
+        ele.setAttribute('hidden', 'hidden')
       }else {
-        ele.removeAttribute('hidden');
+        ele.removeAttribute('hidden')
       }
     }
   }
@@ -125,71 +125,71 @@ export default {
     }
   },
   mounted: async function() {
-    let query = location.href.split('?')[1];
+    let query = location.href.split('?')[1]
     if(query && query.indexOf('#')!= -1 ) {
       query = query.split('#')[0];
     }
     if (query) {
-        query = query.split('&');
+        query = query.split('&')
         for (var i = 0; i < query.length; i++) {
-            var ary = query[i].split('=');
+            var ary = query[i].split('=')
             if (ary[0] == 'device' && ary[1]) {
-              device = ary[1];
+              device = ary[1]
             } else if(ary[0] == 'sn' && ary[1]) {
-              sn = ary[1];
+              sn = ary[1]
             } else if(ary[0] == 'classId' && ary[1]) {
-              classId = ary[1];
+              classId = ary[1]
             } else if(ary[0] == 'username' && ary[1]) {
-              username = ary[1];
+              username = ary[1]
             } else if(ary[0] == 'studentNo' && ary[1]) {
-              studentNo = ary[1];
+              studentNo = ary[1]
             }
         }
     }
     if (device == 'pc' || device == 'pad') {
       // 答题模式下不允许复制粘贴功能
-      document.getElementsByTagName('body')[0].setAttribute('style', 'margin-top: 60px !important');
-      document.oncontextmenu=new Function("event.returnValue=false");
-      document.onselectstart=new Function("event.returnValue=false");
+      document.getElementsByTagName('body')[0].setAttribute('style', 'margin-top: 60px !important')
+      document.oncontextmenu=new Function("event.returnValue=false")
+      document.onselectstart=new Function("event.returnValue=false")
       document.onkeydown = function(){
         if (event.ctrlKey && window.event.keyCode==67){
-          return false;
+          return false
         }
         if (event.ctrlKey && window.event.keyCode==86){
-          return false;
+          return false
         }
       }
       document.body.oncopy = function (){
-        return false;
+        return false
       }
-      let _this = this.properties.data[0];
-      quizList.push(_this);
-      let body = document.getElementsByClassName('el-main')[0];
-      let ansSheet = document.getElementsByClassName('answer-sheet');
-      let nodeAnswerSheet = ansSheet.length > 0 ? ansSheet[0] : document.createElement('ul');
+      let _this = this.properties.data[0]
+      quizList.push(_this)
+      let body = document.getElementsByClassName('el-main')[0]
+      let ansSheet = document.getElementsByClassName('answer-sheet')
+      let nodeAnswerSheet = ansSheet.length > 0 ? ansSheet[0] : document.createElement('ul')
       let ansEle = ''
       for(let i = 0; i < quizList.length; i++) {
-        ansEle += '<li data-index="' + i + '"><a class="quiz-item el-button" data-id="' + quizList[i].id + '" href="#quiz_' + quizList[i].id + '">Quiz ' + (i + 1) + '</a></li>';
+        ansEle += '<li data-index="' + i + '"><a class="quiz-item el-button" data-id="' + quizList[i].id + '" href="#quiz_' + quizList[i].id + '">Quiz ' + (i + 1) + '</a></li>'
       }
-      nodeAnswerSheet.setAttribute('class', 'answer-sheet');
-      nodeAnswerSheet.innerHTML = ansEle;
-      body.insertBefore(nodeAnswerSheet, body.childNodes[0]);
-      let quizItems = document.getElementsByClassName('quiz-item');
+      nodeAnswerSheet.setAttribute('class', 'answer-sheet')
+      nodeAnswerSheet.innerHTML = ansEle
+      body.insertBefore(nodeAnswerSheet, body.childNodes[0])
+      let quizItems = document.getElementsByClassName('quiz-item')
       for(let i = 0; i < quizItems.length; i++) {
         quizItems[i].onclick = function(){
-          let quizId = this.getAttribute('data-id');
-          window.location.hash="#" + quizId;
+          let quizId = this.getAttribute('data-id')
+          window.location.hash="#" + quizId
         }
       }
       // 生成一个答题卡在顶部
-      let answer = {};
-      answer.quizId = _this.id;
-      answer.quizScore = _this.score;
-      answerSheet.push(answer);
-      timer.reset().start();
+      let answer = {}
+      answer.quizId = _this.id
+      answer.quizScore = _this.score
+      answerSheet.push(answer)
+      timer.reset().start()
     }
     if(device == 'pc') {
-      this.isOperate = true;
+      this.isOperate = true
     } else if(device == 'pad') {
       // 课堂学习 进入课堂 /class/enter
       let params = {
@@ -205,23 +205,23 @@ export default {
           sn = r.data.u.recordSn
           let ans = r.data.u.answerSheet
           if(ans && ans[0].quizId) {
-            answerSheet = ans;
+            answerSheet = ans
             // 恢复答题状态
             for(let i = 0; i < ans.length; i++) {
-              var item  = ans[i];
+              var item  = ans[i]
               let data = this.properties.data;
               if(item.quizId == data[0].id && item.myAnswer) {
                 // 找到了该题目
-                this.isShow = true;
-                this.isRight = item.trueFlag;
+                this.isShow = true
+                this.isRight = item.trueFlag
                 if(data[0].type == 0){// 单选
-                  this.quiz.single = item.myAnswer;
+                  this.quiz.single = item.myAnswer
                 } else if(data[0].type == 1) {
-                  this.quiz.multiple = item.myAnswer.split(',');
+                  this.quiz.multiple = item.myAnswer.split(',')
                 } else if(data[0].type == 2) {
-                  this.quiz.judge = item.myAnswer;
+                  this.quiz.judge = item.myAnswer
                 } else if(data[0].type == 3) {
-                  this.textAnswer = item.myAnswer;
+                  this.textAnswer = item.myAnswer
                 }
                 break;
               }
@@ -229,7 +229,7 @@ export default {
           }
         }
       } else {
-        this.$message.error("课堂已关闭~");
+        this.$message.error("课堂已关闭~")
       }
     }
   },
@@ -243,94 +243,94 @@ export default {
         this.$message.error("Please input your answer!")
         return;
       }
-      this.isShow = true;
-      let trueFlag = false;
+      this.isShow = true
+      let trueFlag = false
       let myAnswer;
       if(data[0].type == 0) {  // 单选
-        myAnswer = this.quiz.single;
+        myAnswer = this.quiz.single
         if(myAnswer === data[0].answer[0]) {
-          trueFlag = true;
-          this.isRight = true;
+          trueFlag = true
+          this.isRight = true
         }else {
-          trueFlag = false;
-          this.isRight = false;
+          trueFlag = false
+          this.isRight = false
         }
       }else if(data[0].type == 2) { // 判断
-        myAnswer = this.quiz.judge;
+        myAnswer = this.quiz.judge
         if(myAnswer === data[0].answer[0]) {
-          trueFlag = true;
-          this.isRight = true;
+          trueFlag = true
+          this.isRight = true
         }else {
-          trueFlag = false;
-          this.isRight = false;
+          trueFlag = false
+          this.isRight = false
         }
       }else if(data[0].type == 1) { // 多选
-        myAnswer = this.quiz.multiple.sort();
-        let answer = data[0].answer.sort();
+        myAnswer = this.quiz.multiple.sort()
+        let answer = data[0].answer.sort()
         if(JSON.stringify(myAnswer) === JSON.stringify(answer)) {
-          trueFlag = true;
-          this.isRight = true;
+          trueFlag = true
+          this.isRight = true
         }else {
-          trueFlag = false;
-          this.isRight = false;
+          trueFlag = false
+          this.isRight = false
         }
       }else if(data[0].type == 3) { // 文本匹配
         // 去掉所有空格回车和其他空符号之后转换为小写
-        let flag = false;
-        myAnswer = this.textAnswer.replace(/\r|\n|\\s/g, "").toLowerCase();
+        let flag = false
+        myAnswer = this.textAnswer.replace(/\r|\n|\\s/g, "").toLowerCase()
         for(let i = 0; i < data[0].options.length; i ++) {
           let opAnswer = data[0].options[i].item.replace(/\r|\n|\\s/g, "").toLowerCase();
           if(opAnswer === myAnswer) {
-            flag = true;
-            break;
+            flag = true
+            break
           }
         }
-        trueFlag = flag;
-        this.isRight = flag;
+        trueFlag = flag
+        this.isRight = flag
       }
-      let ansArr = document.getElementsByTagName('a');
+      let ansArr = document.getElementsByTagName('a')
       for(let i = 0; i < ansArr.length; i++) {
         if(ansArr[i].getAttribute('data-id') === data[0].id) {
-          ansArr[i].classList.add('quiz-item-done');
+          ansArr[i].classList.add('quiz-item-done')
         }
       }
       for(let i = 0; i < answerSheet.length; i++) {
-        let item = answerSheet[i];
+        let item = answerSheet[i]
         if(item.quizId === data[0].id) {
-          item.trueFlag = trueFlag;
+          item.trueFlag = trueFlag
           if(myAnswer instanceof Array) {
-            item.myAnswer = myAnswer.join(',');
+            item.myAnswer = myAnswer.join(',')
           }else {
-            item.myAnswer = myAnswer;
+            item.myAnswer = myAnswer
           }
           break;
         }
       }
-      saveQuiz.push(JSON.stringify(data));
-      let params = {};
-      params.answerSheet = JSON.stringify(answerSheet);
-      params.totalScore = 0;
-      params.rightCount = 0;
-      params.wrongCount = 0;
-      params.emptyCount = 0;
-      params.sn = sn;
+      saveQuiz.push(JSON.stringify(data))
+      let params = {}
+      params.answerSheet = JSON.stringify(answerSheet)
+      params.totalScore = 0
+      params.rightCount = 0
+      params.wrongCount = 0
+      params.emptyCount = 0
+      params.sn = sn
       for(let i = 0; i < answerSheet.length; i++) {
-        let item = answerSheet[i];
+        let item = answerSheet[i]
         if(item.myAnswer) {
           if(item.trueFlag) {
-            params.rightCount++;
-            params.totalScore += parseInt(item.quizScore);
+            params.rightCount++
+            params.totalScore += parseInt(item.quizScore)
           } else {
-            params.wrongCount++;
+            params.wrongCount++
           }
         } else{
-          params.emptyCount++;
+          params.emptyCount++
         }
       }
       if(device === 'pc') { // 自学
         if(!sn) {
           // 预览模式不产生记录
-          return;
+          return
         }
         lessonAPI.upsertRecord(params)
       } else if(device === 'pad') { // 课堂学习
@@ -500,5 +500,3 @@ export default {
     color: white;
   }
 </style>
-
-

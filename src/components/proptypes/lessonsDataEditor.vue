@@ -93,39 +93,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { lessonAPI } from '@/api'
-
-/* GUID 算法
-  len: 指定长度
-  radix: 基数
-*/
-function uuid(len, radix) {
-  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-  var uuid = [], i;
-  radix = radix || chars.length;
-
-  if (len) {
-    // Compact form
-    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
-  } else {
-    // rfc4122, version 4 form
-    var r;
-
-    // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-    uuid[14] = '4';
-
-    // Fill in random data.  At i==19 set the high bits of clock sequence as
-    // per rfc4122, sec. 4.1.5
-    for (i = 0; i < 36; i++) {
-      if (!uuid[i]) {
-        r = 0 | Math.random()*16;
-        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
-      }
-    }
-  }
-
-  return uuid.join('');
-}
+import uuid from 'uuid/v1'
 
 const checkInputEmpty = () => {
   let opeInput = document.getElementsByClassName("writer-input");
@@ -255,7 +223,7 @@ export default {
       this.$refs[formName].validate( async (valid) => {
         if (valid && this.lessonsSelect.length != 0) {
           //课程包id
-          this.lessonsData.id === '' ? this.lessonsData.id = uuid(32, 16) : this.lessonsData.id;
+          this.lessonsData.id === '' ? this.lessonsData.id = uuid() : this.lessonsData.id;
           //设置年龄段
           if( this.ages == 0 ){
             this.lessonsData.agesMin = '0';
