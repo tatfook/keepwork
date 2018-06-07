@@ -4,7 +4,7 @@ export default [
     data: {},
     props: {},
     theme: {
-      rootRow: ['mod-full-width']
+      root: ['mod-space', 'mod-full-width']
     },
     options: {}
   },
@@ -12,12 +12,12 @@ export default [
     data: {},
     props: {},
     theme: {
-      rootRow: ['mod-full-width']
+      root: ['mod-space', 'mod-full-width']
     },
     options: {
       theme: {},
       config: {
-        comment: {
+        categoryList: {
           styleId: 1
         }
       }
