@@ -12,13 +12,13 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModLesson from './web/lesson'
 import ModMenu from './web/menu'
+import ModTextBoard from './web/textBoard'
+// import ModPageList from './web/pageList'
+// import ModToc from './web/toc'
 import ModQuiz from './web/quiz'
 import ModTeachers from './web/teachers'
 import ModLessonShare from './web/lessonShare'
 import ModLessonPackage from './web/lessonPackage'
-import ModTextBoard from './web/textBoard'
-// import ModPageList from './web/pageList'
-// import ModToc from './web/toc'
 
 var modsList = [
   {

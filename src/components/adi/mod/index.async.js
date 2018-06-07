@@ -12,11 +12,6 @@ const ModText = () => import('./web/text')
 const ModVipRead = () => import('./web/vipRead')
 const ModComment = () => import('./web/comment')
 const ModBoard = () => import('./web/board')
-const ModLesson = () => import('./web/lesson')
-const ModQuiz = () => import('./web/quiz')
-const ModTeachers = () => import('./web/teachers')
-const ModLessonShare = () => import('./web/lessonShare')
-const ModLessonPackage = () => import('./web/lessonPackage')
 const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
@@ -24,6 +19,11 @@ const ModBigFile = () => import('./web/bigFile')
 const ModPagePath = () => import('./web/pagePath')
 const ModTab = () => import('./web/tab')
 const ModButton = () => import('./web/button')
+const ModLesson = () => import('./web/lesson')
+const ModQuiz = () => import('./web/quiz')
+const ModTeachers = () => import('./web/teachers')
+const ModLessonShare = () => import('./web/lessonShare')
+const ModLessonPackage = () => import('./web/lessonPackage')
 
 export const modList = {
   ModMarkdown,
@@ -40,18 +40,18 @@ export const modList = {
   ModVipRead,
   ModComment,
   ModBoard,
-  ModLesson,
-  ModQuiz,
-  ModTeachers,
-  ModLessonShare,
-  ModLessonPackage,
   ModTextBoard,
   ModPageList,
   ModToc,
   ModBigFile,
   ModPagePath,
   ModTab,
-  ModButton
+  ModButton,
+  ModLesson,
+  ModQuiz,
+  ModTeachers,
+  ModLessonShare,
+  ModLessonPackage
 }
 
 export const load = async modName => {

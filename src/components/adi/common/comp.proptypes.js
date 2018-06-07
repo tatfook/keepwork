@@ -12,11 +12,6 @@ import AdiVipRead from './vipRead/vipRead.proptypes'
 import AdiComment from './comment/comment.proptypes'
 import AdiInnerModal from './innerModal/innerModal.proptypes'
 import AdiNumber from './number/number.proptypes'
-import AdiQuiz from './quiz/quiz.proptypes'
-import AdiLesson from './lesson/lesson.proptypes'
-import AdiTeachers from './teachers/teachers.proptypes'
-import AdiLessonShare from './lessonShare/lessonShare.proptypes'
-import AdiLessonPackage from './lessonPackage/lessonPackage.proptypes'
 import AdiPageList from './pageList/pageList.proptypes'
 import AdiFooter from './footer/footer.proptypes'
 import AdiToc from './toc/toc.proptypes'
@@ -24,6 +19,11 @@ import AdiBigFile from './bigFile/bigFile.proptypes'
 import AdiBreadCrumb from './breadCrumb/breadCrumb.proptypes'
 import AdiPagePath from './pagePath/pagePath.proptypes'
 import AdiTab from './tab/tab.proptypes'
+import AdiQuiz from './quiz/quiz.proptypes'
+import AdiLesson from './lesson/lesson.proptypes'
+import AdiTeachers from './teachers/teachers.proptypes'
+import AdiLessonShare from './lessonShare/lessonShare.proptypes'
+import AdiLessonPackage from './lessonPackage/lessonPackage.proptypes'
 
 export default {
   AdiMarkdown,
@@ -40,16 +40,16 @@ export default {
   AdiComment,
   AdiInnerModal,
   AdiNumber,
-  AdiQuiz,
-  AdiLesson,
-  AdiTeachers,
-  AdiLessonShare,
-  AdiLessonPackage,
   AdiPageList,
   AdiFooter,
   AdiToc,
   AdiBigFile,
   AdiBreadCrumb,
   AdiPagePath,
-  AdiTab
+  AdiTab,
+  AdiQuiz,
+  AdiLesson,
+  AdiTeachers,
+  AdiLessonShare,
+  AdiLessonPackage
 }
