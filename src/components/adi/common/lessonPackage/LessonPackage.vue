@@ -21,11 +21,11 @@
               <span class="lessons-include">Skills:</span>
               <pre>{{properties.data.skills}}</pre>
             </div>
-            <div class="lessons-button">
+            <div class="lessons-button" v-if="!isLessonsBuy">
               <span class="lessons-coins">
                 <span class="lessons-cost">{{properties.data.cost}}</span>coins
               </span>
-              <el-button @click="addClick" type="primary" id="btnAdd" v-if="!isLessonsBuy" >ADD</el-button>
+              <el-button @click="addClick" type="primary" id="btnAdd" >ADD</el-button>
             </div>
           </div>
         </el-col>
