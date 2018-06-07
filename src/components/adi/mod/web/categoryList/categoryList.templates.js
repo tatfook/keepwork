@@ -1,4 +1,4 @@
 export default [
   // style 0
-  [{ colCategroyList: 'categroyList' }]
+  [{ colCategoryList: 'categoryList' }]
 ]

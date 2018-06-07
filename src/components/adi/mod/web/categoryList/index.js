@@ -3,10 +3,10 @@ import mod from '@/components/adi/mod/base/Base'
 import styles from './categoryList.styles'
 import templates from './categoryList.templates'
 
-const name = 'ModCategroyList'
+const name = 'ModCategoryList'
 
 const components = {
-  categroyList: 'AdiCategroyList'
+  categoryList: 'AdiCategoryList'
 }
 
 const properties = generateProperties(name, components)
