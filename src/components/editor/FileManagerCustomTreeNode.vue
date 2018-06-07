@@ -1,6 +1,6 @@
 <template>
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
-    {{data.displayName || node.label}}
+    {{data.displayName || node.label | hideMDFileExtension}}
     <span class="node-icon">
       <i class="iconfont icon-file_" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
