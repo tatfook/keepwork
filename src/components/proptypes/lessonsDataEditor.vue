@@ -94,6 +94,7 @@
 import { mapGetters } from 'vuex'
 import { lessonAPI } from '@/api'
 import uuid from 'uuid/v1'
+// import { mdToJson, jsonToMd } from '../../lib/mod/parser/mdParser/yaml'
 
 const checkInputEmpty = () => {
   let opeInput = document.getElementsByClassName("writer-input");
@@ -283,6 +284,9 @@ export default {
     let r = await lessonAPI.lessonList()
     const lessonsData = r.hits.hits;
       lessonsData.forEach((lesson, index ) => {
+        // const tmp1 = mdToJson(lesson)
+        // console.log("#DEBUG")
+        // console.log(tmp1)
         const tmp = parseMarkDown(lesson._source)
         this.lessonsListData.push({
           lessonTitle: tmp.lessonTitle,

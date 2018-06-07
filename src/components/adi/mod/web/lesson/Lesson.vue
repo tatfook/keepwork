@@ -89,7 +89,7 @@ const init = async function(){
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
   } else if (device == 'print') {
-    document.domain = 'localhost'
+    document.domain = window.location.host
     document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
     document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
