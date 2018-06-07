@@ -22,7 +22,11 @@ export default {
     ToolHeader
   },
   watch: {
-    $route: 'updateActivePage'
+    $route: 'updateActivePage',
+    activePageInfo(activePageInfo) {
+      let {username, sitename, pagename} = activePageInfo
+      document.title = pagename || sitename || username || 'KeepWork'
+    }
   },
   methods: {
     ...mapActions({
@@ -45,7 +49,8 @@ export default {
   computed: {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
-      username: 'user/username'
+      username: 'user/username',
+      activePageInfo: 'activePageInfo'
     })
   }
 }
