@@ -91,7 +91,7 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 import qs from 'qs'
 
-const lessonHost = 'http://lesson.keepwork.com/'
+const lessonHost = 'http://localhost:3000/'
 
 export default {
   name: 'AdiLessonPackage',

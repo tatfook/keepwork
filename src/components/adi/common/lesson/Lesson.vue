@@ -88,7 +88,7 @@ export default {
     }
   },
   created: function() {
-    const lessonHost = 'http://lesson.keepwork.com/'
+    const lessonHost = 'http://localhost/'
     let username = this.username
     if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
       if (username) {
