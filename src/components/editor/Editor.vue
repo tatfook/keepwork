@@ -6,11 +6,15 @@
           <el-button class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
           <el-button v-if='activePage' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          <el-button v-if='activePage' class='iconfont icon-upload' @click="openSkyDriveManagerDialog"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
+        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
       </el-row>
       <el-row class="manager-content-box">
-        <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+        <keep-alive>
+          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+        </keep-alive>
       </el-row>
     </el-col>
     <div class="col-between"></div>
@@ -84,6 +88,7 @@ import FileManager from './FileManager'
 import ModsList from './ModsList'
 import Search from './Search'
 import PageSetting from './PageSetting'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -102,6 +107,7 @@ export default {
       },
       isCodeWinShow: true,
       isFullscreen: false,
+      isSkyDriveManagerDialogShow: false,
       gConst
     }
   },
@@ -124,7 +130,8 @@ export default {
     Search,
     ModsList,
     FileManager,
-    PageSetting
+    PageSetting,
+    SkyDriveManagerDialog
   },
   computed: {
     ...mapGetters({
@@ -286,6 +293,20 @@ export default {
     },
     addModToMarkdown() {
       this.$refs.codemirror.addMod()
+    },
+    openSkyDriveManagerDialog() {
+      this.isSkyDriveManagerDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isSkyDriveManagerDialogShow = false
+      if (url) {
+        let filename = (file.filename || url)
+        let isImage = /^image\/.*/.test(file.type)
+
+        isImage
+          ? this.$refs.codemirror.insertFile(filename, url)
+          : this.$refs.codemirror.insertLink(filename, url)
+      }
     }
   }
 }

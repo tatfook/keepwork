@@ -1,4 +1,5 @@
 const ModMarkdown = () => import('./common/markdown')
+const ModIFrame = () => import('./common/iframe')
 const ModTitle = () => import('./web/title')
 const ModMixPosition = () => import('./web/mixPosition')
 const ModMixLayer = () => import('./web/mixLayer')
@@ -20,9 +21,13 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
+const ModPagePath = () => import('./web/pagePath')
+const ModTab = () => import('./web/tab')
+const ModButton = () => import('./web/button')
 
 export const modList = {
   ModMarkdown,
+  ModIFrame,
   ModTitle,
   ModMixPosition,
   ModMixLayer,
@@ -43,7 +48,10 @@ export const modList = {
   ModTextBoard,
   ModPageList,
   ModToc,
-  ModBigFile
+  ModBigFile,
+  ModPagePath,
+  ModTab,
+  ModButton
 }
 
 export const load = async modName => {

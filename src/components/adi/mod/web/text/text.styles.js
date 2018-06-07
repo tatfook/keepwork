@@ -65,5 +65,25 @@ export default [
         height: '70px'
       }
     }
+  },
+  // style 2
+  {
+    data: {},
+    props: {},
+    theme: {
+      root: ['mod-space', 'bg_color_4', 'color_2'],
+      paragraph: ['mod-full-width', 'font_9']
+    },
+    options: {
+      theme: {},
+      config: {
+        paragraph: emptyData.paragraph
+      }
+    },
+    preview: {
+      outter: {
+        height: '70px'
+      }
+    }
   }
 ]

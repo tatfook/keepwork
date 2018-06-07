@@ -1,6 +1,6 @@
 <template>
   <div v-loading='loading' @click.stop="handleDialogClick">
-    <el-row class="website-setting-layout">
+    <el-row class="website-setting-layout" type="flex">
       <el-col :span="6" class="website-setting-layouts">
         <header>
           <h1>{{$t('editor.layoutPlan')}}</h1>
@@ -89,7 +89,7 @@
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select size="small" v-model="layoutForm.header" filterable :placeholder="this.$t('editor.select')">
+              <el-select size="small" v-model="layoutForm.header" filterable clearable  :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
                   :key="fileName"
@@ -101,7 +101,7 @@
             </el-form-item>
             <el-form-item prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
-              <el-select size="small" v-model="layoutForm.sidebar" filterable :placeholder="this.$t('editor.select')">
+              <el-select size="small" v-model="layoutForm.sidebar" filterable clearable  :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('sidebar')"
                   :key="fileName"
@@ -113,7 +113,7 @@
             </el-form-item>
             <el-form-item prop="footer">
               <label>{{$t('editor.footer')}}</label>
-              <el-select size="small" v-model="layoutForm.footer" filterable :placeholder="this.$t('editor.select')">
+              <el-select size="small" v-model="layoutForm.footer" filterable clearable :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('footer')"
                   :key="fileName"
@@ -144,7 +144,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import { suffixFileExtension } from '@/lib/utils/gitlab'
+import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import stylesList from '@/components/adi/layout/templates'
 
@@ -266,8 +266,8 @@ export default {
       console.error(e)
       this.loading = false
     })
-    // this.selectFirstLayout()
     this.selectDefaultLayout()
+    this.newLayoutIndex = _.values(this.siteLayoutsMap).length
     this.loading = false
   },
   watch: {
@@ -299,13 +299,24 @@ export default {
       this.editLayout(newLayout)
     },
     removeLayout(layout) {
+      let thelayoutInUse = this.layoutForm.defaultLayoutId
+        ? this.layoutForm.defaultLayoutId === layout.id
+        : this.userSiteDefaultLayoutId === layout.id
+
+      if (thelayoutInUse) {
+        return this.$message({
+          message: this.$t('editor.theLayoutIsInUse'),
+          type: 'error',
+          center:true
+        })
+      }
+
       if (this.siteLayoutsLength <= 1) {
         return this.$message({
           message: this.$t('editor.keepOneLayout'),
           type: 'warning',
           center:true
         })
-        // return alert('Keep one layout at least!')
       }
       Vue.set(this.updatedLayoutsMap, layout.id, {
         ...this.updatedLayoutsMap[layout.id],
@@ -391,8 +402,7 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what} ${self.$t('editor.emptyName')}`
-            if (!/^[A-Za-z0-9_]+$/.test(value)) return `${what} ${self.$t('editor.nameRule')}`
-            if (/^[_]/.test(value)) return `${what} ${self.$t('editor.nameUnderline')}`
+            if (!gitFilenameValidator(value)) return `${what} ${self.$t('editor.nameRule')}`
             if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
           }
@@ -427,7 +437,7 @@ export default {
 
 <style lang='scss'>
 .website-setting {
-  $column-height: 650px;
+  $column-height: auto;
 
   &-layout {
     cursor: default;
@@ -471,7 +481,6 @@ export default {
       }
     }
     .display-state-btns {
-      flex: 0 0 60px;
       .el-button {
         margin: 0 !important;
       }

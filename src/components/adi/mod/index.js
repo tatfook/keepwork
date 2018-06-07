@@ -1,4 +1,5 @@
 import ModMarkdown from './common/markdown'
+import ModIFrame from './common/iframe'
 import ModTitle from './web/title'
 import ModMixPosition from './web/mixPosition'
 import ModMixLayer from './web/mixLayer'
@@ -20,9 +21,13 @@ import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
 import ModBigFile from './web/bigFile'
+import ModPagePath from './web/pagePath'
+import ModTab from './web/tab'
+import ModButton from './web/button'
 
 export const modList = {
   ModMarkdown,
+  ModIFrame,
   ModTitle,
   ModMixPosition,
   ModMixLayer,
@@ -43,7 +48,10 @@ export const modList = {
   ModTextBoard,
   ModPageList,
   ModToc,
-  ModBigFile
+  ModBigFile,
+  ModPagePath,
+  ModTab,
+  ModButton
 }
 
 export const load = modName => {

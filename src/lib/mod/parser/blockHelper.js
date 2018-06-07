@@ -1,12 +1,8 @@
 import _ from 'lodash'
 import md5 from 'blueimp-md5'
 import { mdToJson, jsonToMd } from './mdParser/yaml'
-import CmdHelper from './cmdHelper'
+import CmdHelper, { MARKDOWN_CMD, MOD_CMD_BEGIN, MOD_CMD_END} from './cmdHelper'
 import ModAdaptor from './modAdaptor'
-
-const MARKDOWN_CMD = 'Markdown'
-const MOD_CMD_BEGIN = '```@'
-const MOD_CMD_END = '```'
 
 const blockHelper = {
   buildJson(block) {
@@ -26,7 +22,7 @@ const blockHelper = {
   },
 
   buildKey(block) {
-    block.key = md5(this.text(block), block.lineBegin)
+    block.key = md5(this.text(block), block.uuid)
     block.modKey = md5(this.text(block))
   },
 
@@ -42,7 +38,7 @@ const blockHelper = {
   },
 
   isMarkdownMod(block) {
-    return block.cmd === MARKDOWN_CMD
+    return block && block.cmd === MARKDOWN_CMD
   },
 
   isOnEdit(block, lineNumber) {
@@ -80,7 +76,6 @@ const blockHelper = {
 
   modifyBegin(block, diff) {
     block.lineBegin += diff
-    this.buildKey(block)
   },
 
   contentBegin(block) {

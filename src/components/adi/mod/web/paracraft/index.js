@@ -18,7 +18,10 @@ const components = {
   download: 'AdiButton',
   enter: 'AdiButton',
   innerModal: 'AdiInnerModal',
-  paracraftInfo: 'AdiLabel'
+  paracraftInfo: 'AdiLabel',
+  titleA: 'AdiTitle',
+  subtitleA: 'AdiTitle',
+  backgroundImage: 'AdiMedia'
 }
 
 const properties = generateProperties(name, components)

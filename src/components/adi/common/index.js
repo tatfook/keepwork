@@ -1,10 +1,11 @@
+import AdiMarkdown from './markdown/Markdown'
+import AdiIFrame from './iframe/IFrame'
 import AdiImgLoop from './imgLoop/ImgLoop'
 import AdiTitle from './title/Title'
 import AdiButton from './button/Button'
 import AdiMenu from './menu/Menu'
 import AdiMedia from './media/Media'
 import AdiLabel from './label/Label'
-import AdiMarkdown from './markdown/Markdown'
 import AdiBoard from './board/Board'
 import AdiDescLabel from './descLabel/DescLabel'
 import AdiVipRead from './vipRead/VipRead'
@@ -21,15 +22,19 @@ import AdiPageList from './pageList/pageList'
 import AdiFooter from './footer/footer'
 import AdiToc from './toc/Toc'
 import AdiBigFile from './bigFile/BigFile'
+import AdiBreadCrumb from './breadCrumb/BreadCrumb'
+import AdiPagePath from './pagePath/pagePath'
+import AdiTab from './tab/Tab'
 
 export default {
+  AdiMarkdown,
+  AdiIFrame,
   AdiImgLoop,
   AdiTitle,
   AdiButton,
   AdiMenu,
   AdiMedia,
   AdiLabel,
-  AdiMarkdown,
   AdiBoard,
   AdiDescLabel,
   AdiVipRead,
@@ -45,5 +50,8 @@ export default {
   AdiPageList,
   AdiFooter,
   AdiToc,
-  AdiBigFile
+  AdiBigFile,
+  AdiBreadCrumb,
+  AdiPagePath,
+  AdiTab
 }

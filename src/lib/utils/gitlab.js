@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
+export const EMPTY_GIT_FOLDER_KEEPER_REGEX = /^\.(git|keep|gitignore)/ // for .gitkeep, .keep, .gitignore, .gitignore.md
 export const CONFIG_FOLDER_NAME = '_config'
 
 let protocol = location && location.protocol ? location.protocol : 'http:'
@@ -24,7 +25,8 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let treeWithChildren = {}
 
   files.forEach(file => {
-    if (file.path.indexOf(rootPath) !== 0 || file.path === rootPath) return
+    if (file.path.indexOf(rootPath + '/') !== 0) return
+
     let setKeys = file.path
       .substr(rootPath.length + 1)
       .split('/')
@@ -49,7 +51,7 @@ export const gitTree2NestedArray = (files, rootPath) => {
   let nestedArray = convertChildren2ArrayInTree({
     [temporaryChildrenKey]: treeWithChildren
   })['children']
-  return nestedArray
+  return _.isEmpty(nestedArray) ? [] : nestedArray
 }
 
 /*doc
@@ -132,8 +134,28 @@ export const getPageInfoByPath = path => {
   return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
 }
 
+/**
+ * @param {*} filename string
+ * @param {*} ext string
+ * ('filename', 'ext') => 'filename.ext'
+ * ('filename.ext', 'ext') => 'filename.ext'
+ */
+export const getFilenameWithExt = (filename, ext) => {
+  let filenameExt = /.+\./.test(filename) ? filename.split('.').pop() : ''
+  filenameExt = filenameExt.toLowerCase()
+  filename = filenameExt !== ext ? `${filename}.${ext}` : filename
+  return filename
+}
+
+export const gitFilenameValidator = (filename = '') => {
+  let validated = /^[^/\\:"*?<>|\s]+$/.test(filename)
+  validated = validated && /^[^_.]/.test(filename)
+  return validated
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
+  EMPTY_GIT_FOLDER_KEEPER_REGEX,
   CONFIG_FOLDER_NAME,
   webTemplateProject,
   gitTree2NestedArray,
@@ -141,5 +163,7 @@ export default {
   getFileFullPathByPath,
   getFileSitePathByPath,
   getRelativePathByPath,
-  getPageInfoByPath
+  getPageInfoByPath,
+  getFilenameWithExt,
+  gitFilenameValidator
 }

@@ -33,7 +33,20 @@
     "maded": "制作的",
     "websiteB": "网站",
     "QR": "扫描二维码打开网页",
-    "error": "出错啦，请重试"
+    "error": "出错啦，请重试",
+
+    "OK": "确认",
+    "Cancel": "取消",
+
+    "action": "操作",
+    "search": "搜索",
+    "copy": "复制",
+    "insert": "插入",
+    "download": "下载",
+    "update": "更新",
+    "rename": "重命名",
+    "remove": "删除",
+    "apply": "应用"
   },
   "editor": {
     "save": "保存",
@@ -76,8 +89,7 @@
     "website": "网页",
 
     "emptyName": "名不能为空",
-    "nameRule": "名只能由字母，数字和下划线组成",
-    "nameUnderline": "名不能由下划线开头",
+    "nameRule": "名称不能包含 \\\/:\"*?<>| 不能以 _. 开头",
     "nameExist": "同名文件已经存在",
 
     "openedFiles": "已打开",
@@ -160,17 +172,23 @@
     "match": "匹配",
     "cancel": "取消",
     "keepOneLayout": "至少保留一个布局",
+    "theLayoutIsInUse": "布局正在使用",
 
     "deleteFolder": "删除文件夹及其中的所有内容么?",
     "documents": "个文件吗？",
     "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
     "videoNotSupport": "您的浏览器不支持 video 标签。",
-    "notFound": "内容找不到了"
+    "notFound": "内容找不到了",
+
+    "yourPage": "您的页面",
+    "yourPosition": "您所在的位置：",
+    "defaultPage": "首页"
   },
   "modList": {
     "recent": "常用",
     "markdown": "文本(Md)",
     "bigFile": "大文件",
+    "pagePath": "页面路径",
 
     "text": "文本",
     "navigation": "导航",
@@ -307,6 +325,8 @@
     "size": "大小",
     "menu": "菜单",
     "logo": "图标",
+    "logoB": "图标",
+    "menuB": "菜单",
     "businessName": "主标题",
     "tagline": "副标题",
     "qq": "QQ号",
@@ -324,7 +344,9 @@
     "download": "下载",
     "enter": "进入",
     "innerModal": "内部模态框",
-    "bigFile": "大文件"
+    "bigFile": "大文件",
+    "iframe": "iframe",
+    "pageRoute": "页面路径"
   },
   "field": {
     "fileId": "字段",
@@ -338,6 +360,37 @@
     "title": "标题",
     "extraMsg": "额外信息",
     "channel": "渠道",
-    "number": "数字"
+    "number": "数字",
+    "width": "宽度",
+    "height": "高度",
+    "webHeight": "web高度",
+    "mobileHeight": "手机高度",
+    "fontSize": "字体大小",
+    "path": "页面路径"
+  },
+  "skydrive": {
+    "mediaLibrary": "图库",
+    "skyDrive": "网盘",
+    "usage": "当前使用",
+
+    "filename": "文件名",
+    "filetype": "类型",
+    "filesize": "大小",
+    "updateDate": "更新时间",
+
+    "checkedState": "状态",
+    "checkPassed": "通过",
+    "checkUnpassed": "未通过",
+    "checking": "审核中",
+    "fileUnapprovedError": "文件尚未通过审核",
+
+    "downloadSelected": "下载选中",
+    "removeSelected": "删除选中",
+    "dragAndDrop": "拖拽到本窗口上传",
+    "uploadFile": "上传文件",
+    "notImageFileError": "文件不是图片类型",
+    "removeFileConfirmMsg": "确认删除文件？",
+    "newFilenamePromptMsg": "请输入新的文件名",
+    "nameConflictError": "文件名和现有名字重复"
   }
 }

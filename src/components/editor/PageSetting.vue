@@ -37,7 +37,7 @@ export default {
       selectedLayoutId: ''
     }
   },
-  async mounted() {
+  async activated() {
     await Promise.all([
       this.gitlabGetRepositoryTree({path: this.sitePath}),
       this.userGetSiteLayoutConfig({path: this.sitePath})
@@ -68,16 +68,16 @@ export default {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)
     },
     userSiteLayoutsMap() {
-      return _.keyBy(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), 'id')
+      return _.keyBy(_.filter(_.get(this.userSiteLayoutConfig, ['layoutConfig', 'layouts'], []), o => !o.deleted), 'id')
     },
     settedPageLayout() {
       return this.userGetSettedPageLayoutByPath(this.pagePath)
     },
     settedPageLayoutId() {
-      return _.get(this.settedPageLayout, 'id', NaN)
+      return _.get(this.settedPageLayout, 'id', '')
     },
     selectedLayout() {
-      return this.userSiteLayoutsMap[this.selectedLayoutId || this.selectedLayoutId]
+      return this.userSiteLayoutsMap[this.selectedLayoutId]
     },
     selectedStyleComponent() {
       return stylesList[_.get(this.selectedLayout, 'styleName', 'basic')]
