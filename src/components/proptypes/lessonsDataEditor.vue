@@ -140,7 +140,7 @@ const checkInputEmpty = () => {
       }
     }
 }
-const lessonHost = 'http://localhost:3000'
+const lessonHost = 'http://lesson.keepwork.com/'
 //markdown转json
 const parseMarkDown = (item) => {
     let contentArr = item.content.split('```');
