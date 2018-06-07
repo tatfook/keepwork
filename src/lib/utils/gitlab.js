@@ -131,7 +131,8 @@ export const getPageInfoByPath = path => {
   let [, , ...paths] = fullPath.split('/').filter(x => x)
   let relativePath = paths.join('/')
   let bareRelativePath = relativePath.replace(/\.md$/, '')
-  return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
+  let pagename = (paths[paths.length - 1] || '').replace(/\.md$/, '')
+  return { username, sitename, pagename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
 }
 
 /**
@@ -147,6 +148,12 @@ export const getFilenameWithExt = (filename, ext) => {
   return filename
 }
 
+export const gitFilenameValidator = (filename = '') => {
+  let validated = /^[^/\\:"*?<>|\s]+$/.test(filename)
+  validated = validated && /^[^_.]/.test(filename)
+  return validated
+}
+
 export default {
   EMPTY_GIT_FOLDER_KEEPER,
   EMPTY_GIT_FOLDER_KEEPER_REGEX,
@@ -158,5 +165,6 @@ export default {
   getFileSitePathByPath,
   getRelativePathByPath,
   getPageInfoByPath,
-  getFilenameWithExt
+  getFilenameWithExt,
+  gitFilenameValidator
 }
