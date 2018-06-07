@@ -7,9 +7,8 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
-import axios from 'axios'
+import { lessonAPI } from '@/api'
 
-const lessonHost = 'http://localhost:3000/'
 export default {
   data() {
     return {
@@ -25,8 +24,8 @@ export default {
   },
   name: 'AdiLessonShare',
   mixins: [compBaseMixin],
-  mounted: function() {
-    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+  mounted: async function() {
+    if (!this.editMode) {
       let query = location.href.split('?')[1]
       if(query && query.indexOf('#') != -1){
         query = query.split('#')[0]
@@ -44,33 +43,24 @@ export default {
         }
       }
       if(username) {
-        // TODO: 网络请求获取数据后替换
-        let params = {
-          params: {
-            lessonUrl: lessonUrl,
-            username: username
-          }
+        // 网络请求获取数据后替换
+        let r = await lessonAPI.shareRecord(lessonUrl, username)
+        if(r.err == 0) {
+          let mainE = document.getElementsByClassName('el-main')[0]
+          let html = mainE.innerHTML
+          html = html.replace('{{lessonTitle}}', r.data.lessonTitle)
+          html = html.replace('{{learnTime}}', r.data.beginTime)
+          html = html.replace('{{username}}', r.data.username)
+          html = html.replace('{{learnedDays}}', r.data.learnedDays)
+          html = html.replace('{{codeWriteLine}}', r.data.codeWriteLine)
+          html = html.replace('{{codeReadLine}}', r.data.codeReadLine)
+          html = html.replace('{{commands}}', r.data.commands)
+          mainE.innerHTML = html
+        }else {
+          this.$alert('该地址已失效，请重试', {
+            confirmButtonText: '确定'
+          });
         }
-        axios.get(lessonHost + '/api/record/share', params)
-          .then(response => {
-            let r = response.data
-            if(r.err == 0) {
-              let mainE = document.getElementsByClassName('el-main')[0]
-              let html = mainE.innerHTML
-              html = html.replace('{{lessonTitle}}', r.data.lessonTitle)
-              html = html.replace('{{learnTime}}', r.data.beginTime)
-              html = html.replace('{{username}}', r.data.username)
-              html = html.replace('{{learnedDays}}', r.data.learnedDays)
-              html = html.replace('{{codeWriteLine}}', r.data.codeWriteLine)
-              html = html.replace('{{codeReadLine}}', r.data.codeReadLine)
-              html = html.replace('{{commands}}', r.data.commands)
-              mainE.innerHTML = html
-            }else {
-              this.$alert('该地址已失效，请重试', {
-                confirmButtonText: '确定'
-              });
-            }
-          })
       }else {
         // 非法链接
         this.$alert('无效的地址，请重试', {

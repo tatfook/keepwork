@@ -8,7 +8,7 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import  { mapGetters} from 'vuex'
-import axios from 'axios'
+import { lessonAPI } from '@/api'
 
 let teacherShow = false
 const getMods = function(name) {
@@ -80,28 +80,23 @@ export default {
   mounted: function(){
     init()
   },
-  created: function() {
-    const lessonHost = 'http://lesson.keepwork.com/'
+  created: async function() {
     let username = this.username
     if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
       if (username) {
-        axios.get(lessonHost + '/api/member/auth', {
-          withCredentials: true
-        }).then(response => {
-          let r = response.data
-          if (r.data && r.data.identity === 2) {
-            this.teacherShow = true;
-            document.getElementById("isTeachersContent").style.display = "inline-block";
-          } else {
-            this.teacherShow = false;
-            document.getElementById("isTeachersContent").style.display = "none";
-          }
+        let r = await lessonAPI.auth()
+        if (r.data && r.data.identity === 2) {
+          this.teacherShow = true;
+          document.getElementById("isTeachersContent").style.display = "inline-block";
+        } else {
+          this.teacherShow = false;
+          document.getElementById("isTeachersContent").style.display = "none";
+        }
+        this.$forceUpdate()
+        if (device == 'pc' || device == 'pad') {
+          this.teacherShow = false
           this.$forceUpdate()
-          if (device == 'pc' || device == 'pad') {
-            this.teacherShow = false
-            this.$forceUpdate()
-          }
-        })
+        }
       } else {
         this.teacherShow = false;
         document.getElementById("isTeachersContent").style.display = "none";

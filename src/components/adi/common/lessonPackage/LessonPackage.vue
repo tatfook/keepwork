@@ -88,10 +88,7 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
-import axios from 'axios'
-import qs from 'qs'
-
-const lessonHost = 'http://localhost:3000/'
+import { lessonAPI } from '@/api'
 
 export default {
   name: 'AdiLessonPackage',
@@ -160,81 +157,68 @@ export default {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
           type: 'warning'
-        }).then(() => {
-          axios.post(lessonHost + '/api/subscribe/add', qs.stringify({packageId:this.properties.data.id}),
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true
-          })
-          .then(response => {
-            if(response.data.err == 0){
+        }).then( async () => {
+          let r = await lessonAPI.addSubscribe(this.properties.data.id)
+          if(r.err == 0){
+            this.$message({
+              type: 'success',
+              message: 'Add lessons of this package success!'
+            });
+            this.isLessonsBuy = true;
+            //调用该用户学习状态
+            this.UserState();
+          }else if(r.err == 101){
+            this.$message.error('Operation failed please retry!');
+          }else if( r.err == 102 ){
+            this.$message.error('Sorry,please login!');
+          }else if(r.err == 103){
               this.$message({
-                type: 'success',
-                message: 'Add lessons of this package success!'
-              });
-              this.isLessonsBuy = true;
-              //调用该用户学习状态
-              this.UserState();
-            }else if(response.data.err == 101){
-              this.$message.error('Operation failed please retry!');
-            }else if( response.data.err == 102 ){
-             this.$message.error('Sorry,please login!');
-            }else if(response.data.err == 103){
-                this.$message({
-                type: warn,
-                message: "You have already purchased!"
-              });
-            }
-          })
+              type: warn,
+              message: 'You have already purchased!'
+            });
+          }
         })
     },
     //用户学习状态
-    UserState(){
+    async UserState(){
       let packageId = this.properties.data.id;
-      if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
-        axios.get(lessonHost + '/api/subscribe/state', {
-          params: {
-            packageId: packageId
-          },
-          withCredentials: true
-        })
-        .then(response => {
-            if( response.data.err == 0 ){
-              //已购买
-              this.isLessonsBuy = true;
-              //学习进度以及学习情况
-              var proNum = Number(((response.data.data.doneCount/response.data.data.lessonCount)*100).toFixed(1));
+      if (!this.editMode) {
+        let r = await lessonAPI.subscribeState(packageId)
+        if(r.err == 0 ){
+          //已购买
+          this.isLessonsBuy = true;
+          //学习进度以及学习情况
+          var proNum = Number(((r.data.doneCount/r.data.lessonCount)*100).toFixed(1));
 
-              if( proNum > 100 ){
-                this.lessonProgress = 100;
-              }else{
-                this.lessonProgress = proNum ;
+          if( proNum > 100 ){
+            this.lessonProgress = 100;
+          }else{
+            this.lessonProgress = proNum ;
+          }
+          //是否已经完成
+          if( proNum >= 100 ){
+            this.isFinished = true;
+          }
+          //已完成课程
+          this.doneCount = r.data.doneCount;
+          // 继续学习链接
+          this.nextLearnLesson = r.data.nextLearnLesson;
+          this.firstLessonUrl = r.data.firstLessonUrl;
+          //课程的完成度
+          for( var i = 0; i < this.properties.data.lessons.length;i++ ){
+            let item = this.properties.data.lessons[i]
+            item.shareUrl = item.lessonUrl + '_share?username=' + this.username
+            for( var j = 0; j < r.data.lessons.length ; j++ ){
+              if( this.properties.data.lessons[i].lessonUrl == r.data.lessons[j].lessonUrl ){
+                this.properties.data.lessons[i].learnedFlag = r.data.lessons[j].learnedFlag;
               }
-              //是否已经完成
-              if( proNum >= 100 ){
-                this.isFinished = true;
-              }
-              //已完成课程
-              this.doneCount = response.data.data.doneCount;
-              // 继续学习链接
-              this.nextLearnLesson = response.data.data.nextLearnLesson;
-              this.firstLessonUrl = response.data.data.firstLessonUrl;
-              //课程的完成度
-              for( var i = 0; i < this.properties.data.lessons.length;i++ ){
-                let item = this.properties.data.lessons[i]
-                item.shareUrl = item.lessonUrl + '_share?username=' + this.username
-                for( var j = 0; j < response.data.data.lessons.length ; j++ ){
-                  if( this.properties.data.lessons[i].lessonUrl == response.data.data.lessons[j].lessonUrl ){
-                    this.properties.data.lessons[i].learnedFlag = response.data.data.lessons[j].learnedFlag;
-                  }
-                }
-              }
-            }else if(response.data.err == 102){
-              this.$message.error("Sorry,please login !");
-            }else if( response.data.err == 400 ){
-              //未购买
             }
-          })
+          }
+        }else if(r.err == 102){
+          this.$message.error("Sorry,please login !");
+        }else if( r.err == 400 ){
+          //未购买
+        }
       }
     }
   },

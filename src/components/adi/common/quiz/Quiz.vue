@@ -64,8 +64,7 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
-import axios from 'axios'
-import qs from 'qs'
+import { lessonAPI } from '@/api'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div');
@@ -84,7 +83,6 @@ const hideMod = function(name, flag) {
 const saveQuiz = []; // 保存所提交的题型
 const quizList = []; // 试题集合
 let answerSheet = []; // 保存当前答题卡
-const lessonHost = 'http://localhost:3000/'
 let device; // 设备 pc 电脑自学 pad 课堂学习
 let sn; // 试题的sn
 let classId; // 课堂 Id
@@ -98,16 +96,10 @@ const timer = {
     return this
   },
   start: function(username) {
-    this.timeoutObj = setInterval( function(){
+    this.timeoutObj = setInterval( async function(){
       // 开始记录学习时长
       let params = {sn: sn}
-      axios.post(lessonHost + '/api/record/study', qs.stringify(params),
-        {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        })
-        .then(response => {
-          let r = response.data
-        })
+      let r = await lessonAPI.studyRecord(sn)
     }, this.timeout)
   },
   stop: function() {
@@ -132,7 +124,7 @@ export default {
       }
     }
   },
-  mounted: function() {
+  mounted: async function() {
     let query = location.href.split('?')[1];
     if(query && query.indexOf('#')!= -1 ) {
       query = query.split('#')[0];
@@ -171,7 +163,6 @@ export default {
         return false;
       }
       let _this = this.properties.data[0];
-      // console.log(_this);
       quizList.push(_this);
       let body = document.getElementsByClassName('el-main')[0];
       let ansSheet = document.getElementsByClassName('answer-sheet');
@@ -207,49 +198,43 @@ export default {
         username: username,
         studentNo: studentNo
       }
-      axios.post(lessonHost + '/api/class/enter', qs.stringify(params),
-      {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
-      .then(response => {
-        let r = response.data
-        if(r.err == 0) {
-          this.isOperate = true
-          if(r.data.u){
-            sn = r.data.u.recordSn
-            let ans = r.data.u.answerSheet
-            if(ans && ans[0].quizId) {
-              answerSheet = ans;
-              // 恢复答题状态
-              for(let i = 0; i < ans.length; i++) {
-                var item  = ans[i];
-                let data = this.properties.data;
-                if(item.quizId == data[0].id && item.myAnswer) {
-                  // 找到了该题目
-                  this.isShow = true;
-                  this.isRight = item.trueFlag;
-                  if(data[0].type == 0){// 单选
-                    this.quiz.single = item.myAnswer;
-                  } else if(data[0].type == 1) {
-                    this.quiz.multiple = item.myAnswer.split(',');
-                  } else if(data[0].type == 2) {
-                    this.quiz.judge = item.myAnswer;
-                  } else if(data[0].type == 3) {
-                    this.textAnswer = item.myAnswer;
-                  }
-                  break;
+      let r = await lessonAPI.enterClass(params)
+      if(r.err == 0) {
+        this.isOperate = true
+        if(r.data.u){
+          sn = r.data.u.recordSn
+          let ans = r.data.u.answerSheet
+          if(ans && ans[0].quizId) {
+            answerSheet = ans;
+            // 恢复答题状态
+            for(let i = 0; i < ans.length; i++) {
+              var item  = ans[i];
+              let data = this.properties.data;
+              if(item.quizId == data[0].id && item.myAnswer) {
+                // 找到了该题目
+                this.isShow = true;
+                this.isRight = item.trueFlag;
+                if(data[0].type == 0){// 单选
+                  this.quiz.single = item.myAnswer;
+                } else if(data[0].type == 1) {
+                  this.quiz.multiple = item.myAnswer.split(',');
+                } else if(data[0].type == 2) {
+                  this.quiz.judge = item.myAnswer;
+                } else if(data[0].type == 3) {
+                  this.textAnswer = item.myAnswer;
                 }
+                break;
               }
             }
           }
-        } else {
-          this.$message.error("课堂已关闭~");
         }
-      })
+      } else {
+        this.$message.error("课堂已关闭~");
+      }
     }
   },
   methods: {
-    submitQuiz() {
+    async submitQuiz() {
       let data = this.properties.data;
       if(!this.quiz.single && !this.quiz.judge && !this.quiz.multiple.join(',') && data[0].type != 3) {
         this.$message.error("Please select one answer!")
@@ -303,17 +288,8 @@ export default {
         trueFlag = flag;
         this.isRight = flag;
       }
-      // if(trueFlag) {
-      //   this.$message({
-      //     message: '恭喜你，答对了~',
-      //     type: 'success'
-      //   });
-      // } else {
-      //   this.$message.error("很遗憾，答错了~");
-      // }
       let ansArr = document.getElementsByTagName('a');
       for(let i = 0; i < ansArr.length; i++) {
-        console.log(data);
         if(ansArr[i].getAttribute('data-id') === data[0].id) {
           ansArr[i].classList.add('quiz-item-done');
         }
@@ -356,22 +332,10 @@ export default {
           // 预览模式不产生记录
           return;
         }
-        axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(response => {
-
-          })
+        lessonAPI.upsertRecord(params)
       } else if(device === 'pad') { // 课堂学习
         params.username = username
-        axios.post(lessonHost + '/api/class/replay', qs.stringify(params),
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(response => {
-
-          })
+        lessonAPI.replayClass(params)
       }
     }
   }

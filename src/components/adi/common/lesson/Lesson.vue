@@ -44,7 +44,7 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
-import axios from 'axios'
+import { lessonAPI } from '@/api'
 export default {
   data() {
     return {
@@ -87,23 +87,18 @@ export default {
       this.options.previewClick()
     }
   },
-  created: function() {
-    const lessonHost = 'http://localhost/'
+  async created() {
     let username = this.username
-    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
+    if (!this.editMode) {
       if (username) {
-        axios.get(lessonHost + '/api/member/auth', {
-          withCredentials: true
-        }).then(response => {
-          let r = response.data
-          if (r.data && r.data.identity === 2) {
-            this.options.updateVipView()
-            this.properties.vip = true
-          } else {
-            this.properties.vip = false
-          }
-          this.$forceUpdate()
-        })
+        let r = await lessonAPI.auth()
+        if (r.data && r.data.identity === 2) {
+          this.options.updateVipView()
+          this.properties.vip = true
+        } else {
+          this.properties.vip = false
+        }
+        this.$forceUpdate()
       } else {
         this.properties.vip = false
       }

@@ -2,8 +2,7 @@
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
 import { mapGetters } from 'vuex'
-import axios from 'axios'
-import qs from 'qs'
+import { lessonAPI } from '@/api'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div')
@@ -51,15 +50,7 @@ const getMod = function(name) {
   return null
 }
 
-const lessonHost = 'http://localhost:3000/'
 document.domain = 'localhost'; // TODO: 后面需要修改为 keepwork
-// document.domain = top.location.origin.replace(/\:(\d)+/,'').replace(/http\:\/\//, '');
-
-// console.debug('***************************')
-// console.debug(top.location.origin);
-// console.debug(document.referrer);
-// console.debug(window.location.ancestorOrigins[0]);
-// console.debug('***************************')
 
 let vuex = {}
 let firstInFlag = true
@@ -75,7 +66,7 @@ let lastResponse
 let vipFlag = false //false 普通用户 true vip用户
 let notify
 
-const init = function(){
+const init = async function(){
   if (localStorage && localStorage.vuex) {
     vuex = JSON.parse(localStorage.vuex)
   }
@@ -136,18 +127,12 @@ const init = function(){
     let params = {}
     params.username = self.username
     params.lessonUrl = self.activePageUrl
-    if (location.href.indexOf('editor.html') === -1 && location.href.indexOf('viewport.html') === -1) {
-      axios.post(lessonHost + '/api/class/resurme', qs.stringify(params),
-      {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
-      .then(response => {
-        let r = response.data
-        if(r.err === 0) {
-          // 可以恢复状态
-          beginClass(r.data.classId);
-        }
-      })
+    if (!self.editMode) {
+      let r = await lessonAPI.resurmeClass(params)
+      if(r.err === 0) {
+        // 可以恢复状态
+        beginClass(r.data.classId)
+      }
     }
   }
 }
@@ -160,18 +145,12 @@ const timer = {
     return this
   },
   start: function() {
-    this.timeoutObj = setInterval( function () {
+    this.timeoutObj = setInterval( async function () {
       // /class/performance 获取数据后 DOM 操作
       let params = {username: self.username}
-      axios.post(lessonHost + '/api/class/performance', qs.stringify(params),
-        {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        })
-        .then(response => {
-          let r = response.data;
-          lastResponse = r;
-          updateStudentsView(r);
-        })
+      let r = await lessonAPI.performanceClass(params)
+      lastResponse = r;
+      updateStudentsView(r);
       if(classState == 1) {
         document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class';
         let eleTip = document.getElementsByClassName('is-dark')[0];
@@ -587,7 +566,7 @@ export default {
         }
       }
 
-      options.playClick = function() {
+      options.playClick = async function() {
         // 生成一个 Record，返回做题的地址
         // 如存在课程总结 params 追加一个 lessonPerformance
         if(self.isLogined) {
@@ -604,50 +583,25 @@ export default {
           params.codeWriteLine = self.modData.lesson.CodeWriteLine
           params.commands = self.modData.lesson.Commands
           let quizs = getMods('ModQuiz')
-          // let lessonGet = getMod('ModLessonGet')
-          // let lessonPerformance = ''
-          // if(lessonGet) {
-          //   let eles = lessonGet.getElementsByTagName('pre')
-          //   for(let i =0; i < eles.length; i++) {
-          //     let ele = eles[i]
-          //     if(ele.getAttribute('class')=='content'){
-          //       lessonPerformance = ele.innerText
-          //     }
-          //   }
-          //   params.lessonPerformance = lessonPerformance
-          // }
-          // lessonPerformance
-          axios.post(lessonHost + '/api/record/saveOrUpdate', qs.stringify(params),
-            {
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            })
-            .then(response => {
-              let r = response.data
-              if(r.err == 0) {
-                // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
-                let mRecordSn =  r.data.recordSn
-                btnPaly.setAttribute("disabled","true")
-                document.getElementsByClassName('summary-tip')[0].innerText = 'Please wait…The summary will be generated after the learning is finished.'
-                window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
-                let timerLearnState = setInterval( function () {
-                  // record/learnDetailBySn 获取数据后 DOM 操作
-                  let params = {
-                    params: {sn: mRecordSn }
-                  }
-                  axios.get(lessonHost + '/api/record/learnDetailBySn', params)
-                    .then(response => {
-                      let r = response.data;
-                      if(r.data.state == 2) {
-                        // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
-                        let summaryMod = getMod('ModSummary')
-                        let link = lessonHost + '/learnedRecord/' + mRecordSn;
-                        summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
-                        clearInterval(timerLearnState)
-                      }
-                    })
-                }, 5000) // 5s
+          let r = await lessonAPI.upsertRecord(params)
+          if(r.err == 0) {
+            // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
+            let mRecordSn =  r.data.recordSn
+            btnPaly.setAttribute("disabled","true")
+            document.getElementsByClassName('summary-tip')[0].innerText = 'Please wait…The summary will be generated after the learning is finished.'
+            window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
+            let timerLearnState = setInterval( async function () {
+              // record/learnDetailBySn 获取数据后 DOM 操作
+              let r = await lessonAPI.learnRecordDetail(mRecordSn)
+              if(r.data.state == 2) {
+                // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
+                let summaryMod = getMod('ModSummary')
+                let link = lessonAPI.lessonHost + '/learnedRecord/' + mRecordSn;
+                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                clearInterval(timerLearnState)
               }
-            })
+            }, 5000) // 5s
+          }
         } else {
           self.$message.error("未登录~");
         }
@@ -657,10 +611,9 @@ export default {
         let btnPreview = document.getElementById('btnPreview');
         window.open(self.activePageUrl + '?device=pc', '_blank')
       }
-      options.classOpClick = function() {
+      options.classOpClick = async function() {
         btnClass = document.getElementById('btnClass');
         let params = {}
-        // let tipClass = document.getElementById('tipClass')
         params.username = self.username
         params.lessonNo = self.modData.lesson.LessonNo
         params.lessonUrl = self.activePageUrl
@@ -671,40 +624,21 @@ export default {
         params.codeReadLine = self.modData.lesson.CodeReadLine
         params.codeWriteLine = self.modData.lesson.CodeWriteLine
         params.commands = self.modData.lesson.Commands
-        // let lessonGet = getMod('ModLessonGet');
-        // let lessonPerformance = '';
-
-        // if(lessonGet) {
-        //   let eles = lessonGet.getElementsByTagName('pre')
-        //   for(let i =0; i < eles.length; i++) {
-        //     let ele = eles[i]
-        //     if(ele.getAttribute('class')=='content'){
-        //       lessonPerformance = ele.innerText
-        //     }
-        //   }
-        //   params.lessonPerformance = lessonPerformance
-        // }
         params.quizNum = getMods('ModQuiz').length
         if( classState == 0 ) {
           // begin class
-          axios.post(lessonHost + '/api/class/begin', qs.stringify(params),
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(response => {
-            let r = response.data
-            if(r.err == 0) {
-              beginClass(r.data.classId);
-            } else {
-              self.$alert('<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' + r.data.lessonNo + 'is ongoing.</div>', {
-                dangerouslyUseHTMLString: true,
-                confirmButtonText: 'Click to view',
-                center: true
-              }).then(() => {
-                window.open(r.data.lessonUrl);
-              });
-             }
-          })
+          let r = await lessonAPI.beginClass(params)
+          if(r.err == 0) {
+            beginClass(r.data.classId);
+          } else {
+            self.$alert('<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' + r.data.lessonNo + 'is ongoing.</div>', {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: 'Click to view',
+              center: true
+            }).then(() => {
+              window.open(r.data.lessonUrl);
+            });
+          }
         } else if ( classState == 1 ) {
           // finish class
           btnClass.lastChild.innerText = 'Dismiss the Class';
@@ -712,45 +646,31 @@ export default {
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
             type: 'warning'
-          }).then(() => {
+          }).then( async () => {
             // yes
-            axios.post(lessonHost + '/api/class/finish', qs.stringify(params),
-            {
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            })
-            .then(response => {
-              let r = response.data
-              // 展现 Summary 数据
-              classState = 2
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
-              timer.stop()
-              let summaryMod = getMod('ModSummary')
-              if(r.data) {
-                notify.close();
-                let link = lessonHost + '/taughtedRecord/' + r.data.classId;
-                if(summaryMod.getAttribute("style") == "display:none") {
-                  summaryMod.setAttribute("style", "display:block");
-                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
-                  let dataMod = summaryMod.parentNode.childNodes;
-                  for(let i = 0; i < dataMod.length; i++) {
-                    let modItem = dataMod[i].getAttribute("data-mod")
-                    if(modItem != "ModSummary" && modItem != "ModLesson") {
-                      dataMod[i].setAttribute("style", "display: none");
-                    }
+            let r = await lessonAPI.finishClass(params)
+            // 展现 Summary 数据
+            classState = 2
+            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+            timer.stop()
+            let summaryMod = getMod('ModSummary')
+            if(r.data) {
+              notify.close();
+              let link = lessonAPI.lessonHost + '/taughtedRecord/' + r.data.classId;
+              if(summaryMod.getAttribute("style") == "display:none") {
+                summaryMod.setAttribute("style", "display:block");
+                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
+                let dataMod = summaryMod.parentNode.childNodes;
+                for(let i = 0; i < dataMod.length; i++) {
+                  let modItem = dataMod[i].getAttribute("data-mod")
+                  if(modItem != "ModSummary" && modItem != "ModLesson") {
+                    dataMod[i].setAttribute("style", "display: none");
                   }
-
-                  // let timerLearnState = setTimeout( function () {
-                  //   let summaryContainer = document.getElementById("summaryContainer");
-                  //   if(summaryContainer.height !== '0px') {
-                  //     summaryContainer.style.display = "none";
-                  //   }
-                  // }, 200);
-                }else{
-                  summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
                 }
-
+              }else{
+                summaryMod.innerHTML = "<iframe id='summaryContainer' frameborder='0' width='100%' src = "+ link +"></iframe>";
               }
-            });
+            }
             btnClass.setAttribute('disabled','true');
             document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none');
 

@@ -91,9 +91,8 @@
   </el-dialog>
 </template>
 <script>
-import axios from 'axios'
-import qs from 'qs'
 import { mapGetters } from 'vuex'
+import { lessonAPI } from '@/api'
 
 /* GUID 算法
   len: 指定长度
@@ -140,7 +139,6 @@ const checkInputEmpty = () => {
       }
     }
 }
-const lessonHost = 'http://localhost:3000/'
 //markdown转json
 const parseMarkDown = (item) => {
     let contentArr = item.content.split('```');
@@ -254,7 +252,7 @@ export default {
     },
     submitForm(formName) {
       checkInputEmpty();
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate( async (valid) => {
         if (valid && this.lessonsSelect.length != 0) {
           //课程包id
           this.lessonsData.id === '' ? this.lessonsData.id = uuid(32, 16) : this.lessonsData.id;
@@ -287,20 +285,14 @@ export default {
             packageUrl: this.activePageUrl
           }
           //发送添加课程包的请求
-          axios.post(lessonHost + '/api/package/createOrUpdate', qs.stringify(params),
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(response => {
-            if( response.data.err == 0 ){
+          let r = await lessonAPI.upsertPackage(params)
+          if( r.err == 0 ){
               this.handleClose();
               this.$emit('finishEditing', this.lessonsData);
             }else{
-              this.$message.error( response.data.msg )
+              this.$message.error( r.msg )
             }
-          })
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -310,7 +302,7 @@ export default {
       this.$refs[formName].resetFields();
     }
   },
-  created: function(){
+  created: async function(){
     //获取选中课程的数据
     if( this.lessonsData.lessons ){
       this.lessonsData.lessons.forEach((lesson, index ) => {
@@ -320,8 +312,8 @@ export default {
     //更新课程数量
     this.lessonsData.lessonCount = this.lessonsData.lessons.length;
     //获取课程列表
-    axios.get(lessonHost + '/api/class/lesson').then(response => {
-      const lessonsData = response.data.hits.hits;
+    let r = await lessonAPI.lessonList()
+    const lessonsData = r.hits.hits;
       lessonsData.forEach((lesson, index ) => {
         const tmp = parseMarkDown(lesson._source)
         this.lessonsListData.push({
@@ -333,8 +325,6 @@ export default {
           key: index,
         });
       })
-
-    })
   }
 }
 </script>
