@@ -131,7 +131,8 @@ export const getPageInfoByPath = path => {
   let [, , ...paths] = fullPath.split('/').filter(x => x)
   let relativePath = paths.join('/')
   let bareRelativePath = relativePath.replace(/\.md$/, '')
-  return { username, sitename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
+  let pagename = (paths[paths.length - 1] || '').replace(/\.md$/, '')
+  return { username, sitename, pagename, isLegal, barePath, fullPath, sitepath, paths, relativePath, bareRelativePath }
 }
 
 /**
