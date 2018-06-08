@@ -149,7 +149,7 @@ export const getFilenameWithExt = (filename, ext) => {
 }
 
 export const gitFilenameValidator = (filename = '') => {
-  let validated = /^[^/\\:"*?<>|\s]+$/.test(filename)
+  let validated = /^[^/\\:@&*=#"*?<>|\s]+$/.test(filename)
   validated = validated && /^[^_.]/.test(filename)
   return validated
 }

@@ -77,6 +77,12 @@ const gitLabAPIGenerator = ({ url, token }) => {
               }
             )
             return res.data
+          },
+          async rename(projectId, payload) {
+            let res = await instance.post(
+              `projects/${projectId}/repository/commits`, payload
+            )
+            return res.data
           }
         }
       }
@@ -146,6 +152,26 @@ export class GitAPI {
       this.commitToES(path, 'delete', '', {})
       return data
     })
+  }
+
+  async renameFile(currentFilePath, newFilePath, options) {
+    let content = await this.getContent(currentFilePath, options)
+    let payload = {
+      branch: options.branch || this.config.branch || 'master',
+      commit_message: 'rename file',
+      actions: [{
+        action: 'move',
+        file_path: newFilePath,
+        previous_path: currentFilePath,
+        content: content
+      }]
+    }
+    await this.client.projects.repository.files.rename(options.projectId, payload)
+      .then((data) => {
+        this.commitToES(newFilePath, 'create', content, {})
+        this.commitToES(currentFilePath, 'delete', '', {})
+        return data
+      })
   }
 
   async upsertFile(path, options) {
