@@ -375,7 +375,9 @@
     "width": "width",
     "height": "height",
     "webHeight": "web height",
+    "webWidth": "web width",
     "mobileHeight": "mobile height",
+    "mobileWidth": "mobile width",
     "fontSize": "font size",
     "path": "page path"
   },
