@@ -18,8 +18,10 @@
               </span>
             </div>
             <div class="lessons-skills">
-              <span class="lessons-include">Skills:</span>
-              <pre>{{properties.data.skills}}</pre>
+              <div class="lessons-include">Skills:</div>
+              <ul>
+                <li>{{properties.data.skills}}</li>
+              </ul>
             </div>
             <div class="lessons-button" v-if="!isLessonsBuy">
               <span class="lessons-coins">
@@ -61,8 +63,10 @@
                       </el-col>
                     </el-row>
                     <div class="lesson-item-goals">
-                      <span>Lesson Goals:</span>  
-                      <pre>{{lesson.LessonGoals}}</pre>
+                      <div>Lesson Goals:</div>  
+                      <ul>
+                        <li>{{lesson.LessonGoals}}</li>
+                      </ul>
                     </div>
                   </el-col>
                   <el-col>
@@ -293,21 +297,22 @@ export default {
   .lessons-count{
     color: #FF414A;
   }
-  .lessons-skills pre{
-    font-size: 16px;
-    color: #4c4c4c;
-  }
-  .lessons-skills pre,.lesson-item .lesson-item-goals pre {
+  .lessons-skills li,.lesson-item .lesson-item-goals li {
+    padding: 0;
+    margin: 0;
     margin-top: 10px;
     font-family: inherit;
     word-wrap: break-word;
-    white-space: pre-wrap;
+    white-space: pre-line;
     line-height: 1.5;
     font-weight: lighter;
     word-break:break-all
   }
-
-  .lessons-skills pre li {
+  .lessons-skills ul{
+    padding: 0;
+  }
+  .lessons-skills li {
+    list-style: none;
     color:#4C4C4C;
     line-height:24px;
     font-size:16px;
@@ -415,7 +420,7 @@ export default {
   .lesson-item-desc .lesson-item-goals,.lesson-item-desc .lesson-item-dur{
     color: #999;
   }
-  .lesson-item .lesson-item-goals pre{
+  .lesson-item .lesson-item-goals li{
     font-size: 14px;
     color: #333;
   }
