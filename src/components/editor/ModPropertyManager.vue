@@ -1,8 +1,7 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-      <i class="iconfont icon-delete"></i>
-      {{$t('editor.modDel')}}
+      <i class="iconfont icon-delete icon-del"></i>
     </div>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
@@ -139,12 +138,20 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 .property-manager-container {
   min-height: 100%;
   background-color: #ebeef5;
   padding: 0 18px;
   position: relative;
+  .icon-del{
+    display: none;
+  }
+  &:hover{
+    .icon-del{
+      display: inline;
+    }
+  }
 }
 .property-manager-container .delete-mod {
   position: absolute;

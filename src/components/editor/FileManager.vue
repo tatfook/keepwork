@@ -265,12 +265,23 @@ export default {
   }
 
   .el-tree--highlight-current
+    .el-tree-node
+    > .el-tree-node__content {
+    .file-manager-buttons-container{
+      display: none;
+    }
+  }
+  .el-tree--highlight-current
     .el-tree-node.is-current
     > .el-tree-node__content {
     background-color: #ccfffc;
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
+    .file-manager-buttons-container{
+      display: inline-block !important;
+      line-height: 38px !important;
+    }
   }
   .el-tree-node__content {
     height: 32px;

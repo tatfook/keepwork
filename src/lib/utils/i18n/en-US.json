@@ -189,12 +189,17 @@
     "areYouSureYouWantToDeleteThisFolder":
       "Are you sure you want to delete this folder ?",
     "videoNotSupport": "Your browser does not support the video tag.",
-    "notFound": "Content cannot be found"
+    "notFound": "Content cannot be found",
+
+    "yourPage": "Your page",
+    "yourPosition": "Your position：",
+    "defaultPage": "Default page"
   },
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
     "bigFile": "Big file",
+    "pagePath": "Page path",
 
     "text": "Text",
     "navigation": "Navigation",
@@ -328,6 +333,8 @@
     "size": "size",
     "menu": "menu",
     "logo": "icon",
+    "logoB": "icon",
+    "menuB": "menu",
     "businessName": "main title",
     "tagline": "subtitle",
     "qq": "QQ number",
@@ -346,7 +353,8 @@
     "enter": "Enter",
     "innerModal": "Inner modal",
     "bigFile": "Big file",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "pageRoute": "Page route"
   },
   "field": {
     "fileId": "file Id",
@@ -363,7 +371,11 @@
     "channel": "channel",
     "number": "number",
     "width": "width",
-    "height": "height"
+    "height": "height",
+    "webHeight": "web height",
+    "mobileHeight": "mobile height",
+    "fontSize": "font size",
+    "path": "page path"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

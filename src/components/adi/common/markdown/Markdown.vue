@@ -19,9 +19,9 @@ export default {
 <style lang="scss">
 .comp-markdown {
   color: unset;
+  font-size: unset;
 
   p {
-    margin: 0;
     word-wrap: break-word;
   }
 

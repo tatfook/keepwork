@@ -5,7 +5,7 @@
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
-    <span v-else>{{node.label | hideMDFileExtension}}</span>
+    <span v-else>{{data.displayName || node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
       <i class="iconfont icon-file_" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>

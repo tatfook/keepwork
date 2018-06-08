@@ -179,12 +179,17 @@
     "documents": "个文件吗？",
     "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
     "videoNotSupport": "您的浏览器不支持 video 标签。",
-    "notFound": "内容找不到了"
+    "notFound": "内容找不到了",
+
+    "yourPage": "您的页面",
+    "yourPosition": "您所在的位置：",
+    "defaultPage": "首页"
   },
   "modList": {
     "recent": "常用",
     "markdown": "文本(Md)",
     "bigFile": "大文件",
+    "pagePath": "页面路径",
 
     "text": "文本",
     "navigation": "导航",
@@ -318,6 +323,8 @@
     "size": "大小",
     "menu": "菜单",
     "logo": "图标",
+    "logoB": "图标",
+    "menuB": "菜单",
     "businessName": "主标题",
     "tagline": "副标题",
     "qq": "QQ号",
@@ -336,7 +343,8 @@
     "enter": "进入",
     "innerModal": "内部模态框",
     "bigFile": "大文件",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "pageRoute": "页面路径"
   },
   "field": {
     "fileId": "字段",
@@ -352,7 +360,11 @@
     "channel": "渠道",
     "number": "数字",
     "width": "宽度",
-    "height": "高度"
+    "height": "高度",
+    "webHeight": "web高度",
+    "mobileHeight": "手机高度",
+    "fontSize": "字体大小",
+    "path": "页面路径"
   },
   "skydrive": {
     "mediaLibrary": "图库",

@@ -39,7 +39,10 @@ export default {
     sitePath: String
   },
   async mounted() {
-    this.basicMessage = await this.getPersonalSiteInfoByPath(this.sitePath)
+    this.basicMessage = _.clone(await this.getPersonalSiteInfoByPath(this.sitePath))
+    await this.userGetWebsiteDetailInfoByPath({
+      path: this.sitePath
+    })
     this.loading = false
   },
   data() {
@@ -75,7 +78,8 @@ export default {
       await that
         .gitlabUploadFile({
           fileName: fileName,
-          content: imgBase64
+          content: imgBase64,
+          sitePath: this.sitePath
         })
         .then(result => {
           that.basicMessage.logoUrl = result
