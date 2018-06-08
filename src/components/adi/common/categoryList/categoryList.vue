@@ -1,18 +1,18 @@
 <template>
   <div class="comp categroy-list-comp">
-    <div class="style-0" v-if="getStyleId === 0">
-      <div class="item" v-for="(item, index) in [{test: 1},{test: 2}]" :key="index">
+    <div class="style-0" v-if="getStyleId === 0" v-loading="loading">
+      <div class="item" v-for="(item, index) in pageData" :key="index">
         <el-row class="item-container" :gutter="5">
           <el-col :span="6" :xs="24">
             <img class="cover" src="https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png">
           </el-col>
           <el-col :span="18" :xs="24">
             <div class="desc">
-              <div class="title">2018年3月14日维护公告</div>
+              <div class="title">{{item.title}}</div>
               <div class="summary">
-                《创意空间》是由配天研发的一款全新品类游戏，玩家在游戏中扮演召唤师，自 由搭配各式各样的生物、法术、神器等卡牌，通过不同卡牌之间的跨回合连锁效 果，来战胜强大的秘境首领或竞技场对手。
+                {{item.summary}}
               </div>
-              <div class="date">2018-03-13</div>
+              <div class="date">{{item.date}}</div>
             </div>
           </el-col>
         </el-row>
@@ -20,25 +20,114 @@
     </div>
 
     <div class="style-1" v-if="getStyleId === 1">
-      <div class="item"  v-for="(item, index) in [{test: 1},{test: 2},{test: 2},{test: 2}]" :key="index">
+      <div class="item" v-for="(item, index) in pageData" :key="index">
         <img class="cover" src="https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png">
         <div class="desc">
-          <div class="title">2018年3月14日维护公告</div>
-          <div class="summary">作者：xxxxxxx</div>
+          <div class="title">{{item.title}}</div>
+          <div class="summary">{{item.summary}}</div>
         </div>
       </div>
+    </div>
+
+    <div class="pagination">
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" :total="total">
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
+import { Base64 } from 'js-base64'
 import compBaseMixin from '../comp.base.mixin'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'AdiCategoryList',
+  data() {
+    return {
+      total: 0,
+      pageSize: 2,
+      currentPage: 1,
+      allData: [],
+      pageData: [],
+      loading: true
+    }
+  },
   mixins: [compBaseMixin],
-  methods: {},
+  async created() {
+    await this.getRepositoryTree({ path: this.activePageInfo.sitepath })
+
+    this.projectId = this.getProjectIdByPath(this.activePageInfo.sitepath)
+    this.allData = this.getChildrenByPath('newsList')
+    this.total = this.allData.length
+
+    this.gitlabApi = this.getGitlabAPI()['client']['projects']['repository'][
+      'files'
+    ]
+
+    this.getCurrentPageData()
+
+    this.loading = false
+  },
+  methods: {
+    ...mapActions({
+      getRepositoryTree: 'gitlab/getRepositoryTree'
+    }),
+    ...mapGetters({
+      gitlabChildrenByPath: 'gitlab/childrenByPath'
+    }),
+    getChildrenByPath(path) {
+      return this.gitlabChildrenByPath({
+        repositoryTreesAllFiles: this.repositoryTreesAllFiles
+      })(this.activePageInfo.sitepath + '/' + (path || ''))
+    },
+    handleCurrentChange(pageNum) {
+      this.currentPage = pageNum
+    },
+    getCurrentPageData() {
+      this.pageData = []
+
+      _.forEach(this.allData, async (item, index) => {
+        let startIndex =
+          (this.currentPage === 1 && 1) || (this.pageSize === 1 && this.currentPage * this.pageSize || (this.currentPage * this.pageSize) - 1)
+        let endIndex = startIndex + (this.pageSize - 1)
+
+        startIndex--
+        endIndex--
+
+        if (index >= startIndex && index <= endIndex) {
+          let data = await this.gitlabApi.show(
+            this.projectId,
+            item.path,
+            'master'
+          )
+
+          let newItem = {
+            title: '',
+            summary: '暂无简介',
+            date: '暂无日期'
+          }
+
+          newItem['title'] = item.name.replace('.md', '')
+
+          this.pageData.push(newItem)
+        }
+      })
+    }
+  },
+  watch: {
+    currentPage() {
+      return this.getCurrentPageData()
+    }
+  },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo',
+      getGitlabAPI: 'gitlab/getGitlabAPI',
+      getProjectIdByPath: 'gitlab/getProjectIdByPath',
+      repositoryTreesAllFiles: 'gitlab/repositoryTreesAllFiles'
+    }),
     getStyleId() {
       return this.options.styleId || 0
     }
@@ -180,7 +269,7 @@ export default {
     padding: 0 30px;
 
     &::after {
-      content: "";
+      content: '';
       width: 300px;
     }
 
@@ -212,6 +301,11 @@ export default {
         }
       }
     }
+  }
+
+  .pagination {
+    margin-top: 35px;
+    text-align: center;
   }
 }
 </style>

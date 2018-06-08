@@ -2,7 +2,6 @@
   <div class="comp comp-page-switching">
     <div class="pagination">
       <el-pagination
-        background="red"
         layout="prev, pager, next"
         :total="1000">
       </el-pagination>
