@@ -48,6 +48,7 @@ export default {
       removePending: false,
       isWebsiteSettingShow: false,
       isRenameFile: false,
+      isValidator: false,
       isRenamePending: false,
       newFileName: ''
     }
@@ -64,7 +65,8 @@ export default {
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
-      userDeletePagesConfig: 'user/deletePagesConfig'
+      userDeletePagesConfig: 'user/deletePagesConfig',
+      savePageByPath: 'savePageByPath'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -152,6 +154,27 @@ export default {
         .catch(e => console.error(e))
     },
     async toggleRenameFile() {
+      let { saved } = this.getOpenedFileByPath(this.filePath)
+      if (!saved) {
+        await this.$confirm('该文件尚未保存，是否保存？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(async () => {
+            await this.savePageByPath(this.filePath)
+            this.$message({
+              type: 'success',
+              message: '保存成功!'
+            })
+            this.toggleInputFocus()
+          })
+          .catch(() => {})
+        return
+      }
+      this.toggleInputFocus()
+    },
+    toggleInputFocus() {
       this.isRenameFile = true
       this.newFileName = this.data.name.replace(/.md$/, '')
       this.$nextTick(() => this.$refs.input.focus())
@@ -174,6 +197,7 @@ export default {
         return this.$message.error(this.$t('editor.nameExist'))
       }
       if (!gitFilenameValidator(this.newFileName)) {
+        this.isValidator = true
         return this.$message.error(
           `${this.newFileName} ${this.$t('editor.nameRule')}`
         )
@@ -190,15 +214,23 @@ export default {
       })
       this.isRenameFile = false
       this.isRenamePending = false
+      this.isValidator = false
       this.resetPage({ currentPath: this.currentPath })
       this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
     },
     handleRenameCancel() {
       this.isRenameFile = false
+      this.isValidator = false
       this.newFileName = ''
     },
     delayCancel() {
-      setTimeout(() => !this.isRenamePending && this.handleRenameCancel(), 250)
+      setTimeout(
+        () =>
+          !this.isValidator &&
+          !this.isRenamePending &&
+          this.handleRenameCancel(),
+        250
+      )
     },
     removeFile() {
       if (this.data.type === 'tree') {
@@ -279,7 +311,8 @@ export default {
   computed: {
     ...mapGetters({
       gitlabChildNamesByPath: 'gitlab/childNamesByPath',
-      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath'
+      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      getOpenedFileByPath: 'getOpenedFileByPath'
     }),
     pending() {
       return this.addFolderPending || this.addFilePending || this.removePending
@@ -312,6 +345,9 @@ export default {
 
       let [username, name] = this.data.path.split('/')
       return `${username}/${name}`
+    },
+    filePath() {
+      return this.data.path.replace(/.md$/, '')
     }
   },
   filters: {

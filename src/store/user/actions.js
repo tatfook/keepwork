@@ -242,9 +242,8 @@ const actions = {
     let sitePath = currentFilePath.split('/').slice(0, -1).join('/')
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
-    if (!config && !config.pages) return
-    let pages = config.pages
-    console.log('pages', pages)
+    let { pages = null } = config.pages || {}
+    if (!pages) return
     let currentPageName = currentFilePath.split('/').pop()
     let newPageName = newFilePath.split('/').pop()
     if (pages[currentPageName] && pages[currentPageName]['layout']) {
