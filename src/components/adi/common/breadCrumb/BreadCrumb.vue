@@ -1,17 +1,28 @@
 <template>
   <div class="comp-breadcrumb">
+
     <el-breadcrumb :style="getStyle" separator="/">
       <el-breadcrumb-item v-for="(menuData, index) in data" :key="index">
-        <a
-          :target="getTarget"
-          :href="menuData.link"
-          @mouseenter="mouseenter"
-          @mouseleave="mouseleave"
-        >
+        <a :target="getTarget" :href="menuData.link" @mouseenter="mouseenter" @mouseleave="mouseleave">
           {{isEmptyData ? $t(menuData.name) : menuData.name}}
         </a>
       </el-breadcrumb-item>
     </el-breadcrumb>
+
+    <el-dropdown>
+      <el-button type="primary">
+        <span>导航</span>
+        <i class="el-icon-arrow-down el-icon--right"></i>
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-for="(menuData, index) in data" :key="index">
+          <a :target="getTarget" :href="menuData.link">
+            {{isEmptyData ? $t(menuData.name) : menuData.name}}
+          </a>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
   </div>
 </template>
 
@@ -64,25 +75,39 @@ export default {
 <style lang="scss" scoped>
 .comp-breadcrumb {
   .el-breadcrumb {
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
+    @media only screen and (min-width: 768px) {
+      display: block;
+    }
     .el-breadcrumb__item {
       height: 64px;
       display: flex;
       align-items: center;
+      a {
+        height: 60px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        color: unset;
+        text-decoration: none;
+        text-align: center;
+        font-weight: normal;
+      }
+      a:hover {
+        border-bottom-width: 4px;
+        border-bottom-style: solid;
+      }
     }
   }
-  a {
-    height: 60px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    color: unset;
-    text-decoration: none;
-    text-align: center;
-    font-weight: normal;
-  }
-  a:hover {
-    border-bottom-width: 4px;
-    border-bottom-style: solid;
+  .el-dropdown {
+    @media only screen and (max-width: 767px) {
+      display: block;
+    }
+    @media only screen and (min-width: 768px) {
+      display: none;
+    }
   }
 }
 </style>
@@ -95,6 +120,17 @@ export default {
     display: flex;
     align-items: center;
     color: unset;
+  }
+  .el-breadcrumb__item:last-child .el-breadcrumb__inner a {
+    cursor: pointer;
+  }
+}
+.el-dropdown-menu {
+  .el-dropdown-menu__item {
+    a {
+      color: unset;
+      text-decoration: none;
+    }
   }
 }
 </style>

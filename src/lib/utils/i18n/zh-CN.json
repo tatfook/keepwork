@@ -345,7 +345,8 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径"
+    "pageRoute": "页面路径",
+    "tab": "标签"
   },
   "field": {
     "fileId": "字段",
@@ -363,7 +364,9 @@
     "width": "宽度",
     "height": "高度",
     "webHeight": "web高度",
+    "webWidth": "web宽度",
     "mobileHeight": "手机高度",
+    "mobileWidth": "手机宽度",
     "fontSize": "字体大小",
     "path": "页面路径"
   },

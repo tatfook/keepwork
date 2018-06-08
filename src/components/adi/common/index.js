@@ -19,6 +19,8 @@ import AdiBigFile from './bigFile/BigFile'
 import AdiBreadCrumb from './breadCrumb/BreadCrumb'
 import AdiPagePath from './pagePath/pagePath'
 import AdiTab from './tab/Tab'
+import AdiCategoryList from './categoryList/categoryList'
+import AdiPageSwitching from './pageSwitching/PageSwitching'
 
 export default {
   AdiMarkdown,
@@ -41,5 +43,7 @@ export default {
   AdiBigFile,
   AdiBreadCrumb,
   AdiPagePath,
-  AdiTab
+  AdiTab,
+  AdiCategoryList,
+  AdiPageSwitching
 }
