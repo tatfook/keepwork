@@ -23,7 +23,10 @@ export default [
           nameFontColor: 'color_6',
           labelFontColor: 'color_3',
           commonSize: 'font_5',
-          pageFontColor: 'color_8'
+          pageFontColor: 'color_8',
+
+          nameMobileSize: 'font_7',
+          commonMobileSize: 'font_8'
         }
       },
       config: {
@@ -32,7 +35,10 @@ export default [
     },
     preview: {
       outter: {
-        height: '16px'
+        height: '8px'
+      },
+      inner: {
+        'margin-top': '-20px'
       }
     }
   }

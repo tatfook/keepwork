@@ -314,7 +314,8 @@ export default [
       },
       colLogoB: {
         display: 'flex',
-        'justify-content': 'flex-start'
+        'justify-content': 'flex-start',
+        'min-width': '180px'
       },
       logoB: {
         height: '64px',
@@ -329,22 +330,19 @@ export default [
         width: 'auto'
       },
       '@media only screen and (max-width: 767px)': {
-        colLogoB: {
-          'justify-content': 'center'
-        },
-        colMenuB: {
-          'justify-content': 'center'
+        menuB: {
+          'min-width': '40px'
         }
       }
     },
     props: {
       colGroupRow: { gutter: 10 },
       colLogoB: {
-        xs: { span: 24 },
+        xs: { span: 12 },
         sm: { span: 9 }
       },
       colMenuB: {
-        xs: { span: 24 },
+        xs: { span: 12 },
         sm: { span: 15 }
       }
     },
@@ -368,7 +366,7 @@ export default [
     },
     preview: {
       outter: {
-        height: '13px'
+        height: '5px'
       }
     }
   }
