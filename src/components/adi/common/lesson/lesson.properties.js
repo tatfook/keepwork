@@ -2,7 +2,7 @@ export default {
   LessonNo: '1',
   Title: 'lesson title',
   LessonGoals: 'lesson goals',
-  CoverImageOfTheLesson: 'http://daofeng-school.com/imgs/school/react-course.jpg',
+  CoverImageOfTheLesson: 'https://daofeng-school.com/imgs/school/react-course.jpg',
   AnimationOfTheLesson: '',
   animations: [],
   vip: false,

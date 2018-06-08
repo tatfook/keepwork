@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-export const lessonHost = 'http://lesson.keepwork.com'
+export const lessonHost = process.env.LESSON_API_PREFIX
 
 const client = axios.create({
   baseURL: lessonHost,

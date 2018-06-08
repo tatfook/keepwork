@@ -94,7 +94,7 @@
 import { mapGetters } from 'vuex'
 import { lessonAPI } from '@/api'
 import uuid from 'uuid/v1'
-// import { mdToJson, jsonToMd } from '../../lib/mod/parser/mdParser/yaml'
+import { mdToJson, jsonToMd } from '../../lib/mod/parser/mdParser/yaml'
 
 const checkInputEmpty = () => {
   let opeInput = document.getElementsByClassName("writer-input");
@@ -111,22 +111,23 @@ const checkInputEmpty = () => {
 //markdown转json
 const parseMarkDown = (item) => {
     let contentArr = item.content.split('```');
-    let lessonData,itemData={};
+    let lessonData,itemData={}
     for(let i = 0; i < contentArr.length; i++) {
-        let contentVo = contentArr[i];
+        let contentVo = contentArr[i]
         if(contentVo.substr(0, '@Lesson'.length) == '@Lesson') {
-            lessonData = contentVo;
+            contentVo = contentVo.replace('@Lesson', '')
+            lessonData = mdToJson(contentVo.trim())
             break;
         }
     }
     if(lessonData) {
-        itemData.lessonTitle = lessonData.split('Title:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
+        itemData.lessonTitle = lessonData.lesson.Title;
         itemData.lessonUrl = item.url;
-        itemData.lessonCover = lessonData.split('CoverImageOfTheLesson:')[1].split('\n')[0];
-        itemData.lessonNo = lessonData.split('LessonNo:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
-        itemData.LessonGoals = lessonData.split('LessonGoals:')[1].split('\n')[0].replace(new RegExp("'","g"),"");
+        itemData.lessonCover = lessonData.lesson.CoverImageOfTheLesson;
+        itemData.lessonNo = lessonData.lesson.LessonNo;
+        itemData.LessonGoals = lessonData.lesson.LessonGoals;
     }
-    return itemData;
+    return itemData
 }
 
 export default {
