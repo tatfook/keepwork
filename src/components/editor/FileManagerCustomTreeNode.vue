@@ -125,8 +125,7 @@ export default {
       })
     },
     removeFolder(data) {
-      const self = this
-      let pathArr = this.data.path.split('/')
+      let pathArr = data.path.split('/')
       let folderName = pathArr[pathArr.length - 1]
       const toRemoveFiles = []
       const recursionFile = data => {
@@ -139,15 +138,15 @@ export default {
       }
       recursionFile(data)
 
-      this.$confirm(self.$t('editor.deleteFolder'), self.$t('editor.delete'), {
-        confirmButtonText: self.$t('el.messagebox.confirm'),
-        cancelButtonText: self.$t('el.messagebox.cancel'),
+      this.$confirm(`${this.$t('editor.deleteFolderBefore')}${data.name}${this.$t('editor.deleteFolderAfter')}`, this.$t('editor.delete'), {
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel'),
         type: 'error'
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFolder({ paths: toRemoveFiles }),
-            await this.deletePagesFromLayout({ paths: toRemoveFiles })
+          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          await this.deletePagesFromLayout({ paths: toRemoveFiles })
           this.resetPage({ toRemoveFiles })
           this.removePending = false
         })

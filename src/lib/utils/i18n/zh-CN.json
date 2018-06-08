@@ -175,7 +175,8 @@
     "keepOneLayout": "至少保留一个布局",
     "theLayoutIsInUse": "布局正在使用",
 
-    "deleteFolder": "删除文件夹及其中的所有内容么?",
+    "deleteFolderBefore": "删除 ",
+    "deleteFolderAfter": " 文件夹及其中的所有内容么?",
     "documents": "个文件吗？",
     "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
     "videoNotSupport": "您的浏览器不支持 video 标签。",
