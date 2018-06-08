@@ -1,6 +1,5 @@
 <template>
   <el-row class="pagePath comp">
-
     <el-col :xs="24" :sm="6" :class="getPageNameClass.pageNameClass">
       <a :target='target'>{{properties.name?properties.name:$t('editor.yourPage')}}</a>
     </el-col>
@@ -15,7 +14,6 @@
         </el-breadcrumb>
       </div>
     </el-col>
-
   </el-row>
 </template>
 
@@ -115,12 +113,13 @@ export default {
     }
 
     .pagePath__path-info__squeue {
-      // height: 16px;
       overflow-x: hidden;
 
       .el-breadcrumb {
         color: unset;
         overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
       }
     }
   }
@@ -138,8 +137,6 @@ export default {
         width: 84px;
       }
       .pagePath__path-info__squeue {
-        // height: 14px;
-
         .el-breadcrumb {
           max-width: 604px;
         }
