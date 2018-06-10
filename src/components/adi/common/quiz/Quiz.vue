@@ -228,6 +228,8 @@ export default {
             }
           }
         }
+      } else if(r.err == 202) {
+        this.$message.error("课堂已满员~")
       } else {
         this.$message.error("课堂已关闭~")
       }
