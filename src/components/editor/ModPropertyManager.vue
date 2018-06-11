@@ -1,8 +1,8 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
-    <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
+    <!-- <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
       <i class="iconfont icon-delete icon-del"></i>
-    </div>
+    </div> -->
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>

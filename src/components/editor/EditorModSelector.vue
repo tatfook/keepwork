@@ -1,5 +1,8 @@
 <template>
   <div :class="{ 'mod-active': isActive }" class='kp-mod-selector' @click='setActive'>
+    <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
+      <i class="iconfont icon-delete icon-del"></i>
+    </div>
     <div class='mod'>
       <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
       <span v-if='invalid'> 错误的Mod指令 </span>
@@ -14,7 +17,7 @@
 <script>
 import ModLoader from '@/components/adi/mod'
 import VueScrollTo from 'vue-scrollto'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { gConst } from '@/lib/global'
 
 export default {
@@ -50,6 +53,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      deleteMod: 'deleteMod',
+    }),
     newMod(position) {
       this.$store.dispatch('setNewModPosition', position)
       this.$emit('onAddMod', this.mod.key)
@@ -65,6 +71,22 @@ export default {
         y: true
       }
       VueScrollTo.scrollTo(this.$el, 500, options)
+    },
+    toDeleteMod() {
+      let self = this
+      this.$confirm(
+        this.$t('editor.modDelMsg'),
+        this.$t('editor.modDelMsgTitle'),
+        {
+          confirmButtonText: self.$t('el.messagebox.confirm'),
+          cancelButtonText: self.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
+        .then(() => {
+          this.deleteMod(this.mod.key)
+        })
+        .catch(() => {})
     }
   }
 }
@@ -88,7 +110,7 @@ export default {
   position: absolute;
   left: 50%;
   margin-left: -19px;
-  z-index: 11111;
+  z-index: 99;
 }
 .add-before {
   top: -19px;
@@ -104,9 +126,31 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
 .kp-mod-selector .comp {
   position: relative;
+}
+.kp-mod-selector {
+  position: relative;
+  .delete-mod {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background-color: #f56c6c;
+    color: #ffffff;
+    border-radius: 50%;
+    z-index: 99;
+    display: none;
+  }
+  &:hover {
+    .delete-mod {
+      display: inline;
+    }
+  }
 }
 .kp-mod-selector .comp:hover::before {
   content: '';
