@@ -222,6 +222,11 @@ const actions = {
       useCache: false
     })
   },
+  async renameFolder(context, { currentFolderPath, newFolderPath, childrenFiles }) {
+    console.log('currentFolderPath', currentFolderPath)
+    console.log('newFolderPath', newFolderPath)
+    console.log('childrenFiles', childrenFiles)
+  },
   async addFolder({ dispatch }, { path }) {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`
     await dispatch('createFile', { path: newEmptyFilePath })
