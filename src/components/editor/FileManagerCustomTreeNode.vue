@@ -1,7 +1,7 @@
 <template>
-  <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending">
-    <span class="rename-wrapper" v-if="isRenameFile" v-loading="isRenamePending">
-      <el-input @click.native.stop ref="input" v-if="isRenameFile" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newFileName" class="rename-input" size="mini"></el-input>
+  <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
+    <span class="rename-wrapper" v-if="isRename">
+      <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
@@ -12,8 +12,8 @@
       <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
-    <span class="file-manager-buttons-container" v-if="!isRenameFile">
-      <el-button v-if="isFile" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRenameFile" title="修改文件名">
+    <span class="file-manager-buttons-container" v-if="!isRename">
+      <el-button v-if="isFile" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" title="修改名称">
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
@@ -46,11 +46,12 @@ export default {
       addFolderPending: false,
       addFilePending: false,
       removePending: false,
+      savePending: false,
+      renamePending: false,
       isWebsiteSettingShow: false,
-      isRenameFile: false,
+      isRename: false,
       isValidator: false,
-      isRenamePending: false,
-      newFileName: ''
+      newName: ''
     }
   },
   methods: {
@@ -61,6 +62,7 @@ export default {
       gitlabAddFolder: 'gitlab/addFolder',
       gitlabRemoveFile: 'gitlab/removeFile',
       gitlabRenameFile: 'gitlab/renameFile',
+      gitlabRenameFolder: 'gitlab/renameFolder',
       gitlabRemoveFolder: 'gitlab/removeFolder',
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',
@@ -117,32 +119,30 @@ export default {
       return newFileName && newFileName.trim()
     },
     expandFolder(path) {
-      let parentPath = path.split('/')
-      parentPath.pop()
       this.updateFilemanagerTreeNodeExpandMapByPath({
-        path: parentPath.join('/'),
+        path: path
+          .split('/')
+          .slice(0, -1)
+          .join('/'),
         expanded: true
       })
     },
     removeFolder(data) {
       let pathArr = data.path.split('/')
       let folderName = pathArr[pathArr.length - 1]
-      const toRemoveFiles = []
-      const recursionFile = data => {
-        if (!/.md$/.test(data.path)) {
-          toRemoveFiles.push(`${data.path}/.gitignore.md`)
-        } else {
-          toRemoveFiles.push(data.path)
-        }
-        data.children && data.children.forEach(item => recursionFile(item))
-      }
-      recursionFile(data)
+      let toRemoveFiles = this.recursion(data)
 
-      this.$confirm(`${this.$t('editor.deleteFolderBefore')}${data.name}${this.$t('editor.deleteFolderAfter')}`, this.$t('editor.delete'), {
-        confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel'),
-        type: 'error'
-      })
+      this.$confirm(
+        `${this.$t('editor.deleteFolderBefore')}${data.name}${this.$t(
+          'editor.deleteFolderAfter'
+        )}`,
+        this.$t('editor.delete'),
+        {
+          confirmButtonText: this.$t('el.messagebox.confirm'),
+          cancelButtonText: this.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
@@ -152,38 +152,77 @@ export default {
         })
         .catch(e => console.error(e))
     },
-    async toggleRenameFile() {
-      let { saved } = this.getOpenedFileByPath(this.filePath)
-      if (!saved) {
-        await this.$confirm('该文件尚未保存，是否保存？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(async () => {
-            await this.savePageByPath(this.filePath)
-            this.$message({
-              type: 'success',
-              message: '保存成功!'
+    recursion(data) {
+      let childrenFiles = []
+      const recursionFile = data => {
+        if (!/.md$/.test(data.path)) {
+          childrenFiles.push(`${data.path}/.gitignore.md`)
+        } else {
+          childrenFiles.push(data.path)
+        }
+        data.children && data.children.forEach(item => recursionFile(item))
+      }
+      recursionFile(data)
+      return childrenFiles
+    },
+    async toggleRename() {
+      if (this.isFolder) {
+        let childrenFiles = this.recursion(this.data)
+        let unSavedFiles = _.intersection(this.unSavedFiles, childrenFiles)
+        if (unSavedFiles.length > 0) {
+          await this.$confirm(
+            `有 ${unSavedFiles.length} 个文件尚未保存，是否保存?`,
+            '提示',
+            {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warnning'
+            }
+          )
+            .then(async () => {
+              this.savePending = true
+              let num = unSavedFiles.length
+              let files = unSavedFiles.map(i => i.replace(/.md$/, ''))
+              while (num--) {
+                await this.savePageByPath(files[num])
+              }
+              this.savePending = false
             })
-            this.toggleInputFocus()
+            .catch(() => {})
+        }
+      } else {
+        let { saved } = this.getOpenedFileByPath(this.filePath)
+        if (!saved) {
+          await this.$confirm('该文件尚未保存，是否保存？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
           })
-          .catch(() => {})
-        return
+            .then(async () => {
+              await this.savePageByPath(this.filePath)
+              this.$message({
+                type: 'success',
+                message: '保存成功!'
+              })
+              this.toggleInputFocus()
+            })
+            .catch(() => {})
+          return
+        }
       }
       this.toggleInputFocus()
     },
     toggleInputFocus() {
-      this.isRenameFile = true
-      this.newFileName = this.data.name.replace(/.md$/, '')
+      this.isRename = true
+      this.newName = this.data.name.replace(/.md$/, '')
       this.$nextTick(() => this.$refs.input.focus())
     },
     async handleRenameConfirm() {
       if (
-        !this.newFileName.trim() ||
-        this.newFileName.trim() === this.data.name.replace(/.md$/, '')
+        !this.newName.trim() ||
+        this.newName.trim() === this.data.name.replace(/.md$/, '')
       ) {
-        return (this.isRenameFile = false)
+        return (this.isRename = false)
       }
       await this.gitlabGetRepositoryTree({ path: this.sitePath })
       let childNames = await this.gitlabChildNamesByPath(
@@ -192,49 +231,54 @@ export default {
           .slice(0, -1)
           .join('/')
       )
-      if (childNames.indexOf(this.newFileName) > -1) {
+      if (childNames.indexOf(this.newName) > -1) {
         return this.$message.error(this.$t('editor.nameExist'))
       }
-      if (!gitFilenameValidator(this.newFileName)) {
+      if (!gitFilenameValidator(this.newName)) {
         this.isValidator = true
         return this.$message.error(
-          `${this.newFileName} ${this.$t('editor.nameRule')}`
+          `${this.newName} ${this.$t('editor.nameRule')}`
         )
       }
-      this.isRenamePending = true
-      let parentPath = this.data.path
-        .split('/')
-        .slice(0, -1)
-        .join('/')
-      let newFilePath = `${parentPath}/${this.newFileName}.md`
-      await this.gitlabRenameFile({
-        currentFilePath: this.data.path,
-        newFilePath: newFilePath
-      })
-      this.isRenameFile = false
-      this.isRenamePending = false
+      this.renamePending = true
+      if (this.isFolder) {
+        console.log('文件夹，特殊处理')
+        let childrenFiles = this.recursion(this.data)
+        let newFolderPath = `${this.parentPath}/${this.newName}`
+        await this.gitlabRenameFolder({
+          currentFolderPath: this.currentPath,
+          newFolderPath,
+          childrenFiles
+        })
+        return (this.renamePending = false)
+      } else {
+        let newFilePath = `${this.parentPath}/${this.newName}.md`
+        await this.gitlabRenameFile({
+          currentFilePath: this.data.path,
+          newFilePath: newFilePath
+        })
+      }
+      this.isRename = false
+      this.renamePending = false
       this.isValidator = false
       this.resetPage({ currentPath: this.currentPath })
       this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
     },
     handleRenameCancel() {
-      this.isRenameFile = false
+      this.isRename = false
       this.isValidator = false
       this.newFileName = ''
     },
     delayCancel() {
       setTimeout(
         () =>
-          !this.isValidator &&
-          !this.isRenamePending &&
-          this.handleRenameCancel(),
+          !this.isValidator && !this.renamePending && this.handleRenameCancel(),
         250
       )
     },
     removeFile() {
-      if (this.data.type === 'tree') {
-        this.removeFolder(this.data)
-        return
+      if (this.isFolder) {
+        return this.removeFolder(this.data)
       }
 
       let self = this
@@ -311,10 +355,16 @@ export default {
     ...mapGetters({
       gitlabChildNamesByPath: 'gitlab/childNamesByPath',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
-      getOpenedFileByPath: 'getOpenedFileByPath'
+      getOpenedFileByPath: 'getOpenedFileByPath',
+      openedFiles: 'openedFiles'
     }),
     pending() {
-      return this.addFolderPending || this.addFilePending || this.removePending
+      return (
+        this.addFolderPending ||
+        this.addFilePending ||
+        this.removePending ||
+        this.renamePending
+      )
     },
     isFile() {
       return this.data.type === 'blob'
@@ -347,6 +397,15 @@ export default {
     },
     filePath() {
       return this.data.path.replace(/.md$/, '')
+    },
+    unSavedFiles() {
+      return _.keys(_.pickBy(this.openedFiles, ({ saved }) => !saved))
+    },
+    parentPath() {
+      return this.data.path
+        .split('/')
+        .slice(0, -1)
+        .join('/')
     }
   },
   filters: {
