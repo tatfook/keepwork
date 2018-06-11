@@ -36,13 +36,13 @@ var modsList = [
     children: [
       {
         id: '2-1',
-        label: 'modList.menu',
-        mods: [ModMenu]
+        label: 'modList.headNavigation',
+        mods: [ModTitle]
       },
       {
         id: '2-2',
-        label: 'modList.headNavigation',
-        mods: [ModTitle]
+        label: 'modList.menu',
+        mods: [ModMenu]
       }
     ]
   },
@@ -112,11 +112,6 @@ var modsList = [
         id: '6-1',
         label: 'modList.headNavigation',
         mods: [ModTitle]
-      },
-      {
-        id: '6-2',
-        label: 'modList.text',
-        mods: [ModText]
       },
       {
         id: '6-3',
