@@ -214,7 +214,6 @@ const actions = {
       options,
       gitlab
     } = await getGitlabParams(context, { path: currentFilePath })
-    console.log(options)
     await gitlab.renameFile(currentFilePath, newFilePath, options)
     await dispatch('user/renamePageFromConfig', { currentFilePath, newFilePath }, { root: true })
     await dispatch('closeOpenedFile', { path: currentFilePath }, { root: true })

@@ -220,7 +220,6 @@ const actions = {
   },
   async deletePagesConfig(context, { sitePath, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
-    console.log(sitePath)
     let config = siteLayoutConfigBySitePath(sitePath)
     config.pages = _.omit(config.pages, pages)
     let unSaveLayoutConfig = {
@@ -252,7 +251,6 @@ const actions = {
       pages[newPageName]['layout'] = pages[currentPageName]['layout']
     }
     pages = _.omit(pages, [currentPageName])
-    console.log(pages)
     let layoutConfig = _.get(config, 'layoutConfig')
     let unSaveConfig = {
       ...config,
@@ -269,7 +267,6 @@ const actions = {
     let sitePath = getFileSitePathByPath(currentFolderPath)
     let { getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
-    console.log(config)
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
