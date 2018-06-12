@@ -182,13 +182,14 @@ export default {
 </script>
 <style lang="scss">
 .breadcrumb-item-dropdown {
-  padding: 15px 0;
+  padding: 0;
   min-width: auto;
   border-color: #e4e7ed;
   .file-list-content {
     max-height: 380px;
     box-sizing: border-box;
     overflow-y: auto;
+    padding: 15px 0;
   }
   ul {
     margin: 0;
@@ -201,6 +202,7 @@ export default {
     padding: 0 16px;
     color: #909399;
     cursor: pointer;
+    font-size: 14px;
     a {
       color: inherit;
       text-decoration: none;
@@ -254,6 +256,7 @@ export default {
     border-radius: 30px;
     box-sizing: border-box;
     cursor: pointer;
+    font-size: 14px;
   }
   .page-item-content:hover {
     color: #0081ba;
