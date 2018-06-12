@@ -1,13 +1,13 @@
 /*doc
 ---
-title: Title Mod
-name: Title Mod
+title: HeadNavigation Mod
+name: HeadNavigation Mod
 category: Adi Mod
 ---
 
-This is the Title Mod for usage.
+This is the HeadNavigation Mod for usage.
 
-```@Title
+```@HeadNavigation
 styleID: // 样式ID
 logo:
   src: // logo图片来源地址链接
@@ -48,7 +48,7 @@ import mod from '@/components/adi/mod/base/Base'
 import styles from './title.styles'
 import templates from './title.templates'
 
-const name = 'ModTitle'
+const name = 'ModHeadNavigation'
 
 const components = {
   logo: 'AdiMedia',
