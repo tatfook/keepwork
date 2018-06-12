@@ -239,10 +239,11 @@ const actions = {
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async renamePageFromConfig(context, { currentFilePath, newFilePath }) {
-    let sitePath = currentFilePath.split('/').slice(0, -1).join('/')
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    await dispatch('getSiteLayoutConfig', { path: currentFilePath })
+    let sitePath = getFileSitePathByPath(currentFilePath)
     let config = siteLayoutConfigBySitePath(sitePath)
-    let { pages = null } = config.pages || {}
+    let { pages = null } = config || {}
     if (!pages) return
     let currentPageName = currentFilePath.split('/').pop()
     let newPageName = newFilePath.split('/').pop()
@@ -251,6 +252,7 @@ const actions = {
       pages[newPageName]['layout'] = pages[currentPageName]['layout']
     }
     pages = _.omit(pages, [currentPageName])
+    console.log(pages)
     let layoutConfig = _.get(config, 'layoutConfig')
     let unSaveConfig = {
       ...config,
@@ -262,6 +264,12 @@ const actions = {
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
+  },
+  async renamePagesFromConfig(context, { currentFolderPath, newFolderPath }) {
+    let sitePath = getFileSitePathByPath(currentFolderPath)
+    let { getters: { siteLayoutConfigBySitePath } } = context
+    let config = siteLayoutConfigBySitePath(sitePath)
+    console.log(config)
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
