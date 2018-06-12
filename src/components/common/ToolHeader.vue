@@ -9,9 +9,10 @@
       <div class="breadcrumb-item">
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <ul class="file-list-content">
-            <li class="file-list-item" v-for='site in siteList' :key='site.name'>
+            <li v-for='site in siteList' :key='site.name'>
               <a :href="`/${site.username}/${site.name}`">
-                <i class="iconfont icon-private" v-if="site.visibility==='private'"></i> {{site.displayName || site.name}}
+                <span class="list-content">{{site.displayName || site.name}}</span>
+                <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
           </ul>
@@ -208,6 +209,23 @@ export default {
   li:hover {
     background-color: #e5f2f8;
     color: #0081ba;
+  }
+  .file-list-item {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  .list-content {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+  .icon-private {
+    float: right;
+    margin-left: 15px;
+    font-size: 18px;
   }
 }
 .tool-header {
