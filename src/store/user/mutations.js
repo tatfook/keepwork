@@ -4,6 +4,7 @@ import Vue from 'vue'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
+const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
 const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
 const CREATE_COMMENT_SUCCESS = 'CREATE_COMMENT_SUCCESS'
 const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS'
@@ -24,6 +25,7 @@ export const props = {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
   GET_ALL_WEBSITE_SUCCESS,
+  GET_USER_DETAIL_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
@@ -56,6 +58,12 @@ const mutations = {
     Vue.set(state, 'website', {
       ...state.website,
       [username]: _.keyBy(list, 'name')
+    })
+  },
+  [GET_USER_DETAIL_SUCCESS](state, {username, userDetail}) {
+    Vue.set(state, 'usersDetail', {
+      ...state.usersDetail,
+      [username]: userDetail
     })
   },
   [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, {username, list}) {
