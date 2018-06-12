@@ -78,8 +78,16 @@ const actions = {
     await dispatch('getProfile')
 
     return Promise.all([
+      dispatch('getAllPersonalWebsite', { useCache }),
+      dispatch('getAllContributedWebsite', { useCache })
+    ])
+  },
+  async getAllPersonalWebsite({ dispatch }, payload) {
+    let { useCache = false } = payload || {}
+    await dispatch('getProfile')
+
+    return Promise.all([
       dispatch('getAllWebsite', { useCache }),
-      dispatch('getAllContributedWebsite', { useCache }),
       dispatch('getAllSiteDataSource', { useCache })
     ])
   },
@@ -161,7 +169,8 @@ const actions = {
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
-  async getAllWebsite(context, { useCache = false } = {}) {
+  async getAllWebsite(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -171,7 +180,8 @@ const actions = {
     let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
     commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
   },
-  async getAllSiteDataSource(context, { useCache = false }) {
+  async getAllSiteDataSource(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -181,7 +191,8 @@ const actions = {
     let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
   },
-  async getAllContributedWebsite(context, { useCache = false }) {
+  async getAllContributedWebsite(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -263,6 +274,7 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
+
   async renamePagesFromConfig(context, { currentFolderPath, newFolderPath, childrenFiles }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     await dispatch('getSiteLayoutConfig', { path: currentFolderPath })
@@ -294,6 +306,7 @@ const actions = {
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
+
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
