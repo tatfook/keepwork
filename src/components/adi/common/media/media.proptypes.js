@@ -1,5 +1,5 @@
 export default {
-  src: 'link',
+  src: 'media',
   link: 'link',
   webHeight: 'input',
   webWidth: 'input',

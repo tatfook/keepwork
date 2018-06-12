@@ -3,7 +3,7 @@ export default {
   link: 'link',
   width: 'input',
   height: 'input',
-  src: 'input',
+  src: 'media',
   fontSize: 'input',
   target: 'linkTarget'
 }
