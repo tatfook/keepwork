@@ -18,6 +18,7 @@ import _ from 'lodash'
 import Vue from 'vue'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'
+import WebsiteSettingStyle from './WebsiteSettingStyle'
 
 export default {
   name: 'WebsiteSettingDialog',
@@ -30,11 +31,19 @@ export default {
       title: `//${location.host}/${this.sitePath}`,
       websiteSettingNavs: [
         {
+          text: '基本信息',
+          comp: WebsiteSettingBasicMessage
+        },
+        {
           text: '网站布局',
           comp: WebsiteSettingLayout
+        },
+        {
+          text: '网站样式',
+          comp: WebsiteSettingStyle
         }
       ],
-      activeSettingIndex: 0
+      activeSettingIndex: 1
     }
   },
   computed: {
@@ -52,7 +61,8 @@ export default {
   },
   components: {
     WebsiteSettingLayout,
-    WebsiteSettingBasicMessage
+    WebsiteSettingBasicMessage,
+    WebsiteSettingStyle
   }
 }
 </script>

@@ -1,19 +1,17 @@
 import ModMarkdown from './common/markdown'
-import ModTitle from './web/title'
+import ModHeadNavigation from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
 import ModMixLayer from './web/mixLayer'
 import ModMixPositon from './web/mixPosition'
-import ModImg from './web/img'
+import ModWideScreen from './web/img'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
-// import ModPageList from './web/pageList'
-// import ModToc from './web/toc'
 
 var modsList = [
   {
@@ -38,13 +36,13 @@ var modsList = [
     children: [
       {
         id: '2-1',
-        label: 'modList.menu',
-        mods: [ModMenu]
+        label: 'modList.headNavigation',
+        mods: [ModHeadNavigation]
       },
       {
         id: '2-2',
-        label: 'modList.headNavigation',
-        mods: [ModTitle]
+        label: 'modList.menu',
+        mods: [ModMenu]
       }
     ]
   },
@@ -54,13 +52,13 @@ var modsList = [
     children: [
       {
         id: '3-1',
-        label: 'modList.carousel',
+        label: 'modList.imgLoop',
         mods: [ModImgLoop]
       },
       {
         id: '3-2',
-        label: 'modList.widescreenImage',
-        mods: [ModImg]
+        label: 'modList.wideScreen',
+        mods: [ModWideScreen]
       },
       {
         id: '3-3',
@@ -78,11 +76,6 @@ var modsList = [
         label: 'modList.markdown',
         mods: [ModMarkdown]
       },
-      // {
-      //   id: '4-2',
-      //   label: 'modList.toc',
-      //   mods: [ModToc]
-      // },
       {
         id: '4-2',
         label: 'modList.text',
@@ -93,11 +86,6 @@ var modsList = [
         label: 'modList.menu',
         mods: [ModMenu]
       }
-      // {
-      //   id: '4-5',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // }
     ]
   },
   {
@@ -109,11 +97,6 @@ var modsList = [
         label: 'modList.comment',
         mods: [ModComment]
       },
-      // {
-      //   id: '5-2',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // },
       {
         id: '5-2',
         label: 'modList.qq',
@@ -128,12 +111,7 @@ var modsList = [
       {
         id: '6-1',
         label: 'modList.headNavigation',
-        mods: [ModTitle]
-      },
-      {
-        id: '6-2',
-        label: 'modList.text',
-        mods: [ModText]
+        mods: [ModHeadNavigation]
       },
       {
         id: '6-3',

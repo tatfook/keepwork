@@ -184,8 +184,7 @@ export default {
       }
 
       let change = changes[0]
-      let mod = Parser.getActiveBlock(this.modList, change.from.line)
-
+      let mod = Parser.getActiveBlock(this.modList, change.from.line + 1)
       if (!mod) {
         return this.$store.dispatch('updateMarkDown', {
           code,

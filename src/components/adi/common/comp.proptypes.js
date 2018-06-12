@@ -16,6 +16,11 @@ import AdiPageList from './pageList/pageList.proptypes'
 import AdiFooter from './footer/footer.proptypes'
 import AdiToc from './toc/toc.proptypes'
 import AdiBigFile from './bigFile/bigFile.proptypes'
+import AdiBreadCrumb from './breadCrumb/breadCrumb.proptypes'
+import AdiPagePath from './pagePath/pagePath.proptypes'
+import AdiTab from './tab/tab.proptypes'
+import AdiCategoryList from './categoryList/categoryList.proptypes'
+import AdiPageSwitching from './pageSwitching/pageSwitching.proptypes'
 
 export default {
   AdiMarkdown,
@@ -35,5 +40,10 @@ export default {
   AdiPageList,
   AdiFooter,
   AdiToc,
-  AdiBigFile
+  AdiBigFile,
+  AdiBreadCrumb,
+  AdiPagePath,
+  AdiTab,
+  AdiCategoryList,
+  AdiPageSwitching
 }

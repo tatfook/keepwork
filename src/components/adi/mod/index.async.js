@@ -1,9 +1,9 @@
 const ModMarkdown = () => import('./common/markdown')
 const ModIFrame = () => import('./common/iframe')
-const ModTitle = () => import('./web/title')
+const ModHeadNavigation = () => import('./web/title')
 const ModMixPosition = () => import('./web/mixPosition')
 const ModMixLayer = () => import('./web/mixLayer')
-const ModImg = () => import('./web/img')
+const ModWideScreen = () => import('./web/img')
 const ModMenu = () => import('./web/menu')
 const ModImgLoop = () => import('./web/imgLoop')
 const ModParacraft = () => import('./web/paracraft')
@@ -16,14 +16,19 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
+const ModTab = () => import('./web/tab')
+const ModButton = () => import('./web/button')
+const ModPagePath = () => import('./web/pagePath')
+const ModCategoryList = () => import('./web/categoryList')
+const ModPageSwitching = () => import('./web/pageSwitching')
 
 export const modList = {
   ModMarkdown,
   ModIFrame,
-  ModTitle,
+  ModHeadNavigation,
   ModMixPosition,
   ModMixLayer,
-  ModImg,
+  ModWideScreen,
   ModMenu,
   ModImgLoop,
   ModParacraft,
@@ -35,7 +40,12 @@ export const modList = {
   ModTextBoard,
   ModPageList,
   ModToc,
-  ModBigFile
+  ModBigFile,
+  ModTab,
+  ModButton,
+  ModPagePath,
+  ModCategoryList,
+  ModPageSwitching
 }
 
 export const load = async modName => {

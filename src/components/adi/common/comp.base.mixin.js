@@ -14,7 +14,7 @@ export default {
     properties() {
       return _.merge(
         {},
-        compDefaultProperties[this.$options.name] || {},
+        compDefaultProperties[this.options.name] || {},
         this.source || {}
       )
     }

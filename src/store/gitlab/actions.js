@@ -206,6 +206,33 @@ const actions = {
       })
     }
   },
+  async renameFile(context, { currentFilePath, newFilePath }) {
+    const { dispatch } = context
+    let {
+      username,
+      name,
+      options,
+      gitlab
+    } = await getGitlabParams(context, { path: currentFilePath })
+    await gitlab.renameFile(currentFilePath, newFilePath, options)
+    await dispatch('user/renamePageFromConfig', { currentFilePath, newFilePath }, { root: true })
+    await dispatch('closeOpenedFile', { path: currentFilePath }, { root: true })
+    await dispatch('getRepositoryTree', {
+      path: `${username}/${name}`,
+      useCache: false
+    })
+  },
+  async renameFolder(context, { currentFolderPath, newFolderPath, childrenFiles }) {
+    const { dispatch } = context
+    let { username, name, options, gitlab } = await getGitlabFileParams(context, { path: currentFolderPath })
+    await gitlab.renameFolder(currentFolderPath, newFolderPath, childrenFiles, options)
+    await dispatch('user/renamePagesFromConfig', { currentFolderPath, newFolderPath, childrenFiles }, { root: true })
+    await dispatch('closeOpenedFile', { path: currentFolderPath }, { root: true })
+    await dispatch('getRepositoryTree', {
+      path: `${username}/${name}`,
+      useCache: false
+    })
+  },
   async addFolder({ dispatch }, { path }) {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`
     await dispatch('createFile', { path: newEmptyFilePath })
@@ -220,7 +247,7 @@ const actions = {
       } = await getGitlabFileParams(context, { path: paths[i] })
       try {
         await gitlab.deleteFile(paths[i], options)
-        dispatch('closeOpenedFile', { path: paths[i] }, {root: true})
+        dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
       } catch (error) {
         console.error(error)
       }
@@ -262,7 +289,7 @@ const actions = {
       useCache: false
     })
   },
-  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content }) {
+  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content, sitePath }) {
     let {
       activePageUrl,
       'user/username': username,
@@ -279,19 +306,20 @@ const actions = {
       return // invalid file
     }
 
+    sitePath = sitePath || activePageUrl
     await dispatch(
       'user/getWebsiteDetailInfoByPath',
-      { path: activePageUrl },
+      { path: sitePath },
       { root: true }
     )
     const {
       rawBaseUrl,
       dataSourceUsername,
       projectName
-    } = getSiteDetailInfoDataSourceByPath(activePageUrl)
+    } = getSiteDetailInfoDataSourceByPath(sitePath)
 
     let { getGitlabAPI, getProjectIdByPath } = getters
-    let projectId = getProjectIdByPath(activePageUrl)
+    let projectId = getProjectIdByPath(sitePath)
     let options = {
       projectId,
       content,

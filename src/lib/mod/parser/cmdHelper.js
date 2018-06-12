@@ -7,10 +7,10 @@ export const MOD_CMD_END = '```'
 export const cmdList = [
   'Markdown',
   'IFrame',
-  'Title',
+  'HeadNavigation',
   'MixPosition',
   'MixLayer',
-  'Img',
+  'WideScreen',
   'Menu',
   'ImgLoop',
   'Paracraft',
@@ -22,7 +22,12 @@ export const cmdList = [
   'TextBoard',
   'PageList',
   'Toc',
-  'BigFile'
+  'BigFile',
+  'Tab',
+  'Button',
+  'PagePath',
+  'CategoryList',
+  'PageSwitching'
 ]
 
 export const oldCmdMapper = {
