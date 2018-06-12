@@ -198,8 +198,8 @@
     "headNavigation": "页首导航",
 
     "graphic": "图形",
-    "carousel": "图片轮播",
-    "widescreenImage": "宽屏图像",
+    "imgLoop": "图片轮播",
+    "wideScreen": "宽屏图像",
     "board": "绘图板",
 
     "mixLayer": "图文叠加",
