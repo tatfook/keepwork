@@ -275,9 +275,9 @@ const actions = {
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async renamePagesFromConfig(context, { currentFolderPath, newFolderPath }) {
-    let sitePath = getFileSitePathByPath(currentFolderPath)
-    let { getters: { siteLayoutConfigBySitePath } } = context
-    let config = siteLayoutConfigBySitePath(sitePath)
+    // let sitePath = getFileSitePathByPath(currentFolderPath)
+    // let { getters: { siteLayoutConfigBySitePath } } = context
+    // let config = siteLayoutConfigBySitePath(sitePath)
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
