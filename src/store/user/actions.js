@@ -24,7 +24,8 @@ const {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
-  GET_FROM_SKY_DRIVE_SUCCESS
+  GET_FROM_SKY_DRIVE_SUCCESS,
+  GET_USER_DETAIL_SUCCESS
 } = props
 
 const actions = {
@@ -73,6 +74,15 @@ const actions = {
       await getProfilePromise
     }
   })(),
+  async getUserDetailByUsername(context, { username }) {
+    let { commit, getters: { usersDetail } } = context
+    let userDetail = usersDetail && usersDetail[username]
+    if (userDetail) {
+      return
+    }
+    userDetail = await keepwork.user.getDetailByName({ username: username })
+    commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+  },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
     await dispatch('getProfile')

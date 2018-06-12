@@ -70,6 +70,12 @@ const getters = {
 
     return personalSiteList
   },
+  getDetailByUsername: (
+    state
+  ) => username => {
+    let { usersDetail } = state
+    return usersDetail[username]
+  },
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList
