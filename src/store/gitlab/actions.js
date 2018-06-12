@@ -223,9 +223,15 @@ const actions = {
     })
   },
   async renameFolder(context, { currentFolderPath, newFolderPath, childrenFiles }) {
-    console.log('currentFolderPath', currentFolderPath)
-    console.log('newFolderPath', newFolderPath)
-    console.log('childrenFiles', childrenFiles)
+    const { dispatch } = context
+    let { username, name, options, gitlab } = await getGitlabFileParams(context, { path: currentFolderPath })
+    await gitlab.renameFolder(currentFolderPath, newFolderPath, childrenFiles, options)
+    await dispatch('user/renamePagesFromConfig', { currentFolderPath, newFolderPath }, { root: true })
+    await dispatch('closeOpenedFile', { path: currentFolderPath }, { root: true })
+    await dispatch('getRepositoryTree', {
+      path: `${username}/${name}`,
+      useCache: false
+    })
   },
   async addFolder({ dispatch }, { path }) {
     let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`

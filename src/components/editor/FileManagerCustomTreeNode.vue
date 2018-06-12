@@ -13,7 +13,7 @@
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
-      <el-button v-if="isFile" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" title="修改名称">
+      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" title="修改名称">
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
@@ -242,27 +242,24 @@ export default {
       }
       this.renamePending = true
       if (this.isFolder) {
-        console.log('文件夹，特殊处理')
         let childrenFiles = this.recursion(this.data)
-        let newFolderPath = `${this.parentPath}/${this.newName}`
         await this.gitlabRenameFolder({
           currentFolderPath: this.currentPath,
-          newFolderPath,
+          newFolderPath: `${this.parentPath}/${this.newName}`,
           childrenFiles
         })
-        return (this.renamePending = false)
       } else {
         let newFilePath = `${this.parentPath}/${this.newName}.md`
         await this.gitlabRenameFile({
           currentFilePath: this.data.path,
           newFilePath: newFilePath
         })
+        this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
       }
       this.isRename = false
       this.renamePending = false
       this.isValidator = false
       this.resetPage({ currentPath: this.currentPath })
-      this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
     },
     handleRenameCancel() {
       this.isRename = false
