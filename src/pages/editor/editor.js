@@ -40,7 +40,12 @@ const store = new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      paths: ['user', 'editor'] // , 'gitlab']
+      paths: [
+        'user.profile',
+        'user.webTemplateConfig',
+        'user.skyDrive',
+        'editor'
+      ] // , 'gitlab']
     }),
     broadcast('frameViewport')
   ]
