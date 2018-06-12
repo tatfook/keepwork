@@ -226,7 +226,7 @@ const actions = {
     const { dispatch } = context
     let { username, name, options, gitlab } = await getGitlabFileParams(context, { path: currentFolderPath })
     await gitlab.renameFolder(currentFolderPath, newFolderPath, childrenFiles, options)
-    await dispatch('user/renamePagesFromConfig', { currentFolderPath, newFolderPath }, { root: true })
+    await dispatch('user/renamePagesFromConfig', { currentFolderPath, newFolderPath, childrenFiles }, { root: true })
     await dispatch('closeOpenedFile', { path: currentFolderPath }, { root: true })
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,

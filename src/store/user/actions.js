@@ -255,8 +255,8 @@ const actions = {
     let config = siteLayoutConfigBySitePath(sitePath)
     let { pages = null } = config || {}
     if (!pages) return
-    let currentPageName = currentFilePath.split('/').pop()
-    let newPageName = newFilePath.split('/').pop()
+    let currentPageName = currentFilePath.replace(`${sitePath}/`, '')
+    let newPageName = newFilePath.replace(`${sitePath}/`, '')
     if (pages[currentPageName] && pages[currentPageName]['layout']) {
       pages[newPageName] = {}
       pages[newPageName]['layout'] = pages[currentPageName]['layout']
@@ -274,10 +274,39 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
-  async renamePagesFromConfig(context, { currentFolderPath, newFolderPath }) {
-    // let sitePath = getFileSitePathByPath(currentFolderPath)
-    // let { getters: { siteLayoutConfigBySitePath } } = context
-    // let config = siteLayoutConfigBySitePath(sitePath)
+
+  async renamePagesFromConfig(context, { currentFolderPath, newFolderPath, childrenFiles }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    await dispatch('getSiteLayoutConfig', { path: currentFolderPath })
+    let sitePath = getFileSitePathByPath(currentFolderPath)
+    let config = siteLayoutConfigBySitePath(sitePath)
+    let { pages = null } = config || {}
+    if (!pages) return
+    let currentPagePath = currentFolderPath.replace(`${sitePath}/`, '')
+    let newPagePath = newFolderPath.replace(`${sitePath}/`, '')
+    let currentChildrenPages = childrenFiles
+      .map(file => file.replace(`${sitePath}/`, ''))
+      .filter(file => !/\.gitignore.md$/.test(file) && Object.keys(pages).includes(file))
+    currentChildrenPages.forEach(pageName => {
+      if (pages[pageName] && pages[pageName]['layout']) {
+        let newPageName = pageName.replace(currentPagePath, newPagePath)
+        pages[newPageName] = {}
+        pages[newPageName]['layout'] = pages[pageName]['layout']
+      }
+    })
+    pages = _.omit(pages, currentChildrenPages)
+    let layoutConfig = _.get(config, 'layoutConfig')
+    let unSaveConfig = {
+      ...config,
+      layoutConfig,
+      pages: pages
+    }
+    let content = JSON.stringify(unSaveConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
+
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
