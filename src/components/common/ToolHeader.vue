@@ -9,7 +9,7 @@
 
       <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
         <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-        <el-popover popper-class="breadcrumb-item-dropdown">
+        <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <ul class="file-list-content">
             <li class="file-list-item" v-for='file in fileList' :key='file.name' @click="handleBreadcrumbClick(file)">{{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}</li>
           </ul>
@@ -179,8 +179,8 @@ export default {
   .breadcrumb {
     display: inline-block;
     padding: 0 200px 0 20px;
-    height: 50px;
-    line-height: 50px;
+    height: 52px;
+    line-height: 52px;
     .el-loading-spinner {
       top: 35%;
       transform: scale(0.4);
