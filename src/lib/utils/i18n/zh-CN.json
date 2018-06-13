@@ -89,7 +89,7 @@
     "website": "网页",
 
     "emptyName": "名不能为空",
-    "nameRule": "名称不能包含 \\\/:@&*=#\"*?<>| 不能以 _. 开头",
+    "nameRule": "名称不能包含 \\/:@&*=#\"*?<>| 不能以 _. 开头",
     "nameExist": "同名文件已经存在",
 
     "openedFiles": "已打开",
@@ -195,11 +195,11 @@
     "text": "文本",
     "navigation": "导航",
     "menu": "导航菜单",
-    "headNavigation": "页首导航",
+    "title": "页首导航",
 
     "graphic": "图形",
     "imgLoop": "图片轮播",
-    "wideScreen": "宽屏图像",
+    "img": "宽屏图像",
     "board": "绘图板",
 
     "mixLayer": "图文叠加",

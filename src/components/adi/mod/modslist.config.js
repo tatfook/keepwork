@@ -1,11 +1,11 @@
 import ModMarkdown from './common/markdown'
-import ModHeadNavigation from './web/title'
+import ModTitle from './web/title'
 import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
 import ModMixLayer from './web/mixLayer'
 import ModMixPositon from './web/mixPosition'
-import ModWideScreen from './web/img'
+import ModImg from './web/img'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
@@ -36,8 +36,8 @@ var modsList = [
     children: [
       {
         id: '2-1',
-        label: 'modList.headNavigation',
-        mods: [ModHeadNavigation]
+        label: 'modList.title',
+        mods: [ModTitle]
       },
       {
         id: '2-2',
@@ -57,8 +57,8 @@ var modsList = [
       },
       {
         id: '3-2',
-        label: 'modList.wideScreen',
-        mods: [ModWideScreen]
+        label: 'modList.img',
+        mods: [ModImg]
       },
       {
         id: '3-3',
@@ -110,8 +110,8 @@ var modsList = [
     children: [
       {
         id: '6-1',
-        label: 'modList.headNavigation',
-        mods: [ModHeadNavigation]
+        label: 'modList.title',
+        mods: [ModTitle]
       },
       {
         id: '6-3',

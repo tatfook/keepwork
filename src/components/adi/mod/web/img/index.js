@@ -1,13 +1,13 @@
 /*doc
 ---
-title: WideScreen Mod
-name: WideScreen Mod
+title: Img Mod
+name: Img Mod
 category: Adi Mod
 ---
 
-This is the WideScreen Mod for usage.
+This is the Img Mod for usage.
 
-```@WideScreen
+```@Img
 styleID: // 样式ID
 img:
   src: // 图像来源地址链接
@@ -23,7 +23,7 @@ import mod from '@/components/adi/mod/base/Base'
 import styles from './img.styles'
 import templates from './img.templates'
 
-const name = 'ModWideScreen'
+const name = 'ModImg'
 
 const components = {
   img: 'AdiMedia'

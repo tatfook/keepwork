@@ -7,10 +7,10 @@ export const MOD_CMD_END = '```'
 export const cmdList = [
   'Markdown',
   'IFrame',
-  'HeadNavigation',
+  'Title',
   'MixPosition',
   'MixLayer',
-  'WideScreen',
+  'Img',
   'Menu',
   'ImgLoop',
   'Paracraft',

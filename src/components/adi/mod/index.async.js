@@ -1,9 +1,9 @@
 const ModMarkdown = () => import('./common/markdown')
 const ModIFrame = () => import('./common/iframe')
-const ModHeadNavigation = () => import('./web/title')
+const ModTitle = () => import('./web/title')
 const ModMixPosition = () => import('./web/mixPosition')
 const ModMixLayer = () => import('./web/mixLayer')
-const ModWideScreen = () => import('./web/img')
+const ModImg = () => import('./web/img')
 const ModMenu = () => import('./web/menu')
 const ModImgLoop = () => import('./web/imgLoop')
 const ModParacraft = () => import('./web/paracraft')
@@ -25,10 +25,10 @@ const ModPageSwitching = () => import('./web/pageSwitching')
 export const modList = {
   ModMarkdown,
   ModIFrame,
-  ModHeadNavigation,
+  ModTitle,
   ModMixPosition,
   ModMixLayer,
-  ModWideScreen,
+  ModImg,
   ModMenu,
   ModImgLoop,
   ModParacraft,
