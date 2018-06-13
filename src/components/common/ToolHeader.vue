@@ -10,14 +10,14 @@
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <ul class="file-list-content">
             <li v-for='site in siteList' :key='site.name'>
-              <a :href="`/${site.username}/${site.name}`">
+              <a :href="`/${site.username}/${site.name}`" class="clearfix">
                 <span class="list-content">{{site.displayName || site.name}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
           </ul>
           <span class="page-item-content" slot="reference">
-            {{activePageInfo.sitename}}
+            {{siteDisplayName}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
           </span>
         </el-popover>
@@ -66,9 +66,20 @@ export default {
       activePageInfo: 'activePageInfo',
       displayUsername: 'user/displayUsername',
       activePageStarInfo: 'user/activePageStarInfo',
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       userGetDetailByUsername: 'user/getDetailByUsername'
     }),
+    siteDisplayName() {
+      let { sitepath } = this.activePageInfo
+      if (!sitepath) {
+        return
+      }
+      let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
+      let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
+      let name = _.get(siteDetailInfo, 'siteinfo.name')
+      return siteDisplayName || name
+    },
     sitePath() {
       let { sitepath } = this.activePageInfo
       return sitepath
@@ -187,6 +198,11 @@ export default {
   padding: 0;
   min-width: auto;
   border-color: #e4e7ed;
+  .clearfix::after {
+    content: '';
+    clear: both;
+    display: table;
+  }
   .file-list-content {
     max-height: 380px;
     box-sizing: border-box;
@@ -208,6 +224,9 @@ export default {
     a {
       color: inherit;
       text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
     }
   }
   li:hover {
