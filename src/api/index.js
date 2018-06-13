@@ -4,6 +4,7 @@ import EsAPI from './esGateway'
 import { keepwork } from './keepwork'
 import skyDrive from './skyDrive'
 import sensitiveWord from './sensitiveWord'
+import lessonAPI from './lesson'
 
 export {
   EsAPI,
@@ -11,5 +12,6 @@ export {
   gitlab,
   keepwork,
   skyDrive,
-  sensitiveWord
+  sensitiveWord,
+  lessonAPI
 }

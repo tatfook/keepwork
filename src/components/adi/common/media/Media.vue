@@ -1,7 +1,9 @@
 <template>
   <div class='comp-media'>
     <a :target='target' :href='link'>
-      <div class="img" v-if='isImage' :style="loadImg"></div>
+      <div :class="getImgClass" v-if='isImage'>
+        <img :src="src">
+      </div>
       <video v-else-if='isVideo' :src='src'></video>
       <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
@@ -12,6 +14,10 @@
 import Media from './media.types'
 import compBaseMixin from '../comp.base.mixin'
 import { Base64 } from 'js-base64'
+import jss from 'jss'
+import preset from 'jss-preset-default'
+
+jss.setup(preset())
 
 export default {
   name: 'AdiMedia',
@@ -46,10 +52,25 @@ export default {
         ? this.properties.link
         : this.options.emptyLink
     },
-    loadImg() {
-      return this.generateStyleString({
-        'background-image': 'url(' + this.src + ')'
-      })
+    getImgClass() {
+      let imgClassName = 'comp-media-img'
+      let style = {
+        [imgClassName]: {
+          'height': parseInt(this.properties.webHeight || this.options.defaultWebHeight) + 'px!important'
+        },
+        '@media only screen and (max-width: 767px)': {
+          [imgClassName]: {
+            'height': parseInt(this.properties.mobileHeight || this.options.defaultMobileHeight) + 'px!important'
+          }
+        }
+      }
+
+      if(!this.sheet) {
+        this.sheet = jss.createStyleSheet(style)
+        this.sheet.attach()
+      }
+
+      return this.sheet.classes[imgClassName] + ' img'
     },
     svgFill() {
       return this.generateStyleString({
@@ -79,8 +100,17 @@ export default {
   .img {
     width: 100%;
     height: 100%;
-    background-position: center;
-    background-size: cover;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      object-fit: cover;
+    }
   }
 }
 </style>

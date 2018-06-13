@@ -1,0 +1,350 @@
+<template>
+  <el-dialog title="Lessons" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
+    <el-form :model="lessonsData" :rules="rules" ref="lessonsData" label-width="128px" class="demo-ruleForm">
+      <!-- 课程包名称 -->
+      <el-form-item label="LessonsTitle:" prop="title">
+        <el-input v-model="lessonsData.title" maxlength="255" placeholder="Please Input..."></el-input>
+      </el-form-item>
+      <!-- 课程包封面图的URL地址 -->
+      <el-form-item label="CoverImage(URL)" prop="cover">
+        <el-input v-model="lessonsData.cover" maxlength="512" placeholder="Please Input..."></el-input>
+      </el-form-item>
+      <!-- 课程包技能点 -->
+      <el-form-item label="Skills:" prop="skills">
+        <el-input type="textarea" maxlength="512" v-model="lessonsData.skills" placeholder="Please Input..."></el-input>
+      </el-form-item>
+      <!-- 课程包的适用年龄段 -->
+      <el-form-item label="Ages:" prop="ages">
+        <el-row>
+          <el-col :span="8">
+            <el-radio-group v-model="ages" @change="changeAge">
+              <el-radio label="0">Suitable for all</el-radio>
+              <el-radio label="1">Self-define</el-radio>
+            </el-radio-group>
+          </el-col>
+          <el-col :span="14">
+            <el-row :gutter="20">
+              <el-form-item v-if="ages == 1">
+                <!-- 自定义年龄最小值 -->
+                <el-col :span="11">
+                  <el-form-item prop="agesMin">
+                    <el-input  v-model.number="lessonsData.agesMin" placeholder="Please Input..." min="1"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">-</el-col>
+                <!-- 自定义年龄最大值 -->
+                <el-col :span="11">
+                  <el-form-item prop="agesMax">
+                    <el-input v-model.number="lessonsData.agesMax" placeholder="Please Input..." :min=" lessonsData.agesMin + 1"></el-input>
+                  </el-form-item>  
+                </el-col>
+              </el-form-item>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <!-- 课程包金币花费和获得设置 -->
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="Cost:">
+            <el-row>
+              <el-col :span="18">
+                <el-input-number :min="0" v-model="lessonsData.cost"></el-input-number> 
+              </el-col>
+              <el-col :span="6">Coins</el-col>
+            </el-row>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="Reward:">
+            <el-row>
+              <el-col :span="18">
+                <el-input-number :min="0" v-model="lessonsData.reward"></el-input-number>
+              </el-col>
+              <el-col :span="6">Coins</el-col>
+            </el-row>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 选择课程包的课程 -->
+      <el-form-item label="Lessons:" class="lesson-list" v-bind:class="{'unempty': lessonsSelect.length == 0 }">
+        <el-transfer
+          filterable
+          :filter-method="filterMethod"
+          filter-placeholder="search lessons"
+          v-model="lessonsSelect"       
+          :titles="['Lessons', 'Select lessons']"
+          :data="lessonsListData">
+         <span slot-scope="{ option }" class="lessonsTitle">
+          <span>{{ option.lessonTitle }}</span>
+          <a class="lesson-link" v-bind:href="option.lessonUrl">{{ option.lessonUrl }}</a>
+         </span>
+        </el-transfer>
+        <el-alert title="selected lesson greater than 0" type="error" v-if="lessonsSelect.length == 0" >
+  </el-alert>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @change="validInput" @click="submitForm('lessonsData')">submit</el-button>
+      <el-button @click="handleClose">cancel</el-button>
+    </span>
+  </el-dialog>
+</template>
+<script>
+import { mapGetters } from 'vuex'
+import { lessonAPI } from '@/api'
+import uuid from 'uuid/v1'
+import { mdToJson, jsonToMd } from '../../lib/mod/parser/mdParser/yaml'
+
+const checkInputEmpty = () => {
+  let opeInput = document.getElementsByClassName("writer-input");
+    for(let i = 0; i < opeInput.length; i++) {
+      let input = opeInput[i].children[0];
+      if(input.value == undefined || input.value == "") {
+          input.style.borderColor = "#f56c6c";
+          return;
+      }else{
+          input.style.borderColor = "#67c23a";
+      }
+    }
+}
+//markdown转json
+const parseMarkDown = (item) => {
+    let contentArr = item.content.split('```');
+    let lessonData,itemData={}
+    for(let i = 0; i < contentArr.length; i++) {
+        let contentVo = contentArr[i]
+        if(contentVo.substr(0, '@Lesson'.length) == '@Lesson') {
+            contentVo = contentVo.replace('@Lesson', '')
+            lessonData = mdToJson(contentVo.trim())
+            break;
+        }
+    }
+    if(lessonData) {
+        itemData.lessonTitle = lessonData.lesson.Title;
+        itemData.lessonUrl = item.url;
+        itemData.lessonCover = lessonData.lesson.CoverImageOfTheLesson;
+        itemData.lessonNo = lessonData.lesson.LessonNo;
+        itemData.LessonGoals = lessonData.lesson.LessonGoals;
+    }
+    return itemData
+}
+
+export default {
+  name: 'lessonsDataEditor',
+  props: {
+    isEditorShow: Boolean,
+    originalLessonsData: Object,
+  },
+
+  data() {
+    //校验数值是否是整数
+    const checkScore = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('please input an integer greater than 0'));
+      }
+      //如果是年龄的最大值 那么他的最小值就应该是年龄最小值加1
+      if(rule.field == 'agesMax'){
+        const agesmin = parseInt(this.originalLessonsData.agesMin);
+        if(value <= agesmin){
+            callback(new Error('please input an integer greater than agesmin'));
+        }
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('please input an integer greater than 0'));
+        } else {
+          if(value < 0){
+            callback(new Error('please input an positive integer'));
+          }else{
+             callback();
+          }
+        }
+      }, 200);
+    };
+
+    return {
+      // 表单规则
+      rules: {
+        title: [
+          { required: true, message: 'please input title', trigger: 'blur' }
+        ],
+        score: [
+          { required: true, validator: checkScore, trigger: 'blur' }
+        ],
+        cover: [
+          { required: true, message: 'please input coverImage(url)', trigger: 'blur' }
+        ],
+        skills: [
+          { required: true, message: 'please input skills', trigger: 'blur' }
+        ],
+        agesMin: [
+          { validator: checkScore, trigger: 'blur', type: 'number' }
+        ],
+        agesMax: [
+          { validator: checkScore, trigger: 'blur', type: 'number'}
+        ]
+      },
+      //年龄段默认值
+      ages: '0',
+      //选中课程
+      lessonsListData: [],
+      lessonsSelect: [],
+      filterMethod(query, item) {
+        return item.lessonTitle.indexOf(query) > -1;
+      },
+    }
+  },
+  computed: {
+    ...mapGetters({
+      activePageUrl: 'activePageUrl'
+    }),
+    lessonsData() {
+      return this.originalLessonsData
+    },
+    isDialogShow() {
+      return this.isEditorShow
+    }
+  },
+  methods: {
+    handleClose() {
+      this.$emit('cancel', null)
+    },
+    validInput () {
+      checkInputEmpty();
+    },
+    //切换年龄清空自定义的年龄
+    changeAge() {
+      if( this.ages == 1 ){
+        this.lessonsData.agesMin = 1;
+        this.lessonsData.agesMax = 2;
+      }
+    },
+    submitForm(formName) {
+      checkInputEmpty();
+      this.$refs[formName].validate( async (valid) => {
+        if (valid && this.lessonsSelect.length != 0) {
+          //课程包id
+          this.lessonsData.id === '' ? this.lessonsData.id = uuid() : this.lessonsData.id;
+          //设置年龄段
+          if( this.ages == 0 ){
+            this.lessonsData.agesMin = '0';
+            this.lessonsData.agesMax = '0';
+          }
+          //选择课程包的课程
+          if( this.lessonsSelect.length > 0 ){
+            this.lessonsData.lessons = []
+            for( var i = 0; i < this.lessonsSelect.length ; i++ ){
+              let index = this.lessonsSelect[i];
+              this.lessonsListData[index].sortIdx = i;
+              this.lessonsData.lessons.push(this.lessonsListData[index]);
+            }
+          }
+          //更新课程数量
+          this.lessonsData.lessonCount = this.lessonsSelect.length;
+          let params = {
+            id: this.lessonsData.id,
+            title: this.lessonsData.title,
+            cover: this.lessonsData.cover,
+            skills: this.lessonsData.skills,
+            agesMin: this.lessonsData.agesMin,
+            agesMax: this.lessonsData.agesMax,
+            cost: this.lessonsData.cost,
+            reward: this.lessonsData.reward,
+            lessons: JSON.stringify(this.lessonsData.lessons),
+            packageUrl: this.activePageUrl
+          }
+          //发送添加课程包的请求
+          let r = await lessonAPI.upsertPackage(params)
+          if( r.err == 0 ){
+              this.handleClose();
+              this.$emit('finishEditing', this.lessonsData);
+            }else{
+              this.$message.error( r.msg )
+            }
+        } else {
+          return false;
+        }
+      });
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
+  },
+  created: async function(){
+    //获取选中课程的数据
+    if( this.lessonsData.lessons ){
+      this.lessonsData.lessons.forEach((lesson, index ) => {
+        this.lessonsSelect.push(lesson.key)
+      })
+    }
+    //更新课程数量
+    this.lessonsData.lessonCount = this.lessonsData.lessons.length;
+    //获取课程列表
+    let r = await lessonAPI.lessonList()
+    const lessonsData = r.hits.hits;
+      lessonsData.forEach((lesson, index ) => {
+        // const tmp1 = mdToJson(lesson)
+        // console.log("#DEBUG")
+        // console.log(tmp1)
+        const tmp = parseMarkDown(lesson._source)
+        this.lessonsListData.push({
+          lessonTitle: tmp.lessonTitle,
+          lessonUrl: tmp.lessonUrl,
+          lessonCover: tmp.lessonCover,
+          lessonNo: tmp.lessonNo,
+          LessonGoals: tmp.LessonGoals,
+          key: index,
+        });
+      })
+  }
+}
+</script>
+
+<style scope>
+  .flex-center-between{
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .flex-center-between .el-input {
+      margin: 0 20px;
+  }
+
+  .el-form-item .writer-input .el-input__inner {
+    border-color: #dcdfe6;
+  }
+  .lessons .el-form-item__label:before{
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+  }
+  .lesson-list .el-transfer-panel__item{
+    min-height: 30px;
+    height: auto;
+  }
+  .unempty .el-form-item__content .el-transfer-panel:nth-child(3){
+    border: 1px solid #f56c6c;
+  }
+  .lesson-list .el-transfer-panel{
+    width: 360px;
+  }
+  .lesson-list .el-alert--error{
+    margin-top: 10px;
+  }
+  .lessonsTitle{
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  .lesson-link{
+    color: #409EFF
+  }
+  .lesson-link:hover{
+    color: #66b1ff
+  }
+</style>
+

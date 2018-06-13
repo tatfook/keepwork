@@ -16,6 +16,14 @@ import AdiPageList from './pageList/pageList'
 import AdiFooter from './footer/footer'
 import AdiToc from './toc/Toc'
 import AdiBigFile from './bigFile/BigFile'
+import AdiBreadCrumb from './breadCrumb/BreadCrumb'
+import AdiPagePath from './pagePath/pagePath'
+import AdiTab from './tab/Tab'
+import AdiQuiz from './quiz/Quiz'
+import AdiLesson from './lesson/Lesson'
+import AdiTeachers from './teachers/Teachers'
+import AdiLessonShare from './lessonShare/LessonShare'
+import AdiLessonPackage from './lessonPackage/lessonPackage'
 
 export default {
   AdiMarkdown,
@@ -35,5 +43,13 @@ export default {
   AdiPageList,
   AdiFooter,
   AdiToc,
-  AdiBigFile
+  AdiBigFile,
+  AdiBreadCrumb,
+  AdiPagePath,
+  AdiTab,
+  AdiQuiz,
+  AdiLesson,
+  AdiTeachers,
+  AdiLessonShare,
+  AdiLessonPackage
 }

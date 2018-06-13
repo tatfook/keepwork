@@ -10,10 +10,15 @@ import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
 import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
+import ModLesson from './web/lesson'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 // import ModPageList from './web/pageList'
 // import ModToc from './web/toc'
+import ModQuiz from './web/quiz'
+import ModTeachers from './web/teachers'
+import ModLessonShare from './web/lessonShare'
+import ModLessonPackage from './web/lessonPackage'
 
 var modsList = [
   {
@@ -170,6 +175,37 @@ var modsList = [
         id: '7-2',
         label: 'modList.vipRead',
         mods: [ModVipRead]
+      }
+    ]
+  },
+  {
+    id: '9',
+    label: 'Lesson',
+    children: [
+      {
+        id: '9-1',
+        label: 'ModLesson',
+        mods: [ModLesson]
+      },
+      {
+        id: '9-2',
+        label: 'ModQuiz',
+        mods: [ModQuiz]
+      },
+      {
+        id: '9-3',
+        label: 'Mod-Teachers',
+        mods: [ModTeachers]
+      },
+      {
+        id: '9-4',
+        label: 'ModLessonShare',
+        mods: [ModLessonShare]
+      },
+      {
+        id: '9-5',
+        label: 'ModLessonPackage',
+        mods: [ModLessonPackage]
       }
     ]
   }

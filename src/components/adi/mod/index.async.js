@@ -16,6 +16,14 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
+const ModPagePath = () => import('./web/pagePath')
+const ModTab = () => import('./web/tab')
+const ModButton = () => import('./web/button')
+const ModLesson = () => import('./web/lesson')
+const ModQuiz = () => import('./web/quiz')
+const ModTeachers = () => import('./web/teachers')
+const ModLessonShare = () => import('./web/lessonShare')
+const ModLessonPackage = () => import('./web/lessonPackage')
 
 export const modList = {
   ModMarkdown,
@@ -35,7 +43,15 @@ export const modList = {
   ModTextBoard,
   ModPageList,
   ModToc,
-  ModBigFile
+  ModBigFile,
+  ModPagePath,
+  ModTab,
+  ModButton,
+  ModLesson,
+  ModQuiz,
+  ModTeachers,
+  ModLessonShare,
+  ModLessonPackage
 }
 
 export const load = async modName => {
