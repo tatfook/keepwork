@@ -2,6 +2,7 @@
   <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
     <span class="rename-wrapper" v-if="isRename">
       <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
+      <!-- <el-input @click.native.stop ref="input" v-if="isRename" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input> -->
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
@@ -434,8 +435,9 @@ export default {
 }
 
 .rename-wrapper {
-  display: flex;
+  display: inline-flex;
   .rename-input {
+    width: 90%;
   }
   .rename-btn {
     width: 20px;
