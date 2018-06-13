@@ -182,7 +182,7 @@ const actions = {
   },
   async createFile(
     context,
-    { path, content = '\n', refreshRepositoryTree = true }
+    { path, content = '', refreshRepositoryTree = true }
   ) {
     let { commit, dispatch } = context
     let {
