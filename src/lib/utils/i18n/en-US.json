@@ -208,8 +208,8 @@
     "headNavigation": "Head navigation",
 
     "graphic": "Graphic",
-    "imgLoop": "Image loop",
-    "wideScreen": "Wide screen image",
+    "carousel": "Carousel",
+    "widescreenImage": "Widescreen image",
     "board": "Board",
 
     "mixLayer": "Mix layer",
