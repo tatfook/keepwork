@@ -216,7 +216,13 @@
     "textBoard": "文本与绘图板",
     "toc": "Markdown 目录",
 
-    "other": "其他"
+    "other": "其他",
+
+    "lesson": "课程",
+    "quiz": "问题",
+    "teachers": "教师可见",
+    "lessonShare": "分享课程",
+    "package": "课程包"
   },
   "adi": {
     "markdown": {
@@ -346,7 +352,12 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径"
+    "pageRoute": "页面路径",
+    "lesson": "课程",
+    "quiz": "问题",
+    "teachers": "教师可见",
+    "lessonShare": "分享课程",
+    "package": "课程包"
   },
   "field": {
     "fileId": "字段",
@@ -366,7 +377,17 @@
     "webHeight": "web高度",
     "mobileHeight": "手机高度",
     "fontSize": "字体大小",
-    "path": "页面路径"
+    "path": "页面路径",
+    "LessonNo": "课程序号",
+    "Title": "课程标题",
+    "LessonGoals": "课程目标",
+    "CoverImageOfTheLesson": "封面",
+    "AnimationOfTheLesson": "动画",
+    "CodeReadLine": "代码阅读行数",
+    "CodeWriteLine": "代码编写行数",
+    "Commands": "指令数",
+    "animations": "素材",
+    "content": "内容"
   },
   "skydrive": {
     "mediaLibrary": "图库",

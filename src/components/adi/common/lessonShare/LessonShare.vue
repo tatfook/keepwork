@@ -25,7 +25,7 @@ export default {
   name: 'AdiLessonShare',
   mixins: [compBaseMixin],
   mounted: async function() {
-    if (!this.editMode) {
+    if (!this.editMode && location.pathname == this.activePageUrl) {
       let query = location.href.split('?')[1]
       if(query && query.indexOf('#') != -1){
         query = query.split('#')[0]
@@ -57,12 +57,14 @@ export default {
           html = html.replace('{{commands}}', r.data.commands)
           mainE.innerHTML = html
         }else {
+          console.log('editMode:', this.editMode)
           this.$alert('该地址已失效，请重试', {
             confirmButtonText: '确定'
           });
         }
       }else {
         // 非法链接
+        console.log('editMode:', this.editMode)
         this.$alert('无效的地址，请重试', {
           confirmButtonText: '确定'
         });

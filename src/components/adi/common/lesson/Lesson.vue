@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters } from 'vuex'
 import { lessonAPI } from '@/api'

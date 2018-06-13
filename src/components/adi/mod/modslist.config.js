@@ -180,31 +180,31 @@ var modsList = [
   },
   {
     id: '9',
-    label: 'Lesson',
+    label: 'modList.lesson',
     children: [
       {
         id: '9-1',
-        label: 'ModLesson',
+        label: 'modList.lesson',
         mods: [ModLesson]
       },
       {
         id: '9-2',
-        label: 'ModQuiz',
+        label: 'modList.quiz',
         mods: [ModQuiz]
       },
       {
         id: '9-3',
-        label: 'Mod-Teachers',
+        label: 'modList.teachers',
         mods: [ModTeachers]
       },
       {
         id: '9-4',
-        label: 'ModLessonShare',
+        label: 'modList.lessonShare',
         mods: [ModLessonShare]
       },
       {
         id: '9-5',
-        label: 'ModLessonPackage',
+        label: 'modList.package',
         mods: [ModLessonPackage]
       }
     ]

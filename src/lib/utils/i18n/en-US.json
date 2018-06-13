@@ -226,7 +226,13 @@
     "textBoard": "Text Board",
     "toc": "Markdown list",
 
-    "other": "Other"
+    "other": "Other",
+
+    "lesson": "Lesson",
+    "quiz": "Quiz",
+    "teachers": "Teachers",
+    "lessonShare": "LessonShare",
+    "package": "Package"
   },
   "adi": {
     "markdown": {
@@ -356,7 +362,12 @@
     "innerModal": "Inner modal",
     "bigFile": "Big file",
     "iframe": "iframe",
-    "pageRoute": "Page route"
+    "pageRoute": "Page route",
+    "lesson": "Lesson",
+    "quiz":"Quiz",
+    "teachers":"Teachers",
+    "lessonShare":"LessonShare",
+    "package":"Package"
   },
   "field": {
     "fileId": "file Id",
@@ -377,7 +388,17 @@
     "webHeight": "web height",
     "mobileHeight": "mobile height",
     "fontSize": "font size",
-    "path": "page path"
+    "path": "page path",
+    "LessonNo": "Lesson No.",
+    "Title": "Lesson Title",
+    "LessonGoals": "Lesson Goals",
+    "CoverImageOfTheLesson": "Cover Image Of The Lesson",
+    "AnimationOfTheLesson": "Animation Of The Lesson",
+    "CodeReadLine": "Code Read Line",
+    "CodeWriteLine": "Code Write Line",
+    "Commands": "Commands",
+    "animations": "Animations",
+    "content": "Content"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",
