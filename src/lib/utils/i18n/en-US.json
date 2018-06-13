@@ -356,7 +356,8 @@
     "bigFile": "Big file",
     "iframe": "iframe",
     "pageRoute": "Page route",
-    "tab": "Tab"
+    "tab": "Tab",
+    "categoryList": "Category list"
   },
   "field": {
     "fileId": "file Id",
@@ -379,7 +380,9 @@
     "mobileHeight": "mobile height",
     "mobileWidth": "mobile width",
     "fontSize": "font size",
-    "path": "page path"
+    "path": "page path",
+    "target": "target",
+    "source": "source"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",
