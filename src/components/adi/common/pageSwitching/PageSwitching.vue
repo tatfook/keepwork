@@ -2,7 +2,7 @@
   <div class="comp comp-page-switching">
     <div class="container">
       <div v-for="(item, index) in sourceData" :key="index">
-        {{item._source.content}}
+        <mod-list-viewer :modList='getModList(item._source.content)' :theme='theme' />
       </div>
     </div>
     <div class="pagination">
@@ -19,10 +19,14 @@
 
 <script>
 import { search } from '@/api/esGateway'
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import compBaseMixin from '../comp.base.mixin'
+import ModListViewer from '@/components/viewer/ModListViewer'
+import Parser from '@/lib/mod/parser'
 
 export default {
   name: 'AdiPageSwitching',
+  mixins: [compBaseMixin],
   async created() {
     this.getSource()
   },
@@ -35,6 +39,9 @@ export default {
       sourceData: [],
       loading: true
     }
+  },
+  components: {
+    ModListViewer
   },
   computed: {
     ...mapGetters({
@@ -72,6 +79,9 @@ export default {
 
       this.total = source.hits.total
       this.sourceData = source.hits.hits
+    },
+    getModList(content) {
+      return Parser.buildBlockList(content)
     }
   }
 }

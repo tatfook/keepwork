@@ -5,6 +5,7 @@ export default {
   props: {
     source: Object,
     options: Object,
+    theme: Object,
     editMode: {
       type: Boolean,
       default: false
