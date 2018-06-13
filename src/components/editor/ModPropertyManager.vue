@@ -1,13 +1,12 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
-    <!-- <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-      <i class="iconfont icon-delete icon-del"></i>
-    </div> -->
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
+        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>        
         <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
+        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>                
         <div class='styles-container'>
           <style-selector :mod='activeMod' />
         </div>
@@ -33,8 +32,14 @@ export default {
   name: 'ModPropertyManager',
   data: () => ({
     editable: true,
-    BaseCompProptypes
+    BaseCompProptypes,
+    currentModLabel: ''
   }),
+  activated() {
+    this.currentModLabel =
+      this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
+      this.activeMod.cmd.substring(2)
+  },
   methods: {
     ...mapActions({
       setActivePropertyData: 'setActivePropertyData',
@@ -49,15 +54,19 @@ export default {
     toDeleteMod() {
       let self = this
 
-      this.$confirm(this.$t('editor.modDelMsg'), this.$t('editor.modDelMsgTitle'), {
-        confirmButtonText: self.$t('el.messagebox.confirm'),
-        cancelButtonText: self.$t('el.messagebox.cancel'),
-        type: 'error'
-      })
-      .then(() => {
-        this.deleteMod(this.activeMod.key)
-      })
-      .catch(() => {})
+      this.$confirm(
+        this.$t('editor.modDelMsg'),
+        this.$t('editor.modDelMsgTitle'),
+        {
+          confirmButtonText: self.$t('el.messagebox.confirm'),
+          cancelButtonText: self.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
+        .then(() => {
+          this.deleteMod(this.activeMod.key)
+        })
+        .catch(() => {})
     },
     tabClickHandle(tabItem) {
       let activeName = tabItem.name
@@ -68,16 +77,16 @@ export default {
       let activeModDafaultDatas = modLoader.load(modType).properties
       let activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
 
-      if(activeModDatas && typeof(activeModDatas[key]) == 'object') {
+      if (activeModDatas && typeof activeModDatas[key] == 'object') {
         _.forEach(activeModDatas[key], (itemA, keyA) => {
-          if(typeof(itemA) == 'number') {
+          if (typeof itemA == 'number') {
             activeModDatas[key][keyA] = String(itemA)
           }
         })
 
         return activeModDatas[key] || null
       }
-    },
+    }
   },
   computed: {
     activePropertyDataCopy() {
@@ -98,13 +107,14 @@ export default {
       let mod = modLoader.load(modType)
       let modComponents = mod.components
       let currentStyle = mod.styles[modStyleID]
-      let currentTemplate = mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
+      let currentTemplate =
+        mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
 
       let checkKeys = (item, thisProp) => {
-        if(typeof(item) == 'object') {
-            _.forEach(item, (itemA, keyA) => {
-              checkKeys(itemA, thisProp)
-            })
+        if (typeof item == 'object') {
+          _.forEach(item, (itemA, keyA) => {
+            checkKeys(itemA, thisProp)
+          })
         } else if (item == thisProp.key) {
           thisProp.hasProp = true
         }
@@ -113,11 +123,11 @@ export default {
       let filterModComponents = {}
 
       _.forEach(modComponents, (item, key) => {
-        let thisProp = {key: key, hasProp: false}
+        let thisProp = { key: key, hasProp: false }
 
         checkKeys(currentTemplate, thisProp)
 
-        if(thisProp.hasProp) {
+        if (thisProp.hasProp) {
           filterModComponents[key] = item
         }
       })
@@ -141,17 +151,9 @@ export default {
 <style lang="scss">
 .property-manager-container {
   min-height: 100%;
-  background-color: #ebeef5;
+  background-color: #e9f5ff;
   padding: 0 18px;
   position: relative;
-  .icon-del{
-    display: none;
-  }
-  &:hover{
-    .icon-del{
-      display: inline;
-    }
-  }
 }
 .property-manager-container .delete-mod {
   position: absolute;
@@ -163,5 +165,42 @@ export default {
 .property-manager-container .el-tabs__item {
   padding: 0 20px;
   font-size: 16px;
+}
+.currentModTilte {
+  height: 30px;
+  margin: 8px 18px;
+  color: #505b65;
+}
+.el-tabs__nav-wrap::after{
+  display: none;
+}
+.el-tabs__nav-wrap.is-scrollable {
+  padding: 0;
+  .el-tabs__nav-prev, .el-tabs__nav-next{
+    display: none !important;
+  }
+  }
+  .el-tabs__nav {
+    margin: 22px 0;
+    .el-tabs__active-bar {
+      width: 0;
+      height: 0;
+    }
+    .el-tabs__item {
+      height: 30px;
+      width: 198px;
+      text-align: center;
+      line-height: 30px;
+      margin: 0 12px 0 0;
+      background-color: #fff;
+      box-shadow: 3px 3px 5px #ccc;
+      border-radius: 4px;
+      padding: 0;
+    }
+    .is-active {
+      background-color: #3ba4ff;
+      color: #fff;
+    }
+  
 }
 </style>
