@@ -62,9 +62,7 @@ export default {
     this.allData = this.getChildrenByPath('newsList')
     this.total = this.allData.length
 
-    this.gitlabApi = this.getGitlabAPI()['client']['projects']['repository'][
-      'files'
-    ]
+    this.gitlabApi = this.getGitlabAPI()['client']['projects']['repository']['files']
 
     this.getCurrentPageData()
 
