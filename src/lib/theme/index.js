@@ -1,7 +1,3 @@
-// import _ from 'lodash'
-// import { getPageInfoByPath } from '@/lib/utils/gitlab'
-// import uuid = from '@/lib/utils/uuid'
-
 const ThemeHelper = {
   defaultTheme() {
     return {
