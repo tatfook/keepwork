@@ -36,7 +36,7 @@ var modsList = [
     children: [
       {
         id: '2-1',
-        label: 'modList.headNavigation',
+        label: 'modList.title',
         mods: [ModTitle]
       },
       {
@@ -52,12 +52,12 @@ var modsList = [
     children: [
       {
         id: '3-1',
-        label: 'modList.carousel',
+        label: 'modList.imgLoop',
         mods: [ModImgLoop]
       },
       {
         id: '3-2',
-        label: 'modList.widescreenImage',
+        label: 'modList.img',
         mods: [ModImg]
       },
       {
@@ -110,7 +110,7 @@ var modsList = [
     children: [
       {
         id: '6-1',
-        label: 'modList.headNavigation',
+        label: 'modList.title',
         mods: [ModTitle]
       },
       {

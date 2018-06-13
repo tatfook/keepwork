@@ -89,7 +89,7 @@
     "website": "Web page",
 
     "emptyName": "name cannot be empty",
-    "nameRule": "name can't contain \\\/:@&*=#\"*?<>| can't begin with _.",
+    "nameRule": "name can't contain \\/:@&*=#\"*?<>| can't begin with _.",
     "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
@@ -205,11 +205,11 @@
     "text": "Text",
     "navigation": "Navigation",
     "menu": "Menu",
-    "headNavigation": "Head navigation",
+    "title": "Head navigation",
 
     "graphic": "Graphic",
-    "carousel": "Carousel",
-    "widescreenImage": "Widescreen image",
+    "imgLoop": "Image loop",
+    "img": "Wide screen image",
     "board": "Board",
 
     "mixLayer": "Mix layer",
