@@ -323,7 +323,6 @@ const actions = {
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
-
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
