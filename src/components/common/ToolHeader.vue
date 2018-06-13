@@ -22,9 +22,11 @@
 
     <div class="icons">
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
-        <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
+        <i class="iconfont icon-edit"></i>
       </a>
-      <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
+      <span class="icon-item" v-popover:share>
+        <i class="iconfont icon-Share"></i>
+      </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
@@ -165,10 +167,11 @@ export default {
   }
   .icon-item {
     line-height: 1;
-    padding: 10px 15px;
+    padding: 10px 8px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
+    color: #2c3e50;
   }
   .icon-item .iconfont {
     font-size: 30px;
@@ -235,12 +238,12 @@ export default {
     }
     .icon-item {
       padding: 0 8px;
+      .iconfont {
+        font-size: 20px;
+      }
     }
     img {
       width: 20px;
-    }
-    .icon-like- {
-      font-size: 20px;
     }
   }
 }
