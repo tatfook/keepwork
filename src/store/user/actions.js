@@ -93,6 +93,14 @@ const actions = {
     userDetail = await keepwork.user.getDetailByName({ username: username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
+  async getAllPersonalPageList({ dispatch, getters }, payload) {
+    let { useCache = true } = payload || {}
+    await dispatch('getAllPersonalWebsite', { useCache })
+    let { personalSitePathMap } = getters
+    await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
+      await dispatch('gitlab/getRepositoryTree', {path: sitepath, useCache}, { root: true })
+    })).catch(e => console.error(e))
+  },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
     await dispatch('getProfile')

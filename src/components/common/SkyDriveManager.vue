@@ -10,7 +10,7 @@
           {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" v-if='defaultMode'>
         <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
           <i slot="suffix" class="el-input__icon el-icon-search"></i>
         </el-input>
