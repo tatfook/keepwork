@@ -206,7 +206,8 @@ const getters = {
   },
 
   activePageStarInfo: state => state.activePageStarInfo,
-
+  siteThemeConfigs: state => state.siteThemeConfigs,
+  siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || {},
   siteLayoutConfigs: state => state.siteLayoutConfigs,
   siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {

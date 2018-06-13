@@ -20,6 +20,8 @@ const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
 const UPDATE_SITE_MSG_SUCCESS = 'UPDATE_SITE_MSG_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
+const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
+const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -40,7 +42,9 @@ export const props = {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
-  GET_FROM_SKY_DRIVE_SUCCESS
+  GET_FROM_SKY_DRIVE_SUCCESS,
+  SAVE_SITE_THEME_CONFIG_SUCCESS,
+  GET_SITE_THEME_CONFIG_SUCCESS
 }
 
 const doNothing = state => {
@@ -121,6 +125,18 @@ const mutations = {
   [SAVE_SITE_LAYOUT_CONFIG_SUCCESS](state, { sitePath, config }) {
     Vue.set(state, 'siteLayoutConfigs', {
       ...state.siteLayoutConfigs,
+      [sitePath]: config
+    })
+  },
+  [GET_SITE_THEME_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteThemeConfigs', {
+      ...state.siteThemeConfigs,
+      [sitePath]: config
+    })
+  },
+  [SAVE_SITE_THEME_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteThemeConfigs', {
+      ...state.siteThemeConfigs,
       [sitePath]: config
     })
   },

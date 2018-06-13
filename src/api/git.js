@@ -227,7 +227,7 @@ export class GitAPI {
         this.commitToESByArray(actions, options)
         return data
       })
-      .catch(err => console.log(err))
+      .catch(e => {})
   }
 
   async upsertFile(path, options) {

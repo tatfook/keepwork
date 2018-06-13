@@ -7,9 +7,9 @@
         </header>
         <main>
           <el-row class="website-setting-font-family" type="flex" justify="center">
-            <el-col :span="spanSize">
+            <el-col :span="22">
               <span class="website-setting-select-title">字体:</span>
-              <el-select class="website-setting-select" v-model="fontFamily" size="small" @change="handleFontFamilyChange" placeholder="请选择">
+              <el-select class="website-setting-select" v-model="fontFamily" size="small" placeholder="请选择">
                 <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -17,9 +17,9 @@
             </el-col>
           </el-row>
           <el-row class="website-setting-font-size" type="flex" justify="center">
-            <el-col :span="spanSize">
+            <el-col :span="22">
               <span class="website-setting-select-title">字号:</span>
-              <el-select class="website-setting-select" v-model="fontSizeIndex" size="small" @change="handleFontSizeChange" placeholder="请选择">
+              <el-select class="website-setting-select" v-model="fontId" size="small" placeholder="请选择">
                 <el-option v-for="item in fontSize" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -27,7 +27,7 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <website-setting-style-font-preview :fontSizeList="fontSizeList" :fontSizeIndex="fontSizeIndex" :fontFamily="fontFamily" />
+              <p v-for="(size, index) in fontSizeList[fontId]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
@@ -37,12 +37,12 @@
           <h1>2.颜色</h1>
         </header>
         <main>
-          <website-setting-sytle-color-preview :colorsList="colors" :colorIndex="colorIndex" @handleSelectColor="handleSelectColor" />
+          <website-setting-sytle-color-preview :colorsList="colors" :colorsId.sync="colorsId" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
       <el-col :span="3" class="website-setting-btns">
         <el-button @click="handleSave" type="primary">{{$t('editor.save')}}</el-button>
-        <el-button>{{$t('editor.cancel')}}</el-button>
+        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -50,7 +50,7 @@
 
 <script>
 import themeData from '@/lib/theme/theme.data'
-import WebsiteSettingStyleFontPreview from './WebsiteSettingStyleFontPreview'
+import { mapActions, mapGetters } from 'vuex'
 import WebsiteSettingSytleColorPreview from './WebSiteSettingSytleColorPreview'
 export default {
   name: 'websiteSettingStyle',
@@ -58,79 +58,88 @@ export default {
     sitePath: String
   },
   components: {
-    WebsiteSettingSytleColorPreview,
-    WebsiteSettingStyleFontPreview
+    WebsiteSettingSytleColorPreview
+  },
+  async mounted() {
+    this.loading = true
+    await this.userGetSiteThemeConfig({ path: this.sitePath })
+    this.loading = false
   },
   methods: {
-    handleSave() {
-      console.log({
-        fontSize: this.fontSizeIndex,
+    ...mapActions({
+      userGetSiteThemeConfig: 'user/getSiteThemeConfig',
+      userSaveSiteThemeConfig: 'user/saveSiteThemeConfig'
+    }),
+    async handleSave() {
+      this.loading = true
+      let config = {
+        fontId: this.fontId,
         fontFamily: this.fontFamily,
-        colors: this.colorIndex
-      })
+        colorsId: this.colorsId
+      }
+      await this.userSaveSiteThemeConfig({ sitePath: this.sitePath, config })
+        .then(() => {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+        })
+        .catch(() => {
+          this.$message.error('保存失败')
+        })
+      this.loading = false
+    },
+    handleClose() {
+      this.$emit('close')
     },
     handleSelectColor(index) {
-      if (this.colorIndex !== index) {
-        this.colorIndex = index
-        console.log(`使用第${index}组颜色`)
+      if (this.colorsId !== index) {
+        this.colorsId = index
       }
-    },
-    handleFontSizeChange(index) {
-      console.log(`改变字体大小${index}`)
-    },
-    handleFontFamilyChange(value) {
-      console.log(`改变字体为:${value}`)
-    },
-    hexRandomColor() {
-      return (
-        '#' +
-        (('00000' + Math.random() * 0x1000000) << 0).toString(16).slice(-6)
-      )
+    }
+  },
+  watch: {
+    userSiteThemeConfigClone(config) {
+      let { fontId = 0, colorsId = 0, fontFamily = 'default' } = config || {}
+      this.fontId = fontId
+      this.fontFamily = fontFamily
+      this.colorsId = colorsId
     }
   },
   computed: {
+    ...mapGetters({
+      userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
+    }),
+    userSiteThemeConfigClone() {
+      return this.userSiteThemeConfigBySitePath(this.sitePath)
+    },
     colors() {
-      let colors = themeData.classic.colors[0]
-      let _temp = []
-      let num = 10
-      while (num--) {
-        let n = 10
-        let _arr = []
-        while (n--) {
-          _arr.push(this.hexRandomColor())
-        }
-        _temp.push(_arr)
-      }
-      return [colors, ..._temp]
+      return themeData.classic.colors
     },
     fontSize() {
-      let fonts = themeData.classic.fonts[0]
-      return new Array(6).fill(fonts).map((val, index) => ({
+      return this.fontSizeName.map((label, index) => ({
         value: index,
-        label: this.fontSizeName[index]
+        label: label
       }))
     },
     fontSizeList() {
-      let fonts = [...new Set(themeData.classic.fonts[0])]
-      let _fontsList = []
-      let num = 6
-      while (num--) {
-        _fontsList.push(fonts.map(i => i + num))
-      }
-      return _fontsList.reverse()
+      const fonts = themeData.classic.fonts[0]
+      let big = [0, 3, 6, 9]
+      let small = [2, 5, 8, 9]
+      let midium = [1, 4, 7, 9]
+      let comp = [small, midium, big]
+      return comp.map(size => size.map(index => fonts[index]))
     }
   },
   data() {
     return {
-      spanSize: 22,
-      name: 'websiteSettingStyle',
       loading: false,
-      colorIndex: 0,
-      fontSizeName: ['小号', '标准', '中号', '大号', '超大', '巨无霸'],
-      fontSizeIndex: 1,
+      colorsId: 0,
+      fontSizeName: ['小号', '中号', '大号'],
+      fontId: 0,
       fontFamilyList: [
         {
-          value: 'default',
+          value: 'inherit',
           label: '系统默认'
         },
         {
@@ -148,25 +157,9 @@ export default {
         {
           value: 'SimSun',
           label: '宋体'
-        },
-        {
-          value: 'Arial',
-          label: 'Arial'
-        },
-        {
-          value: 'Tahoma',
-          label: 'Tahoma'
-        },
-        {
-          value: 'Helvetica',
-          label: 'Helvetica'
-        },
-        {
-          value: 'Georgia',
-          label: 'Georgia'
         }
       ],
-      fontFamily: 'default'
+      fontFamily: 'inherit'
     }
   }
 }
@@ -218,6 +211,9 @@ export default {
       padding-left: 0;
     }
   }
+}
+.website-setting-preview-fontsize {
+  width: 80%;
 }
 .tips {
   color: rgba($color: #8a8a8a, $alpha: 0.5);
