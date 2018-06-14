@@ -59,7 +59,8 @@ const actions = {
           resolve()
         }).catch(async e => {
           if (!forceLogin) {
-            reject(e)
+            reject(new Error('401'))
+            clearGetProfilePromise()
             return
           }
 
@@ -70,9 +71,12 @@ const actions = {
               username: prompt('username: '),
               password: prompt('password: ')
             }
-            await dispatch('login', payload)
-
             clearGetProfilePromise()
+            if (!payload.username || !payload.password) {
+              reject(new Error('401'))
+              return
+            }
+            await dispatch('login', payload)
             await dispatch('getProfile')
             return resolve()
           }

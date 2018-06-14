@@ -49,6 +49,9 @@
     "apply": "应用"
   },
   "editor": {
+    "files": "文件",
+    "modules": "模块",
+    "networkDisk":"网盘",
     "save": "保存",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",

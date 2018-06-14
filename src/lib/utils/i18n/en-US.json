@@ -49,6 +49,9 @@
     "apply": "Apply"
   },
   "editor": {
+    "files": "Files",
+    "modules": "Modules",
+    "networkDisk":"NetworkDisk",
     "save": "Save",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
