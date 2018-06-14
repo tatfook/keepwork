@@ -80,7 +80,7 @@ export default {
       loading: true,
       savePending: false,
       dialogVisible: false,
-      toBeCloseFile: null,
+      toBeCloseFilePath: null,
       filesTreeProps: {
         children: 'children',
         label: 'name'
@@ -229,7 +229,7 @@ export default {
         this.closeAndResetFile(path)
       } else {
         this.dialogVisible = true
-        this.toBeCloseFile = { path }
+        this.toBeCloseFilePath = path
       }
     },
     closeAndResetFile(path) {
@@ -237,6 +237,7 @@ export default {
       openedFiles = Object.keys(openedFiles)
       let _path = openedFiles.filter(name => name !== path)
       this.closeOpenedFile({ path })
+      if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
       if (_path.length === 0) {
         this.$router.push('/')
       } else {
@@ -244,22 +245,21 @@ export default {
       }
     },
     handleCloseDialog() {
-      this.toBeCloseFile = null
+      this.toBeCloseFilePath = null
       this.dialogVisible = false
     },
     handleCloseOpenedFile() {
-      let file = this.toBeCloseFile
-      file && this.closeOpenedFile(file)
+      let path = this.toBeCloseFilePath
+      path && this.closeAndResetFile(path)
       this.handleCloseDialog()
     },
     async saveAndCloseOpenedFile() {
-      let file = this.toBeCloseFile
-      let { path } = file
+      let path = this.toBeCloseFilePath
       this.savePending = true
       await this.savePageByPath(path)
-      this.savePending = false
-      this.closeOpenedFile(file)
+      this.closeAndResetFile(path)
       this.handleCloseDialog()
+      this.savePending = false
     },
     handleOpenedClick(data, node) {
       let path = data.path
