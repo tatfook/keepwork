@@ -8,17 +8,22 @@
       <router-view/>
     </el-main>
     <el-aside></el-aside>
+    <el-footer height='auto' class="index-page-footer">
+      <common-footer class="container"></common-footer>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
+import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
     CommonHeader,
+    CommonFooter,
     ToolHeader
   },
   watch: {
