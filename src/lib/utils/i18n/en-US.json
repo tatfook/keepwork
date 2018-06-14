@@ -46,7 +46,11 @@
     "update": "Update",
     "rename": "Rename",
     "remove": "Remove",
-    "apply": "Apply"
+    "apply": "Apply",
+
+    "add": "Add",
+    "change": "Change",
+    "link": "Link"
   },
   "editor": {
     "save": "Save",
@@ -194,7 +198,9 @@
 
     "yourPage": "Your page",
     "yourPosition": "Your position：",
-    "defaultPage": "Default page"
+    "defaultPage": "Default page",
+
+    "removeImgConfirmMsg": "Are you sure to remove this image?"
   },
   "modList": {
     "recent": "Commonly used",
