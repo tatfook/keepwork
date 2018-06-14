@@ -17,7 +17,7 @@
               </el-button>
               <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
+              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseOpenedFile(data)'>
               </el-button>
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
@@ -101,7 +101,8 @@ export default {
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
-      filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
+      filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
+      getOpenedFileByPath: 'getOpenedFileByPath'
     }),
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
@@ -190,6 +191,39 @@ export default {
       // try open file
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
+    },
+    async handleCloseOpenedFile({ path }) {
+      let toBeCloseFile = this.getOpenedFileByPath(path)
+      let { saved = true } = toBeCloseFile
+      const h = this.$createElement
+      this.$msgbox({
+        title: '该文件尚未保存！',
+        message: h('el-row', null, [
+          h('el-button', { class: 'el-button--danger' }, '不保存并关闭文件'),
+          h('el-button',{ class: 'el-button--primary' }, '保存并关闭文件')
+        ]),
+        showConfirmButton: false,
+        center: true,
+        type: 'warning',
+        roundButton: true
+      })
+      // saved ? closeOpenedFile({ data })
+      // : this.$confirm('该文件未保存, 是否继续?', '提示', {
+      //     confirmButtonText: '保存并关闭文件',
+      //     cancelButtonText: '不保存并关闭文件',
+      //     type: 'warning',
+      //     center: true
+      //   }).then(() => {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '不保存'
+      //     })
+      //   }).catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '保存并关闭文件'
+      //     })
+      //   })
     },
     handleOpenedClick(data, node) {
       let path = data.path
