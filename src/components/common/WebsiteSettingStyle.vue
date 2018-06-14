@@ -100,7 +100,7 @@ export default {
   },
   watch: {
     userSiteThemeConfigClone(config) {
-      let { fontId = 0, colorsId = 0, fontFamily = 'default' } = config || {}
+      let { fontId = 0, colorsId = 0, fontFamily = 'inherit' } = config || {}
       this.fontId = fontId
       this.fontFamily = fontFamily
       this.colorsId = colorsId
@@ -135,8 +135,9 @@ export default {
     return {
       loading: false,
       colorsId: 0,
-      fontSizeName: ['小号', '中号', '大号'],
       fontId: 0,
+      fontFamily: 'inherit',
+      fontSizeName: ['小号', '中号', '大号'],
       fontFamilyList: [
         {
           value: 'inherit',
@@ -158,8 +159,7 @@ export default {
           value: 'SimSun',
           label: '宋体'
         }
-      ],
-      fontFamily: 'inherit'
+      ]
     }
   }
 }

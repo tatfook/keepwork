@@ -37,13 +37,13 @@ export default {
         {
           text: '网站布局',
           comp: WebsiteSettingLayout
-        },
-        {
-          text: '网站样式',
-          comp: WebsiteSettingStyle
         }
+        // {
+        //   text: '网站样式',
+        //   comp: WebsiteSettingStyle
+        // }
       ],
-      activeSettingIndex: 2
+      activeSettingIndex: 1
     }
   },
   computed: {
