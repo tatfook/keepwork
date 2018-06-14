@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @focus='getFocus'>
+    <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @change='updateValue' @focus='getFocus'>
       <i @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
     </el-input>
     <SkyDriveManagerDialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
@@ -22,6 +22,14 @@ export default {
       inputTypeValue: this.originValue,
       isSkyDriveManagerDialogShow: false
     }
+  },
+  computed: {
+    // inputTypeValue: {
+    //   get() {
+    //     // return inputTypeValue
+    //   },
+    //   set() {}
+    // }
   },
   watch: {
     inputTypeValue(newVal) {

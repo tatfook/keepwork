@@ -24,7 +24,7 @@ export default {
     cardValue: Object,
     prop: Object,
     activePropertyOptions: Object,
-    isCardActive: Boolean,
+    isCardActive: Boolean
   },
   data() {
     return {
