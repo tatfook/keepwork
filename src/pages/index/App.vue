@@ -8,7 +8,7 @@
       <router-view/>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='auto' class="index-page-footer">
+    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
       <common-footer class="container"></common-footer>
     </el-footer>
   </el-container>
