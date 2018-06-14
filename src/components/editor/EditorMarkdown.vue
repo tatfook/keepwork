@@ -32,7 +32,8 @@ export default {
   name: 'EditorMarkdown',
   data() {
     return {
-      gConst
+      gConst,
+      preEvent: null
     }
   },
   components: {
@@ -166,6 +167,19 @@ export default {
     checkInModCode(line) {
       return Parser.getActiveBlock(this.modList, line)
     },
+    checkOriginEvent(change) {
+      // see https://codemirror.net/doc/manual.html#selection_origin
+      // When it starts with *, it will always replace the previous event (if that had the same origin)
+      if (change.origin && change.origin[0] === '*') {
+        if (this.preEvent && this.preEvent[0] === '*') {
+          this.$store.dispatch('reduceUndoStack')
+        }
+        // reset preEvent if it is the last compose action
+        this.preEvent = change.removed && change.removed[0] === "" ? change.origin : null
+      } else {
+        this.preEvent = null
+      }
+    },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
       let cursor = editor.getCursor()
@@ -184,9 +198,8 @@ export default {
       }
 
       let change = changes[0]
-      // see https://codemirror.net/doc/manual.html#selection_origin
-      // When it starts with *, it will always replace the previous event (if that had the same origin)
-      if (change.origin && change.origin[0] === '*') return
+
+      this.checkOriginEvent(change)
       let mod = Parser.getActiveBlock(this.modList, change.from.line + 1)
       if (!mod) {
         return this.$store.dispatch('updateMarkDown', {

@@ -92,17 +92,20 @@ const actions = {
     }
 
     const pageData = getters.openedFiles[fullPath]
-    if (!cacheAvailable(pageData)) {
+    const needReload = !cacheAvailable(pageData)
+    if (needReload) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
-    if (!_.get(getters.openedFiles, fullPath)) {
+
+    commit(SET_ACTIVE_PAGE, { path, username })
+
+    if (needReload) {
       UndoHelper.init(getters.activeAreaData.undoManager, {
         newCode: getters.code,
         cursor: { line: 1, ch: 0 }
       })
     }
-    commit(SET_ACTIVE_PAGE, { path, username })
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters
@@ -323,7 +326,12 @@ const actions = {
   updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
-
+  reduceUndoStack({ getters }) {
+    UndoHelper.undo(
+      getters.activeAreaData.undoManager,
+      () => {}
+    )
+  },
   undo({ getters, dispatch }) {
     UndoHelper.undo(
       getters.activeAreaData.undoManager,
