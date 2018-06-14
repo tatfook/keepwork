@@ -450,8 +450,7 @@ const actions = {
       rootGetters: { 'user/username': username }
     } = context
     commit(CLOSE_OPENED_FILE, { username, path: fullPath })
-    console.log(path)
-    console.log(state.activePageUrl)
+
     if (path === state.activePageUrl) {
       commit(SET_ACTIVE_PAGE, null)
     }

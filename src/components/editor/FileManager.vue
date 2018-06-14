@@ -23,8 +23,8 @@
               </el-button>
               <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <!-- <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleColoseConfirm(data)'> -->
-                <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
+              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
+                <!-- <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'> -->
               </el-button>
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
@@ -145,7 +145,8 @@ export default {
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      setActivePage: 'setActivePage'
     }),
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
@@ -221,14 +222,25 @@ export default {
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
     },
-    async handleColoseConfirm({ path }) {
+    async handleCloseConfirm({ path }) {
       let file = this.getOpenedFileByPath(path)
       let { saved = true } = file
       if (saved) {
-        this.closeOpenedFile({ path })
+        this.closeAndResetFile(path)
       } else {
         this.dialogVisible = true
         this.toBeCloseFile = { path }
+      }
+    },
+    closeAndResetFile(path) {
+      let openedFiles = this.openedFiles
+      openedFiles = Object.keys(openedFiles)
+      let _path = openedFiles.filter(name => name !== path)
+      this.closeOpenedFile({ path })
+      if (_path.length = 0) {
+        this.$router.push('/')
+      } else {
+        this.setActivePage({ path: _path[0] })
       }
     },
     handleCloseDialog() {
