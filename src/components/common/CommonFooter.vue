@@ -2,28 +2,33 @@
   <div class="footer-container">
     <ul>
       <li>
-        <a href="#" target="_blank">{{$t('common.openPlatform')}}</a>
+        <a href="/official/open" target="_blank">{{$t('common.openPlatform')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.joinUs')}}</a>
+        <a href="/official/company/joinus" target="_blank">{{$t('common.joinUs')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.websiteStatistics')}}</a>
+        <a href="/wiki/statics" target="_blank">{{$t('common.websiteStatistics')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.updateInformation')}}</a>
+        <a href="/intro/keepwork/changelog" target="_blank">{{$t('common.updateInformation')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.feedback')}}</a>
+        <a href="https://github.com/tatfook/wikicraft/issues" target="_blank">{{$t('common.feedback')}}</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.complaintPage')}}</a>
+        <a href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">Powered By NPL</a>
       </li>
       <li>
-        <a href="#" target="_blank">{{$t('common.poweredByNPL')}}</a>
-      </li>
-      <li>
-        <a href="#" target="_blank">{{$t('common.simplifiedChinese')}}</a>
+        <el-dropdown @command='swichLanguage' trigger="click" placement="top">
+          <span class="el-dropdown-link">
+            <i class='iconfont icon-language'></i>{{$t('common.simplifiedChinese')}}
+          </span>
+          <el-dropdown-menu slot='dropdown'>
+            <el-dropdown-item command='zh-cn'>简体中文</el-dropdown-item>
+            <el-dropdown-item command='en'>English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </li>
     </ul>
     <p>
@@ -35,39 +40,59 @@
 
 <script>
 export default {
-  name: 'CommonFooter'
+  name: 'CommonFooter',
+  methods: {
+    swichLanguage(language) {
+      window.localStorage.setItem('keepwork-language-locale', language)
+      window.location.reload()
+    }
+  }
 }
 </script>
-
-<style scoped>
-ul {
-  margin: 0;
-  padding: 0;
-}
-ul > li {
-  list-style: none;
-  display: inline-block;
-  padding-bottom: 6px;
-}
-a {
-  color: #3977ad;
-  padding: 0 5px 5px;
-  margin: 0 25px;
-  text-decoration: none;
-  font-size: 14px;
-}
-a:hover {
-  border-bottom: 2px solid #3977ad;
-}
-p {
-  margin: 0;
-}
-.footer-container span {
-  font-size: 14px;
+<style lang="scss" scoped>
+.footer-container {
+  padding: 25px 15px;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+  ul > li {
+    list-style: none;
+    display: inline-block;
+    padding-bottom: 6px;
+  }
+  a {
+    color: #3977ad;
+    padding: 0 5px 5px;
+    margin: 0 25px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  a:hover {
+    border-bottom: 2px solid #3977ad;
+  }
+  p {
+    margin: 6px 0 0;
+    text-align: center;
+    font-size: 14px;
+  }
+  span {
+    font-size: 14px;
+  }
+  .icon-language {
+    color: #ec1e1e;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  .el-dropdown-link {
+    cursor: pointer;
+  }
 }
 @media (max-width: 768px) {
-  a {
-    margin: 0;
+  .footer-container {
+    a {
+      margin: 0;
+    }
   }
 }
 </style>

@@ -43,7 +43,7 @@ export default {
           comp: WebsiteSettingStyle
         }
       ],
-      activeSettingIndex: 1
+      activeSettingIndex: 2
     }
   },
   computed: {

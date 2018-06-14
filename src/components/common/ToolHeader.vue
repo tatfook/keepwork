@@ -10,14 +10,14 @@
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <ul class="file-list-content">
             <li v-for='site in siteList' :key='site.name'>
-              <a :href="`/${site.username}/${site.name}`">
+              <a :href="`/${site.username}/${site.name}`" class="clearfix">
                 <span class="list-content">{{site.displayName || site.name}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
           </ul>
           <span class="page-item-content" slot="reference">
-            {{activePageInfo.sitename}}
+            {{siteDisplayName}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
           </span>
         </el-popover>
@@ -39,9 +39,11 @@
 
     <div class="icons">
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
-        <img src="http://keepwork.com/wiki/assets/imgs/icon/wiki_edit.png" alt="">
+        <i class="iconfont icon-edit"></i>
       </a>
-      <img v-popover:share class="icon-item" src="http://keepwork.com/wiki/assets/imgs/icon/wiki_share.png" alt="">
+      <span class="icon-item" v-popover:share>
+        <i class="iconfont icon-Share"></i>
+      </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
@@ -64,9 +66,20 @@ export default {
       activePageInfo: 'activePageInfo',
       displayUsername: 'user/displayUsername',
       activePageStarInfo: 'user/activePageStarInfo',
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       userGetDetailByUsername: 'user/getDetailByUsername'
     }),
+    siteDisplayName() {
+      let { sitepath } = this.activePageInfo
+      if (!sitepath) {
+        return
+      }
+      let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
+      let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
+      let name = _.get(siteDetailInfo, 'siteinfo.name')
+      return siteDisplayName || name
+    },
     sitePath() {
       let { sitepath } = this.activePageInfo
       return sitepath
@@ -185,6 +198,11 @@ export default {
   padding: 0;
   min-width: auto;
   border-color: #e4e7ed;
+  .clearfix::after {
+    content: '';
+    clear: both;
+    display: table;
+  }
   .file-list-content {
     max-height: 380px;
     box-sizing: border-box;
@@ -206,6 +224,9 @@ export default {
     a {
       color: inherit;
       text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
     }
   }
   li:hover {
@@ -277,10 +298,11 @@ export default {
   }
   .icon-item {
     line-height: 1;
-    padding: 10px 15px;
+    padding: 10px 8px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
+    color: #2c3e50;
   }
   .icon-item .iconfont {
     font-size: 30px;
@@ -348,12 +370,12 @@ export default {
     }
     .icon-item {
       padding: 0 8px;
+      .iconfont {
+        font-size: 20px;
+      }
     }
     img {
       width: 20px;
-    }
-    .icon-like- {
-      font-size: 20px;
     }
   }
 }

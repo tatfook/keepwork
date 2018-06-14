@@ -13,6 +13,7 @@ const blockHelper = {
         const data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
         Vue.set(block, 'data', data)
         this.updateCmd(block, targetCmd)
+        this.buildMarkdown(block)
       } else {
         const data = this.isMarkdownMod(block)
           ? { md: { data: this.mdText(block) } }

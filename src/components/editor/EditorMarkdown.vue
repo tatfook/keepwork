@@ -137,7 +137,7 @@ export default {
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     highlightCodeByMod(mod) {
-      if(mod.modType === 'ModMarkdown') return
+      if (mod.modType === 'ModMarkdown') return
       let lineBegin = mod.lineBegin - 1
       let lineEnd = BlockHelper.endLine(mod) - 1
       this.clearHighlight()
@@ -159,7 +159,7 @@ export default {
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
-          if(mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
+          if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
         }
       })
     },
@@ -184,6 +184,9 @@ export default {
       }
 
       let change = changes[0]
+      // see https://codemirror.net/doc/manual.html#selection_origin
+      // When it starts with *, it will always replace the previous event (if that had the same origin)
+      if (change.origin && change.origin[0] === '*') return
       let mod = Parser.getActiveBlock(this.modList, change.from.line + 1)
       if (!mod) {
         return this.$store.dispatch('updateMarkDown', {
