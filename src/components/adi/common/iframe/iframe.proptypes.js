@@ -1,5 +1,5 @@
 export default {
-  src: 'input',
+  src: 'link',
   height: 'input',
   width: 'input'
 }

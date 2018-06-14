@@ -7,6 +7,7 @@ import linkTarget from './LinkTargetType'
 import switchButton from './SwitchButtonType'
 import gallery from './GalleryType'
 import filter from './FilterType'
+import media from './MediaType'
 
 export default {
   input,
@@ -17,5 +18,6 @@ export default {
   linkTarget,
   switchButton,
   gallery,
-  filter
+  filter,
+  media
 }
