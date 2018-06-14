@@ -29,9 +29,9 @@ export default [
         'margin-top': '-20px'
       }
     }
-  },
+  }
   // style 1
-  {
+  /* {
     data: {
       root: {}
     },
@@ -61,5 +61,5 @@ export default [
         'margin-top': '-20px'
       }
     }
-  }
+  } */
 ]
