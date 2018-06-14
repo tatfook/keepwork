@@ -1,10 +1,16 @@
 <template>
   <div class="file-manager" v-loading="loading">
-
     <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
       <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
         <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
       </h1>
+      <el-dialog title="提示" center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+        <center>该文件尚未保存！</center>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="warning" @click="handleCloseOpenedFile()">不保存关闭</el-button>
+          <el-button type="primary" @click="saveAndCloseOpenedFile()" :loading="savePending">保存并关闭</el-button>
+        </span>
+      </el-dialog>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
           <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
@@ -17,7 +23,8 @@
               </el-button>
               <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseOpenedFile(data)'>
+              <!-- <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleColoseConfirm(data)'> -->
+                <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
               </el-button>
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
@@ -71,6 +78,9 @@ export default {
   data() {
     return {
       loading: true,
+      savePending: false,
+      dialogVisible: false,
+      toBeCloseFile: null,
       filesTreeProps: {
         children: 'children',
         label: 'name'
@@ -140,20 +150,39 @@ export default {
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
       if (!isLegal) {
-        let closeAllFolder = this.personalSitePaths ? Object.keys(this.personalSitePaths).map(path => ({path, expanded: false})) : []
+        let closeAllFolder = this.personalSitePaths
+          ? Object.keys(this.personalSitePaths).map(path => ({
+              path,
+              expanded: false
+            }))
+          : []
         return this.updateFilemanagerTreeNodeExpandMapByPath(closeAllFolder)
       }
       await this.getRepositoryTree({ path: sitepath })
 
       let folderPaths = paths.slice(0, paths.length - 1)
       let expandedFolderPaths = folderPaths.reduce((prev, current) => {
-        let expanededPath = sitepath + '/' + (prev[prev.length-1] ? prev[prev.length-1] + '/' : '') + current
+        let expanededPath =
+          sitepath +
+          '/' +
+          (prev[prev.length - 1] ? prev[prev.length - 1] + '/' : '') +
+          current
         return prev.concat(expanededPath)
       }, [])
       expandedFolderPaths.unshift(sitepath)
-      let expandedFolderPathsList = expandedFolderPaths.map(path => ({path, expanded: true}))
-      let appendCloseFolderPathsList = this.personalSitePaths ? Object.keys(this.personalSitePaths).filter(i => i !== sitepath).map(path => ({path, expanded: false})) : []
-      this.updateFilemanagerTreeNodeExpandMapByPath([...expandedFolderPathsList, ...appendCloseFolderPathsList])
+      let expandedFolderPathsList = expandedFolderPaths.map(path => ({
+        path,
+        expanded: true
+      }))
+      let appendCloseFolderPathsList = this.personalSitePaths
+        ? Object.keys(this.personalSitePaths)
+            .filter(i => i !== sitepath)
+            .map(path => ({ path, expanded: false }))
+        : []
+      this.updateFilemanagerTreeNodeExpandMapByPath([
+        ...expandedFolderPathsList,
+        ...appendCloseFolderPathsList
+      ])
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -192,38 +221,33 @@ export default {
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
     },
-    async handleCloseOpenedFile({ path }) {
-      let toBeCloseFile = this.getOpenedFileByPath(path)
-      let { saved = true } = toBeCloseFile
-      const h = this.$createElement
-      this.$msgbox({
-        title: '该文件尚未保存！',
-        message: h('el-row', null, [
-          h('el-button', { class: 'el-button--danger' }, '不保存并关闭文件'),
-          h('el-button',{ class: 'el-button--primary' }, '保存并关闭文件')
-        ]),
-        showConfirmButton: false,
-        center: true,
-        type: 'warning',
-        roundButton: true
-      })
-      // saved ? closeOpenedFile({ data })
-      // : this.$confirm('该文件未保存, 是否继续?', '提示', {
-      //     confirmButtonText: '保存并关闭文件',
-      //     cancelButtonText: '不保存并关闭文件',
-      //     type: 'warning',
-      //     center: true
-      //   }).then(() => {
-      //     this.$message({
-      //       type: 'success',
-      //       message: '不保存'
-      //     })
-      //   }).catch(() => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: '保存并关闭文件'
-      //     })
-      //   })
+    async handleColoseConfirm({ path }) {
+      let file = this.getOpenedFileByPath(path)
+      let { saved = true } = file
+      if (saved) {
+        this.closeOpenedFile({ path })
+      } else {
+        this.dialogVisible = true
+        this.toBeCloseFile = { path }
+      }
+    },
+    handleCloseDialog() {
+      this.toBeCloseFile = null
+      this.dialogVisible = false
+    },
+    handleCloseOpenedFile() {
+      let file = this.toBeCloseFile
+      file && this.closeOpenedFile(file)
+      this.handleCloseDialog()
+    },
+    async saveAndCloseOpenedFile() {
+      let file = this.toBeCloseFile
+      let { path } = file
+      this.savePending = true
+      await this.savePageByPath(path)
+      this.savePending = false
+      this.closeOpenedFile(file)
+      this.handleCloseDialog()
     },
     handleOpenedClick(data, node) {
       let path = data.path
@@ -235,12 +259,12 @@ export default {
       this.trees[type] = !this.trees[type]
     },
     togglePersonalSiteList() {
-      let type = "isMyShow"
+      let type = 'isMyShow'
       this.toggleContent(type)
       this.trees[type] && this.getAllPersonalWebsite()
     },
     toggleContributedSiteList() {
-      let type = "isContributedShow"
+      let type = 'isContributedShow'
       this.toggleContent(type)
       this.trees[type] && this.getAllContributedWebsite()
     },
@@ -261,11 +285,17 @@ export default {
       let path = data.path
       let pathArr = path.split('/')
       let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(`${this.$t('editor.delConfirm')} ${pageName} ${this.$t('editor.page')}?`, this.$t('editor.delNotice'), {
-        confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel'),
-        type: 'error'
-      })
+      this.$confirm(
+        `${this.$t('editor.delConfirm')} ${pageName} ${this.$t(
+          'editor.page'
+        )}?`,
+        this.$t('editor.delNotice'),
+        {
+          confirmButtonText: this.$t('el.messagebox.confirm'),
+          cancelButtonText: this.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
         .then(async () => {
           await this.gitlabRemoveFile({ path })
         })
@@ -310,10 +340,8 @@ export default {
     color: #535353;
   }
 
-  .el-tree--highlight-current
-    .el-tree-node
-    > .el-tree-node__content {
-    .file-manager-buttons-container{
+  .el-tree--highlight-current .el-tree-node > .el-tree-node__content {
+    .file-manager-buttons-container {
       display: none;
     }
   }
@@ -324,7 +352,7 @@ export default {
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
-    .file-manager-buttons-container{
+    .file-manager-buttons-container {
       display: inline-block !important;
       line-height: 38px !important;
     }
