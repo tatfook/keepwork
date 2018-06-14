@@ -237,10 +237,10 @@ export default {
       openedFiles = Object.keys(openedFiles)
       let _path = openedFiles.filter(name => name !== path)
       this.closeOpenedFile({ path })
-      if (_path.length = 0) {
+      if (_path.length === 0) {
         this.$router.push('/')
       } else {
-        this.setActivePage({ path: _path[0] })
+        this.$router.push('/' + _path[0].replace(/\.md$/, ''))
       }
     },
     handleCloseDialog() {
