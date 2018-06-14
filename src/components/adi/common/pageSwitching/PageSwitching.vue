@@ -5,7 +5,7 @@
         <mod-list-viewer :modList='getModList(item._source.content)' :theme='theme' />
       </div>
     </div>
-    <div class="pagination">
+    <div v-if="beShow" class="pagination">
       <el-pagination
         layout="prev, pager, next"
         @current-change="handleCurrentChange"
@@ -37,7 +37,8 @@ export default {
       currentPage: 1,
       allData: [],
       sourceData: [],
-      loading: true
+      loading: true,
+      beShow: false
     }
   },
   components: {
@@ -58,15 +59,21 @@ export default {
       this.currentPage = pageNum
     },
     async getSource() {
-      let path = '/introduction/pages'
+      if(!this.properties.path) {
+        this.beShow = false
+        return
+      }
 
+      this.beShow = true
+
+      let url = this.activePageInfo.sitepath + (this.properties.path)
       let index = process.env.ES_INDEX
       let type = process.env.ES_TYPE
       let body = {
         query: {
           match: {
             url: {
-              query: this.activePageInfo.sitepath + path,
+              query: url,
               operator: 'and'
             }
           }
