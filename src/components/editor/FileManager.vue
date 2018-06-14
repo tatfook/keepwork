@@ -28,7 +28,7 @@
     </div>
 
     <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
-      <h1 class="toggle-bar" @click='toggleContent("isMyShow")'>
+      <h1 class="toggle-bar" @click='togglePersonalSiteList'>
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
       </h1>
       <el-collapse-transition>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="joined-tree tree-item" :class="{'is-active': trees.isContributedShow}">
-      <h1 class="toggle-bar" @click='toggleContent("isContributedShow")'>
+      <h1 class="toggle-bar" @click='toggleContributedSiteList'>
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
@@ -125,6 +125,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      getAllPersonalWebsite: 'user/getAllPersonalWebsite',
+      getAllContributedWebsite: 'user/getAllContributedWebsite',
       getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
       updateFilemanagerTreeNodeExpandMapByPath:
@@ -197,6 +199,16 @@ export default {
     },
     toggleContent(type) {
       this.trees[type] = !this.trees[type]
+    },
+    togglePersonalSiteList() {
+      let type = "isMyShow"
+      this.toggleContent(type)
+      this.trees[type] && this.getAllPersonalWebsite()
+    },
+    toggleContributedSiteList() {
+      let type = "isContributedShow"
+      this.toggleContent(type)
+      this.trees[type] && this.getAllContributedWebsite()
     },
     async save(data) {
       if (data.savePending === undefined) {

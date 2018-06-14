@@ -22,7 +22,7 @@
     "feedback": "Feedback",
     "complaintPage": "Complaint page",
     "poweredByNPL": "Powered By NPL",
-    "simplifiedChinese": "Simplified Chinese",
+    "simplifiedChinese": "English",
 
     "caseNumberA": "ICP 14002196 -2, Guangdong Province",
     "caseNumberB": "© Tatfook",
@@ -89,7 +89,7 @@
     "website": "Web page",
 
     "emptyName": "name cannot be empty",
-    "nameRule": "name can't contain \\\/:\"*?<>| can't begin with _.",
+    "nameRule": "name can't contain \\/:@&*=#\"*?<>| can't begin with _.",
     "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
@@ -180,29 +180,36 @@
     "layoutParameters": "3. Layout parameters",
     "match": "match",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "keepOneLayout": "Keep one layout at least",
     "theLayoutIsInUse": "The layout is in use",
 
-    "deleteFolder": "Be sure to delete the folder and inside documents ?",
+    "deleteFolderBefore": "Be sure to delete ",
+    "deleteFolderAfter": " folder and inside documents ?",
     "documents": " documents ?",
     "areYouSureYouWantToDeleteThisFolder":
       "Are you sure you want to delete this folder ?",
     "videoNotSupport": "Your browser does not support the video tag.",
-    "notFound": "Content cannot be found"
+    "notFound": "Content cannot be found",
+
+    "yourPage": "Your page",
+    "yourPosition": "Your position：",
+    "defaultPage": "Default page"
   },
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
     "bigFile": "Big file",
+    "pagePath": "Page path",
 
     "text": "Text",
     "navigation": "Navigation",
     "menu": "Menu",
-    "headNavigation": "Head navigation",
+    "title": "Head navigation",
 
     "graphic": "Graphic",
-    "carousel": "Carousel",
-    "widescreenImage": "Widescreen image",
+    "imgLoop": "Image loop",
+    "img": "Wide screen image",
     "board": "Board",
 
     "mixLayer": "Mix layer",
@@ -327,11 +334,13 @@
     "size": "size",
     "menu": "menu",
     "logo": "icon",
+    "logoB": "icon",
+    "menuB": "menu",
     "businessName": "main title",
     "tagline": "subtitle",
     "qq": "QQ number",
     "pic": "head portrait",
-    "desc": "name",
+    "desc": "description",
     "md": "Markdown document",
     "board": "drawing board",
     "comment": "comment",
@@ -345,7 +354,9 @@
     "enter": "Enter",
     "innerModal": "Inner modal",
     "bigFile": "Big file",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "pageRoute": "Page route",
+    "tab": "Tab"
   },
   "field": {
     "fileId": "file Id",
@@ -362,7 +373,13 @@
     "channel": "channel",
     "number": "number",
     "width": "width",
-    "height": "height"
+    "height": "height",
+    "webHeight": "web height",
+    "webWidth": "web width",
+    "mobileHeight": "mobile height",
+    "mobileWidth": "mobile width",
+    "fontSize": "font size",
+    "path": "page path"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

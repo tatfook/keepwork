@@ -20,7 +20,8 @@ export const post = (...args) => {
 
 export const user = {
   login: (...args) => post('/user/login', ...args),
-  getProfile: (...args) => post('/user/getProfile', ...args)
+  getProfile: (...args) => post('/user/getProfile', ...args),
+  getDetailByName: (...args) => post('/user/getDetailByName', ...args)
 }
 
 /*doc

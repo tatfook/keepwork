@@ -70,6 +70,12 @@ const getters = {
 
     return personalSiteList
   },
+  getDetailByUsername: (
+    state
+  ) => username => {
+    let { usersDetail } = state
+    return usersDetail[username]
+  },
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList
@@ -200,7 +206,8 @@ const getters = {
   },
 
   activePageStarInfo: state => state.activePageStarInfo,
-
+  siteThemeConfigs: state => state.siteThemeConfigs,
+  siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || {},
   siteLayoutConfigs: state => state.siteLayoutConfigs,
   siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {

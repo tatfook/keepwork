@@ -16,6 +16,11 @@ import AdiPageList from './pageList/pageList.properties'
 import AdiFooter from './footer/footer.properties'
 import AdiToc from './toc/toc.properties'
 import AdiBigFile from './bigFile/bigFile.properties'
+import AdiBreadCrumb from './breadCrumb/breadCrumb.properties'
+import AdiPagePath from './pagePath/pagePath.properties'
+import AdiTab from './tab/tab.properties'
+import AdiCategoryList from './categoryList/categoryList.properties'
+import AdiPageSwitching from './pageSwitching/pageSwitching.properties'
 
 export default {
   AdiMarkdown,
@@ -35,5 +40,10 @@ export default {
   AdiPageList,
   AdiFooter,
   AdiToc,
-  AdiBigFile
+  AdiBigFile,
+  AdiBreadCrumb,
+  AdiPagePath,
+  AdiTab,
+  AdiCategoryList,
+  AdiPageSwitching
 }

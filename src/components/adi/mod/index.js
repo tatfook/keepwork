@@ -16,6 +16,11 @@ import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
 import ModBigFile from './web/bigFile'
+import ModTab from './web/tab'
+import ModButton from './web/button'
+import ModPagePath from './web/pagePath'
+import ModCategoryList from './web/categoryList'
+import ModPageSwitching from './web/pageSwitching'
 
 export const modList = {
   ModMarkdown,
@@ -35,7 +40,12 @@ export const modList = {
   ModTextBoard,
   ModPageList,
   ModToc,
-  ModBigFile
+  ModBigFile,
+  ModTab,
+  ModButton,
+  ModPagePath,
+  ModCategoryList,
+  ModPageSwitching
 }
 
 export const load = modName => {

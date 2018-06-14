@@ -1,30 +1,35 @@
 <template>
   <el-container id='app' class="index-page-container">
-    <el-header height='61px' class="index-page-header">
+    <el-header height='61px' class="index-page-header" v-if="!isSystemCompShow.isSystemHeaderHide">
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
-      <tool-header class="container"></tool-header>
+      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
       <router-view/>
     </el-main>
     <el-aside></el-aside>
+    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
+      <common-footer class="container"></common-footer>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
 import CommonHeader from '../../components/common/CommonHeader'
+import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
     CommonHeader,
+    CommonFooter,
     ToolHeader
   },
   watch: {
     $route: 'updateActivePage',
     activePageInfo(activePageInfo) {
-      let {username, sitename, pagename} = activePageInfo
+      let { username, sitename, pagename } = activePageInfo
       document.title = pagename || sitename || username || 'KeepWork'
     }
   },
@@ -50,8 +55,26 @@ export default {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
       username: 'user/username',
+      userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       activePageInfo: 'activePageInfo'
-    })
+    }),
+    isSystemCompShow() {
+      let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(
+        `${this.activePageInfo.username}/${this.activePageInfo.sitename}`
+      )
+      return {
+        isSystemHeaderHide: _.get(
+          userSiteLayoutConfig,
+          'layoutConfig.isSystemHeaderHide',
+          false
+        ),
+        isSystemFooterHide: _.get(
+          userSiteLayoutConfig,
+          'layoutConfig.isSystemFooterHide',
+          false
+        )
+      }
+    }
   }
 }
 </script>

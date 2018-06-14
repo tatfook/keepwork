@@ -11,14 +11,7 @@ export default [
     templateID: 0,
     data: {
       img: {
-        width: '100%',
-        height: '600px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        img: {
-          width: '100%',
-          height: '160px'
-        }
+        width: '100%'
       }
     },
     props: {
@@ -30,7 +23,13 @@ export default [
     },
     options: {
       theme: {},
-      config: { ...emptyData }
+      config: {
+        img: {
+          ...emptyData['img'],
+          defaultWebHeight: '600px',
+          defaultMobileHeight: '160px'
+        }
+      }
     },
     cover: require('@/../static/adi/img/cover/imgOne.png'),
     preview: {
@@ -45,14 +44,7 @@ export default [
     templateID: 0,
     data: {
       img: {
-        width: '100%',
-        height: '800px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        img: {
-          width: '100%',
-          height: '240px'
-        }
+        width: '100%'
       }
     },
     props: {
@@ -64,7 +56,13 @@ export default [
     },
     options: {
       theme: {},
-      config: { ...emptyData }
+      config: {
+        img: {
+          ...emptyData['img'],
+          defaultWebHeight: '800px',
+          defaultMobileHeight: '240px'
+        }
+      }
     },
     cover: require('@/../static/adi/img/cover/imgTwo.png'),
     preview: {
