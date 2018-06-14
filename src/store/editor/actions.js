@@ -196,7 +196,10 @@ const actions = {
       modPropertiesStyle = modProperties
       modPropertiesStyle.styleID = payload.styleID
     }
-    let newMod = Parser.buildBlock(Parser.getCmd(payload.modName), modPropertiesStyle || modProperties)
+    let newMod = Parser.buildBlock(
+      Parser.getCmd(payload.modName),
+      modPropertiesStyle || modProperties
+    )
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(ADD_MOD, {
