@@ -378,6 +378,7 @@ const beginClass = function(classId) {
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
   let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3)
+
   self.$alert("<div class='txt-one'>The class ID is <span style='font-size: 26px'>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
             + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
     dangerouslyUseHTMLString: true,
@@ -386,15 +387,22 @@ const beginClass = function(classId) {
       notify = self.$notify.info({
         title: 'Class ID:',
         dangerouslyUseHTMLString: true,
-        message: '<div class="showMessage"><strong>'+ classIdStr +'</strong><div class="prompt el-popover">Class ID is the unique identifier for this class.'
+        message: '<div class="showMessage"><strong>'+ classIdStr +'</strong><button class="el-button is-circle btn-full"><i class="el-icon-zoom-in"></i></button><div class="prompt el-popover">Class ID is the unique identifier for this class.'
                   + 'Students in this class need to login with this identifier to start learning the lesson. '
                   + 'This ensures the student learning data is sent to the system correctly.</div></div>',
         duration: 0,
         showClose: false
       })
+      document.querySelector('.btn-full ').onclick = function() {
+        self.$alert('<div class="full-class"><span class="full-font">' + classIdStr + '</span></div>',{
+          dangerouslyUseHTMLString: true,
+          customClass: 'full-class',
+          center: true,
+          showConfirmButton: false
+        });
+      }
     }
   });
-
   let studentMod = getMod('ModStudent')
   let quizNo = '' // 题目编号
   quizLen = getMods('ModQuiz').length
@@ -521,7 +529,7 @@ export default {
           if(lessonMod && lessonMod.parentNode != null) {
             if(len == 0) {
               let htm = '<div class="el-row mod-full-width-0-0-65">'
-                        + '<div class="no-data">There are no related animations.</div>'
+                        + '<div class="no-data">There are no references.</div>'
                       + '</div>'
               lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
@@ -704,6 +712,22 @@ export default {
  }
 .text-right {
   text-align: right;
+}
+
+.btn-full {
+  margin-left: 90px;
+}
+
+.full-class {
+  width: 100%;
+  height: 100%;
+}
+
+.full-font {
+  font-size: 160px;
+  font-weight: bold;
+  margin-top: 30%;
+  display: inline-block;
 }
 
 .animations-list {
