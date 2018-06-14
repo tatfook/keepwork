@@ -357,7 +357,7 @@
     "quiz": "问题",
     "teachers": "教师可见",
     "lessonShare": "分享课程",
-    "package": "课程包"
+    "lessonPackage": "课程包"
   },
   "field": {
     "fileId": "字段",

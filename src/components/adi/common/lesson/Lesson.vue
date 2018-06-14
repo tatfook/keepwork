@@ -33,7 +33,7 @@
       <el-tabs value="first" @tab-click="tabClick">
         <div class="student-info">learning:<span class="student-learning">0</span>,&nbsp;&nbsp;Leave learning page:<span class="student-leave">0</span>, &nbsp;&nbsp;Offline:<span class="student-offline">0</span></div>
         <el-tab-pane label="Overview" name="first"></el-tab-pane>
-        <el-tab-pane label="Related Animations" name="second"></el-tab-pane>
+        <el-tab-pane label="Related References" name="second"></el-tab-pane>
         <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
         <el-tab-pane label="Summary" name="fourth"></el-tab-pane>
       </el-tabs>

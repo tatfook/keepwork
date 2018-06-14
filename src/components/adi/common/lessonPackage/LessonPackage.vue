@@ -39,7 +39,8 @@
         <div class="progress-tip">Have learned {{doneCount}} lessons.</div>
       </el-col>
       <el-col :span="4">
-        <el-button class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Continue</el-button>                                       
+        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Continue</el-button>  
+        <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Start to learn</el-button>                                     
       </el-col>
     </el-row>
     <div class="lessons-list">
@@ -157,7 +158,7 @@ export default {
     },
     // 购买课程包
     addClick() {
-      this.$confirm('To learn lessons of this package, you have to invest '+ this.properties.data.cost +' coins', {
+      this.$confirm('To learn lessons of this package, you have to invest '+ this.properties.data.cost +' coins.', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
           type: 'warning'

@@ -367,7 +367,7 @@
     "quiz":"Quiz",
     "teachers":"Teachers",
     "lessonShare":"LessonShare",
-    "package":"Package"
+    "lessonPackage":"Package"
   },
   "field": {
     "fileId": "file Id",

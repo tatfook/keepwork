@@ -1,10 +1,10 @@
 <template>
-  <el-dialog class="tree-data-dialog" title="Add animations" :visible.sync="show" width="600px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" title="Add references" :visible.sync="show" width="600px" :before-close="handleClose">
     <draggable element="el-collapse" :list="animationsData" accordion>
       <el-collapse-item v-for="e in animationsData" :name="e.id" :key="e.id">
         <template slot="title">
           <img class="cover" :src="e.coverImage"/>
-          <span class="title">{{e.title}}</span>
+          <span class="title" >{{e.title}}</span>
           <a :href="e.animation" target="_blank" class="link">{{e.animation}}</a>
           <span class="delete">
             <el-button type="danger" size="small" icon="el-icon-delete" @click="removeItem(e.id)" circle></el-button>
@@ -113,6 +113,15 @@ export default {
   text-decoration: none;
   margin-left: 10px;
   color: #409eff;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tree-data-dialog .title {
+  flex:1;
+  text-decoration: none;
+  margin-left: 10px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

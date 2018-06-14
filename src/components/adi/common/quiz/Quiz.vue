@@ -48,14 +48,15 @@
             <pre>{{opt.item}}</pre>
           </div>
         </div>
-        <div v-if="item.type == 3 && isOperate">
-          <el-input :disabled="isShow" type="textarea" maxlength="512" v-model="textAnswer" placeholder="Please Input Your Answer Here."></el-input>
+        <div v-if="item.type == 3 && isOperate && !isShow">
+          <el-input :disabled="isShow" type="textarea" maxlength="512" v-model="textAnswer" placeholder="If your answer matches any text above, it’s correct."></el-input>
         </div>
         <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuiz">submit</el-button>
       </div>
 
       <div v-if="isShow" class="submit-show">
         <div v-if="item.type != 3" class="opt-item"><span>Right Answer:</span> {{ item.answer }}</div>
+        <div v-if="item.type == 3" class="opt-item"><span>Your Answer:</span><br/> <pre>{{textAnswer}}</pre></div>
         <div class="opt-item"><span>Explanation:</span> {{ item.desc }}</div>
       </div>
     </div>
@@ -279,9 +280,9 @@ export default {
       }else if(data[0].type == 3) { // 文本匹配
         // 去掉所有空格回车和其他空符号之后转换为小写
         let flag = false
-        myAnswer = this.textAnswer.replace(/\r|\n|\\s/g, "").toLowerCase()
+        myAnswer = this.textAnswer.replace(/\r+|\n+|\s+/g, "").toLowerCase()
         for(let i = 0; i < data[0].options.length; i ++) {
-          let opAnswer = data[0].options[i].item.replace(/\r|\n|\\s/g, "").toLowerCase();
+          let opAnswer = data[0].options[i].item.replace(/\r+|\n+|\s+/g, "").toLowerCase()
           if(opAnswer === myAnswer) {
             flag = true
             break

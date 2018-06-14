@@ -1,8 +1,8 @@
 <template>
-  <el-dialog title="Lessons" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
+  <el-dialog title="Lessons Package" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
     <el-form :model="lessonsData" :rules="rules" ref="lessonsData" label-width="128px" class="demo-ruleForm">
       <!-- 课程包名称 -->
-      <el-form-item label="LessonsTitle:" prop="title">
+      <el-form-item label="Title:" prop="title">
         <el-input v-model="lessonsData.title" maxlength="255" placeholder="Please Input..."></el-input>
       </el-form-item>
       <!-- 课程包封面图的URL地址 -->
@@ -26,14 +26,14 @@
             <el-row :gutter="20">
               <el-form-item v-if="ages == 1">
                 <!-- 自定义年龄最小值 -->
-                <el-col :span="11">
+                <el-col :span="10">
                   <el-form-item prop="agesMin">
-                    <el-input  v-model.number="lessonsData.agesMin" placeholder="Please Input..." min="1"></el-input>
+                    <el-input v-model.number="lessonsData.agesMin" placeholder="Please Input..." min="1"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="2">-</el-col>
                 <!-- 自定义年龄最大值 -->
-                <el-col :span="11">
+                <el-col :span="12">
                   <el-form-item prop="agesMax">
                     <el-input v-model.number="lessonsData.agesMax" placeholder="Please Input..." :min=" lessonsData.agesMin + 1"></el-input>
                   </el-form-item>  
@@ -73,14 +73,14 @@
           :filter-method="filterMethod"
           filter-placeholder="search lessons"
           v-model="lessonsSelect"       
-          :titles="['Lessons', 'Select lessons']"
+          :titles="['Lessons', 'Selected lessons']"
           :data="lessonsListData">
          <span slot-scope="{ option }" class="lessonsTitle">
           <span>{{ option.lessonTitle }}</span>
           <a class="lesson-link" v-bind:href="option.lessonUrl">{{ option.lessonUrl }}</a>
          </span>
         </el-transfer>
-        <el-alert title="selected lesson greater than 0" type="error" v-if="lessonsSelect.length == 0" >
+        <el-alert title="at least select 1 lesson" type="error" v-if="lessonsSelect.length == 0" >
   </el-alert>
       </el-form-item>
     </el-form>
@@ -147,7 +147,12 @@ export default {
       if(rule.field == 'agesMax'){
         const agesmin = parseInt(this.originalLessonsData.agesMin);
         if(value <= agesmin){
-            callback(new Error('please input an integer greater than agesmin'));
+            callback(new Error('please input an integer greater than ' + agesmin));
+        }
+      } else if(rule.field == 'agesMin') {
+        const agesmax = parseInt(this.originalLessonsData.agesMax);
+        if(agesmax && value >= agesmax){
+            callback(new Error('please input an integer less than ' + agesmax));
         }
       }
       setTimeout(() => {
