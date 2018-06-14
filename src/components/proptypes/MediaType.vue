@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @change='updateValue' @focus='getFocus'>
+    <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @input='updateValue' @focus='getFocus'>
       <i @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
     </el-input>
     <SkyDriveManagerDialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
@@ -18,34 +18,25 @@ export default {
   },
   data() {
     return {
-      lastUpdatedValue: this.originValue,
-      inputTypeValue: this.originValue,
       isSkyDriveManagerDialogShow: false
     }
   },
   computed: {
-    // inputTypeValue: {
-    //   get() {
-    //     // return inputTypeValue
-    //   },
-    //   set() {}
-    // }
-  },
-  watch: {
-    inputTypeValue(newVal) {
-      this.updateValue(newVal)
+    inputTypeValue: {
+      get() {
+        return this.originValue
+      },
+      set() {}
     }
   },
   methods: {
     updateValue(newVal) {
-      if (this.lastUpdatedValue === newVal) return
-      this.lastUpdatedValue = newVal
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
-      this.updateValue(this.inputTypeValue)
+      this.$emit('onChangeValue')
     },
     insertImg() {
       this.openSkyDriveManagerDialog()
@@ -55,8 +46,7 @@ export default {
     },
     closeSkyDriveManagerDialog({ url }) {
       this.isSkyDriveManagerDialogShow = false
-      if (!url) return
-      this.inputTypeValue = url
+      this.updateValue(url)
     }
   },
   components: {

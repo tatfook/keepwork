@@ -2,7 +2,7 @@
   <el-dialog class="tree-data-dialog" :title="$t('editor.pageListLogic')" :visible.sync="isDialogShow" :before-close="handleClose" center>
     <p>{{$t('editor.supportWildcard')}}</p>
     <p>{{$t('editor.supportBooleanCalculation')}}</p>
-    <el-input type="textarea" :rows="20" v-model='originalTreeData' @change='updateValue' @focus='getFocus'></el-input>
+    <el-input type="textarea" :rows="20" v-model='originalTreeData' @input='updateValue' @focus='getFocus'></el-input>
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>
       <el-button type="primary" @click="finishEditingData">{{$t('el.messagebox.confirm')}}</el-button>
@@ -32,7 +32,7 @@ export default {
     },
     isDialogShow() {
       return this.isEditorShow
-    },
+    }
   },
   methods: {
     handleClose() {
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.el-dialog{
+.el-dialog {
   width: 900px;
 }
 </style>
