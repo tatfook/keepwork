@@ -173,11 +173,16 @@ export default {
   .hidden-sm-and-up .el-submenu {
     margin: 0 -10px;
   }
+  .el-menu-item {
+    padding: 0 10px;
+  }
   .profile-menu-item {
     padding-left: 0;
   }
   .el-menu .login-btn {
-    margin-right: -20px;
+    padding: 0;
+    background-color: transparent;
+    color: #3977ad;
   }
 }
 </style>
