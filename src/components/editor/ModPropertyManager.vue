@@ -32,14 +32,8 @@ export default {
   name: 'ModPropertyManager',
   data: () => ({
     editable: true,
-    BaseCompProptypes,
-    currentModLabel: ''
+    BaseCompProptypes
   }),
-  activated() {
-    this.currentModLabel =
-      this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
-      this.activeMod.cmd.substring(2)
-  },
   methods: {
     ...mapActions({
       setActivePropertyData: 'setActivePropertyData',
@@ -84,6 +78,10 @@ export default {
       hasActiveProperty: 'hasActiveProperty',
       activePropertyTabType: 'activePropertyTabType'
     }),
+    currentModLabel() {
+      return this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
+      this.activeMod.cmd.substring(2)
+    },
     editingProps() {
       let modType = 'Mod' + this.activeMod.cmd
       let modStyleID = this.activeMod.data.styleID || 0
