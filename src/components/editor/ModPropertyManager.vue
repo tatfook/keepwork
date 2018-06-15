@@ -51,23 +51,6 @@ export default {
       let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}))
       this.setActivePropertyData({ data })
     },
-    toDeleteMod() {
-      let self = this
-
-      this.$confirm(
-        this.$t('editor.modDelMsg'),
-        this.$t('editor.modDelMsgTitle'),
-        {
-          confirmButtonText: self.$t('el.messagebox.confirm'),
-          cancelButtonText: self.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
-        .then(() => {
-          this.deleteMod(this.activeMod.key)
-        })
-        .catch(() => {})
-    },
     tabClickHandle(tabItem) {
       let activeName = tabItem.name
       this.setActivePropertyTabType(activeName)
