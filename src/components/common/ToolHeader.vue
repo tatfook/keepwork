@@ -133,7 +133,8 @@ export default {
     ...mapActions({
       starPages: 'user/starPages',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
-      getUserDetailByUsername: 'user/getUserDetailByUsername'
+      getUserDetailByUsername: 'user/getUserDetailByUsername',
+      getProfile: 'user/getProfile'
     }),
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo
@@ -157,6 +158,19 @@ export default {
     },
     async togglePageStar() {
       this.starPending = true
+      let isLogin = true
+      await this.getProfile().catch(e => {
+        isLogin = false
+      })
+      if (!isLogin) {
+        this.$message({
+          showClose: true,
+          message: this.$t('common.loginToStarPage'),
+          type: 'error'
+        })
+        this.starPending = false
+        return
+      }
       await this.starPages({
         url: this.activePageUrl
       }).catch(e => {

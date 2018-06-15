@@ -46,7 +46,8 @@
     "update": "Update",
     "rename": "Rename",
     "remove": "Remove",
-    "apply": "Apply"
+    "apply": "Apply",
+    "loginToStarPage": "You must login before star this page!"
   },
   "editor": {
     "save": "Save",
