@@ -50,7 +50,9 @@
 
     "add": "Add",
     "change": "Change",
-    "link": "Link"
+    "link": "Link",
+    "back": "back",
+    "NoPages": "I'm sorry! The page you visited does not exist!"    
   },
   "editor": {
     "files": "Files",
