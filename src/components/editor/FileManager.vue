@@ -56,7 +56,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="mycontributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="mycontributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -117,7 +117,7 @@ export default {
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
       getOpenedFileByPath: 'getOpenedFileByPath'
     }),
-    mycontributedSiteList(){
+    myContributedSiteList(){
       return this.contributedSiteList.map(i => {
         i.myJoin = true
         return i
