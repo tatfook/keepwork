@@ -47,12 +47,12 @@
     "rename": "Rename",
     "remove": "Remove",
     "apply": "Apply",
-
     "add": "Add",
     "change": "Change",
     "link": "Link",
     "back": "back",
-    "NoPages": "I'm sorry! The page you visited does not exist!"    
+    "NoPages": "I'm sorry! The page you visited does not exist!",
+    "loginToStarPage": "You must login before star this page!"
   },
   "editor": {
     "files": "Files",
