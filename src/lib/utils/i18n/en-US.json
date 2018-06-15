@@ -415,6 +415,7 @@
     "notImageFileError": "File is not image!",
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
-    "nameConflictError": "The name already exists."
+    "nameConflictError": "The name already exists.",
+    "nameContainSpecialCharacterError": "The name contains special characters."
   }
 }
