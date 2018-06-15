@@ -145,6 +145,7 @@ export default {
     border-radius: 50%;
     z-index: 99;
     display: none;
+    cursor: pointer;
   }
   &:hover {
     .delete-mod {
