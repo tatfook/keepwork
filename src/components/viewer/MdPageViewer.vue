@@ -4,6 +4,7 @@
     <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
     <mod-list-viewer v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' />
     <mod-list-viewer :modList='modList' :theme='theme' />
+    {{ code ? '' : '404' }}
   </component>
 </template>
 
@@ -16,6 +17,7 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
+      code: 'code',
       layout: 'layout',
       modList: 'modList',
       headerModList: 'headerModList',
