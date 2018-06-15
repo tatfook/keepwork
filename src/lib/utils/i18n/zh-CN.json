@@ -404,6 +404,8 @@
     "notImageFileError": "文件不是图片类型",
     "removeFileConfirmMsg": "确认删除文件？",
     "newFilenamePromptMsg": "请输入新的文件名",
-    "nameConflictError": "文件名和现有名字重复"
+    "nameConflictError": "文件名和现有名字重复",
+    "nameEmptyError": "文件名不能为空",
+    "nameContainSpecialCharacterError": "文件名里包含特殊字符"
   }
 }

@@ -152,7 +152,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import _ from 'lodash'
 import mediaProperties from '../adi/common/media/media.properties';
-
+const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
   name: 'SkyDriveManager',
   props: {
@@ -299,7 +299,16 @@ export default {
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        inputValidator: str => this.filenameValidator(getFilenameWithExt(str, ext))
+        inputValidator: str => {
+          if (!str) {
+            return this.$t('skydrive.nameEmptyError')
+          }
+          let isFilenameValid = this.testFilenameIsValid(str)
+          if (typeof(isFilenameValid) === 'string') {
+            return isFilenameValid
+          }
+          return this.filenameValidator(getFilenameWithExt(str, ext))
+        }
       })
 
       newname = (newname || '').trim()
@@ -314,6 +323,10 @@ export default {
       await this.userChangeFileNameInSkyDrive({_id, filename}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
+    },
+    testFilenameIsValid(newFilename) {
+      let errMsg = this.$t('skydrive.nameContainSpecialCharacterError')
+      return (!ErrFilenamePatt.test(newFilename)) ? errMsg : true
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
