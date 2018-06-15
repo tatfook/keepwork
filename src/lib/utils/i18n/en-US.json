@@ -56,7 +56,7 @@
   },
   "editor": {
     "files": "Files",
-    "modules": "Modules",
+    "modules": "MOD",
     "save": "Save",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
