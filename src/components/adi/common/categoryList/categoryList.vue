@@ -4,11 +4,15 @@
       <div class="item" v-for="(item, index) in pageData" :key="index">
         <el-row class="item-container" :gutter="5">
           <el-col :span="6" :xs="24">
-            <img class="cover" src="https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png">
+            <img class="cover" :src="item.cover">
           </el-col>
           <el-col :span="18" :xs="24">
             <div class="desc">
-              <div class="title">{{item.title}}</div>
+              <div class="title">
+                <a :href="item.url" target="_blank">
+                  {{item.title}}
+                </a>
+              </div>
               <div class="summary">
                 {{item.summary}}
               </div>
@@ -21,7 +25,7 @@
 
     <div class="style-1" v-if="getStyleId === 1">
       <div class="item" v-for="(item, index) in pageData" :key="index">
-        <img class="cover" src="https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png">
+        <img class="cover" :src="itme.cover">
         <div class="desc">
           <div class="title">{{item.title}}</div>
           <div class="summary">{{item.summary}}</div>
@@ -37,6 +41,7 @@
 </template>
 
 <script>
+import { search } from '@/api/esGateway'
 import _ from 'lodash'
 import { Base64 } from 'js-base64'
 import compBaseMixin from '../comp.base.mixin'
@@ -47,7 +52,7 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 2,
+      pageSize: 5,
       currentPage: 1,
       allData: [],
       pageData: [],
@@ -55,18 +60,8 @@ export default {
     }
   },
   mixins: [compBaseMixin],
-  async created() {
-    await this.getRepositoryTree({ path: this.activePageInfo.sitepath })
-
-    this.projectId = this.getProjectIdByPath(this.activePageInfo.sitepath)
-    this.allData = this.getChildrenByPath('newsList')
-    this.total = this.allData.length
-
-    this.gitlabApi = this.getGitlabAPI()['client']['projects']['repository']['files']
-
-    this.getCurrentPageData()
-
-    this.loading = false
+  created() {
+    this.getSource()
   },
   methods: {
     ...mapActions({
@@ -75,48 +70,106 @@ export default {
     ...mapGetters({
       gitlabChildrenByPath: 'gitlab/childrenByPath'
     }),
-    getChildrenByPath(path) {
-      return this.gitlabChildrenByPath({
-        repositoryTreesAllFiles: this.repositoryTreesAllFiles
-      })(this.activePageInfo.sitepath + '/' + (path || ''))
+    async getSource() {
+      if(!this.properties.path) {
+        return
+      }
+
+      this.loading = true
+
+      let url = this.activePageInfo.sitepath + (this.properties.path)
+
+      let index = process.env.ES_INDEX
+      let type = process.env.ES_TYPE
+      let body = {
+        query: {
+          bool: {
+            must: {
+              match: {
+                url: {
+                  query: url,
+                  operator: 'and'
+                }
+              }
+            },
+            must_not: [
+              {
+                match: {
+                  url: {
+                    query: '.gitignore'
+                  }
+                }
+              },
+              {
+                match: {
+                  source_url: {
+                    query: this.properties.path + '.md'
+                  }
+                }
+              }
+            ]
+          }
+        },
+        sort: {
+          update_time: {
+            order: "desc"
+          }
+        },
+        from: this.currentPage == 1 ? 0 : (this.currentPage * this.pageSize) - this.pageSize,
+        size: this.pageSize
+      }
+
+      let source = await search({index, type, body})
+
+      this.formatData(source)
+      this.loading = false
     },
     handleCurrentChange(pageNum) {
       this.currentPage = pageNum
     },
-    getCurrentPageData() {
+    formatData(source) {
       this.pageData = []
+      this.total = source && source.hits && source.hits.total || 0
 
-      _.forEach(this.allData, async (item, index) => {
-        let startIndex =
-          (this.currentPage === 1 && 1) || (this.pageSize === 1 && this.currentPage * this.pageSize || (this.currentPage * this.pageSize) - 1)
-        let endIndex = startIndex + (this.pageSize - 1)
+      let allData = source && source.hits && source.hits.hits
 
-        startIndex--
-        endIndex--
+      _.forEach(allData, (item, index) => {
+        let currentData = item._source
 
-        if (index >= startIndex && index <= endIndex) {
-          let data = await this.gitlabApi.show(
-            this.projectId,
-            item.path,
-            'master'
-          )
+        let newItem = {
+          title: '',
+          summary: '',
+          date: '',
+          cover: 'https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png',
+          url: '#'
+        }
 
-          let newItem = {
-            title: '',
-            summary: '暂无简介',
-            date: '暂无日期'
+        let pageArray = currentData['pagename'].split('/')
+
+        newItem['title'] = pageArray[pageArray.length - 1]
+
+        let content = currentData['content'].split("\n")
+
+        _.forEach(content, (item, key) => {
+          if (item.match("摘要")) {
+            newItem['summary'] = item
           }
 
-          newItem['title'] = item.name.replace('.md', '')
+          if (item.match(/!\[cover\]/)) {
+            newItem['cover'] = item.replace(/(!\[cover\]\(|\))/ig, "")
+          }
+        })
 
-          this.pageData.push(newItem)
-        }
+        newItem['date'] = currentData['update_time']
+        newItem['url'] = currentData['url']
+
+        this.pageData.push(newItem)
       })
     }
   },
   watch: {
     currentPage() {
-      return this.getCurrentPageData()
+      this.getSource()
     }
   },
   computed: {
@@ -173,6 +226,11 @@ export default {
         .title {
           height: 23px;
           overflow: hidden;
+          
+          a {
+            text-decoration: none;
+            color: unset;
+          }
         }
 
         .summary {
