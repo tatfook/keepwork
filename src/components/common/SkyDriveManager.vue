@@ -300,6 +300,9 @@ export default {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         inputValidator: str => {
+          if (!str) {
+            return this.$t('skydrive.nameEmptyError')
+          }
           let isFilenameValid = this.testFilenameIsValid(str)
           if (typeof(isFilenameValid) === 'string') {
             return isFilenameValid

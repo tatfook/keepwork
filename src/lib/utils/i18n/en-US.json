@@ -416,6 +416,7 @@
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
     "nameConflictError": "The name already exists.",
+    "nameEmptyError": "The name cannot be empyt.",
     "nameContainSpecialCharacterError": "The name contains special characters."
   }
 }
