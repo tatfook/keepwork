@@ -46,7 +46,8 @@
     "update": "更新",
     "rename": "重命名",
     "remove": "删除",
-    "apply": "应用"
+    "apply": "应用",
+    "loginToStarPage": "点击右上角登录后才能点赞！"
   },
   "editor": {
     "save": "保存",
