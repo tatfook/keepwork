@@ -321,7 +321,7 @@ export default {
 .file-manager {
   height: 100%;
   background-color: #ccd3da;
-
+  overflow-y: auto;
   h1 {
     font-size: 16px;
     color: #333;

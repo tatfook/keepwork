@@ -13,7 +13,7 @@
       </el-row>
       <el-row class="manager-content-box">
         <keep-alive>
-          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps' v-keep-scroll-position></component>
         </keep-alive>
       </el-row>
     </el-col>
