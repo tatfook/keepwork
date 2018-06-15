@@ -283,11 +283,11 @@ export default {
     display: inline-block;
   }
   .page-item-content {
-    padding: 0 16px;
+    padding: 0 10px 0 16px;
     border: 1px solid #dcdfe6;
     display: inline-block;
-    height: 30px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 26px;
     border-radius: 30px;
     box-sizing: border-box;
     cursor: pointer;
@@ -298,8 +298,10 @@ export default {
     border-color: #cce6f1;
   }
   .icon-home-keepwork {
-    font-size: 24px;
+    font-size: 22px;
     vertical-align: middle;
+    top: -2px;
+    position: relative;
   }
   .breadcrumb-separator {
     color: #dbdbdb;
@@ -373,6 +375,7 @@ export default {
       line-height: 40px;
       white-space: nowrap;
       overflow-x: auto;
+      overflow-y: hidden;
       max-width: 100%;
       box-sizing: border-box;
       padding: 0 15px;
