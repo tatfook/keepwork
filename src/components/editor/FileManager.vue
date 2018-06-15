@@ -45,7 +45,8 @@
       <el-collapse-transition>
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
-          <el-button type='text'>{{ $t('editor.createWebsiteNow') }}</el-button>
+          <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
+          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
         </div>
       </el-collapse-transition>
     </div>
@@ -72,6 +73,7 @@ import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
 export default {
   name: 'FileManager',
@@ -93,7 +95,8 @@ export default {
       openedTreesProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      isNewWebsiteDialogShow: false
     }
   },
   async mounted() {
@@ -312,7 +315,16 @@ export default {
           await this.gitlabRemoveFile({ path })
         })
         .catch(() => {})
+    },
+    openNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = true
+    },
+    closeNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = false
     }
+  },
+  components: {
+    NewWebsiteDialog
   }
 }
 </script>
