@@ -128,4 +128,9 @@ body {
     }
   }
 }
+@media (max-width: 768px) {
+  .index-page-header {
+    padding: 0 15px;
+  }
+}
 </style>
