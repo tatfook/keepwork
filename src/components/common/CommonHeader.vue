@@ -18,21 +18,74 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-      <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="isLogin">
+
+
+      
+
+      <el-menu-item index="10" class="pull-right" v-if="isLogin">
+        <a href="#">历史</a>
+      </el-menu-item>
+
+      <el-menu-item index="11" class="pull-right" v-if="isLogin">
+        <a href="#">关注</a>
+      </el-menu-item>
+
+      <el-menu-item index="12" class="pull-right" v-if="isLogin">
+        <a href="#">动态(0)</a>
+      </el-menu-item>
+
+      <!-- <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="isLogin">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
+          <img class="user-profile" src='https://api-stage.keepwork.com/git/gitlab_www_keepgo1230/keepworkdatasource/raw/master/gitlab_www_keepgo1230/workCover/pic1529373614286.jpeg' alt="username">
         </template>
         <el-menu-item index="5-1">
           <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
         </el-menu-item>
         <el-menu-item index="5-2">
-          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
+          <a href="#">个人中心</a>
         </el-menu-item>
         <el-menu-item index="5-3">
+          <a href="#">服务商城</a>
+        </el-menu-item>
+        <el-menu-item index="5-4">
+          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
+        </el-menu-item>
+        <el-menu-item index="5-5">
           <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
-        <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
-      </el-submenu>
+        <el-menu-item index="5-6">
+          <a href="">我的网盘</a>
+        </el-menu-item>
+        <el-menu-item index="5-7">
+          <a href="#">邀请注册</a>
+        </el-menu-item>
+        <el-menu-item index="5-8">
+          <a href="#">退出登录</a>
+        </el-menu-item>
+      </el-submenu> -->
+
+      <el-menu-item class="pull-right" v-if="isLogin">
+        <el-dropdown placement="bottom-start">
+          <span class="el-dropdown-link">
+          <img class="user-profile" :src='userProfile.portrait' alt="username">
+              <i class="el-icon-caret-bottom"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">个人中心</a></el-dropdown-item>
+            <el-dropdown-item><a href="#">服务商城</a></el-dropdown-item>
+            <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="">我的网盘</a></el-dropdown-item>
+            <el-dropdown-item><a href="#">邀请注册</a></el-dropdown-item>
+            <el-dropdown-item divided><a href="#">退出登录</a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
+      
+
+
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
         <a href="/wiki/join">注册</a>
       </el-menu-item>
@@ -40,7 +93,6 @@
         <a href="/wiki/login" class="login-btn">登录</a>
       </el-menu-item>
     </el-menu>
-
     <el-menu mode='horizontal' class="hidden-sm-and-up">
       <el-menu-item index='0' class="profile-menu-item">
         <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
@@ -83,14 +135,23 @@
         </el-menu-item>
       </el-submenu>
     </el-menu>
+    <div @click.stop v-if='isPersonalCenterShow'>
+      <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
+    </div>
   </div>
 </template>
 
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
+import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 export default {
   name: 'CommonHeader',
+  data() {
+    return {
+      isPersonalCenterShow: false
+    }
+  },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
@@ -121,7 +182,16 @@ export default {
     backEditArea() {
       this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
       window.location.reload()
+    },
+    goPersonalCenter() {
+      this.isPersonalCenterShow = true
+    },
+    closePersonalCenterDialog() {
+      this.isPersonalCenterShow = false
     }
+  },
+  components: {
+    PersonalCenterDialog
   }
 }
 </script>
@@ -182,9 +252,21 @@ export default {
 }
 </style>
 <style lang="scss">
-.profile-submenu {
+.el-menu-item [class^='el-icon-'] {
+    width: 20px;
+    font-size: 18px;
+    position: absolute;
+    bottom: 8px;
+    right: -18px;
+}
+.el-menu-item i {
+    color: #2b6da8;
+  }
+.profile-submenu,
+.el-popper {
   a {
     color: inherit;
+    text-decoration: none;
   }
 }
 .iicc-logo {
