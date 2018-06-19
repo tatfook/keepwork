@@ -12,7 +12,7 @@
           </el-button>
         </span>
       </div>
-      <el-dialog title="提示" center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+      <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
         <center>{{this.$t("editor.fileUnSaved")}}</center>
         <span slot="footer" class="dialog-footer">
           <el-button type="warning" @click="handleCloseOpenedFile()">{{this.$t("editor.unSaveClose")}}</el-button>
