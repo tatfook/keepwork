@@ -47,9 +47,16 @@
     "rename": "重命名",
     "remove": "删除",
     "apply": "应用",
+    "add": "添加",
+    "change": "更换",
+    "link": "链接",
+    "back": "返 回",
+    "NoPages": "很抱歉！您访问的页面不存在!",
     "loginToStarPage": "点击右上角登录后才能点赞！"
   },
   "editor": {
+    "files": "文件",
+    "modules": "模块",
     "save": "保存",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
@@ -185,7 +192,9 @@
 
     "yourPage": "您的页面",
     "yourPosition": "您所在的位置：",
-    "defaultPage": "首页"
+    "defaultPage": "首页",
+
+    "removeImgConfirmMsg": "你确定要删除图片吗？"
   },
   "modList": {
     "recent": "常用",
@@ -347,7 +356,8 @@
     "bigFile": "大文件",
     "iframe": "iframe",
     "pageRoute": "页面路径",
-    "tab": "标签"
+    "tab": "标签",
+    "categoryList": "分类列表"
   },
   "field": {
     "fileId": "字段",
@@ -369,7 +379,9 @@
     "mobileHeight": "手机高度",
     "mobileWidth": "手机宽度",
     "fontSize": "字体大小",
-    "path": "页面路径"
+    "path": "页面路径",
+    "target": "目标",
+    "source": "来源"
   },
   "skydrive": {
     "mediaLibrary": "图库",
@@ -394,6 +406,8 @@
     "notImageFileError": "文件不是图片类型",
     "removeFileConfirmMsg": "确认删除文件？",
     "newFilenamePromptMsg": "请输入新的文件名",
-    "nameConflictError": "文件名和现有名字重复"
+    "nameConflictError": "文件名和现有名字重复",
+    "nameEmptyError": "文件名不能为空",
+    "nameContainSpecialCharacterError": "文件名里包含特殊字符"
   }
 }

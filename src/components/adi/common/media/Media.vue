@@ -57,12 +57,12 @@ export default {
       let style = {
         [imgClassName]: {
           'height': parseInt(this.properties.webHeight || this.options.defaultWebHeight) + 'px!important',
-          'width': parseInt(this.properties.webWidth || this.options.defaultWebWidth) + 'px!important',
+          'width': parseInt(this.properties.webWidth || this.options.defaultWebWidth) + 'px!important'
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
             'height': parseInt(this.properties.mobileHeight || this.options.defaultMobileHeight) + 'px!important',
-            'width': parseInt(this.properties.mobileWidth || this.options.defaultMobileWidth) + 'px!important',
+            'width': parseInt(this.properties.mobileWidth || this.options.defaultMobileWidth) + 'px!important'
           }
         }
       }

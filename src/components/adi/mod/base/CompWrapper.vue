@@ -1,9 +1,9 @@
 <template>
   <div v-if='editMode' @click.stop.prevent='onEditProperty' @dblclick='onDblclickProperty' :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :editMode='editMode' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :editMode='editMode' :options='options' />
   </div>
   <div v-else :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :options='options' />
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   props: {
     mod: Object,
     modData: Object,
+    theme: Object,
     property: String,
     compType: String,
     classes: Array,

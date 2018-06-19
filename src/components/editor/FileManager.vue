@@ -1,10 +1,16 @@
 <template>
   <div class="file-manager" v-loading="loading">
-
     <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
       <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
         <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
       </h1>
+      <el-dialog title="提示" center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+        <center>该文件尚未保存！</center>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="warning" @click="handleCloseOpenedFile()">不保存关闭</el-button>
+          <el-button type="primary" @click="saveAndCloseOpenedFile()" :loading="savePending">保存并关闭</el-button>
+        </span>
+      </el-dialog>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
           <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
@@ -17,7 +23,8 @@
               </el-button>
               <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
-              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'>
+              <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
+                <!-- <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'> -->
               </el-button>
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
@@ -38,7 +45,8 @@
       <el-collapse-transition>
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
-          <el-button type='text'>{{ $t('editor.createWebsiteNow') }}</el-button>
+          <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
+          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
         </div>
       </el-collapse-transition>
     </div>
@@ -48,7 +56,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="contributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -65,12 +73,16 @@ import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
+import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
 export default {
   name: 'FileManager',
   data() {
     return {
       loading: true,
+      savePending: false,
+      dialogVisible: false,
+      toBeCloseFilePath: null,
       filesTreeProps: {
         children: 'children',
         label: 'name'
@@ -83,7 +95,8 @@ export default {
       openedTreesProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      isNewWebsiteDialogShow: false
     }
   },
   async mounted() {
@@ -101,8 +114,15 @@ export default {
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
-      filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath'
+      filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
+      getOpenedFileByPath: 'getOpenedFileByPath'
     }),
+    myContributedSiteList(){
+      return this.contributedSiteList.map(i => {
+        i.myJoin = true
+        return i
+      })
+    },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
@@ -134,25 +154,45 @@ export default {
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      setActivePage: 'setActivePage'
     }),
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
       if (!isLegal) {
-        let closeAllFolder = this.personalSitePaths ? Object.keys(this.personalSitePaths).map(path => ({path, expanded: false})) : []
+        let closeAllFolder = this.personalSitePaths
+          ? Object.keys(this.personalSitePaths).map(path => ({
+              path,
+              expanded: false
+            }))
+          : []
         return this.updateFilemanagerTreeNodeExpandMapByPath(closeAllFolder)
       }
       await this.getRepositoryTree({ path: sitepath })
 
       let folderPaths = paths.slice(0, paths.length - 1)
       let expandedFolderPaths = folderPaths.reduce((prev, current) => {
-        let expanededPath = sitepath + '/' + (prev[prev.length-1] ? prev[prev.length-1] + '/' : '') + current
+        let expanededPath =
+          sitepath +
+          '/' +
+          (prev[prev.length - 1] ? prev[prev.length - 1] + '/' : '') +
+          current
         return prev.concat(expanededPath)
       }, [])
       expandedFolderPaths.unshift(sitepath)
-      let expandedFolderPathsList = expandedFolderPaths.map(path => ({path, expanded: true}))
-      let appendCloseFolderPathsList = this.personalSitePaths ? Object.keys(this.personalSitePaths).filter(i => i !== sitepath).map(path => ({path, expanded: false})) : []
-      this.updateFilemanagerTreeNodeExpandMapByPath([...expandedFolderPathsList, ...appendCloseFolderPathsList])
+      let expandedFolderPathsList = expandedFolderPaths.map(path => ({
+        path,
+        expanded: true
+      }))
+      let appendCloseFolderPathsList = this.personalSitePaths
+        ? Object.keys(this.personalSitePaths)
+            .filter(i => i !== sitepath)
+            .map(path => ({ path, expanded: false }))
+        : []
+      this.updateFilemanagerTreeNodeExpandMapByPath([
+        ...expandedFolderPathsList,
+        ...appendCloseFolderPathsList
+      ])
     },
     renderContent(h, { node, data, store }) {
       // trick codes below
@@ -191,6 +231,45 @@ export default {
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
     },
+    async handleCloseConfirm({ path }) {
+      let file = this.getOpenedFileByPath(path)
+      let { saved = true } = file
+      if (saved) {
+        this.closeAndResetFile(path)
+      } else {
+        this.dialogVisible = true
+        this.toBeCloseFilePath = path
+      }
+    },
+    closeAndResetFile(path) {
+      let openedFiles = this.openedFiles
+      openedFiles = Object.keys(openedFiles)
+      let _path = openedFiles.filter(name => name !== path)
+      this.closeOpenedFile({ path })
+      if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
+      if (_path.length === 0) {
+        this.$router.push('/')
+      } else {
+        this.$router.push('/' + _path[0].replace(/\.md$/, ''))
+      }
+    },
+    handleCloseDialog() {
+      this.toBeCloseFilePath = null
+      this.dialogVisible = false
+    },
+    handleCloseOpenedFile() {
+      let path = this.toBeCloseFilePath
+      path && this.closeAndResetFile(path)
+      this.handleCloseDialog()
+    },
+    async saveAndCloseOpenedFile() {
+      let path = this.toBeCloseFilePath
+      this.savePending = true
+      await this.savePageByPath(path)
+      this.closeAndResetFile(path)
+      this.handleCloseDialog()
+      this.savePending = false
+    },
     handleOpenedClick(data, node) {
       let path = data.path
       let openedTree = this.$refs.openedTree
@@ -201,12 +280,12 @@ export default {
       this.trees[type] = !this.trees[type]
     },
     togglePersonalSiteList() {
-      let type = "isMyShow"
+      let type = 'isMyShow'
       this.toggleContent(type)
       this.trees[type] && this.getAllPersonalWebsite()
     },
     toggleContributedSiteList() {
-      let type = "isContributedShow"
+      let type = 'isContributedShow'
       this.toggleContent(type)
       this.trees[type] && this.getAllContributedWebsite()
     },
@@ -227,16 +306,31 @@ export default {
       let path = data.path
       let pathArr = path.split('/')
       let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(`${this.$t('editor.delConfirm')} ${pageName} ${this.$t('editor.page')}?`, this.$t('editor.delNotice'), {
-        confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel'),
-        type: 'error'
-      })
+      this.$confirm(
+        `${this.$t('editor.delConfirm')} ${pageName} ${this.$t(
+          'editor.page'
+        )}?`,
+        this.$t('editor.delNotice'),
+        {
+          confirmButtonText: this.$t('el.messagebox.confirm'),
+          cancelButtonText: this.$t('el.messagebox.cancel'),
+          type: 'error'
+        }
+      )
         .then(async () => {
           await this.gitlabRemoveFile({ path })
         })
         .catch(() => {})
+    },
+    openNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = true
+    },
+    closeNewWebsiteDialog() {
+      this.isNewWebsiteDialogShow = false
     }
+  },
+  components: {
+    NewWebsiteDialog
   }
 }
 </script>
@@ -245,7 +339,7 @@ export default {
 .file-manager {
   height: 100%;
   background-color: #ccd3da;
-
+  overflow-y: auto;
   h1 {
     font-size: 16px;
     color: #333;
@@ -276,10 +370,8 @@ export default {
     color: #535353;
   }
 
-  .el-tree--highlight-current
-    .el-tree-node
-    > .el-tree-node__content {
-    .file-manager-buttons-container{
+  .el-tree--highlight-current .el-tree-node > .el-tree-node__content {
+    .file-manager-buttons-container {
       display: none;
     }
   }
@@ -290,7 +382,7 @@ export default {
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
-    .file-manager-buttons-container{
+    .file-manager-buttons-container {
       display: inline-block !important;
       line-height: 38px !important;
     }

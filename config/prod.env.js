@@ -6,5 +6,7 @@ module.exports = {
   NODE_ENV: '"production"',
   KEEPWORK_API_PREFIX: `"https://${i18nDomainLabel('', '.')}keepwork.com/api/wiki/models"`,
   GITLAB_API_PREFIX: `"https://api${i18nDomainLabel('-')}.keepwork.com/git"`,
-  ES_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/es"`
+  ES_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/es"`,
+  ES_INDEX: `""`,
+  ES_TYPE: `""`
 }

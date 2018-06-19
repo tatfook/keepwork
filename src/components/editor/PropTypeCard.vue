@@ -17,6 +17,8 @@
 <script>
 import proptypes from '@/components/proptypes'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
+
 export default {
   name: 'PropTypeCard',
   props: {
@@ -24,7 +26,7 @@ export default {
     cardValue: Object,
     prop: Object,
     activePropertyOptions: Object,
-    isCardActive: Boolean,
+    isCardActive: Boolean
   },
   data() {
     return {
@@ -54,10 +56,18 @@ export default {
       })
     },
     changeProptyData(changedData) {
-      this.changeActivePropty()
-      this.setActivePropertyData({
-        data: changedData
-      })
+      let self = this
+
+      if (!self.changeProtyDataThrottle) {
+        self.changeProtyDataThrottle = _.throttle(changedData => {
+          self.changeActivePropty()
+          self.setActivePropertyData({
+            data: changedData
+          })
+        }, 100)
+      }
+
+      self.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {
       this.changeProptyData({

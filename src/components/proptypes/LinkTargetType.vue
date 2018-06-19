@@ -1,11 +1,11 @@
 <template>
   <!-- <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input> -->
-  <el-select class="link-target-type" v-model='linkTargetValue' :placeholder='$t("field." + editingKey)' @change='updateValue' size='mini' @focus='getFocus'>
+  <el-select class="link-target-type" v-model='linkTargetValue' :placeholder='$t("field." + editingKey)' @input='updateValue' size='mini' @focus='getFocus'>
     <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
   </el-select>
 </template>
-<script>
 
+<script>
 import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
