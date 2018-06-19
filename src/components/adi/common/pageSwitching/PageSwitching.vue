@@ -1,6 +1,6 @@
 <template>
   <div class="comp comp-page-switching">
-    <div class="container">
+    <div>
       <div v-for="(item, index) in sourceData" :key="index">
         <mod-list-viewer :modList='getModList(item._source.content)' :theme='theme' />
       </div>
