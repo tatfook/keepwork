@@ -1,17 +1,17 @@
 let emptyData = {
   media: {
     emptySrc: require('@/../static/adi/mixLayer/mix-layer.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   title: {
     emptyName: 'adi.mixLayer.title',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitle: {
     emptyName: 'adi.mixLayer.subtitle',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   paragraph: {
