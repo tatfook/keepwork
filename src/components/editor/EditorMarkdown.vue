@@ -378,7 +378,6 @@ export default {
       if (undefined === content) {
         this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
       }
-      return lineNo
     },
     replaceLine(lineNo, content) {
       const originalContent = this.editor.getLine(lineNo)
