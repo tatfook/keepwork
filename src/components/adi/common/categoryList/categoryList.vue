@@ -25,7 +25,7 @@
 
     <div class="style-1" v-if="getStyleId === 1">
       <div class="item" v-for="(item, index) in pageData" :key="index">
-        <img class="cover" :src="itme.cover">
+        <img class="cover" :src="item.cover">
         <div class="desc">
           <div class="title">{{item.title}}</div>
           <div class="summary">{{item.summary}}</div>
@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 5,
       currentPage: 1,
       allData: [],
       pageData: [],
@@ -140,7 +139,7 @@ export default {
           title: '',
           summary: '',
           date: '',
-          cover: 'https://user-images.githubusercontent.com/29323249/40962972-b1b431a0-68d9-11e8-9d3c-289b95956b04.png',
+          cover: this.properties.emptyCover || '',
           url: '#'
         }
 
@@ -181,6 +180,9 @@ export default {
     }),
     getStyleId() {
       return this.options.styleId || 0
+    },
+    pageSize() {
+      return this.properties.pageSize || 5
     }
   }
 }
