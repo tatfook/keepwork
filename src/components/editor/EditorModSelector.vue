@@ -37,7 +37,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeMod: 'activeMod'
+      activeMod: 'activeMod',
+      modList: 'modList'
     }),
     modComponent() {
       if (this.modConf) return this.modConf.mod
@@ -55,6 +56,8 @@ export default {
   methods: {
     ...mapActions({
       deleteMod: 'deleteMod',
+      setPreMod: 'setPreMod',
+      setNewModPosition: 'setNewModPosition',
     }),
     newMod(position) {
       this.$store.dispatch('setNewModPosition', position)
@@ -72,18 +75,27 @@ export default {
       }
       VueScrollTo.scrollTo(this.$el, 500, options)
     },
+    getPreMod() {
+      let modList = this.modList
+      let index = modList.findIndex(i => i.key === this.mod.key)
+      return index ? modList[index - 1] : modList[index || 0]
+    },
     toDeleteMod() {
-      let self = this
       this.$confirm(
         this.$t('editor.modDelMsg'),
         this.$t('editor.modDelMsgTitle'),
         {
-          confirmButtonText: self.$t('el.messagebox.confirm'),
-          cancelButtonText: self.$t('el.messagebox.cancel'),
+          confirmButtonText: this.$t('el.messagebox.confirm'),
+          cancelButtonText: this.$t('el.messagebox.cancel'),
           type: 'error'
         }
       )
         .then(() => {
+          let preMod = this.getPreMod()
+          if (preMod) {
+            this.setPreMod(preMod)
+            this.setNewModPosition(gConst.POSITION_AFTER)
+          }
           this.deleteMod(this.mod.key)
         })
         .catch(() => {})

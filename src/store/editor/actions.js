@@ -18,6 +18,7 @@ const {
   ADD_MOD,
   DELETE_MOD,
   MOVE_MOD,
+  SET_PRE_MOD_KEY,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -189,6 +190,9 @@ const actions = {
       dispatch('addModToMarkdown', payload)
     }
   },
+  setPreMod({ commit }, { key = '' }) {
+    commit(SET_PRE_MOD_KEY, key)
+  },
   addModToAdi({ commit, dispatch }, payload) {
     const modProperties = ModFactory.generate(payload.modName)
     var modPropertiesStyle
@@ -228,11 +232,13 @@ const actions = {
     commit(SET_EDITING_AREA, payload)
   },
   setActiveMod({ commit }, key) {
+    commit(SET_PRE_MOD_KEY, '')
     commit(SET_ACTIVE_MOD, key)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setActiveProperty({ commit, dispatch }, payload) {
+    commit(SET_PRE_MOD_KEY, '')
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
