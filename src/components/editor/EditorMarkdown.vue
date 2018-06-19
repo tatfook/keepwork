@@ -337,10 +337,13 @@ export default {
       } else {
         replaceStr += '[]'
       }
+
+      let cursorLineNo = this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
       coords
         ? this.editor.replaceRange(replaceStr, coords)
-        : this.editor.replaceSelection(replaceStr)
+        : this.editor.replaceSelection(lineContent ? '\n' + replaceStr : replaceStr)
       this.editor.focus()
     },
     insertFile(txt, url, coords) {
@@ -353,10 +356,12 @@ export default {
         replaceStr += '![]'
       }
 
+      let cursorLineNo = this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
       coords
         ? this.editor.replaceRange(replaceStr, coords)
-        : this.editor.replaceSelection(replaceStr)
+        : this.editor.replaceSelection(lineContent ? '\n' + replaceStr : replaceStr)
       this.editor.focus()
     },
     addNewLine(lineNo, content) {
@@ -409,15 +414,20 @@ export default {
         // gitlab
         let lineNo = this.editor.getCursor().line
         let originText = this.editor.getLine(lineNo)
-        this.replaceLine(lineNo, originText + this.$t('editor.readFileFromLocal'))
+        if (originText) {
+          this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
+          lineNo++
+        }else{
+          this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
+        }
         let fileReader = new FileReader()
         fileReader.onload = async () => {
-          this.replaceLine(lineNo, originText + this.$t('editor.uploadingToGitlabText'))
+          this.replaceLine(lineNo,  this.$t('editor.uploadingToGitlabText'))
           const path = await this.gitlabUploadFile({
             fileName: file.name,
             content: fileReader.result
           })
-          this.replaceLine(lineNo, originText)
+          this.replaceLine(lineNo, '')
           if (!path) {
             this.insertLink(null, '***Upload Failed!***', coords)
           } else if (/image\/\w+/.test(file.type)) {
