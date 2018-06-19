@@ -409,10 +409,10 @@ export default {
         // gitlab
         let lineNo = this.editor.getCursor().line
         let originText = this.editor.getLine(lineNo)
-        this.replaceLine(lineNo, originText + '正在读取文件。。。')
+        this.replaceLine(lineNo, originText + this.$t('editor.readFileFromLocal'))
         let fileReader = new FileReader()
         fileReader.onload = async () => {
-          this.replaceLine(lineNo, originText + '正在上传到gitlab。。。')
+          this.replaceLine(lineNo, originText + this.$t('editor.uploadingToGitlabText'))
           const path = await this.gitlabUploadFile({
             fileName: file.name,
             content: fileReader.result
