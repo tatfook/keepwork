@@ -1,5 +1,5 @@
 <template>
-  <div class="comp categroy-list-comp">
+  <div class="comp category-list-comp">
     <div class="style-0" v-if="getStyleId === 0" v-loading="loading">
       <div class="item" v-for="(item, index) in pageData" :key="index">
         <el-row class="item-container" :gutter="5">
@@ -70,13 +70,13 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath'
     }),
     async getSource() {
-      if(!this.properties.path) {
+      if (!this.properties.path) {
         return
       }
 
       this.loading = true
 
-      let url = this.activePageInfo.sitepath + (this.properties.path)
+      let url = this.activePageInfo.sitepath + this.properties.path
 
       let index = process.env.ES_INDEX
       let type = process.env.ES_TYPE
@@ -111,14 +111,17 @@ export default {
         },
         sort: {
           update_time: {
-            order: "desc"
+            order: 'desc'
           }
         },
-        from: this.currentPage == 1 ? 0 : (this.currentPage * this.pageSize) - this.pageSize,
+        from:
+          this.currentPage == 1
+            ? 0
+            : this.currentPage * this.pageSize - this.pageSize,
         size: this.pageSize
       }
 
-      let source = await search({index, type, body})
+      let source = await search({ index, type, body })
 
       this.formatData(source)
       this.loading = false
@@ -128,7 +131,7 @@ export default {
     },
     formatData(source) {
       this.pageData = []
-      this.total = source && source.hits && source.hits.total || 0
+      this.total = (source && source.hits && source.hits.total) || 0
 
       let allData = source && source.hits && source.hits.hits
 
@@ -147,15 +150,15 @@ export default {
 
         newItem['title'] = pageArray[pageArray.length - 1]
 
-        let content = currentData['content'].split("\n")
+        let content = currentData['content'].split('\n')
 
         _.forEach(content, (item, key) => {
-          if (item.match("摘要")) {
+          if (this.properties.summarySign && item.match(this.properties.summarySign)) {
             newItem['summary'] = item
           }
 
           if (item.match(/!\[cover\]/)) {
-            newItem['cover'] = item.replace(/(!\[cover\]\(|\))/ig, "")
+            newItem['cover'] = item.replace(/(!\[cover\]\(|\))/gi, '')
           }
         })
 
@@ -189,7 +192,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.categroy-list-comp {
+.category-list-comp {
   width: 100%;
   box-shadow: 0px 1px 25px #00000036;
   padding: 30px 0;
@@ -228,7 +231,7 @@ export default {
         .title {
           height: 23px;
           overflow: hidden;
-          
+
           a {
             text-decoration: none;
             color: unset;
@@ -250,10 +253,10 @@ export default {
       }
 
       @media (max-width: 1000px) {
-        .categroy-page {
+        .category-page {
           .styleOne {
-            .categroy-page-list {
-              .categroy-page-list-right {
+            .category-page-list {
+              .category-page-list-right {
                 width: 60%;
                 height: 135px;
                 float: right;
@@ -265,26 +268,26 @@ export default {
       }
 
       @media (max-width: 760px) {
-        .categroy-page {
+        .category-page {
           width: 94%;
           height: auto;
           border: #bbbaba 1px solid;
           padding: 30px 2.5%;
 
           .styleOne {
-            .categroy-page-list {
+            .category-page-list {
               width: 90%;
               padding: 2.5%;
               height: auto;
               margin: 0 auto;
               border-bottom: #000 1px dashed;
-              .categroy-page-list-left {
+              .category-page-list-left {
                 width: 100%;
                 height: 100%;
                 margin: 0 auto;
                 float: none;
               }
-              .categroy-page-list-right {
+              .category-page-list-right {
                 width: 100%;
                 height: auto;
                 float: none;
@@ -292,20 +295,20 @@ export default {
                 div {
                   width: 100%;
                 }
-                .categroy-page-list-right-font-size-one {
+                .category-page-list-right-font-size-one {
                   width: 100%;
                   height: auto;
                   overflow: visible;
                   text-align: center;
                 }
-                .categroy-page-list-right-font-size-two {
+                .category-page-list-right-font-size-two {
                   width: 100%;
                   font-size: 10px;
                   height: auto;
                   overflow: visible;
                   text-align: left;
                 }
-                .categroy-page-list-right-font-size-three {
+                .category-page-list-right-font-size-three {
                   width: 100%;
                   font-size: 10px;
                   height: auto;
