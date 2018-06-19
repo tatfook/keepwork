@@ -4,6 +4,7 @@ export default {
   width: 'input',
   height: 'input',
   src: 'media',
+  color: 'input',
   fontSize: 'input',
   target: 'linkTarget'
 }
