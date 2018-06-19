@@ -11,7 +11,7 @@
             </div>
             <div class="tab-article-title">
               <div v-for="(itemA, indexA) in item.list" :key="indexA">
-                <a :href="'/' + itemA.link" target="_blank">
+                <a :href="itemA.link" target="_blank">
                   <div>[{{item.label}}]</div>
                   <div>{{ itemA.title }}</div>
                   <div class="tab-news-release-time">{{ itemA.date }}</div>
@@ -31,6 +31,7 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
+import { search } from '@/api/esGateway'
 
 export default {
   name: 'AdiTab',
@@ -45,16 +46,62 @@ export default {
     ...mapActions({
       getRepositoryTree: 'gitlab/getRepositoryTree'
     }),
-    ...mapGetters({
-      gitlabChildrenByPath: 'gitlab/childrenByPath'
-    }),
     handleClick(tabsComponent) {
       return
     },
-    getChildrenByPath(path) {
-      return this.gitlabChildrenByPath({
-        repositoryTreesAllFiles: this.repositoryTreesAllFiles
-      })(this.activePageInfo.sitepath + '/' + (path || ''))
+    formatData(source, path) {
+      let pageData = []
+      let allData = source && source.hits && source.hits.hits || []
+
+      _.forEach(allData, (item, index) => {
+        let currentItem = item._source
+        let currentData = {
+          title: currentItem['pagename'].replace(path.substr(1) + '/', ''),
+          link: currentItem['url'],
+          date: currentItem['update_time']
+        }
+
+        pageData.push(currentData)
+      })
+
+      return pageData
+    },
+    async getSource(path) {
+      let url = this.activePageInfo.sitepath + path
+
+      let index = process.env.ES_INDEX
+      let type = process.env.ES_TYPE
+      let body = {
+        query: {
+          bool: {
+            must: {
+              match: {
+                url: {
+                  query: url,
+                  operator: 'and'
+                }
+              }
+            },
+            must_not: [
+              {
+                match: {
+                  url: '.gitignore'
+                }
+              }
+            ]
+          }
+        },
+        sort: {
+          update_time: {
+            order: 'desc'
+          }
+        },
+        size: 5
+      }
+
+      let source = await search({index, type, body})
+
+      return this.formatData(source, path)
     }
   },
   computed: {
@@ -79,43 +126,23 @@ export default {
     }
   },
   async created() {
-    await this.getRepositoryTree({ path: this.activePageInfo.sitepath })
+    let source = []
+    if(this.properties.source && Array.isArray(this.properties.source)) {
+      source = this.properties.source
+    }
 
-    let tabListHandle = this.properties.source.split('|')
-
-    _.forEach(tabListHandle, (element, key) => {
-      let curEleHandle = element.split(' ')
-
-      if (curEleHandle.length == 4) {
-        let curEle = {
-          label: '',
-          name: '',
-          notice: '',
-          list: []
-        }
-
-        curEle['label'] = curEleHandle[0]
-        curEle['name'] = curEleHandle[2]
-        curEle['notice'] = curEleHandle[3]
-        curEle['list'] = []
-
-        let curFiles = this.getChildrenByPath(curEleHandle[1])
-
-        _.forEach(curFiles, item => {
-          console.log(item)
-          if (item.type == 'blob') {
-            let thisItem = {
-              title: (item.name || '').replace('.md', ''),
-              link: item.path,
-              date: '暂无时间'
-            }
-
-            curEle['list'].push(thisItem)
-          }
-        })
-
-        this.tabList.push(curEle)
+    _.forEach(source, async (element, key) => {
+      let curEle = {
+        label: element.label || '',
+        name: element.name || '',
+        notice: element.notice || '',
+        list: []
       }
+
+      this.tabList.push(curEle)
+
+      let curFiles = await this.getSource(element.path)
+      curEle['list'] = curFiles
     })
   }
 }
