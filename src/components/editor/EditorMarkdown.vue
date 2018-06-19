@@ -338,12 +338,13 @@ export default {
         replaceStr += '[]'
       }
 
-      let cursorLineNo = this.editor.getCursor().line
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
       let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
-        : this.editor.replaceSelection(lineContent ? '\n' + replaceStr : replaceStr)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
     insertFile(txt, url, coords) {
@@ -356,12 +357,13 @@ export default {
         replaceStr += '![]'
       }
 
-      let cursorLineNo = this.editor.getCursor().line
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
       let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
-        : this.editor.replaceSelection(lineContent ? '\n' + replaceStr : replaceStr)
+        : this.editor.replaceSelection(replaceStr)
       this.editor.focus()
     },
     addNewLine(lineNo, content) {
@@ -412,7 +414,7 @@ export default {
         // }
 
         // gitlab
-        let lineNo = this.editor.getCursor().line
+        let lineNo = coords ? coords.line : this.editor.getCursor().line
         let originText = this.editor.getLine(lineNo)
         if (originText) {
           this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
