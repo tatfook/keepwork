@@ -3,71 +3,71 @@ import _ from 'lodash'
 let emptyData = {
   preview: {
     emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   worldName: {
     emptyName: 'adi.paracraft.worldName',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   backgroundImage: {
     emptySrc: require('@/../static/adi/paracraft/backgroundImage.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   titleA: {
     emptyName: 'adi.paracraft.paracraftTitle.titleA',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitleA: {
     emptyName: 'adi.paracraft.paracraftSubTitle.subtitle',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   author: {
     emptyDesc: 'adi.paracraft.author.desc',
     emptyText: 'adi.paracraft.author.text',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   version: {
     emptyDesc: 'adi.paracraft.version.desc',
     emptyText: '0.0.0',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   updateTime: {
     emptyText: '2018-1-10-14-30',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   viewTimesImg: {
     emptySrc: require('@/../static/adi/paracraft/eye.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
     emptyDesc: 'adi.paracraft.viewTimes.desc',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
     emptySize: 'adi.paracraft.size.size',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   download: {
     emptyName: 'adi.paracraft.download.name',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   enter: {
     emptyName: 'adi.paracraft.enter.name',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   desc: {

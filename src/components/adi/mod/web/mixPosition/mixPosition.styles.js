@@ -1,17 +1,17 @@
 let emptyData = {
   media: {
     emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   title: {
     emptyName: 'adi.mixPosition.title',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitle: {
     emptyName: 'adi.mixPosition.subtitle',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   paragraph: {
@@ -19,7 +19,7 @@ let emptyData = {
   },
   button: {
     emptyName: 'adi.mixPosition.button',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   }
 }
