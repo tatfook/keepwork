@@ -16,6 +16,7 @@ const buildCompWrapper = (h, m, property, compType) => {
       compType={compType}
       classes={m.compWrapperClass(property)}
       editMode={m.editMode}
+      theme={m.theme}
       options={m.compWrapperOptions(property)}
     />
   )
