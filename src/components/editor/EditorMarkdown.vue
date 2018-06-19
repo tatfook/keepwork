@@ -378,6 +378,7 @@ export default {
       if (undefined === content) {
         this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
       }
+      return lineNo
     },
     replaceLine(lineNo, content) {
       const originalContent = this.editor.getLine(lineNo)
@@ -408,15 +409,16 @@ export default {
 
         // gitlab
         let lineNo = this.editor.getCursor().line
-        this.replaceLine(lineNo, '正在读取文件。。。')
+        let originText = this.editor.getLine(lineNo)
+        this.replaceLine(lineNo, originText + '正在读取文件。。。')
         let fileReader = new FileReader()
         fileReader.onload = async () => {
-          this.replaceLine(lineNo, '正在上传到gitlab。。。')
+          this.replaceLine(lineNo, originText + '正在上传到gitlab。。。')
           const path = await this.gitlabUploadFile({
             fileName: file.name,
             content: fileReader.result
           })
-          this.replaceLine(lineNo, '')
+          this.replaceLine(lineNo, originText)
           if (!path) {
             this.insertLink(null, '***Upload Failed!***', coords)
           } else if (/image\/\w+/.test(file.type)) {
