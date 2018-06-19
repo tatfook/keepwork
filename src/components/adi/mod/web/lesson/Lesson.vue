@@ -6,12 +6,12 @@ import { lessonAPI } from '@/api'
 
 const hideMod = function(name, flag) {
   let eles = document.getElementsByTagName('div')
-  for(let i =0; i < eles.length; i++) {
+  for (let i = 0; i < eles.length; i++) {
     let ele = eles[i]
-    if(ele.getAttribute('data-mod')==name){
-      if(flag) {
+    if (ele.getAttribute('data-mod') == name) {
+      if (flag) {
         ele.setAttribute('style', 'display:none')
-      }else {
+      } else {
         ele.setAttribute('style', 'display:block')
       }
     }
@@ -21,9 +21,9 @@ const hideMod = function(name, flag) {
 const getMods = function(name) {
   let eles = document.getElementsByTagName('div')
   let rets = []
-  for(let i = 0; i < eles.length; i++) {
+  for (let i = 0; i < eles.length; i++) {
     let ele = eles[i]
-    if(ele.getAttribute('data-mod')==name){
+    if (ele.getAttribute('data-mod') == name) {
       rets.push(ele)
     }
   }
@@ -41,9 +41,9 @@ const createMod = function(name, html) {
 // get the first mod
 const getMod = function(name) {
   let eles = document.getElementsByTagName('div')
-  for(let i = 0; i < eles.length; i++) {
+  for (let i = 0; i < eles.length; i++) {
     let ele = eles[i]
-    if(ele.getAttribute('data-mod')==name){
+    if (ele.getAttribute('data-mod') == name) {
       return ele
     }
   }
@@ -64,45 +64,59 @@ let lastResponse
 let vipFlag = false //false 普通用户 true vip用户
 let notify
 
-const init = async function(){
+const init = async function() {
   if (localStorage && localStorage.vuex) {
     vuex = JSON.parse(localStorage.vuex)
   }
   let query = location.href.split('?')[1]
-  if(query && query.indexOf('#')!= -1 ) {
-    query = query.split('#')[0];
+  if (query && query.indexOf('#') != -1) {
+    query = query.split('#')[0]
   }
   let device
   if (query) {
-      query = query.split('&');
-      for (var i = 0; i < query.length; i++) {
-        var ary = query[i].split('=');
-        if (ary[0] == 'device' && ary[1]) {
-            device = ary[1];
-            break;
-        }
+    query = query.split('&')
+    for (var i = 0; i < query.length; i++) {
+      var ary = query[i].split('=')
+      if (ary[0] == 'device' && ary[1]) {
+        device = ary[1]
+        break
       }
+    }
   }
 
   if (device == 'pc' || device == 'pad') {
-    document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
-    document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
+    document
+      .getElementsByClassName('index-page-header')[0]
+      .setAttribute('hidden', 'hidden')
+    document
+      .getElementsByClassName('tool-header')[0]
+      .setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
   } else if (device == 'print') {
     // document.domain = window.location.host
     document.domain = 'localhost'
-    document.getElementsByClassName('index-page-header')[0].setAttribute('hidden', 'hidden')
-    document.getElementsByClassName('tool-header')[0].setAttribute('hidden', 'hidden')
+    document
+      .getElementsByClassName('index-page-header')[0]
+      .setAttribute('hidden', 'hidden')
+    document
+      .getElementsByClassName('tool-header')[0]
+      .setAttribute('hidden', 'hidden')
     hideMod('ModLesson', true)
     // 计算页面的实际高度，iframe自适应会用到
     function calcPageHeight(doc) {
-      let cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
-      let sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
-      let height  = Math.max(cHeight, sHeight)
+      let cHeight = Math.max(
+        doc.body.clientHeight,
+        doc.documentElement.clientHeight
+      )
+      let sHeight = Math.max(
+        doc.body.scrollHeight,
+        doc.documentElement.scrollHeight
+      )
+      let height = Math.max(cHeight, sHeight)
       return height
     }
-    let iframeTimer = setInterval(function(){
-      if(document.readyState == 'complete') {
+    let iframeTimer = setInterval(function() {
+      if (document.readyState == 'complete') {
         var height = calcPageHeight(document)
         var container = parent.document.getElementById('keepworkContainer')
         container.style.height = height + 'px'
@@ -110,16 +124,20 @@ const init = async function(){
         container.setAttribute('ready', 'ready')
         clearInterval(iframeTimer)
       }
-    },500)
+    }, 500)
   } else {
     let lessonMod = getMod('ModLesson')
-    if(lessonMod && lessonMod.parentNode != null) {
-      let studentHtm =  '<div class="el-row mod-full-width-0-0-65">'
-                        + '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>'
-                      + '</div>'
-      let summaryHtm =  '<div class="el-row mod-full-width-0-0-65">'
-                        + '<div class="no-data summary-tip">' + (vipFlag? 'Teaching': 'Learning') + ' is not started yet. There is no summary here.</div>'
-                      + '</div>'
+    if (lessonMod && lessonMod.parentNode != null) {
+      let studentHtm =
+        '<div class="el-row mod-full-width-0-0-65">' +
+        '<div class="no-data">Teaching is not started yet.There is no record of students\' performance.</div>' +
+        '</div>'
+      let summaryHtm =
+        '<div class="el-row mod-full-width-0-0-65">' +
+        '<div class="no-data summary-tip">' +
+        (vipFlag ? 'Teaching' : 'Learning') +
+        ' is not started yet. There is no summary here.</div>' +
+        '</div>'
       lessonMod.parentNode.appendChild(createMod('ModStudent', studentHtm))
       lessonMod.parentNode.appendChild(createMod('ModSummary', summaryHtm))
     }
@@ -129,7 +147,7 @@ const init = async function(){
     params.lessonUrl = self.activePageUrl
     if (!self.editMode) {
       let r = await lessonAPI.resurmeClass(params)
-      if(r.err === 0) {
+      if (r.err === 0) {
         // 可以恢复状态
         beginClass(r.data.classId)
       }
@@ -145,16 +163,17 @@ const timer = {
     return this
   },
   start: function() {
-    this.timeoutObj = setInterval( async function () {
+    this.timeoutObj = setInterval(async function() {
       // /class/performance 获取数据后 DOM 操作
-      let params = {username: self.username}
+      let params = { username: self.username }
       let r = await lessonAPI.performanceClass(params)
       lastResponse = r
       updateStudentsView(r)
-      if(classState == 1) {
-        document.getElementById('btnClass').lastChild.innerText = 'Dismiss the Class'
-        let eleTip = document.getElementsByClassName('is-dark')[0];
-        if(eleTip) {
+      if (classState == 1) {
+        document.getElementById('btnClass').lastChild.innerText =
+          'Dismiss the Class'
+        let eleTip = document.getElementsByClassName('is-dark')[0]
+        if (eleTip) {
           eleTip.innerText = '(Click here to dismiss the class)'
         }
       }
@@ -167,46 +186,55 @@ const timer = {
 
 // 更新 Students'Performance 下的视图
 const updateStudentsView = function(r) {
-  r = (typeof r !== 'undefined') ?  r : lastResponse // r 缺省时为 lastResponse
-  let theadHtm = '', tbodyHtm = '', quizHtm = [], myanswer = ''  //thead tbody 题目答案
-  let total = 0, progress = 0, count = 0 // 题目总数 答题进度 答题数量
-  if(r.data) {
+  r = typeof r !== 'undefined' ? r : lastResponse // r 缺省时为 lastResponse
+  let theadHtm = '',
+    tbodyHtm = '',
+    quizHtm = [],
+    myanswer = '' //thead tbody 题目答案
+  let total = 0,
+    progress = 0,
+    count = 0 // 题目总数 答题进度 答题数量
+  if (r.data) {
     let data = r.data
-    for(let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       let item = data[i]
       item.count = 0
-      item.total = (item.answerSheet ? item.answerSheet.length : quizLen)
-      if(item.rightCount || item.wrongCount) {
-        item.count =  parseInt(item.rightCount) + parseInt(item.wrongCount)
+      item.total = item.answerSheet ? item.answerSheet.length : quizLen
+      if (item.rightCount || item.wrongCount) {
+        item.count = parseInt(item.rightCount) + parseInt(item.wrongCount)
       }
     }
-    if(orderBy) { // 需要排序该数据
+    if (orderBy) {
+      // 需要排序该数据
       const compare = function(prop, ascFlag) {
-         String.prototype.startWith = function(s) {
-          if (s == null || s == "" || this.length == 0 || s.length > this.length)
+        String.prototype.startWith = function(s) {
+          if (
+            s == null ||
+            s == '' ||
+            this.length == 0 ||
+            s.length > this.length
+          )
             return false
-          if (this.substr(0, s.length) == s)
-            return true
-          else
-            return false
+          if (this.substr(0, s.length) == s) return true
+          else return false
           return true
         }
-        return function(a,b){
+        return function(a, b) {
           let value1 = a[prop]
           let value2 = b[prop]
-          if( prop.startWith('quiz') ) {
+          if (prop.startWith('quiz')) {
             let idx = parseInt(prop.split('-')[1]) - 1
             value1 = 0
             value2 = 0
-            if(a && a.answerSheet && a.answerSheet[idx]) {
+            if (a && a.answerSheet && a.answerSheet[idx]) {
               value1 = a.answerSheet[idx].trueFlag ? 2 : 1
             }
-            if(b && b.answerSheet && b.answerSheet[idx]) {
+            if (b && b.answerSheet && b.answerSheet[idx]) {
               value2 = b.answerSheet[idx].trueFlag ? 2 : 1
             }
           }
           let ret = 0
-          value1 > value2 ? ret = 1 : ret = -1
+          value1 > value2 ? (ret = 1) : (ret = -1)
           return ascFlag ? ret : -ret
         }
       }
@@ -218,61 +246,84 @@ const updateStudentsView = function(r) {
     let learningCount = 0 // 正在学习人数
     let leaveCount = 0 // 离开的人数
     let offlineCount = 0 // 离线的人数
-    for(let i  = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       let item = data[i]
       quizHtm[i] = ''
-      if(item.state === 1) { // 1.learning 2.Leave learning page 3.Offline
+      if (item.state === 1) {
+        // 1.learning 2.Leave learning page 3.Offline
         learningCount++
-      } else if(item.state === 2) {
+      } else if (item.state === 2) {
         leaveCount++
-      } else if(item.state === 3) {
+      } else if (item.state === 3) {
         offlineCount++
       }
       let answerItem = item.answerSheet
-      if(answerItem) {
-        for(let j = 0; j < answerItem.length; j++) {
-          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : " "
-          quizHtm[i] += '<td class="' + (answerItem[j].trueFlag ? 'right' : 'wrong') + '">'+ myanswer +'</td>' // 对错样式
+      if (answerItem) {
+        for (let j = 0; j < answerItem.length; j++) {
+          myanswer = answerItem[j].myAnswer ? answerItem[j].myAnswer : ' '
+          quizHtm[i] +=
+            '<td class="' +
+            (answerItem[j].trueFlag ? 'right' : 'wrong') +
+            '">' +
+            myanswer +
+            '</td>' // 对错样式
         }
       } else {
-        for(let j = 0; j < quizLen; j++) {
+        for (let j = 0; j < quizLen; j++) {
           quizHtm[i] += '<td></td>'
         }
       }
       progress = item.count + '/' + item.total // 完成进度
-      if(item.total != 0 && item.count === item.total) {
-        progress = "finished"
+      if (item.total != 0 && item.count === item.total) {
+        progress = 'finished'
       }
 
-      let quiz = quizHtm[i] == undefined ? " " : quizHtm[i];
+      let quiz = quizHtm[i] == undefined ? ' ' : quizHtm[i]
 
-      tbodyHtm += '<tr><td>'+ item.username +'</td>'
-                      + '<td>'+ item.studentNo +'</td>'
-                      + '<td>'+ progress +'</td>'
-                      + quiz
-                + '</tr>'
+      tbodyHtm +=
+        '<tr><td>' +
+        item.username +
+        '</td>' +
+        '<td>' +
+        item.studentNo +
+        '</td>' +
+        '<td>' +
+        progress +
+        '</td>' +
+        quiz +
+        '</tr>'
     }
-    if(currentTab === 'ModStudent') {
+    if (currentTab === 'ModStudent') {
       // 隐藏学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+      document
+        .getElementsByClassName('student-info')[0]
+        .setAttribute('style', 'display:none')
     } else {
       // 显示学习信息
-      document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block')
-      document.getElementsByClassName('student-learning')[0].innerText = learningCount
+      document
+        .getElementsByClassName('student-info')[0]
+        .setAttribute('style', 'display:block')
+      document.getElementsByClassName(
+        'student-learning'
+      )[0].innerText = learningCount
       document.getElementsByClassName('student-leave')[0].innerText = leaveCount
-      document.getElementsByClassName('student-offline')[0].innerText = offlineCount
+      document.getElementsByClassName(
+        'student-offline'
+      )[0].innerText = offlineCount
     }
-    document.querySelector(".student-taughted-details .tbl-body").innerHTML = tbodyHtm // 表格主体
+    document.querySelector(
+      '.student-taughted-details .tbl-body'
+    ).innerHTML = tbodyHtm // 表格主体
   }
 }
 
 const bindSortEvent = function() {
   // Sort Start
   let nameSortFlag = false,
-      noSortFlag = false,
-      totalSortFlag = false,
-      quizSortFlag = []; //数组存储题目排序
-  for(let i = 0; i < quizLen; i++) {
+    noSortFlag = false,
+    totalSortFlag = false,
+    quizSortFlag = [] //数组存储题目排序
+  for (let i = 0; i < quizLen; i++) {
     quizSortFlag.push(false)
   }
   const active = function(p, c) {
@@ -296,66 +347,72 @@ const bindSortEvent = function() {
       }
     }
     let childEles = p.getElementsByClassName('sort-icon')
-    for(let i = 0; i < childEles[0].childNodes.length; i++) {
+    for (let i = 0; i < childEles[0].childNodes.length; i++) {
       let ele = childEles[0].childNodes[i]
-      if(ele.getAttribute('class') == c) {
+      if (ele.getAttribute('class') == c) {
         addClass(ele, 'active')
-      }else {
+      } else {
         removeClass(ele, 'active')
       }
     }
   }
-  document.getElementsByClassName('sort-by-name')[0].addEventListener('click', function(e) {
-    orderBy = 'username'
-    if(nameSortFlag) {
-      // 倒序
-      active(this, 'el-icon-caret-top')
-      nameSortFlag = false
-      sortFlag = false
-    } else {
-      // 正序
-      active(this, 'el-icon-caret-bottom')
-      nameSortFlag = true
-      sortFlag = true
-    }
-    updateStudentsView()
-  });
-  document.getElementsByClassName('sort-by-no')[0].addEventListener('click', function(e) {
-    orderBy = 'studentNo'
-    if(noSortFlag) {
-      // 倒序
-      active(this, 'el-icon-caret-top')
-      noSortFlag = false
-      sortFlag = false
-    } else {
-      // 正序
-      active(this, 'el-icon-caret-bottom')
-      noSortFlag = true
-      sortFlag = true
-    }
-    updateStudentsView()
-  });
-  document.getElementsByClassName('sort-by-total')[0].addEventListener('click', function(e) {
-    orderBy = 'count'
-    if(totalSortFlag) {
-      // 倒序
-      active(this, 'el-icon-caret-top')
-      totalSortFlag = false
-      sortFlag = false
-    } else {
-      // 正序
-      active(this, 'el-icon-caret-bottom')
-      totalSortFlag = true
-      sortFlag = true
-    }
-    updateStudentsView()
-  });
-  let quizSortEles = document.getElementsByClassName('sort-by-quiz');
-  for(let i = 0; i < quizSortEles.length; i++) {
+  document
+    .getElementsByClassName('sort-by-name')[0]
+    .addEventListener('click', function(e) {
+      orderBy = 'username'
+      if (nameSortFlag) {
+        // 倒序
+        active(this, 'el-icon-caret-top')
+        nameSortFlag = false
+        sortFlag = false
+      } else {
+        // 正序
+        active(this, 'el-icon-caret-bottom')
+        nameSortFlag = true
+        sortFlag = true
+      }
+      updateStudentsView()
+    })
+  document
+    .getElementsByClassName('sort-by-no')[0]
+    .addEventListener('click', function(e) {
+      orderBy = 'studentNo'
+      if (noSortFlag) {
+        // 倒序
+        active(this, 'el-icon-caret-top')
+        noSortFlag = false
+        sortFlag = false
+      } else {
+        // 正序
+        active(this, 'el-icon-caret-bottom')
+        noSortFlag = true
+        sortFlag = true
+      }
+      updateStudentsView()
+    })
+  document
+    .getElementsByClassName('sort-by-total')[0]
+    .addEventListener('click', function(e) {
+      orderBy = 'count'
+      if (totalSortFlag) {
+        // 倒序
+        active(this, 'el-icon-caret-top')
+        totalSortFlag = false
+        sortFlag = false
+      } else {
+        // 正序
+        active(this, 'el-icon-caret-bottom')
+        totalSortFlag = true
+        sortFlag = true
+      }
+      updateStudentsView()
+    })
+  let quizSortEles = document.getElementsByClassName('sort-by-quiz')
+  for (let i = 0; i < quizSortEles.length; i++) {
     quizSortEles[i].addEventListener('click', function(e) {
-      let idx = parseInt( this.getAttribute('idx') )
+      let idx = parseInt(this.getAttribute('idx'))
       orderBy = 'quiz-' + idx
-      if(quizSortFlag[idx]) {
+      if (quizSortFlag[idx]) {
         // 倒序
         active(this, 'el-icon-caret-top')
         quizSortFlag[idx] = false
@@ -367,7 +424,7 @@ const bindSortEvent = function() {
         sortFlag = true
       }
       updateStudentsView()
-    });
+    })
   }
   // Sort End
 }
@@ -377,85 +434,123 @@ const beginClass = function(classId) {
   classId = classId
   timer.reset().start(self.username)
   // 弹窗显示 ClassId
-  let classIdStr = classId.substr(0,3) + ' ' + classId.substr(3,3) + ' ' + classId.substr(6,3)
+  let classIdStr =
+    classId.substr(0, 3) +
+    ' ' +
+    classId.substr(3, 3) +
+    ' ' +
+    classId.substr(6, 3)
 
-  self.$alert("<div class='txt-one'>The class ID is <span style='font-size: 26px'>" + classIdStr + "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>"
-            + "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>", {
-    dangerouslyUseHTMLString: true,
-    confirmButtonText: 'OK',
-    callback: action => {
-      notify = self.$notify.info({
-        title: 'Class ID:',
-        dangerouslyUseHTMLString: true,
-        message: '<div class="showMessage"><strong>'+ classIdStr +'</strong><button class="el-button is-circle btn-full"><i class="el-icon-zoom-in"></i></button><div class="prompt el-popover">Class ID is the unique identifier for this class.'
-                  + 'Students in this class need to login with this identifier to start learning the lesson. '
-                  + 'This ensures the student learning data is sent to the system correctly.</div></div>',
-        duration: 0,
-        showClose: false
-      })
-      document.querySelector('.btn-full ').onclick = function() {
-        self.$alert('<div class="full-class"><span class="full-font">' + classIdStr + '</span></div>',{
+  self.$alert(
+    "<div class='txt-one'>The class ID is <span style='font-size: 26px'>" +
+      classIdStr +
+      "</span><br/>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu<br/> <span style='color:#409EFF'>Students' Performance</span></div>" +
+      "<div class='txt-two'><span>Attention</span>: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>",
+    {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: 'OK',
+      callback: action => {
+        notify = self.$notify.info({
+          title: 'Class ID:',
           dangerouslyUseHTMLString: true,
-          customClass: 'full-class',
-          center: true,
-          showConfirmButton: false
-        });
+          message:
+            '<div class="showMessage"><strong>' +
+            classIdStr +
+            '</strong><button class="el-button is-circle btn-full"><i class="el-icon-zoom-in"></i></button><div class="prompt el-popover">Class ID is the unique identifier for this class.' +
+            'Students in this class need to login with this identifier to start learning the lesson. ' +
+            'This ensures the student learning data is sent to the system correctly.</div></div>',
+          duration: 0,
+          showClose: false
+        })
+        document.querySelector('.btn-full ').onclick = function() {
+          self.$alert(
+            '<div class="full-class"><span class="full-font">' +
+              classIdStr +
+              '</span></div>',
+            {
+              dangerouslyUseHTMLString: true,
+              customClass: 'full-class',
+              center: true,
+              showConfirmButton: false
+            }
+          )
+        }
       }
     }
-  });
+  )
   let studentMod = getMod('ModStudent')
   let quizNo = '' // 题目编号
   quizLen = getMods('ModQuiz').length
-  for(let i = 0; i < quizLen; i++) { // 题目序号
-    let quizContent = getMods('ModQuiz')[i].getElementsByClassName("quiz-content")[0]
-    let dataAnswer = quizContent.getElementsByClassName("getData")[0].getAttribute("data-answer")
-    let optItem = quizContent.getElementsByClassName("opt-item") //获取所有题目选项
-    let resetData = dataAnswer.replace("[","").replace("]","").replace(/\"/g, "").split(",") // 将字符串转换成数组
+  for (let i = 0; i < quizLen; i++) {
+    // 题目序号
+    let quizContent = getMods('ModQuiz')[i].getElementsByClassName(
+      'quiz-content'
+    )[0]
+    let dataAnswer = quizContent
+      .getElementsByClassName('getData')[0]
+      .getAttribute('data-answer')
+    let optItem = quizContent.getElementsByClassName('opt-item') //获取所有题目选项
+    let resetData = dataAnswer
+      .replace('[', '')
+      .replace(']', '')
+      .replace(/\"/g, '')
+      .split(',') // 将字符串转换成数组
 
-    for(let j = 0; j < optItem.length; j++) {
-      let resetHtm = optItem[j].innerHTML.replace(/\s+/g,"")[0]
-      for(let k = 0; k < resetData.length; k++) {
-        if(resetData[k] == resetHtm) {
+    for (let j = 0; j < optItem.length; j++) {
+      let resetHtm = optItem[j].innerHTML.replace(/\s+/g, '')[0]
+      for (let k = 0; k < resetData.length; k++) {
+        if (resetData[k] == resetHtm) {
           optItem[j].className += ' state'
         }
       }
     }
 
-    quizNo += '<td><div class="sort-btn sort-by-quiz" idx="'+ parseInt(i+1) +'">'
-            + '<span>Quiz'+ parseInt(i+1) +'</span>'
-            + '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>'
-            + '<div class="quizContent">' + quizContent.innerHTML + '</div>'
-            + '</div></td>'
+    quizNo +=
+      '<td><div class="sort-btn sort-by-quiz" idx="' +
+      parseInt(i + 1) +
+      '">' +
+      '<span>Quiz' +
+      parseInt(i + 1) +
+      '</span>' +
+      '<span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span>' +
+      '<div class="quizContent">' +
+      quizContent.innerHTML +
+      '</div>' +
+      '</div></td>'
   }
 
-  let studetDataHtm = '<div class="student-taughted-details mod-full-width-0-0-65">'
-        + '<div class="express">'
-          + '<span class="r">right</span>'
-          + '<span class="w">wrong</span>'
-      + '</div>'
-      + '<table class="table-wrap" cellspacing="0" border="0">'
-          + '<thead>'
-            + '<tr class="tbl-head">'
-              + '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + '<td><div class="sort-btn sort-by-total"><span>Quizes(Total:'+ quizLen +')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>'
-              + quizNo
-            +'</tr>'
-          + '</thead>'
-          + '<tbody class="tbl-body"></tbody>'
-      + '</table>'
-  + '</div>'
+  let studetDataHtm =
+    '<div class="student-taughted-details mod-full-width-0-0-65">' +
+    '<div class="express">' +
+    '<span class="r">right</span>' +
+    '<span class="w">wrong</span>' +
+    '</div>' +
+    '<table class="table-wrap" cellspacing="0" border="0">' +
+    '<thead>' +
+    '<tr class="tbl-head">' +
+    '<td><div class="sort-btn sort-by-name"><span>Name</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>' +
+    '<td><div class="sort-btn sort-by-no"><span>Student No.</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>' +
+    '<td><div class="sort-btn sort-by-total"><span>Quizes(Total:' +
+    quizLen +
+    ')</span><span class="sort-icon"><i class="el-icon-caret-top active"></i><i class="el-icon-caret-bottom"></i></span></div></td>' +
+    quizNo +
+    '</tr>' +
+    '</thead>' +
+    '<tbody class="tbl-body"></tbody>' +
+    '</table>' +
+    '</div>'
   studentMod.innerHTML = studetDataHtm
   bindSortEvent()
   let summaryMod = getMod('ModSummary')
-  summaryMod.innerHTML = '<div class="el-row mod-full-width-0-0-65">'
-                        + '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>'
-                      + '</div>'
+  summaryMod.innerHTML =
+    '<div class="el-row mod-full-width-0-0-65">' +
+    '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>' +
+    '</div>'
   let btnClass = document.getElementById('btnClass')
-  if(document.readyState == 'complete' && btnClass && btnClass.lastChild) {
+  if (document.readyState == 'complete' && btnClass && btnClass.lastChild) {
     btnClass.lastChild.innerText = 'Dismiss the Class'
     let eleTip = document.getElementsByClassName('is-dark')[0]
-    if(eleTip) {
+    if (eleTip) {
       eleTip.innerText = '(Click here to dismiss the class)'
     }
   }
@@ -468,7 +563,7 @@ export default {
       activePageUrl: 'activePageUrl'
     })
   },
-  mounted: function(){
+  mounted: function() {
     init()
   },
   mixins: [baseMixin],
@@ -485,63 +580,81 @@ export default {
         // 切换显示的页卡
         const sliceMod = function(name) {
           currentTab = name
-           // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
-          if(name == 'ModOverview') {
-
+          // ["ModLesson", "ModMarkdown", "ModQuiz", "ModAnimations", "ModStudent", "ModSummary", "ModAnimations", "ModStudent", "ModSummary"]
+          if (name == 'ModOverview') {
             // 显示除了 ModAnimations ModStudent ModSummary 之外所有的 Mod
-            for(let i = 0; i < mods.length; i ++) {
+            for (let i = 0; i < mods.length; i++) {
               let t = mods[i]
-              if(t != 'ModAnimations' && t != 'ModStudent' && t != 'ModSummary'){
+              if (
+                t != 'ModAnimations' &&
+                t != 'ModStudent' &&
+                t != 'ModSummary'
+              ) {
                 hideMod(t)
-              }else {
+              } else {
                 hideMod(t, true)
               }
             }
           } else {
-            for(let i = 0; i < mods.length; i ++) {
+            for (let i = 0; i < mods.length; i++) {
               let t = mods[i]
-              if(t == name){
+              if (t == name) {
                 hideMod(t)
-              }else {
+              } else {
                 hideMod(t, true)
               }
             }
           }
-          if(classState == 1) {
-            if(name == 'ModStudent') {
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
+          if (classState == 1) {
+            if (name == 'ModStudent') {
+              document
+                .getElementsByClassName('student-info')[0]
+                .setAttribute('style', 'display:none')
             } else {
-              document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:block')
+              document
+                .getElementsByClassName('student-info')[0]
+                .setAttribute('style', 'display:block')
             }
 
-            if(name == 'ModSummary') {
-              let summaryContainer = document.getElementById("summaryContainer")
-              if(summaryContainer) {
-                summaryContainer.style.display = "block"
+            if (name == 'ModSummary') {
+              let summaryContainer = document.getElementById('summaryContainer')
+              if (summaryContainer) {
+                summaryContainer.style.display = 'block'
               }
             }
           }
         }
-        if(firstInFlag) {
+        if (firstInFlag) {
           let lessonMod = getMod('ModLesson')
           let animations = self.modData.lesson.animations
           let len = animations.length
-          if(lessonMod && lessonMod.parentNode != null) {
-            if(len == 0) {
-              let htm = '<div class="el-row mod-full-width-0-0-65">'
-                        + '<div class="no-data">There are no references.</div>'
-                      + '</div>'
+          if (lessonMod && lessonMod.parentNode != null) {
+            if (len == 0) {
+              let htm =
+                '<div class="el-row mod-full-width-0-0-65">' +
+                '<div class="no-data">There are no references.</div>' +
+                '</div>'
               lessonMod.parentNode.appendChild(createMod('ModAnimations', htm))
             } else {
-              let html = '<div class="el-row mod-full-width-0-0-65 animations-list">'
-              for(let i = 0; i < len; i++) {
+              let html =
+                '<div class="el-row mod-full-width-0-0-65 animations-list">'
+              for (let i = 0; i < len; i++) {
                 let item = animations[i]
-                html += '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">'
-                          + '<a href="'+ item.animation +'" target="_blank" class="animations-cover">'
-                           + '<div style="background-image: url('+ item.coverImage +')"></div>'
-                          + '</a>'
-                          + '<a href="'+ item.animation +'" target="_blank" class="animations-title">'+ item.title +'</a>'
-                      + '</div>'
+                html +=
+                  '<div class="el-col el-col-12 el-col-xs-12 el-col-sm-8 el-col-lg-8">' +
+                  '<a href="' +
+                  item.animation +
+                  '" target="_blank" class="animations-cover">' +
+                  '<div style="background-image: url(' +
+                  item.coverImage +
+                  ')"></div>' +
+                  '</a>' +
+                  '<a href="' +
+                  item.animation +
+                  '" target="_blank" class="animations-title">' +
+                  item.title +
+                  '</a>' +
+                  '</div>'
               }
               html += '</div>'
 
@@ -549,16 +662,21 @@ export default {
             }
           }
           let eles = document.getElementsByTagName('div')
-          for(let i = 0; i < eles.length; i++) {
+          for (let i = 0; i < eles.length; i++) {
             let ele = eles[i]
             let modName = ele.getAttribute('data-mod')
-            if(modName != null && modName != '' && modName != undefined && modName != 'ModLesson'){
+            if (
+              modName != null &&
+              modName != '' &&
+              modName != undefined &&
+              modName != 'ModLesson'
+            ) {
               mods.push(modName)
             }
           }
           firstInFlag = false
         }
-        switch( tab.name ){
+        switch (tab.name) {
           case 'first': // Overview
             sliceMod('ModOverview')
             break
@@ -577,8 +695,8 @@ export default {
       options.playClick = async function() {
         // 生成一个 Record，返回做题的地址
         // 如存在课程总结 params 追加一个 lessonPerformance
-        if(self.isLogined) {
-          let btnPaly = document.getElementById('btnPlay');
+        if (self.isLogined) {
+          let btnPaly = document.getElementById('btnPlay')
           let params = {}
           params.username = self.username
           params.lessonUrl = self.activePageUrl
@@ -592,26 +710,34 @@ export default {
           params.commands = self.modData.lesson.Commands
           let quizs = getMods('ModQuiz')
           let r = await lessonAPI.upsertRecord(params)
-          if(r.err == 0) {
+          if (r.err == 0) {
             // TODO:open客户端传递我们的地址，启动一个 timer: record/learnDetailBySn 如果 record 已经状态变为结束 View Summary
-            let mRecordSn =  r.data.recordSn
-            btnPaly.setAttribute("disabled","true")
-            document.getElementsByClassName('summary-tip')[0].innerText = 'Please wait…The summary will be generated after the learning is finished.'
-            window.open(r.data.url + '?device=pc&sn=' + mRecordSn,'_blank')
-            let timerLearnState = setInterval( async function () {
+            let mRecordSn = r.data.recordSn
+            btnPaly.setAttribute('disabled', 'true')
+            document.getElementsByClassName('summary-tip')[0].innerText =
+              'Please wait…The summary will be generated after the learning is finished.'
+            window.open(r.data.url + '?device=pc&sn=' + mRecordSn, '_blank')
+            let timerLearnState = setInterval(async function() {
               // record/learnDetailBySn 获取数据后 DOM 操作
               let r = await lessonAPI.learnRecordDetail(mRecordSn)
-              if(r.data.state == 2) {
+              if (r.data.state == 2) {
                 // 自学已结束，嵌入自学的 Summary 页面 /learnedRecord/1184
                 let summaryMod = getMod('ModSummary')
-                let link = lessonAPI.lessonHost + '/learnedRecord/' + mRecordSn + '?__keepwork__=1'
-                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
+                let link =
+                  lessonAPI.lessonHost +
+                  '/learnedRecord/' +
+                  mRecordSn +
+                  '?__keepwork__=1'
+                summaryMod.innerHTML =
+                  "<iframe id='iframeId' frameborder='0' width='100%' src = " +
+                  link +
+                  '></iframe>'
                 clearInterval(timerLearnState)
               }
             }, 5000) // 5s
           }
         } else {
-          self.$message.error("未登录~")
+          self.$message.error('未登录~')
         }
       }
       options.previewClick = function() {
@@ -633,70 +759,99 @@ export default {
         params.codeWriteLine = self.modData.lesson.CodeWriteLine
         params.commands = self.modData.lesson.Commands
         params.quizNum = getMods('ModQuiz').length
-        if( classState == 0 ) {
+        if (classState == 0) {
           // begin class
           let r = await lessonAPI.beginClass(params)
-          if(r.err == 0) {
-            beginClass(r.data.classId);
+          if (r.err == 0) {
+            beginClass(r.data.classId)
           } else {
-            self.$alert('<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' + r.data.lessonNo + 'is ongoing.</div>', {
-              dangerouslyUseHTMLString: true,
-              confirmButtonText: 'Click to view',
-              center: true
-            }).then(() => {
-              window.open(r.data.lessonUrl);
-            });
-          }
-        } else if ( classState == 1 ) {
-          // finish class
-          btnClass.lastChild.innerText = 'Dismiss the Class';
-          self.$confirm('Are you sure you want to dismiss the class? It is irrevocable.', 'Info', {
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          }).then( async () => {
-            // yes
-            let r = await lessonAPI.finishClass(params)
-            // 展现 Summary 数据
-            classState = 2
-            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
-            timer.stop()
-            let summaryMod = getMod('ModSummary')
-            if(r.data) {
-              notify.close()
-              let link = lessonAPI.lessonHost + '/taughtedRecord/' + r.data.classId + '?__keepwork__=1'
-              if(summaryMod.getAttribute("style") == "display:none") {
-                summaryMod.setAttribute("style", "display:block")
-                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
-                let dataMod = summaryMod.parentNode.childNodes
-                for(let i = 0; i < dataMod.length; i++) {
-                  let modItem = dataMod[i].getAttribute("data-mod")
-                  if(modItem != "ModSummary" && modItem != "ModLesson") {
-                    dataMod[i].setAttribute("style", "display: none")
-                  }
+            self
+              .$alert(
+                '<div style="color: #F75858; font-size: 16px; margin-bottom:15px;">The operation is not permitted.The teaching of Lesson' +
+                  r.data.lessonNo +
+                  'is ongoing.</div>',
+                {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: 'Click to view',
+                  center: true
                 }
-              }else{
-                summaryMod.innerHTML = "<iframe id='iframeId' frameborder='0' width='100%' src = "+ link +"></iframe>"
+              )
+              .then(() => {
+                window.open(r.data.lessonUrl)
+              })
+          }
+        } else if (classState == 1) {
+          // finish class
+          btnClass.lastChild.innerText = 'Dismiss the Class'
+          self
+            .$confirm(
+              'Are you sure you want to dismiss the class? It is irrevocable.',
+              'Info',
+              {
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
               }
-            }
-            btnClass.setAttribute('disabled','true')
-            document.getElementsByClassName('student-info')[0].setAttribute('style', 'display:none')
-            let tabItem = document.getElementsByClassName("el-tabs__item")
-            for(let i = 0; i < tabItem.length; i++) {
-              tabItem[i].setAttribute("class", "el-tabs__item is-top")
-            }
-            document.getElementById("tab-fourth").className += ' is-active'
-          }).catch(() => {
-            // cancel
-          })
+            )
+            .then(async () => {
+              // yes
+              let r = await lessonAPI.finishClass(params)
+              // 展现 Summary 数据
+              classState = 2
+              document
+                .getElementsByClassName('student-info')[0]
+                .setAttribute('style', 'display:none')
+              timer.stop()
+              let summaryMod = getMod('ModSummary')
+              if (r.data) {
+                notify.close()
+                let link =
+                  lessonAPI.lessonHost +
+                  '/taughtedRecord/' +
+                  r.data.classId +
+                  '?__keepwork__=1'
+                if (summaryMod.getAttribute('style') == 'display:none') {
+                  summaryMod.setAttribute('style', 'display:block')
+                  summaryMod.innerHTML =
+                    "<iframe id='iframeId' frameborder='0' width='100%' src = " +
+                    link +
+                    '></iframe>'
+                  let dataMod = summaryMod.parentNode.childNodes
+                  for (let i = 0; i < dataMod.length; i++) {
+                    let modItem = dataMod[i].getAttribute('data-mod')
+                    if (modItem != 'ModSummary' && modItem != 'ModLesson') {
+                      dataMod[i].setAttribute('style', 'display: none')
+                    }
+                  }
+                } else {
+                  summaryMod.innerHTML =
+                    "<iframe id='iframeId' frameborder='0' width='100%' src = " +
+                    link +
+                    '></iframe>'
+                }
+              }
+              btnClass.setAttribute('disabled', 'true')
+              document
+                .getElementsByClassName('student-info')[0]
+                .setAttribute('style', 'display:none')
+              let tabItem = document.getElementsByClassName('el-tabs__item')
+              for (let i = 0; i < tabItem.length; i++) {
+                tabItem[i].setAttribute('class', 'el-tabs__item is-top')
+              }
+              document.getElementById('tab-fourth').className += ' is-active'
+            })
+            .catch(() => {
+              // cancel
+            })
         }
       }
       options.updateVipView = function() {
         // vip 权限用户
         vipFlag = true
         let summaryTip = document.getElementsByClassName('summary-tip')[0]
-        if(summaryTip) {
-          summaryTip.innerText = 'Teaching is not started yet. There is no summary here.'
+        if (summaryTip) {
+          summaryTip.innerText =
+            'Teaching is not started yet. There is no summary here.'
         }
       }
       return options
@@ -706,10 +861,9 @@ export default {
 </script>
 
 <style lang="scss">
- [data-mod="ModLesson"] {
-   padding-bottom: 0;
-
- }
+[data-mod='ModLesson'] {
+  padding-bottom: 0;
+}
 .text-right {
   text-align: right;
 }
@@ -731,7 +885,7 @@ export default {
 }
 
 .animations-list {
-    padding: 0 60px 20px;
+  padding: 0 60px 20px;
 }
 
 .animations-list .el-col {
@@ -743,41 +897,42 @@ export default {
   height: 160px;
 }
 
-.animations-cover > div{
-    width: 100%;
-    height: 100%;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 6px;
-    -webkit-border-radius: 6px;
-    position: relative;
+.animations-cover > div {
+  width: 100%;
+  height: 100%;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  position: relative;
 }
 
 .animations-cover:hover div:before {
-    content: "";
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 2;
-    background: url('/static/adi/lesson/play_btn_action.png') center center no-repeat;
-    background-size: contain;
+  content: '';
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background: url('/static/adi/lesson/play_btn_action.png') center center
+    no-repeat;
+  background-size: contain;
 }
 
 .animations-title {
-    display: block;
-    margin-top: 12px;
-    color: #333;
-    font-size: 17px;
-    text-decoration: none;
-    text-align: center;
+  display: block;
+  margin-top: 12px;
+  color: #333;
+  font-size: 17px;
+  text-decoration: none;
+  text-align: center;
 }
 
 .animations-title:hover {
-   color: #409EFE;
+  color: #409efe;
 }
 
 .no-data {
@@ -791,84 +946,85 @@ export default {
   text-align: center;
 }
 .student-taughted-details {
-    padding: 40px 20px;
-    min-height: 500px;
-    box-sizing: border-box;
+  padding: 40px 20px;
+  min-height: 500px;
+  box-sizing: border-box;
 }
-.express >span {
-    margin-right: 10px;
-    font-size: 14px;
-    color: #676767;
+.express > span {
+  margin-right: 10px;
+  font-size: 14px;
+  color: #676767;
 }
-.express span.r::before, .express span.w::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin: 0 15px;
-    vertical-align: middle;
-    border-radius:50%;
+.express span.r::before,
+.express span.w::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin: 0 15px;
+  vertical-align: middle;
+  border-radius: 50%;
 }
 span.r::before {
-    background-color: #27CE2F;
+  background-color: #27ce2f;
 }
 span.w::before {
-    background-color: #F53838;
+  background-color: #f53838;
 }
 .table-wrap {
-    margin-top: 15px;
-    width: 100%;
-    border:1px solid #BFBFBF;
-    border-radius: 8px;
+  margin-top: 15px;
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  border-radius: 8px;
 }
 
 .table-wrap td {
-    height: 50px;
-    padding: 8px 5px;
-    text-align: center;
-    font-size: 14px;
+  height: 50px;
+  padding: 8px 5px;
+  text-align: center;
+  font-size: 14px;
 }
 
 .table-wrap thead td {
-    position: relative;
-    border-right:1px solid #BFBFBF;
-    border-bottom: 2px solid #bfbfbf;
-    font-size: 16px;
-    color:#333;
+  position: relative;
+  border-right: 1px solid #bfbfbf;
+  border-bottom: 2px solid #bfbfbf;
+  font-size: 16px;
+  color: #333;
 }
 .table-wrap thead td:hover .quizContent {
-  display:block;
+  display: block;
 }
 
 .table-wrap .quizContent {
-    display: none;
-    position: absolute;
-    top: 70px;
-    background-color: #fff;
-    border: 2px solid #98CBFF;
-    border-radius: 4px;
-    width: 100%;
-    min-width: 380px;
-    right: 0;
-    padding: 15px 10px 0;
-    text-align: left;
-    font-size: 14px;
-    color: #101010;
+  display: none;
+  position: absolute;
+  top: 70px;
+  background-color: #fff;
+  border: 2px solid #98cbff;
+  border-radius: 4px;
+  width: 100%;
+  min-width: 380px;
+  right: 0;
+  padding: 15px 10px 0;
+  text-align: left;
+  font-size: 14px;
+  color: #101010;
 }
 .table-wrap .quizContent .title {
-    font-size: 15px;
-    font-weight: bold;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .table-wrap .quizContent .opt-item {
   margin: 15px 0;
 }
 .table-wrap .quizContent .opt-item.state {
-  color: #27CE2F;
+  color: #27ce2f;
 }
 
 .table-wrap .quizContent.quizContent::before {
-  content: "";
+  content: '';
   position: absolute;
   border: 2px solid #98cbff;
   width: 20px;
@@ -882,93 +1038,93 @@ span.w::before {
 }
 
 .table-wrap thead td:last-child {
-    border-right: none;
+  border-right: none;
 }
 
 .table-wrap .sort-btn {
-    display: flex;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    user-select: none;
-    justify-content: center;
+  display: flex;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  justify-content: center;
 }
 
 .table-wrap .sort-icon {
-    padding-left: 5px;
+  padding-left: 5px;
 }
 
 .table-wrap .sort-icon i {
-   display: block;
-   line-height: 8px;
-   color: #CCC;
+  display: block;
+  line-height: 8px;
+  color: #ccc;
 }
 
-.table-wrap .sort-icon i.active{
-    color: #49A5F8;
+.table-wrap .sort-icon i.active {
+  color: #49a5f8;
 }
 
 .table-wrap .sort-by-quiz i {
-    color: #F53838;
+  color: #f53838;
 }
 .table-wrap .sort-by-quiz i.active {
-    color: #27CE2F;
+  color: #27ce2f;
 }
 
 .table-wrap tbody tr:nth-child(even) {
-    background:rgba(64,158,254, .1);
+  background: rgba(64, 158, 254, 0.1);
 }
 
 .table-wrap .user-img {
-    width: 40px;
-    height: 40px;
-    margin: 0 auto;
-    border-radius:50%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 .table-wrap .right {
-    color: #27CE2F;
+  color: #27ce2f;
 }
 .table-wrap .wrong {
-    color: #F53838;
+  color: #f53838;
 }
 .el-notification {
-    overflow: inherit;
+  overflow: inherit;
 }
-.el-notification:hover .showMessage .prompt{
-    display: block;
+.el-notification:hover .showMessage .prompt {
+  display: block;
 }
 .el-notification__content .showMessage {
-    position: relative;
+  position: relative;
 }
 .el-notification__content .showMessage .prompt {
-    display: none;
-    top: 40px;
-    left: 0;
-    z-index: 9;
+  display: none;
+  top: 40px;
+  left: 0;
+  z-index: 9;
 }
 .el-notification__content .showMessage .prompt::after {
-    content: "";
-    position: absolute;
-    top: -15px;
-    display: block;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-    border-width: 8px;
-    -webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
-    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
-    border-bottom-color: #b3b4b7;
-    left: 50%;
-    transform: translateX(-50%);
-    border-bottom-color: #fff;
+  content: '';
+  position: absolute;
+  top: -15px;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 8px;
+  -webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+  border-bottom-color: #b3b4b7;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: #fff;
 }
-.el-notification__content .showMessage > strong{
-    color: #FF414A;
-    font-weight: bold;
+.el-notification__content .showMessage > strong {
+  color: #ff414a;
+  font-weight: bold;
 }
 .txt-one {
   padding: 10px 10px 15px;
@@ -978,14 +1134,15 @@ span.w::before {
 .txt-two {
   padding: 10px 10px 15px;
   font-size: 14px;
-  color:#999;
+  color: #999;
 }
 .txt-one a {
   text-decoration: none;
-  color: #409EFF;
+  color: #409eff;
 }
-.txt-one span, .txt-two span {
-  color: #F75858;
+.txt-one span,
+.txt-two span {
+  color: #f75858;
 }
 #pane-first {
   padding: 10px 20px 10px;

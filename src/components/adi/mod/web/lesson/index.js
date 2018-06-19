@@ -1,4 +1,6 @@
-import { generateProperties } from '@/components/adi/mod/base/base.utils'
+import {
+  generateProperties
+} from '@/components/adi/mod/base/base.utils'
 
 import styles from './lesson.styles'
 import templates from './lesson.templates'

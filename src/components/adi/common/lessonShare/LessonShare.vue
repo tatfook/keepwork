@@ -27,25 +27,28 @@ export default {
   mounted: async function() {
     if (!this.editMode && location.pathname == this.activePageUrl) {
       let query = location.href.split('?')[1]
-      if(query && query.indexOf('#') != -1){
+      if (query && query.indexOf('#') != -1) {
         query = query.split('#')[0]
       }
-      let lessonUrl = this.activePageUrl.substring(0, this.activePageUrl.length - 6)
+      let lessonUrl = this.activePageUrl.substring(
+        0,
+        this.activePageUrl.length - 6
+      )
       let username
-      if(query) {
+      if (query) {
         query = query.split('&')
         for (var i = 0; i < query.length; i++) {
-          var ary = query[i].split('=');
+          var ary = query[i].split('=')
           if (ary[0] == 'username' && ary[1]) {
-              username = ary[1]
-              break
+            username = ary[1]
+            break
           }
         }
       }
-      if(username) {
+      if (username) {
         // 网络请求获取数据后替换
         let r = await lessonAPI.shareRecord(lessonUrl, username)
-        if(r.err == 0) {
+        if (r.err == 0) {
           let mainE = document.getElementsByClassName('el-main')[0]
           let html = mainE.innerHTML
           html = html.replace('{{lessonTitle}}', r.data.lessonTitle)
@@ -56,21 +59,21 @@ export default {
           html = html.replace('{{codeReadLine}}', r.data.codeReadLine)
           html = html.replace('{{commands}}', r.data.commands)
           mainE.innerHTML = html
-        }else {
+        } else {
           console.log('editMode:', this.editMode)
           this.$alert('该地址已失效，请重试', {
             confirmButtonText: '确定'
-          });
+          })
         }
-      }else {
+      } else {
         // 非法链接
         console.log('editMode:', this.editMode)
         this.$alert('无效的地址，请重试', {
           confirmButtonText: '确定'
-        });
+        })
       }
       this.show = false
-    }else {
+    } else {
       this.show = true
       this.$forceUpdate()
     }
@@ -79,22 +82,21 @@ export default {
 </script>
 
 <style>
-  [data-mod="ModLessonShare"]{
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+[data-mod='ModLessonShare'] {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
-  .comp-lesson-share {
-    margin: 25px 40px;
-  }
+.comp-lesson-share {
+  margin: 25px 40px;
+}
 
-  .comp-lesson-share .content {
-    margin-top:25px;
-    font-size: 16px;
-    color:#333;
-    font-family: inherit;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-  }
-
+.comp-lesson-share .content {
+  margin-top: 25px;
+  font-size: 16px;
+  color: #333;
+  font-family: inherit;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
 </style>

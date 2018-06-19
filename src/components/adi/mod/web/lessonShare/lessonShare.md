@@ -7,5 +7,4 @@
 
 # lessonShare
 - content : // 编辑内容总结
-
 ```

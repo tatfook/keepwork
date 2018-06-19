@@ -1,5 +1,5 @@
 export default [
-  [
-    { colLessonShare: 'lessonShare' }
-  ]
+  [{
+    colLessonShare: 'lessonShare'
+  }]
 ]
