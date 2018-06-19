@@ -1,12 +1,12 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
+    <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
       <div class="opened-files-container">
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
         </h1>
         <span class="opened-files-buttons" v-if="hasOpenedFiles" v-show="trees.isOpenedShow">
-          <el-button v-loading="savePending" class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
+          <el-button class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
           </el-button>
           <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFiles'>
           </el-button>
