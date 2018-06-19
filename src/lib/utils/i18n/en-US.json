@@ -385,6 +385,7 @@
     "src": "src",
     "name": "name",
     "data": "data",
+    "color": "font color",
     "text": "text",
     "desc": "desc",
     "select": "please choose",
