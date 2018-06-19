@@ -1,14 +1,22 @@
 <template>
   <div class="file-manager" v-loading="loading">
     <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}">
-      <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
-        <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
-      </h1>
-      <el-dialog title="提示" center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
-        <center>该文件尚未保存！</center>
+      <div class="opened-files-container">
+        <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
+          <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
+        </h1>
+        <span class="opened-files-buttons" v-if="hasOpenedFiles" v-show="trees.isOpenedShow">
+          <el-button v-loading="savePending" class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
+          </el-button>
+          <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFiles'>
+          </el-button>
+        </span>
+      </div>
+      <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+        <center>{{this.$t("editor.fileUnSaved")}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFile()">不保存关闭</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFile()" :loading="savePending">保存并关闭</el-button>
+          <el-button type="warning" @click="handleCloseOpenedFile()">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click="saveAndCloseOpenedFile()" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-collapse-transition>
@@ -46,7 +54,7 @@
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
-          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
         </div>
       </el-collapse-transition>
     </div>
@@ -117,7 +125,7 @@ export default {
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
       getOpenedFileByPath: 'getOpenedFileByPath'
     }),
-    myContributedSiteList(){
+    myContributedSiteList() {
       return this.contributedSiteList.map(i => {
         i.myJoin = true
         return i
@@ -141,6 +149,21 @@ export default {
         treeDatas.push(nodeData)
       })
       return treeDatas
+    },
+    hasOpenedFiles() {
+      return this.openedFilesPaths.length > 0
+    },
+    openedFilesPaths() {
+      return _.keys(this.openedFiles)
+    },
+    hasUnSaveOpenedFiles() {
+      return this.unSavedOpenedFiles.length > 0
+    },
+    unSavedOpenedFiles() {
+      return _.filter(_.values(this.openedFiles), ({ saved }) => !saved)
+    },
+    unSavedOpenedFilesPaths() {
+      return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
     }
   },
   methods: {
@@ -155,7 +178,8 @@ export default {
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
-      setActivePage: 'setActivePage'
+      setActivePage: 'setActivePage',
+      closeAllOpenedFile: 'closeAllOpenedFile'
     }),
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
@@ -327,6 +351,34 @@ export default {
     },
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
+    },
+    async closeAllOpenedFiles() {
+      if (!this.hasOpenedFiles) return
+      let paths = this.unSavedOpenedFilesPaths
+      while(paths.length > 0) {
+        let path = paths.shift()
+        let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
+        await this.$confirm(`${this.$t("editor.saveConfirmBefore")} "${fileName}" ${this.$t("editor.saveConfirmAfter")}`,{
+          confirmButtonText: this.$t('el.messagebox.confirm'),
+          cancelButtonText: this.$t('el.messagebox.cancel'),
+          type: 'warning'
+        }).then(async () => {
+          await this.savePageByPath(path)
+        }).catch(() =>{
+        })
+      }
+      this.closeAllOpenedFile()
+      this.$router.push('/')
+    },
+    async saveAllOpenedFiles() {
+      if (!this.hasUnSaveOpenedFiles) return
+      let num = this.unSavedOpenedFilesPaths.length
+      let paths = this.unSavedOpenedFilesPaths
+      this.savePending = true
+      while(num--) {
+        await this.savePageByPath(paths[num])
+      }
+      this.savePending = false
     }
   },
   components: {
@@ -340,6 +392,21 @@ export default {
   height: 100%;
   background-color: #ccd3da;
   overflow-y: auto;
+  .opened-files-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+    .opened-files-buttons {
+      .iconfont {
+        color: #535353;
+        font-size: 22px;
+        &:hover {
+          color: #3ba4ff;
+        }
+      }
+    }
+  }
   h1 {
     font-size: 16px;
     color: #333;
