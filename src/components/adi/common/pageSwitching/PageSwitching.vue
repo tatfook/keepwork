@@ -71,10 +71,19 @@ export default {
       let type = process.env.ES_TYPE
       let body = {
         query: {
-          match: {
-            url: {
-              query: url,
-              operator: 'and'
+          bool: {
+            must: {
+              match: {
+                url: {
+                  query: url,
+                  operator: 'and'
+                }
+              }
+            },
+            must_not: {
+              match: {
+                url: ".gitignore"
+              }
             }
           }
         },
