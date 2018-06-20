@@ -47,10 +47,10 @@
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">{{$t('cmmon.signIn')}}</a>
+        <a href="/wiki/join">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">{{$t('cmmon.login')}}</a>
+        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
     </el-menu>
 
@@ -73,10 +73,10 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">{{$t('cmmon.signIn')}}</a>
+        <a href="/wiki/join">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">{{$t('cmmon.login')}}</a>
+        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">

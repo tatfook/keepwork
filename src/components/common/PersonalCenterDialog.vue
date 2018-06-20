@@ -31,15 +31,15 @@ export default {
       title: `//${location.host}/${this.sitePath}`,
       websiteSettingNavs: [
         {
-          text: '用户资料',
+          text: this.$t('common.userData'),
           comp: UserData
         },
         {
-          text: '账户安全',
+          text: this.$t('common.accountSecurity'),
           comp: AccountSecurity
         },
         {
-          text: '实名认证',
+          text: this.$t('common.realNameAuthentication'),
           comp: RealNameAuthentication
         }
       ],
