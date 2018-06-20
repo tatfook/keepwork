@@ -208,7 +208,8 @@
     "removeImgConfirmMsg": "Are you sure to remove this image?",
 
     "uploadingToGitlabText": "uploading file to gitlab ...",
-    "readFileFromLocal": "reading file from local ..."
+    "readFileFromLocal": "reading file from local ...",
+    "enlargeMdEditing": "Large window editing"
   },
   "modList": {
     "recent": "Commonly used",
