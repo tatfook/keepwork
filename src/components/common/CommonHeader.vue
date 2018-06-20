@@ -20,13 +20,13 @@
       </el-menu-item>
       
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
-        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
       </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
-        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
       </el-menu-item>
       <el-menu-item index="12" class="pull-right" v-if="isLogin">
-        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
       </el-menu-item>
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-start">
@@ -37,10 +37,10 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
             <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item> -->
-            <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item>
+            <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#">{{$t('common.invitationToRegister')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a></el-dropdown-item>
             <!-- <el-dropdown-item divided><a href="#" @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
@@ -99,6 +99,9 @@
     <div @click.stop v-if='isPersonalCenterShow'>
       <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
     </div>
+    <div @click.stop v-if='isSkyDriveManagerDialogShow'>
+        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />      
+    </div>
   </div>
 </template>
 
@@ -106,11 +109,14 @@
 import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+
 export default {
   name: 'CommonHeader',
   data() {
     return {
-      isPersonalCenterShow: false
+      isPersonalCenterShow: false,
+      isSkyDriveManagerDialogShow: false
     }
   },
   computed: {
@@ -150,11 +156,25 @@ export default {
     closePersonalCenterDialog() {
       this.isPersonalCenterShow = false
     },
-    logout(){
-    }
+    openSkyDriveManagerDialog() {
+      this.isSkyDriveManagerDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isSkyDriveManagerDialogShow = false
+      if (url) {
+        let filename = file.filename || url
+        let isImage = /^image\/.*/.test(file.type)
+
+        isImage
+          ? this.$refs.codemirror.insertFile(filename, url)
+          : this.$refs.codemirror.insertLink(filename, url)
+      }
+    },
+    logout() {}
   },
   components: {
-    PersonalCenterDialog
+    PersonalCenterDialog,
+    SkyDriveManagerDialog
   }
 }
 </script>
@@ -216,15 +236,15 @@ export default {
 </style>
 <style lang="scss">
 .el-menu-item [class^='el-icon-'] {
-    width: 20px;
-    font-size: 18px;
-    position: absolute;
-    bottom: 8px;
-    right: -18px;
+  width: 20px;
+  font-size: 18px;
+  position: absolute;
+  bottom: 8px;
+  right: -18px;
 }
 .el-menu-item i {
-    color: #2b6da8 !important;
-  }
+  color: #2b6da8 !important;
+}
 .profile-submenu,
 .el-popper {
   a {
