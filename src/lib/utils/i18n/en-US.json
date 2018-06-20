@@ -213,7 +213,10 @@
     "yourPosition": "Your position：",
     "defaultPage": "Default page",
 
-    "removeImgConfirmMsg": "Are you sure to remove this image?"
+    "removeImgConfirmMsg": "Are you sure to remove this image?",
+
+    "uploadingToGitlabText": "uploading file to gitlab ...",
+    "readFileFromLocal": "reading file from local ..."
   },
   "modList": {
     "recent": "Commonly used",
