@@ -99,7 +99,7 @@ export default {
       isNewWebsiteDialogShow: false
     }
   },
-  async activated() {
+  async mounted() {
     await this.getAllPersonalAndContributedSite().catch(err => {
       console.error(err)
     })
