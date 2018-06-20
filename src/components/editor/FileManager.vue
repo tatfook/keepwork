@@ -46,7 +46,7 @@
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
-          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
         </div>
       </el-collapse-transition>
     </div>
@@ -104,6 +104,7 @@ export default {
       console.error(err)
     })
     this.loading = false
+    await this.checkSitePath()
     this.initUrlExpandSelect()
   },
   computed: {
@@ -117,7 +118,7 @@ export default {
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
       getOpenedFileByPath: 'getOpenedFileByPath'
     }),
-    myContributedSiteList(){
+    myContributedSiteList() {
       return this.contributedSiteList.map(i => {
         i.myJoin = true
         return i
@@ -157,6 +158,20 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile',
       setActivePage: 'setActivePage'
     }),
+    async checkSitePath(checkTimes = 10, waitTime = 500) {
+      const sleep = async () =>
+        new Promise(resolve => setTimeout(resolve, waitTime))
+      let { sitepath } = this.activePageInfo
+      if (sitepath) return Promise.resolve()
+      while (checkTimes--) {
+        await sleep()
+        let { sitepath } = this.activePageInfo
+        if (sitepath) {
+          return Promise.resolve()
+        }
+      }
+      return Promise.resolve()
+    },
     async initUrlExpandSelect() {
       let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
       if (!isLegal) {
@@ -170,16 +185,14 @@ export default {
       }
       await this.getRepositoryTree({ path: sitepath })
 
-      let folderPaths = paths.slice(0, paths.length - 1)
-      let expandedFolderPaths = folderPaths.reduce((prev, current) => {
-        let expanededPath =
-          sitepath +
-          '/' +
-          (prev[prev.length - 1] ? prev[prev.length - 1] + '/' : '') +
-          current
-        return prev.concat(expanededPath)
-      }, [])
-      expandedFolderPaths.unshift(sitepath)
+      let folderPaths = paths.slice(0, -1)
+      let expandedFolderPaths = folderPaths.reduce(
+        (prev, current) => {
+          let exapndedPath = prev.slice(-1) + '/' + current
+          return prev.concat(exapndedPath)
+        },
+        [sitepath]
+      )
       let expandedFolderPathsList = expandedFolderPaths.map(path => ({
         path,
         expanded: true
