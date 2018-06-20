@@ -1,14 +1,19 @@
 <template>
   <div class='page-setting' v-loading='loading'>
-    <h1>{{ barePath }}</h1>
-    <el-select size="small" v-model="selectedLayoutId" filterable :placeholder="this.$t('editor.select')" @change="selectPageLayout">
-      <el-option
-        v-for="(layout) in userSiteLayoutsMap"
-        :key="layout.id"
-        :label="layout.name"
-        :value="layout.id">
-      </el-option>
-    </el-select>
+    <div class="page-setting-top">
+      <h1>{{ barePath }}</h1>
+      <i class="el-icon-close" @click="changeView('FileManager')"></i>
+    </div>
+    <div class="page-setting-select">
+      <el-select size="small" v-model="selectedLayoutId" filterable :placeholder="this.$t('editor.select')" @change="selectPageLayout">
+        <el-option
+          v-for="(layout) in userSiteLayoutsMap"
+          :key="layout.id"
+          :label="layout.name"
+          :value="layout.id">
+        </el-option>
+      </el-select>
+    </div>    
     <div class='page-setting-selected-style'>
       <component :is='selectedStyleComponent'>
         <div slot='header'>header</div>
@@ -59,7 +64,8 @@ export default {
       return this.pageInfo.sitepath
     },
     barePath() {
-      return this.pageInfo.barePath
+      let index = this.pageInfo.barePath.indexOf('/')
+      return this.pageInfo.barePath.substr(index + 1)
     },
     relativePath() {
       return this.pageInfo.relativePath
@@ -87,8 +93,12 @@ export default {
     ...mapActions({
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userSaveSiteLayoutConfig: 'user/saveSiteLayoutConfig',
-      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree'
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
+      setActiveManagePaneComponent: 'setActiveManagePaneComponent'
     }),
+    changeView(type) {
+      this.setActiveManagePaneComponent(type)
+    },
     async selectPageLayout() {
       if (this.settedPageLayoutId == this.selectedLayoutId) return
 
@@ -109,6 +119,25 @@ export default {
 </script>
 
 <style lang="scss">
+.page-setting{
+  padding:0 30px;
+}
+.page-setting-top{
+  position: relative;
+  i{
+    position: absolute;
+    right: 0;
+    top: 2px;
+    font-size: 22px;
+    cursor: pointer;
+  }
+}
+.page-setting-select{
+  text-align: center;
+  .el-select{
+    width: 270px;
+  }
+}
 .page-setting-selected-style {
   margin: 20px auto;
   width: 260px;
