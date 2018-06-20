@@ -42,6 +42,13 @@
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
+      <el-dialog class="multiple-text-dialog" title="正文" :visible.sync="isMultipleTextDialogShow" :before-close="handleMultipleTextDialogClose('beforeclose')" :show-close=false @open='initMarkdownModDatas'>
+        <el-input type='textarea' resize='none' :placeholder="$t('field.' + editingMarkdownModDatas.key)" v-model='editingMarkdownModDatas.content'></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="handleMultipleTextDialogClose('reset')">取 消</el-button>
+          <el-button type="primary" @click="handleMultipleTextDialogClose('save')">确 定</el-button>
+        </span>
+      </el-dialog>-
     </el-col>
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
@@ -108,7 +115,8 @@ export default {
       isCodeWinShow: true,
       isFullscreen: false,
       isSkyDriveManagerDialogShow: false,
-      gConst
+      gConst,
+      editingMarkdownModDatas: {}
     }
   },
   created() {
@@ -136,12 +144,14 @@ export default {
   computed: {
     ...mapGetters({
       activePage: 'activePage',
+      activeMod: 'activeMod',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeManagePaneComponentName: 'activeManagePaneComponentName',
       activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
-      activePageInfo: 'activePageInfo'
+      activePageInfo: 'activePageInfo',
+      isMultipleTextDialogShow: 'isMultipleTextDialogShow'
     }),
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
@@ -209,7 +219,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      resetShowingCol: 'resetShowingCol'
+      resetShowingCol: 'resetShowingCol',
+      setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
+      setActiveProperty: 'setActiveProperty',
+      setActivePropertyData: 'setActivePropertyData'
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
@@ -300,12 +313,47 @@ export default {
     closeSkyDriveManagerDialog({ file, url }) {
       this.isSkyDriveManagerDialogShow = false
       if (url) {
-        let filename = (file.filename || url)
+        let filename = file.filename || url
         let isImage = /^image\/.*/.test(file.type)
 
         isImage
           ? this.$refs.codemirror.insertFile(filename, url)
           : this.$refs.codemirror.insertLink(filename, url)
+      }
+    },
+    initMarkdownModDatas() {
+      this.editingMarkdownModDatas = {
+        content: this.activeMod.data.md.data,
+        key: 'data'
+      }
+    },
+    closeMultipleTextDialog() {
+      this.setIsMultipleTextDialogShow({
+        isShow: false
+      })
+    },
+    saveMultipleTextDatas() {
+      this.setActiveProperty({
+        key: this.activeMod.key,
+        property: 'md'
+      })
+      this.setActivePropertyData({
+        data: {
+          data: this.editingMarkdownModDatas.content
+        }
+      })
+    },
+    handleMultipleTextDialogClose(type) {
+      switch (type) {
+        case 'save':
+          this.saveMultipleTextDatas()
+          this.closeMultipleTextDialog()
+          break
+        case 'reset':
+          this.closeMultipleTextDialog()
+          break
+        default:
+          break
       }
     }
   }
@@ -435,4 +483,26 @@ export default {
   background-color: #cdd4dc;
   max-width: 1080px;
 }
+</style>
+<style lang="scss">
+.multiple-text-dialog {
+  .el-dialog {
+    width: 1300px;
+    max-width: 80%;
+    height: 800px;
+    max-height: 80%;
+  }
+  .el-dialog__header {
+    background-color: #3ba4ff;
+  }
+  .el-dialog__title{
+    color: #fff;
+  }
+  .el-diaog__body {
+    padding: 30px 0;
+  }
+}
+</style>
+
+<style>
 </style>
