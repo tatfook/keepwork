@@ -1,7 +1,13 @@
 {
   "common": {
+    "login": "Login",
+    "signIn": "Sign in",
+    "logout": "Logout",
     "welcomeToKeepwork": "Welcome to Keepwork",
     "createNewWebsite": "Create New Website",
+    "serviceMall": "Service Mall",
+    "invitationToRegister": "Invitation to register",
+    "personalCenter": "Personal Center",
 
     "features": "Features",
     "applicationCenter": "Application center",

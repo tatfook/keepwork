@@ -1,13 +1,19 @@
 {
   "common": {
+    "login": "登录",
+    "signIn": "注册",
+    "logout": "退出登录",
     "welcomeToKeepwork": "欢迎来到 Keepwork",
     "createNewWebsite": "创建新网站",
+    "serviceMall": "服务商城",
+    "invitationToRegister": "邀请注册",
+    "personalCenter": "个人中心",
 
     "features": "功能",
     "applicationCenter": "应用中心",
     "myHomePage": "我的主页",
     "websiteManagement": "网站管理",
-    "pageEditor": "页面编辑器",
+    "pageEditor": "在线编辑器",
     "myWebDisk": "我的网盘",
     "dynamic": "动态",
     "attention": "关注",

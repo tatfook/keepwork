@@ -20,13 +20,13 @@
       </el-menu-item>
       
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
-        <a href="#">历史</a>
+        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
       </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
-        <a href="#">关注</a>
+        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
       </el-menu-item>
       <el-menu-item index="12" class="pull-right" v-if="isLogin">
-        <a href="#">动态(0)</a>
+        <a href="https://keepwork.com/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
       </el-menu-item>
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-start">
@@ -36,23 +36,22 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">个人中心</a></el-dropdown-item>
-            <el-dropdown-item><a href="#">服务商城</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="">我的网盘</a></el-dropdown-item>
-            <el-dropdown-item><a href="#">邀请注册</a></el-dropdown-item>
-            <el-dropdown-item divided><a href="#">退出登录</a></el-dropdown-item>
+            <el-dropdown-item><a href="">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#">{{$t('common.invitationToRegister')}}</a></el-dropdown-item>
+            <!-- <el-dropdown-item divided><a href="#" @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">注册</a>
+        <a href="/wiki/join">{{$t('cmmon.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">登录</a>
+        <a href="/wiki/login" class="login-btn">{{$t('cmmon.login')}}</a>
       </el-menu-item>
-
     </el-menu>
 
     <el-menu mode='horizontal' class="hidden-sm-and-up">
@@ -74,10 +73,10 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">注册</a>
+        <a href="/wiki/join">{{$t('cmmon.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">登录</a>
+        <a href="/wiki/login" class="login-btn">{{$t('cmmon.login')}}</a>
       </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
@@ -150,6 +149,8 @@ export default {
     },
     closePersonalCenterDialog() {
       this.isPersonalCenterShow = false
+    },
+    logout(){
     }
   },
   components: {
