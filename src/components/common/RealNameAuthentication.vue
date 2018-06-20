@@ -1,3 +1,3 @@
 <template>
-    <div></div>
+    <div>实名认证</div>
 </template>
