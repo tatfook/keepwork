@@ -393,7 +393,7 @@ export default {
       return `${username}/${name}`
     },
     filePath() {
-      return this.data.path.replace(/.md$/, '')
+      return this.data.path.replace(/\.md$/, '')
     },
     unSavedFiles() {
       return _.keys(_.pickBy(this.openedFiles, ({ saved }) => !saved))
