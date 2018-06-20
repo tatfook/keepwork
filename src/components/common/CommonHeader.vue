@@ -36,7 +36,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item>
+            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item> -->
             <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
