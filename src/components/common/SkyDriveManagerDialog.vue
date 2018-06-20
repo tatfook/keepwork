@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     handleClose(event) {
+      console.log('00000')
       this.$emit('close', event)
     }
   },

@@ -61,7 +61,6 @@ export default {
       if (!self.changeProtyDataThrottle) {
         self.changeProtyDataThrottle = _.throttle(changedData => {
           self.changeActivePropty()
-          console.log(changedData)
           self.setActivePropertyData({
             data: changedData
           })

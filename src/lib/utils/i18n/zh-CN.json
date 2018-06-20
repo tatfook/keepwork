@@ -52,7 +52,8 @@
     "link": "链接",
     "back": "返 回",
     "NoPages": "很抱歉！您访问的页面不存在!",
-    "loginToStarPage": "点击右上角登录后才能点赞！"
+    "loginToStarPage": "点击右上角登录后才能点赞！",
+    "confirmButtonText": "确认"
   },
   "editor": {
     "files": "文件",

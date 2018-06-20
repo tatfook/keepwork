@@ -42,11 +42,10 @@
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
-      <el-dialog class="multiple-text-dialog" title="正文" :visible.sync="isMultipleTextDialogShow" :before-close="handleMultipleTextDialogClose('beforeclose')" :show-close=false @open='initMarkdownModDatas'>
+      <el-dialog class="multiple-text-dialog" title="正文" :visible="isMultipleTextDialogShow" top='6vh' :before-close="handleMultipleTextDialogClose" @open='initMarkdownModDatas'>
         <el-input type='textarea' resize='none' :placeholder="$t('field.' + editingMarkdownModDatas.key)" v-model='editingMarkdownModDatas.content'></el-input>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="handleMultipleTextDialogClose('reset')">取 消</el-button>
-          <el-button type="primary" @click="handleMultipleTextDialogClose('save')">确 定</el-button>
+          <el-button type="primary" @click="handleMultipleTextDialogClose('save')">{{$t('common.confirmButtonText')}}</el-button>
         </span>
       </el-dialog>-
     </el-col>
@@ -116,7 +115,10 @@ export default {
       isFullscreen: false,
       isSkyDriveManagerDialogShow: false,
       gConst,
-      editingMarkdownModDatas: {}
+      editingMarkdownModDatas: {
+        key: 'data',
+        content: ''
+      }
     }
   },
   created() {
@@ -353,6 +355,7 @@ export default {
           this.closeMultipleTextDialog()
           break
         default:
+          this.closeMultipleTextDialog()
           break
       }
     }
@@ -488,18 +491,33 @@ export default {
 .multiple-text-dialog {
   .el-dialog {
     width: 1300px;
-    max-width: 80%;
-    height: 800px;
-    max-height: 80%;
+    max-width: 80vw;
   }
   .el-dialog__header {
     background-color: #3ba4ff;
+    padding: 8px 30px;
   }
-  .el-dialog__title{
+  .el-dialog__title {
+    color: #fff;
+    font-size: 16px;
+  }
+  .el-dialog__headerbtn {
+    top: 15px;
+    right: 14px;
+  }
+  .el-dialog__headerbtn .el-dialog__close {
     color: #fff;
   }
   .el-diaog__body {
     padding: 30px 0;
+  }
+  .el-textarea__inner {
+    border: none;
+    height: 640px;
+    max-height: 70vh;
+  }
+  .el-button--primary {
+    padding: 7px 45px;
   }
 }
 </style>

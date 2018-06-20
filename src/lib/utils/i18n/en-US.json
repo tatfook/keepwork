@@ -52,7 +52,8 @@
     "link": "Link",
     "back": "back",
     "NoPages": "I'm sorry! The page you visited does not exist!",
-    "loginToStarPage": "You must login before star this page!"
+    "loginToStarPage": "You must login before star this page!",
+    "confirmButtonText": "Confirm"
   },
   "editor": {
     "files": "Files",
