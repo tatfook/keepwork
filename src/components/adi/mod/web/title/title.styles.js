@@ -301,10 +301,9 @@ export default [
         height: '63px'
       }
     }
-  }
-
+  },
   // style 4
-  /* {
+  {
     templateID: 2,
     data: {
       root: {},
@@ -369,5 +368,5 @@ export default [
         height: '5px'
       }
     }
-  } */
+  }
 ]

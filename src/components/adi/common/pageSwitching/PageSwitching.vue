@@ -1,6 +1,6 @@
 <template>
   <div class="comp comp-page-switching">
-    <div class="container">
+    <div>
       <div v-for="(item, index) in sourceData" :key="index">
         <mod-list-viewer :modList='getModList(item._source.content)' :theme='theme' />
       </div>
@@ -71,10 +71,19 @@ export default {
       let type = process.env.ES_TYPE
       let body = {
         query: {
-          match: {
-            url: {
-              query: url,
-              operator: 'and'
+          bool: {
+            must: {
+              match: {
+                url: {
+                  query: url,
+                  operator: 'and'
+                }
+              }
+            },
+            must_not: {
+              match: {
+                url: ".gitignore"
+              }
             }
           }
         },

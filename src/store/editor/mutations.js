@@ -42,6 +42,7 @@ const SET_EDITING_AREA = 'SET_EDITING_AREA'
 const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
+const CLOSE_ALL_OPENED_FILE = 'CLOSE_ALL_OPENED_FILE'
 
 const REFRESH_SITE_SETTINGS = 'REFRESH_SITE_SETTINGS'
 const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
@@ -274,6 +275,9 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
+  },
+  [CLOSE_ALL_OPENED_FILE](state) {
+    Vue.set(state, 'openedFiles', {})
   },
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)

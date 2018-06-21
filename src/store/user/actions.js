@@ -389,7 +389,6 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
-
   async saveSiteBasicSetting(context, {newBasicMessage}) {
     let { commit, getters } = context
     let { authRequestConfig } = getters

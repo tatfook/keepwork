@@ -472,6 +472,9 @@ const actions = {
     if (path === state.activePageUrl) {
       commit(SET_ACTIVE_PAGE, null)
     }
+  },
+  closeAllOpenedFile({ commit }, getters) {
+    commit('CLOSE_ALL_OPENED_FILE')
   }
 }
 

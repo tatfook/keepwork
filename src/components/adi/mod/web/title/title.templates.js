@@ -30,7 +30,6 @@ export default [
     },
     { colMenu: 'menu' }
   ],
-
   // template 2
   [
     {
