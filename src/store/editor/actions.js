@@ -365,6 +365,8 @@ const actions = {
     { sitePath }
   ) {
     let siteSetting = initSiteState()
+
+    await dispatch('user/getProfile', {forceLogin: true}, {root: true})
     await dispatch('user/getSiteLayoutConfig', { path: sitePath })
     let {
       'user/siteLayoutConfigBySitePath': siteLayoutConfigBySitePath,
@@ -397,7 +399,7 @@ const actions = {
           fileName: fileName
         })
       })
-    )
+    ).catch(e => console.error(e))
 
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
   },
