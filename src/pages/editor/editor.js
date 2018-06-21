@@ -46,7 +46,13 @@ const store = new Vuex.Store({
         'user.profile',
         'user.webTemplateConfig',
         'user.skyDrive',
-        'editor'
+        'editor.activeManagePaneComponent',
+        'editor.activePage',
+        'editor.activePageUrl',
+        'editor.filemanagerTreeNodeExpandMapByPath',
+        'editor.openedFiles',
+        'editor.showingCol',
+        'editor.siteSettings'
       ] // , 'gitlab']
     }),
     broadcast('frameViewport')

@@ -337,7 +337,11 @@ export default {
       } else {
         replaceStr += '[]'
       }
+
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
@@ -353,7 +357,10 @@ export default {
         replaceStr += '![]'
       }
 
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
@@ -378,7 +385,6 @@ export default {
       if (undefined === content) {
         this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
       }
-      return lineNo
     },
     replaceLine(lineNo, content) {
       const originalContent = this.editor.getLine(lineNo)
@@ -408,12 +414,22 @@ export default {
         // }
 
         // gitlab
+        let lineNo = coords ? coords.line : this.editor.getCursor().line
+        let originText = this.editor.getLine(lineNo)
+        if (originText) {
+          this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
+          lineNo++
+        }else{
+          this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
+        }
         let fileReader = new FileReader()
         fileReader.onload = async () => {
+          this.replaceLine(lineNo,  this.$t('editor.uploadingToGitlabText'))
           const path = await this.gitlabUploadFile({
             fileName: file.name,
             content: fileReader.result
           })
+          this.replaceLine(lineNo, '')
           if (!path) {
             this.insertLink(null, '***Upload Failed!***', coords)
           } else if (/image\/\w+/.test(file.type)) {

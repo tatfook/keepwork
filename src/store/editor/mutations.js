@@ -13,6 +13,7 @@ const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
 const MOVE_MOD = 'MOVE_MOD'
 const SET_PRE_MOD_KEY = 'SET_PRE_MOD_KEY'
+const SET_IS_MULTIPLE_TEXT_DIALOG_SHOW = 'SET_IS_MULTIPLE_TEXT_DIALOG_SHOW'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
@@ -55,6 +56,7 @@ export const props = {
   DELETE_MOD,
   MOVE_MOD,
   SET_PRE_MOD_KEY,
+  SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -151,6 +153,9 @@ const mutations = {
   },
   [SET_PRE_MOD_KEY](state, key) {
     Vue.set(state.activePage, 'preModKey', key)
+  },
+  [SET_IS_MULTIPLE_TEXT_DIALOG_SHOW](state, isShow) {
+    Vue.set(state, 'isMultipleTextDialogShow', isShow)
   },
   [SET_ACTIVE_PROPERTY](state, property) {
     if (!state.activePage.activeMod) return
