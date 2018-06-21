@@ -94,6 +94,9 @@ const actions = {
     const sitePath = getFileSitePathByPath(path)
     const siteData = state.siteSettings[sitePath]
 
+    // load profile and websites info to get correct projectIds for reading files
+    await dispatch('user/getAllPersonalAndContributedSite', {root: true})
+
     if (!cacheAvailable(siteData)) {
       await dispatch('refreshSiteSettings', { sitePath })
     }
@@ -365,6 +368,7 @@ const actions = {
     { sitePath }
   ) {
     let siteSetting = initSiteState()
+
     await dispatch('user/getSiteLayoutConfig', { path: sitePath })
     let {
       'user/siteLayoutConfigBySitePath': siteLayoutConfigBySitePath,
@@ -397,7 +401,7 @@ const actions = {
           fileName: fileName
         })
       })
-    )
+    ).catch(e => console.error(e))
 
     commit(REFRESH_SITE_SETTINGS, { sitePath, siteSetting })
   },
