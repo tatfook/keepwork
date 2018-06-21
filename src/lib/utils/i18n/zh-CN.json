@@ -61,7 +61,8 @@
     "link": "链接",
     "back": "返 回",
     "NoPages": "很抱歉！您访问的页面不存在!",
-    "loginToStarPage": "点击右上角登录后才能点赞！"
+    "loginToStarPage": "点击右上角登录后才能点赞！",
+    "confirmButtonText": "确认"
   },
   "editor": {
     "files": "文件",
@@ -212,7 +213,11 @@
     "yourPosition": "您所在的位置：",
     "defaultPage": "首页",
 
-    "removeImgConfirmMsg": "你确定要删除图片吗？"
+    "removeImgConfirmMsg": "你确定要删除图片吗？",
+
+    "uploadingToGitlabText": "正在上传到gitab。。。",
+    "readFileFromLocal": "正在读取文件。。。",
+    "enlargeMdEditing": "大窗口编辑"
   },
   "modList": {
     "recent": "常用",

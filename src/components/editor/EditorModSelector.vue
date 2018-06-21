@@ -57,7 +57,7 @@ export default {
     ...mapActions({
       deleteMod: 'deleteMod',
       setPreMod: 'setPreMod',
-      setNewModPosition: 'setNewModPosition',
+      setNewModPosition: 'setNewModPosition'
     }),
     newMod(position) {
       this.$store.dispatch('setNewModPosition', position)
