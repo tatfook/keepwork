@@ -45,6 +45,7 @@
     "error": "出错啦，请重试",
 
     "OK": "确认",
+    "Sure": "确定",
     "Cancel": "取消",
 
     "action": "操作",
@@ -71,6 +72,8 @@
     "saveAll": "保存全部",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unSaveConfirm": "您有修改的内容未保存，是否继续？",
+    "closeDialogTitle": "关闭提示",
     "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",

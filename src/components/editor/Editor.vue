@@ -42,7 +42,7 @@
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
-      <el-dialog class="multiple-text-dialog" title="正文" :visible="isMultipleTextDialogShow" top='6vh' :before-close="handleMultipleTextDialogClose" @open='initMarkdownModDatas'>
+      <el-dialog class="multiple-text-dialog" :title="$t('card.paragraph')" :visible="isMultipleTextDialogShow" top='6vh' :before-close="handleMultipleTextDialogClose" @open='initMarkdownModDatas'>
         <el-input type='textarea' resize='none' :placeholder="$t('field.' + editingMarkdownModDatas.key)" v-model='editingMarkdownModDatas.content'></el-input>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handleMultipleTextDialogClose('save')">{{$t('common.confirmButtonText')}}</el-button>
@@ -341,6 +341,11 @@ export default {
         }
       })
     },
+    checkIsModified() {
+      return (
+        this.editingMarkdownModDatas.content !== this.activePropertyData.data
+      )
+    },
     handleMultipleTextDialogClose(type) {
       switch (type) {
         case 'save':
@@ -348,7 +353,19 @@ export default {
           this.closeMultipleTextDialog()
           break
         default:
-          this.closeMultipleTextDialog()
+          let isModified = this.checkIsModified()
+          if (isModified) {
+            let that = this
+            this.$confirm(this.$t('editor.unSaveConfirm'), this.$t('editor.closeDialogTitle'), {
+              confirmButtonText: that.$t('common.Sure'),
+              cancelButtonText: that.$t('common.Cancel'),
+              type: 'warning'
+            }).then(() => {
+              this.closeMultipleTextDialog()
+            })
+          } else {
+            this.closeMultipleTextDialog()
+          }
           break
       }
     }
