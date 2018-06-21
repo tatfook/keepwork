@@ -243,7 +243,9 @@ export default {
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) throw new Error(filenameValidateResult)
-
+      if (!this.mediaLibraryMode) {
+        this.loading = true
+      }
       let previewUrl = URL.createObjectURL(file)
       let fileIndex = this.uploadingFiles.length
       let that = this
@@ -256,6 +258,9 @@ export default {
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.uploadingFiles[fileIndex].percent = 0
+      if (!this.mediaLibraryMode) {
+        this.loading = false
+      }
     },
     async handleUpdateFile(e, bigfileToUpdate) {
       let file = _.get(e, ['target', 'files', 0])
