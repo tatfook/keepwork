@@ -1,15 +1,15 @@
 <template>
   <el-container v-loading="loading" id="editor">
-      <el-header>
-        <EditorHeader></EditorHeader>
-      </el-header>
-      <el-main>
-        <router-view @showPreview='showPreview' />
-        <el-dialog  class="preview-dialog" :visible.sync='dialogVisible ' width='100% ' height='100% '>
-          <PageViewer />
-        </el-dialog>
-      </el-main>
-    </el-container>
+    <el-header>
+      <EditorHeader></EditorHeader>
+    </el-header>
+    <el-main>
+      <router-view @showPreview='showPreview' />
+      <el-dialog class="preview-dialog" :visible.sync='dialogVisible ' width='100% ' height='100% '>
+        <PageViewer />
+      </el-dialog>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -31,9 +31,15 @@ export default {
   watch: {
     $route: 'updateActivePage'
   },
+  computed:{
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    })
+  },
   methods: {
     ...mapActions({
-      setActivePage: 'setActivePage'
+      setActivePage: 'setActivePage',
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath'
     }),
     async updateActivePage() {
       this.loading = true
@@ -41,6 +47,9 @@ export default {
       await this.setActivePage({ path }).catch(e => {
         console.error(e)
         this.loading = false
+      })
+      await this.userGetWebsiteDetailInfoByPath({
+        path: this.activePageInfo.sitepath
       })
       this.loading = false
     },
@@ -74,7 +83,7 @@ body {
 #editor {
   background: white;
 }
-.preview-dialog .el-dialog__body{
+.preview-dialog .el-dialog__body {
   padding: 30px 0;
 }
 </style>
