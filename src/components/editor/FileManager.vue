@@ -179,7 +179,7 @@ export default {
     },
     async initUrlExpandSelect() {
       let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
-      if (this.username !== username) {
+      if (this.username !== username && sitepath) {
         this.$set(this.trees, 'isMyShow', false)
         this.$set(this.trees, 'isContributedShow', true)
       }
