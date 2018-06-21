@@ -5,7 +5,7 @@
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
         </h1>
-        <span class="opened-files-buttons" v-if="hasOpenedFiles" v-show="trees.isOpenedShow">
+        <span class="opened-files-buttons" v-if="hasOpenedFiles" v-show="trees.isOpenedShow && hasOpenedFiles">
           <el-button class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
           </el-button>
           <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFilesConfirm'>
@@ -15,15 +15,15 @@
       <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFile()">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFile()" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          <el-button type="warning" @click="handleCloseOpenedFile">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click="saveAndCloseOpenedFile" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
-      <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseDialog">
+      <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFile(true)">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFileAndNext()" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          <el-button type="warning" @click="handleCloseOpenedFileAndNext">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-collapse-transition>
@@ -313,8 +313,14 @@ export default {
       }
     },
     handleCloseDialog() {
-      this.toBeCloseFilePath = null
+      this.toBeCloseFilePath = ''
+      this.toBeCloseFileName = ''
       this.dialogVisible = false
+    },
+    handleCloseAllDialog() {
+      this.toBeCloseFilePath = ''
+      this.toBeCloseFileName = ''
+      this.dialogCloseAllVisible = false
     },
     handleCloseOpenedFile() {
       let path = this.toBeCloseFilePath
@@ -325,9 +331,16 @@ export default {
       let path = this.toBeCloseFilePath
       this.savePending = true
       await this.savePageByPath(path)
-      this.closeAndResetFile(path)
-      this.handleCloseDialog()
-      this.savePending = false
+      .then(() => {
+        this.closeAndResetFile(path)
+        this.handleCloseDialog()
+        this.savePending = false
+      })
+      .catch(e => {
+        this.$message.error(this.$t("editor.saveFail"));
+        this.handleCloseDialog()
+        this.savePending = false
+      })
     },
     handleOpenedClick(data, node) {
       let path = data.path
@@ -388,7 +401,6 @@ export default {
       this.isNewWebsiteDialogShow = false
     },
     async closeAllOpenedFilesConfirm() {
-      // if (!this.hasOpenedFiles) return
       if (this.unSavedOpenedFilesPaths.length > 0) {
         this.toBeCloseList = [...this.unSavedOpenedFilesPaths]
         this.dialogCloseAllVisible = true
@@ -397,24 +409,9 @@ export default {
         let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
         this.toBeCloseFileName = `${siteName}/${fileName}`
         this.toBeCloseFilePath = path
+      } else {
+        this.closeAllOpenedFile()
       }
-      // while (paths.length > 0) {
-      //   let path = paths.shift()
-      //   let siteName = path.split('/').slice(1, 2).join()
-      //   let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
-      //   console.log(siteName, fileName)
-        // await this.$confirm(`${this.$t("editor.saveConfirmBefore")} "${fileName}" ${this.$t("editor.saveConfirmAfter")}`,{
-        //   confirmButtonText: this.$t('el.messagebox.confirm'),
-        //   cancelButtonText: this.$t('el.messagebox.cancel'),
-        //   type: 'warning'
-        // }).then(async () => {
-        //   await this.savePageByPath(path)
-        // }).catch(() =>{
-        //   return
-        // })
-      // }
-      // this.closeAllOpenedFile()
-      // this.$router.push('/')
     },
     checkHasNext() {
       if (this.unSavedOpenedFilesPaths.length > 0) {
@@ -428,27 +425,22 @@ export default {
     handleCloseOpenedFileAndNext() {
       let path = this.toBeCloseFilePath
       path && this.closeAndResetFile(path)
-      if (this.unSavedOpenedFilesPaths.length > 0) {
-        this.closeAllOpenedFilesConfirm()
-      } else {
-        this.closeAllOpenedFile()
-        this.$router.push('/')
-        this.dialogCloseAllVisible = false
-      }
+      this.checkHasNext()
     },
     async saveAndCloseOpenedFileAndNext() {
       this.savePending = true
       let path = this.toBeCloseFilePath
       await this.savePageByPath(path)
-      this.closeAndResetFile(path)
-      this.savePending = false
-      if (this.unSavedOpenedFiles.length > 0) {
-        this.closeAllOpenedFilesConfirm()
-      } else {
-        this.closeAllOpenedFile()
-        this.$router.push('/')
-        this.dialogCloseAllVisible = false
-      }
+      .then(() => {
+        this.closeAndResetFile(path)
+        this.savePending = false
+        this.checkHasNext()
+      })
+      .catch(e => {
+        this.$message.error(this.$t("editor.saveFail"));
+        this.handleCloseAllDialog()
+        this.savePending = false
+      })
     },
     async saveAllOpenedFiles() {
       if (!this.hasUnSaveOpenedFiles) return
@@ -456,7 +448,9 @@ export default {
       let paths = this.unSavedOpenedFilesPaths
       this.savePending = true
       while(num--) {
-        await this.savePageByPath(paths[num])
+        await this.savePageByPath(paths[num]).catch(e => {
+          this.$message.error(this.$t("editor.saveFail"));
+        })
       }
       this.savePending = false
     }
