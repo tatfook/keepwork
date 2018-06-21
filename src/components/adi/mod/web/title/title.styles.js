@@ -6,29 +6,29 @@ let defaultData = {
     emptyData: [
       {
         name: 'adi.title.menu',
-        link: 'http://keepwork.com'
+        link: '#'
       }
     ],
     emptyTarget: '_blank'
   },
   logo: {
     emptySrc: require('@/../static/adi/title/bear.svg'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   businessName: {
     emptyName: 'adi.title.businessName',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   tagline: {
     emptyName: 'adi.title.tagLine',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   logoB: {
     emptySrc: require('@/../static/adi/CreativeSpace/logo.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   }
 }
@@ -301,10 +301,9 @@ export default [
         height: '63px'
       }
     }
-  }
-
+  },
   // style 4
-  /* {
+  {
     templateID: 2,
     data: {
       root: {},
@@ -369,5 +368,5 @@ export default [
         height: '5px'
       }
     }
-  } */
+  }
 ]

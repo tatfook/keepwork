@@ -32,8 +32,7 @@ export default {
   name: 'EditorMarkdown',
   data() {
     return {
-      gConst,
-      preEvent: null
+      gConst
     }
   },
   components: {
@@ -167,18 +166,10 @@ export default {
     checkInModCode(line) {
       return Parser.getActiveBlock(this.modList, line)
     },
-    checkOriginEvent(change) {
+    checkIfInComposing(change) {
       // see https://codemirror.net/doc/manual.html#selection_origin
       // When it starts with *, it will always replace the previous event (if that had the same origin)
-      if (change.origin && change.origin[0] === '*') {
-        if (this.preEvent && this.preEvent[0] === '*') {
-          this.$store.dispatch('reduceUndoStack')
-        }
-        // reset preEvent if it is the last compose action
-        this.preEvent = change.removed && change.removed[0] === "" ? change.origin : null
-      } else {
-        this.preEvent = null
-      }
+      return change.origin && change.origin[0] === '*' && change.removed && change.removed[0] === ""
     },
     updateMarkdown(editor, changes) {
       let code = editor.getValue()
@@ -199,7 +190,7 @@ export default {
 
       let change = changes[0]
 
-      this.checkOriginEvent(change)
+      if(this.checkIfInComposing(change)) return
       let mod = Parser.getActiveBlock(this.modList, change.from.line + 1)
       if (!mod) {
         return this.$store.dispatch('updateMarkDown', {
@@ -337,7 +328,11 @@ export default {
       } else {
         replaceStr += '[]'
       }
+
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
@@ -353,7 +348,10 @@ export default {
         replaceStr += '![]'
       }
 
+      let cursorLineNo = coords ? coords.line : this.editor.getCursor().line
+      let lineContent = this.editor.getLine(cursorLineNo)
       replaceStr += url ? `(${url})` : '()'
+      replaceStr = lineContent ? '\n' + replaceStr : replaceStr
       coords
         ? this.editor.replaceRange(replaceStr, coords)
         : this.editor.replaceSelection(replaceStr)
@@ -378,7 +376,6 @@ export default {
       if (undefined === content) {
         this.editor.replaceRange('\n', { line: lineNo, ch: 0 })
       }
-      return lineNo
     },
     replaceLine(lineNo, content) {
       const originalContent = this.editor.getLine(lineNo)
@@ -408,12 +405,22 @@ export default {
         // }
 
         // gitlab
+        let lineNo = coords ? coords.line : this.editor.getCursor().line
+        let originText = this.editor.getLine(lineNo)
+        if (originText) {
+          this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
+          lineNo++
+        }else{
+          this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
+        }
         let fileReader = new FileReader()
         fileReader.onload = async () => {
+          this.replaceLine(lineNo,  this.$t('editor.uploadingToGitlabText'))
           const path = await this.gitlabUploadFile({
             fileName: file.name,
             content: fileReader.result
           })
+          this.replaceLine(lineNo, '')
           if (!path) {
             this.insertLink(null, '***Upload Failed!***', coords)
           } else if (/image\/\w+/.test(file.type)) {

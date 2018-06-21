@@ -3,12 +3,12 @@ import _ from 'lodash'
 let emptyData = {
   pic: {
     emptySrc: require('@/../static/adi/qq/qqOne.svg'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   desc: {
     emptyName: 'adi.qq.desc',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   }
 }

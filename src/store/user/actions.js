@@ -59,7 +59,8 @@ const actions = {
           resolve()
         }).catch(async e => {
           if (!forceLogin) {
-            reject(e)
+            reject(new Error('401'))
+            clearGetProfilePromise()
             return
           }
 
@@ -70,9 +71,12 @@ const actions = {
               username: prompt('username: '),
               password: prompt('password: ')
             }
-            await dispatch('login', payload)
-
             clearGetProfilePromise()
+            if (!payload.username || !payload.password) {
+              reject(new Error('401'))
+              return
+            }
+            await dispatch('login', payload)
             await dispatch('getProfile')
             return resolve()
           }
@@ -92,6 +96,14 @@ const actions = {
     }
     userDetail = await keepwork.user.getDetailByName({ username: username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+  },
+  async getAllPersonalPageList({ dispatch, getters }, payload) {
+    let { useCache = true } = payload || {}
+    await dispatch('getAllPersonalWebsite', { useCache })
+    let { personalSitePathMap } = getters
+    await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
+      await dispatch('gitlab/getRepositoryTree', {path: sitepath, useCache}, { root: true })
+    })).catch(e => console.error(e))
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
@@ -377,7 +389,6 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
-
   async saveSiteBasicSetting(context, {newBasicMessage}) {
     let { commit, getters } = context
     let { authRequestConfig } = getters

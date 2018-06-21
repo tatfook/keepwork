@@ -5,6 +5,7 @@
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
+    <span v-else-if="data.myJoin">{{data.username}}/{{data.sitename}}({{data.displayName || node.label | hideMDFileExtension}})</span>
     <span v-else>{{data.displayName || node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
       <i class="iconfont icon-file_" v-if="isFile"></i>
@@ -13,7 +14,7 @@
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
-      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" title="修改名称">
+      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
@@ -171,11 +172,10 @@ export default {
         let unSavedFiles = _.intersection(this.unSavedFiles, childrenFiles)
         if (unSavedFiles.length > 0) {
           await this.$confirm(
-            `有 ${unSavedFiles.length} 个文件尚未保存，是否保存?`,
-            '提示',
+            `${unSavedFiles.length}${this.$t("editor.filesUnSaved")}`,
             {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+              confirmButtonText: this.$t("editor.confirm"),
+              cancelButtonText: this.$t(""),
               type: 'warnning'
             }
           )
@@ -193,9 +193,9 @@ export default {
       } else {
         let { saved } = this.getOpenedFileByPath(this.filePath)
         if (!saved) {
-          await this.$confirm('该文件尚未保存，是否保存？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          await this.$confirm(this.$t("editor.theFileUnSaved"), {
+            confirmButtonText: this.$t('el.messagebox.confirm') ,
+            cancelButtonText: this.$t('el.messagebox.cancel'),
             type: 'warning'
           })
             .then(async () => {
@@ -393,7 +393,7 @@ export default {
       return `${username}/${name}`
     },
     filePath() {
-      return this.data.path.replace(/.md$/, '')
+      return this.data.path.replace(/\.md$/, '')
     },
     unSavedFiles() {
       return _.keys(_.pickBy(this.openedFiles, ({ saved }) => !saved))

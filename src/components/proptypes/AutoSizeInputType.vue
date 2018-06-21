@@ -1,5 +1,5 @@
 <template>
-  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows:7, maxRows: maxRows }" resize='none' :placeholder="$t('field.' + editingKey)" v-model='inputTypeValue' @change='updateValue' @focus='getFocus' @blur='blurEventHandler' @input='inputValue'></el-input>
+  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows:7, maxRows: maxRows }" resize='none' :placeholder="$t('field.' + editingKey)" v-model='inputTypeValue' @input='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
 </template>
 <script>
 const blurMinRows = 7
@@ -45,11 +45,11 @@ export default {
       this.$nextTick(function() {
         this.$refs.autosizeTextarea.resizeTextarea()
       })
-    },
-    inputValue(newVal) {
-      // sometimes input event can be triggered without focus, for example, the grammarly plugin for chrome
-      if (!this.onFocus) this.updateValue(newVal)
     }
+    // inputValue(newVal) {
+    //   // sometimes input event can be triggered without focus, for example, the grammarly plugin for chrome
+    //   if (!this.onFocus) this.updateValue(newVal)
+    // }
   }
 }
 </script>

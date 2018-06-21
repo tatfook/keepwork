@@ -10,7 +10,7 @@
           {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" v-if='defaultMode'>
         <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
           <i slot="suffix" class="el-input__icon el-icon-search"></i>
         </el-input>
@@ -127,6 +127,13 @@
           </div>
           <span :title="$t('common.remove')" class='el-icon-delete' @click="handleRemove(mediaItem)"></span>
         </div>
+        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.percent>0" :style='{
+            backgroundImage: `url("${file.cover}")`
+          }'>
+          <div class="skydrive-manager-media-uploading-cover">
+          </div>
+          <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
+        </div>
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
@@ -152,7 +159,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import _ from 'lodash'
 import mediaProperties from '../adi/common/media/media.properties';
-
+const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
   name: 'SkyDriveManager',
   props: {
@@ -165,7 +172,8 @@ export default {
       loading: true,
       searchWord: '',
       multipleSelectionResults: [],
-      selectedMediaItem: null
+      selectedMediaItem: null,
+      uploadingFiles:[]
     }
   },
   async mounted() {
@@ -235,13 +243,24 @@ export default {
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) throw new Error(filenameValidateResult)
-
-      this.loading = true
+      if (!this.mediaLibraryMode) {
+        this.loading = true
+      }
+      let previewUrl = URL.createObjectURL(file)
+      let fileIndex = this.uploadingFiles.length
+      let that = this
+      this.uploadingFiles.push({
+        cover: previewUrl,
+        percent: 0
+      })
       await this.userUploadFileToSkyDrive({file, onProgress(progress) {
-        console.log(progress)
+        that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
-      this.loading = false
+      this.uploadingFiles[fileIndex].percent = 0
+      if (!this.mediaLibraryMode) {
+        this.loading = false
+      }
     },
     async handleUpdateFile(e, bigfileToUpdate) {
       let file = _.get(e, ['target', 'files', 0])
@@ -299,7 +318,16 @@ export default {
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
-        inputValidator: str => this.filenameValidator(getFilenameWithExt(str, ext))
+        inputValidator: str => {
+          if (!str) {
+            return this.$t('skydrive.nameEmptyError')
+          }
+          let isFilenameValid = this.testFilenameIsValid(str)
+          if (typeof(isFilenameValid) === 'string') {
+            return isFilenameValid
+          }
+          return this.filenameValidator(getFilenameWithExt(str, ext))
+        }
       })
 
       newname = (newname || '').trim()
@@ -314,6 +342,10 @@ export default {
       await this.userChangeFileNameInSkyDrive({_id, filename}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
+    },
+    testFilenameIsValid(newFilename) {
+      let errMsg = this.$t('skydrive.nameContainSpecialCharacterError')
+      return (!ErrFilenamePatt.test(newFilename)) ? errMsg : true
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
@@ -491,6 +523,22 @@ export default {
       .el-icon-delete {
         display: block;
       }
+    }
+  }
+  &-media-uploading{
+    padding: 0 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    &-cover{
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.3);
+    }
+    .el-progress{
+      position: relative;
+      top: 45px;
     }
   }
 }

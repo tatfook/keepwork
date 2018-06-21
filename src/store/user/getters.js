@@ -82,6 +82,32 @@ const getters = {
   },
   personalSitePathMap: (state, { personalSiteList }) =>
     _.keyBy(personalSiteList, ({ username, name }) => `${username}/${name}`),
+  personalAllPagePathList: (state, { personalSitePathMap }) => {
+    let sitepaths = _.keys(personalSitePathMap)
+
+    let getChildrenPathsDeep = x => {
+      let result = []
+      result.push(x.path)
+      x.children && x.children.length && x.children.forEach(
+        child => (result = result.concat(getChildrenPathsDeep(child)))
+      )
+      return result
+    }
+
+    let allPageList = sitepaths.reduce((prev, sitepath) => {
+      return [
+        ...prev,
+        ...getChildrenPathsDeep({
+          ...personalSitePathMap[sitepath],
+          path: sitepath
+        })
+      ]
+    }, [])
+
+    allPageList = allPageList.map(str => str.replace(/\.[^.]+/, ''))
+
+    return allPageList
+  },
   getPersonalSiteInfoByPath: (state, { personalSitePathMap }) => path => {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]

@@ -75,7 +75,7 @@
         </el-dropdown>
       </el-menu-item> -->
       <el-menu-item index='2' class="link-box">
-        <i class="iconfont icon-copy" @click='doCopyLink'></i>
+        <i class="iconfont icon-copy" @click='doCopyLink' :title='$t("common.copy")'></i>
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='8' class='unsaved-tip'>

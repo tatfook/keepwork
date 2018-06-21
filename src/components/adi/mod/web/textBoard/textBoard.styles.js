@@ -1,12 +1,12 @@
 let emptyData = {
   subtitle: {
     emptyName: 'adi.mixPosition.subtitle',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   title: {
     emptyName: 'adi.text.title',
-    emptyLink: 'http://keepwork.com',
+    emptyLink: '#',
     emptyTarget: '_blank'
   },
   paragraph: {

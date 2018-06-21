@@ -1,14 +1,23 @@
 {
   "common": {
+    "login": "Login",
+    "signIn": "Sign in",
+    "logout": "Logout",
     "welcomeToKeepwork": "Welcome to Keepwork",
     "createNewWebsite": "Create New Website",
+    "serviceMall": "Service Mall",
+    "invitationToRegister": "Invitation to register",
+    "personalCenter": "Personal Center",
+    "userData": "User Data",
+    "accountSecurity": "Account Security",
+    "realNameAuthentication": "Real Name Authentication",
 
     "features": "Features",
     "applicationCenter": "Application center",
     "myHomePage": "My home page",
     "websiteManagement": "Website Management",
     "pageEditor": "Page editor",
-    "myWebDisk": "My web disk",
+    "myWebDisk": "Cloud Drive",
     "dynamic": "Dynamic",
     "attention": "Attention",
     "history": "History",
@@ -36,6 +45,7 @@
     "error": "Error, please try again",
 
     "OK": "OK",
+    "Sure": "Confirm",
     "Cancel": "Cancel",
 
     "action": "Action",
@@ -47,12 +57,23 @@
     "rename": "Rename",
     "remove": "Remove",
     "apply": "Apply",
-    "loginToStarPage": "You must login before star this page!"
+    "add": "Add",
+    "change": "Change",
+    "link": "Link",
+    "back": "back",
+    "NoPages": "I'm sorry! The page you visited does not exist!",
+    "loginToStarPage": "You must login before star this page!",
+    "confirmButtonText": "Confirm"
   },
   "editor": {
+    "files": "Files",
+    "modules": "MOD",
     "save": "Save",
+    "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
+    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
     "copyFail": "Link copy failed",
@@ -76,6 +97,7 @@
 
     "refresh": "Refresh",
     "close": "Close",
+    "closeAll": "Close all",
     "delete": "Delete",
     "delConfirm": "OK to delete at",
     "nameSingle": "name",
@@ -83,6 +105,13 @@
     "link": "Link",
     "setting": "Setting",
     "create": "Create",
+    "fileUnSaved": "The file has not been saved yet",
+    "filesUnSaved": " files have not been saved, whether to save? ",
+    "theFileUnSaved": "The file has not been saved yet, is it saved?",
+    "unSaveClose": "Do not save close",
+    "saveClose": "Save and close",
+    "saveConfirmBefore": "Do you want to save the changes to the ",
+    "saveConfirmAfter": "file before closing it?",
 
     "folder": "Folder",
     "newPage": "New page",
@@ -195,7 +224,13 @@
 
     "yourPage": "Your page",
     "yourPosition": "Your position：",
-    "defaultPage": "Default page"
+    "defaultPage": "Default page",
+
+    "removeImgConfirmMsg": "Are you sure to remove this image?",
+
+    "uploadingToGitlabText": "uploading file to gitlab ...",
+    "readFileFromLocal": "reading file from local ...",
+    "enlargeMdEditing": "Large window editing"
   },
   "modList": {
     "recent": "Commonly used",
@@ -357,7 +392,8 @@
     "bigFile": "Big file",
     "iframe": "iframe",
     "pageRoute": "Page route",
-    "tab": "Tab"
+    "tab": "Tab",
+    "categoryList": "Category list"
   },
   "field": {
     "fileId": "file Id",
@@ -366,6 +402,7 @@
     "src": "src",
     "name": "name",
     "data": "data",
+    "color": "font color",
     "text": "text",
     "desc": "desc",
     "select": "please choose",
@@ -380,7 +417,9 @@
     "mobileHeight": "mobile height",
     "mobileWidth": "mobile width",
     "fontSize": "font size",
-    "path": "page path"
+    "path": "page path",
+    "target": "target",
+    "source": "source"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",
@@ -405,6 +444,8 @@
     "notImageFileError": "File is not image!",
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
-    "nameConflictError": "The name already exists."
+    "nameConflictError": "The name already exists.",
+    "nameEmptyError": "The name cannot be empyt.",
+    "nameContainSpecialCharacterError": "The name contains special characters."
   }
 }

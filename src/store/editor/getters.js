@@ -45,12 +45,16 @@ const getters = {
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
   },
+  isMultipleTextDialogShow: state => {
+    return state.isMultipleTextDialogShow
+  },
   activePropertyOptions: state => {
     if (state.activePropertyOptions) return state.activePropertyOptions
   },
   activePropertyData: (state, { activeProperty }) => {
     return _.get(state, ['activePage', 'activeMod', 'data', activeProperty], {})
   },
+  preModKey: state => state.activePage && state.activePage.preModKey,
 
   hasActiveMod: state => state.activePage && state.activePage.activeMod,
   hasActiveProperty: state =>

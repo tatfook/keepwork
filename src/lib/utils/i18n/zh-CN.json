@@ -1,13 +1,22 @@
 {
   "common": {
+    "login": "登录",
+    "signIn": "注册",
+    "logout": "退出登录",
     "welcomeToKeepwork": "欢迎来到 Keepwork",
     "createNewWebsite": "创建新网站",
+    "serviceMall": "服务商城",
+    "invitationToRegister": "邀请注册",
+    "personalCenter": "个人中心",
+    "userData": "用户资料",
+    "accountSecurity": "账户安全",
+    "realNameAuthentication": "实名认证",
 
     "features": "功能",
     "applicationCenter": "应用中心",
     "myHomePage": "我的主页",
     "websiteManagement": "网站管理",
-    "pageEditor": "页面编辑器",
+    "pageEditor": "在线编辑器",
     "myWebDisk": "我的网盘",
     "dynamic": "动态",
     "attention": "关注",
@@ -36,6 +45,7 @@
     "error": "出错啦，请重试",
 
     "OK": "确认",
+    "Sure": "确定",
     "Cancel": "取消",
 
     "action": "操作",
@@ -47,12 +57,23 @@
     "rename": "重命名",
     "remove": "删除",
     "apply": "应用",
-    "loginToStarPage": "点击右上角登录后才能点赞！"
+    "add": "添加",
+    "change": "更换",
+    "link": "链接",
+    "back": "返 回",
+    "NoPages": "很抱歉！您访问的页面不存在!",
+    "loginToStarPage": "点击右上角登录后才能点赞！",
+    "confirmButtonText": "确认"
   },
   "editor": {
+    "files": "文件",
+    "modules": "模块",
     "save": "保存",
+    "saveAll": "保存全部",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unSaveConfirm": "您有修改的内容未保存，是否继续？",
+    "closeDialogTitle": "关闭提示",
     "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",
@@ -76,6 +97,7 @@
 
     "refresh": "刷新",
     "close": "关闭",
+    "closeAll": "关闭全部",
     "delete": "删除",
     "delConfirm": "确定删除",
     "nameSingle": "名",
@@ -83,6 +105,13 @@
     "link": "链接",
     "setting": "设置",
     "create": "创建",
+    "fileUnSaved": "该文件尚未保存",
+    "filesUnSaved": " 个文件尚未保存，是否保存？",
+    "theFileUnSaved": "该文件尚未保存，是否保存？",
+    "unSaveClose": "不保存关闭",
+    "saveClose": "保存并关闭",
+    "saveConfirmBefore": "要在关闭前保存对",
+    "saveConfirmAfter": "的更改吗？",
 
     "folder": "文件夹",
     "newPage": "新建页面",
@@ -185,7 +214,13 @@
 
     "yourPage": "您的页面",
     "yourPosition": "您所在的位置：",
-    "defaultPage": "首页"
+    "defaultPage": "首页",
+
+    "removeImgConfirmMsg": "你确定要删除图片吗？",
+
+    "uploadingToGitlabText": "正在上传到gitab。。。",
+    "readFileFromLocal": "正在读取文件。。。",
+    "enlargeMdEditing": "大窗口编辑"
   },
   "modList": {
     "recent": "常用",
@@ -347,14 +382,16 @@
     "bigFile": "大文件",
     "iframe": "iframe",
     "pageRoute": "页面路径",
-    "tab": "标签"
+    "tab": "标签",
+    "categoryList": "分类列表"
   },
   "field": {
     "fileId": "字段",
     "fileType": "字段类型",
     "link": "链接",
-    "src": "地址",
+    "src": "背景图片地址",
     "name": "名字",
+    "color": "字体颜色",
     "text": "文本",
     "desc": "描述",
     "data": "数据",
@@ -369,7 +406,9 @@
     "mobileHeight": "手机高度",
     "mobileWidth": "手机宽度",
     "fontSize": "字体大小",
-    "path": "页面路径"
+    "path": "页面路径",
+    "target": "目标",
+    "source": "来源"
   },
   "skydrive": {
     "mediaLibrary": "图库",
@@ -394,6 +433,8 @@
     "notImageFileError": "文件不是图片类型",
     "removeFileConfirmMsg": "确认删除文件？",
     "newFilenamePromptMsg": "请输入新的文件名",
-    "nameConflictError": "文件名和现有名字重复"
+    "nameConflictError": "文件名和现有名字重复",
+    "nameEmptyError": "文件名不能为空",
+    "nameContainSpecialCharacterError": "文件名里包含特殊字符"
   }
 }

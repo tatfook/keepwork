@@ -68,7 +68,8 @@ export default {
   computed: {
     ...mapGetters({
       activeMod: 'activeMod',
-      themeConf: 'themeConf'
+      themeConf: 'themeConf',
+      preModKey: 'preModKey'
     }),
     theme() {
       let globalTheme = themeFactory.generate(this.themeConf)
@@ -99,7 +100,7 @@ export default {
     newMod(name, index) {
       this.$store.dispatch('addMod', {
         modName: name,
-        preModKey: this.activeMod && this.activeMod.key,
+        preModKey: this.preModKey || (this.activeMod && this.activeMod.key),
         styleID: index
       })
     },

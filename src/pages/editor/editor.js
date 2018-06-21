@@ -11,6 +11,7 @@ import router from './editor.router'
 import { editorModule, userModule, gitlabModule, createPersistedState } from '@/store'
 import ElementUI from 'element-ui'
 import { broadcast } from 'vuex-iframe-sync'
+import VueKeepScrollPosition from 'vue-keep-scroll-position'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import handleMessage from '@/lib/iframe'
 
@@ -18,6 +19,7 @@ window.addEventListener('message', handleMessage)
 
 Vue.use(fullscreen)
 Vue.use(VueClipboard)
+Vue.use(VueKeepScrollPosition)
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -44,7 +46,13 @@ const store = new Vuex.Store({
         'user.profile',
         'user.webTemplateConfig',
         'user.skyDrive',
-        'editor'
+        'editor.activeManagePaneComponent',
+        'editor.activePage',
+        'editor.activePageUrl',
+        'editor.filemanagerTreeNodeExpandMapByPath',
+        'editor.openedFiles',
+        'editor.showingCol',
+        'editor.siteSettings'
       ] // , 'gitlab']
     }),
     broadcast('frameViewport')

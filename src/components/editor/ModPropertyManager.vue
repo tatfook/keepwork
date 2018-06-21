@@ -32,14 +32,8 @@ export default {
   name: 'ModPropertyManager',
   data: () => ({
     editable: true,
-    BaseCompProptypes,
-    currentModLabel: ''
+    BaseCompProptypes
   }),
-  activated() {
-    this.currentModLabel =
-      this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
-      this.activeMod.cmd.substring(2)
-  },
   methods: {
     ...mapActions({
       setActivePropertyData: 'setActivePropertyData',
@@ -50,23 +44,6 @@ export default {
       // the data of the json_editor is in ini_data of the component
       let data = _.cloneDeep(_.get(this, ['$refs', 'editor', 'ini_data'], {}))
       this.setActivePropertyData({ data })
-    },
-    toDeleteMod() {
-      let self = this
-
-      this.$confirm(
-        this.$t('editor.modDelMsg'),
-        this.$t('editor.modDelMsgTitle'),
-        {
-          confirmButtonText: self.$t('el.messagebox.confirm'),
-          cancelButtonText: self.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
-        .then(() => {
-          this.deleteMod(this.activeMod.key)
-        })
-        .catch(() => {})
     },
     tabClickHandle(tabItem) {
       let activeName = tabItem.name
@@ -88,6 +65,14 @@ export default {
       }
     }
   },
+  watch: {
+    activeProperty() {
+      this.$nextTick(() => {
+        let ele = document.querySelector('.prop-box.active')
+        ele && ele.scrollIntoView()
+      })
+    }
+  },
   computed: {
     activePropertyDataCopy() {
       return _.cloneDeep(this.activePropertyData)
@@ -101,6 +86,10 @@ export default {
       hasActiveProperty: 'hasActiveProperty',
       activePropertyTabType: 'activePropertyTabType'
     }),
+    currentModLabel() {
+      return this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
+      this.activeMod.cmd.substring(2)
+    },
     editingProps() {
       let modType = 'Mod' + this.activeMod.cmd
       let modStyleID = this.activeMod.data.styleID || 0
