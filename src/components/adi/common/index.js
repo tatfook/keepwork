@@ -25,7 +25,7 @@ import AdiQuiz from './quiz/Quiz'
 import AdiLesson from './lesson/Lesson'
 import AdiTeachers from './teachers/Teachers'
 import AdiLessonShare from './lessonShare/LessonShare'
-import AdiLessonPackage from './lessonPackage/lessonPackage'
+import AdiLessonPackage from './lessonPackage/LessonPackage'
 
 export default {
   AdiMarkdown,
