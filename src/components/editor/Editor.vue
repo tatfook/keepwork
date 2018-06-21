@@ -347,9 +347,6 @@ export default {
           this.saveMultipleTextDatas()
           this.closeMultipleTextDialog()
           break
-        case 'reset':
-          this.closeMultipleTextDialog()
-          break
         default:
           this.closeMultipleTextDialog()
           break
