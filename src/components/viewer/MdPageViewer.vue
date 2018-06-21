@@ -4,7 +4,7 @@
     <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
     <mod-list-viewer v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' />
     <mod-list-viewer :modList='modList' :theme='theme' />
-    <div v-if="code ? false : true" class="img404">
+    <div v-if="show404" class="img404">
       <img src="https://test.keepwork.com/wiki/assets/imgs/404.png" alt="">
       <p>{{$t('common.NoPages')}}</p>
       <el-button class="back" type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button>
@@ -19,6 +19,18 @@ import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
 
 export default {
+  data() {
+    return {
+      mountedSecondsTimer: NaN,
+      mountedSeconds: 0
+    }
+  },
+  mounted() {
+    this.mountedSecondsTimer = setInterval(() => this.mountedSeconds ++, 1000)
+  },
+  unmounted() {
+    clearInterval(this.mountedSecondsTimer)
+  },
   computed: {
     ...mapGetters({
       code: 'code',
@@ -29,6 +41,12 @@ export default {
       sidebarModList: 'sidebarModList',
       themeConf: 'themeConf'
     }),
+    show404() {
+      return this.code === undefined && this.mounted3SecondsAgo
+    },
+    mounted3SecondsAgo() {
+      return this.mountedSeconds >= 3
+    },
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)
       if (this.storedTheme === newTheme) return this.storedTheme
