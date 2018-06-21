@@ -19,6 +19,7 @@ const {
   DELETE_MOD,
   MOVE_MOD,
   SET_PRE_MOD_KEY,
+  SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -195,6 +196,9 @@ const actions = {
   },
   setPreMod({ commit }, { key = '' }) {
     commit(SET_PRE_MOD_KEY, key)
+  },
+  setIsMultipleTextDialogShow({ commit }, { isShow = false }) {
+    commit(SET_IS_MULTIPLE_TEXT_DIALOG_SHOW, isShow)
   },
   addModToAdi({ commit, dispatch }, payload) {
     const modProperties = ModFactory.generate(payload.modName)

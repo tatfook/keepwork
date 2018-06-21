@@ -5,6 +5,7 @@
         {{$t("card." + cardKey)}}
       </el-col>
       <el-col class="card-info">
+        <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" :title="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
         <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
         </el-switch>
       </el-col>
@@ -42,12 +43,20 @@ export default {
         return this.cardValue && !this.cardValue.hidden
       },
       set() {}
+    },
+    isMultiLineProp() {
+      let propKeys = _.keys(this.prop)
+      let multipleLineProps = _.filter(propKeys, propItem => {
+        return this.prop[propItem] === 'autoSizeInput'
+      })
+      return multipleLineProps.length > 0
     }
   },
   methods: {
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
     changeActivePropty() {
       this.setActiveProperty({
@@ -73,11 +82,17 @@ export default {
       this.changeProptyData({
         hidden: !value
       })
+    },
+    showMultiTextDailog() {
+      this.changeProptyData(this.cardValue)
+      this.setIsMultipleTextDialogShow({
+        isShow: true
+      })
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .prop-box {
   background-color: #fff;
   padding: 25px 18px;
@@ -100,5 +115,12 @@ export default {
 }
 .card-info {
   width: auto;
+  white-space: nowrap;
+  .iconfont {
+    vertical-align: middle;
+    color: #333;
+    margin-right: 10px;
+    cursor: pointer;
+  }
 }
 </style>

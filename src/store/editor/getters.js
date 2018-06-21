@@ -45,6 +45,9 @@ const getters = {
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
   },
+  isMultipleTextDialogShow: state => {
+    return state.isMultipleTextDialogShow
+  },
   activePropertyOptions: state => {
     if (state.activePropertyOptions) return state.activePropertyOptions
   },

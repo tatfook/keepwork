@@ -52,7 +52,8 @@
     "link": "Link",
     "back": "back",
     "NoPages": "I'm sorry! The page you visited does not exist!",
-    "loginToStarPage": "You must login before star this page!"
+    "loginToStarPage": "You must login before star this page!",
+    "confirmButtonText": "Confirm"
   },
   "editor": {
     "files": "Files",
@@ -207,7 +208,8 @@
     "removeImgConfirmMsg": "Are you sure to remove this image?",
 
     "uploadingToGitlabText": "uploading file to gitlab ...",
-    "readFileFromLocal": "reading file from local ..."
+    "readFileFromLocal": "reading file from local ...",
+    "enlargeMdEditing": "Large window editing"
   },
   "modList": {
     "recent": "Commonly used",
