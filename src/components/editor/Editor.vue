@@ -153,7 +153,8 @@ export default {
       activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
-      isMultipleTextDialogShow: 'isMultipleTextDialogShow'
+      isMultipleTextDialogShow: 'isMultipleTextDialogShow',
+      activePropertyData: 'activePropertyData'
     }),
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
@@ -325,7 +326,7 @@ export default {
     },
     initMarkdownModDatas() {
       this.editingMarkdownModDatas = {
-        content: this.activeMod.data.md.data,
+        content: this.activePropertyData.data,
         key: 'data'
       }
     },
@@ -335,10 +336,6 @@ export default {
       })
     },
     saveMultipleTextDatas() {
-      this.setActiveProperty({
-        key: this.activeMod.key,
-        property: 'md'
-      })
       this.setActivePropertyData({
         data: {
           data: this.editingMarkdownModDatas.content

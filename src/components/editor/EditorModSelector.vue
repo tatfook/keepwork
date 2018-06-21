@@ -4,7 +4,7 @@
       <i class="iconfont icon-delete icon-del"></i>
     </div>
     <div class='mod'>
-      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive' v-on:dblclick.native="modDbclickHandle"></component>
+      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
       <span v-if='invalid'> 错误的Mod指令 </span>
     </div>
     <div class='operator' v-if='isActive'>
@@ -100,18 +100,6 @@ export default {
           this.deleteMod(this.mod.key)
         })
         .catch(() => {})
-    },
-    modDbclickHandle() {
-      let { cmd } = this.mod
-      switch (cmd) {
-        case 'Markdown':
-          this.setIsMultipleTextDialogShow({
-            isShow: true
-          })
-          break
-        default:
-          break
-      }
     }
   }
 }

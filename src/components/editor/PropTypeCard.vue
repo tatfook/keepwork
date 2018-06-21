@@ -49,7 +49,6 @@ export default {
       let multipleLineProps = _.filter(propKeys, propItem => {
         return this.prop[propItem] === 'autoSizeInput'
       })
-      console.log(multipleLineProps)
       return multipleLineProps.length > 0
     }
   },
@@ -85,6 +84,7 @@ export default {
       })
     },
     showMultiTextDailog() {
+      this.changeProptyData(this.cardValue)
       this.setIsMultipleTextDialogShow({
         isShow: true
       })
