@@ -51,7 +51,12 @@ const {
   REFRESH_SITE_SETTINGS,
   UPDATE_OPENED_LAYOUT_FILE,
 
-  UPDATE_CURSOR_POSITION
+  UPDATE_CURSOR_POSITION,
+
+  UNDO,
+  REDO,
+  SAVE_HISTORY,
+  INIT_UNDO
 } = props
 
 const cacheAvailable = pageData => {
@@ -103,7 +108,7 @@ const actions = {
     commit(SET_ACTIVE_PAGE, { path, username })
 
     if (needReload) {
-      UndoHelper.init(getters.activeAreaData.undoManager, {
+      commit(INIT_UNDO, {
         newCode: getters.code,
         cursor: { line: 1, ch: 0 }
       })
@@ -135,13 +140,12 @@ const actions = {
     }
   },
   updateCode(
-    { dispatch, getters },
+    { dispatch, getters, commit },
     { code: newCode, historyDisabled, cursor }
   ) {
     let {
       code: oldCode,
       activePageUrl: path,
-      activeAreaData,
       activeArea
     } = getters
     if (newCode === oldCode) return
@@ -150,8 +154,7 @@ const actions = {
     } else {
       dispatch('updateOpenedLayoutFile', { content: newCode, saved: false })
     }
-    !historyDisabled &&
-      UndoHelper.save(activeAreaData.undoManager, { newCode, cursor })
+    if (!historyDisabled) { commit(SAVE_HISTORY, { newCode, cursor }) }
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -187,7 +190,7 @@ const actions = {
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('refreshCode')
   },
-  addMod({ commit, dispatch, getters }, payload) {
+  addMod({ dispatch, getters }, payload) {
     if (getters.activePage.addingArea === gConst.ADDING_AREA_ADI) {
       dispatch('addModToAdi', payload)
     } else {
@@ -286,7 +289,7 @@ const actions = {
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
     await dispatch('refreshCode')
   },
-  async saveSiteConfigPage({ commit, getters, dispatch }, { content, path }) {
+  async saveSiteConfigPage({ commit, dispatch }, { content, path }) {
     await dispatch('gitlab/saveFile', { content, path }, { root: true })
     let [username, sitename, , , areanames, filename] = path.split('/')
     commit(UPDATE_OPENED_LAYOUT_FILE, {
@@ -297,7 +300,7 @@ const actions = {
   },
   deleteMod({ commit, dispatch, state }, key) {
     commit(DELETE_MOD, key)
-    if (key === state.activePage.activeMod.key) {
+    if (key === _.get(state, ['activePage', 'activeMod', 'key'])) {
       commit(SET_ACTIVE_MOD, null)
       commit(SET_ACTIVE_PROPERTY, null)
       commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModsList')
@@ -339,35 +342,26 @@ const actions = {
   updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
-  reduceUndoStack({ getters }) {
-    UndoHelper.undo(
-      getters.activeAreaData.undoManager,
-      () => {}
-    )
+  undo({ commit, dispatch }) {
+    commit(UNDO)
+    dispatch('resetCurrentItem')
   },
-  undo({ getters, dispatch }) {
-    UndoHelper.undo(
-      getters.activeAreaData.undoManager,
-      (code = '', cursor = { line: 1, ch: 0 }) => {
-        dispatch('updateMarkDown', { code, historyDisabled: true })
-        dispatch('updateCursor', { cursor })
-      }
-    )
+  redo({ commit, dispatch }) {
+    commit(REDO)
+    dispatch('resetCurrentItem')
   },
-  redo({ getters, dispatch }) {
-    UndoHelper.redo(
-      getters.activeAreaData.undoManager,
-      (code = '', cursor = { line: 1, ch: 0 }) => {
-        dispatch('updateMarkDown', { code, historyDisabled: true })
-        dispatch('updateCursor', { cursor })
-      }
-    )
+  resetCurrentItem({ getters, dispatch }) {
+    const currentItem = UndoHelper.currentItem(getters.activeAreaData.undoManager)
+    let code = currentItem.newCode || ''
+    let cursor = currentItem.cursor || { line: 1, ch: 0 }
+    dispatch('updateMarkDown', { code, historyDisabled: true })
+    dispatch('updateCursor', { cursor })
   },
   setNewModPosition({ commit }, position) {
     commit(SET_NEW_MOD_POSITION, position)
   },
   async refreshSiteSettings(
-    { commit, dispatch, getters, rootGetters },
+    { commit, dispatch, rootGetters },
     { sitePath }
   ) {
     let siteSetting = initSiteState()
