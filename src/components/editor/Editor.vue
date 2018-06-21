@@ -224,7 +224,6 @@ export default {
     ...mapActions({
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
-      setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData'
     }),
     changeView(type) {
