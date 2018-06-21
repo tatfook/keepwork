@@ -45,6 +45,7 @@
     "error": "Error, please try again",
 
     "OK": "OK",
+    "Sure": "Confirm",
     "Cancel": "Cancel",
 
     "action": "Action",
@@ -71,6 +72,8 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
+    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
     "copyFail": "Link copy failed",
