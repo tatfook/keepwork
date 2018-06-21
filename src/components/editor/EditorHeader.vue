@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
 <el-menu-item>
-        <el-dropdown placement="bottom-end">
+        <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -12,9 +12,9 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span>新建网站</span>
-                  <span>新建文件夹</span>
-                  <span>新建页面</span>
+                  <span><button @click.stop="openNewWebsiteDialog">新建网站</button></span>
+                  <span><button disabled>新建文件夹</button></span>
+                  <span><button disabled>新建页面</button></span>
                 </div>
               </div>
             </el-dropdown-item>
@@ -22,8 +22,8 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
                 <div class="kp-submenu-top-content">
-                  <span>设置网站</span>
-                  <span>设置页面</span>
+                  <span><button>设置网站</button></span>
+                  <span><button>设置页面</button></span>
                 </div>
               </div>
             </el-dropdown-item>
@@ -31,9 +31,9 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span>删除网站</span>
-                  <span>删除文件夹</span>
-                  <span>删除页面</span>
+                  <span><button>删除网站</button></span>
+                  <span><button>删除文件夹</button></span>
+                  <span><button>删除页面</button></span>
                 </div>
               </div>
             </el-dropdown-item>
@@ -41,44 +41,44 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-save1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span>保存</span>
-                  <span>全部保存</span>
+                  <span><button :disabled='isActivePageSaved' @click.stop="save">保存</button></span>
+                  <span><button>全部保存</button></span>
                 </div>
               </div></el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span>关闭</span>
-                  <span>全部关闭</span>
+                  <span><button>关闭</button></span>
+                  <span><button>全部关闭</button></span>
                 </div>
               </div></el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-refresh1"></i></span>刷新</span>
-                  <span><span class="icon-span"><i class="iconfont icon-pre-step"></i></span>撤销</span>
-                  <span><span class="icon-span"><i class="iconfont icon-redo"></i></span>重做</span>
+                  <span><span class="icon-span"><i class="iconfont icon-refresh1"></i></span><button @click.stop="refresh">刷新</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-pre-step"></i></span><button @click.stop='undo' :disabled='!canUndo'>撤销</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-redo"></i></span><button @click='redo' :disabled='!canRedo'>重做</button></span>
                 </div>
               </div></el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-mod"></i></span>模块</span>
-                  <span><span class="icon-span"><i class="iconfont icon-lfile"></i></span>大文件</span>
+                  <span><span class="icon-span"><i class="iconfont icon-mod"></i></span><button>模块</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-lfile"></i></span><button>大文件</button></span>
                 </div>
               </div></el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-code1"></i></span>显示代码</span>
-                  <span><span class="icon-span"><i class="iconfont icon-help"></i></span>帮助</span>
+                  <span><span class="icon-span"><i class="iconfont icon-code1"></i></span><button>显示代码</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-help"></i></span><button>帮助</button></span>
                 </div>
               </div></el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
               <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-home"></i></span>返回首页</span>
+                  <span><span class="icon-span"><i class="iconfont icon-home"></i></span><button @click.stop="backHome">返回首页</button></span>
               </div>
               </div>
             </el-dropdown-item>
@@ -252,6 +252,12 @@ export default {
     },
     changeView(type) {
       this.setActiveManagePaneComponent(type)
+    },
+    refresh(){
+      window.location.reload();
+    },
+    backHome(){
+      window.location.href=this.nowOrigin
     }
   },
   components: {
@@ -293,6 +299,15 @@ export default {
 .kp-menu .kp-submenu span{
   display: block;
   height: 24px;
+}
+.kp-menu .kp-submenu span button{
+  border: none;
+  background-color: #fff;
+  margin: 0;
+  padding-left: 1px;
+}
+.kp-menu .kp-submenu span button:hover{
+  color: #409EFF;        
 }
 .kp-menu .kp-submenu .icon-span{
   display: inline-block  ;
@@ -408,10 +423,21 @@ export default {
   .kp-submenu-top-content{
     flex: 1;
     span{
-      padding-left: 10px;
+      // padding-left: 10px;
       display: block;
       &:hover{
         color: #409EFF;
+      }
+      button{
+        padding-left: 10px;
+        border: none;
+        background-color: #fff;
+        &:hover{
+        color: #409EFF;          
+        }
+      }
+      button[disabled]{
+        color: #ccc;
       }
     }
   }
