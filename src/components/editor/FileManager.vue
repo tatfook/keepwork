@@ -105,7 +105,11 @@ export default {
     })
     this.loading = false
     await this.checkSitePath()
-    this.initUrlExpandSelect()
+    await this.initUrlExpandSelect()
+    this.$nextTick(() => {
+      let ele = document.querySelector('.is-current')
+      ele && ele.scrollIntoView()
+    })
   },
   computed: {
     ...mapGetters({
@@ -116,7 +120,8 @@ export default {
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
-      getOpenedFileByPath: 'getOpenedFileByPath'
+      getOpenedFileByPath: 'getOpenedFileByPath',
+      username: 'user/username'
     }),
     myContributedSiteList() {
       return this.contributedSiteList.map(i => {
@@ -173,7 +178,11 @@ export default {
       return Promise.resolve()
     },
     async initUrlExpandSelect() {
-      let { isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
+      let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
+      if (this.username !== username) {
+        this.$set(this.trees, 'isMyShow', false)
+        this.$set(this.trees, 'isContributedShow', true)
+      }
       if (!isLegal) {
         let closeAllFolder = this.personalSitePaths
           ? Object.keys(this.personalSitePaths).map(path => ({
