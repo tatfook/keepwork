@@ -1,23 +1,40 @@
 <template>
   <div class="tool-header">
     <div class="breadcrumb" v-loading='breadcrumbsLoading'>
-      <a class="breadcrumb-item" href="/">{{ locationOrigin }}</a>
-      <span class="breadcrumb-separator" role="presentation">/</span>
+      <a class="breadcrumb-item iconfont icon-home-keepwork" href="/wiki/home"></a>
+      <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
-      <span class="breadcrumb-separator" role="presentation">/</span>
-      <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a>
+      <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
+      <!-- <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a> -->
+      <div class="breadcrumb-item">
+        <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
+          <ul class="file-list-content">
+            <li v-for='site in siteList' :key='site.name'>
+              <a :href="`/${site.username}/${site.name}`" class="clearfix">
+                <span class="list-content">{{site.displayName || site.name}}</span>
+                <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
+              </a>
+            </li>
+          </ul>
+          <span class="page-item-content" slot="reference">
+            {{siteDisplayName}}
+            <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
+          </span>
+        </el-popover>
+      </div>
 
-      <el-dropdown v-for='(fileList, index) in breadcrumbs' :key='index' class="breadcrumb-item" @command='handleBreadcrumbClick'>
-        <span class="el-dropdown-link">
-          <span class="breadcrumb-separator" role="presentation">/</span> {{activePageInfo.paths[index] | hideMarkdownExt}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for='file in fileList' :key='file.name' :command='file'>
-            {{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
+        <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
+        <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
+          <ul class="file-list-content">
+            <li class="file-list-item" v-for='file in fileList' :key='file.name' @click="handleBreadcrumbClick(file)">{{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}</li>
+          </ul>
+          <span class="page-item-content" slot="reference">
+            {{activePageInfo.paths[index] | hideMarkdownExt}}
+            <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
+          </span>
+        </el-popover>
+      </div>
     </div>
 
     <div class="icons">
@@ -49,8 +66,20 @@ export default {
       activePageInfo: 'activePageInfo',
       displayUsername: 'user/displayUsername',
       activePageStarInfo: 'user/activePageStarInfo',
-      gitlabChildrenByPath: 'gitlab/childrenByPath'
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
+      gitlabChildrenByPath: 'gitlab/childrenByPath',
+      userGetDetailByUsername: 'user/getDetailByUsername'
     }),
+    siteDisplayName() {
+      let { sitepath } = this.activePageInfo
+      if (!sitepath) {
+        return
+      }
+      let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
+      let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
+      let name = _.get(siteDetailInfo, 'siteinfo.name')
+      return siteDisplayName || name
+    },
     sitePath() {
       let { sitepath } = this.activePageInfo
       return sitepath
@@ -73,7 +102,8 @@ export default {
   data() {
     return {
       starPending: false,
-      breadcrumbsLoading: true
+      breadcrumbsLoading: true,
+      siteList: []
     }
   },
   watch: {
@@ -85,12 +115,26 @@ export default {
         editorMode: false
       }).catch(e => console.error(e))
       this.breadcrumbsLoading = false
+    },
+    activePageInfo: {
+      deep: true,
+      async handler(newActivePageInfo) {
+        let { username } = newActivePageInfo
+        if (!username) {
+          return
+        }
+        await this.getUserDetailByUsername({ username: username })
+        let result = this.userGetDetailByUsername(username)
+        this.siteList = result.allSiteList
+      }
     }
   },
   methods: {
     ...mapActions({
       starPages: 'user/starPages',
-      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree'
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
+      getUserDetailByUsername: 'user/getUserDetailByUsername',
+      getProfile: 'user/getProfile'
     }),
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo
@@ -114,6 +158,19 @@ export default {
     },
     async togglePageStar() {
       this.starPending = true
+      let isLogin = true
+      await this.getProfile().catch(e => {
+        isLogin = false
+      })
+      if (!isLogin) {
+        this.$message({
+          showClose: true,
+          message: this.$t('common.loginToStarPage'),
+          type: 'error'
+        })
+        this.starPending = false
+        return
+      }
       await this.starPages({
         url: this.activePageUrl
       }).catch(e => {
@@ -132,7 +189,11 @@ export default {
       if (file.type === 'tree') {
         let children = this.gitlabChildrenByPath(file.path)
         let indexChild = children.filter(file => file.name === 'index.md')[0]
-        targetFile = indexChild || children[0] || targetFile
+        let firstFileTypeChild = children.filter(
+          file => file.type === 'blob'
+        )[0]
+        targetFile =
+          indexChild || firstFileTypeChild || children[0] || targetFile
       }
 
       let url =
@@ -147,18 +208,104 @@ export default {
 }
 </script>
 <style lang="scss">
+.breadcrumb-item-dropdown {
+  padding: 0;
+  min-width: auto;
+  border-color: #e4e7ed;
+  .clearfix::after {
+    content: '';
+    clear: both;
+    display: table;
+  }
+  .file-list-content {
+    max-height: 380px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding: 15px 0;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    list-style: none;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    color: #909399;
+    cursor: pointer;
+    font-size: 14px;
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  li:hover {
+    background-color: #e5f2f8;
+    color: #0081ba;
+  }
+  .file-list-item {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  .list-content {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+  .icon-private {
+    float: right;
+    margin-left: 15px;
+    font-size: 18px;
+  }
+}
 .tool-header {
   position: relative;
   height: 50px;
   .breadcrumb {
     display: inline-block;
-    padding: 0 20px;
-    height: 50px;
-    line-height: 50px;
+    padding: 0 200px 0 20px;
+    height: 52px;
+    line-height: 52px;
     .el-loading-spinner {
       top: 35%;
       transform: scale(0.4);
     }
+  }
+  .breadcrumb-item {
+    color: #909399;
+    display: inline-block;
+  }
+  .page-item-content {
+    padding: 0 10px 0 16px;
+    border: 1px solid #dcdfe6;
+    display: inline-block;
+    height: 28px;
+    line-height: 26px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .page-item-content:hover {
+    color: #0081ba;
+    border-color: #cce6f1;
+  }
+  .icon-home-keepwork {
+    font-size: 22px;
+    vertical-align: middle;
+    top: -2px;
+    position: relative;
+  }
+  .breadcrumb-separator {
+    color: #dbdbdb;
+    padding: 0 6px;
   }
   .icons {
     position: absolute;
@@ -187,7 +334,7 @@ export default {
   }
   .el-dropdown-link:hover,
   a:hover {
-    color: #3ba4ff;
+    color: #0081ba;
     cursor: pointer;
   }
 }
@@ -228,8 +375,10 @@ export default {
       line-height: 40px;
       white-space: nowrap;
       overflow-x: auto;
+      overflow-y: hidden;
       max-width: 100%;
       box-sizing: border-box;
+      padding: 0 15px;
     }
     .icons {
       position: relative;

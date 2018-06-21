@@ -4,6 +4,7 @@ import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
+import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
 
 const {
@@ -24,7 +25,10 @@ const {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
-  GET_FROM_SKY_DRIVE_SUCCESS
+  GET_FROM_SKY_DRIVE_SUCCESS,
+  GET_USER_DETAIL_SUCCESS,
+  GET_SITE_THEME_CONFIG_SUCCESS,
+  SAVE_SITE_THEME_CONFIG_SUCCESS
 } = props
 
 const actions = {
@@ -55,7 +59,8 @@ const actions = {
           resolve()
         }).catch(async e => {
           if (!forceLogin) {
-            reject(e)
+            reject(new Error('401'))
+            clearGetProfilePromise()
             return
           }
 
@@ -66,9 +71,12 @@ const actions = {
               username: prompt('username: '),
               password: prompt('password: ')
             }
-            await dispatch('login', payload)
-
             clearGetProfilePromise()
+            if (!payload.username || !payload.password) {
+              reject(new Error('401'))
+              return
+            }
+            await dispatch('login', payload)
             await dispatch('getProfile')
             return resolve()
           }
@@ -80,13 +88,38 @@ const actions = {
       await getProfilePromise
     }
   })(),
+  async getUserDetailByUsername(context, { username }) {
+    let { commit, getters: { usersDetail } } = context
+    let userDetail = usersDetail && usersDetail[username]
+    if (userDetail) {
+      return
+    }
+    userDetail = await keepwork.user.getDetailByName({ username: username })
+    commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+  },
+  async getAllPersonalPageList({ dispatch, getters }, payload) {
+    let { useCache = true } = payload || {}
+    await dispatch('getAllPersonalWebsite', { useCache })
+    let { personalSitePathMap } = getters
+    await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
+      await dispatch('gitlab/getRepositoryTree', {path: sitepath, useCache}, { root: true })
+    })).catch(e => console.error(e))
+  },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
     await dispatch('getProfile')
 
     return Promise.all([
+      dispatch('getAllPersonalWebsite', { useCache }),
+      dispatch('getAllContributedWebsite', { useCache })
+    ])
+  },
+  async getAllPersonalWebsite({ dispatch }, payload) {
+    let { useCache = false } = payload || {}
+    await dispatch('getProfile')
+
+    return Promise.all([
       dispatch('getAllWebsite', { useCache }),
-      dispatch('getAllContributedWebsite', { useCache }),
       dispatch('getAllSiteDataSource', { useCache })
     ])
   },
@@ -168,7 +201,8 @@ const actions = {
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
-  async getAllWebsite(context, { useCache = false } = {}) {
+  async getAllWebsite(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -178,7 +212,8 @@ const actions = {
     let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
     commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
   },
-  async getAllSiteDataSource(context, { useCache = false }) {
+  async getAllSiteDataSource(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -188,7 +223,8 @@ const actions = {
     let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
   },
-  async getAllContributedWebsite(context, { useCache = false }) {
+  async getAllContributedWebsite(context, payload) {
+    let { useCache = false } = payload || {}
     let { dispatch, commit, getters } = context
     await dispatch('getProfile')
 
@@ -225,25 +261,6 @@ const actions = {
     config = _.isString(content) ? JSON.parse(content) : content
     commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
   },
-  async deletePagesConfig(context, { sitePath, pages }) {
-    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
-    let config = siteLayoutConfigBySitePath(sitePath)
-    config.pages = _.omit(config.pages, pages)
-    let unSaveLayoutConfig = {
-      ..._.get(config, 'layoutConfig')
-    }
-    let _pages = _.omit(config.pages, pages)
-    let unSavedConfig = {
-      ...config,
-      layoutConfig: unSaveLayoutConfig,
-      pages: _pages
-    }
-    let content = JSON.stringify(unSavedConfig, null, 2)
-    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
-    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
-    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSavedConfig })
-    dispatch('refreshSiteSettings', { sitePath }, { root: true })
-  },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
     let config = siteLayoutConfigBySitePath(sitePath)
@@ -265,6 +282,112 @@ const actions = {
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
     dispatch('refreshSiteSettings', {sitePath}, {root: true})
+  },
+  async getSiteThemeConfig(context, { path, editorMode = true, useCache = true }) {
+    let { commit, dispatch, rootGetters } = context
+    let sitePath = getFileSitePathByPath(path)
+    let config = getFileSitePathByPath(sitePath)
+    let themeFilePath = ThemeHelper.themeFilePath(sitePath)
+    await dispatch('gitlab/readFile', { path: themeFilePath, editorMode }, { root: true })
+      .then(async () => {
+        let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
+        let { content } = gitlabGetFileByPath(themeFilePath) || {}
+        config = _.isString(content) ? JSON.parse(content) : content
+        commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
+      })
+      .catch(async () => {
+        config = ThemeHelper.defaultTheme()
+        commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
+      })
+  },
+  async saveSiteThemeConfig(context, { sitePath, config }) {
+    let { commit, dispatch } = context
+    let content = JSON.stringify(config, null, 2)
+    let themeFilePath = ThemeHelper.themeFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: themeFilePath, content }, { root: true })
+      .catch(async () => {
+        await dispatch('gitlab/createFile', { path: themeFilePath, content, refreshRepositoryTree: false }, { root: true })
+      })
+    commit(SAVE_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
+  },
+  async deletePagesConfig(context, { sitePath, pages }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    let config = siteLayoutConfigBySitePath(sitePath)
+    config.pages = _.omit(config.pages, pages)
+    let unSaveLayoutConfig = {
+      ..._.get(config, 'layoutConfig')
+    }
+    let _pages = _.omit(config.pages, pages)
+    let unSavedConfig = {
+      ...config,
+      layoutConfig: unSaveLayoutConfig,
+      pages: _pages
+    }
+    let content = JSON.stringify(unSavedConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSavedConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
+  },
+  async renamePageFromConfig(context, { currentFilePath, newFilePath }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    await dispatch('getSiteLayoutConfig', { path: currentFilePath })
+    let sitePath = getFileSitePathByPath(currentFilePath)
+    let config = siteLayoutConfigBySitePath(sitePath)
+    let { pages = null } = config || {}
+    if (!pages) return
+    let currentPageName = currentFilePath.replace(`${sitePath}/`, '')
+    let newPageName = newFilePath.replace(`${sitePath}/`, '')
+    if (pages[currentPageName] && pages[currentPageName]['layout']) {
+      pages[newPageName] = {}
+      pages[newPageName]['layout'] = pages[currentPageName]['layout']
+    }
+    pages = _.omit(pages, [currentPageName])
+    let layoutConfig = _.get(config, 'layoutConfig')
+    let unSaveConfig = {
+      ...config,
+      layoutConfig,
+      pages: pages
+    }
+    let content = JSON.stringify(unSaveConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
+  },
+
+  async renamePagesFromConfig(context, { currentFolderPath, newFolderPath, childrenFiles }) {
+    let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
+    await dispatch('getSiteLayoutConfig', { path: currentFolderPath })
+    let sitePath = getFileSitePathByPath(currentFolderPath)
+    let config = siteLayoutConfigBySitePath(sitePath)
+    let { pages = null } = config || {}
+    if (!pages) return
+    let currentPagePath = currentFolderPath.replace(`${sitePath}/`, '')
+    let newPagePath = newFolderPath.replace(`${sitePath}/`, '')
+    let currentChildrenPages = childrenFiles
+      .map(file => file.replace(`${sitePath}/`, ''))
+      .filter(file => !/\.gitignore.md$/.test(file) && Object.keys(pages).includes(file))
+    currentChildrenPages.forEach(pageName => {
+      if (pages[pageName] && pages[pageName]['layout']) {
+        let newPageName = pageName.replace(currentPagePath, newPagePath)
+        pages[newPageName] = {}
+        pages[newPageName]['layout'] = pages[pageName]['layout']
+      }
+    })
+    pages = _.omit(pages, currentChildrenPages)
+    let layoutConfig = _.get(config, 'layoutConfig')
+    let unSaveConfig = {
+      ...config,
+      layoutConfig,
+      pages: pages
+    }
+    let content = JSON.stringify(unSaveConfig, null, 2)
+    let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
+    await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async saveSiteBasicSetting(context, {newBasicMessage}) {
     let { commit, getters } = context

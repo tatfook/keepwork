@@ -70,12 +70,44 @@ const getters = {
 
     return personalSiteList
   },
+  getDetailByUsername: (
+    state
+  ) => username => {
+    let { usersDetail } = state
+    return usersDetail[username]
+  },
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList
   },
   personalSitePathMap: (state, { personalSiteList }) =>
     _.keyBy(personalSiteList, ({ username, name }) => `${username}/${name}`),
+  personalAllPagePathList: (state, { personalSitePathMap }) => {
+    let sitepaths = _.keys(personalSitePathMap)
+
+    let getChildrenPathsDeep = x => {
+      let result = []
+      result.push(x.path)
+      x.children && x.children.length && x.children.forEach(
+        child => (result = result.concat(getChildrenPathsDeep(child)))
+      )
+      return result
+    }
+
+    let allPageList = sitepaths.reduce((prev, sitepath) => {
+      return [
+        ...prev,
+        ...getChildrenPathsDeep({
+          ...personalSitePathMap[sitepath],
+          path: sitepath
+        })
+      ]
+    }, [])
+
+    allPageList = allPageList.map(str => str.replace(/\.[^.]+/, ''))
+
+    return allPageList
+  },
   getPersonalSiteInfoByPath: (state, { personalSitePathMap }) => path => {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
@@ -200,7 +232,8 @@ const getters = {
   },
 
   activePageStarInfo: state => state.activePageStarInfo,
-
+  siteThemeConfigs: state => state.siteThemeConfigs,
+  siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || {},
   siteLayoutConfigs: state => state.siteLayoutConfigs,
   siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {

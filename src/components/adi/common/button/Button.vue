@@ -44,10 +44,10 @@ export default {
       let style = {
         width: this.properties.width && parseInt(this.properties.width) + 'px',
         height: this.properties.height && parseInt(this.properties.height) + 'px',
+        color: this.properties.color || '',
         'background-image': 'url(' + this.properties.src || '' + ')',
         'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px'
       }
-
       return this.generateStyleString(_.merge({}, style, this.options.buttonStyle))
     },
     buttonImgStyle() {

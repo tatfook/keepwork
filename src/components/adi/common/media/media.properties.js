@@ -1,7 +1,7 @@
 export default {
   src: '',
   link: '',
-  webHeight: '',
-  mobileHeight: '',
+  webWidth: '',
+  mobileWidth: '',
   target: '_self'
 }

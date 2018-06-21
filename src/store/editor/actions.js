@@ -18,6 +18,7 @@ const {
   ADD_MOD,
   DELETE_MOD,
   MOVE_MOD,
+  SET_PRE_MOD_KEY,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -92,17 +93,20 @@ const actions = {
     }
 
     const pageData = getters.openedFiles[fullPath]
-    if (!cacheAvailable(pageData)) {
+    const needReload = !cacheAvailable(pageData)
+    if (needReload) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
-    if (!_.get(getters.openedFiles, fullPath)) {
+
+    commit(SET_ACTIVE_PAGE, { path, username })
+
+    if (needReload) {
       UndoHelper.init(getters.activeAreaData.undoManager, {
         newCode: getters.code,
         cursor: { line: 1, ch: 0 }
       })
     }
-    commit(SET_ACTIVE_PAGE, { path, username })
   },
   async saveActivePage({ getters, dispatch }) {
     let { activePageUrl, layoutPages } = getters
@@ -189,6 +193,9 @@ const actions = {
       dispatch('addModToMarkdown', payload)
     }
   },
+  setPreMod({ commit }, { key = '' }) {
+    commit(SET_PRE_MOD_KEY, key)
+  },
   addModToAdi({ commit, dispatch }, payload) {
     const modProperties = ModFactory.generate(payload.modName)
     var modPropertiesStyle
@@ -196,7 +203,10 @@ const actions = {
       modPropertiesStyle = modProperties
       modPropertiesStyle.styleID = payload.styleID
     }
-    let newMod = Parser.buildBlock(Parser.getCmd(payload.modName), modPropertiesStyle || modProperties)
+    let newMod = Parser.buildBlock(
+      Parser.getCmd(payload.modName),
+      modPropertiesStyle || modProperties
+    )
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(ADD_MOD, {
@@ -225,11 +235,13 @@ const actions = {
     commit(SET_EDITING_AREA, payload)
   },
   setActiveMod({ commit }, key) {
+    commit(SET_PRE_MOD_KEY, '')
     commit(SET_ACTIVE_MOD, key)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setActiveProperty({ commit, dispatch }, payload) {
+    commit(SET_PRE_MOD_KEY, '')
     commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
@@ -323,7 +335,12 @@ const actions = {
   updateFilemanagerTreeNodeExpandMapByPath({ commit }, payload) {
     commit(UPDATE_FILEMANAGER_TREE_NODE_EXPANDED, payload)
   },
-
+  reduceUndoStack({ getters }) {
+    UndoHelper.undo(
+      getters.activeAreaData.undoManager,
+      () => {}
+    )
+  },
   undo({ getters, dispatch }) {
     UndoHelper.undo(
       getters.activeAreaData.undoManager,
@@ -451,6 +468,9 @@ const actions = {
     if (path === state.activePageUrl) {
       commit(SET_ACTIVE_PAGE, null)
     }
+  },
+  closeAllOpenedFile({ commit }, getters) {
+    commit('CLOSE_ALL_OPENED_FILE')
   }
 }
 

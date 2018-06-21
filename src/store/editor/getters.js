@@ -51,6 +51,7 @@ const getters = {
   activePropertyData: (state, { activeProperty }) => {
     return _.get(state, ['activePage', 'activeMod', 'data', activeProperty], {})
   },
+  preModKey: state => state.activePage && state.activePage.preModKey,
 
   hasActiveMod: state => state.activePage && state.activePage.activeMod,
   hasActiveProperty: state =>

@@ -16,9 +16,11 @@ import ModTextBoard from './web/textBoard'
 import ModPageList from './web/pageList'
 import ModToc from './web/toc'
 import ModBigFile from './web/bigFile'
-import ModPagePath from './web/pagePath'
 import ModTab from './web/tab'
 import ModButton from './web/button'
+import ModPagePath from './web/pagePath'
+import ModCategoryList from './web/categoryList'
+import ModPageSwitching from './web/pageSwitching'
 import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModTeachers from './web/teachers'
@@ -44,9 +46,11 @@ export const modList = {
   ModPageList,
   ModToc,
   ModBigFile,
-  ModPagePath,
   ModTab,
   ModButton,
+  ModPagePath,
+  ModCategoryList,
+  ModPageSwitching,
   ModLesson,
   ModQuiz,
   ModTeachers,

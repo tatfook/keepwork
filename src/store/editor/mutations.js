@@ -12,6 +12,7 @@ const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
 const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
 const MOVE_MOD = 'MOVE_MOD'
+const SET_PRE_MOD_KEY = 'SET_PRE_MOD_KEY'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
@@ -40,6 +41,7 @@ const SET_EDITING_AREA = 'SET_EDITING_AREA'
 const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
+const CLOSE_ALL_OPENED_FILE = 'CLOSE_ALL_OPENED_FILE'
 
 const REFRESH_SITE_SETTINGS = 'REFRESH_SITE_SETTINGS'
 const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
@@ -52,6 +54,7 @@ export const props = {
   ADD_MOD,
   DELETE_MOD,
   MOVE_MOD,
+  SET_PRE_MOD_KEY,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -145,6 +148,9 @@ const mutations = {
     if (index !== -1) {
       Vue.set(state.activePage, 'activeMod', modList[index])
     }
+  },
+  [SET_PRE_MOD_KEY](state, key) {
+    Vue.set(state.activePage, 'preModKey', key)
   },
   [SET_ACTIVE_PROPERTY](state, property) {
     if (!state.activePage.activeMod) return
@@ -264,6 +270,9 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
+  },
+  [CLOSE_ALL_OPENED_FILE](state) {
+    Vue.set(state, 'openedFiles', {})
   },
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)

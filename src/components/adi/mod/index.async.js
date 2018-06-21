@@ -16,9 +16,11 @@ const ModTextBoard = () => import('./web/textBoard')
 const ModPageList = () => import('./web/pageList')
 const ModToc = () => import('./web/toc')
 const ModBigFile = () => import('./web/bigFile')
-const ModPagePath = () => import('./web/pagePath')
 const ModTab = () => import('./web/tab')
 const ModButton = () => import('./web/button')
+const ModPagePath = () => import('./web/pagePath')
+const ModCategoryList = () => import('./web/categoryList')
+const ModPageSwitching = () => import('./web/pageSwitching')
 const ModLesson = () => import('./web/lesson')
 const ModQuiz = () => import('./web/quiz')
 const ModTeachers = () => import('./web/teachers')
@@ -44,9 +46,11 @@ export const modList = {
   ModPageList,
   ModToc,
   ModBigFile,
-  ModPagePath,
   ModTab,
   ModButton,
+  ModPagePath,
+  ModCategoryList,
+  ModPageSwitching,
   ModLesson,
   ModQuiz,
   ModTeachers,

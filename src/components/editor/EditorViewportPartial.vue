@@ -9,7 +9,7 @@
     </div>
     <draggable v-model='modDraggableList' @change="changeDraggableList">
       <template v-for='mod in modList'>
-        <editor-mod-selector :key='mod.key' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
+        <editor-mod-selector :key='mod.uuid' :mod='mod' :theme='theme' @onAddMod='openModSelector'></editor-mod-selector>
       </template>
     </draggable>
   </div>

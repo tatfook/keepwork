@@ -4,6 +4,7 @@ import Vue from 'vue'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
+const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
 const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
 const CREATE_COMMENT_SUCCESS = 'CREATE_COMMENT_SUCCESS'
 const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS'
@@ -19,11 +20,14 @@ const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
 const UPDATE_SITE_MSG_SUCCESS = 'UPDATE_SITE_MSG_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
+const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
+const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
   GET_ALL_WEBSITE_SUCCESS,
+  GET_USER_DETAIL_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
@@ -38,7 +42,9 @@ export const props = {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
-  GET_FROM_SKY_DRIVE_SUCCESS
+  GET_FROM_SKY_DRIVE_SUCCESS,
+  SAVE_SITE_THEME_CONFIG_SUCCESS,
+  GET_SITE_THEME_CONFIG_SUCCESS
 }
 
 const doNothing = state => {
@@ -56,6 +62,12 @@ const mutations = {
     Vue.set(state, 'website', {
       ...state.website,
       [username]: _.keyBy(list, 'name')
+    })
+  },
+  [GET_USER_DETAIL_SUCCESS](state, {username, userDetail}) {
+    Vue.set(state, 'usersDetail', {
+      ...state.usersDetail,
+      [username]: userDetail
     })
   },
   [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, {username, list}) {
@@ -113,6 +125,18 @@ const mutations = {
   [SAVE_SITE_LAYOUT_CONFIG_SUCCESS](state, { sitePath, config }) {
     Vue.set(state, 'siteLayoutConfigs', {
       ...state.siteLayoutConfigs,
+      [sitePath]: config
+    })
+  },
+  [GET_SITE_THEME_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteThemeConfigs', {
+      ...state.siteThemeConfigs,
+      [sitePath]: config
+    })
+  },
+  [SAVE_SITE_THEME_CONFIG_SUCCESS](state, { sitePath, config }) {
+    Vue.set(state, 'siteThemeConfigs', {
+      ...state.siteThemeConfigs,
       [sitePath]: config
     })
   },

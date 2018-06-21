@@ -56,6 +56,14 @@
               </div>
             </div>
           </div>
+          <div class="website-setting-layout-system">
+            <p>
+              <el-checkbox v-model="layoutForm.isSystemHeaderHide" :disabled="!isVip">隐藏系统header（仅限vip）</el-checkbox>
+            </p>
+            <p>
+              <el-checkbox v-model="layoutForm.isSystemFooterHide" :disabled="!isVip">隐藏系统footer（仅限vip）</el-checkbox>
+            </p>
+          </div>
         </main>
       </el-col>
       <el-col :span="7" class="website-setting-styles">
@@ -171,6 +179,8 @@ export default {
       stylesList,
       layoutForm: {
         defaultLayoutId: NaN,
+        isSystemHeaderHide: NaN,
+        isSystemFooterHide: NaN,
         name: '',
         header: '',
         sidebar: '',
@@ -187,8 +197,19 @@ export default {
   computed: {
     ...mapGetters({
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      vipInfo: 'user/vipInfo',
       gitlabChildNamesByPath: 'gitlab/childNamesByPath'
     }),
+    isVip() {
+      let endDate = new Date(this.vipInfo['endDate']).getTime()
+      let now = Date.now()
+
+      if (this.vipInfo['isValid'] && endDate >= now) {
+        return true
+      } else {
+        return false
+      }
+    },
     userSiteLayoutConfigClone() {
       let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(this.sitePath)
       return _.cloneDeep(userSiteLayoutConfig)
@@ -198,6 +219,12 @@ export default {
     },
     userSiteDefaultLayoutId() {
       return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'defaultLayoutId'], NaN)
+    },
+    userSiteDefaultIsSystemHeaderHide() {
+      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'isSystemHeaderHide'], false)
+    },
+    userSiteDefaultIsSystemFooterHide() {
+      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'isSystemFooterHide'], false)
     },
     allSiteLayoutsMap() {
       return _.merge({}, this.userSiteLayoutsMapClone, this.updatedLayoutsMap)
@@ -268,6 +295,8 @@ export default {
     })
     this.selectDefaultLayout()
     this.newLayoutIndex = _.values(this.siteLayoutsMap).length
+    this.layoutForm.isSystemHeaderHide = this.userSiteDefaultIsSystemHeaderHide
+    this.layoutForm.isSystemFooterHide = this.userSiteDefaultIsSystemFooterHide
     this.loading = false
   },
   watch: {
@@ -293,6 +322,10 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile'
     }),
+    changeHeaderHide(val){
+      console.log(val)
+      this.unsavedDefaultIsSystemFooterHide = val
+    },
     addLayout() {
       let newLayout = LayoutHelper.newLayout(++this.newLayoutIndex)
       Vue.set(this.updatedLayoutsMap, newLayout.id, newLayout)
@@ -416,7 +449,9 @@ export default {
         sitePath: this.sitePath,
         layoutConfig: {
           layouts: this.allUnsavedLayouts,
-          defaultLayoutId: this.unsavedDefaultLayoutId
+          defaultLayoutId: this.unsavedDefaultLayoutId,
+          isSystemHeaderHide: this.layoutForm.isSystemHeaderHide,
+          isSystemFooterHide: this.layoutForm.isSystemFooterHide
         }
       }).catch(e => {
         console.error(e)
@@ -446,6 +481,15 @@ export default {
   }
   &-layout-list {
     margin-top: 15px;
+    min-height: 270px;
+    max-height: 390px;
+  }
+  &-layout-system {
+    border-top: 1px solid #bcbcbc;
+    padding-top: 16px;
+    p{
+      margin: 0 0 10px 0;
+    }
   }
   &-layout-item {
     height: 32px;

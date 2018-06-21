@@ -1,14 +1,23 @@
 {
   "common": {
+    "login": "Login",
+    "signIn": "Sign in",
+    "logout": "Logout",
     "welcomeToKeepwork": "Welcome to Keepwork",
     "createNewWebsite": "Create New Website",
+    "serviceMall": "Service Mall",
+    "invitationToRegister": "Invitation to register",
+    "personalCenter": "Personal Center",
+    "userData": "User Data",
+    "accountSecurity": "Account Security",
+    "realNameAuthentication": "Real Name Authentication",
 
     "features": "Features",
     "applicationCenter": "Application center",
     "myHomePage": "My home page",
     "websiteManagement": "Website Management",
     "pageEditor": "Page editor",
-    "myWebDisk": "My web disk",
+    "myWebDisk": "Cloud Drive",
     "dynamic": "Dynamic",
     "attention": "Attention",
     "history": "History",
@@ -22,7 +31,7 @@
     "feedback": "Feedback",
     "complaintPage": "Complaint page",
     "poweredByNPL": "Powered By NPL",
-    "simplifiedChinese": "Simplified Chinese",
+    "simplifiedChinese": "English",
 
     "caseNumberA": "ICP 14002196 -2, Guangdong Province",
     "caseNumberB": "© Tatfook",
@@ -46,10 +55,19 @@
     "update": "Update",
     "rename": "Rename",
     "remove": "Remove",
-    "apply": "Apply"
+    "apply": "Apply",
+    "add": "Add",
+    "change": "Change",
+    "link": "Link",
+    "back": "back",
+    "NoPages": "I'm sorry! The page you visited does not exist!",
+    "loginToStarPage": "You must login before star this page!"
   },
   "editor": {
+    "files": "Files",
+    "modules": "MOD",
     "save": "Save",
+    "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
     "unsavedTip": "File content is unsaved",
@@ -75,6 +93,7 @@
 
     "refresh": "Refresh",
     "close": "Close",
+    "closeAll": "Close all",
     "delete": "Delete",
     "delConfirm": "OK to delete at",
     "nameSingle": "name",
@@ -82,6 +101,13 @@
     "link": "Link",
     "setting": "Setting",
     "create": "Create",
+    "fileUnSaved": "The file has not been saved yet",
+    "filesUnSaved": " files have not been saved, whether to save? ",
+    "theFileUnSaved": "The file has not been saved yet, is it saved?",
+    "unSaveClose": "Do not save close",
+    "saveClose": "Save and close",
+    "saveConfirmBefore": "Do you want to save the changes to the ",
+    "saveConfirmAfter": "file before closing it?",
 
     "folder": "Folder",
     "newPage": "New page",
@@ -89,7 +115,7 @@
     "website": "Web page",
 
     "emptyName": "name cannot be empty",
-    "nameRule": "name can't contain \\\/:\"*?<>| can't begin with _.",
+    "nameRule": "name can't contain \\/:@&*=#\"*?<>| can't begin with _.",
     "nameExist": "a file of the same name already exists",
 
     "openedFiles": "Opened",
@@ -180,10 +206,12 @@
     "layoutParameters": "3. Layout parameters",
     "match": "match",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "keepOneLayout": "Keep one layout at least",
     "theLayoutIsInUse": "The layout is in use",
 
-    "deleteFolder": "Be sure to delete the folder and inside documents ?",
+    "deleteFolderBefore": "Be sure to delete ",
+    "deleteFolderAfter": " folder and inside documents ?",
     "documents": " documents ?",
     "areYouSureYouWantToDeleteThisFolder":
       "Are you sure you want to delete this folder ?",
@@ -192,7 +220,9 @@
 
     "yourPage": "Your page",
     "yourPosition": "Your position：",
-    "defaultPage": "Default page"
+    "defaultPage": "Default page",
+
+    "removeImgConfirmMsg": "Are you sure to remove this image?"
   },
   "modList": {
     "recent": "Commonly used",
@@ -203,11 +233,11 @@
     "text": "Text",
     "navigation": "Navigation",
     "menu": "Menu",
-    "headNavigation": "Head navigation",
+    "title": "Head navigation",
 
     "graphic": "Graphic",
-    "carousel": "Carousel",
-    "widescreenImage": "Widescreen image",
+    "imgLoop": "Image loop",
+    "img": "Wide screen image",
     "board": "Board",
 
     "mixLayer": "Mix layer",
@@ -347,7 +377,7 @@
     "tagline": "subtitle",
     "qq": "QQ number",
     "pic": "head portrait",
-    "desc": "name",
+    "desc": "description",
     "md": "Markdown document",
     "board": "drawing board",
     "comment": "comment",
@@ -363,6 +393,8 @@
     "bigFile": "Big file",
     "iframe": "iframe",
     "pageRoute": "Page route",
+    "tab": "Tab",
+    "categoryList": "Category list",
     "lesson": "Lesson",
     "quiz":"Quiz",
     "teachers":"Teachers",
@@ -376,6 +408,7 @@
     "src": "src",
     "name": "name",
     "data": "data",
+    "color": "font color",
     "text": "text",
     "desc": "desc",
     "select": "please choose",
@@ -386,9 +419,13 @@
     "width": "width",
     "height": "height",
     "webHeight": "web height",
+    "webWidth": "web width",
     "mobileHeight": "mobile height",
+    "mobileWidth": "mobile width",
     "fontSize": "font size",
     "path": "page path",
+    "target": "target",
+    "source": "source",
     "LessonNo": "Lesson No.",
     "Title": "Lesson Title",
     "LessonGoals": "Lesson Goals",
@@ -423,6 +460,8 @@
     "notImageFileError": "File is not image!",
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
-    "nameConflictError": "The name already exists."
+    "nameConflictError": "The name already exists.",
+    "nameEmptyError": "The name cannot be empyt.",
+    "nameContainSpecialCharacterError": "The name contains special characters."
   }
 }

@@ -39,7 +39,7 @@ export default {
     sitePath: String
   },
   async mounted() {
-    this.basicMessage = await this.getPersonalSiteInfoByPath(this.sitePath)
+    this.basicMessage = _.clone(await this.getPersonalSiteInfoByPath(this.sitePath))
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })

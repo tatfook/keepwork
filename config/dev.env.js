@@ -7,7 +7,9 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   HOST_ENV: '"localhost"',
   KEEPWORK_API_PREFIX: `"https://stage${i18nDomainLabel('-')}.keepwork.com/api/wiki/models"`,
-  GITLAB_API_PREFIX: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/git"`,
+  LESSON_API_PREFIX: `"http://localhost:3000/"`,
+  GITLAB_API_PREFIX: `"https://git-stage${i18nDomainLabel('-')}.keepwork.com"`,
   ES_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/es"`,
-  LESSON_API_PREFIX: `"http://localhost:3000/"`
+  ES_INDEX: `"www_pages_v1"`,
+  ES_TYPE: `"pages"`
 })

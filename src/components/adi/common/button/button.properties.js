@@ -4,6 +4,7 @@ export default {
   width: '',
   height: '',
   src: '',
+  color: '',
   fontSize: '',
   target: '_self'
 }

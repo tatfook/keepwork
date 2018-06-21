@@ -10,6 +10,7 @@ import lessonPackage from './lessonsType'
 import animations from './AnimationsType'
 import gallery from './GalleryType'
 import filter from './FilterType'
+import media from './MediaType'
 
 export default {
   input,
@@ -23,5 +24,6 @@ export default {
   lessonPackage,
   animations,
   gallery,
-  filter
+  filter,
+  media
 }

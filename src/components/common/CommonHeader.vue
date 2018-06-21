@@ -18,26 +18,39 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-      <el-submenu index="5" class="pull-right" popper-class='profile-submenu' v-if="isLogin">
-        <template slot="title">
+      
+      <el-menu-item index="10" class="pull-right" v-if="isLogin">
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
+      </el-menu-item>
+      <el-menu-item index="11" class="pull-right" v-if="isLogin">
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
+      </el-menu-item>
+      <el-menu-item index="12" class="pull-right" v-if="isLogin">
+        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
+      </el-menu-item>
+      <el-menu-item index="13" class="pull-right" v-if="isLogin">
+        <el-dropdown placement="bottom-start">
+          <span class="el-dropdown-link">
           <img class="user-profile" :src='userProfile.portrait' alt="username">
-        </template>
-        <el-menu-item index="5-1">
-          <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
-        </el-menu-item>
-        <el-menu-item index="5-2">
-          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
-        </el-menu-item>
-        <el-menu-item index="5-3">
-          <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
-        </el-menu-item>
-        <!-- <el-menu-item index="5-3">我的网盘</el-menu-item> -->
-      </el-submenu>
+              <i class="el-icon-caret-bottom"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
+            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item> -->
+            <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
+            <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a></el-dropdown-item>
+            <!-- <el-dropdown-item divided><a href="#" @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item> -->
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">注册</a>
+        <a href="/wiki/join">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">登录</a>
+        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
     </el-menu>
 
@@ -60,10 +73,10 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">注册</a>
+        <a href="/wiki/join">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">登录</a>
+        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
@@ -83,14 +96,29 @@
         </el-menu-item>
       </el-submenu>
     </el-menu>
+    <div @click.stop v-if='isPersonalCenterShow'>
+      <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
+    </div>
+    <div @click.stop v-if='isSkyDriveManagerDialogShow'>
+        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />      
+    </div>
   </div>
 </template>
 
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
+import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+
 export default {
   name: 'CommonHeader',
+  data() {
+    return {
+      isPersonalCenterShow: false,
+      isSkyDriveManagerDialogShow: false
+    }
+  },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
@@ -121,7 +149,32 @@ export default {
     backEditArea() {
       this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
       window.location.reload()
-    }
+    },
+    goPersonalCenter() {
+      this.isPersonalCenterShow = true
+    },
+    closePersonalCenterDialog() {
+      this.isPersonalCenterShow = false
+    },
+    openSkyDriveManagerDialog() {
+      this.isSkyDriveManagerDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isSkyDriveManagerDialogShow = false
+      if (url) {
+        let filename = file.filename || url
+        let isImage = /^image\/.*/.test(file.type)
+
+        isImage
+          ? this.$refs.codemirror.insertFile(filename, url)
+          : this.$refs.codemirror.insertLink(filename, url)
+      }
+    },
+    logout() {}
+  },
+  components: {
+    PersonalCenterDialog,
+    SkyDriveManagerDialog
   }
 }
 </script>
@@ -173,18 +226,35 @@ export default {
   .hidden-sm-and-up .el-submenu {
     margin: 0 -10px;
   }
+  .el-menu-item {
+    padding: 0 10px;
+  }
   .profile-menu-item {
     padding-left: 0;
   }
   .el-menu .login-btn {
-    margin-right: -20px;
+    padding: 0;
+    background-color: transparent;
+    color: #3977ad;
   }
 }
 </style>
 <style lang="scss">
-.profile-submenu {
+.el-menu-item [class^='el-icon-'] {
+  width: 20px;
+  font-size: 18px;
+  position: absolute;
+  bottom: 8px;
+  right: -18px;
+}
+.el-menu-item i {
+  color: #2b6da8 !important;
+}
+.profile-submenu,
+.el-popper {
   a {
     color: inherit;
+    text-decoration: none;
   }
 }
 .iicc-logo {

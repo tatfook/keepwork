@@ -50,6 +50,8 @@ layout
 {
   "layoutConfig": {
     "defaultLayoutId": 0,
+    "isSystemHeaderHide": false,
+    "isSystemFooterHide": false,
     "layouts": [
       {
         "id": 0,

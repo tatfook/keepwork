@@ -43,13 +43,13 @@ var modsList = [
     children: [
       {
         id: '2-1',
-        label: 'modList.menu',
-        mods: [ModMenu]
+        label: 'modList.title',
+        mods: [ModTitle]
       },
       {
         id: '2-2',
-        label: 'modList.headNavigation',
-        mods: [ModTitle]
+        label: 'modList.menu',
+        mods: [ModMenu]
       }
     ]
   },
@@ -59,12 +59,12 @@ var modsList = [
     children: [
       {
         id: '3-1',
-        label: 'modList.carousel',
+        label: 'modList.imgLoop',
         mods: [ModImgLoop]
       },
       {
         id: '3-2',
-        label: 'modList.widescreenImage',
+        label: 'modList.img',
         mods: [ModImg]
       },
       {
@@ -83,11 +83,6 @@ var modsList = [
         label: 'modList.markdown',
         mods: [ModMarkdown]
       },
-      // {
-      //   id: '4-2',
-      //   label: 'modList.toc',
-      //   mods: [ModToc]
-      // },
       {
         id: '4-2',
         label: 'modList.text',
@@ -98,11 +93,6 @@ var modsList = [
         label: 'modList.menu',
         mods: [ModMenu]
       }
-      // {
-      //   id: '4-5',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // }
     ]
   },
   {
@@ -114,11 +104,6 @@ var modsList = [
         label: 'modList.comment',
         mods: [ModComment]
       },
-      // {
-      //   id: '5-2',
-      //   label: 'modList.pageList',
-      //   mods: [ModPageList]
-      // },
       {
         id: '5-2',
         label: 'modList.qq',
@@ -132,13 +117,8 @@ var modsList = [
     children: [
       {
         id: '6-1',
-        label: 'modList.headNavigation',
+        label: 'modList.title',
         mods: [ModTitle]
-      },
-      {
-        id: '6-2',
-        label: 'modList.text',
-        mods: [ModText]
       },
       {
         id: '6-3',

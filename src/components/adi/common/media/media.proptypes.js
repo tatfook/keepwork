@@ -1,7 +1,7 @@
 export default {
-  src: 'link',
+  src: 'media',
   link: 'link',
-  webHeight: 'input',
-  mobileHeight: 'input',
+  webWidth: 'input',
+  mobileWidth: 'input',
   target: 'linkTarget'
 }

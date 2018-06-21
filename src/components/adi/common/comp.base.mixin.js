@@ -5,6 +5,7 @@ export default {
   props: {
     source: Object,
     options: Object,
+    theme: Object,
     editMode: {
       type: Boolean,
       default: false
@@ -14,7 +15,7 @@ export default {
     properties() {
       return _.merge(
         {},
-        compDefaultProperties[this.$options.name] || {},
+        compDefaultProperties[this.options.name] || {},
         this.source || {}
       )
     }

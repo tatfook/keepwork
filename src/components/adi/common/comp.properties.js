@@ -19,6 +19,8 @@ import AdiBigFile from './bigFile/bigFile.properties'
 import AdiBreadCrumb from './breadCrumb/breadCrumb.properties'
 import AdiPagePath from './pagePath/pagePath.properties'
 import AdiTab from './tab/tab.properties'
+import AdiCategoryList from './categoryList/categoryList.properties'
+import AdiPageSwitching from './pageSwitching/pageSwitching.properties'
 import AdiQuiz from './quiz/quiz.properties'
 import AdiLesson from './lesson/lesson.properties'
 import AdiTeachers from './teachers/teachers.properties'
@@ -47,6 +49,8 @@ export default {
   AdiBreadCrumb,
   AdiPagePath,
   AdiTab,
+  AdiCategoryList,
+  AdiPageSwitching,
   AdiQuiz,
   AdiLesson,
   AdiTeachers,

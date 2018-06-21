@@ -3,17 +3,17 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          <el-button class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
-          <el-button v-if='activePage' class='iconfont icon-upload' @click="openSkyDriveManagerDialog"></el-button>
+          <el-button v-if='activePage' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" :title="$t('editor.modules')"></el-button>
+          <el-button v-if='activePage' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
         <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
       </el-row>
       <el-row class="manager-content-box">
         <keep-alive>
-          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps'></component>
+          <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps' v-keep-scroll-position></component>
         </keep-alive>
       </el-row>
     </el-col>
