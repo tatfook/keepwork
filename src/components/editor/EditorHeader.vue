@@ -1,7 +1,7 @@
 <template>
   <div class='editor-header'>
     <el-menu mode='horizontal'>
-<el-menu-item>
+      <el-menu-item>
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
