@@ -8,6 +8,6 @@ module.exports = {
   LESSON_API_PREFIX: `"http://lesson.keepwork.com/"`,
   GITLAB_API_PREFIX: `"https://git${i18nDomainLabel('-')}.keepwork.com"`,
   ES_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/es"`,
-  ES_INDEX: `""`,
-  ES_TYPE: `""`
+  ES_INDEX: `"default_kw_pages"`,
+  ES_TYPE: `"pages"`
 }

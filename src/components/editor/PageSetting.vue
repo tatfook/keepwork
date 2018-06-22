@@ -57,7 +57,7 @@ export default {
     ]).catch(e => {
       console.error(e)
     })
-    this.selectedLayoutId = this.settedPageLayoutId || ''
+    this.selectedLayoutId = this.settedPageLayoutId || this.defaultLayoutId
     this.loading = false
   },
   computed: {
@@ -84,6 +84,9 @@ export default {
     },
     relativePath() {
       return this.pageInfo.relativePath
+    },
+    defaultLayoutId() {
+      return _.get(this.userSiteLayoutConfig, ['layoutConfig','defaultLayoutId'], '')
     },
     userSiteLayoutConfig() {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)

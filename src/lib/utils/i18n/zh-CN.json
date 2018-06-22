@@ -45,6 +45,7 @@
     "error": "出错啦，请重试",
 
     "OK": "确认",
+    "Sure": "确定",
     "Cancel": "取消",
 
     "action": "操作",
@@ -61,7 +62,8 @@
     "link": "链接",
     "back": "返 回",
     "NoPages": "很抱歉！您访问的页面不存在!",
-    "loginToStarPage": "点击右上角登录后才能点赞！"
+    "loginToStarPage": "点击右上角登录后才能点赞！",
+    "confirmButtonText": "确认"
   },
   "editor": {
     "files": "文件",
@@ -70,6 +72,8 @@
     "saveAll": "保存全部",
     "saveSuccess": "文件保存成功",
     "saveFail": "文件保存失败",
+    "unSaveConfirm": "您有修改的内容未保存，是否继续？",
+    "closeDialogTitle": "关闭提示",
     "unsavedTip": "编辑内容未保存",
     "copySuccess": "链接复制成功",
     "copyFail": "链接复制失败",
@@ -101,7 +105,7 @@
     "link": "链接",
     "setting": "设置",
     "create": "创建",
-    "fileUnSaved": "该文件尚未保存",
+    "fileUnSaved": "尚未保存",
     "filesUnSaved": " 个文件尚未保存，是否保存？",
     "theFileUnSaved": "该文件尚未保存，是否保存？",
     "unSaveClose": "不保存关闭",
@@ -212,7 +216,11 @@
     "yourPosition": "您所在的位置：",
     "defaultPage": "首页",
 
-    "removeImgConfirmMsg": "你确定要删除图片吗？"
+    "removeImgConfirmMsg": "你确定要删除图片吗？",
+
+    "uploadingToGitlabText": "正在上传到gitab。。。",
+    "readFileFromLocal": "正在读取文件。。。",
+    "enlargeMdEditing": "大窗口编辑"
   },
   "modList": {
     "recent": "常用",

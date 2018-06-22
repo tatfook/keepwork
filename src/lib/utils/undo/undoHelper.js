@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export default {
   truncate(undoManager) {
     while (undoManager.stack.length > undoManager.maxLength) {
@@ -5,7 +7,7 @@ export default {
     }
   },
   init(undoManager, initialItem) {
-    undoManager.initialItem = initialItem
+    undoManager.initialItem = _.cloneDeep(initialItem)
     this.clear(undoManager)
   },
   clear(undoManager) {
@@ -49,5 +51,8 @@ export default {
   },
   count(undoManager) {
     return undoManager.stack.length - 1 // -1 because of initial item
+  },
+  currentItem(undoManager) {
+    return undoManager.stack[undoManager.position] || {}
   }
 }

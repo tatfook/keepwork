@@ -42,6 +42,12 @@
       <iframe id="frameViewport" src="viewport.html" style="height: 100%; width: 100%; background: #fff" />
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
+      <el-dialog class="multiple-text-dialog" :title="$t('card.paragraph')" :visible="isMultipleTextDialogShow" top='6vh' :before-close="handleMultipleTextDialogClose" @open='initMarkdownModDatas'>
+        <el-input type='textarea' resize='none' :placeholder="$t('field.' + editingMarkdownModDatas.key)" v-model='editingMarkdownModDatas.content'></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleMultipleTextDialogClose('save')">{{$t('common.confirmButtonText')}}</el-button>
+        </span>
+      </el-dialog>
     </el-col>
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
@@ -108,7 +114,11 @@ export default {
       isCodeWinShow: true,
       isFullscreen: false,
       isSkyDriveManagerDialogShow: false,
-      gConst
+      gConst,
+      editingMarkdownModDatas: {
+        key: 'data',
+        content: ''
+      }
     }
   },
   created() {
@@ -136,12 +146,15 @@ export default {
   computed: {
     ...mapGetters({
       activePage: 'activePage',
+      activeMod: 'activeMod',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeManagePaneComponentName: 'activeManagePaneComponentName',
       activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
-      activePageInfo: 'activePageInfo'
+      activePageInfo: 'activePageInfo',
+      isMultipleTextDialogShow: 'isMultipleTextDialogShow',
+      activePropertyData: 'activePropertyData'
     }),
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
@@ -209,7 +222,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      resetShowingCol: 'resetShowingCol'
+      resetShowingCol: 'resetShowingCol',
+      setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
+      setActivePropertyData: 'setActivePropertyData'
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
@@ -300,12 +315,58 @@ export default {
     closeSkyDriveManagerDialog({ file, url }) {
       this.isSkyDriveManagerDialogShow = false
       if (url) {
-        let filename = (file.filename || url)
+        let filename = file.filename || url
         let isImage = /^image\/.*/.test(file.type)
 
         isImage
           ? this.$refs.codemirror.insertFile(filename, url)
           : this.$refs.codemirror.insertLink(filename, url)
+      }
+    },
+    initMarkdownModDatas() {
+      this.editingMarkdownModDatas = {
+        content: this.activePropertyData.data,
+        key: 'data'
+      }
+    },
+    closeMultipleTextDialog() {
+      this.setIsMultipleTextDialogShow({
+        isShow: false
+      })
+    },
+    saveMultipleTextDatas() {
+      this.setActivePropertyData({
+        data: {
+          data: this.editingMarkdownModDatas.content
+        }
+      })
+    },
+    checkIsModified() {
+      return (
+        this.editingMarkdownModDatas.content !== this.activePropertyData.data
+      )
+    },
+    handleMultipleTextDialogClose(type) {
+      switch (type) {
+        case 'save':
+          this.saveMultipleTextDatas()
+          this.closeMultipleTextDialog()
+          break
+        default:
+          let isModified = this.checkIsModified()
+          if (isModified) {
+            let that = this
+            this.$confirm(this.$t('editor.unSaveConfirm'), this.$t('editor.closeDialogTitle'), {
+              confirmButtonText: that.$t('common.Sure'),
+              cancelButtonText: that.$t('common.Cancel'),
+              type: 'warning'
+            }).then(() => {
+              this.closeMultipleTextDialog()
+            })
+          } else {
+            this.closeMultipleTextDialog()
+          }
+          break
       }
     }
   }
@@ -435,4 +496,41 @@ export default {
   background-color: #cdd4dc;
   max-width: 1080px;
 }
+</style>
+<style lang="scss">
+.multiple-text-dialog {
+  .el-dialog {
+    width: 1300px;
+    max-width: 80vw;
+  }
+  .el-dialog__header {
+    background-color: #3ba4ff;
+    padding: 8px 30px;
+  }
+  .el-dialog__title {
+    color: #fff;
+    font-size: 16px;
+  }
+  .el-dialog__headerbtn {
+    top: 15px;
+    right: 14px;
+  }
+  .el-dialog__headerbtn .el-dialog__close {
+    color: #fff;
+  }
+  .el-diaog__body {
+    padding: 30px 0;
+  }
+  .el-textarea__inner {
+    border: none;
+    height: 640px;
+    max-height: 70vh;
+  }
+  .el-button--primary {
+    padding: 7px 45px;
+  }
+}
+</style>
+
+<style>
 </style>

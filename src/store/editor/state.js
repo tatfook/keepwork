@@ -52,7 +52,8 @@ const state = () => ({
     isManagerShow: true,
     isCodeShow: true,
     isPreviewShow: true
-  }
+  },
+  isMultipleTextDialogShow: false
 })
 
 export default state

@@ -9,6 +9,7 @@
 
 <script>
 import BasicComponents from '@/components/adi/common/'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -22,6 +23,9 @@ export default {
     options: Object
   },
   methods: {
+    ...mapActions({
+      setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
+    }),
     onEditProperty() {
       this.$store.dispatch('setActiveProperty', {
         key: this.mod.key,
@@ -29,9 +33,14 @@ export default {
       })
     },
     onDblclickProperty() {
+      if (this.compType === 'AdiMarkdown') {
+        this.setIsMultipleTextDialogShow({
+          isShow: true
+        })
+      }
       let comp = BasicComponents[this.compType]
 
-      if(comp.bedbclick){
+      if (comp.bedbclick) {
         comp.dblclick(this)
       }
     }
@@ -44,7 +53,10 @@ export default {
       return this.modData[this.property] && !this.modData[this.property].hidden
     },
     source() {
-      if(this.modData[this.property] && typeof(this.modData[this.property]) == 'object') {
+      if (
+        this.modData[this.property] &&
+        typeof this.modData[this.property] == 'object'
+      ) {
         return this.modData[this.property]
       } else {
         return {}
@@ -55,5 +67,4 @@ export default {
 </script>
 
 <style>
-
 </style>
