@@ -54,7 +54,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -71,7 +71,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -461,6 +461,19 @@ export default {
   },
   components: {
     NewWebsiteDialog
+  },
+  filters: {
+    sortBy: (list, key) => list.sort((obj1,obj2) =>{
+      let val1 = obj1[key]
+      let val2 = obj2[key]
+      if(val1 < val2){
+        return -1
+      }else if(val1 > val2){
+        return 1
+      }else{
+        return 0
+      }
+    })
   }
 }
 </script>
