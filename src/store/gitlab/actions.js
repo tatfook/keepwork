@@ -28,13 +28,16 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   let {
     dispatch,
     getters: { getGitlabAPI },
-    rootGetters: { 'user/getGitFileProjectIdAndRefByPath': getGitFileProjectIdAndRefByPath }
+    rootGetters
   } = context
   let [username, name] = path.split('/').filter(x => x)
 
   // call user/getAllPersonalAndContributedSite then we can get git file options
   await dispatch('user/getAllPersonalAndContributedSite', null, { root: true })
+
+  let { 'user/getGitFileProjectIdAndRefByPath': getGitFileProjectIdAndRefByPath } = rootGetters
   let { projectId } = getGitFileProjectIdAndRefByPath(path)
+
   let gitlab = getGitlabAPI()
   let options = { projectId, ref, branch, content, commit_message: `keepwork commit: ${path}` }
 
