@@ -100,7 +100,6 @@ export default {
       dialogCloseAllVisible: false,
       toBeCloseFilePath: '',
       toBeCloseFileName: '',
-      toBeCloseList: [],
       filesTreeProps: {
         children: 'children',
         label: 'name'
@@ -402,9 +401,8 @@ export default {
     },
     async closeAllOpenedFilesConfirm() {
       if (this.unSavedOpenedFilesPaths.length > 0) {
-        this.toBeCloseList = [...this.unSavedOpenedFilesPaths]
         this.dialogCloseAllVisible = true
-        let path = this.toBeCloseList[0]
+        let path = this.unSavedOpenedFilesPaths[0]
         let siteName = path.split('/').slice(1, 2).join()
         let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
         this.toBeCloseFileName = `${siteName}/${fileName}`
