@@ -160,6 +160,8 @@ export default {
     cursor: pointer;
   }
   &:hover {
+    border:2px dashed #f7a935;
+    transition: all .2s ease-out;   
     .delete-mod {
       display: inline;
     }
@@ -173,7 +175,6 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 3;
-  background-color: rgba(127, 195, 255, 0.4);
 }
 </style>
 
