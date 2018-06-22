@@ -5,7 +5,7 @@
         <div>
           {{ $t('skydrive.usage') }}
           <span class="skydrive-manager-total">
-            <span class="skydrive-manager-total-used" :style="{ width: info.usedPercent + '%' }"></span>
+            <span class="skydrive-manager-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
           </span>
           {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
@@ -219,6 +219,10 @@ export default {
     },
     approvedMultipleSelectionResults() {
       return this.multipleSelectionResults.filter(({ checked }) => Number(checked) === 1)
+    },
+    usedProcessBarClass() {
+      let { usedPercent } = this.info
+      return usedPercent >= 90 ? 'skydrive-manager-total-used-danger' : (usedPercent >= 70 ? 'skydrive-manager-total-used-warning' : '')
     }
   },
   methods: {
@@ -447,6 +451,12 @@ export default {
       height: 100%;
       border-radius: 5px;
       background: #3BA4FF;
+      &-danger {
+        background-color: #ff1e02;
+      }
+      &-warning {
+        background-color: #f97b00;
+      }
     }
   }
   &-footer {
