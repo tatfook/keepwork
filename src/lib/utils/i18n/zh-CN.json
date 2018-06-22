@@ -105,7 +105,7 @@
     "link": "链接",
     "setting": "设置",
     "create": "创建",
-    "fileUnSaved": "该文件尚未保存",
+    "fileUnSaved": "尚未保存",
     "filesUnSaved": " 个文件尚未保存，是否保存？",
     "theFileUnSaved": "该文件尚未保存，是否保存？",
     "unSaveClose": "不保存关闭",
