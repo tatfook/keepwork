@@ -65,6 +65,14 @@ export default {
       }
     }
   },
+  watch: {
+    activeProperty() {
+      this.$nextTick(() => {
+        let ele = document.querySelector('.prop-box.active')
+        ele && ele.scrollIntoView()
+      })
+    }
+  },
   computed: {
     activePropertyDataCopy() {
       return _.cloneDeep(this.activePropertyData)

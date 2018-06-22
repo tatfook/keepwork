@@ -45,6 +45,7 @@
     "error": "Error, please try again",
 
     "OK": "OK",
+    "Sure": "Confirm",
     "Cancel": "Cancel",
 
     "action": "Action",
@@ -61,7 +62,8 @@
     "link": "Link",
     "back": "back",
     "NoPages": "I'm sorry! The page you visited does not exist!",
-    "loginToStarPage": "You must login before star this page!"
+    "loginToStarPage": "You must login before star this page!",
+    "confirmButtonText": "Confirm"
   },
   "editor": {
     "files": "Files",
@@ -70,6 +72,8 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
+    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
     "copyFail": "Link copy failed",
@@ -101,7 +105,7 @@
     "link": "Link",
     "setting": "Setting",
     "create": "Create",
-    "fileUnSaved": "The file has not been saved yet",
+    "fileUnSaved": "has not been saved yet",
     "filesUnSaved": " files have not been saved, whether to save? ",
     "theFileUnSaved": "The file has not been saved yet, is it saved?",
     "unSaveClose": "Do not save close",
@@ -222,7 +226,11 @@
     "yourPosition": "Your position：",
     "defaultPage": "Default page",
 
-    "removeImgConfirmMsg": "Are you sure to remove this image?"
+    "removeImgConfirmMsg": "Are you sure to remove this image?",
+
+    "uploadingToGitlabText": "uploading file to gitlab ...",
+    "readFileFromLocal": "reading file from local ...",
+    "enlargeMdEditing": "Large window editing"
   },
   "modList": {
     "recent": "Commonly used",
