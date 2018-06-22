@@ -106,7 +106,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" style="display:none;" @change="handleUploadFile">
+            <input type="file" style="display:none;" multiple @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -146,7 +146,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none;" @change="handleUploadFile">
+            <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -229,13 +229,25 @@ export default {
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive'
     }),
-    handleUploadFile(e) {
-      let file = _.get(e, ['target', 'files', 0])
-      this.uploadFile(file)
+    async filesQueueToUpload(files){
+      if (!this.mediaLibraryMode) {
+        this.loading = true
+      }
+      await Promise.all(_.map(files, async file => {
+        await this.uploadFile(file)
+      }))
+      this.uploadingFiles = []
+      if (!this.mediaLibraryMode) {
+        this.loading = false
+      }
     },
-    async handleDrop(e) {
-      let file = _.get(e, ['dataTransfer', 'files', 0])
-      this.uploadFile(file)
+    handleUploadFile(e) {
+      let files = _.get(e, ['target', 'files'])
+      this.filesQueueToUpload(files)
+    },
+    handleDrop(e) {
+      let files = _.get(e, ['dataTransfer', 'files'])
+      this.filesQueueToUpload(files)
     },
     async uploadFile(file) {
       if (!file) return
@@ -247,9 +259,6 @@ export default {
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) throw new Error(filenameValidateResult)
-      if (!this.mediaLibraryMode) {
-        this.loading = true
-      }
       let previewUrl = URL.createObjectURL(file)
       let fileIndex = this.uploadingFiles.length
       let that = this
@@ -263,10 +272,6 @@ export default {
         that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
-      this.uploadingFiles.splice(fileIndex, 1)
-      if (!this.mediaLibraryMode) {
-        this.loading = false
-      }
     },
     cancelUpload(){
       _.forIn(this.qiniuCancelUpload, (subscirbtion, key)=>{
@@ -291,7 +296,6 @@ export default {
         that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
-      this.uploadingFiles.splice(fileIndex, 1)
       this.loading = false
     },
     async handleRemove(file) {
