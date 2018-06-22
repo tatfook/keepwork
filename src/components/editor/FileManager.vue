@@ -1,11 +1,11 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <div class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
+    <div v-show="hasOpenedFiles" class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
       <div class="opened-files-container">
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
         </h1>
-        <span class="opened-files-buttons" v-if="hasOpenedFiles" v-show="trees.isOpenedShow && hasOpenedFiles">
+        <span class="opened-files-buttons" v-show="trees.isOpenedShow && hasOpenedFiles">
           <el-button class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
           </el-button>
           <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFilesConfirm'>
@@ -39,7 +39,6 @@
               <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
               </el-button>
               <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
-                <!-- <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='closeOpenedFile(data)'> -->
               </el-button>
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
@@ -138,13 +137,17 @@ export default {
       activePageInfo: 'activePageInfo',
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
       getOpenedFileByPath: 'getOpenedFileByPath',
-      username: 'user/username'
+      username: 'user/username',
+      hasOpenedFiles: 'hasOpenedFiles'
     }),
     myContributedSiteList() {
       return this.contributedSiteList.map(i => {
         i.myJoin = true
         return i
       })
+    },
+    openedTree() {
+      return this.$refs.openedTree
     },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
@@ -164,9 +167,6 @@ export default {
         treeDatas.push(nodeData)
       })
       return treeDatas
-    },
-    hasOpenedFiles() {
-      return this.openedFilesPaths.length > 0
     },
     openedFilesPaths() {
       return _.keys(this.openedFiles)
@@ -193,7 +193,6 @@ export default {
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
-      setActivePage: 'setActivePage',
       closeAllOpenedFile: 'closeAllOpenedFile'
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
@@ -281,10 +280,11 @@ export default {
         node.loading = true
         await this.getRepositoryTree({ path })
       }
-
       // try open file
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
+      isFileClicked && this.openedTree.setCurrentKey(path)
+      this.$nextTick(() => console.log('nextTick--------------->'))
     },
     async handleCloseConfirm({ path }) {
       let file = this.getOpenedFileByPath(path)
@@ -341,11 +341,8 @@ export default {
         this.savePending = false
       })
     },
-    handleOpenedClick(data, node) {
-      let path = data.path
-      let openedTree = this.$refs.openedTree
+    handleOpenedClick({ path }, node) {
       this.$router.push('/' + path.replace(/\.md$/, ''))
-      openedTree.setCurrentKey(path)
     },
     toggleContent(type) {
       this.trees[type] = !this.trees[type]
@@ -408,6 +405,7 @@ export default {
         this.toBeCloseFileName = `${siteName}/${fileName}`
         this.toBeCloseFilePath = path
       } else {
+        this.$router.push('/')
         this.closeAllOpenedFile()
       }
     },
