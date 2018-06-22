@@ -12,13 +12,13 @@
           </el-button>
         </span>
       </div>
-      <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+      <!-- <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
           <el-button type="warning" @click="handleCloseOpenedFile" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
           <el-button type="primary" @click="saveAndCloseOpenedFile" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
       <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
@@ -27,8 +27,8 @@
         </span>
       </el-dialog>
       <el-collapse-transition>
-        <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" highlight-current @node-click="handleOpenedClick">
-          <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
+        <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" :render-content="renderOpenedFile" highlight-current @node-click="handleOpenedClick">
+          <!-- <span class='joined-tree-node el-tree-node__label' slot-scope="{ node, data }">
             <span class="node-icon">
               <i class="iconfont icon-edited_file" :class="{'is-modified': data.isModified}"></i>
             </span>
@@ -43,7 +43,7 @@
               <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
               </el-button>
             </span>
-          </span>
+          </span> -->
         </el-tree>
       </el-collapse-transition>
     </div>
@@ -86,6 +86,7 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
+import FileManagerOpenedFileNode from './FileManagerOpenedFileNode'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 
@@ -248,6 +249,11 @@ export default {
         ...appendCloseFolderPathsList
       ])
     },
+    renderOpenedFile(h, { node, data, store }) {
+      let { fullPath: activePageFullPath } = this.activePageInfo
+      activePageFullPath === data.path && store.setCurrentNode(node)
+      return <FileManagerOpenedFileNode data={data} node={node} />
+    },
     renderContent(h, { node, data, store }) {
       // trick codes below
       // manipulated the node in <el-tree/>
@@ -284,21 +290,20 @@ export default {
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
       isFileClicked && this.openedTree.setCurrentKey(path)
-      this.$nextTick(() => console.log('nextTick--------------->'))
     },
-    async handleCloseConfirm({ path }) {
-      let file = this.getOpenedFileByPath(path)
-      let { saved = true } = file
-      if (saved) {
-        this.closeAndResetFile(path)
-      } else {
-        this.dialogVisible = true
-        this.toBeCloseFilePath = path
-        let siteName = path.split('/').slice(1, 2)
-        let fileName = path.split('/').slice(-1)
-        this.toBeCloseFileName = [...siteName, ...fileName].join('/').replace(/\.md$/, '')
-      }
-    },
+    // async handleCloseConfirm({ path }) {
+    //   let file = this.getOpenedFileByPath(path)
+    //   let { saved = true } = file
+    //   if (saved) {
+    //     this.closeAndResetFile(path)
+    //   } else {
+    //     this.dialogVisible = true
+    //     this.toBeCloseFilePath = path
+    //     let siteName = path.split('/').slice(1, 2)
+    //     let fileName = path.split('/').slice(-1)
+    //     this.toBeCloseFileName = [...siteName, ...fileName].join('/').replace(/\.md$/, '')
+    //   }
+    // },
     closeAndResetFile(path) {
       let openedFiles = this.openedFiles
       openedFiles = Object.keys(openedFiles)
@@ -357,39 +362,39 @@ export default {
       this.toggleContent(type)
       this.trees[type] && this.getAllContributedWebsite()
     },
-    async save(data) {
-      if (data.savePending === undefined) {
-        this.$set(data, 'savePending', false)
-      }
-      let path = data.path
-      data.savePending = true
-      await this.savePageByPath(path)
-      data.savePending = false
-    },
+    // async save(data) {
+    //   if (data.savePending === undefined) {
+    //     this.$set(data, 'savePending', false)
+    //   }
+    //   let path = data.path
+    //   data.savePending = true
+    //   await this.savePageByPath(path)
+    //   data.savePending = false
+    // },
     isSaveble(nodeData) {
       let path = nodeData.path
       return path && this.openedFiles[path] && this.openedFiles[path].timestamp
     },
-    removeFile(data) {
-      let path = data.path
-      let pathArr = path.split('/')
-      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(
-        `${this.$t('editor.delConfirm')} ${pageName} ${this.$t(
-          'editor.page'
-        )}?`,
-        this.$t('editor.delNotice'),
-        {
-          confirmButtonText: this.$t('el.messagebox.confirm'),
-          cancelButtonText: this.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
-        .then(async () => {
-          await this.gitlabRemoveFile({ path })
-        })
-        .catch(() => {})
-    },
+    // removeFile(data) {
+    //   let path = data.path
+    //   let pathArr = path.split('/')
+    //   let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
+    //   this.$confirm(
+    //     `${this.$t('editor.delConfirm')} ${pageName} ${this.$t(
+    //       'editor.page'
+    //     )}?`,
+    //     this.$t('editor.delNotice'),
+    //     {
+    //       confirmButtonText: this.$t('el.messagebox.confirm'),
+    //       cancelButtonText: this.$t('el.messagebox.cancel'),
+    //       type: 'error'
+    //     }
+    //   )
+    //     .then(async () => {
+    //       await this.gitlabRemoveFile({ path })
+    //     })
+    //     .catch(() => {})
+    // },
     openNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = true
     },
