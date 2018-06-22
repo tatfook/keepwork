@@ -466,16 +466,16 @@ const actions = {
     let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
   },
-  async uploadFileToSkyDrive(context, {file, onProgress}) {
+  async uploadFileToSkyDrive(context, {file, onStart, onProgress}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let url = await skyDrive.upload({file, onProgress}, authRequestConfig)
+    let url = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
     return url
   },
-  async updateFileInSkyDrive(context, {file, onProgress, bigfileToUpdate}) {
+  async updateFileInSkyDrive(context, {file, onStart, onProgress, bigfileToUpdate}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let url = await skyDrive.update({file, onProgress, bigfileToUpdate}, authRequestConfig)
+    let url = await skyDrive.update({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig)
     return url
   },
   async removeFileFromSkyDrive(context, {file}) {

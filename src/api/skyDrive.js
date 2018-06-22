@@ -10,12 +10,14 @@ export const qiniuUpload = async (options) => {
     let observer = {
       next: ({total}) => onProgress && onProgress(total),
       error(err) {
+        console.log('qiniuUpload: ', err)
         reject(err)
         subscription && subscription.unsubscribe()
       },
       complete: resolve
     }
     subscription = observable.subscribe(observer)
+    options.onStart && options.onStart(subscription)
   })
   return result
 }
@@ -51,13 +53,13 @@ export const getTokenAndUid = async authRequestConfig => {
   return { token, uid }
 }
 
-export const upload = async ({file, onProgress, bigfileToUpdate}, authRequestConfig) => {
+export const upload = async ({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig) => {
   let { token, uid } = await getTokenAndUid(authRequestConfig)
   let key = getFileKey(file)
 
   let config = { region: qiniu.region.z2 }
   let putExtra = { params: { 'x:uid': uid } }
-  let { hash } = await qiniuUpload({file, token, key, onProgress, config, putExtra})
+  let { hash } = await qiniuUpload({file, token, key, onStart, onProgress, config, putExtra})
 
   let payload = {
     filename: file.name,
@@ -85,8 +87,8 @@ export const upload = async ({file, onProgress, bigfileToUpdate}, authRequestCon
   // return downloadUrl
 }
 
-export const update = async ({file, onProgress, bigfileToUpdate}, authRequestConfig) => {
-  let downloadUrl = await upload({file, onProgress, bigfileToUpdate}, authRequestConfig)
+export const update = async ({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig) => {
+  let downloadUrl = await upload({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig)
   return downloadUrl
 }
 

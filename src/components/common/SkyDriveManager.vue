@@ -173,12 +173,16 @@ export default {
       searchWord: '',
       multipleSelectionResults: [],
       selectedMediaItem: null,
-      uploadingFiles:[]
+      uploadingFiles:[],
+      qiniuCancelUpload:{}
     }
   },
   async mounted() {
     await this.userRefreshSkyDrive()
     this.loading = false
+  },
+  beforeDestroy(){
+    this.cancelUpload()
   },
   computed: {
     ... mapGetters({
@@ -253,14 +257,21 @@ export default {
         cover: previewUrl,
         percent: 0
       })
-      await this.userUploadFileToSkyDrive({file, onProgress(progress) {
+      await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
+        that.qiniuCancelUpload[file.name] = subscirbtion
+      }, onProgress(progress) {
         that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
-      this.uploadingFiles[fileIndex].percent = 0
+      this.uploadingFiles.splice(fileIndex, 1)
       if (!this.mediaLibraryMode) {
         this.loading = false
       }
+    },
+    cancelUpload(){
+      _.forIn(this.qiniuCancelUpload, (subscirbtion, key)=>{
+        subscirbtion.unsubscribe()
+      })
     },
     async handleUpdateFile(e, bigfileToUpdate) {
       let file = _.get(e, ['target', 'files', 0])
@@ -268,10 +279,19 @@ export default {
       if (file.type !== bigfileToUpdate.file.type) throw new Error('file type don\'t match')
 
       this.loading = true
-      await this.userUpdateFileInSkyDrive({file, bigfileToUpdate, onProgress(progress) {
-        console.log(progress)
+      let that = this
+      let fileIndex = this.uploadingFiles.length
+      this.uploadingFiles.push({
+        cover: '',
+        percent: 0
+      })
+      await this.userUpdateFileInSkyDrive({file, bigfileToUpdate, onStart(subscirbtion) {
+        that.qiniuCancelUpload[file.name] = subscirbtion
+      }, onProgress(progress) {
+        that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      this.uploadingFiles.splice(fileIndex, 1)
       this.loading = false
     },
     async handleRemove(file) {

@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-if='show' :title="title" class="new-website-dialog" :close-on-click-modal="false" :visible.sync="show" width="960px" :before-close="handleClose">
-    <SkyDriveManager :mediaLibrary='mediaLibrary' @close='handleClose'/>
+    <SkyDriveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'/>
   </el-dialog>
 </template>
 
@@ -24,7 +24,19 @@ export default {
   },
   methods: {
     handleClose(event) {
-      this.$emit('close', event)
+      let { uploadingFiles } = this.$refs.skyDriveManager
+      let that = this
+      if (uploadingFiles.length > 0) {
+        this.$confirm('还有文件正在上传中，关闭后文件将取消上传，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          that.$emit('close', event)
+        }).catch(() => {});
+      }else{
+        this.$emit('close', event)
+      }
     }
   },
   components: {
