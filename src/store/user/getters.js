@@ -176,7 +176,7 @@ const getters = {
   ) => path => {
     let [username, sitename] = path.split('/').filter(x => x)
     let {
-      userinfo: { dataSource: dataSourceList = [], defaultDataSourceSitename }
+      userinfo: { dataSource: dataSourceList = [], defaultDataSourceSitename = '__keepwork__' }
     } = getSiteDetailInfoByPath(path)
     let defaultDataSource = dataSourceList.filter(dataSource => dataSource.sitename === defaultDataSourceSitename)[0]
     let targetDataSource = dataSourceList.filter(
