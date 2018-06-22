@@ -192,6 +192,7 @@
     "supportBooleanCalculation":
       "Support Boolean calculation: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. Layout plan",
+    "layoutManagement": "Layout management",    
     "addLayout": "Add layout",
     "default": "Default",
     "rename": "Rename",

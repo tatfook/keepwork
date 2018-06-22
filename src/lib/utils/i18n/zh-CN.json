@@ -183,6 +183,7 @@
     "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
     "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. 布局方案",
+    "layoutManagement": "布局方案管理",
     "addLayout": "添加方案",
     "default": "默认",
     "rename": "重命名",

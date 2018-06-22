@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
 <el-menu-item>
-        <el-dropdown placement="bottom-end" trigger="click">
+        <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -12,13 +12,13 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button @click.stop="openNewWebsiteDialog">新建网站</button></span>
-                  <span><button disabled>新建文件夹</button></span>
-                  <span><button disabled>新建页面</button></span>
+                  <span><button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button></span>
+                  <!-- <span><button disabled>新建文件夹</button></span> -->
+                  <!-- <span><button disabled>新建页面</button></span> -->
                 </div>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item divided>
+            <!-- <el-dropdown-item divided>
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
                 <div class="kp-submenu-top-content">
@@ -26,8 +26,8 @@
                   <span><button>设置页面</button></span>
                 </div>
               </div>
-            </el-dropdown-item>
-            <el-dropdown-item divided>
+            </el-dropdown-item> -->
+            <!-- <el-dropdown-item divided>
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
                 <div class="kp-submenu-top-content">
@@ -36,49 +36,54 @@
                   <span><button>删除页面</button></span>
                 </div>
               </div>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <div class="kp-menu-top">
-                <div class="kp-icon"><i class="iconfont icon-save1"></i></div>
+              <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled':'']">
+                <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button :disabled='isActivePageSaved' @click.stop="save">保存</button></span>
-                  <span><button>全部保存</button></span>
+                  <span><button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button></span>
+                  <!-- <span><button>全部保存</button></span> -->
                 </div>
-              </div></el-dropdown-item>
-            <el-dropdown-item divided>
+              </div>
+              </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
                 <div class="kp-submenu-top-content">
                   <span><button>关闭</button></span>
                   <span><button>全部关闭</button></span>
                 </div>
-              </div></el-dropdown-item>
+              </div>
+            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-refresh1"></i></span><button @click.stop="refresh">刷新</button></span>
-                  <span><span class="icon-span"><i class="iconfont icon-pre-step"></i></span><button @click.stop='undo' :disabled='!canUndo'>撤销</button></span>
-                  <span><span class="icon-span"><i class="iconfont icon-redo"></i></span><button @click='redo' :disabled='!canRedo'>重做</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-refresh1"></i></span><button @click.stop="refresh">{{$t('editor.refresh')}}</button></span>
+                  <span><span :class="['icon-span',!canUndo ? 'isDisabled':'']"><i class="iconfont icon-pre-step"></i></span><button @click.stop='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</button></span>
+                  <span><span :class="['icon-span',!canRedo ? 'isDisabled':'']"><i class="iconfont icon-redo"></i></span><button @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</button></span>
                 </div>
-              </div></el-dropdown-item>
-            <el-dropdown-item divided>
+              </div>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
                   <span><span class="icon-span"><i class="iconfont icon-mod"></i></span><button>模块</button></span>
                   <span><span class="icon-span"><i class="iconfont icon-lfile"></i></span><button>大文件</button></span>
                 </div>
-              </div></el-dropdown-item>
+              </div>
+            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-code1"></i></span><button>显示代码</button></span>
-                  <span><span class="icon-span"><i class="iconfont icon-help"></i></span><button>帮助</button></span>
+                  <!-- <span><span class="icon-span"><i class="iconfont icon-code1"></i></span><button>显示代码</button></span> -->
+                  <span><span class="icon-span"><i class="iconfont icon-help"></i></span><a href="https://keepwork.com/official/help/index">{{$t('editor.help')}}</a></span>
                 </div>
-              </div></el-dropdown-item>
+              </div>
+            </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
               <div class="kp-submenu">
-                  <span><span class="icon-span"><i class="iconfont icon-home"></i></span><button @click.stop="backHome">返回首页</button></span>
+                  <span><span class="icon-span"><i class="iconfont icon-home"></i></span><button @click.stop="backHome">{{$t('editor.backHomePage')}}</button></span>
               </div>
               </div>
             </el-dropdown-item>
@@ -300,13 +305,11 @@ export default {
   display: block;
   height: 24px;
 }
-.kp-menu .kp-submenu span button{
-  border: none;
-  background-color: #fff;
-  margin: 0;
-  padding-left: 1px;
+.kp-menu .kp-submenu span a{
+  text-decoration: none;
+  color: #000;
 }
-.kp-menu .kp-submenu span button:hover{
+.kp-menu .kp-submenu span a:hover{
   color: #409EFF;        
 }
 .kp-menu .kp-submenu .icon-span{
@@ -406,7 +409,7 @@ export default {
     .kp-icon{
       .iconfont{
       color: #409EFF;        
-      }    
+      }
     }
   }
   .kp-icon{
@@ -423,7 +426,6 @@ export default {
   .kp-submenu-top-content{
     flex: 1;
     span{
-      // padding-left: 10px;
       display: block;
       &:hover{
         color: #409EFF;
@@ -442,10 +444,36 @@ export default {
     }
   }
 }
+.isDisabled{
+      .iconfont{
+      color: #CcC !important;        
+    }    
+  &:hover{
+    .kp-icon{
+      .iconfont{
+      color: #CcC !important;        
+      }
+    }
+  }
+}
 .kp-menu .kp-submenu span:hover{
-  color: #409EFF;
   .iconfont{
       color: #409EFF;        
   }    
 }
+.kp-menu .kp-submenu span {
+  button{
+    border: none;
+    background-color: #fff;
+    margin: 0;
+    padding-left: 1px;
+    &:hover{
+      color:#409eff;
+    }
+  }
+  button[disabled]{
+    color: #ccc;
+  }
+}
+
 </style>
