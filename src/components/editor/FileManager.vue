@@ -15,14 +15,14 @@
       <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFile">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="warning" @click="handleCloseOpenedFile" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
           <el-button type="primary" @click="saveAndCloseOpenedFile" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFileAndNext">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="warning" @click="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
           <el-button type="primary" @click="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
@@ -446,12 +446,18 @@ export default {
       if (!this.hasUnSaveOpenedFiles) return
       let num = this.unSavedOpenedFilesPaths.length
       let paths = this.unSavedOpenedFilesPaths
+      let isSuccess = true
       this.savePending = true
       while(num--) {
         await this.savePageByPath(paths[num]).catch(e => {
           this.$message.error(this.$t("editor.saveFail"));
+          isSuccess = false
         })
       }
+      isSuccess && this.$message({
+          message: this.$t("editor.saveSuccess"),
+          type: 'success'
+        });
       this.savePending = false
     }
   },
