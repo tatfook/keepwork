@@ -1,7 +1,7 @@
 <template>
   <div class='editor-header'>
     <el-menu mode='horizontal'>
-      <el-menu-item>
+      <el-menu-item index="2">
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
@@ -112,14 +112,14 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item> -->
-      <el-menu-item index='2' class="link-box">
+      <el-menu-item index='6' class="link-box">
         <i class="iconfont icon-copy" @click='doCopyLink' :title='$t("common.copy")'></i>
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
-      <el-menu-item index='8' class='unsaved-tip'>
+      <el-menu-item index='7' class='unsaved-tip'>
         <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
       </el-menu-item>
-      <el-menu-item index='7' class='pull-right user-profile-box'>
+      <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>

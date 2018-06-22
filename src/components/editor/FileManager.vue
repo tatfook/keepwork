@@ -54,11 +54,11 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="myPersonalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="myPersonalSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
-        <div class="empty" v-if="myPersonalSiteList.length <= 0">
+        <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
           <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
@@ -71,7 +71,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="myContributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="myContributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -140,34 +140,8 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       username: 'user/username'
     }),
-    myPersonalSiteList(){
-      let compare = function(obj1,obj2){
-        var username1 = obj1.domain.substring(0,1)
-        var username2 = obj2.domain.substring(0,1)
-        if(username1 < username2){
-          return -1
-        }else if(username1 > username2){
-          return 1
-        }else{
-          return 0
-        }
-      }
-      return this.personalSiteList.sort(compare)
-    },
     myContributedSiteList() {
-      let compare = function(obj1,obj2){
-        var username1 = obj1.username.substring(0,1)
-        var username2 = obj2.username.substring(0,1)
-        if(username1 < username2){
-          return -1
-        }else if(username1 > username2){
-          return 1
-        }else{
-          return 0
-        }
-      }
-      let sortedContributedSiteList = this.contributedSiteList.sort(compare)
-      return sortedContributedSiteList.map(i => {
+      return this.contributedSiteList.map(i => {
         i.myJoin = true
         return i
       })
@@ -487,6 +461,19 @@ export default {
   },
   components: {
     NewWebsiteDialog
+  },
+  filters: {
+    sortBy: (list, key) => list.sort((obj1,obj2) =>{
+      let val1 = obj1[key]
+      let val2 = obj2[key]
+      if(val1 < val2){
+        return -1
+      }else if(val1 > val2){
+        return 1
+      }else{
+        return 0
+      }
+    })
   }
 }
 </script>
