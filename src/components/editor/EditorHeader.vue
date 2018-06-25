@@ -38,7 +38,7 @@
               </div>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled':'']">
+              <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
                 <div class="kp-submenu-top-content">
                   <span :class="isActivePageSaved ? 'disabled-bgc' : ''"><button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button></span>
@@ -427,6 +427,11 @@ export default {
       .iconfont{
       color: #409EFF;        
       }
+    }
+  }
+  &.disabled-bgc:hover{
+    .kp-icon{
+        background-color:#f5f5f5;
     }
   }
   .kp-icon{
