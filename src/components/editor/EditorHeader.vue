@@ -296,7 +296,9 @@ export default {
   border-color: #F7BC2A;
   color: white;
 }
-
+.el-dropdown-link{
+  padding: 20px 0;
+}
 .kp-logo {
   width: 127px;
 }
