@@ -444,7 +444,8 @@ export default {
         background-color:rgba(40, 140, 233, 0.1);        
         button{
           color: #409EFF; 
-          background-color: transparent;    
+          background-color: transparent;
+          cursor: pointer;    
         }
       }
       button{
@@ -481,6 +482,7 @@ export default {
     button{
       background-color: transparent;
       color:#409eff;
+      cursor: pointer;
     }
   }
   button{
