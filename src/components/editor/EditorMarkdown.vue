@@ -156,7 +156,7 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursorLine(this.modList, line)
+        let mod = Parser.getBlockByCursorLine(this.modList || [], line)
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key

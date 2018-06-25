@@ -22,6 +22,7 @@ const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
 const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
+const USE_FILE_IN_SITE_SUCCESS = 'USE_FILE_IN_SITE_SUCCESS'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -44,7 +45,8 @@ export const props = {
   UPDATE_SITE_MSG_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
-  GET_SITE_THEME_CONFIG_SUCCESS
+  GET_SITE_THEME_CONFIG_SUCCESS,
+  USE_FILE_IN_SITE_SUCCESS
 }
 
 const doNothing = state => {
@@ -154,6 +156,15 @@ const mutations = {
       [username]: {
         ..._.get(state, ['skyDrive', username]),
         ...payload
+      }
+    })
+  },
+  [USE_FILE_IN_SITE_SUCCESS](state, {sitePath, fileId, url}) {
+    Vue.set(state, 'siteFiles', {
+      ...state.siteFiles,
+      [sitePath]: {
+        ..._.get(state, ['siteFiles', sitePath]),
+        [fileId]: url
       }
     })
   }

@@ -331,8 +331,7 @@ export default {
       this.isSkyDriveManagerDialogShow = false
       if (url) {
         let filename = file.filename || url
-        let isImage = /^image\/.*/.test(file.type)
-
+        let isImage = /^image/.test(file.type)
         isImage
           ? this.$refs.codemirror.insertFile(filename, url)
           : this.$refs.codemirror.insertLink(filename, url)

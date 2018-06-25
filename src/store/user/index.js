@@ -14,7 +14,8 @@ const state = () => ({
   siteLayoutConfigs: {},
   skyDrive: {},
   usersDetail: [],
-  siteThemeConfigs: {}
+  siteThemeConfigs: {},
+  siteFiles: {}
 })
 
 export default {

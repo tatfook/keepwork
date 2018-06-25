@@ -81,21 +81,21 @@
               <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
             </span>
             <span v-else>
-              <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.copy')" @click='handleCopy(scope.row.file.download_url)'></span>
-              <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
-              <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.download')" @click='download(scope.row.file)'></span>
+              <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copy')" @click='handleCopy(scope.row)'></span>
+              <span class='iconfont icon-insert' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
+              <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
 
               <el-dropdown>
                 <span class="el-dropdown-link">
                   <i class="el-icon-more el-icon--right"></i>
                 </span>
                 <el-dropdown-menu class='skydrive-manager-cell-actions-menu' slot="dropdown">
-                  <el-dropdown-item>
+                  <!-- <el-dropdown-item>
                     <label class='el-icon-refresh'>
                       <input type="file" :accept="'.' + scope.row.ext" style="display:none;" @change='e => handleUpdateFile(e, scope.row)'>
                       <span>{{ $t('common.update') }}</span>
                     </label>
-                  </el-dropdown-item>
+                  </el-dropdown-item> -->
                   <el-dropdown-item @click.native='handleRename(scope.row)'>
                     <span class='el-icon-edit'></span>
                     {{ $t('common.rename') }}
@@ -135,12 +135,12 @@
           <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
         </div>
         <div v-for='mediaItem in skyDriveMediaLibraryData'
-          :key='mediaItem.file.key'
+          :key='mediaItem.filename'
           class='skydrive-manager-media-item'
           :class='{selected: selectedMediaItem === mediaItem}'
           @click='handleSelectMediaItem(mediaItem)'
           :style='{
-            backgroundImage: "url(" + mediaItem.file.download_url + ")"
+            backgroundImage: "url(" + mediaItem.downloadUrl + ")"
           }'>
           <div class='skydrive-manager-media-item-cover'>
             <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span>
@@ -191,7 +191,7 @@ export default {
     }
   },
   async mounted() {
-    await this.userRefreshSkyDrive()
+    await this.userRefreshSkyDrive({useCache: false})
     this.loading = false
   },
   beforeDestroy(){
@@ -199,21 +199,24 @@ export default {
   },
   computed: {
     ... mapGetters({
+      'activePageInfo': 'activePageInfo',
       'userSkyDriveFileList': 'user/skyDriveFileList',
-      'userSkyDriveInfo': 'user/skyDriveInfo'
+      'userSkyDriveInfo': 'user/skyDriveInfo',
+      'userSiteFileBySitePathAndFileId': 'user/siteFileBySitePathAndFileId'
     }),
     skyDriveTableData() {
       return this.userSkyDriveFileList.map(item => {
         // checked: 0 未审核, 1 通过, 2 未通过
-        let { file, checked } = item
-        let { size, type } = file
+        let { checked, size, filename, type } = item
+        let file = { size, filename, type, downloadUrl: '' }
         let ext = this.getFileExt(file)
+
         let displaySize = this.biteToM(size) + 'MB'
 
         checked = Number(checked)
         let checkPassed = checked === 1
         let checkedState = checkPassed ? this.$t('skydrive.checkPassed') : checked === 2 ? this.$t('skydrive.checkUnpassed') : this.$t('skydrive.checking')
-        return {...item, size, displaySize, type, ext, checkedState, checkPassed }
+        return {...item, file, size, displaySize, type, ext, checkedState, checkPassed }
       }).filter(this.itemFilterBySearchWord)
     },
     skyDriveTableDataWithUploading() {
@@ -223,14 +226,14 @@ export default {
       return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
     },
     skyDriveMediaLibraryData() {
-      let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image\/.*/.test(type))
+      let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image/.test(type))
       let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
         return obj1.updateDate <= obj2.updateDate
       })
       return sortedMediaDatas
     },
     info() {
-      let {total = 0, used = 0} = this.userSkyDriveInfo
+      let {total = 0, used = 0} = this.userSkyDriveInfo || {}
       let unused = total - used
       let usedPercent = Math.max(0, (100 * used/total).toFixed(2))
       return {total, used, unused, usedPercent}
@@ -251,9 +254,9 @@ export default {
     ... mapActions({
       userRefreshSkyDrive: 'user/refreshSkyDrive',
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
-      userUpdateFileInSkyDrive: 'user/updateFileInSkyDrive',
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
-      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive'
+      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
+      userUseFileInSite: 'user/useFileInSite'
     }),
     getFileExt(file){
       let { filename, type } = file
@@ -289,7 +292,7 @@ export default {
           ext: this.getFileExt(file),
           displaySize: this.biteToM(file.size) + 'MB',
           file: {
-            download_url: ''
+            downloadUrl: ''
           },
           updateDate: this.formatDate(),
           state: 'doing' // success, error, cancel, doing
@@ -357,26 +360,6 @@ export default {
         subscirbtion.unsubscribe()
       })
     },
-    async handleUpdateFile(e, bigfileToUpdate) {
-      let file = _.get(e, ['target', 'files', 0])
-      console.log('handleUpdateFile: ', file, bigfileToUpdate)
-      if (file.type !== bigfileToUpdate.file.type) throw new Error('file type don\'t match')
-
-      this.loading = true
-      let that = this
-      let fileIndex = this.uploadingFiles.length
-      this.uploadingFiles.push({
-        cover: '',
-        percent: 0
-      })
-      await this.userUpdateFileInSkyDrive({file, bigfileToUpdate, onStart(subscirbtion) {
-        that.qiniuCancelUpload[file.name] = subscirbtion
-      }, onProgress(progress) {
-        that.uploadingFiles[fileIndex].percent = progress.percent
-      }}).catch(err => console.error(err))
-      await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
-      this.loading = false
-    },
     async handleRemove(file) {
       await this.$confirm(this.$t('skydrive.removeFileConfirmMsg'), this.$t('editor.delNotice'), {
         confirmButtonText: this.$t('common.OK'),
@@ -389,7 +372,14 @@ export default {
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
     },
-    handleCopy(toCopyLink) {
+    async handleCopy(file) {
+      let toCopyLink = await this.getSiteFileUrl(file)
+
+      await this.$confirm(toCopyLink, {
+        confirmButtonText: this.$t('common.copy'),
+        cancelButtonText: 'Cancel'
+      })
+
       this.$copyText(toCopyLink).then(res => {
         this.$message({
           showClose: true,
@@ -405,19 +395,12 @@ export default {
         })
       })
     },
-    async handleInsert(item) {
-      if (!item) return
-      let { file, checked } = item
-      if (Number(checked) !== 1) return this.$message({
-        showClose: true,
-        message: this.$t('skydrive.fileUnapprovedError'),
-        type: 'error'
-      })
-      let url = file.download_url
+    async handleInsert(file) {
+      let url = await this.getSiteFileUrl(file)
       this.$emit('close', { file, url })
     },
     async handleRename(item) {
-      let { _id, ext } = item
+      let { key, ext } = item
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
@@ -442,7 +425,7 @@ export default {
 
       let filename = newname
       this.loading = true
-      await this.userChangeFileNameInSkyDrive({_id, filename}).catch(err => console.error(err))
+      await this.userChangeFileNameInSkyDrive({key, filename}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
     },
@@ -460,13 +443,15 @@ export default {
     async downloadAllSelected() {
       this.approvedMultipleSelectionResults.map(({ file }) => this.download(file))
     },
-    async download({ filename, download_url }) {
-      if (!download_url) return
+    async download(file) {
+      let downloadUrl = file.downloadUrl
+      if (!downloadUrl) return
+      let { filename } = file
       await new Promise((resolve, reject) => {
         let a = document.createElement('a')
         a.target = '_blank'
         a.style.display = 'none'
-        a.href = `${download_url};attname=${filename}`
+        a.href = `${downloadUrl};attname=${filename}`
         a.download = filename || ""
         document.body.appendChild(a)
         a.click()
@@ -501,6 +486,15 @@ export default {
     },
     handleSelectMediaItem(mediaItem) {
       this.selectedMediaItem = mediaItem
+    },
+    async getSiteFileUrl(file) {
+      let {sitepath: sitePath} = this.activePageInfo
+      let payload = {fileId: file.id, sitePath}
+      this.loading = true
+      await this.userUseFileInSite(payload).catch(e => console.error(e))
+      this.loading = false
+      let url = this.userSiteFileBySitePathAndFileId(payload)
+      return url
     }
   },
   filters: {

@@ -10,6 +10,7 @@
       </ul>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+    <div style="height: 100px;"></div>
   </div>
 </template>
 
