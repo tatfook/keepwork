@@ -174,8 +174,6 @@ export default {
     cursor: pointer;
   }
   &:hover {
-    border:2px dashed #f7a935;
-    transition: all .2s ease-out;   
     .delete-mod {
       display: inline;
     }
