@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
       <el-menu-item index="2">
-        <el-dropdown placement="bottom-end">
+        <el-dropdown placement="bottom-end" trigger="click" class="kp-dropdown-menu">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -13,8 +13,8 @@
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
                   <span><button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button></span>
-                  <!-- <span><button disabled>新建文件夹</button></span> -->
-                  <!-- <span><button disabled>新建页面</button></span> -->
+                  <span><button disabled>新建文件夹</button></span>
+                  <span><button disabled>新建页面</button></span>
                 </div>
               </div>
             </el-dropdown-item>
@@ -272,6 +272,9 @@ export default {
 </script>
 
 <style scoped>
+.kp-dropdown-menu:hover{
+  background-color: rgba(40, 140, 233, 0.1);
+}
 .el-menu-item.is-active {
   border-bottom: none;
 }
@@ -307,9 +310,12 @@ export default {
 }
 .kp-menu .kp-submenu span a{
   text-decoration: none;
-  color: #000;
+  color: #909399;
 }
-.kp-menu .kp-submenu span a:hover{
+.kp-menu .kp-submenu span:hover{
+  background-color: rgba(40, 140, 233, 0.1);
+}
+.kp-menu .kp-submenu span:hover a{
   color: #409EFF;        
 }
 .kp-menu .kp-submenu .icon-span{
@@ -428,15 +434,17 @@ export default {
     span{
       display: block;
       &:hover{
-        color: #409EFF;
+        background-color:rgba(40, 140, 233, 0.1);        
+        button{
+          color: #409EFF; 
+          background-color: transparent;    
+        }
       }
       button{
         padding-left: 10px;
         border: none;
         background-color: #fff;
-        &:hover{
-        color: #409EFF;          
-        }
+        color: #909399;
       }
       button[disabled]{
         color: #ccc;
@@ -462,18 +470,27 @@ export default {
   }    
 }
 .kp-menu .kp-submenu span {
+  &:hover{
+    button{
+      background-color: transparent;
+      color:#409eff;
+    }
+  }
   button{
     border: none;
     background-color: #fff;
     margin: 0;
+    color: #909399;    
     padding-left: 1px;
-    &:hover{
-      color:#409eff;
-    }
+    // &:hover{
+    //   color:#409eff;
+    // }
   }
   button[disabled]{
     color: #ccc;
   }
 }
-
+.el-popper[x-placement^=bottom] {
+  width: 164px;
+}
 </style>
