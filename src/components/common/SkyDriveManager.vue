@@ -253,9 +253,6 @@ export default {
       return ext
     },
     async filesQueueToUpload(files){
-      // if (!this.mediaLibraryMode) {
-      //   this.loading = true
-      // }
       await Promise.all(_.map(files, async file => {
         let fileIndex = this.uploadingFiles.length
         let previewUrl = URL.createObjectURL(file)
@@ -273,9 +270,6 @@ export default {
         await this.uploadFile(file, fileIndex)
         this.uploadingFiles[fileIndex].finished = true
       }))
-      if (!this.mediaLibraryMode) {
-        this.loading = false
-      }
     },
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
