@@ -1,5 +1,5 @@
 <template>
-<div :class="{'mod-wrap':true,'mod-active': isActive, }" ref="kp-mod-wrap">
+<div :class="{'mod-wrap':true,'mod-active': isActive, }">
   <div :class="['kp-mod-selector',mod.cmd === 'Markdown' ? 'no-mask' : '']" @click='setActive'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
       <i class="iconfont icon-delete icon-del"></i>
