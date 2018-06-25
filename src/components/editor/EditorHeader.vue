@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
       <el-menu-item index="2">
-        <el-dropdown placement="bottom-end" class="kp-dropdown-menu">
+        <el-dropdown placement="bottom-end" class="kp-dropdown-menu" trigger="click">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -41,7 +41,7 @@
               <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled':'']">
                 <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button></span>
+                  <span :class="isActivePageSaved ? 'disabled-bgc' : ''"><button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button></span>
                   <!-- <span><button>全部保存</button></span> -->
                 </div>
               </div>
@@ -59,8 +59,8 @@
               <div class="kp-menu">
                 <div class="kp-submenu">
                   <span><span class="icon-span"><i class="iconfont icon-refresh1"></i></span><button @click.stop="refresh">{{$t('editor.refresh')}}</button></span>
-                  <span><span :class="['icon-span',!canUndo ? 'isDisabled':'']"><i class="iconfont icon-pre-step"></i></span><button @click.stop='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</button></span>
-                  <span><span :class="['icon-span',!canRedo ? 'isDisabled':'']"><i class="iconfont icon-redo"></i></span><button @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</button></span>
+                  <span :class="!canUndo ? 'disabled-bgc':''"><span :class="['icon-span',!canUndo ? 'isDisabled':'']"><i class="iconfont icon-pre-step"></i></span><button @click.stop='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</button></span>
+                  <span :class="!canRedo ? 'disabled-bgc':''"><span :class="['icon-span',!canRedo ? 'isDisabled':'']"><i class="iconfont icon-redo"></i></span><button @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</button></span>
                 </div>
               </div>
             </el-dropdown-item>
@@ -321,6 +321,9 @@ export default {
 .kp-menu .kp-submenu span:hover{
   background-color: rgba(40, 140, 233, 0.1);
 }
+.kp-menu .kp-submenu span.disabled-bgc:hover{
+        background-color:#f5f5f5;
+}
 .kp-menu .kp-submenu span:hover a{
   color: #409EFF;        
 }
@@ -459,11 +462,17 @@ export default {
       button[disabled]{
         color: #ccc;
       }
+      button:focus{
+        outline: none;
+      }
+      &.disabled-bgc:hover{
+        background-color:#f5f5f5;
+      }
     }
   }
 }
 .isDisabled{
-      .iconfont{
+    .iconfont{
       color: #CcC !important;        
     }    
   &:hover{
@@ -496,6 +505,9 @@ export default {
   }
   button[disabled]{
     color: #ccc;
+  }
+  button:focus{
+        outline: none;
   }
 }
 .el-popper[x-placement^=bottom] {
