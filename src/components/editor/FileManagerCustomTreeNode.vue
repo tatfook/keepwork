@@ -279,7 +279,6 @@ export default {
         return this.removeFolder(this.data)
       }
       const h = this.$createElement
-      console.log(this.data)
       let siteName = this.data.path.split('/').slice(1,2)
       let fileName = this.data.name.replace(/\.md$/, '')
       this.$msgbox({
