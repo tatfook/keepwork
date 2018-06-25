@@ -12,7 +12,7 @@ const getters = {
     state.openedFiles[username] || {},
   getOpenedFileByPath: (state, { openedFiles }) => path =>
     openedFiles[getFileFullPathByPath(path)] || {},
-
+  hasOpenedFiles: (state, { openedFiles }) => _.values(openedFiles).length > 0,
   activePage: state => state.activePage,
   activePageUrl: state => state.activePageUrl,
   activePageInfo: (state, { activePageUrl, openedFiles }) => {
@@ -44,6 +44,9 @@ const getters = {
   },
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
+  },
+  isMultipleTextDialogShow: state => {
+    return state.isMultipleTextDialogShow
   },
   activePropertyOptions: state => {
     if (state.activePropertyOptions) return state.activePropertyOptions

@@ -23,7 +23,7 @@
       </component>
     </div>
     <div class="layoutManagerBtnWrap" @click="openWebsiteSettingDialog">
-      <el-button class="layoutManagerBtn" type="primary">布局方案管理</el-button>
+      <el-button class="layoutManagerBtn" type="primary">{{$t('editor.layoutManagement')}}</el-button>
     </div>
     <div @click.stop v-if='isWebsiteSettingShow'>
       <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
@@ -57,7 +57,7 @@ export default {
     ]).catch(e => {
       console.error(e)
     })
-    this.selectedLayoutId = this.settedPageLayoutId || ''
+    this.selectedLayoutId = this.settedPageLayoutId || this.defaultLayoutId
     this.loading = false
   },
   computed: {
@@ -84,6 +84,9 @@ export default {
     },
     relativePath() {
       return this.pageInfo.relativePath
+    },
+    defaultLayoutId() {
+      return _.get(this.userSiteLayoutConfig, ['layoutConfig','defaultLayoutId'], '')
     },
     userSiteLayoutConfig() {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)

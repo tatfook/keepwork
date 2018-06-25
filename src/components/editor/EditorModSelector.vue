@@ -59,7 +59,7 @@ export default {
     ...mapActions({
       deleteMod: 'deleteMod',
       setPreMod: 'setPreMod',
-      setNewModPosition: 'setNewModPosition',
+      setNewModPosition: 'setNewModPosition'
     }),
     newMod(position) {
       this.$store.dispatch('setNewModPosition', position)
@@ -174,6 +174,8 @@ export default {
     cursor: pointer;
   }
   &:hover {
+    border:2px dashed #f7a935;
+    transition: all .2s ease-out;   
     .delete-mod {
       display: inline;
     }

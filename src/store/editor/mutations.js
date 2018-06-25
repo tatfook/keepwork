@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
+import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 import {
   getFileFullPathByPath,
@@ -13,6 +14,7 @@ const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
 const MOVE_MOD = 'MOVE_MOD'
 const SET_PRE_MOD_KEY = 'SET_PRE_MOD_KEY'
+const SET_IS_MULTIPLE_TEXT_DIALOG_SHOW = 'SET_IS_MULTIPLE_TEXT_DIALOG_SHOW'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
@@ -48,6 +50,11 @@ const UPDATE_OPENED_LAYOUT_FILE = 'UPDATE_OPENED_LAYOUT_FILE'
 
 const UPDATE_CURSOR_POSITION = 'UPDATE_CURSOR_POSITION'
 
+const UNDO = 'UNDO'
+const REDO = 'REDO'
+const SAVE_HISTORY = 'SAVE_HISTORY'
+const INIT_UNDO = 'INIT_UNDO'
+
 export const props = {
   SET_ACTIVE_PAGE,
 
@@ -55,6 +62,7 @@ export const props = {
   DELETE_MOD,
   MOVE_MOD,
   SET_PRE_MOD_KEY,
+  SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
@@ -86,12 +94,17 @@ export const props = {
   REFRESH_SITE_SETTINGS,
   UPDATE_OPENED_LAYOUT_FILE,
 
-  UPDATE_CURSOR_POSITION
+  UPDATE_CURSOR_POSITION,
+
+  UNDO,
+  REDO,
+  SAVE_HISTORY,
+  INIT_UNDO
 }
 
-const activeModList = state => {
+const activeAreaData = state => {
   const area = state.activePage.activeArea
-  if (area === LayoutHelper.Const.MAIN_AREA) return state.activePage.modList
+  if (area === LayoutHelper.Const.MAIN_AREA) return state.activePage
 
   const sitePath = getFileSitePathByPath(state.activePageUrl)
   const siteSetting = state.siteSettings[sitePath]
@@ -103,9 +116,13 @@ const activeModList = state => {
   let targetLayoutContentFileName = _.get(layout, ['content', area])
   let targetLayoutContentFilePath = `${area}s/${targetLayoutContentFileName}`
   if (targetLayoutContentFileName && targetLayoutContentFilePath) {
-    return siteSetting.pages[targetLayoutContentFilePath].modList
+    return siteSetting.pages[targetLayoutContentFilePath]
   }
-  console.error('invalid active mod list')
+  console.error('invalid active area')
+}
+
+const activeModList = state => {
+  return activeAreaData(state).modList
 }
 
 const mutations = {
@@ -151,6 +168,9 @@ const mutations = {
   },
   [SET_PRE_MOD_KEY](state, key) {
     Vue.set(state.activePage, 'preModKey', key)
+  },
+  [SET_IS_MULTIPLE_TEXT_DIALOG_SHOW](state, isShow) {
+    Vue.set(state, 'isMultipleTextDialogShow', isShow)
   },
   [SET_ACTIVE_PROPERTY](state, property) {
     if (!state.activePage.activeMod) return
@@ -283,6 +303,21 @@ const mutations = {
   ) {
     let siteSetting = state.siteSettings[sitePath]
     _.merge(siteSetting.pages[layoutContentFilePath], data)
+  },
+  [UNDO](state) {
+    UndoHelper.undo(activeAreaData(state).undoManager)
+  },
+  [REDO](state) {
+    UndoHelper.redo(activeAreaData(state).undoManager)
+  },
+  [SAVE_HISTORY](state, payload) {
+    UndoHelper.save(
+      activeAreaData(state).undoManager,
+      payload
+    )
+  },
+  [INIT_UNDO](state, payload) {
+    UndoHelper.init(activeAreaData(state).undoManager, payload)
   }
 }
 
