@@ -124,9 +124,6 @@ export default {
         return i
       })
     },
-    openedTree() {
-      return this.$refs.openedTree
-    },
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
@@ -266,12 +263,9 @@ export default {
       // try open file
       let isFileClicked = data.type === 'blob'
       isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
-      isFileClicked && this.openedTree.setCurrentKey(path)
     },
     closeAndResetFile(path) {
-      let openedFiles = this.openedFiles
-      openedFiles = Object.keys(openedFiles)
-      let _path = openedFiles.filter(name => name !== path)
+      let _path = Object.keys(this.openedFiles).filter(name => name !== path)
       this.closeOpenedFile({ path })
       if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
       if (_path.length === 0) {
