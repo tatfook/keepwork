@@ -20,7 +20,7 @@
     <div v-if='defaultMode'>
       <el-table
         ref="skyDriveTable"
-        :data="skyDriveTableData"
+        :data="skyDriveTableDataWithUploading"
         height="500"
         tooltip-effect="dark"
         @selection-change="handleSelectionChange"
@@ -52,10 +52,15 @@
           <template slot-scope="scope">{{ scope.row.displaySize }}</template>
         </el-table-column>
         <el-table-column
-          prop="updateDate"
           sortable
           :label="$t('skydrive.updateDate')"
           width="150">
+          <template slot-scope="scope">
+            <span v-if="scope.row.percent >= 0 && !scope.row.finished === true">
+              <el-progress :stroke-width="10" color="#13ce67" :show-text=false  :percentage="scope.row.percent"></el-progress>
+            </span>
+            <span v-else>{{scope.row.updateDate}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="checkedState"
@@ -68,32 +73,36 @@
           class-name="skydrive-manager-cell-actions"
           :label="$t('common.action')">
           <template slot-scope="scope">
-            <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.copy')" @click='handleCopy(scope.row.file.download_url)'></span>
-            <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
-            <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.download')" @click='download(scope.row.file)'></span>
+            <span v-if="scope.row.percent >= 0 && !scope.row.finished === true">
+              <span class='iconfont icon-close_' :title="$t('common.remove')"></span>
+            </span>
+            <span v-else>
+              <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.copy')" @click='handleCopy(scope.row.file.download_url)'></span>
+              <span class='iconfont icon-insert' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
+              <span class='el-icon-download' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.download')" @click='download(scope.row.file)'></span>
 
-            <el-dropdown>
-              <span class="el-dropdown-link">
-                <i class="el-icon-more el-icon--right"></i>
-              </span>
-              <el-dropdown-menu class='skydrive-manager-cell-actions-menu' slot="dropdown">
-                <el-dropdown-item>
-                  <label class='el-icon-refresh'>
-                    <input type="file" :accept="'.' + scope.row.ext" style="display:none;" @change='e => handleUpdateFile(e, scope.row)'>
-                    <span>{{ $t('common.update') }}</span>
-                  </label>
-                </el-dropdown-item>
-                <el-dropdown-item @click.native='handleRename(scope.row)'>
-                  <span class='el-icon-edit'></span>
-                  {{ $t('common.rename') }}
-                </el-dropdown-item>
-                <el-dropdown-item @click.native='handleRemove(scope.row)'>
-                  <span class='el-icon-delete'></span>
-                  {{ $t('common.remove') }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  <i class="el-icon-more el-icon--right"></i>
+                </span>
+                <el-dropdown-menu class='skydrive-manager-cell-actions-menu' slot="dropdown">
+                  <el-dropdown-item>
+                    <label class='el-icon-refresh'>
+                      <input type="file" :accept="'.' + scope.row.ext" style="display:none;" @change='e => handleUpdateFile(e, scope.row)'>
+                      <span>{{ $t('common.update') }}</span>
+                    </label>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click.native='handleRename(scope.row)'>
+                    <span class='el-icon-edit'></span>
+                    {{ $t('common.rename') }}
+                  </el-dropdown-item>
+                  <el-dropdown-item @click.native='handleRemove(scope.row)'>
+                    <span class='el-icon-delete'></span>
+                    {{ $t('common.remove') }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -193,9 +202,8 @@ export default {
       return this.userSkyDriveFileList.map(item => {
         // checked: 0 未审核, 1 通过, 2 未通过
         let { file, checked } = item
-        let { size, filename, type } = file
-        let ext = /.+\./.test(filename) ? filename.split('.').pop() : type
-        ext = (ext || '').toLowerCase()
+        let { size, type } = file
+        let ext = this.getFileExt(file)
         let displaySize = this.biteToM(size) + 'MB'
 
         checked = Number(checked)
@@ -203,6 +211,10 @@ export default {
         let checkedState = checkPassed ? this.$t('skydrive.checkPassed') : checked === 2 ? this.$t('skydrive.checkUnpassed') : this.$t('skydrive.checking')
         return {...item, size, displaySize, type, ext, checkedState, checkPassed }
       }).filter(this.itemFilterBySearchWord)
+    },
+    skyDriveTableDataWithUploading() {
+      let filterFinishedUploadingFile = _.filter(this.uploadingFiles, [ 'finished', false ])
+      return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
     },
     skyDriveMediaLibraryData() {
       return this.skyDriveTableData.filter(({ type }) => /^image\/.*/.test(type))
@@ -233,14 +245,34 @@ export default {
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive'
     }),
+    getFileExt(file){
+      let { filename, type } = file
+      filename = filename || file.name
+      let ext = /.+\./.test(filename) ? filename.split('.').pop() : type
+      ext = (ext || '').toLowerCase()
+      return ext
+    },
     async filesQueueToUpload(files){
-      if (!this.mediaLibraryMode) {
-        this.loading = true
-      }
+      // if (!this.mediaLibraryMode) {
+      //   this.loading = true
+      // }
       await Promise.all(_.map(files, async file => {
-        await this.uploadFile(file)
+        let fileIndex = this.uploadingFiles.length
+        let previewUrl = URL.createObjectURL(file)
+        this.uploadingFiles.push({
+          cover: previewUrl,
+          percent: 0,
+          finished: false,
+          filename: file.name,
+          ext: this.getFileExt(file),
+          displaySize: this.biteToM(file.size) + 'MB',
+          file: {
+            download_url: ''
+          }
+        })
+        await this.uploadFile(file, fileIndex)
+        this.uploadingFiles[fileIndex].finished = true
       }))
-      this.uploadingFiles = []
       if (!this.mediaLibraryMode) {
         this.loading = false
       }
@@ -253,7 +285,7 @@ export default {
       let files = _.get(e, ['dataTransfer', 'files'])
       this.filesQueueToUpload(files)
     },
-    async uploadFile(file) {
+    async uploadFile(file, fileIndex) {
       if (!file) return
       if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) return this.$message({
         showClose: true,
@@ -262,14 +294,10 @@ export default {
       })
 
       let filenameValidateResult = this.filenameValidator(file.name)
-      if (filenameValidateResult !== true) throw new Error(filenameValidateResult)
-      let previewUrl = URL.createObjectURL(file)
-      let fileIndex = this.uploadingFiles.length
+      if (filenameValidateResult !== true) {
+        throw new Error(filenameValidateResult)
+      }
       let that = this
-      this.uploadingFiles.push({
-        cover: previewUrl,
-        percent: 0
-      })
       await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
         that.qiniuCancelUpload[file.name] = subscirbtion
       }, onProgress(progress) {
