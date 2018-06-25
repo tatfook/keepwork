@@ -13,8 +13,8 @@
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
                   <span><button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button></span>
-                  <span><button disabled>新建文件夹</button></span>
-                  <span><button disabled>新建页面</button></span>
+                  <!-- <span><button disabled>新建文件夹</button></span> -->
+                  <!-- <span><button disabled>新建页面</button></span> -->
                 </div>
               </div>
             </el-dropdown-item>
@@ -272,6 +272,9 @@ export default {
 </script>
 
 <style scoped>
+.kp-dropdown-menu{
+  padding: 0 10px;
+}
 .kp-dropdown-menu:hover{
   background-color: rgba(40, 140, 233, 0.1);
 }
@@ -299,6 +302,7 @@ export default {
 }
 .el-dropdown-menu__item{
   line-height: 24px;
+  padding: 0;
 }
 .el-dropdown-menu__item:hover{
   color: inherit;
@@ -322,6 +326,7 @@ export default {
   display: inline-block  ;
   width: 20px;
   margin-right: 15px;
+  padding-left: 20px;
 }
 .kp-menu .kp-submenu .icon-span .iconfont{
       border: none;
@@ -413,6 +418,7 @@ export default {
   display: flex;
   &:hover{
     .kp-icon{
+      background-color:rgba(40, 140, 233, 0.1);          
       .iconfont{
       color: #409EFF;        
       }
@@ -420,8 +426,8 @@ export default {
   }
   .kp-icon{
     width: 20px;
-    padding:0 4px 0 0;
-    border-right:1px solid #eee;
+    padding:0 4px 0 20px;
+    height: 24px;
     .iconfont{
       border: none;
       line-height: 10px;
@@ -433,6 +439,7 @@ export default {
     flex: 1;
     span{
       display: block;
+      border-left: 1px solid #eee;
       &:hover{
         background-color:rgba(40, 140, 233, 0.1);        
         button{
@@ -482,9 +489,6 @@ export default {
     margin: 0;
     color: #909399;    
     padding-left: 1px;
-    // &:hover{
-    //   color:#409eff;
-    // }
   }
   button[disabled]{
     color: #ccc;
@@ -492,5 +496,9 @@ export default {
 }
 .el-popper[x-placement^=bottom] {
   width: 164px;
+  left: 45px !important;
+}
+.el-dropdown-menu__item--divided:before {
+  margin: 0;
 }
 </style>
