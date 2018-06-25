@@ -133,17 +133,18 @@ export default {
       let folderName = pathArr[pathArr.length - 1]
       let toRemoveFiles = this.recursion(data)
 
-      this.$confirm(
-        `${this.$t('editor.deleteFolderBefore')}${data.name}${this.$t(
-          'editor.deleteFolderAfter'
-        )}`,
-        this.$t('editor.delete'),
-        {
-          confirmButtonText: this.$t('el.messagebox.confirm'),
-          cancelButtonText: this.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
+      const h = this.$createElement
+      this.$msgbox({
+        title: '提示',
+        message: h('p', null, [
+          h('span', null, this.$t('editor.deleteFolderBefore')),
+          h('span', { style: 'color: #FF4342' }, ` "${data.name} "`),
+          h('span', null, this.$t('editor.deleteFolderAfter'))
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      })
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
@@ -151,7 +152,7 @@ export default {
           this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
-        .catch(e => console.error(e))
+        .catch(() => {})
     },
     recursion(data) {
       let childrenFiles = []
@@ -172,10 +173,10 @@ export default {
         let unSavedFiles = _.intersection(this.unSavedFiles, childrenFiles)
         if (unSavedFiles.length > 0) {
           await this.$confirm(
-            `${unSavedFiles.length}${this.$t("editor.filesUnSaved")}`,
+            `${unSavedFiles.length}${this.$t('editor.filesUnSaved')}`,
             {
-              confirmButtonText: this.$t("editor.confirm"),
-              cancelButtonText: this.$t(""),
+              confirmButtonText: this.$t('editor.confirm'),
+              cancelButtonText: this.$t('editor.cancel'),
               type: 'warnning'
             }
           )
@@ -193,8 +194,8 @@ export default {
       } else {
         let { saved } = this.getOpenedFileByPath(this.filePath)
         if (!saved) {
-          await this.$confirm(this.$t("editor.theFileUnSaved"), {
-            confirmButtonText: this.$t('el.messagebox.confirm') ,
+          await this.$confirm(this.$t('editor.theFileUnSaved'), {
+            confirmButtonText: this.$t('el.messagebox.confirm'),
             cancelButtonText: this.$t('el.messagebox.cancel'),
             type: 'warning'
           })
@@ -202,7 +203,7 @@ export default {
               await this.savePageByPath(this.filePath)
               this.$message({
                 type: 'success',
-                message: '保存成功!'
+                message: this.$t('editor.saveSuccess')
               })
               this.toggleInputFocus()
             })
@@ -277,30 +278,28 @@ export default {
       if (this.isFolder) {
         return this.removeFolder(this.data)
       }
-
-      let self = this
-
-      let pathArr = this.data.path.split('/')
-      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(
-        `${self.$t('editor.delConfirm')} ${pageName} ${self.$t(
-          'editor.page'
-        )}？`,
-        self.$t('editor.delete'),
-        {
-          confirmButtonText: self.$t('el.messagebox.confirm'),
-          cancelButtonText: self.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
+      const h = this.$createElement
+      let siteName = this.data.path.split('/').slice(1,2)
+      let fileName = this.data.name.replace(/\.md$/, '')
+      this.$msgbox({
+        title: this.$t('editor.modDelMsgTitle'),
+        message: h('p', null, [
+          h('span', null, this.$t('editor.delConfirm')),
+          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${fileName} " `),
+          h('span', null, `${this.$t('editor.page')}?`)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFile({ path: this.currentPath }),
-            await this.deletePagesFromLayout({ paths: [this.currentPath] })
-          this.resetPage({ currentPath: this.currentPath })
+          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          await this.deletePagesFromLayout({ paths: toRemoveFiles })
+          this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
-        .catch(e => console.error(e))
+        .catch(() => {})
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
