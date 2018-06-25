@@ -56,25 +56,28 @@
           :label="$t('skydrive.updateDate')"
           width="150">
           <template slot-scope="scope">
-            <span v-if="scope.row.percent >= 0 && !scope.row.finished === true">
+            <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
               <el-progress :stroke-width="10" color="#13ce67" :show-text=false  :percentage="scope.row.percent"></el-progress>
             </span>
             <span v-else>{{scope.row.updateDate}}</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="checkedState"
           sortable
           :label="$t('skydrive.checkedState')"
           width="100"
           show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="skydrive-manager-cell-danger-text" v-if="scope.row.state === 'error'" :title="scope.row.errorMsg">失败</span>
+            <span v-else>{{scope.row.checkedState}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           class-name="skydrive-manager-cell-actions"
           :label="$t('common.action')">
           <template slot-scope="scope">
-            <span v-if="scope.row.percent >= 0 && !scope.row.finished === true">
-              <span class='iconfont icon-close_' :title="$t('common.remove')"></span>
+            <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
+              <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
             </span>
             <span v-else>
               <span class='iconfont icon-copy' :class='{disabled: !scope.row.file.download_url}' :title="$t('common.copy')" @click='handleCopy(scope.row.file.download_url)'></span>
@@ -213,7 +216,7 @@ export default {
       }).filter(this.itemFilterBySearchWord)
     },
     skyDriveTableDataWithUploading() {
-      let filterFinishedUploadingFile = _.filter(this.uploadingFiles, [ 'finished', false ])
+      let filterFinishedUploadingFile = _.dropWhile(this.uploadingFiles, [ 'state', 'success' ])
       return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
     },
     skyDriveMediaLibraryData() {
@@ -259,16 +262,15 @@ export default {
         this.uploadingFiles.push({
           cover: previewUrl,
           percent: 0,
-          finished: false,
           filename: file.name,
           ext: this.getFileExt(file),
           displaySize: this.biteToM(file.size) + 'MB',
           file: {
             download_url: ''
-          }
+          },
+          state: 'doing' // success, error, cancel, doing
         })
         await this.uploadFile(file, fileIndex)
-        this.uploadingFiles[fileIndex].finished = true
       }))
     },
     handleUploadFile(e) {
@@ -289,15 +291,32 @@ export default {
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
-        throw new Error(filenameValidateResult)
+        this.uploadingFiles[fileIndex].state = 'error'
+        this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
+        return
       }
       let that = this
       await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
         that.qiniuCancelUpload[file.name] = subscirbtion
       }, onProgress(progress) {
+        fileIndex = _.findIndex(that.uploadingFiles, ['filename', file.name])
         that.uploadingFiles[fileIndex].percent = progress.percent
       }}).catch(err => console.error(err))
+      fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
+      this.uploadingFiles[fileIndex].state = 'success'
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+    },
+    removeFromUploadQue(file){
+      let { filename, state } = file
+      if (state === 'doing') {
+        let removingFileSubscribtion = _.get(this.qiniuCancelUpload, filename)
+        if (removingFileSubscribtion) {
+          removingFileSubscribtion.unsubscribe()
+        }
+      }
+      this.uploadingFiles = _.remove(this.uploadingFiles, (file)=>{
+        return file.filename !== filename
+      })
     },
     cancelUpload(){
       _.forIn(this.qiniuCancelUpload, (subscirbtion, key)=>{
@@ -494,6 +513,9 @@ export default {
     .cell {
       white-space: nowrap;
     }
+  }
+  &-cell-danger-text{
+    color: #f56c6c;
   }
   &-cell-actions, &-cell-actions-menu {
     [class*="icon"] {
