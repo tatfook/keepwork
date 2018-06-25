@@ -113,18 +113,24 @@ export default {
     removeFile(data) {
       let path = data.path
       let pathArr = path.split('/')
-      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(
-        `${this.$t('editor.delConfirm')} ${pageName} ${this.$t(
-          'editor.page'
-        )}?`,
-        this.$t('editor.delNotice'),
-        {
-          confirmButtonText: this.$t('el.messagebox.confirm'),
-          cancelButtonText: this.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
+      let siteName = pathArr.slice(1, 2)
+      let pageName = pathArr.slice(-1).join().replace(/.md$/, '')
+      const h = this.$createElement
+      this.$msgbox({
+        title: this.$t('editor.modDelMsgTitle'),
+        message: h('p', null, [
+          h('span', null, `${this.$t('editor.delConfirm')}`),
+          h(
+            'span',
+            {style: "color: #FF4342"},
+            ` "${siteName}/${pageName}" `
+          ),
+          h('span', null, `${this.$t('editor.page')}?`)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      })
         .then(async () => {
           this.deletePending = true
           await this.gitlabRemoveFile({ path })
