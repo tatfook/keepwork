@@ -273,7 +273,7 @@ export default {
 
 <style scoped>
 .kp-dropdown-menu{
-  padding: 0 10px;
+  padding: 0 0 0 10px;
 }
 .kp-dropdown-menu:hover{
   background-color: rgba(40, 140, 233, 0.1);
@@ -334,10 +334,10 @@ export default {
   padding-left: 20px;
 }
 .kp-menu .kp-submenu .icon-span .iconfont{
-      border: none;
-      line-height: 10px;
-      width: 0;
-      font-size: inherit
+  border: none;
+  line-height: 10px;
+  width: 0;
+  font-size: inherit
 }
 .li-btn {
   padding: 0 8px;
