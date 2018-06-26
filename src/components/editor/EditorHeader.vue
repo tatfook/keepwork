@@ -7,7 +7,7 @@
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" class="kp-dropdown-menu-content">
             <el-dropdown-item>
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
@@ -448,12 +448,14 @@ export default {
     }
   }
 }
-.el-popper[x-placement^=bottom] {
-  width: 164px;
-  left: 45px !important;
-}
-.el-dropdown-menu__item--divided:before {
-  margin: 0;
+.kp-dropdown-menu-content{
+  &.el-popper[x-placement^=bottom] {
+    width: 164px;
+    left: 45px !important;
+  }
+  .el-dropdown-menu__item--divided:before {
+    margin: 0;
+  }
 }
 .kp-menu button{
   display: block;

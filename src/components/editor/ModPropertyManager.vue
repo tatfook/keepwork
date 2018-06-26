@@ -143,6 +143,36 @@ export default {
   background-color: #e9f5ff;
   padding: 0 18px;
   position: relative;
+  > .el-tabs > .el-tabs__header {
+    .el-tabs__nav-wrap.is-scrollable {
+      padding: 0;
+      .el-tabs__nav-prev, .el-tabs__nav-next{
+        display: none !important;
+      }
+    }
+    .el-tabs__nav {
+      margin: 22px 0;
+      .el-tabs__active-bar {
+        width: 0;
+        height: 0;
+      }
+      .el-tabs__item {
+        height: 30px;
+        width: 198px;
+        text-align: center;
+        line-height: 30px;
+        margin: 0 12px 0 0;
+        background-color: #fff;
+        box-shadow: 3px 3px 5px #ccc;
+        border-radius: 4px;
+        padding: 0;
+      }
+      .is-active {
+        background-color: #3ba4ff;
+        color: #fff;
+      }
+    }
+  }
 }
 .property-manager-container .delete-mod {
   position: absolute;
@@ -162,34 +192,5 @@ export default {
 }
 .el-tabs__nav-wrap::after{
   display: none;
-}
-.el-tabs__nav-wrap.is-scrollable {
-  padding: 0;
-  .el-tabs__nav-prev, .el-tabs__nav-next{
-    display: none !important;
-  }
-  }
-  .el-tabs__nav {
-    margin: 22px 0;
-    .el-tabs__active-bar {
-      width: 0;
-      height: 0;
-    }
-    .el-tabs__item {
-      height: 30px;
-      width: 198px;
-      text-align: center;
-      line-height: 30px;
-      margin: 0 12px 0 0;
-      background-color: #fff;
-      box-shadow: 3px 3px 5px #ccc;
-      border-radius: 4px;
-      padding: 0;
-    }
-    .is-active {
-      background-color: #3ba4ff;
-      color: #fff;
-    }
-  
 }
 </style>
