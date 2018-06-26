@@ -1,7 +1,7 @@
 <template>
   <el-row class="pagePath comp">
     <el-col :xs="24" :sm="6" :class="getPageNameClass.pageNameClass">
-      <a :target='target'>{{properties.name?properties.name:$t('editor.yourPage')}}</a>
+      <span>{{properties.name?properties.name:$t('editor.pageName')}}</span>
     </el-col>
 
     <el-col :xs="24" :sm="18" class="pagePath__path-info">
@@ -10,7 +10,9 @@
       </div>
       <div class="pagePath__path-info__squeue">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item v-for="(item, index) in getPathData" :key="index" :class="selectStyle(index)">{{item}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item, index) in pageData" :key="index" :class="selectStyle(index)">
+            <a :href="item.link" :target='target' @mouseenter="mouseenter" @mouseleave="mouseleave">{{item.title}}</a>
+          </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </el-col>
@@ -21,20 +23,114 @@
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
-
+import { search } from '@/api/esGateway'
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'AdiPagePath',
   mixins: [compBaseMixin],
+  data() {
+    return {
+      pageData: []
+    }
+  },
+  created() {
+    this.getSource()
+  },
   methods: {
     selectStyle(index) {
-      if (index == this.getPathData.length - 1) {
+      if (index == this.pageData.length - 1) {
         return this.getPageNameClass.pathNameClass
       } else {
         return this.getPageNameClass.labelNameClass
       }
+    },
+    mouseenter(event) {
+      let element = event.path[0]
+      element.style.color = this.options.pageFontColor
+    },
+    mouseleave(event) {
+      let element = event.path[0]
+      element.style.color = null
+    },
+    formatData(source) {
+      this.pageData = []
+      let allData = (source && source.hits && source.hits.hits) || []
+
+      _.forEach(allData, (item, index) => {
+        let currentData = {
+          lastName: ''
+        }
+
+        let array = item._source['pagename'].split('/')
+        currentData.lastName = array[array.length - 1]
+
+        if (currentData.lastName == this.activePageInfo.pagename) {
+          _.forEach(array, (each, key) => {
+            let eachName = {
+              title: each,
+              link: item._source['url']
+            }
+            this.pageData.push(eachName)
+          })
+
+          let pageData0 = {
+            title: this.$t('editor.homePage'),
+            link: ''
+          }
+          this.pageData.unshift(pageData0)
+
+          for (let i = this.pageData.length - 1; i >= 1; i--) {
+            this.pageData[i - 1].link = this.pageData[i].link.replace(
+              '/' + this.pageData[i].title,
+              ''
+            )
+          }
+
+          for (let j = this.pageData.length - 2; j >= 1; j--) {
+            this.pageData[j].link = this.pageData[j].link + 'Index'
+          }
+          this.pageData[0].link = this.pageData[0].link + '/index'
+          this.pageData[this.pageData.length - 1].link = 'javascript:void(0)'
+        }
+      })
+
+      return this.pageData
+    },
+    async getSource() {
+      let url = this.activePageInfo.sitepath
+      let index = process.env.ES_INDEX
+      let type = process.env.ES_TYPE
+
+      let body = {
+        query: {
+          bool: {
+            must: {
+              match: {
+                url: {
+                  query: url,
+                  operator: 'and'
+                }
+              }
+            },
+            must_not: [
+              {
+                match: {
+                  url: '.gitignore'
+                }
+              }
+            ]
+          }
+        }
+      }
+      let source = await search({ index, type, body })
+      this.formatData(source)
     }
   },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    }),
     target() {
       return this.properties.target
     },
@@ -77,15 +173,6 @@ export default {
         labelNameClass: this.sheet.classes[labelName],
         pathNameClass: this.sheet.classes[pathName]
       }
-    },
-    getPathData() {
-      let pathData
-      if (this.properties.path.length == 0) {
-        pathData = [this.$t('editor.defaultPage'), this.$t('editor.yourPage')]
-      } else {
-        pathData = this.properties.path.split('>')
-      }
-      return pathData
     }
   }
 }
@@ -104,19 +191,17 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    color: unset;
     white-space: nowrap;
 
     .pagePath__path-info__position {
       width: 126px;
-      height: 21px;
+      line-height: 1;
     }
 
     .pagePath__path-info__squeue {
       overflow-x: hidden;
 
       .el-breadcrumb {
-        color: unset;
         overflow-x: auto;
         overflow-y: hidden;
         display: flex;
@@ -150,11 +235,24 @@ export default {
 .pagePath {
   .el-breadcrumb__item {
     .el-breadcrumb__inner {
-      font-weight: normal;
+      color: unset;
+      a {
+        color: unset;
+        font-weight: normal;
+        text-decoration: none;
+      }
+    }
+    .el-breadcrumb__separator {
       color: unset;
     }
-    .el-breadcrumb__inner:hover {
+  }
+
+  .el-breadcrumb__item:last-child {
+    .el-breadcrumb__inner {
       color: unset;
+      a {
+        color: unset;
+      }
     }
   }
 }
