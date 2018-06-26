@@ -98,7 +98,7 @@ export default {
       console.error(err)
     })
     this.loading = false
-    await this.checkSitePath()
+    this.$route.path !== '/' && await this.checkSitePath()
     await this.initUrlExpandSelect()
     this.$nextTick(() => {
       let ele = document.querySelector('.is-current')
