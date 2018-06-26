@@ -120,7 +120,8 @@ export default {
     },
     activeCursorLine() {
       const cursor = this.editor.getCursor()
-      return cursor.sticky ? cursor.line : this.editor.lastLine()
+      return cursor.line || this.editor.lastLine()
+      // return cursor.sticky ? cursor.line : this.editor.lastLine()
     }
   },
   methods: {
