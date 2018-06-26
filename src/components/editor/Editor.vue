@@ -52,7 +52,7 @@
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
-        <el-col span="23">
+        <el-col :span="23">
           <el-button-group>
             <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
             <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
@@ -73,7 +73,7 @@
             <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
           </el-button-group>
         </el-col>
-        <el-col span="1" class="fullScreenBtn">
+        <el-col :span="1" class="fullScreenBtn">
           <el-button-group>
             <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
           </el-button-group>
