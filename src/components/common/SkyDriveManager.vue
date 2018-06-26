@@ -374,7 +374,7 @@ export default {
       }).catch(e => console.error(e))
     },
     async removeAllSelected() {
-      await this.$confirm(this.$t('skydrive.removeFileConfirmMsg'), 'Warning', {
+      await this.$confirm(this.$t('skydrive.removeFileConfirmMsg'), this.$t('editor.delNotice'), {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
