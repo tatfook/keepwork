@@ -52,28 +52,32 @@
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
-        <el-button-group>
-          <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
-        </el-button-group>
-        <el-button-group>
-          <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-          <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-          <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-          <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-          <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
-        </el-button-group>
-        <el-button-group>
-          <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
-          <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
-          <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
-          <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
-          <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-          <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
-          <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
-        </el-button-group>
-        <el-button-group>
-          <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
-        </el-button-group>
+        <el-col span="23">
+          <el-button-group>
+            <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
+            <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
+            <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
+            <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
+            <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+          </el-button-group>
+          <el-button-group>
+            <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
+            <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
+            <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
+            <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
+            <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
+            <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
+            <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
+          </el-button-group>
+          <el-button-group>
+            <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
+          </el-button-group>
+        </el-col>
+        <el-col span="1" class="fullScreenBtn">
+          <el-button-group>
+            <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+          </el-button-group>
+        </el-col>                      
       </el-row>
       <editor-markdown ref='codemirror' />
     </el-col>
@@ -460,6 +464,9 @@ export default {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
+}
+.toolbar .fullScreenBtn .el-button{
+  border-radius: 4px;
 }
 .iconfont {
   padding: 0;
