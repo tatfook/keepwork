@@ -436,6 +436,7 @@
     "newFilenamePromptMsg": "请输入新的文件名",
     "nameConflictError": "文件名和现有名字重复",
     "nameEmptyError": "文件名不能为空",
-    "nameContainSpecialCharacterError": "文件名里包含特殊字符"
+    "nameContainSpecialCharacterError": "文件名里包含特殊字符",
+    "fileUploading": "还有文件正在上传中，关闭后文件将取消上传，是否继续？"
   }
 }

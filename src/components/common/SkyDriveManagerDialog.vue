@@ -26,11 +26,11 @@ export default {
     handleClose(event) {
       let { uploadingFiles } = this.$refs.skyDriveManager
       let that = this
-      let uploadingFileIndex = _.findIndex(that.uploadingFiles, ['state', 'doing'])
+      let uploadingFileIndex = _.findIndex(uploadingFiles, ['state', 'doing'])
       if (uploadingFileIndex >= 0) {
-        this.$confirm('还有文件正在上传中，关闭后文件将取消上传，是否继续？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$t('skydrive.fileUploading'), this.$t('editor.closeDialogTitle'), {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
           type: 'warning'
         }).then(() => {
           that.$emit('close', event)
