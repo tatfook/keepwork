@@ -8,12 +8,16 @@
     <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || node.label | hideMDFileExtension}})</span>
     <span v-else>{{data.displayName || node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
-      <i class="iconfont icon-file_" v-if="isFile"></i>
+      <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
       <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
+      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+      </el-button>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
+      </el-button>
       <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
@@ -69,7 +73,8 @@ export default {
         'updateFilemanagerTreeNodeExpandMapByPath',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
-      savePageByPath: 'savePageByPath'
+      savePageByPath: 'savePageByPath',
+      refreshOpenedFile: 'refreshOpenedFile'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -166,6 +171,15 @@ export default {
       }
       recursionFile(data)
       return childrenFiles
+    },
+    async save(data) {
+      if (data.savePending === undefined) {
+        this.$set(data, 'savePending', false)
+      }
+      let path = data.path
+      data.savePending = true
+      await this.savePageByPath(path)
+      data.savePending = false
     },
     async toggleRename() {
       if (this.isFolder) {
@@ -364,6 +378,9 @@ export default {
     },
     isFile() {
       return this.data.type === 'blob'
+    },
+    isHasOpened() {
+      return this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
     },
     isFolder() {
       return this.data.type === 'tree'
