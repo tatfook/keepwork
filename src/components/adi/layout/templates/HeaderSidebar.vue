@@ -4,10 +4,10 @@
       <slot name="header"></slot>
     </el-header>
     <el-container>
-      <el-aside width="400px">
+      <el-aside width="400px" :class="{'hide': (showSidebarOrMain !== 'sidebar')}">
         <slot name="sidebar"></slot>
       </el-aside>
-      <el-main>
+      <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
         <slot> </slot>
       </el-main>
     </el-container>
@@ -15,14 +15,19 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'HeaderSidebar',
+  props: {
+    showSidebarOrMain: String
+  }
+}
 </script>
 
 <style lang="scss">
-.fullscreen-template{
+.fullscreen-template {
   .el-header,
   .el-main,
-  .el-aside{
+  .el-aside {
     padding: 0;
   }
 }
