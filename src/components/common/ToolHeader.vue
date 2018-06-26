@@ -41,7 +41,7 @@
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <i class="iconfont icon-edit"></i>
       </a>
-      <span class="icon-item" v-popover:share>
+      <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
         <i class="iconfont icon-Share"></i>
       </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
@@ -58,8 +58,18 @@
 import 'social-share.js/dist/js/social-share.min.js'
 import 'social-share.js/dist/css/share.min.css'
 import { mapGetters, mapActions } from 'vuex'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
+
 export default {
   name: 'ToolHeader',
+  data() {
+    return {
+      IS_GLOBAL_VERSION,
+      starPending: false,
+      breadcrumbsLoading: true,
+      siteList: []
+    }
+  },
   computed: {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
@@ -97,13 +107,6 @@ export default {
     },
     locationOrigin() {
       return location.origin
-    }
-  },
-  data() {
-    return {
-      starPending: false,
-      breadcrumbsLoading: true,
-      siteList: []
     }
   },
   watch: {
