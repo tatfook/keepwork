@@ -255,6 +255,13 @@ const getActiveBlock = (blockList, beginLine) => {
   }
 }
 
+const getBlockByCursor = (blockList, beginLine) => {
+  beginLine += 1
+  return blockList.find(mod => {
+    return BlockHelper.isOnCursor(mod, beginLine)
+  })
+}
+
 const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
   if (CmdHelper.isMarkdownCmd(getCmd(modName))) return code
 
@@ -280,5 +287,6 @@ export default {
   addBlockByKey,
   addBlockToMarkdown,
   getCmd,
-  getActiveBlock
+  getActiveBlock,
+  getBlockByCursor
 }
