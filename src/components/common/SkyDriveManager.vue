@@ -52,6 +52,7 @@
           <template slot-scope="scope">{{ scope.row.displaySize }}</template>
         </el-table-column>
         <el-table-column
+          prop="updateDate"
           sortable
           :label="$t('skydrive.updateDate')"
           width="150">
@@ -257,7 +258,21 @@ export default {
       ext = (ext || '').toLowerCase()
       return ext
     },
+    formatDate(dateObj){
+      if (!dateObj) {
+        dateObj = new Date()
+      }
+      let year = dateObj.getFullYear()
+      let month = _.padStart(dateObj.getMonth() + 1, 2, '0')
+      let day = _.padStart(dateObj.getDate(), 2, '0')
+      let hour = _.padStart(dateObj.getHours(), 2, '0')
+      let minute = _.padStart(dateObj.getMinutes(), 2, '0')
+      let second = _.padStart(dateObj.getSeconds(), 2, '0')
+      return [year, month, day].join('-') + [hour, minute, second].join(':')
+    },
     async filesQueueToUpload(files){
+      this.$refs.skyDriveTable.clearSort()
+      this.$refs.skyDriveTable.sort('updateDate', 'descending')
       await Promise.all(_.map(files, async file => {
         let fileIndex = this.uploadingFiles.length
         let previewUrl = URL.createObjectURL(file)
@@ -270,6 +285,7 @@ export default {
           file: {
             download_url: ''
           },
+          updateDate: this.formatDate(),
           state: 'doing' // success, error, cancel, doing
         })
         await this.uploadFile(file, fileIndex)
@@ -306,6 +322,7 @@ export default {
       }}).catch(err => console.error(err))
       fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
       this.uploadingFiles[fileIndex].state = 'success'
+      this.uploadingFiles[fileIndex].updateDate = this.formatDate()
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
     },
     removeFromUploadQue(file){
