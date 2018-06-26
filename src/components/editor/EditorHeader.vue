@@ -12,9 +12,9 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button></span>
-                  <!-- <span><button disabled>新建文件夹</button></span> -->
-                  <!-- <span><button disabled>新建页面</button></span> -->
+                  <button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button>
+                  <!--<button disabled>新建文件夹</button> -->
+                  <!--<button disabled>新建页面</button> -->
                 </div>
               </div>
             </el-dropdown-item>
@@ -22,8 +22,8 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
                 <div class="kp-submenu-top-content">
-                  <span><button>设置网站</button></span>
-                  <span><button>设置页面</button></span>
+                  <button>设置网站</button>
+                  <button>设置页面</button>
                 </div>
               </div>
             </el-dropdown-item> -->
@@ -31,9 +31,9 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button>删除网站</button></span>
-                  <span><button>删除文件夹</button></span>
-                  <span><button>删除页面</button></span>
+                  <button>删除网站</button>
+                  <button>删除文件夹</button>
+                  <button>删除页面</button>
                 </div>
               </div>
             </el-dropdown-item> -->
@@ -41,8 +41,8 @@
               <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
                 <div class="kp-submenu-top-content">
-                  <span :class="isActivePageSaved ? 'disabled-bgc' : ''"><button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button></span>
-                  <!-- <span><button>全部保存</button></span> -->
+                  <button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button>
+                  <!-- <button>全部保存</button> -->
                 </div>
               </div>
               </el-dropdown-item>
@@ -50,8 +50,8 @@
               <div class="kp-menu-top">
                 <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <span><button>关闭</button></span>
-                  <span><button>全部关闭</button></span>
+                  <button>关闭</button>
+                  <button>全部关闭</button>
                 </div>
               </div>
             </el-dropdown-item> -->
@@ -404,38 +404,34 @@ export default {
     height: 24px;
     .iconfont{
       border: none;
-      line-height: 10px;
+      line-height: 24px;
       width: 0;
       font-size: inherit
     }
   }
   .kp-submenu-top-content{
     flex: 1;
-    span{
-      display: block;
-      border-left: 1px solid #eee;
-      &:hover{
-        background-color:rgba(40, 140, 233, 0.1);        
-        button{
-          color: #409EFF; 
-          background-color: transparent;
-          cursor: pointer;    
-        }
-      }
-      button{
-        padding-left: 10px;
-        border: none;
-        background-color: #fff;
-        color: #909399;
-      }
-      button[disabled]{
-        color: #ccc;
-      }
-      button:focus{
+    button{
+      width: 100%;
+      height: 24px;
+      border: none;
+      background-color: transparent;
+      text-align: left;
+      padding-left: 10px;
+      color: #909399;
+      border-left: 1px solid #ccc;
+      &:focus{
         outline: none;
       }
-      &.disabled-bgc:hover{
-        background-color:#f5f5f5;
+      &:hover{
+        background-color: rgba(40, 140, 233, 0.1);
+        color: #409EFF;
+      }
+      &[disabled]{
+        color: #ccc;
+        &:hover{
+          background-color: #f5f5f5;
+        }
       }
     }
   }
