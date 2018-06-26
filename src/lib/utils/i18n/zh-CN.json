@@ -208,9 +208,9 @@
     "videoNotSupport": "您的浏览器不支持 video 标签。",
     "notFound": "内容找不到了",
 
-    "yourPage": "您的页面",
+    "pageName": "页面名字",
     "yourPosition": "您所在的位置：",
-    "defaultPage": "首页",
+    "homePage": "首页",
 
     "removeImgConfirmMsg": "你确定要删除图片吗？"
   },

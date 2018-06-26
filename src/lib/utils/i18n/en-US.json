@@ -218,9 +218,9 @@
     "videoNotSupport": "Your browser does not support the video tag.",
     "notFound": "Content cannot be found",
 
-    "yourPage": "Your page",
+    "pageName": "Page name",
     "yourPosition": "Your position：",
-    "defaultPage": "Default page",
+    "homePage": "Home page",
 
     "removeImgConfirmMsg": "Are you sure to remove this image?"
   },
