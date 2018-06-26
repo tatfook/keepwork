@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
       <el-menu-item index="2">
-        <el-dropdown placement="bottom-end" class="kp-dropdown-menu" trigger="click">
+        <el-dropdown placement="bottom-end" class="kp-dropdown-menu">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
