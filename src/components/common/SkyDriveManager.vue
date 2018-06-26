@@ -216,7 +216,9 @@ export default {
       }).filter(this.itemFilterBySearchWord)
     },
     skyDriveTableDataWithUploading() {
-      let filterFinishedUploadingFile = _.dropWhile(this.uploadingFiles, [ 'state', 'success' ])
+      let filterFinishedUploadingFile = _.filter(this.uploadingFiles, (file) => {
+        return file.state !== 'success'
+      })
       return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
     },
     skyDriveMediaLibraryData() {
