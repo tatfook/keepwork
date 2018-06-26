@@ -73,6 +73,7 @@ export default {
   margin: auto;
   img{
     width: 100%;
+    max-width: 456px;
     object-fit: cover;
   }
   p{
