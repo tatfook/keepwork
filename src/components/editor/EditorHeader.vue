@@ -104,7 +104,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item> -->
-      <el-menu-item index='6' class="link-box">
+      <el-menu-item index='6' class="link-box" v-if="activePage && hasOpenedFiles">
         <i class="iconfont icon-copy" @click='doCopyLink' :title='$t("common.copy")'></i>
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
@@ -159,7 +159,9 @@ export default {
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
       openedFiles: 'openedFiles',
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      activePage: 'activePage',
+      hasOpenedFiles: 'hasOpenedFiles'
     }),
     showingType() {
       if (
