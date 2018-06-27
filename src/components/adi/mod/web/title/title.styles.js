@@ -27,7 +27,7 @@ let defaultData = {
     emptyTarget: '_blank'
   },
   logoB: {
-    emptySrc: require('@/../static/adi/CreativeSpace/logo.png'),
+    emptySrc: require('@/../static/adi/title/bear.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   }
@@ -318,7 +318,7 @@ export default [
       },
       logoB: {
         height: '64px',
-        width: '180px'
+        width: '64px'
       },
       colMenuB: {
         display: 'flex',
@@ -357,6 +357,9 @@ export default [
           color: 'color_7',
           backgroundColor: 'color_5',
           borderBottomColor: 'color_7'
+        },
+        logoB: {
+          svgFillColor: 'color_7'
         }
       },
       config: {
