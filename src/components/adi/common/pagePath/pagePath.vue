@@ -95,6 +95,14 @@ export default {
         }
       })
 
+      let pageData0 = {
+        title: this.$t('editor.homePage'),
+        link: 'javascript:void(0)'
+      }
+      if (this.pageData.length == 0) {
+        this.pageData.push(pageData0)
+      }
+
       return this.pageData
     },
     async getSource() {
