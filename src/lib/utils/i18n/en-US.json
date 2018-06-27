@@ -72,7 +72,8 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
-    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "unSaveConfirm":
+      "The content you have modified is not saved. Are you sure you want to continue？",
     "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
@@ -196,7 +197,7 @@
     "supportBooleanCalculation":
       "Support Boolean calculation: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. Layout plan",
-    "layoutManagement": "Layout management",    
+    "layoutManagement": "Layout management",
     "addLayout": "Add layout",
     "default": "Default",
     "rename": "Rename",
@@ -223,7 +224,6 @@
     "videoNotSupport": "Your browser does not support the video tag.",
     "notFound": "Content cannot be found",
 
-    "pageName": "Page name",
     "yourPosition": "Your position：",
     "homePage": "Home page",
 
@@ -392,7 +392,7 @@
     "innerModal": "Inner modal",
     "bigFile": "Big file",
     "iframe": "iframe",
-    "pageRoute": "Page route",
+    "pageRoute": "Page path",
     "tab": "Tab",
     "categoryList": "Category list"
   },
@@ -448,6 +448,7 @@
     "nameConflictError": "The name already exists.",
     "nameEmptyError": "The name cannot be empyt.",
     "nameContainSpecialCharacterError": "The name contains special characters.",
-    "fileUploading": "There are files being uploaded. After closing, the files will be canceled. Continue?"
+    "fileUploading":
+      "There are files being uploaded. After closing, the files will be canceled. Continue?"
   }
 }

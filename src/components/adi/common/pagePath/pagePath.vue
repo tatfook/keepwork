@@ -1,7 +1,7 @@
 <template>
   <el-row class="pagePath comp">
     <el-col :xs="24" :sm="6" :class="getPageNameClass.pageNameClass">
-      <span>{{properties.name?properties.name:$t('editor.pageName')}}</span>
+      <span>{{this.pageData[this.pageData.length - 1].title}}</span>
     </el-col>
 
     <el-col :xs="24" :sm="18" class="pagePath__path-info">
