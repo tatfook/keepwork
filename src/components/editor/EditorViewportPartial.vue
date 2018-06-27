@@ -1,7 +1,6 @@
 <template>
   <div class='viewport-partial' :class='activeClass'>
-    <div class='mask' v-if='unActive' @click='setActiveArea'>
-      <span> 点击编辑 </span>
+    <div class='mask' v-if='unActive' @click='setActiveArea' :title="$t('editor.edit')">
     </div>
     <div class="add-btn-row" @click='openModSelector' v-show='modList.length <= 0'>
       <el-button class='add-mod-btn' type='primary' circle icon='el-icon-plus'></el-button>
@@ -101,25 +100,16 @@ export default {
 }
 .mask {
   z-index: 9;
-  background-color: black;
-  opacity: 0.2;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, .2);
   -moz-opacity: 0.5;
   position: absolute;
   top: 0;
   left: 0;
-  /* width: 100%;
-  height: 60px; */
   right: 0;
   bottom: 0;
-  span {
-    display: none;
-    font-size: 24px;
-    color: white;
-  }
   &:hover {
-    span {
-      display: block;
-    }
+    background-color: rgba(0, 0, 0, .35);
   }
 }
 </style>
