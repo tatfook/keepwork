@@ -62,7 +62,7 @@ export default {
       return this.storedTheme
     },
     layoutTemplate() {
-      return layoutTemplates[this.layout.styleName]
+      return layoutTemplates[this.layout.styleName]['component']
     }
   },
   components: {
