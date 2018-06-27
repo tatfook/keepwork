@@ -180,7 +180,7 @@ export default {
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
-        this._foldCodes(editor)
+        this.foldCodes(editor)
         return
       }
 
@@ -232,7 +232,7 @@ export default {
         cursor
       })
     },
-    _foldCodes(cm) {
+    foldCodes(cm) {
       let mod = Parser.getBlockByCursorLine(this.modList, this.cursorPos.line)
       let lineBegin = mod && mod.lineBegin - 1
       let lineEnd = mod && mod.lineBegin + mod.md.length
