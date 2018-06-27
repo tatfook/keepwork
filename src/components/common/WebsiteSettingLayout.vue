@@ -360,7 +360,7 @@ export default {
     },
     selectLayout(layout) {
       if (this.selectedLayoutId == layout.id) return
-      this.hideSelect(this.stylesList[layout.styleName] || {})
+      this.hideSelect(this.stylesList[layout.styleName])
       this.selectedLayoutId = layout.id
       this.disalbeSelectedLayoutNameEdittable()
       this.resetLayoutForm()
@@ -374,7 +374,7 @@ export default {
     resetLayoutForm() {
       _.merge(this.layoutForm, this.selectedLayoutForm)
     },
-    hideSelect({header = true, sidebar = true, footer = true}){
+    hideSelect({header , sidebar , footer }){
       this.headerSelect = header
       this.sidebarSelect = sidebar
       this.footerSelect = footer
