@@ -13,7 +13,7 @@
       <el-menu-item index='4'>
         <a href='/official/help/index'>{{$t('common.help')}}</a>
       </el-menu-item>
-      <el-menu-item index='6'>
+      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='http://iicc.keepwork.com' target="_blank">
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
@@ -91,7 +91,7 @@
         <el-menu-item index='2-3'>
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
-        <el-menu-item index='2-6'>
+        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-6'>
           <a href='http://iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
         </el-menu-item>
       </el-submenu>
@@ -110,11 +110,13 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
   name: 'CommonHeader',
   data() {
     return {
+      IS_GLOBAL_VERSION,
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false
     }
