@@ -42,7 +42,7 @@ export default {
     CodeMirror.registerHelper('fold', 'wikiCmdFold', this.wikiCmdFold)
   },
   mounted() {
-    this.foldCodes(this.editor)
+    this.foldAllCodes(this.editor)
     this.editor.on('drop', this.onDropFile)
     this.editor.on('paste', this.onPaste)
     this.editor.on('mousedown', this.handleClick)
@@ -156,7 +156,7 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursor(this.modList, line)
+        let mod = Parser.getBlockByCursorLine(this.modList, line)
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
@@ -180,7 +180,7 @@ export default {
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
-        this.foldCodes(editor)
+        this._foldCodes(editor)
         return
       }
 
@@ -232,7 +232,17 @@ export default {
         cursor
       })
     },
-    foldCodes(cm) {
+    _foldCodes(cm) {
+      let mod = Parser.getBlockByCursorLine(this.modList, this.cursorPos.line)
+      let lineBegin = mod && mod.lineBegin - 1
+      let lineEnd = mod && mod.lineBegin + mod.md.length
+      for (let line = cm.firstLine(); line <= cm.lastLine(); ++line) {
+        mod && lineBegin <= line && line <= lineEnd
+          ? cm.foldCode({ line: line, ch: 0 }, null, 'unfold')
+          : cm.foldCode({ line: line, ch: 0 }, null, 'fold')
+      }
+    },
+    foldAllCodes(cm) {
       for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {
         // function isOnEdit only check the content of a mod, doesn't include the mod cmd
         // and cm.firstLine() equal to 0, but the line number start with 1,

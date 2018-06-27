@@ -255,7 +255,7 @@ const getActiveBlock = (blockList, beginLine) => {
   }
 }
 
-const getBlockByCursor = (blockList, beginLine) => {
+const getBlockByCursorLine = (blockList, beginLine) => {
   beginLine += 1
   return blockList.find(mod => {
     return BlockHelper.isOnCursor(mod, beginLine)
@@ -288,5 +288,5 @@ export default {
   addBlockToMarkdown,
   getCmd,
   getActiveBlock,
-  getBlockByCursor
+  getBlockByCursorLine
 }
