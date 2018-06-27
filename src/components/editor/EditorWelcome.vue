@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       isNewWebsiteDialogShow: false,
-      recentOpenWeb: JSON.parse(localStorage.getItem('recentUrl'))
+      recentOpenWeb: JSON.parse(localStorage.getItem('recentOpenWebUrl'))
     }
   },
   methods: {
