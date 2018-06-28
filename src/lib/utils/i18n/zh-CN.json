@@ -100,6 +100,8 @@
     "closeAll": "关闭全部",
     "delete": "删除",
     "delConfirm": "确定删除",
+    "deleteFail": "删除失败",
+    "deleteSuccess": "删除成功",
     "nameSingle": "名",
     "name": "名称",
     "link": "链接",
