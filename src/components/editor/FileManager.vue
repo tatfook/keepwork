@@ -90,7 +90,8 @@ export default {
         children: 'children',
         label: 'label'
       },
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
+      previousOpenSiteUrl: {}
     }
   },
   async mounted() {
