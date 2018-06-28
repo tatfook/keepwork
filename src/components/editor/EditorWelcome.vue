@@ -1,8 +1,13 @@
 <template>
   <div class="guid-content">
-    <h1>{{ $t('common.welcomeToKeepwork') }}</h1>
+    <h1 class="welcomeText">{{ $t('common.welcomeToKeepwork') }}</h1>
     <div>
       <el-button type='primary' @click="openNewWebsiteDialog">{{ $t('common.createNewWebsite') }}</el-button>
+    </div>
+    <div class="resentWeb">
+      <ul>
+        <li><a href='http://localhost:8080/editor.html#/kaitlyn/header/312312'>http://localhost:8080/editor.html#/kaitlyn/header/312312</a></li>
+      </ul>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
   </div>
@@ -15,7 +20,7 @@ export default {
   name: 'EditorWelcome',
   data() {
     return {
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
     }
   },
   methods: {
@@ -31,3 +36,28 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.guid-content{
+  .welcomeText{
+    color: #000;
+    font-size: 46px;
+  }
+  .resentWeb{
+    border-left: 2px solid #dc75cd;
+    margin: 40px 0;
+    ul
+    {
+      margin: 0;
+      padding: 0 22px;
+       li{
+      list-style: none;
+      margin: 8px 0;
+      a{
+        text-decoration: none;
+        color:#535353;
+      }
+    }
+    }
+  }
+} 
+</style>
