@@ -88,7 +88,7 @@
           <editorWelcome />
         </el-col>
       </el-row>
-      <div class="guid-help">帮助</div>      
+      <div class="guid-help"><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></div>      
     </el-col>
   </el-row>
 </template>
@@ -505,6 +505,10 @@ export default {
   position: absolute;
   bottom: 20px;
   right: 20px;
+}
+.guid-col .guid-help a{
+  color: #fff;
+  text-decoration: none;
 }
 .guid-col .guid-help::before{
   content: "";

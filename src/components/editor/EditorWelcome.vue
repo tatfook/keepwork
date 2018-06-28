@@ -6,7 +6,7 @@
     </div>
     <div class="resentWeb">
       <ul>
-        <li><a href='http://localhost:8080/editor.html#/kaitlyn/header/312312'>http://localhost:8080/editor.html#/kaitlyn/header/312312</a></li>
+        <li v-for="(site,index) in recentOpenSiteURL" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
       </ul>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       isNewWebsiteDialogShow: false,
+      recentOpenSiteURL: JSON.parse(localStorage.getItem('recentOpenWebUrl')) || []
     }
   },
   methods: {
