@@ -138,9 +138,9 @@
           <div class='skydrive-manager-media-item-cover'>
             <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span>
           </div>
-          <span :title="$t('common.remove')" class='el-icon-delete' @click="handleRemove(mediaItem)"></span>
+          <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
         </div>
-        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.percent>0" :style='{
+        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success'" :style='{
             backgroundImage: `url("${file.cover}")`
           }'>
           <div class="skydrive-manager-media-uploading-cover">
@@ -271,8 +271,10 @@ export default {
       return [year, month, day].join('-') + [hour, minute, second].join(':')
     },
     async filesQueueToUpload(files){
-      this.$refs.skyDriveTable.clearSort()
-      this.$refs.skyDriveTable.sort('updateDate', 'descending')
+      if (this.defaultMode) {
+        this.$refs.skyDriveTable.clearSort()
+        this.$refs.skyDriveTable.sort('updateDate', 'descending')
+      }
       await Promise.all(_.map(files, async file => {
         let fileIndex = this.uploadingFiles.length
         let previewUrl = URL.createObjectURL(file)
@@ -309,6 +311,7 @@ export default {
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
+        console.log(filenameValidateResult)
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
         return
@@ -609,13 +612,10 @@ export default {
       position: absolute;
       right: 10px;
       bottom: 10px;
-      &:hover {
-        color:black;
-      }
     }
     &:hover, &.selected {
       .skydrive-manager-media-item-cover {
-        background: transparent(0, 0, 0, .2);
+        background: rgba(0, 0, 0, .5);
       }
       .el-icon-delete {
         display: block;
