@@ -30,16 +30,16 @@ export default [
     templateID: 0,
     data: {
       // 定义mod根div的样式
+      colGroupARow: {
+        display: 'flex',
+        'align-items': 'center'
+      },
       media: {
         height: '611px'
       },
-      '@media only screen and (max-width: 767px)': {
-        media: {
-          height: '300px'
-        }
-      },
       colGroupAA: {
-        'word-wrap': 'break-word'
+        'word-wrap': 'break-word',
+        height: '100%'
       },
       title: {
         'margin-top': '20px'
@@ -48,12 +48,18 @@ export default [
         'margin-top': '10px'
       },
       paragraph: {
-        'margin-top': '15px',
-        'text-indent': '28px',
-        'white-space': 'pre-wrap'
+        'margin-top': '15px'
       },
       button: {
         'margin-top': '20px'
+      },
+      '@media only screen and (max-width: 767px)': {
+        media: {
+          height: '300px'
+        },
+        colGroupARow: {
+          display: 'block'
+        }
       }
     },
     props: {
@@ -108,20 +114,32 @@ export default [
 
   // style 1 左文右图
   {
-    templateID: 0,
+    templateID: 1,
     data: {
-      colMedia: {
-        float: 'right'
-      },
-      media: {
-        height: '611px'
-      },
-      colGroupAA: {
-        'word-wrap': 'break-word'
+      '@media only screen and (min-width: 767px)': {
+        colGroupARow: {
+          display: 'flex',
+          'align-items': 'center'
+        },
+        media: {
+          height: '611px'
+        },
+        colGroupAA: {
+          'word-wrap': 'break-word'
+        }
       },
       '@media only screen and (max-width: 767px)': {
         media: {
           height: '300px'
+        },
+        colGroupARow: {
+          display: 'block'
+        },
+        title: {
+          'margin-top': '0'
+        },
+        colMedia: {
+          'margin-top': '20px'
         }
       },
       title: {
@@ -132,7 +150,6 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px',
         'white-space': 'pre-wrap'
       },
       button: {
@@ -208,7 +225,6 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px',
         'white-space': 'pre-wrap'
       },
       colButton: {
@@ -242,7 +258,6 @@ export default [
           float: 'right',
           'margin-top': '15px',
           'max-width': '396px',
-          'text-indent': '28px',
           'writing-mode': 'tb-rl',
           'overflow-x': 'auto'
         }
@@ -332,7 +347,6 @@ export default [
       },
       paragraph: {
         'margin-top': '15px',
-        'text-indent': '28px',
         'white-space': 'pre-wrap'
       }
     },
@@ -397,7 +411,6 @@ export default [
       paragraph: {
         'margin-top': '15px',
         'margin-bottom': '20px',
-        'text-indent': '28px',
         'white-space': 'pre-wrap'
       }
     },
