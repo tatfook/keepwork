@@ -27,13 +27,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-600px',
@@ -50,10 +56,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -72,12 +83,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -104,13 +117,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-600px',
@@ -128,10 +147,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -150,12 +174,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -182,13 +208,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       title: {
         'margin-bottom': '5px'
@@ -206,10 +238,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -228,12 +265,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -260,13 +299,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-400px',
@@ -282,10 +327,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -304,12 +354,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -336,13 +388,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-400px',
@@ -359,10 +417,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -381,12 +444,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -413,13 +478,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-400px',
@@ -436,10 +507,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -458,12 +534,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -490,13 +568,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-250px',
@@ -512,10 +596,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -534,12 +623,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -566,13 +657,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-250px',
@@ -589,10 +686,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -611,12 +713,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
@@ -643,13 +747,19 @@ export default [
         overflow: 'hidden',
         position: 'relative'
       },
+      colGroup: {
+        'background-color': '#000',
+        float: 'none',
+        padding: 0
+      },
+      colMedia: {
+        height: '689px'
+      },
       media: {
         height: '689px',
         position: 'relative',
-        'z-index': 1
-      },
-      colGroup: {
-        height: '689px'
+        'z-index': 1,
+        opacity: '0.5'
       },
       colCouple: {
         'margin-top': '-250px',
@@ -666,10 +776,15 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
+          height: '344px',
+          opacity: '1'
+        },
+        colMedia: {
           height: '344px'
         },
         colGroup: {
-          height: '344px'
+          'background-color': 'rgba(0,0,0,0)',
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -688,12 +803,14 @@ export default [
       }
     },
     props: {
-      colGroup: { span: 24 },
-      colCouple: { span: 24 }
+      colMedia: { span: 24 },
+      colCouple: { span: 24 },
+      colGroup: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
       media: ['mod-full-width'],
+      colGroup: ['mod-full-width'],
       title: ['font_1', 'color_1'],
       subtitle: ['font_3', 'color_1'],
       colCoupleRow: ['mod-full-width'],
