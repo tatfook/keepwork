@@ -221,7 +221,6 @@ export default {
               })
               this.toggleInputFocus()
             })
-            .catch(() => {})
           return
         }
       }
@@ -308,9 +307,9 @@ export default {
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
-          await this.deletePagesFromLayout({ paths: toRemoveFiles })
-          this.resetPage({ toRemoveFiles })
+          await this.gitlabRemoveFile({ path: this.currentPath})
+          await this.deletePagesFromLayout({ paths: [this.currentPath] })
+          this.resetPage({ currentPath: this.currentPath })
           this.removePending = false
         })
         .catch(() => {})

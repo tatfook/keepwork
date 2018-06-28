@@ -100,6 +100,8 @@
     "closeAll": "Close all",
     "delete": "Delete",
     "delConfirm": "OK to delete at",
+    "deleteFail": "delete fail",
+    "deleteSuccess": "delete success",
     "nameSingle": "name",
     "name": "Name",
     "link": "Link",

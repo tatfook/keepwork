@@ -11,7 +11,7 @@
       </el-button>
       <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
       </el-button>
-      <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeFile(data)">
+      <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeOpenedFile(data)">
       </el-button>
     </span>
     <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
@@ -44,7 +44,8 @@ export default {
   computed: {
     ...mapGetters({
       getOpenedFileByPath: 'getOpenedFileByPath',
-      openedFiles: 'openedFiles'
+      openedFiles: 'openedFiles',
+      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath'
     }),
     fileName() {
       let siteName = this.data.path.split('/').slice(1, 2)
@@ -57,7 +58,9 @@ export default {
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
-      gitlabRemoveFile: 'gitlab/removeFile'
+      gitlabRemoveFile: 'gitlab/removeFile',
+      userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
+      userDeletePagesConfig: 'user/deletePagesConfig'
     }),
     async handleCloseConfirm({ path }) {
       let file = this.getOpenedFileByPath(path)
@@ -110,21 +113,20 @@ export default {
       await this.savePageByPath(path)
       data.savePending = false
     },
-    removeFile(data) {
+    removeOpenedFile(data) {
       let path = data.path
       let pathArr = path.split('/')
       let siteName = pathArr.slice(1, 2)
-      let pageName = pathArr.slice(-1).join().replace(/.md$/, '')
+      let pageName = pathArr
+        .slice(-1)
+        .join()
+        .replace(/\.md$/, '')
       const h = this.$createElement
       this.$msgbox({
         title: this.$t('editor.modDelMsgTitle'),
         message: h('p', null, [
           h('span', null, `${this.$t('editor.delConfirm')}`),
-          h(
-            'span',
-            {style: "color: #FF4342"},
-            ` "${siteName}/${pageName}" `
-          ),
+          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${pageName}" `),
           h('span', null, `${this.$t('editor.page')}?`)
         ]),
         showCancelButton: true,
@@ -133,10 +135,31 @@ export default {
       })
         .then(async () => {
           this.deletePending = true
-          await this.gitlabRemoveFile({ path })
+          await this.gitlabRemoveFile({ path }).catch(e => {
+            this.$message.error(this.$t('editor.deleteFail'))
+            this.deletePending = false
+          })
+          await this.deletePagesFromLayout({ paths: [path] })
+          this.resetPage(path)
           this.deletePending = false
         })
-        .catch(() => {})
+    },
+    async deletePagesFromLayout({ paths = [] }) {
+      const re = /^\w+\/\w+\//
+      let sitePath = paths[0].match(re)
+      if (sitePath) sitePath = sitePath[0].replace(/\/$/, '')
+      let pages = _.map(paths, page => page.replace(re, ''))
+      await this.userGetSiteLayoutConfig({ path: sitePath })
+      let config = this.getSiteLayoutConfigBySitePath(sitePath)
+      await this.userDeletePagesConfig({ sitePath, pages })
+    },
+    resetPage(currentPath = null) {
+      if (
+        currentPath &&
+        currentPath.replace(/\.md$/, '') === this.$route.path.substring(1)
+      ) {
+        return this.$router.push('/')
+      }
     }
   }
 }
