@@ -143,7 +143,6 @@ export default {
           this.resetPage(path)
           this.deletePending = false
         })
-        .catch(e => console.error(e))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
