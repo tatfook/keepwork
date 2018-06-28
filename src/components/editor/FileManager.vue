@@ -151,13 +151,6 @@ export default {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
     }
   },
-  watch:{
-    openedFiles(newVal,oldVal){
-      this.previousOpenSiteUrl = _.merge(JSON.parse(localStorage.getItem('recentOpenWebUrl')),newVal)
-      let recentOpenWebUrl = _.map(_.values(this.previousOpenSiteUrl), ({path, timestamp}) => ({path, timestamp})).sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
-      localStorage.setItem('recentOpenWebUrl',JSON.stringify(recentOpenWebUrl.slice(0,5)))
-    }
-  },
   methods: {
     ...mapActions({
       getAllPersonalWebsite: 'user/getAllPersonalWebsite',

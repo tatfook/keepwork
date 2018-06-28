@@ -134,15 +134,6 @@ export default {
         .then(async () => {
           this.deletePending = true
           await this.gitlabRemoveFile({ path })
-          console.log(path)
-          let recentOpenWebUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
-          console.log(recentOpenWebUrl)
-          for(let i = 0; i < recentOpenWebUrl.length; i++){
-            if(recentOpenWebUrl[i].path === path.replace('\.md','')){
-              recentOpenWebUrl.splice(i,1)
-            }
-          }
-          localStorage.getItem('recentOpenWebUrl', recentOpenWebUrl)
           this.deletePending = false
         })
         .catch(() => {})
