@@ -72,7 +72,8 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
-    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "unSaveConfirm":
+      "The content you have modified is not saved. Are you sure you want to continue？",
     "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
@@ -267,7 +268,11 @@
     "textBoard": "Text Board",
     "toc": "Markdown list",
 
-    "other": "Other"
+    "other": "Other",
+
+    "categoryList": "Category list",
+    "tab": "Tab",
+    "pageSwitching": "Page switching"
   },
   "adi": {
     "markdown": {
@@ -396,7 +401,8 @@
     "iframe": "iframe",
     "pageRoute": "Page route",
     "tab": "Tab",
-    "categoryList": "Category list"
+    "categoryList": "Category list",
+    "pageSwitching": "Page switching"
   },
   "field": {
     "fileId": "file Id",
@@ -450,6 +456,7 @@
     "nameConflictError": "The name already exists.",
     "nameEmptyError": "The name cannot be empyt.",
     "nameContainSpecialCharacterError": "The name contains special characters.",
-    "fileUploading": "There are files being uploaded. After closing, the files will be canceled. Continue?"
+    "fileUploading":
+      "There are files being uploaded. After closing, the files will be canceled. Continue?"
   }
 }
