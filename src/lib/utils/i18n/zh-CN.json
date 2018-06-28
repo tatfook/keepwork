@@ -381,7 +381,7 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径",
+    "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表"
   },
