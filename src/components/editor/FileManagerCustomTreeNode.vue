@@ -162,9 +162,9 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
       let _re = localUrl.filter(item => toDele.indexOf(item.path) === -1 )
-      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
+      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
     },
     recursion(data) {
       let childrenFiles = []
@@ -324,9 +324,9 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
       let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
+      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
@@ -379,7 +379,8 @@ export default {
       gitlabChildNamesByPath: 'gitlab/childNamesByPath',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       getOpenedFileByPath: 'getOpenedFileByPath',
-      openedFiles: 'openedFiles'
+      openedFiles: 'openedFiles',
+      username: 'user/username'
     }),
     pending() {
       return (

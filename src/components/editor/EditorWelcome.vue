@@ -15,14 +15,18 @@
 
 <script>
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'EditorWelcome',
   data() {
     return {
       isNewWebsiteDialogShow: false,
-      recentOpenSiteURL: JSON.parse(localStorage.getItem('recentOpenWebUrl')) || []
+      recentOpenSiteURL: []
     }
+  },
+  mounted(){
+    this.recentOpenSiteURL = JSON.parse(localStorage.getItem(`${this.username}`)) || []
   },
   methods: {
     openNewWebsiteDialog() {
@@ -31,6 +35,11 @@ export default {
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
     }
+  },
+  computed:{
+    ...mapGetters({
+      username: 'user/username',
+    })
   },
   components: {
     NewWebsiteDialog
