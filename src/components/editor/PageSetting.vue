@@ -110,7 +110,7 @@ export default {
       return this.userSiteLayoutsMap[this.selectedLayoutId]
     },
     selectedStyleComponent() {
-      return stylesList[_.get(this.selectedLayout, 'styleName', 'basic')]
+      return _.get(stylesList[_.get(this.selectedLayout, 'styleName', 'basic')], 'component')
     }
   },
   methods: {

@@ -77,9 +77,9 @@
               :key='name'
               class="website-setting-style-item"
               :class="{active: selectedLayoutStyleName==name}"
-              @click.stop="selectStyle(name)"
+              @click.stop="selectStyle(name, styleComponent)"
               >
-              <component :is='styleComponent'>
+              <component :is='styleComponent.component'>
                 <div slot='header'>{{$t('editor.header')}}</div>
                 <div slot='footer'>{{$t('editor.footer')}}</div>
                 <div slot='sidebar'>{{$t('editor.aside')}}</div>
@@ -95,9 +95,9 @@
         </header>
         <main>
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
-            <el-form-item prop="header">
+            <el-form-item v-show="headerSelect" prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select size="small" v-model="layoutForm.header" filterable clearable  :placeholder="this.$t('editor.select')">
+              <el-select  size="small" v-model="layoutForm.header" filterable clearable  :placeholder="this.$t('editor.select')">
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
                   :key="fileName"
@@ -107,7 +107,7 @@
               </el-select>
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('header')"></el-button>
             </el-form-item>
-            <el-form-item prop="sidebar">
+            <el-form-item v-show="sidebarSelect" prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
               <el-select size="small" v-model="layoutForm.sidebar" filterable clearable  :placeholder="this.$t('editor.select')">
                 <el-option
@@ -119,7 +119,7 @@
               </el-select>
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('sidebar')"></el-button>
             </el-form-item>
-            <el-form-item prop="footer">
+            <el-form-item v-show="footerSelect" prop="footer">
               <label>{{$t('editor.footer')}}</label>
               <el-select size="small" v-model="layoutForm.footer" filterable clearable :placeholder="this.$t('editor.select')">
                 <el-option
@@ -171,6 +171,9 @@ export default {
     }
 
     return {
+      headerSelect: true,
+      sidebarSelect: true,
+      footerSelect: true,
       newLayoutIndex: 0,
       loading: true,
       selectedLayoutId: NaN,
@@ -323,7 +326,6 @@ export default {
       gitlabCreateFile: 'gitlab/createFile'
     }),
     changeHeaderHide(val){
-      console.log(val)
       this.unsavedDefaultIsSystemFooterHide = val
     },
     addLayout() {
@@ -358,6 +360,7 @@ export default {
     },
     selectLayout(layout) {
       if (this.selectedLayoutId == layout.id) return
+      this.hideSelect(this.stylesList[layout.styleName])
       this.selectedLayoutId = layout.id
       this.disalbeSelectedLayoutNameEdittable()
       this.resetLayoutForm()
@@ -371,7 +374,13 @@ export default {
     resetLayoutForm() {
       _.merge(this.layoutForm, this.selectedLayoutForm)
     },
-    selectStyle(styleName) {
+    hideSelect({header , sidebar , footer }){
+      this.headerSelect = header
+      this.sidebarSelect = sidebar
+      this.footerSelect = footer
+    },
+    selectStyle(styleName, component) {
+      this.hideSelect(component)
       this.updateSelectedLayout({styleName})
     },
     updateSelectedLayout(updatedInfo) {
