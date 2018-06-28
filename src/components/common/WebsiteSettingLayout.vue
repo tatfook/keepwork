@@ -482,7 +482,9 @@ export default {
 <style lang='scss'>
 .website-setting {
   $column-height: auto;
-
+  &-layout-list{
+    overflow: auto;
+  }
   &-layout {
     cursor: default;
     min-height: $column-height;
