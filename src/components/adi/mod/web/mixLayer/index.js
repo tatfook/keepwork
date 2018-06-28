@@ -10,6 +10,7 @@ const components = {
   title: 'AdiTitle',
   subtitle: 'AdiTitle',
   paragraph: 'AdiMarkdown'
+
 }
 
 const properties = generateProperties(name, components)
