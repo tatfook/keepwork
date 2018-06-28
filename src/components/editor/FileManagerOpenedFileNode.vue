@@ -45,7 +45,8 @@ export default {
     ...mapGetters({
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
-      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath'
+      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      username: 'user/username'
     }),
     fileName() {
       let siteName = this.data.path.split('/').slice(1, 2)
@@ -147,9 +148,9 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
       let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
+      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//

@@ -153,11 +153,11 @@ export default {
   watch:{
     openedFiles(newVal,oldVal){
       let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
-      let localStorageArrUrl = _.values(JSON.parse(localStorage.getItem('recentOpenWebUrl')))
+      let localStorageArrUrl = _.values(JSON.parse(localStorage.getItem(`${this.username}`)))
       let updateRecentUrl = localStorageArrUrl.concat(newOpenSiteUrl)
       updateRecentUrl = updateRecentUrl.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
       updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path)
-      localStorage.setItem('recentOpenWebUrl',JSON.stringify(updateRecentUrl.slice(0,5)))
+      localStorage.setItem(`${this.username}`,JSON.stringify(updateRecentUrl.slice(0,5)))
     }
   },
   methods: {
