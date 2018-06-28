@@ -82,7 +82,13 @@
       <editor-markdown ref='codemirror' />
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
-      <editorWelcome />
+      <el-row>
+        <el-col :span="3">&nbsp;</el-col>
+        <el-col :span="21">
+          <editorWelcome />
+        </el-col>
+      </el-row>
+      <div class="guid-help"><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></div>      
     </el-col>
   </el-row>
 </template>
@@ -478,12 +484,41 @@ export default {
   font-size: 16px;
 }
 .guid-col {
-  background-color: #fff;
+  background: url('../../assets/img/background.png') no-repeat top right #fff;
   display: flex;
-  align-items: center;
   justify-content: center;
   flex-direction: column;
   color: #48a3ff;
+  position: relative;
+}
+.guid-col .guid-help{
+  width: 56px;
+	height: 56px;
+	background-color: #ffa33e;
+	border: solid 4px #ffc586;
+  border-radius: 50%;
+  line-height: 56px;
+  justify-content: center;
+  text-align: center;
+  font-size: 17px;
+  color: #fff;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.guid-col .guid-help a{
+  color: #fff;
+  text-decoration: none;
+}
+.guid-col .guid-help::before{
+  content: "";
+  width: 21px;
+	height: 21px;
+	background-color: rgba(202, 149, 91, 0.28);
+  position: absolute;
+  right: -16px;
+  bottom: -16px;
+  border-radius: 50%;
 }
 .guid-col h1 {
   margin: 0 0 36px 0;

@@ -154,10 +154,17 @@ export default {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
           await this.deletePagesFromLayout({ paths: toRemoveFiles })
+          this.removeRecentOpenFolder(toRemoveFiles)
           this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
         .catch(() => {})
+    },
+    removeRecentOpenFolder(toRemoveFiles){
+      let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
+      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let _re = localUrl.filter(item => toDele.indexOf(item.path) === -1 )
+      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
     },
     recursion(data) {
       let childrenFiles = []
@@ -309,10 +316,17 @@ export default {
           this.removePending = true
           await this.gitlabRemoveFile({ path: this.currentPath})
           await this.deletePagesFromLayout({ paths: [this.currentPath] })
+          this.removeRecentOpenFile(this.currentPath)
           this.resetPage({ currentPath: this.currentPath })
           this.removePending = false
         })
         .catch(() => {})
+    },
+    removeRecentOpenFile(path){
+      let delPath = `/${path.replace(/\.md$/,'')}`
+      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let _re = localUrl.filter(item => item.path !== delPath)
+      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//

@@ -140,9 +140,16 @@ export default {
             this.deletePending = false
           })
           await this.deletePagesFromLayout({ paths: [path] })
+          this.removeRecentOpenFile(path)
           this.resetPage(path)
           this.deletePending = false
         })
+    },
+    removeRecentOpenFile(path){
+      let delPath = `/${path.replace(/\.md$/,'')}`
+      let localUrl = JSON.parse(localStorage.getItem('recentOpenWebUrl'))
+      let _re = localUrl.filter(item => item.path !== delPath)
+      localStorage.setItem('recentOpenWebUrl', JSON.stringify(_re))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//

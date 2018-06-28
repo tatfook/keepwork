@@ -90,7 +90,7 @@ export default {
         children: 'children',
         label: 'label'
       },
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
     }
   },
   async mounted() {
@@ -148,6 +148,16 @@ export default {
     },
     unSavedOpenedFilesPaths() {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
+    }
+  },
+  watch:{
+    openedFiles(newVal,oldVal){
+      let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
+      let localStorageArrUrl = _.values(JSON.parse(localStorage.getItem('recentOpenWebUrl')))
+      let updateRecentUrl = localStorageArrUrl.concat(newOpenSiteUrl)
+      updateRecentUrl = updateRecentUrl.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
+      updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path)
+      localStorage.setItem('recentOpenWebUrl',JSON.stringify(updateRecentUrl.slice(0,5)))
     }
   },
   methods: {
