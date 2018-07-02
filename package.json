@@ -27,6 +27,7 @@
     "lodash": "^4.17.5",
     "mousetrap": "^1.6.1",
     "qiniu-js": "^2.2.2",
+    "smooth-scroll-into-view-if-needed": "^1.1.10",
     "social-share.js": "^1.0.16",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.1.0",

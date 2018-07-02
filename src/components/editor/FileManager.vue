@@ -62,6 +62,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
+import scrollIntoView from 'scroll-into-view-if-needed'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
 import FileManagerOpenedFileNode from './FileManagerOpenedFileNode'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
@@ -101,7 +102,7 @@ export default {
     this.$route.path !== '/' && await this.checkSitePath()
     await this.initUrlExpandSelect()
     this.$nextTick(() => {
-      let ele = document.querySelector('.is-current')
+      let ele = document.querySelector('.is-current:last-child')
       ele && ele.scrollIntoView()
     })
   },
