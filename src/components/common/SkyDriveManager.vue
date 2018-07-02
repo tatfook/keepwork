@@ -127,6 +127,13 @@
 
     <div v-if='mediaLibraryMode'>
       <div class="skydrive-manager-media-library">
+        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success'" :style='{
+            backgroundImage: `url("${file.cover}")`
+          }'>
+          <div class="skydrive-manager-media-uploading-cover">
+          </div>
+          <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
+        </div>
         <div v-for='mediaItem in skyDriveMediaLibraryData'
           :key='mediaItem.file.key'
           class='skydrive-manager-media-item'
@@ -139,13 +146,6 @@
             <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span>
           </div>
           <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
-        </div>
-        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success'" :style='{
-            backgroundImage: `url("${file.cover}")`
-          }'>
-          <div class="skydrive-manager-media-uploading-cover">
-          </div>
-          <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
         </div>
       </div>
       <el-row class="skydrive-manager-footer">
@@ -223,7 +223,11 @@ export default {
       return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
     },
     skyDriveMediaLibraryData() {
-      return this.skyDriveTableData.filter(({ type }) => /^image\/.*/.test(type))
+      let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image\/.*/.test(type))
+      let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
+        return obj1.updateDate <= obj2.updateDate
+      })
+      return sortedMediaDatas
     },
     info() {
       let {total = 0, used = 0} = this.userSkyDriveInfo
