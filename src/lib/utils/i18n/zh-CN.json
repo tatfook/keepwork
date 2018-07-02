@@ -215,7 +215,6 @@
     "videoNotSupport": "您的浏览器不支持 video 标签。",
     "notFound": "内容找不到了",
 
-    "pageName": "页面名字",
     "yourPosition": "您所在的位置：",
     "homePage": "首页",
 
@@ -384,7 +383,7 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径",
+    "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表"
   },
