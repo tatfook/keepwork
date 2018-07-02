@@ -1,6 +1,6 @@
 let emptyData = {
   media: {
-    emptySrc: require('@/../static/adi/mixLayer/mix-layer.png'),
+    emptySrc: require('@/../static/adi/mixLayer/mix-layer.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
