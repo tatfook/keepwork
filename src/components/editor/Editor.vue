@@ -11,11 +11,11 @@
         </el-button-group>
         <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
       </el-row>
-      <el-row class="manager-content-box">
+      <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
           <component :is='activeManagePaneComponentName' v-bind='activeManagePaneComponentProps' v-keep-scroll-position></component>
         </keep-alive>
-      </el-row>
+      </el-scrollbar>
     </el-col>
     <div class="col-between"></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
@@ -52,32 +52,34 @@
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
-        <el-col :span="23">
-          <el-button-group>
-            <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-            <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-            <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-            <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-            <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
-          </el-button-group>
-          <el-button-group>
-            <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
+        <el-scrollbar wrap-class="toolbar" :native="false">
+          <el-col :span="23">
+            <el-button-group>
+              <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
+              <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
+              <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
+              <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
+              <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+            </el-button-group>
+            <el-button-group>
+              <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
             <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
             <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
-            <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
-            <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-            <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
-            <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
-          </el-button-group>
-          <el-button-group>
-            <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
-          </el-button-group>
-        </el-col>
-        <el-col :span="1" class="fullScreenBtn">
-          <el-button-group>
-            <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
-          </el-button-group>
-        </el-col>                      
+              <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
+              <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
+              <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
+              <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
+            </el-button-group>
+            <el-button-group>
+              <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
+            </el-button-group>
+          </el-col>
+          <el-col :span="1" class="fullScreenBtn">
+            <el-button-group>
+              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+            </el-button-group>
+          </el-col>
+        </el-scrollbar>
       </el-row>
       <editor-markdown ref='codemirror' />
     </el-col>
@@ -88,7 +90,9 @@
           <editorWelcome />
         </el-col>
       </el-row>
-      <div class="guid-help"><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></div>      
+      <div class="guid-help">
+        <a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -367,11 +371,15 @@ export default {
           let isModified = this.checkIsModified()
           if (isModified) {
             let that = this
-            this.$confirm(this.$t('editor.unSaveConfirm'), this.$t('editor.closeDialogTitle'), {
-              confirmButtonText: that.$t('common.Sure'),
-              cancelButtonText: that.$t('common.Cancel'),
-              type: 'warning'
-            }).then(() => {
+            this.$confirm(
+              this.$t('editor.unSaveConfirm'),
+              this.$t('editor.closeDialogTitle'),
+              {
+                confirmButtonText: that.$t('common.Sure'),
+                cancelButtonText: that.$t('common.Cancel'),
+                type: 'warning'
+              }
+            ).then(() => {
               this.closeMultipleTextDialog()
             })
           } else {
@@ -471,7 +479,7 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-.toolbar .fullScreenBtn .el-button{
+.toolbar .fullScreenBtn .el-button {
   border-radius: 4px;
 }
 .iconfont {
@@ -491,11 +499,11 @@ export default {
   color: #48a3ff;
   position: relative;
 }
-.guid-col .guid-help{
+.guid-col .guid-help {
   width: 56px;
-	height: 56px;
-	background-color: #ffa33e;
-	border: solid 4px #ffc586;
+  height: 56px;
+  background-color: #ffa33e;
+  border: solid 4px #ffc586;
   border-radius: 50%;
   line-height: 56px;
   justify-content: center;
@@ -506,15 +514,15 @@ export default {
   bottom: 20px;
   right: 20px;
 }
-.guid-col .guid-help a{
+.guid-col .guid-help a {
   color: #fff;
   text-decoration: none;
 }
-.guid-col .guid-help::before{
-  content: "";
+.guid-col .guid-help::before {
+  content: '';
   width: 21px;
-	height: 21px;
-	background-color: rgba(202, 149, 91, 0.28);
+  height: 21px;
+  background-color: rgba(202, 149, 91, 0.28);
   position: absolute;
   right: -16px;
   bottom: -16px;
@@ -575,5 +583,20 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
+.manager-win {
+  .el-scrollbar {
+    height: 100%;
+    // width: 100%;
+  }
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+  }
+  .manager-content-box {
+    background-color: #fff;
+  }
+  .manager-content-inner {
+    height: 100%;
+  }
+}
 </style>
