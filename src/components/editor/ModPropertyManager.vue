@@ -22,6 +22,7 @@
 
 <script>
 import _ from 'lodash'
+import scrollIntoView from 'scroll-into-view-if-needed'
 import { mapGetters, mapActions } from 'vuex'
 import { StyleSelector, ThemeSelector } from '@/components/adi/selector'
 import modLoader from '@/components/adi/mod'
@@ -69,7 +70,10 @@ export default {
     activeProperty() {
       this.$nextTick(() => {
         let ele = document.querySelector('.prop-box.active')
-        ele && ele.scrollIntoView()
+        ele && scrollIntoView(ele, {
+          scrollMode: 'if-needed',
+          behavior: 'smooth'
+        })
       })
     }
   },

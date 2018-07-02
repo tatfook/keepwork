@@ -101,7 +101,7 @@ export default {
     this.$route.path !== '/' && await this.checkSitePath()
     await this.initUrlExpandSelect()
     this.$nextTick(() => {
-      let ele = document.querySelector('.is-current')
+      let ele = document.querySelector('.is-current:last-child')
       ele && ele.scrollIntoView()
     })
   },
