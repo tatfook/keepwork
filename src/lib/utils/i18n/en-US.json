@@ -230,7 +230,10 @@
 
     "uploadingToGitlabText": "uploading file to gitlab ...",
     "readFileFromLocal": "reading file from local ...",
-    "enlargeMdEditing": "Large window editing"
+    "enlargeMdEditing": "Large window editing",
+
+    "addReferences": "Add References",
+    "openLessonPackageEditor": "Open LessonPackage Editor"
   },
   "modList": {
     "recent": "Commonly used",
@@ -270,7 +273,9 @@
     "quiz": "Quiz",
     "teachers": "Teachers",
     "lessonShare": "LessonShare",
-    "package": "Package"
+    "package": "Package",
+    "lessonPackage": "Lesson Package"
+
   },
   "adi": {
     "markdown": {
@@ -404,10 +409,66 @@
     "tab": "Tab",
     "categoryList": "Category list",
     "lesson": "Lesson",
+    "lessonGoals": "Lesson Goals:",
     "quiz":"Quiz",
     "teachers":"Teachers",
     "lessonShare":"LessonShare",
-    "lessonPackage":"Package"
+    "lessonPackage":"Package",
+    "overview": "Overview",
+    "references": "References",
+    "studentsPerformance": "Students' Performance",
+    "summary": "Summary",
+    "playParacraft": "Play Paracraft",
+    "lessonPreview": "Preview",
+    "catalogue": "Catalogue:",
+
+    "includes": "Includes:",
+    "lessons": "lessons",
+    "ages": "Ages:",
+    "suitableForAll": "suitable for all",
+    "skills": "Skills:",
+    "coins": "coins",
+    "add": "ADD",
+    "haveLearned1": "Have learned",
+    "haveLearned2": "lessons.",
+    "continue": "Continue",
+    "startToLearn": "Start to learn",
+    "finished": "Finished",
+    "duration": "Duration:",
+    "viewSummary": "View Summary",
+    "addPackageFirst": "Please add the package first",
+    "lessonPackageCost1": "To learn lessons of this package, you have to invest ",
+    "lessonPackageCost2": " coins.",
+    "addPackageSuccess": "Add lessons of this package success!",
+    "operationFail": "Operation failed please retry!",
+    "pleaseLogin": "Sorry,please login!",
+    "havePurchased": "You have already purchased!",
+    "openQuizEditor": "Open Quiz Editor",
+    
+    "singleChoice": "Single Choice",
+    "multipleChoices": "Multiple Choices",
+    "trueOrFalse": "True or False",
+    "textMatch": "Text Match",
+    
+    "type": "Type:",
+    "answer": "Answers:",
+    "score": "Score:",
+    "explanation": "Explanation:",
+    "question": "Question:",
+    "pleaseInput": "Please Input...",
+    "answerOptions": "Answer options:",
+    "rightAnswer": "The selected is the right answer.",
+    "addMoreOptions": "Add More Options",
+    "addMore": "Add More",
+    "submit": "submit",
+    "cancel": "cancel",
+    "integerThan0": "please input an integer greater than 0",
+    "pleaseInputTitle": "please input title",
+    "pleaseSelect": "please select",
+    "pleaseInput2": "please input",
+    "pleaseInputExplanation": "please input explanation",
+    "true": "True",
+    "false": "False"
   },
   "field": {
     "fileId": "file Id",
@@ -443,7 +504,9 @@
     "CodeWriteLine": "Code Write Line",
     "Commands": "Commands",
     "animations": "Animations",
-    "content": "Content"
+    "content": "Content",
+    "addReferences": "Add References",
+    "openLessonPackageEditor": "Open LessonPackage Editor"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="tree-data-dialog" title="Add references" :visible.sync="show" width="600px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" title="Add references---" :visible.sync="show" width="600px" :before-close="handleClose">
     <draggable element="el-collapse" :list="animationsData" accordion>
       <el-collapse-item v-for="e in animationsData" :name="e.id" :key="e.id">
         <template slot="title">

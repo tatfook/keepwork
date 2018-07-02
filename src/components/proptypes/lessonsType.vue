@@ -1,6 +1,6 @@
 <template>
   <div class="menu-type">
-    <el-button plain type='primary' size='mini' @click='isLPEditorShow = true'>Open lessonPackage Editor</el-button>
+    <el-button plain type='primary' size='mini' @click='isLPEditorShow = true'>{{this.$t('editor.openLessonPackageEditor')}}</el-button>
     <lessonsDataEditor :isEditorShow='isLPEditorShow' :originalLessonsData='originValue' @finishEditing='finishEditing' @cancel='cancel'></lessonsDataEditor>
   </div>
 

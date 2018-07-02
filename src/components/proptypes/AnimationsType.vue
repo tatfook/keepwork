@@ -1,6 +1,6 @@
 <template>
   <div class="menu-type">
-    <el-button plain type='primary' @click="openAnimationsDialog">Add References</el-button>
+    <el-button plain type='primary' @click="openAnimationsDialog">{{this.$t('field.addReferences')}}</el-button>
     <animationsDataEditor :show='isAnimationsEditorShow' :animationsData='originValue' @finish='finish' @cancel='cancel'></animationsDataEditor>
   </div>
 </template>

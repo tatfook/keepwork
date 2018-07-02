@@ -8,26 +8,26 @@
             <div class="lessons-title">{{properties.data.title}}</div>
             <div class="lessons-include-title">
               <span class="lessons-content">
-                <span class="lessons-include">Includes:</span>
+                <span class="lessons-include">{{this.$t('card.includes')}}</span>
                 <span class="lessons-count">{{properties.data.lessonCount}}</span>
-                lessons
+                {{this.$t('card.lessons')}}
               </span>
               <span>
-                <span class="lessons-include">Ages:</span>
-                <span class="lessons-age">{{properties.data.agesMin == 0 && properties.data.agesMax == 0 ? "suitable for all" : properties.data.agesMin +'-'+ properties.data.agesMax}}</span>
+                <span class="lessons-include">{{this.$t('card.ages')}}</span>
+                <span class="lessons-age">{{properties.data.agesMin == 0 && properties.data.agesMax == 0 ? this.$t('card.suitableForAll') : properties.data.agesMin +'-'+ properties.data.agesMax}}</span>
               </span>
             </div>
             <div class="lessons-skills">
-              <div class="lessons-include">Skills:</div>
+              <div class="lessons-include">{{this.$t('card.skills')}}</div>
               <ul>
                 <li>{{properties.data.skills}}</li>
               </ul>
             </div>
             <div class="lessons-button" v-if="!isLessonsBuy">
               <span class="lessons-coins">
-                <span class="lessons-cost">{{properties.data.cost}}</span>coins
+                <span class="lessons-cost">{{properties.data.cost}}</span>{{this.$t('card.coins')}}
               </span>
-              <el-button @click="addClick" type="primary" id="btnAdd">ADD</el-button>
+              <el-button @click="addClick" type="primary" id="btnAdd">{{this.$t('card.add')}}</el-button>
             </div>
           </div>
         </el-col>
@@ -36,15 +36,15 @@
     <el-row :gutter="20" type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
       <el-col :span="20">
         <el-progress :stroke-width="18" :text-inside="true" :percentage="lessonProgress"></el-progress>
-        <div class="progress-tip">Have learned {{doneCount}} lessons.</div>
+        <div class="progress-tip">{{this.$t('haveLearned1')}} {{doneCount}} {{this.$t('haveLearned2')}}</div>
       </el-col>
       <el-col :span="4">
-        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Continue</el-button>
-        <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">Start to learn</el-button>
+        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{this.$t('card.continue')}}</el-button>
+        <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{this.$t('card.startToLearn')}}</el-button>
       </el-col>
     </el-row>
     <div class="lessons-list">
-      <div class="list-title">Catalogue：</div>
+      <div class="list-title">{{this.$t('card.catalogue')}}</div>
       <div class="list-content" v-for="lesson in properties.data.lessons" :key="lesson.lessonUrl">
         <div class="lesson-item">
           <el-row type="flex" class="mod-full-width-0-0-65">
@@ -60,12 +60,12 @@
                         <a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{lesson.lessonTitle}}</a>
                       </el-col>
                       <el-col :span="3" class="finished" v-if="lesson.learnedFlag > 0">
-                        <span>Finished</span>
+                        <span>{{this.$t('card.finished')}}</span>
                         <i class="el-icon-success"></i>
                       </el-col>
                     </el-row>
                     <div class="lesson-item-goals">
-                      <div>Lesson Goals:</div>
+                      <div>{{this.$t('card.LessonGoals')}}</div>
                       <ul>
                         <li>{{lesson.LessonGoals}}</li>
                       </ul>
@@ -74,10 +74,10 @@
                   <el-col>
                     <div class="lesson-item-bottom">
                       <div class="lesson-item-dur">
-                        Duration:45min
+                        {{this.$t('card.duration')}}45min
                       </div>
                       <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
-                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">View Summary</a>
+                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">{{this.$t('card.viewSummary')}}</a>
                       </div>
                     </div>
                   </el-col>
@@ -142,8 +142,8 @@ export default {
     //未购买点击
     noBuyAlert() {
       if (!this.isLessonsBuy) {
-        this.$alert('Please add the package first', {
-          confirmButtonText: 'OK',
+        this.$alert(this.$t('card.addPackageFirst'), {
+          confirmButtonText: this.$t('common.OK'),
           center: true
         })
       }
@@ -162,12 +162,10 @@ export default {
     // 购买课程包
     addClick() {
       this.$confirm(
-        'To learn lessons of this package, you have to invest ' +
-          this.properties.data.cost +
-          ' coins.',
+        `${this.$t('card.lessonPackageCost1')}${this.properties.data.cost}${this.$t('card.lessonPackageCost2')}`,
         {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
+          confirmButtonText: this.$t('common.OK'),
+          cancelButtonText: this.$t('common.Cancel'),
           type: 'warning'
         }
       ).then(async () => {
@@ -175,19 +173,19 @@ export default {
         if (r.err == 0) {
           this.$message({
             type: 'success',
-            message: 'Add lessons of this package success!'
+            message: this.$t('card.addPackageSuccess')
           })
           this.isLessonsBuy = true
           //调用该用户学习状态
           this.UserState()
         } else if (r.err == 101) {
-          this.$message.error('Operation failed please retry!')
+          this.$message.error(this.$t('card.operatinFail'))
         } else if (r.err == 102) {
-          this.$message.error('Sorry,please login!')
+          this.$message.error(this.$t('card.pleaseLogin'))
         } else if (r.err == 103) {
           this.$message({
             type: warn,
-            message: 'You have already purchased!'
+            message: this.$t('card.havePurchased')
           })
         }
       })
@@ -234,7 +232,7 @@ export default {
             }
           }
         } else if (r.err == 102) {
-          this.$message.error('Sorry,please login !')
+          this.$message.error(this.$t('card.pleaseLogin'))
         } else if (r.err == 400) {
           //未购买
         }
