@@ -1,54 +1,54 @@
 <template>
-  <el-dialog title="Quiz" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
+  <el-dialog :title="this.$t('card.quiz')" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
     <el-form :model="quizData" :rules="rules" ref="quizData" label-width="128px" class="demo-ruleForm">
-      <el-form-item label="Type:" prop="type">
+      <el-form-item :label="this.$t('card.type')" prop="type">
         <el-radio-group v-model="quizData.type" id="quizType">
-          <el-radio label="0">Single Choice</el-radio>
-          <el-radio label="1">Multiple Choices</el-radio>
-          <el-radio label="2">True or False</el-radio>
-          <el-radio label="3">Text Match</el-radio>
+          <el-radio label="0">{{this.$t('card.singleChoice')}}</el-radio>
+          <el-radio label="1">{{this.$t('card.multipleChoices')}}</el-radio>
+          <el-radio label="2">{{this.$t('card.trueOrFalse')}}</el-radio>
+          <el-radio label="3">{{this.$t('card.textMatch')}}</el-radio>
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="Question:" prop="title">
-        <el-input v-model="quizData.title" maxlength="255" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('card.question')" prop="title">
+        <el-input v-model="quizData.title" maxlength="255" :placeholder="$t('card.pleaseInput')"></el-input>
       </el-form-item>
       <!-- 单选题 -->
-      <el-form-item label="Answer options:" v-if="quizData.type == 0">
-        <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
+      <el-form-item :label="this.$t('card.answerOptions')" v-if="quizData.type == 0">
+        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}}</el-tag></div>
         <el-radio-group :style="{width: '100%'}" v-model="quizData.answer[0]">
-          <div class="flex-center-between" v-for="(opt, index) in quizData.options">
+          <div class="flex-center-between" v-for="(opt, index) in quizData.options" :key="index">
             <el-radio :label="serialNo[index]"></el-radio>
-            <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" class="writer-input" :placeholder="$t('card.pleaseInput')"></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
           </div>
-          <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More Options</el-button>
+          <el-button type="primary" round size="small" @click="addOption(quizData.type)">{{this.$t('card.addMoreOptions')}}</el-button>
         </el-radio-group>
 
       </el-form-item>
 
       <!-- 多选题 -->
-      <el-form-item label="Answer options:" v-if="quizData.type == 1" >
-        <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
+      <el-form-item :label="this.$t('card.answerOptions')" v-if="quizData.type == 1" >
+        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}}</el-tag></div>
 
         <el-checkbox-group :style="{width: '100%'}" v-model="quizData.answer">
           <div class="flex-center-between"
-            v-for="(opt, index) in quizData.options">
+            v-for="(opt, index) in quizData.options" :key="index">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
-            <el-input v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
+            <el-input v-model="opt.item" class="writer-input" :placeholder="$t('card.pleaseInput')"></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
           </div>
-          <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More Options</el-button>
+          <el-button type="primary" round size="small" @click="addOption(quizData.type)">{{this.$t('card.addMoreOptions')}}</el-button>
         </el-checkbox-group>
 
       </el-form-item>
 
       <!-- 判断题 -->
-      <el-form-item label="Answer options:" v-if="quizData.type == 2">
-        <div><el-tag type="warning">The selected is the right answer.</el-tag></div>
+      <el-form-item :label="this.$t('card.answerOptions')" v-if="quizData.type == 2">
+        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}}</el-tag></div>
 
         <el-radio-group v-model="quizData.answer[0]">
-          <span class="el-radio" v-for="(opt, index) in judgeOptions">
+          <span class="el-radio" v-for="(opt, index) in judgeOptions" :key="index">
             <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
           </span>
         </el-radio-group>
@@ -56,27 +56,27 @@
       </el-form-item>
 
       <!-- 文本匹配题 -->
-      <el-form-item label="Answers:" v-if="quizData.type == 3">
-        <div class="flex-center-between" v-for="(opt, index) in quizData.options">
-          <el-input type="textarea" v-model="opt.item" class="writer-input" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('card.answer')" v-if="quizData.type == 3">
+        <div class="flex-center-between" v-for="(opt, index) in quizData.options" :key="index">
+          <el-input type="textarea" v-model="opt.item" class="writer-input" :placeholder="$t('card.pleaseInput')"></el-input>
           <el-button type="danger" @click.prevent="removeOption(opt, quizData.type)" icon="el-icon-delete" circle></el-button>
         </div>
-        <el-button type="primary" round size="small" @click="addOption(quizData.type)">Add More</el-button>
+        <el-button type="primary" round size="small" @click="addOption(quizData.type)">{{this.$t('card.addMore')}}</el-button>
       </el-form-item>
 
-      <el-form-item label="Score:" prop="score">
-        <el-input v-model.number="quizData.score" placeholder="Please Input..." :style="{ width: '20%'}"></el-input>
+      <el-form-item :label="this.$t('card.score')" prop="score">
+        <el-input v-model.number="quizData.score" :placeholder="$t('card.pleaseInput')" :style="{ width: '20%'}"></el-input>
       </el-form-item>
 
-      <el-form-item label="Explanation:" prop="desc">
-        <el-input type="textarea" maxlength="512" v-model="quizData.desc" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('card.explanation')" prop="desc">
+        <el-input type="textarea" maxlength="512" v-model="quizData.desc" :placeholder="$t('card.pleaseInput')"></el-input>
       </el-form-item>
 
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @change="validInput" @click="submitForm('quizData', quizData.type)">submit</el-button>
-      <el-button @click="handleClose">cancel</el-button>
+      <el-button type="primary" @change="validInput" @click="submitForm('quizData', quizData.type)">{{this.$t('card.submit')}}</el-button>
+      <el-button @click="handleClose">{{this.$t('card.cancel')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -106,14 +106,14 @@ export default {
   data() {
     const checkScore = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('please input an integer greater than 0'))
+        return callback(new Error(this.$t('card.integerThan0')))
       }
       setTimeout(() => {
         if (!Number.isInteger(value)) {
-          callback(new Error('please input an integer greater than 0'))
+          callback(new Error(this.$t('card.integerThan0')))
         } else {
           if (value < 0) {
-            callback(new Error('please input an integer greater than 0'))
+            callback(new Error(this.$t('card.integerThan0')))
           } else {
             callback()
           }
@@ -127,32 +127,32 @@ export default {
       serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
 
       judgeOptions: [{
-        item: 'True'
+        item: this.$t('card.true')
       },{
-        item: 'False'
+        item: this.$t('card.false')
       }],
 
       rules: {
         title: [
-          { required: true, message: 'please input title', trigger: 'blur' }
+          { required: true, message: this.$t('card.pleaseInputTitle'), trigger: 'blur' }
         ],
         single: [
-          { required: true, message: 'please select', trigger: 'change'}
+          { required: true, message: this.$t('card.pleaseSelect'), trigger: 'change'}
         ],
         singleInput: [
-          { required: true, message: 'please input', trigger: 'blur' }
+          { required: true, message: this.$t('card.pleaseInput'), trigger: 'blur' }
         ],
         multiple: [
-          { type: 'array', required: true, message: 'please select', trigger: 'change'}
+          { type: 'array', required: true, message: this.$t('card.pleaseSelect'), trigger: 'change'}
         ],
         judge: [
-          { required: true, message: 'please select', trigger: 'change' }
+          { required: true, message: this.$t('card.pleaseSelect'), trigger: 'change' }
         ],
         score: [
           { required: true, validator: checkScore, trigger: 'blur' }
         ],
         desc: [
-          { required: true, message: 'please input explanation', trigger: 'blur' }
+          { required: true, message: this.$t('card.pleaseInputExplanation'), trigger: 'blur' }
         ]
       }
     }

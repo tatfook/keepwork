@@ -220,7 +220,10 @@
 
     "uploadingToGitlabText": "正在上传到gitab。。。",
     "readFileFromLocal": "正在读取文件。。。",
-    "enlargeMdEditing": "大窗口编辑"
+    "enlargeMdEditing": "大窗口编辑",
+
+    "addReferences": "增加引用",
+    "openLessonPackageEditor": "打开课程包编辑器"
   },
   "modList": {
     "recent": "常用",
@@ -260,7 +263,8 @@
     "quiz": "问题",
     "teachers": "教师可见",
     "lessonShare": "分享课程",
-    "package": "课程包"
+    "package": "课程包",
+    "lessonPackage": "课程包"
   },
   "adi": {
     "markdown": {
@@ -394,10 +398,66 @@
     "tab": "标签",
     "categoryList": "分类列表",
     "lesson": "课程",
+    "lessonGoals": "课程目标:",
     "quiz": "问题",
     "teachers": "教师可见",
     "lessonShare": "分享课程",
-    "lessonPackage": "课程包"
+    "lessonPackage": "课程包",
+    "overview": "概览",
+    "references": "参考",
+    "studentsPerformance": "学生成绩",
+    "summary": "概要",
+    "playParacraft": "玩 Paracraft",
+    "lessonPreview": "预览",
+    "catalogue": "目录：",
+
+    "includes": "包含:",
+    "lessons": "门课程",
+    "ages": "年龄:",
+    "suitableForAll": "全年龄",
+    "skills": "技能:",
+    "coins": "知识币",
+    "add": "增加",
+    "haveLearned1": "已经学习",
+    "haveLearned2": "门课程.",
+    "continue": "继续",
+    "startToLearn": "开始学习",
+    "finished": "完成",
+    "duration": "持续时间:",
+    "viewSummary": "查看简介",
+    "addPackageFirst": "请先添加课程包",
+    "lessonPackageCost1": "学习该课程包，你需要支付 ",
+    "lessonPackageCost2": " 知识币。",
+    "addPackageSuccess": "添加课程包成功！",
+    "operationFail": "操作失败，请重试！",
+    "pleaseLogin": "请登录",
+    "havePurchased": "你已经支付过了！",
+    "openQuizEditor": "打开问题编辑器",
+
+    "singleChoice": "单选",
+    "multipleChoices": "多选",
+    "trueOrFalse": "判断题",
+    "textMatch": "文字匹配",
+    
+    "type": "类型:",
+    "answer": "答案:",
+    "score": "分数:",
+    "explanation": "解释:",
+    "question": "问题:",
+    "pleaseInput": "请输入...",
+    "answerOptions": "选项:",
+    "rightAnswer": "这是正确选项.",
+    "addMoreOptions": "增加更多选项",
+    "addMore": "增加更多",
+    "submit": "提交",
+    "cancel": "取消",
+    "integerThan0": "请输入一个大于0的整数",
+    "pleaseInputTitle": "请输入标题",
+    "pleaseSelect": "请选择",
+    "pleaseInput2": "请输入",
+    "pleaseInputExplanation": "请输入解释",
+    "true": "对",
+    "false": "错"
   },
   "field": {
     "fileId": "字段",
@@ -432,7 +492,9 @@
     "CodeWriteLine": "代码编写行数",
     "Commands": "指令数",
     "animations": "素材",
-    "content": "内容"
+    "content": "内容",
+    "addReferences": "增加引用",
+    "openLessonPackageEditor": "打开课程包编辑器"
   },
   "skydrive": {
     "mediaLibrary": "图库",

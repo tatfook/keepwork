@@ -10,14 +10,14 @@
         <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()"></el-col>
         <el-col>
           <div class="lessonDesc">
-            <div class="lesson-title">Lesson {{properties.LessonNo}}: {{properties.Title}}</div>
+            <div class="lesson-title">{{this.$t('card.lesson')}} {{properties.LessonNo}}: {{properties.Title}}</div>
             <div class="lesson-goals-title">
-              Lesson Goals:
+              {{this.$t('card.lessonGoals')}}
               <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
             </div>
             <el-row class="lesson-button">
-              <el-button @click="playClick" type="primary" id="btnPlay" v-if="!properties.vip">Play Paracraft</el-button>
-              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties.vip">Preview</el-button>
+              <el-button @click="playClick" type="primary" id="btnPlay" v-if="!properties.vip">{{this.$t('card.playParacraft')}}</el-button>
+              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties.vip">{{this.$t('card.lessonPreview')}}</el-button>
               <el-tooltip class="item" effect="dark" :content="btnTip" v-if="properties.vip" placement="top">
                 <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">{{btnInfo}}</el-button>
               </el-tooltip>
@@ -34,10 +34,10 @@
           <span class="student-leave">0</span>, &nbsp;&nbsp;Offline:
           <span class="student-offline">0</span>
         </div>
-        <el-tab-pane label="Overview" name="first"></el-tab-pane>
-        <el-tab-pane label="References" name="second"></el-tab-pane>
-        <el-tab-pane label="Students' Performance" v-if="properties.vip" name="third"></el-tab-pane>
-        <el-tab-pane label="Summary" name="fourth"></el-tab-pane>
+        <el-tab-pane :label="this.$t('card.overview')" name="first"></el-tab-pane>
+        <el-tab-pane :label="this.$t('card.references')" name="second"></el-tab-pane>
+        <el-tab-pane :label="this.$t('card.studentsPerformance')" v-if="properties.vip" name="third"></el-tab-pane>
+        <el-tab-pane :label="this.$t('card.summary')" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>
   </el-row>
