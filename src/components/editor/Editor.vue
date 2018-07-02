@@ -587,7 +587,6 @@ export default {
 .manager-win {
   .el-scrollbar {
     height: 100%;
-    // width: 100%;
   }
   .el-scrollbar__wrap {
     overflow-x: auto;
