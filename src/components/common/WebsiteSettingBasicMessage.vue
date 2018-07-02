@@ -58,7 +58,7 @@ export default {
         'user/getSiteDetailInfoDataSourceByPath'
     }),
     siteUrl() {
-      let origin = _.get(location, 'origin', 'http://keepwork.com')
+      let origin = location.origin
       return `${origin}/${this.basicMessage.username}/${this.basicMessage.name}`
     }
   },
