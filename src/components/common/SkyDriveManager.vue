@@ -299,26 +299,34 @@ export default {
     },
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
+      console.log(files)
       this.filesQueueToUpload(files)
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])
+      console.log(files)
       this.filesQueueToUpload(files)
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
-      if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) return this.$message({
-        showClose: true,
-        message: this.$t('skydrive.notImageFileError'),
-        type: 'error'
-      })
+      if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) {
+        this.uploadingFiles[fileIndex].state = 'error'
+        this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
+        return this.$message({
+          showClose: true,
+          message: this.$t('skydrive.notImageFileError'),
+          type: 'error'
+        })
+      }
 
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
-        console.log(filenameValidateResult)
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
-        return
+        return this.$message({
+          message: file.name + ' ' + filenameValidateResult,
+          type: 'error'
+        })
       }
       let that = this
       await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
