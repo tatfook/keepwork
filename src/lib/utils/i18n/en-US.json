@@ -267,7 +267,11 @@
     "textBoard": "Text Board",
     "toc": "Markdown list",
 
-    "other": "Other"
+    "other": "Other",
+
+    "categoryList": "Category list",
+    "tab": "Tab",
+    "pageSwitching": "Page switching"
   },
   "adi": {
     "markdown": {
@@ -396,7 +400,8 @@
     "iframe": "iframe",
     "pagePath": "Page path",
     "tab": "Tab",
-    "categoryList": "Category list"
+    "categoryList": "Category list",
+    "pageSwitching": "Page switching"
   },
   "field": {
     "fileId": "file Id",

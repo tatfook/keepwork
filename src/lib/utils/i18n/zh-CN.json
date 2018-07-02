@@ -256,7 +256,11 @@
     "textBoard": "文本与绘图板",
     "toc": "Markdown 目录",
 
-    "other": "其他"
+    "other": "其他",
+
+    "categoryList": "分类列表",
+    "tab": "标签",
+    "pageSwitching": "页面切换"
   },
   "adi": {
     "markdown": {
@@ -385,7 +389,8 @@
     "iframe": "iframe",
     "pagePath": "页面路径",
     "tab": "标签",
-    "categoryList": "分类列表"
+    "categoryList": "分类列表",
+    "pageSwitching": "页面切换"
   },
   "field": {
     "fileId": "字段",
