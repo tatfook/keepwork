@@ -62,7 +62,6 @@
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
-import scrollIntoView from 'scroll-into-view-if-needed'
 import FileManagerCustomTreeNode from './FileManagerCustomTreeNode'
 import FileManagerOpenedFileNode from './FileManagerOpenedFileNode'
 import { getFileFullPathByPath } from '@/lib/utils/gitlab'
