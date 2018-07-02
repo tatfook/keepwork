@@ -476,6 +476,9 @@ export default {
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
+    .el-tree-node__label{
+      padding-right: 105px;
+    }
     .file-manager-buttons-container {
       display: inline-block !important;
       line-height: 38px !important;
@@ -500,6 +503,15 @@ export default {
     width: 100%;
     position: relative;
     padding-left: 20px;
+    overflow: hidden;
+    span{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: middle;
+    }
   }
   .node-icon {
     position: absolute;
