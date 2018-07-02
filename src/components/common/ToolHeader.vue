@@ -8,14 +8,14 @@
       <!-- <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a> -->
       <div class="breadcrumb-item">
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <ul class="file-list-content">
+          <el-scrollbar tag='ul' wrap-class="file-list-content" view-class="view-box" :native="false">
             <li v-for='site in siteList' :key='site.name'>
               <a :href="`/${site.username}/${site.name}`" class="clearfix">
                 <span class="list-content">{{site.displayName || site.name}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
-          </ul>
+          </el-scrollbar>
           <span class="page-item-content" slot="reference">
             {{siteDisplayName}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
@@ -26,9 +26,9 @@
       <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
         <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <ul class="file-list-content">
+          <el-scrollbar tag='ul' wrap-class="file-list-content" :native="false">
             <li class="file-list-item" v-for='file in fileList' :key='file.name' @click="handleBreadcrumbClick(file)">{{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}</li>
-          </ul>
+          </el-scrollbar>
           <span class="page-item-content" slot="reference">
             {{activePageInfo.paths[index] | hideMarkdownExt}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
@@ -213,7 +213,7 @@ export default {
 <style lang="scss">
 .breadcrumb-item-dropdown {
   padding: 0;
-  min-width: auto;
+  min-width: 40px;
   border-color: #e4e7ed;
   .clearfix::after {
     content: '';
@@ -223,7 +223,7 @@ export default {
   .file-list-content {
     max-height: 380px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: scroll;
     padding: 15px 0;
   }
   ul {
