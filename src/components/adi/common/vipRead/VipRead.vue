@@ -17,7 +17,7 @@
       </div>
       <div v-if="!isLogined" class="vip-more-permission">
         <p ng-show="!editorMode">
-          <a href="http://keepwork.com/wiki/home">{{$t(options.login)}}</a>
+          <a href="this.config.KEEPWORK_WIKI">{{$t(options.login)}}</a>
         </p>
       </div>
       {{init()}}
@@ -52,7 +52,7 @@ export default {
     isMyPage() {
       let pathUsername = window.location.pathname.split('/')[1]
 
-      if(pathUsername && pathUsername == this.username) {
+      if (pathUsername && pathUsername == this.username) {
         return true
       } else {
         return false

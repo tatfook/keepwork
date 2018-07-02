@@ -1,6 +1,10 @@
 import _ from 'lodash'
 import compDefaultProperties from './comp.properties'
 
+const config = {
+  KEEPWORK_WIKI: 'http://keepwork.com/wiki/home'
+}
+
 export default {
   props: {
     source: Object,
@@ -9,6 +13,11 @@ export default {
     editMode: {
       type: Boolean,
       default: false
+    }
+  },
+  data() {
+    return {
+      config: config
     }
   },
   computed: {
