@@ -6,7 +6,7 @@
     </div>
     <div class="resentWeb">
       <ul>
-        <li v-for="(site,index) in recentOpenSiteURL" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
+        <li v-for="(site,index) in MyRecentOpenSiteURL" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
       </ul>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
@@ -21,12 +21,8 @@ export default {
   name: 'EditorWelcome',
   data() {
     return {
-      isNewWebsiteDialogShow: false,
-      recentOpenSiteURL: []
+      isNewWebsiteDialogShow: false
     }
-  },
-  mounted(){
-    this.recentOpenSiteURL = JSON.parse(localStorage.getItem(`${this.username}`)) || []
   },
   methods: {
     openNewWebsiteDialog() {
@@ -39,7 +35,10 @@ export default {
   computed:{
     ...mapGetters({
       username: 'user/username',
-    })
+    }),
+    MyRecentOpenSiteURL(){
+      return JSON.parse(localStorage.getItem(`${this.username}`)) || []
+    }
   },
   components: {
     NewWebsiteDialog
