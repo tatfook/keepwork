@@ -1,19 +1,18 @@
-FROM xuntian/node-yarn as builder
-MAINTAINER xuntian "li.zq@foxmail.com"
-COPY ./ /code/
-WORKDIR /code
-# RUN npm --registry https://registry.npm.taobao.org install
-# RUN npm --registry https://registry.npm.taobao.org update
-# RUN npm run build
+FROM node:8 as builder
+
+RUN mkdir -p /code/
+ADD package.json /code/package.json
+RUN cd /code && npm install
+
 ARG BUILD_ENV
 ARG KEEPWORK_LOCALE
-RUN yarn config set registry https://registry.npm.taobao.org/
-# RUN yarn install --ignore-optional
-RUN yarn install
-RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} TZ=Asia/Shanghai yarn build
 
-FROM nginx
+COPY ./ /code/
+WORKDIR /code
+RUN NODE_ENV=${BUILD_ENV} KEEPWORK_LOCALE=${KEEPWORK_LOCALE} npm run build
+
+
+FROM nginx:1.14
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /code/dist .
-COPY --from=builder /code/node_modules /node_modules
 CMD ["nginx", "-g", "daemon off;"]
