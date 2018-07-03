@@ -433,12 +433,10 @@
     "pleaseLogin": "请登录",
     "havePurchased": "你已经支付过了！",
     "openQuizEditor": "打开问题编辑器",
-
     "singleChoice": "单选",
     "multipleChoices": "多选",
     "trueOrFalse": "判断题",
     "textMatch": "文字匹配",
-    
     "type": "类型:",
     "answer": "答案:",
     "score": "分数:",
@@ -457,7 +455,9 @@
     "pleaseInput2": "请输入",
     "pleaseInputExplanation": "请输入解释",
     "true": "对",
-    "false": "错"
+    "false": "错",
+
+    "teachersColon": "教师:"
   },
   "field": {
     "fileId": "字段",
@@ -494,7 +494,10 @@
     "animations": "素材",
     "content": "内容",
     "addReferences": "增加引用",
-    "openLessonPackageEditor": "打开课程包编辑器"
+    "openLessonPackageEditor": "打开课程包编辑器",
+    "title2": "标题",
+    "coverImage": "封面",
+    "animation": "动画"
   },
   "skydrive": {
     "mediaLibrary": "图库",

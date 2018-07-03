@@ -444,12 +444,10 @@
     "pleaseLogin": "Sorry,please login!",
     "havePurchased": "You have already purchased!",
     "openQuizEditor": "Open Quiz Editor",
-    
     "singleChoice": "Single Choice",
     "multipleChoices": "Multiple Choices",
     "trueOrFalse": "True or False",
     "textMatch": "Text Match",
-    
     "type": "Type:",
     "answer": "Answers:",
     "score": "Score:",
@@ -468,7 +466,10 @@
     "pleaseInput2": "please input",
     "pleaseInputExplanation": "please input explanation",
     "true": "True",
-    "false": "False"
+    "false": "False",
+
+    "teachersColon": "Teachers:"
+
   },
   "field": {
     "fileId": "file Id",

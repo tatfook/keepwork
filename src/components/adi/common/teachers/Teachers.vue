@@ -1,6 +1,6 @@
 <template>
   <div class="comp-teachers" v-if="teacherShow">
-    <span>Teachers:</span>
+    <span>{{this.$t('card.teachersColon')}}</span>
     <pre class="content">{{properties.content ? properties.content : $t(options.content)}}</pre>
   </div>
 </template>
