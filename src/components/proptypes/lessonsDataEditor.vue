@@ -1,26 +1,26 @@
 <template>
-  <el-dialog title="Lessons Package" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
+  <el-dialog :title="this.$t('field.lessonsPackage')" :visible.sync="isDialogShow" width="1000px" :before-close="handleClose" class="lessons">
     <el-form :model="lessonsData" :rules="rules" ref="lessonsData" label-width="128px" class="demo-ruleForm">
       <!-- 课程包名称 -->
-      <el-form-item label="Title:" prop="title">
-        <el-input v-model="lessonsData.title" maxlength="255" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('field.titleColon')" prop="title">
+        <el-input v-model="lessonsData.title" maxlength="255" :placeholder="this.$t('field.pleaseInput')"></el-input>
       </el-form-item>
       <!-- 课程包封面图的URL地址 -->
-      <el-form-item label="CoverImage(URL)" prop="cover">
-        <el-input v-model="lessonsData.cover" maxlength="512" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('field.coverImageUrl')" prop="cover">
+        <el-input v-model="lessonsData.cover" maxlength="512" :placeholder="this.$t('field.pleaseInput')"></el-input>
       </el-form-item>
       <!-- 课程包技能点 -->
-      <el-form-item label="Skills:" prop="skills">
-        <el-input type="textarea" maxlength="512" v-model="lessonsData.skills" placeholder="Please Input..."></el-input>
+      <el-form-item :label="this.$t('field.skills')" prop="skills">
+        <el-input type="textarea" maxlength="512" v-model="lessonsData.skills" :placeholder="this.$t('field.pleaseInput')"></el-input>
       </el-form-item>
       <!-- 课程包的适用年龄段 -->
-      <el-form-item label="Ages:" prop="ages">
+      <el-form-item :label="this.$t('field.ages')" prop="ages">
         <el-row>
           <el-col :span="8">
             <el-radio-group v-model="ages" @change="changeAge">
-              <el-radio label="0">Suitable for all</el-radio>
-              <el-radio label="1">Self-define</el-radio>
-            </el-radio-group>
+              <el-radio label="0">{{this.$t('field.suitableForAll')}}</el-radio>
+              <el-radio label="1">{{this.$t('field.selfDefine')}}</el-radio>
+            </el-radio-group>  
           </el-col>
           <el-col :span="14">
             <el-row :gutter="20">
@@ -28,14 +28,14 @@
                 <!-- 自定义年龄最小值 -->
                 <el-col :span="10">
                   <el-form-item prop="agesMin">
-                    <el-input v-model.number="lessonsData.agesMin" placeholder="Please Input..." min="1"></el-input>
+                    <el-input v-model.number="lessonsData.agesMin" :placeholder="this.$t('field.pleaseInput')" min="1"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="2">-</el-col>
                 <!-- 自定义年龄最大值 -->
                 <el-col :span="12">
                   <el-form-item prop="agesMax">
-                    <el-input v-model.number="lessonsData.agesMax" placeholder="Please Input..." :min=" lessonsData.agesMin + 1"></el-input>
+                    <el-input v-model.number="lessonsData.agesMax" :placeholder="this.$t('field.pleaseInput')" :min=" lessonsData.agesMin + 1"></el-input>
                   </el-form-item>  
                 </el-col>
               </el-form-item>
@@ -46,47 +46,47 @@
       <!-- 课程包金币花费和获得设置 -->
       <el-row>
         <el-col :span="10">
-          <el-form-item label="Cost:">
+          <el-form-item :label="this.$t('field.cost')">
             <el-row>
               <el-col :span="18">
                 <el-input-number :min="0" v-model="lessonsData.cost"></el-input-number> 
               </el-col>
-              <el-col :span="6">Coins</el-col>
+              <el-col :span="6">{{this.$t('field.coins')}}</el-col>
             </el-row>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="Reward:">
+          <el-form-item :label="this.$t('field.reward')">
             <el-row>
               <el-col :span="18">
                 <el-input-number :min="0" v-model="lessonsData.reward"></el-input-number>
               </el-col>
-              <el-col :span="6">Coins</el-col>
+              <el-col :span="6">{{this.$t('field.coins')}}</el-col>
             </el-row>
           </el-form-item>
         </el-col>
       </el-row>
       <!-- 选择课程包的课程 -->
-      <el-form-item label="Lessons:" class="lesson-list" v-bind:class="{'unempty': lessonsSelect.length == 0 }">
+      <el-form-item :label="this.$t('field.lesson')" class="lesson-list" v-bind:class="{'unempty': lessonsSelect.length == 0 }">
         <el-transfer
           filterable
           :filter-method="filterMethod"
-          filter-placeholder="search lessons"
+          :filter-placeholder="this.$t('field.searchLessons')"
           v-model="lessonsSelect"       
-          :titles="['Lessons', 'Selected lessons']"
+          :titles="[this.$t('field.lessons'), this.$t('field.selectedLessons')]"
           :data="lessonsListData">
          <span slot-scope="{ option }" class="lessonsTitle">
           <span>{{ option.lessonTitle }}</span>
           <a class="lesson-link" v-bind:href="option.lessonUrl">{{ option.lessonUrl }}</a>
          </span>
         </el-transfer>
-        <el-alert title="at least select 1 lesson" type="error" v-if="lessonsSelect.length == 0" >
+        <el-alert :title="this.$t('field.atLeastSelect1')" type="error" v-if="lessonsSelect.length == 0" >
   </el-alert>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @change="validInput" @click="submitForm('lessonsData')">submit</el-button>
-      <el-button @click="handleClose">cancel</el-button>
+      <el-button type="primary" @change="validInput" @click="submitForm('lessonsData')">{{this.$t('field.submit')}}</el-button>
+      <el-button @click="handleClose">{{this.$t('field.cancel')}}</el-button>
     </span>
   </el-dialog>
 </template>
