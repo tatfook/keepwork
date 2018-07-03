@@ -507,7 +507,10 @@
     "animations": "Animations",
     "content": "Content",
     "addReferences": "Add References",
-    "openLessonPackageEditor": "Open LessonPackage Editor"
+    "openLessonPackageEditor": "Open LessonPackage Editor",
+    "title2": "Title",
+    "coverImage": "Cover Image",
+    "animation": "Animation"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",
