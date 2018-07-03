@@ -288,11 +288,6 @@ export default {
       this.toBeCloseFileName = ''
       this.dialogCloseAllVisible = false
     },
-    handleCloseOpenedFile() {
-      let path = this.toBeCloseFilePath
-      path && this.closeAndResetFile(path)
-      this.handleCloseDialog()
-    },
     async saveAndCloseOpenedFile() {
       let path = this.toBeCloseFilePath
       this.savePending = true

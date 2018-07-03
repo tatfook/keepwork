@@ -67,7 +67,7 @@ export default {
       let file = this.getOpenedFileByPath(path)
       let { saved = true } = file
       if (saved) {
-        this.closeAndResetFile(path)
+        this.closeAndReset(path)
       } else {
         this.dialogVisible = true
       }
@@ -76,14 +76,14 @@ export default {
       this.dialogVisible = false
     },
     handleCloseOpenedFile({ path }) {
-      path && this.closeAndResetFile(path)
+      this.closeAndReset(path)
       this.handleCloseDialog()
     },
     async saveAndCloseOpenedFile({ path }) {
       this.savePending = true
       await this.savePageByPath(path)
         .then(() => {
-          this.closeAndResetFile(path)
+          this.closeAndReset(path)
           this.handleCloseDialog()
           this.savePending = false
         })
@@ -93,17 +93,13 @@ export default {
           this.savePending = false
         })
     },
-    closeAndResetFile(path) {
-      let openedFiles = this.openedFiles
-      openedFiles = Object.keys(openedFiles)
-      let _path = openedFiles.filter(name => name !== path)
+    closeAndReset(path) {
+      let _path = Object.keys(this.openedFiles).filter(name => name !== path)
       this.closeOpenedFile({ path })
       if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
-      if (_path.length === 0) {
-        this.$router.push('/')
-      } else {
-        this.$router.push('/' + _path[0].replace(/\.md$/, ''))
-      }
+      _path.length === 0
+        ? this.$router.push('/')
+        : this.$nextTick(() => this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` }))
     },
     async save(data) {
       if (data.savePending === undefined) {
@@ -133,21 +129,20 @@ export default {
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
         cancelButtonText: this.$t('el.messagebox.cancel')
-      })
-        .then(async () => {
-          this.deletePending = true
-          await this.gitlabRemoveFile({ path }).catch(e => {
-            this.$message.error(this.$t('editor.deleteFail'))
-            this.deletePending = false
-          })
-          await this.deletePagesFromLayout({ paths: [path] })
-          this.removeRecentOpenFile(path)
-          this.resetPage(path)
+      }).then(async () => {
+        this.deletePending = true
+        await this.gitlabRemoveFile({ path }).catch(e => {
+          this.$message.error(this.$t('editor.deleteFail'))
           this.deletePending = false
         })
+        await this.deletePagesFromLayout({ paths: [path] })
+        this.removeRecentOpenFile(path)
+        this.resetPage(path)
+        this.deletePending = false
+      })
     },
-    removeRecentOpenFile(path){
-      let delPath = `/${path.replace(/\.md$/,'')}`
+    removeRecentOpenFile(path) {
+      let delPath = `/${path.replace(/\.md$/, '')}`
       let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
       let _re = localUrl.filter(item => item.path !== delPath)
       localStorage.setItem(`${this.username}`, JSON.stringify(_re))
