@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="tree-data-dialog" title="Add references---" :visible.sync="show" width="600px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" :title="this.$t('field.addReferences')" :visible.sync="show" width="600px" :before-close="handleClose">
     <draggable element="el-collapse" :list="animationsData" accordion>
       <el-collapse-item v-for="e in animationsData" :name="e.id" :key="e.id">
         <template slot="title">
@@ -11,13 +11,13 @@
           </span>
         </template>
         <el-form class="animationForm" label-position="right" label-width="120px" size="mini">
-          <el-form-item label="Title">
+          <el-form-item :label="$t('field.title2')">
             <el-input v-model="e.title"></el-input>
           </el-form-item>
-          <el-form-item label="Cover Image">
+          <el-form-item :label="$t('field.coverImage')">
             <el-input v-model="e.coverImage"></el-input>
           </el-form-item>
-          <el-form-item label="Animation">
+          <el-form-item :label="$t('field.animation')">
             <el-input v-model="e.animation"></el-input>
           </el-form-item>
         </el-form>
@@ -27,8 +27,8 @@
       <el-button type="primary" icon="el-icon-plus" @click="addAnimation" circle></el-button>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleSave()">submit</el-button>
-      <el-button @click="handleClose()">cancel</el-button>
+      <el-button type="primary" @click="handleSave()">{{this.$t('card.submit')}}</el-button>
+      <el-button @click="handleClose()">{{this.$t('card.cancel')}}</el-button>
     </span>
   </el-dialog>
 </template>
