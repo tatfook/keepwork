@@ -504,7 +504,7 @@ export default {
     position: relative;
     padding-left: 20px;
     overflow: hidden;
-    span{
+    span:not(.rename-wrapper) {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
