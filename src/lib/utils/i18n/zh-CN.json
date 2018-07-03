@@ -497,7 +497,31 @@
     "openLessonPackageEditor": "打开课程包编辑器",
     "title2": "标题",
     "coverImage": "封面",
-    "animation": "动画"
+    "animation": "动画",
+
+    "pleaseInput": "请输入内容...",
+    "titleColon": "Title标题:",
+    "coverImageUrl": "封面(URL):",
+    "lessonsPackage": "课程包",
+    "skills": "技能:",
+    "ages": "年龄:",
+    "suitableForAll": "全年龄",
+    "selfDefine": "自定义",
+    "cost": "费用:",
+    "coins": "知识币",
+    "reward": "奖励:",
+    "lesson": "课程:",
+    "lessons": "课程",
+    "searchLessons": "搜索课程",
+    "selectedLessons": "已选课程",
+
+    "pleaseInputTitle": "请输入标题",
+    "pleaseInputCoverImageUrl": "请输入封面地址(url)",
+    "pleaseInputSkills": "请输入技能点",
+    "atLeastSelect1": "至少选择一门课程",
+
+    "submit": "提交",
+    "cancel": "取消"
   },
   "skydrive": {
     "mediaLibrary": "图库",

@@ -510,7 +510,29 @@
     "openLessonPackageEditor": "Open LessonPackage Editor",
     "title2": "Title",
     "coverImage": "Cover Image",
-    "animation": "Animation"
+    "animation": "Animation",
+
+    "pleaseInput": "Please Input...",
+    "titleColon": "Title:",
+    "coverImageUrl": "CoverImage(URL):",
+    "lessonsPackage": "Lessons Package",
+    "skills": "Skill:",
+    "ages": "Ages:",
+    "suitableForAll": "Suitable for all",
+    "selfDefine": "Self-define",
+    "cost": "Cost:",
+    "coins": "Coins",
+    "reward": "Reward:",
+    "lessons": "Lessons",
+    "searchLessons": "search lessons",
+    "selectedLessons": "Selected Lessons",
+
+    "pleaseInputTitle": "please input title",
+    "pleaseInputCoverImageUrl": "please input coverImage(url)",
+    "pleaseInputSkills": "please input skills",
+    "atLeastSelect1": "at least select 1 lesson",
+    "submit": "submit",
+    "cancel": "cancel"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",
