@@ -172,7 +172,7 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles'
     }),
     isWelcomeShow() {
-      return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
+      return this.personalSiteList.length <= 0 && !this.activePageInfo.sitename
     },
     fullscreenIcon() {
       return this.isFullscreen
