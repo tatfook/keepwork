@@ -77,7 +77,7 @@
           :data="lessonsListData">
          <span slot-scope="{ option }" class="lessonsTitle">
           <span>{{ option.lessonTitle }}</span>
-          <a class="lesson-link" v-bind:href="option.lessonUrl">{{ option.lessonUrl }}</a>
+          <a class="lesson-link" v-bind:href="option.lessonUrl" target="_blank">{{ option.lessonUrl }}</a>
          </span>
         </el-transfer>
         <el-alert :title="this.$t('field.atLeastSelect1')" type="error" v-if="lessonsSelect.length == 0" >
