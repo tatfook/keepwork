@@ -1,14 +1,18 @@
 <template>
-  <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
-    <div class="website-setting-sidebar">
+  <el-dialog :append-to-body=true v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
+    <div class="personal-center-sidebar">
       <ul>
-        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in websiteSettingNavs" :key="index">
+        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in personalSettingNavs" :key="index">
           <span :class="{'active': index === activeSettingIndex}" class="sidebar-nav-item">{{navItem.text}}</span>
         </li>
       </ul>
     </div>
-    <div class="website-setting-content">
+    <div class="personal-center-content">
       <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
+    </div>
+    <div class="personal-center-operations">
+      <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
+      <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -21,7 +25,7 @@ import AccountSecurity from './AccountSecurity'
 import RealNameAuthentication from './RealNameAuthentication'
 
 export default {
-  name: 'WebsiteSettingDialog',
+  name: 'PersonalCenterDialog',
   props: {
     show: Boolean,
     sitePath: String
@@ -29,7 +33,7 @@ export default {
   data() {
     return {
       title: `//${location.host}/${this.sitePath}`,
-      websiteSettingNavs: [
+      personalSettingNavs: [
         {
           text: this.$t('common.userData'),
           comp: UserData
@@ -43,15 +47,18 @@ export default {
           comp: RealNameAuthentication
         }
       ],
-      activeSettingIndex: 2
+      activeSettingIndex: 0
     }
   },
   computed: {
     activeSettingComp() {
-      return this.websiteSettingNavs[this.activeSettingIndex].comp
+      return this.personalSettingNavs[this.activeSettingIndex].comp
     }
   },
   methods: {
+    handleSave() {
+      console.log('saving')
+    },
     handleClose() {
       this.$emit('close')
     },
@@ -68,7 +75,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.website-setting {
+.personal-center {
   &-dialog {
     .el-dialog {
       width: 96%;
@@ -91,7 +98,6 @@ export default {
     width: 165px;
     box-sizing: border-box;
     flex-shrink: 0;
-    border-right: 15px solid #cdd4db;
     ul {
       margin: 0;
       padding: 0;
@@ -121,6 +127,25 @@ export default {
   }
   &-content {
     flex: 1;
+    border: 15px solid #cdd4db;
+    border-width: 0 15px;
+  }
+  &-operations {
+    text-align: center;
+    width: 175px;
+    align-self: flex-end;
+    padding-bottom: 26px;
+    .el-button {
+      width: 120px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .el-button + .el-button {
+      margin-left: 0;
+    }
   }
 }
 </style>
