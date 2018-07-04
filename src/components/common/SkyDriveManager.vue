@@ -127,7 +127,7 @@
 
     <div v-if='mediaLibraryMode'>
       <div class="skydrive-manager-media-library">
-        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success'" :style='{
+        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success' && file.state != 'error'" :style='{
             backgroundImage: `url("${file.cover}")`
           }'>
           <div class="skydrive-manager-media-uploading-cover">
