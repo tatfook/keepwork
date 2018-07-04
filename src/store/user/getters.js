@@ -272,7 +272,9 @@ const getters = {
 
   skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
-  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
+
+  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId])
 }
 
 export default getters
