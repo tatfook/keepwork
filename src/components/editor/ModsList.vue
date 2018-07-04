@@ -203,6 +203,14 @@ export default {
   height: 40px;
   line-height: 40px;
 }
+.mods-treeview .el-tree-node__content > .el-tree-node__label {
+  color: #000;
+  font-weight: 900;
+}
+.mods-treeview .el-tree-node__children .el-tree-node__label {
+  color: dimgray;
+  font-weight: 600;
+}
 .mods-treeview .el-tree-node__label {
   white-space: nowrap;
   text-overflow: ellipsis;
