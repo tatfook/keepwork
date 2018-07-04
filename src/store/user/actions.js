@@ -98,6 +98,12 @@ const actions = {
     userDetail = await keepwork.user.getDetailByName({ username: username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
+  async updateUserInfo(context, userInfo) {
+    let { commit, getters: { authRequestConfig } } = context
+    console.log(authRequestConfig)
+    let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
+    commit(GET_PROFILE_SUCCESS, newUserInfo)
+  },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}
     await dispatch('getAllPersonalWebsite', { useCache })

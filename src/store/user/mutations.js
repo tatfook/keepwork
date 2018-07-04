@@ -58,6 +58,7 @@ const mutations = {
     Vue.set(state, 'info', payload)
   },
   [GET_PROFILE_SUCCESS](state, payload) {
+    console.log(payload)
     Vue.set(state, 'profile', payload)
   },
   [GET_ALL_WEBSITE_SUCCESS](state, {username, list}) {

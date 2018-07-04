@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :append-to-body=true v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
+  <el-dialog v-loading="loading" :append-to-body=true v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
     <div class="personal-center-sidebar">
       <ul>
         <li @click='doActiveNavItem(index)' v-for="(navItem, index) in personalSettingNavs" :key="index">
@@ -8,7 +8,7 @@
       </ul>
     </div>
     <div class="personal-center-content">
-      <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
+      <component ref='personalCenterComponent' :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
     </div>
     <div class="personal-center-operations">
       <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
@@ -23,6 +23,7 @@ import Vue from 'vue'
 import UserData from './UserData'
 import AccountSecurity from './AccountSecurity'
 import RealNameAuthentication from './RealNameAuthentication'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'PersonalCenterDialog',
@@ -32,6 +33,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       title: `//${location.host}/${this.sitePath}`,
       personalSettingNavs: [
         {
@@ -51,13 +53,37 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      loginUserProfile: 'user/profile'
+    }),
     activeSettingComp() {
       return this.personalSettingNavs[this.activeSettingIndex].comp
     }
   },
   methods: {
-    handleSave() {
-      console.log('saving')
+    ...mapActions({
+      userUpdateUserInfo: 'user/updateUserInfo'
+    }),
+    async handleSave() {
+      let componentRef = this.$refs.personalCenterComponent
+      switch (this.activeSettingIndex) {
+        case 0:
+          let { userInfo } = componentRef
+          let isModified = !_.isEqual(this.loginUserProfile, userInfo)
+          if (isModified) {
+            this.loading = true
+            let { _id, displayName, sex } = userInfo
+            await this.userUpdateUserInfo({
+              _id: _id,
+              displayName: displayName,
+              sex: sex
+            })
+            this.loading = false
+          }
+          break
+        default:
+          break
+      }
     },
     handleClose() {
       this.$emit('close')
@@ -78,9 +104,7 @@ export default {
 .personal-center {
   &-dialog {
     .el-dialog {
-      width: 96%;
-      min-width: 1180px;
-      max-width: 1200px;
+      width: 1020px;
     }
     .el-dialog__header {
       box-shadow: 0 2px 2px #b5b5b5;
@@ -95,7 +119,7 @@ export default {
     }
   }
   &-sidebar {
-    width: 165px;
+    width: 170px;
     box-sizing: border-box;
     flex-shrink: 0;
     ul {
@@ -132,7 +156,7 @@ export default {
   }
   &-operations {
     text-align: center;
-    width: 175px;
+    width: 185px;
     align-self: flex-end;
     padding-bottom: 26px;
     .el-button {
