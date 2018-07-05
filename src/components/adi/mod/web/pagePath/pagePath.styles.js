@@ -5,12 +5,12 @@ export default [
   {
     data: {
       root: {},
-      colPageRoute: {},
-      pageRoute: {}
+      colPagePath: {},
+      pagePath: {}
     },
     props: {
       rootRow: {},
-      colPageRoute: { span: 24 }
+      colPagePath: { span: 24 }
     },
     theme: {
       root: ['mod-space'],
@@ -18,7 +18,7 @@ export default [
     },
     options: {
       theme: {
-        pageRoute: {
+        pagePath: {
           nameFontSize: 'font_3',
           nameFontColor: 'color_6',
           labelFontColor: 'color_3',

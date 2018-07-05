@@ -100,12 +100,14 @@
     "closeAll": "关闭全部",
     "delete": "删除",
     "delConfirm": "确定删除",
+    "deleteFail": "删除失败",
+    "deleteSuccess": "删除成功",
     "nameSingle": "名",
     "name": "名称",
     "link": "链接",
     "setting": "设置",
     "create": "创建",
-    "fileUnSaved": "该文件尚未保存",
+    "fileUnSaved": "尚未保存",
     "filesUnSaved": " 个文件尚未保存，是否保存？",
     "theFileUnSaved": "该文件尚未保存，是否保存？",
     "unSaveClose": "不保存关闭",
@@ -187,6 +189,7 @@
     "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
     "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. 布局方案",
+    "layoutManagement": "布局方案管理",
     "addLayout": "添加方案",
     "default": "默认",
     "rename": "重命名",
@@ -205,16 +208,15 @@
     "keepOneLayout": "至少保留一个布局",
     "theLayoutIsInUse": "布局正在使用",
 
-    "deleteFolderBefore": "删除 ",
+    "deleteFolderBefore": "确定删除 ",
     "deleteFolderAfter": " 文件夹及其中的所有内容么?",
     "documents": "个文件吗？",
     "areYouSureYouWantToDeleteThisFolder": "确定要删除该文件夹？",
     "videoNotSupport": "您的浏览器不支持 video 标签。",
     "notFound": "内容找不到了",
 
-    "yourPage": "您的页面",
     "yourPosition": "您所在的位置：",
-    "defaultPage": "首页",
+    "homePage": "首页",
 
     "removeImgConfirmMsg": "你确定要删除图片吗？",
 
@@ -254,7 +256,11 @@
     "textBoard": "文本与绘图板",
     "toc": "Markdown 目录",
 
-    "other": "其他"
+    "other": "其他",
+
+    "categoryList": "分类列表",
+    "tab": "标签",
+    "pageSwitching": "页面切换"
   },
   "adi": {
     "markdown": {
@@ -381,9 +387,10 @@
     "innerModal": "内部模态框",
     "bigFile": "大文件",
     "iframe": "iframe",
-    "pageRoute": "页面路径",
+    "pagePath": "页面路径",
     "tab": "标签",
-    "categoryList": "分类列表"
+    "categoryList": "分类列表",
+    "pageSwitching": "页面切换"
   },
   "field": {
     "fileId": "字段",
@@ -435,6 +442,7 @@
     "newFilenamePromptMsg": "请输入新的文件名",
     "nameConflictError": "文件名和现有名字重复",
     "nameEmptyError": "文件名不能为空",
-    "nameContainSpecialCharacterError": "文件名里包含特殊字符"
+    "nameContainSpecialCharacterError": "文件名里包含特殊字符",
+    "fileUploading": "还有文件正在上传中，关闭后文件将取消上传，是否继续？"
   }
 }

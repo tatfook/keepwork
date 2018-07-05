@@ -26,6 +26,7 @@ desc:
 */
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
+import { config } from '@/components/adi/mod/base/styles.config'
 
 export default {
   mixins: [baseMixin],
@@ -36,7 +37,8 @@ export default {
       options = _.merge(options, this.generateOptionsStyle(name))
 
       let qqUrl =
-        'http://wpa.qq.com/msgrd?v=3&uin=' +
+        config.QQ_URL +
+        '/msgrd?v=3&uin=' +
         this.modData.qq.number +
         '&site=qq&menu=yes'
 

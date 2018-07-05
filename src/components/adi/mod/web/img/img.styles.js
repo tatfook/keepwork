@@ -1,7 +1,9 @@
+import { config } from '@/components/adi/mod/base/styles.config'
+
 let emptyData = {
   img: {
     emptySrc: require('@/../static/adi/img/imgTwo.png'),
-    emptyLink: 'http://keepwork.com',
+    emptyLink: config.KEEPWORK,
     emptyTarget: '_blank'
   }
 }

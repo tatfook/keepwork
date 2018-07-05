@@ -6,7 +6,7 @@
           <el-input size='' v-model="basicMessage.displayName"></el-input>
         </el-form-item>
         <el-form-item label='网站地址：'>
-          <span>http://keepwork.com/{{basicMessage.username}}/{{basicMessage.name}}</span>
+          <span>{{siteUrl}}</span>
         </el-form-item>
         <el-form-item label='网站图标：'>
           <div class="before-cropper-zone">
@@ -56,7 +56,11 @@ export default {
       getPersonalSiteInfoByPath: 'user/getPersonalSiteInfoByPath',
       getSiteDetailInfoDataSourceByPath:
         'user/getSiteDetailInfoDataSourceByPath'
-    })
+    }),
+    siteUrl() {
+      let origin = location.origin
+      return `${origin}/${this.basicMessage.username}/${this.basicMessage.name}`
+    }
   },
   methods: {
     ...mapActions({

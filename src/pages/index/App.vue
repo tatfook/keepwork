@@ -36,10 +36,33 @@ export default {
   methods: {
     ...mapActions({
       setActivePage: 'setActivePage',
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       userInitPageDetail: 'user/initPageDetail'
     }),
+    async getPathWithPagename(path){
+      let originPath = path
+      path = path.split('/').filter(x => x).join('/')
+      await this.gitlabGetRepositoryTree({
+        path: path,
+        editorMode: false
+      }).catch(e => console.error(e))
+      let children = this.gitlabChildrenByPath(path)
+      let indexChild = children.filter(file => file.name === 'index.md')[0]
+      let firstFileTypeChild = children.filter(
+        file => file.type === 'blob'
+      )[0]
+      let targetFile = indexChild || firstFileTypeChild
+      return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : originPath
+    },
     async updateActivePage() {
       let path = this.$router.currentRoute.path
+
+      let pathItemArr = _.without(_.split(path, '/'), '')
+      let isLackPagename = pathItemArr.length === 2
+      if (isLackPagename) {
+        path = await this.getPathWithPagename(path)
+        this.$router.replace({path: path})
+      }
       await this.setActivePage({ path, editorMode: false })
       try {
         await this.userInitPageDetail({
@@ -56,6 +79,7 @@ export default {
       activePageUrl: 'activePageUrl',
       username: 'user/username',
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      gitlabChildrenByPath: 'gitlab/childrenByPath',
       activePageInfo: 'activePageInfo'
     }),
     isSystemCompShow() {

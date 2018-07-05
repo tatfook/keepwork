@@ -1,7 +1,7 @@
 'use strict'
 const merge = require('webpack-merge')
 const devEnv = require('./dev.env')
-const i18nDomainLabel = require('./i18nDomainLabel')
+const { i18nDomainLabel } = require('./i18n')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',

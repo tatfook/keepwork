@@ -1,19 +1,23 @@
 <template>
-  <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
+  <div class="el-tree-node__label" :class="operationButtonsCountClass"  v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
     <span class="rename-wrapper" v-if="isRename">
       <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
-    <span v-else-if="data.myJoin">{{data.username}}/{{data.sitename}}({{data.displayName || node.label | hideMDFileExtension}})</span>
+    <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || node.label | hideMDFileExtension}})</span>
     <span v-else>{{data.displayName || node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
-      <i class="iconfont icon-file_" v-if="isFile"></i>
+      <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
       <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
+      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+      </el-button>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
+      </el-button>
       <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
       <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
@@ -69,7 +73,8 @@ export default {
         'updateFilemanagerTreeNodeExpandMapByPath',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
-      savePageByPath: 'savePageByPath'
+      savePageByPath: 'savePageByPath',
+      refreshOpenedFile: 'refreshOpenedFile'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -133,25 +138,33 @@ export default {
       let folderName = pathArr[pathArr.length - 1]
       let toRemoveFiles = this.recursion(data)
 
-      this.$confirm(
-        `${this.$t('editor.deleteFolderBefore')}${data.name}${this.$t(
-          'editor.deleteFolderAfter'
-        )}`,
-        this.$t('editor.delete'),
-        {
-          confirmButtonText: this.$t('el.messagebox.confirm'),
-          cancelButtonText: this.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
+      const h = this.$createElement
+      this.$msgbox({
+        title: '提示',
+        message: h('p', null, [
+          h('span', null, this.$t('editor.deleteFolderBefore')),
+          h('span', { style: 'color: #FF4342' }, ` "${data.name} "`),
+          h('span', null, this.$t('editor.deleteFolderAfter'))
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      })
         .then(async () => {
           this.removePending = true
           await this.gitlabRemoveFolder({ paths: toRemoveFiles })
           await this.deletePagesFromLayout({ paths: toRemoveFiles })
+          this.removeRecentOpenFolder(toRemoveFiles)
           this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
-        .catch(e => console.error(e))
+        .catch(() => {})
+    },
+    removeRecentOpenFolder(toRemoveFiles){
+      let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
+      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
+      let _re = localUrl.filter(item => toDele.indexOf(item.path) === -1 )
+      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
     },
     recursion(data) {
       let childrenFiles = []
@@ -166,16 +179,25 @@ export default {
       recursionFile(data)
       return childrenFiles
     },
+    async save(data) {
+      if (data.savePending === undefined) {
+        this.$set(data, 'savePending', false)
+      }
+      let path = data.path
+      data.savePending = true
+      await this.savePageByPath(path)
+      data.savePending = false
+    },
     async toggleRename() {
       if (this.isFolder) {
         let childrenFiles = this.recursion(this.data)
         let unSavedFiles = _.intersection(this.unSavedFiles, childrenFiles)
         if (unSavedFiles.length > 0) {
           await this.$confirm(
-            `${unSavedFiles.length}${this.$t("editor.filesUnSaved")}`,
+            `${unSavedFiles.length}${this.$t('editor.filesUnSaved')}`,
             {
-              confirmButtonText: this.$t("editor.confirm"),
-              cancelButtonText: this.$t(""),
+              confirmButtonText: this.$t('editor.confirm'),
+              cancelButtonText: this.$t('editor.cancel'),
               type: 'warnning'
             }
           )
@@ -193,8 +215,8 @@ export default {
       } else {
         let { saved } = this.getOpenedFileByPath(this.filePath)
         if (!saved) {
-          await this.$confirm(this.$t("editor.theFileUnSaved"), {
-            confirmButtonText: this.$t('el.messagebox.confirm') ,
+          await this.$confirm(this.$t('editor.theFileUnSaved'), {
+            confirmButtonText: this.$t('el.messagebox.confirm'),
             cancelButtonText: this.$t('el.messagebox.cancel'),
             type: 'warning'
           })
@@ -202,11 +224,10 @@ export default {
               await this.savePageByPath(this.filePath)
               this.$message({
                 type: 'success',
-                message: '保存成功!'
+                message: this.$t('editor.saveSuccess')
               })
               this.toggleInputFocus()
             })
-            .catch(() => {})
           return
         }
       }
@@ -277,30 +298,35 @@ export default {
       if (this.isFolder) {
         return this.removeFolder(this.data)
       }
-
-      let self = this
-
-      let pathArr = this.data.path.split('/')
-      let pageName = pathArr[pathArr.length - 1].replace(/.md$/, '')
-      this.$confirm(
-        `${self.$t('editor.delConfirm')} ${pageName} ${self.$t(
-          'editor.page'
-        )}？`,
-        self.$t('editor.delete'),
-        {
-          confirmButtonText: self.$t('el.messagebox.confirm'),
-          cancelButtonText: self.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
+      const h = this.$createElement
+      let siteName = this.data.path.split('/').slice(1,2)
+      let fileName = this.data.name.replace(/\.md$/, '')
+      this.$msgbox({
+        title: this.$t('editor.modDelMsgTitle'),
+        message: h('p', null, [
+          h('span', null, this.$t('editor.delConfirm')),
+          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${fileName} " `),
+          h('span', null, `${this.$t('editor.page')}?`)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFile({ path: this.currentPath }),
-            await this.deletePagesFromLayout({ paths: [this.currentPath] })
+          await this.gitlabRemoveFile({ path: this.currentPath})
+          await this.deletePagesFromLayout({ paths: [this.currentPath] })
+          this.removeRecentOpenFile(this.currentPath)
           this.resetPage({ currentPath: this.currentPath })
           this.removePending = false
         })
-        .catch(e => console.error(e))
+        .catch(() => {})
+    },
+    removeRecentOpenFile(path){
+      let delPath = `/${path.replace(/\.md$/,'')}`
+      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
+      let _re = localUrl.filter(item => item.path !== delPath)
+      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
@@ -353,8 +379,13 @@ export default {
       gitlabChildNamesByPath: 'gitlab/childNamesByPath',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       getOpenedFileByPath: 'getOpenedFileByPath',
-      openedFiles: 'openedFiles'
+      openedFiles: 'openedFiles',
+      username: 'user/username'
     }),
+    operationButtonsCountClass(){
+      let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
+      return `buttons-count-${count}`
+    },
     pending() {
       return (
         this.addFolderPending ||
@@ -365,6 +396,9 @@ export default {
     },
     isFile() {
       return this.data.type === 'blob'
+    },
+    isHasOpened() {
+      return this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
     },
     isFolder() {
       return this.data.type === 'tree'
@@ -425,6 +459,17 @@ export default {
   height: 30px;
   width: 30px;
 }
+.el-tree-node__content:hover {
+    .buttons-count-3{
+      padding-right: 105px;
+    }
+    .buttons-count-4{
+      padding-right: 135px;
+    }
+    .buttons-count-5{
+      padding-right: 160px;
+    }
+  }
 .icon-folder::before {
   font-size: 0.8em;
   color: #ffac33;

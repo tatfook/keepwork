@@ -40,7 +40,9 @@
   </el-dialog>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 let newMenuId = 1
+
 export default {
   name: 'treeDataEditor',
   props: {
@@ -56,6 +58,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    }),
     treeData() {
       return this.originalTreeData
     },
@@ -69,7 +74,26 @@ export default {
     },
     finishEditingMenu() {
       this.handleClose()
-      this.$emit('finishEditing', this.treeData)
+      let fixLink = link => {
+        if ( !/http(s?):\/\//.test(link) && !/^\//.test(link) ) {
+          let { barePath } = this.activePageInfo
+          let barePathRoot = barePath.replace(/\/[^\/]+$/,'')
+          return `/${barePathRoot}/${link}`
+        }
+        return link
+      }
+      let fixLinkItem = linkItem => {
+        let result = {
+          ...linkItem,
+          link: fixLink(linkItem.link)
+        }
+        if (linkItem.child && linkItem.child.length) {
+          result.child = linkItem.child.map(fixLinkItem)
+        }
+        return result
+      }
+      let treeDataResult = this.treeData.map(fixLinkItem)
+      this.$emit('finishEditing', treeDataResult)
     },
     showInput(inputRefId, data, type) {
       inputRefId = type + inputRefId
