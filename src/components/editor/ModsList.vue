@@ -196,19 +196,22 @@ export default {
   .el-tree-node.is-current
   > .el-tree-node__content {
   background-color: #e6f7ff;
-  color: #000;
   position: relative;
 }
 .mods-treeview .el-tree-node__content {
   height: 40px;
   line-height: 40px;
 }
-.mods-treeview .el-tree-node > .el-tree-node__content:hover {
+.mods-treeview .el-tree-node > .el-tree-node__content {
   font-weight: 900;
+  color: #000;
 }
-.mods-treeview .el-tree-node__children .el-tree-node__label {
-  color: dimgray;
+.mods-treeview .el-tree-node .el-tree-node__children .el-tree-node > .el-tree-node__content {
+  color: #A9A9A9;
   font-weight: 400;
+}
+.mods-treeview .el-tree-node .el-tree-node__children .el-tree-node > .el-tree-node__content:hover {
+  color: #000;
 }
 .mods-treeview .el-tree-node__label {
   white-space: nowrap;
