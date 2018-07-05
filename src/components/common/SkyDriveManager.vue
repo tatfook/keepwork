@@ -419,9 +419,9 @@ export default {
     },
     async handleRename(item) {
       let { _id, ext } = item
-      let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+      let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
+        confirmButtonText: this.$t('common.OK'),
+        cancelButtonText: this.$t('common.Cancel'),
         inputValidator: str => {
           if (!str) {
             return this.$t('skydrive.nameEmptyError')
