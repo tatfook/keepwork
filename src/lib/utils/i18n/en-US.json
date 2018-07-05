@@ -96,6 +96,10 @@
     "redo": "Redo",
     "module": "Module",
 
+    "setUpTheWebsite": "Set up the website",
+    "setUpThePage": "Set up the page",
+    "deleteTheCurrentPage": "Delete the current page",
+
     "refresh": "Refresh",
     "close": "Close",
     "closeAll": "Close all",

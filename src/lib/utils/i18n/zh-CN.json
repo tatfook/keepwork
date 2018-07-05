@@ -95,6 +95,10 @@
     "redo": "重做",
     "module": "模块",
 
+    "setUpTheWebsite": "设置网站",
+    "setUpThePage": "设置页面",
+    "deleteTheCurrentPage": "删除当前页面",
+
     "refresh": "刷新",
     "close": "关闭",
     "closeAll": "关闭全部",

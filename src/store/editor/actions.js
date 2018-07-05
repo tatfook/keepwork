@@ -56,7 +56,9 @@ const {
   UNDO,
   REDO,
   SAVE_HISTORY,
-  INIT_UNDO
+  INIT_UNDO,
+  TOGGLE_SKY_DRIVE,
+  CLOSE_ALL_OPENED_FILE
 } = props
 
 const cacheAvailable = pageData => {
@@ -472,7 +474,10 @@ const actions = {
     }
   },
   closeAllOpenedFile({ commit }, getters) {
-    commit('CLOSE_ALL_OPENED_FILE')
+    commit(CLOSE_ALL_OPENED_FILE)
+  },
+  toggleSkyDrive({commit}, { showSkyDrive }) {
+    commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
   }
 }
 
