@@ -1,9 +1,13 @@
+import MxDictionary from '../../../util/MxDictionary'
+import MxUtils from '../../../util/MxUtils'
+import MxGraphHierarchyNode from './MxGraphHierarchyNode'
+import MxGraphHierarchyEdge from './MxGraphHierarchyEdge'
 /**
  * Copyright (c) 2006-2015, JGraph Ltd
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 /**
- * Class: mxGraphHierarchyModel
+ * Class: MxGraphHierarchyModel
  *
  * Internal model of a hierarchical graph. This model stores nodes and edges
  * equivalent to the real graph nodes and edges, but also stores the rank of the
@@ -11,7 +15,7 @@
  * The internal model also reverses edge direction were appropriate , ignores
  * self-loop and groups parallels together under one edge object.
  *
- * Constructor: mxGraphHierarchyModel
+ * Constructor: MxGraphHierarchyModel
  *
  * Creates an internal ordered graph model using the vertices passed in. If
  * there are any, leftward edge need to be inverted in the internal model
@@ -26,114 +30,107 @@
  * scanRanksFromSinks - Whether rank assignment is from the sinks or sources.
  * usage
  */
-function mxGraphHierarchyModel(layout, vertices, roots, parent, tightenToSource)
-{
-	var graph = layout.getGraph();
-	this.tightenToSource = tightenToSource;
-	this.roots = roots;
-	this.parent = parent;
 
-	// map of cells to internal cell needed for second run through
-	// to setup the sink of edges correctly
-	this.vertexMapper = new mxDictionary();
-	this.edgeMapper = new mxDictionary();
-	this.maxRank = 0;
-	var internalVertices = [];
+export default class MxGraphHierarchyModel {
+  constructor(layout, vertices, roots, parent, tightenToSource) {
+    // let graph = layout.getGraph()
+    this.tightenToSource = tightenToSource
+    this.roots = roots
+    this.parent = parent
 
-	if (vertices == null)
-	{
-		vertices = this.graph.getChildVertices(parent);
-	}
+    // map of cells to internal cell needed for second run through
+    // to setup the sink of edges correctly
+    this.vertexMapper = new MxDictionary()
+    this.edgeMapper = new MxDictionary()
+    this.maxRank = 0
+    let internalVertices = []
 
-	this.maxRank = this.SOURCESCANSTARTRANK;
-	// map of cells to internal cell needed for second run through
-	// to setup the sink of edges correctly. Guess size by number
-	// of edges is roughly same as number of vertices.
-	this.createInternalCells(layout, vertices, internalVertices);
+    if (vertices === null) {
+      vertices = this.graph.getChildVertices(parent)
+    }
 
-	// Go through edges set their sink values. Also check the
-	// ordering if and invert edges if necessary
-	for (var i = 0; i < vertices.length; i++)
-	{
-		var edges = internalVertices[i].connectsAsSource;
+    this.maxRank = this.SOURCESCANSTARTRANK
+    // map of cells to internal cell needed for second run through
+    // to setup the sink of edges correctly. Guess size by number
+    // of edges is roughly same as number of vertices.
+    this.createInternalCells(layout, vertices, internalVertices)
 
-		for (var j = 0; j < edges.length; j++)
-		{
-			var internalEdge = edges[j];
-			var realEdges = internalEdge.edges;
+    // Go through edges set their sink values. Also check the
+    // ordering if and invert edges if necessary
+    for (let i = 0; i < vertices.length; i++) {
+      let edges = internalVertices[i].connectsAsSource
 
-			// Only need to process the first real edge, since
-			// all the edges connect to the same other vertex
-			if (realEdges != null && realEdges.length > 0)
-			{
-				var realEdge = realEdges[0];
-				var targetCell = layout.getVisibleTerminal(
-						realEdge, false);
-				var internalTargetCell = this.vertexMapper.get(targetCell);
+      for (let j = 0; j < edges.length; j++) {
+        let internalEdge = edges[j]
+        let realEdges = internalEdge.edges
 
-				if (internalVertices[i] == internalTargetCell)
-				{
-					// If there are parallel edges going between two vertices and not all are in the same direction
-					// you can have navigated across one direction when doing the cycle reversal that isn't the same
-					// direction as the first real edge in the array above. When that happens the if above catches
-					// that and we correct the target cell before continuing.
-					// This branch only detects this single case
-					targetCell = layout.getVisibleTerminal(
-							realEdge, true);
-					internalTargetCell = this.vertexMapper.get(targetCell);
-				}
-				
-				if (internalTargetCell != null
-						&& internalVertices[i] != internalTargetCell)
-				{
-					internalEdge.target = internalTargetCell;
+        // Only need to process the first real edge, since
+        // all the edges connect to the same other vertex
+        if (realEdges !== null && realEdges.length > 0) {
+          let realEdge = realEdges[0]
+          let targetCell = layout.getVisibleTerminal(
+            realEdge, false)
+          let internalTargetCell = this.vertexMapper.get(targetCell)
 
-					if (internalTargetCell.connectsAsTarget.length == 0)
-					{
-						internalTargetCell.connectsAsTarget = [];
-					}
+          if (internalVertices[i] === internalTargetCell) {
+            // If there are parallel edges going between two vertices and not all are in the same direction
+            // you can have navigated across one direction when doing the cycle reversal that isn't the same
+            // direction as the first real edge in the array above. When that happens the if above catches
+            // that and we correct the target cell before continuing.
+            // This branch only detects this single case
+            targetCell = layout.getVisibleTerminal(
+              realEdge, true)
+            internalTargetCell = this.vertexMapper.get(targetCell)
+          }
 
-					if (mxUtils.indexOf(internalTargetCell.connectsAsTarget, internalEdge) < 0)
-					{
-						internalTargetCell.connectsAsTarget.push(internalEdge);
-					}
-				}
-			}
-		}
+          if (internalTargetCell !== null && internalVertices[i] !== internalTargetCell) {
+            internalEdge.target = internalTargetCell
 
-		// Use the temp variable in the internal nodes to mark this
-		// internal vertex as having been visited.
-		internalVertices[i].temp[0] = 1;
-	}
-};
+            if (internalTargetCell.connectsAsTarget.length === 0) {
+              internalTargetCell.connectsAsTarget = []
+            }
+
+            if (MxUtils.indexOf(internalTargetCell.connectsAsTarget, internalEdge) < 0) {
+              internalTargetCell.connectsAsTarget.push(internalEdge)
+            }
+          }
+        }
+      }
+
+      // Use the temp letiable in the internal nodes to mark this
+      // internal vertex as having been visited.
+      internalVertices[i].temp[0] = 1
+    }
+  };
+}
 
 /**
  * Variable: maxRank
  *
  * Stores the largest rank number allocated
  */
-mxGraphHierarchyModel.prototype.maxRank = null;
+MxGraphHierarchyModel.prototype.maxRank = null
 
 /**
  * Variable: vertexMapper
  *
  * Map from graph vertices to internal model nodes.
  */
-mxGraphHierarchyModel.prototype.vertexMapper = null;
+MxGraphHierarchyModel.prototype.vertexMapper = null
 
 /**
  * Variable: edgeMapper
  *
  * Map from graph edges to internal model edges
  */
-mxGraphHierarchyModel.prototype.edgeMapper = null;
+MxGraphHierarchyModel.prototype.edgeMapper = null
 
 /**
  * Variable: ranks
  *
  * Mapping from rank number to actual rank
  */
-mxGraphHierarchyModel.prototype.ranks = null;
+MxGraphHierarchyModel.prototype.ranks = null
 
 /**
  * Variable: roots
@@ -141,28 +138,28 @@ mxGraphHierarchyModel.prototype.ranks = null;
  * Store of roots of this hierarchy model, these are real graph cells, not
  * internal cells
  */
-mxGraphHierarchyModel.prototype.roots = null;
+MxGraphHierarchyModel.prototype.roots = null
 
 /**
  * Variable: parent
  *
  * The parent cell whose children are being laid out
  */
-mxGraphHierarchyModel.prototype.parent = null;
+MxGraphHierarchyModel.prototype.parent = null
 
 /**
  * Variable: dfsCount
  *
  * Count of the number of times the ancestor dfs has been used.
  */
-mxGraphHierarchyModel.prototype.dfsCount = 0;
+MxGraphHierarchyModel.prototype.dfsCount = 0
 
 /**
  * Variable: SOURCESCANSTARTRANK
  *
  * High value to start source layering scan rank value from.
  */
-mxGraphHierarchyModel.prototype.SOURCESCANSTARTRANK = 100000000;
+MxGraphHierarchyModel.prototype.SOURCESCANSTARTRANK = 100000000
 
 /**
  * Variable: tightenToSource
@@ -170,7 +167,7 @@ mxGraphHierarchyModel.prototype.SOURCESCANSTARTRANK = 100000000;
  * Whether or not to tighten the assigned ranks of vertices up towards
  * the source cells.
  */
-mxGraphHierarchyModel.prototype.tightenToSource = false;
+MxGraphHierarchyModel.prototype.tightenToSource = false
 
 /**
  * Function: createInternalCells
@@ -182,90 +179,78 @@ mxGraphHierarchyModel.prototype.tightenToSource = false;
  * layout - Reference to the <mxHierarchicalLayout> algorithm.
  * vertices - Array of <mxCells> that represent the vertices whom are to
  * have an internal representation created.
- * internalVertices - The array of <mxGraphHierarchyNodes> to have their
+ * internalVertices - The array of <MxGraphHierarchyNodes> to have their
  * information filled in using the real vertices.
  */
-mxGraphHierarchyModel.prototype.createInternalCells = function(layout, vertices, internalVertices)
-{
-	var graph = layout.getGraph();
+MxGraphHierarchyModel.prototype.createInternalCells = function(layout, vertices, internalVertices) {
+  let graph = layout.getGraph()
 
-	// Create internal edges
-	for (var i = 0; i < vertices.length; i++)
-	{
-		internalVertices[i] = new mxGraphHierarchyNode(vertices[i]);
-		this.vertexMapper.put(vertices[i], internalVertices[i]);
+  // Create internal edges
+  for (let i = 0; i < vertices.length; i++) {
+    internalVertices[i] = new MxGraphHierarchyNode(vertices[i])
+    this.vertexMapper.put(vertices[i], internalVertices[i])
 
-		// If the layout is deterministic, order the cells
-		//List outgoingCells = graph.getNeighbours(vertices[i], deterministic);
-		var conns = layout.getEdges(vertices[i]);
-		internalVertices[i].connectsAsSource = [];
+    // If the layout is deterministic, order the cells
+    // List outgoingCells = graph.getNeighbours(vertices[i], deterministic);
+    let conns = layout.getEdges(vertices[i])
+    internalVertices[i].connectsAsSource = []
 
-		// Create internal edges, but don't do any rank assignment yet
-		// First use the information from the greedy cycle remover to
-		// invert the leftward edges internally
-		for (var j = 0; j < conns.length; j++)
-		{
-			var cell = layout.getVisibleTerminal(conns[j], false);
+    // Create internal edges, but don't do any rank assignment yet
+    // First use the information from the greedy cycle remover to
+    // invert the leftward edges internally
+    for (let j = 0; j < conns.length; j++) {
+      let cell = layout.getVisibleTerminal(conns[j], false)
 
-			// Looking for outgoing edges only
-			if (cell != vertices[i] && layout.graph.model.isVertex(cell) &&
-					!layout.isVertexIgnored(cell))
-			{
-				// We process all edge between this source and its targets
-				// If there are edges going both ways, we need to collect
-				// them all into one internal edges to avoid looping problems
-				// later. We assume this direction (source -> target) is the 
-				// natural direction if at least half the edges are going in
-				// that direction.
+      // Looking for outgoing edges only
+      if (cell !== vertices[i] && layout.graph.model.isVertex(cell) && !layout.isVertexIgnored(cell)) {
+        // We process all edge between this source and its targets
+        // If there are edges going both ways, we need to collect
+        // them all into one internal edges to avoid looping problems
+        // later. We assume this direction (source -> target) is the
+        // natural direction if at least half the edges are going in
+        // that direction.
 
-				// The check below for edges[0] being in the vertex mapper is
-				// in case we've processed this the other way around
-				// (target -> source) and the number of edges in each direction
-				// are the same. All the graph edges will have been assigned to
-				// an internal edge going the other way, so we don't want to 
-				// process them again
-				var undirectedEdges = layout.getEdgesBetween(vertices[i],
-						cell, false);
-				var directedEdges = layout.getEdgesBetween(vertices[i],
-						cell, true);
-				
-				if (undirectedEdges != null &&
-						undirectedEdges.length > 0 &&
-						this.edgeMapper.get(undirectedEdges[0]) == null &&
-						directedEdges.length * 2 >= undirectedEdges.length)
-				{
-					var internalEdge = new mxGraphHierarchyEdge(undirectedEdges);
+        // The check below for edges[0] being in the vertex mapper is
+        // in case we've processed this the other way around
+        // (target -> source) and the number of edges in each direction
+        // are the same. All the graph edges will have been assigned to
+        // an internal edge going the other way, so we don't want to
+        // process them again
+        let undirectedEdges = layout.getEdgesBetween(vertices[i],
+          cell, false)
+        let directedEdges = layout.getEdgesBetween(vertices[i],
+          cell, true)
 
-					for (var k = 0; k < undirectedEdges.length; k++)
-					{
-						var edge = undirectedEdges[k];
-						this.edgeMapper.put(edge, internalEdge);
+        if (undirectedEdges !== null && undirectedEdges.length > 0 && this.edgeMapper.get(undirectedEdges[0]) === null && directedEdges.length * 2 >= undirectedEdges.length) {
+          let internalEdge = new MxGraphHierarchyEdge(undirectedEdges)
 
-						// Resets all point on the edge and disables the edge style
-						// without deleting it from the cell style
-						graph.resetEdge(edge);
+          for (let k = 0; k < undirectedEdges.length; k++) {
+            let edge = undirectedEdges[k]
+            this.edgeMapper.put(edge, internalEdge)
 
-					    if (layout.disableEdgeStyle)
-					    {
-					    	layout.setEdgeStyleEnabled(edge, false);
-					    	layout.setOrthogonalEdge(edge,true);
-					    }
-					}
+            // Resets all point on the edge and disables the edge style
+            // without deleting it from the cell style
+            graph.resetEdge(edge)
 
-					internalEdge.source = internalVertices[i];
+            if (layout.disableEdgeStyle) {
+              layout.setEdgeStyleEnabled(edge, false)
+              layout.setOrthogonalEdge(edge, true)
+            }
+          }
 
-					if (mxUtils.indexOf(internalVertices[i].connectsAsSource, internalEdge) < 0)
-					{
-						internalVertices[i].connectsAsSource.push(internalEdge);
-					}
-				}
-			}
-		}
+          internalEdge.source = internalVertices[i]
 
-		// Ensure temp variable is cleared from any previous use
-		internalVertices[i].temp[0] = 0;
-	}
-};
+          if (MxUtils.indexOf(internalVertices[i].connectsAsSource, internalEdge) < 0) {
+            internalVertices[i].connectsAsSource.push(internalEdge)
+          }
+        }
+      }
+    }
+
+    // Ensure temp letiable is cleared from any previous use
+    internalVertices[i].temp[0] = 0
+  }
+}
 
 /**
  * Function: initialRank
@@ -274,153 +259,133 @@ mxGraphHierarchyModel.prototype.createInternalCells = function(layout, vertices,
  * or sinks and working through each node in the relevant edge direction.
  * Starting at the sinks is basically a longest path layering algorithm.
 */
-mxGraphHierarchyModel.prototype.initialRank = function()
-{
-	var startNodes = [];
+MxGraphHierarchyModel.prototype.initialRank = function() {
+  let startNodes = []
 
-	if (this.roots != null)
-	{
-		for (var i = 0; i < this.roots.length; i++)
-		{
-			var internalNode = this.vertexMapper.get(this.roots[i]);
+  if (this.roots !== null) {
+    for (let i = 0; i < this.roots.length; i++) {
+      let internalNode = this.vertexMapper.get(this.roots[i])
 
-			if (internalNode != null)
-			{
-				startNodes.push(internalNode);
-			}
-		}
-	}
+      if (internalNode !== null) {
+        startNodes.push(internalNode)
+      }
+    }
+  }
 
-	var internalNodes = this.vertexMapper.getValues();
-	
-	for (var i=0; i < internalNodes.length; i++)
-	{
-		// Mark the node as not having had a layer assigned
-		internalNodes[i].temp[0] = -1;
-	}
+  let internalNodes = this.vertexMapper.getValues()
 
-	var startNodesCopy = startNodes.slice();
+  for (let i = 0; i < internalNodes.length; i++) {
+    // Mark the node as not having had a layer assigned
+    internalNodes[i].temp[0] = -1
+  }
 
-	while (startNodes.length > 0)
-	{
-		var internalNode = startNodes[0];
-		var layerDeterminingEdges;
-		var edgesToBeMarked;
+  let startNodesCopy = startNodes.slice()
 
-		layerDeterminingEdges = internalNode.connectsAsTarget;
-		edgesToBeMarked = internalNode.connectsAsSource;
+  while (startNodes.length > 0) {
+    let internalNode = startNodes[0]
+    let layerDeterminingEdges
+    let edgesToBeMarked
 
-		// flag to keep track of whether or not all layer determining
-		// edges have been scanned
-		var allEdgesScanned = true;
+    layerDeterminingEdges = internalNode.connectsAsTarget
+    edgesToBeMarked = internalNode.connectsAsSource
 
-		// Work out the layer of this node from the layer determining
-		// edges. The minimum layer number of any node connected by one of
-		// the layer determining edges variable
-		var minimumLayer = this.SOURCESCANSTARTRANK;
+    // flag to keep track of whether or not all layer determining
+    // edges have been scanned
+    let allEdgesScanned = true
 
-		for (var i = 0; i < layerDeterminingEdges.length; i++)
-		{
-			var internalEdge = layerDeterminingEdges[i];
+    // Work out the layer of this node from the layer determining
+    // edges. The minimum layer number of any node connected by one of
+    // the layer determining edges letiable
+    let minimumLayer = this.SOURCESCANSTARTRANK
 
-			if (internalEdge.temp[0] == 5270620)
-			{
-				// This edge has been scanned, get the layer of the
-				// node on the other end
-				var otherNode = internalEdge.source;
-				minimumLayer = Math.min(minimumLayer, otherNode.temp[0] - 1);
-			}
-			else
-			{
-				allEdgesScanned = false;
+    for (let i = 0; i < layerDeterminingEdges.length; i++) {
+      let internalEdge = layerDeterminingEdges[i]
 
-				break;
-			}
-		}
+      if (internalEdge.temp[0] === 5270620) {
+        // This edge has been scanned, get the layer of the
+        // node on the other end
+        let otherNode = internalEdge.source
+        minimumLayer = Math.min(minimumLayer, otherNode.temp[0] - 1)
+      } else {
+        allEdgesScanned = false
 
-		// If all edge have been scanned, assign the layer, mark all
-		// edges in the other direction and remove from the nodes list
-		if (allEdgesScanned)
-		{
-			internalNode.temp[0] = minimumLayer;
-			this.maxRank = Math.min(this.maxRank, minimumLayer);
+        break
+      }
+    }
 
-			if (edgesToBeMarked != null)
-			{
-				for (var i = 0; i < edgesToBeMarked.length; i++)
-				{
-					var internalEdge = edgesToBeMarked[i];
+    // If all edge have been scanned, assign the layer, mark all
+    // edges in the other direction and remove from the nodes list
+    if (allEdgesScanned) {
+      internalNode.temp[0] = minimumLayer
+      this.maxRank = Math.min(this.maxRank, minimumLayer)
 
-					// Assign unique stamp ( y/m/d/h )
-					internalEdge.temp[0] = 5270620;
+      if (edgesToBeMarked !== null) {
+        for (let i = 0; i < edgesToBeMarked.length; i++) {
+          let internalEdge = edgesToBeMarked[i]
 
-					// Add node on other end of edge to LinkedList of
-					// nodes to be analysed
-					var otherNode = internalEdge.target;
+          // Assign unique stamp ( y/m/d/h )
+          internalEdge.temp[0] = 5270620
 
-					// Only add node if it hasn't been assigned a layer
-					if (otherNode.temp[0] == -1)
-					{
-						startNodes.push(otherNode);
+          // Add node on other end of edge to LinkedList of
+          // nodes to be analysed
+          let otherNode = internalEdge.target
 
-						// Mark this other node as neither being
-						// unassigned nor assigned so it isn't
-						// added to this list again, but it's
-						// layer isn't used in any calculation.
-						otherNode.temp[0] = -2;
-					}
-				}
-			}
+          // Only add node if it hasn't been assigned a layer
+          if (otherNode.temp[0] === -1) {
+            startNodes.push(otherNode)
 
-			startNodes.shift();
-		}
-		else
-		{
-			// Not all the edges have been scanned, get to the back of
-			// the class and put the dunces cap on
-			var removedCell = startNodes.shift();
-			startNodes.push(internalNode);
+            // Mark this other node as neither being
+            // unassigned nor assigned so it isn't
+            // added to this list again, but it's
+            // layer isn't used in any calculation.
+            otherNode.temp[0] = -2
+          }
+        }
+      }
 
-			if (removedCell == internalNode && startNodes.length == 1)
-			{
-				// This is an error condition, we can't get out of
-				// this loop. It could happen for more than one node
-				// but that's a lot harder to detect. Log the error
-				// TODO make log comment
-				break;
-			}
-		}
-	}
+      startNodes.shift()
+    } else {
+      // Not all the edges have been scanned, get to the back of
+      // the class and put the dunces cap on
+      let removedCell = startNodes.shift()
+      startNodes.push(internalNode)
 
-	// Normalize the ranks down from their large starting value to place
-	// at least 1 sink on layer 0
-	for (var i=0; i < internalNodes.length; i++)
-	{
-		// Mark the node as not having had a layer assigned
-		internalNodes[i].temp[0] -= this.maxRank;
-	}
-	
-	// Tighten the rank 0 nodes as far as possible
-	for ( var i = 0; i < startNodesCopy.length; i++)
-	{
-		var internalNode = startNodesCopy[i];
-		var currentMaxLayer = 0;
-		var layerDeterminingEdges = internalNode.connectsAsSource;
+      if (removedCell === internalNode && startNodes.length === 1) {
+        // This is an error condition, we can't get out of
+        // this loop. It could happen for more than one node
+        // but that's a lot harder to detect. Log the error
+        // TODO make log comment
+        break
+      }
+    }
+  }
 
-		for ( var j = 0; j < layerDeterminingEdges.length; j++)
-		{
-			var internalEdge = layerDeterminingEdges[j];
-			var otherNode = internalEdge.target;
-			internalNode.temp[0] = Math.max(currentMaxLayer,
-					otherNode.temp[0] + 1);
-			currentMaxLayer = internalNode.temp[0];
-		}
-	}
-	
-	// Reset the maxRank to that which would be expected for a from-sink
-	// scan
-	this.maxRank = this.SOURCESCANSTARTRANK - this.maxRank;
-};
+  // Normalize the ranks down from their large starting value to place
+  // at least 1 sink on layer 0
+  for (let i = 0; i < internalNodes.length; i++) {
+    // Mark the node as not having had a layer assigned
+    internalNodes[i].temp[0] -= this.maxRank
+  }
+
+  // Tighten the rank 0 nodes as far as possible
+  for (let i = 0; i < startNodesCopy.length; i++) {
+    let internalNode = startNodesCopy[i]
+    let currentMaxLayer = 0
+    let layerDeterminingEdges = internalNode.connectsAsSource
+
+    for (let j = 0; j < layerDeterminingEdges.length; j++) {
+      let internalEdge = layerDeterminingEdges[j]
+      let otherNode = internalEdge.target
+      internalNode.temp[0] = Math.max(currentMaxLayer,
+        otherNode.temp[0] + 1)
+      currentMaxLayer = internalNode.temp[0]
+    }
+  }
+
+  // Reset the maxRank to that which would be expected for a from-sink
+  // scan
+  this.maxRank = this.SOURCESCANSTARTRANK - this.maxRank
+}
 
 /**
  * Function: fixRanks
@@ -428,72 +393,63 @@ mxGraphHierarchyModel.prototype.initialRank = function()
  * Fixes the layer assignments to the values stored in the nodes. Also needs
  * to create dummy nodes for edges that cross layers.
  */
-mxGraphHierarchyModel.prototype.fixRanks = function()
-{
-	var rankList = [];
-	this.ranks = [];
+MxGraphHierarchyModel.prototype.fixRanks = function() {
+  let rankList = []
+  this.ranks = []
 
-	for (var i = 0; i < this.maxRank + 1; i++)
-	{
-		rankList[i] = [];
-		this.ranks[i] = rankList[i];
-	}
+  for (let i = 0; i < this.maxRank + 1; i++) {
+    rankList[i] = []
+    this.ranks[i] = rankList[i]
+  }
 
-	// Perform a DFS to obtain an initial ordering for each rank.
-	// Without doing this you would end up having to process
-	// crossings for a standard tree.
-	var rootsArray = null;
+  // Perform a DFS to obtain an initial ordering for each rank.
+  // Without doing this you would end up having to process
+  // crossings for a standard tree.
+  let rootsArray = null
 
-	if (this.roots != null)
-	{
-		var oldRootsArray = this.roots;
-		rootsArray = [];
+  if (this.roots !== null) {
+    let oldRootsArray = this.roots
+    rootsArray = []
 
-		for (var i = 0; i < oldRootsArray.length; i++)
-		{
-			var cell = oldRootsArray[i];
-			var internalNode = this.vertexMapper.get(cell);
-			rootsArray[i] = internalNode;
-		}
-	}
+    for (let i = 0; i < oldRootsArray.length; i++) {
+      let cell = oldRootsArray[i]
+      let internalNode = this.vertexMapper.get(cell)
+      rootsArray[i] = internalNode
+    }
+  }
 
-	this.visit(function(parent, node, edge, layer, seen)
-	{
-		if (seen == 0 && node.maxRank < 0 && node.minRank < 0)
-		{
-			rankList[node.temp[0]].push(node);
-			node.maxRank = node.temp[0];
-			node.minRank = node.temp[0];
+  this.visit(function(parent, node, edge, layer, seen) {
+    if (seen === 0 && node.maxRank < 0 && node.minRank < 0) {
+      rankList[node.temp[0]].push(node)
+      node.maxRank = node.temp[0]
+      node.minRank = node.temp[0]
 
-			// Set temp[0] to the nodes position in the rank
-			node.temp[0] = rankList[node.maxRank].length - 1;
-		}
+      // Set temp[0] to the nodes position in the rank
+      node.temp[0] = rankList[node.maxRank].length - 1
+    }
 
-		if (parent != null && edge != null)
-		{
-			var parentToCellRankDifference = parent.maxRank - node.maxRank;
+    if (parent !== null && edge !== null) {
+      let parentToCellRankDifference = parent.maxRank - node.maxRank
 
-			if (parentToCellRankDifference > 1)
-			{
-				// There are ranks in between the parent and current cell
-				edge.maxRank = parent.maxRank;
-				edge.minRank = node.maxRank;
-				edge.temp = [];
-				edge.x = [];
-				edge.y = [];
+      if (parentToCellRankDifference > 1) {
+        // There are ranks in between the parent and current cell
+        edge.maxRank = parent.maxRank
+        edge.minRank = node.maxRank
+        edge.temp = []
+        edge.x = []
+        edge.y = []
 
-				for (var i = edge.minRank + 1; i < edge.maxRank; i++)
-				{
-					// The connecting edge must be added to the
-					// appropriate ranks
-					rankList[i].push(edge);
-					edge.setGeneralPurposeVariable(i, rankList[i]
-							.length - 1);
-				}
-			}
-		}
-	}, rootsArray, false, null);
-};
+        for (let i = edge.minRank + 1; i < edge.maxRank; i++) {
+          // The connecting edge must be added to the
+          // appropriate ranks
+          rankList[i].push(edge)
+          edge.setGeneralPurposeVariable(i, rankList[i]
+            .length - 1)
+        }
+      }
+    }
+  }, rootsArray, false, null)
+}
 
 /**
  * Function: visit
@@ -506,41 +462,33 @@ mxGraphHierarchyModel.prototype.fixRanks = function()
  * trackAncestors - Whether or not the search is to keep track all nodes
  * directly above this one in the search path.
  */
-mxGraphHierarchyModel.prototype.visit = function(visitor, dfsRoots, trackAncestors, seenNodes)
-{
-	// Run dfs through on all roots
-	if (dfsRoots != null)
-	{
-		for (var i = 0; i < dfsRoots.length; i++)
-		{
-			var internalNode = dfsRoots[i];
+MxGraphHierarchyModel.prototype.visit = function(visitor, dfsRoots, trackAncestors, seenNodes) {
+  // Run dfs through on all roots
+  if (dfsRoots !== null) {
+    for (let i = 0; i < dfsRoots.length; i++) {
+      let internalNode = dfsRoots[i]
 
-			if (internalNode != null)
-			{
-				if (seenNodes == null)
-				{
-					seenNodes = new Object();
-				}
+      if (internalNode !== null) {
+        if (seenNodes === null) {
+          seenNodes = {}
+        }
 
-				if (trackAncestors)
-				{
-					// Set up hash code for root
-					internalNode.hashCode = [];
-					internalNode.hashCode[0] = this.dfsCount;
-					internalNode.hashCode[1] = i;
-					this.extendedDfs(null, internalNode, null, visitor, seenNodes,
-							internalNode.hashCode, i, 0);
-				}
-				else
-				{
-					this.dfs(null, internalNode, null, visitor, seenNodes, 0);
-				}
-			}
-		}
+        if (trackAncestors) {
+          // Set up hash code for root
+          internalNode.hashCode = []
+          internalNode.hashCode[0] = this.dfsCount
+          internalNode.hashCode[1] = i
+          this.extendedDfs(null, internalNode, null, visitor, seenNodes,
+            internalNode.hashCode, i, 0)
+        } else {
+          this.dfs(null, internalNode, null, visitor, seenNodes, 0)
+        }
+      }
+    }
 
-		this.dfsCount++;
-	}
-};
+    this.dfsCount++
+  }
+}
 
 /**
  * Function: dfs
@@ -558,38 +506,32 @@ mxGraphHierarchyModel.prototype.visit = function(visitor, dfsRoots, trackAncesto
  * ancestor node of the current node
  * layer - the layer on the dfs tree ( not the same as the model ranks )
  */
-mxGraphHierarchyModel.prototype.dfs = function(parent, root, connectingEdge, visitor, seen, layer)
-{
-	if (root != null)
-	{
-		var rootId = root.id;
+MxGraphHierarchyModel.prototype.dfs = function(parent, root, connectingEdge, visitor, seen, layer) {
+  if (root !== null) {
+    let rootId = root.id
 
-		if (seen[rootId] == null)
-		{
-			seen[rootId] = root;
-			visitor(parent, root, connectingEdge, layer, 0);
+    if (seen[rootId] === null) {
+      seen[rootId] = root
+      visitor(parent, root, connectingEdge, layer, 0)
 
-			// Copy the connects as source list so that visitors
-			// can change the original for edge direction inversions
-			var outgoingEdges = root.connectsAsSource.slice();
-			
-			for (var i = 0; i< outgoingEdges.length; i++)
-			{
-				var internalEdge = outgoingEdges[i];
-				var targetNode = internalEdge.target;
+      // Copy the connects as source list so that visitors
+      // can change the original for edge direction inversions
+      let outgoingEdges = root.connectsAsSource.slice()
 
-				// Root check is O(|roots|)
-				this.dfs(root, targetNode, internalEdge, visitor, seen,
-						layer + 1);
-			}
-		}
-		else
-		{
-			// Use the int field to indicate this node has been seen
-			visitor(parent, root, connectingEdge, layer, 1);
-		}
-	}
-};
+      for (let i = 0; i < outgoingEdges.length; i++) {
+        let internalEdge = outgoingEdges[i]
+        let targetNode = internalEdge.target
+
+        // Root check is O(|roots|)
+        this.dfs(root, targetNode, internalEdge, visitor, seen,
+          layer + 1)
+      }
+    } else {
+      // Use the int field to indicate this node has been seen
+      visitor(parent, root, connectingEdge, layer, 1)
+    }
+  }
+}
 
 /**
  * Function: extendedDfs
@@ -611,71 +553,62 @@ mxGraphHierarchyModel.prototype.dfs = function(parent, root, connectingEdge, vis
  * childHash - the new hash code for this node
  * layer - the layer on the dfs tree ( not the same as the model ranks )
  */
-mxGraphHierarchyModel.prototype.extendedDfs = function(parent, root, connectingEdge, visitor, seen, ancestors, childHash, layer)
-{
-	// Explanation of custom hash set. Previously, the ancestors variable
-	// was passed through the dfs as a HashSet. The ancestors were copied
-	// into a new HashSet and when the new child was processed it was also
-	// added to the set. If the current node was in its ancestor list it
-	// meant there is a cycle in the graph and this information is passed
-	// to the visitor.visit() in the seen parameter. The HashSet clone was
-	// very expensive on CPU so a custom hash was developed using primitive
-	// types. temp[] couldn't be used so hashCode[] was added to each node.
-	// Each new child adds another int to the array, copying the prefix
-	// from its parent. Child of the same parent add different ints (the
-	// limit is therefore 2^32 children per parent...). If a node has a
-	// child with the hashCode already set then the child code is compared
-	// to the same portion of the current nodes array. If they match there
-	// is a loop.
-	// Note that the basic mechanism would only allow for 1 use of this
-	// functionality, so the root nodes have two ints. The second int is
-	// incremented through each node root and the first is incremented
-	// through each run of the dfs algorithm (therefore the dfs is not
-	// thread safe). The hash code of each node is set if not already set,
-	// or if the first int does not match that of the current run.
-	if (root != null)
-	{
-		if (parent != null)
-		{
-			// Form this nodes hash code if necessary, that is, if the
-			// hashCode variable has not been initialized or if the
-			// start of the parent hash code does not equal the start of
-			// this nodes hash code, indicating the code was set on a
-			// previous run of this dfs.
-			if (root.hashCode == null ||
-				root.hashCode[0] != parent.hashCode[0])
-			{
-				var hashCodeLength = parent.hashCode.length + 1;
-				root.hashCode = parent.hashCode.slice();
-				root.hashCode[hashCodeLength - 1] = childHash;
-			}
-		}
+MxGraphHierarchyModel.prototype.extendedDfs = function(parent, root, connectingEdge, visitor, seen, ancestors, childHash, layer) {
+  // Explanation of custom hash set. Previously, the ancestors letiable
+  // was passed through the dfs as a HashSet. The ancestors were copied
+  // into a new HashSet and when the new child was processed it was also
+  // added to the set. If the current node was in its ancestor list it
+  // meant there is a cycle in the graph and this information is passed
+  // to the visitor.visit() in the seen parameter. The HashSet clone was
+  // very expensive on CPU so a custom hash was developed using primitive
+  // types. temp[] couldn't be used so hashCode[] was added to each node.
+  // Each new child adds another int to the array, copying the prefix
+  // from its parent. Child of the same parent add different ints (the
+  // limit is therefore 2^32 children per parent...). If a node has a
+  // child with the hashCode already set then the child code is compared
+  // to the same portion of the current nodes array. If they match there
+  // is a loop.
+  // Note that the basic mechanism would only allow for 1 use of this
+  // functionality, so the root nodes have two ints. The second int is
+  // incremented through each node root and the first is incremented
+  // through each run of the dfs algorithm (therefore the dfs is not
+  // thread safe). The hash code of each node is set if not already set,
+  // or if the first int does not match that of the current run.
+  if (root !== null) {
+    if (parent !== null) {
+      // Form this nodes hash code if necessary, that is, if the
+      // hashCode letiable has not been initialized or if the
+      // start of the parent hash code does not equal the start of
+      // this nodes hash code, indicating the code was set on a
+      // previous run of this dfs.
+      if (root.hashCode === null || root.hashCode[0] !== parent.hashCode[0]) {
+        let hashCodeLength = parent.hashCode.length + 1
+        root.hashCode = parent.hashCode.slice()
+        root.hashCode[hashCodeLength - 1] = childHash
+      }
+    }
 
-		var rootId = root.id;
+    let rootId = root.id
 
-		if (seen[rootId] == null)
-		{
-			seen[rootId] = root;
-			visitor(parent, root, connectingEdge, layer, 0);
+    if (seen[rootId] === null) {
+      seen[rootId] = root
+      visitor(parent, root, connectingEdge, layer, 0)
 
-			// Copy the connects as source list so that visitors
-			// can change the original for edge direction inversions
-			var outgoingEdges = root.connectsAsSource.slice();
+      // Copy the connects as source list so that visitors
+      // can change the original for edge direction inversions
+      let outgoingEdges = root.connectsAsSource.slice()
 
-			for (var i = 0; i < outgoingEdges.length; i++)
-			{
-				var internalEdge = outgoingEdges[i];
-				var targetNode = internalEdge.target;
+      for (let i = 0; i < outgoingEdges.length; i++) {
+        let internalEdge = outgoingEdges[i]
+        let targetNode = internalEdge.target
 
-				// Root check is O(|roots|)
-				this.extendedDfs(root, targetNode, internalEdge, visitor, seen,
-						root.hashCode, i, layer + 1);
-			}
-		}
-		else
-		{
-			// Use the int field to indicate this node has been seen
-			visitor(parent, root, connectingEdge, layer, 1);
-		}
-	}
-};
+        // Root check is O(|roots|)
+        this.extendedDfs(root, targetNode, internalEdge, visitor, seen,
+          root.hashCode, i, layer + 1)
+      }
+    } else {
+      // Use the int field to indicate this node has been seen
+      visitor(parent, root, connectingEdge, layer, 1)
+    }
+  }
+}
