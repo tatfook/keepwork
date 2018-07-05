@@ -9,7 +9,7 @@
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
-        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+        <SkyDriveManagerDialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog' />
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
@@ -35,7 +35,7 @@
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
-          <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
+          <el-switch :value="isCodeShow" @change='toggleCodeWin'>
           </el-switch>
         </div>
       </el-row>
@@ -125,9 +125,7 @@ export default {
         leftColWidthParam: '',
         rightColWidthParam: ''
       },
-      isCodeWinShow: true,
       isFullscreen: false,
-      isSkyDriveManagerDialogShow: false,
       gConst,
       editingMarkdownModDatas: {
         key: 'data',
@@ -169,7 +167,9 @@ export default {
       activePageInfo: 'activePageInfo',
       isMultipleTextDialogShow: 'isMultipleTextDialogShow',
       activePropertyData: 'activePropertyData',
-      hasOpenedFiles: 'hasOpenedFiles'
+      hasOpenedFiles: 'hasOpenedFiles',
+      showSkyDrive: 'showSkyDrive',
+      isCodeShow: 'isCodeShow'
     }),
     isWelcomeShow() {
       return this.personalSiteList.length <= 0 || !this.activePageInfo.sitename
@@ -239,26 +239,20 @@ export default {
     ...mapActions({
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      toggleSkyDrive: 'toggleSkyDrive'
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
-    toggleCodeWin(isCodeWinShow) {
-      if (isCodeWinShow) {
-        this.resetShowingCol({
-          isCodeShow: true,
-          isPreviewShow: true
-        })
-        this.$store.dispatch('setAddingArea', {
-          area: this.gConst.ADDING_AREA_ADI
-        })
-      } else {
-        this.resetShowingCol({
-          isCodeShow: false,
-          isPreviewShow: true
-        })
-      }
+    toggleCodeWin() {
+      this.resetShowingCol({
+        isCodeShow: !this.isCodeShow,
+        isPreviewShow: true
+      })
+      this.isCodeShow && this.$store.dispatch('setAddingArea', {
+        area: this.gConst.ADDING_AREA_ADI
+      })
     },
     toggleFullscreen() {
       this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
@@ -325,10 +319,10 @@ export default {
       this.$refs.codemirror.addMod()
     },
     openSkyDriveManagerDialog() {
-      this.isSkyDriveManagerDialogShow = true
+      this.toggleSkyDrive({ showSkyDrive:true })
     },
     closeSkyDriveManagerDialog({ file, url }) {
-      this.isSkyDriveManagerDialogShow = false
+      this.toggleSkyDrive({ showSkyDrive:false })
       if (url) {
         let filename = file.filename || url
         let isImage = /^image\/.*/.test(file.type)
