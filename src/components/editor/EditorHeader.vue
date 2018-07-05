@@ -1,57 +1,87 @@
 <template>
   <div class='editor-header'>
     <el-menu mode='horizontal'>
-      <el-submenu index='1' popper-class='logo-submenu'>
-        <template slot='title'>
-          <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
-        </template>
-        <el-submenu index='1-1'>
-          <template slot='title'>{{$t('editor.system')}}</template>
-          <el-menu-item index='1-1-1' @click="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</el-menu-item>
-          <el-menu-item index='1-1-2' :disabled='isActivePageSaved' @click='save'>{{$t('editor.save')}}</el-menu-item>
-          <el-menu-item index='1-1-3'>
-            <a href="/wiki/user_center?userCenterContentType=websiteManager" target="_blank">{{$t('editor.siteSettings')}}</a>
-          </el-menu-item>
-          <!-- <el-menu-item index='1-1-4'>网站备份</el-menu-item>
-          <el-menu-item index='1-1-5'>版本管理</el-menu-item> -->
-        </el-submenu>
-        <el-submenu index='1-2'>
-          <template slot='title'>{{$t('editor.page')}}</template>
-          <el-menu-item index='1-2-1'>
-            <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=dataSource" target="_blank">{{$t('editor.dataSource')}}</a>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index='1-3'>
-          <template slot='title'>{{$t('editor.edit')}}</template>
-          <el-menu-item index='1-3-1' @click='undo' :disabled='!canUndo'>{{$t('editor.revoke')}}</el-menu-item>
-          <el-menu-item index='1-3-2' @click='redo' :disabled='!canRedo'>{{$t('editor.redo')}}</el-menu-item>
-          <!-- <el-menu-item index='1-3-3'>搜索</el-menu-item>
-          <el-menu-item index='1-3-4'>替换</el-menu-item> -->
-        </el-submenu>
-        <el-submenu index='1-4'>
-          <template slot='title'>{{$t('editor.insert')}}</template>
-          <el-menu-item index='1-4-1' @click="changeView('ModsList')">{{$t('editor.module')}}</el-menu-item>
-          <!-- <el-menu-item index='1-4-2'>网盘</el-menu-item> -->
-        </el-submenu>
-        <!-- <el-submenu index='1-5'>
-          <template slot='title'>显示</template>
-          <el-menu-item index='1-5-1'>预览</el-menu-item>
-          <el-menu-item index='1-5-2'>代码</el-menu-item>
-          <el-menu-item index='1-5-3'>分屏</el-menu-item>
-          <el-menu-item index='1-5-4'>全屏</el-menu-item>
-          <el-submenu index='1-5-5'>
-            <template slot='title'>页面模式</template>
-            <el-menu-item index='1-5-5-1'>电脑</el-menu-item>
-            <el-menu-item index='1-5-5-2'>手机</el-menu-item>
-          </el-submenu>
-        </el-submenu> -->
-        <el-menu-item index='1-6'>
-          <a href="/official/help/index" target="_blank">{{$t('editor.help')}}</a>
-        </el-menu-item>
-        <el-menu-item index='1-7'>
-          <a href='/'>{{$t('editor.backHomePage')}}</a>
-        </el-menu-item>
-      </el-submenu>
+      <el-menu-item index="2">
+        <el-dropdown placement="bottom-end" class="kp-dropdown-menu">
+          <span class="el-dropdown-link">
+            <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="kp-dropdown-menu-content">
+            <el-dropdown-item>
+              <div class="kp-menu-top">
+                <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
+                <div class="kp-submenu-top-content">
+                  <button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button>
+                  <!--<button disabled>新建文件夹</button> -->
+                  <!--<button disabled>新建页面</button> -->
+                </div>
+              </div>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
+              <div class="kp-menu-top">
+                <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
+                <div class="kp-submenu-top-content">
+                  <button>设置网站</button>
+                  <button>设置页面</button>
+                </div>
+              </div>
+            </el-dropdown-item> -->
+            <!-- <el-dropdown-item divided>
+              <div class="kp-menu-top">
+                <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
+                <div class="kp-submenu-top-content">
+                  <button>删除网站</button>
+                  <button>删除文件夹</button>
+                  <button>删除页面</button>
+                </div>
+              </div>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled disabled-bgc':'']">
+                <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
+                <div class="kp-submenu-top-content">
+                  <button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button>
+                  <!-- <button>全部保存</button> -->
+                </div>
+              </div>
+              </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
+              <div class="kp-menu-top">
+                <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
+                <div class="kp-submenu-top-content">
+                  <button>关闭</button>
+                  <button>全部关闭</button>
+                </div>
+              </div>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <div class="kp-menu">
+                <button @click.stop="refresh"><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                <button @click.stop='undo' :disabled='!canUndo'><i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
+                <button @click='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
+              </div>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
+              <div class="kp-menu">
+                <button><i class="iconfont icon-mod"></i>模块</button>                  
+                <button><i class="iconfont icon-lfile"></i>大文件</button>                  
+              </div>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <div class="kp-menu">
+                <!-- <button><i class="iconfont icon-code1"></i>显示代码</button>-->
+                <button><i class="iconfont icon-help"></i><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <div class="kp-menu">
+                <button @click="backHome"><i class="iconfont icon-home"></i>{{$t('editor.backHomePage')}}</button>                  
+              </div>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
       <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
         <span v-loading='savePending' class='iconfont icon-save' :title='$t("editor.save")' @click='save'></span>
       </el-menu-item>
@@ -74,14 +104,14 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item> -->
-      <el-menu-item index='2' class="link-box">
+      <el-menu-item index='6' class="link-box" v-if="activePage && hasOpenedFiles">
         <i class="iconfont icon-copy" @click='doCopyLink' :title='$t("common.copy")'></i>
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
-      <el-menu-item index='8' class='unsaved-tip'>
+      <el-menu-item index='7' class='unsaved-tip'>
         <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
       </el-menu-item>
-      <el-menu-item index='7' class='pull-right user-profile-box'>
+      <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
@@ -129,7 +159,9 @@ export default {
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
       openedFiles: 'openedFiles',
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      activePage: 'activePage',
+      hasOpenedFiles: 'hasOpenedFiles'
     }),
     showingType() {
       if (
@@ -219,6 +251,12 @@ export default {
     },
     changeView(type) {
       this.setActiveManagePaneComponent(type)
+    },
+    refresh(){
+      window.location.reload();
+    },
+    backHome(){
+      window.location.href=this.nowOrigin
     }
   },
   components: {
@@ -228,6 +266,12 @@ export default {
 </script>
 
 <style scoped>
+.kp-dropdown-menu{
+  padding: 0 0 0 10px;
+}
+.kp-dropdown-menu:hover{
+  background-color: rgba(40, 140, 233, 0.1);
+}
 .el-menu-item.is-active {
   border-bottom: none;
 }
@@ -246,10 +290,21 @@ export default {
   border-color: #F7BC2A;
   color: white;
 }
-
+.el-dropdown-link{
+  padding: 20px 0;
+}
 .kp-logo {
   width: 127px;
 }
+.el-dropdown-menu__item{
+  line-height: 24px;
+  padding: 0;
+}
+.el-dropdown-menu__item:hover{
+  color: inherit;
+  background-color: inherit
+}
+
 .li-btn {
   padding: 0 8px;
 }
@@ -330,5 +385,124 @@ export default {
     color: #303133;
   }
 }
+.kp-menu-top{
+  display: flex;
+  &:hover{
+    .kp-icon{
+      background-color:rgba(40, 140, 233, 0.1);          
+      .iconfont{
+      color: #409EFF;        
+      }
+    }
+  }
+  &.disabled-bgc:hover{
+    .kp-icon{
+        background-color:#f5f5f5;
+    }
+  }
+  .kp-icon{
+    width: 20px;
+    padding:0 4px 0 20px;
+    height: 24px;
+    .iconfont{
+      border: none;
+      line-height: 24px;
+      width: 0;
+      font-size: inherit
+    }
+  }
+  .kp-submenu-top-content{
+    flex: 1;
+    button{
+      width: 100%;
+      height: 24px;
+      border: none;
+      background-color: transparent;
+      text-align: left;
+      padding-left: 10px;
+      color: #909399;
+      border-left: 1px solid #ccc;
+      &:focus{
+        outline: none;
+      }
+      &:hover{
+        background-color: rgba(40, 140, 233, 0.1);
+        color: #409EFF;
+      }
+      &[disabled]{
+        color: #ccc;
+        &:hover{
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+}
+.isDisabled{
+    .iconfont{
+      color: #CcC !important;        
+    }    
+  &:hover{
+    .kp-icon{
+      .iconfont{
+      color: #CcC !important;        
+      }
+    }
+  }
+}
+.kp-dropdown-menu-content{
+  &.el-popper[x-placement^=bottom] {
+    width: 164px;
+    left: 45px !important;
+  }
+  .el-dropdown-menu__item--divided:before {
+    margin: 0;
+  }
+}
+.kp-menu button{
+  display: block;
+  width: 100%;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  color: #909399;
+  position: relative;
+  cursor: pointer;
+  text-align: left;
+  padding-left: 56px;
+  .iconfont{
+    border: none;
+    font-size: 14px;
+    width: 0;
+    height: 0;
+    line-height: 24px;
+    position: absolute;
+    left: 20px;
+    top:0;
+  }
+  &:hover{
+    color: #409EFF;
+    background-color: rgba(40, 140, 233, 0.1);
+    .iconfont{
+      color: #409EFF;
+    }
+  }
+  &:focus{
+    outline: none;
+  }
+  a{
+    text-decoration: none;
+    color: inherit;
+  }
+}
+.kp-menu button[disabled]{
+  &:hover{
+    background-color: #f5f5f5;
+  }
+  color: #ccc;
+  cursor: default;
+  .iconfont{
+    color: #ccc;
+  }
+}
 </style>
-

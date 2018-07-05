@@ -8,14 +8,14 @@
       <!-- <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a> -->
       <div class="breadcrumb-item">
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <ul class="file-list-content">
-            <li v-for='site in siteList' :key='site.name'>
+          <el-scrollbar tag='ul' wrap-class="file-list-content" view-class="view-box" :native="false">
+            <li v-for='(site,index) in siteList' :key='index'>
               <a :href="`/${site.username}/${site.name}`" class="clearfix">
-                <span class="list-content">{{site.displayName || site.name}}</span>
+                <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
-          </ul>
+          </el-scrollbar>
           <span class="page-item-content" slot="reference">
             {{siteDisplayName}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
@@ -26,9 +26,9 @@
       <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
         <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <ul class="file-list-content">
+          <el-scrollbar tag='ul' wrap-class="file-list-content" :native="false">
             <li class="file-list-item" v-for='file in fileList' :key='file.name' @click="handleBreadcrumbClick(file)">{{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}</li>
-          </ul>
+          </el-scrollbar>
           <span class="page-item-content" slot="reference">
             {{activePageInfo.paths[index] | hideMarkdownExt}}
             <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
@@ -41,7 +41,7 @@
       <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
         <i class="iconfont icon-edit"></i>
       </a>
-      <span class="icon-item" v-popover:share>
+      <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
         <i class="iconfont icon-Share"></i>
       </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
@@ -58,8 +58,18 @@
 import 'social-share.js/dist/js/social-share.min.js'
 import 'social-share.js/dist/css/share.min.css'
 import { mapGetters, mapActions } from 'vuex'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
+
 export default {
   name: 'ToolHeader',
+  data() {
+    return {
+      IS_GLOBAL_VERSION,
+      starPending: false,
+      breadcrumbsLoading: true,
+      siteList: []
+    }
+  },
   computed: {
     ...mapGetters({
       activePageUrl: 'activePageUrl',
@@ -78,6 +88,9 @@ export default {
       let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
       let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
       let name = _.get(siteDetailInfo, 'siteinfo.name')
+      if(siteDetailInfo.siteinfo && siteDetailInfo.siteinfo.domain === "paracraft"){
+        siteDisplayName = "paracraft"
+      }
       return siteDisplayName || name
     },
     sitePath() {
@@ -97,13 +110,6 @@ export default {
     },
     locationOrigin() {
       return location.origin
-    }
-  },
-  data() {
-    return {
-      starPending: false,
-      breadcrumbsLoading: true,
-      siteList: []
     }
   },
   watch: {
@@ -210,7 +216,7 @@ export default {
 <style lang="scss">
 .breadcrumb-item-dropdown {
   padding: 0;
-  min-width: auto;
+  min-width: 40px;
   border-color: #e4e7ed;
   .clearfix::after {
     content: '';
@@ -220,7 +226,7 @@ export default {
   .file-list-content {
     max-height: 380px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: scroll;
     padding: 15px 0;
   }
   ul {

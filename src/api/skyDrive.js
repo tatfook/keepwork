@@ -1,5 +1,5 @@
 import * as qiniu from 'qiniu-js'
-import keepwork from './keepwork'
+import storage from './storage'
 import uuid from 'uuid/v1'
 
 export const qiniuUpload = async (options) => {
@@ -30,11 +30,6 @@ export const getFileContent = async file => {
   return content
 }
 
-// export const getFileMD5 = async file => {
-//   let content = await getFileContent(file)
-//   return md5(content)
-// }
-
 export const getFileExtension = (filename = '') =>
   filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2).toLowerCase()
 
@@ -44,75 +39,43 @@ export const getFileKey = file => {
   return `${fileID}.${fileExt}`
 }
 
-export const getTokenAndUid = async authRequestConfig => {
-  let { uid } = await keepwork.qiniu.getUid(null, authRequestConfig)
-  let returnOriginalData = true
-  let { uptoken: token } = await keepwork.qiniu.uploadToken(null, authRequestConfig, returnOriginalData)
-  return { token, uid }
-}
-
-export const upload = async ({file, onProgress, bigfileToUpdate}, authRequestConfig) => {
-  let { token, uid } = await getTokenAndUid(authRequestConfig)
+export const upload = async ({file, username, sitename, onProgress}, authRequestConfig) => {
   let key = getFileKey(file)
+  let { token } = await storage.files.token({ key }, authRequestConfig)
 
   let config = { region: qiniu.region.z2 }
-  let putExtra = { params: { 'x:uid': uid } }
-  let { hash } = await qiniuUpload({file, token, key, onProgress, config, putExtra})
-
-  let payload = {
-    filename: file.name,
-    domain: 'ov62qege8.bkt.clouddn.com', // seems useless
-    key,
-    size: file.size,
-    type: file.type,
-    channel: 'qiniu'
-  }
-
-  let result
-  if (bigfileToUpdate) {
-    // update file flow
-    payload = {...payload, filename: bigfileToUpdate.filename, _id: bigfileToUpdate._id}
-    result = await keepwork.bigfile.updateById(payload, authRequestConfig)
-  } else {
-    // upload file flow
-    payload = {...payload, hash}
-    result = await keepwork.bigfile.upload(payload, authRequestConfig)
-  }
-
-  return result
-  // let { _id } = result
-  // let downloadUrl = await keepwork.bigfile.getDownloadUrlById({ _id })
-  // return downloadUrl
+  let putExtra = { params: { 'x:filename': file.name } }
+  await qiniuUpload({file, token, key, onProgress, config, putExtra})
 }
 
-export const update = async ({file, onProgress, bigfileToUpdate}, authRequestConfig) => {
-  let downloadUrl = await upload({file, onProgress, bigfileToUpdate}, authRequestConfig)
-  return downloadUrl
-}
-
-export const remove = async ({file: { _id }}, authRequestConfig) => {
-  await keepwork.bigfile.deleteById({_id}, authRequestConfig)
+export const remove = async ({file: { id }}, authRequestConfig) => {
+  await storage.files.delete({ id }, authRequestConfig)
 }
 
 export const list = async (payload, authRequestConfig) => {
-  let { filelist } = await keepwork.bigfile.getByUsername(payload, authRequestConfig)
+  let filelist = await storage.files.list(payload, authRequestConfig)
   return filelist
 }
 
 export const info = async (payload, authRequestConfig) => {
-  let info = await keepwork.bigfile.getUserStoreInfo(payload, authRequestConfig)
+  let info = await storage.files.statistics(payload, authRequestConfig)
   return info
 }
 
-export const changeFileName = async ({_id, filename}, authRequestConfig) => {
-  await keepwork.bigfile.changeFilename({_id, filename}, authRequestConfig)
+export const changeFileName = async ({key, filename}, authRequestConfig) => {
+  await storage.files.update({key, filename}, authRequestConfig)
+}
+
+export const useFileInSite = async ({userId, siteId, fileId}, authRequestConfig) => {
+  let url = await storage.siteFiles.url({userId, siteId, fileId}, authRequestConfig)
+  return url
 }
 
 export default {
   upload,
-  update,
   remove,
   list,
   info,
-  changeFileName
+  changeFileName,
+  useFileInSite
 }

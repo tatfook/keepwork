@@ -1,7 +1,7 @@
 'use strict'
 const merge = require('webpack-merge')
 const prodEnv = require('./prod.env')
-const i18nDomainLabel = require('./i18nDomainLabel')
+const { i18nDomainLabel } = require('./i18n')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
@@ -9,7 +9,9 @@ module.exports = merge(prodEnv, {
   KEEPWORK_API_PREFIX: `"https://stage${i18nDomainLabel('-')}.keepwork.com/api/wiki/models"`,
   LESSON_API_PREFIX: `"http://localhost:3000/"`,
   GITLAB_API_PREFIX: `"https://git-stage${i18nDomainLabel('-')}.keepwork.com"`,
+  GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com"`,
   ES_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/es"`,
+  STORAGE_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/storage/v0"`,
   ES_INDEX: `"www_pages_v1"`,
   ES_TYPE: `"pages"`
 })

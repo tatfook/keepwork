@@ -23,7 +23,7 @@
       </component>
     </div>
     <div class="layoutManagerBtnWrap" @click="openWebsiteSettingDialog">
-      <el-button class="layoutManagerBtn" type="primary">布局方案管理</el-button>
+      <el-button class="layoutManagerBtn" type="primary">{{$t('editor.layoutManagement')}}</el-button>
     </div>
     <div @click.stop v-if='isWebsiteSettingShow'>
       <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
@@ -110,7 +110,7 @@ export default {
       return this.userSiteLayoutsMap[this.selectedLayoutId]
     },
     selectedStyleComponent() {
-      return stylesList[_.get(this.selectedLayout, 'styleName', 'basic')]
+      return _.get(stylesList[_.get(this.selectedLayout, 'styleName', 'basic')], 'component')
     }
   },
   methods: {

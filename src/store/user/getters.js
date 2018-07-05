@@ -176,7 +176,7 @@ const getters = {
   ) => path => {
     let [username, sitename] = path.split('/').filter(x => x)
     let {
-      userinfo: { dataSource: dataSourceList = [], defaultDataSourceSitename }
+      userinfo: { dataSource: dataSourceList = [], defaultDataSourceSitename = '__keepwork__' }
     } = getSiteDetailInfoByPath(path)
     let defaultDataSource = dataSourceList.filter(dataSource => dataSource.sitename === defaultDataSourceSitename)[0]
     let targetDataSource = dataSourceList.filter(
@@ -272,7 +272,9 @@ const getters = {
 
   skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
-  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
+
+  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId])
 }
 
 export default getters

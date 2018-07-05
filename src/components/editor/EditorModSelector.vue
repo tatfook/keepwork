@@ -1,5 +1,6 @@
 <template>
-  <div :class="{ 'mod-active': isActive }" class='kp-mod-selector' @click='setActive'>
+<div :class="{'mod-wrap':true,'mod-active': isActive, }">
+  <div :class="['kp-mod-selector',mod.cmd === 'Markdown' ? 'no-mask' : '']" @click='setActive'>
     <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
       <i class="iconfont icon-delete icon-del"></i>
     </div>
@@ -12,6 +13,7 @@
       <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -105,10 +107,6 @@ export default {
 </script>
 
 <style scoped>
-.mod-active {
-  border: 2px dashed #69b9ff;
-  position: relative;
-}
 .add-mod-btn {
   width: 38px;
   height: 38px;
@@ -131,7 +129,7 @@ export default {
   bottom: -19px;
 }
 .add-mod-btn:hover {
-  background-color: #3ba4ff;
+  background-color: #f7a935;
   color: #fff;
   font-size: 38px;
   transition: all 0.2s;
@@ -139,6 +137,22 @@ export default {
 </style>
 
 <style lang="scss">
+.mod-wrap{
+  border: 2px solid transparent;
+  &:hover{
+    border:2px dashed #3ab4ff;
+  }
+}
+.mod-active {
+  border:2px dashed #f7a935;  
+  position: relative;
+  .add-mod-btn{
+    background-color: #f7a935;
+  }
+  &:hover{
+    border:2px dashed #f7a935;      
+  }
+}
 .kp-mod-selector .comp {
   position: relative;
 }
@@ -160,8 +174,6 @@ export default {
     cursor: pointer;
   }
   &:hover {
-    border:2px dashed #f7a935;
-    transition: all .2s ease-out;   
     .delete-mod {
       display: inline;
     }
@@ -175,6 +187,12 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 3;
+  background-color: rgba(127, 195, 255, 0.4);
+  cursor: pointer;
+}
+.kp-mod-selector.no-mask .comp:hover::before {
+  background-color: transparent;
+  cursor: pointer;
 }
 </style>
 

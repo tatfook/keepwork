@@ -12,7 +12,7 @@ const getters = {
     state.openedFiles[username] || {},
   getOpenedFileByPath: (state, { openedFiles }) => path =>
     openedFiles[getFileFullPathByPath(path)] || {},
-
+  hasOpenedFiles: (state, { openedFiles }) => _.values(openedFiles).length > 0,
   activePage: state => state.activePage,
   activePageUrl: state => state.activePageUrl,
   activePageInfo: (state, { activePageUrl, openedFiles }) => {

@@ -18,8 +18,8 @@
     "websiteManagement": "Website Management",
     "pageEditor": "Page editor",
     "myWebDisk": "Cloud Drive",
-    "dynamic": "Dynamic",
-    "attention": "Attention",
+    "dynamic": "Activities",
+    "attention": "Follow",
     "history": "History",
     "help": "Help",
     "iicc": "IICC",
@@ -72,7 +72,8 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
-    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
+    "unSaveConfirm":
+      "The content you have modified is not saved. Are you sure you want to continue？",
     "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
@@ -100,6 +101,8 @@
     "closeAll": "Close all",
     "delete": "Delete",
     "delConfirm": "OK to delete at",
+    "deleteFail": "delete fail",
+    "deleteSuccess": "delete success",
     "nameSingle": "name",
     "name": "Name",
     "link": "Link",
@@ -196,6 +199,7 @@
     "supportBooleanCalculation":
       "Support Boolean calculation: || (or)、&& (and)、! (not)",
     "layoutPlan": "1. Layout plan",
+    "layoutManagement": "Layout management",
     "addLayout": "Add layout",
     "default": "Default",
     "rename": "Rename",
@@ -222,9 +226,8 @@
     "videoNotSupport": "Your browser does not support the video tag.",
     "notFound": "Content cannot be found",
 
-    "yourPage": "Your page",
     "yourPosition": "Your position：",
-    "defaultPage": "Default page",
+    "homePage": "Home page",
 
     "removeImgConfirmMsg": "Are you sure to remove this image?",
 
@@ -266,8 +269,10 @@
     "pageList": "Page list",
     "textBoard": "Text Board",
     "toc": "Markdown list",
-
     "other": "Other",
+    "categoryList": "Category list",
+    "tab": "Tab",
+    "pageSwitching": "Page switching",
 
     "lesson": "Lesson",
     "quiz": "Quiz",
@@ -275,7 +280,6 @@
     "lessonShare": "LessonShare",
     "package": "Package",
     "lessonPackage": "Lesson Package"
-
   },
   "adi": {
     "markdown": {
@@ -405,9 +409,11 @@
     "innerModal": "Inner modal",
     "bigFile": "Big file",
     "iframe": "iframe",
-    "pageRoute": "Page route",
+    "pagePath": "Page path",
     "tab": "Tab",
     "categoryList": "Category list",
+    "pageSwitching": "Page switching",
+
     "lesson": "Lesson",
     "lessonGoals": "Lesson Goals:",
     "quiz":"Quiz",
@@ -469,7 +475,6 @@
     "false": "False",
 
     "teachersColon": "Teachers:"
-
   },
   "field": {
     "fileId": "file Id",
@@ -559,6 +564,8 @@
     "newFilenamePromptMsg": "Please input new filename",
     "nameConflictError": "The name already exists.",
     "nameEmptyError": "The name cannot be empyt.",
-    "nameContainSpecialCharacterError": "The name contains special characters."
+    "nameContainSpecialCharacterError": "The name contains special characters.",
+    "fileUploading":
+      "There are files being uploaded. After closing, the files will be canceled. Continue?"
   }
 }

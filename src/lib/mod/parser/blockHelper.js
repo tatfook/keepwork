@@ -52,6 +52,12 @@ const blockHelper = {
     )
   },
 
+  isOnCursor(block, beginLine) {
+    return CmdHelper.isMarkdownCmd(block.cmd)
+      ? beginLine >= block.lineBegin && beginLine < block.lineBegin + block.md.length
+      : beginLine >= block.lineBegin && beginLine <= block.lineBegin + block.md.length + 1
+  },
+
   updateCmd(block, cmd) {
     block.cmd = cmd
     block.modType = 'Mod' + block.cmd

@@ -1,7 +1,9 @@
 export default [
   // template 0
   [
-    { colGroup: 'media' },
+    {
+      colGroup: [{ colMedia: 'media' }]
+    },
     {
       colCouple: [
         { colTitle: 'title' },

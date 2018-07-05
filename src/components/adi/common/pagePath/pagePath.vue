@@ -1,7 +1,7 @@
 <template>
   <el-row class="pagePath comp">
     <el-col :xs="24" :sm="6" :class="getPageNameClass.pageNameClass">
-      <a :target='target'>{{properties.name?properties.name:$t('editor.yourPage')}}</a>
+      <span>{{this.pageArray[this.pageArray.length - 1].name}}</span>
     </el-col>
 
     <el-col :xs="24" :sm="18" class="pagePath__path-info">
@@ -10,7 +10,9 @@
       </div>
       <div class="pagePath__path-info__squeue">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item v-for="(item, index) in getPathData" :key="index" :class="selectStyle(index)">{{item}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item, index) in pageArray" :key="index" :class="selectStyle(index)">
+            <a :href="item.link" :target='target' @mouseenter="mouseenter" @mouseleave="mouseleave">{{item.name}}</a>
+          </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </el-col>
@@ -21,20 +23,60 @@
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
-
+import { search } from '@/api/esGateway'
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'AdiPagePath',
   mixins: [compBaseMixin],
+  data() {
+    return {
+      pageArray: []
+    }
+  },
+  created() {
+    let pageData = []
+    if (this.properties.pageData && Array.isArray(this.properties.pageData)) {
+      pageData = this.properties.pageData
+    }
+
+    _.forEach(pageData, (element, key) => {
+      let currentPage = {
+        name: element.name || '',
+        link: element.link || ''
+      }
+      this.pageArray.push(currentPage)
+    })
+
+    let pageData0 = {
+      name: this.$t('editor.homePage'),
+      link: '/' + this.activePageInfo.sitepath
+    }
+    this.pageArray.unshift(pageData0)
+
+    this.pageArray[this.pageArray.length - 1].link = 'javascript:void(0)'
+  },
   methods: {
     selectStyle(index) {
-      if (index == this.getPathData.length - 1) {
+      if (index == this.pageArray.length - 1) {
         return this.getPageNameClass.pathNameClass
       } else {
         return this.getPageNameClass.labelNameClass
       }
+    },
+    mouseenter(event) {
+      let element = event.path[0]
+      element.style.color = this.options.pageFontColor
+    },
+    mouseleave(event) {
+      let element = event.path[0]
+      element.style.color = null
     }
   },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    }),
     target() {
       return this.properties.target
     },
@@ -77,15 +119,6 @@ export default {
         labelNameClass: this.sheet.classes[labelName],
         pathNameClass: this.sheet.classes[pathName]
       }
-    },
-    getPathData() {
-      let pathData
-      if (this.properties.path.length == 0) {
-        pathData = [this.$t('editor.defaultPage'), this.$t('editor.yourPage')]
-      } else {
-        pathData = this.properties.path.split('>')
-      }
-      return pathData
     }
   }
 }
@@ -104,19 +137,17 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    color: unset;
     white-space: nowrap;
 
     .pagePath__path-info__position {
       width: 126px;
-      height: 21px;
+      line-height: 1;
     }
 
     .pagePath__path-info__squeue {
       overflow-x: hidden;
 
       .el-breadcrumb {
-        color: unset;
         overflow-x: auto;
         overflow-y: hidden;
         display: flex;
@@ -150,11 +181,24 @@ export default {
 .pagePath {
   .el-breadcrumb__item {
     .el-breadcrumb__inner {
-      font-weight: normal;
+      color: unset;
+      a {
+        color: unset;
+        font-weight: normal;
+        text-decoration: none;
+      }
+    }
+    .el-breadcrumb__separator {
       color: unset;
     }
-    .el-breadcrumb__inner:hover {
+  }
+
+  .el-breadcrumb__item:last-child {
+    .el-breadcrumb__inner {
       color: unset;
+      a {
+        color: unset;
+      }
     }
   }
 }

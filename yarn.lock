@@ -2397,9 +2397,9 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30:
   version "1.3.45"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.45.tgz#458ac1b1c5c760ce8811a16d2bfbd97ec30bafb8"
 
-element-ui@^2.3.0:
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.3.7.tgz#ae6f9987a30dcd2f2dd9f151eea53927b45670c9"
+element-ui@^2.4.1:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.4.2.tgz#048e8ba325b613b454111c1d6c0b07e1e051a54a"
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
@@ -7130,6 +7130,10 @@ schema-utils@^0.4.0, schema-utils@^0.4.5:
     ajv "^6.1.0"
     ajv-keywords "^3.1.0"
 
+scroll-into-view-if-needed@2.2.9:
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.9.tgz#f6c95d60f2106893d549de6eef69cb6ce2ebe936"
+
 scss-tokenizer@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/scss-tokenizer/-/scss-tokenizer-0.2.3.tgz#8eb06db9a9723333824d3f5530641149847ce5d1"
@@ -7310,6 +7314,12 @@ slice-ansi@1.0.0:
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-1.0.0.tgz#044f1a49d8842ff307aad6b505ed178bd950134d"
   dependencies:
     is-fullwidth-code-point "^2.0.0"
+
+smooth-scroll-into-view-if-needed@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/smooth-scroll-into-view-if-needed/-/smooth-scroll-into-view-if-needed-1.1.10.tgz#911443272935d8c4f06af5a494b40f959882b586"
+  dependencies:
+    scroll-into-view-if-needed "2.2.9"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

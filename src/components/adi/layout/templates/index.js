@@ -16,20 +16,81 @@ import SidebarHeader from './SidebarHeader'
 import SidebarHeaderFooter from './SidebarHeaderFooter'
 
 export default {
-  basic: BasicMaxWidth, // default maxwidth
-  basic_fullscreen: BasicFullScreen,
+  basic: {
+    header: false,
+    sidebar: false,
+    footer: false,
+    component: BasicMaxWidth
+  },
+  // default maxwidth
+  basic_fullscreen: {
+    header: false,
+    sidebar: false,
+    footer: false,
+    component: BasicFullScreen
+  },
 
-  header: HeaderMaxWidth, // default maxwidth
-  header_fullscreen: HeaderFullScreen,
+  header: {
+    header: true,
+    sidebar: false,
+    footer: false,
+    component: HeaderMaxWidth
+  }, // default maxwidth
+  header_fullscreen: {
+    header: true,
+    sidebar: false,
+    footer: false,
+    component: HeaderFullScreen
+  },
 
-  header_footer: HeaderFooterMaxWidth, // default maxwidth
-  header_footer_fullscreen: HeaderFooterFullScreen,
-  header_footer_sidebar: HeaderFooterSidebar,
+  header_footer: {
+    header: true,
+    sidebar: false,
+    footer: true,
+    component: HeaderFooterMaxWidth
+  }, // default maxwidth
+  header_footer_fullscreen: {
+    header: true,
+    sidebar: false,
+    footer: true,
+    component: HeaderFooterFullScreen
+  },
+  header_footer_sidebar: {
+    header: true,
+    sidebar: true,
+    footer: true,
+    component: HeaderFooterSidebar
+  },
 
-  header_sidebar: HeaderSidebar,
-  header_sidebar_footer: HeaderSidebarFooter,
+  header_sidebar: {
+    header: true,
+    sidebar: true,
+    footer: false,
+    component: HeaderSidebar
+  },
+  header_sidebar_footer: {
+    header: true,
+    sidebar: true,
+    footer: true,
+    component: HeaderSidebarFooter
+  },
 
-  sidebar: Sidebar,
-  sidebar_header: SidebarHeader,
-  sidebar_header_footer: SidebarHeaderFooter
+  sidebar: {
+    header: false,
+    sidebar: true,
+    footer: false,
+    component: Sidebar
+  },
+  sidebar_header: {
+    header: true,
+    sidebar: true,
+    footer: false,
+    component: SidebarHeader
+  },
+  sidebar_header_footer: {
+    header: true,
+    sidebar: true,
+    footer: true,
+    component: SidebarHeaderFooter
+  }
 }
