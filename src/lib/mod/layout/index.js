@@ -57,7 +57,7 @@ const LayoutHelper = {
   },
 
   getLayoutByPath(siteLayoutConfig, path) {
-    let defaultLayoutId = _.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0).toString()
+    let defaultLayoutId = (_.get(siteLayoutConfig, ['layoutConfig', 'defaultLayoutId'], 0) || 0).toString()
     let allLayouts = _.get(siteLayoutConfig, ['layoutConfig', 'layouts'], [])
     let allLayoutsMap = _.keyBy(allLayouts, 'id')
 
