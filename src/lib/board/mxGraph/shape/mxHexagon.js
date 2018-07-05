@@ -1,34 +1,38 @@
+import MxActor from './MxActor'
+import MxUtils from '../util/MxUtils'
+import MxConstants from '../util/MxConstants'
+import MxPoint from '../util/MxPoint'
 /**
  * Copyright (c) 2006-2015, JGraph Ltd
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 /**
- * Class: mxHexagon
- * 
+ * Class: MxHexagon
+ *
  * Implementation of the hexagon shape.
- * 
- * Constructor: mxHexagon
+ *
+ * Constructor: MxHexagon
  *
  * Constructs a new hexagon shape.
  */
-function mxHexagon()
-{
-	mxActor.call(this);
-};
+
+export default class MxHexagon {
+  constructor() {
+    MxActor.call(this)
+  };
+}
 
 /**
- * Extends mxActor.
+ * Extends MxActor.
  */
-mxUtils.extend(mxHexagon, mxActor);
+MxUtils.extend(MxHexagon, MxActor)
 
 /**
  * Function: redrawPath
  *
  * Draws the path for this shape.
  */
-mxHexagon.prototype.redrawPath = function(c, x, y, w, h)
-{
-	var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
-	this.addPoints(c, [new mxPoint(0.25 * w, 0), new mxPoint(0.75 * w, 0), new mxPoint(w, 0.5 * h), new mxPoint(0.75 * w, h),
-	                   new mxPoint(0.25 * w, h), new mxPoint(0, 0.5 * h)], this.isRounded, arcSize, true);
-};
+MxHexagon.prototype.redrawPath = function(c, x, y, w, h) {
+  var arcSize = MxUtils.getValue(this.style, MxConstants.STYLE_ARCSIZE, MxConstants.LINE_ARCSIZE) / 2
+  this.addPoints(c, [new MxPoint(0.25 * w, 0), new MxPoint(0.75 * w, 0), new MxPoint(w, 0.5 * h), new MxPoint(0.75 * w, h), new MxPoint(0.25 * w, h), new MxPoint(0, 0.5 * h)], this.isRounded, arcSize, true)
+}
