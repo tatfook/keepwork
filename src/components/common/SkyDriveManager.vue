@@ -225,7 +225,7 @@ export default {
     skyDriveMediaLibraryData() {
       let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image\/.*/.test(type))
       let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
-        return obj1.updateDate <= obj2.updateDate
+        return obj1.updateDate <= obj2.updateDate ? 1 : -1
       })
       return sortedMediaDatas
     },
