@@ -387,6 +387,7 @@ export default {
       this.loading = true
       await this.userRemoveFileFromSkyDrive({file}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      this.selectedMediaItem = null
       this.loading = false
     },
     handleCopy(toCopyLink) {
