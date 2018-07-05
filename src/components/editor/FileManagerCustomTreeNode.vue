@@ -1,5 +1,5 @@
 <template>
-  <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
+  <div class="el-tree-node__label" :class="operationButtonsCountClass"  v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
     <span class="rename-wrapper" v-if="isRename">
       <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
@@ -382,6 +382,10 @@ export default {
       openedFiles: 'openedFiles',
       username: 'user/username'
     }),
+    operationButtonsCountClass(){
+      let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
+      return `buttons-count-${count}`
+    },
     pending() {
       return (
         this.addFolderPending ||
@@ -455,6 +459,17 @@ export default {
   height: 30px;
   width: 30px;
 }
+.el-tree-node__content:hover {
+    .buttons-count-3{
+      padding-right: 105px;
+    }
+    .buttons-count-4{
+      padding-right: 135px;
+    }
+    .buttons-count-5{
+      padding-right: 160px;
+    }
+  }
 .icon-folder::before {
   font-size: 0.8em;
   color: #ffac33;
