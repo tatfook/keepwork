@@ -17,7 +17,7 @@
     <a href="#" class="quickToTop" v-if="showQuickToTop">
       <div class="toTopIcon"></div>
       <div class="topText">TOP</div>
-      <div class="hoverText">返回顶部</div>
+      <div class="hoverWrap"><div class="hoverText">{{$t('common.quickToTop')}}</div></div>
     </a>
   </div>
 </template>
@@ -99,8 +99,8 @@ export default {
 </script>
 <style lang="scss">
 .quickToTop{
-  height: 50px;
-  width: 50px;
+  height: 56px;
+  width: 56px;
   box-shadow: 0px 0px 2px #fff,0px 0px 2px #fff;
   position: fixed;
   bottom: 30px;
@@ -118,19 +118,25 @@ export default {
     border-bottom-color: transparent;
     transform: rotate(45deg);
     position: absolute;
-    left: 17px;
+    left: 20px;
     top: 8px;
   }
   .topText{
-    margin-top: 25px;
+    margin-top: 28px;
   }
-  .hoverText{
+  .hoverWrap{
     display: none;
+    .hoverText{
+    width: 100%;
+    height: 100%;
     color: #fff;
     position: absolute;
-    top: 4px;
-    left: 7px;
+    left: 10px;
     width: 35px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
   }
   &:hover{
     background-color: #0075b4;
@@ -141,7 +147,7 @@ export default {
     .topText{
       display: none;
     }
-    .hoverText{
+    .hoverWrap{
       display: block;
     }
   }
