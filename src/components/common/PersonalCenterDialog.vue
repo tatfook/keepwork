@@ -49,7 +49,7 @@ export default {
           comp: RealNameAuthentication
         }
       ],
-      activeSettingIndex: 0
+      activeSettingIndex: 1
     }
   },
   computed: {
@@ -81,39 +81,22 @@ export default {
       let componentRef = this.$refs.personalCenterComponent
       switch (this.activeSettingIndex) {
         case 0:
-          let { userInfo } = componentRef
-          let isModified = !_.isEqual(this.loginUserProfile, userInfo)
-          if (isModified) {
-            this.loading = true
-            let {
-              _id,
-              displayName,
-              sex,
-              portrait,
-              location,
-              introduce
-            } = userInfo
-            let isSensitive = await this.checkSensitive([
-              displayName,
-              location,
-              introduce
-            ])
-            if (isSensitive) {
-              this.showMessage('error', this.$t('common.inputIsSensitive'))
-              this.loading = false
-              return
-            }
-            await this.userUpdateUserInfo({
-              _id,
-              displayName,
-              sex,
-              portrait,
-              location,
-              introduce
-            })
-            this.loading = false
-          }
-          this.showMessage('success', this.$t('common.saveSuccess'))
+          await saveUserData()
+          break
+        case 1:
+          await saveSecurityChanges()
+          break
+        default:
+          break
+      }
+    },
+    async saveSecurityChanges() {
+      let { activeName } = componentRef
+      switch (activeName) {
+        case 'changePwd':
+          await this.savePassword()
+          break
+        case 'accountBinding':
           break
         case 2:
           break
@@ -122,6 +105,35 @@ export default {
           this.verifyCellphoneTwo(paylaod)
           break
       }
+    },
+    async savePassword() {},
+    async saveUserData() {
+      let { userInfo } = componentRef
+      let isModified = !_.isEqual(this.loginUserProfile, userInfo)
+      if (isModified) {
+        this.loading = true
+        let { _id, displayName, sex, portrait, location, introduce } = userInfo
+        let isSensitive = await this.checkSensitive([
+          displayName,
+          location,
+          introduce
+        ])
+        if (isSensitive) {
+          this.showMessage('error', this.$t('common.inputIsSensitive'))
+          this.loading = false
+          return
+        }
+        await this.userUpdateUserInfo({
+          _id,
+          displayName,
+          sex,
+          portrait,
+          location,
+          introduce
+        })
+        this.loading = false
+      }
+      this.showMessage('success', this.$t('common.saveSuccess'))
     },
     handleClose() {
       this.$emit('close')
