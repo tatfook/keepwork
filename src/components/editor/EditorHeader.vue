@@ -2,7 +2,7 @@
   <div class='editor-header'>
     <el-menu mode='horizontal'>
       <el-menu-item index="2">
-        <el-dropdown placement="bottom-end" class="kp-dropdown-menu" trigger="click">
+        <el-dropdown placement="bottom-end" class="kp-dropdown-menu">
           <span class="el-dropdown-link">
             <img class='kp-logo' src='@/assets/img/logo.svg' alt='Menu'>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -53,7 +53,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click.stop="refresh"><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                <button @click.stop="refreshOpenedFile(activeFilePath)"><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
                 <button @click.stop='undo' :disabled='!canUndo'><i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
                 <button @click='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
               </div>
@@ -178,6 +178,9 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
     }),
+    activeFilePath() {
+      return { path: this.currentPagePath }
+    },
     currentDisabled() {
       return !(this.activePage && this.hasOpenedFiles)
     },
@@ -233,7 +236,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveManagePaneComponent','savePageByPath','closeOpenedFile','closeAllOpenedFile','toggleSkyDrive','resetShowingCol']),
+    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveManagePaneComponent','savePageByPath','closeOpenedFile','closeAllOpenedFile','toggleSkyDrive','resetShowingCol','refreshOpenedFile']),
     async save() {
       let self = this
 
