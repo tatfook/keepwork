@@ -8,26 +8,26 @@
             <div class="lessons-title">{{properties.data.title}}</div>
             <div class="lessons-include-title">
               <span class="lessons-content">
-                <span class="lessons-include">{{this.$t('card.includes')}}</span>
+                <span class="lessons-include">{{$t('card.includes')}}</span>
                 <span class="lessons-count">{{properties.data.lessonCount}}</span>
-                {{this.$t('card.lessons')}}
+                {{$t('card.lessons')}}
               </span>
               <span>
-                <span class="lessons-include">{{this.$t('card.ages')}}</span>
-                <span class="lessons-age">{{properties.data.agesMin == 0 && properties.data.agesMax == 0 ? this.$t('card.suitableForAll') : properties.data.agesMin +'-'+ properties.data.agesMax}}</span>
+                <span class="lessons-include">{{$t('card.ages')}}</span>
+                <span class="lessons-age">{{properties.data.agesMin == 0 && properties.data.agesMax == 0 ? $t('card.suitableForAll') : properties.data.agesMin +'-'+ properties.data.agesMax}}</span>
               </span>
             </div>
             <div class="lessons-skills">
-              <div class="lessons-include">{{this.$t('card.skills')}}</div>
+              <div class="lessons-include">{{$t('card.skills')}}</div>
               <ul>
                 <li>{{properties.data.skills}}</li>
               </ul>
             </div>
             <div class="lessons-button" v-if="!isLessonsBuy">
               <span class="lessons-coins">
-                <span class="lessons-cost">{{properties.data.cost}}</span>{{this.$t('card.coins')}}
+                <span class="lessons-cost">{{properties.data.cost}}</span>{{$t('card.coins')}}
               </span>
-              <el-button @click="addClick" type="primary" id="btnAdd">{{this.$t('card.add')}}</el-button>
+              <el-button @click="addClick" type="primary" id="btnAdd">{{$t('card.add')}}</el-button>
             </div>
           </div>
         </el-col>
@@ -36,15 +36,15 @@
     <el-row :gutter="20" type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
       <el-col :span="20">
         <el-progress :stroke-width="18" :text-inside="true" :percentage="lessonProgress"></el-progress>
-        <div class="progress-tip">{{this.$t('haveLearned1')}} {{doneCount}} {{this.$t('haveLearned2')}}</div>
+        <div class="progress-tip">{{$t('haveLearned1')}} {{doneCount}} {{$t('haveLearned2')}}</div>
       </el-col>
       <el-col :span="4">
-        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{this.$t('card.continue')}}</el-button>
-        <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{this.$t('card.startToLearn')}}</el-button>
+        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.continue')}}</el-button>
+        <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.startToLearn')}}</el-button>
       </el-col>
     </el-row>
     <div class="lessons-list">
-      <div class="list-title">{{this.$t('card.catalogue')}}</div>
+      <div class="list-title">{{$t('card.catalogue')}}</div>
       <div class="list-content" v-for="lesson in properties.data.lessons" :key="lesson.lessonUrl">
         <div class="lesson-item">
           <el-row type="flex" class="mod-full-width-0-0-65">
@@ -60,12 +60,12 @@
                         <a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{lesson.lessonTitle}}</a>
                       </el-col>
                       <el-col :span="3" class="finished" v-if="lesson.learnedFlag > 0">
-                        <span>{{this.$t('card.finished')}}</span>
+                        <span>{{$t('card.finished')}}</span>
                         <i class="el-icon-success"></i>
                       </el-col>
                     </el-row>
                     <div class="lesson-item-goals">
-                      <div>{{this.$t('card.LessonGoals')}}</div>
+                      <div>{{$t('card.LessonGoals')}}</div>
                       <ul>
                         <li>{{lesson.LessonGoals}}</li>
                       </ul>
@@ -74,10 +74,10 @@
                   <el-col>
                     <div class="lesson-item-bottom">
                       <div class="lesson-item-dur">
-                        {{this.$t('card.duration')}}45min
+                        {{$t('card.duration')}}45min
                       </div>
                       <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
-                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">{{this.$t('card.viewSummary')}}</a>
+                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">{{$t('card.viewSummary')}}</a>
                       </div>
                     </div>
                   </el-col>
