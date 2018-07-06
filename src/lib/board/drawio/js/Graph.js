@@ -2560,7 +2560,7 @@ Graph.prototype.zapGremlins = function(text)
 /**
  * Hover icons are used for hover, vertex handler and drag from sidebar.
  */
-HoverIcons = function(graph)
+export const HoverIcons = function(graph)
 {
 	this.graph = graph;
 	this.init();
@@ -7848,4 +7848,8 @@ if (typeof mxVertexHandler != 'undefined')
 			}
 		};
 	})();
+}
+
+export default {
+  HoverIcons
 }

@@ -637,7 +637,7 @@ Editor.prototype.destroy = function()
  * Class for asynchronously opening a new window and loading a file at the same
  * time. This acts as a bridge between the open dialog and the new editor.
  */
-OpenFile = function(done)
+export const OpenFile = function(done)
 {
 	this.producer = null;
 	this.consumer = null;
@@ -2221,3 +2221,7 @@ PageSetupDialog.getFormats = function()
 	};
 
 })();
+
+export default {
+  OpenFile
+}
