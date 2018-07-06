@@ -52,7 +52,7 @@
           <template slot-scope="scope">{{ scope.row.displaySize }}</template>
         </el-table-column>
         <el-table-column
-          prop="updateDate"
+          prop="updatedAt"
           sortable
           :label="$t('skydrive.updateDate')"
           width="150">
@@ -60,7 +60,7 @@
             <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
               <el-progress :stroke-width="10" color="#13ce67" :show-text=false  :percentage="scope.row.percent"></el-progress>
             </span>
-            <span v-else>{{scope.row.updateDate}}</span>
+            <span v-else>{{scope.row.updatedAt | dateTimeFormatter}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -228,7 +228,7 @@ export default {
     skyDriveMediaLibraryData() {
       let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image/.test(type))
       let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
-        return obj1.updateDate <= obj2.updateDate ? 1 : -1
+        return obj1.updatedAt <= obj2.updatedAt ? 1 : -1
       })
       return sortedMediaDatas
     },
@@ -280,7 +280,7 @@ export default {
     async filesQueueToUpload(files){
       if (this.defaultMode) {
         this.$refs.skyDriveTable.clearSort()
-        this.$refs.skyDriveTable.sort('updateDate', 'descending')
+        this.$refs.skyDriveTable.sort('updatedAt', 'descending')
       }
       await Promise.all(_.map(files, async file => {
         let fileIndex = this.uploadingFiles.length
@@ -294,7 +294,7 @@ export default {
           file: {
             downloadUrl: ''
           },
-          updateDate: this.formatDate(),
+          updatedAt: this.formatDate(),
           state: 'doing' // success, error, cancel, doing
         })
         await this.uploadFile(file, fileIndex)
@@ -340,7 +340,7 @@ export default {
       }}).catch(err => console.error(err))
       fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
       this.uploadingFiles[fileIndex].state = 'success'
-      this.uploadingFiles[fileIndex].updateDate = this.formatDate()
+      this.uploadingFiles[fileIndex].updatedAt = this.formatDate()
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
     },
     removeFromUploadQue(file){
@@ -499,7 +499,8 @@ export default {
     }
   },
   filters: {
-    biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, '')
+    biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, ''),
+    dateTimeFormatter: (str = '') => str.replace(/[a-zA-Z]/g,' ').replace(/\..*$/, '')
   }
 }
 </script>
