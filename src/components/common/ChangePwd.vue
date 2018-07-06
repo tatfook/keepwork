@@ -79,7 +79,7 @@ export default {
   .el-form-item__label {
     padding-right: 22px;
   }
-  .el-form-item.is-required .el-form-item__label:before{
+  .el-form-item.is-required .el-form-item__label:before {
     display: none;
   }
 }

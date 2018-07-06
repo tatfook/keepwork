@@ -32,6 +32,9 @@
         </el-form>
         <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
       </el-col>
+      <el-col class="user-data-setting-operations-col">
+        <DialogOperations @save='saveUserData'></DialogOperations>
+      </el-col>
     </el-row>
   </el-container>
 </template>
@@ -40,6 +43,7 @@
 import _ from 'lodash'
 import vueCropper from 'vue-cropper'
 import { mapGetters, mapActions } from 'vuex'
+import DialogOperations from './DialogOperations'
 export default {
   name: 'userData',
   mounted() {
@@ -94,14 +98,19 @@ export default {
       let imgBase64 = this.profilePreviewUrl
       let imgMainContent = imgBase64.split(',')[1]
       let { username, defaultSiteDataSource } = this.loginUserProfile
-      let { projectId, rawBaseUrl, dataSourceUsername, projectName } = defaultSiteDataSource
+      let {
+        projectId,
+        rawBaseUrl,
+        dataSourceUsername,
+        projectName
+      } = defaultSiteDataSource
       let fileExtension = this.uploadingProfileFile.type.split('/')[1]
       let path = `/${username}_images/profile_${new Date().getTime()}.${fileExtension}`
       await that
         .gitlabCreateFile({
           path,
           content: imgMainContent,
-          userOptions:{
+          userOptions: {
             encoding: 'base64'
           }
         })
@@ -113,6 +122,34 @@ export default {
           console.log(error)
         })
     },
+    async saveUserData() {
+      let { userInfo } = componentRef
+      let isModified = !_.isEqual(this.loginUserProfile, userInfo)
+      if (isModified) {
+        this.loading = true
+        let { _id, displayName, sex, portrait, location, introduce } = userInfo
+        let isSensitive = await this.checkSensitive([
+          displayName,
+          location,
+          introduce
+        ])
+        if (isSensitive) {
+          this.showMessage('error', this.$t('common.inputIsSensitive'))
+          this.loading = false
+          return
+        }
+        await this.userUpdateUserInfo({
+          _id,
+          displayName,
+          sex,
+          portrait,
+          location,
+          introduce
+        })
+        this.loading = false
+      }
+      this.showMessage('success', this.$t('common.saveSuccess'))
+    },
     async uploadProfileToGitlab() {
       this.loading = true
       await this.uploadFileToGitlab()
@@ -121,26 +158,30 @@ export default {
     }
   },
   components: {
-    vueCropper
+    vueCropper,
+    DialogOperations
   }
 }
 </script>
 <style lang='scss' scoped>
 .user-data-setting {
+  height: 100%;
   &-content {
     display: flex;
     width: 100%;
-    padding: 40px 28px 0 20px;
+    padding: 0 0 0 20px;
   }
   &-portrait-col {
-    padding-right: 55px;
     width: auto;
     text-align: center;
+    padding: 40px 55px 0 0;
   }
   &-form-col {
     width: auto;
     flex: 1;
     position: relative;
+    padding: 40px 28px 0 0;
+    border-right: 15px solid #cdd4dc;
     .el-radio {
       color: #333;
     }
@@ -149,6 +190,12 @@ export default {
       left: 0;
       top: 0;
     }
+  }
+  &-operations-col {
+    width: 185px;
+    text-align: center;
+    align-self: flex-end;
+    padding-bottom: 26px;
   }
   &-change-profile {
     position: relative;

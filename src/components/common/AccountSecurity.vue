@@ -2,6 +2,7 @@
   <el-tabs v-model="activeName" class="account-security">
     <el-tab-pane label="修改密码" name="changePwd" class="account-security-pwd-pane">
       <ChangePwd></ChangePwd>
+      <DialogOperations></DialogOperations>
     </el-tab-pane>
     <el-tab-pane label="账号绑定" name="accountBinding">账号绑定</el-tab-pane>
   </el-tabs>
@@ -9,6 +10,7 @@
 
 <script>
 import ChangePwd from './ChangePwd'
+import DialogOperations from './DialogOperations'
 export default {
   name: 'AccountSecurity',
   data() {
@@ -17,7 +19,8 @@ export default {
     }
   },
   components: {
-    ChangePwd
+    ChangePwd,
+    DialogOperations
   }
 }
 </script>

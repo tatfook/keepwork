@@ -10,10 +10,6 @@
     <div class="personal-center-content">
       <component ref='personalCenterComponent' :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
     </div>
-    <div class="personal-center-operations">
-      <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
-      <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
-    </div>
   </el-dialog>
 </template>
 
@@ -81,7 +77,6 @@ export default {
       let componentRef = this.$refs.personalCenterComponent
       switch (this.activeSettingIndex) {
         case 0:
-          await saveUserData()
           break
         case 1:
           await saveSecurityChanges()
@@ -107,34 +102,6 @@ export default {
       }
     },
     async savePassword() {},
-    async saveUserData() {
-      let { userInfo } = componentRef
-      let isModified = !_.isEqual(this.loginUserProfile, userInfo)
-      if (isModified) {
-        this.loading = true
-        let { _id, displayName, sex, portrait, location, introduce } = userInfo
-        let isSensitive = await this.checkSensitive([
-          displayName,
-          location,
-          introduce
-        ])
-        if (isSensitive) {
-          this.showMessage('error', this.$t('common.inputIsSensitive'))
-          this.loading = false
-          return
-        }
-        await this.userUpdateUserInfo({
-          _id,
-          displayName,
-          sex,
-          portrait,
-          location,
-          introduce
-        })
-        this.loading = false
-      }
-      this.showMessage('success', this.$t('common.saveSuccess'))
-    },
     handleClose() {
       this.$emit('close')
     },
@@ -202,24 +169,7 @@ export default {
   &-content {
     flex: 1;
     border: 15px solid #cdd4db;
-    border-width: 0 15px;
-  }
-  &-operations {
-    text-align: center;
-    width: 185px;
-    align-self: flex-end;
-    padding-bottom: 26px;
-    .el-button {
-      width: 120px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-      padding: 0;
-      margin-bottom: 20px;
-    }
-    .el-button + .el-button {
-      margin-left: 0;
-    }
+    border-width: 0 0 0 15px;
   }
 }
 </style>
