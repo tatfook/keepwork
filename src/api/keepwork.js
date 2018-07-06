@@ -18,10 +18,19 @@ export const post = (...args) => {
   )
 }
 
+export const put = (...args) => {
+  let [url, payload, config, returnOriginalData = false] = args
+  return keepworkEndpoint.put(url, payload, config).then(
+    res => returnOriginalData ? res.data : res.data.data
+  )
+}
+
 export const user = {
   login: (...args) => post('/user/login', ...args),
   getProfile: (...args) => post('/user/getProfile', ...args),
-  getDetailByName: (...args) => post('/user/getDetailByName', ...args)
+  getDetailByName: (...args) => post('/user/getDetailByName', ...args),
+  updateUserInfo: (...args) => put('/user/updateUserInfo', ...args),
+  update: (...args) => put('/user/update', ...args)
 }
 
 /*doc
