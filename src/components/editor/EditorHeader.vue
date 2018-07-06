@@ -119,8 +119,8 @@
       <center v-if="closeOneFile">{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}1</center>
       <center v-else>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}2</center>
       <span slot="footer" class="dialog-footer">
-        <el-button type="warning" @click="handleClose" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-        <el-button type="primary" @click="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
+        <el-button type="warning" @click.stop="handleClose" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+        <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
       </span>
     </el-dialog>
   </div>
