@@ -53,7 +53,7 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col :span="23">
+          <el-col>
             <el-button-group>
               <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
               <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
@@ -73,9 +73,7 @@
             <el-button-group>
               <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
             </el-button-group>
-          </el-col>
-          <el-col :span="1" class="fullScreenBtn">
-            <el-button-group>
+            <el-button-group class="fullScreenBtn">
               <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
@@ -471,6 +469,9 @@ export default {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
+}
+.toolbar .fullScreenBtn{
+  float: right;
 }
 .toolbar .fullScreenBtn .el-button {
   border-radius: 4px;
