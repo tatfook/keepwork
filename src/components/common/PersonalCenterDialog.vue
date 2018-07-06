@@ -98,10 +98,7 @@ export default {
               introduce
             ])
             if (isSensitive) {
-              this.showMessage(
-                'error',
-                '您输入的内容不符合互联网安全规范，请修改'
-              )
+              this.showMessage('error', this.$t('common.inputIsSensitive'))
               this.loading = false
               return
             }
@@ -115,7 +112,7 @@ export default {
             })
             this.loading = false
           }
-          this.showMessage('success', '保存成功')
+          this.showMessage('success', this.$t('common.saveSuccess'))
           break
         default:
           break

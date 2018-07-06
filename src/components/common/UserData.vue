@@ -5,7 +5,7 @@
         <img :src="portrait" alt="" class="user-data-setting-profile">
         <div>
           <div class="user-data-setting-change-profile">
-            修改头像
+            {{$t('user.modifyAvatar')}}
             <input type="file" accept="image/*" @change="getUserSelectProfile">
           </div>
           <el-button type="primary" v-show='isCroppering' @click='uploadProfileToGitlab'>确定</el-button>
@@ -13,20 +13,20 @@
       </el-col>
       <el-col class="user-data-setting-form-col">
         <el-form ref="form" :model="userInfo" label-width="80px">
-          <el-form-item label="昵称:">
+          <el-form-item :label='$t("user.displayName")'>
             <el-input v-model="userInfo.displayName" size="small"></el-input>
           </el-form-item>
-          <el-form-item label="性别:">
+          <el-form-item :label='$t("user.sex")'>
             <el-radio-group v-model="userInfo.sex">
-              <el-radio label="M">男</el-radio>
-              <el-radio label="F">女</el-radio>
-              <el-radio label="N">保密</el-radio>
+              <el-radio label="M">{{$t('user.male')}}</el-radio>
+              <el-radio label="F">{{$t('user.female')}}</el-radio>
+              <el-radio label="N">{{$t('user.confidentiality')}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="位置:" size="small">
+          <el-form-item :label='$t("user.location")' size="small">
             <el-input v-model="userInfo.location"></el-input>
           </el-form-item>
-          <el-form-item label="个人简介:">
+          <el-form-item :label='$t("user.introduce")'>
             <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.introduce"></el-input>
           </el-form-item>
         </el-form>
@@ -158,6 +158,7 @@ export default {
       position: absolute;
       opacity: 0;
       left: 0;
+      top: 0;
       cursor: pointer;
       font-size: 0;
       width: 100%;

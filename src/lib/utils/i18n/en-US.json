@@ -8,9 +8,9 @@
     "serviceMall": "Service Mall",
     "invitationToRegister": "Invitation to register",
     "personalCenter": "Personal Center",
-    "userData": "User Data",
-    "accountSecurity": "Account Security",
-    "realNameAuthentication": "Real Name Authentication",
+    "userData": "Information",
+    "accountSecurity": "Security",
+    "realNameAuthentication": "Verified",
 
     "features": "Features",
     "applicationCenter": "Application center",
@@ -64,7 +64,9 @@
     "NoPages": "I'm sorry! The page you visited does not exist!",
     "loginToStarPage": "You must login before star this page!",
     "confirmButtonText": "Confirm",
-    "quickToTop": "Quick to top"
+    "quickToTop": "Quick to top",
+    "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
+    "saveSuccess": "Save Success"
   },
   "editor": {
     "files": "Files",
@@ -462,5 +464,15 @@
     "nameContainSpecialCharacterError": "The name contains special characters.",
     "fileUploading":
       "There are files being uploaded. After closing, the files will be canceled. Continue?"
+  },
+  "user": {
+    "displayName": "NickName:",
+    "sex": "Sex:",
+    "location": "Location:",
+    "introduce": "Introduce:",
+    "male": "Male",
+    "female": "Female",
+    "confidentiality": "Confidentiality",
+    "modifyAvatar": "Modify Avatar"
   }
 }

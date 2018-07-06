@@ -64,7 +64,9 @@
     "NoPages": "很抱歉！您访问的页面不存在!",
     "loginToStarPage": "点击右上角登录后才能点赞！",
     "confirmButtonText": "确认",
-    "quickToTop": "返回顶部"    
+    "quickToTop": "返回顶部",
+    "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
+    "saveSuccess": "保存成功"
   },
   "editor": {
     "files": "文件",
@@ -449,5 +451,15 @@
     "nameEmptyError": "文件名不能为空",
     "nameContainSpecialCharacterError": "文件名里包含特殊字符",
     "fileUploading": "还有文件正在上传中，关闭后文件将取消上传，是否继续？"
+  },
+  "user": {
+    "displayName": "昵称:",
+    "sex": "性别:",
+    "location": "位置:",
+    "introduce": "个人简介:",
+    "male": "男",
+    "female": "女",
+    "confidentiality": "保密",
+    "modifyAvatar": "修改头像"
   }
 }
