@@ -23,7 +23,7 @@
                             <el-input size="small" v-model="authCode"></el-input>
                         </el-col>
                         <el-col :span="8">
-                            <el-button type="primary" size="small" class="send-auth-code">发送验证码</el-button>
+                            <el-button type="primary" size="small" class="send-auth-code" @click.stop="sendAuthCode">发送验证码</el-button>
                         </el-col>
                     </el-form-item>
                 </el-row>                    
@@ -33,43 +33,53 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapGeetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-    name: 'realNameAuthentication',
-    data(){
-        return{
-            hasVerified: false,
-            realNamePhoneNum: '',
-            authCode: ''
-        }
-    },
-    method:{
-        
+  name: 'realNameAuthentication',
+  data() {
+    return {
+      loading: false,
+      hasVerified: false,
+      realNamePhoneNum: 18665835727,
+      authCode: ''
     }
+  },
+  computed: {
+    ...mapGetters({})
+  },
+  methods: {
+    ...mapActions({
+      verifyCellphoneOne: 'user/verifyCellphoneOne'
+    }),
+    sendAuthCode() {
+      let payload = { bind: true, cellphone: this.realNamePhoneNum }
+      this.verifyCellphoneOne(payload)
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
-.real-name-setting{
-    &-header{
-        border-bottom: 3px solid #cdd4db;
+.real-name-setting {
+  &-header {
+    border-bottom: 3px solid #cdd4db;
+  }
+  &-content {
+    width: 70%;
+    padding: 40px 28px 0 20px;
+    .auth-status {
+      color: red;
     }
-    &-content{
-        width: 70%;
-        padding: 40px 28px 0 20px;
-        .auth-status{
-            color: red;
-        }
-        .send-auth-code{
-            margin-left: 8px;
-        }
+    .send-auth-code {
+      margin-left: 8px;
     }
+  }
 }
 </style>
 <style lang="scss">
-.real-name-setting{
-    .el-form-item__label {
-        padding-right: 20px;
-    }
+.real-name-setting {
+  .el-form-item__label {
+    padding-right: 20px;
+  }
 }
 </style>
 

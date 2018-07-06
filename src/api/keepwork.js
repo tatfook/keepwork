@@ -30,7 +30,9 @@ export const user = {
   getProfile: (...args) => post('/user/getProfile', ...args),
   getDetailByName: (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: (...args) => put('/user/updateUserInfo', ...args),
-  update: (...args) => put('/user/update', ...args)
+  update: (...args) => put('/user/update', ...args),
+  verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
+  verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args)
 }
 
 /*doc

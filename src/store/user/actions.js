@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 const {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
+  SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
@@ -102,6 +103,17 @@ const actions = {
     let { commit, getters: { authRequestConfig, token } } = context
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
     commit(GET_PROFILE_SUCCESS, { ...newUserInfo, token })
+  },
+  async verifyCellphoneOne({ commit }, { bind, cellphone }) {
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
+    console.log('verifyInfo', verifyInfoOne)
+    commit(SET_REAL_AUTH_PHONE_NUM, cellphone)
+  },
+  async verifyCellphoneTwo({ commit }, { bind, cellphone, smsCode }) {
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
+    console.log('112', verifyInfoOne)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({bind, smsCode, verifyInfoOne})
+    console.log(verifyInfoTwo)
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}

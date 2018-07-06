@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
+const SET_REAL_AUTH_PHONE_NUM = 'SET_REAL_AUTH_PHONE_NUM'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
 const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
 const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
@@ -27,6 +28,7 @@ const USE_FILE_IN_SITE_SUCCESS = 'USE_FILE_IN_SITE_SUCCESS'
 export const props = {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
+  SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
@@ -59,6 +61,9 @@ const mutations = {
   },
   [GET_PROFILE_SUCCESS](state, payload) {
     Vue.set(state, 'profile', payload)
+  },
+  [SET_REAL_AUTH_PHONE_NUM](state, cellphone) {
+    Vue.set(state, 'realNamePhoneNum', cellphone)
   },
   [GET_ALL_WEBSITE_SUCCESS](state, {username, list}) {
     Vue.set(state, 'website', {

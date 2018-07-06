@@ -63,7 +63,8 @@ export default {
   methods: {
     ...mapActions({
       userUpdateUserInfo: 'user/updateUserInfo',
-      userCheckSensitive: 'user/checkSensitive'
+      userCheckSensitive: 'user/checkSensitive',
+      verifyCellphoneTwo: 'verifyCellphoneTwo'
     }),
     async checkSensitive(checkedWords) {
       let result = await this.userCheckSensitive({ checkedWords })
@@ -114,7 +115,11 @@ export default {
           }
           this.showMessage('success', this.$t('common.saveSuccess'))
           break
+        case 2:
+          break
         default:
+          let paylaod = {bind: true, cellphone: 18665835727, smsCode: 1234}
+          this.verifyCellphoneTwo(paylaod)
           break
       }
     },
