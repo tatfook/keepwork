@@ -398,7 +398,7 @@ export default {
     },
     async handleInsert(file) {
       let url = await this.getSiteFileUrl(file)
-      this.$emit('close', { file, url })
+      this.$emit('close', { file, url: `${url}#${file.filename}` })
     },
     async handleRename(item) {
       let { _id, ext } = item
