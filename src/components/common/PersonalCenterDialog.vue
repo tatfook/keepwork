@@ -72,11 +72,14 @@ export default {
           let isModified = !_.isEqual(this.loginUserProfile, userInfo)
           if (isModified) {
             this.loading = true
-            let { _id, displayName, sex } = userInfo
+            let { _id, displayName, sex, portrait, location, introduce } = userInfo
             await this.userUpdateUserInfo({
-              _id: _id,
-              displayName: displayName,
-              sex: sex
+              _id,
+              displayName,
+              sex,
+              portrait,
+              location,
+              introduce
             })
             this.loading = false
           }

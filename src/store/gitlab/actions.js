@@ -185,7 +185,7 @@ const actions = {
   },
   async createFile(
     context,
-    { path, content = '', refreshRepositoryTree = true }
+    { path, content = '', refreshRepositoryTree = true, userOptions }
   ) {
     let { commit, dispatch } = context
     let {
@@ -194,6 +194,7 @@ const actions = {
       gitlab,
       options
     } = await getGitlabParams(context, { path, content })
+    options = _.merge(userOptions, options)
     await gitlab.createFile(
       path,
       options

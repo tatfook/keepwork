@@ -19,7 +19,6 @@ export const post = (...args) => {
 }
 
 export const put = (...args) => {
-  console.log('11111')
   let [url, payload, config, returnOriginalData = false] = args
   return keepworkEndpoint.put(url, payload, config).then(
     res => returnOriginalData ? res.data : res.data.data

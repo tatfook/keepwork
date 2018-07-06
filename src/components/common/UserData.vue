@@ -4,7 +4,11 @@
       <el-col class="user-data-setting-portrait-col">
         <img :src="portrait" alt="" class="user-data-setting-profile">
         <div>
-          <span>修改头像</span>
+          <div class="user-data-setting-change-profile">
+            修改头像
+            <input type="file" accept="image/*" @change="getUserSelectProfile">
+          </div>
+          <el-button type="primary" v-show='isCroppering' @click='uploadProfileToGitlab'>确定</el-button>
         </div>
       </el-col>
       <el-col class="user-data-setting-form-col">
@@ -26,6 +30,7 @@
             <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.introduce"></el-input>
           </el-form-item>
         </el-form>
+        <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
       </el-col>
     </el-row>
   </el-container>
@@ -33,16 +38,29 @@
 
 <script>
 import _ from 'lodash'
-import { mapGetters } from 'vuex'
+import vueCropper from 'vue-cropper'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'userData',
-  mounted(){
+  mounted() {
     this.userInfo = _.cloneDeep(this.loginUserProfile)
   },
   data() {
     return {
       loading: false,
-      userInfo: {}
+      userInfo: {},
+      isCroppering: false,
+      profilePreviewUrl: '',
+      uploadingProfileFile: {},
+      profileCropper: {
+        img: '',
+        autoCrop: true,
+        autoCropWidth: 200,
+        autoCropHeight: 200,
+        fixedBox: true,
+        canMoveBox: false,
+        canMove: false
+      }
     }
   },
   computed: {
@@ -50,8 +68,60 @@ export default {
       loginUserProfile: 'user/profile'
     }),
     portrait() {
-      return _.get(this.loginUserProfile, 'portrait')
+      return this.isCroppering
+        ? this.profilePreviewUrl
+        : _.get(this.userInfo, 'portrait')
     }
+  },
+  methods: {
+    ...mapActions({
+      gitlabCreateFile: 'gitlab/createFile'
+    }),
+    getUserSelectProfile(e) {
+      let file = _.get(e, ['target', 'files'])[0]
+      this.uploadingProfileFile = file
+      let previewUrl = URL.createObjectURL(file)
+      this.profileCropper.img = previewUrl
+      this.isCroppering = true
+    },
+    getPreviewUrl(data) {
+      this.$refs.profileCropper.getCropData(data => {
+        this.profilePreviewUrl = data
+      })
+    },
+    async uploadFileToGitlab() {
+      let that = this
+      let imgBase64 = this.profilePreviewUrl
+      let imgMainContent = imgBase64.split(',')[1]
+      let { username, defaultSiteDataSource } = this.loginUserProfile
+      let { projectId, rawBaseUrl, dataSourceUsername, projectName } = defaultSiteDataSource
+      let fileExtension = this.uploadingProfileFile.type.split('/')[1]
+      let path = `/${username}_images/profile_${new Date().getTime()}.${fileExtension}`
+      await that
+        .gitlabCreateFile({
+          path,
+          content: imgMainContent,
+          userOptions:{
+            encoding: 'base64'
+          }
+        })
+        .then(() => {
+          let url = `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
+          that.userInfo.portrait = url
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    async uploadProfileToGitlab() {
+      this.loading = true
+      await this.uploadFileToGitlab()
+      this.loading = false
+      this.isCroppering = false
+    }
+  },
+  components: {
+    vueCropper
   }
 }
 </script>
@@ -70,8 +140,28 @@ export default {
   &-form-col {
     width: auto;
     flex: 1;
+    position: relative;
     .el-radio {
       color: #333;
+    }
+    .vue-cropper {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+  &-change-profile {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+    input[type='file'] {
+      position: absolute;
+      opacity: 0;
+      left: 0;
+      cursor: pointer;
+      font-size: 0;
+      width: 100%;
+      height: 100%;
     }
   }
   &-profile {

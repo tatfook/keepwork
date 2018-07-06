@@ -49,9 +49,9 @@ const actions = {
     let getProfilePromise
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
-    return async (context, {forceLogin = true} = {}) => {
+    return async (context, {forceLogin = true, useCache = true} = {}) => {
       let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
-      if (isLogined) return
+      if (isLogined && useCache) return
 
       getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
@@ -99,10 +99,9 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { authRequestConfig } } = context
-    console.log(authRequestConfig)
+    let { commit, getters: { authRequestConfig, token } } = context
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
-    commit(GET_PROFILE_SUCCESS, newUserInfo)
+    commit(GET_PROFILE_SUCCESS, { ...newUserInfo, token })
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}
