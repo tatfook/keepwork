@@ -119,8 +119,7 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles'
     }),
     openedTreeData() {
-      // let clonedopenedFiles = _.clone(this.openedFiles)
-      let clonedopenedFiles = _.cloneDeep(this.openedFiles)
+      let clonedopenedFiles = _.clone(this.openedFiles)
       let treeDatas = []
       let that = this
       _.forOwn(clonedopenedFiles, function(value, key) {
