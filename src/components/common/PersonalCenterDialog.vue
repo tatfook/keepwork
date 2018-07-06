@@ -62,8 +62,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      userUpdateUserInfo: 'user/updateUserInfo'
+      userUpdateUserInfo: 'user/updateUserInfo',
+      userCheckSensitive: 'user/checkSensitive'
     }),
+    async checkSensitive(checkedWords) {
+      let result = await this.userCheckSensitive({ checkedWords })
+      return result && result.length > 0
+    },
+    showMessage(type, message) {
+      this.$message({
+        message,
+        type,
+        showClose: true
+      })
+    },
     async handleSave() {
       let componentRef = this.$refs.personalCenterComponent
       switch (this.activeSettingIndex) {
@@ -72,7 +84,27 @@ export default {
           let isModified = !_.isEqual(this.loginUserProfile, userInfo)
           if (isModified) {
             this.loading = true
-            let { _id, displayName, sex, portrait, location, introduce } = userInfo
+            let {
+              _id,
+              displayName,
+              sex,
+              portrait,
+              location,
+              introduce
+            } = userInfo
+            let isSensitive = await this.checkSensitive([
+              displayName,
+              location,
+              introduce
+            ])
+            if (isSensitive) {
+              this.showMessage(
+                'error',
+                '您输入的内容不符合互联网安全规范，请修改'
+              )
+              this.loading = false
+              return
+            }
             await this.userUpdateUserInfo({
               _id,
               displayName,
@@ -83,6 +115,7 @@ export default {
             })
             this.loading = false
           }
+          this.showMessage('success', '保存成功')
           break
         default:
           break
