@@ -150,8 +150,8 @@
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
-          <el-button size="small" 
-            :disabled='!availableSelectedMediaItem' round 
+          <el-button size="small"
+            :disabled='!availableSelectedMediaItem' round
             @click="handleInsert(availableSelectedMediaItem)"
           >{{ $t('common.apply') }}</el-button>
         </el-col>
@@ -228,7 +228,7 @@ export default {
     skyDriveMediaLibraryData() {
       let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image/.test(type))
       let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
-        return obj1.updateDate <= obj2.updateDate
+        return obj1.updateDate <= obj2.updateDate ? 1 : -1
       })
       return sortedMediaDatas
     },
@@ -370,6 +370,7 @@ export default {
       this.loading = true
       await this.userRemoveFileFromSkyDrive({file}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      this.selectedMediaItem = null
       this.loading = false
     },
     async handleCopy(file) {
@@ -400,10 +401,10 @@ export default {
       this.$emit('close', { file, url })
     },
     async handleRename(item) {
-      let { key, ext } = item
-      let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'), 'Tip', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+      let { _id, ext } = item
+      let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
+        confirmButtonText: this.$t('common.OK'),
+        cancelButtonText: this.$t('common.Cancel'),
         inputValidator: str => {
           if (!str) {
             return this.$t('skydrive.nameEmptyError')

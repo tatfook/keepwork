@@ -63,7 +63,8 @@
     "back": "返 回",
     "NoPages": "很抱歉！您访问的页面不存在!",
     "loginToStarPage": "点击右上角登录后才能点赞！",
-    "confirmButtonText": "确认"
+    "confirmButtonText": "确认",
+    "quickToTop": "返回顶部"    
   },
   "editor": {
     "files": "文件",
@@ -94,6 +95,10 @@
     "revoke": "撤销",
     "redo": "重做",
     "module": "模块",
+
+    "setUpTheWebsite": "设置网站",
+    "setUpThePage": "设置页面",
+    "deleteTheCurrentPage": "删除当前页面",
 
     "refresh": "刷新",
     "close": "关闭",

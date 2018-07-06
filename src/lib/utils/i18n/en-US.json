@@ -63,7 +63,8 @@
     "back": "back",
     "NoPages": "I'm sorry! The page you visited does not exist!",
     "loginToStarPage": "You must login before star this page!",
-    "confirmButtonText": "Confirm"
+    "confirmButtonText": "Confirm",
+    "quickToTop": "Quick to top"
   },
   "editor": {
     "files": "Files",
@@ -95,6 +96,10 @@
     "revoke": "Revoke",
     "redo": "Redo",
     "module": "Module",
+
+    "setUpTheWebsite": "Set up the website",
+    "setUpThePage": "Set up the page",
+    "deleteTheCurrentPage": "Delete the current page",
 
     "refresh": "Refresh",
     "close": "Close",

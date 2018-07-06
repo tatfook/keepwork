@@ -9,7 +9,7 @@
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
-        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+        <SkyDriveManagerDialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog' />
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
@@ -35,7 +35,7 @@
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
-          <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
+          <el-switch :value="isCodeShow" @change='toggleCodeWin'>
           </el-switch>
         </div>
       </el-row>
@@ -53,7 +53,7 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col :span="23">
+          <el-col>
             <el-button-group>
               <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
               <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
@@ -73,9 +73,7 @@
             <el-button-group>
               <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
             </el-button-group>
-          </el-col>
-          <el-col :span="1" class="fullScreenBtn">
-            <el-button-group>
+            <el-button-group class="fullScreenBtn">
               <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
@@ -125,9 +123,7 @@ export default {
         leftColWidthParam: '',
         rightColWidthParam: ''
       },
-      isCodeWinShow: true,
       isFullscreen: false,
-      isSkyDriveManagerDialogShow: false,
       gConst,
       editingMarkdownModDatas: {
         key: 'data',
@@ -169,7 +165,9 @@ export default {
       activePageInfo: 'activePageInfo',
       isMultipleTextDialogShow: 'isMultipleTextDialogShow',
       activePropertyData: 'activePropertyData',
-      hasOpenedFiles: 'hasOpenedFiles'
+      hasOpenedFiles: 'hasOpenedFiles',
+      showSkyDrive: 'showSkyDrive',
+      isCodeShow: 'isCodeShow'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
@@ -239,26 +237,20 @@ export default {
     ...mapActions({
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      toggleSkyDrive: 'toggleSkyDrive'
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
-    toggleCodeWin(isCodeWinShow) {
-      if (isCodeWinShow) {
-        this.resetShowingCol({
-          isCodeShow: true,
-          isPreviewShow: true
-        })
-        this.$store.dispatch('setAddingArea', {
-          area: this.gConst.ADDING_AREA_ADI
-        })
-      } else {
-        this.resetShowingCol({
-          isCodeShow: false,
-          isPreviewShow: true
-        })
-      }
+    toggleCodeWin() {
+      this.resetShowingCol({
+        isCodeShow: !this.isCodeShow,
+        isPreviewShow: true
+      })
+      this.isCodeShow && this.$store.dispatch('setAddingArea', {
+        area: this.gConst.ADDING_AREA_ADI
+      })
     },
     toggleFullscreen() {
       this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
@@ -325,10 +317,10 @@ export default {
       this.$refs.codemirror.addMod()
     },
     openSkyDriveManagerDialog() {
-      this.isSkyDriveManagerDialogShow = true
+      this.toggleSkyDrive({ showSkyDrive:true })
     },
     closeSkyDriveManagerDialog({ file, url }) {
-      this.isSkyDriveManagerDialogShow = false
+      this.toggleSkyDrive({ showSkyDrive:false })
       if (url) {
         let filename = file.filename || url
         let isImage = /^image/.test(file.type)
@@ -477,6 +469,9 @@ export default {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
+}
+.toolbar .fullScreenBtn{
+  float: right;
 }
 .toolbar .fullScreenBtn .el-button {
   border-radius: 4px;

@@ -1,6 +1,6 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <div v-show="hasOpenedFiles" class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
+    <div v-show="hasOpenedFiles" class="opened-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
       <div class="opened-files-container">
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
@@ -471,12 +471,17 @@ export default {
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
-    .el-tree-node__label{
-      padding-right: 105px;
-    }
     .file-manager-buttons-container {
       display: inline-block !important;
       line-height: 38px !important;
+    }
+  }
+  .opened-tree{
+    .el-tree-node__content:hover {
+      background-color: #ccfffc;
+      .el-tree-node__label{
+        padding-right: 135px;
+      }
     }
   }
   .el-tree-node__content {
