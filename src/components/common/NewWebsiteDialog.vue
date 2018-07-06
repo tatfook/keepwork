@@ -30,7 +30,8 @@
       <el-form class="website-name" :model="websiteNameForm" :rules="websiteNameFormRules" ref="websiteNameForm">
         <el-form-item prop="value">
           <el-input :placeholder="forExample.forExample" v-model="websiteNameForm.value">
-            <template slot="prepend">http(s)://keepwork.com/{{ username }}/</template>
+            <template slot="prepend">{{ locationOrigin }}/{{ username }}/</template>
+
           </el-input>
         </el-form-item>
       </el-form>
