@@ -8,7 +8,7 @@
             {{$t('user.modifyAvatar')}}
             <input type="file" accept="image/*" @change="getUserSelectProfile">
           </div>
-          <el-button type="primary" v-show='isCroppering' @click='uploadProfileToGitlab'>确定</el-button>
+          <el-button type="primary" v-show='isCroppering' @click='uploadProfileToGitlab'>{{$t('common.Sure')}}</el-button>
         </div>
       </el-col>
       <el-col class="user-data-setting-form-col">
