@@ -4,7 +4,7 @@
 /**
  * Constructs a new open dialog.
  */
-var OpenDialog = function()
+export const OpenDialog = function()
 {
 	var iframe = document.createElement('iframe');
 	iframe.style.backgroundColor = 'transparent';
@@ -27,7 +27,7 @@ var OpenDialog = function()
 /**
  * Constructs a new color dialog.
  */
-var ColorDialog = function(editorUi, color, apply, cancelFn)
+export const ColorDialog = function(editorUi, color, apply, cancelFn)
 {
 	this.editorUi = editorUi;
 	
@@ -365,7 +365,7 @@ var AboutDialog = function(editorUi)
 /**
  * Constructs a new filename dialog.
  */
-var FilenameDialog = function(editorUi, filename, buttonText, fn, label, validateFn, content, helpLink, closeOnBtn, cancelFn)
+export const FilenameDialog = function(editorUi, filename, buttonText, fn, label, validateFn, content, helpLink, closeOnBtn, cancelFn)
 {
 	closeOnBtn = (closeOnBtn != null) ? closeOnBtn : true;
 	var row, td;
@@ -1661,7 +1661,7 @@ EditDataDialog.placeholderHelpLink = null;
 /**
  * Constructs a new link dialog.
  */
-var LinkDialog = function(editorUi, initialValue, btnLabel, fn)
+export const LinkDialog = function(editorUi, initialValue, btnLabel, fn)
 {
 	var div = document.createElement('div');
 	mxUtils.write(div, mxResources.get('editLink') + ':');
@@ -2487,3 +2487,10 @@ var LayersWindow = function(editorUi, x, y, w, h)
 		this.window.setLocation(x, y);
 	}));
 };
+
+export default {
+  ColorDialog,
+  OpenDialog,
+  FilenameDialog,
+  LinkDialog
+}
