@@ -44,11 +44,11 @@ export default {
       isOldData: false,
       loading: false,
       ext: {
-        txt: 'icon-txt',
-        mp4: 'icon-mp4',
-        mp3: 'icon-mp3',
-        rar: 'icon-rar',
-        gif: 'icon-gif',
+        txt: 'icon-txt1',
+        mp4: 'icon-mp4-1',
+        mp3: 'icon-mp3-1',
+        rar: 'icon-rar1',
+        gif: 'icon-gif1',
         ppt: 'icon-ppt',
         png: 'icon-PNG',
         html: 'icon-html',
@@ -174,27 +174,23 @@ export default {
         font-size: 45px;
       }
 
-      .icon-ppt {
-        color: rgb(243, 115, 39);
-      }
-
-      .icon-txt {
+      .icon-txt1 {
         color: rgb(186, 189, 194);
       }
 
-      .icon-mp4 {
+      .icon-mp4-1 {
         color: rgb(98, 166, 245);
       }
 
-      .icon-mp3 {
+      .icon-mp3-1 {
         color: rgb(245, 108, 73);
       }
 
-      .icon-rar {
+      .icon-rar1 {
         color: rgb(159, 209, 59);
       }
 
-      .icon-gif {
+      .icon-gif1 {
         color: rgb(210, 110, 219);
       }
 
