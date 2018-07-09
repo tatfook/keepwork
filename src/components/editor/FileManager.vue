@@ -15,8 +15,8 @@
       <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-collapse-transition>
