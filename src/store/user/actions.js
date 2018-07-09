@@ -100,9 +100,9 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { authRequestConfig, token } } = context
+    let { commit, getters: { authRequestConfig, profile } } = context
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
-    commit(GET_PROFILE_SUCCESS, { ...newUserInfo, token })
+    commit(GET_PROFILE_SUCCESS, { ...newUserInfo, ...profile })
   },
   async verifyCellphoneOne({ commit }, { bind, cellphone }) {
     let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
