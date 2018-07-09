@@ -508,7 +508,7 @@
     "source": "source",
     "LessonNo": "Lesson No.",
     "Title": "Lesson Title",
-    "LessonGoals": "Lesson Goals",
+    "lessonGoals": "Lesson Goals",
     "CoverImageOfTheLesson": "Cover Image Of The Lesson",
     "AnimationOfTheLesson": "Animation Of The Lesson",
     "CodeReadLine": "Code Read Line",
