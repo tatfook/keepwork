@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 let emptyData = {
   pic: {
     emptySrc: require('@/../static/adi/qq/qqOne.svg'),
@@ -145,13 +143,18 @@ export default [
       },
       config: {
         ...emptyData,
-        desc: _.merge({}, emptyData.desc, {
+        desc: {
+          ...emptyData.desc,
           buttonStyle: {
             border: '1px solid #3ba4ff',
             'border-radius': '18px',
             padding: '4px'
           }
-        })
+        },
+        pic: {
+          ...emptyData.pic,
+          emptySrc: require('@/../static/adi/qq/qqTwo.svg')
+        }
       }
     },
     cover: require('@/../static/adi/qq/cover/qqCoverTwo.png'),
