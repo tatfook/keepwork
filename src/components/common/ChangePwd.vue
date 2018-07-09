@@ -1,28 +1,39 @@
 <template>
-  <el-form class="change-pwd-form" :rules='pwdRules' ref="resetPwdForm" :model="pwdFormDatas" label-width="96px">
-    <el-form-item label="旧密码:" prop='oldpassword'>
-      <el-input v-model="pwdFormDatas.oldpassword" size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="新密码:" prop='newpassword'>
-      <el-input v-model="pwdFormDatas.newpassword" size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="确定新密码:" prop='reNewpassword'>
-      <el-input v-model="pwdFormDatas.reNewpassword" size="small"></el-input>
-    </el-form-item>
-  </el-form>
+  <div class="change-pwd" v-loading='loading'>
+    <el-form class="change-pwd-form" :rules='pwdRules' ref="resetPwdForm" :model="pwdFormDatas" label-width="130px">
+      <el-form-item :label="$t('user.oldPwd')" prop='oldpassword'>
+        <el-input v-model="pwdFormDatas.oldpassword" size="small"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('user.newPwd')" prop='newpassword'>
+        <el-input v-model="pwdFormDatas.newpassword" size="small"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('user.reNewPwd')" prop='reNewpassword'>
+        <el-input v-model="pwdFormDatas.reNewpassword" size="small"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="savePassword" class="change-pwd-form-confirm-button">{{$t('common.Sure')}}</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'ChangePwd',
+  props: {
+    isChangePwdPaneActive: Boolean
+  },
   data() {
     let validatePass2 = (rule, value, callback) => {
       if (value !== this.pwdFormDatas.newpassword) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error(`${this.$t('user.twoPwdInconsistent')}`))
       } else {
         callback()
       }
     }
     return {
+      loading: false,
       pwdFormDatas: {
         oldpassword: '',
         newpassword: '',
@@ -32,40 +43,87 @@ export default {
         oldpassword: [
           {
             required: true,
-            message: '请输入旧密码',
+            message: this.$t('user.oldPwdRequired'),
             trigger: 'blur'
           },
           {
             min: 6,
-            message: '密码最少6位',
+            message: this.$t('user.pwdMinLen'),
             trigger: 'blur'
           }
         ],
         newpassword: [
           {
             required: true,
-            message: '请输入新密码',
+            message: this.$t('user.newPwdRequired'),
             trigger: 'blur'
           },
           {
             min: 6,
-            message: '密码最少6位',
+            message: this.$t('user.pwdMinLen'),
             trigger: 'blur'
           }
         ],
         reNewpassword: [
           {
             required: true,
-            message: '请再次输入新密码',
+            message: this.$t('user.reNewPwdRequired'),
             trigger: 'blur'
           },
           {
             min: 6,
-            message: '密码最少6位',
+            message: this.$t('user.pwdMinLen'),
             trigger: 'blur'
           },
           { validator: validatePass2, trigger: 'blur' }
         ]
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      userChangePwd: 'user/changePwd'
+    }),
+    showMessage(type, message) {
+      this.$message({
+        message,
+        type,
+        showClose: true
+      })
+    },
+    async sendPwdToBack() {
+      this.loading = true
+      let result = await this.userChangePwd({
+        newpassword: this.pwdFormDatas.newpassword,
+        oldpassword: this.pwdFormDatas.oldpassword
+      })
+      if (result == 'success') {
+        this.showMessage('success', this.$t('common.saveSuccess'))
+      } else {
+        this.showMessage('error', result)
+      }
+      this.pwdFormDatas = {}
+      this.loading = false
+    },
+    async savePassword() {
+      this.$refs.resetPwdForm.validate(valid => {
+        if (valid) {
+          this.sendPwdToBack()
+        }
+      })
+    },
+    resetDatas() {
+      this.$refs.resetPwdForm.resetFields()
+    },
+    handleClose() {
+      console.log()
+      this.$emit('close')
+    }
+  },
+  watch: {
+    isChangePwdPaneActive(value) {
+      if (value === false) {
+        this.resetDatas()
       }
     }
   }
@@ -81,6 +139,10 @@ export default {
   }
   .el-form-item.is-required .el-form-item__label:before {
     display: none;
+  }
+  &-confirm-button {
+    width: 120px;
+    height: 40px;
   }
 }
 </style>

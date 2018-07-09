@@ -516,6 +516,12 @@ const actions = {
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)
     return result
+  },
+  async changePwd(context, { oldpassword, newpassword }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
+    return result.error.message
   }
 }
 
