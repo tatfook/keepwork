@@ -450,7 +450,7 @@
     "addPackageFirst": "Please add the package first",
     "lessonPackageCost1": "To learn lessons of this package, you have to invest ",
     "lessonPackageCost2": " coins.",
-    "addPackageSuccess": "Add lessons of this package success!",
+    "addPackageSuccess": "The package was successfully added!",
     "operationFail": "Operation failed please retry!",
     "pleaseLogin": "Sorry,please login!",
     "havePurchased": "You have already purchased!",
