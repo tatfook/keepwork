@@ -74,7 +74,7 @@
                   <el-col>
                     <div class="lesson-item-bottom">
                       <div class="lesson-item-dur">
-                        {{$t('card.duration')}}45min
+                        {{$t('card.duration')}} 45min
                       </div>
                       <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
                         <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">{{$t('card.viewSummary')}}</a>
@@ -103,6 +103,7 @@ export default {
     return {
       dialogVisible: false,
       isLessonsBuy: false,
+      isLogined: true,
       doneCount: 0,
       lessonProgress: 0,
       nextLearnLesson: '',
@@ -141,6 +142,9 @@ export default {
     },
     //未购买点击
     noBuyAlert() {
+      if (!this.isLogined) {
+        return this.$message.error(this.$t('card.pleaseLogin'))
+      }
       if (!this.isLessonsBuy) {
         this.$alert(this.$t('card.addPackageFirst'), {
           confirmButtonText: this.$t('common.OK'),
@@ -160,7 +164,12 @@ export default {
       })
     },
     // 购买课程包
-    addClick() {
+    async addClick() {
+      let r = await lessonAPI.subscribeState(this.properties.data.id)
+      if (r.err == 102) {
+        return this.$message.error(this.$t('card.pleaseLogin'))
+      }
+      this.isLogined = true
       this.$confirm(
         `${this.$t('card.lessonPackageCost1')}${this.properties.data.cost}${this.$t('card.lessonPackageCost2')}`,
         {
@@ -169,7 +178,7 @@ export default {
           type: 'warning'
         }
       ).then(async () => {
-        let r = await lessonAPI.addSubscribe(this.properties.data.id)
+        // let r = await lessonAPI.addSubscribe(this.properties.data.id)
         if (r.err == 0) {
           this.$message({
             type: 'success',
@@ -179,7 +188,7 @@ export default {
           //调用该用户学习状态
           this.UserState()
         } else if (r.err == 101) {
-          this.$message.error(this.$t('card.operatinFail'))
+          this.$message.error(this.$t('card.operationFail'))
         } else if (r.err == 102) {
           this.$message.error(this.$t('card.pleaseLogin'))
         } else if (r.err == 103) {
@@ -232,7 +241,8 @@ export default {
             }
           }
         } else if (r.err == 102) {
-          this.$message.error(this.$t('card.pleaseLogin'))
+          this.isLogined = false
+          // this.$message.error(this.$t('card.pleaseLogin')
         } else if (r.err == 400) {
           //未购买
         }

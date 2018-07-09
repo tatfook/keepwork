@@ -497,7 +497,7 @@
     "source": "来源",
     "LessonNo": "课程序号",
     "Title": "课程标题",
-    "LessonGoals": "课程目标",
+    "lessonGoals": "课程目标",
     "CoverImageOfTheLesson": "封面",
     "AnimationOfTheLesson": "动画",
     "CodeReadLine": "代码阅读行数",
