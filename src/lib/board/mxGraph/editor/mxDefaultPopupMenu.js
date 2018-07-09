@@ -3,26 +3,26 @@
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 /**
- * Class: mxDefaultPopupMenu
+ * Class: MxDefaultPopupMenu
  *
  * Creates popupmenus for mouse events. This object holds an XML node
  * which is a description of the popup menu to be created. In
  * <createMenu>, the configuration is applied to the context and
  * the resulting menu items are added to the menu dynamically. See
  * <createMenu> for a description of the configuration format.
- * 
+ *
  * This class does not create the DOM nodes required for the popup menu, it
  * only parses an XML description to invoke the respective methods on an
  * <mxPopupMenu> each time the menu is displayed.
  *
  * Codec:
- * 
+ *
  * This class uses the <mxDefaultPopupMenuCodec> to read configuration
  * data into an existing instance, however, the actual parsing is done
  * by this class during program execution, so the format is described
  * below.
- * 
- * Constructor: mxDefaultPopupMenu
+ *
+ * Constructor: MxDefaultPopupMenu
  *
  * Constructs a new popupmenu-factory based on given configuration.
  *
@@ -30,17 +30,20 @@
  *
  * config - XML node that contains the configuration data.
  */
-function mxDefaultPopupMenu(config)
-{
-	this.config = config;
-};
+import MxResources from '../util/MxResources'
+import MxUtils from '../util/MxUtils'
+export default class MxDefaultPopupMenu {
+  constructor(config) {
+    this.config = config
+  }
+}
 
 /**
  * Variable: imageBasePath
  *
  * Base path for all icon attributes in the config. Default is null.
  */
-mxDefaultPopupMenu.prototype.imageBasePath = null;
+MxDefaultPopupMenu.prototype.imageBasePath = null
 
 /**
  * Variable: config
@@ -49,7 +52,7 @@ mxDefaultPopupMenu.prototype.imageBasePath = null;
  * used in <createMenu> to dynamically create the menu items if their
  * respective conditions evaluate to true for the given arguments.
  */
-mxDefaultPopupMenu.prototype.config = null;
+MxDefaultPopupMenu.prototype.config = null
 
 /**
  * Function: createMenu
@@ -58,12 +61,12 @@ mxDefaultPopupMenu.prototype.config = null;
  * given menu based on <config>. The config is a sequence of
  * the following nodes and attributes.
  *
- * Child Nodes: 
+ * Child Nodes:
  *
  * add - Adds a new menu item. See below for attributes.
  * separator - Adds a separator. No attributes.
  * condition - Adds a custom condition. Name attribute.
- * 
+ *
  * The add-node may have a child node that defines a function to be invoked
  * before the action is executed (or instead of an action to be executed).
  *
@@ -93,26 +96,26 @@ mxDefaultPopupMenu.prototype.config = null;
  * Example:
  *
  * To add a new item for a given action to the popupmenu:
- * 
+ *
  * (code)
- * <mxDefaultPopupMenu as="popupHandler">
+ * <MxDefaultPopupMenu as="popupHandler">
  *   <add as="delete" action="delete" icon="images/delete.gif" if="cell"/>
- * </mxDefaultPopupMenu>
+ * </MxDefaultPopupMenu>
  * (end)
- * 
+ *
  * To add a new item for a custom function:
- * 
+ *
  * (code)
- * <mxDefaultPopupMenu as="popupHandler">
+ * <MxDefaultPopupMenu as="popupHandler">
  *   <add as="action1"><![CDATA[
- *		function (editor, cell, evt)
- *		{
- *			editor.execute('action1', cell, 'myArg');
- *		}
+ *   function (editor, cell, evt)
+ *   {
+ *     editor.execute('action1', cell, 'myArg');
+ *   }
  *   ]]></add>
- * </mxDefaultPopupMenu>
+ * </MxDefaultPopupMenu>
  * (end)
- * 
+ *
  * The above example invokes action1 with an additional third argument via
  * the editor instance. The third argument is passed to the function that
  * defines action1. If the add-node has no action-attribute, then only the
@@ -125,48 +128,46 @@ mxDefaultPopupMenu.prototype.config = null;
  * Custom Conditions:
  *
  * To add a new condition for popupmenu items:
- *  
+ *
  * (code)
  * <condition name="condition1"><![CDATA[
  *   function (editor, cell, evt)
  *   {
- *     return cell != null;
+ *     return cell !== null;
  *   }
  * ]]></condition>
  * (end)
- * 
+ *
  * The new condition can then be used in any item as follows:
- * 
+ *
  * (code)
  * <add as="action1" action="action1" icon="action1.gif" if="condition1"/>
  * (end)
- * 
+ *
  * The order in which the items and conditions appear is not significant as
  * all connditions are evaluated before any items are created.
- * 
+ *
  * Parameters:
  *
  * editor - Enclosing <mxEditor> instance.
  * menu - <mxPopupMenu> that is used for adding items and separators.
  * cell - Optional <mxCell> which is under the mousepointer.
- * evt - Optional mouse event which triggered the menu. 
+ * evt - Optional mouse event which triggered the menu.
  */
-mxDefaultPopupMenu.prototype.createMenu = function(editor, menu, cell, evt)
-{
-	if (this.config != null)
-	{
-		var conditions = this.createConditions(editor, cell, evt);
-		var item = this.config.firstChild;
+MxDefaultPopupMenu.prototype.createMenu = function(editor, menu, cell, evt) {
+  if (this.config !== null) {
+    var conditions = this.createConditions(editor, cell, evt)
+    var item = this.config.firstChild
 
-		this.addItems(editor, menu, cell, evt, conditions, item, null);
-	}
-};
+    this.addItems(editor, menu, cell, evt, conditions, item, null)
+  }
+}
 
 /**
  * Function: addItems
- * 
+ *
  * Recursively adds the given items and all of its children into the given menu.
- * 
+ *
  * Parameters:
  *
  * editor - Enclosing <mxEditor> instance.
@@ -177,56 +178,67 @@ mxDefaultPopupMenu.prototype.createMenu = function(editor, menu, cell, evt)
  * item - XML node that represents the current menu item.
  * parent - DOM node that represents the parent menu item.
  */
-mxDefaultPopupMenu.prototype.addItems = function(editor, menu, cell, evt, conditions, item, parent)
-{
-	var addSeparator = false;
-	
-	while (item != null)
-	{
-		if (item.nodeName == 'add')
-		{
-			var condition = item.getAttribute('if');
-			
-			if (condition == null || conditions[condition])
-			{
-				var as = item.getAttribute('as');
-				as = mxResources.get(as) || as;
-				var funct = mxUtils.eval(mxUtils.getTextContent(item));
-				var action = item.getAttribute('action');
-				var icon = item.getAttribute('icon');
-				var iconCls = item.getAttribute('iconCls');
-				var enabledCond = item.getAttribute('enabled-if');
-				var enabled = enabledCond == null || conditions[enabledCond];
-				
-				if (addSeparator)
-				{
-					menu.addSeparator(parent);
-					addSeparator = false;
-				}
-				
-				if (icon != null && this.imageBasePath)
-				{
-					icon = this.imageBasePath + icon;
-				}
-				
-				var row = this.addAction(menu, editor, as, icon, funct, action, cell, parent, iconCls, enabled);
-				this.addItems(editor, menu, cell, evt, conditions, item.firstChild, row);
-			}
-		}
-		else if (item.nodeName == 'separator')
-		{
-			addSeparator = true;
-		}
-		
-		item = item.nextSibling;
-	}
-};
+MxDefaultPopupMenu.prototype.addItems = function(
+  editor,
+  menu,
+  cell,
+  evt,
+  conditions,
+  item,
+  parent
+) {
+  var addSeparator = false
+
+  while (item !== null) {
+    if (item.nodeName === 'add') {
+      var condition = item.getAttribute('if')
+
+      if (condition === null || conditions[condition]) {
+        var as = item.getAttribute('as')
+        as = MxResources.get(as) || as
+        var funct = MxUtils.eval(MxUtils.getTextContent(item))
+        var action = item.getAttribute('action')
+        var icon = item.getAttribute('icon')
+        var iconCls = item.getAttribute('iconCls')
+        var enabledCond = item.getAttribute('enabled-if')
+        var enabled = enabledCond === null || conditions[enabledCond]
+
+        if (addSeparator) {
+          menu.addSeparator(parent)
+          addSeparator = false
+        }
+
+        if (icon !== null && this.imageBasePath) {
+          icon = this.imageBasePath + icon
+        }
+
+        var row = this.addAction(
+          menu,
+          editor,
+          as,
+          icon,
+          funct,
+          action,
+          cell,
+          parent,
+          iconCls,
+          enabled
+        )
+        this.addItems(editor, menu, cell, evt, conditions, item.firstChild, row)
+      }
+    } else if (item.nodeName === 'separator') {
+      addSeparator = true
+    }
+
+    item = item.nextSibling
+  }
+}
 
 /**
  * Function: addAction
  *
  * Helper method to bind an action to a new menu item.
- * 
+ *
  * Parameters:
  *
  * menu - <mxPopupMenu> that is used for adding items and separators.
@@ -243,64 +255,68 @@ mxDefaultPopupMenu.prototype.addItems = function(editor, menu, cell, evt, condit
  * enabled - Optional boolean that specifies if the menu item is enabled.
  * Default is true.
  */
-mxDefaultPopupMenu.prototype.addAction = function(menu, editor, lab, icon, funct, action, cell, parent, iconCls, enabled)
-{
-	var clickHandler = function(evt)
-	{
-		if (typeof(funct) == 'function')
-		{
-			funct.call(editor, editor, cell, evt);
-		}
-		
-		if (action != null)
-		{
-			editor.execute(action, cell, evt);
-		}
-	};
-	
-	return menu.addItem(lab, icon, clickHandler, parent, iconCls, enabled);
-};
+MxDefaultPopupMenu.prototype.addAction = function(
+  menu,
+  editor,
+  lab,
+  icon,
+  funct,
+  action,
+  cell,
+  parent,
+  iconCls,
+  enabled
+) {
+  var clickHandler = function(evt) {
+    if (typeof funct === 'function') {
+      funct.call(editor, editor, cell, evt)
+    }
+
+    if (action !== null) {
+      editor.execute(action, cell, evt)
+    }
+  }
+
+  return menu.addItem(lab, icon, clickHandler, parent, iconCls, enabled)
+}
 
 /**
  * Function: createConditions
- * 
+ *
  * Evaluates the default conditions for the given context.
  */
-mxDefaultPopupMenu.prototype.createConditions = function(editor, cell, evt)
-{
-	// Creates array with conditions
-	var model = editor.graph.getModel();
-	var childCount = model.getChildCount(cell);
-	
-	// Adds some frequently used conditions
-	var conditions = [];
-	conditions['nocell'] = cell == null;
-	conditions['ncells'] = editor.graph.getSelectionCount() > 1;
-	conditions['notRoot'] = model.getRoot() !=
-		model.getParent(editor.graph.getDefaultParent());
-	conditions['cell'] = cell != null;
-	
-	var isCell = cell != null && editor.graph.getSelectionCount() == 1;
-	conditions['nonEmpty'] = isCell && childCount > 0;
-	conditions['expandable'] = isCell && editor.graph.isCellFoldable(cell, false);
-	conditions['collapsable'] = isCell && editor.graph.isCellFoldable(cell, true);
-	conditions['validRoot'] = isCell && editor.graph.isValidRoot(cell);
-	conditions['emptyValidRoot'] = conditions['validRoot'] && childCount == 0;
-	conditions['swimlane'] = isCell && editor.graph.isSwimlane(cell);
+MxDefaultPopupMenu.prototype.createConditions = function(editor, cell, evt) {
+  // Creates array with conditions
+  var model = editor.graph.getModel()
+  var childCount = model.getChildCount(cell)
 
-	// Evaluates dynamic conditions from config file
-	var condNodes = this.config.getElementsByTagName('condition');
-	
-	for (var i=0; i<condNodes.length; i++)
-	{
-		var funct = mxUtils.eval(mxUtils.getTextContent(condNodes[i]));
-		var name = condNodes[i].getAttribute('name');
-		
-		if (name != null && typeof(funct) == 'function')
-		{
-			conditions[name] = funct(editor, cell, evt);
-		}
-	}
-	
-	return conditions;
-};
+  // Adds some frequently used conditions
+  var conditions = []
+  conditions['nocell'] = cell === null
+  conditions['ncells'] = editor.graph.getSelectionCount() > 1
+  conditions['notRoot'] =
+    model.getRoot() !== model.getParent(editor.graph.getDefaultParent())
+  conditions['cell'] = cell !== null
+
+  var isCell = cell !== null && editor.graph.getSelectionCount() === 1
+  conditions['nonEmpty'] = isCell && childCount > 0
+  conditions['expandable'] = isCell && editor.graph.isCellFoldable(cell, false)
+  conditions['collapsable'] = isCell && editor.graph.isCellFoldable(cell, true)
+  conditions['validRoot'] = isCell && editor.graph.isValidRoot(cell)
+  conditions['emptyValidRoot'] = conditions['validRoot'] && childCount === 0
+  conditions['swimlane'] = isCell && editor.graph.isSwimlane(cell)
+
+  // Evaluates dynamic conditions from config file
+  var condNodes = this.config.getElementsByTagName('condition')
+
+  for (var i = 0; i < condNodes.length; i++) {
+    var funct = MxUtils.eval(MxUtils.getTextContent(condNodes[i]))
+    var name = condNodes[i].getAttribute('name')
+
+    if (name !== null && typeof funct === 'function') {
+      conditions[name] = funct(editor, cell, evt)
+    }
+  }
+
+  return conditions
+}
