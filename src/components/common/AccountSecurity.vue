@@ -3,12 +3,15 @@
     <el-tab-pane :label="$t('user.modifyPwd')" name="changePwd" class="account-security-pwd-pane">
       <ChangePwd :isChangePwdPaneActive='isChangePwdPaneActive'></ChangePwd>
     </el-tab-pane>
-    <el-tab-pane :label="$t('user.accountBinding')" name="accountBinding">{{$t('user.accountBinding')}}</el-tab-pane>
+    <el-tab-pane :label="$t('user.accountBinding')" name="accountBinding">
+      <AccountBinding></AccountBinding>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import ChangePwd from './ChangePwd'
+import AccountBinding from './AccountBinding'
 export default {
   name: 'AccountSecurity',
   data() {
@@ -22,7 +25,8 @@ export default {
     }
   },
   components: {
-    ChangePwd
+    ChangePwd,
+    AccountBinding
   }
 }
 </script>
