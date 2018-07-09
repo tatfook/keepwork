@@ -17,6 +17,7 @@ const getters = {
     if (profileUserToken !== token) return {}
     return state.profile
   },
+  realNamePhoneNum: state => state.realNamePhoneNum,
   isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
