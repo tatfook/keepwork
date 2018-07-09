@@ -79,8 +79,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      gitlabCreateFile: 'gitlab/createFile'
+      gitlabCreateFile: 'gitlab/createFile',
+      userCheckSensitive: 'user/checkSensitive',
+      userUpdateUserInfo: 'user/updateUserInfo'
     }),
+    async checkSensitive(checkedWords) {
+      let result = await this.userCheckSensitive({ checkedWords })
+      return result && result.length > 0
+    },
     getUserSelectProfile(e) {
       let file = _.get(e, ['target', 'files'])[0]
       this.uploadingProfileFile = file
@@ -122,8 +128,15 @@ export default {
           console.log(error)
         })
     },
+    showMessage(type, message) {
+      this.$message({
+        message,
+        type,
+        showClose: true
+      })
+    },
     async saveUserData() {
-      let { userInfo } = componentRef
+      let userInfo = this.userInfo
       let isModified = !_.isEqual(this.loginUserProfile, userInfo)
       if (isModified) {
         this.loading = true

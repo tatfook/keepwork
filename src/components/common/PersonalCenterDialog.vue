@@ -62,17 +62,6 @@ export default {
       userCheckSensitive: 'user/checkSensitive',
       verifyCellphoneTwo: 'verifyCellphoneTwo'
     }),
-    async checkSensitive(checkedWords) {
-      let result = await this.userCheckSensitive({ checkedWords })
-      return result && result.length > 0
-    },
-    showMessage(type, message) {
-      this.$message({
-        message,
-        type,
-        showClose: true
-      })
-    },
     async handleSave() {
       let componentRef = this.$refs.personalCenterComponent
       switch (this.activeSettingIndex) {
