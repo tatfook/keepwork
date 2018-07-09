@@ -53,9 +53,9 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click.stop="refreshOpenedFile(activeFilePath)"><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
                 <button @click.stop='undo' :disabled='!canUndo'><i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
-                <button @click='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
+                <button @click.stop='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -105,7 +105,7 @@
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='7' class='unsaved-tip'>
-        <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
+        <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
