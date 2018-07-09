@@ -3,15 +3,15 @@
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 /**
- * Class: mxEventSource
+ * Class: MxEventSource
  *
  * Base class for objects that dispatch named events. To create a subclass that
- * inherits from mxEventSource, the following code is used.
+ * inherits from MxEventSource, the following code is used.
  *
  * (code)
  * function MyClass() { };
  *
- * MyClass.prototype = new mxEventSource();
+ * MyClass.prototype = new MxEventSource();
  * MyClass.prototype.constructor = MyClass;
  * (end)
  *
@@ -19,122 +19,114 @@
  *
  * <mxGraphModel>, <mxGraph>, <mxGraphView>, <mxEditor>, <mxCellOverlay>,
  * <mxToolbar>, <mxWindow>
- * 
- * Constructor: mxEventSource
+ *
+ * Constructor: MxEventSource
  *
  * Constructs a new event source.
  */
-function mxEventSource(eventSource)
-{
-	this.setEventSource(eventSource);
-};
+
+import MxEventObject from './MxEventObject.js'
+
+export default class MxEventSource {
+  constructor(eventSource) {
+    this.setEventSource(eventSource)
+  }
+}
 
 /**
- * Variable: eventListeners
+ * variable: eventListeners
  *
  * Holds the event names and associated listeners in an array. The array
  * contains the event name followed by the respective listener for each
  * registered listener.
  */
-mxEventSource.prototype.eventListeners = null;
+MxEventSource.prototype.eventListeners = null
 
 /**
- * Variable: eventsEnabled
+ * variable: eventsEnabled
  *
  * Specifies if events can be fired. Default is true.
  */
-mxEventSource.prototype.eventsEnabled = true;
+MxEventSource.prototype.eventsEnabled = true
 
 /**
- * Variable: eventSource
+ * variable: eventSource
  *
  * Optional source for events. Default is null.
  */
-mxEventSource.prototype.eventSource = null;
+MxEventSource.prototype.eventSource = null
 
 /**
  * Function: isEventsEnabled
- * 
+ *
  * Returns <eventsEnabled>.
  */
-mxEventSource.prototype.isEventsEnabled = function()
-{
-	return this.eventsEnabled;
-};
+MxEventSource.prototype.isEventsEnabled = function() {
+  return this.eventsEnabled
+}
 
 /**
  * Function: setEventsEnabled
- * 
+ *
  * Sets <eventsEnabled>.
  */
-mxEventSource.prototype.setEventsEnabled = function(value)
-{
-	this.eventsEnabled = value;
-};
+MxEventSource.prototype.setEventsEnabled = function(value) {
+  this.eventsEnabled = value
+}
 
 /**
  * Function: getEventSource
- * 
+ *
  * Returns <eventSource>.
  */
-mxEventSource.prototype.getEventSource = function()
-{
-	return this.eventSource;
-};
+MxEventSource.prototype.getEventSource = function() {
+  return this.eventSource
+}
 
 /**
  * Function: setEventSource
- * 
+ *
  * Sets <eventSource>.
  */
-mxEventSource.prototype.setEventSource = function(value)
-{
-	this.eventSource = value;
-};
+MxEventSource.prototype.setEventSource = function(value) {
+  this.eventSource = value
+}
 
 /**
  * Function: addListener
  *
  * Binds the specified function to the given event name. If no event name
  * is given, then the listener is registered for all events.
- * 
- * The parameters of the listener are the sender and an <mxEventObject>.
+ *
+ * The parameters of the listener are the sender and an <MxEventObject>.
  */
-mxEventSource.prototype.addListener = function(name, funct)
-{
-	if (this.eventListeners == null)
-	{
-		this.eventListeners = [];
-	}
-	
-	this.eventListeners.push(name);
-	this.eventListeners.push(funct);
-};
+MxEventSource.prototype.addListener = function(name, funct) {
+  if (this.eventListeners === null) {
+    this.eventListeners = []
+  }
+
+  this.eventListeners.push(name)
+  this.eventListeners.push(funct)
+}
 
 /**
  * Function: removeListener
  *
  * Removes all occurrences of the given listener from <eventListeners>.
  */
-mxEventSource.prototype.removeListener = function(funct)
-{
-	if (this.eventListeners != null)
-	{
-		var i = 0;
-		
-		while (i < this.eventListeners.length)
-		{
-			if (this.eventListeners[i+1] == funct)
-			{
-				this.eventListeners.splice(i, 2);
-			}
-			else
-			{
-				i += 2;
-			}
-		}
-	}
-};
+MxEventSource.prototype.removeListener = function(funct) {
+  if (this.eventListeners !== null) {
+    let i = 0
+
+    while (i < this.eventListeners.length) {
+      if (this.eventListeners[i + 1] === funct) {
+        this.eventListeners.splice(i, 2)
+      } else {
+        i += 2
+      }
+    }
+  }
+}
 
 /**
  * Function: fireEvent
@@ -146,44 +138,37 @@ mxEventSource.prototype.removeListener = function(funct)
  * Example:
  *
  * (code)
- * fireEvent(new mxEventObject("eventName", key1, val1, .., keyN, valN))
+ * fireEvent(new MxEventObject("eventName", key1, val1, .., keyN, valN))
  * (end)
- * 
+ *
  * Parameters:
  *
- * evt - <mxEventObject> that represents the event.
+ * evt - <MxEventObject> that represents the event.
  * sender - Optional sender to be passed to the listener. Default value is
  * the return value of <getEventSource>.
  */
-mxEventSource.prototype.fireEvent = function(evt, sender)
-{
-	if (this.eventListeners != null && this.isEventsEnabled())
-	{
-		if (evt == null)
-		{
-			evt = new mxEventObject();
-		}
-		
-		if (sender == null)
-		{
-			sender = this.getEventSource();
-		}
+MxEventSource.prototype.fireEvent = function(evt, sender) {
+  if (this.eventListeners !== null && this.isEventsEnabled()) {
+    if (evt === null) {
+      evt = new MxEventObject()
+    }
 
-		if (sender == null)
-		{
-			sender = this;
-		}
+    if (sender === null) {
+      sender = this.getEventSource()
+    }
 
-		var args = [sender, evt];
-		
-		for (var i = 0; i < this.eventListeners.length; i += 2)
-		{
-			var listen = this.eventListeners[i];
-			
-			if (listen == null || listen == evt.getName())
-			{
-				this.eventListeners[i+1].apply(this, args);
-			}
-		}
-	}
-};
+    if (sender === null) {
+      sender = this
+    }
+
+    let args = [sender, evt]
+
+    for (let i = 0; i < this.eventListeners.length; i += 2) {
+      let listen = this.eventListeners[i]
+
+      if (listen === null || listen === evt.getName()) {
+        this.eventListeners[i + 1].apply(this, args)
+      }
+    }
+  }
+}
