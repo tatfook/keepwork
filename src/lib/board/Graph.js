@@ -18,7 +18,7 @@ export default class extends Graph {
       mouseEvent = evt
 
       // Workaround for member not found in IE8-
-      if (mxClient.IS_QUIRKS || document.documentMode == 7 || document.documentMode == 8) {
+      if (mxClient.IS_QUIRKS || document.documentMode === 7 || document.documentMode === 8) {
         mouseEvent = mxUtils.clone(evt)
       }
     };
@@ -52,7 +52,7 @@ export default class extends Graph {
       var style = (state != null) ? state.style : this.graph.getCellStyle(cell)
 
       // mxRackContainer may be undefined as it is dynamically loaded at render time
-      if (typeof (mxRackContainer) !== 'undefined' && style['childLayout'] == 'rack') {
+      if (typeof (mxRackContainer) !== 'undefined' && style['childLayout'] === 'rack') {
         var rackLayout = new mxStackLayout(this.graph, false)
 
         rackLayout.setChildGeometry = function(child, geo) {

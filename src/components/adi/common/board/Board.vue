@@ -1,7 +1,7 @@
 <script>
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
-import board from '@/lib/board/board'
+import board from '@/lib/board/Board'
 import boardProptypes from './board.proptypes'
 import { mapGetters, mapActions } from 'vuex'
 
