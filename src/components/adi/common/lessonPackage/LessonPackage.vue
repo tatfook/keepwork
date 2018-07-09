@@ -165,7 +165,7 @@ export default {
     },
     // 购买课程包
     async addClick() {
-      let r = await lessonAPI.subscribeState(this.properties.data.id)
+      let r = await lessonAPI.addSubscribe(this.properties.data.id)
       if (r.err == 102) {
         return this.$message.error(this.$t('card.pleaseLogin'))
       }
