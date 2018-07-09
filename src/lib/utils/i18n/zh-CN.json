@@ -440,7 +440,7 @@
     "addPackageFirst": "请先添加课程包",
     "lessonPackageCost1": "学习该课程包，你需要支付 ",
     "lessonPackageCost2": " 知识币。",
-    "addPackageSuccess": "添加课程包成功！",
+    "addPackageSuccess": "课程包添加成功！",
     "operationFail": "操作失败，请重试！",
     "pleaseLogin": "请登录",
     "havePurchased": "你已经支付过了！",
