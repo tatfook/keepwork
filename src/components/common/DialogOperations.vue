@@ -1,12 +1,15 @@
 <template>
   <div class="dialog-operations">
-    <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
+    <el-button :disabled="isSaveBtnDisabled" type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
     <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
   </div>
 </template>
 <script>
 export default {
   name: 'DialogOperations',
+  props: {
+    isSaveBtnDisabled: Boolean
+  },
   methods: {
     handleSave() {
       this.$emit('save')
