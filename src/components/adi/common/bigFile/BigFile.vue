@@ -11,7 +11,7 @@
       <div v-if="errMsg" class="err">{{errMsg}}</div>
     </div>
     <div v-if="!isOldData">
-      <div class="bigfile-box" v-loading="loading">
+      <div v-if="getType === otherExt" class="bigfile-box" v-loading="loading">
         <div class="file-type-icon">
           <div class="iconfont" :class="getIconClass"></div>
         </div>
@@ -21,6 +21,11 @@
         </div>
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
+      </div>
+      <div v-if="getType === handleExt['mp4']">
+        <video :src="getSrc" controls>
+          {{$t('editor.videoNotSupport')}}
+        </video>
       </div>
     </div>
   </div>
@@ -69,7 +74,9 @@ export default {
         doc: 'icon-word',
         docx: 'icon-word',
         sql: 'icon-sql'
-      }
+      },
+      handleExt: {mp4:'mp4'},
+      otherExt: 'other'
     }
   },
   methods: {
@@ -124,14 +131,36 @@ export default {
       } else {
         return 'icon-ukown_file'
       }
+    },
+    getType() {
+      let ext = this.properties.ext || ''
+
+      if(ext) {
+        let beHandle = false
+
+        _.forEach(this.handleExt, item => {
+          if (item === ext) {
+            beHandle = true
+          }
+        })
+
+        if (beHandle) {
+          return ext
+        } else {
+          return this.otherExt
+        }
+      } else {
+        return this.otherExt
+      }
+    },
+    getSrc() {
+      return this.properties && this.properties.src || ''
     }
   },
   created() {
     if (this.properties.fileId) {
       this.isOldData = true
       this.initOldData()
-    } else {
-      this.init()
     }
   }
 }
