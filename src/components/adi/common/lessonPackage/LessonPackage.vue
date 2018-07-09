@@ -36,10 +36,11 @@
     <el-row :gutter="20" type="flex" justify="space-between" class="lessons-progress" v-if="isLessonsBuy">
       <el-col :span="20">
         <el-progress :stroke-width="18" :text-inside="true" :percentage="lessonProgress"></el-progress>
-        <div class="progress-tip">{{$t('haveLearned1')}} {{doneCount}} {{$t('haveLearned2')}}</div>
+        <div class="progress-tip">{{$t('card.haveLearned1')}} {{doneCount}} {{$t('card.haveLearned2')}}</div>
       </el-col>
       <el-col :span="4">
-        <el-button v-if="lessonProgress > 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.continue')}}</el-button>
+        <el-button v-if="lessonProgress == 100" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.finished')}}</el-button>
+        <el-button v-if="lessonProgress > 0 && lessonProgress != 100" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.continue')}}</el-button>
         <el-button v-if="lessonProgress == 0" class="el-button el-button--small el-button--primary" @click="goStudy" v-bind:disabled="lessonProgress == 100">{{$t('card.startToLearn')}}</el-button>
       </el-col>
     </el-row>
@@ -65,7 +66,7 @@
                       </el-col>
                     </el-row>
                     <div class="lesson-item-goals">
-                      <div>{{$t('card.LessonGoals')}}</div>
+                      <div>{{$t('card.lessonGoals')}}</div>
                       <ul>
                         <li>{{lesson.LessonGoals}}</li>
                       </ul>
@@ -77,7 +78,7 @@
                         {{$t('card.duration')}} 45min
                       </div>
                       <div class="lesson-item-view" v-if="lesson.learnedFlag > 0">
-                        <a class="el-button el-button--small el-button--primary" :href="lesson.shareUrl">{{$t('card.viewSummary')}}</a>
+                        <a class="el-button el-button--small el-button--primary" style="text-decoration: none" :href="lesson.shareUrl">{{$t('card.viewSummary')}}</a>
                       </div>
                     </div>
                   </el-col>
