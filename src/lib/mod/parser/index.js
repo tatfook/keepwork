@@ -46,7 +46,7 @@ const buildBlockList = mdText => {
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
-    } else if (line.trim() !== '') {
+    } else {
       curModBlock = beginModBlock(line, lineNumber + 1)
     }
   })

@@ -108,9 +108,9 @@ const actions = {
     if (needReload) {
       await dispatch('refreshOpenedFile', { path, editorMode })
     }
-    commit(SET_ACTIVE_PAGE, { path, username })
-
     await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
+
+    commit(SET_ACTIVE_PAGE, { path, username })
 
     if (needReload) {
       commit(INIT_UNDO, {
