@@ -473,6 +473,16 @@
     "male": "Male",
     "female": "Female",
     "confidentiality": "Confidentiality",
-    "modifyAvatar": "Modify Avatar"
+    "modifyAvatar": "Modify Avatar",
+    "modifyPwd": "Modify Password:",
+    "accountBinding": "Account Binding",
+    "oldPwd": "Old Password:",
+    "newPwd": "New Password:",
+    "reNewPwd": "Determine:",
+    "twoPwdInconsistent": "Inconsistent password entered twice!",
+    "oldPwdRequired": "Please enter the old password",
+    "newPwdRequired": "Please enter a new password",
+    "reNewPwdRequired": "please enter a new password again",
+    "pwdMinLen": "Password at least 6 digits"
   }
 }

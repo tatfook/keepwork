@@ -460,6 +460,16 @@
     "male": "男",
     "female": "女",
     "confidentiality": "保密",
-    "modifyAvatar": "修改头像"
+    "modifyAvatar": "修改头像",
+    "modifyPwd": "修改密码",
+    "accountBinding": "账号绑定",
+    "oldPwd": "旧密码:",
+    "newPwd": "新密码:",
+    "reNewPwd": "确定新密码:",
+    "twoPwdInconsistent": "两次输入密码不一致!",
+    "oldPwdRequired": "请输入旧密码",
+    "newPwdRequired": "请输入新密码",
+    "reNewPwdRequired": "请再次输入新密码",
+    "pwdMinLen": "密码最少6位"
   }
 }
