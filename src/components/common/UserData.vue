@@ -33,7 +33,7 @@
         <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
       </el-col>
       <el-col class="user-data-setting-operations-col">
-        <DialogOperations @save='saveUserData'></DialogOperations>
+        <DialogOperations @save='saveUserData' @close='handleClose'></DialogOperations>
       </el-col>
     </el-row>
   </el-container>
@@ -168,6 +168,9 @@ export default {
       await this.uploadFileToGitlab()
       this.loading = false
       this.isCroppering = false
+    },
+    handleClose(){
+      this.$emit('close')
     }
   },
   components: {
