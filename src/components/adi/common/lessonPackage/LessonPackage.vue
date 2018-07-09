@@ -45,7 +45,7 @@
     </el-row>
     <div class="lessons-list">
       <div class="list-title">{{$t('card.catalogue')}}</div>
-      <div class="list-content" v-for="lesson in properties.data.lessons" :key="lesson.lessonUrl">
+      <div class="list-content" v-for="(lesson, index) in properties.data.lessons" :key="lesson.lessonUrl">
         <div class="lesson-item">
           <el-row type="flex" class="mod-full-width-0-0-65">
             <el-col class="item-cover" :span="8">
@@ -57,7 +57,7 @@
                   <el-col>
                     <el-row class="lesson-title">
                       <el-col :span="21">
-                        <a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{lesson.lessonTitle}}</a>
+                        <a @click="noBuyAlert" v-bind:href="lessonHref(lesson.lessonUrl)">{{$t('card.lesson')}} {{index + 1}}: {{lesson.lessonTitle}}</a>
                       </el-col>
                       <el-col :span="3" class="finished" v-if="lesson.learnedFlag > 0">
                         <span>{{$t('card.finished')}}</span>
