@@ -36,7 +36,7 @@
         </div>
         <el-tab-pane :label="$t('card.overview')" name="first"></el-tab-pane>
         <el-tab-pane :label="$t('card.references')" name="second"></el-tab-pane>
-        <el-tab-pane :label="$t('card.studentsPerformance')" v-if="properties.vip" name="third"></el-tab-pane>
+        <el-tab-pane :label="$t('card.studentsPerformance')" v-show="properties.vip" name="third"></el-tab-pane>
         <el-tab-pane :label="$t('card.summary')" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>
