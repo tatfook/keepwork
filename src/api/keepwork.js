@@ -156,18 +156,6 @@ export const sensitiveWords = {
   query: (...args) => post('sensitive_words/query', ...args)
 }
 
-// todo merge bigFile and bigfile
-export const bigFile = {
-  getDownloadUrlById: (token, ...args) => {
-    return axios.create({
-      baseURL: process.env.KEEPWORK_API_PREFIX,
-      headers: {'Authorization': 'Bearer ' + token}
-    })
-      .post('bigfile/getDownloadUrlById', ...args)
-      .then(res => res.data.data)
-  }
-}
-
 export const bigfile = {
   upload: (...args) => post('bigfile/upload', ...args),
   getByUsername: (...args) => post('bigfile/getByUsername', ...args),
@@ -194,7 +182,6 @@ export const keepwork = {
   websiteComment,
   sensitiveWords,
   pages,
-  bigFile,
   qiniu,
   bigfile
 }
