@@ -130,7 +130,7 @@ const actions = {
 
     let payload = {
       path,
-      file: { ...file, content: Base64.decode(file.content) }
+      file: { ...file, content: Base64.decode(file.content) + '\n' }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
@@ -164,7 +164,7 @@ const actions = {
       fullPath
     )
 
-    let payload = { path: fullPath, file: { content } }
+    let payload = { path: fullPath, file: { content: content + '\n' } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
   async saveFile(context, { path: inputPath, content }) {
