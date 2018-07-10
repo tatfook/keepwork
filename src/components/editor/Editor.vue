@@ -55,6 +55,7 @@
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col>
             <el-button-group>
+              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
               <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
               <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
               <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
@@ -72,9 +73,6 @@
             </el-button-group>
             <el-button-group>
               <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
-            </el-button-group>
-            <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>

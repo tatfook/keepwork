@@ -114,7 +114,7 @@ const actions = {
     let smsId = context.state.sendCodeInfo.data.smsId
     let { dispatch, commit, getters: { authRequestConfig } } = context
     let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({bind, smsCode, smsId}, authRequestConfig, true)
-    await dispatch('getProfile')
+    await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
