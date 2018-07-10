@@ -51,6 +51,7 @@
     "action": "操作",
     "search": "搜索",
     "copy": "复制",
+    "copyURI": "复制链接",
     "insert": "插入",
     "download": "下载",
     "update": "更新",

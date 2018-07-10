@@ -51,6 +51,7 @@
     "action": "Action",
     "search": "Search",
     "copy": "Copy",
+    "copyURI": "Copy URI",
     "insert": "Insert",
     "download": "Download",
     "update": "Update",
