@@ -35,7 +35,7 @@
           :label="$t('skydrive.filename')"
           class-name="skydrive-manager-cell-filename"
           sortable
-          width="280">
+          width="300">
         </el-table-column>
         <el-table-column
           prop="ext"
@@ -47,7 +47,7 @@
           prop="size"
           sortable
           :label="$t('skydrive.filesize')"
-          width="80"
+          width="85"
           show-overflow-tooltip>
           <template slot-scope="scope">{{ scope.row.displaySize }}</template>
         </el-table-column>
@@ -55,7 +55,7 @@
           prop="updatedAt"
           sortable
           :label="$t('skydrive.updateDate')"
-          width="150">
+          width="155">
           <template slot-scope="scope">
             <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
               <el-progress :stroke-width="10" color="#13ce67" :show-text=false  :percentage="scope.row.percent"></el-progress>
@@ -75,7 +75,8 @@
         </el-table-column>
         <el-table-column
           class-name="skydrive-manager-cell-actions"
-          :label="$t('common.action')">
+          :label="$t('common.action')"
+          width="140">
           <template slot-scope="scope">
             <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
               <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
