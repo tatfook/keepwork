@@ -104,7 +104,7 @@ export default {
       await this.verifyCellphoneOne(payload)
       let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
       if(message === "号码格式有误"){
-        this.showMessage('error', this.$t('user.wrongNumberFormat'))
+        // this.showMessage('error', this.$t('user.wrongNumberFormat'))
         return
       }
       if(message === "短信验证码发送过频繁"){
