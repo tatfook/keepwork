@@ -16,7 +16,8 @@ const state = () => ({
   usersDetail: [],
   siteThemeConfigs: {},
   siteFiles: {},
-  realNamePhoneNum: {}
+  sendCodeInfo: {},
+  authCodeInfo: {}
 })
 
 export default {

@@ -34,7 +34,7 @@
           <img class="user-profile" :src='userProfile.portrait' alt="username">
               <i class="el-icon-caret-bottom"></i>
           </span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item>
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
@@ -216,7 +216,13 @@ export default {
   border-radius: 50%;
   object-fit: cover;
 }
-
+.user-menu-dropdown li{
+  padding: 0;
+}
+.user-menu-dropdown a{
+  display: block;
+  padding: 0 20px;
+}
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {
     width: 36px;

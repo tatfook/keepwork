@@ -24,6 +24,7 @@ const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
 const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
 const USE_FILE_IN_SITE_SUCCESS = 'USE_FILE_IN_SITE_SUCCESS'
+const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 
 export const props = {
   LOGIN_SUCCESS,
@@ -48,7 +49,8 @@ export const props = {
   GET_FROM_SKY_DRIVE_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
-  USE_FILE_IN_SITE_SUCCESS
+  USE_FILE_IN_SITE_SUCCESS,
+  SET_AUTH_CODE_INFO
 }
 
 const doNothing = state => {
@@ -62,8 +64,8 @@ const mutations = {
   [GET_PROFILE_SUCCESS](state, payload) {
     Vue.set(state, 'profile', payload)
   },
-  [SET_REAL_AUTH_PHONE_NUM](state, cellphone) {
-    Vue.set(state, 'realNamePhoneNum', cellphone)
+  [SET_REAL_AUTH_PHONE_NUM](state, payload) {
+    Vue.set(state, 'sendCodeInfo', payload)
   },
   [GET_ALL_WEBSITE_SUCCESS](state, {username, list}) {
     Vue.set(state, 'website', {
@@ -172,6 +174,9 @@ const mutations = {
         [fileId]: url
       }
     })
+  },
+  [SET_AUTH_CODE_INFO](state, payload) {
+    Vue.set(state, 'authCodeInfo', payload)
   }
 }
 

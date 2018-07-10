@@ -30,7 +30,8 @@ const {
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
-  USE_FILE_IN_SITE_SUCCESS
+  USE_FILE_IN_SITE_SUCCESS,
+  SET_AUTH_CODE_INFO
 } = props
 
 const actions = {
@@ -104,16 +105,17 @@ const actions = {
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
     commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
   },
-  async verifyCellphoneOne({ commit }, { bind, cellphone }) {
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
-    console.log('verifyInfo', verifyInfoOne)
-    commit(SET_REAL_AUTH_PHONE_NUM, cellphone)
+  async verifyCellphoneOne(context, { bind, cellphone }) {
+    let { commit, getters: { authRequestConfig } } = context
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone}, authRequestConfig, true)
+    commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
   },
-  async verifyCellphoneTwo({ commit }, { bind, cellphone, smsCode }) {
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
-    console.log('112', verifyInfoOne)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({bind, smsCode, verifyInfoOne})
-    console.log(verifyInfoTwo)
+  async verifyCellphoneTwo(context, { bind, cellphone, smsCode }) {
+    let smsId = context.state.sendCodeInfo.data.smsId
+    let { dispatch, commit, getters: { authRequestConfig } } = context
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({bind, smsCode, smsId}, authRequestConfig, true)
+    await dispatch('getProfile')
+    commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}

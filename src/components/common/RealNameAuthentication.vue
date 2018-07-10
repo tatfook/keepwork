@@ -1,77 +1,203 @@
 <template>
     <el-container class="real-name-setting" v-loading="loading">
-        <el-header class="real-name-setting-header">
-            <h3>实名认证</h3>
-        </el-header>
-        <el-row class="real-name-setting-content">
-            <el-form label-width="100px">
-                <el-form-item label="认证状态:">
-                    <span v-if="hasVerified">已认证</span>
-                    <span v-else class="auth-status">未认证</span>
+      <el-row class="real-name-setting-wrap">
+        <el-col :class="['real-name-setting-content',hasVerified?'hasVerified':'']">
+          <el-header class="real-name-setting-header">
+              <h3>{{$t('common.realNameAuthentication')}}</h3>
+          </el-header>
+          <el-row class="real-name-setting-form">
+              <el-form :rules="phoneNumberRules" :model="ruleFormDatas" label-width="110px">
+                <el-form-item :label='$t("user.certificationStatus")' :class="{'real-name-status':hasVerified}">
+                    <span v-if="hasVerified">{{$t('user.certified')}}</span>
+                    <span v-else class="auth-status">{{$t('user.unverified')}}</span>
                 </el-form-item>
                 <el-row v-if="hasVerified">
-                    <el-form-item label="认证手机:">
-                        <span>18665835727</span>
+                    <el-form-item :label='$t("user.certifiedPhoneNumber")'>
+                        <span>{{verifiedPhoneNumber}}</span>
                     </el-form-item>
                 </el-row>
                 <el-row v-else>
-                    <el-form-item label="认证手机:">
-                        <el-input size="small" v-model="realNamePhoneNum"></el-input>
+                    <el-form-item :label='$t("user.certifiedPhoneNumber")' prop="cellphoneNumber">
+                        <el-input size="small" v-model="ruleFormDatas.cellphoneNumber"></el-input>
                     </el-form-item>
-                    <el-form-item label="短信验证码:">
-                        <el-col :span="16">
+                    <el-form-item :label='$t("user.verificationCode")'>
+                      <el-row class="send-auth">
+                        <el-col class="send-auth-code">
                             <el-input size="small" v-model="authCode"></el-input>
                         </el-col>
-                        <el-col :span="8">
-                            <el-button type="primary" size="small" class="send-auth-code" @click.stop="sendAuthCode">发送验证码</el-button>
+                        <el-col class="send-auth-send-code">
+                            <el-button :disabled="sendCodeDisabled" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
+                              <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
+                              <span v-else>{{$t('user.sendVerificationCode')}}</span>
+                            </el-button>
                         </el-col>
+                      </el-row>                      
                     </el-form-item>
                 </el-row>                    
-            </el-form>
-        </el-row>
+              </el-form>
+          </el-row>
+        </el-col>
+        <el-col v-if="!hasVerified" class="real-name-setting-operations-col">
+          <DialogOperations @save="bindPhoneNumber" @close="handleClose"></DialogOperations>
+        </el-col>        
+      </el-row>      
     </el-container>
 </template>
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
+import DialogOperations from './DialogOperations'
 export default {
   name: 'realNameAuthentication',
   data() {
+    let validatePhoneNumber = (rule, value, callback) => {
+        if(!/^1\d{10}$/.test(value)){
+          callback(new Error(this.$t('user.wrongNumberFormat')))
+        }else{
+          callback()
+        }
+    }
     return {
       loading: false,
-      hasVerified: false,
-      realNamePhoneNum: 18665835727,
-      authCode: ''
+      sendCodeDisabled: false,
+      count: 60,
+      timer: null,
+      authCode: '',
+      ruleFormDatas: {
+        cellphoneNumber: ''
+      },
+      phoneNumberRules: {
+        cellphoneNumber: [
+          { required: true, message: this.$t('user.inputPhoneNumber'), trigger: 'blur'},
+          { validator: validatePhoneNumber, trigger: 'blur'}
+        ]
+      }
     }
   },
   computed: {
-    ...mapGetters({})
+    ...mapGetters({
+      sendCodeInfo: 'user/sendCodeInfo',
+      authCodeInfo: 'user/authCodeInfo',
+      realNameInfo: 'user/realNameInfo'
+    }),
+    hasVerified() {
+      return this.realNameInfo && this.realNameInfo.verified
+    },
+    verifiedPhoneNumber() {
+      return this.realNameInfo && this.realNameInfo.cellphone
+    }
   },
   methods: {
     ...mapActions({
-      verifyCellphoneOne: 'user/verifyCellphoneOne'
+      verifyCellphoneOne: 'user/verifyCellphoneOne',
+      verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
-    sendAuthCode() {
-      let payload = { bind: true, cellphone: this.realNamePhoneNum }
-      this.verifyCellphoneOne(payload)
+    showMessage(type, message){
+      this.$message({
+        message,
+        type,
+        showClose: true
+      })
+    },
+    async sendAuthCode() {
+      let payload = { bind: true, cellphone: this.ruleFormDatas.cellphoneNumber }
+      await this.verifyCellphoneOne(payload)
+      let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
+      if(message === "号码格式有误"){
+        this.showMessage('error', this.$t('user.wrongNumberFormat'))
+        return
+      }
+      if(message === "短信验证码发送过频繁"){
+        this.showMessage('error', this.$t('user.sendingFrequent'))
+        return
+      }
+      if(message === "验证码超出同模板同号码天发送上限"){
+        this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
+        return
+      }
+      let message2 = this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0,6)
+      if(message2 === "手机号已绑定"){
+        this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
+        return
+      }
+      this.sendCodeDisabled = true
+      this.timer = setInterval(() => {
+        if(this.count > 0){
+          this.count--
+        }else{
+          this.sendCodeDisabled = false;
+          clearInterval(this.timer)
+          this.timer = null
+        }
+      }, 1000)
+    },
+    async bindPhoneNumber(){
+      let payload = { bind: true, cellphone: this.ruleFormDatas.cellphoneNumber, smsCode: this.authCode }
+      await this.verifyCellphoneTwo(payload)
+      let messageId = this.authCodeInfo.error.id
+      if(messageId === -1){
+        this.showMessage('error', this.$t('user.verificationCodeError'))
+      } else if(messageId === 0){
+        this.showMessage('success', this.$t('common.saveSuccess'))
+      }
+    },
+    handleClose(){
+      this.$emit('close')
     }
+  },
+  components: {
+    DialogOperations
   }
 }
 </script>
 <style lang="scss" scoped>
 .real-name-setting {
-  &-header {
-    border-bottom: 3px solid #cdd4db;
+  height: 100%;
+  &-wrap{
+    width: 100%;
+    display: flex;
   }
-  &-content {
-    width: 70%;
-    padding: 40px 28px 0 20px;
+  &-content{
+    flex: 1;
+    border-right: 15px solid #cdd4db;
     .auth-status {
       color: red;
     }
-    .send-auth-code {
-      margin-left: 8px;
+    .send-auth{
+      display: flex;
+      .send-auth-code {
+        flex: 1
+      }
+      .send-auth-send-code{
+        width: 100px;
+        margin-left: 8px;
+        .send-code-button{
+          width: 100%;
+        }
+      }
     }
+  }
+  .hasVerified{
+    border-right: none;
+  }
+  &-header {
+    border-bottom: 3px solid #cdd4db;
+    line-height: 60px;
+    margin-bottom: 20px;
+    h3{
+      margin: 0;
+    }
+  }
+  &-form{
+    width: 70%;
+    .real-name-status{
+      margin-bottom: 0;
+    }
+  }
+  &-operations-col{
+    width: 185px;
+    text-align: center;
+    align-self: flex-end;
   }
 }
 </style>
@@ -81,6 +207,13 @@ export default {
     padding-right: 20px;
   }
 }
+</style>
+<style lang="scss">
+  .real-name-setting-form{
+    .el-form-item.is-required .el-form-item__label:before {
+      display: none;
+    }
+  }
 </style>
 
 
