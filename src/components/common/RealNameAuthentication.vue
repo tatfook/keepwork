@@ -61,7 +61,7 @@ export default {
       loading: false,
       sendCodeDisabled: false,
       count: 60,
-      timer: 3,
+      timer: null,
       authCode: '',
       ruleFormDatas: {
         cellphoneNumber: ''
@@ -115,7 +115,7 @@ export default {
         this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
         return
       }
-      let message2 = this.sendCodeInfo.message.slice(0,6)
+      let message2 = this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0,6)
       if(message2 === "手机号已绑定"){
         this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
