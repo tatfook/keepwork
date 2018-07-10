@@ -81,7 +81,7 @@
               <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
             </span>
             <span v-else>
-              <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copy')" @click='handleCopy(scope.row)'></span>
+              <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copyURI')" @click='handleCopy(scope.row)'></span>
               <span class='iconfont icon-insert' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
               <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
 
