@@ -1,13 +1,13 @@
 <template>
   <div class="email-bind">
-    <el-form class="account-binding-form account-binding-email" ref='emailForm' :inline="true" :rules="emailBindRules" label-width="140px" :model='emailFormData'>
+    <el-form class="email-bind-form" ref='emailForm' :inline="true" :rules="emailBindRules" label-width="140px" :model='emailFormData'>
       <el-form-item label="邮箱绑定:" prop="email">
-        <el-input class="account-binding-form-item-content" size='small' v-model="emailFormData.email" v-if="!isUserBindEmail"></el-input>
-        <div class="account-binding-form-item-content" v-if="isUserBindEmail">{{userEmail}}</div>
+        <el-input class="email-bind-form-item-content" size='small' v-model="emailFormData.email" v-if="!isUserBindEmail"></el-input>
+        <div class="email-bind-form-item-content" v-if="isUserBindEmail">{{userEmail}}</div>
         <span class="el-form-item__error" v-show="emailError">{{emailError}}</span>
       </el-form-item>
       <el-form-item>
-        <el-button size="small" class="account-binding-form-item-button" @click="toggleBindEmail">
+        <el-button size="small" class="email-bind-form-item-button" @click="toggleBindEmail">
           {{isUserBindEmail ? '解绑':'绑定'}}
         </el-button>
       </el-form-item>
@@ -107,3 +107,21 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.email-bind {
+  &-form {
+    &-item-content {
+      width: 180px;
+      padding-right: 56px;
+    }
+    &-item-button {
+      color: #1989fa;
+      border-color: #1989fa;
+    }
+    .el-form-item__label {
+      padding-right: 56px;
+      color: #333;
+    }
+  }
+}
+</style>
