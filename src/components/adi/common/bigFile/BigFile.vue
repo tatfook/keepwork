@@ -22,7 +22,8 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
-      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg']">
+      <div class="bigfile-image"
+           v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
         <img :src="getSrc" />
       </div>
       <div v-if="getType === handleExt['mp4']">
@@ -85,7 +86,8 @@ export default {
         mp4:'mp4',
         jpg:'jpg',
         png:'png',
-        pdf:'pdf'
+        pdf:'pdf',
+        gif:'gif'
       },
       otherExt: 'other'
     }
