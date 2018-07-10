@@ -17,7 +17,6 @@ const getters = {
     if (profileUserToken !== token) return {}
     return state.profile
   },
-  realNamePhoneNum: state => state.realNamePhoneNum,
   isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
@@ -25,6 +24,7 @@ const getters = {
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
@@ -32,6 +32,8 @@ const getters = {
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
+  sendCodeInfo: (state) => state.sendCodeInfo,
+  authCodeInfo: (state) => state.authCodeInfo,
 
   siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (

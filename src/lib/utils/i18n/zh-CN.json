@@ -460,6 +460,19 @@
     "male": "男",
     "female": "女",
     "confidentiality": "保密",
-    "modifyAvatar": "修改头像"
+    "modifyAvatar": "修改头像",
+    "inputPhoneNumber": "请输入手机号码",
+    "wrongNumberFormat": "号码格式不正确",
+    "certificationStatus": "认证状态:",
+    "certified": "已认证",
+    "unverified": "未认证",
+    "certifiedPhoneNumber": "认证手机:",
+    "verificationCode": "短信验证码:",
+    "sendVerificationCode": "发送验证码",
+    "resend": "重新发送",
+    "sendingFrequent": "短信验证码发送过频繁",
+    "codeExceedsTheSendingLimit": "验证码超出同模板同号码天发送上限",
+    "verificationCodeError": "验证码错误",
+    "hasBeenBoundToOtherAccounts": "手机号已绑定了其他账号"
   }
 }
