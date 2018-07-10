@@ -2493,7 +2493,7 @@ ChangePageSetup.prototype.execute = () => {
 }
 
 // Registers codec for ChangePageSetup
-(() => {
+;(() => {
   let codec = new MxObjectCodec(new ChangePageSetup(), [
     'ui',
     'previousColor',
