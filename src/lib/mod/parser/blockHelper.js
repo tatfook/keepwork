@@ -112,11 +112,7 @@ const blockHelper = {
     if (block.cmd !== MARKDOWN_CMD) {
       let headLine = MOD_CMD_BEGIN + block.cmd
       let endLine = MOD_CMD_END
-      if (block.endingMark) {
-        return _.flatten([headLine, block.md, endLine])
-      } else {
-        return _.flatten([headLine, block.md])
-      }
+      return _.flatten([headLine, block.md, endLine])
     } else {
       let endLine = MARKDOWN_CMD_END
       return block.endingMark ? _.flatten([block.md, endLine]) : block.md
