@@ -88,23 +88,24 @@ export default {
         default:
           break
       }
+      this.handleClose()
     },
     async verifyEmailCode() {
       let { username } = this.userProfile
       await this.userVerifyEmailTwo({
         username: username,
-        bind: true,
+        bind: this.codeDialogDatas.bind,
         isApi: true,
         verifyCode: this.codeDialogDatas.code
       })
-      this.showMessage('success', '绑定成功')
+      this.showMessage('success', `${this.codeDialogDatas.bind ? '绑定' : '解绑'}成功`)
     },
     async sendCode() {
       switch (this.codeDialogDatas.type) {
         case 'email':
           let result = await this.userVerifyEmailOne({
             email: this.codeDialogDatas.value,
-            bind: true
+            bind: this.codeDialogDatas.bind
           })
           this.codeDialogDatas.codeSent = true
           this.showMessage('success', '邮件发送成功')
