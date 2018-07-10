@@ -51,6 +51,7 @@
     "action": "Action",
     "search": "Search",
     "copy": "Copy",
+    "copyURI": "Copy URI",
     "insert": "Insert",
     "download": "Download",
     "update": "Update",
@@ -487,5 +488,15 @@
     "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
     "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts"
+    "modifyPwd": "Modify Password:",
+    "accountBinding": "Account Binding",
+    "oldPwd": "Old Password:",
+    "newPwd": "New Password:",
+    "reNewPwd": "Determine:",
+    "twoPwdInconsistent": "Inconsistent password entered twice!",
+    "oldPwdRequired": "Please enter the old password",
+    "newPwdRequired": "Please enter a new password",
+    "reNewPwdRequired": "please enter a new password again",
+    "pwdMinLen": "Password at least 6 digits"
   }
 }

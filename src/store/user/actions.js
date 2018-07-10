@@ -101,9 +101,9 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { authRequestConfig, token } } = context
+    let { commit, getters: { authRequestConfig, profile } } = context
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
-    commit(GET_PROFILE_SUCCESS, { ...newUserInfo, token })
+    commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
   },
   async verifyCellphoneOne(context, { bind, cellphone }) {
     let { commit, getters: { authRequestConfig } } = context
@@ -518,6 +518,12 @@ const actions = {
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)
     return result
+  },
+  async changePwd(context, { oldpassword, newpassword }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
+    return result.error.message
   }
 }
 

@@ -29,11 +29,11 @@
           <el-form-item :label='$t("user.introduce")'>
             <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.introduce"></el-input>
           </el-form-item>
+          <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
         </el-form>
-        <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
       </el-col>
       <el-col class="user-data-setting-operations-col">
-        <DialogOperations @save='saveUserData' @close='handleClose'></DialogOperations>
+        <DialogOperations :isSaveBtnDisabled='isSaveBtnDisabled' @save='saveUserData' @close='handleClose'></DialogOperations>
       </el-col>
     </el-row>
   </el-container>
@@ -71,6 +71,9 @@ export default {
     ...mapGetters({
       loginUserProfile: 'user/profile'
     }),
+    isSaveBtnDisabled() {
+      return this.isCroppering
+    },
     portrait() {
       return this.isCroppering
         ? this.profilePreviewUrl
@@ -105,7 +108,6 @@ export default {
       let imgMainContent = imgBase64.split(',')[1]
       let { username, defaultSiteDataSource } = this.loginUserProfile
       let {
-        projectId,
         rawBaseUrl,
         dataSourceUsername,
         projectName
@@ -169,7 +171,7 @@ export default {
       this.loading = false
       this.isCroppering = false
     },
-    handleClose(){
+    handleClose() {
       this.$emit('close')
     }
   },
@@ -195,9 +197,11 @@ export default {
   &-form-col {
     width: auto;
     flex: 1;
-    position: relative;
     padding: 40px 28px 0 0;
     border-right: 15px solid #cdd4dc;
+    .el-form {
+      position: relative;
+    }
     .el-radio {
       color: #333;
     }

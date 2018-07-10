@@ -209,15 +209,12 @@ const actions = {
     commit(SET_IS_MULTIPLE_TEXT_DIALOG_SHOW, isShow)
   },
   addModToAdi({ commit, dispatch }, payload) {
-    const modProperties = ModFactory.generate(payload.modName)
-    var modPropertiesStyle
-    if (payload.styleID) {
-      modPropertiesStyle = modProperties
-      modPropertiesStyle.styleID = payload.styleID
-    }
+    let modProperties = ModFactory.generate(payload.modName)
+    modProperties.styleID = payload.styleID || modProperties.styleID
+    modProperties = _.merge(modProperties, payload.modProperties)
     let newMod = Parser.buildBlock(
       Parser.getCmd(payload.modName),
-      modPropertiesStyle || modProperties
+      modProperties
     )
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)

@@ -51,6 +51,7 @@
     "action": "操作",
     "search": "搜索",
     "copy": "复制",
+    "copyURI": "复制链接",
     "insert": "插入",
     "download": "下载",
     "update": "更新",
@@ -474,5 +475,15 @@
     "codeExceedsTheSendingLimit": "验证码超出同模板同号码天发送上限",
     "verificationCodeError": "验证码错误",
     "hasBeenBoundToOtherAccounts": "手机号已绑定了其他账号"
+    "modifyPwd": "修改密码",
+    "accountBinding": "账号绑定",
+    "oldPwd": "旧密码:",
+    "newPwd": "新密码:",
+    "reNewPwd": "确定新密码:",
+    "twoPwdInconsistent": "两次输入密码不一致!",
+    "oldPwdRequired": "请输入旧密码",
+    "newPwdRequired": "请输入新密码",
+    "reNewPwdRequired": "请再次输入新密码",
+    "pwdMinLen": "密码最少6位"
   }
 }

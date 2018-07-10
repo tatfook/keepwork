@@ -54,15 +54,7 @@ export default {
         this.style.data.colGroup.top = 'unset'
       }
 
-      if (this.modData.styleID == '1') {
-        return _.merge(
-          {},
-          options,
-          (this.modData.pic.src = './static/adi/qq/qqTwo.svg')
-        )
-      } else {
-        return options
-      }
+      return options
     }
   }
 }
