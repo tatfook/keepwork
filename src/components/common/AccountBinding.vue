@@ -6,11 +6,11 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import EmailBind from "./accountBind/EmailBind";
-import PhoneBind from "./accountBind/PhoneBind";
+import EmailBind from './accountBind/EmailBind'
+import PhoneBind from './accountBind/PhoneBind'
 export default {
   name: 'AccountBinding',
-  components:{
+  components: {
     EmailBind,
     PhoneBind
   }
@@ -38,7 +38,9 @@ export default {
       font-size: 16px;
       color: #1989fa;
       border-color: #1989fa;
-      padding: 8px 32px;
+      width: 148px;
+      text-align: center;
+      padding: 8px 0;
       border-radius: 34px;
     }
     .el-dialog__header {

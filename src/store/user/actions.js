@@ -538,11 +538,14 @@ const actions = {
   async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
     let { getters, dispatch } = context
     let { authRequestConfig } = getters
-    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig)
-    await dispatch('getProfile', {
-      useCache: false
-    })
-    return result
+    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig, { returnOriginalData: true })
+    let message = result.error.message
+    if (message === 'success') {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+    }
+    return message
   }
 }
 
