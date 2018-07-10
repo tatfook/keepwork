@@ -22,10 +22,16 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
+      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg']">
+        <img :src="getSrc" />
+      </div>
       <div v-if="getType === handleExt['mp4']">
         <video :src="getSrc" controls>
           {{$t('editor.videoNotSupport')}}
         </video>
+      </div>
+      <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
+        <iframe :src="getSrc"></iframe>
       </div>
     </div>
   </div>
@@ -75,7 +81,12 @@ export default {
         docx: 'icon-word',
         sql: 'icon-sql'
       },
-      handleExt: {mp4:'mp4'},
+      handleExt: {
+        mp4:'mp4',
+        jpg:'jpg',
+        png:'png',
+        pdf:'pdf'
+      },
       otherExt: 'other'
     }
   },
@@ -177,6 +188,20 @@ export default {
 
   .err {
     text-align: center;
+  }
+
+  .bigfile-pdf {
+    iframe {
+      width: 100%;
+      height: 1000px;
+      border: none;
+    }
+  }
+
+  .bigfile-image {
+    img {
+      width: 100%;
+    }
   }
 
   .bigfile-box {
