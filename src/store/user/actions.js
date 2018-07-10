@@ -524,6 +524,22 @@ const actions = {
     let { authRequestConfig } = getters
     let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
     return result.error.message
+  },
+  async getByEmail(context, { email }) {
+    let result = await keepwork.user.getByEmail({ email })
+    return result
+  },
+  async verifyEmailOne(context, { email, bind }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailOne({ email, bind }, authRequestConfig)
+    return result
+  },
+  async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig)
+    return result
   }
 }
 
