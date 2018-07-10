@@ -3,6 +3,7 @@ export const MOD_CMD_END_REG = /^```$/
 export const MARKDOWN_CMD = 'Markdown'
 export const MOD_CMD_BEGIN = '```@'
 export const MOD_CMD_END = '```'
+export const MARKDOWN_CMD_END = '----'
 
 export const cmdList = [
   'Markdown',
@@ -53,6 +54,10 @@ export const isMarkdownCmd = (cmd) => {
   return cmd === MARKDOWN_CMD
 }
 
+export const isMarkdownEndLine = (line) => {
+  return line === MARKDOWN_CMD_END
+}
+
 export const targetCmd = (cmd) => {
   return oldCmdMapper[cmd]
 }
@@ -73,6 +78,7 @@ export default {
   isValidCmd,
   isOldCmd,
   isMarkdownCmd,
+  isMarkdownEndLine,
   targetCmd,
   isCmdLine,
   isCmdEnd

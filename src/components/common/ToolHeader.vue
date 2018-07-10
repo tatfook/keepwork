@@ -9,9 +9,9 @@
       <div class="breadcrumb-item">
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <el-scrollbar tag='ul' wrap-class="file-list-content" view-class="view-box" :native="false">
-            <li v-for='site in siteList' :key='site.name'>
+            <li v-for='(site,index) in siteList' :key='index'>
               <a :href="`/${site.username}/${site.name}`" class="clearfix">
-                <span class="list-content">{{site.displayName || site.name}}</span>
+                <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
             </li>
@@ -86,8 +86,12 @@ export default {
         return
       }
       let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
+      if(!siteDetailInfo) return
       let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
       let name = _.get(siteDetailInfo, 'siteinfo.name')
+      if(siteDetailInfo.siteinfo && siteDetailInfo.siteinfo.domain === "paracraft"){
+        siteDisplayName = "paracraft"
+      }
       return siteDisplayName || name
     },
     sitePath() {

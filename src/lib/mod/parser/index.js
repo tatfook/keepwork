@@ -2,7 +2,9 @@ import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
 import CmdHelper from './cmdHelper'
-import { gConst } from '@/lib/global'
+import {
+  gConst
+} from '@/lib/global'
 
 const beginModBlock = (line, lineNumber) => {
   let cmd
@@ -15,7 +17,8 @@ const beginModBlock = (line, lineNumber) => {
   return curModBlock
 }
 
-const endModBlock = (blockList, curModBlock) => {
+const endModBlock = (blockList, curModBlock, endingMark) => {
+  BlockHelper.setEndingMark(curModBlock, endingMark)
   BlockHelper.buildJson(curModBlock)
   BlockHelper.buildKey(curModBlock)
   blockList.push(_.cloneDeep(curModBlock))
@@ -31,6 +34,7 @@ const buildBlockList = mdText => {
   if (!mdText) return []
   let mdLines = mdText.split('\n')
   let blockList = []
+  let started = null
   let curModBlock = null
   _.forEach(mdLines, (line, lineNumber) => {
     if (curModBlock) {
@@ -38,7 +42,13 @@ const buildBlockList = mdText => {
         CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
       ) { // markdown mod will ignore the cmd end
-        endModBlock(blockList, curModBlock)
+        endModBlock(blockList, curModBlock, true)
+        curModBlock = null
+      } else if (
+        BlockHelper.isMarkdownMod(curModBlock) &&
+        CmdHelper.isMarkdownEndLine(line)
+      ) { // check markdown mod ending mark
+        endModBlock(blockList, curModBlock, true)
         curModBlock = null
       } else if (CmdHelper.isCmdLine(line)) {
         endModBlock(blockList, curModBlock)
@@ -46,7 +56,8 @@ const buildBlockList = mdText => {
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
-    } else if (line.trim() !== '') {
+    } else if (!started || line.trim() !== '') {
+      started = true
       curModBlock = beginModBlock(line, lineNumber + 1)
     }
   })
@@ -99,7 +110,7 @@ const getBlockLines = (mdText, block) => {
     if (
       (CmdHelper.isCmdEnd(mdLines[i]) &&
         !BlockHelper.isMarkdownMod(block)) ||
-        CmdHelper.isCmdLine(mdLines[i])
+      CmdHelper.isCmdLine(mdLines[i])
     ) {
       break
     }
@@ -112,10 +123,12 @@ const getBlockLines = (mdText, block) => {
 // ONLY update block code if the changed lines are safe(no insert and no delete)
 const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
+    let line = mdLines[i]
     if (
-      (CmdHelper.isCmdEnd(mdLines[i]) &&
+      (CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(block)) ||
-        CmdHelper.isCmdLine(mdLines[i])
+      CmdHelper.isCmdLine(line) ||
+      CmdHelper.isMarkdownEndLine(line)
     ) {
       return true
     }
@@ -148,9 +161,10 @@ const tryToMergeBlock = (blockList, index) => {
   let block = blockList[index]
   let nextBlock = blockList[index + 1]
 
-  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock)) return
+  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock) || block.endingMark) return
 
   BlockHelper.updateMarkdown(block, _.concat([], block.md, nextBlock.md))
+  BlockHelper.setEndingMark(block, nextBlock.endingMark)
   deleteBlock(blockList, nextBlock.key)
   updateBlocksBeginLine(blockList, index + 1, block.lengthDiff)
 }
@@ -160,8 +174,7 @@ const deleteBlock = (blockList, key) => {
   let block = blockList[blockIndex]
   updateBlocksBeginLine(
     blockList,
-    blockIndex + 1,
-    -1 - BlockHelper.textLength(block)
+    blockIndex + 1, -1 - BlockHelper.textLength(block)
   )
   blockList.splice(blockIndex, 1)
   if (!BlockHelper.isMarkdownMod(block)) tryToMergeBlock(blockList, blockIndex - 1)

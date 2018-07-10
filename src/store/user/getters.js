@@ -17,6 +17,7 @@ const getters = {
     if (profileUserToken !== token) return {}
     return state.profile
   },
+  realNamePhoneNum: state => state.realNamePhoneNum,
   isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
@@ -272,7 +273,9 @@ const getters = {
 
   skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
-  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
+
+  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId])
 }
 
 export default getters

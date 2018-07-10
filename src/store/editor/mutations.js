@@ -54,6 +54,7 @@ const UNDO = 'UNDO'
 const REDO = 'REDO'
 const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
+const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
 
 export const props = {
   SET_ACTIVE_PAGE,
@@ -99,7 +100,9 @@ export const props = {
   UNDO,
   REDO,
   SAVE_HISTORY,
-  INIT_UNDO
+  INIT_UNDO,
+  TOGGLE_SKY_DRIVE,
+  CLOSE_ALL_OPENED_FILE
 }
 
 const activeAreaData = state => {
@@ -318,6 +321,9 @@ const mutations = {
   },
   [INIT_UNDO](state, payload) {
     UndoHelper.init(activeAreaData(state).undoManager, payload)
+  },
+  [TOGGLE_SKY_DRIVE](state, { showSkyDrive = false }) {
+    Vue.set(state, 'isSkyDriveManagerDialogShow', showSkyDrive)
   }
 }
 

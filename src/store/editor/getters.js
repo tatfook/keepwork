@@ -68,6 +68,7 @@ const getters = {
     if (state.activePage) return state.activePage.activePropertyTabType
   },
   showingCol: state => state.showingCol,
+  isCodeShow: (state, { showingCol }) => !!_.get(showingCol, 'isCodeShow'),
   canUndo: (state, { activeAreaData }) =>
     activeAreaData && UndoHelper.canUndo(activeAreaData.undoManager),
   canRedo: (state, { activeAreaData }) =>
@@ -115,7 +116,8 @@ const getters = {
   mainModList: state => (state.activePage ? state.activePage.modList : []),
   headerModList: (state, { header }) => header && header.modList,
   footerModList: (state, { footer }) => footer && footer.modList,
-  sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList
+  sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
+  showSkyDrive: state => state.isSkyDriveManagerDialogShow
 }
 
 export default getters

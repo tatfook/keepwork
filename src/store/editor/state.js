@@ -53,7 +53,8 @@ const state = () => ({
     isCodeShow: true,
     isPreviewShow: true
   },
-  isMultipleTextDialogShow: false
+  isMultipleTextDialogShow: false,
+  isSkyDriveManagerDialogShow: false
 })
 
 export default state

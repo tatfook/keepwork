@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 const {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
+  SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
@@ -28,7 +29,8 @@ const {
   GET_FROM_SKY_DRIVE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
-  SAVE_SITE_THEME_CONFIG_SUCCESS
+  SAVE_SITE_THEME_CONFIG_SUCCESS,
+  USE_FILE_IN_SITE_SUCCESS
 } = props
 
 const actions = {
@@ -48,9 +50,9 @@ const actions = {
     let getProfilePromise
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
-    return async (context, {forceLogin = true} = {}) => {
+    return async (context, {forceLogin = true, useCache = true} = {}) => {
       let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
-      if (isLogined) return
+      if (isLogined && useCache) return
 
       getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
@@ -96,6 +98,22 @@ const actions = {
     }
     userDetail = await keepwork.user.getDetailByName({ username: username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+  },
+  async updateUserInfo(context, userInfo) {
+    let { commit, getters: { authRequestConfig, profile } } = context
+    let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
+    commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
+  },
+  async verifyCellphoneOne({ commit }, { bind, cellphone }) {
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
+    console.log('verifyInfo', verifyInfoOne)
+    commit(SET_REAL_AUTH_PHONE_NUM, cellphone)
+  },
+  async verifyCellphoneTwo({ commit }, { bind, cellphone, smsCode }) {
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({bind, cellphone})
+    console.log('112', verifyInfoOne)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({bind, smsCode, verifyInfoOne})
+    console.log(verifyInfoTwo)
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}
@@ -451,18 +469,20 @@ const actions = {
     ])
   },
   async getInfoFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, getters } = context
+    let { commit, dispatch, getters } = context
     let { username, skyDriveInfo, authRequestConfig } = getters
     if (useCache && !_.isEmpty(skyDriveInfo)) return
 
+    await dispatch('getProfile')
     let info = await skyDrive.info(null, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
   },
   async getFileListFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, getters } = context
+    let { commit, dispatch, getters } = context
     let { username, skyDriveFileList, authRequestConfig } = getters
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
+    await dispatch('getProfile')
     let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
   },
@@ -472,23 +492,36 @@ const actions = {
     let url = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
     return url
   },
-  async updateFileInSkyDrive(context, {file, onStart, onProgress, bigfileToUpdate}) {
-    let { dispatch, getters: { authRequestConfig } } = context
-    await dispatch('getProfile')
-    let url = await skyDrive.update({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig)
-    return url
-  },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.remove({file}, authRequestConfig)
   },
-  async changeFileNameInSkyDrive(context, {_id, filename}) {
+  async changeFileNameInSkyDrive(context, {key, filename}) {
     let { getters: { authRequestConfig } } = context
-    await skyDrive.changeFileName({_id, filename}, authRequestConfig)
+    await skyDrive.changeFileName({key, filename}, authRequestConfig)
+  },
+  async useFileInSite(context, {fileId, sitePath, useCache = true}) {
+    let { commit, dispatch, getters, rootGetters } = context
+
+    let { authRequestConfig, siteFileBySitePathAndFileId } = getters
+    let cachedUrl = siteFileBySitePathAndFileId({sitePath, fileId})
+    if (useCache && !_.isEmpty(cachedUrl)) return
+
+    await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
+    let { siteinfo: { userId, _id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
+
+    let url = await skyDrive.useFileInSite({userId, siteId, fileId}, authRequestConfig)
+    commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
   },
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)
     return result
+  },
+  async changePwd(context, { oldpassword, newpassword }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
+    return result.error.message
   }
 }
 

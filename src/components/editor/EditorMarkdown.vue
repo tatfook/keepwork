@@ -156,7 +156,7 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursorLine(this.modList, line)
+        let mod = Parser.getBlockByCursorLine(this.modList || [], line)
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
@@ -201,17 +201,20 @@ export default {
           cursor
         })
       }
+
       // the new input might create a new cmd
       let text = _.cloneDeep(change.text)
-      if (text[0] !== '') text[0] = editor.getLine(change.from.line)
-      if (text[text.length - 1] !== '')
-        text[text.length - 1] = editor.getLine(change.to.line)
-
+      if (text.length > 0) {
+        if (text[0] !== '') text[0] = editor.getLine(change.from.line)
+        if (text[text.length - 1] !== '')
+          text[text.length - 1] = editor.getLine(change.to.line)
+      }
       // the last line of removed code might broke the cmd
       let removed = _.cloneDeep(change.removed)
-      if (removed.length > 1) {
-        let oldMdLines = this.code.split('\n')
-        removed[removed.length - 1] = oldMdLines[change.to.line]
+      if (removed.length > 0) {
+        if (removed[0] !== '') removed[0] = editor.getLine(change.from.line)
+        if (removed[removed.length - 1] !== '')
+          removed[removed.length - 1] = editor.getLine(change.to.line)
       }
       if (
         Parser.willAffectModData(mod, removed) ||

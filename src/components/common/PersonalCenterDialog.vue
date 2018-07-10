@@ -1,14 +1,14 @@
 <template>
-  <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
-    <div class="website-setting-sidebar">
+  <el-dialog v-loading="loading" :append-to-body=true v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
+    <div class="personal-center-sidebar">
       <ul>
-        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in websiteSettingNavs" :key="index">
+        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in personalSettingNavs" :key="index">
           <span :class="{'active': index === activeSettingIndex}" class="sidebar-nav-item">{{navItem.text}}</span>
         </li>
       </ul>
     </div>
-    <div class="website-setting-content">
-      <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
+    <div class="personal-center-content">
+      <component ref='personalCenterComponent' :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
     </div>
   </el-dialog>
 </template>
@@ -19,17 +19,19 @@ import Vue from 'vue'
 import UserData from './UserData'
 import AccountSecurity from './AccountSecurity'
 import RealNameAuthentication from './RealNameAuthentication'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'WebsiteSettingDialog',
+  name: 'PersonalCenterDialog',
   props: {
     show: Boolean,
     sitePath: String
   },
   data() {
     return {
+      loading: false,
       title: `//${location.host}/${this.sitePath}`,
-      websiteSettingNavs: [
+      personalSettingNavs: [
         {
           text: this.$t('common.userData'),
           comp: UserData
@@ -43,15 +45,52 @@ export default {
           comp: RealNameAuthentication
         }
       ],
-      activeSettingIndex: 2
+      activeSettingIndex: 1
     }
   },
   computed: {
+    ...mapGetters({
+      loginUserProfile: 'user/profile'
+    }),
     activeSettingComp() {
-      return this.websiteSettingNavs[this.activeSettingIndex].comp
+      return this.personalSettingNavs[this.activeSettingIndex].comp
     }
   },
   methods: {
+    ...mapActions({
+      userUpdateUserInfo: 'user/updateUserInfo',
+      userCheckSensitive: 'user/checkSensitive',
+      verifyCellphoneTwo: 'verifyCellphoneTwo'
+    }),
+    async handleSave() {
+      let componentRef = this.$refs.personalCenterComponent
+      switch (this.activeSettingIndex) {
+        case 0:
+          break
+        case 1:
+          await saveSecurityChanges()
+          break
+        default:
+          break
+      }
+    },
+    async saveSecurityChanges() {
+      let { activeName } = componentRef
+      switch (activeName) {
+        case 'changePwd':
+          await this.savePassword()
+          break
+        case 'accountBinding':
+          break
+        case 2:
+          break
+        default:
+          let paylaod = {bind: true, cellphone: 18665835727, smsCode: 1234}
+          this.verifyCellphoneTwo(paylaod)
+          break
+      }
+    },
+    async savePassword() {},
     handleClose() {
       this.$emit('close')
     },
@@ -68,12 +107,10 @@ export default {
 </script>
 
 <style lang='scss'>
-.website-setting {
+.personal-center {
   &-dialog {
     .el-dialog {
-      width: 96%;
-      min-width: 1180px;
-      max-width: 1200px;
+      width: 1020px;
     }
     .el-dialog__header {
       box-shadow: 0 2px 2px #b5b5b5;
@@ -88,10 +125,9 @@ export default {
     }
   }
   &-sidebar {
-    width: 165px;
+    width: 170px;
     box-sizing: border-box;
     flex-shrink: 0;
-    border-right: 15px solid #cdd4db;
     ul {
       margin: 0;
       padding: 0;
@@ -121,6 +157,8 @@ export default {
   }
   &-content {
     flex: 1;
+    border: 15px solid #cdd4db;
+    border-width: 0 0 0 15px;
   }
 }
 </style>

@@ -18,10 +18,22 @@ export const post = (...args) => {
   )
 }
 
+export const put = (...args) => {
+  let [url, payload, config, returnOriginalData = false] = args
+  return keepworkEndpoint.put(url, payload, config).then(
+    res => returnOriginalData ? res.data : res.data.data
+  )
+}
+
 export const user = {
   login: (...args) => post('/user/login', ...args),
   getProfile: (...args) => post('/user/getProfile', ...args),
-  getDetailByName: (...args) => post('/user/getDetailByName', ...args)
+  getDetailByName: (...args) => post('/user/getDetailByName', ...args),
+  updateUserInfo: (...args) => put('/user/updateUserInfo', ...args),
+  update: (...args) => put('/user/update', ...args),
+  changepw: (...args) => post('/user/changepw', ...args),
+  verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
+  verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args)
 }
 
 /*doc
@@ -145,18 +157,6 @@ export const sensitiveWords = {
   query: (...args) => post('sensitive_words/query', ...args)
 }
 
-// todo merge bigFile and bigfile
-export const bigFile = {
-  getDownloadUrlById: (token, ...args) => {
-    return axios.create({
-      baseURL: process.env.KEEPWORK_API_PREFIX,
-      headers: {'Authorization': 'Bearer ' + token}
-    })
-      .post('bigfile/getDownloadUrlById', ...args)
-      .then(res => res.data.data)
-  }
-}
-
 export const bigfile = {
   upload: (...args) => post('bigfile/upload', ...args),
   getByUsername: (...args) => post('bigfile/getByUsername', ...args),
@@ -183,7 +183,6 @@ export const keepwork = {
   websiteComment,
   sensitiveWords,
   pages,
-  bigFile,
   qiniu,
   bigfile
 }

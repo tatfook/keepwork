@@ -127,10 +127,10 @@ const actions = {
       path: inputPath
     })
     let file = await gitlab.getFile(path, options)
-
+    let markdownFileAppendisToCheck404 = /\.md$/.test(inputPath) ? '\n' : ''
     let payload = {
       path,
-      file: { ...file, content: Base64.decode(file.content) }
+      file: { ...file, content: Base64.decode(file.content) + markdownFileAppendisToCheck404 }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
@@ -163,7 +163,8 @@ const actions = {
       projectName,
       fullPath
     )
-
+    let markdownFileAppendisToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
+    content = typeof content === 'string' ? (content + markdownFileAppendisToCheck404) : content
     let payload = { path: fullPath, file: { content } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
@@ -174,7 +175,10 @@ const actions = {
       path,
       options
     } = await getGitlabFileParams(context, { path: inputPath, content })
-    await gitlab.editFile(path, options)
+    await gitlab.editFile(path, {
+      ...options,
+      content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content
+    })
       .catch(async e => {
         console.error(e)
         // try create a new file
@@ -185,7 +189,7 @@ const actions = {
   },
   async createFile(
     context,
-    { path, content = '', refreshRepositoryTree = true }
+    { path, content = '', refreshRepositoryTree = true, userOptions }
   ) {
     let { commit, dispatch } = context
     let {
@@ -194,6 +198,7 @@ const actions = {
       gitlab,
       options
     } = await getGitlabParams(context, { path, content })
+    options = _.merge(userOptions, options)
     await gitlab.createFile(
       path,
       options

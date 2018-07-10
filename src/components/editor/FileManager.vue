@@ -1,6 +1,6 @@
 <template>
   <div class="file-manager" v-loading="loading">
-    <div v-show="hasOpenedFiles" class="joined-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
+    <div v-show="hasOpenedFiles" class="opened-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
       <div class="opened-files-container">
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
@@ -15,8 +15,8 @@
       <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-collapse-transition>
@@ -288,11 +288,6 @@ export default {
       this.toBeCloseFileName = ''
       this.dialogCloseAllVisible = false
     },
-    handleCloseOpenedFile() {
-      let path = this.toBeCloseFilePath
-      path && this.closeAndResetFile(path)
-      this.handleCloseDialog()
-    },
     async saveAndCloseOpenedFile() {
       let path = this.toBeCloseFilePath
       this.savePending = true
@@ -476,12 +471,17 @@ export default {
   }
   .el-tree-node__content:hover {
     background-color: #ccfffc;
-    .el-tree-node__label{
-      padding-right: 105px;
-    }
     .file-manager-buttons-container {
       display: inline-block !important;
       line-height: 38px !important;
+    }
+  }
+  .opened-tree{
+    .el-tree-node__content:hover {
+      background-color: #ccfffc;
+      .el-tree-node__label{
+        padding-right: 135px;
+      }
     }
   }
   .el-tree-node__content {
@@ -504,7 +504,7 @@ export default {
     position: relative;
     padding-left: 20px;
     overflow: hidden;
-    span{
+    span:not(.rename-wrapper) {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
