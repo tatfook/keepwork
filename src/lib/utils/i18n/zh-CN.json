@@ -474,7 +474,7 @@
     "sendingFrequent": "短信验证码发送过频繁",
     "codeExceedsTheSendingLimit": "验证码超出同模板同号码天发送上限",
     "verificationCodeError": "验证码错误",
-    "hasBeenBoundToOtherAccounts": "手机号已绑定了其他账号"
+    "hasBeenBoundToOtherAccounts": "手机号已绑定了其他账号",
     "modifyPwd": "修改密码",
     "accountBinding": "账号绑定",
     "oldPwd": "旧密码:",

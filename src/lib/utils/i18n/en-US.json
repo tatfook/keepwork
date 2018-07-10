@@ -487,7 +487,7 @@
     "sendingFrequent": "Sending frequent",
     "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
-    "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts"
+    "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts",
     "modifyPwd": "Modify Password:",
     "accountBinding": "Account Binding",
     "oldPwd": "Old Password:",
