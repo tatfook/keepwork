@@ -38,7 +38,7 @@
           </el-row>
         </el-col>
         <el-col v-if="!hasVerified" class="real-name-setting-operations-col">
-          <DialogOperations @save="bindPhoneNumber" @close="handleClose"></DialogOperations>
+          <DialogOperations @save="realNamePhoneNumber" @close="handleClose"></DialogOperations>
         </el-col>        
       </el-row>      
     </el-container>
@@ -100,7 +100,7 @@ export default {
       })
     },
     async sendAuthCode() {
-      let payload = { bind: true, cellphone: this.ruleFormDatas.cellphoneNumber }
+      let payload = { setRealNameInfo: true, cellphone: this.ruleFormDatas.cellphoneNumber }
       await this.verifyCellphoneOne(payload)
       let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
       if(message === "号码格式有误"){
@@ -131,8 +131,8 @@ export default {
         }
       }, 1000)
     },
-    async bindPhoneNumber(){
-      let payload = { bind: true, cellphone: this.ruleFormDatas.cellphoneNumber, smsCode: this.authCode }
+    async realNamePhoneNumber(){
+      let payload = { setRealNameInfo: true, cellphone: this.ruleFormDatas.cellphoneNumber, smsCode: this.authCode }
       await this.verifyCellphoneTwo(payload)
       let messageId = this.authCodeInfo.error.id
       if(messageId === -1){
