@@ -18,7 +18,7 @@
           <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
-      
+
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
       </el-menu-item>
@@ -31,26 +31,36 @@
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-start">
           <span class="el-dropdown-link">
-          <img class="user-profile" :src='userProfile.portrait' alt="username">
-              <i class="el-icon-caret-bottom"></i>
+            <img class="user-profile" :src='userProfile.portrait' alt="username">
+            <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
-            <el-dropdown-item><a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a></el-dropdown-item>
+            <el-dropdown-item>
+              <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a>
+            </el-dropdown-item>
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
-            <el-dropdown-item><a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a></el-dropdown-item>
+            <el-dropdown-item>
+              <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
+            </el-dropdown-item>
             <!-- <el-dropdown-item divided><a href="#" @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">{{$t('common.signIn')}}</a>
+        <a @click.stop.prevent="goJoin">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
+        <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
     </el-menu>
 
@@ -73,10 +83,10 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/join">{{$t('common.signIn')}}</a>
+        <a @click.stop.prevent="goJoin">{{$t('common.signIn')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
-        <a href="/wiki/login" class="login-btn">{{$t('common.login')}}</a>
+        <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-submenu index='2' class="pull-right">
         <template slot="title">
@@ -100,7 +110,7 @@
       <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
     </div>
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
-        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />      
+      <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
     </div>
   </div>
 </template>
@@ -110,6 +120,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import Cookies from 'js-cookie'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -172,7 +183,13 @@ export default {
           : this.$refs.codemirror.insertLink(filename, url)
       }
     },
-    logout() {}
+    logout() {},
+    goLogin() {
+      window.location = '/wiki/login?redirect=' + window.location.href
+    },
+    goJoin() {
+      window.location = '/wiki/join?redirect=' + window.location.href
+    }
   },
   components: {
     PersonalCenterDialog,
@@ -216,10 +233,10 @@ export default {
   border-radius: 50%;
   object-fit: cover;
 }
-.user-menu-dropdown li{
+.user-menu-dropdown li {
   padding: 0;
 }
-.user-menu-dropdown a{
+.user-menu-dropdown a {
   display: block;
   padding: 0 20px;
 }
