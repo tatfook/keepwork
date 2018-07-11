@@ -1,17 +1,17 @@
-import mxClient from './mxGraph/mxClient'
-import mxEvent from './mxGraph/'
-import mxUtils from './mxGraph/util/mxUtils'
-import mxResources from './mxGraph/util/mxResources'
+import MxClient from './mxGraph/MxClient'
+import MxEvent from './mxGraph/util/MxEvent'
+import MxUtils from './mxGraph/util/MxUtils'
+import MxResources from './mxGraph/util/MxResources'
 
 export class ErrorDialog {
   constructor(editorUi, title, message, buttonText, fn, retry, buttonText2, fn2, hide) {
-    hide = (hide != null) ? hide : true
+    hide = (hide !== null) ? hide : true
 
-    var div = document.createElement('div')
+    let div = document.createElement('div')
     div.style.textAlign = 'center'
 
-    if (title != null) {
-      var hd = document.createElement('div')
+    if (title !== null) {
+      let hd = document.createElement('div')
       hd.style.padding = '0px'
       hd.style.margin = '0px'
       hd.style.fontSize = '18px'
@@ -19,21 +19,21 @@ export class ErrorDialog {
       hd.style.marginBottom = '16px'
       hd.style.borderBottom = '1px solid #c0c0c0'
       hd.style.color = 'gray'
-      mxUtils.write(hd, title)
+      MxUtils.write(hd, title)
       div.appendChild(hd)
     }
 
-    var p2 = document.createElement('div')
+    let p2 = document.createElement('div')
     p2.style.padding = '6px'
     p2.innerHTML = message
     div.appendChild(p2)
 
-    var btns = document.createElement('div')
+    let btns = document.createElement('div')
     btns.style.marginTop = '16px'
     btns.style.textAlign = 'right'
 
-    if (retry != null) {
-      var retryBtn = mxUtils.button(mxResources.get('tryAgain'), function() {
+    if (retry !== null) {
+      let retryBtn = MxUtils.button(MxResources.get('tryAgain'), function() {
         editorUi.hideDialog()
         retry()
       })
@@ -43,12 +43,12 @@ export class ErrorDialog {
       btns.style.textAlign = 'center'
     }
 
-    var btn = mxUtils.button(buttonText, function() {
+    let btn = MxUtils.button(buttonText, function() {
       if (hide) {
         editorUi.hideDialog()
       }
 
-      if (fn != null) {
+      if (fn !== null) {
         fn()
       }
     })
@@ -56,13 +56,13 @@ export class ErrorDialog {
 
     btns.appendChild(btn)
 
-    if (buttonText2 != null) {
-      var mainBtn = mxUtils.button(buttonText2, function() {
+    if (buttonText2 !== null) {
+      let mainBtn = MxUtils.button(buttonText2, function() {
         if (hide) {
           editorUi.hideDialog()
         }
 
-        if (fn2 != null) {
+        if (fn2 !== null) {
           fn2()
         }
       })
@@ -82,38 +82,38 @@ export class ErrorDialog {
 
 export class ConfirmDialog {
   constructor(editorUi, message, okFn, cancelFn, okLabel, cancelLabel, okImg, cancelImg, showRememberOption) {
-    var div = document.createElement('div')
+    let div = document.createElement('div')
     div.style.textAlign = 'center'
 
-    var p2 = document.createElement('div')
+    let p2 = document.createElement('div')
     p2.style.padding = '6px'
     p2.style.overflow = 'auto'
     p2.style.maxHeight = '40px'
 
-    if (mxClient.IS_QUIRKS) {
+    if (MxClient.IS_QUIRKS) {
       p2.style.height = '60px'
     }
 
-    mxUtils.write(p2, message)
+    MxUtils.write(p2, message)
     div.appendChild(p2)
 
-    var btns = document.createElement('div')
+    let btns = document.createElement('div')
     btns.style.textAlign = 'center'
     btns.style.whiteSpace = 'nowrap'
 
-    var cb = document.createElement('input')
+    let cb = document.createElement('input')
     cb.setAttribute('type', 'checkbox')
 
-    var cancelBtn = mxUtils.button(cancelLabel || mxResources.get('cancel'), function() {
+    let cancelBtn = MxUtils.button(cancelLabel || MxResources.get('cancel'), function() {
       editorUi.hideDialog()
 
-      if (cancelFn != null) {
+      if (cancelFn !== null) {
         cancelFn(cb.checked)
       }
     })
     cancelBtn.className = 'geBtn'
 
-    if (cancelImg != null) {
+    if (cancelImg !== null) {
       cancelBtn.innerHTML = cancelImg + '<br>' + cancelBtn.innerHTML
       cancelBtn.style.paddingBottom = '8px'
       cancelBtn.style.paddingTop = '8px'
@@ -125,17 +125,17 @@ export class ConfirmDialog {
       btns.appendChild(cancelBtn)
     }
 
-    var okBtn = mxUtils.button(okLabel || mxResources.get('ok'), function() {
+    let okBtn = MxUtils.button(okLabel || MxResources.get('ok'), function() {
       editorUi.hideDialog()
 
-      if (okFn != null) {
+      if (okFn !== null) {
         okFn(cb.checked)
       }
     })
 
     btns.appendChild(okBtn)
 
-    if (okImg != null) {
+    if (okImg !== null) {
       okBtn.innerHTML = okImg + '<br>' + okBtn.innerHTML + '<br>'
       okBtn.style.paddingBottom = '8px'
       okBtn.style.paddingTop = '8px'
@@ -155,18 +155,18 @@ export class ConfirmDialog {
     if (showRememberOption) {
       btns.style.marginTop = '10px'
 
-      var p2 = document.createElement('p')
+      let p2 = document.createElement('p')
       p2.style.marginTop = '20px'
       p2.appendChild(cb)
 
-      var span = document.createElement('span')
-      mxUtils.write(span, ' ' + mxResources.get('rememberThisSetting'))
+      let span = document.createElement('span')
+      MxUtils.write(span, ' ' + MxResources.get('rememberThisSetting'))
       p2.appendChild(span)
       div.appendChild(p2)
 
-      mxEvent.addListener(span, 'click', function(evt) {
+      MxEvent.addListener(span, 'click', function(evt) {
         cb.checked = !cb.checked
-        mxEvent.consume(evt)
+        MxEvent.consume(evt)
       })
     } else {
       btns.style.marginTop = '16px'
