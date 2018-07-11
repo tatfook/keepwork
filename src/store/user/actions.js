@@ -111,10 +111,10 @@ const actions = {
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },
-  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId }) {
+  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
     let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
     smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId}, authRequestConfig, true)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind}, authRequestConfig, true)
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
     return verifyInfoTwo
