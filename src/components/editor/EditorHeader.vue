@@ -68,6 +68,7 @@
               <div class="kp-menu">
                 <button :disabled='currentDisabled' @click='toggleCodeWin'><i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
                 <button><i class="iconfont icon-help"></i><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
+                <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>                  
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -130,6 +131,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
 import { gConst } from '@/lib/global'
+import { toggleLanguage, locale } from '@/lib/utils/i18n'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 
@@ -178,6 +180,9 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
     }),
+    isEnglish(){
+      return locale === 'en-US' ? true : false
+    },
     activeFilePath() {
       return { path: this.currentPagePath }
     },
@@ -465,9 +470,7 @@ export default {
         area: this.gConst.ADDING_AREA_ADI
       })
     },
-    refresh(){
-      window.location.reload();
-    },
+    toggleLanguage,
     backHome(){
       window.location.href=this.nowOrigin
     }
@@ -633,10 +636,10 @@ export default {
       border: none;
       background-color: transparent;
       text-align: left;
-      padding-left: 10px;
       color: #909399;
       border-left: 1px solid #ccc;
       margin-top: -1px;
+      padding: 0 0 0 10px;
       cursor: pointer;
       &:focus{
         outline: none;
@@ -669,8 +672,9 @@ export default {
 }
 .kp-dropdown-menu-content{
   &.el-popper[x-placement^=bottom] {
-    width: 164px;
-    left: 45px !important;
+    min-width: 164px;
+    max-width: 200px;
+    left: 40px !important;
   }
   .el-dropdown-menu__item{
     cursor: default;
