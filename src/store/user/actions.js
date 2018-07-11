@@ -109,13 +109,15 @@ const actions = {
     let { commit, getters: { authRequestConfig } } = context
     let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ setRealNameInfo, cellphone }, authRequestConfig, true)
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
+    return verifyInfoOne
   },
-  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode }) {
+  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId }) {
     let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
-    let smsId = sendCodeInfo.data && sendCodeInfo.data.smsId
+    smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
     let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId}, authRequestConfig, true)
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
+    return verifyInfoTwo
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}

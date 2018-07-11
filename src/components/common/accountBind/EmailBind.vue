@@ -39,7 +39,8 @@ export default {
       },
       emailCodeDialogDatas: {
         type: '',
-        value: ''
+        value: '',
+        bind: undefined
       },
       isCodeDialogVisible: false
     }
