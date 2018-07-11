@@ -16,14 +16,14 @@
  * Constructs a new drag source for the given element.
  */
 
-import MxEvent from './MxEvent.js'
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxGuide from './MxGuide.js'
-import MxCellHighlight from '@/lib/board/mxGraph/handler/MxCellHighlight.js'
-import MxConstants from './MxConstants.js'
-import MxRectangle from './MxRectangle.js'
-import MxPoint from './MxPoint.js'
+import MxEvent from './MxEvent'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxGuide from './MxGuide'
+import MxCellHighlight from '@/lib/board/mxGraph/handler/MxCellHighlight'
+import MxConstants from './MxConstants'
+import MxRectangle from './MxRectangle'
+import MxPoint from './MxPoint'
 
 export default class MxDragSource {
   constructor(element, dropHandler) {

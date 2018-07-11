@@ -22,13 +22,13 @@
  * container - DOM node that contains the toolbar.
  */
 
-import MxEventSource from './MxEventSource.js'
-import MxUtils from './MxUtils.js'
-import MxEvent from './MxEvent.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxPopupMenu from './MxPopupMenu.js'
-import MxEventObject from './MxEventObject.js'
-import MxPoint from './MxPoint.js'
+import MxEventSource from './MxEventSource'
+import MxUtils from './MxUtils'
+import MxEvent from './MxEvent'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxPopupMenu from './MxPopupMenu'
+import MxEventObject from './MxEventObject'
+import MxPoint from './MxPoint'
 
 export default class MxToolbar {
   constructor(container) {

@@ -13,7 +13,7 @@
  * Constructs a new rectangle for the optional parameters. If no parameters
  * are given then the respective default values are used.
  */
-import MxPoint from './MxPoint.js'
+import MxPoint from './MxPoint'
 
 export default class MxRectangle {
   constructor(x, y, width, height) {

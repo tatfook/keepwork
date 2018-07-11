@@ -38,8 +38,8 @@
  * window.
  */
 
-import mxUtils from './mxUtils.js'
-import mxEvent from './mxEvent.js'
+import MxUtils from './MxUtils'
+import MxEvent from './MxEvent'
 
 export default class MxDivResizer {
   constructor(div, container) {
@@ -49,17 +49,17 @@ export default class MxDivResizer {
       }
 
       this.div = div
-      let style = mxUtils.getCurrentStyle(div)
+      let style = MxUtils.getCurrentStyle(div)
 
       if (style !== null) {
         this.resizeWidth = style.width === 'auto'
         this.resizeHeight = style.height === 'auto'
       }
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         container,
         'resize',
-        mxUtils.bind(this, function(evt) {
+        MxUtils.bind(this, function(evt) {
           if (!this.handlingResize) {
             this.handlingResize = true
             this.resize()

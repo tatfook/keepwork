@@ -3,8 +3,8 @@
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxRectangle from './MxRectangle.js'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxRectangle from './MxRectangle'
 
 export const MxConstants = {
   /**

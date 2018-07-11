@@ -12,10 +12,10 @@
  * Creates a HTML table using the specified classname.
  */
 
-import MxUtils from './MxUtils.js'
-import MxResources from './MxResources.js'
-import MxEvent from './MxEvent.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
+import MxUtils from './MxUtils'
+import MxResources from './MxResources'
+import MxEvent from './MxEvent'
+import MxClient from '@/lib/board/mxGraph/MxClient'
 
 export default class MxForm {
   constructor(className) {

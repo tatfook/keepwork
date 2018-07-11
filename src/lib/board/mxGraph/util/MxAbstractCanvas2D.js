@@ -13,10 +13,10 @@
  * Constructs a new abstract canvas.
  */
 
-import MxUrlConverter from './MxUrlConverter.js'
-import MxConstants from './MxConstants.js'
-import MxUtils from './MxUtils.js'
-import MxPoint from './MxPoint.js'
+import MxUrlConverter from './MxUrlConverter'
+import MxConstants from './MxConstants'
+import MxUtils from './MxUtils'
+import MxPoint from './MxPoint'
 
 export default class MxAbstractCanvas2D {
   constructor(converter) {

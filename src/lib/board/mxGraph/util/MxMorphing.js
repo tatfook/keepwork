@@ -40,9 +40,9 @@
  * delay - Optional delay between the animation steps. Passed to <MxAnimation>.
  */
 
-import MxAnimation from './MxAnimation.js'
-import MxCellStatePreview from '@/lib/board/mxGraph/view/MxCellStatePreview.js'
-import MxPoint from './MxPoint.js'
+import MxAnimation from './MxAnimation'
+import MxCellStatePreview from '@/lib/board/mxGraph/view/MxCellStatePreview'
+import MxPoint from './MxPoint'
 
 export default class MxMorphing {
   constructor(graph, steps, ease, delay) {

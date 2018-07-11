@@ -71,9 +71,9 @@
  * size is given, then a default size of 100 steps is used.
  */
 
-import MxEventSource from './MxEventSource.js'
-import MxEventObject from './MxEventObject.js'
-import MxEvent from './MxEvent.js'
+import MxEventSource from './MxEventSource'
+import MxEventObject from './MxEventObject'
+import MxEvent from './MxEvent'
 
 export default class MxUndoManager {
   constructor(size) {

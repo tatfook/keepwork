@@ -2,10 +2,10 @@
  * Copyright (c) 2006-2015, JGraph Ltd
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxUtils from './MxUtils.js'
-import MxWindow from './MxWindow.js'
-import MxEvent from './MxEvent.js'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxUtils from './MxUtils'
+import MxWindow from './MxWindow'
+import MxEvent from './MxEvent'
 
 let MxLog = {
   /**

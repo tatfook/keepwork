@@ -3,9 +3,9 @@
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxMouseEvent from './MxMouseEvent.js'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxMouseEvent from './MxMouseEvent'
 
 let MxEvent = {
   /**

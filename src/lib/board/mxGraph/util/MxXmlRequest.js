@@ -86,8 +86,8 @@
  * password - String specifying the password to be used for the request.
  */
 
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
 
 export default class MxXmlRequest {
   constructor(url, params, method, async, username, password) {

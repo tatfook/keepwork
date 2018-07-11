@@ -186,13 +186,13 @@
  * MxWindow.
  */
 
-import MxEventSource from './MxEventSource.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxRectangle from './MxRectangle.js'
-import MxUtils from './MxUtils.js'
-import MxEvent from './MxEvent.js'
-import MxConstants from './MxConstants.js'
-import MxEventObject from './MxEventObject.js'
+import MxEventSource from './MxEventSource'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxRectangle from './MxRectangle'
+import MxUtils from './MxUtils'
+import MxEvent from './MxEvent'
+import MxConstants from './MxConstants'
+import MxEventObject from './MxEventObject'
 
 export default class MxWindow {
   constructor(

@@ -29,9 +29,9 @@
  * Constructs a new abstract canvas.
  */
 
-import MxAbstractCanvas2D from './MxAbstractCanvas2D.js'
-import MxUtils from './MxUtils.js'
-import MxConstants from './MxConstants.js'
+import MxAbstractCanvas2D from './MxAbstractCanvas2D'
+import MxUtils from './MxUtils'
+import MxConstants from './MxConstants'
 
 export default class MxXmlCanvas2D {
   constructor(root) {

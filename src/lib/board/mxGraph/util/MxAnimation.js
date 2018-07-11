@@ -17,10 +17,10 @@
  * graph - Reference to the enclosing <mxGraph>.
  */
 
-import MxEventSource from './MxEventSource.js'
-import MxUtils from './MxUtils.js'
-import MxEventObject from './MxEventObject.js'
-import MxEvent from './MxEvent.js'
+import MxEventSource from './MxEventSource'
+import MxUtils from './MxUtils'
+import MxEventObject from './MxEventObject'
+import MxEvent from './MxEvent'
 
 export default class MxAnimation {
   constructor(delay) {

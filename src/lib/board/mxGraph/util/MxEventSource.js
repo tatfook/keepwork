@@ -25,7 +25,7 @@
  * Constructs a new event source.
  */
 
-import MxEventObject from './MxEventObject.js'
+import MxEventObject from './MxEventObject'
 
 export default class MxEventSource {
   constructor(eventSource) {

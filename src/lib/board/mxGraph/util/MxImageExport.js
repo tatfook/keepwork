@@ -31,8 +31,8 @@
  * Constructs a new image export.
  */
 
-import MxShape from '@/lib/board/mxGraph/shape/MxShape.js'
-import MxUtils from './MxUtils.js'
+import MxShape from '@/lib/board/mxGraph/shape/MxShape'
+import MxUtils from './MxUtils'
 
 export default class MxImageExport {}
 

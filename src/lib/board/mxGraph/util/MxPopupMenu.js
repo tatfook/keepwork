@@ -29,11 +29,11 @@
  * Fires after the menu has been shown in <popup>.
  */
 
-import MxEventSource from './MxEventSource.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxEvent from './MxEvent.js'
-import MxUtils from './MxUtils.js'
-import MxEventObject from './MxEventObject.js'
+import MxEventSource from './MxEventSource'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxEvent from './MxEvent'
+import MxUtils from './MxUtils'
+import MxEventObject from './MxEventObject'
 
 export default class MxPopupMenu {
   constructor(factoryMethod) {

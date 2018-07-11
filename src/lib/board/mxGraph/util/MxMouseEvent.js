@@ -36,9 +36,9 @@
  * state - Optional <mxCellState> under the mouse.
  *
  */
-import MxEvent from './MxEvent.js'
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
+import MxEvent from './MxEvent'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
 
 export default class MxMouseEvent {
   constructor(evt, state) {

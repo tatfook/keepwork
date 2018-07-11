@@ -13,7 +13,7 @@
  * Constructs a new dictionary which allows object to be used as keys.
  */
 
-import MxObjectIdentity from './MxObjectIdentity.js'
+import MxObjectIdentity from './MxObjectIdentity'
 
 export default class MxDictionary {
   constructor() {

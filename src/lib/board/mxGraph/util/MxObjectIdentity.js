@@ -2,7 +2,7 @@
  * Copyright (c) 2006-2015, JGraph Ltd
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
-import MxUtils from './MxUtils.js'
+import MxUtils from './MxUtils'
 
 let MxObjectIdentity = {
   /**

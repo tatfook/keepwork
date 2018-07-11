@@ -12,7 +12,7 @@
  * Constructs a new point for the optional x and y coordinates. If no
  * coordinates are given, then the default values for <x> and <y> are used.
  */
-import MxUtils from './MxUtils.js'
+import MxUtils from './MxUtils'
 
 export default class MxPoint {
   constructor(x, y) {

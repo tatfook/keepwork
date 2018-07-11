@@ -2,9 +2,9 @@
  * Copyright (c) 2006-2016, JGraph Ltd
  * Copyright (c) 2006-2016, Gaudenz Alder
  */
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxUtils from './MxUtils.js'
-import MxConstants from './MxConstants.js'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxUtils from './MxUtils'
+import MxConstants from './MxConstants'
 
 let MxResources = {
   /**

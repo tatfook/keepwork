@@ -11,9 +11,9 @@
  *
  * Constructs a new guide object.
  */
-import MxPolyline from '@/lib/board/mxGraph/shape/MxPolyline.js'
-import MxConstants from './MxConstants.js'
-import MxPoint from './MxPoint.js'
+import MxPolyline from '@/lib/board/mxGraph/shape/MxPolyline'
+import MxConstants from './MxConstants'
+import MxPoint from './MxPoint'
 
 export default class MxGuide {
   constructor(graph, states) {

@@ -28,9 +28,9 @@
  * graph - Reference to the enclosing graph.
  */
 
-import MxUtils from './MxUtils.js'
-import MxEventSource from './MxEventSource.js'
-import MxEvent from './MxEvent.js'
+import MxUtils from './MxUtils'
+import MxEventSource from './MxEventSource'
+import MxEvent from './MxEvent'
 
 export default class MxAutoSaveManager {
   constructor(graph) {

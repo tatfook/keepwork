@@ -8,9 +8,9 @@
  * Implements a handler for panning.
  */
 
-import MxUtils from './MxUtils.js'
-import MxEvent from './MxEvent.js'
-import MxEventObject from './MxEventObject.js'
+import MxUtils from './MxUtils'
+import MxEvent from './MxEvent'
+import MxEventObject from './MxEventObject'
 
 export default class MxPanningManager {
   constructor(graph) {

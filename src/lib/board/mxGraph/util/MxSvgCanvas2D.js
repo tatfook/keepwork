@@ -54,11 +54,11 @@
  * stroke-miterlimit globally. Default is false.
  */
 
-import MxAbstractCanvas2D from './MxAbstractCanvas2D.js'
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxConstants from './MxConstants.js'
-import MxRectangle from './MxRectangle.js'
+import MxAbstractCanvas2D from './MxAbstractCanvas2D'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxConstants from './MxConstants'
+import MxRectangle from './MxRectangle'
 
 export default class MxSvgCanvas2D {
   constructor(root, styleEnabled) {

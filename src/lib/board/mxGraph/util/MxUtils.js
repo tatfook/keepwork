@@ -3,22 +3,22 @@
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
 
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxLog from './MxLog.js'
-import MxConstants from './MxConstants.js'
-import MxEvent from './MxEvent.js'
-import MxXmlRequest from './MxXmlRequest.js'
-import MxDictionary from './MxDictionary.js'
-import MxObjectIdentity from './MxObjectIdentity.js'
-import MxPoint from './MxPoint.js'
-import MxRectangle from './MxRectangle.js'
-import MxEffects from './MxEffects.js'
-import MxCellPath from '@/lib/board/mxGraph/model/MxCellPath.js'
-import MxTemporaryCellStates from '@/lib/board/mxGraph/view/MxTemporaryCellStates.js'
-import MxCodec from '@/lib/board/mxGraph/io/MxCodec.js'
-import MxWindow from './MxWindow.js'
-import MxResources from './MxResources.js'
-import MxDragSource from './MxDragSource.js'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxLog from './MxLog'
+import MxConstants from './MxConstants'
+import MxEvent from './MxEvent'
+import MxXmlRequest from './MxXmlRequest'
+import MxDictionary from './MxDictionary'
+import MxObjectIdentity from './MxObjectIdentity'
+import MxPoint from './MxPoint'
+import MxRectangle from './MxRectangle'
+import MxEffects from './MxEffects'
+import MxCellPath from '@/lib/board/mxGraph/model/MxCellPath'
+import MxTemporaryCellStates from '@/lib/board/mxGraph/view/MxTemporaryCellStates'
+import MxCodec from '@/lib/board/mxGraph/io/MxCodec'
+import MxWindow from './MxWindow'
+import MxResources from './MxResources'
+import MxDragSource from './MxDragSource'
 
 let MxUtils = {
   /**

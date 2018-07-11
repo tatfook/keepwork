@@ -34,10 +34,10 @@
  * also <text> for plain text label restrictions in shapes for VML.
  */
 
-import MxAbstractCanvas2D from './MxAbstractCanvas2D.js'
-import MxUtils from './MxUtils.js'
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxConstants from './MxConstants.js'
+import MxAbstractCanvas2D from './MxAbstractCanvas2D'
+import MxUtils from './MxUtils'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxConstants from './MxConstants'
 
 export default class MxVmlCanvas2D {
   constructor(root) {
