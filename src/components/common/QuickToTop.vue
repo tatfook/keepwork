@@ -1,16 +1,16 @@
 <template>
   <div>
-    <a href="#" class="quickToTop" v-if="showQuickToTop">
+    <div @click="backToTop" class="quickToTop" v-if="showQuickToTop">
       <div class="toTopIcon"></div>
       <div class="topText">TOP</div>
       <div class="hoverWrap"><div class="hoverText">{{$t('common.quickToTop')}}</div></div>
-    </a>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "scrollTop",
+  name: "QuickToTop",
   data(){
     return{
       showQuickToTop: false
@@ -19,10 +19,13 @@ export default {
   methods:{
     currentPageYOffset(){
       window.pageYOffset > 2160 ? this.showQuickToTop = true : this.showQuickToTop = false
+    },
+    backToTop(){
+      window.scrollTo(0,0)
     }
   },
   created(){
-    window.addEventListener('scroll',this.currentPageYOffset)
+    window.addEventListener('scroll', _.debounce(this.currentPageYOffset, 200))
   },
   beforeDestroy(){
     window.removeEventListener('scroll',this.currentPageYOffset)
@@ -30,7 +33,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .quickToTop{
   height: 56px;
   width: 56px;
@@ -43,6 +46,7 @@ export default {
   background-color: #fff;
   text-decoration: none;
   color: #303133;
+  cursor: pointer;
   .toTopIcon{
     width: 12px;
     height: 12px;
