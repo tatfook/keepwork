@@ -86,7 +86,7 @@ export default {
         mp4:'mp4',
         jpg:'jpg',
         png:'png',
-        pdf:'pdf',
+        // pdf:'pdf',
         gif:'gif'
       },
       otherExt: 'other'
