@@ -8,12 +8,12 @@ label<template>
           <span class="el-form-item__error" v-show="codeError">{{codeError}}</span>
         </el-form-item>
         <el-form-item>
-          <el-button class="account-binding-dialog-code-button" :loading="isSendingCode" size="small" :disabled="isCounting" @click="sendCode">{{isCounting ?`${countDown}秒后重新发送`:'发送验证码'}}</el-button>
+          <el-button class="account-binding-dialog-code-button" :loading="isSendingCode" size="small" :disabled="isCounting" @click="sendCode">{{isCounting ?`${countDown}${$t('user.countDownResend')}`: $t('user.sendCodes')}}</el-button>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="VerifyCode" :disabled="isVerifyCodeAvailable">确 定</el-button>
-        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="VerifyCode" :disabled="isVerifyCodeAvailable">{{$t('common.Sure')}}</el-button>
+        <el-button @click="handleClose">{{$t('common.Cancel')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -32,10 +32,10 @@ export default {
       let title = ''
       switch (this.codeType) {
         case 'email':
-          title = `邮箱绑定 > ${this.codeDialogDatas.value}`
+          title = `${this.$t('user.emailBind')} > ${this.codeDialogDatas.value}`
           break
         case 'cellphone':
-          title = `手机绑定 > ${this.codeDialogDatas.value}`
+          title = `${this.$t('user.phoneBind')} > ${this.codeDialogDatas.value}`
           break
         default:
           break
@@ -46,10 +46,10 @@ export default {
       let label = ''
       switch (this.codeType) {
         case 'email':
-          label = '邮箱验证码:'
+          label = this.$t('user.emailVerificationCode')
           break
         case 'cellphone':
-          label = '手机验证码:'
+          label = this.$t('user.smsCode')
           break
         default:
           break
@@ -126,13 +126,13 @@ export default {
       if (message === 'success') {
         this.showMessage(
           'success',
-          `${this.codeDialogDatas.bind ? '绑定' : '解绑'}成功`
+          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
         )
       } else {
         this.codeError = message
         this.showMessage(
           'error',
-          `${this.codeDialogDatas.bind ? '绑定' : '解绑'}失败`
+          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.failure')}`
         )
       }
       return message
@@ -143,17 +143,16 @@ export default {
         smsCode: this.code,
         smsId: this.smsId
       })
-      console.log(result)
       if (result.data) {
         this.showMessage(
           'success',
-          `${this.codeDialogDatas.bind ? '绑定' : '解绑'}成功`
+          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
         )
       } else {
         this.codeError = result.error.message
         this.showMessage(
           'error',
-          `${this.codeDialogDatas.bind ? '绑定' : '解绑'}失败`
+          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.failure')}`
         )
       }
       return result.data ? 'success' : result.error.message
@@ -169,7 +168,7 @@ export default {
           })
           this.isSendingCode = false
           this.isCodeSent = true
-          this.showMessage('success', '邮件发送成功')
+          this.showMessage('success', this.$t('user.mailSentSuccess'))
           this.startTimer()
           break
         case 'cellphone':
@@ -183,11 +182,11 @@ export default {
           if (smsId) {
             this.smsId = smsId
             this.isCodeSent = true
-            this.showMessage('success', '短信发送成功')
+            this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
             this.startTimer()
           } else {
             this.codeError = phoneResult.message
-            this.showMessage('error', '短信发送失败')
+            this.showMessage('error', this.$t('user.smsCodeSentFailed'))
           }
           break
         default:

@@ -1,12 +1,13 @@
 <template>
   <div class="phone-bind">
     <el-form class="phone-bind-form" ref='phoneForm' :inline="true" :model='phoneFormData' :rules="phoneBindRules" label-width="140px">
-      <el-form-item label="手机绑定:" prop="cellphone">
+      <el-form-item prop="cellphone">
+        <span slot="label">{{$t('user.phoneBind')}}:</span>
         <el-input class="phone-bind-form-item-content" size='small' v-model="phoneFormData.cellphone" v-if="!isUserBindPhone"></el-input>
         <div class="phone-bind-form-item-content" v-if="isUserBindPhone">{{userPhone}}</div>
       </el-form-item>
       <el-form-item>
-        <el-button size="small" class="phone-bind-form-item-button" @click="toggleBindPhone">{{isUserBindPhone ? '解绑':'绑定'}}</el-button>
+        <el-button size="small" class="phone-bind-form-item-button" :class="{'phone-bind-form-item-button-unbund':isUserBindPhone}" @click="toggleBindPhone">{{isUserBindPhone ? $t('user.unbunding') : $t('user.binding')}}</el-button>
       </el-form-item>
     </el-form>
     <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='phoneCodeDialogDatas' codeType='cellphone' @close='handleClose'></CodeVerifyDialog>
@@ -21,14 +22,14 @@ export default {
   data() {
     let phoneValidater = (rule, value, callback) => {
       if (!PhoneReg.test(value)) {
-        callback(new Error('请输入正确的手机号'))
+        callback(new Error(this.$t('user.wrongNumberFormat')))
       } else {
         callback()
       }
     }
     return {
       phoneFormData: {
-        cellphone: '18965103835'
+        cellphone: ''
       },
       phoneCodeDialogDatas: {
         type: '',
@@ -100,6 +101,10 @@ export default {
     &-item-button {
       color: #1989fa;
       border-color: #1989fa;
+      &-unbund {
+        color: #333;
+        border-color: #bcbcbc;
+      }
     }
     .el-form-item__label {
       padding-right: 56px;
