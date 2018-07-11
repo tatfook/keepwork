@@ -1,4 +1,10 @@
-import mxUtils from './mxGraph/util/mxUtils'
+import mxUtils from './MxGraph/util/mxUtils'
+import Sidebar from './drawio/js/Sidebar'
+import Editor from './Editor'
+import Graph from './Graph'
+import MxGraph from './mxGraph/view/MxGraph'
+import MxGraphView from './mxGraph/view/MxGraphView'
+import EditorUi from './EditorUi'
 
 export const mxSettings = {
   /**
@@ -136,10 +142,10 @@ export const mxSettings = {
       currentEdgeStyle: Graph.prototype.defaultEdgeStyle,
       currentVertexStyle: Graph.prototype.defaultVertexStyle,
       createTarget: false,
-      pageFormat: mxGraph.prototype.pageFormat,
+      pageFormat: MxGraph.prototype.pageFormat,
       search: true,
       showStartScreen: true,
-      gridColor: mxGraphView.prototype.gridColor,
+      gridColor: MxGraphView.prototype.gridColor,
       autosave: !EditorUi.isElectronApp,
       resizeImages: null,
       openCounter: 0,
@@ -221,7 +227,7 @@ export const mxSettings = {
       }
 
       if (mxSettings.settings.pageFormat == null) {
-        mxSettings.settings.pageFormat = mxGraph.prototype.pageFormat
+        mxSettings.settings.pageFormat = MxGraph.prototype.pageFormat
       }
 
       if (mxSettings.settings.search == null) {
@@ -233,7 +239,7 @@ export const mxSettings = {
       }
 
       if (mxSettings.settings.gridColor == null) {
-        mxSettings.settings.gridColor = mxGraphView.prototype.gridColor
+        mxSettings.settings.gridColor = MxGraphView.prototype.gridColor
       }
 
       if (mxSettings.settings.autosave == null) {
