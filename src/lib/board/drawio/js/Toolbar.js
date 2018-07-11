@@ -5,15 +5,15 @@
  * Construcs a new toolbar for the given editor.
  */
 
-import MxClient from '@/lib/board/mxGraph/MxClient.js'
-import MxUtils from '@/lib/board/mxGraph/util/MxUtils.js'
-import MxEvent from '@/lib/board/mxGraph/util/MxEvent.js'
-import EditorUi from './EditorUi.js'
-import MxResources from '@/lib/board/mxGraph/util/MxResources.js'
-import MxConstants from '@/lib/board/mxGraph/util/MxConstants.js'
-import Menus from './Menus.js'
-import Editor from './Editor.js'
-import { FilenameDialog } from './Dialogs.js'
+import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxUtils from '@/lib/board/mxGraph/util/MxUtils'
+import MxEvent from '@/lib/board/mxGraph/util/MxEvent'
+import EditorUi from './EditorUi'
+import MxResources from '@/lib/board/mxGraph/util/MxResources'
+import MxConstants from '@/lib/board/mxGraph/util/MxConstants'
+import Menus from './Menus'
+import Editor from './Editor'
+import { FilenameDialog } from './Dialogs'
 import MxPopupMenu from '@/lib/board/mxGraph/util/MxPopupMenu'
 
 export default class Toolbar {
