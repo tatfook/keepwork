@@ -4,12 +4,18 @@ import Base64 from 'js-base64'
 import EditorUi from './drawio/js/EditorUi'
 import Graph from './Graph'
 
-import mxClient from './mxGraph/mxClient'
-import mxUtils from './mxGraph/util/mxUtils'
-import mxEvent from './mxGraph/util/mxEvent'
-import mxResources from './mxGraph/util/mxResources'
-import mxGraphModel from './mxGraph/model/mxGraphModel'
-import mxEventObject from './mxGraph/util/mxEventObject'
+import MxClient from './mxGraph/MxClient'
+import MxUtils from './mxGraph/util/MxUtils'
+import MxEvent from './mxGraph/util/MxEvent'
+import MxResources from './mxGraph/util/MxResources'
+import MxGraphModel from './mxGraph/model/MxGraphModel'
+import MxEventObject from './mxGraph/util/MxEventObject'
+import MxClipboard from './mxGraph/util/MxClipboard'
+import MxCodec from './mxGraph/io/MxCodec'
+import { MxSettings } from './Settings'
+import { ConfirmDialog, ErrorDialog } from './Dialog'
+import Editor from './Editor'
+import pako from 'pako'
 
 export default class extends EditorUi {
   /**
@@ -30,10 +36,10 @@ export default class extends EditorUi {
   init() {
     editorUiInit.apply(this, arguments)
 
-    var graph = this.editor.graph
+    let graph = this.editor.graph
 
     if (!this.editor.chromeless) {
-      var textInput = document.createElement('div')
+      let textInput = document.createElement('div')
 
       textInput.style.position = 'absolute'
       textInput.style.whiteSpace = 'nowrap'
@@ -41,13 +47,13 @@ export default class extends EditorUi {
       textInput.style.display = 'block'
       textInput.contentEditable = true
 
-      mxUtils.setOpacity(textInput, 0)
+      MxUtils.setOpacity(textInput, 0)
 
       textInput.style.width = '1px'
       textInput.style.height = '1px'
       textInput.innerHTML = '&nbsp;'
 
-      var restoreFocus = false
+      let restoreFocus = false
 
       // Disables built-in cut, copy and paste shortcuts
       this.keyHandler.bindControlKey(88, null)
@@ -57,18 +63,18 @@ export default class extends EditorUi {
 
       graph.container.addEventListener(
         'paste',
-        mxUtils.bind(this, function(evt) {
-          var graph = this.editor.graph
+        MxUtils.bind(this, function(evt) {
+          let graph = this.editor.graph
 
-          if (!mxEvent.isConsumed(evt)) {
+          if (!MxEvent.isConsumed(evt)) {
             try {
-              var data = evt.clipboardData || evt.originalEvent.clipboardData
-              var containsText = false
+              let data = evt.clipboardData || evt.originalEvent.clipboardData
+              let containsText = false
 
               // Workaround for asynchronous paste event processing in textInput
               // is to ignore this event if it contains text/html/rtf (see below).
               // NOTE: Image is not pasted into textInput so can't listen there.
-              for (var i = 0; i < data.types.length; i++) {
+              for (let i = 0; i < data.types.length; i++) {
                 if (data.types[i].substring(0, 5) === 'text/') {
                   containsText = true
                   break
@@ -76,10 +82,10 @@ export default class extends EditorUi {
               }
 
               if (!containsText) {
-                var items = data.items
+                let items = data.items
 
-                for (index in items) {
-                  var item = items[index]
+                for (let index in items) {
+                  let item = items[index]
 
                   if (item.kind === 'file') {
                     if (graph.isEditing()) {
@@ -97,17 +103,17 @@ export default class extends EditorUi {
                         },
                         function(file) {
                           // Handles only images
-                          return file.type.substring(0, 6) == 'image/'
+                          return file.type.substring(0, 6) === 'image/'
                         },
                         function(queue) {
                           // Invokes elements of queue in order
-                          for (var i = 0; i < queue.length; i++) {
+                          for (let i = 0; i < queue.length; i++) {
                             queue[i]()
                           }
                         }
                       )
                     } else {
-                      var pt = this.editor.graph.getInsertPoint()
+                      let pt = this.editor.graph.getInsertPoint()
 
                       this.snapshoot()
                       this.importFiles(
@@ -117,7 +123,7 @@ export default class extends EditorUi {
                         this.maxImageSize
                       )
 
-                      mxEvent.consume(evt)
+                      MxEvent.consume(evt)
                     }
 
                     break
@@ -133,25 +139,25 @@ export default class extends EditorUi {
         false
       )
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         graph.container,
         'keydown',
-        mxUtils.bind(this, function(evt) {
-          var source = mxEvent.getSource(evt)
+        MxUtils.bind(this, function(evt) {
+          let source = MxEvent.getSource(evt)
 
           if (
-            graph.container != null &&
+            graph.container !== null &&
             graph.isEnabled() &&
             !graph.isMouseDown &&
             !graph.isEditing() &&
-            this.dialog == null &&
-            source.nodeName != 'INPUT' &&
-            source.nodeName != 'TEXTAREA'
+            this.dialog === null &&
+            source.nodeName !== 'INPUT' &&
+            source.nodeName !== 'TEXTAREA'
           ) {
             if (
-              evt.keyCode == 224 /* FF */ ||
-              (!mxClient.IS_MAC && evt.keyCode == 17) /* Control */ ||
-              (mxClient.IS_MAC && evt.keyCode == 91) /* Meta */
+              evt.keyCode === 224 /* FF */ ||
+              (!MxClient.IS_MAC && evt.keyCode === 17) /* Control */ ||
+              (MxClient.IS_MAC && evt.keyCode === 91) /* Meta */
             ) {
               if (!restoreFocus) {
                 // Avoid autoscroll but allow handling of all pass-through ctrl shortcuts
@@ -162,7 +168,7 @@ export default class extends EditorUi {
                 restoreFocus = true
 
                 // Workaround for selected document content in quirks mode
-                if (mxClient.IS_QUIRKS) {
+                if (MxClient.IS_QUIRKS) {
                   window.setTimeout(function() {
                     textInput.focus()
                     document.execCommand('selectAll', false, null)
@@ -177,29 +183,29 @@ export default class extends EditorUi {
         })
       )
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         graph.container,
         'keyup',
-        mxUtils.bind(this, function(evt) {
+        MxUtils.bind(this, function(evt) {
           // Workaround for asynchronous event read invalid in IE quirks mode
-          var keyCode = evt.keyCode
+          let keyCode = evt.keyCode
 
           // Asynchronous workaround for scroll to origin after paste if the
           // Ctrl-key is not pressed for long enough in FF on Windows
           window.setTimeout(
-            mxUtils.bind(this, function() {
+            MxUtils.bind(this, function() {
               if (
                 restoreFocus &&
-                (keyCode == 224 /* FF */ ||
-                keyCode == 17 /* Control */ ||
-                  keyCode == 91) /* Meta */
+                (keyCode === 224 /* FF */ ||
+                keyCode === 17 /* Control */ ||
+                  keyCode === 91) /* Meta */
               ) {
                 restoreFocus = false
 
                 if (
                   !graph.isEditing() &&
-                  this.dialog == null &&
-                  graph.container != null
+                  this.dialog === null &&
+                  graph.container !== null
                 ) {
                   graph.container.focus()
                 }
@@ -213,7 +219,7 @@ export default class extends EditorUi {
       )
 
       // Clears input and restores focus and selection
-      function clearInput() {
+      const clearInput = function() {
         window.setTimeout(function() {
           textInput.innerHTML = '&nbsp;'
           textInput.focus()
@@ -221,22 +227,22 @@ export default class extends EditorUi {
         }, 0)
       }
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         textInput,
         'copy',
-        mxUtils.bind(this, function(evt) {
+        MxUtils.bind(this, function(evt) {
           if (graph.isEnabled()) {
-            mxClipboard.copy(graph)
+            MxClipboard.copy(graph)
             this.copyCells(textInput)
             clearInput()
           }
         })
       )
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         textInput,
         'cut',
-        mxUtils.bind(this, function(evt) {
+        MxUtils.bind(this, function(evt) {
           if (graph.isEnabled()) {
             this.copyCells(textInput, true)
             clearInput()
@@ -244,10 +250,10 @@ export default class extends EditorUi {
         })
       )
 
-      mxEvent.addListener(
+      MxEvent.addListener(
         textInput,
         'paste',
-        mxUtils.bind(this, function(evt) {
+        MxUtils.bind(this, function(evt) {
           if (
             graph.isEnabled() &&
             !graph.isCellLocked(graph.getDefaultParent())
@@ -256,7 +262,7 @@ export default class extends EditorUi {
             textInput.focus()
 
             window.setTimeout(
-              mxUtils.bind(this, function() {
+              MxUtils.bind(this, function() {
                 this.pasteCells(evt, textInput)
                 textInput.innerHTML = '&nbsp;'
               }),
@@ -267,9 +273,9 @@ export default class extends EditorUi {
         true
       )
 
-      var isSelectionAllowed = this.isSelectionAllowed
+      let isSelectionAllowed = this.isSelectionAllowed
       this.isSelectionAllowed = function(evt) {
-        if (mxEvent.getSource(evt) == textInput) {
+        if (MxEvent.getSource(evt) === textInput) {
           return true
         }
 
@@ -277,12 +283,12 @@ export default class extends EditorUi {
       }
     }
 
-    var y =
+    let y =
       Math.max(
         document.body.clientHeight || 0,
         document.documentElement.clientHeight || 0
       ) / 2
-    var x = document.body.clientWidth / 2 - 2
+    let x = document.body.clientWidth / 2 - 2
 
     this.spinner = this.createSpinner(x, y, 24)
   }
@@ -291,21 +297,21 @@ export default class extends EditorUi {
    * Creates the format panel and adds overrides.
    */
   copyCells(elt, removeCells) {
-    var graph = this.editor.graph
+    let graph = this.editor.graph
 
     if (!graph.isSelectionEmpty()) {
-      var cells = mxUtils.sortCells(
+      let cells = MxUtils.sortCells(
         graph.model.getTopmostCells(graph.getSelectionCells())
       )
 
       // LATER: Add span with XML in data attribute
-      // var span = document.createElement('span');
+      // let span = document.createElement('span');
       // span.setAttribute('data-jgraph-type', 'application/vnd.jgraph.xml');
-      // span.setAttribute('data-jgraph-content', mxUtils.getXml(graph.encodeCells(clones)));
+      // span.setAttribute('data-jgraph-content', MxUtils.getXml(graph.encodeCells(clones)));
 
       // Fixes cross-platform clipboard UTF8 issues by encoding as URI
-      var xml = mxUtils.getXml(this.editor.graph.encodeCells(cells))
-      mxUtils.setTextContent(elt, encodeURIComponent(xml))
+      let xml = MxUtils.getXml(this.editor.graph.encodeCells(cells))
+      MxUtils.setTextContent(elt, encodeURIComponent(xml))
 
       if (removeCells) {
         graph.removeCells(cells, false)
@@ -327,33 +333,33 @@ export default class extends EditorUi {
    * Creates the format panel and adds overrides.
    */
   pasteCells(evt, elt) {
-    if (!mxEvent.isConsumed(evt)) {
-      var spans = elt.getElementsByTagName('span')
+    if (!MxEvent.isConsumed(evt)) {
+      let spans = elt.getElementsByTagName('span')
 
       if (
-        spans != null &&
+        spans !== null &&
         spans.length > 0 &&
         spans[0].getAttribute('data-lucid-type') ===
           'application/vnd.lucid.chart.objects'
       ) {
-        var content = spans[0].getAttribute('data-lucid-content')
+        let content = spans[0].getAttribute('data-lucid-content')
 
-        if (content != null && content.length > 0) {
+        if (content !== null && content.length > 0) {
           this.importLucidChart(content, 0, 0)
-          mxEvent.consume(evt)
+          MxEvent.consume(evt)
         }
       } else {
-        var graph = this.editor.graph
-        var xml = mxUtils.trim(
-          mxClient.IS_QUIRKS || document.documentMode === 8
-            ? mxUtils.getTextContent(elt)
+        let graph = this.editor.graph
+        let xml = MxUtils.trim(
+          MxClient.IS_QUIRKS || document.documentMode === 8
+            ? MxUtils.getTextContent(elt)
             : elt.textContent
         )
-        var compat = false
+        let compat = false
 
         // Workaround for junk after XML in VM
         try {
-          var idx = xml.lastIndexOf('%3E')
+          let idx = xml.lastIndexOf('%3E')
 
           if (idx >= 0 && idx < xml.length - 3) {
             xml = xml.substring(0, idx + 3)
@@ -364,10 +370,10 @@ export default class extends EditorUi {
 
         // Checks for embedded XML content
         try {
-          var spans = elt.getElementsByTagName('span')
-          var tmp =
-            spans != null && spans.length > 0
-              ? mxUtils.trim(decodeURIComponent(spans[0].textContent))
+          let spans = elt.getElementsByTagName('span')
+          let tmp =
+            spans !== null && spans.length > 0
+              ? MxUtils.trim(decodeURIComponent(spans[0].textContent))
               : decodeURIComponent(xml)
 
           if (this.isCompatibleString(tmp)) {
@@ -385,13 +391,13 @@ export default class extends EditorUi {
           graph.pasteCounter = 0
         }
 
-        var dx = graph.pasteCounter * graph.gridSize
+        let dx = graph.pasteCounter * graph.gridSize
 
-        if (xml != null && xml.length > 0) {
+        if (xml !== null && xml.length > 0) {
           if (compat || this.isCompatibleString(xml)) {
             graph.setSelectionCells(this.importXml(xml, dx, dx))
           } else {
-            var pt = graph.getInsertPoint()
+            let pt = graph.getInsertPoint()
 
             if (graph.isMouseInsertPoint()) {
               dx = 0
@@ -410,14 +416,14 @@ export default class extends EditorUi {
           if (!graph.isSelectionEmpty()) {
             graph.scrollCellToVisible(graph.getSelectionCell())
 
-            if (this.hoverIcons != null) {
+            if (this.hoverIcons !== null) {
               this.hoverIcons.update(
                 graph.view.getState(graph.getSelectionCell())
               )
             }
 
             try {
-              mxEvent.consume(evt)
+              MxEvent.consume(evt)
             } catch (e) {
               // ignore event no longer exists in async handler in IE8-
             }
@@ -432,11 +438,11 @@ export default class extends EditorUi {
    */
   isCompatibleString(data) {
     try {
-      var doc = mxUtils.parseXml(data)
-      var node = this.editor.extractGraphModel(doc.documentElement, true)
+      let doc = MxUtils.parseXml(data)
+      let node = this.editor.extractGraphModel(doc.documentElement, true)
 
       return (
-        node != null && node.getElementsByTagName('parsererror').length === 0
+        node !== null && node.getElementsByTagName('parsererror').length === 0
       )
     } catch (e) {
       console.log(e)
@@ -451,11 +457,11 @@ export default class extends EditorUi {
    * TODO: Make this function asynchronous
    */
   insertTextAt(text, dx, dy, html, asImage, crop, resizeImages) {
-    crop = crop != null ? crop : true
-    resizeImages = resizeImages != null ? resizeImages : true
+    crop = crop !== null ? crop : true
+    resizeImages = resizeImages !== null ? resizeImages : true
 
     // Handles special case for Gliffy data which requires async server-side for parsing
-    if (text != null) {
+    if (text !== null) {
       if (
         Graph.fileSupport &&
         !this.isOffline() &&
@@ -467,7 +473,7 @@ export default class extends EditorUi {
           new Blob([text.replace(/\s+/g, ' ')], {
             type: 'application/octet-stream'
           }),
-          mxUtils.bind(this, function(xhr) {
+          MxUtils.bind(this, function(xhr) {
             if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299) {
               this.editor.graph.setSelectionCells(
                 this.insertTextAt(xhr.responseText, dx, dy, true)
@@ -478,19 +484,18 @@ export default class extends EditorUi {
 
         // Returns empty cells array as it is aysynchronous
         return []
-      }
-      // Handles special case of data URI which requires async loading for finding size
-      else if (
+      } else if (
+        // Handles special case of data URI which requires async loading for finding size
         text.substring(0, 5) === 'data:' ||
         (!this.isOffline() &&
           (asImage || /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text)))
       ) {
-        var graph = this.editor.graph
+        let graph = this.editor.graph
 
         // Checks for embedded XML in PNG
-        if (text.substring(0, 22) == 'data:image/png;base64,') {
-          var xml = this.extractGraphModelFromPng(text)
-          var result = this.importXml(xml, dx, dy, crop, true)
+        if (text.substring(0, 22) === 'data:image/png;base64,') {
+          let xml = this.extractGraphModelFromPng(text)
+          let result = this.importXml(xml, dx, dy, crop, true)
 
           if (result.length > 0) {
             return result
@@ -500,19 +505,19 @@ export default class extends EditorUi {
         // Tries to extract embedded XML from SVG data URI
         if (text.substring(0, 19) === 'data:image/svg+xml;') {
           try {
-            var xml = null
+            let xml = null
 
             if (text.substring(0, 26) === 'data:image/svg+xml;base64,') {
               xml = text.substring(text.indexOf(',') + 1)
               xml =
-                window.atob && !mxClient.IS_SF
+                window.atob && !MxClient.IS_SF
                   ? atob(xml)
                   : Base64.decode(xml, true)
             } else {
               xml = decodeURIComponent(text.substring(text.indexOf(',') + 1))
             }
 
-            var result = this.importXml(xml, dx, dy, crop, true)
+            let result = this.importXml(xml, dx, dy, crop, true)
 
             if (result.length > 0) {
               return result
@@ -524,12 +529,12 @@ export default class extends EditorUi {
 
         this.loadImage(
           text,
-          mxUtils.bind(this, function(img) {
+          MxUtils.bind(this, function(img) {
             if (text.substring(0, 5) === 'data:') {
               this.resizeImage(
                 img,
                 text,
-                mxUtils.bind(this, function(data2, w2, h2) {
+                MxUtils.bind(this, function(data2, w2, h2) {
                   graph.setSelectionCell(
                     graph.insertVertex(
                       null,
@@ -550,15 +555,15 @@ export default class extends EditorUi {
                 this.maxImageSize
               )
             } else {
-              var s = Math.min(
+              let s = Math.min(
                 1,
                 Math.min(
                   this.maxImageSize / img.width,
                   this.maxImageSize / img.height
                 )
               )
-              var w = Math.round(img.width * s)
-              var h = Math.round(img.height * s)
+              let w = Math.round(img.width * s)
+              let h = Math.round(img.height * s)
 
               graph.setSelectionCell(
                 graph.insertVertex(
@@ -577,8 +582,8 @@ export default class extends EditorUi {
               )
             }
           }),
-          mxUtils.bind(this, function() {
-            var cell = null
+          MxUtils.bind(this, function() {
+            let cell = null
 
             // Inserts invalid data URIs as text
             graph.getModel().beginUpdate()
@@ -595,7 +600,7 @@ export default class extends EditorUi {
               )
               graph.updateCellSize(cell)
               graph.fireEvent(
-                new mxEventObject('textInserted', 'cells', [cell])
+                new MxEventObject('textInserted', 'cells', [cell])
               )
             } finally {
               graph.getModel().endUpdate()
@@ -607,7 +612,7 @@ export default class extends EditorUi {
 
         return []
       } else {
-        text = this.editor.graph.zapGremlins(mxUtils.trim(text))
+        text = this.editor.graph.zapGremlins(MxUtils.trim(text))
 
         if (this.isCompatibleString(text)) {
           return this.importXml(text, dx, dy, crop)
@@ -615,8 +620,8 @@ export default class extends EditorUi {
           if (text.substring(0, 26) === '{"state":"{\\"Properties\\":') {
             this.importLucidChart(text, dx, dy, crop)
           } else {
-            var graph = this.editor.graph
-            var cell = null
+            let graph = this.editor.graph
+            let cell = null
 
             graph.getModel().beginUpdate()
             try {
@@ -633,7 +638,7 @@ export default class extends EditorUi {
                 'text;' + (html ? 'html=1;' : '')
               )
               graph.fireEvent(
-                new mxEventObject('textInserted', 'cells', [cell])
+                new MxEventObject('textInserted', 'cells', [cell])
               )
 
               // Apply value and updates the cell size to fit the text block
@@ -641,7 +646,7 @@ export default class extends EditorUi {
               graph.updateCellSize(cell)
 
               // See http://stackoverflow.com/questions/6927719/url-regex-does-not-work-in-javascript
-              var regexp = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/i
+              let regexp = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/i
 
               if (regexp.test(cell.value)) {
                 graph.setLinkForCell(cell, cell.value)
@@ -667,40 +672,40 @@ export default class extends EditorUi {
    * Imports the given XML into the existing diagram.
    */
   importXml(xml, dx, dy, crop, noErrorHandling) {
-    dx = dx != null ? dx : 0
-    dy = dy != null ? dy : 0
-    var cells = []
+    dx = dx !== null ? dx : 0
+    dy = dy !== null ? dy : 0
+    let cells = []
 
     try {
-      var graph = this.editor.graph
+      let graph = this.editor.graph
 
-      if (xml != null && xml.length > 0) {
-        var doc = mxUtils.parseXml(xml)
+      if (xml !== null && xml.length > 0) {
+        let doc = MxUtils.parseXml(xml)
 
         // Checks for mxfile with multiple pages
-        var node = this.editor.extractGraphModel(
+        let node = this.editor.extractGraphModel(
           doc.documentElement,
-          this.pages != null
+          this.pages !== null
         )
 
-        if (node != null && node.nodeName === 'mxfile' && this.pages != null) {
-          var diagrams = node.getElementsByTagName('diagram')
+        if (node !== null && node.nodeName === 'mxfile' && this.pages !== null) {
+          let diagrams = node.getElementsByTagName('diagram')
 
           if (diagrams.length === 1) {
-            node = mxUtils.parseXml(
-              graph.decompress(mxUtils.getTextContent(diagrams[0]))
+            node = MxUtils.parseXml(
+              graph.decompress(MxUtils.getTextContent(diagrams[0]))
             ).documentElement
           } else if (diagrams.length > 1) {
             // Adds pages
             graph.model.beginUpdate()
             try {
-              for (var i = 0; i < diagrams.length; i++) {
-                var page = this.updatePageRoot(new DiagramPage(diagrams[i]))
-                var index = this.pages.length
+              for (let i = 0; i < diagrams.length; i++) {
+                let page = this.updatePageRoot(new DiagramPage(diagrams[i]))
+                let index = this.pages.length
 
                 // Checks for invalid page names
-                if (page.getName() == null) {
-                  page.setName(mxResources.get('pageWithNumber', [index + 1]))
+                if (page.getName() === null) {
+                  page.setName(MxResources.get('pageWithNumber', [index + 1]))
                 }
 
                 graph.model.execute(new ChangePage(this, page, page, index))
@@ -711,13 +716,13 @@ export default class extends EditorUi {
           }
         }
 
-        if (node != null && node.nodeName === 'mxGraphModel') {
-          var model = new mxGraphModel()
-          var codec = new mxCodec(node.ownerDocument)
+        if (node !== null && node.nodeName === 'MxGraphModel') {
+          let model = new MxGraphModel()
+          let codec = new MxCodec(node.ownerDocument)
           codec.decode(node, model)
 
-          var childCount = model.getChildCount(model.getRoot())
-          var targetChildCount = graph.model.getChildCount(
+          let childCount = model.getChildCount(model.getRoot())
+          let targetChildCount = graph.model.getChildCount( // eslint-disable-line no-unused-vars
             graph.model.getRoot()
           )
 
@@ -725,17 +730,17 @@ export default class extends EditorUi {
           graph.model.beginUpdate()
           try {
             // Mapping for multiple calls to cloneCells with the same set of cells
-            var mapping = new Object()
+            let mapping = new Object()
 
-            for (var i = 0; i < childCount; i++) {
-              var parent = model.getChildAt(model.getRoot(), i)
+            for (let i = 0; i < childCount; i++) {
+              let parent = model.getChildAt(model.getRoot(), i)
 
               // Adds cells to existing layer if not locked
               if (
-                childCount == 1 &&
+                childCount === 1 &&
                 !graph.isCellLocked(graph.getDefaultParent())
               ) {
-                var children = model.getChildren(parent)
+                let children = model.getChildren(parent)
                 cells = cells.concat(
                   graph.importCells(
                     children,
@@ -756,7 +761,7 @@ export default class extends EditorUi {
                   null,
                   mapping
                 )[0]
-                var children = graph.model.getChildren(parent)
+                let children = graph.model.getChildren(parent)
                 graph.moveCells(children, dx, dy)
                 cells = cells.concat(children)
               }
@@ -768,9 +773,9 @@ export default class extends EditorUi {
                 dy = graph.snap(dy)
               }
 
-              var bounds = graph.getBoundingBoxFromGeometry(cells, true)
+              let bounds = graph.getBoundingBoxFromGeometry(cells, true)
 
-              if (bounds != null) {
+              if (bounds !== null) {
                 graph.moveCells(cells, dx - bounds.x, dy - bounds.y)
               }
             }
@@ -781,7 +786,7 @@ export default class extends EditorUi {
       }
     } catch (e) {
       if (!noErrorHandling) {
-        this.handleError(e, mxResources.get('invalidOrMissingFile'))
+        this.handleError(e, MxResources.get('invalidOrMissingFile'))
       }
 
       throw e
@@ -797,7 +802,7 @@ export default class extends EditorUi {
    * @param {number} dy Y-coordinate of the translation.
    */
   isOfflineApp() {
-    return urlParams['offline'] == '1'
+    return window.urlParams['offline'] === '1'
   }
 
   /**
@@ -805,7 +810,7 @@ export default class extends EditorUi {
    */
   isOffline() {
     return (
-      this.isOfflineApp() || !navigator.onLine || urlParams['stealth'] == '1'
+      this.isOfflineApp() || !navigator.onLine || window.urlParams['stealth'] === '1'
     )
   }
 
@@ -814,15 +819,15 @@ export default class extends EditorUi {
    */
   isRemoteFileFormat(data, filename) {
     return (
-      /(\.*<graphml xmlns=\".*)/.test(data) ||
-      /(\"contentType\":\s*\"application\/gliffy\+json\")/.test(data) ||
-      (filename != null && /(\.vsdx)($|\?)/i.test(filename)) ||
-      (filename != null && /(\.vssx)($|\?)/i.test(filename))
+      /(\.*<graphml xmlns=".*)/.test(data) ||
+      /("contentType":\s*"application\/gliffy\+json")/.test(data) ||
+      (filename !== null && /(\.vsdx)($|\?)/i.test(filename)) ||
+      (filename !== null && /(\.vssx)($|\?)/i.test(filename))
     )
   }
 
   getCurrentCompressData() {
-    var currentGraphElement = this.editor.getGraphXml()
+    let currentGraphElement = this.editor.getGraphXml()
 
     if (
       currentGraphElement &&
@@ -832,13 +837,13 @@ export default class extends EditorUi {
       return null
     }
 
-    var currentGraphXml = mxUtils.getXml(currentGraphElement)
-    var currentCompressText = this.editor.graph.compress(
+    let currentGraphXml = MxUtils.getXml(currentGraphElement)
+    let currentCompressText = this.editor.graph.compress(
       this.editor.graph.zapGremlins(currentGraphXml)
     )
 
-    var container = document.createElement('div')
-    var diagram = document.createElement('diagram')
+    let container = document.createElement('div')
+    let diagram = document.createElement('diagram')
 
     diagram.innerText = currentCompressText
     diagram.setAttribute('version', Board.VERSION)
@@ -865,22 +870,22 @@ export default class extends EditorUi {
     resampleThreshold,
     ignoreEmbeddedXml
   ) {
-    x = x != null ? x : 0
-    y = y != null ? y : 0
+    x = x !== null ? x : 0
+    y = y !== null ? y : 0
 
-    maxSize = maxSize != null ? maxSize : this.maxImageSize
-    maxBytes = maxBytes != null ? maxBytes : this.maxImageBytes
+    maxSize = maxSize !== null ? maxSize : this.maxImageSize
+    maxBytes = maxBytes !== null ? maxBytes : this.maxImageBytes
 
-    var crop = x != null && y != null
-    var resizeImages = true
+    let crop = x !== null && y !== null
+    let resizeImages = true
 
     // Checks if large images are imported
-    var largeImages = false
+    let largeImages = false
 
-    if (!mxClient.IS_CHROMEAPP && files != null) {
-      var thresh = resampleThreshold || this.resampleThreshold
+    if (!MxClient.IS_CHROMEAPP && files !== null) {
+      let thresh = resampleThreshold || this.resampleThreshold
 
-      for (var i = 0; i < files.length; i++) {
+      for (let i = 0; i < files.length; i++) {
         if (
           files[i].type.substring(0, 6) === 'image/' &&
           files[i].size > thresh
@@ -892,14 +897,14 @@ export default class extends EditorUi {
       }
     }
 
-    var doImportFiles = mxUtils.bind(this, function() {
-      var graph = this.editor.graph
-      var gs = graph.gridSize
+    let doImportFiles = MxUtils.bind(this, function() {
+      let graph = this.editor.graph
+      let gs = graph.gridSize
 
       fn =
-        fn != null
+        fn !== null
           ? fn
-          : mxUtils.bind(this, function(
+          : MxUtils.bind(this, function(
             data,
             mimeType,
             x,
@@ -910,7 +915,7 @@ export default class extends EditorUi {
             done,
             file
           ) {
-            if (data != null && data.substring(0, 10) === '<mxlibrary') {
+            if (data !== null && data.substring(0, 10) === '<mxlibrary') {
               this.spinner.stop()
               this.loadLibrary(new LocalLibrary(this, data, filename))
 
@@ -933,35 +938,34 @@ export default class extends EditorUi {
           })
 
       resultFn =
-        resultFn != null
+        resultFn !== null
           ? resultFn
-          : mxUtils.bind(this, function(cells) {
+          : MxUtils.bind(this, function(cells) {
             graph.setSelectionCells(cells)
           })
 
-      if (this.spinner.spin(document.body, mxResources.get('loading'))) {
-        var count = files.length
-        var remain = count
-        var queue = []
+      if (this.spinner.spin(document.body, MxResources.get('loading'))) {
+        let count = files.length
+        let remain = count
+        let queue = []
 
         // Barrier waits for all files to be loaded asynchronously
-        var barrier = mxUtils.bind(this, function(index, fnc) {
+        let barrier = MxUtils.bind(this, function(index, fnc) {
           queue[index] = fnc
 
           if (--remain === 0) {
             this.spinner.stop()
+            let cells = []
 
-            if (barrierFn != null) {
+            if (barrierFn !== null) {
               barrierFn(queue)
             } else {
-              var cells = []
-
               graph.getModel().beginUpdate()
               try {
-                for (var j = 0; j < queue.length; j++) {
-                  var tmp = queue[j]()
+                for (let j = 0; j < queue.length; j++) {
+                  let tmp = queue[j]()
 
-                  if (tmp != null) {
+                  if (tmp !== null) {
                     cells = cells.concat(tmp)
                   }
                 }
@@ -974,50 +978,50 @@ export default class extends EditorUi {
           }
         })
 
-        for (var i = 0; i < count; i++) {
-          mxUtils.bind(this, function(index) {
-            var file = files[index]
-            var reader = new FileReader()
+        for (let i = 0; i < count; i++) {
+          MxUtils.bind(this, function(index) {
+            let file = files[index]
+            let reader = new FileReader()
 
-            reader.onload = mxUtils.bind(this, function(e) {
-              if (filterFn == null || filterFn(file)) {
+            reader.onload = MxUtils.bind(this, function(e) {
+              if (filterFn === null || filterFn(file)) {
                 if (file.type.substring(0, 6) === 'image/') {
                   if (file.type.substring(0, 9) === 'image/svg') {
                     // Checks if SVG contains content attribute
-                    var data = e.target.result
-                    var comma = data.indexOf(',')
-                    var svgText = atob(data.substring(comma + 1))
-                    var root = mxUtils.parseXml(svgText)
-                    var svgs = root.getElementsByTagName('svg')
+                    let data = e.target.result
+                    let comma = data.indexOf(',')
+                    let svgText = atob(data.substring(comma + 1))
+                    let root = MxUtils.parseXml(svgText)
+                    let svgs = root.getElementsByTagName('svg')
 
                     if (svgs.length > 0) {
-                      var svgRoot = svgs[0]
-                      var cont = ignoreEmbeddedXml
+                      let svgRoot = svgs[0]
+                      let cont = ignoreEmbeddedXml
                         ? null
                         : svgRoot.getAttribute('content')
 
                       if (
-                        cont != null &&
-                        cont.charAt(0) != '<' &&
-                        cont.charAt(0) != '%'
+                        cont !== null &&
+                        cont.charAt(0) !== '<' &&
+                        cont.charAt(0) !== '%'
                       ) {
                         cont = unescape(
                           window.atob ? atob(cont) : Base64.decode(cont, true)
                         )
                       }
 
-                      if (cont != null && cont.charAt(0) === '%') {
+                      if (cont !== null && cont.charAt(0) === '%') {
                         cont = decodeURIComponent(cont)
                       }
 
                       if (
-                        cont != null &&
+                        cont !== null &&
                         (cont.substring(0, 8) === '<mxfile ' ||
-                          cont.substring(0, 14) === '<mxGraphModel ')
+                          cont.substring(0, 14) === '<MxGraphModel ')
                       ) {
                         barrier(
                           index,
-                          mxUtils.bind(this, function() {
+                          MxUtils.bind(this, function() {
                             return fn(
                               cont,
                               'text/xml',
@@ -1034,36 +1038,35 @@ export default class extends EditorUi {
                         // find initial size from SVG attributes (only for IE11)
                         barrier(
                           index,
-                          mxUtils.bind(this, function() {
+                          MxUtils.bind(this, function() {
                             try {
-                              var prefix = data.substring(0, comma + 1)
+                              let prefix = data.substring(0, comma + 1) // eslint-disable-line no-unused-vars
 
                               // Parses SVG and find width and height
-                              if (root != null) {
-                                var svgs = root.getElementsByTagName('svg')
+                              if (root !== null) {
+                                let svgs = root.getElementsByTagName('svg')
 
                                 if (svgs.length > 0) {
-                                  var svgRoot = svgs[0]
-                                  var w = parseFloat(
+                                  let svgRoot = svgs[0]
+                                  let w = parseFloat(
                                     svgRoot.getAttribute('width')
                                   )
-                                  var h = parseFloat(
+                                  let h = parseFloat(
                                     svgRoot.getAttribute('height')
                                   )
 
                                   // Check if viewBox attribute already exists
-                                  var vb = svgRoot.getAttribute('viewBox')
+                                  let vb = svgRoot.getAttribute('viewBox')
 
-                                  if (vb == null || vb.length === 0) {
+                                  if (vb === null || vb.length === 0) {
                                     svgRoot.setAttribute(
                                       'viewBox',
                                       '0 0 ' + w + ' ' + h
                                     )
-                                  }
+                                  } else if (isNaN(w) || isNaN(h)) {
                                   // Uses width and height from viewbox for
                                   // missing width and height attributes
-                                  else if (isNaN(w) || isNaN(h)) {
-                                    var tokens = vb.split(' ')
+                                    let tokens = vb.split(' ')
 
                                     if (tokens.length > 3) {
                                       w = parseFloat(tokens[2])
@@ -1072,10 +1075,10 @@ export default class extends EditorUi {
                                   }
 
                                   data = this.createSvgDataUri(
-                                    mxUtils.getXml(svgs[0])
+                                    MxUtils.getXml(svgs[0])
                                   )
 
-                                  var s = Math.min(
+                                  let s = Math.min(
                                     1,
                                     Math.min(maxSize / Math.max(1, w)),
                                     maxSize / Math.max(1, h)
@@ -1103,20 +1106,20 @@ export default class extends EditorUi {
                     }
                   } else {
                     // Checks if PNG+XML is available to bypass code below
-                    var containsModel = false
+                    let containsModel = false
 
                     if (file.type === 'image/png') {
-                      var xml = ignoreEmbeddedXml
+                      let xml = ignoreEmbeddedXml
                         ? null
                         : this.extractGraphModelFromPng(e.target.result)
 
-                      if (xml != null && xml.length > 0) {
-                        var img = new Image()
+                      if (xml !== null && xml.length > 0) {
+                        let img = new Image()
                         img.src = e.target.result
 
                         barrier(
                           index,
-                          mxUtils.bind(this, function() {
+                          MxUtils.bind(this, function() {
                             return fn(
                               xml,
                               'text/xml',
@@ -1136,18 +1139,18 @@ export default class extends EditorUi {
                     // Additional asynchronous step for finding image size
                     if (!containsModel) {
                       // Cannot load local files in Chrome App
-                      if (mxClient.IS_CHROMEAPP) {
+                      if (MxClient.IS_CHROMEAPP) {
                         this.spinner.stop()
                         this.showError(
-                          mxResources.get('error'),
-                          mxResources.get('dragAndDropNotSupported'),
-                          mxResources.get('cancel'),
-                          mxUtils.bind(this, function() {
+                          MxResources.get('error'),
+                          MxResources.get('dragAndDropNotSupported'),
+                          MxResources.get('cancel'),
+                          MxUtils.bind(this, function() {
                             // Hides the dialog
                           }),
                           null,
-                          mxResources.get('ok'),
-                          mxUtils.bind(this, function() {
+                          MxResources.get('ok'),
+                          MxUtils.bind(this, function() {
                             // Redirects to import function
                             this.actions.get('import').funct()
                           })
@@ -1155,20 +1158,20 @@ export default class extends EditorUi {
                       } else {
                         this.loadImage(
                           e.target.result,
-                          mxUtils.bind(this, function(img) {
+                          MxUtils.bind(this, function(img) {
                             this.resizeImage(
                               img,
                               e.target.result,
-                              mxUtils.bind(this, function(data2, w2, h2) {
+                              MxUtils.bind(this, function(data2, w2, h2) {
                                 barrier(
                                   index,
-                                  mxUtils.bind(this, function() {
+                                  MxUtils.bind(this, function() {
                                     // Refuses to insert images above a certain size as they kill the app
                                     if (
-                                      data2 != null &&
+                                      data2 !== null &&
                                       data2.length < maxBytes
                                     ) {
-                                      var s =
+                                      let s =
                                         !resizeImages ||
                                         !this.isResampleImage(
                                           e.target.result,
@@ -1194,7 +1197,7 @@ export default class extends EditorUi {
                                       )
                                     } else {
                                       this.handleError({
-                                        message: mxResources.get('imageTooBig')
+                                        message: MxResources.get('imageTooBig')
                                       })
 
                                       return null
@@ -1250,7 +1253,7 @@ export default class extends EditorUi {
                 },
                 file
               )
-            } else if (file.type.substring(0, 5) == 'image') {
+            } else if (file.type.substring(0, 5) === 'image') {
               reader.readAsDataURL(file)
             } else {
               reader.readAsText(file)
@@ -1275,48 +1278,48 @@ export default class extends EditorUi {
    * Filename is an optional parameter for blobs (that do not have a filename).
    */
   confirmImageResize(fn, force) {
-    force = force != null ? force : false
+    force = force !== null ? force : false
 
-    var resume =
-      this.spinner != null && this.spinner.pause != null
+    let resume =
+      this.spinner !== null && this.spinner.pause !== null
         ? this.spinner.pause()
         : function() {}
-    var resizeImages =
-      isLocalStorage || mxClient.IS_CHROMEAPP
-        ? mxSettings.getResizeImages()
+    let resizeImages =
+      isLocalStorage || MxClient.IS_CHROMEAPP
+        ? MxSettings.getResizeImages()
         : null
 
-    var wrapper = function(remember, resize) {
+    let wrapper = function(remember, resize) {
       if (remember || force) {
-        mxSettings.setResizeImages(remember ? resize : null)
-        mxSettings.save()
+        MxSettings.setResizeImages(remember ? resize : null)
+        MxSettings.save()
       }
 
       resume()
       fn(resize)
     }
 
-    if (resizeImages != null && !force) {
+    if (resizeImages !== null && !force) {
       wrapper(false, resizeImages)
     } else {
       this.showDialog(
         new ConfirmDialog(
           this,
-          mxResources.get('resizeLargeImages'),
+          MxResources.get('resizeLargeImages'),
           function(remember) {
             wrapper(remember, true)
           },
           function(remember) {
             wrapper(remember, false)
           },
-          mxResources.get('resize'),
-          mxResources.get('actualSize'),
+          MxResources.get('resize'),
+          MxResources.get('actualSize'),
           '<img style="margin-top:8px;" src="' + Editor.loResImage + '"/>',
           '<img style="margin-top:8px;" src="' + Editor.hiResImage + '"/>',
-          isLocalStorage || mxClient.IS_CHROMEAPP
+          isLocalStorage || MxClient.IS_CHROMEAPP
         ).container,
         340,
-        isLocalStorage || mxClient.IS_CHROMEAPP ? 220 : 200,
+        isLocalStorage || MxClient.IS_CHROMEAPP ? 220 : 200,
         true,
         true
       )
@@ -1330,9 +1333,9 @@ export default class extends EditorUi {
    * @param {number} dy Y-coordinate of the translation.
    */
   createSpinner(x, y, size) {
-    size = size != null ? size : 24
+    size = size !== null ? size : 24
 
-    var spinner = new Spinner({
+    let spinner = new Spinner({
       lines: 12, // The number of lines to draw
       length: size, // The length of each line
       width: Math.round(size / 3), // The line thickness
@@ -1347,17 +1350,17 @@ export default class extends EditorUi {
     })
 
     // Extends spin method to include an optional label
-    var oldSpin = spinner.spin
+    let oldSpin = spinner.spin
 
     spinner.spin = function(container, label) {
-      var result = false
+      let result = false
 
       if (!this.active) {
         oldSpin.call(this, container)
         this.active = true
 
-        if (label != null) {
-          var status = document.createElement('div')
+        if (label !== null) {
+          let status = document.createElement('div')
 
           status.style.position = 'absolute'
           status.style.whiteSpace = 'nowrap'
@@ -1372,13 +1375,13 @@ export default class extends EditorUi {
           status.style.left = Math.max(0, x) + 'px'
           status.style.top = Math.max(0, y + 70) + 'px'
 
-          mxUtils.setPrefixedStyle(status.style, 'borderRadius', '6px')
-          mxUtils.setPrefixedStyle(
+          MxUtils.setPrefixedStyle(status.style, 'borderRadius', '6px')
+          MxUtils.setPrefixedStyle(
             status.style,
             'boxShadow',
             '2px 2px 3px 0px #ddd'
           )
-          mxUtils.setPrefixedStyle(
+          MxUtils.setPrefixedStyle(
             status.style,
             'transform',
             'translate(-50%,-50%)'
@@ -1390,8 +1393,8 @@ export default class extends EditorUi {
 
           // Centers the label in older IE versions
           if (
-            mxClient.IS_VML &&
-            (document.documentMode == null || document.documentMode <= 8)
+            MxClient.IS_VML &&
+            (document.documentMode === null || document.documentMode <= 8)
           ) {
             status.style.left =
               Math.round(Math.max(0, x - status.offsetWidth / 2)) + 'px'
@@ -1401,11 +1404,11 @@ export default class extends EditorUi {
         }
 
         // Pause returns a function to resume the spinner
-        this.pause = mxUtils.bind(this, function() {
-          var fn = function() {}
+        this.pause = MxUtils.bind(this, function() {
+          let fn = function() {}
 
           if (this.active) {
-            fn = mxUtils.bind(this, function() {
+            fn = MxUtils.bind(this, function() {
               this.spin(container, label)
             })
           }
@@ -1422,13 +1425,13 @@ export default class extends EditorUi {
     }
 
     // Extends stop method to remove the optional label
-    var oldStop = spinner.stop
+    let oldStop = spinner.stop
 
     spinner.stop = function() {
       oldStop.call(this)
       this.active = false
 
-      if (spinner.status != null) {
+      if (spinner.status !== null) {
         spinner.status.parentNode.removeChild(spinner.status)
         spinner.status = null
       }
@@ -1445,46 +1448,45 @@ export default class extends EditorUi {
    * Extracts the XML from the compressed or non-compressed text chunk.
    */
   extractGraphModelFromPng(data) {
-    var result = null
+    let result = null
 
     try {
-      var base64 = data.substring(data.indexOf(',') + 1)
+      let base64 = data.substring(data.indexOf(',') + 1)
 
       // Workaround for invalid character error in Safari
-      var binary =
-        window.atob && !mxClient.IS_SF
+      let binary =
+        window.atob && !MxClient.IS_SF
           ? atob(base64)
           : Base64.decode(base64, true)
 
       EditorUi.parsePng(
         binary,
-        mxUtils.bind(this, function(pos, type, length) {
-          var value = binary.substring(pos + 8, pos + 8 + length)
+        MxUtils.bind(this, function(pos, type, length) {
+          let value = binary.substring(pos + 8, pos + 8 + length)
 
-          if (type == 'zTXt') {
-            var idx = value.indexOf(String.fromCharCode(0))
+          if (type === 'zTXt') {
+            let idx = value.indexOf(String.fromCharCode(0))
 
-            if (value.substring(0, idx) == 'mxGraphModel') {
+            if (value.substring(0, idx) === 'MxGraphModel') {
               // Workaround for Java URL Encoder using + for spaces, which isn't compatible with JS
-              var xmlData = this.editor.graph
+              let xmlData = this.editor.graph
                 .bytesToString(pako.inflateRaw(value.substring(idx + 2)))
                 .replace(/\+/g, ' ')
 
-              if (xmlData != null && xmlData.length > 0) {
+              if (xmlData !== null && xmlData.length > 0) {
                 result = xmlData
               }
             }
-          }
+          } else if (type === 'tEXt') {
           // Uncompressed section is normally not used
-          else if (type == 'tEXt') {
-            var vals = value.split(String.fromCharCode(0))
+            let vals = value.split(String.fromCharCode(0))
 
-            if (vals.length > 1 && vals[0] == 'mxGraphModel') {
+            if (vals.length > 1 && vals[0] === 'MxGraphModel') {
               result = vals[1]
             }
           }
 
-          if (result != null || type == 'IDAT') {
+          if (result !== null || type === 'IDAT') {
             // Stops processing the file as our text chunks
             // are always placed before the data section
             return true
@@ -1495,12 +1497,12 @@ export default class extends EditorUi {
       // ignores decoding errors
     }
 
-    if (result != null && result.charAt(0) === '%') {
+    if (result !== null && result.charAt(0) === '%') {
       result = decodeURIComponent(result)
     }
 
     // Workaround for double encoded content
-    if (result != null && result.charAt(0) === '%') {
+    if (result !== null && result.charAt(0) === '%') {
       result = decodeURIComponent(result)
     }
 
@@ -1514,13 +1516,13 @@ export default class extends EditorUi {
    * @param {number} dy Y-coordinate of the translation.
    */
   loadImage(uri, onload, onerror) {
-    var img = new Image()
+    let img = new Image()
 
     img.onload = function() {
       onload(img)
     }
 
-    if (onerror != null) {
+    if (onerror !== null) {
       img.onerror = onerror
     }
 
@@ -1531,35 +1533,35 @@ export default class extends EditorUi {
    * Resizes the given image if <maxImageBytes> is not null.
    */
   resizeImage(img, data, fn, enabled, maxSize, thresh) {
-    maxSize = maxSize != null ? maxSize : this.maxImageSize
-    var w = Math.max(1, img.width)
-    var h = Math.max(1, img.height)
+    maxSize = maxSize !== null ? maxSize : this.maxImageSize
+    let w = Math.max(1, img.width)
+    let h = Math.max(1, img.height)
 
     if (enabled && this.isResampleImage(data, thresh)) {
       try {
-        var factor = Math.max(w / maxSize, h / maxSize)
+        let factor = Math.max(w / maxSize, h / maxSize)
 
         if (factor > 1) {
-          var w2 = Math.round(w / factor)
-          var h2 = Math.round(h / factor)
+          let w2 = Math.round(w / factor)
+          let h2 = Math.round(h / factor)
 
-          var canvas = document.createElement('canvas')
+          let canvas = document.createElement('canvas')
           canvas.width = w2
           canvas.height = h2
 
-          var ctx = canvas.getContext('2d')
+          let ctx = canvas.getContext('2d')
           ctx.drawImage(img, 0, 0, w2, h2)
 
-          var tmp = canvas.toDataURL()
+          let tmp = canvas.toDataURL()
 
           // Uses new image if smaller
           if (tmp.length < data.length) {
             // Checks if the image is empty by comparing
             // with an empty image of the same size
-            var canvas2 = document.createElement('canvas')
+            let canvas2 = document.createElement('canvas')
             canvas2.width = w2
             canvas2.height = h2
-            var tmp2 = canvas2.toDataURL()
+            let tmp2 = canvas2.toDataURL()
 
             if (tmp !== tmp2) {
               data = tmp
@@ -1580,7 +1582,7 @@ export default class extends EditorUi {
    *
    */
   isResampleImage(data, thresh) {
-    thresh = thresh != null ? thresh : this.resampleThreshold
+    thresh = thresh !== null ? thresh : this.resampleThreshold
 
     return data.length > thresh
   }
@@ -1592,21 +1594,21 @@ export default class extends EditorUi {
    * @param {number} dy Y-coordinate of the translation.
    */
   handleError(resp, title, fn) {
-    var resume =
-      this.spinner != null && this.spinner.pause != null
+    let resume =
+      this.spinner !== null && this.spinner.pause !== null
         ? this.spinner.pause()
         : function() {}
-    var e = resp != null && resp.error != null ? resp.error : resp
+    let e = resp !== null && resp.error !== null ? resp.error : resp
 
-    if (e != null || title != null) {
-      var msg = mxUtils.htmlEntities(mxResources.get('unknownError'))
-      var btn = mxResources.get('ok')
-      var retry = null
-      title = title != null ? title : mxResources.get('error')
+    if (e !== null || title !== null) {
+      let msg = MxUtils.htmlEntities(MxResources.get('unknownError'))
+      let btn = MxResources.get('ok')
+      let retry = null
+      title = title !== null ? title : MxResources.get('error')
 
-      if (e != null) {
-        if (e.retry != null) {
-          btn = mxResources.get('cancel')
+      if (e !== null) {
+        if (e.retry !== null) {
+          btn = MxResources.get('cancel')
           retry = function() {
             resume()
             e.retry()
@@ -1619,7 +1621,7 @@ export default class extends EditorUi {
           typeof gapi.drive.realtime !== 'undefined' &&
           e.type === gapi.drive.realtime.ErrorType.FORBIDDEN
         ) {
-          msg = mxUtils.htmlEntities(mxResources.get('forbidden'))
+          msg = MxUtils.htmlEntities(MxResources.get('forbidden'))
         } else if (
           e.code === 404 ||
           e.status === 404 ||
@@ -1628,31 +1630,31 @@ export default class extends EditorUi {
             typeof gapi.drive.realtime !== 'undefined' &&
             e.type === gapi.drive.realtime.ErrorType.NOT_FOUND)
         ) {
-          msg = mxUtils.htmlEntities(mxResources.get('fileNotFoundOrDenied'))
-          var id = window.location.hash
+          msg = MxUtils.htmlEntities(MxResources.get('fileNotFoundOrDenied'))
+          let id = window.location.hash
 
-          if (id != null && id.substring(0, 2) === '#G') {
+          if (id !== null && id.substring(0, 2) === '#G') {
             id = id.substring(2)
             msg +=
               ' <a href="https://drive.google.com/open?id=' +
               id +
               '" target="_blank">' +
-              mxUtils.htmlEntities(mxResources.get('tryOpeningViaThisPage')) +
+              MxUtils.htmlEntities(MxResources.get('tryOpeningViaThisPage')) +
               '</a>'
           }
         } else if (e.code === Board.ERROR_TIMEOUT) {
-          msg = mxUtils.htmlEntities(mxResources.get('timeout'))
+          msg = MxUtils.htmlEntities(MxResources.get('timeout'))
         } else if (e.code === Board.ERROR_BUSY) {
-          msg = mxUtils.htmlEntities(mxResources.get('busy'))
-        } else if (e.message != null) {
-          msg = mxUtils.htmlEntities(e.message)
-        } else if (e.response != null && e.response.error != null) {
-          msg = mxUtils.htmlEntities(e.response.error)
+          msg = MxUtils.htmlEntities(MxResources.get('busy'))
+        } else if (e.message !== null) {
+          msg = MxUtils.htmlEntities(e.message)
+        } else if (e.response !== null && e.response.error !== null) {
+          msg = MxUtils.htmlEntities(e.response.error)
         }
       }
 
       this.showError(title, msg, btn, fn, retry)
-    } else if (fn != null) {
+    } else if (fn !== null) {
       fn()
     }
   }
@@ -1664,7 +1666,7 @@ export default class extends EditorUi {
    * @param {number} dy Y-coordinate of the translation.
    */
   showError(title, msg, btn, fn, retry, btn2, fn2) {
-    var dlg = new ErrorDialog(this, title, msg, btn, fn, retry, btn2, fn2)
+    let dlg = new ErrorDialog(this, title, msg, btn, fn, retry, btn2, fn2)
     this.showDialog(dlg.container, 340, 150, true, false)
     dlg.init()
   }
@@ -1685,28 +1687,28 @@ export default class extends EditorUi {
     crop,
     ignoreEmbeddedXml
   ) {
-    crop = crop != null ? crop : true
+    crop = crop !== null ? crop : true
 
-    var async = false
-    var cells = null
+    let async = false
+    let cells = null
 
     if (mimeType.substring(0, 5) === 'image') {
-      var containsModel = false
+      let containsModel = false
 
       if (mimeType.substring(0, 9) === 'image/png') {
-        var xml = ignoreEmbeddedXml ? null : this.extractGraphModelFromPng(data)
+        let xml = ignoreEmbeddedXml ? null : this.extractGraphModelFromPng(data)
 
-        if (xml != null && xml.length > 0) {
+        if (xml !== null && xml.length > 0) {
           cells = this.importXml(xml, dx, dy, crop)
           containsModel = true
         }
       }
 
       if (!containsModel) {
-        var graph = this.editor.graph
+        let graph = this.editor.graph
 
         // Strips encoding bit (eg. ;base64,) for cell style
-        var semi = data.indexOf(';')
+        let semi = data.indexOf(';')
 
         if (semi > 0) {
           data =
@@ -1745,19 +1747,19 @@ export default class extends EditorUi {
 
       // Returns empty cells array as it is aysynchronous
       this.parseFile(
-        file != null
+        file !== null
           ? file
           : new Blob([data], { type: 'application/octet-stream' }),
-        mxUtils.bind(this, function(xhr) {
+        MxUtils.bind(this, function(xhr) {
           if (xhr.readyState === 4) {
-            var importedCells = null
+            let importedCells = null
 
             if (xhr.status >= 200 && xhr.status <= 299) {
-              var xml = xhr.responseText
+              let xml = xhr.responseText
 
-              if (xml != null && xml.substring(0, 10) === '<mxlibrary') {
+              if (xml !== null && xml.substring(0, 10) === '<mxlibrary') {
                 if (
-                  filename != null &&
+                  filename !== null &&
                   filename.toLowerCase().substring(filename.length - 5) ===
                     '.vssx'
                 ) {
@@ -1770,7 +1772,7 @@ export default class extends EditorUi {
               }
             }
 
-            if (done != null) {
+            if (done !== null) {
               done(importedCells)
             }
           }
@@ -1788,7 +1790,7 @@ export default class extends EditorUi {
       )
     }
 
-    if (!async && done != null) {
+    if (!async && done !== null) {
       done(cells)
     }
 
@@ -1796,16 +1798,16 @@ export default class extends EditorUi {
   }
 
   snapshoot() {
-    var snd = new Audio(Board.CAMERA_SOUND)
+    let snd = new Audio(Board.CAMERA_SOUND)
 
     snd.play()
   }
 }
 
-// var updatePasteActionStates = EditorUi.prototype.updatePasteActionStates;
+// let updatePasteActionStates = EditorUi.prototype.updatePasteActionStates;
 // EditorUi.prototype.updatePasteActionStates = function(){
 //     updatePasteActionStates.call(this, arguments);
 
-//     var paste = this.actions.get('paste');
+//     let paste = this.actions.get('paste');
 //     paste.setEnabled(true);
 // }
