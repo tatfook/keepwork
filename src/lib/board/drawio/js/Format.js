@@ -10,7 +10,7 @@ import Dialog from '../../Dialog'
 import { DiagramFormatPanel } from '../../Format'
 import MxEventObject from '../../mxGraph/util/MxEventObject'
 import Menus from '../../Menus'
-import { mxCellRenderer } from '../../mxGraph/view/mxCellRenderer'
+import { MxCellRenderer } from '../../mxGraph/view/MxCellRenderer'
 import { FilenameDialog } from './Dialogs'
 import { ChangePageSetup } from './EditorUi'
 import { PageSetupDialog, Editor } from './Editor'
@@ -2254,7 +2254,7 @@ ArrangePanel.prototype.addEdgeGeometry = function(container) {
       MxUtils.getValue(
         rect.style,
         'width',
-        mxCellRenderer.defaultShapes['flexArrow'].prototype.defaultWidth
+        MxCellRenderer.defaultShapes['flexArrow'].prototype.defaultWidth
       )
     ) {
       graph.setCellStyles('width', value, graph.getSelectionCells())
@@ -2341,7 +2341,7 @@ ArrangePanel.prototype.addEdgeGeometry = function(container) {
         let value = MxUtils.getValue(
           rect.style,
           'width',
-          mxCellRenderer.defaultShapes['flexArrow'].prototype.defaultWidth
+          MxCellRenderer.defaultShapes['flexArrow'].prototype.defaultWidth
         )
         width.value = value + ' pt'
       }
