@@ -16,6 +16,11 @@ export const locale = (() => {
   return result
 })()
 
+export const toggleLanguage = () => {
+  localStorage['keepwork-language-locale'] = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
+  location.reload()
+}
+
 /**
  * Set cookie for lessons and other thired service providers backend use
  * lang en-US, zh-CN presents the language the frontend is using
@@ -27,5 +32,6 @@ Cookies.set('locale', IS_GLOBAL_VERSION ? 'en-US' : 'zh-CN')
 
 export default {
   locale,
-  messages
+  messages,
+  toggleLanguage
 }
