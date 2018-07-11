@@ -2,62 +2,62 @@
   <div class="comp-quiz" v-bind:class="{'error': !isRight }">
       <div v-if="!isOperate" class="splic"></div>
 
-    <div v-for="item in properties.data" :id="item.id">
-      <div class="no"><i class="el-icon-edit-outline"></i> Quiz </div>
+    <div v-for="(item, index) in properties.data" :id="item.id" :key="index">
+      <div class="no"><i class="el-icon-edit-outline"></i> {{$t('card.quiz')}} </div>
 
       <div class="quiz-content">
-        <div class="title">{{ item.title }} <span v-if="item.type == 1">(<em>multiple choices</em>)</span></div>
+        <div class="title">{{ item.title }} <span v-if="item.type == 1">(<em>{{$t('card.multipleChoices')}}</em>)</span></div>
 
         <div v-if="isOperate">
           <!-- 单选题 -->
           <el-radio-group v-if="item.type == 0" v-model="quiz.single">
-            <div class="opt-item" v-for="(opt, index) in item.options">
+            <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
               <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
           </el-radio-group>
 
           <!-- 多选题 -->
           <el-checkbox-group v-if="item.type == 1" v-model="quiz.multiple">
-            <div class="opt-item" v-for="(opt, index) in item.options">
+            <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
               <el-checkbox name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
             </div>
           </el-checkbox-group>
 
           <!-- 判断题 -->
           <el-radio-group v-if="item.type == 2" v-model="quiz.judge">
-            <div class="opt-item" v-for="(opt, index) in item.options">
+            <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
               <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
           </el-radio-group>
 
           <!-- 文本匹配题 -->
           <div v-if="item.type == 3" v-model="quiz.text">
-            <div class="opt-item" v-for="(opt, index) in item.options">
-              <div>Text {{index+1}}: </div>
+            <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
+              <div>{{$t('modList.text')}} {{index+1}}: </div>
               <pre>{{opt.item}}</pre>
             </div>
           </div>
         </div>
 
         <div v-if="!isOperate" :data-answer="item.answer" class="getData">
-          <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 0 || item.type == 1 || item.type == 2">
+          <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 0 || item.type == 1 || item.type == 2" :key="index">
               {{serialNo[index]}} {{opt.item}}
           </div>
-          <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 3">
-            <div>Text {{index+1}}: </div>
+          <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 3" :key="index">
+            <div>{{$t('modList.text')}} {{index+1}}: </div>
             <pre>{{opt.item}}</pre>
           </div>
         </div>
         <div v-if="item.type == 3 && isOperate && !isShow">
-          <el-input :disabled="isShow" type="textarea" maxlength="512" v-model="textAnswer" placeholder="If your answer matches any text above, it’s correct."></el-input>
+          <el-input :disabled="isShow" type="textarea" maxlength="512" v-model="textAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
         </div>
-        <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuiz">submit</el-button>
+        <el-button v-if="isOperate && !isShow" size="small" type="primary" @click="submitQuiz">{{$t('card.submit')}}</el-button>
       </div>
 
       <div v-if="isShow" class="submit-show">
-        <div v-if="item.type != 3" class="opt-item"><span>Right Answer:</span> {{ item.answer }}</div>
-        <div v-if="item.type == 3" class="opt-item"><span>Your Answer:</span><br/> <pre>{{textAnswer}}</pre></div>
-        <div class="opt-item"><span>Explanation:</span> {{ item.desc }}</div>
+        <div v-if="item.type != 3" class="opt-item"><span>{{$t('card.rightAnswerColon')}}</span> {{ item.answer }}</div>
+        <div v-if="item.type == 3" class="opt-item"><span>{{$t('card.yourAnswerColon')}}</span><br/> <pre>{{textAnswer}}</pre></div>
+        <div class="opt-item"><span>{{$t('card.explanationColon')}}</span> {{ item.desc }}</div>
       </div>
     </div>
   </div>
@@ -230,21 +230,21 @@ export default {
           }
         }
       } else if(r.err == 202) {
-        this.$message.error("课堂已满员~")
+        this.$message.error(this.$t('card.classIsFull'))
       } else {
-        this.$message.error("课堂已关闭~")
+        this.$message.error(this.$t('card.classClosed'))
       }
     }
   },
   methods: {
     async submitQuiz() {
       let data = this.properties.data;
-      if(!this.quiz.single && !this.quiz.judge && !this.quiz.multiple.join(',') && data[0].type != 3) {
-        this.$message.error("Please select one answer!")
-        return;
-      }else if(data[0].type == 3 && !this.textAnswer) {
-        this.$message.error("Please input your answer!")
-        return;
+      if(!this.quiz.single && !this.quiz.judge && data[0].type != 3 && data[0].type != 1) {
+        return this.$message.error(this.$t('card.pleaseSelectOne'))
+      } else if(data[0].type == 1 && this.quiz.multiple.length < 2) {
+        return this.$message.error(this.$t('card.chooseTwoAnswer'))
+      } else if(data[0].type == 3 && !this.textAnswer) {
+        return this.$message.error(this.$t('card.pleaseInputAnswer'))
       }
       this.isShow = true
       let trueFlag = false

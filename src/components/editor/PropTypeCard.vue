@@ -75,7 +75,6 @@ export default {
           })
         }, 100)
       }
-
       self.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {

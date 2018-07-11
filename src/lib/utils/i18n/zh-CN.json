@@ -448,7 +448,7 @@
     "singleChoice": "单选",
     "multipleChoices": "多选",
     "trueOrFalse": "判断题",
-    "textMatch": "文字匹配",
+    "textMatch": "文本匹配",
     "type": "类型:",
     "answer": "答案:",
     "score": "分数:",
@@ -468,8 +468,21 @@
     "pleaseInputExplanation": "请输入解释",
     "true": "对",
     "false": "错",
+    "teachersColon": "教师:",
 
-    "teachersColon": "教师:"
+    "rightAnswerColon": "正确答案:",
+    "yourAnswerColon": "你的答案:",
+    "explanationColon": "解释:",
+    "textMatchPlaceholder": "只要你的答案与上面的任何文本匹配，那就是正确的。",
+    "pleaseSelectOne": "请选择一个答案!",
+    "chooseTwoAnswer": "至少选择两个答案!",
+    "pleaseInputAnswer": "请输入你的答案!",
+    "theClassIsFull": "课堂已满员~",
+    "theClassClosed": "课堂已关闭~",
+    "cantBeEmpty": "内容不能为空",
+    "keepThreeOptions": "至少保留三个选项",
+    "keepTwoOptions": "至少保留两个选项",
+    "keepOneOption": "至少保留一个选项"
   },
   "field": {
     "fileId": "字段",
