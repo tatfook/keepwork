@@ -111,8 +111,8 @@ const actions = {
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
   },
   async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode }) {
-    let smsId = context.state.sendCodeInfo.data.smsId
-    let { dispatch, commit, getters: { authRequestConfig } } = context
+    let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
+    let smsId = sendCodeInfo.data && sendCodeInfo.data.smsId
     let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId}, authRequestConfig, true)
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
