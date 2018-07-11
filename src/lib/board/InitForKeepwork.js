@@ -35,14 +35,14 @@
   // global.Menus = Menus
   // global.Settings = Settings
 
-  var root = './static/adi'
+  let root = './static/adi'
 
   global.urlParams = global.urlParams || {}
 
   // Public global variables
   global.MAX_REQUEST_SIZE = global.MAX_REQUEST_SIZE || 10485760
   global.MAX_AREA = global.MAX_AREA || 15000 * 15000
-  global.isLocalStorage = typeof localStorage != 'undefined' || false // isLocalStorage controls access to local storage
+  global.isLocalStorage = typeof localStorage !== 'undefined' || false // isLocalStorage controls access to local storage
 
   // URLs for save and export
   // window.EXPORT_URL     = window.EXPORT_URL     || '/export';
