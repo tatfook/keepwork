@@ -51,7 +51,7 @@
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
-            <!-- <el-dropdown-item divided><a href="#" @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item> -->
+            <el-dropdown-item divided><a @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -183,7 +183,11 @@ export default {
           : this.$refs.codemirror.insertLink(filename, url)
       }
     },
-    logout() {},
+    logout() {
+      Cookies.remove('token')
+      Cookies.remove('token', { path: '/' })
+      window.location.reload()
+    },
     goLogin() {
       window.location = '/wiki/login?redirect=' + window.location.href
     },
@@ -239,6 +243,9 @@ export default {
 .user-menu-dropdown a {
   display: block;
   padding: 0 20px;
+}
+.el-dropdown-menu__item--divided:before {
+  margin: 0px;
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {
