@@ -6,24 +6,6 @@ import {
   gConst
 } from '@/lib/global'
 
-const beginModBlock = (line, lineNumber) => {
-  let cmd
-  if (CmdHelper.isCmdLine(line)) {
-    cmd = line.split('@')[1]
-  }
-  let curModBlock = new ModBlock(cmd, lineNumber)
-  if (!cmd) BlockHelper.addLine(curModBlock, line)
-
-  return curModBlock
-}
-
-const endModBlock = (blockList, curModBlock, endingMark) => {
-  BlockHelper.setEndingMark(curModBlock, endingMark)
-  BlockHelper.buildJson(curModBlock)
-  BlockHelper.buildKey(curModBlock)
-  blockList.push(_.cloneDeep(curModBlock))
-}
-
 const buildBlock = (cmd, jsonData, beginLine) => {
   let block = new ModBlock(cmd, beginLine || 1)
   if (jsonData) BlockHelper.updateJson(block, jsonData)
@@ -36,33 +18,59 @@ const buildBlockList = mdText => {
   let blockList = []
   let started = null
   let curModBlock = null
+  let preModBlock = null
+  const beginModBlock = (line, lineNumber) => {
+    let cmd
+    if (CmdHelper.isCmdLine(line)) {
+      cmd = line.split('@')[1]
+    }
+    if (!cmd) {
+      let mdBegin = preModBlock ? BlockHelper.endLine(preModBlock) : 1
+      curModBlock = new ModBlock(cmd, mdBegin)
+      // keep the blank lines for markdown mod
+      for (let i = mdBegin; i < lineNumber; i++) {
+        BlockHelper.addLine(curModBlock, mdLines[i - 1])
+      }
+
+      BlockHelper.addLine(curModBlock, line)
+    } else {
+      // dismiss all blank lines between two general mods
+      curModBlock = new ModBlock(cmd, lineNumber)
+    }
+  }
+  const endModBlock = (endingMark) => {
+    BlockHelper.setEndingMark(curModBlock, endingMark)
+    BlockHelper.buildJson(curModBlock)
+    BlockHelper.buildKey(curModBlock)
+    blockList.push(_.cloneDeep(curModBlock))
+    preModBlock = curModBlock
+    curModBlock = null
+  }
   _.forEach(mdLines, (line, lineNumber) => {
     if (curModBlock) {
       if (
         CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
       ) { // markdown mod will ignore the cmd end
-        endModBlock(blockList, curModBlock, true)
-        curModBlock = null
+        endModBlock(true)
       } else if (
         BlockHelper.isMarkdownMod(curModBlock) &&
         CmdHelper.isMarkdownEndLine(line)
       ) { // check markdown mod ending mark
-        endModBlock(blockList, curModBlock, true)
-        curModBlock = null
+        endModBlock(true)
       } else if (CmdHelper.isCmdLine(line)) {
-        endModBlock(blockList, curModBlock)
-        curModBlock = beginModBlock(line, lineNumber + 1)
+        endModBlock()
+        beginModBlock(line, lineNumber + 1)
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
     } else if (!started || line.trim() !== '') {
       started = true
-      curModBlock = beginModBlock(line, lineNumber + 1)
+      beginModBlock(line, lineNumber + 1)
     }
   })
 
-  if (curModBlock) endModBlock(blockList, curModBlock)
+  if (curModBlock) endModBlock()
   return blockList
 }
 
@@ -125,10 +133,9 @@ const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
     let line = mdLines[i]
     if (
-      (CmdHelper.isCmdEnd(line) &&
-        !BlockHelper.isMarkdownMod(block)) ||
-      CmdHelper.isCmdLine(line) ||
-      CmdHelper.isMarkdownEndLine(line)
+      (CmdHelper.isCmdEnd(line) && !BlockHelper.isMarkdownMod(block)) ||
+      (CmdHelper.isMarkdownEndLine(line) && BlockHelper.isMarkdownMod(block)) ||
+      CmdHelper.isCmdLine(line)
     ) {
       return true
     }
