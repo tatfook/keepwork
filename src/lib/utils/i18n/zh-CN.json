@@ -68,7 +68,9 @@
     "confirmButtonText": "确认",
     "quickToTop": "返回顶部",
     "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
-    "saveSuccess": "保存成功"
+    "saveSuccess": "保存成功",
+    "success": "成功",
+    "failure": "失败"
   },
   "editor": {
     "files": "文件",
@@ -470,8 +472,10 @@
     "unverified": "未认证",
     "certifiedPhoneNumber": "认证手机:",
     "verificationCode": "短信验证码:",
+    "emailVerificationCode": "邮箱验证码:",
     "sendVerificationCode": "发送验证码",
     "resend": "重新发送",
+    "countDownResend": "秒后重新发送",
     "sendingFrequent": "短信验证码发送过频繁",
     "codeExceedsTheSendingLimit": "验证码超出同模板同号码天发送上限",
     "verificationCodeError": "验证码错误",
@@ -485,6 +489,17 @@
     "oldPwdRequired": "请输入旧密码",
     "newPwdRequired": "请输入新密码",
     "reNewPwdRequired": "请再次输入新密码",
-    "pwdMinLen": "密码最少6位"
+    "pwdMinLen": "密码最少6位",
+    "emailBind": "邮箱绑定",
+    "phoneBind": "手机绑定",
+    "binding": "绑定",
+    "unbunding": "解绑",
+    "wrongEmailFormat": "请输入正确的邮箱",
+    "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
+    "mailSentSuccess": "邮件发送成功！",
+    "smsCodeSentSuccess": "短信发送成功",
+    "smsCodeSentFailed": "短信发送失败",
+    "smsCode": "短信验证码:",
+    "sendCodes": "发送验证码"
   }
 }

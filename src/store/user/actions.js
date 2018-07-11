@@ -109,13 +109,15 @@ const actions = {
     let { commit, getters: { authRequestConfig } } = context
     let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ setRealNameInfo, cellphone }, authRequestConfig, true)
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
+    return verifyInfoOne
   },
-  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode }) {
+  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
     let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
-    let smsId = sendCodeInfo.data && sendCodeInfo.data.smsId
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId}, authRequestConfig, true)
+    smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind}, authRequestConfig, true)
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
+    return verifyInfoTwo
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}
@@ -524,6 +526,28 @@ const actions = {
     let { authRequestConfig } = getters
     let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
     return result.error.message
+  },
+  async getByEmail(context, { email }) {
+    let result = await keepwork.user.getByEmail({ email })
+    return result
+  },
+  async verifyEmailOne(context, { email, bind }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailOne({ email, bind }, authRequestConfig)
+    return result
+  },
+  async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig, { returnOriginalData: true })
+    let message = result.error.message
+    if (message === 'success') {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+    }
+    return message
   }
 }
 

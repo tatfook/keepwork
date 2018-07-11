@@ -32,6 +32,9 @@ export const user = {
   updateUserInfo: (...args) => put('/user/updateUserInfo', ...args),
   update: (...args) => put('/user/update', ...args),
   changepw: (...args) => post('/user/changepw', ...args),
+  getByEmail: (...args) => post('/user/getByEmail', ...args),
+  verifyEmailOne: (...args) => post('/user/verifyEmailOne', ...args),
+  verifyEmailTwo: (...args) => post('/user/verifyEmailTwo', ...args),
   verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
   verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args)
 }

@@ -68,7 +68,9 @@
     "confirmButtonText": "Confirm",
     "quickToTop": "Quick to top",
     "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
-    "saveSuccess": "Save Success"
+    "saveSuccess": "Save Success",
+    "success": "Success",
+    "failure": "Failure"
   },
   "editor": {
     "files": "Files",
@@ -483,8 +485,10 @@
     "unverified": "unverified",
     "certifiedPhoneNumber": "certified phone number:",
     "verificationCode": "verification code",
+    "emailVerificationCode": "Mail Code:",
     "sendVerificationCode": "Send verification code",
     "resend": "resend",
+    "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
     "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
@@ -498,6 +502,17 @@
     "oldPwdRequired": "Please enter the old password",
     "newPwdRequired": "Please enter a new password",
     "reNewPwdRequired": "please enter a new password again",
-    "pwdMinLen": "Password at least 6 digits"
+    "pwdMinLen": "Password at least 6 digits",
+    "emailBind": "Email",
+    "phoneBind": "Phone",
+    "binding": "binding",
+    "unbunding": "unbunding",
+    "wrongEmailFormat": "E-mail format is incorrect",
+    "emailHasBeenBoundToOtherAccounts": "The mailbox has been bound!",
+    "mailSentSuccess": "Mail sent successfully",
+    "smsCodeSentSuccess": "SMS sent successfully!",
+    "smsCodeSentFailed": "Message failed to send",
+    "smsCode": "SmsCode:",
+    "sendCodes": "Send Codes"
   }
 }
