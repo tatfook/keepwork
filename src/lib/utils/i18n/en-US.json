@@ -478,8 +478,21 @@
     "pleaseInputExplanation": "please input explanation",
     "true": "True",
     "false": "False",
+    "teachersColon": "Teachers:",
 
-    "teachersColon": "Teachers:"
+    "rightAnswerColon": "Right Answer:",
+    "yourAnswerColon": "Your Answer:",
+    "explanationColon": "Explanation:",
+    "textMatchPlaceholder": "If your answer matches any text above, it’s correct.",
+    "pleaseSelectOne": "Please select one answer!",
+    "chooseTwoAnswer": "Choose at least two answers!",
+    "pleaseInputAnswer": "Please input your answer!",
+    "classIsFull": "The class is full",
+    "classClosed": "Class closed",
+    "cantBeEmpty": "Content cannot be empty",
+    "KeepThreeOptions": "Keep at least three options",
+    "KeepTwoOptions": "Keep at least two options",
+    "KeepOneOption": "Keep at least one option"
   },
   "field": {
     "fileId": "file Id",
