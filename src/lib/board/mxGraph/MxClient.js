@@ -2,7 +2,7 @@ import configures from '../configures'
 // import mxLog from './util/mxLog'
 // import mxObjectIdentity from './util/mxObjectIdentity'
 // import mxDictionary from './util/mxDictionary'
-import mxResources from './util/mxResources'
+import MxResources from './util/MxResources'
 // import mxPoint from './util/mxPoint'
 // import mxRectangle from './util/mxRectangle'
 // import mxEffects from './util/mxEffects'
@@ -11,7 +11,7 @@ import mxResources from './util/mxResources'
 // import mxEventObject from './util/mxEventObject'
 // import mxMouseEvent from './util/mxMouseEvent'
 // import mxEventSource from './util/mxEventSource'
-import mxEvent from './util/mxEvent'
+import MxEvent from './util/MxEvent'
 // import mxXmlRequest from './util/mxXmlRequest'
 // import mxClipboard from './util/mxClipboard'
 // import mxWindow from './util/mxWindow'
@@ -140,8 +140,8 @@ import mxEvent from './util/mxEvent'
 // import mxDefaultPopupMenuCodec from './io/mxDefaultPopupMenuCodec'
 // import mxEditorCodec from './io/mxEditorCodec'
 
-class mxClient {
-  // Class: mxClient
+class MxClient {
+  // Class: MxClient
 
   // Bootstrapping mechanism for the mxGraph thin client. The production version
   // of this file contains all code required to run the mxGraph thin client, as
@@ -162,7 +162,7 @@ class mxClient {
 
   // Variable: IS_IE
 
-  // True if the current browser is Internet Explorer 10 or below. Use <mxClient.IS_IE11>
+  // True if the current browser is Internet Explorer 10 or below. Use <MxClient.IS_IE11>
   // to detect IE 11.
 
   static IS_IE = navigator.userAgent.indexOf('MSIE') >= 0
@@ -191,7 +191,7 @@ class mxClient {
 
   static IS_QUIRKS =
     navigator.userAgent.indexOf('MSIE') >= 0 &&
-    (document.documentMode == null || document.documentMode === 5)
+    (document.documentMode === null || document.documentMode === 5)
 
   // Variable: IS_EM
 
@@ -410,19 +410,19 @@ class mxClient {
   // Function: isBrowserSupported
 
   // Returns true if the current browser is supported, that is, if
-  // <mxClient.IS_VML> or <mxClient.IS_SVG> is true.
+  // <MxClient.IS_VML> or <MxClient.IS_SVG> is true.
 
   // Example:
 
   // (code)
-  // if (!mxClient.isBrowserSupported())
+  // if (!MxClient.isBrowserSupported())
   // {
   //   mxUtils.error('Browser is not supported!', 200, false);
   // }
   // (end)
 
   static get isBrowserSupported() {
-    return mxClient.IS_VML || mxClient.IS_SVG
+    return MxClient.IS_VML || MxClient.IS_SVG
   }
 
   // Function: link
@@ -431,7 +431,7 @@ class mxClient {
   // to add a stylesheet to the page as follows:
 
   // (code)
-  // mxClient.link('stylesheet', filename);
+  // MxClient.link('stylesheet', filename);
   // (end)
 
   // where filename is the (relative) URL of the stylesheet. The charset
@@ -447,7 +447,7 @@ class mxClient {
     doc = doc || document
 
     // Workaround for Operation Aborted in IE6 if base tag is used in head
-    if (mxClient.IS_IE6) {
+    if (MxClient.IS_IE6) {
       doc.write(
         '<link rel="' +
           rel +
@@ -456,14 +456,14 @@ class mxClient {
           '" charset="UTF-8" type="text/css"/>'
       )
     } else {
-      var link = doc.createElement('link')
+      let link = doc.createElement('link')
 
       link.setAttribute('rel', rel)
       link.setAttribute('href', href)
       link.setAttribute('charset', 'UTF-8')
       link.setAttribute('type', 'text/css')
 
-      var head = doc.getElementsByTagName('head')[0]
+      let head = doc.getElementsByTagName('head')[0]
       head.appendChild(link)
     }
   }
@@ -475,10 +475,10 @@ class mxClient {
   // Parameters:
 
   // fn - Function to call after all resources have been loaded.
-  // lan - Optional string to pass to <mxResources.add>.
+  // lan - Optional string to pass to <MxResources.add>.
 
   static loadResources(fn, lan) {
-    var pending = mxClient.defaultBundles.length
+    let pending = MxClient.defaultBundles.length
 
     function callback() {
       if (--pending === 0) {
@@ -486,8 +486,8 @@ class mxClient {
       }
     }
 
-    for (var i = 0; i < mxClient.defaultBundles.length; i++) {
-      mxResources.add(mxClient.defaultBundles[i], lan, callback)
+    for (let i = 0; i < MxClient.defaultBundles.length; i++) {
+      MxResources.add(MxClient.defaultBundles[i], lan, callback)
     }
   }
 
@@ -495,7 +495,7 @@ class mxClient {
 
   // Dynamically adds a script node to the document header.
 
-  // In production environments, the includes are resolved in the mxClient.js
+  // In production environments, the includes are resolved in the MxClient.js
   // file to reduce the number of requests required for client startup. This
   // function should only be used in development environments, but not in
   // production systems.
@@ -511,9 +511,9 @@ class mxClient {
 
   static dispose() {
     // Cleans all objects where listeners have been added
-    for (var i = 0; i < mxEvent.objects.length; i++) {
-      if (mxEvent.objects[i].mxListenerList != null) {
-        mxEvent.removeAllListeners(mxEvent.objects[i])
+    for (let i = 0; i < MxEvent.objects.length; i++) {
+      if (MxEvent.objects[i].mxListenerList != null) {
+        MxEvent.removeAllListeners(MxEvent.objects[i])
       }
     }
   }
@@ -523,14 +523,14 @@ class mxClient {
 
 // Optional global config variable to toggle loading of the two resource files
 // in <mxGraph> and <mxEditor>. Default is true. NOTE: This is a global variable,
-// not a variable of mxClient. If this is false, you can use <mxClient.loadResources>
+// not a variable of MxClient. If this is false, you can use <MxClient.loadResources>
 // with its callback to load the default bundles asynchronously.
 
 // (code)
 // <script type="text/javascript">
-// var mxLoadResources = false;
+// let mxLoadResources = false;
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 if (typeof configures.mxLoadResources === 'undefined') {
@@ -541,13 +541,13 @@ if (typeof configures.mxLoadResources === 'undefined') {
 
 // Optional global config variable to force loading the JavaScript files in
 // development mode. Default is undefined. NOTE: This is a global variable,
-// not a variable of mxClient.
+// not a variable of MxClient.
 
 // (code)
 // <script type="text/javascript">
-// var mxLoadResources = true;
+// let mxLoadResources = true;
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 if (typeof configures.mxForceIncludes === 'undefined') {
@@ -557,13 +557,13 @@ if (typeof configures.mxForceIncludes === 'undefined') {
 // Variable: mxResourceExtension
 
 // Optional global config variable to specify the extension of resource files.
-// Default is true. NOTE: This is a global variable, not a variable of mxClient.
+// Default is true. NOTE: This is a global variable, not a variable of MxClient.
 
 // (code)
 // <script type="text/javascript">
-// var mxResourceExtension = '.txt';
+// let mxResourceExtension = '.txt';
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 if (typeof configures.mxResourceExtension === 'undefined') {
@@ -574,13 +574,13 @@ if (typeof configures.mxResourceExtension === 'undefined') {
 
 // Optional global config variable to toggle loading of the CSS files when
 // the library is initialized. Default is true. NOTE: This is a global variable,
-// not a variable of mxClient.
+// not a variable of MxClient.
 
 // (code)
 // <script type="text/javascript">
-// var mxLoadStylesheets = false;
+// let mxLoadStylesheets = false;
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 if (typeof configures.mxLoadStylesheets === 'undefined') {
@@ -590,14 +590,14 @@ if (typeof configures.mxLoadStylesheets === 'undefined') {
 // Variable: basePath
 
 // Basepath for all URLs in the core without trailing slash. Default is '.'.
-// Set mxBasePath prior to loading the mxClient library as follows to override
+// Set mxBasePath prior to loading the MxClient library as follows to override
 // this setting:
 
 // (code)
 // <script type="text/javascript">
 // mxBasePath = '/path/to/core/directory';
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 // When using a relative path, the path is relative to the URL of the page that
@@ -609,22 +609,22 @@ if (typeof configures.mxBasePath !== 'undefined' && configures.mxBasePath.length
     configures.mxBasePath = configures.mxBasePath.substring(0, configures.mxBasePath.length - 1)
   }
 
-  mxClient.basePath = configures.mxBasePath
+  MxClient.basePath = configures.mxBasePath
 } else {
-  mxClient.basePath = '.'
+  MxClient.basePath = '.'
 }
 
 // Variable: imageBasePath
 
 // Basepath for all images URLs in the core without trailing slash. Default is
-// <mxClient.basePath> + '/images'. Set mxImageBasePath prior to loading the
-// mxClient library as follows to override this setting:
+// <MxClient.basePath> + '/images'. Set mxImageBasePath prior to loading the
+// MxClient library as follows to override this setting:
 
 // (code)
 // <script type="text/javascript">
 // mxImageBasePath = '/path/to/image/directory';
 // </script>
-// <script type="text/javascript" src="/path/to/core/directory/js/mxClient.js"></script>
+// <script type="text/javascript" src="/path/to/core/directory/js/MxClient.js"></script>
 // (end)
 
 // When using a relative path, the path is relative to the URL of the page that
@@ -636,26 +636,26 @@ if (typeof configures.mxImageBasePath !== 'undefined' && configures.mxImageBaseP
     configures.mxImageBasePath = configures.mxImageBasePath.substring(0, configures.mxImageBasePath.length - 1)
   }
 
-  mxClient.imageBasePath = configures.mxImageBasePath
+  MxClient.imageBasePath = configures.mxImageBasePath
 } else {
-  mxClient.imageBasePath = mxClient.basePath + '/images'
+  MxClient.imageBasePath = MxClient.basePath + '/images'
 }
 
 // Variable: language
 
 // Defines the language of the client, eg. en for english, de for german etc.
 // The special value 'none' will disable all built-in internationalization and
-// resource loading. See <mxResources.getSpecialBundle> for handling identifiers
+// resource loading. See <MxResources.getSpecialBundle> for handling identifiers
 // with and without a dash.
 
-// Set mxLanguage prior to loading the mxClient library as follows to override
+// Set mxLanguage prior to loading the MxClient library as follows to override
 // this setting:
 
 // (code)
 // <script type="text/javascript">
 // mxLanguage = 'en';
 // </script>
-// <script type="text/javascript" src="js/mxClient.js"></script>
+// <script type="text/javascript" src="js/MxClient.js"></script>
 // (end)
 
 // If internationalization is disabled, then the following variables should be
@@ -672,9 +672,9 @@ if (typeof configures.mxImageBasePath !== 'undefined' && configures.mxImageBaseP
 // <mxGraph.alreadyConnectedResource>.
 
 if (typeof configures.mxLanguage !== 'undefined' && configures.mxLanguage != null) {
-  mxClient.language = configures.mxLanguage
+  MxClient.language = configures.mxLanguage
 } else {
-  mxClient.language = mxClient.IS_IE
+  MxClient.language = MxClient.IS_IE
     ? navigator.userLanguage
     : navigator.language
 }
@@ -685,104 +685,104 @@ if (typeof configures.mxLanguage !== 'undefined' && configures.mxLanguage != nul
 // resources for this language will only load the common resource file, but not
 // the language-specific resource file. Default is 'en'.
 
-// Set mxDefaultLanguage prior to loading the mxClient library as follows to override
+// Set mxDefaultLanguage prior to loading the MxClient library as follows to override
 // this setting:
 
 // (code)
 // <script type="text/javascript">
 // mxDefaultLanguage = 'de';
 // </script>
-// <script type="text/javascript" src="js/mxClient.js"></script>
+// <script type="text/javascript" src="js/MxClient.js"></script>
 // (end)
 
 if (typeof configures.mxDefaultLanguage !== 'undefined' && configures.mxDefaultLanguage != null) {
-  mxClient.defaultLanguage = configures.mxDefaultLanguage
+  MxClient.defaultLanguage = configures.mxDefaultLanguage
 } else {
-  mxClient.defaultLanguage = 'en'
+  MxClient.defaultLanguage = 'en'
 }
 
 // Adds all required stylesheets and namespaces
 if (configures.mxLoadStylesheets) {
-  mxClient.link('stylesheet', mxClient.basePath + '/css/common.css')
+  MxClient.link('stylesheet', MxClient.basePath + '/css/common.css')
 }
 
 // Variable: languages
 
 // Defines the optional array of all supported language extensions. The default
 // language does not have to be part of this list. See
-// <mxResources.isLanguageSupported>.
+// <MxResources.isLanguageSupported>.
 
 // (code)
 // <script type="text/javascript">
 // mxLanguages = ['de', 'it', 'fr'];
 // </script>
-// <script type="text/javascript" src="js/mxClient.js"></script>
+// <script type="text/javascript" src="js/MxClient.js"></script>
 // (end)
 
 // This is used to avoid unnecessary requests to language files, ie. if a 404
 // will be returned.
 
 if (typeof mxLanguages !== 'undefined' && configures.mxLanguages != null) {
-  mxClient.languages = configures.mxLanguages
+  MxClient.languages = configures.mxLanguages
 }
 
 // Adds required namespaces, stylesheets and memory handling for older IE browsers
-if (mxClient.IS_VML) {
-  if (mxClient.IS_SVG) {
-    mxClient.IS_VML = false
+if (MxClient.IS_VML) {
+  if (MxClient.IS_SVG) {
+    MxClient.IS_VML = false
   } else {
     // Enables support for IE8 standards mode. Note that this requires all attributes for VML
     // elements to be set using direct notation, ie. node.attr = value. The use of setAttribute
     // is not possible.
     if (document.documentMode === 8) {
       document.namespaces.add(
-        mxClient.VML_PREFIX,
+        MxClient.VML_PREFIX,
         'urn:schemas-microsoft-com:vml',
         '#default#VML'
       )
       document.namespaces.add(
-        mxClient.OFFICE_PREFIX,
+        MxClient.OFFICE_PREFIX,
         'urn:schemas-microsoft-com:office:office',
         '#default#VML'
       )
     } else {
       document.namespaces.add(
-        mxClient.VML_PREFIX,
+        MxClient.VML_PREFIX,
         'urn:schemas-microsoft-com:vml'
       )
       document.namespaces.add(
-        mxClient.OFFICE_PREFIX,
+        MxClient.OFFICE_PREFIX,
         'urn:schemas-microsoft-com:office:office'
       )
     }
 
     // Workaround for limited number of stylesheets in IE (does not work in standards mode)
-    if (mxClient.IS_QUIRKS && document.styleSheets.length >= 30) {
+    if (MxClient.IS_QUIRKS && document.styleSheets.length >= 30) {
       ;(function() {
-        var node = document.createElement('style')
+        let node = document.createElement('style')
         node.type = 'text/css'
         node.styleSheet.cssText =
-          mxClient.VML_PREFIX +
+          MxClient.VML_PREFIX +
           '\\:*{behavior:url(#default#VML)}' +
-          mxClient.OFFICE_PREFIX +
+          MxClient.OFFICE_PREFIX +
           '\\:*{behavior:url(#default#VML)}'
         document.getElementsByTagName('head')[0].appendChild(node)
       })()
     } else {
       document.createStyleSheet().cssText =
-        mxClient.VML_PREFIX +
+        MxClient.VML_PREFIX +
         '\\:*{behavior:url(#default#VML)}' +
-        mxClient.OFFICE_PREFIX +
+        MxClient.OFFICE_PREFIX +
         '\\:*{behavior:url(#default#VML)}'
     }
 
     if (configures.mxLoadStylesheets) {
-      mxClient.link('stylesheet', mxClient.basePath + '/css/explorer.css')
+      MxClient.link('stylesheet', MxClient.basePath + '/css/explorer.css')
     }
 
     // Cleans up resources when the application terminates
-    window.attachEvent('onunload', mxClient.dispose)
+    window.attachEvent('onunload', MxClient.dispose)
   }
 }
 
-export default mxClient
+export default MxClient
