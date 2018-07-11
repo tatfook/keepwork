@@ -186,6 +186,7 @@ export default {
     logout() {
       Cookies.remove('token')
       Cookies.remove('token', { path: '/' })
+      window.localStorage.removeItem('satellizer_token')
       window.location.reload()
     },
     goLogin() {
