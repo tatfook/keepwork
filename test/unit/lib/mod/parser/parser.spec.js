@@ -47,6 +47,21 @@ describe('mod parser', () => {
       const newBlockList = Parser.buildBlockList('\n hello \n```@AreYouKiddingMe\n```\n')
       expect(newBlockList.length).toEqual(1)
     })
+    test('should parse the old version cmd', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@board/main\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModBoard')
+    })
+    test('should parse the irregular cmd', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@bOArd\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModBoard')
+    })
+    test('should parse the irregular cmd with old version', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@boArd/MaIn\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModBoard')
+    })
   })
 
   describe('#buildMarkdown', () => {

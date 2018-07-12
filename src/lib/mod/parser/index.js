@@ -20,10 +20,7 @@ const buildBlockList = mdText => {
   let curModBlock = null
   let preModBlock = null
   const beginModBlock = (line, lineNumber) => {
-    let cmd
-    if (CmdHelper.isCmdLine(line)) {
-      cmd = line.split('@')[1]
-    }
+    let cmd = CmdHelper.parseCmd(line)
     if (!cmd) {
       let mdBegin = preModBlock ? BlockHelper.endLine(preModBlock) : 1
       curModBlock = new ModBlock(cmd, mdBegin)
