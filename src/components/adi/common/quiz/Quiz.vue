@@ -12,21 +12,21 @@
           <!-- 单选题 -->
           <el-radio-group v-if="item.type == 0" v-model="quiz.single">
             <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
-              <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
+              <el-radio :disabled="isShow" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
           </el-radio-group>
 
           <!-- 多选题 -->
           <el-checkbox-group v-if="item.type == 1" v-model="quiz.multiple">
             <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
-              <el-checkbox name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
+              <el-checkbox :disabled="isShow" name="multipleOption" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-checkbox>
             </div>
           </el-checkbox-group>
 
           <!-- 判断题 -->
           <el-radio-group v-if="item.type == 2" v-model="quiz.judge">
             <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
-              <el-radio :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
+              <el-radio :disabled="isShow" :label="serialNo[index]">{{serialNo[index]}} {{opt.item}}</el-radio>
             </div>
           </el-radio-group>
 
