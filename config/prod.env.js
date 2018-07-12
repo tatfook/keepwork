@@ -12,5 +12,7 @@ module.exports = {
   STORAGE_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/storage/v0"`,
   ES_INDEX: `"default_kw_pages"`,
   ES_TYPE: `"pages"`,
-  IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`
+  IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
+  PARACRAFT: 'https://www.paracraft.cn',
+  QQ_URL: 'http://wpa.qq.com'
 }
