@@ -13,6 +13,6 @@ module.exports = {
   ES_INDEX: `"default_kw_pages"`,
   ES_TYPE: `"pages"`,
   IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
-  PARACRAFT: 'https://www.paracraft.cn',
-  QQ_URL: 'http://wpa.qq.com'
+  PARACRAFT: `"https://www.paracraft.cn"`,
+  QQ_URL: `"http://wpa.qq.com"`
 }

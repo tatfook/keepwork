@@ -13,6 +13,6 @@ module.exports = merge(prodEnv, {
   STORAGE_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/storage/v0"`,
   ES_INDEX: `"www_pages_v1"`,
   ES_TYPE: `"pages"`,
-  PARACRAFT: 'https://www.paracraft.cn',
-  QQ_URL: 'http://wpa.qq.com'
+  PARACRAFT: `"https://www.paracraft.cn"`,
+  QQ_URL: `"http://wpa.qq.com"`
 })
