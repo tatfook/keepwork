@@ -11,7 +11,7 @@
     "userData": "Information",
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
-    "chinese-englishSwitch": "chinese simplified",    
+    "chinese-englishSwitch": "chinese simplified",
 
     "features": "Features",
     "applicationCenter": "Application center",
@@ -441,7 +441,8 @@
     "fontSize": "font size",
     "path": "page path",
     "target": "target",
-    "source": "source"
+    "source": "source",
+    "ratio": "ratio(eg: 16/9)"
   },
   "skydrive": {
     "mediaLibrary": "Image Library",

@@ -1,4 +1,4 @@
 export default {
   src: '',
-  ratio: '0.6'
+  ratio: '16/9'
 }
