@@ -83,9 +83,9 @@ const actions = {
             await dispatch('login', payload)
             await dispatch('getProfile')
             return resolve()
+          } else {
+            location.href = '/wiki/login?redirect=' + window.location.href
           }
-          location.href = '/wiki/login'
-          setTimeout(resolve, 10 * 1000)
         })
       }).then(clearGetProfilePromise)
 
