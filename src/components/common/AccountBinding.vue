@@ -2,20 +2,23 @@
   <div class="account-binding">
     <EmailBind></EmailBind>
     <PhoneBind></PhoneBind>
-    <GithubBind></GithubBind>
+    <ThirdPartyBinding type='qq'></ThirdPartyBinding>
+    <ThirdPartyBinding type='weixin'></ThirdPartyBinding>
+    <ThirdPartyBinding type='xinlangweibo'></ThirdPartyBinding>
+    <ThirdPartyBinding type='github'></ThirdPartyBinding>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import EmailBind from './accountBind/EmailBind'
 import PhoneBind from './accountBind/PhoneBind'
-import GithubBind from './accountBind/GithubBind'
+import ThirdPartyBinding from './accountBind/ThirdPartyBinding'
 export default {
   name: 'AccountBinding',
   components: {
     EmailBind,
     PhoneBind,
-    GithubBind
+    ThirdPartyBinding
   }
 }
 </script>
