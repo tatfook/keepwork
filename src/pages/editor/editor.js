@@ -53,7 +53,7 @@ const store = new Vuex.Store({
         'editor.openedFiles',
         'editor.showingCol',
         'editor.siteSettings',
-        'editor.recentOpenedSiteUrl'
+        'editor.updateRecentUrlList'
       ] // , 'gitlab']
     }),
     broadcast('frameViewport')

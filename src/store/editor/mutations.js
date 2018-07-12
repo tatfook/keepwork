@@ -327,8 +327,11 @@ const mutations = {
   [TOGGLE_SKY_DRIVE](state, { showSkyDrive = false }) {
     Vue.set(state, 'isSkyDriveManagerDialogShow', showSkyDrive)
   },
-  [ADD_RECENT_OPENED_SITE](state, payload) {
-    Vue.set(state, 'recentOpenedSiteUrl', payload)
+  [ADD_RECENT_OPENED_SITE](state, { updateRecentUrlList, username }) {
+    Vue.set(state, 'updateRecentUrlList', {
+      ...state.updateRecentUrlList,
+      [username]: updateRecentUrlList
+    })
   }
 }
 
