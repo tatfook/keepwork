@@ -16,7 +16,7 @@ Vue.use(VueAuthenticate, {
       scope: ['get_user_info'],
       clientId: '101403344',
       url: `${window.location.origin}/api/wiki/auth/qq`,
-      redirectUri: `${window.location.origin}/api/wiki/auth/qq`,
+      redirectUri: `${window.location.origin}/wiki/login`,
       popupOptions: popupOptions
     },
     weixin: {
@@ -25,7 +25,7 @@ Vue.use(VueAuthenticate, {
       authorizationEndpoint: 'https://open.weixin.qq.com/connect/qrconnect',
       clientId: 'wxc97e44ce7c18725e',
       appid: 'wxc97e44ce7c18725e',
-      redirectUri: `${window.location.origin}/api/wiki/auth/weixin`,
+      redirectUri: `${window.location.origin}/wiki/login`,
       url: `${window.location.origin}/api/wiki/auth/weixin`,
       popupOptions: popupOptions,
       scope: 'snsapi_login',
@@ -36,7 +36,7 @@ Vue.use(VueAuthenticate, {
       name: 'xinlangweibo',
       authorizationEndpoint: 'https://api.weibo.com/oauth2/authorize',
       clientId: '2411934420',
-      redirectUri: `${window.location.origin}/api/wiki/auth/xinlangweibo`,
+      redirectUri: `${window.location.origin}/wiki/login`,
       url: `${window.location.origin}/api/wiki/auth/xinlangweibo`,
       oauthType: '2.0',
       popupOptions: popupOptions
@@ -46,7 +46,7 @@ Vue.use(VueAuthenticate, {
       clientId: '2219fe9cb6d105dd30fb',
       scope: ['user:email'],
       url: `${window.location.origin}/api/wiki/auth/github`,
-      redirectUri: `${window.location.origin}/api/wiki/auth/github`
+      redirectUri: `${window.location.origin}/wiki/login`
     }
   }
 })
