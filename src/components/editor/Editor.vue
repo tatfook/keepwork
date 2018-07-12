@@ -31,7 +31,7 @@
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-new_open_window" :title="$t('editor.newWindowOpen')" @click='showPage'></el-button>
+          <el-button class="iconfont icon-new_open_window" :title="$t('editor.preview')" @click='showPreview'></el-button>
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
@@ -283,12 +283,12 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
-    // showPreview() {
-    //   this.$emit('showPreview')
-    // },
-    showPage() {
-      window.open(this.activePageUrl)
+    showPreview() {
+      this.$emit('showPreview')
     },
+    // showPage() {
+    //   window.open(this.activePageUrl)
+    // },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
       this.resizeWinParams.leftColWidthParam = ''
