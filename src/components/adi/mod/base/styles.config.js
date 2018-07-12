@@ -1,5 +1,5 @@
 export const config = {
-  KEEPWORK: 'https://keepwork.com/',
+  KEEPWORK: process.env.KEEPWORK,
   PARACRAFT: 'https://www.paracraft.cn',
   QQ_URL: 'http://wpa.qq.com'
 }
