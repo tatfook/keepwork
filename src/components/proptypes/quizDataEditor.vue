@@ -2,7 +2,7 @@
   <el-dialog :title="this.$t('card.quiz')" :visible.sync="isDialogShow" width="800px" :before-close="handleClose">
     <el-form :model="cloneQuiz" :rules="rules" ref="quizData" label-width="128px" class="demo-ruleForm">
       <el-form-item :label="this.$t('card.type')" prop="type">
-        <el-radio-group v-model="quizType" id="quizType">
+        <el-radio-group v-model="quizType" @change="handleQuizTypeChange" id="quizType">
           <el-radio label="0">{{this.$t('card.singleChoice')}}</el-radio>
           <el-radio label="1">{{this.$t('card.multipleChoices')}}</el-radio>
           <el-radio label="2">{{this.$t('card.trueOrFalse')}}</el-radio>
@@ -194,16 +194,19 @@ export default {
     }
   },
   methods: {
+    handleQuizTypeChange(type) {
+      this.errMsg = ''
+    },
     initQuizData(quiz) {
       this.cloneQuiz = _.cloneDeep(quiz)
       const { type, options, answer } = this.cloneQuiz
       this.quizType = type
-      if (type === '0') {
+      if (type === '0' && options.length > 1) {
         this.singleOptions = options
         this.singleAnswer = answer[0]
       }
 
-      if (type === '1') {
+      if (type === '1' && options.length > 2) {
         this.multipleOptions = options
         this.multipleAnswer = answer.length > 1 ? answer : []
       }

@@ -238,7 +238,7 @@ export default {
   },
   methods: {
     async submitQuiz() {
-      let data = this.properties.data;
+      let data = this.properties.data
       if(!this.quiz.single && !this.quiz.judge && data[0].type != 3 && data[0].type != 1) {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
       } else if(data[0].type == 1 && this.quiz.multiple.length < 2) {
