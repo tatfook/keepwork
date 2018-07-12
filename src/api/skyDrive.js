@@ -16,6 +16,7 @@ export const qiniuUpload = async (options) => {
       complete: resolve
     }
     subscription = observable.subscribe(observer)
+    options.onStart && options.onStart(subscription)
   })
   return result
 }
@@ -39,13 +40,13 @@ export const getFileKey = file => {
   return `${fileID}.${fileExt}`
 }
 
-export const upload = async ({file, username, sitename, onProgress}, authRequestConfig) => {
+export const upload = async ({file, username, sitename, onStart, onProgress}, authRequestConfig) => {
   let key = getFileKey(file)
   let { token } = await storage.files.token({ key }, authRequestConfig)
 
   let config = { region: qiniu.region.z2 }
   let putExtra = { params: { 'x:filename': file.name } }
-  await qiniuUpload({file, token, key, onProgress, config, putExtra})
+  await qiniuUpload({file, token, key, onStart, onProgress, config, putExtra})
 }
 
 export const remove = async ({file: { id }}, authRequestConfig) => {

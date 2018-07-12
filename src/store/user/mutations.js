@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
+const SET_REAL_AUTH_PHONE_NUM = 'SET_REAL_AUTH_PHONE_NUM'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
 const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
 const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
@@ -23,10 +24,13 @@ const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
 const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
 const USE_FILE_IN_SITE_SUCCESS = 'USE_FILE_IN_SITE_SUCCESS'
+const GET_USER_THREE_SERVICES_SUCCESS = 'GET_USER_THREE_SERVICES_SUCCESS'
+const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 
 export const props = {
   LOGIN_SUCCESS,
   GET_PROFILE_SUCCESS,
+  SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
@@ -46,7 +50,9 @@ export const props = {
   GET_FROM_SKY_DRIVE_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
-  USE_FILE_IN_SITE_SUCCESS
+  USE_FILE_IN_SITE_SUCCESS,
+  GET_USER_THREE_SERVICES_SUCCESS,
+  SET_AUTH_CODE_INFO
 }
 
 const doNothing = state => {
@@ -59,6 +65,9 @@ const mutations = {
   },
   [GET_PROFILE_SUCCESS](state, payload) {
     Vue.set(state, 'profile', payload)
+  },
+  [SET_REAL_AUTH_PHONE_NUM](state, payload) {
+    Vue.set(state, 'sendCodeInfo', payload)
   },
   [GET_ALL_WEBSITE_SUCCESS](state, {username, list}) {
     Vue.set(state, 'website', {
@@ -167,6 +176,12 @@ const mutations = {
         [fileId]: url
       }
     })
+  },
+  [SET_AUTH_CODE_INFO](state, payload) {
+    Vue.set(state, 'authCodeInfo', payload)
+  },
+  [GET_USER_THREE_SERVICES_SUCCESS](state, payload) {
+    Vue.set(state, 'threeServices', payload)
   }
 }
 

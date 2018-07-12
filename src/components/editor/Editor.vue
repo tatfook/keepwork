@@ -55,6 +55,7 @@
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col>
             <el-button-group>
+              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
               <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
               <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
               <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
@@ -72,9 +73,6 @@
             </el-button-group>
             <el-button-group>
               <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
-            </el-button-group>
-            <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -157,6 +155,7 @@ export default {
     ...mapGetters({
       activePage: 'activePage',
       activeMod: 'activeMod',
+      preModKey: 'preModKey',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeManagePaneComponentName: 'activeManagePaneComponentName',
@@ -321,13 +320,25 @@ export default {
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.toggleSkyDrive({ showSkyDrive:false })
-      if (url) {
-        let filename = file.filename || url
-        let isImage = /^image/.test(file.type)
-        isImage
-          ? this.$refs.codemirror.insertFile(filename, url)
-          : this.$refs.codemirror.insertLink(filename, url)
-      }
+      if (!url) return
+
+      let filename = file.filename || url
+
+      // let isImage = /^image/.test(file.type)
+      // if (isImage) return this.$refs.codemirror.insertFile(filename, url)
+
+      this.$store.dispatch('addMod', {
+        modName: 'ModBigFile',
+        preModKey: this.preModKey || (this.activeMod && this.activeMod.key),
+        modProperties: {
+          bigFile: {
+            src: url,
+            ext: file.ext,
+            filename: filename,
+            size: file.size
+          }
+        }
+      })
     },
     initMarkdownModDatas() {
       this.editingMarkdownModDatas = {
@@ -467,7 +478,7 @@ export default {
 }
 .toolbar::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
 .toolbar .fullScreenBtn{

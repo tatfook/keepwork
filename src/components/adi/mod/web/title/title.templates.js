@@ -33,7 +33,7 @@ export default [
   // template 2
   [
     {
-      colGroup: [{ colLogoB: 'logoB' }, { colMenuB: 'menuB' }]
+      colGroup: [{ colLogoB: 'logo' }, { colMenuB: 'menuB' }]
     }
   ]
 ]

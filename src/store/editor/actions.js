@@ -58,7 +58,8 @@ const {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  CLOSE_ALL_OPENED_FILE
+  CLOSE_ALL_OPENED_FILE,
+  ADD_RECENT_OPENED_SITE
 } = props
 
 const cacheAvailable = pageData => {
@@ -209,15 +210,12 @@ const actions = {
     commit(SET_IS_MULTIPLE_TEXT_DIALOG_SHOW, isShow)
   },
   addModToAdi({ commit, dispatch }, payload) {
-    const modProperties = ModFactory.generate(payload.modName)
-    var modPropertiesStyle
-    if (payload.styleID) {
-      modPropertiesStyle = modProperties
-      modPropertiesStyle.styleID = payload.styleID
-    }
+    let modProperties = ModFactory.generate(payload.modName)
+    modProperties.styleID = payload.styleID || modProperties.styleID
+    modProperties = _.merge(modProperties, payload.modProperties)
     let newMod = Parser.buildBlock(
       Parser.getCmd(payload.modName),
-      modPropertiesStyle || modProperties
+      modProperties
     )
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
@@ -478,6 +476,9 @@ const actions = {
   },
   toggleSkyDrive({commit}, { showSkyDrive }) {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
+  },
+  addRecentOpenedSiteUrl({ commit }, { recentOpenedSite }) {
+    commit(ADD_RECENT_OPENED_SITE, recentOpenedSite)
   }
 }
 

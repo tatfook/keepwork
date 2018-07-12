@@ -25,11 +25,6 @@ let defaultData = {
     emptyName: 'adi.title.tagLine',
     emptyLink: '#',
     emptyTarget: '_blank'
-  },
-  logoB: {
-    emptySrc: require('@/../static/adi/title/bear.svg'),
-    emptyLink: '#',
-    emptyTarget: '_blank'
   }
 }
 export default [
@@ -316,7 +311,7 @@ export default [
         'justify-content': 'flex-start',
         'min-width': '180px'
       },
-      logoB: {
+      logo: {
         height: '64px',
         width: '64px'
       },
@@ -358,7 +353,7 @@ export default [
           backgroundColor: 'color_5',
           borderBottomColor: 'color_7'
         },
-        logoB: {
+        logo: {
           svgFillColor: 'color_7'
         }
       },

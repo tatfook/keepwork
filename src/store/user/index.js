@@ -15,7 +15,10 @@ const state = () => ({
   skyDrive: {},
   usersDetail: [],
   siteThemeConfigs: {},
-  siteFiles: {}
+  siteFiles: {},
+  sendCodeInfo: {},
+  authCodeInfo: {},
+  threeServices: []
 })
 
 export default {

@@ -1,8 +1,16 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import md5 from 'blueimp-md5'
-import { mdToJson, jsonToMd } from './mdParser/yaml'
-import CmdHelper, { MARKDOWN_CMD, MOD_CMD_BEGIN, MOD_CMD_END} from './cmdHelper'
+import {
+  mdToJson,
+  jsonToMd
+} from './mdParser/yaml'
+import CmdHelper, {
+  MARKDOWN_CMD,
+  MOD_CMD_BEGIN,
+  MOD_CMD_END,
+  MARKDOWN_CMD_END
+} from './cmdHelper'
 import ModAdaptor from './modAdaptor'
 
 const blockHelper = {
@@ -16,7 +24,11 @@ const blockHelper = {
         this.buildMarkdown(block)
       } else {
         const data = this.isMarkdownMod(block)
-          ? { md: { data: this.mdText(block) } }
+          ? {
+            md: {
+              data: this.mdText(block)
+            }
+          }
           : mdToJson(this.mdText(block))
         Vue.set(block, 'data', data)
       }
@@ -102,7 +114,8 @@ const blockHelper = {
       let endLine = MOD_CMD_END
       return _.flatten([headLine, block.md, endLine])
     } else {
-      return block.md
+      let endLine = MARKDOWN_CMD_END
+      return block.endingMark ? _.flatten([block.md, endLine]) : block.md
     }
   },
 
@@ -116,6 +129,10 @@ const blockHelper = {
 
   mdText(block) {
     return block.md.join('\n')
+  },
+
+  setEndingMark(block, mark) {
+    block.endingMark = mark || false
   }
 }
 

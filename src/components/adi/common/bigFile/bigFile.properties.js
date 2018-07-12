@@ -1,6 +1,1 @@
-export default {
-  fileId: '',
-  fileType: '',
-  extraMsg: '',
-  channel: ''
-}
+export default {}

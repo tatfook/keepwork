@@ -52,7 +52,8 @@ const store = new Vuex.Store({
         'editor.filemanagerTreeNodeExpandMapByPath',
         'editor.openedFiles',
         'editor.showingCol',
-        'editor.siteSettings'
+        'editor.siteSettings',
+        'editor.recentOpenedSiteUrl'
       ] // , 'gitlab']
     }),
     broadcast('frameViewport')

@@ -55,7 +55,6 @@ const components = {
   businessName: 'AdiTitle',
   tagline: 'AdiTitle',
   menu: 'AdiMenu',
-  logoB: 'AdiMedia',
   menuB: 'AdiBreadCrumb'
 }
 

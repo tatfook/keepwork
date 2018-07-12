@@ -1,3 +1,42 @@
 <template>
-    <div>账户安全</div>
+  <el-tabs v-model="activeName" class="account-security">
+    <el-tab-pane :label="$t('user.modifyPwd')" name="changePwd" class="account-security-pwd-pane">
+      <ChangePwd :isChangePwdPaneActive='isChangePwdPaneActive'></ChangePwd>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('user.accountBinding')" name="accountBinding">
+      <AccountBinding></AccountBinding>
+    </el-tab-pane>
+  </el-tabs>
 </template>
+
+<script>
+import ChangePwd from './ChangePwd'
+import AccountBinding from './AccountBinding'
+export default {
+  name: 'AccountSecurity',
+  data() {
+    return {
+      activeName: 'accountBinding'
+    }
+  },
+  computed: {
+    isChangePwdPaneActive() {
+      return this.activeName === 'changePwd'
+    }
+  },
+  components: {
+    ChangePwd,
+    AccountBinding
+  }
+}
+</script>
+<style lang="scss">
+.account-security {
+  .el-tabs__nav {
+    margin-left: 75px;
+  }
+  &-pwd-pane {
+    padding: 50px 180px 15px 60px;
+  }
+}
+</style>

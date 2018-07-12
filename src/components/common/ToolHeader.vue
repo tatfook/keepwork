@@ -86,6 +86,7 @@ export default {
         return
       }
       let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
+      if(!siteDetailInfo) return
       let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
       let name = _.get(siteDetailInfo, 'siteinfo.name')
       if(siteDetailInfo.siteinfo && siteDetailInfo.siteinfo.domain === "paracraft"){

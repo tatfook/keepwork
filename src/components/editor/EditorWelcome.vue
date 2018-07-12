@@ -35,10 +35,10 @@ export default {
   },
   computed:{
     ...mapGetters({
-      username: 'user/username',
+      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
     }),
     MyRecentOpenSiteURL(){
-      return JSON.parse(localStorage.getItem(`${this.username}`)) || []
+      return _.map(this.recentOpenedSiteUrl,({ path }) =>({ path }))
     }
   },
   components: {

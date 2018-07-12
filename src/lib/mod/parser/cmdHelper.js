@@ -3,6 +3,7 @@ export const MOD_CMD_END_REG = /^```$/
 export const MARKDOWN_CMD = 'Markdown'
 export const MOD_CMD_BEGIN = '```@'
 export const MOD_CMD_END = '```'
+export const MARKDOWN_CMD_END = '----'
 
 export const cmdList = [
   'Markdown',
@@ -43,23 +44,46 @@ export const oldCmdMapper = {
 }
 
 export const isValidCmd = (cmd) => {
-  return cmdList.includes(cmd) || !!oldCmdMapper[cmd]
+  return isNewCmd(cmd) || isOldCmd(cmd)
 }
 
 export const isNewCmd = (cmd) => {
-  return cmdList.includes(cmd)
+  for (let key in cmdList) {
+    if (cmdList[key].toLowerCase() === cmd.toLowerCase()) return true
+  }
+  return false
 }
 
 export const isOldCmd = (cmd) => {
-  return !!oldCmdMapper[cmd]
+  for (let key in oldCmdMapper) {
+    if (key.toLowerCase() === cmd.toLowerCase()) return true
+  }
+  return false
 }
 
 export const isMarkdownCmd = (cmd) => {
   return cmd === MARKDOWN_CMD
 }
 
+export const isMarkdownEndLine = (line) => {
+  return line === MARKDOWN_CMD_END
+}
+
+export const standardCmd = (cmd) => {
+  for (let key in cmdList) {
+    if (cmdList[key].toLowerCase() === cmd.toLowerCase()) return cmdList[key]
+  }
+  for (let key in oldCmdMapper) {
+    if (key.toLowerCase() === cmd.toLowerCase()) return key
+  }
+  return ''
+}
+
 export const targetCmd = (cmd) => {
-  return oldCmdMapper[cmd]
+  for (let key in oldCmdMapper) {
+    if (key.toLowerCase() === cmd.toLowerCase()) return oldCmdMapper[key]
+  }
+  return ''
 }
 
 export const isCmdLine = (line) => {
@@ -70,6 +94,13 @@ export const isCmdLine = (line) => {
   return false
 }
 
+export const parseCmd = (line) => {
+  if (line.match(MOD_CMD_BEGIN_REG)) {
+    const cmd = line.split('@')[1]
+    if (isValidCmd(cmd)) return standardCmd(cmd)
+  }
+}
+
 export const isCmdEnd = (line) => {
   return line.match(MOD_CMD_END_REG)
 }
@@ -78,7 +109,9 @@ export default {
   isValidCmd,
   isOldCmd,
   isMarkdownCmd,
+  isMarkdownEndLine,
   targetCmd,
   isCmdLine,
-  isCmdEnd
+  isCmdEnd,
+  parseCmd
 }

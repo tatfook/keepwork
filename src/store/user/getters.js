@@ -24,6 +24,7 @@ const getters = {
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
@@ -31,6 +32,8 @@ const getters = {
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
+  sendCodeInfo: (state) => state.sendCodeInfo,
+  authCodeInfo: (state) => state.authCodeInfo,
 
   siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (
@@ -274,7 +277,14 @@ const getters = {
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
   skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
 
-  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId])
+  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId]),
+  threeServices: (state) => state.threeServices,
+  getThreeService: (state, { threeServices }) => type => {
+    let result = _.find(threeServices, (o) => {
+      return o.serviceName === type
+    })
+    return result
+  }
 }
 
 export default getters

@@ -15,8 +15,8 @@
       <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
         <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="warning" @click="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
         </span>
       </el-dialog>
       <el-collapse-transition>
@@ -116,7 +116,8 @@ export default {
       filemanagerTreeNodeExpandMapByPath: 'filemanagerTreeNodeExpandMapByPath',
       getOpenedFileByPath: 'getOpenedFileByPath',
       username: 'user/username',
-      hasOpenedFiles: 'hasOpenedFiles'
+      hasOpenedFiles: 'hasOpenedFiles',
+      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
     }),
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
@@ -153,11 +154,11 @@ export default {
   watch:{
     openedFiles(newVal,oldVal){
       let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
-      let localStorageArrUrl = _.values(JSON.parse(localStorage.getItem(`${this.username}`)))
-      let updateRecentUrl = localStorageArrUrl.concat(newOpenSiteUrl)
+      let updateRecentUrl = this.recentOpenedSiteUrl.concat(newOpenSiteUrl)
       updateRecentUrl = updateRecentUrl.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
       updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path)
-      localStorage.setItem(`${this.username}`,JSON.stringify(updateRecentUrl.slice(0,5)))
+      let payload = { recentOpenedSite: updateRecentUrl }
+      this.addRecentOpenedSiteUrl(payload)
     }
   },
   methods: {
@@ -172,7 +173,8 @@ export default {
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
-      closeAllOpenedFile: 'closeAllOpenedFile'
+      closeAllOpenedFile: 'closeAllOpenedFile',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
       const sleep = async () =>
