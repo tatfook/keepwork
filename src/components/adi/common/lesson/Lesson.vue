@@ -13,11 +13,15 @@
             <div class="lesson-title">{{$t('card.lesson')}} {{properties.LessonNo}}: {{properties.Title}}</div>
             <div class="lesson-goals-title">
               {{$t('card.lessonGoals')}}
-              <pre class="lesson-goals">{{properties.LessonGoals}}</pre>
+              <el-scrollbar class="lesson-goals" :native="false">
+                  {{properties.LessonGoals}}
+              </el-scrollbar>
+              <!-- <pre class="lesson-goals">{{properties.LessonGoals}}</pre>  -->
             </div>
             <el-row class="lesson-button">
               <el-button @click="playClick" type="primary" id="btnPlay" v-if="!properties.vip">{{$t('card.playParacraft')}}</el-button>
               <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties.vip">{{$t('card.lessonPreview')}}</el-button>
+              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties">{{$t('card.lessonPreview')}}</el-button>
               <el-tooltip class="item" effect="dark" :content="btnTip" v-if="properties.vip" placement="top">
                 <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">{{btnInfo}}</el-button>
               </el-tooltip>
@@ -177,6 +181,10 @@ export default {
   word-wrap: break-word;
   white-space: pre-wrap;
   line-height: 1.5;
+  height: 210px;
+}
+.lesson-goals .el-scrollbar__wrap{
+  overflow-x: hidden;
 }
 
 .lesson-goals li {

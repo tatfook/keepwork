@@ -241,8 +241,8 @@ export default {
       let data = this.properties.data
       if(!this.quiz.single && !this.quiz.judge && data[0].type != 3 && data[0].type != 1) {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
-      } else if(data[0].type == 1 && this.quiz.multiple.length < 2) {
-        return this.$message.error(this.$t('card.chooseTwoAnswer'))
+      } else if(data[0].type == 1 && this.quiz.multiple.length < 1) {
+        return this.$message.error(this.$t('card.pleaseSelectOne'))
       } else if(data[0].type == 3 && !this.textAnswer) {
         return this.$message.error(this.$t('card.pleaseInputAnswer'))
       }
