@@ -11,6 +11,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import handleMessage from '@/lib/iframe'
+import '@/components/common/thirdAuth'
 
 window.addEventListener('message', handleMessage)
 

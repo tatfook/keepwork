@@ -31,6 +31,7 @@ const {
   GET_SITE_THEME_CONFIG_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   USE_FILE_IN_SITE_SUCCESS,
+  GET_USER_THREE_SERVICES_SUCCESS,
   SET_AUTH_CODE_INFO
 } = props
 
@@ -548,6 +549,18 @@ const actions = {
       })
     }
     return message
+  },
+  async getUserThreeServiceByUsername(context, { username }) {
+    let { getters, commit } = context
+    let { authRequestConfig } = getters
+    let userThreeServices = await keepwork.userThreeService.getByUsername({ username }, authRequestConfig)
+    commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
+  },
+  async threeServiceDeleteById(context, { id, username }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    await keepwork.userThreeService.deleteById({ id }, authRequestConfig)
+    await dispatch('getUserThreeServiceByUsername', { username })
   }
 }
 

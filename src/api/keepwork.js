@@ -178,6 +178,11 @@ export const qiniu = {
   getUid: (...args) => post('qiniu/getUid', ...args)
 }
 
+export const userThreeService = {
+  getByUsername: (...args) => post('user_three_service/getByUsername', ...args),
+  deleteById: (...args) => post('user_three_service/deleteById', ...args)
+}
+
 export const keepwork = {
   user,
   website,
@@ -187,6 +192,7 @@ export const keepwork = {
   sensitiveWords,
   pages,
   qiniu,
+  userThreeService,
   bigfile
 }
 
