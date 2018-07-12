@@ -116,7 +116,7 @@ export default {
       username: 'user/username'
     }),
     costCoin() {
-      return this.properties.cost
+      return this.properties.data.cost
     }
   },
   methods: {
@@ -174,7 +174,7 @@ export default {
         return this.$message.error(this.$t('card.pleaseLogin'))
       }
       if (auth.data && auth.data.coin < this.costCoin) {
-        return this.$message.err(this.$t('card.coinsInsufficient'))
+        return this.$message.error(this.$t('card.coinsInsufficient'))
       }
       let r = await lessonAPI.addSubscribe(this.properties.data.id)
       if (r.err == 102) {
