@@ -7,7 +7,7 @@ import MxConstants from '../../mxGraph/util/MxConstants'
 import MxClient from '../../mxGraph/MxClient'
 import MxResources from '../../mxGraph/util/mxRectangle'
 import Dialog from '../../Dialog'
-import { DiagramFormatPanel } from '../../Format'
+// import { DiagramFormatPanel } from '../../Format'
 import MxEventObject from '../../mxGraph/util/MxEventObject'
 import Menus from '../../Menus'
 import { MxCellRenderer } from '../../mxGraph/view/MxCellRenderer'
@@ -6179,9 +6179,11 @@ StyleFormatPanel.prototype.addStyleOps = function(div) {
 /**
  * Adds the label menu items to the given menu and parent.
  */
-DiagramFormatPanel = function(format, editorUi, container) {
-  BaseFormatPanel.call(this, format, editorUi, container)
-  this.init()
+export class DiagramFormatPanel {
+  constructor(format, editorUi, container) {
+    BaseFormatPanel.call(this, format, editorUi, container)
+    this.init()
+  }
 }
 
 MxUtils.extend(DiagramFormatPanel, BaseFormatPanel)

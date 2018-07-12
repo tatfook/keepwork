@@ -1,8 +1,8 @@
 import Graph from './drawio/js/Graph'
 
-import mxClient from './mxGraph'
-import mxUtils from './mxGraph/util/mxUtils'
-import mxEvent from './mxGraph/util/mxEvent'
+import MxClient from './mxGraph/MxClient'
+import MxUtils from './mxGraph/util/MxUtils'
+import MxEvent from './mxGraph/util/MxEvent'
 import MxStackLayout from './mxGraph/layout/MxStackLayout'
 import pako from 'pako'
 import Base64 from 'js-base64'
@@ -18,15 +18,15 @@ export default class extends Graph {
       mouseEvent = evt
 
       // Workaround for member not found in IE8-
-      if (mxClient.IS_QUIRKS || document.documentMode === 7 || document.documentMode === 8) {
-        mouseEvent = mxUtils.clone(evt)
+      if (MxClient.IS_QUIRKS || document.documentMode === 7 || document.documentMode === 8) {
+        mouseEvent = MxUtils.clone(evt)
       }
     };
 
-    mxEvent.addListener(this.container, 'mouseenter', setMouseEvent)
-    mxEvent.addListener(this.container, 'mousemove', setMouseEvent)
+    MxEvent.addListener(this.container, 'mouseenter', setMouseEvent)
+    MxEvent.addListener(this.container, 'mousemove', setMouseEvent)
 
-    mxEvent.addListener(this.container, 'mouseleave', function(evt) {
+    MxEvent.addListener(this.container, 'mouseleave', function(evt) {
       mouseEvent = null
     })
 
@@ -84,7 +84,7 @@ export default class extends Graph {
   }
 
   getDecompressData(compressData) {
-    let graphData = mxUtils.parseXml(compressData)
+    let graphData = MxUtils.parseXml(compressData)
 
     if (typeof (graphData) === 'object') {
       let diagram = graphData.querySelector('diagram')
@@ -95,7 +95,7 @@ export default class extends Graph {
         let mxGraphModelText = this.decompress(content)
 
         if (mxGraphModelText) {
-          return mxUtils.parseXml(mxGraphModelText)
+          return MxUtils.parseXml(mxGraphModelText)
         }
       }
     }

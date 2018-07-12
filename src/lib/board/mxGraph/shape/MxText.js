@@ -839,7 +839,7 @@ mxText.prototype.updateHtmlFilter = function() {
   }
 
   // Workaround for rendering offsets
-  let dy = 0
+  dy = 0
 
   if (this.overflow !== 'fill' && MxClient.IS_QUIRKS) {
     if (this.valign === MxConstants.ALIGN_TOP) {

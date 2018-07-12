@@ -6,23 +6,23 @@
  */
 import MxClient from '../../mxGraph/MxClient'
 import { OpenFile, Editor } from '../../Editor'
-import Jscolor from '../../drawio/Jscolor'
+import Jscolor from '../jscolor/jscolor'
 import Dialog from '../../Dialog'
 import MxEvent from '../../mxGraph/util/MxEvent'
 import MxResources from '../../mxGraph/util/MxResources'
-import MxUtils from '../../mxGraph/MxUtils'
+import MxUtils from '../../mxGraph/util/MxUtils'
 import MxEventObject from '../../mxGraph/util/MxEventObject'
 import Graph from '../js/Graph'
 import MxGraphModel from '../../mxGraph/model/MxGraphModel'
 import MxCodec from '../../mxGraph/io/MxCodec'
 import MxConstants from '../../mxGraph/util/MxConstants'
-import MxXmlCanvas2D from '../../mxGraph/MxXmlCanvas2D'
+import MxXmlCanvas2D from '../../mxGraph/util/MxXmlCanvas2D'
 import MxImageExport from '../../mxGraph/util/MxImageExport'
 import MxXmlRequest from '../../mxGraph/util/MxXmlRequest'
 import MxForm from '../../mxGraph/util/MxForm'
 import MxWindow from '../../mxGraph/util/MxWindow'
 import EditorUi from '../js/EditorUi'
-import MxCell from '../../mxGraph/io/MxCell'
+import MxCell from '../../mxGraph/model/MxCell'
 
 export class OpenDialog {
   constructor() {
@@ -49,7 +49,7 @@ export class OpenDialog {
       'height',
       (Editor.useLocalStorage ? 480 : 220) + dx + 'px'
     )
-    iframe.setAttribute('src', OPEN_FORM)
+    iframe.setAttribute('src', window.OPEN_FORM)
 
     this.container = iframe
   }

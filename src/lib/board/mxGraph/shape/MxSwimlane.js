@@ -1,6 +1,6 @@
 import MxShape from './MxShape'
 import MxUtils from '../util/MxUtils'
-import MxRectangle from './MxRectangle'
+import MxRectangle from '../util/MxRectangle'
 import MxConstants from '../util/MxConstants'
 
 /**

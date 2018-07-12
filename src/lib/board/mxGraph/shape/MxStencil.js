@@ -3,7 +3,7 @@ import MxConstants from '../util/MxConstants'
 import MxConnectionConstraint from '../view/MxConnectionConstraint'
 import MxPoint from '../util/MxPoint'
 import MxResources from '../util/MxResources'
-import MxRectangle from './MxRectangle'
+import MxRectangle from '../util/MxRectangle'
 import MxStencilRegistry from './MxStencilRegistry'
 /**
  * Copyright (c) 2006-2015, JGraph Ltd

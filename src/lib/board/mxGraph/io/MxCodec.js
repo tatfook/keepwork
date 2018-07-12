@@ -113,7 +113,7 @@
  */
 import MxUtils from '../util/MxUtils'
 import MxConstants from '../util/MxConstants'
-import MxCell from './MxCell'
+import MxCell from '../model/MxCell'
 import MxCellPath from '../model/MxCellPath'
 import MxCodecRegistry from './MxCodecRegistry'
 import MxLog from '../util/MxLog'

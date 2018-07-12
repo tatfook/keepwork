@@ -1,10 +1,9 @@
-import MxGraphLayout from './MxGraphLayout'
 import MxDictionary from '../util/MxDictionary'
 import MxCellPath from '../model/MxCellPath'
 import MxRectangle from '../util/MxRectangle'
 import MxUtils from '../util/MxUtils'
 import MxPoint from '../util/MxPoint'
-import { WeightedCellSorter } from '../../mxGraphLayout'
+import { WeightedCellSorter, MxGraphLayout } from './MxGraphLayout'
 /**
  * Copyright (c) 2006-2018, JGraph Ltd
  * Copyright (c) 2006-2018, Gaudenz Alder

@@ -35,9 +35,7 @@ import MxUtils from '../util/MxUtils'
 import MxEventSource from '../util/MxEventSource'
 import MxEvent from '../util/MxEvent'
 import MxDictionary from '../util/MxDictionary'
-import MxRootChange from '../io/MxRootChange'
-import MxChildChange from '../io/MxChildChange'
-import { MxTerminalChange } from '../model/MxGraphModel'
+import { MxTerminalChange, MxChildChange, MxRootChange } from '../model/MxGraphModel'
 import MxEventObject from '../util/MxEventObject'
 
 export default class MxLayoutManager {

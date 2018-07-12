@@ -4,8 +4,8 @@
 /**
  * Constructs a new graph editor
  */
-import MxEventSource from '@/util/MxEventSource'
-import MxClient from '@/lib/board/mxGraph/MxClient'
+import MxEventSource from '../../mxGraph/util/MxEventSource'
+import MxClient from '../../mxGraph/MxClient'
 import Editor from '@/lib/board/drawio/js/Editor'
 import MxPopupMenu from '@/lib/board/mxGraph/util/MxPopupMenu'
 import MxConnectionHandler from '@/lib/board/mxGraph/handler/MxConnectionHandler'

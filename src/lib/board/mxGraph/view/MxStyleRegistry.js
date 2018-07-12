@@ -2,7 +2,7 @@
  * Copyright (c) 2006-2015, JGraph Ltd
  * Copyright (c) 2006-2015, Gaudenz Alder
  */
-import MxConstants from './MxConstants'
+import MxConstants from '../util/MxConstants'
 import MxEdgeStyle from './MxEdgeStyle'
 import MxPerimeter from './MxPerimeter'
 

@@ -1,5 +1,5 @@
 import MxClient from './mxGraph/MxClient'
-import MxUtils from './mxGraph/MxUtils'
+import MxUtils from './mxGraph/util/MxUtils'
 import Editor from './drawio/js/Editor'
 import { Base64 } from 'js-base64'
 import MxResources from './mxGraph/util/MxResources'

@@ -24,7 +24,7 @@ import {
   LayersWindow,
   OutlineWindow
 } from './Dialogs'
-import MxClient from '../mxGraph/MxClient'
+import MxClient from '../../mxGraph/MxClient'
 import MxClipboard from '../../mxGraph/util/MxClipboard'
 import MxEvent from '../../mxGraph/util/MxEvent'
 import MxConstants from '../../mxGraph/util/MxConstants'

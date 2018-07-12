@@ -25,7 +25,7 @@
  * graph - Reference to the enclosing <mxGraph>.
  */
 import MxEventSource from '../util/MxEventSource'
-import MxDictionary from '../util/mxDictionary∂'
+import MxDictionary from '../util/MxDictionary'
 import MxUtils from '../util/MxUtils'
 import MxEvent from '../util/MxEvent'
 import MxEventObject from '../util/MxEventObject'
