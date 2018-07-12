@@ -492,7 +492,8 @@
     "cantBeEmpty": "Content cannot be empty",
     "KeepThreeOptions": "Keep at least three options",
     "KeepTwoOptions": "Keep at least two options",
-    "KeepOneOption": "Keep at least one option"
+    "KeepOneOption": "Keep at least one option",
+    "coinsInsufficient": "Sorry. Your coins are insufficient."
   },
   "field": {
     "fileId": "file Id",

@@ -114,7 +114,10 @@ export default {
   computed: {
     ...mapGetters({
       username: 'user/username'
-    })
+    }),
+    costCoin() {
+      return this.properties.cost
+    }
   },
   methods: {
     //课程包封面
@@ -166,6 +169,13 @@ export default {
     },
     // 购买课程包
     async addClick() {
+      let auth = await lessonAPI.auth()
+      if (auth.err == 102) {
+        return this.$message.error(this.$t('card.pleaseLogin'))
+      }
+      if (auth.data && auth.data.coin < this.costCoin) {
+        return this.$message.err(this.$t('card.coinsInsufficient'))
+      }
       let r = await lessonAPI.addSubscribe(this.properties.data.id)
       if (r.err == 102) {
         return this.$message.error(this.$t('card.pleaseLogin'))

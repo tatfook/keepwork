@@ -482,7 +482,8 @@
     "cantBeEmpty": "内容不能为空",
     "keepThreeOptions": "至少保留三个选项",
     "keepTwoOptions": "至少保留两个选项",
-    "keepOneOption": "至少保留一个选项"
+    "keepOneOption": "至少保留一个选项",
+    "coinsInsufficient": "对不起,你的知识币不够"
   },
   "field": {
     "fileId": "字段",
