@@ -156,7 +156,7 @@ export default {
       let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
       let updateRecentUrl = this.recentOpenedSiteUrl.concat(newOpenSiteUrl)
       updateRecentUrl = updateRecentUrl.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
-      updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path)
+      updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path).slice(0,5)
       let payload = { recentOpenedSite: updateRecentUrl }
       this.addRecentOpenedSiteUrl(payload)
     }
