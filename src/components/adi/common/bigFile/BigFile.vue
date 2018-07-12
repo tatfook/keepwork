@@ -97,7 +97,7 @@ export default {
       return prettysize(this.properties.size)
     },
     download() {
-      download(this.properties.src)
+      window.open(this.properties.src)
     },
     getFileType(fileType) {
       if (/image\/\w+/.test(fileType)) {
