@@ -55,7 +55,7 @@ const state = () => ({
   },
   isMultipleTextDialogShow: false,
   isSkyDriveManagerDialogShow: false,
-  recentOpenedSiteUrl: []
+  updateRecentUrlList: []
 })
 
 export default state

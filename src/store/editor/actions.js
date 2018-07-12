@@ -477,8 +477,9 @@ const actions = {
   toggleSkyDrive({commit}, { showSkyDrive }) {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
   },
-  addRecentOpenedSiteUrl({ commit }, { recentOpenedSite }) {
-    commit(ADD_RECENT_OPENED_SITE, recentOpenedSite)
+  addRecentOpenedSiteUrl(context, { updateRecentUrlList }) {
+    let { commit, rootGetters: { 'user/username': username } } = context
+    commit(ADD_RECENT_OPENED_SITE, { updateRecentUrlList, username })
   }
 }
 
