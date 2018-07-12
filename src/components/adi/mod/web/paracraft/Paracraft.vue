@@ -69,7 +69,6 @@ paracraftInfo:
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
 import { mapGetters } from 'vuex'
-import { config } from '@/components/adi/mod/base/styles.config'
 
 export default {
   mixins: [baseMixin],
@@ -109,7 +108,7 @@ export default {
           downloadUrl() {
             let downloadUrl = self.modData.paracraftInfo.client_url
               ? self.modData.paracraftInfo.client_url
-              : config.PARACRAFT
+              : process.env.PARACRAFT
             window.open(downloadUrl)
           }
         }
