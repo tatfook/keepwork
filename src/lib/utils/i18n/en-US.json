@@ -490,9 +490,9 @@
     "classIsFull": "The class is full",
     "classClosed": "Class closed",
     "cantBeEmpty": "Content cannot be empty",
-    "KeepThreeOptions": "Keep at least three options",
-    "KeepTwoOptions": "Keep at least two options",
-    "KeepOneOption": "Keep at least one option",
+    "keepThreeOptions": "Please set at least three options",
+    "keepTwoOptions": "Please set at least two options",
+    "keepOneOption": "Please set at least one answer",
     "coinsInsufficient": "Sorry. Your coins are insufficient."
   },
   "field": {
