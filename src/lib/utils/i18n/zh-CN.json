@@ -117,6 +117,7 @@
     "name": "名称",
     "link": "链接",
     "setting": "设置",
+    "settings": "设置",
     "create": "创建",
     "fileUnSaved": "尚未保存",
     "filesUnSaved": " 个文件尚未保存，是否保存？",
@@ -129,7 +130,9 @@
     "folder": "文件夹",
     "newPage": "新建页面",
     "newFolder": "新建文件夹",
+    "new": "新建",
     "website": "网页",
+    "required": "必填",
 
     "emptyName": "名不能为空",
     "nameRule": "名称不能包含 \\/:@&*=#\"*?<>| 不能以 _. 开头",
@@ -150,7 +153,7 @@
     "modStyle": "样式",
     "modDel": "删除模块",
     "modDelMsg": "确定删除这个模块？",
-    "modDelMsgTitle": "删除提示",
+    "modDelMsgTitle": "删除",
 
     "select": "请选择",
     "selfWindowOpen": "本窗口打开",
@@ -164,7 +167,7 @@
     "insertBefore": "前面添加",
     "insertChild": "添加子项",
     "noData": "暂无数据，请添加",
-    "delNotice": "删除提醒",
+    "delNotice": "删除",
     "menuDelMsg": "确定删除这个节点？子节点也会直接被删除",
     "menuItem": "菜单项",
     "fullScreen": "全屏",
@@ -199,20 +202,20 @@
     "pageListLogic": "页面列表逻辑",
     "supportWildcard": "支持通配符: * (代表多个字符) , ? (代表一个字符)",
     "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
-    "layoutPlan": "1. 布局方案",
+    "layoutPlan": "布局方案",
     "layoutManagement": "布局方案管理",
     "addLayout": "添加方案",
     "default": "默认",
     "rename": "重命名",
 
-    "layoutStyle": "2. 布局风格",
+    "layoutStyle": "布局风格",
     "header": "页头",
     "sidebar": "侧边栏",
     "footer": "页脚",
     "aside": "侧边栏",
     "main": "主内容",
 
-    "layoutParameters": "3. 布局参数",
+    "layoutParameters": "布局参数",
     "match": "匹配",
     "cancel": "取消",
     "confirm": "确认",
@@ -506,5 +509,16 @@
     "smsCodeSentFailed": "短信发送失败",
     "smsCode": "短信验证码:",
     "sendCodes": "发送验证码"
+  },
+  "setting": {
+    "general": "基本信息",
+    "siteLayouts": "网站布局",
+    "siteName": "网站名称",
+    "siteLink": "网站地址",
+    "siteLogo": "网站图标",
+    "siteIntro": "网站介绍",
+    "change": "修改",
+    "hideSystemHeader": "隐藏系统Header (仅限vip)",
+    "hideSystemFooter": "隐藏系统Footer (仅限vip)"
   }
 }

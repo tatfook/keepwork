@@ -31,11 +31,11 @@ export default {
       title: `//${location.host}/${this.sitePath}`,
       websiteSettingNavs: [
         {
-          text: '基本信息',
+          text: this.$t('setting.general'),
           comp: WebsiteSettingBasicMessage
         },
         {
-          text: '网站布局',
+          text: this.$t('setting.siteLayouts'),
           comp: WebsiteSettingLayout
         }
         // {
@@ -43,7 +43,7 @@ export default {
         //   comp: WebsiteSettingStyle
         // }
       ],
-      activeSettingIndex: 1
+      activeSettingIndex: 0
     }
   },
   computed: {

@@ -2,25 +2,25 @@
   <div class="website-basic-message" v-loading='loading'>
     <div class="website-basic-message-content">
       <el-form label-position='left' ref='basicMessageForm' :model='basicMessage' label-width='82px'>
-        <el-form-item class="display-name-item" label='网站名称：'>
+        <el-form-item class="display-name-item" :label="$t('setting.siteName') + ':'">
           <el-input size='' v-model="basicMessage.displayName"></el-input>
         </el-form-item>
-        <el-form-item label='网站地址：'>
+        <el-form-item :label="$t('setting.siteLink') + ':'">
           <span>{{siteUrl}}</span>
         </el-form-item>
-        <el-form-item label='网站图标：'>
+        <el-form-item :label="$t('setting.siteLogo') + ':'">
           <div class="before-cropper-zone">
             <img class="profile" :src='basicMessage.logoUrl' alt="">
             <div class="operate-masker">
               <span class="to-change-btn">
-                修改
+                {{ $t('setting.change') }}
                 <input type="file" class="input-file" @change='siteLogoUpload'>
               </span>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label='网站介绍：'>
-          <el-input placeholder='请输入' type='textarea' v-model="basicMessage.desc"></el-input>
+        <el-form-item :label="$t('setting.siteIntro') + ':'">
+          <el-input type='textarea' v-model="basicMessage.desc"></el-input>
         </el-form-item>
       </el-form>
     </div>
