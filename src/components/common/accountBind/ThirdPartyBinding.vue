@@ -1,16 +1,19 @@
 <template>
-  <div class="github-bind">
-    <span class="github-bind-label">{{$t('user.githubBind')}}:</span>
-    <span class="github-bind-info">{{isUserBindGithub ? userGithubUsername : $t('user.unBound')}}</span>
-    <el-button size="small" class="github-bind-button" :class="{'github-bind-button-unbund':isUserBindGithub}" @click="authenticate" :loading="isLoading">{{isUserBindGithub ? $t('user.unbunding') : $t('user.binding')}}</el-button>
+  <div class="third-party-bind">
+    <span class="third-party-bind-label">{{bindLabel}}:</span>
+    <span class="third-party-bind-info">{{isUserBindService ? bindServiceUsername : $t('user.unBound')}}</span>
+    <el-button size="small" class="third-party-bind-button" :class="{'third-party-bind-button-unbund':isUserBindService}" @click="authenticate" :loading="isLoading">{{isUserBindService ? $t('user.unbunding') : $t('user.binding')}}</el-button>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'GithubBind',
+  name: 'ThirdPartyBinding',
   async mounted() {
     await this.getUserThreeServiceByUsername({ username: this.username })
+  },
+  props: {
+    type: String
   },
   data() {
     return {
@@ -22,17 +25,37 @@ export default {
       username: 'user/username',
       getThreeService: 'user/getThreeService'
     }),
-    bindGithub() {
-      return this.getThreeService('github')
+    bindServiceData() {
+      return this.getThreeService(this.type)
     },
-    userGithubId() {
-      return _.get(this.bindGithub, '_id')
+    bindServiceId() {
+      return _.get(this.bindServiceData, '_id')
     },
-    userGithubUsername() {
-      return _.get(this.bindGithub, 'serviceUsername')
+    bindServiceUsername() {
+      return _.get(this.bindServiceData, 'serviceUsername')
     },
-    isUserBindGithub() {
-      return this.userGithubId && this.userGithubUsername ? true : false
+    isUserBindService() {
+      return this.bindServiceId && this.bindServiceUsername ? true : false
+    },
+    bindLabel() {
+      let label = ''
+      switch (this.type) {
+        case 'github':
+          label = this.$t('user.githubBind')
+          break
+        case 'qq':
+          label = this.$t('user.qqBind')
+          break
+        case 'weixin':
+          label = this.$t('user.weixinBind')
+          break
+        case 'xinlangweibo':
+          label = this.$t('user.weiboBind')
+          break
+        default:
+          break
+      }
+      return label
     }
   },
   methods: {
@@ -42,9 +65,9 @@ export default {
     }),
     async authenticate() {
       this.isLoading = true
-      if (this.isUserBindGithub) {
+      if (this.isUserBindService) {
         await this.threeServiceDeleteById({
-          id: this.userGithubId,
+          id: this.bindServiceId,
           username: this.username
         })
         this.isLoading = false
@@ -54,7 +77,7 @@ export default {
         })
         return
       }
-      let provider = 'github'
+      let provider = this.type
       this.$auth
         .authenticate(provider)
         .then(async () => {
@@ -77,7 +100,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.github-bind {
+.third-party-bind {
+  margin-bottom: 22px;
   &-label {
     width: 140px;
     display: inline-block;
