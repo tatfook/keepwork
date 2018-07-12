@@ -5,7 +5,7 @@
       <i class="el-icon-close" @click="changeView('FileManager')"></i>
     </div>
     <div class="page-setting-select">
-      <el-select size="small" v-model="selectedLayoutId" filterable :placeholder="this.$t('editor.select')" @change="selectPageLayout">
+      <el-select size="small" v-model="selectedLayoutId" filterable @change="selectPageLayout">
         <el-option
           v-for="(layout) in userSiteLayoutsMap"
           :key="layout.id"

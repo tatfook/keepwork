@@ -37,7 +37,8 @@
       </el-form>
       <p class="info">
         {{$t('editor.lowerCaseLetters')}}<br/> {{$t('editor.unchangeable')}}
-        <br/> {{$t('editor.vipForwarding')}}
+        <br/>
+        <span v-if="!IS_GLOBAL_VERSION">{{$t('editor.vipForwarding')}}</span>
       </p>
     </div>
     <div v-if="stepIndex===2" class="success-info">
@@ -68,6 +69,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
   name: 'NewWebsiteDialog',
@@ -100,6 +102,7 @@ export default {
     }
 
     return {
+      IS_GLOBAL_VERSION,
       loading: true,
       stepIndex: 0,
       steps: [
