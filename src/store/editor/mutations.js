@@ -55,6 +55,7 @@ const REDO = 'REDO'
 const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
 const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
+const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
 
 export const props = {
   SET_ACTIVE_PAGE,
@@ -102,7 +103,8 @@ export const props = {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  CLOSE_ALL_OPENED_FILE
+  CLOSE_ALL_OPENED_FILE,
+  ADD_RECENT_OPENED_SITE
 }
 
 const activeAreaData = state => {
@@ -324,6 +326,9 @@ const mutations = {
   },
   [TOGGLE_SKY_DRIVE](state, { showSkyDrive = false }) {
     Vue.set(state, 'isSkyDriveManagerDialogShow', showSkyDrive)
+  },
+  [ADD_RECENT_OPENED_SITE](state, payload) {
+    Vue.set(state, 'recentOpenedSiteUrl', payload)
   }
 }
 
