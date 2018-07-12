@@ -117,7 +117,8 @@ const getters = {
   headerModList: (state, { header }) => header && header.modList,
   footerModList: (state, { footer }) => footer && footer.modList,
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
-  showSkyDrive: state => state.isSkyDriveManagerDialogShow
+  showSkyDrive: state => state.isSkyDriveManagerDialogShow,
+  recentOpenedSiteUrl: state => state.recentOpenedSiteUrl || []
 }
 
 export default getters

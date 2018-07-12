@@ -58,7 +58,8 @@ const {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  CLOSE_ALL_OPENED_FILE
+  CLOSE_ALL_OPENED_FILE,
+  ADD_RECENT_OPENED_SITE
 } = props
 
 const cacheAvailable = pageData => {
@@ -475,6 +476,9 @@ const actions = {
   },
   toggleSkyDrive({commit}, { showSkyDrive }) {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
+  },
+  addRecentOpenedSiteUrl({ commit }, { recentOpenedSite }) {
+    commit(ADD_RECENT_OPENED_SITE, recentOpenedSite)
   }
 }
 

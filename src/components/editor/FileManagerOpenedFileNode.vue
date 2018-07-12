@@ -48,7 +48,8 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
-      username: 'user/username'
+      username: 'user/username',
+      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
     }),
     fileName() {
       let siteName = this.data.path.split('/').slice(1, 2)
@@ -63,7 +64,8 @@ export default {
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
-      userDeletePagesConfig: 'user/deletePagesConfig'
+      userDeletePagesConfig: 'user/deletePagesConfig',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async handleCloseConfirm({ path }) {
       let file = this.getOpenedFileByPath(path)
@@ -145,9 +147,9 @@ export default {
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let _re = this.recentOpenedSiteUrl.filter(item => item.path !== delPath)
+      let payload = { recentOpenedSite: _re }
+      this.addRecentOpenedSiteUrl(payload)
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//

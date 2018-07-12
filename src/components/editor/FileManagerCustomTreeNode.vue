@@ -74,7 +74,8 @@ export default {
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
       savePageByPath: 'savePageByPath',
-      refreshOpenedFile: 'refreshOpenedFile'
+      refreshOpenedFile: 'refreshOpenedFile',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -162,9 +163,9 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => toDele.indexOf(item.path) === -1 )
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let _re = this.recentOpenedSiteUrl.filter(item => toDele.indexOf(item.path) === -1 )
+      let payload = { recentOpenedSite: _re }
+      this.addRecentOpenedSiteUrl(payload)
     },
     recursion(data) {
       let childrenFiles = []
@@ -324,9 +325,9 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let _re = this.recentOpenedSiteUrl.filter(item => item.path !== delPath)
+      let payload = { recentOpenedSite: _re }
+      this.addRecentOpenedSiteUrl(payload)
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
@@ -380,7 +381,8 @@ export default {
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
-      username: 'user/username'
+      username: 'user/username',
+      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
     }),
     operationButtonsCountClass(){
       let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
