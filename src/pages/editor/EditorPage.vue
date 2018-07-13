@@ -5,7 +5,7 @@
     </el-header>
     <el-main>
       <router-view @showPreview='showPreview' />
-      <el-dialog class="preview-dialog" :visible.sync='dialogVisible ' width='80% ' height='100% '>
+      <el-dialog class="preview-dialog" :visible.sync='dialogVisible ' width='88% ' height='100% '>
         <PageViewer />
       </el-dialog>
     </el-main>
@@ -85,6 +85,10 @@ body {
 }
 .preview-dialog .el-dialog__body {
   padding: 30px 0;
+}
+.preview-dialog .el-main{
+  background-color: #fff;
+  overflow: hidden;
 }
 </style>
 
