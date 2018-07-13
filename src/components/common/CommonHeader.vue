@@ -2,7 +2,7 @@
   <div>
     <el-menu mode='horizontal' class="hidden-xs-only">
       <el-menu-item index='0'>
-        <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
+        <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1'>
         <a href="/wiki/home">{{$t('common.features')}}</a>
@@ -14,8 +14,8 @@
         <a href='/official/help/index'>{{$t('common.help')}}</a>
       </el-menu-item>
       <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
-        <a href='http://iicc.keepwork.com' target="_blank">
-          <img class="iicc-logo" src="http://keepwork.com/wiki/assets/imgs/iicc_logo.png" alt="">{{$t('common.iicc')}}
+        <a href='//iicc.keepwork.com' target="_blank">
+          <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
 
@@ -66,7 +66,7 @@
 
     <el-menu mode='horizontal' class="hidden-sm-and-up">
       <el-menu-item index='0' class="profile-menu-item">
-        <img class="brand" src="http://keepwork.com/wiki/assets/imgs/icon/logo.svg" alt="KeepWork">
+        <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-submenu index='1' class="pull-right" v-if="isLogin">
         <template slot="title">
@@ -102,7 +102,7 @@
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
         <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-6'>
-          <a href='http://iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
+          <a href='//iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
         </el-menu-item>
       </el-submenu>
     </el-menu>
