@@ -13,7 +13,7 @@
       <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
     </div>
   </div>
-  <scrollTop></scrollTop>  
+  <QuickToTop/>  
 </div>
 </template>
 
@@ -22,7 +22,7 @@ import ModLoader from '@/components/adi/mod'
 import VueScrollTo from 'vue-scrollto'
 import { mapGetters, mapActions } from 'vuex'
 import { gConst } from '@/lib/global'
-import scrollTop from '@/components/common/QuickToTop'
+import QuickToTop from '@/components/common/QuickToTop'
 
 export default {
   props: {
@@ -106,7 +106,7 @@ export default {
     }
   },
   components:{
-    scrollTop
+    QuickToTop
   }
 }
 </script>

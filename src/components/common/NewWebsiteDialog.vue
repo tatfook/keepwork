@@ -49,7 +49,10 @@
       <p>{{$t('editor.URL')}}
         <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
         <br/> {{$t('editor.setWebsiteName')}}
-        <br/> {{$t('editor.privatePermissions')}}
+        <br/>
+        <span v-if="!IS_GLOBAL_VERSION">
+          {{$t('editor.privatePermissions')}}
+        </span>
       </p>
     </div>
     <span slot="footer" class="dialog-footer">
