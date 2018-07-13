@@ -21,7 +21,6 @@
             <el-row class="lesson-button">
               <el-button @click="playClick" type="primary" id="btnPlay" v-if="!properties.vip">{{$t('card.playParacraft')}}</el-button>
               <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties.vip">{{$t('card.lessonPreview')}}</el-button>
-              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties">{{$t('card.lessonPreview')}}</el-button>
               <el-tooltip class="item" effect="dark" :content="btnTip" v-if="properties.vip" placement="top">
                 <el-button class="btn-begin" @click="classOpClick" type="primary" plain id="btnClass">{{btnInfo}}</el-button>
               </el-tooltip>
