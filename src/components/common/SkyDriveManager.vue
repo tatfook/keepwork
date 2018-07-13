@@ -151,7 +151,7 @@
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
-          <el-button size="small"
+          <el-button size="small" :type="availableSelectedMediaItem ? 'primary':''"
             :disabled='!availableSelectedMediaItem' round
             @click="handleInsert(availableSelectedMediaItem)"
           >{{ $t('common.apply') }}</el-button>
