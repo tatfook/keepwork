@@ -16,7 +16,6 @@
               <el-scrollbar class="lesson-goals" :native="false">
                   {{properties.LessonGoals}}
               </el-scrollbar>
-              <!-- <pre class="lesson-goals">{{properties.LessonGoals}}</pre>  -->
             </div>
             <el-row class="lesson-button">
               <el-button @click="playClick" type="primary" id="btnPlay" v-if="!properties.vip">{{$t('card.playParacraft')}}</el-button>
@@ -37,10 +36,18 @@
           <span class="student-leave">0</span>, &nbsp;&nbsp;Offline:
           <span class="student-offline">0</span>
         </div>
-        <el-tab-pane :label="$t('card.overview')" name="first"></el-tab-pane>
-        <el-tab-pane :label="$t('card.references')" name="second"></el-tab-pane>
-        <el-tab-pane :label="$t('card.studentsPerformance')" v-if="properties.vip" name="third"></el-tab-pane>
-        <el-tab-pane :label="$t('card.summary')" name="fourth"></el-tab-pane>
+        <el-tab-pane :lazy="true" name="first">
+          <span class="tab-fake-label" slot='label'>{{$t('card.overview')}}</span>
+        </el-tab-pane>
+        <el-tab-pane :lazy="true" name="second">
+          <span class="tab-fake-label" slot="label">{{$t('card.references')}}</span>
+        </el-tab-pane>
+        <el-tab-pane :lazy="true"  name="third">
+          <span class="tab-fake-label" :class="{isHidden: !properties.vip}" slot="label"> {{$t('card.studentsPerformance')}}</span>
+        </el-tab-pane>
+        <el-tab-pane  :lazy="true" name="fourth">
+          <span class="tab-fake-label" slot="label">{{$t('card.summary')}}</span>
+        </el-tab-pane>
       </el-tabs>
     </el-row>
   </el-row>
@@ -115,6 +122,14 @@ export default {
 </script>
 
 <style>
+.tab-fake-label{
+  display: inline-block;
+  padding: 0 20px;
+  margin: 0 2%;
+}
+.tab-fake-label.isHidden{
+  display: none;
+}
 .el-main.index-page-main {
   background-color: #fbfbfb;
 }
@@ -203,8 +218,7 @@ export default {
   margin: 0;
 }
 .el-tabs__item {
-  padding: 0 20px !important;
-  margin: 0 2%;
+  padding: 0;
   font-size: 20px;
   height: 53px;
   line-height: 53px;
