@@ -303,13 +303,14 @@ export default {
     },
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
-      console.log(files)
       this.filesQueueToUpload(files)
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])
-      console.log(files)
       this.filesQueueToUpload(files)
+    },
+    async wait(ms = 0) {
+      return new Promise(resolve => setTimeout(resolve, ms))
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
@@ -327,10 +328,13 @@ export default {
       if (filenameValidateResult !== true) {
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
-        return this.$message({
+        await this.wait(Math.random()*1000)
+        this.$notify({
+          title: this.$t('common.failure'),
           message: file.name + ' ' + filenameValidateResult,
           type: 'error'
         })
+        return
       }
       let that = this
       await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
@@ -375,6 +379,9 @@ export default {
       this.loading = false
     },
     async handleCopy(file) {
+      if (!file.checkPassed) {
+        return
+      }
       let toCopyLink = await this.getSiteFileUrl(file)
 
       await this.$confirm(toCopyLink, {
@@ -398,6 +405,9 @@ export default {
       })
     },
     async handleInsert(file) {
+      if (!file.checkPassed) {
+        return
+      }
       let url = await this.getSiteFileUrl(file)
       this.$emit('close', { file, url: `${url}#${file.filename}` })
     },

@@ -14,7 +14,7 @@
         <el-button class="back" type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button>
       </div>
     </component>
-    <scrollTop></scrollTop>
+    <QuickToTop/>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import layoutTemplates from '@/components/adi/layout/templates'
 import ModListViewer from './ModListViewer'
 import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
-import scrollTop from '@/components/common/QuickToTop'
+import QuickToTop from '@/components/common/QuickToTop'
 
 export default {
   data() {
@@ -69,7 +69,7 @@ export default {
   },
   components: {
     ModListViewer,
-    scrollTop
+    QuickToTop
   },
   methods: {
     toggleSidebarMainShow() {

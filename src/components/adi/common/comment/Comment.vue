@@ -92,7 +92,7 @@ export default {
       let { content } = this
 
       if(!content) {
-        return alert('请输入聊天内容');
+        return
       }
 
       this.loading = true

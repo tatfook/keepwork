@@ -118,7 +118,7 @@ const getters = {
   footerModList: (state, { footer }) => footer && footer.modList,
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
   showSkyDrive: state => state.isSkyDriveManagerDialogShow,
-  recentOpenedSiteUrl: state => state.recentOpenedSiteUrl || []
+  updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || []
 }
 
 export default getters

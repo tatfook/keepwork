@@ -117,7 +117,7 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       username: 'user/username',
       hasOpenedFiles: 'hasOpenedFiles',
-      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.openedFiles)
@@ -154,10 +154,10 @@ export default {
   watch:{
     openedFiles(newVal,oldVal){
       let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
-      let updateRecentUrl = this.recentOpenedSiteUrl.concat(newOpenSiteUrl)
-      updateRecentUrl = updateRecentUrl.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
-      updateRecentUrl = _.uniqBy(updateRecentUrl, obj => obj.path)
-      let payload = { recentOpenedSite: updateRecentUrl }
+      let updateRecentUrlList = this.updateRecentUrlList.concat(newOpenSiteUrl)
+      updateRecentUrlList = updateRecentUrlList.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
+      updateRecentUrlList = _.uniqBy(updateRecentUrlList, obj => obj.path).slice(0,5)
+      let payload = { updateRecentUrlList }
       this.addRecentOpenedSiteUrl(payload)
     }
   },

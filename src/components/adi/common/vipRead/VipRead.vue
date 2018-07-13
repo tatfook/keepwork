@@ -17,7 +17,7 @@
       </div>
       <div v-if="!isLogined" class="vip-more-permission">
         <p ng-show="!editorMode">
-          <a href="this.config.KEEPWORK_WIKI">{{$t(options.login)}}</a>
+          <a href="/wiki/home">{{$t(options.login)}}</a>
         </p>
       </div>
       {{init()}}

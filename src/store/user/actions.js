@@ -83,9 +83,9 @@ const actions = {
             await dispatch('login', payload)
             await dispatch('getProfile')
             return resolve()
+          } else {
+            location.href = '/wiki/login?redirect=' + window.location.href
           }
-          location.href = '/wiki/login'
-          setTimeout(resolve, 10 * 1000)
         })
       }).then(clearGetProfilePromise)
 
@@ -208,7 +208,7 @@ const actions = {
     type = 'Basic', // level1 classify get templates, seems useless in new templates solution
     templateName = 'Basic', // level2 templates .name
     styleName = '默认样式', // level3 template.styles .name, seems useless in new templates solution
-    logoUrl = 'http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
+    logoUrl = '//keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
   } }) {
     let { commit, getters: { username, userId, authRequestConfig } } = context
     let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }

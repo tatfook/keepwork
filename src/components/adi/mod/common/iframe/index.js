@@ -10,8 +10,7 @@ This is the IFrame Mod for usage.
 ```@IFrame
 iframe:
   src: //url地址
-  width: //宽度，默认100%
-  height: //高度，默认300px
+  ratio: //宽高比， 比如16/9； 或者高/宽的值，比如0.5625
 
 ```
 

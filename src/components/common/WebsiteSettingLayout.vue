@@ -3,7 +3,7 @@
     <el-row class="website-setting-layout" type="flex">
       <el-col :span="6" class="website-setting-layouts">
         <header>
-          <h1>{{$t('editor.layoutPlan')}}</h1>
+          <h1>1. {{$t('editor.layoutPlan')}}</h1>
         </header>
         <main>
           <el-button class="add-layout-btn" icon="el-icon-plus" type="text" @click.stop="addLayout">{{$t('editor.addLayout')}}</el-button>
@@ -56,19 +56,19 @@
               </div>
             </div>
           </div>
-          <div class="website-setting-layout-system">
+          <div v-if="!IS_GLOBAL_VERSION" class="website-setting-layout-system">
             <p>
-              <el-checkbox v-model="layoutForm.isSystemHeaderHide" :disabled="!isVip">隐藏系统header（仅限vip）</el-checkbox>
+              <el-checkbox v-model="layoutForm.isSystemHeaderHide" :disabled="!isVip">{{$t('setting.hideSystemHeader')}}</el-checkbox>
             </p>
             <p>
-              <el-checkbox v-model="layoutForm.isSystemFooterHide" :disabled="!isVip">隐藏系统footer（仅限vip）</el-checkbox>
+              <el-checkbox v-model="layoutForm.isSystemFooterHide" :disabled="!isVip">{{$t('setting.hideSystemFooter')}}</el-checkbox>
             </p>
           </div>
         </main>
       </el-col>
       <el-col :span="7" class="website-setting-styles">
         <header>
-          <h1>{{$t('editor.layoutStyle')}}</h1>
+          <h1>2. {{$t('editor.layoutStyle')}}</h1>
         </header>
         <main>
           <div class="website-setting-styles-main">
@@ -91,13 +91,13 @@
       </el-col>
       <el-col :span="8" class="website-setting-layoutconfig">
         <header>
-          <h1>{{$t('editor.layoutParameters')}}</h1>
+          <h1>3. {{$t('editor.layoutParameters')}}</h1>
         </header>
         <main>
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item v-show="headerSelect" prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select  size="small" v-model="layoutForm.header" filterable clearable  :placeholder="this.$t('editor.select')">
+              <el-select  size="small" v-model="layoutForm.header" filterable clearable>
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('header')"
                   :key="fileName"
@@ -109,7 +109,7 @@
             </el-form-item>
             <el-form-item v-show="sidebarSelect" prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
-              <el-select size="small" v-model="layoutForm.sidebar" filterable clearable  :placeholder="this.$t('editor.select')">
+              <el-select size="small" v-model="layoutForm.sidebar" filterable clearable>
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('sidebar')"
                   :key="fileName"
@@ -121,7 +121,7 @@
             </el-form-item>
             <el-form-item v-show="footerSelect" prop="footer">
               <label>{{$t('editor.footer')}}</label>
-              <el-select size="small" v-model="layoutForm.footer" filterable clearable :placeholder="this.$t('editor.select')">
+              <el-select size="small" v-model="layoutForm.footer" filterable clearable>
                 <el-option
                   v-for="fileName in getAvailableContentFileNames('footer')"
                   :key="fileName"
@@ -133,7 +133,7 @@
             </el-form-item>
             <el-form-item prop="match">
               <label>{{$t('editor.match')}}</label>
-              <el-input size="small" :placeholder="this.$t('editor.match')" type="textarea" v-model="layoutForm.match">
+              <el-input size="small" type="textarea" v-model="layoutForm.match">
               </el-input>
               <el-button icon="el-icon-plus" style="visibility:hidden; cursor:default;"></el-button>
             </el-form-item>
@@ -155,6 +155,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import stylesList from '@/components/adi/layout/templates'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
   name: 'WebsiteSettingLayout',
@@ -171,6 +172,7 @@ export default {
     }
 
     return {
+      IS_GLOBAL_VERSION,
       headerSelect: true,
       sidebarSelect: true,
       footerSelect: true,
@@ -437,7 +439,7 @@ export default {
       let what = this.$t(`editor.${contentKey}`)
       let { value: newFileName } = await this.$prompt(
         `${what} ${self.$t('editor.nameSingle')}`,
-        `${self.$t('editor.create')} ${self.$t(`editor.${contentKey}`)}`,
+        `${self.$t('editor.new')} ${self.$t(`editor.${contentKey}`)}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
           confirmButtonText: self.$t('el.messagebox.confirm'),
