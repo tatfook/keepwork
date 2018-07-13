@@ -37,10 +37,10 @@
           <span class="student-leave">0</span>, &nbsp;&nbsp;Offline:
           <span class="student-offline">0</span>
         </div>
-        <el-tab-pane :label="$t('card.overview')" name="1"></el-tab-pane>
-        <el-tab-pane :label="$t('card.references')" name="2"></el-tab-pane>
-        <el-tab-pane :label="$t('card.studentsPerformance')" v-if="properties.vip"  name="3"></el-tab-pane>
-        <el-tab-pane :label="$t('card.summary')" name="4"></el-tab-pane>
+        <el-tab-pane :label="$t('card.overview')" name="first"></el-tab-pane>
+        <el-tab-pane :label="$t('card.references')" name="second"></el-tab-pane>
+        <el-tab-pane :label="$t('card.studentsPerformance')" v-if="properties.vip" name="third"></el-tab-pane>
+        <el-tab-pane :label="$t('card.summary')" name="fourth"></el-tab-pane>
       </el-tabs>
     </el-row>
   </el-row>
