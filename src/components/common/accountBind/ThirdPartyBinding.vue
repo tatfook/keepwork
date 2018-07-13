@@ -63,6 +63,23 @@ export default {
       getUserThreeServiceByUsername: 'user/getUserThreeServiceByUsername',
       threeServiceDeleteById: 'user/threeServiceDeleteById'
     }),
+    async handleBingdingResult(result) {
+      if (result && result.error == 0) {
+        await this.getUserThreeServiceByUsername({
+          username: this.username
+        })
+        this.showMgitessage({
+          message: this.$t('user.binding') + this.$t('common.success'),
+          type: 'success'
+        })
+      } else {
+        this.$message({
+          message: this.$t('user.binding') + this.$t('common.failure'),
+          type: 'error'
+        })
+      }
+      this.isLoading = false
+    },
     async authenticate() {
       this.isLoading = true
       if (this.isUserBindService) {
@@ -80,20 +97,14 @@ export default {
       let provider = this.type
       this.$auth
         .authenticate(provider)
-        .then(async () => {
-          await this.getUserThreeServiceByUsername({ username: this.username })
-          this.isLoading = false
-          this.$message({
-            message: this.$t('user.binding') + this.$t('common.success'),
-            type: 'success'
-          })
+        .then(async result => {
+          console.log(result)
+          this.handleBingdingResult(result)
         })
-        .catch(error => {
+        .catch(async result => {
+          console.log(result)
+          this.handleBingdingResult(result)
           this.isLoading = false
-          this.$message({
-            message: this.$t('user.binding') + this.$t('common.failure'),
-            type: 'error'
-          })
         })
     }
   }
