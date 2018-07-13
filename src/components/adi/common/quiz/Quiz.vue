@@ -6,7 +6,7 @@
       <div class="no"><i class="el-icon-edit-outline"></i> {{$t('card.quiz')}} </div>
 
       <div class="quiz-content">
-        <div class="title">{{ item.title }} <span v-if="item.type == 1">(<em>{{$t('card.multipleChoices')}}</em>)</span></div>
+        <div class="title break-word">{{ item.title }} <span v-if="item.type == 1">(<em>{{$t('card.multipleChoices')}}</em>)</span></div>
 
         <div v-if="isOperate">
           <!-- 单选题 -->
@@ -34,7 +34,7 @@
           <div v-if="item.type == 3" v-model="quiz.text">
             <div class="opt-item" v-for="(opt, index) in item.options" :key="index">
               <div>{{$t('modList.text')}} {{index+1}}: </div>
-              <pre>{{opt.item}}</pre>
+              <pre class="break-word" style="white-space: normal; word-wrap: break-word;">{{opt.item}}</pre>
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@
           </div>
           <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 3" :key="index">
             <div>{{$t('modList.text')}} {{index+1}}: </div>
-            <pre>{{opt.item}}</pre>
+            <pre class="break-word">{{opt.item}}</pre>
           </div>
         </div>
         <div v-if="item.type == 3 && isOperate && !isShow">
@@ -55,9 +55,9 @@
       </div>
 
       <div v-if="isShow" class="submit-show">
-        <div v-if="item.type != 3" class="opt-item"><span>{{$t('card.rightAnswerColon')}}</span> {{ item.answer }}</div>
-        <div v-if="item.type == 3" class="opt-item"><span>{{$t('card.yourAnswerColon')}}</span><br/> <pre>{{textAnswer}}</pre></div>
-        <div class="opt-item"><span>{{$t('card.explanationColon')}}</span> {{ item.desc }}</div>
+        <div v-if="item.type != 3" class="opt-item break-word"><span>{{$t('card.rightAnswerColon')}}</span> {{ item.answer }}</div>
+        <div v-if="item.type == 3" class="opt-item break-word"><span>{{$t('card.yourAnswerColon')}}</span><br/> <pre>{{textAnswer}}</pre></div>
+        <div class="opt-item break-word" ><span>{{$t('card.explanationColon')}}</span> {{ item.desc }}</div>
       </div>
     </div>
   </div>
@@ -501,5 +501,10 @@ export default {
     background: #f99523;
     border: 1px solid #f99523;
     color: white;
+  }
+
+  .break-word {
+    white-space: normal;
+    word-wrap: break-word;
   }
 </style>
