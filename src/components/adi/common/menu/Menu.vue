@@ -105,26 +105,18 @@ export default {
 a {
   text-decoration: none;
   color: unset;
-  display: inline-block;
-  height: 100%;
-  padding-left: 20px;
-  padding-right: 40px;
-  position: relative;
-  z-index: 999;
 }
-.el-menu-item {
-  padding: 0;
-}
+
 .comp-menu {
   height: 100%;
 
   .el-menu {
     height: 100%;
+
     .el-menu-item {
       height: 100%;
       line-height: 50px;
       border: 0;
-      padding: 0;
     }
   }
 }
@@ -143,14 +135,11 @@ a {
     .el-submenu {
       height: 100%;
     }
+
     .el-submenu__title {
       height: 100%;
       line-height: 50px;
       border: 0;
-      padding: 0;
-      i {
-        margin-left: -20px;
-      }
     }
   }
 }
