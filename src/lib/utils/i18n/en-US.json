@@ -522,7 +522,8 @@
     "smsCodeSentSuccess": "SMS sent successfully!",
     "smsCodeSentFailed": "Message failed to send",
     "smsCode": "SmsCode:",
-    "sendCodes": "Send Codes"
+    "sendCodes": "Send Codes",
+    "inputLoginPwd": "Login Password"
   },
   "setting": {
     "general": "Basic Info",

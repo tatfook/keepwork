@@ -36,7 +36,9 @@ export const user = {
   verifyEmailOne: (...args) => post('/user/verifyEmailOne', ...args),
   verifyEmailTwo: (...args) => post('/user/verifyEmailTwo', ...args),
   verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args)
+  verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args),
+  unbindCellphone: (...args) => post('/user/unbindCellphone', ...args),
+  unbindEmail: (...args) => post('/user/unbindEmail', ...args)
 }
 
 /*doc
@@ -180,7 +182,8 @@ export const qiniu = {
 
 export const userThreeService = {
   getByUsername: (...args) => post('user_three_service/getByUsername', ...args),
-  deleteById: (...args) => post('user_three_service/deleteById', ...args)
+  deleteById: (...args) => post('user_three_service/deleteById', ...args),
+  unbind: (...args) => post('user_three_service/unbind', ...args)
 }
 
 export const keepwork = {
