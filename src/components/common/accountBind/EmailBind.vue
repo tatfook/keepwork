@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='emailCodeDialogDatas' codeType='email' @close='handleClose'></CodeVerifyDialog>
-    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogDatas='pwdDialogDatas' @close='handlePwdDialogClose'></PasswordVerifyDialog>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
@@ -46,7 +46,7 @@ export default {
         bind: undefined
       },
       isCodeDialogVisible: false,
-      pwdDialogDatas: {
+      pwdDialogData: {
         type: '',
         value: ''
       },
@@ -76,7 +76,7 @@ export default {
     async toggleBindEmail() {
       let emailForm = this.$refs.emailForm
       if (this.isUserBindEmail) {
-        this.pwdDialogDatas = {
+        this.pwdDialogData = {
           type: 'email',
           value: this.userEmail
         }

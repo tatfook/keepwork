@@ -3,7 +3,7 @@
     <span class="third-party-bind-label">{{bindLabel}}:</span>
     <span class="third-party-bind-info">{{isUserBindService ? bindServiceUsername : $t('user.unBound')}}</span>
     <el-button size="small" class="third-party-bind-button" :class="{'third-party-bind-button-unbund':isUserBindService}" @click="authenticate" :loading="isLoading">{{isUserBindService ? $t('user.unbunding') : $t('user.binding')}}</el-button>
-    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogDatas='pwdDialogDatas' @close='handlePwdDialogClose'></PasswordVerifyDialog>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      pwdDialogDatas: {
+      pwdDialogData: {
         type: '',
         value: ''
       },
@@ -92,7 +92,7 @@ export default {
     },
     async authenticate() {
       if (this.isUserBindService) {
-        this.pwdDialogDatas = {
+        this.pwdDialogData = {
           type: 'threeService',
           value: this.bindServiceUsername,
           username: this.username,

@@ -20,17 +20,17 @@ import { mapActions } from 'vuex'
 export default {
   name: 'PasswordVerifyDialog',
   props: {
-    pwdDialogDatas: Object,
+    pwdDialogData: Object,
     isPwdDialogVisible: Boolean,
     codeType: String
   },
   computed: {
     dialogTitle() {
-      let title = this.$t('user.unbunding') + ' > ' + this.pwdDialogDatas.value
+      let title = this.$t('user.unbunding') + ' > ' + this.pwdDialogData.value
       return title
     },
     inputLabel() {
-      let label = '输入登录密码:'
+      let label = this.$t('user.inputLoginPwd') + ':'
       return label
     }
   },
@@ -69,7 +69,7 @@ export default {
     async unBoundAccount() {
       this.loading = true
       let result = {}
-      switch (this.pwdDialogDatas.type) {
+      switch (this.pwdDialogData.type) {
         case 'email':
           result = await this.userUnbindEmail({
             password: this.password
@@ -83,8 +83,8 @@ export default {
         case 'threeService':
           result = await this.userThreeServiceUnbind({
             password: this.password,
-            id: this.pwdDialogDatas.serviceId,
-            username: this.pwdDialogDatas.username
+            id: this.pwdDialogData.serviceId,
+            username: this.pwdDialogData.username
           })
           break
         default:
@@ -97,7 +97,7 @@ export default {
           `${this.$t('user.unbunding')}${this.$t('common.success')}`
         )
       } else {
-        this.pwdError = '解绑失败，请检查密码是否正确'
+        this.pwdError = this.$t('user.unbunding') + ' ' + this.$t('common.failure') + ',' + this.$t('user.pleaseCheckPwd')
       }
       this.loading = false
     }
@@ -123,7 +123,7 @@ export default {
     padding: 25px 0 0 18px;
   }
   .el-input {
-    width: 325px;
+    width: 305px;
     margin-right: 8px;
   }
   .el-form-item__label {

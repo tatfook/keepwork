@@ -11,7 +11,7 @@
       </el-form-item>
     </el-form>
     <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='phoneCodeDialogDatas' codeType='cellphone' @close='handleClose'></CodeVerifyDialog>
-    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogDatas='pwdDialogDatas' @close='handlePwdDialogClose'></PasswordVerifyDialog>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
@@ -42,7 +42,7 @@ export default {
         cellphone: [{ validator: phoneValidater, trigger: 'change' }]
       },
       isCodeDialogVisible: false,
-      pwdDialogDatas: {
+      pwdDialogData: {
         type: '',
         value: ''
       },
@@ -69,7 +69,7 @@ export default {
     async toggleBindPhone() {
       let phoneForm = this.$refs.phoneForm
       if (this.isUserBindPhone) {
-        this.pwdDialogDatas = {
+        this.pwdDialogData = {
           type: 'cellphone',
           value: this.userEmail
         }

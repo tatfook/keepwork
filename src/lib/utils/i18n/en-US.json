@@ -522,8 +522,9 @@
     "smsCodeSentSuccess": "SMS sent successfully!",
     "smsCodeSentFailed": "Message failed to send",
     "smsCode": "SmsCode:",
-    "sendCodes": "Send Codes",
-    "inputLoginPwd": "Login Password"
+    "sendCodes": "Send Code",
+    "inputLoginPwd": "Login Password",
+    "pleaseCheckPwd": "Please check if the password is correct"
   },
   "setting": {
     "general": "Basic Info",
