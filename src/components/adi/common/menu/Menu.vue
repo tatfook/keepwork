@@ -105,18 +105,53 @@ export default {
 a {
   text-decoration: none;
   color: unset;
+  display: inline-block;
+  height: 100%;
+  padding-left: 20px;
+  padding-right: 40px;
+  position: relative;
+  z-index: 999;
 }
+.el-menu--horizontal {
+  .el-menu {
+    .el-submenu {
+      .el-submenu__title { //子菜单
+        padding: 0;
+        a { //子菜单文字与超链接
+          height: 100%;
+          width: 200px;
+          margin-left: -10px;
+          padding-left: 10px;
+          padding-right: 10px;
+          margin-right: -10px;
+          position: relative;
+          z-index: 999;
+        }
+        .el-submenu__icon-arrow { //子菜单图片
 
+        }
+      }
+    }
+    .el-menu-item {
+      padding: 0;
+      a {
+        width: 200px;
+        padding: 0 10px;
+        position: relative;
+        z-index: 999;
+      }
+    }
+  }
+}
 .comp-menu {
   height: 100%;
-
   .el-menu {
     height: 100%;
-
     .el-menu-item {
       height: 100%;
       line-height: 50px;
       border: 0;
+      padding: 0;
     }
   }
 }
@@ -130,16 +165,19 @@ a {
     text-decoration: none;
     color: unset;
   }
-
   .el-menu {
     .el-submenu {
       height: 100%;
     }
-
     .el-submenu__title {
+      width: auto;
       height: 100%;
       line-height: 50px;
       border: 0;
+      padding: 0;
+      i {
+        margin-left: -20px;
+      }
     }
   }
 }
