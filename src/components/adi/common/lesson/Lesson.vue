@@ -117,6 +117,7 @@ export default {
       }
       this.$forceUpdate()
     }
+    console.log(this.properties)
   }
 }
 </script>
@@ -189,11 +190,9 @@ export default {
   color: #4c4c4c;
 }
 .lesson-goals {
-  margin-top: 15px;
   font-family: inherit;
   font-size: 16px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
+  white-space: pre-line;
   line-height: 1.5;
   height: 210px;
 }
