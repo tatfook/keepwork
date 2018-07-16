@@ -16,7 +16,7 @@
     </span>
     <div @click.stop>
       <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
-        <center>{{`"${fileName}" ${$t("editor.fileUnSaved")}`}}</center>
+        <div class="dialog-content">{{`"${fileName}" ${$t("editor.fileUnSaved")}`}}</div>
         <div slot="footer" class="dialog-footer">
           <center><el-button type="warning" @click.stop="handleCloseOpenedFile(data)" :disabled="savePending">{{$t("editor.unSaveClose")}}</el-button></center>
           <center><el-button type="primary" @click.stop="saveAndCloseOpenedFile(data)" :loading="savePending">{{$t("editor.saveClose")}}</el-button></center>
@@ -172,6 +172,11 @@ export default {
 }
 </script>
 <style>
+.el-dialog__body .dialog-content{
+  text-align: center;
+  word-wrap: break-word;
+  white-space: normal;
+}
 .dialog-footer center{
   margin-bottom: 10px;
 }
