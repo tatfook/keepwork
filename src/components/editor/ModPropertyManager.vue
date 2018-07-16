@@ -197,4 +197,9 @@ export default {
 .el-tabs__nav-wrap::after{
   display: none;
 }
+@media (max-width: 1920px) {
+  .property-manager-container > .el-tabs > .el-tabs__header .el-tabs__nav .el-tabs__item{
+    width: 134px;
+  }
+}
 </style>
