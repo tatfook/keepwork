@@ -215,7 +215,6 @@ export default {
     width: 185px;
     text-align: center;
     align-self: flex-end;
-    padding-bottom: 26px;
   }
   &-change-profile {
     position: relative;
