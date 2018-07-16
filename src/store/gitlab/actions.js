@@ -127,10 +127,10 @@ const actions = {
       path: inputPath
     })
     let file = await gitlab.getFile(path, options)
-    let markdownFileAppendisToCheck404 = /\.md$/.test(inputPath) ? '\n' : ''
+    let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
       path,
-      file: { ...file, content: Base64.decode(file.content) + markdownFileAppendisToCheck404 }
+      file: { ...file, content: Base64.decode(file.content) + markdownExtraLineToCheck404 }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
@@ -163,8 +163,8 @@ const actions = {
       projectName,
       fullPath
     )
-    let markdownFileAppendisToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
-    content = typeof content === 'string' ? (content + markdownFileAppendisToCheck404) : content
+    let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
+    content = typeof content === 'string' ? (content + markdownExtraLineToCheck404) : content
     let payload = { path: fullPath, file: { content } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
