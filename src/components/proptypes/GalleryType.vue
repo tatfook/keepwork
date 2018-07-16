@@ -4,7 +4,10 @@
       <el-button @click='handleAdd' class="gallery-type-add-btn" icon="el-icon-plus">{{$t('common.add')}}</el-button>
       <div v-for='(item, index) in galleryData'
         class="gallery-type-item"
-        :key='index'>
+        :key='index'
+        ref="c2"
+        :item="item" 
+        @change="updateValue(item)">
 
         <div
           class="gallery-type-item-img"
@@ -49,7 +52,8 @@ export default {
       locationOrigin: location.origin,
       selectedIndex: NaN,
       galleryData: _.cloneDeep(this.originValue),
-      isSkyDriveManagerDialogShow: false
+      isSkyDriveManagerDialogShow: false,
+      value: true
     }
   },
   async mounted() {
@@ -57,21 +61,31 @@ export default {
   },
   watch: {
     galleryData: {
-      handler() {
+      handler: function(val, oldVal) {
         this.handleChange()
       },
-      deep: true
+      // immediate: true,
+      // deep: true
     }
   },
   computed: {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     })
+    // inputTypeValue: {
+    //   get() {
+    //     return this.originValue
+    //   },
+    //   set() {}
+    // }
   },
   methods: {
     ...mapActions({
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
+    change(item) {
+      this.$refs.c2.item = this.item
+    },
     handleChange() {
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = this.galleryData
@@ -84,7 +98,7 @@ export default {
       })
     },
     async handleRemove(index) {
-      await this.$confirm(this.$t('editor.removeImgConfirmMsg'), '', {
+      await this.$confirm(this.$t('editor.removeImgConfirmMsg'), this.$t('editor.delNotice'), {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
