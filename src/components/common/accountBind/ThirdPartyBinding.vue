@@ -68,7 +68,7 @@ export default {
         await this.getUserThreeServiceByUsername({
           username: this.username
         })
-        this.showMgitessage({
+        this.$message({
           message: this.$t('user.binding') + this.$t('common.success'),
           type: 'success'
         })
