@@ -406,7 +406,7 @@ export default {
       this.$emit('close', { file, url: `${url}#${file.filename}` })
     },
     async handleRename(item) {
-      let { _id, ext } = item
+      let { _id, ext, key } = item
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
