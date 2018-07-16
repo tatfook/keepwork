@@ -169,9 +169,10 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
-import _ from 'lodash'
+import formatDate from '@/lib/utils/formatDate'
 import mediaProperties from '../adi/common/media/media.properties';
 const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
@@ -266,18 +267,6 @@ export default {
       ext = (ext || '').toLowerCase()
       return ext
     },
-    formatDate(dateObj){
-      if (!dateObj) {
-        dateObj = new Date()
-      }
-      let year = dateObj.getFullYear()
-      let month = _.padStart(dateObj.getMonth() + 1, 2, '0')
-      let day = _.padStart(dateObj.getDate(), 2, '0')
-      let hour = _.padStart(dateObj.getHours(), 2, '0')
-      let minute = _.padStart(dateObj.getMinutes(), 2, '0')
-      let second = _.padStart(dateObj.getSeconds(), 2, '0')
-      return [year, month, day].join('-') + [hour, minute, second].join(':')
-    },
     async filesQueueToUpload(files){
       if (this.defaultMode) {
         this.$refs.skyDriveTable.clearSort()
@@ -295,7 +284,7 @@ export default {
           file: {
             downloadUrl: ''
           },
-          updatedAt: this.formatDate(),
+          updatedAt: formatDate(),
           state: 'doing' // success, error, cancel, doing
         })
         await this.uploadFile(file, fileIndex)
@@ -350,7 +339,7 @@ export default {
       }}).catch(err => console.error(err))
       fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
       this.uploadingFiles[fileIndex].state = 'success'
-      this.uploadingFiles[fileIndex].updatedAt = this.formatDate()
+      this.uploadingFiles[fileIndex].updatedAt = formatDate()
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
     },
     removeFromUploadQue(file){
@@ -417,7 +406,7 @@ export default {
       this.$emit('close', { file, url: `${url}#${file.filename}` })
     },
     async handleRename(item) {
-      let { _id, ext } = item
+      let { _id, ext, key } = item
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
@@ -516,7 +505,7 @@ export default {
   },
   filters: {
     biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, ''),
-    dateTimeFormatter: (str = '') => str.replace(/[a-zA-Z]/g,' ').replace(/\..*$/, '')
+    dateTimeFormatter: (str = new Date()) => formatDate(new Date(str))
   }
 }
 </script>
