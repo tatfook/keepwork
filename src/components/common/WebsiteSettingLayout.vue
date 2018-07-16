@@ -422,7 +422,7 @@ export default {
       let contentFolderPath = LayoutHelper.layoutContentFolderPath(this.sitePath, contentKey)
       let newFilePath = `${contentFolderPath}/${newFileName}`
       this.loading = true
-      await this.gitlabCreateFile({ path: newFilePath }).then(
+      await this.gitlabCreateFile({ path: newFilePath, content: `# this is ${contentKey}` }).then(
         async () => await this.gitlabGetRepositoryTree({ path: this.sitePath })
       ).catch(e => {
         console.error(e)
