@@ -84,7 +84,7 @@ export default {
       padding: 0;
       border-top: 15px solid #cdd4dc;
       display: flex;
-      min-height: 652px;
+      height: 652px;
     }
   }
   &-sidebar {

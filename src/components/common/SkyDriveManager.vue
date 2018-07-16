@@ -120,7 +120,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" style="display:none;" multiple @change="handleUploadFile">
+            <input ref="fileInput" type="file" style="display:none;" multiple @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -151,7 +151,7 @@
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
-          <el-button size="small"
+          <el-button size="small" :type="availableSelectedMediaItem ? 'primary':''"
             :disabled='!availableSelectedMediaItem' round
             @click="handleInsert(availableSelectedMediaItem)"
           >{{ $t('common.apply') }}</el-button>
@@ -160,7 +160,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
+            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -304,6 +304,11 @@ export default {
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
       this.filesQueueToUpload(files)
+      if (this.defaultMode) {
+        this.$refs.fileInput.value = ''
+      }else{
+        this.$refs.imageInput.value = ''
+      }
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])

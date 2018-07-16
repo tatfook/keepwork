@@ -64,17 +64,19 @@ export default {
       threeServiceDeleteById: 'user/threeServiceDeleteById'
     }),
     async handleBingdingResult(result) {
-      if (result && result.error == 0) {
+      if (result && result.data && result.data.error == 0) {
         await this.getUserThreeServiceByUsername({
           username: this.username
         })
-        this.showMgitessage({
+        this.$message({
           message: this.$t('user.binding') + this.$t('common.success'),
           type: 'success'
         })
       } else {
+        let defaultErrorMessage = this.$t('user.binding') + this.$t('common.failure')
+        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.$message({
-          message: this.$t('user.binding') + this.$t('common.failure'),
+          message: failureMessage,
           type: 'error'
         })
       }

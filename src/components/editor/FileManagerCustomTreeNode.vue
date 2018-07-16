@@ -386,7 +386,7 @@ export default {
     }),
     operationButtonsCountClass(){
       let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
-      return `buttons-count-${count}`
+      return this.isRename ? '' : `buttons-count-${count}`
     },
     pending() {
       return (
