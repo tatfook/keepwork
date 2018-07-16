@@ -51,7 +51,11 @@ export const isNewCmd = (cmd) => {
 
 export const isOldCmd = (cmd) => {
   for (let key in oldCmdMapper) {
-    if (key.toLowerCase() === cmd.toLowerCase()) return true
+    if (cmd === 'Paracraft') {
+      return false
+    } else if (key.toLowerCase() === cmd.toLowerCase()) {
+      return true
+    }
   }
   return false
 }
