@@ -509,7 +509,9 @@
     "smsCodeSentSuccess": "短信发送成功",
     "smsCodeSentFailed": "短信发送失败",
     "smsCode": "短信验证码:",
-    "sendCodes": "发送验证码"
+    "sendCodes": "发送验证码",
+    "inputLoginPwd": "输入登录密码",
+    "pleaseCheckPwd": "请检查密码是否正确"
   },
   "setting": {
     "general": "基本信息",

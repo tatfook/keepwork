@@ -3,10 +3,12 @@
     <span class="third-party-bind-label">{{bindLabel}}:</span>
     <span class="third-party-bind-info">{{isUserBindService ? bindServiceUsername : $t('user.unBound')}}</span>
     <el-button size="small" class="third-party-bind-button" :class="{'third-party-bind-button-unbund':isUserBindService}" @click="authenticate" :loading="isLoading">{{isUserBindService ? $t('user.unbunding') : $t('user.binding')}}</el-button>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import PasswordVerifyDialog from './PasswordVerifyDialog'
 export default {
   name: 'ThirdPartyBinding',
   async mounted() {
@@ -17,7 +19,12 @@ export default {
   },
   data() {
     return {
-      isLoading: false
+      isLoading: false,
+      pwdDialogData: {
+        type: '',
+        value: ''
+      },
+      isPwdDialogVisible: false
     }
   },
   computed: {
@@ -73,7 +80,8 @@ export default {
           type: 'success'
         })
       } else {
-        let defaultErrorMessage = this.$t('user.binding') + this.$t('common.failure')
+        let defaultErrorMessage =
+          this.$t('user.binding') + this.$t('common.failure')
         let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.$message({
           message: failureMessage,
@@ -83,17 +91,14 @@ export default {
       this.isLoading = false
     },
     async authenticate() {
-      this.isLoading = true
       if (this.isUserBindService) {
-        await this.threeServiceDeleteById({
-          id: this.bindServiceId,
-          username: this.username
-        })
-        this.isLoading = false
-        this.$message({
-          message: this.$t('user.unbunding') + this.$t('common.success'),
-          type: 'success'
-        })
+        this.pwdDialogData = {
+          type: 'threeService',
+          value: this.bindServiceUsername,
+          username: this.username,
+          serviceId: this.bindServiceId
+        }
+        this.isPwdDialogVisible = true
         return
       }
       let provider = this.type
@@ -108,7 +113,13 @@ export default {
           this.handleBingdingResult(result)
           this.isLoading = false
         })
+    },
+    handlePwdDialogClose() {
+      this.isPwdDialogVisible = false
     }
+  },
+  components: {
+    PasswordVerifyDialog
   }
 }
 </script>
