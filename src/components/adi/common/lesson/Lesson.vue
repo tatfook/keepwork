@@ -117,7 +117,6 @@ export default {
       }
       this.$forceUpdate()
     }
-    console.log(this.properties)
   }
 }
 </script>
