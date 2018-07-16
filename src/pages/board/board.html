@@ -126,7 +126,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
   <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#d89000">
-  <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
+  <link rel="stylesheet" type="text/css" href="/static/board/src/main/webapp/styles/grapheditor.css">
   <link rel="canonical" href="https://www.draw.io">
   <link rel="manifest" href="images/manifest.json">
   <link rel="shortcut icon" href="favicon.ico">
@@ -293,7 +293,12 @@
       // ignored
     }
 
+    let boardRoot = '/static/board/src/main/webapp'
     var t0 = new Date();
+
+    mxBasePath = boardRoot;
+    RESOURCES_PATH = boardRoot + '/resources';
+    IMAGE_PATH = boardRoot + '/images';
 
     // Changes paths for local development environment
     if (urlParams['dev'] == '1') {
@@ -327,12 +332,12 @@
       mxscript(drawDevUrl + 'js/diagramly/Devel.js');
     }
     else {
-      mxscript('./static/board/js/app.min.js');
+      mxscript(boardRoot + '/js/app.min.js');
     }
 
     // Electron
     if (window && window.process && window.process.type) {
-      mxscript('./static/board/js/diagramly/ElectronApp.js');
+      mxscript(boardRoot + '/js/diagramly/ElectronApp.js');
     }
 
     // Adds basic error handling
@@ -364,31 +369,31 @@
   <div id="geFooter" style="visibility:hidden;overflow:hidden;margin-right:170px;height:100%;">
     <div class="geSocialFooter" style="position:absolute;right:32px;white-space:nowrap;">
       <a href="https://www.youtube.com/channel/UCiTtRN9b8P4CoSfpkfgEJHA" title="draw.io on Youtube" target="_blank">
-        <img border="0" width="24" height="24" src="images/glyphicons_youtube.png" alt="draw.io on Youtube" />
+        <img border="0" width="24" height="24" src="/static/board/src/main/webapp/images/glyphicons_youtube.png" alt="draw.io on Youtube" />
       </a>
       &nbsp;
       <a href="https://www.facebook.com/pages/drawio/161015263923018" title="draw.io on Facebook" target="_blank">
-        <img border="0" width="24" height="24" src="images/glyphicons_facebook.png" alt="draw.io on Facebook" />
+        <img border="0" width="24" height="24" src="/static/board/src/main/webapp/images/glyphicons_facebook.png" alt="draw.io on Facebook" />
       </a>
       &nbsp;
       <a href="https://www.twitter.com/drawio" title="draw.io on Twitter" target="_blank">
-        <img border="0" width="24" height="24" src="images/glyphicons_twitter.png" alt="draw.io on Twitter" />
+        <img border="0" width="24" height="24" src="/static/board/src/main/webapp/images/glyphicons_twitter.png" alt="draw.io on Twitter" />
       </a>
       &nbsp;
       <a href="https://github.com/jgraph/drawio" title="draw.io on GitHub" target="_blank">
-        <img border="0" width="24" height="24" src="images/glyphicons_github.png" alt="draw.io on GitHub" />
+        <img border="0" width="24" height="24" src="/static/board/src/main/webapp/images/glyphicons_github.png" alt="draw.io on GitHub" />
       </a>
     </div>
     <table align="center" height="100%">
       <tr>
         <td id="geFooterItem2" align="center" style="width:280px;transition: all 1s ease;">
           <a title="Quick Start Video" href="https://www.youtube.com/watch?v=Z0D96ZikMkc" target="_blank">
-            <img border="0" align="absmiddle" style="margin-top:-4px;padding-right:10px;" width="26" height="20" src="images/youtube.png"
+            <img border="0" align="absmiddle" style="margin-top:-4px;padding-right:10px;" width="26" height="20" src="/static/board/src/main/webapp/images/youtube.png"
             />Quick Start Video</a>
         </td>
         <td id="geFooterItem1" align="center" style="width:260px;">
           <a id="geFooterLink1" title="#1 Rated Confluence Add-on" target="_blank" href="https://about.draw.io/integrations/confluence-integration/">
-            <img border="0" width="24" height="24" align="absmiddle" style="padding-right:10px;" src="images/logo-confluence.png" />#1 Rated Confluence App
+            <img border="0" width="24" height="24" align="absmiddle" style="padding-right:10px;" src="/static/board/src/main/webapp/images/logo-confluence.png" />#1 Rated Confluence App
           </a>
         </td>
       </tr>
@@ -398,6 +403,8 @@
     /**
      * Main
      */
+    App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
+
     App.main();
   </script>
 </body>
