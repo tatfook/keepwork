@@ -542,10 +542,12 @@ const beginClass = function(classId) {
   studentMod.innerHTML = studetDataHtm
   bindSortEvent()
   let summaryMod = getMod('ModSummary')
-  summaryMod.innerHTML =
-    '<div class="el-row mod-full-width-0-0-65">' +
-    '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>' +
-    '</div>'
+  setTimeout(() => {
+    summaryMod.innerHTML =
+      '<div class="el-row mod-full-width-0-0-65">' +
+      '<div class="no-data summary-tip">Please wait… The summary will be generated after the teaching is finished.</div>' +
+      '</div>'
+  }, 200);
   let btnClass = document.getElementById('btnClass')
   if (document.readyState == 'complete' && btnClass && btnClass.lastChild) {
     btnClass.lastChild.innerText = 'Dismiss the Class'
