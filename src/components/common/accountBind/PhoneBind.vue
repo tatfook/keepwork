@@ -71,7 +71,7 @@ export default {
       if (this.isUserBindPhone) {
         this.pwdDialogData = {
           type: 'cellphone',
-          value: this.userEmail
+          value: this.userPhone
         }
         phoneForm.clearValidate()
         this.isPwdDialogVisible = true
