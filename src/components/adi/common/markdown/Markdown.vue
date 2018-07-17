@@ -10,7 +10,6 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
-import 'github-markdown-css/github-markdown.css'
 
 export default {
   name: 'AdiMarkdown',
@@ -29,6 +28,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'github-markdown-css/github-markdown.css';
+@import 'highlight.js/styles/github-gist.css';
+
 .comp-markdown {
   color: unset;
   font-size: unset;
