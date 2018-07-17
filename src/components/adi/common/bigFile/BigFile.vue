@@ -96,8 +96,29 @@ export default {
     getSize() {
       return prettysize(this.properties.size)
     },
-    download() {
-      window.open(this.properties.src)
+    // download() {
+    //   window.open(this.properties.src)
+    // },
+    async download() {
+      let downloadUrl = this.properties.src
+      // console.log(downloadUrl)
+      if (!downloadUrl) return
+
+      let filename = this.properties.filename
+      await new Promise((resolve, reject) => {
+        let a = document.createElement('a')
+        a.target = '_blank'
+        a.style.display = 'none'
+        a.href = `${downloadUrl};attname=${filename}`
+        a.download = filename || ""
+        document.body.appendChild(a)
+        a.click()
+        // console.log(a)
+        setTimeout(() => {
+          a.remove()
+          resolve()
+        }, 300)
+      }).catch(e => console.error(e))
     },
     getFileType(fileType) {
       if (/image\/\w+/.test(fileType)) {
