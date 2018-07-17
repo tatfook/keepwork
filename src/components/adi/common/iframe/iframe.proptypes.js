@@ -1,4 +1,6 @@
 export default {
   src: 'link',
-  ratio: 'input'
+  ratio: 'input',
+  width: 'input',
+  height: 'input'
 }
