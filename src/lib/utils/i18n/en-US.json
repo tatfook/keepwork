@@ -518,6 +518,7 @@
     "githubBind": "Github",
     "binding": "binding",
     "unbunding": "unbunding",
+    "unBundingFailure": "Unbunding failure",
     "unBound": "unBound",
     "wrongEmailFormat": "E-mail format is incorrect",
     "emailHasBeenBoundToOtherAccounts": "The mailbox has been bound!",
