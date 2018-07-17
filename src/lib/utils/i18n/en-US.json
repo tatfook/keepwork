@@ -459,6 +459,7 @@
     "checkPassed": "Approved",
     "checkUnpassed": "Rejected",
     "checking": "Processing",
+    "uploadFailed": "Failed",
     "fileUnapprovedError": "File is not approved yet!",
 
     "downloadSelected": "Download",
