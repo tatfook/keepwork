@@ -1,7 +1,7 @@
 <template>
-  <div v-loading='loading' @click.stop="handleDialogClick">
+  <div class="website-setting" v-loading='loading' @click.stop="handleDialogClick">
     <el-row class="website-setting-layout" type="flex">
-      <el-col :span="6" class="website-setting-layouts">
+      <el-col :span="7" class="website-setting-layouts">
         <header>
           <h1>1. {{$t('editor.layoutPlan')}}</h1>
         </header>
@@ -66,7 +66,7 @@
           </div>
         </main>
       </el-col>
-      <el-col :span="7" class="website-setting-styles">
+      <el-col :span="8" class="website-setting-styles">
         <header>
           <h1>2. {{$t('editor.layoutStyle')}}</h1>
         </header>
@@ -89,7 +89,7 @@
           </div>
         </main>
       </el-col>
-      <el-col :span="8" class="website-setting-layoutconfig">
+      <el-col :span="9" class="website-setting-layoutconfig">
         <header>
           <h1>3. {{$t('editor.layoutParameters')}}</h1>
         </header>
@@ -140,11 +140,8 @@
           </el-form>
         </main>
       </el-col>
-      <el-col :span="3" class="website-setting-btns">
-        <el-button type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
-        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
-      </el-col>
     </el-row>
+    <DialogOperations class="website-setting-operations" @save="handleSave" @close="handleClose"></DialogOperations>
   </div>
 </template>
 
@@ -155,6 +152,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import stylesList from '@/components/adi/layout/templates'
+import DialogOperations from './DialogOperations'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -424,7 +422,7 @@ export default {
       let contentFolderPath = LayoutHelper.layoutContentFolderPath(this.sitePath, contentKey)
       let newFilePath = `${contentFolderPath}/${newFileName}`
       this.loading = true
-      await this.gitlabCreateFile({ path: newFilePath }).then(
+      await this.gitlabCreateFile({ path: newFilePath, content: `# this is ${contentKey}` }).then(
         async () => await this.gitlabGetRepositoryTree({ path: this.sitePath })
       ).catch(e => {
         console.error(e)
@@ -477,12 +475,16 @@ export default {
     handleDialogClick() {
       this.disalbeSelectedLayoutNameEdittable()
     }
+  },
+  components:{
+    DialogOperations
   }
 }
 </script>
 
 <style lang='scss'>
 .website-setting {
+  display: flex;
   $column-height: auto;
   &-layout-list{
     overflow: auto;
@@ -490,7 +492,7 @@ export default {
   &-layout {
     cursor: default;
     min-height: $column-height;
-    min-width: 1000px;
+    flex: 1;
   }
   &-layout-list {
     margin-top: 15px;
@@ -589,6 +591,9 @@ export default {
       }
     }
   }
+  &-layoutconfig {
+    border-right: 15px solid #cdd4db;
+  }
   &-styles, &-layoutconfig {
     padding-bottom: 0;
     padding-left: 0;
@@ -621,7 +626,7 @@ export default {
   }
   &-styles {
     &-main {
-      max-height: 570px;
+      max-height: 558px;
       overflow-y: auto;
       overflow-x: hidden;
     }
@@ -692,6 +697,9 @@ export default {
       width: 100%;
       margin: 15px 0 0 !important;
     }
+  }
+  &-operations{
+    width: 175px;
   }
 }
 </style>
