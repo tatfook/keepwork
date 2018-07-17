@@ -112,6 +112,38 @@
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
       <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
     </div>
+    <div @click.stop v-if="isLoginDialogShow" class="login-dialog">
+      <el-dialog title="" :visible.sync="isLoginDialogShow">
+        <el-form class="login-dialog-form">
+          <el-form-item>
+            <el-input></el-input>
+          </el-form-item>
+           <el-form-item>
+            <el-input></el-input>
+          </el-form-item>
+          <div class="login-dialog-form-operate">忘记密码?</div>
+          <el-form-item>
+            <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+          </el-form-item>
+          <div class="login-dialog-form-operate_signIn">没有账号？点击<a>注册</a></div>
+          <div class="login-dialog-form-three-login">
+            <div class="title">直接使用以下账号登录</div>
+            <a>
+              <img src="https://stage.keepwork.com/wiki/assets/imgs/icon/wiki_qq.png" alt="">
+            </a>
+            <a>
+              <img src="https://stage.keepwork.com/wiki/assets/imgs/icon/wiki_wechat.png" alt="">
+            </a>
+            <a>
+              <img src="https://stage.keepwork.com/wiki/assets/imgs/icon/wiki_sina_weibo.png" alt="">
+            </a>
+            <a>
+              <img src="https://stage.keepwork.com/wiki/assets/imgs/icon/wiki_github_logo.png" alt="">
+            </a>
+          </div>
+        </el-form>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -129,7 +161,8 @@ export default {
     return {
       IS_GLOBAL_VERSION,
       isPersonalCenterShow: false,
-      isSkyDriveManagerDialogShow: false
+      isSkyDriveManagerDialogShow: false,
+      isLoginDialogShow: false
     }
   },
   computed: {
@@ -190,7 +223,7 @@ export default {
       window.location.reload()
     },
     goLogin() {
-      window.location = '/wiki/login?redirect=' + window.location.href
+      this.isLoginDialogShow = true
     },
     goJoin() {
       window.location = '/wiki/join?redirect=' + window.location.href
@@ -294,6 +327,87 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+.login-dialog{
+  .el-dialog__header{
+    padding: 0;
+  }
+  .el-dialog{
+    width: 478px;
+    height: 580px;
+    padding: 40px 0 60px 0;
+  }
+  &-form{
+    width: 68%;
+    margin: 0 auto;
+    .el-form-item__content{
+      .el-input__inner{
+        background-color: rgb(250, 255, 189);
+        &:focus{
+          // border: none;
+          box-shadow: 1px 1px 3px #daeaf6,-1px -1px 3px #daeaf6;
+        }
+      }
+    }
+    &-operate{
+      text-align: right;
+      cursor: pointer;
+    }
+    &-operate_signIn{
+      text-align: right;
+      a{
+        display: inline-block;
+        width: 28px;
+        height: 20px;
+        border-bottom: 1px solid #3977ad;
+        color: #286090;
+        cursor: pointer;
+      }
+    }
+    &-three-login{
+      a{
+        display: inline-block;
+        width: 24%;
+        text-align: center;
+        img{
+          cursor: pointer;
+        }
+      }
+      .title{
+        margin: 40px 0;
+        padding: 20px 0 35px;
+        text-align: center;
+        position: relative;
+        &::before{
+          content: '';
+          height: 2px;
+          width: 25%;
+          position: absolute;
+          right: 0;
+          top: 40%;
+          background-color: #d6e6f4;
+        }
+        &::after{
+          content: '';
+          height: 2px;
+          width: 25%;
+          position: absolute;
+          left: 0;
+          top: 40%;
+          background-color: #d6e6f4;
+        }
+      }
+    }
+    .login-btn{
+      background-color: #337ab7;
+      width: 100%;
+      margin: 20px 0;
+      height: 44px;
+      padding: 10px 16px;
+      font-size: 18px;
+      border-radius: 6px;
+    }
+  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {
