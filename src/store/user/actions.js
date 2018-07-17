@@ -488,14 +488,15 @@ const actions = {
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
     await dispatch('getProfile')
-    let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
+    let filelist = await skyDrive.list({pageSize: 10000000}, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
+    return filelist
   },
   async uploadFileToSkyDrive(context, {file, onStart, onProgress}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let url = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
-    return url
+    let { key } = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
+    return { key }
   },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
@@ -517,6 +518,15 @@ const actions = {
 
     let url = await skyDrive.useFileInSite({userId, siteId, fileId}, authRequestConfig)
     commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
+    return url
+  },
+  async uploadFileAndUseInSite({dispatch}, {file, sitePath, onStart, onProgress}) {
+    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, onStart, onProgress})
+    let filelist = await dispatch('getFileListFromSkyDrive', {useCache: false})
+    let fileUploaded = (filelist || []).filter(({ key }) => fileKey === key)[0]
+    let { id: fileId } = fileUploaded
+    let url = await dispatch('useFileInSite', {fileId, sitePath, useCache: false})
+    return {file: fileUploaded, url}
   },
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)

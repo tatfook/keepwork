@@ -246,7 +246,7 @@
 
     "removeImgConfirmMsg": "Are you sure to remove this image?",
 
-    "uploadingToGitlabText": "uploading file to gitlab ...",
+    "uploadingToSkyDriveText": "uploading file ...",
     "readFileFromLocal": "reading file from local ...",
     "enlargeMdEditing": "Large window editing"
   },
