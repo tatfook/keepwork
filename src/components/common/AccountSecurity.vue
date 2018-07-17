@@ -16,7 +16,7 @@ export default {
   name: 'AccountSecurity',
   data() {
     return {
-      activeName: 'accountBinding'
+      activeName: 'changePwd'
     }
   },
   computed: {

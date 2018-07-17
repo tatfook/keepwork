@@ -626,7 +626,7 @@ export default {
   }
   &-styles {
     &-main {
-      max-height: 558px;
+      max-height: 562px;
       overflow-y: auto;
       overflow-x: hidden;
     }
