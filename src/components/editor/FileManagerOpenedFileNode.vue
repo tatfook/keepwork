@@ -49,7 +49,7 @@ export default {
       openedFiles: 'openedFiles',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       username: 'user/username',
-      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     fileName() {
       let siteName = this.data.path.split('/').slice(1, 2)
@@ -147,7 +147,7 @@ export default {
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
-      let _re = this.recentOpenedSiteUrl.filter(item => item.path !== delPath)
+      let _re = this.updateRecentUrlList.filter(item => item.path !== delPath)
       let payload = { recentOpenedSite: _re }
       this.addRecentOpenedSiteUrl(payload)
     },
