@@ -35,8 +35,7 @@ const buildBlockList = mdText => {
       curModBlock = new ModBlock(cmd, lineNumber)
     }
   }
-  const endModBlock = (endingMark) => {
-    BlockHelper.setEndingMark(curModBlock, endingMark)
+  const endModBlock = () => {
     BlockHelper.buildJson(curModBlock)
     BlockHelper.buildKey(curModBlock)
     blockList.push(_.cloneDeep(curModBlock))
@@ -49,12 +48,7 @@ const buildBlockList = mdText => {
         CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
       ) { // markdown mod will ignore the cmd end
-        endModBlock(true)
-      } else if (
-        BlockHelper.isMarkdownMod(curModBlock) &&
-        CmdHelper.isMarkdownEndLine(line)
-      ) { // check markdown mod ending mark
-        endModBlock(true)
+        endModBlock()
       } else if (CmdHelper.isCmdLine(line)) {
         endModBlock()
         beginModBlock(line, lineNumber + 1)
@@ -88,6 +82,8 @@ const updateBlockList = (blockList, newBlockList) => {
           BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
         } else {
           // if block data was changed, remove and replace with the new one
+          newBlock.uuid = block.uuid // keep the old uuid
+          BlockHelper.buildKey(newBlock)
           blockList.splice(index, 1, _.cloneDeep(newBlock))
         }
       } else {
@@ -131,7 +127,6 @@ const willAffectModData = (block, mdLines) => {
     let line = mdLines[i]
     if (
       (CmdHelper.isCmdEnd(line) && !BlockHelper.isMarkdownMod(block)) ||
-      (CmdHelper.isMarkdownEndLine(line) && BlockHelper.isMarkdownMod(block)) ||
       CmdHelper.isCmdLine(line)
     ) {
       return true
@@ -165,10 +160,9 @@ const tryToMergeBlock = (blockList, index) => {
   let block = blockList[index]
   let nextBlock = blockList[index + 1]
 
-  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock) || block.endingMark) return
+  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock)) return
 
   BlockHelper.updateMarkdown(block, _.concat([], block.md, nextBlock.md))
-  BlockHelper.setEndingMark(block, nextBlock.endingMark)
   deleteBlock(blockList, nextBlock.key)
   updateBlocksBeginLine(blockList, index + 1, block.lengthDiff)
 }

@@ -145,11 +145,6 @@ describe('mod parser', () => {
       expect(Parser.willAffectModData(markdownBlock, mdLines)).toEqual(false)
       expect(Parser.willAffectModData(generalMod, mdLines)).toEqual(true)
     })
-    test('include markdown ending marker', () => {
-      const mdLines = 'hello\n----\n'.split('\n')
-      expect(Parser.willAffectModData(markdownBlock, mdLines)).toEqual(true)
-      expect(Parser.willAffectModData(generalMod, mdLines)).toEqual(false)
-    })
   })
 
   describe('#updateBlockCode', () => {

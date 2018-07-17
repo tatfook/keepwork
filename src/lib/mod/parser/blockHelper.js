@@ -8,8 +8,7 @@ import {
 import CmdHelper, {
   MARKDOWN_CMD,
   MOD_CMD_BEGIN,
-  MOD_CMD_END,
-  MARKDOWN_CMD_END
+  MOD_CMD_END
 } from './cmdHelper'
 import ModAdaptor from './modAdaptor'
 
@@ -114,8 +113,7 @@ const blockHelper = {
       let endLine = MOD_CMD_END
       return _.flatten([headLine, block.md, endLine])
     } else {
-      let endLine = MARKDOWN_CMD_END
-      return block.endingMark ? _.flatten([block.md, endLine]) : block.md
+      return block.md
     }
   },
 
@@ -129,10 +127,6 @@ const blockHelper = {
 
   mdText(block) {
     return block.md.join('\n')
-  },
-
-  setEndingMark(block, mark) {
-    block.endingMark = mark || false
   }
 }
 
