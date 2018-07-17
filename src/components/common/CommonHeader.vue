@@ -121,13 +121,13 @@
            <el-form-item prop="password">
             <el-input type="password" v-model="ruleForm.password"></el-input>
           </el-form-item>
-          <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">忘记密码?</a></div>
+          <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click="login('ruleForm')">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
           </el-form-item>
-          <div class="login-dialog-form-operate_signIn">没有账号？点击<a href="/wiki/join">注册</a></div>
+          <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}?<a href="/wiki/join">{{$t('common.signIn')}}</a></div>
           <div class="login-dialog-form-three-login">
-            <div class="title">直接使用以下账号登录</div>
+            <div class="title">{{$t('common.usingFollowingAccount')}}</div>
             <a>
               <img src="https://stage.keepwork.com/wiki/assets/imgs/icon/wiki_qq.png" alt="">
             </a>
@@ -169,9 +169,9 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: this.$t('common.inputUsername'), trigger: 'blur' }
         ],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: this.$t('common.inputPassword'), trigger: 'blur' }]
       }
     }
   },
@@ -243,13 +243,13 @@ export default {
             this.isLoginDialogShow = false
           } else if (info.error.message === '用户不存在') {
             this.$message({
-              message:'用户名不存在',
+              message: this.$t('common.usernameNotExist'),
               type:'error',
               showClose: true
             })
           }else if (info.error.message === '密码错误'){
             this.$message({
-              message:'密码错误',
+              message:  this.$t('common.wrongPassword'),
               type:'error',
               showClose: true
             })
@@ -397,7 +397,7 @@ export default {
       text-align: right;
       a {
         display: inline-block;
-        width: 28px;
+        text-decoration: none;
         height: 20px;
         border-bottom: 1px solid #3977ad;
         color: #286090;
@@ -421,7 +421,7 @@ export default {
         &::before {
           content: '';
           height: 2px;
-          width: 25%;
+          width: 16%;
           position: absolute;
           right: 0;
           top: 40%;
@@ -430,7 +430,7 @@ export default {
         &::after {
           content: '';
           height: 2px;
-          width: 25%;
+          width: 16%;
           position: absolute;
           left: 0;
           top: 40%;

@@ -2,6 +2,13 @@
   "common": {
     "login": "Login",
     "signIn": "Sign in",
+    "forgetPassword": "forget the password",
+    "noAccount": "no account?please click",
+    "usingFollowingAccount": "using the following account to login",
+    "inputUsername": "Please enter your username",
+    "inputPassword": "Please enter your password",
+    "wrongPassword": "wrong password",
+    "usernameNotExist": "The username does not exist",
     "logout": "Logout",
     "welcomeToKeepwork": "Welcome to Keepwork",
     "createNewWebsite": "New Website",
