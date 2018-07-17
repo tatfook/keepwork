@@ -163,7 +163,7 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let _re = this.recentOpenedSiteUrl.filter(item => toDele.indexOf(item.path) === -1 )
+      let _re = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1 )
       let payload = { recentOpenedSite: _re }
       this.addRecentOpenedSiteUrl(payload)
     },
@@ -325,7 +325,7 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let _re = this.recentOpenedSiteUrl.filter(item => item.path !== delPath)
+      let _re = this.updateRecentUrlList.filter(item => item.path !== delPath)
       let payload = { recentOpenedSite: _re }
       this.addRecentOpenedSiteUrl(payload)
     },
@@ -382,7 +382,7 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
       username: 'user/username',
-      recentOpenedSiteUrl: 'recentOpenedSiteUrl'
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     operationButtonsCountClass(){
       let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
