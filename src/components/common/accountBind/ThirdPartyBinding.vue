@@ -101,12 +101,14 @@ export default {
         this.isPwdDialogVisible = true
         return
       }
+      this.isLoading = true
       let provider = this.type
       this.$auth
         .authenticate(provider)
         .then(async result => {
           console.log(result)
           this.handleBingdingResult(result)
+          this.isLoading = false
         })
         .catch(async result => {
           console.log(result)

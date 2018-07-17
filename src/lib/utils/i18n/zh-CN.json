@@ -506,6 +506,7 @@
     "binding": "绑定",
     "unbunding": "解绑",
     "unBound": "未绑定",
+    "unBundingFailure": "绑定失败",
     "wrongEmailFormat": "请输入正确的邮箱",
     "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
     "mailSentSuccess": "邮件发送成功！",

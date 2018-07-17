@@ -38,9 +38,6 @@ export default {
     return {
       pwdError: '',
       password: '',
-      isCodeSent: false,
-      smsId: '',
-      isSendingCode: false,
       loading: false
     }
   },
@@ -62,9 +59,8 @@ export default {
       this.$emit('close')
     },
     resetDatas() {
-      this.code = ''
       this.pwdError = ''
-      this.isCodeSent = false
+      this.password = ''
     },
     async unBoundAccount() {
       this.loading = true
@@ -97,7 +93,7 @@ export default {
           `${this.$t('user.unbunding')}${this.$t('common.success')}`
         )
       } else {
-        this.pwdError = this.$t('user.unbunding') + ' ' + this.$t('common.failure') + ',' + this.$t('user.pleaseCheckPwd')
+        this.pwdError = this.$t('user.unBundingFailure') + this.$t('common.failure') + ',' + this.$t('user.pleaseCheckPwd')
       }
       this.loading = false
     }
