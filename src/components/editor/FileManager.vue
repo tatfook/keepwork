@@ -110,6 +110,8 @@ export default {
       personalSiteList: 'user/personalSiteList',
       personalSitePaths: 'user/personalSitePathMap',
       contributedSiteList: 'user/contributedSiteList',
+      showOpenedFiles: 'showOpenedFiles',
+      allSiteNameList: 'allSiteNameList',
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
@@ -120,7 +122,7 @@ export default {
       updateRecentUrlList: 'updateRecentUrlList'
     }),
     openedTreeData() {
-      let clonedopenedFiles = _.clone(this.openedFiles)
+      let clonedopenedFiles = _.clone(this.showOpenedFiles)
       let treeDatas = []
       let that = this
       _.forOwn(clonedopenedFiles, function(value, key) {
@@ -177,6 +179,9 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
+      if (this.checkUrlSite()) {
+        return this.$router.push('/')
+      }
       const sleep = async () =>
         new Promise(resolve => setTimeout(resolve, waitTime))
       let { sitepath } = this.activePageInfo
@@ -189,6 +194,10 @@ export default {
         }
       }
       return Promise.resolve()
+    },
+    checkUrlSite() {
+      let siteName = this.$route.path.split('/')[2]
+      return !this.allSiteNameList.includes(siteName)
     },
     async initUrlExpandSelect() {
       let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo

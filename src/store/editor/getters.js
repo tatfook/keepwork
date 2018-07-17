@@ -10,6 +10,13 @@ import LayoutHelper from '@/lib/mod/layout'
 const getters = {
   openedFiles: (state, getters, rootState, { 'user/username': username }) =>
     state.openedFiles[username] || {},
+  showOpenedFiles: (state, { openedFiles, allSiteNameList }) => {
+    let _openedKeys = _.filter(_.keys(openedFiles), key => allSiteNameList.includes(key.split('/')[1]))
+    let _openedFiles = _.pick(openedFiles, _openedKeys)
+    return _openedFiles
+  },
+  allSiteNameList: (state, { 'user/personalSiteNameList': personalList, 'user/contributeSiteNameList': contributeList }) =>
+    [...new Set([...personalList, ...contributeList])],
   getOpenedFileByPath: (state, { openedFiles }) => path =>
     openedFiles[getFileFullPathByPath(path)] || {},
   hasOpenedFiles: (state, { openedFiles }) => _.values(openedFiles).length > 0,
@@ -118,7 +125,8 @@ const getters = {
   footerModList: (state, { footer }) => footer && footer.modList,
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
   showSkyDrive: state => state.isSkyDriveManagerDialogShow,
-  updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || []
+  updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || [],
+  recentOpenedList: (state, { updateRecentUrlList, allSiteNameList }) => _.filter(updateRecentUrlList, ({ path }) => allSiteNameList.includes(path.split('/')[2]))
 }
 
 export default getters

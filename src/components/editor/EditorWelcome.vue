@@ -6,7 +6,7 @@
     </div>
     <div class="resentWeb">
       <ul>
-        <li v-for="(site,index) in updateRecentUrlList" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
+        <li v-for="(site,index) in recentOpenedList" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
       </ul>
     </div>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
@@ -35,7 +35,8 @@ export default {
   },
   computed:{
     ...mapGetters({
-      updateRecentUrlList: 'updateRecentUrlList'
+      updateRecentUrlList: 'updateRecentUrlList',
+      recentOpenedList: 'recentOpenedList',
     })
   },
   components: {
