@@ -70,7 +70,8 @@
     "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
     "success": "Success",
-    "failure": "Failure"
+    "failure": "Failure",
+    "errorInfoTitle": "Error"
   },
   "editor": {
     "files": "Files",
@@ -535,6 +536,7 @@
     "siteIntro": "Intro",
     "change": "Change",
     "hideSystemHeader": "Hide system header (vip only)",
-    "hideSystemFooter": "Hide system footer (vip only)"
+    "hideSystemFooter": "Hide system footer (vip only)",
+    "siteNameMaxLen": "The site name must be less than 30 characters"
   }
 }

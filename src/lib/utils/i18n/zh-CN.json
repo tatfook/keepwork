@@ -70,7 +70,8 @@
     "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
     "saveSuccess": "保存成功",
     "success": "成功",
-    "failure": "失败"
+    "failure": "失败",
+    "errorInfoTitle": "错误提示"
   },
   "editor": {
     "files": "文件",
@@ -522,6 +523,7 @@
     "siteIntro": "网站介绍",
     "change": "修改",
     "hideSystemHeader": "隐藏系统Header (仅限vip)",
-    "hideSystemFooter": "隐藏系统Footer (仅限vip)"
+    "hideSystemFooter": "隐藏系统Footer (仅限vip)",
+    "siteNameMaxLen": "网站名称需小于30个字符"
   }
 }
