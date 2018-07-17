@@ -76,9 +76,7 @@ export default {
       this.handleClose()
       let fixLink = link => {
         if ( !/http(s?):\/\//.test(link) && !/^\//.test(link) ) {
-          let { barePath } = this.activePageInfo
-          let barePathRoot = barePath.replace(/\/[^\/]+$/,'')
-          return `/${barePathRoot}/${link}`
+          return ''
         }
         return link
       }
