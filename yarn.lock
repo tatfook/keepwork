@@ -3610,7 +3610,7 @@ html-webpack-plugin@^2.30.1:
     pretty-error "^2.0.2"
     toposort "^1.0.0"
 
-htmlparser2@^3.8.2:
+htmlparser2@^3.8.2, htmlparser2@^3.9.2:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
   dependencies:
@@ -3749,6 +3749,10 @@ imurmurhash@^0.1.4:
 in-publish@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/in-publish/-/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
+
+incremental-dom@^0.5.1:
+  version "0.5.1"
+  resolved "http://registry.npm.taobao.org/incremental-dom/download/incremental-dom-0.5.1.tgz#52f4539c3e9eee7cd112a6da052fb7162fefb0c3"
 
 indent-string@^2.1.0:
   version "2.1.0"
@@ -5263,6 +5267,12 @@ markdown-it-highlightjs@^3.0.0:
   dependencies:
     highlight.js "^9.9.0"
     lodash.flow "^3.1.0"
+
+markdown-it-incremental-dom@^1.3.0:
+  version "1.3.0"
+  resolved "http://registry.npm.taobao.org/markdown-it-incremental-dom/download/markdown-it-incremental-dom-1.3.0.tgz#967856571f4550efde53b05cbfe8394bfdccd21b"
+  dependencies:
+    htmlparser2 "^3.9.2"
 
 markdown-it-ins@^2.0.0:
   version "2.0.0"
@@ -8267,15 +8277,17 @@ vue-loader@^13.3.0:
 
 vue-markdown@leopoldchen/vue-markdown#master:
   version "2.2.3"
-  resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/15a095214100951b419bfe5046e19397e69f296b"
+  resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/d4a4c59182961437c576ad794726cc9b883a809c"
   dependencies:
     highlight.js "^9.12.0"
+    incremental-dom "^0.5.1"
     markdown-it "^6.0.1"
     markdown-it-abbr "^1.0.3"
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
     markdown-it-highlightjs "^3.0.0"
+    markdown-it-incremental-dom "^1.3.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
