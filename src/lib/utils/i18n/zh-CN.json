@@ -448,6 +448,7 @@
     "checkPassed": "通过",
     "checkUnpassed": "未通过",
     "checking": "审核中",
+    "uploadFailed": "上传失败",
     "fileUnapprovedError": "文件尚未通过审核",
 
     "downloadSelected": "下载选中",
