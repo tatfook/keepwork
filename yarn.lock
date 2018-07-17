@@ -253,7 +253,7 @@ are-we-there-yet@~1.1.2:
 
 argparse@^1.0.7:
   version "1.0.10"
-  resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
+  resolved "http://registry.npm.taobao.org/argparse/download/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
   dependencies:
     sprintf-js "~1.0.2"
 
@@ -3533,9 +3533,9 @@ he@1.1.x, he@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
-highlight.js@^9.12.0:
+highlight.js@^9.12.0, highlight.js@^9.9.0:
   version "9.12.0"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
+  resolved "http://registry.npm.taobao.org/highlight.js/download/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -4999,7 +4999,7 @@ just-extend@^1.1.27:
 
 katex@^0.6.0:
   version "0.6.0"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.6.0.tgz#12418e09121c05c92041b6b3b9fb6bab213cb6f3"
+  resolved "http://registry.npm.taobao.org/katex/download/katex-0.6.0.tgz#12418e09121c05c92041b6b3b9fb6bab213cb6f3"
   dependencies:
     match-at "^0.1.0"
 
@@ -5061,7 +5061,7 @@ levn@^0.3.0, levn@~0.3.0:
 
 linkify-it@~1.2.2:
   version "1.2.4"
-  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-1.2.4.tgz#0773526c317c8fd13bd534ee1d180ff88abf881a"
+  resolved "http://registry.npm.taobao.org/linkify-it/download/linkify-it-1.2.4.tgz#0773526c317c8fd13bd534ee1d180ff88abf881a"
   dependencies:
     uc.micro "^1.0.1"
 
@@ -5130,6 +5130,10 @@ lodash.camelcase@^4.3.0:
 lodash.clonedeep@^4.3.2:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+
+lodash.flow@^3.1.0:
+  version "3.5.0"
+  resolved "http://registry.npm.taobao.org/lodash.flow/download/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
 
 lodash.get@^4.4.2:
   version "4.4.2"
@@ -5239,45 +5243,52 @@ map-visit@^1.0.0:
 
 markdown-it-abbr@^1.0.3:
   version "1.0.4"
-  resolved "https://registry.yarnpkg.com/markdown-it-abbr/-/markdown-it-abbr-1.0.4.tgz#d66b5364521cbb3dd8aa59dadfba2fb6865c8fd8"
+  resolved "http://registry.npm.taobao.org/markdown-it-abbr/download/markdown-it-abbr-1.0.4.tgz#d66b5364521cbb3dd8aa59dadfba2fb6865c8fd8"
 
 markdown-it-deflist@^2.0.1:
   version "2.0.3"
-  resolved "https://registry.yarnpkg.com/markdown-it-deflist/-/markdown-it-deflist-2.0.3.tgz#5727db04184d3cb2bc6ee4a9641e3a1091d5fd6f"
+  resolved "http://registry.npm.taobao.org/markdown-it-deflist/download/markdown-it-deflist-2.0.3.tgz#5727db04184d3cb2bc6ee4a9641e3a1091d5fd6f"
 
 markdown-it-emoji@^1.1.1:
   version "1.4.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-emoji/-/markdown-it-emoji-1.4.0.tgz#9bee0e9a990a963ba96df6980c4fddb05dfb4dcc"
+  resolved "http://registry.npm.taobao.org/markdown-it-emoji/download/markdown-it-emoji-1.4.0.tgz#9bee0e9a990a963ba96df6980c4fddb05dfb4dcc"
 
 markdown-it-footnote@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-footnote/-/markdown-it-footnote-2.0.0.tgz#14e9c4f68ff12cf354fa365ae378276e8104ca94"
+  resolved "http://registry.npm.taobao.org/markdown-it-footnote/download/markdown-it-footnote-2.0.0.tgz#14e9c4f68ff12cf354fa365ae378276e8104ca94"
+
+markdown-it-highlightjs@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/markdown-it-highlightjs/download/markdown-it-highlightjs-3.0.0.tgz#ed3dd619ca2b98e6bf2112d163bf444043340210"
+  dependencies:
+    highlight.js "^9.9.0"
+    lodash.flow "^3.1.0"
 
 markdown-it-ins@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-ins/-/markdown-it-ins-2.0.0.tgz#a5aa6a30f1e2f71e9497567cfdff40f1fde67483"
+  resolved "http://registry.npm.taobao.org/markdown-it-ins/download/markdown-it-ins-2.0.0.tgz#a5aa6a30f1e2f71e9497567cfdff40f1fde67483"
 
 markdown-it-katex@^2.0.3:
   version "2.0.3"
-  resolved "https://registry.yarnpkg.com/markdown-it-katex/-/markdown-it-katex-2.0.3.tgz#d7b86a1aea0b9d6496fab4e7919a18fdef589c39"
+  resolved "http://registry.npm.taobao.org/markdown-it-katex/download/markdown-it-katex-2.0.3.tgz#d7b86a1aea0b9d6496fab4e7919a18fdef589c39"
   dependencies:
     katex "^0.6.0"
 
 markdown-it-mark@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-mark/-/markdown-it-mark-2.0.0.tgz#46a1aa947105aed8188978e0a016179e404f42c7"
+  resolved "http://registry.npm.taobao.org/markdown-it-mark/download/markdown-it-mark-2.0.0.tgz#46a1aa947105aed8188978e0a016179e404f42c7"
 
 markdown-it-sub@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-sub/-/markdown-it-sub-1.0.0.tgz#375fd6026eae7ddcb012497f6411195ea1e3afe8"
+  resolved "http://registry.npm.taobao.org/markdown-it-sub/download/markdown-it-sub-1.0.0.tgz#375fd6026eae7ddcb012497f6411195ea1e3afe8"
 
 markdown-it-sup@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-sup/-/markdown-it-sup-1.0.0.tgz#cb9c9ff91a5255ac08f3fd3d63286e15df0a1fc3"
+  resolved "http://registry.npm.taobao.org/markdown-it-sup/download/markdown-it-sup-1.0.0.tgz#cb9c9ff91a5255ac08f3fd3d63286e15df0a1fc3"
 
 markdown-it-task-lists@^2.0.1:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/markdown-it-task-lists/-/markdown-it-task-lists-2.1.1.tgz#f68f4d2ac2bad5a2c373ba93081a1a6848417088"
+  resolved "http://registry.npm.taobao.org/markdown-it-task-lists/download/markdown-it-task-lists-2.1.1.tgz#f68f4d2ac2bad5a2c373ba93081a1a6848417088"
 
 markdown-it-toc-and-anchor@leopoldchen/markdown-it-toc-and-anchor:
   version "4.1.3"
@@ -5288,7 +5299,7 @@ markdown-it-toc-and-anchor@leopoldchen/markdown-it-toc-and-anchor:
 
 markdown-it@^6.0.1:
   version "6.1.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-6.1.1.tgz#ced037f4473ee9f5153ac414f77dc83c91ba927c"
+  resolved "http://registry.npm.taobao.org/markdown-it/download/markdown-it-6.1.1.tgz#ced037f4473ee9f5153ac414f77dc83c91ba927c"
   dependencies:
     argparse "^1.0.7"
     entities "~1.1.1"
@@ -5298,7 +5309,7 @@ markdown-it@^6.0.1:
 
 match-at@^0.1.0:
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/match-at/-/match-at-0.1.1.tgz#25d040d291777704d5e6556bbb79230ec2de0540"
+  resolved "http://registry.npm.taobao.org/match-at/download/match-at-0.1.1.tgz#25d040d291777704d5e6556bbb79230ec2de0540"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
@@ -5317,7 +5328,7 @@ md5.js@^1.3.4:
 
 mdurl@~1.0.1:
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
+  resolved "http://registry.npm.taobao.org/mdurl/download/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -7518,7 +7529,7 @@ split-string@^3.0.1, split-string@^3.0.2:
 
 sprintf-js@~1.0.2:
   version "1.0.3"
-  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
+  resolved "http://registry.npm.taobao.org/sprintf-js/download/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
 sshpk@^1.7.0:
   version "1.14.1"
@@ -7937,7 +7948,7 @@ typedarray@^0.0.6:
 
 uc.micro@^1.0.1:
   version "1.0.5"
-  resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.5.tgz#0c65f15f815aa08b560a61ce8b4db7ffc3f45376"
+  resolved "http://registry.npm.taobao.org/uc.micro/download/uc.micro-1.0.5.tgz#0c65f15f815aa08b560a61ce8b4db7ffc3f45376"
 
 uglify-es@^3.3.4:
   version "3.3.9"
@@ -8024,7 +8035,7 @@ unique-slug@^2.0.0:
 
 "unorm@>= 1.0.0":
   version "1.4.1"
-  resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.4.1.tgz#364200d5f13646ca8bcd44490271335614792300"
+  resolved "http://registry.npm.taobao.org/unorm/download/unorm-1.4.1.tgz#364200d5f13646ca8bcd44490271335614792300"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
@@ -8091,7 +8102,7 @@ use@^3.1.0:
 
 uslug@^1.0.4:
   version "1.0.4"
-  resolved "https://registry.yarnpkg.com/uslug/-/uslug-1.0.4.tgz#b9a22f0914e0a86140633dacc302e5f4fa450677"
+  resolved "http://registry.npm.taobao.org/uslug/download/uslug-1.0.4.tgz#b9a22f0914e0a86140633dacc302e5f4fa450677"
   dependencies:
     unorm ">= 1.0.0"
 
@@ -8255,8 +8266,8 @@ vue-loader@^13.3.0:
     vue-template-es2015-compiler "^1.6.0"
 
 vue-markdown@leopoldchen/vue-markdown#master:
-  version "2.2.4"
-  resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/e83981dd0050f7fb66cb40bf74896593032282f6"
+  version "2.2.3"
+  resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/15a095214100951b419bfe5046e19397e69f296b"
   dependencies:
     highlight.js "^9.12.0"
     markdown-it "^6.0.1"
@@ -8264,6 +8275,7 @@ vue-markdown@leopoldchen/vue-markdown#master:
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
+    markdown-it-highlightjs "^3.0.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"

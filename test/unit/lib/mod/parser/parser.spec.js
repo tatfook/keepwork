@@ -53,14 +53,24 @@ describe('mod parser', () => {
       expect(newBlockList[1].modType).toEqual('ModBoard')
     })
     test('should parse the irregular cmd', () => {
-      const newBlockList = Parser.buildBlockList('\n hello \n```@bOArd\n```\n')
+      let newBlockList = Parser.buildBlockList('\n hello \n```@bOArd\n```\n')
       expect(newBlockList.length).toEqual(2)
       expect(newBlockList[1].modType).toEqual('ModBoard')
+      newBlockList = Parser.buildBlockList('\n hello \n```@pARacraft\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModParacraft')
     })
-    test('should parse the irregular cmd with old version', () => {
-      const newBlockList = Parser.buildBlockList('\n hello \n```@boArd/MaIn\n```\n')
-      expect(newBlockList.length).toEqual(2)
-      expect(newBlockList[1].modType).toEqual('ModBoard')
+    test('should not parse the irregular cmd with old version', () => {
+      let newBlockList = Parser.buildBlockList('\n hello \n```@boArd/MaIn\n```\n')
+      expect(newBlockList.length).toEqual(1)
+      newBlockList = Parser.buildBlockList('\n hello \n```@wiki/js/WOrld3D\n```\n')
+      expect(newBlockList.length).toEqual(1)
+    })
+    test('old paracraft mod', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@paracraft\n```\n```@wiki/js/world3D\n```\n')
+      expect(newBlockList.length).toEqual(3)
+      expect(newBlockList[1].modType).toEqual('ModParacraft')
+      expect(newBlockList[2].modType).toEqual('ModParacraft')
     })
   })
 

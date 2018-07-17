@@ -34,7 +34,11 @@ export default {
     }
   },
   mounted() {
-    this.mountedSecondsTimer = setInterval(() => this.mountedSeconds++, 1000)
+    this.mountedSecondsTimer = setInterval(() => {
+      this.mountedSeconds+=3
+      // stop update mountedSeconds for better performance
+      clearInterval(this.mountedSecondsTimer)
+    }, 3000)
   },
   unmounted() {
     clearInterval(this.mountedSecondsTimer)
@@ -50,7 +54,7 @@ export default {
       themeConf: 'themeConf'
     }),
     show404() {
-      return this.code === undefined && this.mounted3SecondsAgo
+      return !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined && this.mounted3SecondsAgo
     },
     mounted3SecondsAgo() {
       return this.mountedSeconds >= 3

@@ -1,15 +1,26 @@
 <template>
-  <vue-markdown class="markdown-body comp-markdown" :toc="true" :source='properties.data ? properties.data : $t(options.emptyData)' toc-anchor-link-symbol="" toc-anchor-class="iconfont icon-link_"/>
+  <vue-markdown
+    class="markdown-body comp-markdown"
+    :toc="true"
+    :source='validData'
+    toc-anchor-link-symbol=""
+    toc-anchor-class="iconfont icon-link_"/>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
-import 'github-markdown-css/github-markdown.css'
 
 export default {
   name: 'AdiMarkdown',
   mixins: [compBaseMixin],
+  computed: {
+    validData() {
+      let isEmpty = !(this.properties.data && this.properties.data.trim())
+      if (isEmpty && this.editMode) return this.$t(this.options.emptyData)
+      return this.properties.data
+    }
+  },
   components: {
     VueMarkdown
   }
@@ -17,6 +28,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'github-markdown-css/github-markdown.css';
+@import 'highlight.js/styles/github-gist.css';
+
 .comp-markdown {
   color: unset;
   font-size: unset;
