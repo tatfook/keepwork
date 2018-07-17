@@ -77,8 +77,8 @@ export default {
         >
           {this.$t('card.openBoard')}
         </el-button>
-        <el-dialog {...this.getDialogProps}>
-          <div id="mx-client" />
+        <el-dialog class="board-dialog" {...this.getDialogProps}>
+          <iframe class="board-iframe" src={process.env.BOARD} />
           <div
             class="mx-client-close"
             on-click={() => {
@@ -102,7 +102,12 @@ export default {
       set() {}
     },
     getDialogProps() {
-      let props = { visible: this.visible, fullscreen: true }
+      let props = {
+        visible: this.visible,
+        fullscreen: true,
+        showClose: false
+      }
+
       let on = {
         'update:visible': v => {
           this.visible = v
@@ -160,32 +165,32 @@ export default {
       }
     },
     closeEditor() {
-      if(!this.ui || !this.ui.getCurrentCompressData) {
-        return
-      }
+      // if(!this.ui || !this.ui.getCurrentCompressData) {
+      //   return
+      // }
 
       this.visible = false
-      isInitEditor = false
+      // isInitEditor = false
 
-      let data = this.ui.getCurrentCompressData()
+      // let data = this.ui.getCurrentCompressData()
 
-      if (this.activeProperty()) {
-        this.changeProptyData({ data })
-      }
+      // if (this.activeProperty()) {
+      //   this.changeProptyData({ data })
+      // }
 
-      let mxWindow = document.querySelectorAll('.mxWindow')
+      // let mxWindow = document.querySelectorAll('.mxWindow')
 
-      if (mxWindow) {
-        mxWindow.forEach(element => {
-          element.parentNode.removeChild(element)
-        })
-      }
+      // if (mxWindow) {
+      //   mxWindow.forEach(element => {
+      //     element.parentNode.removeChild(element)
+      //   })
+      // }
 
-      let mxClientEle = document.querySelector('#mx-client')
+      // let mxClientEle = document.querySelector('#mx-client')
 
-      while (mxClientEle.hasChildNodes()) {
-        mxClientEle.removeChild(mxClientEle.firstChild)
-      }
+      // while (mxClientEle.hasChildNodes()) {
+      //   mxClientEle.removeChild(mxClientEle.firstChild)
+      // }
     },
     updateValue(newVal) {
       var tempChangedDataObj = {}
@@ -197,33 +202,53 @@ export default {
     }
   },
   created() {
-    //TODO: Rewrite mxGraph to es6 code
+    console.log(process.env.NODE_ENV)
+    // if (!window.mxClient) {
+    //   let boardScript = document.createElement('script')
+    //   boardScript.setAttribute(
+    //     'src',
+    //     './static/adi/board/keepwork-board.min.js'
+    //   )
 
-    if (!window.mxClient) {
-      let boardScript = document.createElement('script')
-      boardScript.setAttribute(
-        'src',
-        './static/adi/board/keepwork-board.min.js'
-      )
+    //   let graphEditorCss = document.createElement('link')
+    //   graphEditorCss.setAttribute('rel', 'stylesheet')
+    //   graphEditorCss.setAttribute('type', 'text/css')
+    //   graphEditorCss.setAttribute(
+    //     'href',
+    //     './static/adi/board/assets/styles/grapheditor.css'
+    //   )
 
-      let graphEditorCss = document.createElement('link')
-      graphEditorCss.setAttribute('rel', 'stylesheet')
-      graphEditorCss.setAttribute('type', 'text/css')
-      graphEditorCss.setAttribute(
-        'href',
-        './static/adi/board/assets/styles/grapheditor.css'
-      )
-
-      let body = document.querySelector('body')
-      body.appendChild(boardScript)
-      body.appendChild(graphEditorCss)
-    }
+    //   let body = document.querySelector('body')
+    //   body.appendChild(boardScript)
+    //   body.appendChild(graphEditorCss)
+    // }
   }
 }
 </script>
+<style lang="scss">
+.board-dialog {
+  .el-dialog__header {
+    padding: 0;
+  }
+
+  .el-dialog__body {
+    height: 100%;
+    padding: 0px;
+    overflow: hidden;
+  }
+}
+</style>
+
 <style scoped>
 .el-button {
   font-size: 16px;
+}
+
+
+.board-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .mx-client-close {
@@ -244,7 +269,7 @@ export default {
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
-  margin-right: 16px;
+  margin-right: 55px;
   height: 27px;
   line-height: 27px;
   min-width: 54px;
