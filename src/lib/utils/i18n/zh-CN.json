@@ -235,7 +235,7 @@
 
     "removeImgConfirmMsg": "你确定要删除图片吗？",
 
-    "uploadingToGitlabText": "正在上传到gitab。。。",
+    "uploadingToSkyDriveText": "正在上传。。。",
     "readFileFromLocal": "正在读取文件。。。",
     "enlargeMdEditing": "大窗口编辑"
   },

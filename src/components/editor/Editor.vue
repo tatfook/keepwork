@@ -79,7 +79,7 @@
           </el-col>
         </el-scrollbar>
       </el-row>
-      <editor-markdown ref='codemirror' />
+      <EditorMarkdown ref='codemirror' @insertBigfile='insertBigfile'/>
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <el-row>
@@ -321,27 +321,27 @@ export default {
     openSkyDriveManagerDialog() {
       this.toggleSkyDrive({ showSkyDrive: true })
     },
-    closeSkyDriveManagerDialog({ file, url }) {
-      this.toggleSkyDrive({ showSkyDrive: false })
+    async insertBigfile({ file, url }) {
       if (!url) return
-
+      let ext = file.ext || (file.filename || '').split('.').pop()
       let filename = file.filename || url
-
-      // let isImage = /^image/.test(file.type)
-      // if (isImage) return this.$refs.codemirror.insertFile(filename, url)
-
+      console.log('insertBigfile: ', JSON.stringify(file), url)
       this.$store.dispatch('addMod', {
         modName: 'ModBigFile',
         preModKey: this.preModKey || (this.activeMod && this.activeMod.key),
         modProperties: {
           bigFile: {
             src: url,
-            ext: file.ext,
+            ext: ext,
             filename: filename,
             size: file.size
           }
         }
       })
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.toggleSkyDrive({ showSkyDrive: false })
+      this.insertBigfile({ file, url })
     },
     initMarkdownModDatas() {
       this.editingMarkdownModDatas = {
