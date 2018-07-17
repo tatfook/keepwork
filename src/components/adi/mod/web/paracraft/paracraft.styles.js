@@ -87,8 +87,13 @@ export default [
         'background-color': '#F9F9F9',
         'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)'
       },
+      // colPreview: {
+      //   display: 'flex',
+      //   'justify-content': 'center',
+      //   'align-items': 'center'
+      // },
       preview: {
-        height: '200px'
+        // height: '176px'
       },
       colGroupLeft: {
         padding: '20px'
@@ -119,7 +124,7 @@ export default [
       },
       '@media only screen and (max-width: 767px)': {
         preview: {
-          height: '250px'
+          // height: '250px'
         },
         colGroupCA: {
           'margin-top': '12px'
@@ -214,6 +219,21 @@ export default [
       },
       config: {
         ...emptyData,
+        // preview: {
+        //   height: '250px'
+        // },
+        preview: {
+          img: {
+            width: '100%',
+            height: '250px',
+            src: require('@/../static/adi/paracraft/preview.jpg')
+          }
+        },
+        viewTimesImg: {
+          img: {
+            height: '17px'
+          }
+        },
         innerModal: {
           width: '70%',
           height: '80%',

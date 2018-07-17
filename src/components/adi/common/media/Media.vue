@@ -1,9 +1,9 @@
 <template>
   <div class='comp-media'>
     <a :target='target' :href='link'>
-      <div :class="getImgClass" v-if='isImage'>
-        <img :src="src">
-      </div>
+      <!-- <div :class="getImgClass" v-if='isImage' :height="this.options.height"> -->
+      <div :class="getImgClass" v-if='isImage' :style="imgStyle"></div>
+        <!-- <img :src="src"> -->
       <video v-else-if='isVideo' :src='src'></video>
       <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
@@ -22,7 +22,17 @@ jss.setup(preset())
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
+  created() {
+    console.log(this.options.img)
+  },
   computed: {
+    imgStyle() {
+      return this.generateStyleString({
+        width: this.options.img && this.options.img.width,
+        height: this.options.img && this.options.img.height,
+        'background-image': 'url(' + this.properties.src ? this.properties.src : this.options.img.src + ')'
+      })
+    },
     svg() {
       if (this.isBase64Svg) {
         let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : ''
@@ -39,9 +49,9 @@ export default {
     isBase64Svg() {
       return Media.isBase64Svg(this.src)
     },
-    src() {
-      return this.properties.src ? this.properties.src : this.options.emptySrc
-    },
+    // src() {
+    //   return this.properties.src ? this.properties.src : this.options.emptySrc
+    // },
     target() {
       return this.properties.target
         ? this.properties.target
@@ -96,23 +106,21 @@ export default {
 
 <style lang="scss" scoped>
 .comp-media {
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
+  a {
+    display: inline-block;
 
-  .img {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+    .img {
+      // width: 100%;
+      // height: 100%;
+      // position: relative;
+      // overflow: hidden;
 
-    img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      object-fit: cover;
+      background-position: center;
+      background-size: cover;
     }
+    
   }
 }
 </style>
