@@ -40,7 +40,7 @@ export const oldCmdMapper = {
 }
 
 export const isValidCmd = (cmd) => {
-  return isNewCmd(cmd) || isOldCmd(cmd)
+  return isOldCmd(cmd) || isNewCmd(cmd)
 }
 
 export const isNewCmd = (cmd) => {
@@ -56,7 +56,7 @@ export const isOldCmd = (cmd) => {
   }
 
   for (let key in oldCmdMapper) {
-    if (key.toLowerCase() === cmd.toLowerCase()) return true
+    if (key === cmd) return true
   }
   return false
 }
@@ -70,18 +70,18 @@ export const isMarkdownEndLine = (line) => {
 }
 
 export const standardCmd = (cmd) => {
+  for (let key in oldCmdMapper) {
+    if (key === cmd) return key
+  }
   for (let key in cmdList) {
     if (cmdList[key].toLowerCase() === cmd.toLowerCase()) return cmdList[key]
-  }
-  for (let key in oldCmdMapper) {
-    if (key.toLowerCase() === cmd.toLowerCase()) return key
   }
   return ''
 }
 
 export const targetCmd = (cmd) => {
   for (let key in oldCmdMapper) {
-    if (key.toLowerCase() === cmd.toLowerCase()) return oldCmdMapper[key]
+    if (key === cmd) return oldCmdMapper[key]
   }
   return ''
 }

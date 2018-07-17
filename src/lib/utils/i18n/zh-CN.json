@@ -70,7 +70,8 @@
     "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
     "saveSuccess": "保存成功",
     "success": "成功",
-    "failure": "失败"
+    "failure": "失败",
+    "errorInfoTitle": "错误提示"
   },
   "editor": {
     "files": "文件",
@@ -274,7 +275,8 @@
 
     "categoryList": "分类列表",
     "tab": "标签",
-    "pageSwitching": "页面切换"
+    "pageSwitching": "页面切换",
+    "iframe": "iframe"
   },
   "adi": {
     "markdown": {
@@ -446,6 +448,7 @@
     "checkPassed": "通过",
     "checkUnpassed": "未通过",
     "checking": "审核中",
+    "uploadFailed": "上传失败",
     "fileUnapprovedError": "文件尚未通过审核",
 
     "downloadSelected": "下载选中",
@@ -503,13 +506,16 @@
     "binding": "绑定",
     "unbunding": "解绑",
     "unBound": "未绑定",
+    "unBundingFailure": "绑定失败",
     "wrongEmailFormat": "请输入正确的邮箱",
     "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
     "mailSentSuccess": "邮件发送成功！",
     "smsCodeSentSuccess": "短信发送成功",
     "smsCodeSentFailed": "短信发送失败",
     "smsCode": "短信验证码:",
-    "sendCodes": "发送验证码"
+    "sendCodes": "发送验证码",
+    "inputLoginPwd": "输入登录密码",
+    "pleaseCheckPwd": "请检查密码是否正确"
   },
   "setting": {
     "general": "基本信息",
@@ -520,6 +526,7 @@
     "siteIntro": "网站介绍",
     "change": "修改",
     "hideSystemHeader": "隐藏系统Header (仅限vip)",
-    "hideSystemFooter": "隐藏系统Footer (仅限vip)"
+    "hideSystemFooter": "隐藏系统Footer (仅限vip)",
+    "siteNameMaxLen": "网站名称需小于30个字符"
   }
 }

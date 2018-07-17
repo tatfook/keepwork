@@ -22,6 +22,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .dialog-operations {
+  text-align: center;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
+  padding-bottom: 26px;
   .el-button {
     width: 120px;
     height: 40px;

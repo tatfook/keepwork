@@ -58,9 +58,14 @@
           width="155">
           <template slot-scope="scope">
             <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
-              <el-progress :stroke-width="10" color="#13ce67" :show-text=false  :percentage="scope.row.percent"></el-progress>
+              <el-progress
+                :stroke-width="10"
+                :color="scope.row.state === 'doing' ? '#13ce67' : '#f56c6c'"
+                :show-text=false
+                :percentage="scope.row.percent"
+              ></el-progress>
             </span>
-            <span v-else>{{scope.row.updatedAt | dateTimeFormatter}}</span>
+            <span v-else>{{scope.row.updatedAt}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -69,7 +74,7 @@
           width="100"
           show-overflow-tooltip>
           <template slot-scope="scope">
-            <span class="skydrive-manager-cell-danger-text" v-if="scope.row.state === 'error'" :title="scope.row.errorMsg">失败</span>
+            <span class="skydrive-manager-cell-danger-text" v-if="scope.row.state === 'error'" :title="scope.row.errorMsg">{{$t('skydrive.uploadFailed')}}</span>
             <span v-else>{{scope.row.checkedState}}</span>
           </template>
         </el-table-column>
@@ -120,7 +125,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" style="display:none;" multiple @change="handleUploadFile">
+            <input ref="fileInput" type="file" style="display:none;" multiple @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -151,7 +156,7 @@
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6">
-          <el-button size="small"
+          <el-button size="small" :type="availableSelectedMediaItem ? 'primary':''"
             :disabled='!availableSelectedMediaItem' round
             @click="handleInsert(availableSelectedMediaItem)"
           >{{ $t('common.apply') }}</el-button>
@@ -160,7 +165,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
+            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -169,9 +174,10 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
-import _ from 'lodash'
+import formatDate from '@/lib/utils/formatDate'
 import mediaProperties from '../adi/common/media/media.properties';
 const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
@@ -208,29 +214,32 @@ export default {
     skyDriveTableData() {
       return this.userSkyDriveFileList.map(item => {
         // checked: 0 未审核, 1 通过, 2 未通过
-        let { checked, size, filename, type } = item
+        let { checked, size, filename, type, updatedAt } = item
         let file = { size, filename, type, downloadUrl: '' }
         let ext = this.getFileExt(file)
+        updatedAt = formatDate(new Date(updatedAt))
 
         let displaySize = this.biteToM(size) + 'MB'
-
         checked = Number(checked)
         let checkPassed = checked === 1
         let checkedState = checkPassed ? this.$t('skydrive.checkPassed') : checked === 2 ? this.$t('skydrive.checkUnpassed') : this.$t('skydrive.checking')
-        return {...item, file, size, displaySize, type, ext, checkedState, checkPassed }
-      }).filter(this.itemFilterBySearchWord)
+
+        return {...item, file, size, updatedAt, displaySize, type, ext, checkedState, checkPassed }
+      }).filter(this.itemFilterBySearchWord).sort(this.sortByUpdateAt)
     },
     skyDriveTableDataWithUploading() {
       let filterFinishedUploadingFile = _.filter(this.uploadingFiles, (file) => {
         return file.state !== 'success'
       })
-      return _.concat(filterFinishedUploadingFile, this.skyDriveTableData)
+
+      return [
+        ...filterFinishedUploadingFile,
+        ...this.skyDriveTableData
+      ].sort(this.sortByUpdateAt)
     },
     skyDriveMediaLibraryData() {
       let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image/.test(type))
-      let sortedMediaDatas = mediaDatas.sort((obj1, obj2)=>{
-        return obj1.updatedAt <= obj2.updatedAt ? 1 : -1
-      })
+      let sortedMediaDatas = mediaDatas.sort(this.sortByUpdateAt)
       return sortedMediaDatas
     },
     info() {
@@ -266,18 +275,6 @@ export default {
       ext = (ext || '').toLowerCase()
       return ext
     },
-    formatDate(dateObj){
-      if (!dateObj) {
-        dateObj = new Date()
-      }
-      let year = dateObj.getFullYear()
-      let month = _.padStart(dateObj.getMonth() + 1, 2, '0')
-      let day = _.padStart(dateObj.getDate(), 2, '0')
-      let hour = _.padStart(dateObj.getHours(), 2, '0')
-      let minute = _.padStart(dateObj.getMinutes(), 2, '0')
-      let second = _.padStart(dateObj.getSeconds(), 2, '0')
-      return [year, month, day].join('-') + [hour, minute, second].join(':')
-    },
     async filesQueueToUpload(files){
       if (this.defaultMode) {
         this.$refs.skyDriveTable.clearSort()
@@ -295,7 +292,7 @@ export default {
           file: {
             downloadUrl: ''
           },
-          updatedAt: this.formatDate(),
+          updatedAt: formatDate(new Date(Date.now() + 7*24*3600*1000)), // add extra time for sort
           state: 'doing' // success, error, cancel, doing
         })
         await this.uploadFile(file, fileIndex)
@@ -304,6 +301,11 @@ export default {
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
       this.filesQueueToUpload(files)
+      if (this.defaultMode) {
+        this.$refs.fileInput.value = ''
+      }else{
+        this.$refs.imageInput.value = ''
+      }
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])
@@ -342,11 +344,16 @@ export default {
       }, onProgress(progress) {
         fileIndex = _.findIndex(that.uploadingFiles, ['filename', file.name])
         that.uploadingFiles[fileIndex].percent = progress.percent
-      }}).catch(err => console.error(err))
-      fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
-      this.uploadingFiles[fileIndex].state = 'success'
-      this.uploadingFiles[fileIndex].updatedAt = this.formatDate()
-      await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      }}).then(async () => {
+        fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
+        this.uploadingFiles[fileIndex].state = 'success'
+        this.uploadingFiles[fileIndex].updatedAt = formatDate()
+        await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
+      }).catch(err => {
+        fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
+        this.uploadingFiles[fileIndex].state = 'error'
+        console.error(err)
+      })
     },
     removeFromUploadQue(file){
       let { filename, state } = file
@@ -412,7 +419,7 @@ export default {
       this.$emit('close', { file, url: `${url}#${file.filename}` })
     },
     async handleRename(item) {
-      let { _id, ext } = item
+      let { _id, ext, key } = item
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
@@ -507,11 +514,13 @@ export default {
       this.loading = false
       let url = this.userSiteFileBySitePathAndFileId(payload)
       return url
+    },
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     }
   },
   filters: {
-    biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, ''),
-    dateTimeFormatter: (str = '') => str.replace(/[a-zA-Z]/g,' ').replace(/\..*$/, '')
+    biteToG: (bite = 0) => (bite/(1024*1024*1024)).toFixed(2).toString().replace(/\.*0*$/, '')
   }
 }
 </script>
