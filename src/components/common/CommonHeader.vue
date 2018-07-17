@@ -121,11 +121,11 @@
            <el-form-item prop="password">
             <el-input type="password" v-model="ruleForm.password"></el-input>
           </el-form-item>
-          <div class="login-dialog-form-operate">忘记密码?</div>
+          <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">忘记密码?</a></div>
           <el-form-item>
             <el-button class="login-btn" type="primary" @click="login('ruleForm')">登录</el-button>
           </el-form-item>
-          <div class="login-dialog-form-operate_signIn">没有账号？点击<a>注册</a></div>
+          <div class="login-dialog-form-operate_signIn">没有账号？点击<a href="/wiki/join">注册</a></div>
           <div class="login-dialog-form-three-login">
             <div class="title">直接使用以下账号登录</div>
             <a>
@@ -388,6 +388,10 @@ export default {
     &-operate {
       text-align: right;
       cursor: pointer;
+      a{
+        text-decoration: none;
+        color: inherit;
+      }
     }
     &-operate_signIn {
       text-align: right;
