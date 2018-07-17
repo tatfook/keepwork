@@ -51,7 +51,7 @@
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
-            <el-dropdown-item divided><a @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item>
+            <el-dropdown-item divided><a @click.stop="logout">{{$t('common.logout')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -114,16 +114,16 @@
     </div>
     <div @click.stop v-if="isLoginDialogShow" class="login-dialog">
       <el-dialog title="" :visible.sync="isLoginDialogShow">
-        <el-form class="login-dialog-form">
-          <el-form-item>
-            <el-input></el-input>
+        <el-form class="login-dialog-form" :model="ruleForm" :rules="rules">
+          <el-form-item prop="username">
+            <el-input v-model="ruleForm.username"></el-input>
           </el-form-item>
-           <el-form-item>
-            <el-input></el-input>
+           <el-form-item prop="password">
+            <el-input type="password" v-model="ruleForm.password"></el-input>
           </el-form-item>
           <div class="login-dialog-form-operate">忘记密码?</div>
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="login">登录</el-button>
           </el-form-item>
           <div class="login-dialog-form-operate_signIn">没有账号？点击<a>注册</a></div>
           <div class="login-dialog-form-three-login">
@@ -162,7 +162,17 @@ export default {
       IS_GLOBAL_VERSION,
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
-      isLoginDialogShow: false
+      isLoginDialogShow: false,
+      ruleForm: {
+        username: '',
+        password: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+      }
     }
   },
   computed: {
@@ -190,7 +200,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      userGetProfile: 'user/getProfile'
+      userGetProfile: 'user/getProfile',
+      userLogin: 'user/login',
+      userLogout: 'user/logout'
     }),
     backEditArea() {
       this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
@@ -216,14 +228,24 @@ export default {
           : this.$refs.codemirror.insertLink(filename, url)
       }
     },
-    logout() {
-      Cookies.remove('token')
-      Cookies.remove('token', { path: '/' })
-      window.localStorage.removeItem('satellizer_token')
-      window.location.reload()
-    },
     goLogin() {
       this.isLoginDialogShow = true
+    },
+    async login() {
+      if (!this.ruleForm.username || !this.ruleForm.password) {
+        return
+      } else {
+        let payload = {
+          username: this.ruleForm.username,
+          password: this.ruleForm.password
+        }
+        await this.userLogin(payload)
+        this.isLoginDialogShow = false
+      }
+    },
+    logout() {
+      this.userLogout()
+      window.location.reload()
     },
     goJoin() {
       window.location = '/wiki/join?redirect=' + window.location.href
@@ -328,34 +350,32 @@ export default {
   height: 30px;
   margin-right: 5px;
 }
-.login-dialog{
-  .el-dialog__header{
+.login-dialog {
+  .el-dialog__header {
     padding: 0;
   }
-  .el-dialog{
+  .el-dialog {
     width: 478px;
     height: 580px;
     padding: 40px 0 60px 0;
   }
-  &-form{
+  &-form {
     width: 68%;
     margin: 0 auto;
-    .el-form-item__content{
-      .el-input__inner{
-        background-color: rgb(250, 255, 189);
-        &:focus{
-          // border: none;
-          box-shadow: 1px 1px 3px #daeaf6,-1px -1px 3px #daeaf6;
+    .el-form-item__content {
+      .el-input__inner {
+        &:focus {
+          box-shadow: 1px 1px 3px #daeaf6, -1px -1px 3px #daeaf6;
         }
       }
     }
-    &-operate{
+    &-operate {
       text-align: right;
       cursor: pointer;
     }
-    &-operate_signIn{
+    &-operate_signIn {
       text-align: right;
-      a{
+      a {
         display: inline-block;
         width: 28px;
         height: 20px;
@@ -364,21 +384,21 @@ export default {
         cursor: pointer;
       }
     }
-    &-three-login{
-      a{
+    &-three-login {
+      a {
         display: inline-block;
         width: 24%;
         text-align: center;
-        img{
+        img {
           cursor: pointer;
         }
       }
-      .title{
+      .title {
         margin: 40px 0;
         padding: 20px 0 35px;
         text-align: center;
         position: relative;
-        &::before{
+        &::before {
           content: '';
           height: 2px;
           width: 25%;
@@ -387,7 +407,7 @@ export default {
           top: 40%;
           background-color: #d6e6f4;
         }
-        &::after{
+        &::after {
           content: '';
           height: 2px;
           width: 25%;
@@ -398,8 +418,7 @@ export default {
         }
       }
     }
-    .login-btn{
-      background-color: #337ab7;
+    .login-btn {
       width: 100%;
       margin: 20px 0;
       height: 44px;
