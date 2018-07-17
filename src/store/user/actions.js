@@ -38,8 +38,11 @@ const {
 
 const actions = {
   async login({ commit }, payload) {
-    let info = await keepwork.user.login(payload)
-    commit(LOGIN_SUCCESS, info)
+    let info = await keepwork.user.login(payload, null, true)
+    if (info.data) {
+      commit(LOGIN_SUCCESS, info.data)
+    }
+    return info
   },
   logout({ commit }) {
     commit(LOGOUT)

@@ -114,7 +114,7 @@
     </div>
     <div @click.stop v-if="isLoginDialogShow" class="login-dialog">
       <el-dialog title="" :visible.sync="isLoginDialogShow">
-        <el-form class="login-dialog-form" :model="ruleForm" :rules="rules">
+        <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item prop="username">
             <el-input v-model="ruleForm.username"></el-input>
           </el-form-item>
@@ -123,7 +123,7 @@
           </el-form-item>
           <div class="login-dialog-form-operate">忘记密码?</div>
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="login('ruleForm')">登录</el-button>
           </el-form-item>
           <div class="login-dialog-form-operate_signIn">没有账号？点击<a>注册</a></div>
           <div class="login-dialog-form-three-login">
@@ -231,21 +231,37 @@ export default {
     goLogin() {
       this.isLoginDialogShow = true
     },
-    async login() {
-      if (!this.ruleForm.username || !this.ruleForm.password) {
-        return
-      } else {
-        let payload = {
-          username: this.ruleForm.username,
-          password: this.ruleForm.password
+    async login(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          let payload = {
+            username: this.ruleForm.username,
+            password: this.ruleForm.password
+          }
+          let info = await this.userLogin(payload)
+          if (info.error.id === 0) {
+            this.isLoginDialogShow = false
+          } else if (info.error.message === '用户不存在') {
+            this.$message({
+              message:'用户名不存在',
+              type:'error',
+              showClose: true
+            })
+          }else if (info.error.message === '密码错误'){
+            this.$message({
+              message:'密码错误',
+              type:'error',
+              showClose: true
+            })
+          }
+        } else {
+          return false
         }
-        await this.userLogin(payload)
-        this.isLoginDialogShow = false
-      }
+      })
     },
     logout() {
       this.userLogout()
-      window.location.reload()
+      // window.location.reload()
     },
     goJoin() {
       window.location = '/wiki/join?redirect=' + window.location.href
