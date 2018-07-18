@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Vue from 'vue'
 
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+const LOGOUT = 'LOGOUT'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
 const SET_REAL_AUTH_PHONE_NUM = 'SET_REAL_AUTH_PHONE_NUM'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
@@ -29,6 +30,7 @@ const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 
 export const props = {
   LOGIN_SUCCESS,
+  LOGOUT,
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
@@ -60,8 +62,14 @@ const doNothing = state => {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, payload) {
-    Vue.set(state, 'info', payload)
+  [LOGIN_SUCCESS](state, {token, userinfo: profile}) {
+    Vue.set(state, 'profile', {
+      ...profile,
+      token
+    })
+  },
+  [LOGOUT](state) {
+    Vue.set(state, 'profile', {})
   },
   [GET_PROFILE_SUCCESS](state, payload) {
     Vue.set(state, 'profile', payload)

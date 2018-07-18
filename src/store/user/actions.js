@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 
 const {
   LOGIN_SUCCESS,
+  LOGOUT,
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
@@ -37,8 +38,17 @@ const {
 
 const actions = {
   async login({ commit }, payload) {
-    let info = await keepwork.user.login(payload)
-    commit(LOGIN_SUCCESS, info)
+    let info = await keepwork.user.login(payload, null, true)
+    if (info.data) {
+      commit(LOGIN_SUCCESS, info.data)
+    }
+    return info
+  },
+  logout({ commit }) {
+    commit(LOGOUT)
+    Cookies.remove('token')
+    Cookies.remove('token', { path: '/' })
+    window.localStorage.removeItem('satellizer_token')
   },
   /*doc
     getProfile
