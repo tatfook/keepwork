@@ -8,6 +8,7 @@
 import Parser from '@/lib/mod/parser'
 import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
+import formatDate from '@/lib/utils/formatDate'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
@@ -414,9 +415,11 @@ export default {
       } else {
         this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
       }
+      let filename = `${(formatDate()||'').replace(/\s|\:/g, '_')}-${(Date.now()+'').replace(/\d*(\d{3})$/,'$1')}-${file.name}`
 
       await this.userUploadFileAndUseInSite({
         file,
+        filename,
         sitePath: this.activePageInfo.sitepath,
         onStart: subscirbtion => {
           this.replaceLine(lineNo, this.$t('editor.uploadingToSkyDriveText'))
