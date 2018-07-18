@@ -83,7 +83,6 @@ const getters = {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList
   },
-  personalSiteNameList: (state, { personalSiteList }) => personalSiteList.map(site => site.name),
   personalSitePathMap: (state, { personalSiteList }) =>
     _.keyBy(personalSiteList, ({ username, name }) => `${username}/${name}`),
   personalAllPagePathList: (state, { personalSitePathMap }) => {
@@ -156,10 +155,10 @@ const getters = {
     state,
     { username, getContributedSiteListByUsername }
   ) => getContributedSiteListByUsername(username),
-  contributeSiteNameList: (state, { contributedSiteList }) => contributedSiteList.map(site => site.name),
   contributedSitePathMap: (state, { contributedSiteList }) =>
     _.keyBy(contributedSiteList, ({ username, name }) => `${username}/${name}`),
 
+  personalAndContributedSiteNameList: (state, { personalAndContributedSiteList }) => _.map(personalAndContributedSiteList, ({ name }) => name),
   personalAndContributedSiteList: (
     state,
     { personalSiteList, contributedSiteList }

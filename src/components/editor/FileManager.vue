@@ -111,7 +111,7 @@ export default {
       personalSitePaths: 'user/personalSitePathMap',
       contributedSiteList: 'user/contributedSiteList',
       showOpenedFiles: 'showOpenedFiles',
-      allSiteNameList: 'allSiteNameList',
+      allSiteNameList: 'user/personalAndContributedSiteNameList',
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
@@ -147,7 +147,7 @@ export default {
       return this.unSavedOpenedFiles.length > 0
     },
     unSavedOpenedFiles() {
-      return _.filter(_.values(this.openedFiles), ({ saved }) => !saved)
+      return _.filter(_.values(this.showOpenedFiles), ({ saved }) => !saved)
     },
     unSavedOpenedFilesPaths() {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))

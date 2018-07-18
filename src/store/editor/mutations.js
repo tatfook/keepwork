@@ -276,12 +276,16 @@ const mutations = {
     Vue.set(state.activePage, 'cursorPos', cursor)
   },
   [RESET_OPENED_FILE](state, { username, path, data }) {
+    let _path = path.split('/')
+    if (!_path[0] && !_path[1]) return
     Vue.set(state.openedFiles, username, {
       ..._.get(state, ['openedFiles', username]),
       [path]: data
     })
   },
   [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
+    let _path = path.split('/')
+    if (!_path[0] && !_path[1]) return
     _.merge(state.openedFiles, {
       [username]: {
         [path]: {
