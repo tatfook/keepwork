@@ -4,6 +4,7 @@
       <el-form-item prop="cellphone">
         <span slot="label">{{$t('user.phoneBind')}}:</span>
         <el-input class="phone-bind-form-item-content" size='small' v-model="phoneFormData.cellphone" v-if="!isUserBindPhone"></el-input>
+        <span class="el-form-item__error" v-show="phoneError">{{phoneError}}</span>
         <div class="phone-bind-form-item-content" v-if="isUserBindPhone">{{userPhone}}</div>
       </el-form-item>
       <el-form-item>
@@ -23,6 +24,10 @@ export default {
   name: 'PhoneBind',
   data() {
     let phoneValidater = (rule, value, callback) => {
+      this.phoneError = ''
+      if (value == '') {
+        return
+      }
       if (!PhoneReg.test(value)) {
         callback(new Error(this.$t('user.wrongNumberFormat')))
       } else {
@@ -46,7 +51,8 @@ export default {
         type: '',
         value: ''
       },
-      isPwdDialogVisible: false
+      isPwdDialogVisible: false,
+      phoneError: ''
     }
   },
   computed: {
@@ -75,6 +81,10 @@ export default {
         }
         phoneForm.clearValidate()
         this.isPwdDialogVisible = true
+        return
+      }
+      if (this.phoneFormData.cellphone == '') {
+        this.phoneError = this.$t('user.wrongNumberFormat')
         return
       }
       phoneForm.validate(async valid => {
