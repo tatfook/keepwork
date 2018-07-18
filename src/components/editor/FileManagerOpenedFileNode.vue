@@ -14,12 +14,12 @@
       <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeOpenedFile(data)">
       </el-button>
     </span>
-    <div @click.stop>
-      <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+    <div @click.stop class="close-dialog">
+      <el-dialog center :visible.sync="dialogVisible" width="360px" closed="handleCloseDialog">
         <div class="dialog-content">{{`"${fileName}" ${$t("editor.fileUnSaved")}`}}</div>
         <div slot="footer" class="dialog-footer">
-          <center><el-button type="warning" @click.stop="handleCloseOpenedFile(data)" :disabled="savePending">{{$t("editor.unSaveClose")}}</el-button></center>
-          <center><el-button type="primary" @click.stop="saveAndCloseOpenedFile(data)" :loading="savePending">{{$t("editor.saveClose")}}</el-button></center>
+          <el-button type="warning" @click.stop="handleCloseOpenedFile(data)" :disabled="savePending">{{$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click.stop="saveAndCloseOpenedFile(data)" :loading="savePending">{{$t("editor.saveClose")}}</el-button>
         </div>
       </el-dialog>
     </div>
@@ -171,13 +171,15 @@ export default {
   }
 }
 </script>
-<style>
-.el-dialog__body .dialog-content{
-  text-align: center;
-  word-wrap: break-word;
-  white-space: normal;
-}
-.dialog-footer center{
-  margin-bottom: 10px;
-}
+<style lang="scss">
+.close-dialog{
+  .el-dialog__header{
+    height: 0;
+  }
+  .el-dialog__body .dialog-content{
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+  } 
+} 
 </style>
