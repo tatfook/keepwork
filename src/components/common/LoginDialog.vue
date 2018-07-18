@@ -119,14 +119,14 @@ export default {
           // 登录成功  进行页面跳转
         }
         this.$message({
-          message: 登录成功,
+          message: this.$t('common.loginSuccess'),
           type: 'success',
           showClose: true
         })
       } else {
         let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.$message({
-          message: 登录失败,
+          message: this.$t('common.logonFailed'),
           type: 'error',
           showClose: true
         })
