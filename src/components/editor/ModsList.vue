@@ -124,7 +124,7 @@ export default {
   height: 100%;
 }
 .style-cover {
-  width: 100%;
+  width: 98%;
   cursor: pointer;
   display: block;
   margin-bottom: 12px;
@@ -147,7 +147,7 @@ export default {
   overflow: auto;
 }
 .render {
-  width: 295px;
+  width: 155px;
   height: auto;
   background-color: white;
   overflow: hidden;
@@ -165,12 +165,12 @@ export default {
   .render-mod-container {
     border: 10px solid white;
     height: 300px;
-    width: 275px;
+    width: 135px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.26);
+      transform: scale(0.1245);
       transform-origin: top left;
     }
   }
