@@ -67,7 +67,7 @@
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <button :disabled='currentDisabled' @click='toggleCodeWin'><i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
-                <button><i class="iconfont icon-help"></i><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
+                <button><i class="iconfont icon-help"></i><a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
                 <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>                  
               </div>
             </el-dropdown-item>
@@ -694,6 +694,12 @@ export default {
   cursor: pointer;
   text-align: left;
   padding-left: 56px;
+  .kp-menu-help{
+    display: inline-block;
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+  }
   .iconfont{
     border: none;
     font-size: 14px;
