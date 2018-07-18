@@ -35,7 +35,6 @@ export default {
   },
   computed:{
     ...mapGetters({
-      updateRecentUrlList: 'updateRecentUrlList',
       recentOpenedList: 'recentOpenedList',
     })
   },
