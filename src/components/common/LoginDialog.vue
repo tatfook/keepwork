@@ -14,16 +14,16 @@
           <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}?<a href="/wiki/join">{{$t('common.signIn')}}</a></div>
           <div class="login-dialog-form-three-login">
             <div class="title">{{$t('common.usingFollowingAccount')}}</div>
-            <a>
+            <a @click="authorizedToLogin('qq')">
               <img src="@/assets/img/wiki_qq.png" alt="">
             </a>
-            <a>
+            <a @click="authorizedToLogin('weixin')">
               <img src="@/assets/img/wiki_wechat.png" alt="">
             </a>
-            <a>
+            <a @click="authorizedToLogin('xinlangweibo')">
               <img src="@/assets/img/wiki_sina_weibo.png" alt="">
             </a>
-            <a>
+            <a @click="authorizedToLogin('github')">
               <img src="@/assets/img/wiki_github_logo.png" alt="">
             </a>
           </div>
@@ -31,24 +31,34 @@
       </el-dialog>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 
 export default {
   name: 'LoginDialog',
   props: {
     show: Boolean
   },
-  data(){
-    return{
-       ruleForm: {
+  data() {
+    return {
+      ruleForm: {
         username: '',
         password: ''
       },
       rules: {
         username: [
-          { required: true, message: this.$t('common.inputUsername'), trigger: 'blur' }
+          {
+            required: true,
+            message: this.$t('common.inputUsername'),
+            trigger: 'blur'
+          }
         ],
-        password: [{ required: true, message: this.$t('common.inputPassword'), trigger: 'blur' }]
+        password: [
+          {
+            required: true,
+            message: this.$t('common.inputPassword'),
+            trigger: 'blur'
+          }
+        ]
       }
     }
   },
@@ -56,7 +66,7 @@ export default {
     ...mapActions({
       userLogin: 'user/login',
     }),
-    handleClose(){
+    handleClose() {
       this.$emit('close')
     },
     async login(formName) {
@@ -72,13 +82,13 @@ export default {
           } else if (info.error.message === '用户不存在') {
             this.$message({
               message: this.$t('common.usernameNotExist'),
-              type:'error',
+              type: 'error',
               showClose: true
             })
-          }else if (info.error.message === '密码错误'){
+          } else if (info.error.message === '密码错误') {
             this.$message({
-              message:  this.$t('common.wrongPassword'),
-              type:'error',
+              message: this.$t('common.wrongPassword'),
+              type: 'error',
               showClose: true
             })
           }
@@ -87,6 +97,41 @@ export default {
         }
       })
     },
+    authorizedToLogin(provider) {
+      this.$auth
+        .authenticate(provider)
+        .then(async result => {
+          console.log('1',result)
+          this.handleLoginResult(result)
+          this.isLoading = false
+        })
+        .catch(async result => {
+          console.log('2',result)
+          this.handleLoginResult(result)
+          this.isLoading = false
+        })
+    },
+    async handleLoginResult(){
+      if (result && result.data && result.data.error == 0) {
+        if (result.data.data.token == "token"){
+          // 用户未绑定  跳完善注册信息页
+        } else {
+          // 登录成功  进行页面跳转
+        }
+        this.$message({
+          message: this.$t('common.loginSuccess'),
+          type: 'success',
+          showClose: true
+        })
+      } else {
+        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
+        this.$message({
+          message: this.$t('common.logonFailed'),
+          type: 'error',
+          showClose: true
+        })
+      }
+    }
   }
 }
 </script>
@@ -114,7 +159,7 @@ export default {
     &-operate {
       text-align: right;
       cursor: pointer;
-      a{
+      a {
         text-decoration: none;
         color: inherit;
       }
