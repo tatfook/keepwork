@@ -120,7 +120,7 @@ const parseMarkDown = (item) => {
             break;
         }
     }
-    if(lessonData) {
+    if(lessonData.lesson) {
         itemData.lessonTitle = lessonData.lesson.Title;
         itemData.lessonUrl = item.url;
         itemData.lessonCover = lessonData.lesson.CoverImageOfTheLesson;
@@ -196,7 +196,7 @@ export default {
       lessonsListData: [],
       lessonsSelect: [],
       filterMethod(query, item) {
-        return item.lessonTitle.indexOf(query) > -1;
+        return item.lessonTitle && item.lessonTitle.indexOf(query) > -1;
       },
     }
   },
