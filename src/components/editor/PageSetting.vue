@@ -145,6 +145,7 @@ export default {
       this.setActiveManagePaneComponent(type)
     },
     async savePageDisplayName() {
+      this.pageDisplayName = _.trim(this.pageDisplayName)
       if (this.settedPageDisplayName === this.pageDisplayName) return
       if (this.pageDisplayName.length > 50) {
         this.displayNameError = this.$t('editor.setPageDisplayNameError')
