@@ -15,6 +15,9 @@
       </div>
     </component>
     <QuickToTop/>
+    <div @click.stop v-if="isLoginDialogShow">
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+    </div>
   </div>
 </template>
 
@@ -24,16 +27,21 @@ import ModListViewer from './ModListViewer'
 import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
 import QuickToTop from '@/components/common/QuickToTop'
+import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
   data() {
     return {
       mountedSecondsTimer: NaN,
       mountedSeconds: 0,
-      showSidebarOrMain: 'main'
+      showSidebarOrMain: 'main',
+      isLoginDialogShow: false
     }
   },
   mounted() {
+    if(!this.username){
+      this.isLoginDialogShow = true
+    }
     this.mountedSecondsTimer = setInterval(() => {
       this.mountedSeconds+=3
       // stop update mountedSeconds for better performance
@@ -51,7 +59,8 @@ export default {
       headerModList: 'headerModList',
       footerModList: 'footerModList',
       sidebarModList: 'sidebarModList',
-      themeConf: 'themeConf'
+      themeConf: 'themeConf',
+      username:'user/username'
     }),
     show404() {
       return !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined && this.mounted3SecondsAgo
@@ -73,9 +82,13 @@ export default {
   },
   components: {
     ModListViewer,
-    QuickToTop
+    QuickToTop,
+    LoginDialog
   },
   methods: {
+    closeLoginDialog(){
+      this.isLoginDialogShow = false
+    },
     toggleSidebarMainShow() {
       switch (this.showSidebarOrMain) {
         case 'main':
