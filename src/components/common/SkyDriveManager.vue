@@ -385,7 +385,7 @@ export default {
 
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),
-        cancelButtonText: 'Cancel'
+        cancelButtonText: this.$t('common.Cancel')
       })
 
       this.$copyText(toCopyLink).then(res => {

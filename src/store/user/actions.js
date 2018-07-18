@@ -502,10 +502,10 @@ const actions = {
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
     return filelist
   },
-  async uploadFileToSkyDrive(context, {file, onStart, onProgress}) {
+  async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let { key } = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
+    let { key } = await skyDrive.upload({file, filename, onStart, onProgress}, authRequestConfig)
     return { key }
   },
   async removeFileFromSkyDrive(context, {file}) {
@@ -530,8 +530,8 @@ const actions = {
     commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
     return url
   },
-  async uploadFileAndUseInSite({dispatch}, {file, sitePath, onStart, onProgress}) {
-    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, onStart, onProgress})
+  async uploadFileAndUseInSite({dispatch}, {file, filename, sitePath, onStart, onProgress}) {
+    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, filename, onStart, onProgress})
     let filelist = await dispatch('getFileListFromSkyDrive', {useCache: false})
     let fileUploaded = (filelist || []).filter(({ key }) => fileKey === key)[0]
     let { id: fileId } = fileUploaded
