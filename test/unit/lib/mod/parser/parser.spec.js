@@ -120,6 +120,19 @@ describe('mod parser', () => {
       expect(newBlockList[0].lineBegin).toEqual(oldBlockList[0].lineBegin)
       expect(newBlockList[1].lineBegin).toEqual(oldBlockList[1].lineBegin)
     })
+    test('copy and paste to rearange mod order', () => {
+      const newCode = '\nhello\n```@Title\n```\n```@Img\n```\nworld\n'
+      const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
+      expect(newBlockList[1].key).toEqual(oldBlockList[2].key)
+      expect(newBlockList[2].key).toEqual(oldBlockList[1].key)
+    })
+    test('copy and paste to rearange and update mods', () => {
+      const newCode = '\nhello\n```@Title\n```\nabc world\n```@Img\n```\n'
+      const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
+      expect(newBlockList[2].uuid).toEqual(oldBlockList[3].uuid)
+      expect(newBlockList[1].key).toEqual(oldBlockList[2].key)
+      expect(newBlockList[3].key).toEqual(oldBlockList[1].key)
+    })
   })
 
   describe('#willAffectModData', () => {

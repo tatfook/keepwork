@@ -38,7 +38,7 @@ const blockHelper = {
 
   buildKey(block) {
     block.key = md5(this.text(block), block.uuid)
-    block.modKey = md5(this.text(block))
+    block.modKey = md5(this.text(block), block.modType)
   },
 
   buildMarkdown(block) {
@@ -72,6 +72,12 @@ const blockHelper = {
   updateCmd(block, cmd) {
     block.cmd = cmd
     block.modType = 'Mod' + block.cmd
+    this.buildKey(block)
+  },
+
+  updateUUID(block, uuid) {
+    block.uuid = uuid
+    this.buildKey(block)
   },
 
   updateJson(block, jsonData) {
