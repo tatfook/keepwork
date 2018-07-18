@@ -488,9 +488,9 @@
   },
   "user": {
     "displayName": "NickName:",
-    "sex": "Sex:",
+    "sex": "Gender:",
     "location": "Location:",
-    "introduce": "Introduce:",
+    "introduce": "Intro:",
     "male": "Male",
     "female": "Female",
     "confidentiality": "Confidentiality",
