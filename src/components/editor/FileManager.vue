@@ -12,13 +12,15 @@
           </el-button>
         </span>
       </div>
-      <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
-        <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
-        <span slot="footer" class="dialog-footer">
+    <div @click.stop class="close-dialog">
+      <el-dialog center :visible.sync="dialogCloseAllVisible" width="360px" closed="handleCloseAllDialog">
+        <div class="dialog-content">{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</div>
+        <div slot="footer" class="dialog-footer">
           <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
           <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
-        </span>
+        </div>
       </el-dialog>
+    </div>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" :render-content="renderOpenedFile" highlight-current @node-click="handleOpenedClick">
         </el-tree>
@@ -575,6 +577,12 @@ export default {
   }
   .el-loading-spinner .circular {
     width: 22px;
+  }
+ .el-dialog__body .dialog-content{
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 32px;
   }
 }
 </style>
