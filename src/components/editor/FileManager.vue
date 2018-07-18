@@ -153,12 +153,15 @@ export default {
     },
     unSavedOpenedFilesPaths() {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
+    },
+    openedFilesPathAndTime() {
+      return _.map(this.showOpenedFiles, ({ path, timestamp }) => ({ path, timestamp }))
     }
   },
   watch:{
-    openedFiles(newVal,oldVal){
-      let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
-      let updateRecentUrlList = this.updateRecentUrlList.concat(newOpenSiteUrl)
+    openedFilesPathAndTime(newVal,oldVal){
+      if (JSON.stringify(newVal) === JSON.stringify(oldVal)) return
+      let updateRecentUrlList = this.updateRecentUrlList.concat(newVal)
       updateRecentUrlList = updateRecentUrlList.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
       updateRecentUrlList = _.uniqBy(updateRecentUrlList, obj => obj.path).slice(0,5)
       let payload = { updateRecentUrlList }
