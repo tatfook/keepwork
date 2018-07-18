@@ -92,7 +92,7 @@ export default [
     cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '27px'
       }
     }
   },
@@ -159,7 +159,7 @@ export default [
     cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '27px'
       }
     }
   },
@@ -226,7 +226,7 @@ export default [
     cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '43px'
       }
     }
   },
@@ -293,7 +293,7 @@ export default [
     cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '43px'
       }
     }
   },
