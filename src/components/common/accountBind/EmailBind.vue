@@ -91,7 +91,7 @@ export default {
         return
       }
       if (this.emailFormData.email == '') {
-        this.emailError = this.$t('user.wrongNumberFormat')
+        this.emailError = this.$t('user.wrongEmailFormat')
         return
       }
       emailForm.validate(async valid => {
