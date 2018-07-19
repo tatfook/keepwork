@@ -5,7 +5,7 @@
         <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
       </el-form-item>
        <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')"></el-input>
+        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
       </el-form-item>
       <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
       <el-form-item>
@@ -92,6 +92,7 @@ export default {
           this.loading = false
           if (info.error.id === 0) {
             this.$emit('close')
+            window.location.reload()
           } else if (info.error.message === '用户不存在') {
             this.$message({
               message: this.$t('common.usernameNotExist'),

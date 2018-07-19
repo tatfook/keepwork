@@ -13,7 +13,7 @@
       <img src="@/assets/img/no_right_to_access.png" alt="">
       <p>{{$t('common.NoPages')}}</p>
       <!-- <el-button type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button> -->
-      <el-button v-if="!userIsLogined" type="primary" round @click="isLoginDialogShow = true">{{$t('common.login')}}</el-button>
+      <el-button v-if="!userIsLogined" type="primary" round @click="toLogin">{{$t('common.login')}}</el-button>
     </div>
     <QuickToTop/>
     <div @click.stop v-if="isLoginDialogShow">
@@ -113,6 +113,9 @@ export default {
           this.showSidebarOrMain = 'main'
           break
       }
+    },
+    toLogin(){
+      this.isLoginDialogShow = true
     }
   },
   components: {
