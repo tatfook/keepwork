@@ -5,9 +5,7 @@
       <div v-for='(item, index) in galleryData'
         class="gallery-type-item"
         :key='index'
-        v-model='inputTypeValue'
-        ref="c2"
-        :item="item" 
+        :item="item"
         @change="updateValue(item)">
 
         <div
@@ -52,28 +50,17 @@ export default {
     return {
       locationOrigin: location.origin,
       selectedIndex: NaN,
-      galleryData: _.cloneDeep(this.originValue),
-      isSkyDriveManagerDialogShow: false,
-      // value: true
+      isSkyDriveManagerDialogShow: false
     }
   },
   async mounted() {
     await this.getAllPersonalPageList()
   },
-  watch: {
-    // galleryData: {
-    //   handler: function(val, oldVal) {
-    //     this.handleChange()
-    //   },
-    //   deep: true
-    //   // immediate: true,
-    // }
-  },
   computed: {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     }),
-    inputTypeValue: {
+    galleryData: {
       get() {
         return this.originValue
       },
@@ -84,9 +71,6 @@ export default {
     ...mapActions({
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
-    change(item) {
-      this.$refs.c2.item = this.item
-    },
     handleChange() {
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = this.galleryData
@@ -118,6 +102,7 @@ export default {
       let item = this.galleryData[this.selectedIndex]
       if (!url || !item) return
       item.img = url
+      this.handleChange()
     }
   },
   components: {
