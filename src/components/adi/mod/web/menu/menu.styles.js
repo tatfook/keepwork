@@ -4,7 +4,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -41,7 +40,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -82,7 +80,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },

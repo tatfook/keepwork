@@ -1,18 +1,22 @@
 <template>
-  <div class="comp-button">
+  <div class="comp-button" :class="getClass">
     <a v-if="!options.clickEvent" :class="getClassStyle" :target='getTarget' :href="getLink" :style="buttonStyle">
-      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
-      {{ getButtonName }}
+        <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+        {{ getButtonName }}
     </a>
     <a v-if="options.clickEvent" :class="getClassStyle" @click='callback' :style="buttonStyle">
-      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
-      {{ getButtonName }}
+        <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+        {{ getButtonName }}
     </a>
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import { Base64 } from 'js-base64'
+import jss from 'jss'
+import preset from 'jss-preset-default'
+
 export default {
   name: 'AdiButton',
   mixins: [compBaseMixin],
@@ -38,7 +42,7 @@ export default {
       return properties.target ? properties.target : options.emptyTarget
     },
     hasImg() {
-      return this.options.img && this.options.img.src
+      return true
     },
     buttonStyle() {
       let style = {
@@ -81,6 +85,32 @@ export default {
           return ''
           break
       }
+    },
+    getClass() {
+      let className = 'comp-space'
+      let style = {
+        [className]: {
+          'margin-top': this.options.space && this.options.space.webMarginTop + '!important',
+          'margin-bottom': this.options.space && this.options.space.webMarginBottom + '!important',
+          'padding-top': this.options.space && this.options.space.webPaddingTop + '!important',
+          'padding-bottom': this.options.space && this.options.space.webPaddingBottom + '!important'
+        },
+        '@media only screen and (max-width: 767px)': {
+          [className]: {
+            'margin-top': this.options.space && this.options.space.mobileMarginTop + '!important',
+            'margin-bottom': this.options.space && this.options.space.mobileMarginBottom + '!important',
+            'padding-top': this.options.space && this.options.space.mobilePaddingTop + '!important',
+            'padding-bottom': this.options.space && this.options.space.mobilePaddingBottom + '!important'
+          }
+        }
+      }
+
+      if(!this.sheet) {
+        this.sheet = jss.createStyleSheet(style)
+        this.sheet.attach()
+      }
+
+      return this.sheet.classes[className]
     }
   }
 }
@@ -88,12 +118,6 @@ export default {
 
 <style lang="scss" scoped>
 .comp-button {
-  .img {
-    margin-right: 10px;
-    background-position: center;
-    background-size: cover;
-  }
-
   a {
     text-decoration: none;
     display: inline-block;
@@ -111,6 +135,11 @@ export default {
     line-height: unset;
     color: unset;
     background-repeat: no-repeat;
+    .img {
+      margin-right: 10px;
+      background-position: center;
+      background-size: cover;
+    }
   }
 }
 </style>
