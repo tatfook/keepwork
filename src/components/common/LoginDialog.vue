@@ -136,12 +136,13 @@ export default {
           let token = result.data.token
           let userinfo = result.data.data
           this.userThirdLogin({token, userinfo})
+          this.handleClose()
+          this.$message({
+            message: this.$t('common.loginSuccess'),
+            type: 'success',
+            showClose: true
+          })
         }
-        this.$message({
-          message: this.$t('common.loginSuccess'),
-          type: 'success',
-          showClose: true
-        })
       } else {
         let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.$message({
