@@ -2,10 +2,10 @@
       <el-dialog title="" v-if='show' :visible.sync="show" class="login-dialog" :before-close="handleClose">
         <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item prop="username">
-            <el-input v-model="ruleForm.username"></el-input>
+            <el-input v-model="ruleForm.username" placeholder="登录账号 (推荐email或手机号)"></el-input>
           </el-form-item>
            <el-form-item prop="password">
-            <el-input type="password" v-model="ruleForm.password"></el-input>
+            <el-input type="password" v-model="ruleForm.password" placeholder="密码"></el-input>
           </el-form-item>
           <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
           <el-form-item>
