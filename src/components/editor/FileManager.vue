@@ -12,13 +12,15 @@
           </el-button>
         </span>
       </div>
-      <el-dialog center :visible.sync="dialogCloseAllVisible" width="300px" closed="handleCloseAllDialog">
-        <center>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
-        <span slot="footer" class="dialog-footer">
+    <div @click.stop class="close-dialog">
+      <el-dialog center :visible.sync="dialogCloseAllVisible" width="360px" closed="handleCloseAllDialog">
+        <div class="dialog-content">{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</div>
+        <div slot="footer" class="dialog-footer">
           <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
           <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
-        </span>
+        </div>
       </el-dialog>
+    </div>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" :render-content="renderOpenedFile" highlight-current @node-click="handleOpenedClick">
         </el-tree>
@@ -110,6 +112,8 @@ export default {
       personalSiteList: 'user/personalSiteList',
       personalSitePaths: 'user/personalSitePathMap',
       contributedSiteList: 'user/contributedSiteList',
+      showOpenedFiles: 'showOpenedFiles',
+      allSiteNameList: 'user/personalAndContributedSiteNameList',
       openedFiles: 'openedFiles',
       activePageUrl: 'activePageUrl',
       activePageInfo: 'activePageInfo',
@@ -120,7 +124,7 @@ export default {
       updateRecentUrlList: 'updateRecentUrlList'
     }),
     openedTreeData() {
-      let clonedopenedFiles = _.clone(this.openedFiles)
+      let clonedopenedFiles = _.clone(this.showOpenedFiles)
       let treeDatas = []
       let that = this
       _.forOwn(clonedopenedFiles, function(value, key) {
@@ -145,16 +149,19 @@ export default {
       return this.unSavedOpenedFiles.length > 0
     },
     unSavedOpenedFiles() {
-      return _.filter(_.values(this.openedFiles), ({ saved }) => !saved)
+      return _.filter(_.values(this.showOpenedFiles), ({ saved }) => !saved)
     },
     unSavedOpenedFilesPaths() {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
+    },
+    openedFilesPathAndTime() {
+      return _.map(this.showOpenedFiles, ({ path, timestamp }) => ({ path, timestamp }))
     }
   },
   watch:{
-    openedFiles(newVal,oldVal){
-      let newOpenSiteUrl = _.map(_.values(newVal),({path,timestamp}) => ({path,timestamp}))
-      let updateRecentUrlList = this.updateRecentUrlList.concat(newOpenSiteUrl)
+    openedFilesPathAndTime(newVal,oldVal){
+      if (JSON.stringify(newVal) === JSON.stringify(oldVal)) return
+      let updateRecentUrlList = this.updateRecentUrlList.concat(newVal)
       updateRecentUrlList = updateRecentUrlList.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
       updateRecentUrlList = _.uniqBy(updateRecentUrlList, obj => obj.path).slice(0,5)
       let payload = { updateRecentUrlList }
@@ -177,6 +184,9 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
+      if (this.checkUrlSite()) {
+        return this.$router.push('/')
+      }
       const sleep = async () =>
         new Promise(resolve => setTimeout(resolve, waitTime))
       let { sitepath } = this.activePageInfo
@@ -189,6 +199,10 @@ export default {
         }
       }
       return Promise.resolve()
+    },
+    checkUrlSite() {
+      let siteName = this.$route.path.split('/')[2]
+      return !this.allSiteNameList.includes(siteName)
     },
     async initUrlExpandSelect() {
       let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
@@ -566,6 +580,12 @@ export default {
   }
   .el-loading-spinner .circular {
     width: 22px;
+  }
+ .el-dialog__body .dialog-content{
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 32px;
   }
 }
 </style>

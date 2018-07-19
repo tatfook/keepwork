@@ -40,13 +40,14 @@ export const getFileKey = file => {
   return `${fileID}.${fileExt}`
 }
 
-export const upload = async ({file, username, sitename, onStart, onProgress}, authRequestConfig) => {
+export const upload = async ({file, filename, onStart, onProgress}, authRequestConfig) => {
   let key = getFileKey(file)
   let { token } = await storage.files.token({ key }, authRequestConfig)
-
+  filename = filename || file.name
   let config = { region: qiniu.region.z2 }
-  let putExtra = { params: { 'x:filename': file.name } }
+  let putExtra = { params: { 'x:filename': filename } }
   await qiniuUpload({file, token, key, onStart, onProgress, config, putExtra})
+  return { key, filename: filename, size: file.size }
 }
 
 export const remove = async ({file: { id }}, authRequestConfig) => {

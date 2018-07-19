@@ -163,9 +163,8 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let _re = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1 )
-      let payload = { recentOpenedSite: _re }
-      this.addRecentOpenedSiteUrl(payload)
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1 )
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     recursion(data) {
       let childrenFiles = []
@@ -325,9 +324,8 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let _re = this.updateRecentUrlList.filter(item => item.path !== delPath)
-      let payload = { recentOpenedSite: _re }
-      this.addRecentOpenedSiteUrl(payload)
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//

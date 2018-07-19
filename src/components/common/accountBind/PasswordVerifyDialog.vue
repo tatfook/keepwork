@@ -2,9 +2,9 @@
   <div class="label">
     <el-dialog class="password-verify-dialog" v-loading='loading' :visible.sync="isPwdDialogVisible" width="506px" :before-close="handleClose" :append-to-body="true">
       <span slot='title'>{{dialogTitle}}</span>
-      <el-form :inline="true">
+      <el-form :inline="true" @submit.native.prevent>
         <el-form-item :label='inputLabel'>
-          <el-input v-model="password" type="small"></el-input>
+          <el-input ref="passwordInput" type="password" v-model="password" size="small" autofocus></el-input>
           <span class="el-form-item__error" v-show="pwdError">{{pwdError}}</span>
         </el-form-item>
       </el-form>
@@ -93,9 +93,19 @@ export default {
           `${this.$t('user.unbunding')}${this.$t('common.success')}`
         )
       } else {
-        this.pwdError = this.$t('user.unBundingFailure') + this.$t('common.failure') + ',' + this.$t('user.pleaseCheckPwd')
+        this.pwdError =  this.$t('user.unBundingFailure') + ',' + this.$t('user.pleaseCheckPwd')
       }
       this.loading = false
+    }
+  },
+  watch: {
+    isPwdDialogVisible: function(val) {
+      let that = this
+      if (val === true) {
+        this.$nextTick(() => {
+          this.$refs.passwordInput.focus()
+        })
+      }
     }
   }
 }
