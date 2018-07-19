@@ -71,32 +71,12 @@ const actions = {
           commit(GET_PROFILE_SUCCESS, {...profile, token})
           resolve()
         }).catch(async e => {
-          if (!forceLogin) {
-            reject(new Error('401'))
-            clearGetProfilePromise()
-          }
-          // alert('尚未登陆，请登陆后访问！')
-          // // login for localhost test
-          // if (process.env.HOST_ENV === 'localhost') {
-          //   let payload = {
-          //     username: prompt('username: '),
-          //     password: prompt('password: ')
-          //   }
-          //   clearGetProfilePromise()
-          //   if (!payload.username || !payload.password) {
-          //     reject(new Error('401'))
-          //     return
-          //   }
-          //   await dispatch('login', payload)
-          //   await dispatch('getProfile')
-          //   return resolve()
-          // } else {
-          //   location.href = '/wiki/login?redirect=' + window.location.href
-          // }
+          !forceLogin && clearGetProfilePromise()
+          reject(new Error('401'))
         })
       }).then(clearGetProfilePromise)
 
-      await getProfilePromise
+      return getProfilePromise
     }
   })(),
   async getUserDetailByUsername(context, { username }) {
