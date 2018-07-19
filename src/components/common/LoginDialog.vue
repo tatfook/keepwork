@@ -11,9 +11,11 @@
           <el-form-item>
             <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
           </el-form-item>
-          <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}?<a href="/wiki/join">{{$t('common.signIn')}}</a></div>
+          <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/wiki/join">{{$t('common.register')}}</a></div>
           <div class="login-dialog-form-three-login">
-            <div class="title">{{$t('common.usingFollowingAccount')}}</div>
+            <div class="title">
+              <span>{{$t('common.usingFollowingAccount')}}</span>
+            </div>
             <a @click="authorizedToLogin('qq')">
               <img src="@/assets/img/wiki_qq.png" alt="">
             </a>
@@ -189,23 +191,20 @@ export default {
         padding: 20px 0 35px;
         text-align: center;
         position: relative;
-        &::before {
-          content: '';
-          height: 2px;
-          width: 16%;
-          position: absolute;
-          right: 0;
-          top: 40%;
-          background-color: #d6e6f4;
+        span {
+          background: #fff;
+          position: relative;
+          z-index: 2;
+          padding: 0 4px;
         }
         &::after {
           content: '';
           height: 2px;
-          width: 16%;
+          width: 100%;
           position: absolute;
-          left: 0;
+          right: 0;
           top: 40%;
-          background-color: #d6e6f4;
+          background: #d6e6f4;
         }
       }
     }
