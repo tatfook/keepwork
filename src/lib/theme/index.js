@@ -3,7 +3,7 @@ const ThemeHelper = {
     return {
       fontFamily: 'inherit',
       fontId: 0,
-      colorsId: 0
+      colorId: 0
     }
   },
   themeRootPath(sitePath) {

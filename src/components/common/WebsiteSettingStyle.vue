@@ -37,7 +37,7 @@
           <h1>2.颜色</h1>
         </header>
         <main>
-          <website-setting-sytle-color-preview :colorsList="colors" :colorsId.sync="colorsId" @handleSelectColor="handleSelectColor" />
+          <website-setting-sytle-color-preview :colorsList="colors" :colorID.sync="colorID" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
       <el-col :span="3" class="website-setting-btns">
@@ -75,7 +75,7 @@ export default {
       let config = {
         fontId: this.fontId,
         fontFamily: this.fontFamily,
-        colorsId: this.colorsId
+        colorID: this.colorID
       }
       await this.userSaveSiteThemeConfig({ sitePath: this.sitePath, config })
         .then(() => {
@@ -93,17 +93,17 @@ export default {
       this.$emit('close')
     },
     handleSelectColor(index) {
-      if (this.colorsId !== index) {
-        this.colorsId = index
+      if (this.colorID !== index) {
+        this.colorID = index
       }
     }
   },
   watch: {
     userSiteThemeConfigClone(config) {
-      let { fontId = 0, colorsId = 0, fontFamily = 'inherit' } = config || {}
+      let { fontId = 0, colorID = 0, fontFamily = 'inherit' } = config || {}
       this.fontId = fontId
       this.fontFamily = fontFamily
-      this.colorsId = colorsId
+      this.colorID = colorID
     }
   },
   computed: {
@@ -134,7 +134,7 @@ export default {
   data() {
     return {
       loading: false,
-      colorsId: 0,
+      colorID: 0,
       fontId: 0,
       fontFamily: 'inherit',
       fontSizeName: ['小号', '中号', '大号'],
