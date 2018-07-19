@@ -72,7 +72,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      userLogin: 'user/login'
+      userLogin: 'user/login',
+      userThirdLogin: 'user/thirdLogin'
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
@@ -127,10 +128,14 @@ export default {
     },
     async handleLoginResult(){
       if (result && result.data && result.data.error == 0) {
-        if (result.data.data.token == "token"){
+        if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
+          window.location.href = '/wiki/join?redirect=' + window.location.href
         } else {
           // 登录成功  进行页面跳转
+          let token = result.data.token
+          let userinfo = result.data.data
+          this.userThirdLogin({token, userinfo})
         }
         this.$message({
           message: this.$t('common.loginSuccess'),
