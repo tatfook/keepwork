@@ -57,7 +57,7 @@
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.signIn')}}</a>
+        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
@@ -83,7 +83,7 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.signIn')}}</a>
+        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
