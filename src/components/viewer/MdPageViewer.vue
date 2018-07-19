@@ -10,9 +10,10 @@
       <mod-list-viewer :modList='modList' :theme='theme' />
     </component>
     <div v-if="show404" class="img404">
-      <img src="https://test.keepwork.com/wiki/assets/imgs/404.png" alt="">
+      <img src="@/assets/img/no_right_to_access.png" alt="">
       <p>{{$t('common.NoPages')}}</p>
-      <el-button class="back" type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button>
+      <!-- <el-button type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button> -->
+      <el-button type="primary" round @click="isLoginDialogShow = true">{{$t('common.login')}}</el-button>
     </div>
     <QuickToTop/>
     <div @click.stop v-if="isLoginDialogShow">
