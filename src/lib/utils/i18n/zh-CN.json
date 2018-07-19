@@ -2,6 +2,8 @@
   "common": {
     "login": "登录",
     "register": "注册",
+    "password": "密码",
+    "loginAccount": "登录账号 (推荐email或手机号)",
     "forgetPassword": "忘记密码",
     "noAccount": "没有账号？点击",
     "usingFollowingAccount": "直接使用以下账号登录",
