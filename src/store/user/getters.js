@@ -10,10 +10,10 @@ import {
 import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
-  token: state => _.get(state, ['profile', 'token'], Cookies.get('token')),
+  token: state => (() => Cookies.get('token'))(),
   profile: (state, { token }) => {
     let { token: profileUserToken } = state.profile
-    if (profileUserToken !== token) return {}
+    if (!token || !profileUserToken || profileUserToken !== token) return {}
     return state.profile
   },
   isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
