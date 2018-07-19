@@ -26,7 +26,7 @@
                             <el-input size="small" v-model="authCode"></el-input>
                         </el-col>
                         <el-col class="send-auth-send-code">
-                            <el-button :disabled="sendCodeDisabled" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
+                            <el-button :disabled="sendCodeDisabled || !ruleFormDatas.cellphoneNumber" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
                               <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
                               <span v-else>{{$t('user.sendVerificationCode')}}</span>
                             </el-button>
@@ -53,11 +53,11 @@ export default {
   name: 'realNameAuthentication',
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
-        if(!/^1\d{10}$/.test(value)){
-          callback(new Error(this.$t('user.wrongNumberFormat')))
-        }else{
-          callback()
-        }
+      if (!/^1\d{10}$/.test(value)) {
+        callback(new Error(this.$t('user.wrongNumberFormat')))
+      } else {
+        callback()
+      }
     }
     return {
       loading: false,
@@ -70,8 +70,12 @@ export default {
       },
       phoneNumberRules: {
         cellphoneNumber: [
-          { required: true, message: this.$t('user.inputPhoneNumber'), trigger: 'blur'},
-          { validator: validatePhoneNumber, trigger: 'blur'}
+          {
+            required: true,
+            message: this.$t('user.inputPhoneNumber'),
+            trigger: 'blur'
+          },
+          { validator: validatePhoneNumber, trigger: 'blur' }
         ]
       }
     }
@@ -88,8 +92,8 @@ export default {
     verifiedPhoneNumber() {
       return this.realNameInfo && this.realNameInfo.cellphone
     },
-    localeLableWidth(){
-      return locale === 'en-US' ? '190px': '110px'
+    localeLableWidth() {
+      return locale === 'en-US' ? '190px' : '110px'
     }
   },
   methods: {
@@ -97,7 +101,7 @@ export default {
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
-    showMessage(type, message){
+    showMessage(type, message) {
       this.$message({
         message,
         type,
@@ -105,48 +109,61 @@ export default {
       })
     },
     async sendAuthCode() {
-      let payload = { setRealNameInfo: true, cellphone: this.ruleFormDatas.cellphoneNumber }
+      let payload = {
+        setRealNameInfo: true,
+        cellphone: this.ruleFormDatas.cellphoneNumber
+      }
       await this.verifyCellphoneOne(payload)
       let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
-      if(message === "号码格式有误"){
+      if (message === 'success') {
+        this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
+        this.sendCodeDisabled = true
+        this.timer = setInterval(() => {
+          if (this.count > 0) {
+            this.count--
+          } else {
+            this.sendCodeDisabled = false
+            clearInterval(this.timer)
+            this.timer = null
+            this.count = 60
+          }
+        }, 1000)
+        return
+      }
+      if (message === '号码格式有误') {
         // this.showMessage('error', this.$t('user.wrongNumberFormat'))
         return
       }
-      if(message === "短信验证码发送过频繁"){
+      if (message === '短信验证码发送过频繁') {
         this.showMessage('error', this.$t('user.sendingFrequent'))
         return
       }
-      if(message === "验证码超出同模板同号码天发送上限"){
+      if (message === '验证码超出同模板同号码天发送上限') {
         this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
         return
       }
-      let message2 = this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0,6)
-      if(message2 === "手机号已绑定"){
+      let message2 =
+        this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0, 6)
+      if (message2 === '手机号已绑定') {
         this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
       }
-      this.sendCodeDisabled = true
-      this.timer = setInterval(() => {
-        if(this.count > 0){
-          this.count--
-        }else{
-          this.sendCodeDisabled = false;
-          clearInterval(this.timer)
-          this.timer = null
-        }
-      }, 1000)
     },
-    async realNamePhoneNumber(){
-      let payload = { setRealNameInfo: true, cellphone: this.ruleFormDatas.cellphoneNumber, smsCode: this.authCode }
+    async realNamePhoneNumber() {
+      let payload = {
+        setRealNameInfo: true,
+        cellphone: this.ruleFormDatas.cellphoneNumber,
+        smsCode: this.authCode
+      }
       await this.verifyCellphoneTwo(payload)
       let messageId = this.authCodeInfo.error.id
-      if(messageId === -1){
+      if (messageId === -1) {
         this.showMessage('error', this.$t('user.verificationCodeError'))
-      } else if(messageId === 0){
+      } else if (messageId === 0) {
         this.showMessage('success', this.$t('common.saveSuccess'))
       }
     },
-    handleClose(){
+    handleClose() {
       this.$emit('close')
     }
   },
@@ -158,48 +175,48 @@ export default {
 <style lang="scss" scoped>
 .real-name-setting {
   height: 100%;
-  &-wrap{
+  &-wrap {
     width: 100%;
     display: flex;
   }
-  &-content{
+  &-content {
     flex: 1;
     border-right: 15px solid #cdd4db;
     .auth-status {
       color: red;
     }
-    .send-auth{
+    .send-auth {
       display: flex;
       .send-auth-code {
-        flex: 1
+        flex: 1;
       }
-      .send-auth-send-code{
+      .send-auth-send-code {
         width: 136px;
         margin-left: 8px;
-        .send-code-button{
+        .send-code-button {
           width: 100%;
         }
       }
     }
   }
-  .hasVerified{
+  .hasVerified {
     border-right: none;
   }
   &-header {
     border-bottom: 3px solid #cdd4db;
     line-height: 60px;
     margin-bottom: 20px;
-    h3{
+    h3 {
       margin: 0;
     }
   }
-  &-form{
+  &-form {
     width: 80%;
-    .real-name-status{
+    .real-name-status {
       margin-bottom: 0;
     }
   }
-  &-operations-col{
+  &-operations-col {
     width: 185px;
     text-align: center;
     align-self: flex-end;
@@ -214,11 +231,11 @@ export default {
 }
 </style>
 <style lang="scss">
-  .real-name-setting-form{
-    .el-form-item.is-required .el-form-item__label:before {
-      display: none;
-    }
+.real-name-setting-form {
+  .el-form-item.is-required .el-form-item__label:before {
+    display: none;
   }
+}
 </style>
 
 
