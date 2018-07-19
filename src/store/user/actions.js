@@ -45,6 +45,9 @@ const actions = {
     }
     return info
   },
+  thirdLogin({ commit }, payload) {
+    commit(LOGIN_SUCCESS, payload)
+  },
   logout({ commit }) {
     commit(LOGOUT)
     Cookies.remove('token')
