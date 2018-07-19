@@ -3,6 +3,8 @@ export const MOD_CMD_END_REG = /^```$/
 export const MARKDOWN_CMD = 'Markdown'
 export const MOD_CMD_BEGIN = '```@'
 export const MOD_CMD_END = '```'
+export const MARKDOWN_CMD_END = '----'
+export const MOD_PARACRAFT = 'Paracraft'
 
 export const cmdList = [
   'Markdown',
@@ -49,6 +51,10 @@ export const isNewCmd = (cmd) => {
 }
 
 export const isOldCmd = (cmd) => {
+  if (cmd === MOD_PARACRAFT) {
+    return false
+  }
+
   for (let key in oldCmdMapper) {
     if (key === cmd) return true
   }

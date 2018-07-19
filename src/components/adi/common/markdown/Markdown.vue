@@ -1,6 +1,6 @@
 <template>
   <vue-markdown
-    class="markdown-body comp-markdown"
+    :class="getClass"
     :toc="true"
     :source='validData'
     toc-anchor-link-symbol=""
@@ -10,11 +10,40 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
+import { Base64 } from 'js-base64'
+import jss from 'jss'
+import preset from 'jss-preset-default'
 
 export default {
   name: 'AdiMarkdown',
   mixins: [compBaseMixin],
   computed: {
+    getClass() {
+      let className = 'comp-space'
+      let style = {
+        [className]: {
+          'margin-top': this.options.space && this.options.space.webMarginTop + '!important',
+          'margin-bottom': this.options.space && this.options.space.webMarginBottom + '!important',
+          'padding-top': this.options.space && this.options.space.webPaddingTop + '!important',
+          'padding-bottom': this.options.space && this.options.space.webPaddingBottom + '!important'
+        },
+        '@media only screen and (max-width: 767px)': {
+          [className]: {
+            'margin-top': this.options.space && this.options.space.mobileMarginTop + '!important',
+            'margin-bottom': this.options.space && this.options.space.mobileMarginBottom + '!important',
+            'padding-top': this.options.space && this.options.space.mobilePaddingTop + '!important',
+            'padding-bottom': this.options.space && this.options.space.mobilePaddingBottom + '!important'
+          }
+        }
+      }
+
+      if(!this.sheet) {
+        this.sheet = jss.createStyleSheet(style)
+        this.sheet.attach()
+      }
+
+      return 'markdown-body ' + 'comp-markdown ' + this.sheet.classes[className]
+    },
     validData() {
       let isEmpty = !(this.properties.data && this.properties.data.trim())
       if (isEmpty && this.editMode) return this.$t(this.options.emptyData)

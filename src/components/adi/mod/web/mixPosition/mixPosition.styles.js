@@ -104,7 +104,7 @@ export default [
     cover: require('@/../static/adi/mixPosition/cover/projectOne.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '80px'
       },
       inner: {
         'margin-top': '-20px'
@@ -198,7 +198,7 @@ export default [
     cover: require('@/../static/adi/mixPosition/cover/projectTwo.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '80px'
       },
       inner: {
         'margin-top': '-20px'
@@ -314,7 +314,7 @@ export default [
     cover: require('@/../static/adi/mixPosition/cover/projectThree.png'),
     preview: {
       outter: {
-        height: '155px'
+        height: '80px'
       },
       inner: {
         'margin-top': '-20px'
@@ -378,7 +378,7 @@ export default [
     cover: require('@/../static/adi/mixPosition/cover/projectFour.png'),
     preview: {
       outter: {
-        height: '186px'
+        height: '86px'
       },
       inner: {
         'margin-top': '-20px'
@@ -442,7 +442,7 @@ export default [
     cover: require('@/../static/adi/mixPosition/cover/projectFive.png'),
     preview: {
       outter: {
-        height: '189px'
+        height: '89px'
       },
       inner: {
         'margin-top': '-20px'
