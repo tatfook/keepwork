@@ -6,7 +6,7 @@
               <h3>{{$t('common.realNameAuthentication')}}</h3>
           </el-header>
           <el-row class="real-name-setting-form">
-              <el-form :rules="phoneNumberRules" :model="ruleFormDatas" label-width="110px">
+              <el-form :rules="phoneNumberRules" :model="ruleFormDatas" :label-width="localeLableWidth">
                 <el-form-item :label='$t("user.certificationStatus")' :class="{'real-name-status':hasVerified}">
                     <span v-if="hasVerified">{{$t('user.certified')}}</span>
                     <span v-else class="auth-status">{{$t('user.unverified')}}</span>
@@ -47,6 +47,8 @@
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
+import { locale } from '@/lib/utils/i18n'
+
 export default {
   name: 'realNameAuthentication',
   data() {
@@ -85,6 +87,9 @@ export default {
     },
     verifiedPhoneNumber() {
       return this.realNameInfo && this.realNameInfo.cellphone
+    },
+    localeLableWidth(){
+      return locale === 'en-US' ? '190px': '110px'
     }
   },
   methods: {
@@ -169,7 +174,7 @@ export default {
         flex: 1
       }
       .send-auth-send-code{
-        width: 100px;
+        width: 136px;
         margin-left: 8px;
         .send-code-button{
           width: 100%;
@@ -189,7 +194,7 @@ export default {
     }
   }
   &-form{
-    width: 70%;
+    width: 80%;
     .real-name-status{
       margin-bottom: 0;
     }
