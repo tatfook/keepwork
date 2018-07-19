@@ -126,7 +126,7 @@ export default {
           this.isLoading = false
         })
     },
-    async handleLoginResult(){
+    async handleLoginResult(result){
       if (result && result.data && result.data.error == 0) {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
