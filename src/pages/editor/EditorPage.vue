@@ -5,12 +5,12 @@
     </el-header>
     <el-main>
       <router-view @showPreview='showPreview' />
-      <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible ' width='88% ' height='100% '>
+      <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '>
         <PageViewer />
       </el-dialog>
     </el-main>
     <div @click.stop v-if="!userIsLogined">
-      <LoginDialog :show="!userIsLogined" :forceLogin="true"/>
+      <LoginDialog :show="!userIsLogined" :forceLogin="true" @close="handleLoginDialogClose"/>
     </div>
   </el-container>
 </template>
@@ -67,6 +67,9 @@ export default {
     },
     showPreview() {
       this.previewDialogVisible = true
+    },
+    handleLoginDialogClose() {
+      location.reload()
     }
   },
   components: {
