@@ -19,7 +19,7 @@
           <el-row class="website-setting-font-size" type="flex" justify="center">
             <el-col :span="22">
               <span class="website-setting-select-title">字号:</span>
-              <el-select class="website-setting-select" v-model="fontId" size="small" placeholder="请选择">
+              <el-select class="website-setting-select" v-model="fontID" size="small" placeholder="请选择">
                 <el-option v-for="item in fontSize" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -27,7 +27,7 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <p v-for="(size, index) in fontSizeList[fontId]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
+              <p v-for="(size, index) in fontSizeList[fontID]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
@@ -73,9 +73,10 @@ export default {
     async handleSave() {
       this.loading = true
       let config = {
-        fontId: this.fontId,
+        fontID: this.fontID,
         fontFamily: this.fontFamily,
-        colorID: this.colorID
+        colorID: this.colorID,
+        name: 'classic'
       }
       await this.userSaveSiteThemeConfig({ sitePath: this.sitePath, config })
         .then(() => {
@@ -100,8 +101,8 @@ export default {
   },
   watch: {
     userSiteThemeConfigClone(config) {
-      let { fontId = 0, colorID = 0, fontFamily = 'inherit' } = config || {}
-      this.fontId = fontId
+      let { fontID = 0, colorID = 0, fontFamily = 'inherit' } = config || {}
+      this.fontID = fontID
       this.fontFamily = fontFamily
       this.colorID = colorID
     }
@@ -135,7 +136,7 @@ export default {
     return {
       loading: false,
       colorID: 0,
-      fontId: 0,
+      fontID: 0,
       fontFamily: 'inherit',
       fontSizeName: ['小号', '中号', '大号'],
       fontFamilyList: [

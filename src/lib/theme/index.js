@@ -1,10 +1,9 @@
 const ThemeHelper = {
-  defaultTheme() {
-    return {
-      fontFamily: 'inherit',
-      fontId: 0,
-      colorId: 0
-    }
+  defaultTheme: {
+    fontFamily: 'inherit',
+    fontID: 0,
+    colorID: 0,
+    name: 'classic'
   },
   themeRootPath(sitePath) {
     return `${sitePath}/_config/`
