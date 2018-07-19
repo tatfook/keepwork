@@ -1,10 +1,10 @@
 {
   "common": {
     "login": "Login",
-    "signIn": "Sign in",
-    "forgetPassword": "forget the password",
-    "noAccount": "No account?please click",
-    "usingFollowingAccount": "using the following account to login",
+    "register": "Register",
+    "forgetPassword": "Forget password",
+    "noAccount": "No account? Click ",
+    "usingFollowingAccount": "Log in directly with the following account",
     "inputUsername": "Please enter your username",
     "inputPassword": "Please enter your password",
     "wrongPassword": "Wrong password",

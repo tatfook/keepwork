@@ -40,6 +40,7 @@ const actions = {
   async login({ commit }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
+      info.data.token && Cookies.set('token', info.data.token)
       commit(LOGIN_SUCCESS, info.data)
     }
     return info
@@ -52,10 +53,6 @@ const actions = {
   },
   /*doc
     getProfile
-
-    getProfile({forceLogin: false})
-    can be called without username,
-    only uses cookie info;
     dispatch this action first, in any action which depends on username.
   */
   getProfile: (() => {
@@ -63,23 +60,20 @@ const actions = {
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
     return async (context, {forceLogin = true, useCache = true} = {}) => {
-      // let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
       let { commit, getters: { isLogined, authRequestConfig, token } } = context
       if (isLogined && useCache) return
 
       getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
           commit(GET_PROFILE_SUCCESS, {...profile, token})
-          Cookies.set('token', token)
           resolve()
         }).catch(async e => {
           if (!forceLogin) {
             reject(new Error('401'))
             clearGetProfilePromise()
-            // return
           }
           // alert('尚未登陆，请登陆后访问！')
-          // login for localhost test
+          // // login for localhost test
           // if (process.env.HOST_ENV === 'localhost') {
           //   let payload = {
           //     username: prompt('username: '),

@@ -1,34 +1,36 @@
 <template>
-      <el-dialog title="" v-if='show' :visible.sync="show" class="login-dialog" :before-close="handleClose">
-        <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-          <el-form-item prop="username">
-            <el-input v-model="ruleForm.username"></el-input>
-          </el-form-item>
-           <el-form-item prop="password">
-            <el-input type="password" v-model="ruleForm.password"></el-input>
-          </el-form-item>
-          <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
-          <el-form-item>
-            <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
-          </el-form-item>
-          <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}?<a href="/wiki/join">{{$t('common.signIn')}}</a></div>
-          <div class="login-dialog-form-three-login">
-            <div class="title">{{$t('common.usingFollowingAccount')}}</div>
-            <a @click="authorizedToLogin('qq')">
-              <img src="@/assets/img/wiki_qq.png" alt="">
-            </a>
-            <a @click="authorizedToLogin('weixin')">
-              <img src="@/assets/img/wiki_wechat.png" alt="">
-            </a>
-            <a @click="authorizedToLogin('xinlangweibo')">
-              <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-            </a>
-            <a @click="authorizedToLogin('github')">
-              <img src="@/assets/img/wiki_github_logo.png" alt="">
-            </a>
-          </div>
-        </el-form>
-      </el-dialog>
+  <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
+    <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+      <el-form-item prop="username">
+        <el-input v-model="ruleForm.username"></el-input>
+      </el-form-item>
+       <el-form-item prop="password">
+        <el-input type="password" v-model="ruleForm.password"></el-input>
+      </el-form-item>
+      <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+      <el-form-item>
+        <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
+      </el-form-item>
+      <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/wiki/join">{{$t('common.register')}}</a></div>
+      <div class="login-dialog-form-three-login">
+        <div class="title">
+          <span>{{$t('common.usingFollowingAccount')}}</span>
+        </div>
+        <a @click="authorizedToLogin('qq')">
+          <img src="@/assets/img/wiki_qq.png" alt="">
+        </a>
+        <a @click="authorizedToLogin('weixin')">
+          <img src="@/assets/img/wiki_wechat.png" alt="">
+        </a>
+        <a @click="authorizedToLogin('xinlangweibo')">
+          <img src="@/assets/img/wiki_sina_weibo.png" alt="">
+        </a>
+        <a @click="authorizedToLogin('github')">
+          <img src="@/assets/img/wiki_github_logo.png" alt="">
+        </a>
+      </div>
+    </el-form>
+  </el-dialog>
 </template>
 <script>
 import { mapActions } from 'vuex'
@@ -36,10 +38,16 @@ import { mapActions } from 'vuex'
 export default {
   name: 'LoginDialog',
   props: {
-    show: Boolean
+    show: Boolean,
+    forceLogin: {
+      required: false,
+      default: false,
+      type: Boolean
+    }
   },
   data() {
     return {
+      loading: false,
       ruleForm: {
         username: '',
         password: ''
@@ -64,10 +72,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      userLogin: 'user/login',
+      userLogin: 'user/login'
     }),
     handleClose() {
-      this.$emit('close')
+      !this.forceLogin && this.$emit('close')
     },
     async login(formName) {
       this.$refs[formName].validate(async valid => {
@@ -76,7 +84,12 @@ export default {
             username: this.ruleForm.username,
             password: this.ruleForm.password
           }
-          let info = await this.userLogin(payload)
+          this.loading = true
+          let info = await this.userLogin(payload).catch(e => {
+            console.error(e)
+            this.loading = false
+          })
+          this.loading = false
           if (info.error.id === 0) {
             this.$emit('close')
           } else if (info.error.message === '用户不存在') {
@@ -138,8 +151,12 @@ export default {
 
 <style lang="scss">
 .login-dialog {
-  .el-dialog__header {
-    padding: 0;
+  &.force-login {
+    .el-dialog__header {
+      .el-dialog__headerbtn {
+        display: none;
+      }
+    }
   }
   .el-dialog {
     width: 478px;
@@ -189,23 +206,20 @@ export default {
         padding: 20px 0 35px;
         text-align: center;
         position: relative;
-        &::before {
-          content: '';
-          height: 2px;
-          width: 16%;
-          position: absolute;
-          right: 0;
-          top: 40%;
-          background-color: #d6e6f4;
+        span {
+          background: #fff;
+          position: relative;
+          z-index: 2;
+          padding: 0 4px;
         }
         &::after {
           content: '';
           height: 2px;
-          width: 16%;
+          width: 100%;
           position: absolute;
-          left: 0;
+          right: 0;
           top: 40%;
-          background-color: #d6e6f4;
+          background: #d6e6f4;
         }
       }
     }
