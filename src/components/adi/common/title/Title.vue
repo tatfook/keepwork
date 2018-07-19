@@ -1,19 +1,59 @@
 <template>
   <div class="comp-title">
-    <a :target='properties.target ? properties.target : options.emptyTarget' :href='properties.link ? properties.link : options.emptyLink'>
-      <h1>{{ properties.name ? properties.name : $t(options.emptyName) }}</h1>
+    <a :target='getTarget' :href="getLink">
+      <h1 :class="getClass">{{ properties.name ? properties.name : $t(options.emptyName) }}</h1>
     </a>
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import { Base64 } from 'js-base64'
+import jss from 'jss'
+import preset from 'jss-preset-default'
 
 export default {
   name: 'AdiTitle',
   mixins: [compBaseMixin],
   methods: {},
-  computed: {}
+  computed: {
+    getTarget() {
+      let properties = this.properties
+      let options = this.options
+      return properties.target ? properties.target : options.emptyTarget
+    },
+    getLink() {
+      let properties = this.properties
+      let options = this.options
+      return properties.link ? properties.link : options.emptyLink
+    },
+    getClass() {
+      let className = 'comp-space'
+      let style = {
+        [className]: {
+          'margin-top': this.options.space && this.options.space.webMarginTop + '!important',
+          'margin-bottom': this.options.space && this.options.space.webMarginBottom + '!important',
+          'padding-top': this.options.space && this.options.space.webPaddingTop + '!important',
+          'padding-bottom': this.options.space && this.options.space.webPaddingBottom + '!important'
+        },
+        '@media only screen and (max-width: 767px)': {
+          [className]: {
+            'margin-top': this.options.space && this.options.space.mobileMarginTop + '!important',
+            'margin-bottom': this.options.space && this.options.space.mobileMarginBottom + '!important',
+            'padding-top': this.options.space && this.options.space.mobilePaddingTop + '!important',
+            'padding-bottom': this.options.space && this.options.space.mobilePaddingBottom + '!important'
+          }
+        }
+      }
+
+      if(!this.sheet) {
+        this.sheet = jss.createStyleSheet(style)
+        this.sheet.attach()
+      }
+
+      return this.sheet.classes[className]
+    }
+  }
 }
 </script>
 
@@ -21,13 +61,13 @@ export default {
 a {
   text-decoration: none;
   color: unset;
-}
 
-h1 {
-  margin: 0;
-  font-size: unset;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  h1 {
+    margin: 0;
+    font-size: unset;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>

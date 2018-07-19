@@ -52,7 +52,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -120,7 +119,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -191,7 +189,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -258,7 +255,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
