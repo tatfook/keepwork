@@ -1,7 +1,7 @@
 {
   "common": {
     "login": "登录",
-    "signIn": "注册",
+    "register": "注册",
     "forgetPassword": "忘记密码",
     "noAccount": "没有账号？点击",
     "usingFollowingAccount": "直接使用以下账号登录",
