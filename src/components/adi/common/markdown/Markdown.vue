@@ -1,10 +1,11 @@
 <template>
-  <vue-markdown
-    :class="getClass"
-    :toc="true"
-    :source='validData'
-    toc-anchor-link-symbol=""
-    toc-anchor-class="iconfont icon-link_"/>
+  <div :class="getClass">
+    <vue-markdown
+      :toc="true"
+      :source="validData"
+      toc-anchor-link-symbol=""
+      toc-anchor-class="iconfont icon-link_"/>
+  </div>
 </template>
 
 <script>
