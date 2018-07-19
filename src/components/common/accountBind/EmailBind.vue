@@ -14,11 +14,13 @@
       </el-form-item>
     </el-form>
     <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='emailCodeDialogDatas' codeType='email' @close='handleClose'></CodeVerifyDialog>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import CodeVerifyDialog from './CodeVerifyDialog'
+import PasswordVerifyDialog from './PasswordVerifyDialog'
 const EmailReg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
 export default {
   name: 'EmailBind',
@@ -43,7 +45,12 @@ export default {
         value: '',
         bind: undefined
       },
-      isCodeDialogVisible: false
+      isCodeDialogVisible: false,
+      pwdDialogData: {
+        type: '',
+        value: ''
+      },
+      isPwdDialogVisible: false
     }
   },
   computed: {
@@ -69,13 +76,12 @@ export default {
     async toggleBindEmail() {
       let emailForm = this.$refs.emailForm
       if (this.isUserBindEmail) {
-        this.emailCodeDialogDatas = {
+        this.pwdDialogData = {
           type: 'email',
-          value: this.userEmail,
-          bind: false
+          value: this.userEmail
         }
         emailForm.clearValidate()
-        this.isCodeDialogVisible = true
+        this.isPwdDialogVisible = true
         return
       }
       emailForm.validate(async valid => {
@@ -102,10 +108,14 @@ export default {
     },
     handleClose() {
       this.isCodeDialogVisible = false
+    },
+    handlePwdDialogClose() {
+      this.isPwdDialogVisible = false
     }
   },
   components: {
-    CodeVerifyDialog
+    CodeVerifyDialog,
+    PasswordVerifyDialog
   }
 }
 </script>

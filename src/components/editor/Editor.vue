@@ -249,9 +249,10 @@ export default {
         isCodeShow: !this.isCodeShow,
         isPreviewShow: true
       })
-      this.isCodeShow && this.$store.dispatch('setAddingArea', {
-        area: this.gConst.ADDING_AREA_ADI
-      })
+      this.isCodeShow &&
+        this.$store.dispatch('setAddingArea', {
+          area: this.gConst.ADDING_AREA_ADI
+        })
     },
     toggleFullscreen() {
       this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
@@ -318,10 +319,10 @@ export default {
       this.$refs.codemirror.addMod()
     },
     openSkyDriveManagerDialog() {
-      this.toggleSkyDrive({ showSkyDrive:true })
+      this.toggleSkyDrive({ showSkyDrive: true })
     },
     closeSkyDriveManagerDialog({ file, url }) {
-      this.toggleSkyDrive({ showSkyDrive:false })
+      this.toggleSkyDrive({ showSkyDrive: false })
       if (!url) return
 
       let filename = file.filename || url
@@ -469,7 +470,7 @@ export default {
   position: relative;
   flex-shrink: 0;
 }
-.toolbar-content{
+.toolbar-content {
   min-width: 500px;
 }
 .toolbar::-webkit-scrollbar {
@@ -486,7 +487,7 @@ export default {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-.toolbar .fullScreenBtn{
+.toolbar .fullScreenBtn {
   float: right;
 }
 .toolbar .fullScreenBtn .el-button {
@@ -556,6 +557,11 @@ export default {
   height: 100%;
   background-color: #cdd4dc;
   max-width: 1080px;
+}
+@media (max-width: 1920px) {
+  .manager-win {
+    flex-basis: 320px;
+  }
 }
 </style>
 <style lang="scss">

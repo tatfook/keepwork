@@ -38,7 +38,7 @@ export default [
     cover: require('@/../static/adi/img/cover/imgOne.png'),
     preview: {
       outter: {
-        height: '157px'
+        height: '57px'
       }
     }
   },
@@ -73,7 +73,7 @@ export default [
     cover: require('@/../static/adi/img/cover/imgTwo.png'),
     preview: {
       outter: {
-        height: '209px'
+        height: '100px'
       }
     }
   }

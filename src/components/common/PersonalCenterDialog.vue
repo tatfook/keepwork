@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       loading: false,
-      title: `//${location.host}/${this.sitePath}`,
+      title: this.$t('common.personalCenter'),
       personalSettingNavs: [
         {
           text: this.$t('common.userData'),
@@ -45,7 +45,7 @@ export default {
           comp: RealNameAuthentication
         }
       ],
-      activeSettingIndex: 1
+      activeSettingIndex: 0
     }
   },
   computed: {

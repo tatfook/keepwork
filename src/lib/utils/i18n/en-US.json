@@ -70,7 +70,8 @@
     "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
     "success": "Success",
-    "failure": "Failure"
+    "failure": "Failure",
+    "errorInfoTitle": "Error"
   },
   "editor": {
     "files": "Files",
@@ -285,7 +286,8 @@
 
     "categoryList": "Category list",
     "tab": "Tab",
-    "pageSwitching": "Page switching"
+    "pageSwitching": "Page switching",
+    "iframe": "iframe"
   },
   "adi": {
     "markdown": {
@@ -458,6 +460,7 @@
     "checkPassed": "Approved",
     "checkUnpassed": "Rejected",
     "checking": "Processing",
+    "uploadFailed": "Failed",
     "fileUnapprovedError": "File is not approved yet!",
 
     "downloadSelected": "Download",
@@ -515,6 +518,7 @@
     "githubBind": "Github",
     "binding": "binding",
     "unbunding": "unbunding",
+    "unBundingFailure": "Unbunding failure",
     "unBound": "unBound",
     "wrongEmailFormat": "E-mail format is incorrect",
     "emailHasBeenBoundToOtherAccounts": "The mailbox has been bound!",
@@ -522,7 +526,9 @@
     "smsCodeSentSuccess": "SMS sent successfully!",
     "smsCodeSentFailed": "Message failed to send",
     "smsCode": "SmsCode:",
-    "sendCodes": "Send Codes"
+    "sendCodes": "Send Code",
+    "inputLoginPwd": "Login Password",
+    "pleaseCheckPwd": "Please check if the password is correct"
   },
   "setting": {
     "general": "Basic Info",
@@ -533,6 +539,7 @@
     "siteIntro": "Intro",
     "change": "Change",
     "hideSystemHeader": "Hide system header (vip only)",
-    "hideSystemFooter": "Hide system footer (vip only)"
+    "hideSystemFooter": "Hide system footer (vip only)",
+    "siteNameMaxLen": "The site name must be less than 30 characters"
   }
 }

@@ -561,6 +561,46 @@ const actions = {
     let { authRequestConfig } = getters
     await keepwork.userThreeService.deleteById({ id }, authRequestConfig)
     await dispatch('getUserThreeServiceByUsername', { username })
+  },
+  async threeServiceUnbind(context, { id, password, username }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.userThreeService.unbind({ id, password }, authRequestConfig).then(async () => {
+      await dispatch('getUserThreeServiceByUsername', { username })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
+  },
+  async unbindCellphone(context, { password }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.user.unbindCellphone({ password }, authRequestConfig).then(async () => {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
+  },
+  async unbindEmail(context, { password }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.user.unbindEmail({ password }, authRequestConfig).then(async () => {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
   }
 }
 

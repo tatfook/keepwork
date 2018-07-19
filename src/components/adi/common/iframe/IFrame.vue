@@ -20,6 +20,11 @@ export default {
         return {
           'padding-top': (100 / eval(ratio)) + '%'
         }
+      } else {
+        return {
+          'width': this.properties.width,
+          'height': this.properties.height
+        }
       }
     }
   }

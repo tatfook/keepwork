@@ -523,9 +523,9 @@ export default [
         'margin-top': '-20px'
       }
     }
-  }
+  },
   // style 3
-  /* {
+  {
     templateID: 3,
     data: {
       root: {
@@ -733,9 +733,9 @@ export default [
         'margin-top': '-20px'
       }
     }
-  }, */
+  },
   // style 4
-  /* {
+  {
     templateID: 3,
     data: {
       root: {
@@ -953,5 +953,5 @@ export default [
         'margin-top': '-20px'
       }
     }
-  } */
+  }
 ]

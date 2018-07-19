@@ -11,11 +11,13 @@
       </el-form-item>
     </el-form>
     <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='phoneCodeDialogDatas' codeType='cellphone' @close='handleClose'></CodeVerifyDialog>
+    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
   </div>
 </template>
 <script>
 import CodeVerifyDialog from './CodeVerifyDialog'
 import { mapGetters } from 'vuex'
+import PasswordVerifyDialog from './PasswordVerifyDialog'
 const PhoneReg = /[0-9]{11}/
 export default {
   name: 'PhoneBind',
@@ -39,7 +41,12 @@ export default {
       phoneBindRules: {
         cellphone: [{ validator: phoneValidater, trigger: 'change' }]
       },
-      isCodeDialogVisible: false
+      isCodeDialogVisible: false,
+      pwdDialogData: {
+        type: '',
+        value: ''
+      },
+      isPwdDialogVisible: false
     }
   },
   computed: {
@@ -62,13 +69,12 @@ export default {
     async toggleBindPhone() {
       let phoneForm = this.$refs.phoneForm
       if (this.isUserBindPhone) {
-        this.phoneCodeDialogDatas = {
+        this.pwdDialogData = {
           type: 'cellphone',
-          value: this.userPhone,
-          bind: false
+          value: this.userPhone
         }
         phoneForm.clearValidate()
-        this.isCodeDialogVisible = true
+        this.isPwdDialogVisible = true
         return
       }
       phoneForm.validate(async valid => {
@@ -84,10 +90,14 @@ export default {
     },
     handleClose() {
       this.isCodeDialogVisible = false
+    },
+    handlePwdDialogClose() {
+      this.isPwdDialogVisible = false
     }
   },
   components: {
-    CodeVerifyDialog
+    CodeVerifyDialog,
+    PasswordVerifyDialog
   }
 }
 </script>

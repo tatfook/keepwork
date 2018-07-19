@@ -1,11 +1,15 @@
 <template>
-  <vue-markdown :class="getClass" :toc="true" :source='properties.data ? properties.data : $t(options.emptyData)' toc-anchor-link-symbol="" toc-anchor-class="iconfont icon-link_"/>
+  <vue-markdown
+    :class="getClass"
+    :toc="true"
+    :source='validData'
+    toc-anchor-link-symbol=""
+    toc-anchor-class="iconfont icon-link_"/>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
-import 'github-markdown-css/github-markdown.css'
 import { Base64 } from 'js-base64'
 import jss from 'jss'
 import preset from 'jss-preset-default'
@@ -13,7 +17,7 @@ import preset from 'jss-preset-default'
 export default {
   name: 'AdiMarkdown',
   mixins: [compBaseMixin],
-    computed: {
+  computed: {
     getClass() {
       let className = 'comp-space'
       let style = {
@@ -39,6 +43,11 @@ export default {
       }
 
       return this.sheet.classes[className] + 'markdown-body' + 'comp-markdown'
+    },
+    validData() {
+      let isEmpty = !(this.properties.data && this.properties.data.trim())
+      if (isEmpty && this.editMode) return this.$t(this.options.emptyData)
+      return this.properties.data
     }
   },
   components: {
@@ -48,6 +57,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'github-markdown-css/github-markdown.css';
+@import 'highlight.js/styles/github-gist.css';
+
 .comp-markdown {
   color: unset;
   font-size: unset;

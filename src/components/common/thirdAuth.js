@@ -2,12 +2,21 @@ import Vue from 'vue'
 import vueAxios from 'vue-axios'
 import VueAuthenticate from 'vue-authenticate'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 Vue.use(vueAxios, axios)
 let popupOptions = {
   width: 900,
   height: 545
 }
 Vue.use(VueAuthenticate, {
+  bindRequestInterceptor: function() {
+    this.$http.interceptors.request.use((config) => {
+      config.headers['Authorization'] = [
+        'Bearer', Cookies.get('token')
+      ].join(' ')
+      return config
+    })
+  },
   providers: {
     qq: {
       name: 'qq',
