@@ -56,21 +56,21 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': this.options.img && this.options.img.defaultWebHeight + '!important',
-          'width': parseInt(this.properties.webWidth || this.options.img.defaultWebWidth) + 'px!important',
-          'margin-top': this.options.space && this.options.space.webMarginTop + '!important',
-          'margin-bottom': this.options.space && this.options.space.webMarginBottom + '!important',
-          'padding-top': this.options.space && this.options.space.webPaddingTop + '!important',
-          'padding-bottom': this.options.space && this.options.space.webPaddingBottom + '!important'
+          'height': this.options.img && this.parsePx(this.options.img.defaultWebHeight),
+          'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultWebWidth),
+          'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
+          'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
+          'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
+          'padding-bottom': this.options.space && this.parsePx(this.options.space.webPaddingBottom)
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': this.options.img && this.options.img.defaultMobileHeight + '!important',
-            'width': parseInt(this.properties.mobileWidth || this.options.img.defaultMobileWidth) + 'px!important',
-            'margin-top': this.options.space && this.options.space.mobileMarginTop + '!important',
-            'margin-bottom': this.options.space && this.options.space.mobileMarginBottom + '!important',
-            'padding-top': this.options.space && this.options.space.mobilePaddingTop + '!important',
-            'padding-bottom': this.options.space && this.options.space.mobilePaddingBottom + '!important'
+            'height': this.options.img && this.parsePx(this.options.img.defaultMobileHeight),
+            'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultMobileWidth),
+            'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
+            'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
+            'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
+            'padding-bottom': this.options.space && this.parsePx(this.options.space.mobilePaddingBottom)
           }
         }
       }
@@ -87,6 +87,15 @@ export default {
         fill: this.options.svgFillColor
       })
     }
+  },
+  methods: {
+    parsePx(value) {
+      if(value) {
+        return parseInt(value) + 'px!important'
+      } else {
+        return 'auto!important'
+      }
+    },
   }
 }
 </script>
