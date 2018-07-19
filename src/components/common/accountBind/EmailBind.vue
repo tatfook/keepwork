@@ -4,6 +4,7 @@
       <el-form-item prop="email">
         <span slot="label">{{$t('user.emailBind')}}:</span>
         <el-input class="email-bind-form-item-content" size='small' v-model="emailFormData.email" v-if="!isUserBindEmail"></el-input>
+        <span class="el-form-item__error" v-show="emailError">{{emailError}}</span>
         <div class="email-bind-form-item-content" v-if="isUserBindEmail">{{userEmail}}</div>
         <span class="el-form-item__error" v-show="emailError">{{emailError}}</span>
       </el-form-item>
@@ -26,6 +27,10 @@ export default {
   name: 'EmailBind',
   data() {
     let emailValidater = (rule, value, callback) => {
+      this.emailError = ''
+      if (value == '') {
+        return
+      }
       if (!EmailReg.test(value)) {
         callback(new Error(this.$t('user.wrongEmailFormat')))
       } else {
@@ -50,7 +55,8 @@ export default {
         type: '',
         value: ''
       },
-      isPwdDialogVisible: false
+      isPwdDialogVisible: false,
+      emailError: ''
     }
   },
   computed: {
@@ -82,6 +88,10 @@ export default {
         }
         emailForm.clearValidate()
         this.isPwdDialogVisible = true
+        return
+      }
+      if (this.emailFormData.email == '') {
+        this.emailError = this.$t('user.wrongEmailFormat')
         return
       }
       emailForm.validate(async valid => {

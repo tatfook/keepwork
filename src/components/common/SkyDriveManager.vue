@@ -178,6 +178,8 @@ import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import formatDate from '@/lib/utils/formatDate'
+import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
+import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import mediaProperties from '../adi/common/media/media.properties';
 const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
@@ -194,7 +196,7 @@ export default {
       multipleSelectionResults: [],
       selectedMediaItem: null,
       uploadingFiles:[],
-      qiniuCancelUpload:{}
+      qiniuUploadSubscriptions:{}
     }
   },
   async mounted() {
@@ -216,7 +218,7 @@ export default {
         // checked: 0 未审核, 1 通过, 2 未通过
         let { checked, size, filename, type, updatedAt } = item
         let file = { size, filename, type, downloadUrl: '' }
-        let ext = this.getFileExt(file)
+        let ext = getFileExt(file)
         updatedAt = formatDate(new Date(updatedAt))
 
         let displaySize = this.biteToM(size) + 'MB'
@@ -268,13 +270,6 @@ export default {
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       userUseFileInSite: 'user/useFileInSite'
     }),
-    getFileExt(file){
-      let { filename, type } = file
-      filename = filename || file.name
-      let ext = /.+\./.test(filename) ? filename.split('.').pop() : type
-      ext = (ext || '').toLowerCase()
-      return ext
-    },
     async filesQueueToUpload(files){
       if (this.defaultMode) {
         this.$refs.skyDriveTable.clearSort()
@@ -287,7 +282,7 @@ export default {
           cover: previewUrl,
           percent: 0,
           filename: file.name,
-          ext: this.getFileExt(file),
+          ext: getFileExt(file),
           displaySize: this.biteToM(file.size) + 'MB',
           file: {
             downloadUrl: ''
@@ -311,9 +306,6 @@ export default {
       let files = _.get(e, ['dataTransfer', 'files'])
       this.filesQueueToUpload(files)
     },
-    async wait(ms = 0) {
-      return new Promise(resolve => setTimeout(resolve, ms))
-    },
     async uploadFile(file, fileIndex) {
       if (!file) return
       if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) {
@@ -330,7 +322,7 @@ export default {
       if (filenameValidateResult !== true) {
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
-        await this.wait(Math.random()*1000)
+        await waitForMilliSeconds(Math.random()*1000)
         this.$notify({
           title: this.$t('common.failure'),
           message: file.name + ' ' + filenameValidateResult,
@@ -339,8 +331,8 @@ export default {
         return
       }
       let that = this
-      await this.userUploadFileToSkyDrive({file, onStart(subscirbtion) {
-        that.qiniuCancelUpload[file.name] = subscirbtion
+      await this.userUploadFileToSkyDrive({file, onStart(subscription) {
+        that.qiniuUploadSubscriptions[file.name] = subscription
       }, onProgress(progress) {
         fileIndex = _.findIndex(that.uploadingFiles, ['filename', file.name])
         that.uploadingFiles[fileIndex].percent = progress.percent
@@ -358,7 +350,7 @@ export default {
     removeFromUploadQue(file){
       let { filename, state } = file
       if (state === 'doing') {
-        let removingFileSubscribtion = _.get(this.qiniuCancelUpload, filename)
+        let removingFileSubscribtion = _.get(this.qiniuUploadSubscriptions, filename)
         if (removingFileSubscribtion) {
           removingFileSubscribtion.unsubscribe()
         }
@@ -368,8 +360,8 @@ export default {
       })
     },
     cancelUpload(){
-      _.forIn(this.qiniuCancelUpload, (subscirbtion, key)=>{
-        subscirbtion.unsubscribe()
+      _.forIn(this.qiniuUploadSubscriptions, (subscription, key)=>{
+        subscription.unsubscribe()
       })
     },
     async handleRemove(file) {
@@ -393,7 +385,7 @@ export default {
 
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),
-        cancelButtonText: 'Cancel'
+        cancelButtonText: this.$t('common.Cancel')
       })
 
       this.$copyText(toCopyLink).then(res => {
@@ -419,18 +411,19 @@ export default {
       this.$emit('close', { file, url: `${url}#${file.filename}` })
     },
     async handleRename(item) {
-      let { _id, ext, key } = item
+      let { _id, ext, filename, key } = item
+      let bareFilename = getBareFilename(filename)
       let { value: newname } = await this.$prompt(this.$t('skydrive.newFilenamePromptMsg'),  this.$t('common.rename'), {
+        inputValue: bareFilename,
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
         inputValidator: str => {
-          if (!str) {
-            return this.$t('skydrive.nameEmptyError')
-          }
+          if (str === bareFilename || str === filename) return true
+          if (!str) return this.$t('skydrive.nameEmptyError')
+
           let isFilenameValid = this.testFilenameIsValid(str)
-          if (typeof(isFilenameValid) === 'string') {
-            return isFilenameValid
-          }
+          if (typeof(isFilenameValid) === 'string') return isFilenameValid
+
           return this.filenameValidator(getFilenameWithExt(str, ext))
         }
       })
@@ -441,10 +434,11 @@ export default {
       let newnameExt = /.+\./.test(newname) ? newname.split('.').pop() : ''
       newnameExt = newnameExt.toLowerCase()
       newname = newnameExt !== ext ? `${newname}.${ext}` : newname
+      let newFilename = newname
+      if (newFilename === filename) return
 
-      let filename = newname
       this.loading = true
-      await this.userChangeFileNameInSkyDrive({key, filename}).catch(err => console.error(err))
+      await this.userChangeFileNameInSkyDrive({key, filename: newFilename}).catch(err => console.error(err))
       await this.userRefreshSkyDrive({useCache: false}).catch(err => console.error(err))
       this.loading = false
     },

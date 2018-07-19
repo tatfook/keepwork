@@ -51,7 +51,7 @@
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
-            <el-dropdown-item divided><a @click.stop.prevent="logout">{{$t('common.logout')}}</a></el-dropdown-item>
+            <el-dropdown-item divided><a @click.stop="logout">{{$t('common.logout')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -112,6 +112,9 @@
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
       <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
     </div>
+    <div @click.stop v-if="isLoginDialogShow">
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+    </div>
   </div>
 </template>
 
@@ -120,6 +123,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import LoginDialog from '@/components/common/LoginDialog'
 import Cookies from 'js-cookie'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
@@ -129,7 +133,8 @@ export default {
     return {
       IS_GLOBAL_VERSION,
       isPersonalCenterShow: false,
-      isSkyDriveManagerDialogShow: false
+      isSkyDriveManagerDialogShow: false,
+      isLoginDialogShow: false,
     }
   },
   computed: {
@@ -157,7 +162,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      userGetProfile: 'user/getProfile'
+      userGetProfile: 'user/getProfile',
+      userLogout: 'user/logout'
     }),
     backEditArea() {
       this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
@@ -183,14 +189,15 @@ export default {
           : this.$refs.codemirror.insertLink(filename, url)
       }
     },
-    logout() {
-      Cookies.remove('token')
-      Cookies.remove('token', { path: '/' })
-      window.localStorage.removeItem('satellizer_token')
-      window.location.reload()
-    },
     goLogin() {
-      window.location = '/wiki/login?redirect=' + window.location.href
+      this.isLoginDialogShow = true
+    },
+    closeLoginDialog(){
+      this.isLoginDialogShow = false
+    },
+    logout() {
+      this.userLogout()
+      // window.location.reload()
     },
     goJoin() {
       window.location = '/wiki/join?redirect=' + window.location.href
@@ -198,7 +205,8 @@ export default {
   },
   components: {
     PersonalCenterDialog,
-    SkyDriveManagerDialog
+    SkyDriveManagerDialog,
+    LoginDialog
   }
 }
 </script>

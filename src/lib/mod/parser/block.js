@@ -12,7 +12,6 @@ class ModBlock {
     this.key = null // data-binding
     this.modKey = null
     this.uuid = uuid()
-    this.endingMark = false
   }
 }
 

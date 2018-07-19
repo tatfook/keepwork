@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 
 const {
   LOGIN_SUCCESS,
+  LOGOUT,
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
@@ -37,8 +38,17 @@ const {
 
 const actions = {
   async login({ commit }, payload) {
-    let info = await keepwork.user.login(payload)
-    commit(LOGIN_SUCCESS, info)
+    let info = await keepwork.user.login(payload, null, true)
+    if (info.data) {
+      commit(LOGIN_SUCCESS, info.data)
+    }
+    return info
+  },
+  logout({ commit }) {
+    commit(LOGOUT)
+    Cookies.remove('token')
+    Cookies.remove('token', { path: '/' })
+    window.localStorage.removeItem('satellizer_token')
   },
   /*doc
     getProfile
@@ -53,7 +63,8 @@ const actions = {
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
     return async (context, {forceLogin = true, useCache = true} = {}) => {
-      let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
+      // let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
+      let { commit, getters: { isLogined, authRequestConfig, token } } = context
       if (isLogined && useCache) return
 
       getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
@@ -65,27 +76,26 @@ const actions = {
           if (!forceLogin) {
             reject(new Error('401'))
             clearGetProfilePromise()
-            return
+            // return
           }
-
-          alert('尚未登陆，请登陆后访问！')
+          // alert('尚未登陆，请登陆后访问！')
           // login for localhost test
-          if (process.env.HOST_ENV === 'localhost') {
-            let payload = {
-              username: prompt('username: '),
-              password: prompt('password: ')
-            }
-            clearGetProfilePromise()
-            if (!payload.username || !payload.password) {
-              reject(new Error('401'))
-              return
-            }
-            await dispatch('login', payload)
-            await dispatch('getProfile')
-            return resolve()
-          } else {
-            location.href = '/wiki/login?redirect=' + window.location.href
-          }
+          // if (process.env.HOST_ENV === 'localhost') {
+          //   let payload = {
+          //     username: prompt('username: '),
+          //     password: prompt('password: ')
+          //   }
+          //   clearGetProfilePromise()
+          //   if (!payload.username || !payload.password) {
+          //     reject(new Error('401'))
+          //     return
+          //   }
+          //   await dispatch('login', payload)
+          //   await dispatch('getProfile')
+          //   return resolve()
+          // } else {
+          //   location.href = '/wiki/login?redirect=' + window.location.href
+          // }
         })
       }).then(clearGetProfilePromise)
 
@@ -488,14 +498,15 @@ const actions = {
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
     await dispatch('getProfile')
-    let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
+    let filelist = await skyDrive.list({pageSize: 10000000}, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
+    return filelist
   },
-  async uploadFileToSkyDrive(context, {file, onStart, onProgress}) {
+  async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let url = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
-    return url
+    let { key } = await skyDrive.upload({file, filename, onStart, onProgress}, authRequestConfig)
+    return { key }
   },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
@@ -517,6 +528,15 @@ const actions = {
 
     let url = await skyDrive.useFileInSite({userId, siteId, fileId}, authRequestConfig)
     commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
+    return url
+  },
+  async uploadFileAndUseInSite({dispatch}, {file, filename, sitePath, onStart, onProgress}) {
+    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, filename, onStart, onProgress})
+    let filelist = await dispatch('getFileListFromSkyDrive', {useCache: false})
+    let fileUploaded = (filelist || []).filter(({ key }) => fileKey === key)[0]
+    let { id: fileId } = fileUploaded
+    let url = await dispatch('useFileInSite', {fileId, sitePath, useCache: false})
+    return {file: fileUploaded, url}
   },
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)

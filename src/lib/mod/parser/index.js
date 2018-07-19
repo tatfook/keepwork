@@ -35,8 +35,7 @@ const buildBlockList = mdText => {
       curModBlock = new ModBlock(cmd, lineNumber)
     }
   }
-  const endModBlock = (endingMark) => {
-    BlockHelper.setEndingMark(curModBlock, endingMark)
+  const endModBlock = () => {
     BlockHelper.buildJson(curModBlock)
     BlockHelper.buildKey(curModBlock)
     blockList.push(_.cloneDeep(curModBlock))
@@ -49,12 +48,7 @@ const buildBlockList = mdText => {
         CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
       ) { // markdown mod will ignore the cmd end
-        endModBlock(true)
-      } else if (
-        BlockHelper.isMarkdownMod(curModBlock) &&
-        CmdHelper.isMarkdownEndLine(line)
-      ) { // check markdown mod ending mark
-        endModBlock(true)
+        endModBlock()
       } else if (CmdHelper.isCmdLine(line)) {
         endModBlock()
         beginModBlock(line, lineNumber + 1)
@@ -76,25 +70,51 @@ const updateBlockList = (blockList, newBlockList) => {
     blockList.splice(0, blockList.length)
     return
   }
-  _.forEach(newBlockList, (newBlock, index) => {
-    let block = blockList[index]
-    if (!block) {
-      // if block doesn't exist, just insert the new one
-      blockList.splice(index, 0, _.cloneDeep(newBlock))
-    } else if (block.key !== newBlock.key) {
-      if (block.modType === newBlock.modType) {
-        if (block.modKey === newBlock.modKey) {
-          // if block data wasn't changed, keep the old mod and old uuid, just update the lineBegin value
-          BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
-        } else {
-          // if block data was changed, remove and replace with the new one
-          blockList.splice(index, 1, _.cloneDeep(newBlock))
-        }
-      } else {
-        blockList.splice(index, 0, _.cloneDeep(newBlock))
-      }
+
+  const matchWithModKey = (newBlock, begin) => {
+    for (let index = begin; index < blockList.length; index++) {
+      if (blockList[index].modKey === newBlock.modKey) return index
     }
-  })
+    return -1
+  }
+
+  const matchWithModType = (newBlock, begin) => {
+    for (let index = begin; index < blockList.length; index++) {
+      if (blockList[index].modType === newBlock.modType) return index
+    }
+    return -1
+  }
+
+  let unmatchList = []
+  // insert new blocks and store the unmatch blocks
+  for (let index = 0; index < newBlockList.length; index++) {
+    let newBlock = newBlockList[index]
+    let matchedIndex = matchWithModKey(newBlock, index)
+    if (matchedIndex !== -1) {
+      let block = blockList[matchedIndex]
+      BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
+
+      // rearrange if the index doesn't match
+      if (matchedIndex !== index) {
+        blockList.splice(matchedIndex, 1)
+        blockList.splice(index, 0, block)
+      }
+    } else {
+      let unmatchBlock = _.cloneDeep(newBlock)
+      blockList.splice(index, 0, unmatchBlock)
+      unmatchList.push(unmatchBlock)
+    }
+  }
+
+  // replace the unmatch mods' uuid with the old unmatched uuids
+  for (let index = 0; index < unmatchList.length; index++) {
+    let unmatchBlock = unmatchList[index]
+    let matchedIndex = matchWithModType(unmatchBlock, newBlockList.length)
+    if (matchedIndex !== -1) {
+      BlockHelper.updateUUID(unmatchBlock, blockList[matchedIndex].uuid)
+      blockList.splice(matchedIndex, 1)
+    }
+  }
 
   blockList.splice(newBlockList.length, blockList.length - newBlockList.length)
   return blockList
@@ -131,7 +151,6 @@ const willAffectModData = (block, mdLines) => {
     let line = mdLines[i]
     if (
       (CmdHelper.isCmdEnd(line) && !BlockHelper.isMarkdownMod(block)) ||
-      (CmdHelper.isMarkdownEndLine(line) && BlockHelper.isMarkdownMod(block)) ||
       CmdHelper.isCmdLine(line)
     ) {
       return true
@@ -165,10 +184,9 @@ const tryToMergeBlock = (blockList, index) => {
   let block = blockList[index]
   let nextBlock = blockList[index + 1]
 
-  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock) || block.endingMark) return
+  if (!BlockHelper.isMarkdownMod(block) || !BlockHelper.isMarkdownMod(nextBlock)) return
 
   BlockHelper.updateMarkdown(block, _.concat([], block.md, nextBlock.md))
-  BlockHelper.setEndingMark(block, nextBlock.endingMark)
   deleteBlock(blockList, nextBlock.key)
   updateBlocksBeginLine(blockList, index + 1, block.lengthDiff)
 }

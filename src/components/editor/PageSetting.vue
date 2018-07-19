@@ -1,19 +1,23 @@
 <template>
   <div class='page-setting' v-loading='loading'>
     <div class="page-setting-top">
-      <h1 class="top-path">{{ barePath }}</h1>
+      <h1 class="top-path" :title="barePath">{{ barePath }}</h1>
       <i class="el-icon-close" @click="changeView('FileManager')"></i>
     </div>
-    <div class="page-setting-select">
-      <el-select size="small" v-model="selectedLayoutId" filterable @change="selectPageLayout">
-        <el-option
-          v-for="(layout) in userSiteLayoutsMap"
-          :key="layout.id"
-          :label="layout.name"
-          :value="layout.id">
-        </el-option>
-      </el-select>
-    </div>    
+    <div class="page-setting-item">
+      <label class="page-setting-label" for="pageDisplayName">{{$t('editor.pageTitle')}}:</label>
+      <el-input size="small" v-model="pageDisplayName" @blur="savePageDisplayName"></el-input>
+      <span class="el-form-item__error" v-show="displayNameError">{{displayNameError}}</span>
+    </div>
+    <div class="page-setting-item">
+      <label class="page-setting-label">{{$t('editor.pageLayout')}}:</label>
+      <div class="page-setting-select">
+        <el-select size="small" v-model="selectedLayoutId" filterable @change="selectPageLayout">
+          <el-option v-for="(layout) in userSiteLayoutsMap" :key="layout.id" :label="layout.name" :value="layout.id">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
     <div class='page-setting-selected-style'>
       <component :is='selectedStyleComponent'>
         <div slot='header'>header</div>
@@ -23,7 +27,7 @@
       </component>
     </div>
     <div class="layoutManagerBtnWrap" @click="openWebsiteSettingDialog">
-      <el-button class="layoutManagerBtn" type="primary">{{$t('editor.layoutManagement')}}</el-button>
+      <el-button class="layoutManagerBtn" type="primary" size="small">{{$t('editor.layoutManagement')}}</el-button>
     </div>
     <div @click.stop v-if='isWebsiteSettingShow'>
       <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
@@ -41,13 +45,15 @@ import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 export default {
   name: 'PageSetting',
   props: {
-    pagePath: String,
+    pagePath: String
   },
   data() {
     return {
       loading: true,
       selectedLayoutId: '',
-      isWebsiteSettingShow: false
+      isWebsiteSettingShow: false,
+      pageDisplayName: '',
+      displayNameError: ''
     }
   },
   async activated() {
@@ -58,6 +64,7 @@ export default {
       console.error(e)
     })
     this.selectedLayoutId = this.settedPageLayoutId || this.defaultLayoutId
+    this.pageDisplayName = this.settedPageDisplayName
     this.loading = false
   },
   computed: {
@@ -65,7 +72,7 @@ export default {
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       userGetSettedPageLayoutByPath: 'user/getSettedPageLayoutByPath'
     }),
-    currentPath(){
+    currentPath() {
       let pathArr = this.pageInfo.barePath.split('/')
       let path = []
       path.push(pathArr[0])
@@ -86,7 +93,11 @@ export default {
       return this.pageInfo.relativePath
     },
     defaultLayoutId() {
-      return _.get(this.userSiteLayoutConfig, ['layoutConfig','defaultLayoutId'], '')
+      return _.get(
+        this.userSiteLayoutConfig,
+        ['layoutConfig', 'defaultLayoutId'],
+        ''
+      )
     },
     userSiteLayoutConfig() {
       return this.userSiteLayoutConfigBySitePath(this.sitePath)
@@ -106,11 +117,21 @@ export default {
     settedPageLayoutId() {
       return _.get(this.settedPageLayout, 'id', '')
     },
+    settedPageDisplayName() {
+      return _.get(
+        this.userSiteLayoutConfig,
+        ['pages', this.relativePath, 'displayName'],
+        ''
+      )
+    },
     selectedLayout() {
       return this.userSiteLayoutsMap[this.selectedLayoutId]
     },
     selectedStyleComponent() {
-      return _.get(stylesList[_.get(this.selectedLayout, 'styleName', 'basic')], 'component')
+      return _.get(
+        stylesList[_.get(this.selectedLayout, 'styleName', 'basic')],
+        'component'
+      )
     }
   },
   methods: {
@@ -122,6 +143,27 @@ export default {
     }),
     changeView(type) {
       this.setActiveManagePaneComponent(type)
+    },
+    async savePageDisplayName() {
+      this.pageDisplayName = _.trim(this.pageDisplayName)
+      if (this.settedPageDisplayName === this.pageDisplayName) return
+      if (this.pageDisplayName.length > 50) {
+        this.displayNameError = this.$t('editor.setPageDisplayNameError')
+        return
+      }
+      this.loading = true
+      let payload = {
+        sitePath: this.sitePath,
+        pages: {
+          [this.relativePath]: {
+            displayName: this.pageDisplayName,
+            layout: this.settedPageLayoutId || this.defaultLayoutId
+          }
+        }
+      }
+      await this.userSaveSiteLayoutConfig(payload).catch(e => console.error(e))
+      this.displayNameError = ''
+      this.loading = false
     },
     async selectPageLayout() {
       if (this.settedPageLayoutId == this.selectedLayoutId) return
@@ -145,7 +187,7 @@ export default {
       this.isWebsiteSettingShow = false
     }
   },
-  components:{
+  components: {
     WebsiteSettingDialog
   }
 }
@@ -153,17 +195,32 @@ export default {
 
 <style lang="scss">
 .page-setting {
-  padding: 0 30px;
+  padding: 20px;
+  &-item {
+    margin-bottom: 40px;
+    position: relative;
+  }
+  &-label {
+    font-size: 14px;
+    color: #535353;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
 }
 .page-setting-top {
   position: relative;
-  .top-path{
-    word-wrap:break-word;
+  .top-path {
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 42px;
+    padding-right: 30px;
   }
   i {
     position: absolute;
-    right: -15px;
-    top: 2px;
+    right: 0px;
+    top: -2px;
     font-size: 22px;
     cursor: pointer;
   }
@@ -171,19 +228,16 @@ export default {
 .page-setting-select {
   text-align: center;
   .el-select {
-    width: 270px;
+    width: 100%;
   }
 }
 .layoutManagerBtnWrap {
   width: 270px;
-  height: 32px;
-  line-height: 32px;
   margin: auto;
   .layoutManagerBtn {
-    height: 32px;
-    width: 270px;
-    line-height: 6px;
+    width: 100%;
     margin: 0 auto;
+    border-radius: 32px;
   }
 }
 .page-setting-selected-style {

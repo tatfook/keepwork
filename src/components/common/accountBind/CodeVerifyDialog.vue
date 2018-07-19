@@ -2,7 +2,7 @@ label<template>
   <div class="label">
     <el-dialog class="account-binding-dialog" :visible.sync="isCodeDialogVisible" width="600px" :before-close="handleClose" :append-to-body="true">
       <span slot='title'>{{dialogTitle}}</span>
-      <el-form :inline="true">
+      <el-form :inline="true" @submit.native.prevent>
         <el-form-item :label='inputLabel'>
           <el-input v-model="code" type="small"></el-input>
           <span class="el-form-item__error" v-show="codeError">{{codeError}}</span>

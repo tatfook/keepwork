@@ -65,10 +65,6 @@ export const isMarkdownCmd = (cmd) => {
   return cmd === MARKDOWN_CMD
 }
 
-export const isMarkdownEndLine = (line) => {
-  return line === MARKDOWN_CMD_END
-}
-
 export const standardCmd = (cmd) => {
   for (let key in oldCmdMapper) {
     if (key === cmd) return key
@@ -109,7 +105,6 @@ export default {
   isValidCmd,
   isOldCmd,
   isMarkdownCmd,
-  isMarkdownEndLine,
   targetCmd,
   isCmdLine,
   isCmdEnd,

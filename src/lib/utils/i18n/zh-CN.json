@@ -2,6 +2,15 @@
   "common": {
     "login": "登录",
     "signIn": "注册",
+    "forgetPassword": "忘记密码",
+    "noAccount": "没有账号？点击",
+    "usingFollowingAccount": "直接使用以下账号登录",
+    "inputUsername": "请输入用户名",
+    "inputPassword": "请输入密码",
+    "wrongPassword": "密码错误",
+    "usernameNotExist": "用户名不存在",
+    "loginSuccess": "登录成功",
+    "logonFailed": "登录失败",
     "logout": "退出登录",
     "welcomeToKeepwork": "欢迎来到 Keepwork",
     "createNewWebsite": "创建新网站",
@@ -205,6 +214,9 @@
     "supportBooleanCalculation": "支持逻辑运算: || (or)、&& (and)、! (not)",
     "layoutPlan": "布局方案",
     "layoutManagement": "布局方案管理",
+    "pageTitle": "页面标题",
+    "pageLayout": "页面布局",
+    "setPageDisplayNameError": "设置失败，页面标题最多50个字符",
     "addLayout": "添加方案",
     "default": "默认",
     "rename": "重命名",
@@ -235,7 +247,7 @@
 
     "removeImgConfirmMsg": "你确定要删除图片吗？",
 
-    "uploadingToGitlabText": "正在上传到gitab。。。",
+    "uploadingToSkyDriveText": "正在上传。。。",
     "readFileFromLocal": "正在读取文件。。。",
     "enlargeMdEditing": "大窗口编辑"
   },
@@ -506,7 +518,7 @@
     "binding": "绑定",
     "unbunding": "解绑",
     "unBound": "未绑定",
-    "unBundingFailure": "绑定失败",
+    "unBundingFailure": "解绑失败",
     "wrongEmailFormat": "请输入正确的邮箱",
     "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
     "mailSentSuccess": "邮件发送成功！",

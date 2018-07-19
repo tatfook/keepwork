@@ -8,8 +8,7 @@ import {
 import CmdHelper, {
   MARKDOWN_CMD,
   MOD_CMD_BEGIN,
-  MOD_CMD_END,
-  MARKDOWN_CMD_END
+  MOD_CMD_END
 } from './cmdHelper'
 import ModAdaptor from './modAdaptor'
 
@@ -39,7 +38,7 @@ const blockHelper = {
 
   buildKey(block) {
     block.key = md5(this.text(block), block.uuid)
-    block.modKey = md5(this.text(block))
+    block.modKey = md5(this.text(block), block.modType)
   },
 
   buildMarkdown(block) {
@@ -73,6 +72,12 @@ const blockHelper = {
   updateCmd(block, cmd) {
     block.cmd = cmd
     block.modType = 'Mod' + block.cmd
+    this.buildKey(block)
+  },
+
+  updateUUID(block, uuid) {
+    block.uuid = uuid
+    this.buildKey(block)
   },
 
   updateJson(block, jsonData) {
@@ -114,8 +119,7 @@ const blockHelper = {
       let endLine = MOD_CMD_END
       return _.flatten([headLine, block.md, endLine])
     } else {
-      let endLine = MARKDOWN_CMD_END
-      return block.endingMark ? _.flatten([block.md, endLine]) : block.md
+      return block.md
     }
   },
 
@@ -129,10 +133,6 @@ const blockHelper = {
 
   mdText(block) {
     return block.md.join('\n')
-  },
-
-  setEndingMark(block, mark) {
-    block.endingMark = mark || false
   }
 }
 

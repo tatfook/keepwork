@@ -30,7 +30,7 @@ export default {
     $route: 'updateActivePage',
     activePageInfo(activePageInfo) {
       let { username, sitename, pagename } = activePageInfo
-      document.title = pagename || sitename || username || 'KeepWork'
+      document.title = this.activePageDisplayName || pagename || sitename || username || 'KeepWork'
     }
   },
   methods: {
@@ -82,10 +82,19 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       activePageInfo: 'activePageInfo'
     }),
+    userSiteLayoutConfig(){
+      let sitePath = _.get(this.activePageInfo, 'sitepath', '')
+      return this.userSiteLayoutConfigBySitePath(sitePath)
+    },
+    activePageConfig(){
+      let relativePath = _.get(this.activePageInfo, 'relativePath', '')
+      return _.get(this.userSiteLayoutConfig, ['pages', relativePath])
+    },
+    activePageDisplayName(){
+      return _.get(this.activePageConfig, 'displayName')
+    },
     isSystemCompShow() {
-      let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(
-        `${this.activePageInfo.username}/${this.activePageInfo.sitename}`
-      )
+      let userSiteLayoutConfig = this.userSiteLayoutConfig
       return {
         isSystemHeaderHide: _.get(
           userSiteLayoutConfig,
