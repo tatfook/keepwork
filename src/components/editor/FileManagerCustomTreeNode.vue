@@ -26,7 +26,7 @@
       </el-button>
       <el-button v-if="isRemovable" class="iconfont icon-delete" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-set_up" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.setting")'>
+      <el-button v-if="isSettable" class="iconfont icon-set_up" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.settings")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -74,7 +74,8 @@ export default {
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
       savePageByPath: 'savePageByPath',
-      refreshOpenedFile: 'refreshOpenedFile'
+      refreshOpenedFile: 'refreshOpenedFile',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async addFile() {
       let newFileName = await this.newFileNamePrompt()
@@ -105,16 +106,16 @@ export default {
       let childNames = this.gitlabChildNamesByPath(this.currentPath)
 
       let { value: newFileName } = await this.$prompt(
-        `${what}${self.$t('editor.nameSingle')}`,
-        `${self.$t('editor.create')}${what}`,
+        `${what} ${self.$t('editor.name')}`,
+        `${self.$t('editor.new')} ${what}`,
         {
           cancelButtonText: self.$t('el.messagebox.cancel'),
           confirmButtonText: self.$t('el.messagebox.confirm'),
           inputValidator: str => {
             let value = (str || '').trim()
-            if (!value) return `${what} ${self.$t('editor.emptyName')}`
+            if (!value) return self.$t('editor.required')
             if (!gitFilenameValidator(value))
-              return `${what} ${self.$t('editor.nameRule')}`
+              return self.$t('editor.nameRule')
             if (childNames.indexOf(value) > -1)
               return self.$t('editor.nameExist')
             return true
@@ -140,7 +141,7 @@ export default {
 
       const h = this.$createElement
       this.$msgbox({
-        title: '提示',
+        title: this.$t('editor.delete'),
         message: h('p', null, [
           h('span', null, this.$t('editor.deleteFolderBefore')),
           h('span', { style: 'color: #FF4342' }, ` "${data.name} "`),
@@ -162,9 +163,8 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => toDele.indexOf(item.path) === -1 )
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1 )
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     recursion(data) {
       let childrenFiles = []
@@ -306,7 +306,7 @@ export default {
         message: h('p', null, [
           h('span', null, this.$t('editor.delConfirm')),
           h('span', { style: 'color: #FF4342' }, ` "${siteName}/${fileName} " `),
-          h('span', null, `${this.$t('editor.page')}?`)
+          h('span', null, '?')
         ]),
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
@@ -324,9 +324,8 @@ export default {
     },
     removeRecentOpenFile(path){
       let delPath = `/${path.replace(/\.md$/,'')}`
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
@@ -380,11 +379,12 @@ export default {
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
-      username: 'user/username'
+      username: 'user/username',
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     operationButtonsCountClass(){
       let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
-      return `buttons-count-${count}`
+      return this.isRename ? '' : `buttons-count-${count}`
     },
     pending() {
       return (

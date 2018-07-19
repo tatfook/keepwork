@@ -10,11 +10,12 @@ import {
 import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
-  info: state => state.info,
-  token: state => _.get(state, ['info', 'token'], Cookies.get('token')),
-  profile: (state, { token }) => {
+  getToken: state => () => Cookies.get('token'),
+  token: (state, { getToken }) => getToken(),
+  profile: (state, { getToken }) => {
+    let token = getToken()
     let { token: profileUserToken } = state.profile
-    if (profileUserToken !== token) return {}
+    if (!token || !profileUserToken || profileUserToken !== token) return {}
     return state.profile
   },
   isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
@@ -24,6 +25,7 @@ const getters = {
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   authRequestConfig: (state, { token }) =>
     token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
@@ -31,6 +33,8 @@ const getters = {
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
+  sendCodeInfo: (state) => state.sendCodeInfo,
+  authCodeInfo: (state) => state.authCodeInfo,
 
   siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (
@@ -155,6 +159,7 @@ const getters = {
   contributedSitePathMap: (state, { contributedSiteList }) =>
     _.keyBy(contributedSiteList, ({ username, name }) => `${username}/${name}`),
 
+  personalAndContributedSiteNameList: (state, { personalAndContributedSiteList }) => _.map(personalAndContributedSiteList, ({ name }) => name),
   personalAndContributedSiteList: (
     state,
     { personalSiteList, contributedSiteList }
@@ -272,7 +277,16 @@ const getters = {
 
   skyDrive: (state, { username }) => _.get(state.skyDrive, username, {}),
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
-  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info
+  skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
+
+  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId]),
+  threeServices: (state) => state.threeServices,
+  getThreeService: (state, { threeServices }) => type => {
+    let result = _.find(threeServices, (o) => {
+      return o.serviceName === type
+    })
+    return result
+  }
 }
 
 export default getters

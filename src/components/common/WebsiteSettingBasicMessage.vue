@@ -1,26 +1,26 @@
 <template>
   <div class="website-basic-message" v-loading='loading'>
     <div class="website-basic-message-content">
-      <el-form label-position='left' ref='basicMessageForm' :model='basicMessage' label-width='82px'>
-        <el-form-item class="display-name-item" label='网站名称：'>
+      <el-form label-position='left' ref='basicMessageForm' :rules="basicInfoRules" :model='basicMessage' label-width='82px'>
+        <el-form-item class="display-name-item" :label="$t('setting.siteName') + ':'" prop="displayName">
           <el-input size='' v-model="basicMessage.displayName"></el-input>
         </el-form-item>
-        <el-form-item label='网站地址：'>
+        <el-form-item :label="$t('setting.siteLink') + ':'">
           <span>{{siteUrl}}</span>
         </el-form-item>
-        <el-form-item label='网站图标：'>
+        <el-form-item :label="$t('setting.siteLogo') + ':'">
           <div class="before-cropper-zone">
             <img class="profile" :src='basicMessage.logoUrl' alt="">
             <div class="operate-masker">
               <span class="to-change-btn">
-                修改
+                {{ $t('setting.change') }}
                 <input type="file" class="input-file" @change='siteLogoUpload'>
               </span>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label='网站介绍：'>
-          <el-input placeholder='请输入' type='textarea' v-model="basicMessage.desc"></el-input>
+        <el-form-item :label="$t('setting.siteIntro') + ':'">
+          <el-input type='textarea' v-model="basicMessage.desc"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -39,16 +39,28 @@ export default {
     sitePath: String
   },
   async mounted() {
-    this.basicMessage = _.clone(await this.getPersonalSiteInfoByPath(this.sitePath))
+    this.basicMessage = _.clone(
+      await this.getPersonalSiteInfoByPath(this.sitePath)
+    )
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
+    this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },
   data() {
     return {
       basicMessage: {},
-      loading: true
+      loading: true,
+      basicInfoRules: {
+        displayName: [
+          {
+            max: 30,
+            message: this.$t('setting.siteNameMaxLen'),
+            trigger: 'change'
+          }
+        ]
+      }
     }
   },
   computed: {
@@ -108,27 +120,35 @@ export default {
     },
     async submitChange() {
       this.loading = true
-      let isSensitive = await this.checkSensitive()
-      if (isSensitive) {
-        this.showErrorMsg('您输入的内容不符合互联网安全规范，请修改')
-        return
-      }
-      await this.userSaveSiteBasicSetting({
-        newBasicMessage: this.basicMessage
+      this.$refs.basicMessageForm.validate(async valid => {
+        if (valid) {
+          let isSensitive = await this.checkSensitive()
+          if (isSensitive) {
+            this.showErrorMsg(this.$t('common.inputIsSensitive'))
+            return
+          }
+          await this.userSaveSiteBasicSetting({
+            newBasicMessage: this.basicMessage
+          })
+          this.showResultInfo()
+          this.$refs.basicMessageForm.resetFields()
+        } else {
+          this.loading = false
+          return false
+        }
       })
-      this.showResultInfo()
     },
     showResultInfo() {
       this.loading = false
       this.$message({
-        message: '恭喜你，保存成功',
+        message: this.$t('common.saveSuccess'),
         type: 'success'
       })
     },
     showErrorMsg(errorMsg) {
       this.loading = false
-      this.$alert(errorMsg, '错误提示', {
-        confirmButtonText: '确定'
+      this.$alert(errorMsg, this.$t('common.errorInfoTitle'), {
+        confirmButtonText: this.$t('common.Sure')
       })
     },
     handleClose() {
@@ -155,6 +175,10 @@ export default {
     .el-input__inner {
       height: 32px;
       line-height: 32px;
+    }
+    .el-form-item__error {
+      bottom: 100%;
+      top: auto;
     }
     .el-textarea__inner {
       height: 187px;

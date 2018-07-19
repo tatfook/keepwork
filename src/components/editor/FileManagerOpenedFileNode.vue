@@ -14,13 +14,15 @@
       <el-button class="iconfont icon-delete" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeOpenedFile(data)">
       </el-button>
     </span>
-    <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
-      <center>{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="warning" @click="handleCloseOpenedFile(data)" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-        <el-button type="primary" @click="saveAndCloseOpenedFile(data)" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
-      </span>
-    </el-dialog>
+    <div @click.stop class="close-dialog">
+      <el-dialog center :visible.sync="dialogVisible" width="360px" closed="handleCloseDialog">
+        <div class="dialog-content">{{`"${fileName}" ${$t("editor.fileUnSaved")}`}}</div>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="warning" @click.stop="handleCloseOpenedFile(data)" :disabled="savePending">{{$t("editor.unSaveClose")}}</el-button>
+          <el-button type="primary" @click.stop="saveAndCloseOpenedFile(data)" :loading="savePending">{{$t("editor.saveClose")}}</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </span>
 </template>
 
@@ -46,7 +48,8 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
-      username: 'user/username'
+      username: 'user/username',
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     fileName() {
       let siteName = this.data.path.split('/').slice(1, 2)
@@ -61,7 +64,8 @@ export default {
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
-      userDeletePagesConfig: 'user/deletePagesConfig'
+      userDeletePagesConfig: 'user/deletePagesConfig',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async handleCloseConfirm({ path }) {
       let file = this.getOpenedFileByPath(path)
@@ -143,9 +147,8 @@ export default {
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
-      let localUrl = JSON.parse(localStorage.getItem(`${this.username}`))
-      let _re = localUrl.filter(item => item.path !== delPath)
-      localStorage.setItem(`${this.username}`, JSON.stringify(_re))
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async deletePagesFromLayout({ paths = [] }) {
       const re = /^\w+\/\w+\//
@@ -167,3 +170,15 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.close-dialog{
+  .el-dialog__header{
+    height: 0;
+  }
+  .el-dialog__body .dialog-content{
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+  } 
+} 
+</style>

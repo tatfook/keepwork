@@ -4,7 +4,8 @@
       <slot name="header"></slot>
     </el-header>
     <el-main>
-      <slot> </slot>
+      <slot>
+      </slot>
     </el-main>
   </el-container>
 </template>
@@ -21,6 +22,7 @@ export default {}
   }
   .el-main {
     max-width: 1080px;
+    width: 100%;
     margin: 0 auto;
   }
 }

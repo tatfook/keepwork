@@ -54,6 +54,8 @@ const UNDO = 'UNDO'
 const REDO = 'REDO'
 const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
+const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
+const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
 
 export const props = {
   SET_ACTIVE_PAGE,
@@ -99,7 +101,10 @@ export const props = {
   UNDO,
   REDO,
   SAVE_HISTORY,
-  INIT_UNDO
+  INIT_UNDO,
+  TOGGLE_SKY_DRIVE,
+  CLOSE_ALL_OPENED_FILE,
+  ADD_RECENT_OPENED_SITE
 }
 
 const activeAreaData = state => {
@@ -271,12 +276,16 @@ const mutations = {
     Vue.set(state.activePage, 'cursorPos', cursor)
   },
   [RESET_OPENED_FILE](state, { username, path, data }) {
+    let _path = path.split('/')
+    if (!_path[0] && !_path[1]) return
     Vue.set(state.openedFiles, username, {
       ..._.get(state, ['openedFiles', username]),
       [path]: data
     })
   },
   [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
+    let _path = path.split('/')
+    if (!_path[0] && !_path[1]) return
     _.merge(state.openedFiles, {
       [username]: {
         [path]: {
@@ -318,6 +327,15 @@ const mutations = {
   },
   [INIT_UNDO](state, payload) {
     UndoHelper.init(activeAreaData(state).undoManager, payload)
+  },
+  [TOGGLE_SKY_DRIVE](state, { showSkyDrive = false }) {
+    Vue.set(state, 'isSkyDriveManagerDialogShow', showSkyDrive)
+  },
+  [ADD_RECENT_OPENED_SITE](state, { updateRecentUrlList, username }) {
+    Vue.set(state, 'updateRecentUrlList', {
+      ...state.updateRecentUrlList,
+      [username]: updateRecentUrlList
+    })
   }
 }
 

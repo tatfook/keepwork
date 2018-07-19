@@ -48,6 +48,11 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '76px'
+      }
     }
   },
   {
@@ -79,6 +84,11 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '76px'
+      }
     }
   },
   {
@@ -123,6 +133,11 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '76px'
+      }
     }
   },
   {
@@ -167,6 +182,11 @@ export default [
     options: {
       theme: {},
       config: { ...emptyData }
+    },
+    preview: {
+      outter: {
+        height: '76px'
+      }
     }
   }
 ]

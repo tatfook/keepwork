@@ -25,11 +25,6 @@ let defaultData = {
     emptyName: 'adi.title.tagLine',
     emptyLink: '#',
     emptyTarget: '_blank'
-  },
-  logoB: {
-    emptySrc: require('@/../static/adi/title/bear.svg'),
-    emptyLink: '#',
-    emptyTarget: '_blank'
   }
 }
 export default [
@@ -57,7 +52,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -94,12 +88,7 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
-    preview: {
-      outter: {
-        height: '47px'
-      }
-    }
+    cover: require('@/../static/adi/title/title1.png')
   },
   // style 1
   {
@@ -125,7 +114,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -161,12 +149,7 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
-    preview: {
-      outter: {
-        height: '47px'
-      }
-    }
+    cover: require('@/../static/adi/title/title1.png')
   },
   // style 2
   {
@@ -196,7 +179,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -228,12 +210,7 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
-    preview: {
-      outter: {
-        height: '63px'
-      }
-    }
+    cover: require('@/../static/adi/title/title2.png')
   },
   // style 3
   {
@@ -263,7 +240,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -295,12 +271,7 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
-    preview: {
-      outter: {
-        height: '63px'
-      }
-    }
+    cover: require('@/../static/adi/title/title2.png')
   },
   // style 4
   {
@@ -316,7 +287,7 @@ export default [
         'justify-content': 'flex-start',
         'min-width': '180px'
       },
-      logoB: {
+      logo: {
         height: '64px',
         width: '64px'
       },
@@ -358,17 +329,12 @@ export default [
           backgroundColor: 'color_5',
           borderBottomColor: 'color_7'
         },
-        logoB: {
+        logo: {
           svgFillColor: 'color_7'
         }
       },
       config: {
         ...defaultData
-      }
-    },
-    preview: {
-      outter: {
-        height: '5px'
       }
     }
   }

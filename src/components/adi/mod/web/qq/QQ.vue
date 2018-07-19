@@ -26,7 +26,6 @@ desc:
 */
 import _ from 'lodash'
 import baseMixin from '../../base/base.mixin'
-import { config } from '@/components/adi/mod/base/styles.config'
 
 export default {
   mixins: [baseMixin],
@@ -37,7 +36,7 @@ export default {
       options = _.merge(options, this.generateOptionsStyle(name))
 
       let qqUrl =
-        config.QQ_URL +
+        process.env.QQ_URL +
         '/msgrd?v=3&uin=' +
         this.modData.qq.number +
         '&site=qq&menu=yes'
@@ -54,15 +53,7 @@ export default {
         this.style.data.colGroup.top = 'unset'
       }
 
-      if (this.modData.styleID == '1') {
-        return _.merge(
-          {},
-          options,
-          (this.modData.pic.src = './static/adi/qq/qqTwo.svg')
-        )
-      } else {
-        return options
-      }
+      return options
     }
   }
 }

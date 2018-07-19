@@ -2,24 +2,9 @@ import _ from 'lodash'
 import ModBlock from './block'
 import BlockHelper from './blockHelper'
 import CmdHelper from './cmdHelper'
-import { gConst } from '@/lib/global'
-
-const beginModBlock = (line, lineNumber) => {
-  let cmd
-  if (CmdHelper.isCmdLine(line)) {
-    cmd = line.split('@')[1]
-  }
-  let curModBlock = new ModBlock(cmd, lineNumber)
-  if (!cmd) BlockHelper.addLine(curModBlock, line)
-
-  return curModBlock
-}
-
-const endModBlock = (blockList, curModBlock) => {
-  BlockHelper.buildJson(curModBlock)
-  BlockHelper.buildKey(curModBlock)
-  blockList.push(_.cloneDeep(curModBlock))
-}
+import {
+  gConst
+} from '@/lib/global'
 
 const buildBlock = (cmd, jsonData, beginLine) => {
   let block = new ModBlock(cmd, beginLine || 1)
@@ -31,27 +16,52 @@ const buildBlockList = mdText => {
   if (!mdText) return []
   let mdLines = mdText.split('\n')
   let blockList = []
+  let started = null
   let curModBlock = null
+  let preModBlock = null
+  const beginModBlock = (line, lineNumber) => {
+    let cmd = CmdHelper.parseCmd(line)
+    if (!cmd) {
+      let mdBegin = preModBlock ? BlockHelper.endLine(preModBlock) : 1
+      curModBlock = new ModBlock(cmd, mdBegin)
+      // keep the blank lines for markdown mod
+      for (let i = mdBegin; i < lineNumber; i++) {
+        BlockHelper.addLine(curModBlock, mdLines[i - 1])
+      }
+
+      BlockHelper.addLine(curModBlock, line)
+    } else {
+      // dismiss all blank lines between two general mods
+      curModBlock = new ModBlock(cmd, lineNumber)
+    }
+  }
+  const endModBlock = () => {
+    BlockHelper.buildJson(curModBlock)
+    BlockHelper.buildKey(curModBlock)
+    blockList.push(_.cloneDeep(curModBlock))
+    preModBlock = curModBlock
+    curModBlock = null
+  }
   _.forEach(mdLines, (line, lineNumber) => {
     if (curModBlock) {
       if (
         CmdHelper.isCmdEnd(line) &&
         !BlockHelper.isMarkdownMod(curModBlock)
       ) { // markdown mod will ignore the cmd end
-        endModBlock(blockList, curModBlock)
-        curModBlock = null
+        endModBlock()
       } else if (CmdHelper.isCmdLine(line)) {
-        endModBlock(blockList, curModBlock)
-        curModBlock = beginModBlock(line, lineNumber + 1)
+        endModBlock()
+        beginModBlock(line, lineNumber + 1)
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
-    } else if (line.trim() !== '') {
-      curModBlock = beginModBlock(line, lineNumber + 1)
+    } else if (!started || line.trim() !== '') {
+      started = true
+      beginModBlock(line, lineNumber + 1)
     }
   })
 
-  if (curModBlock) endModBlock(blockList, curModBlock)
+  if (curModBlock) endModBlock()
   return blockList
 }
 
@@ -60,25 +70,51 @@ const updateBlockList = (blockList, newBlockList) => {
     blockList.splice(0, blockList.length)
     return
   }
-  _.forEach(newBlockList, (newBlock, index) => {
-    let block = blockList[index]
-    if (!block) {
-      // if block doesn't exist, just insert the new one
-      blockList.splice(index, 0, _.cloneDeep(newBlock))
-    } else if (block.key !== newBlock.key) {
-      if (block.modType === newBlock.modType) {
-        if (block.modKey === newBlock.modKey) {
-          // if block data wasn't changed, keep the old mod and old uuid, just update the lineBegin value
-          BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
-        } else {
-          // if block data was changed, remove and replace with the new one
-          blockList.splice(index, 1, _.cloneDeep(newBlock))
-        }
-      } else {
-        blockList.splice(index, 0, _.cloneDeep(newBlock))
-      }
+
+  const matchWithModKey = (newBlock, begin) => {
+    for (let index = begin; index < blockList.length; index++) {
+      if (blockList[index].modKey === newBlock.modKey) return index
     }
-  })
+    return -1
+  }
+
+  const matchWithModType = (newBlock, begin) => {
+    for (let index = begin; index < blockList.length; index++) {
+      if (blockList[index].modType === newBlock.modType) return index
+    }
+    return -1
+  }
+
+  let unmatchList = []
+  // insert new blocks and store the unmatch blocks
+  for (let index = 0; index < newBlockList.length; index++) {
+    let newBlock = newBlockList[index]
+    let matchedIndex = matchWithModKey(newBlock, index)
+    if (matchedIndex !== -1) {
+      let block = blockList[matchedIndex]
+      BlockHelper.modifyBegin(block, newBlock.lineBegin - block.lineBegin)
+
+      // rearrange if the index doesn't match
+      if (matchedIndex !== index) {
+        blockList.splice(matchedIndex, 1)
+        blockList.splice(index, 0, block)
+      }
+    } else {
+      let unmatchBlock = _.cloneDeep(newBlock)
+      blockList.splice(index, 0, unmatchBlock)
+      unmatchList.push(unmatchBlock)
+    }
+  }
+
+  // replace the unmatch mods' uuid with the old unmatched uuids
+  for (let index = 0; index < unmatchList.length; index++) {
+    let unmatchBlock = unmatchList[index]
+    let matchedIndex = matchWithModType(unmatchBlock, newBlockList.length)
+    if (matchedIndex !== -1) {
+      BlockHelper.updateUUID(unmatchBlock, blockList[matchedIndex].uuid)
+      blockList.splice(matchedIndex, 1)
+    }
+  }
 
   blockList.splice(newBlockList.length, blockList.length - newBlockList.length)
   return blockList
@@ -99,7 +135,7 @@ const getBlockLines = (mdText, block) => {
     if (
       (CmdHelper.isCmdEnd(mdLines[i]) &&
         !BlockHelper.isMarkdownMod(block)) ||
-        CmdHelper.isCmdLine(mdLines[i])
+      CmdHelper.isCmdLine(mdLines[i])
     ) {
       break
     }
@@ -112,10 +148,10 @@ const getBlockLines = (mdText, block) => {
 // ONLY update block code if the changed lines are safe(no insert and no delete)
 const willAffectModData = (block, mdLines) => {
   for (let i = 0; i < mdLines.length; i++) {
+    let line = mdLines[i]
     if (
-      (CmdHelper.isCmdEnd(mdLines[i]) &&
-        !BlockHelper.isMarkdownMod(block)) ||
-        CmdHelper.isCmdLine(mdLines[i])
+      (CmdHelper.isCmdEnd(line) && !BlockHelper.isMarkdownMod(block)) ||
+      CmdHelper.isCmdLine(line)
     ) {
       return true
     }
@@ -160,8 +196,7 @@ const deleteBlock = (blockList, key) => {
   let block = blockList[blockIndex]
   updateBlocksBeginLine(
     blockList,
-    blockIndex + 1,
-    -1 - BlockHelper.textLength(block)
+    blockIndex + 1, -1 - BlockHelper.textLength(block)
   )
   blockList.splice(blockIndex, 1)
   if (!BlockHelper.isMarkdownMod(block)) tryToMergeBlock(blockList, blockIndex - 1)

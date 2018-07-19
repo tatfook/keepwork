@@ -56,13 +56,21 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': parseInt(this.properties.webHeight || this.options.defaultWebHeight) + 'px!important',
-          'width': parseInt(this.properties.webWidth || this.options.defaultWebWidth) + 'px!important'
+          'height': this.options.img && this.parsePx(this.options.img.defaultWebHeight),
+          'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultWebWidth),
+          'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
+          'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
+          'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
+          'padding-bottom': this.options.space && this.parsePx(this.options.space.webPaddingBottom)
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': parseInt(this.properties.mobileHeight || this.options.defaultMobileHeight) + 'px!important',
-            'width': parseInt(this.properties.mobileWidth || this.options.defaultMobileWidth) + 'px!important'
+            'height': this.options.img && this.parsePx(this.options.img.defaultMobileHeight),
+            'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultMobileWidth),
+            'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
+            'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
+            'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
+            'padding-bottom': this.options.space && this.parsePx(this.options.space.mobilePaddingBottom)
           }
         }
       }
@@ -72,13 +80,22 @@ export default {
         this.sheet.attach()
       }
 
-      return this.sheet.classes[imgClassName] + ' img'
+      return 'img ' + this.sheet.classes[imgClassName]
     },
     svgFill() {
       return this.generateStyleString({
         fill: this.options.svgFillColor
       })
     }
+  },
+  methods: {
+    parsePx(value) {
+      if(value) {
+        return parseInt(value) + 'px!important'
+      } else {
+        return 'auto!important'
+      }
+    },
   }
 }
 </script>
@@ -98,20 +115,21 @@ export default {
 .comp-media {
   width: 100%;
   height: 100%;
-
-  .img {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-
-    img {
-      position: absolute;
+  a {
+    .img {
       width: 100%;
       height: 100%;
-      left: 0;
-      top: 0;
-      object-fit: cover;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        object-fit: cover;
+      }
     }
   }
 }

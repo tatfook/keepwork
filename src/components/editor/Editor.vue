@@ -9,7 +9,7 @@
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
-        <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+        <SkyDriveManagerDialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog' />
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
@@ -31,11 +31,11 @@
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-new_open_window" :title="$t('editor.newWindowOpen')" @click='showPage'></el-button>
+          <el-button class="iconfont icon-new_open_window" :title="$t('editor.preview')" @click='showPreview'></el-button>
         </el-button-group>
         <div class="code-win-swich">
           <span>{{$t('editor.showCode')}}</span>
-          <el-switch v-model="isCodeWinShow" @change='toggleCodeWin'>
+          <el-switch :value="isCodeShow" @change='toggleCodeWin'>
           </el-switch>
         </div>
       </el-row>
@@ -53,7 +53,7 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col>
+          <el-col class="toolbar-content">
             <el-button-group>
               <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
               <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
@@ -79,7 +79,7 @@
           </el-col>
         </el-scrollbar>
       </el-row>
-      <editor-markdown ref='codemirror' />
+      <EditorMarkdown ref='codemirror' @insertBigfile='insertBigfile'/>
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <el-row>
@@ -123,9 +123,7 @@ export default {
         leftColWidthParam: '',
         rightColWidthParam: ''
       },
-      isCodeWinShow: true,
       isFullscreen: false,
-      isSkyDriveManagerDialogShow: false,
       gConst,
       editingMarkdownModDatas: {
         key: 'data',
@@ -159,6 +157,7 @@ export default {
     ...mapGetters({
       activePage: 'activePage',
       activeMod: 'activeMod',
+      preModKey: 'preModKey',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
       activeManagePaneComponentName: 'activeManagePaneComponentName',
@@ -167,7 +166,9 @@ export default {
       activePageInfo: 'activePageInfo',
       isMultipleTextDialogShow: 'isMultipleTextDialogShow',
       activePropertyData: 'activePropertyData',
-      hasOpenedFiles: 'hasOpenedFiles'
+      hasOpenedFiles: 'hasOpenedFiles',
+      showSkyDrive: 'showSkyDrive',
+      isCodeShow: 'isCodeShow'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
@@ -237,26 +238,21 @@ export default {
     ...mapActions({
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
-      setActivePropertyData: 'setActivePropertyData'
+      setActivePropertyData: 'setActivePropertyData',
+      toggleSkyDrive: 'toggleSkyDrive'
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
-    toggleCodeWin(isCodeWinShow) {
-      if (isCodeWinShow) {
-        this.resetShowingCol({
-          isCodeShow: true,
-          isPreviewShow: true
-        })
+    toggleCodeWin() {
+      this.resetShowingCol({
+        isCodeShow: !this.isCodeShow,
+        isPreviewShow: true
+      })
+      this.isCodeShow &&
         this.$store.dispatch('setAddingArea', {
           area: this.gConst.ADDING_AREA_ADI
         })
-      } else {
-        this.resetShowingCol({
-          isCodeShow: false,
-          isPreviewShow: true
-        })
-      }
     },
     toggleFullscreen() {
       this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
@@ -290,12 +286,12 @@ export default {
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
     },
-    // showPreview() {
-    //   this.$emit('showPreview')
-    // },
-    showPage() {
-      window.open(this.activePageUrl)
+    showPreview() {
+      this.$emit('showPreview')
     },
+    // showPage() {
+    //   window.open(this.activePageUrl)
+    // },
     dragMouseUp() {
       this.resizeWinParams.isResizing = false
       this.resizeWinParams.leftColWidthParam = ''
@@ -323,18 +319,26 @@ export default {
       this.$refs.codemirror.addMod()
     },
     openSkyDriveManagerDialog() {
-      this.isSkyDriveManagerDialogShow = true
+      this.toggleSkyDrive({ showSkyDrive: true })
+    },
+    async insertBigfile({ file, url }) {
+      if (!url) return
+      let ext = file.ext || (file.filename || '').split('.').pop()
+      let filename = file.filename || url
+      console.log('insertBigfile: ', JSON.stringify(file), url)
+      this.$refs.codemirror.addNewLine(null, `\`\`\`@BigFile
+styleID: 0
+bigFile:
+  src: >-
+    ${url}
+  ext: ${ext}
+  filename: ${filename}
+  size: ${file.size}
+\`\`\``)
     },
     closeSkyDriveManagerDialog({ file, url }) {
-      this.isSkyDriveManagerDialogShow = false
-      if (url) {
-        let filename = file.filename || url
-        let isImage = /^image\/.*/.test(file.type)
-
-        isImage
-          ? this.$refs.codemirror.insertFile(filename, url)
-          : this.$refs.codemirror.insertLink(filename, url)
-      }
+      this.toggleSkyDrive({ showSkyDrive: false })
+      this.insertBigfile({ file, url })
     },
     initMarkdownModDatas() {
       this.editingMarkdownModDatas = {
@@ -463,6 +467,9 @@ export default {
   position: relative;
   flex-shrink: 0;
 }
+.toolbar-content {
+  min-width: 500px;
+}
 .toolbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -474,10 +481,10 @@ export default {
 }
 .toolbar::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-.toolbar .fullScreenBtn{
+.toolbar .fullScreenBtn {
   float: right;
 }
 .toolbar .fullScreenBtn .el-button {
@@ -547,6 +554,11 @@ export default {
   height: 100%;
   background-color: #cdd4dc;
   max-width: 1080px;
+}
+@media (max-width: 1920px) {
+  .manager-win {
+    flex-basis: 320px;
+  }
 }
 </style>
 <style lang="scss">

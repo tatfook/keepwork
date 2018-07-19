@@ -13,65 +13,62 @@
                 <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
                 <div class="kp-submenu-top-content">
                   <button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button>
-                  <!--<button disabled>新建文件夹</button> -->
-                  <!--<button disabled>新建页面</button> -->
                 </div>
               </div>
             </el-dropdown-item>
-            <!-- <el-dropdown-item divided>
-              <div class="kp-menu-top">
+            <el-dropdown-item divided>
+              <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
                 <div class="kp-submenu-top-content">
-                  <button>设置网站</button>
-                  <button>设置页面</button>
+                  <button :disabled='currentDisabled' @click.stop="openWebsiteSettingDialog">{{$t('editor.setUpTheWebsite')}}</button>
+                  <button :disabled='currentDisabled' @click.stop="goSettingPage">{{$t('editor.setUpThePage')}}</button>
                 </div>
               </div>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item divided>
-              <div class="kp-menu-top">
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <button>删除网站</button>
-                  <button>删除文件夹</button>
-                  <button>删除页面</button>
+                  <button :disabled='currentDisabled' @click="removeCurrentPage(currentPagePath)">{{$t('editor.deleteTheCurrentPage')}}</button>
                 </div>
               </div>
-            </el-dropdown-item> -->
+            </el-dropdown-item>
             <el-dropdown-item divided>
-              <div :class="['kp-menu-top',isActivePageSaved ? 'isDisabled disabled-bgc':'']">
+              <div :class="['kp-menu-top',isSaveAll ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button>
-                  <!-- <button>全部保存</button> -->
+                  <button :disabled='isSaveAll' @click.stop="saveAllOpenedFiles">{{$t('editor.saveAll')}}</button>
                 </div>
               </div>
               </el-dropdown-item>
-            <!-- <el-dropdown-item divided>
-              <div class="kp-menu-top">
+            <el-dropdown-item divided>
+              <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
                 <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
                 <div class="kp-submenu-top-content">
-                  <button>关闭</button>
-                  <button>全部关闭</button>
+                  <button :disabled='currentDisabled' @click.stop="handleCloseConfirm">{{$t('editor.close')}}</button>
+                  <button :disabled='currentDisabled' @click.stop="closeAllOpenedFilesConfirm">{{$t('editor.closeAll')}}</button>
                 </div>
               </div>
-            </el-dropdown-item> -->
+            </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click.stop="refresh"><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
                 <button @click.stop='undo' :disabled='!canUndo'><i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
-                <button @click='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
+                <button @click.stop='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
               </div>
             </el-dropdown-item>
-            <!-- <el-dropdown-item divided>
-              <div class="kp-menu">
-                <button><i class="iconfont icon-mod"></i>模块</button>                  
-                <button><i class="iconfont icon-lfile"></i>大文件</button>                  
-              </div>
-            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <!-- <button><i class="iconfont icon-code1"></i>显示代码</button>-->
-                <button><i class="iconfont icon-help"></i><a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
+                <button :disabled='currentDisabled' @click="changeView('ModsList')"><i class="iconfont icon-mod"></i>{{$t('editor.modules')}}</button>                  
+                <button :disabled='currentDisabled' @click="openSkyDriveManagerDialog"><i class="iconfont icon-lfile"></i>{{$t('modList.bigFile')}}</button>                  
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <div class="kp-menu">
+                <button :disabled='currentDisabled' @click='toggleCodeWin'><i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
+                <button><i class="iconfont icon-help"></i><a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
+                <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>                  
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -109,20 +106,34 @@
         <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='7' class='unsaved-tip'>
-        <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span>
+        <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
     <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
+    <div @click.stop v-if='isWebsiteSettingShow'>
+      <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
+    </div>
+    <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
+      <center v-if="closeOneFile">{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}1</center>
+      <center v-else>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}2</center>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="warning" @click.stop="handleClose" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+        <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mousetrap from 'mousetrap'
+import { gConst } from '@/lib/global'
+import { toggleLanguage, locale } from '@/lib/utils/i18n'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
+import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 
 export default {
   name: 'EditorHeader',
@@ -130,6 +141,12 @@ export default {
     return {
       savePending: false,
       isNewWebsiteDialogShow: false,
+      isWebsiteSettingShow: false,
+      dialogVisible: false,
+      closeOneFile: false,
+      toBeCloseFileName: '',
+      toBeCloseFilePath: '',
+      gConst,
       nowOrigin: document.location.origin
     }
   },
@@ -152,17 +169,47 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
-      openedFiles: 'openedFiles',
-      userProfile: 'user/profile',
       activePage: 'activePage',
-      hasOpenedFiles: 'hasOpenedFiles'
+      hasOpenedFiles: 'hasOpenedFiles',
+      isCodeShow: 'isCodeShow'
     }),
+    isEnglish(){
+      return locale === 'en-US' ? true : false
+    },
+    activeFilePath() {
+      return { path: this.currentPagePath }
+    },
+    currentDisabled() {
+      return !(this.activePage && this.hasOpenedFiles)
+    },
+    fileName() {
+      return this.activePageInfo.sitename + '/' + this.activePageInfo.pagename
+    },
+    currentPath(){
+      return this.activePageInfo.sitepath
+    },
+    currentPagePath(){
+      return this.activePageInfo.barePath
+    },
+    hasUnSaveOpenedFiles() {
+      return this.unSavedOpenedFiles.length > 0
+    },
+    isSaveAll(){
+      return this.unSavedOpenedFiles.length === 0
+    },
+    unSavedOpenedFiles() {
+      return _.filter(_.values(this.openedFiles), ({ saved }) => !saved)
+    },
+    unSavedOpenedFilesPaths() {
+      return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
+    },
     showingType() {
       if (
         this.showingCol.isCodeShow === false &&
@@ -194,7 +241,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveManagePaneComponent']),
+    ...mapActions({
+      saveActivePage: 'saveActivePage',
+      undo: 'undo',
+      redo: 'redo',
+      setActiveManagePaneComponent: 'setActiveManagePaneComponent',
+      savePageByPath: 'savePageByPath',
+      closeOpenedFile: 'closeOpenedFile',
+      closeAllOpenedFile: 'closeAllOpenedFile',
+      toggleSkyDrive: 'toggleSkyDrive',
+      resetShowingCol: 'resetShowingCol',
+      refreshOpenedFile: 'refreshOpenedFile'
+    }),
     async save() {
       let self = this
 
@@ -228,6 +286,145 @@ export default {
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
     },
+    openWebsiteSettingDialog() {
+      this.isWebsiteSettingShow = true
+    },
+    closeWebsiteSettingDialog() {
+      this.isWebsiteSettingShow = false
+    },
+    goSettingPage(){
+      this.setActiveManagePaneComponent({
+        name: 'PageSetting',
+        props: {
+          pagePath: this.currentPagePath
+        }
+      })
+    },
+    removeCurrentPage(path){
+      let pathArr = path.split('/')
+      let siteName = pathArr.slice(1, 2).join()
+      let pageName = pathArr.slice(-1).join()
+      const h = this.$createElement
+      this.$msgbox({
+        title: this.$t('editor.modDelMsgTitle'),
+        message: h('p', null, [
+          h('span', null, `${this.$t('editor.delConfirm')}`),
+          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${pageName}" `),
+          h('span', null, `${this.$t('editor.page')}?`)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel')
+      }).then(async () => {
+        this.deletePending = true
+        await this.gitlabRemoveFile({ path }).catch(e => {
+          this.$message.error(this.$t('editor.deleteFail'))
+          this.deletePending = false
+        })
+        await this.deletePagesFromLayout({ paths: [path] })
+        this.removeRecentOpenFile(path)
+        this.resetPage(path)
+        this.deletePending = false
+      })
+    },
+    async saveAllOpenedFiles() {
+      if (!this.hasUnSaveOpenedFiles) return
+      let num = this.unSavedOpenedFilesPaths.length
+      let paths = this.unSavedOpenedFilesPaths
+      let isSuccess = true
+      this.savePending = true
+      while(num--) {
+        await this.savePageByPath(paths[num]).catch(e => {
+          this.$message.error(this.$t("editor.saveFail"));
+          isSuccess = false
+        })
+      }
+      isSuccess && this.$message({
+          message: this.$t("editor.saveSuccess"),
+          type: 'success'
+        });
+      this.savePending = false
+    },
+    handleCloseOpenedFile() {
+      let path = _.get(this.activePageInfo,'fullPath','')
+      this.closeAndReset(path)
+      this.handleCloseDialog()
+      this.closeOneFile = false
+    },
+    async saveAndCloseOpenedFile() {
+      let path = this.activePageInfo.fullPath
+      this.savePending = true
+      await this.savePageByPath(path)
+        .then(() => {
+          this.closeAndReset(path)
+          this.handleCloseDialog()
+          this.savePending = false
+          this.closeOneFile = false
+        })
+        .catch(e => {
+          this.$message.error(this.$t('editor.saveFail'))
+          this.handleCloseDialog()
+          this.savePending = false
+        })
+    },
+    async closeAllOpenedFilesConfirm() {
+      if (this.unSavedOpenedFilesPaths.length > 0) {
+        this.dialogVisible = true
+        let path = this.unSavedOpenedFilesPaths[0]
+        let siteName = path.split('/').slice(1, 2).join()
+        let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
+        this.toBeCloseFileName = `${siteName}/${fileName}`
+        this.toBeCloseFilePath = path
+      } else {
+        this.$router.push('/')
+        this.closeAllOpenedFile()
+      }
+    },
+    handleCloseOpenedFileAndNext() {
+      let path = this.toBeCloseFilePath
+      path && this.closeAndResetFile(path)
+      this.checkHasNext()
+    },
+    async saveAndCloseOpenedFileAndNext() {
+      this.savePending = true
+      let path = this.toBeCloseFilePath
+      await this.savePageByPath(path)
+      .then(() => {
+        this.closeAndResetFile(path)
+        this.savePending = false
+        this.checkHasNext()
+      })
+      .catch(e => {
+        this.$message.error(this.$t("editor.saveFail"));
+        this.handleCloseAllDialog()
+        this.savePending = false
+      })
+    },
+    handleClose(){
+      return this.closeOneFile  ? this.handleCloseOpenedFile() : this.handleCloseOpenedFileAndNext()
+    },
+    saveHandleClose(){
+      return this.closeOneFile  ? this.saveAndCloseOpenedFile() : this.saveAndCloseOpenedFileAndNext()
+    },
+    closeAndResetFile(path) {
+      let _path = Object.keys(this.openedFiles).filter(name => name !== path)
+      this.closeOpenedFile({ path })
+      if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
+      if (_path.length === 0) {
+        this.$router.push('/')
+      } else {
+        this.$router.push('/' + _path[0].replace(/\.md$/, ''))
+      }
+    },
+    checkHasNext() {
+      if (this.unSavedOpenedFilesPaths.length > 0) {
+        this.closeAllOpenedFilesConfirm()
+      } else {
+        this.closeAllOpenedFile()
+        this.dialogVisible = false
+        this.$router.push('/')
+      }
+    },
     doCopyLink() {
       let that = this
       let toCopyLink = this.activePageFullUrl
@@ -249,18 +446,49 @@ export default {
         }
       )
     },
+    handleCloseDialog() {
+      this.dialogVisible = false
+    },
+    async handleCloseConfirm() {
+      this.closeOneFile = true
+      let path = _.get(this.activePageInfo,'fullPath','')
+      if (this.isActivePageSaved) {
+        this.closeAndReset(path)
+      } else {
+        this.dialogVisible = true
+      }
+    },
+    closeAndReset(path) {
+      let _path = Object.keys(this.openedFiles).filter(name => name !== path)
+      this.closeOpenedFile({ path })
+      if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
+      _path.length === 0
+        ? this.$router.push('/')
+        : this.$nextTick(() => this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` }))
+    },
     changeView(type) {
       this.setActiveManagePaneComponent(type)
     },
-    refresh(){
-      window.location.reload();
+    openSkyDriveManagerDialog() {
+      this.toggleSkyDrive({ showSkyDrive:true })
     },
+    toggleCodeWin() {
+      this.resetShowingCol({
+        isCodeShow: !this.isCodeShow,
+        isPreviewShow: true
+      })
+      this.isCodeShow && this.$store.dispatch('setAddingArea', {
+        area: this.gConst.ADDING_AREA_ADI
+      })
+    },
+    toggleLanguage,
     backHome(){
       window.location.href=this.nowOrigin
     }
   },
   components: {
-    NewWebsiteDialog
+    NewWebsiteDialog,
+    WebsiteSettingDialog
   }
 }
 </script>
@@ -419,9 +647,11 @@ export default {
       border: none;
       background-color: transparent;
       text-align: left;
-      padding-left: 10px;
       color: #909399;
       border-left: 1px solid #ccc;
+      margin-top: -1px;
+      padding: 0 0 0 10px;
+      cursor: pointer;
       &:focus{
         outline: none;
       }
@@ -431,6 +661,7 @@ export default {
       }
       &[disabled]{
         color: #ccc;
+        cursor: default;
         &:hover{
           background-color: #f5f5f5;
         }
@@ -452,8 +683,12 @@ export default {
 }
 .kp-dropdown-menu-content{
   &.el-popper[x-placement^=bottom] {
-    width: 164px;
-    left: 45px !important;
+    min-width: 164px;
+    max-width: 200px;
+    left: 40px !important;
+  }
+  .el-dropdown-menu__item{
+    cursor: default;
   }
   .el-dropdown-menu__item--divided:before {
     margin: 0;
@@ -470,6 +705,12 @@ export default {
   cursor: pointer;
   text-align: left;
   padding-left: 56px;
+  .kp-menu-help{
+    display: inline-block;
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+  }
   .iconfont{
     border: none;
     font-size: 14px;

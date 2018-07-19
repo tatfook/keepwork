@@ -1,8 +1,15 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import md5 from 'blueimp-md5'
-import { mdToJson, jsonToMd } from './mdParser/yaml'
-import CmdHelper, { MARKDOWN_CMD, MOD_CMD_BEGIN, MOD_CMD_END} from './cmdHelper'
+import {
+  mdToJson,
+  jsonToMd
+} from './mdParser/yaml'
+import CmdHelper, {
+  MARKDOWN_CMD,
+  MOD_CMD_BEGIN,
+  MOD_CMD_END
+} from './cmdHelper'
 import ModAdaptor from './modAdaptor'
 
 const blockHelper = {
@@ -16,7 +23,11 @@ const blockHelper = {
         this.buildMarkdown(block)
       } else {
         const data = this.isMarkdownMod(block)
-          ? { md: { data: this.mdText(block) } }
+          ? {
+            md: {
+              data: this.mdText(block)
+            }
+          }
           : mdToJson(this.mdText(block))
         Vue.set(block, 'data', data)
       }
@@ -27,7 +38,7 @@ const blockHelper = {
 
   buildKey(block) {
     block.key = md5(this.text(block), block.uuid)
-    block.modKey = md5(this.text(block))
+    block.modKey = md5(this.text(block), block.modType)
   },
 
   buildMarkdown(block) {
@@ -61,6 +72,12 @@ const blockHelper = {
   updateCmd(block, cmd) {
     block.cmd = cmd
     block.modType = 'Mod' + block.cmd
+    this.buildKey(block)
+  },
+
+  updateUUID(block, uuid) {
+    block.uuid = uuid
+    this.buildKey(block)
   },
 
   updateJson(block, jsonData) {

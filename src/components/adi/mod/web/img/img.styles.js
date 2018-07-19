@@ -1,9 +1,9 @@
-import { config } from '@/components/adi/mod/base/styles.config'
+import _ from 'lodash'
 
 let emptyData = {
   img: {
     emptySrc: require('@/../static/adi/img/imgTwo.png'),
-    emptyLink: config.KEEPWORK,
+    emptyLink: process.env.KEEPWORK,
     emptyTarget: '_blank'
   }
 }
@@ -26,19 +26,16 @@ export default [
     options: {
       theme: {},
       config: {
-        img: {
-          ...emptyData['img'],
-          defaultWebHeight: '600px',
-          defaultMobileHeight: '160px'
-        }
+        ...emptyData,
+        img: _.merge({}, emptyData.img, {
+          img: {
+            defaultWebHeight: '600px',
+            defaultMobileHeight: '160px'
+          }
+        })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgOne.png'),
-    preview: {
-      outter: {
-        height: '157px'
-      }
-    }
+    cover: require('@/../static/adi/img/cover/imgOne.png')
   },
 
   // style 1
@@ -59,18 +56,15 @@ export default [
     options: {
       theme: {},
       config: {
-        img: {
-          ...emptyData['img'],
-          defaultWebHeight: '800px',
-          defaultMobileHeight: '240px'
-        }
+        ...emptyData,
+        img: _.merge({}, emptyData.img, {
+          img: {
+            defaultWebHeight: '800px',
+            defaultMobileHeight: '240px'
+          }
+        })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgTwo.png'),
-    preview: {
-      outter: {
-        height: '209px'
-      }
-    }
+    cover: require('@/../static/adi/img/cover/imgTwo.png')
   }
 ]

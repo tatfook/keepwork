@@ -101,9 +101,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix1.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -192,9 +189,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix2.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -283,9 +277,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix3.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -372,9 +363,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix4.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -462,9 +450,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix5.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -552,9 +537,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix6.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -641,9 +623,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix7.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -731,9 +710,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix8.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -821,9 +797,6 @@ export default [
     },
     cover: require('@/../static/adi/mixLayer/mix9.png'),
     preview: {
-      outter: {
-        height: '176px'
-      },
       inner: {
         'margin-top': '-20px'
       }

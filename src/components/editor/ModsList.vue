@@ -148,7 +148,7 @@ export default {
 }
 .render {
   width: 295px;
-  height: auto;
+  height: 200px;
   background-color: white;
   overflow: hidden;
   margin: auto;
@@ -172,6 +172,21 @@ export default {
       width: 1080px;
       transform: scale(0.26);
       transform-origin: top left;
+    }
+  }
+}
+@media screen and (max-width: 1920px) {
+  .style-cover {
+    width: 98%;
+  }
+  .render {
+    width: 155px;
+    height: 130px;
+    .render-mod-container {
+      width: 135px;
+      .render-mod {
+        transform: scale(0.1245);
+      }
     }
   }
 }

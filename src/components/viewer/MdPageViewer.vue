@@ -2,53 +2,84 @@
   <div class="md-page-viewer">
     <div v-if='sidebarModList' class="toggle-sidebar-main-button" :class="{'position-right': (showSidebarOrMain === 'sidebar')}" @click="toggleSidebarMainShow">
       <i class="iconfont icon-arrowsdownline"></i>
-    </div>
+    </div>    
     <component :is='layoutTemplate' :showSidebarOrMain='showSidebarOrMain' v-if='layout'>
       <mod-list-viewer v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' />
       <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
       <mod-list-viewer v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' />
       <mod-list-viewer :modList='modList' :theme='theme' />
-      <div v-if="show404" class="img404">
-        <img src="https://test.keepwork.com/wiki/assets/imgs/404.png" alt="">
-        <p>{{$t('common.NoPages')}}</p>
-        <el-button class="back" type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button>
-      </div>
     </component>
+    <div v-if="show404" class="img404">
+      <img src="@/assets/img/no_right_to_access.png" alt="">
+      <p>{{$t('common.NoPages')}}</p>
+      <!-- <el-button type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button> -->
+      <el-button v-if="!userIsLogined" type="primary" round @click="toLogin">{{$t('common.login')}}</el-button>
+    </div>
+    <QuickToTop/>
+    <div @click.stop v-if="isLoginDialogShow">
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+    </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import layoutTemplates from '@/components/adi/layout/templates'
 import ModListViewer from './ModListViewer'
 import themeFactory from '@/lib/theme/theme.factory'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import QuickToTop from '@/components/common/QuickToTop'
+import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
   data() {
     return {
       mountedSecondsTimer: NaN,
       mountedSeconds: 0,
-      showSidebarOrMain: 'main'
+      showSidebarOrMain: 'main',
+      isLoginDialogShow: false
     }
   },
-  mounted() {
-    this.mountedSecondsTimer = setInterval(() => this.mountedSeconds++, 1000)
+  async mounted() {
+    await this.userGetWebsiteDetailInfoByPath({
+      path: this.activePageInfo.sitepath
+    }).catch(e => console.error(e))
+
+    this.isLoginDialogShow = !this.userIsLogined && this.isSitePrivate
+    this.mountedSecondsTimer = setInterval(() => {
+      this.mountedSeconds+=3
+      // stop update mountedSeconds for better performance
+      clearInterval(this.mountedSecondsTimer)
+    }, 3000)
   },
   unmounted() {
     clearInterval(this.mountedSecondsTimer)
   },
   computed: {
     ...mapGetters({
+      activePageInfo: 'activePageInfo',
       code: 'code',
       layout: 'layout',
       modList: 'modList',
       headerModList: 'headerModList',
       footerModList: 'footerModList',
       sidebarModList: 'sidebarModList',
-      themeConf: 'themeConf'
+      themeConf: 'themeConf',
+      userIsLogined:'user/isLogined',
+      userGetSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath'
     }),
+    siteDetailInfo() {
+      if (!this.activePageInfo) return {}
+      return this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
+    },
+    siteVisibility() {
+      return _.get(this.siteDetailInfo, ['siteinfo', 'visibility'], 'public')
+    },
+    isSitePrivate() {
+      return this.siteVisibility === 'private'
+    },
     show404() {
-      return this.code === undefined && this.mounted3SecondsAgo
+      return !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined && this.mounted3SecondsAgo
     },
     mounted3SecondsAgo() {
       return this.mountedSeconds >= 3
@@ -62,13 +93,17 @@ export default {
       return this.storedTheme
     },
     layoutTemplate() {
+      if (!this.layout) return
       return layoutTemplates[this.layout.styleName]['component']
     }
   },
-  components: {
-    ModListViewer
-  },
   methods: {
+    ...mapActions({
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath'
+    }),
+    closeLoginDialog(){
+      this.isLoginDialogShow = false
+    },
     toggleSidebarMainShow() {
       switch (this.showSidebarOrMain) {
         case 'main':
@@ -78,7 +113,15 @@ export default {
           this.showSidebarOrMain = 'main'
           break
       }
+    },
+    toLogin(){
+      this.isLoginDialogShow = true
     }
+  },
+  components: {
+    ModListViewer,
+    QuickToTop,
+    LoginDialog
   }
 }
 </script>
@@ -130,7 +173,7 @@ export default {
   text-align: center;
   padding: 40px 0 10px 0;
   vertical-align: middle;
-  margin: auto;
+  margin:6% auto 0;
   img {
     width: 100%;
     max-width: 456px;

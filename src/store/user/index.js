@@ -3,7 +3,6 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = () => ({
-  info: {},
   profile: {},
   website: {},
   contributedWebsite: {},
@@ -14,7 +13,11 @@ const state = () => ({
   siteLayoutConfigs: {},
   skyDrive: {},
   usersDetail: [],
-  siteThemeConfigs: {}
+  siteThemeConfigs: {},
+  siteFiles: {},
+  sendCodeInfo: {},
+  authCodeInfo: {},
+  threeServices: []
 })
 
 export default {

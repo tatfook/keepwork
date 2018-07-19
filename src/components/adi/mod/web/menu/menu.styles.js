@@ -4,7 +4,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -29,11 +28,6 @@ export default [
           emptyTarget: '_blank'
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '14px'
-      }
     }
   },
   // style 1
@@ -41,7 +35,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -70,11 +63,6 @@ export default [
           }
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '14px'
-      }
     }
   },
   // style 2
@@ -82,7 +70,6 @@ export default [
     templateID: 0,
     data: {
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -109,11 +96,6 @@ export default [
             float: 'right'
           }
         }
-      }
-    },
-    preview: {
-      outter: {
-        height: '14px'
       }
     }
   },
@@ -146,13 +128,8 @@ export default [
           emptyTarget: '_blank'
         }
       }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '14px'
-      }
     }
+    // cover: require('@/../static/adi/menu/menu.png'),
   },
   // style 4
   {
@@ -186,11 +163,6 @@ export default [
             justifyContent: 'center'
           }
         }
-      }
-    },
-    preview: {
-      outter: {
-        height: '14px'
       }
     }
   },
@@ -226,11 +198,6 @@ export default [
           }
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '14px'
-      }
     }
   },
   // style 6
@@ -261,11 +228,6 @@ export default [
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
-      }
-    },
-    preview: {
-      outter: {
-        height: '14px'
       }
     }
   },
@@ -302,11 +264,6 @@ export default [
           }
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '14px'
-      }
     }
   },
   // style 8
@@ -340,11 +297,6 @@ export default [
             float: 'right'
           }
         }
-      }
-    },
-    preview: {
-      outter: {
-        height: '14px'
       }
     }
   },
@@ -380,11 +332,6 @@ export default [
           justifyContent: 'flex-start'
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '26px'
-      }
     }
   },
   // style 10
@@ -417,12 +364,6 @@ export default [
           display: 'flex',
           justifyContent: 'center'
         }
-      }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '26px'
       }
     }
   },
@@ -457,12 +398,6 @@ export default [
           justifyContent: 'flex-end'
         }
       }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '26px'
-      }
     }
   },
   // style 12
@@ -495,12 +430,6 @@ export default [
           display: 'flex',
           justifyContent: 'flex-start'
         }
-      }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '26px'
       }
     }
   },
@@ -535,12 +464,6 @@ export default [
           justifyContent: 'center'
         }
       }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '26px'
-      }
     }
   },
   // style 14
@@ -573,12 +496,6 @@ export default [
           display: 'flex',
           justifyContent: 'flex-end'
         }
-      }
-    },
-    // cover: require('@/../static/adi/menu/menu.png'),
-    preview: {
-      outter: {
-        height: '26px'
       }
     }
   }

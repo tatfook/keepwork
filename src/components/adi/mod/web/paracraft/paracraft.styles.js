@@ -87,28 +87,17 @@ export default [
         'background-color': '#F9F9F9',
         'box-shadow': '0 0 5px 0 rgba(44,62,80,.35)'
       },
-      preview: {
-        height: '200px'
-      },
       colGroupLeft: {
-        padding: '20px'
-      },
-      viewTimesImg: {
-        width: '24px',
-        height: '17px'
-      },
-      colViewTimesImg: {
-        width: 'auto'
+        'padding-left': '10px',
+        'padding-right': '10px'
       },
       colGroupA: {
         'padding-left': '10px'
       },
       colGroupB: {
-        'margin-top': '40px',
         'padding-left': '10px'
       },
       colGroupC: {
-        'margin-top': '10px',
         'padding-left': '10px'
       },
       colDownload: {
@@ -117,30 +106,13 @@ export default [
       colEnter: {
         'min-width': '80px'
       },
-      '@media only screen and (max-width: 767px)': {
-        preview: {
-          height: '250px'
-        },
-        colGroupCA: {
-          'margin-top': '12px'
-        },
-        colSize: {
-          'margin-top': '10px'
-        },
-        colEnter: {
-          'margin-top': '5px'
-        }
-      }
+      '@media only screen and (max-width: 767px)': {}
     },
     props: {
       colGroupRow: { gutter: 10 },
       colPreview: {
-        sm: {
-          span: 6
-        },
-        xs: {
-          span: 24
-        }
+        sm: { span: 6 },
+        xs: { span: 24 }
       },
       colGroupLeft: {
         sm: { span: 14 },
@@ -150,8 +122,14 @@ export default [
         span: 12
       },
       colGroupVersionAndUpdateTime: {
-        offset: 2,
-        span: 9
+        xs: {
+          offset: 2,
+          span: 9
+        },
+        sm: {
+          offset: 1,
+          span: 11
+        }
       },
       colAuthor: {
         span: 8
@@ -162,9 +140,13 @@ export default [
       colGroupCARow: {
         gutter: 5
       },
+      colViewTimesImg: {
+        xs: { span: 4 },
+        sm: { span: 3 }
+      },
       colViewTimes: {
         xs: { span: 20 },
-        sm: { span: 11 }
+        sm: { span: 21 }
       },
       colSize: {
         xs: { span: 24 },
@@ -214,6 +196,78 @@ export default [
       },
       config: {
         ...emptyData,
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '196px',
+            defaultMobileHeight: '250px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        }),
+        worldName: _.merge({}, emptyData.worldName, {
+          space: {
+            webMarginTop: '20px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        author: _.merge({}, emptyData.author, {
+          space: {
+            webMarginTop: '40px',
+            mobileMarginTop: '40px'
+          }
+        }),
+        version: _.merge({}, emptyData.version, {
+          space: {
+            webMarginTop: '20px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        viewTimesImg: _.merge({}, emptyData.viewTimesImg, {
+          img: {
+            defaultWebHeight: '17px',
+            defaultMobileHeight: '17px',
+            defaultWebWidth: '24px',
+            defaultMobileWidth: '24px'
+          },
+          space: {
+            webMarginTop: '12px',
+            mobileMarginTop: '12px'
+          }
+        }),
+        viewTimes: _.merge({}, emptyData.viewTimes, {
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        size: _.merge({}, emptyData.size, {
+          space: {
+            webMarginTop: '2px',
+            mobileMarginTop: '10px',
+            webMarginBottom: '20px',
+            mobileMarginBottom: '20px'
+          }
+        }),
+        download: _.merge({}, emptyData.download, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        enter: _.merge({}, emptyData.enter, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '5px',
+            webMarginBottom: '20px',
+            mobileMarginBottom: '20px'
+          }
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
@@ -223,11 +277,8 @@ export default [
     },
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
-      outter: {
-        height: '48px'
-      },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-5px'
       }
     }
   },
@@ -235,20 +286,7 @@ export default [
   {
     templateID: 1,
     data: {
-      preview: {
-        height: '314px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        colPreview: {
-          'margin-top': '10px'
-        },
-        colGroupAB: {
-          'margin-top': '10px'
-        },
-        colDesc: {
-          'margin-top': '10px'
-        }
-      }
+      '@media only screen and (max-width: 767px)': {}
     },
     props: {
       colGroupAA: {
@@ -319,12 +357,39 @@ export default [
       },
       config: {
         ...emptyData,
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '314px',
+            defaultMobileHeight: '314px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          },
+          space: {
+            mobileMarginTop: '10px'
+          }
+        }),
         download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
             src: require('@/../static/adi/paracraft/down.png')
+          },
+          space: {
+            mobileMarginTop: '10px'
+          }
+        }),
+        enter: _.merge({}, emptyData.enter, {
+          img: {
+            src: ''
+          },
+          space: {
+            mobileMarginTop: '10px'
+          }
+        }),
+        desc: _.merge({}, emptyData.desc, {
+          space: {
+            mobileMarginTop: '10px'
           }
         }),
         innerModal: {
@@ -336,9 +401,6 @@ export default [
     },
     cover: require('@/../static/adi/paracraft/paracraft2.png'),
     preview: {
-      outter: {
-        height: '87px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -347,30 +409,7 @@ export default [
   // style 2
   {
     templateID: 2,
-    data: {
-      preview: {
-        height: '314px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        colGroupA: {
-          'margin-top': '10px'
-        },
-        colAuthor: {
-          'margin-top': '10px'
-        },
-        colDesc: {
-          'margin-top': '10px'
-        },
-        colGroupAA: {
-          'margin-top': '10px'
-        }
-      },
-      '@media only screen and (min-width: 768px)': {
-        colGroupAA: {
-          'margin-top': '40px'
-        }
-      }
-    },
+    data: {},
     props: {
       colGroupRow: {
         gutter: 30
@@ -418,12 +457,48 @@ export default [
       },
       config: {
         ...emptyData,
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '314px',
+            defaultMobileHeight: '314px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        }),
+        worldName: _.merge({}, emptyData.worldName, {
+          space: {
+            mobileMarginTop: '10px'
+          }
+        }),
+        author: _.merge({}, emptyData.author, {
+          space: {
+            mobileMarginTop: '20px'
+          }
+        }),
         download: _.merge({}, emptyData.download, {
           elBtn: 'default',
           img: {
             width: '20px',
             height: '20px',
             src: require('@/../static/adi/paracraft/down.png')
+          },
+          space: {
+            webMarginTop: '40px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        enter: _.merge({}, emptyData.enter, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '40px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        desc: _.merge({}, emptyData.desc, {
+          space: {
+            mobileMarginTop: '20px'
           }
         }),
         innerModal: {
@@ -435,16 +510,13 @@ export default [
     },
     cover: require('@/../static/adi/paracraft/paracraft3.png'),
     preview: {
-      outter: {
-        height: '79px'
-      },
       inner: {
         'margin-top': '-20px'
       }
     }
-  }
+  },
   // style 3
-  /* {
+  {
     templateID: 3,
     data: {
       root: {
@@ -645,16 +717,13 @@ export default [
     },
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
-      outter: {
-        height: '48px'
-      },
       inner: {
         'margin-top': '-20px'
       }
     }
-  }, */
+  },
   // style 4
-  /* {
+  {
     templateID: 3,
     data: {
       root: {
@@ -865,12 +934,9 @@ export default [
     },
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
-      outter: {
-        height: '48px'
-      },
       inner: {
         'margin-top': '-20px'
       }
     }
-  } */
+  }
 ]

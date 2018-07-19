@@ -53,7 +53,9 @@ const state = () => ({
     isCodeShow: true,
     isPreviewShow: true
   },
-  isMultipleTextDialogShow: false
+  isMultipleTextDialogShow: false,
+  isSkyDriveManagerDialogShow: false,
+  updateRecentUrlList: []
 })
 
 export default state

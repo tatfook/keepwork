@@ -3,7 +3,7 @@ import Parser from '@/lib/mod/parser'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
 
 describe('mod parser', () => {
-  const code = '\nhello\n```@Img\n```\n```@Title\n```\nworld\nwelcome\nto\nkeepwork\n'
+  const code = '\nhello\n```@Img\n```\n\n```@Title\n```\nworld\nwelcome\nto\nkeepwork\n'
   const oldBlockList = Parser.buildBlockList(code)
   let blockList
   beforeEach(() => {
@@ -12,12 +12,12 @@ describe('mod parser', () => {
 
   describe('#buildBlockList', () => {
     test('sample code', () => {
-      expect(code.split('\n').length).toEqual(11)
+      expect(code.split('\n').length).toEqual(12)
       expect(blockList.length).toEqual(4)
-      expect(blockList[0].lineBegin).toEqual(2)
+      expect(blockList[0].lineBegin).toEqual(1)
       expect(blockList[1].lineBegin).toEqual(3)
-      expect(blockList[2].lineBegin).toEqual(5)
-      expect(blockList[3].lineBegin).toEqual(7)
+      expect(blockList[2].lineBegin).toEqual(6)
+      expect(blockList[3].lineBegin).toEqual(8)
       expect(blockList[0].modType).toEqual('ModMarkdown')
       expect(blockList[1].modType).toEqual('ModImg')
       expect(blockList[2].modType).toEqual('ModTitle')
@@ -29,7 +29,7 @@ describe('mod parser', () => {
     })
     test('code only contains \n', () => {
       const newBlockList = Parser.buildBlockList('\n\n\n')
-      expect(newBlockList.length).toEqual(0)
+      expect(newBlockList.length).toEqual(1)
     })
     test('non-empty code', () => {
       const newBlockList = Parser.buildBlockList('\n hello \n world \n')
@@ -41,11 +41,36 @@ describe('mod parser', () => {
     })
     test('begin line', () => {
       const newBlockList = Parser.buildBlockList('\n hello \n world \n')
-      expect(newBlockList[0].lineBegin).toEqual(2)
+      expect(newBlockList[0].lineBegin).toEqual(1)
     })
     test('should avoid the invalid mod cmd', () => {
       const newBlockList = Parser.buildBlockList('\n hello \n```@AreYouKiddingMe\n```\n')
       expect(newBlockList.length).toEqual(1)
+    })
+    test('should parse the old version cmd', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@board/main\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModBoard')
+    })
+    test('should parse the irregular cmd', () => {
+      let newBlockList = Parser.buildBlockList('\n hello \n```@bOArd\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModBoard')
+      newBlockList = Parser.buildBlockList('\n hello \n```@pARacraft\n```\n')
+      expect(newBlockList.length).toEqual(2)
+      expect(newBlockList[1].modType).toEqual('ModParacraft')
+    })
+    test('should not parse the irregular cmd with old version', () => {
+      let newBlockList = Parser.buildBlockList('\n hello \n```@boArd/MaIn\n```\n')
+      expect(newBlockList.length).toEqual(1)
+      newBlockList = Parser.buildBlockList('\n hello \n```@wiki/js/WOrld3D\n```\n')
+      expect(newBlockList.length).toEqual(1)
+    })
+    test('old paracraft mod', () => {
+      const newBlockList = Parser.buildBlockList('\n hello \n```@paracraft\n```\n```@wiki/js/world3D\n```\n')
+      expect(newBlockList.length).toEqual(3)
+      expect(newBlockList[1].modType).toEqual('ModParacraft')
+      expect(newBlockList[2].modType).toEqual('ModParacraft')
     })
   })
 
@@ -53,19 +78,19 @@ describe('mod parser', () => {
     test('will keep the previous empty lines', () => {
       const newCode = '\n\nhello\n```@Img\n```\n```@Title\n```\nworld\n'
       const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
-      expect(newBlockList[0].lineBegin).toEqual(3)
+      expect(newBlockList[0].lineBegin).toEqual(1)
       expect(Parser.buildMarkdown(newBlockList)).toMatch(newCode)
     })
     test('will remove the ending empty lines if the last mod is not markdown mod', () => {
       const newCode = '\n\nhello\n```@Img\n```\n```@Title\n```\n\n\n'
       const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
-      expect(newBlockList[0].lineBegin).toEqual(3)
+      expect(newBlockList[0].lineBegin).toEqual(1)
       expect(Parser.buildMarkdown(newBlockList)).not.toEqual(newCode)
     })
     test('will keep the empty lines between mods', () => {
       const newCode = '\n\nhello\n```@Img\n```\n\n\n```@Title\n```\nworld\n'
       const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
-      expect(newBlockList[0].lineBegin).toEqual(3)
+      expect(newBlockList[0].lineBegin).toEqual(1)
       expect(Parser.buildMarkdown(newBlockList)).toEqual(newCode)
     })
   })
@@ -80,7 +105,7 @@ describe('mod parser', () => {
       expect(newBlockList[2].lineBegin).toEqual(oldBlockList[1].lineBegin + 2)
     })
     test('insert mod into the middle', () => {
-      const newCode = '\nhello\n```@Img\n```\n```@Menu\n```\n```@Title\n```\nworld\n'
+      const newCode = '\nhello\n```@Img\n```\n```@Menu\n```\n\n```@Title\n```\nworld\n'
       const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
       expect(newBlockList[0].key).toEqual(oldBlockList[0].key)
       expect(newBlockList[3].key).toEqual(oldBlockList[2].key)
@@ -94,6 +119,19 @@ describe('mod parser', () => {
       expect(newBlockList[1].key).toEqual(oldBlockList[1].key)
       expect(newBlockList[0].lineBegin).toEqual(oldBlockList[0].lineBegin)
       expect(newBlockList[1].lineBegin).toEqual(oldBlockList[1].lineBegin)
+    })
+    test('copy and paste to rearange mod order', () => {
+      const newCode = '\nhello\n```@Title\n```\n```@Img\n```\nworld\n'
+      const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
+      expect(newBlockList[1].key).toEqual(oldBlockList[2].key)
+      expect(newBlockList[2].key).toEqual(oldBlockList[1].key)
+    })
+    test('copy and paste to rearange and update mods', () => {
+      const newCode = '\nhello\n```@Title\n```\nabc world\n```@Img\n```\n'
+      const newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
+      expect(newBlockList[2].uuid).toEqual(oldBlockList[3].uuid)
+      expect(newBlockList[1].key).toEqual(oldBlockList[2].key)
+      expect(newBlockList[3].key).toEqual(oldBlockList[1].key)
     })
   })
 
@@ -172,9 +210,10 @@ describe('mod parser', () => {
     test('delete a general mod which is in the middle of two markdown mod', () => {
       const newCode = '\nhello\n```@Img\n```\nworld\n'
       let newBlockList = Parser.updateBlockList(blockList, Parser.buildBlockList(newCode))
+      expect(newBlockList[0].md.length).toEqual(2)
       Parser.deleteBlock(newBlockList, newBlockList[1].key)
       expect(newBlockList.length).toEqual(1)
-      expect(newBlockList[0].md.length).toEqual(3)
+      expect(newBlockList[0].md.length).toEqual(4)
     })
   })
 
@@ -297,7 +336,7 @@ describe('mod parser', () => {
       expect(Parser.getActiveBlock(blockList, 2)).not.toBeUndefined()
     })
     test('cursor outside a mod', () => {
-      expect(Parser.getActiveBlock(blockList, 1)).toBeUndefined()
+      expect(Parser.getActiveBlock(blockList, 5)).toBeUndefined()
     })
     test('cursor point to the cmd line', () => {
       expect(Parser.getActiveBlock(blockList, 3)).toBeUndefined()

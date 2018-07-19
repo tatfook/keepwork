@@ -9,7 +9,9 @@ import Cookies from 'js-cookie'
 
 const {
   LOGIN_SUCCESS,
+  LOGOUT,
   GET_PROFILE_SUCCESS,
+  SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
@@ -28,60 +30,69 @@ const {
   GET_FROM_SKY_DRIVE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
-  SAVE_SITE_THEME_CONFIG_SUCCESS
+  SAVE_SITE_THEME_CONFIG_SUCCESS,
+  USE_FILE_IN_SITE_SUCCESS,
+  GET_USER_THREE_SERVICES_SUCCESS,
+  SET_AUTH_CODE_INFO
 } = props
 
 const actions = {
   async login({ commit }, payload) {
-    let info = await keepwork.user.login(payload)
-    commit(LOGIN_SUCCESS, info)
+    let info = await keepwork.user.login(payload, null, true)
+    if (info.data) {
+      info.data.token && Cookies.set('token', info.data.token)
+      commit(LOGIN_SUCCESS, info.data)
+    }
+    return info
+  },
+  thirdLogin({ commit }, payload) {
+    commit(LOGIN_SUCCESS, payload)
+  },
+  logout({ commit }) {
+    commit(LOGOUT)
+    Cookies.remove('token')
+    Cookies.remove('token', { path: '/' })
+    window.localStorage.removeItem('satellizer_token')
   },
   /*doc
     getProfile
-
-    getProfile({forceLogin: false})
-    can be called without username,
-    only uses cookie info;
     dispatch this action first, in any action which depends on username.
   */
   getProfile: (() => {
     let getProfilePromise
     let clearGetProfilePromise = () => (getProfilePromise = null)
 
-    return async (context, {forceLogin = true} = {}) => {
-      let { commit, dispatch, getters: { isLogined, authRequestConfig, token } } = context
-      if (isLogined) return
+    return async (context, {forceLogin = true, useCache = true} = {}) => {
+      let { commit, getters: { isLogined, authRequestConfig, token } } = context
+      if (isLogined && useCache) return
 
       getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
         keepwork.user.getProfile(null, authRequestConfig).then(profile => {
           commit(GET_PROFILE_SUCCESS, {...profile, token})
-          Cookies.set('token', token)
           resolve()
         }).catch(async e => {
           if (!forceLogin) {
             reject(new Error('401'))
             clearGetProfilePromise()
-            return
           }
-
-          alert('尚未登陆，请登陆后访问！')
-          // login for localhost test
-          if (process.env.HOST_ENV === 'localhost') {
-            let payload = {
-              username: prompt('username: '),
-              password: prompt('password: ')
-            }
-            clearGetProfilePromise()
-            if (!payload.username || !payload.password) {
-              reject(new Error('401'))
-              return
-            }
-            await dispatch('login', payload)
-            await dispatch('getProfile')
-            return resolve()
-          }
-          location.href = '/wiki/login'
-          setTimeout(resolve, 10 * 1000)
+          // alert('尚未登陆，请登陆后访问！')
+          // // login for localhost test
+          // if (process.env.HOST_ENV === 'localhost') {
+          //   let payload = {
+          //     username: prompt('username: '),
+          //     password: prompt('password: ')
+          //   }
+          //   clearGetProfilePromise()
+          //   if (!payload.username || !payload.password) {
+          //     reject(new Error('401'))
+          //     return
+          //   }
+          //   await dispatch('login', payload)
+          //   await dispatch('getProfile')
+          //   return resolve()
+          // } else {
+          //   location.href = '/wiki/login?redirect=' + window.location.href
+          // }
         })
       }).then(clearGetProfilePromise)
 
@@ -96,6 +107,25 @@ const actions = {
     }
     userDetail = await keepwork.user.getDetailByName({ username: username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+  },
+  async updateUserInfo(context, userInfo) {
+    let { commit, getters: { authRequestConfig, profile } } = context
+    let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
+    commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
+  },
+  async verifyCellphoneOne(context, { setRealNameInfo, cellphone }) {
+    let { commit, getters: { authRequestConfig } } = context
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ setRealNameInfo, cellphone }, authRequestConfig, true)
+    commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
+    return verifyInfoOne
+  },
+  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
+    let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
+    smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind}, authRequestConfig, true)
+    await dispatch('getProfile', { useCache: false })
+    commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
+    return verifyInfoTwo
   },
   async getAllPersonalPageList({ dispatch, getters }, payload) {
     let { useCache = true } = payload || {}
@@ -185,7 +215,7 @@ const actions = {
     type = 'Basic', // level1 classify get templates, seems useless in new templates solution
     templateName = 'Basic', // level2 templates .name
     styleName = '默认样式', // level3 template.styles .name, seems useless in new templates solution
-    logoUrl = 'http://keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
+    logoUrl = '//keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
   } }) {
     let { commit, getters: { username, userId, authRequestConfig } } = context
     let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }
@@ -451,44 +481,143 @@ const actions = {
     ])
   },
   async getInfoFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, getters } = context
+    let { commit, dispatch, getters } = context
     let { username, skyDriveInfo, authRequestConfig } = getters
     if (useCache && !_.isEmpty(skyDriveInfo)) return
 
+    await dispatch('getProfile')
     let info = await skyDrive.info(null, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
   },
   async getFileListFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, getters } = context
+    let { commit, dispatch, getters } = context
     let { username, skyDriveFileList, authRequestConfig } = getters
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
-    let filelist = await skyDrive.list({pageSize: 100000}, authRequestConfig)
+    await dispatch('getProfile')
+    let filelist = await skyDrive.list({pageSize: 10000000}, authRequestConfig)
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
+    return filelist
   },
-  async uploadFileToSkyDrive(context, {file, onStart, onProgress}) {
+  async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
     let { dispatch, getters: { authRequestConfig } } = context
     await dispatch('getProfile')
-    let url = await skyDrive.upload({file, onStart, onProgress}, authRequestConfig)
-    return url
-  },
-  async updateFileInSkyDrive(context, {file, onStart, onProgress, bigfileToUpdate}) {
-    let { dispatch, getters: { authRequestConfig } } = context
-    await dispatch('getProfile')
-    let url = await skyDrive.update({file, onStart, onProgress, bigfileToUpdate}, authRequestConfig)
-    return url
+    let { key } = await skyDrive.upload({file, filename, onStart, onProgress}, authRequestConfig)
+    return { key }
   },
   async removeFileFromSkyDrive(context, {file}) {
     let { getters: { authRequestConfig } } = context
     await skyDrive.remove({file}, authRequestConfig)
   },
-  async changeFileNameInSkyDrive(context, {_id, filename}) {
+  async changeFileNameInSkyDrive(context, {key, filename}) {
     let { getters: { authRequestConfig } } = context
-    await skyDrive.changeFileName({_id, filename}, authRequestConfig)
+    await skyDrive.changeFileName({key, filename}, authRequestConfig)
+  },
+  async useFileInSite(context, {fileId, sitePath, useCache = true}) {
+    let { commit, dispatch, getters, rootGetters } = context
+
+    let { authRequestConfig, siteFileBySitePathAndFileId } = getters
+    let cachedUrl = siteFileBySitePathAndFileId({sitePath, fileId})
+    if (useCache && !_.isEmpty(cachedUrl)) return
+
+    await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
+    let { siteinfo: { userId, _id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
+
+    let url = await skyDrive.useFileInSite({userId, siteId, fileId}, authRequestConfig)
+    commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
+    return url
+  },
+  async uploadFileAndUseInSite({dispatch}, {file, filename, sitePath, onStart, onProgress}) {
+    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, filename, onStart, onProgress})
+    let filelist = await dispatch('getFileListFromSkyDrive', {useCache: false})
+    let fileUploaded = (filelist || []).filter(({ key }) => fileKey === key)[0]
+    let { id: fileId } = fileUploaded
+    let url = await dispatch('useFileInSite', {fileId, sitePath, useCache: false})
+    return {file: fileUploaded, url}
   },
   async checkSensitive(context, {checkedWords}) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)
     return result
+  },
+  async changePwd(context, { oldpassword, newpassword }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
+    return result.error.message
+  },
+  async getByEmail(context, { email }) {
+    let result = await keepwork.user.getByEmail({ email })
+    return result
+  },
+  async verifyEmailOne(context, { email, bind }) {
+    let { getters } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailOne({ email, bind }, authRequestConfig)
+    return result
+  },
+  async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig, { returnOriginalData: true })
+    let message = result.error.message
+    if (message === 'success') {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+    }
+    return message
+  },
+  async getUserThreeServiceByUsername(context, { username }) {
+    let { getters, commit } = context
+    let { authRequestConfig } = getters
+    let userThreeServices = await keepwork.userThreeService.getByUsername({ username }, authRequestConfig)
+    commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
+  },
+  async threeServiceDeleteById(context, { id, username }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    await keepwork.userThreeService.deleteById({ id }, authRequestConfig)
+    await dispatch('getUserThreeServiceByUsername', { username })
+  },
+  async threeServiceUnbind(context, { id, password, username }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.userThreeService.unbind({ id, password }, authRequestConfig).then(async () => {
+      await dispatch('getUserThreeServiceByUsername', { username })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
+  },
+  async unbindCellphone(context, { password }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.user.unbindCellphone({ password }, authRequestConfig).then(async () => {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
+  },
+  async unbindEmail(context, { password }) {
+    let { getters, dispatch } = context
+    let { authRequestConfig } = getters
+    let unbindResut = {status: ''}
+    await keepwork.user.unbindEmail({ password }, authRequestConfig).then(async () => {
+      await dispatch('getProfile', {
+        useCache: false
+      })
+      unbindResut.status = 'success'
+    }).catch(() => {
+      unbindResut.status = 'failed'
+    })
+    return unbindResut
   }
 }
 

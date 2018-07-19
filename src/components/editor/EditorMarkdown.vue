@@ -8,6 +8,8 @@
 import Parser from '@/lib/mod/parser'
 import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
+import formatDate from '@/lib/utils/formatDate'
+import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
 import _CodeMirror from 'codemirror'
@@ -32,7 +34,8 @@ export default {
   name: 'EditorMarkdown',
   data() {
     return {
-      gConst
+      gConst,
+      qiniuUploadSubscriptions: {}
     }
   },
   components: {
@@ -60,6 +63,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      activePageInfo: 'activePageInfo',
       code: 'code',
       modList: 'modList',
       activeMod: 'activeMod',
@@ -127,7 +131,7 @@ export default {
   methods: {
     ...mapActions({
       gitlabUploadFile: 'gitlab/uploadFile',
-      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
+      userUploadFileAndUseInSite: 'user/uploadFileAndUseInSite',
       setActiveMod: 'setActiveMod'
     }),
     addMod() {
@@ -156,7 +160,7 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursorLine(this.modList, line)
+        let mod = Parser.getBlockByCursorLine(this.modList || [], line)
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
@@ -201,17 +205,20 @@ export default {
           cursor
         })
       }
+
       // the new input might create a new cmd
       let text = _.cloneDeep(change.text)
-      if (text[0] !== '') text[0] = editor.getLine(change.from.line)
-      if (text[text.length - 1] !== '')
-        text[text.length - 1] = editor.getLine(change.to.line)
-
+      if (text.length > 0) {
+        if (text[0] !== '') text[0] = editor.getLine(change.from.line)
+        if (text[text.length - 1] !== '')
+          text[text.length - 1] = editor.getLine(change.to.line)
+      }
       // the last line of removed code might broke the cmd
       let removed = _.cloneDeep(change.removed)
-      if (removed.length > 1) {
-        let oldMdLines = this.code.split('\n')
-        removed[removed.length - 1] = oldMdLines[change.to.line]
+      if (removed.length > 0) {
+        if (removed[0] !== '') removed[0] = editor.getLine(change.from.line)
+        if (removed[removed.length - 1] !== '')
+          removed[removed.length - 1] = editor.getLine(change.to.line)
       }
       if (
         Parser.willAffectModData(mod, removed) ||
@@ -400,53 +407,35 @@ export default {
       )
     },
     async uploadFile(file, coords) {
-      if (file.size <= this.gConst.GIT_FILE_UPLOAD_MAX_SIZE) {
-        // use skyDrive
-        // let url = await this.userUploadFileToSkyDrive({
-        //   file,
-        //   onProgress(progress) {
-        //     console.log(progress)
-        //   }
-        // }).catch(err => console.error(err))
-
-        // if (!url) {
-        //   this.insertLink(null, '***Upload Failed!***', coords)
-        // } else if (/image\/\w+/.test(file.type)) {
-        //   this.insertFile(null, url, coords)
-        // } else {
-        //   this.insertLink(file.name, url, coords)
-        // }
-
-        // gitlab
-        let lineNo = coords ? coords.line : this.editor.getCursor().line
-        let originText = this.editor.getLine(lineNo)
-        if (originText) {
-          this.replaceLine(
-            lineNo,
-            originText + '\n' + this.$t('editor.readFileFromLocal')
-          )
-          lineNo++
-        } else {
-          this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
-        }
-        let fileReader = new FileReader()
-        fileReader.onload = async () => {
-          this.replaceLine(lineNo, this.$t('editor.uploadingToGitlabText'))
-          const path = await this.gitlabUploadFile({
-            fileName: file.name,
-            content: fileReader.result
-          })
-          this.replaceLine(lineNo, '')
-          if (!path) {
-            this.insertLink(null, '***Upload Failed!***', coords)
-          } else if (/image\/\w+/.test(file.type)) {
-            this.insertFile(null, path, coords)
-          } else {
-            this.insertLink(file.name, path, coords)
-          }
-        }
-        fileReader.readAsDataURL(file)
+      let lineNo = coords ? coords.line : this.editor.getCursor().line
+      let originText = this.editor.getLine(lineNo)
+      if (originText) {
+        this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
+        lineNo++
+      } else {
+        this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
       }
+      let filename = `${(formatDate()||'').replace(/\s|\:/g, '_')}-${(Date.now()+'').replace(/\d*(\d{3})$/,'$1')}-${file.name}`
+
+      await this.userUploadFileAndUseInSite({
+        file,
+        filename,
+        sitePath: this.activePageInfo.sitepath,
+        onStart: subscirbtion => {
+          this.replaceLine(lineNo, this.$t('editor.uploadingToSkyDriveText'))
+          this.qiniuUploadSubscriptions[file.name] = subscirbtion
+        },
+        onProgress: progress => {
+          this.replaceLine(lineNo, this.$t('editor.uploadingToSkyDriveText'))
+        }
+      }).then(async ({file, url}) => {
+        this.replaceLine(lineNo, '')
+        this.$emit('insertBigfile', {file, url: `${url}#${file.filename}`})
+      }).catch(err => {
+        console.error(err)
+        this.replaceLine(lineNo, '')
+        this.insertLink(null, '***Upload Failed!***', coords)
+      })
     },
     onDropFile(cm, evt) {
       let files = evt.dataTransfer.files

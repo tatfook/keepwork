@@ -10,10 +10,11 @@ This is the IFrame Mod for usage.
 ```@IFrame
 iframe:
   src: //url地址
-  width: //宽度，默认100%
-  height: //高度，默认300px
-
+  ratio: //宽高比， 比如16/9； 或者高/宽的值，比如0.5625
+  width: //宽度，可以为百分比（80%）或者像素（800px）
+  height： //高度，只能为像素(900px)
 ```
+注：width和height只有在ratio为空的时候才生效。
 
 */
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
