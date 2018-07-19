@@ -170,7 +170,7 @@ export default {
   text-align: center;
   padding: 40px 0 10px 0;
   vertical-align: middle;
-  margin: auto;
+  margin:6% auto 0;
   img {
     width: 100%;
     max-width: 456px;
