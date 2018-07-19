@@ -9,8 +9,8 @@
         <PageViewer />
       </el-dialog>
     </el-main>
-    <div @click.stop v-if="!userIsLogined">
-      <LoginDialog :show="!userIsLogined" :forceLogin="true" @close="handleLoginDialogClose"/>
+    <div @click.stop v-if="showLoginDialog">
+      <LoginDialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose"/>
     </div>
   </el-container>
 </template>
@@ -27,10 +27,12 @@ export default {
     return {
       loading: false,
       previewDialogVisible: false,
+      profileLoaded: false
     }
   },
   async mounted() {
     await this.userGetProfile().catch(e => console.error(e))
+    this.profileLoaded = true
   },
   watch: {
     $route: 'updateActivePage'
@@ -40,9 +42,12 @@ export default {
       activePageInfo: 'activePageInfo',
       userIsLogined: 'user/isLogined',
     }),
-    showLoading() {
-      return this.userIsLogined && this.loading
+    showLoginDialog() {
+      return this.profileLoaded && !this.userIsLogined
     },
+    showLoading() {
+      return !this.showLoginDialog && this.loading
+    }
   },
   methods: {
     ...mapActions({
