@@ -278,10 +278,10 @@ export default [
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
       outter: {
-        height: '48px'
+        height: '33px'
       },
       inner: {
-        'margin-top': '-20px'
+        'margin-top': '-5px'
       }
     }
   },
@@ -405,7 +405,7 @@ export default [
     cover: require('@/../static/adi/paracraft/paracraft2.png'),
     preview: {
       outter: {
-        height: '87px'
+        height: '47px'
       },
       inner: {
         'margin-top': '-20px'
@@ -517,7 +517,7 @@ export default [
     cover: require('@/../static/adi/paracraft/paracraft3.png'),
     preview: {
       outter: {
-        height: '79px'
+        height: '49px'
       },
       inner: {
         'margin-top': '-20px'
@@ -727,7 +727,7 @@ export default [
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
       outter: {
-        height: '48px'
+        height: '38px'
       },
       inner: {
         'margin-top': '-20px'
@@ -947,7 +947,7 @@ export default [
     cover: require('@/../static/adi/paracraft/paracraft1.png'),
     preview: {
       outter: {
-        height: '48px'
+        height: '38px'
       },
       inner: {
         'margin-top': '-20px'
