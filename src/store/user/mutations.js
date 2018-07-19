@@ -62,11 +62,8 @@ const doNothing = state => {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, {token, userinfo: profile}) {
-    Vue.set(state, 'profile', {
-      ...profile,
-      token
-    })
+  [LOGIN_SUCCESS](state, {userinfo: profile}) {
+    Vue.set(state, 'profile', profile)
   },
   [LOGOUT](state) {
     Vue.set(state, 'profile', {})

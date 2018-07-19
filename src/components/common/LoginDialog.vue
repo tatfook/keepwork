@@ -1,5 +1,5 @@
 <template>
-      <el-dialog title="" v-if='show' :visible.sync="show" class="login-dialog" :before-close="handleClose">
+      <el-dialog title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
         <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item prop="username">
             <el-input v-model="ruleForm.username"></el-input>
@@ -36,7 +36,12 @@ import { mapActions } from 'vuex'
 export default {
   name: 'LoginDialog',
   props: {
-    show: Boolean
+    show: Boolean,
+    forceLogin: {
+      required: false,
+      default: false,
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -67,7 +72,7 @@ export default {
       userLogin: 'user/login',
     }),
     handleClose() {
-      this.$emit('close')
+      !this.forceLogin && this.$emit('close')
     },
     async login(formName) {
       this.$refs[formName].validate(async valid => {
@@ -138,8 +143,12 @@ export default {
 
 <style lang="scss">
 .login-dialog {
-  .el-dialog__header {
-    padding: 0;
+  &.force-login {
+    .el-dialog__header {
+      .el-dialog__headerbtn {
+        display: none;
+      }
+    }
   }
   .el-dialog {
     width: 478px;
