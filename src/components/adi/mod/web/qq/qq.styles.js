@@ -73,12 +73,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverOne.png'),
-    preview: {
-      outter: {
-        height: '40px'
-      }
-    }
+    cover: require('@/../static/adi/qq/cover/qqCoverOne.png')
   },
 
   // style 1 左图右文
@@ -157,11 +152,6 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png'),
-    preview: {
-      outter: {
-        height: '40px'
-      }
-    }
+    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png')
   }
 ]
