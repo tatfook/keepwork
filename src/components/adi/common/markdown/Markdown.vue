@@ -42,7 +42,7 @@ export default {
         this.sheet.attach()
       }
 
-      return this.sheet.classes[className] + 'markdown-body' + 'comp-markdown'
+      return 'markdown-body ' + 'comp-markdown ' + this.sheet.classes[className]
     },
     validData() {
       let isEmpty = !(this.properties.data && this.properties.data.trim())

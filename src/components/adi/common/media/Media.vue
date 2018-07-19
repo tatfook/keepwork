@@ -80,7 +80,7 @@ export default {
         this.sheet.attach()
       }
 
-      return this.sheet.classes[imgClassName] + ' img'
+      return 'img ' + this.sheet.classes[imgClassName]
     },
     svgFill() {
       return this.generateStyleString({

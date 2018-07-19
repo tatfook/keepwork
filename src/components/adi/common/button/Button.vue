@@ -1,12 +1,12 @@
 <template>
   <div class="comp-button" :class="getClass">
     <a v-if="!options.clickEvent" :class="getClassStyle" :target='getTarget' :href="getLink" :style="buttonStyle">
-        <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
-        {{ getButtonName }}
+      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+      {{ getButtonName }}
     </a>
     <a v-if="options.clickEvent" :class="getClassStyle" @click='callback' :style="buttonStyle">
-        <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
-        {{ getButtonName }}
+      <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
+      {{ getButtonName }}
     </a>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
       return properties.target ? properties.target : options.emptyTarget
     },
     hasImg() {
-      return true
+      return this.options.img && this.options.img.src
     },
     buttonStyle() {
       let style = {
