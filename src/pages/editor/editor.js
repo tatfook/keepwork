@@ -14,6 +14,7 @@ import { broadcast } from 'vuex-iframe-sync'
 import VueKeepScrollPosition from 'vue-keep-scroll-position'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import handleMessage from '@/lib/iframe'
+import '@/components/common/thirdAuth'
 
 window.addEventListener('message', handleMessage)
 
