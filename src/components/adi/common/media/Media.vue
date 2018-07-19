@@ -56,13 +56,21 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': parseInt(this.properties.webHeight || this.options.defaultWebHeight) + 'px!important',
-          'width': parseInt(this.properties.webWidth || this.options.defaultWebWidth) + 'px!important'
+          'height': this.options.img && this.options.img.defaultWebHeight + '!important',
+          'width': parseInt(this.properties.webWidth || this.options.img.defaultWebWidth) + 'px!important',
+          'margin-top': this.options.space && this.options.space.webMarginTop + '!important',
+          'margin-bottom': this.options.space && this.options.space.webMarginBottom + '!important',
+          'padding-top': this.options.space && this.options.space.webPaddingTop + '!important',
+          'padding-bottom': this.options.space && this.options.space.webPaddingBottom + '!important'
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': parseInt(this.properties.mobileHeight || this.options.defaultMobileHeight) + 'px!important',
-            'width': parseInt(this.properties.mobileWidth || this.options.defaultMobileWidth) + 'px!important'
+            'height': this.options.img && this.options.img.defaultMobileHeight + '!important',
+            'width': parseInt(this.properties.mobileWidth || this.options.img.defaultMobileWidth) + 'px!important',
+            'margin-top': this.options.space && this.options.space.mobileMarginTop + '!important',
+            'margin-bottom': this.options.space && this.options.space.mobileMarginBottom + '!important',
+            'padding-top': this.options.space && this.options.space.mobilePaddingTop + '!important',
+            'padding-bottom': this.options.space && this.options.space.mobilePaddingBottom + '!important'
           }
         }
       }
@@ -72,7 +80,7 @@ export default {
         this.sheet.attach()
       }
 
-      return this.sheet.classes[imgClassName] + ' img'
+      return 'img ' + this.sheet.classes[imgClassName]
     },
     svgFill() {
       return this.generateStyleString({
@@ -98,20 +106,21 @@ export default {
 .comp-media {
   width: 100%;
   height: 100%;
-
-  .img {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-
-    img {
-      position: absolute;
+  a {
+    .img {
       width: 100%;
       height: 100%;
-      left: 0;
-      top: 0;
-      object-fit: cover;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        object-fit: cover;
+      }
     }
   }
 }

@@ -124,7 +124,6 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
-import Cookies from 'js-cookie'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {

@@ -52,7 +52,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -92,7 +91,7 @@ export default [
     cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '27px'
       }
     }
   },
@@ -120,7 +119,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       },
       colMenu: {
@@ -159,7 +157,7 @@ export default [
     cover: require('@/../static/adi/title/title1.png'),
     preview: {
       outter: {
-        height: '47px'
+        height: '27px'
       }
     }
   },
@@ -191,7 +189,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -226,7 +223,7 @@ export default [
     cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '43px'
       }
     }
   },
@@ -258,7 +255,6 @@ export default [
       },
       // 定义子组件menu的wrapper样式
       menu: {
-        height: '50px',
         margin: 'auto'
       }
     },
@@ -293,7 +289,7 @@ export default [
     cover: require('@/../static/adi/title/title2.png'),
     preview: {
       outter: {
-        height: '63px'
+        height: '43px'
       }
     }
   },

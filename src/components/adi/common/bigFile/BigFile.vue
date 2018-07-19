@@ -24,15 +24,15 @@
       </div>
       <div class="bigfile-image"
            v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
-        <img :src="getSrc" />
+        <img :src="actualUrl" />
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video :src="getSrc" controls>
+        <video :src="actualUrl" controls>
           {{$t('editor.videoNotSupport')}}
         </video>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src="getSrc"></iframe>
+        <iframe :src="actualUrl"></iframe>
       </div>
     </div>
   </div>
@@ -41,8 +41,8 @@
 import compBaseMixin from '../comp.base.mixin'
 import { keepwork } from '@/api'
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 import prettysize from 'prettysize'
-import download from 'downloadjs'
 import _ from 'lodash'
 
 export default {
@@ -55,6 +55,7 @@ export default {
       url: '',
       isOldData: false,
       loading: false,
+      actualUrl: '',
       ext: {
         txt: 'icon-txt1',
         mp4: 'icon-mp4-1',
@@ -96,8 +97,26 @@ export default {
     getSize() {
       return prettysize(this.properties.size)
     },
-    download() {
-      window.open(this.properties.src)
+    async download() {
+      let downloadUrl = this.actualUrl
+
+      if (!downloadUrl) return
+
+      let filename = this.properties.filename
+      await new Promise((resolve, reject) => {
+        let a = document.createElement('a')
+        a.target = '_blank'
+        a.style.display = 'none'
+        a.href = `${downloadUrl};attname=${filename}`
+        a.download = filename || ""
+        document.body.appendChild(a)
+        a.click()
+
+        setTimeout(() => {
+          a.remove()
+          resolve()
+        }, 300)
+      }).catch(e => console.error(e))
     },
     getFileType(fileType) {
       if (/image\/\w+/.test(fileType)) {
@@ -165,15 +184,31 @@ export default {
       } else {
         return this.otherExt
       }
-    },
-    getSrc() {
-      return this.properties && this.properties.src || ''
     }
   },
-  created() {
+  async created() {
     if (this.properties.fileId) {
       this.isOldData = true
       this.initOldData()
+    } else {
+      let src = this.properties.src
+
+      if (!src) return
+
+      let result
+
+      await axios.get(src.replace("/raw#", "/rawurl#")).then((response) => {
+        result = response;
+      })
+      .catch((error) => {
+        this.actualUrl = src
+      })
+
+      if (result && result.data && result.data.data) {
+        this.actualUrl = result.data.data
+      } else {
+        this.actualUrl = src
+      }
     }
   }
 }

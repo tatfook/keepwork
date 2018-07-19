@@ -169,13 +169,13 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
-      userProfile: 'user/profile',
       activePage: 'activePage',
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
@@ -241,7 +241,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveActivePage', 'undo', 'redo', 'setActiveManagePaneComponent','savePageByPath','closeOpenedFile','closeAllOpenedFile','toggleSkyDrive','resetShowingCol','refreshOpenedFile']),
+    ...mapActions({
+      saveActivePage: 'saveActivePage',
+      undo: 'undo',
+      redo: 'redo',
+      setActiveManagePaneComponent: 'setActiveManagePaneComponent',
+      savePageByPath: 'savePageByPath',
+      closeOpenedFile: 'closeOpenedFile',
+      closeAllOpenedFile: 'closeAllOpenedFile',
+      toggleSkyDrive: 'toggleSkyDrive',
+      resetShowingCol: 'resetShowingCol',
+      refreshOpenedFile: 'refreshOpenedFile'
+    }),
     async save() {
       let self = this
 
