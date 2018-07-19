@@ -4,7 +4,9 @@
       <el-button @click='handleAdd' class="gallery-type-add-btn" icon="el-icon-plus">{{$t('common.add')}}</el-button>
       <div v-for='(item, index) in galleryData'
         class="gallery-type-item"
-        :key='index'>
+        :key='index'
+        :item="item"
+        @change="updateValue(item)">
 
         <div
           class="gallery-type-item-img"
@@ -48,25 +50,22 @@ export default {
     return {
       locationOrigin: location.origin,
       selectedIndex: NaN,
-      galleryData: _.cloneDeep(this.originValue),
       isSkyDriveManagerDialogShow: false
     }
   },
   async mounted() {
     await this.getAllPersonalPageList()
   },
-  watch: {
-    galleryData: {
-      handler() {
-        this.handleChange()
-      },
-      deep: true
-    }
-  },
   computed: {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
-    })
+    }),
+    galleryData: {
+      get() {
+        return this.originValue
+      },
+      set() {}
+    }
   },
   methods: {
     ...mapActions({
@@ -103,6 +102,7 @@ export default {
       let item = this.galleryData[this.selectedIndex]
       if (!url || !item) return
       item.img = url
+      this.handleChange()
     }
   },
   components: {

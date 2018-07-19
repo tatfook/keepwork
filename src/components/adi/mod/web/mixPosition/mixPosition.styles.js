@@ -103,9 +103,6 @@ export default [
     },
     cover: require('@/../static/adi/mixPosition/cover/projectOne.png'),
     preview: {
-      outter: {
-        height: '80px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -197,9 +194,6 @@ export default [
     },
     cover: require('@/../static/adi/mixPosition/cover/projectTwo.png'),
     preview: {
-      outter: {
-        height: '80px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -313,9 +307,6 @@ export default [
     },
     cover: require('@/../static/adi/mixPosition/cover/projectThree.png'),
     preview: {
-      outter: {
-        height: '80px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -377,9 +368,6 @@ export default [
     },
     cover: require('@/../static/adi/mixPosition/cover/projectFour.png'),
     preview: {
-      outter: {
-        height: '86px'
-      },
       inner: {
         'margin-top': '-20px'
       }
@@ -441,9 +429,6 @@ export default [
     },
     cover: require('@/../static/adi/mixPosition/cover/projectFive.png'),
     preview: {
-      outter: {
-        height: '89px'
-      },
       inner: {
         'margin-top': '-20px'
       }
