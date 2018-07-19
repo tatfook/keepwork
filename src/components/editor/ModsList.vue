@@ -124,7 +124,7 @@ export default {
   height: 100%;
 }
 .style-cover {
-  width: 98%;
+  width: 100%;
   cursor: pointer;
   display: block;
   margin-bottom: 12px;
@@ -147,8 +147,8 @@ export default {
   overflow: auto;
 }
 .render {
-  width: 155px;
-  height: auto;
+  width: 295px;
+  height: 200px;
   background-color: white;
   overflow: hidden;
   margin: auto;
@@ -165,13 +165,28 @@ export default {
   .render-mod-container {
     border: 10px solid white;
     height: 300px;
-    width: 135px;
+    width: 275px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.1245);
+      transform: scale(0.26);
       transform-origin: top left;
+    }
+  }
+}
+@media screen and (max-width: 1920px) {
+  .style-cover {
+    width: 98%;
+  }
+  .render {
+    width: 155px;
+    height: 130px;
+    .render-mod-container {
+      width: 135px;
+      .render-mod {
+        transform: scale(0.1245);
+      }
     }
   }
 }

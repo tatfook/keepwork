@@ -34,9 +34,6 @@ export default [
       }
     },
     preview: {
-      outter: {
-        height: '8px'
-      },
       inner: {
         'margin-top': '-20px'
       }

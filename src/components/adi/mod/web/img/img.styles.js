@@ -35,12 +35,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgOne.png'),
-    preview: {
-      outter: {
-        height: '57px'
-      }
-    }
+    cover: require('@/../static/adi/img/cover/imgOne.png')
   },
 
   // style 1
@@ -70,11 +65,6 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgTwo.png'),
-    preview: {
-      outter: {
-        height: '100px'
-      }
-    }
+    cover: require('@/../static/adi/img/cover/imgTwo.png')
   }
 ]

@@ -88,12 +88,7 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
-    preview: {
-      outter: {
-        height: '27px'
-      }
-    }
+    cover: require('@/../static/adi/title/title1.png')
   },
   // style 1
   {
@@ -154,12 +149,7 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title1.png'),
-    preview: {
-      outter: {
-        height: '27px'
-      }
-    }
+    cover: require('@/../static/adi/title/title1.png')
   },
   // style 2
   {
@@ -220,12 +210,7 @@ export default [
         ...defaultData
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
-    preview: {
-      outter: {
-        height: '43px'
-      }
-    }
+    cover: require('@/../static/adi/title/title2.png')
   },
   // style 3
   {
@@ -286,12 +271,7 @@ export default [
         menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
       }
     },
-    cover: require('@/../static/adi/title/title2.png'),
-    preview: {
-      outter: {
-        height: '43px'
-      }
-    }
+    cover: require('@/../static/adi/title/title2.png')
   },
   // style 4
   {
@@ -355,11 +335,6 @@ export default [
       },
       config: {
         ...defaultData
-      }
-    },
-    preview: {
-      outter: {
-        height: '5px'
       }
     }
   }
