@@ -2,10 +2,10 @@
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
     <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
-        <el-input v-model="ruleForm.username"></el-input>
+        <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
       </el-form-item>
        <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password"></el-input>
+        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')"></el-input>
       </el-form-item>
       <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
       <el-form-item>
@@ -159,6 +159,9 @@ export default {
     }
   }
   .el-dialog {
+    .el-dialog__header{
+      padding: 0;
+    }
     width: 478px;
     height: 580px;
     padding: 40px 0 60px 0;
@@ -202,7 +205,7 @@ export default {
         }
       }
       .title {
-        margin: 40px 0;
+        margin: 35px 0;
         padding: 20px 0 35px;
         text-align: center;
         position: relative;
