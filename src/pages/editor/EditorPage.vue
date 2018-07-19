@@ -1,20 +1,24 @@
 <template>
-  <el-container v-loading="loading" id="editor">
+  <el-container v-loading="showLoading" id="editor">
     <el-header>
       <EditorHeader></EditorHeader>
     </el-header>
     <el-main>
       <router-view @showPreview='showPreview' />
-      <el-dialog class="preview-dialog" :visible.sync='dialogVisible ' width='88% ' height='100% '>
+      <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '>
         <PageViewer />
       </el-dialog>
     </el-main>
+    <div @click.stop v-if="!userIsLogined">
+      <LoginDialog :show="!userIsLogined" :forceLogin="true" @close="handleLoginDialogClose"/>
+    </div>
   </el-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
+import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
 
 export default {
@@ -22,23 +26,28 @@ export default {
   data() {
     return {
       loading: false,
-      dialogVisible: false
+      previewDialogVisible: false,
     }
   },
-  created() {
-    // this.updateActivePage()
+  async mounted() {
+    await this.userGetProfile().catch(e => console.error(e))
   },
   watch: {
     $route: 'updateActivePage'
   },
   computed:{
     ...mapGetters({
-      activePageInfo: 'activePageInfo'
-    })
+      activePageInfo: 'activePageInfo',
+      userIsLogined: 'user/isLogined',
+    }),
+    showLoading() {
+      return this.userIsLogined && this.loading
+    },
   },
   methods: {
     ...mapActions({
       setActivePage: 'setActivePage',
+      userGetProfile: 'user/getProfile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath'
     }),
     async updateActivePage() {
@@ -50,16 +59,23 @@ export default {
       })
       await this.userGetWebsiteDetailInfoByPath({
         path: this.activePageInfo.sitepath
+      }).catch(e => {
+        console.error(e)
+        this.loading = false
       })
       this.loading = false
     },
     showPreview() {
-      this.dialogVisible = true
+      this.previewDialogVisible = true
+    },
+    handleLoginDialogClose() {
+      location.reload()
     }
   },
   components: {
     PageViewer,
-    EditorHeader
+    EditorHeader,
+    LoginDialog
   }
 }
 </script>
