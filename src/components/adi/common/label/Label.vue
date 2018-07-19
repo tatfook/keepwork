@@ -1,7 +1,7 @@
 <template>
   <div class='comp-label'>
     <a :target='properties.target ? properties.target : options.emptyTarget' :href='properties.link ? properties.link : options.emptyLink'>
-      <label :class="getClass"> {{properties.text ? properties.text : options.emptyText }} </label>
+      <label> {{properties.text ? properties.text : options.emptyText }} </label>
     </a>
   </div>
 </template>

@@ -2,6 +2,7 @@
   <div class='comp-media'>
     <a :target='target' :href='link'>
       <div :class="getImgClass" v-if='isImage'>
+      <!-- <div v-if='isImage' class="img"> -->
         <img :src="src">
       </div>
       <video v-else-if='isVideo' :src='src'></video>

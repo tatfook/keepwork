@@ -1,6 +1,5 @@
 <template>
-  <vue-markdown
-    :class="getClass"
+  <vue-markdown class="markdown-body comp-markdown"
     :toc="true"
     :source='validData'
     toc-anchor-link-symbol=""

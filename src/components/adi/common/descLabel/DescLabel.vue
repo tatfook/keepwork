@@ -1,8 +1,8 @@
 <template>
   <div class='comp-label'>
     <a :target='properties.target ? properties.target : options.emptyTarget' :href='properties.link ? properties.link : options.emptyLink'>
-      <label :class="getClass"> {{properties.desc ? properties.desc : $t(options.emptyDesc)}} </label>
-      <label :class="getClass"> {{properties.text ? properties.text : $t(options.emptyText)}} </label>
+      <label> {{properties.desc ? properties.desc : $t(options.emptyDesc)}} </label>
+      <label> {{properties.text ? properties.text : $t(options.emptyText)}} </label>
     </a>
   </div>
 </template>

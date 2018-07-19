@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-button" :class="getClass">
+  <div class="comp-button">
     <a v-if="!options.clickEvent" :class="getClassStyle" :target='getTarget' :href="getLink" :style="buttonStyle">
       <div v-if="hasImg" class="img" :style="buttonImgStyle"></div>
       {{ getButtonName }}

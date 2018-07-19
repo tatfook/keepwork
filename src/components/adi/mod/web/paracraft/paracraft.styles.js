@@ -106,6 +106,9 @@ export default [
       colEnter: {
         'min-width': '80px'
       },
+      colViewTimesImg: {
+        width: '29px'
+      },
       '@media only screen and (max-width: 767px)': {}
     },
     props: {
@@ -141,12 +144,12 @@ export default [
         gutter: 5
       },
       colViewTimesImg: {
-        xs: { span: 4 },
-        sm: { span: 3 }
+        // xs: { span: 4 },
+        // sm: { span: 3 }
       },
       colViewTimes: {
         xs: { span: 20 },
-        sm: { span: 21 }
+        sm: { span: 15 }
       },
       colSize: {
         xs: { span: 24 },
@@ -532,7 +535,7 @@ export default [
         position: 'relative'
       },
       preview: {
-        height: '100%',
+        // height: '100%',
         'border-radius': '5px',
         overflow: 'hidden'
       },
@@ -540,23 +543,23 @@ export default [
         width: 'auto'
       },
       colViewTimesImg: {
-        width: '20px',
-        height: '14px',
+        // width: '20px',
+        // height: '14px',
         'margin-right': '5px'
       },
       viewTimesImg: {
-        width: '100%',
-        height: '100%'
+        // width: '100%',
+        // height: '100%'
       },
       '@media only screen and (max-width: 767px)': {
         colPreview: {
-          'height': '200px'
+          // 'height': '200px'
         },
         colGroupBA: {
           'margin-top': '10px'
         },
         colAuthor: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colDesc: {
           'margin-top': '10px'
@@ -602,14 +605,14 @@ export default [
           'margin-top': '-505px'
         },
         backgroundImage: {
-          height: '510px'
+          // height: '510px'
         },
         colSubtitle: {
           'margin-top': '20px',
           'margin-left': '10px'
         },
         colPreview: {
-          height: '100%'
+          // height: '100%'
         },
         colGroupAA: {
           'margin-top': '40px'
@@ -637,13 +640,13 @@ export default [
           'margin-top': '30px'
         },
         colVersion: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colSize: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colAuthor: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colGroupCA: {
           position: 'absolute',
@@ -717,6 +720,86 @@ export default [
       },
       config: {
         ...emptyData,
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '200px',
+            defaultMobileHeight: '200px'
+            // defaultWebWidth: 'auto',
+            // defaultMobileWidth: 'auto'
+          }
+        }),
+        worldName: _.merge({}, emptyData.worldName, {
+          space: {
+            webMarginTop: '20px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        author: _.merge({}, emptyData.author, {
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '20px'
+          }
+        }),
+        version: _.merge({}, emptyData.version, {
+          space: {
+            webMarginTop: '10px'
+            // mobileMarginTop: '20px'
+          }
+        }),
+        viewTimesImg: _.merge({}, emptyData.viewTimesImg, {
+          img: {
+            defaultWebHeight: '14px',
+            defaultMobileHeight: '14px',
+            defaultWebWidth: '20px',
+            defaultMobileWidth: '20px'
+          },
+          space: {
+            // webMarginTop: '12px',
+            // mobileMarginTop: '12px'
+          }
+        }),
+        backgroundImage: _.merge({}, emptyData.backgroundImage, {
+          img: {
+            defaultWebHeight: '510px',
+            defaultMobileHeight: '0'
+            // defaultWebWidth: '20px',
+            // defaultMobileWidth: '20px'
+          }
+        }),
+        viewTimes: _.merge({}, emptyData.viewTimes, {
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        size: _.merge({}, emptyData.size, {
+          space: {
+            webMarginTop: '10px'
+            // mobileMarginTop: '10px',
+            // webMarginBottom: '20px',
+            // mobileMarginBottom: '20px'
+          }
+        }),
+        download: _.merge({}, emptyData.download, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        enter: _.merge({}, emptyData.enter, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '5px',
+            webMarginBottom: '20px',
+            mobileMarginBottom: '20px'
+          }
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
