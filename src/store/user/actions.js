@@ -40,15 +40,14 @@ const actions = {
   async login({ commit }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
-      console.log('info,data', info.data)
       info.data.token && Cookies.set('token', info.data.token)
       commit(LOGIN_SUCCESS, info.data)
     }
     return info
   },
-  thirdLogin({ commit }, payload) {
-    console.log('payload', payload)
-    commit(LOGIN_SUCCESS, payload)
+  thirdLogin({ commit }, {userinfo, token}) {
+    Cookies.set('token', token)
+    commit(LOGIN_SUCCESS, {userinfo, token})
   },
   logout({ commit }) {
     commit(LOGOUT)
