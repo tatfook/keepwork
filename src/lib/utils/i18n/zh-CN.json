@@ -449,7 +449,10 @@
     "ratio": "宽高比例(如16/9)"
   },
   "skydrive": {
-    "mediaLibrary": "图库",
+    "image": "图片",
+    "video": "视频",
+
+    "mediaLibrary": "媒体库",
     "skyDrive": "网盘",
     "usage": "当前使用",
 

@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "serve": "pm2 serve dist 8090",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js",
     "coverage": "jest --config test/unit/jest.conf.js --coverage",

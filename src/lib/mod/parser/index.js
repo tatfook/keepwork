@@ -291,6 +291,7 @@ const getActiveBlock = (blockList, beginLine) => {
 }
 
 const getBlockByCursorLine = (blockList, beginLine) => {
+  if (beginLine === 0) return false
   beginLine += 1
   return blockList.find(mod => {
     return BlockHelper.isOnCursor(mod, beginLine)

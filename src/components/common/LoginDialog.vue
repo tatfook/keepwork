@@ -12,7 +12,7 @@
         <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
       </el-form-item>
       <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/wiki/join">{{$t('common.register')}}</a></div>
-      <!-- <div class="login-dialog-form-three-login">
+      <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
         <div class="title">
           <span>{{$t('common.usingFollowingAccount')}}</span>
         </div>
@@ -28,7 +28,7 @@
         <a @click="authorizedToLogin('github')">
           <img src="@/assets/img/wiki_github_logo.png" alt="">
         </a>
-      </div> -->
+      </div>
     </el-form>
   </el-dialog>
 </template>
@@ -47,6 +47,7 @@ export default {
   },
   data() {
     return {
+      envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
       ruleForm: {
         username: '',
@@ -78,6 +79,13 @@ export default {
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
+    showMessage(type, message) {
+      this.$message({
+        message,
+        type,
+        showClose: true
+      })
+    },
     async login(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
@@ -95,17 +103,9 @@ export default {
             this.$emit('close')
             window.location.reload()
           } else if (info.error.message === '用户不存在') {
-            this.$message({
-              message: this.$t('common.usernameNotExist'),
-              type: 'error',
-              showClose: true
-            })
+            this.showMessage('error', this.$t('common.usernameNotExist'))
           } else if (info.error.message === '密码错误') {
-            this.$message({
-              message: this.$t('common.wrongPassword'),
-              type: 'error',
-              showClose: true
-            })
+            this.showMessage('error', this.$t('common.wrongPassword'))
           }
         } else {
           return false
@@ -137,19 +137,11 @@ export default {
           let userinfo = result.data.data
           this.userThirdLogin({token, userinfo})
           this.handleClose()
-          this.$message({
-            message: this.$t('common.loginSuccess'),
-            type: 'success',
-            showClose: true
-          })
+          this.showMessage('success', this.$t('common.loginSuccess'))
         }
       } else {
         let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
-        this.$message({
-          message: this.$t('common.logonFailed'),
-          type: 'error',
-          showClose: true
-        })
+        this.showMessage('error', this.$t('common.logonFailed'))
       }
     }
   }
@@ -244,4 +236,3 @@ export default {
   }
 }
 </style>
-

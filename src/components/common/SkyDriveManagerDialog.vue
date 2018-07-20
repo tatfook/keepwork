@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-if='show' :title="title" class="new-website-dialog" :close-on-click-modal="false" :visible.sync="show" width="960px" :before-close="handleClose">
+  <el-dialog
+    v-if='show' 
+    :title="title"
+    class="skydrive-manager-dialog"
+    :class="{'skydrive-manager-dialog-media-mode': mediaLibrary}"
+    :close-on-click-modal="false"
+    :visible.sync="show" width="960px"
+    :before-close="handleClose"
+  >
     <SkyDriveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'/>
   </el-dialog>
 </template>
@@ -47,4 +55,21 @@ export default {
 </script>
 
 <style lang="scss">
+.skydrive-manager-dialog-media-mode {
+  >.el-dialog {
+    border-radius: 10px;
+    overflow: hidden;
+    .el-dialog__header {
+      padding: 35px 35px 10px;
+      background: #E8E8E8;
+    }
+    .el-dialog__body {
+      padding: 30px 35px;
+    }
+    .el-loading-mask {
+      left: -35px;
+      right: -35px;
+    }
+  }
+}
 </style>

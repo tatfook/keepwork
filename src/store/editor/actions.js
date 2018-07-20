@@ -116,7 +116,7 @@ const actions = {
     if (needReload) {
       commit(INIT_UNDO, {
         newCode: getters.code,
-        cursor: { line: 1, ch: 0 }
+        cursor: { line: 0, ch: 0 }
       })
     }
   },
@@ -356,7 +356,7 @@ const actions = {
   resetCurrentItem({ getters, dispatch }) {
     const currentItem = UndoHelper.currentItem(getters.activeAreaData.undoManager)
     let code = currentItem.newCode || ''
-    let cursor = currentItem.cursor || { line: 1, ch: 0 }
+    let cursor = currentItem.cursor || { line: 0, ch: 0 }
     dispatch('updateMarkDown', { code, historyDisabled: true })
     dispatch('updateCursor', { cursor })
   },

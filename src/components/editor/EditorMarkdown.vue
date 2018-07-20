@@ -184,8 +184,7 @@ export default {
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
-        this.foldCodes(editor)
-        return
+        return this.foldCodes(editor)
       }
 
       if (changes.length > 1) {
