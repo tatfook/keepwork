@@ -518,7 +518,6 @@ export default {
   .el-tree-node__label {
     width: 100%;
     position: relative;
-    padding-left: 20px;
     overflow: hidden;
     span:not(.rename-wrapper) {
       white-space: nowrap;

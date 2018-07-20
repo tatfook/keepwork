@@ -461,7 +461,10 @@
     "ratio": "ratio(eg: 16/9)"
   },
   "skydrive": {
-    "mediaLibrary": "Image Library",
+    "image": "Image",
+    "video": "Video",
+
+    "mediaLibrary": "Media Library",
     "skyDrive": "Sky Drive",
     "usage": "Usage",
 

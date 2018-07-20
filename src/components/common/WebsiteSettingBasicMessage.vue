@@ -39,12 +39,10 @@ export default {
     sitePath: String
   },
   async mounted() {
-    this.basicMessage = _.clone(
-      await this.getPersonalSiteInfoByPath(this.sitePath)
-    )
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
+    this.basicMessage = _.clone(this.getPersonalSiteInfoByPath(this.sitePath))
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },
@@ -131,7 +129,6 @@ export default {
             newBasicMessage: this.basicMessage
           })
           this.showResultInfo()
-          this.$refs.basicMessageForm.resetFields()
         } else {
           this.loading = false
           return false
