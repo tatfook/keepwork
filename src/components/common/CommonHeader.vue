@@ -115,6 +115,9 @@
     <div @click.stop v-if="isLoginDialogShow">
       <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
     </div>
+    <div @click.stop v-if="isRegisterDialogShow">
+      <RegisterDialog :show="isRegisterDialogShow" @close="closeRegisterDialog"/>
+    </div>
   </div>
 </template>
 
@@ -124,6 +127,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
+import RegisterDialog from '@/components/common/RegisterDialog'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -134,6 +138,7 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
+      isRegisterDialogShow: false
     }
   },
   computed: {
@@ -199,13 +204,17 @@ export default {
       // window.location.reload()
     },
     goJoin() {
-      window.location = '/wiki/join?redirect=' + window.location.href
+      this.isRegisterDialogShow = true
+    },
+    closeRegisterDialog(){
+      this.isRegisterDialogShow = false
     }
   },
   components: {
     PersonalCenterDialog,
     SkyDriveManagerDialog,
-    LoginDialog
+    LoginDialog,
+    RegisterDialog
   }
 }
 </script>
