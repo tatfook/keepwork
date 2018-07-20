@@ -384,7 +384,9 @@ export default {
     }),
     operationButtonsCountClass(){
       let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
-      return this.isRename ? '' : `buttons-count-${count}`
+      let buttonCountClass = this.isRename ? '' : `buttons-count-${count}`
+      let websiteLabelClass = this.isWebsite ? ' website-node-label':''
+      return buttonCountClass + websiteLabelClass
     },
     pending() {
       return (
@@ -451,6 +453,16 @@ export default {
 </script>
 
 <style lang="scss">
+.el-tree-node__label {
+  padding-left: 20px;
+}
+.website-node-label{
+  margin-left: -24px;
+  padding-left: 44px;
+  .node-icon{
+    left: 24px;
+  }
+}
 .el-tree-node__label::before {
   content: ' ';
   display: inline-block;
