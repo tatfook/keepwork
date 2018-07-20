@@ -309,7 +309,6 @@ const mutations = {
     Vue.set(state, 'openedFiles', {})
   },
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
-    console.log(siteSetting)
     Vue.set(state.siteSettings, sitePath, siteSetting)
   },
   [UPDATE_OPENED_LAYOUT_FILE](

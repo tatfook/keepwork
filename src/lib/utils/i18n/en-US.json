@@ -89,6 +89,7 @@
     "quickToTop": "Quick to top",
     "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
+    "saveFail": "Save Fail",
     "success": "Success",
     "failure": "Failure",
     "errorInfoTitle": "Error"
@@ -566,6 +567,7 @@
   "setting": {
     "general": "Basic Info",
     "siteLayouts": "Layouts",
+    "siteStyle": "Style",
     "siteName": "Name",
     "siteLink": "Link",
     "siteLogo": "Logo",

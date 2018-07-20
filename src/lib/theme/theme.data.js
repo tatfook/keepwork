@@ -15,6 +15,16 @@ export default {
         '#3ba4ff',
         '#1780dc',
         '#005399'
+      ],
+      [
+        '#fd8d3c',
+        '#6a51a3',
+        '#74c476',
+        '#ecea1c',
+        '#e3338a',
+        '#d9d9d9',
+        '#ffffff',
+        '#000000'
       ]
       // ['blue', 'green', 'red', 'red'],
       // ['green', 'red', 'blue', 'yellow']

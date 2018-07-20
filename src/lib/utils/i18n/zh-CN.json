@@ -89,6 +89,7 @@
     "quickToTop": "返回顶部",
     "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
     "saveSuccess": "保存成功",
+    "saveFail": "保存失败",
     "success": "成功",
     "failure": "失败",
     "errorInfoTitle": "错误提示"
@@ -553,6 +554,7 @@
   "setting": {
     "general": "基本信息",
     "siteLayouts": "网站布局",
+    "siteStyle": "网站样式",
     "siteName": "网站名称",
     "siteLink": "网站地址",
     "siteLogo": "网站图标",
