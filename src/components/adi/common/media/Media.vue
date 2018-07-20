@@ -56,8 +56,8 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': this.options.img && this.parsePx(this.options.img.defaultWebHeight),
-          'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultWebWidth),
+          'height': this.parsePx(this.options.img && this.options.img.defaultWebHeight),
+          'width': this.parsePx(this.properties.webWidth) || this.parsePx(this.options.img && this.options.img.defaultWebWidth),
           'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
           'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
           'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
@@ -65,8 +65,8 @@ export default {
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': this.options.img && this.parsePx(this.options.img.defaultMobileHeight),
-            'width': this.parsePx(this.properties.webWidth) || this.options.img && this.parsePx(this.options.img.defaultMobileWidth),
+            'height': this.parsePx(this.options.img && this.options.img.defaultMobileHeight),
+            'width': this.parsePx(this.properties.webWidth) || this.parsePx(this.options.img && this.options.img.defaultMobileWidth),
             'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
             'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
             'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
