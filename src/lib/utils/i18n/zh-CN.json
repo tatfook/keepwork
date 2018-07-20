@@ -2,6 +2,7 @@
   "common": {
     "login": "登录",
     "register": "注册",
+    "registerFailed": "注册失败",
     "password": "密码",
     "loginAccount": "登录账号 (推荐email或手机号)",
     "forgetPassword": "忘记密码",
@@ -494,7 +495,6 @@
     "certifiedPhoneNumber": "认证手机:",
     "verificationCode": "短信验证码:",
     "emailVerificationCode": "邮箱验证码:",
-    "sendVerificationCode": "发送验证码",
     "resend": "重新发送",
     "countDownResend": "秒后重新发送",
     "sendingFrequent": "短信验证码发送过频繁",

@@ -1,5 +1,5 @@
 <template>
-    <el-container class="real-name-setting" v-loading="loading">
+    <el-container class="real-name-setting">
       <el-row class="real-name-setting-wrap">
         <el-col :class="['real-name-setting-content',hasVerified?'hasVerified':'']">
           <el-header class="real-name-setting-header">
@@ -26,9 +26,9 @@
                             <el-input size="small" v-model="authCode"></el-input>
                         </el-col>
                         <el-col class="send-auth-send-code">
-                            <el-button :disabled="sendCodeDisabled || !ruleFormDatas.cellphoneNumber" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
+                            <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleFormDatas.cellphoneNumber" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
                               <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
-                              <span v-else>{{$t('user.sendVerificationCode')}}</span>
+                              <span v-else>{{$t('user.sendCodes')}}</span>
                             </el-button>
                         </el-col>
                       </el-row>                      
@@ -60,7 +60,7 @@ export default {
       }
     }
     return {
-      loading: false,
+      sendCodeLoading: false,
       sendCodeDisabled: false,
       count: 60,
       timer: null,
@@ -75,7 +75,7 @@ export default {
             message: this.$t('user.inputPhoneNumber'),
             trigger: 'blur'
           },
-          { validator: validatePhoneNumber, trigger: 'blur' }
+          { validator: validatePhoneNumber, trigger: 'change' }
         ]
       }
     }
@@ -109,11 +109,13 @@ export default {
       })
     },
     async sendAuthCode() {
+      this.sendCodeLoading = true
       let payload = {
         setRealNameInfo: true,
         cellphone: this.ruleFormDatas.cellphoneNumber
       }
       await this.verifyCellphoneOne(payload)
+      this.sendCodeLoading = false
       let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
       if (message === 'success') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
@@ -131,7 +133,7 @@ export default {
         return
       }
       if (message === '号码格式有误') {
-        // this.showMessage('error', this.$t('user.wrongNumberFormat'))
+        this.showMessage('error', this.$t('user.smsCodeSentFailed'))
         return
       }
       if (message === '短信验证码发送过频繁') {
@@ -191,7 +193,7 @@ export default {
         flex: 1;
       }
       .send-auth-send-code {
-        width: 136px;
+        width: 116px;
         margin-left: 8px;
         .send-code-button {
           width: 100%;

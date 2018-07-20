@@ -38,7 +38,8 @@ export const user = {
   verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
   verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: (...args) => post('/user/unbindCellphone', ...args),
-  unbindEmail: (...args) => post('/user/unbindEmail', ...args)
+  unbindEmail: (...args) => post('/user/unbindEmail', ...args),
+  register: (...args) => post('/user/register', ...args)
 }
 
 /*doc

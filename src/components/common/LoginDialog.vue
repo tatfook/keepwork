@@ -118,12 +118,10 @@ export default {
         .then(async result => {
           console.log('1',result)
           this.handleLoginResult(result)
-          this.isLoading = false
         })
         .catch(async result => {
           console.log('2',result)
           this.handleLoginResult(result)
-          this.isLoading = false
         })
     },
     async handleLoginResult(result){
