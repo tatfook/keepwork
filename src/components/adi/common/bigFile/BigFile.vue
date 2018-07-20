@@ -133,7 +133,7 @@ export default {
           return
         }
 
-        this.url = await keepwork.bigfile.getDownloadUrlById(this.token, {
+        this.url = await keepwork.bigfile.getDownloadUrlById({
           _id: this.properties.fileId
         })
 
