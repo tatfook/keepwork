@@ -106,6 +106,9 @@ export default [
       colEnter: {
         'min-width': '80px'
       },
+      colViewTimesImg: {
+        width: '29px'
+      },
       '@media only screen and (max-width: 767px)': {}
     },
     props: {
@@ -141,12 +144,12 @@ export default [
         gutter: 5
       },
       colViewTimesImg: {
-        xs: { span: 4 },
-        sm: { span: 3 }
+        // xs: { span: 4 },
+        // sm: { span: 3 }
       },
       colViewTimes: {
         xs: { span: 20 },
-        sm: { span: 21 }
+        sm: { span: 15 }
       },
       colSize: {
         xs: { span: 24 },
@@ -523,7 +526,7 @@ export default [
         position: 'relative'
       },
       preview: {
-        height: '100%',
+        // height: '100%',
         'border-radius': '5px',
         overflow: 'hidden'
       },
@@ -531,38 +534,39 @@ export default [
         width: 'auto'
       },
       colViewTimesImg: {
-        width: '20px',
-        height: '14px',
+        // width: '20px',
+        // height: '14px',
+        width: '29px',
         'margin-right': '5px'
       },
       viewTimesImg: {
-        width: '100%',
-        height: '100%'
+        // width: '100%',
+        // height: '100%'
       },
       '@media only screen and (max-width: 767px)': {
         colPreview: {
-          'height': '200px'
+          // 'height': '200px'
         },
         colGroupBA: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colAuthor: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
-        colDesc: {
-          'margin-top': '10px'
-        },
-        colGroupAA: {
-          'margin-top': '10px'
-        },
+        // colDesc: {
+        //   'margin-top': '10px'
+        // }, //没有
+        // colGroupAA: {
+        //   'margin-top': '10px'
+        // }, //没有
         colViewTimes: {
-          'margin-top': '-3px'
+          // 'margin-top': '-3px'
         },
         colGroupCA: {
           'margin-top': '30px'
         },
         colDownload: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         }
       },
       '@media only screen and (min-width: 768px)': {
@@ -585,28 +589,28 @@ export default [
           position: 'relative'
         },
         colGroupA: {
-          'margin-top': '10px',
-          'margin-bottom': '10px'
+          // 'margin-top': '10px',
+          // 'margin-bottom': '10px'
         },
         colParacraft: {
           position: 'relative',
           'margin-top': '-505px'
         },
         backgroundImage: {
-          height: '510px'
+          // height: '510px'
         },
         colSubtitle: {
-          'margin-top': '20px',
+          // 'margin-top': '20px',
           'margin-left': '10px'
         },
         colPreview: {
-          height: '100%'
+          // height: '100%'
         },
-        colGroupAA: {
-          'margin-top': '40px'
-        },
+        // colGroupAA: {
+        //   'margin-top': '40px'
+        // },没有
         colDownload: {
-          'margin-top': '30px',
+          // 'margin-top': '30px',
           width: '150px',
           position: 'relative',
           'margin-left': '50%',
@@ -614,27 +618,27 @@ export default [
           'border-radius': '30px',
           overflow: 'hidden'
         },
-        colGroupD: {
-          'margin-top': '10px'
-        },
-        colTitleDA: {
-          'margin-top': '10px',
+        // colGroupD: {
+        //   'margin-top': '10px'
+        // },没有
+        colTitle: {
+          // 'margin-top': '10px',
           'text-align': 'center'
         },
-        colParagraphDB: {
-          'margin-top': '10px'
-        },
-        colGroupE: {
-          'margin-top': '30px'
-        },
+        // colParagraphDB: {
+        //   'margin-top': '10px'
+        // },没有
+        // colGroupE: {
+        //   'margin-top': '30px'
+        // },没有
         colVersion: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colSize: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colAuthor: {
-          'margin-top': '10px'
+          // 'margin-top': '10px'
         },
         colGroupCA: {
           position: 'absolute',
@@ -708,6 +712,104 @@ export default [
       },
       config: {
         ...emptyData,
+        backgroundImage: _.merge({}, emptyData.backgroundImage, {
+          img: {
+            defaultWebHeight: '510px',
+            defaultMobileHeight: '0'
+            // defaultWebWidth: '20px',
+            // defaultMobileWidth: '20px'
+          }
+        }),
+        titleA: _.merge({}, emptyData.titleA, {
+          space: {
+            webMarginTop: '10px'
+            // mobileMarginTop: '10px'
+          }
+        }),
+        subtitleA: _.merge({}, emptyData.subtitleA, {
+          space: {
+            webMarginTop: '20px'
+            // mobileMarginTop: '20px'
+          }
+        }),
+        updateTime: _.merge({}, emptyData.version, {
+          space: {
+            webMarginTop: '10px',
+            webMarginbottom: '10px'
+          }
+        }),
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '200px',
+            defaultMobileHeight: '200px'
+            // defaultWebWidth: 'auto',
+            // defaultMobileWidth: 'auto'
+          }
+        }),
+        worldName: _.merge({}, emptyData.worldName, {
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        author: _.merge({}, emptyData.author, {
+          space: {
+            webMarginTop: '10px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        version: _.merge({}, emptyData.version, {
+          space: {
+            webMarginTop: '10px'
+            // mobileMarginTop: '10px'
+          }
+        }),
+        size: _.merge({}, emptyData.size, {
+          space: {
+            webMarginTop: '10px'
+            // mobileMarginTop: '10px',
+            // webMarginBottom: '20px',
+            // mobileMarginBottom: '20px'
+          }
+        }),
+        viewTimesImg: _.merge({}, emptyData.viewTimesImg, {
+          img: {
+            defaultWebHeight: '14px',
+            defaultMobileHeight: '14px',
+            defaultWebWidth: '20px',
+            defaultMobileWidth: '20px'
+          },
+          space: {
+            // webMarginTop: '12px',
+            mobileMarginTop: '30px'
+          }
+        }),
+        viewTimes: _.merge({}, emptyData.viewTimes, {
+          space: {
+            webMarginTop: '37px',
+            mobileMarginTop: '30px'
+          }
+        }),
+        download: _.merge({}, emptyData.download, {
+          img: {
+            src: ''
+          },
+          space: {
+            webMarginTop: '30px',
+            mobileMarginTop: '10px'
+          }
+        }),
+        enter: _.merge({}, emptyData.enter, {
+          img: {
+            src: ''
+          },
+          space: {
+            // webMarginTop: '10px',
+            // mobileMarginTop: '5px',
+            // webMarginBottom: '20px',
+            // mobileMarginBottom: '20px'
+          }
+        }),
         innerModal: {
           width: '70%',
           height: '80%',
