@@ -4,7 +4,9 @@
       <slot name="header"></slot>
     </el-header>
     <el-main>
-      <slot> </slot>
+      <div class="maxwidth-main">
+        <slot> </slot>
+      </div>
     </el-main>
     <el-footer height='auto'>
       <slot name="footer"></slot>
@@ -24,10 +26,22 @@ export default {}
     padding: 0;
   }
 
-  .el-main{
-    max-width: 1080px;
+  .el-main {
+    max-width: 1130px;
     width: 100%;
     margin: 0 auto;
+    overflow: hidden;
+    .maxwidth-main {
+      [data-mod] {
+        margin: 0 auto;
+        max-width: 1080px;
+        overflow: hidden;
+      }
+      [data-mod="ModMarkdown"] {
+        overflow: auto;
+        max-width: 100%;
+      }
+    }
   }
 }
 </style>
