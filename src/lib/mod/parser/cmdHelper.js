@@ -83,7 +83,7 @@ export const targetCmd = (cmd) => {
 }
 
 export const isCmdLine = (line) => {
-  if (line.match(MOD_CMD_BEGIN_REG)) {
+  if (line && line.match(MOD_CMD_BEGIN_REG)) {
     const cmd = line.split('@')[1]
     if (isValidCmd(cmd)) return true
   }
@@ -91,14 +91,14 @@ export const isCmdLine = (line) => {
 }
 
 export const parseCmd = (line) => {
-  if (line.match(MOD_CMD_BEGIN_REG)) {
+  if (line && line.match(MOD_CMD_BEGIN_REG)) {
     const cmd = line.split('@')[1]
     if (isValidCmd(cmd)) return standardCmd(cmd)
   }
 }
 
 export const isCmdEnd = (line) => {
-  return line.match(MOD_CMD_END_REG)
+  return line && line.match(MOD_CMD_END_REG)
 }
 
 export default {
