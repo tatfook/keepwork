@@ -199,9 +199,7 @@ export default [
         preview: _.merge({}, emptyData.preview, {
           img: {
             defaultWebHeight: '196px',
-            defaultMobileHeight: '250px',
-            defaultWebWidth: 'auto',
-            defaultMobileWidth: 'auto'
+            defaultMobileHeight: '250px'
           }
         }),
         worldName: _.merge({}, emptyData.worldName, {
@@ -360,9 +358,7 @@ export default [
         preview: _.merge({}, emptyData.preview, {
           img: {
             defaultWebHeight: '314px',
-            defaultMobileHeight: '314px',
-            defaultWebWidth: 'auto',
-            defaultMobileWidth: 'auto'
+            defaultMobileHeight: '314px'
           },
           space: {
             mobileMarginTop: '10px'
@@ -460,9 +456,7 @@ export default [
         preview: _.merge({}, emptyData.preview, {
           img: {
             defaultWebHeight: '314px',
-            defaultMobileHeight: '314px',
-            defaultWebWidth: 'auto',
-            defaultMobileWidth: 'auto'
+            defaultMobileHeight: '314px'
           }
         }),
         worldName: _.merge({}, emptyData.worldName, {
