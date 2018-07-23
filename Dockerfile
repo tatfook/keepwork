@@ -2,6 +2,7 @@ FROM node:8 as builder
 
 RUN mkdir -p /code/
 ADD package.json /code/package.json
+ADD yarn.lock /code/yarn.lock
 RUN cd /code && npm install
 
 ARG BUILD_ENV
