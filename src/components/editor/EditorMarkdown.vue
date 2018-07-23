@@ -248,7 +248,7 @@ export default {
           : cm.foldCode({ line: line, ch: 0 }, null, 'fold')
       }
     },
-    foldAllCodes(cm) {
+    foldAllCodes(cm = this.editor) {
       for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {
         // function isOnEdit only check the content of a mod, doesn't include the mod cmd
         // and cm.firstLine() equal to 0, but the line number start with 1,
