@@ -31,7 +31,7 @@
         </el-row> 
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">注册</el-button>
+        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
       </el-form-item>
       <!-- <div v-if="envIsForDevelopment" class="register-dialog-form-three-login">
         <div class="title">
