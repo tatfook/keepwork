@@ -33,6 +33,7 @@ export default {
   async mounted() {
     await this.userGetProfile().catch(e => console.error(e))
     this.profileLoaded = true
+    document.title = 'wikieditor'
   },
   watch: {
     $route: 'updateActivePage'
