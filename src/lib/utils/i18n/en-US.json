@@ -28,7 +28,8 @@
     "accountNoChange": "Account name cannot be changed after registration",
     "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
     "defaultAddress": "The defaulted personal website address:",
-    "authCode": "code",
+    "authCode": "Code",
+    "perfectInfo": "Perfect information",
 
     "features": "Features",
     "applicationCenter": "Application center",

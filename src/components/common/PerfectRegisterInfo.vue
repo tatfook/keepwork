@@ -30,7 +30,7 @@
         </el-row> 
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">完善信息</el-button>
+        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.perfectInfo')}}</el-button>
       </el-form-item>
     </el-form>
   </div>
