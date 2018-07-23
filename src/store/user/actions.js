@@ -59,6 +59,10 @@ const actions = {
     let registerInfo = await keepwork.user.register({ username, password }, null, true)
     return registerInfo
   },
+  async thirdRegister({ commit }, { username, password, threeService }) {
+    let thirdRegisterInfo = await keepwork.user.thirdRegister({ username, password, threeService }, null, true)
+    return thirdRegisterInfo
+  },
   /*doc
     getProfile
     dispatch this action first, in any action which depends on username.
