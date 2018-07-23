@@ -472,6 +472,7 @@
   "skydrive": {
     "image": "Image",
     "video": "Video",
+    "nothingHere": "Empty",
 
     "mediaLibrary": "Media Library",
     "skyDrive": "Sky Drive",
@@ -493,7 +494,9 @@
     "removeSelected": "Remove",
     "dragAndDrop": "Drag And Drop",
     "uploadFile": "Upload",
-    "notImageFileError": "File is not image!",
+    "uploadImage": "Upload image",
+    "uploadVideo": "Upload video",
+    "notMediaFileError": "File is not image, nor video!",
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
     "nameConflictError": "The name already exists.",
