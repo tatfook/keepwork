@@ -132,7 +132,7 @@ export default {
       if (result && result.data && result.data.error == 0) {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
-          window.location.href = '/wiki/join?redirect=' + window.location.href
+          this.$router.push({ path: '/register' })
         } else {
           // 登录成功  进行页面跳转
           let token = result.data.token
