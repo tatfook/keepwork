@@ -2,6 +2,7 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "accountName": "Account name",
     "registerFailed": "Register Failed",
     "password": "Password",
     "loginAccount": "Account (email or mobile phone number)",
@@ -24,6 +25,10 @@
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
     "chinese-englishSwitch": "chinese simplified",
+    "accountNoChange": "Account name cannot be changed after registration",
+    "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
+    "defaultAddress": "The defaulted personal website address:",
+    "authCode": "code",
 
     "features": "Features",
     "applicationCenter": "Application center",

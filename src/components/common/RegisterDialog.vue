@@ -2,25 +2,25 @@
   <el-dialog v-loading="loading" title="" v-if='show' :visible.sync="show" class="register-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" placeholder="账户名"></el-input>
+        <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
       </el-form-item>
       <div class="register-dialog-form-tip">
-        登录账号注册后不可更改<br>
-        可以使用英文字母、数字组合（例如：keep123<br>
-        系统默认个人网址地址:<br>
-        https://release.keepwork.com/???
+        {{$t('common.accountNoChange')}}<br>
+        {{$t('common.useLettersOrNumber')}}<br>
+        {{$t('common.defaultAddress')}}<br>
+        <span class="defaultAddress">https://release.keepwork.com/???</span>
       </div>
       <el-form-item prop="password">
         <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
       </el-form-item>
       <el-form-item prop="phoneNumber">
-        <el-input v-model="ruleForm.phoneNumber" placeholder="输入手机号"></el-input>
+        <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
       </el-form-item>
       <el-form-item>
         <!-- <el-input v-model="ruleForm.phoneNumber" placeholder="验证码"></el-input> -->
         <el-row class="send-auth">
           <el-col class="send-auth-code">
-              <el-input v-model="authCode" placeholder="验证码"></el-input>
+              <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
           </el-col>
           <el-col class="send-auth-send-code">
               <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleForm.phoneNumber" type="primary" class="send-code-button" @click.stop="sendAuthCode">
@@ -278,6 +278,10 @@ export default {
     &-tip{
       line-height: 18px;
       margin-bottom: 18px;
+      .defaultAddress{
+        color: #ff0000;
+        font-weight: 700;
+      }
     }
     .send-auth{
       display: flex;
