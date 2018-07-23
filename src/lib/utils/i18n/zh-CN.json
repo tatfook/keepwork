@@ -2,6 +2,7 @@
   "common": {
     "login": "登录",
     "register": "注册",
+    "accountName": "账户名",
     "registerFailed": "注册失败",
     "password": "密码",
     "loginAccount": "登录账号 (推荐email或手机号)",
@@ -24,6 +25,11 @@
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
     "chinese-englishSwitch": "切换为英文",
+    "accountNoChange": "登录账号注册后不可更改",
+    "useLettersOrNumber": "可以使用英文字母、数字组合(例如：keep123)",
+    "defaultAddress": "系统默认个人网址地址:",
+    "authCode": "验证码",
+    "perfectInfo": "完善信息",
 
     "features": "功能",
     "applicationCenter": "应用中心",

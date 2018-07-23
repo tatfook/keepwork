@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-loading="loading" title="" v-if='show' :visible.sync="show" class="register-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
+  <div class="perfect-register-info">
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
         <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
@@ -17,7 +17,6 @@
         <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
       </el-form-item>
       <el-form-item>
-        <!-- <el-input v-model="ruleForm.phoneNumber" placeholder="验证码"></el-input> -->
         <el-row class="send-auth">
           <el-col class="send-auth-code">
               <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
@@ -31,27 +30,10 @@
         </el-row> 
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">注册</el-button>
+        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.perfectInfo')}}</el-button>
       </el-form-item>
-      <!-- <div v-if="envIsForDevelopment" class="register-dialog-form-three-login">
-        <div class="title">
-          <span>{{$t('common.usingFollowingAccount')}}</span>
-        </div>
-        <a @click="authorizedToLogin('qq')">
-          <img src="@/assets/img/wiki_qq.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('weixin')">
-          <img src="@/assets/img/wiki_wechat.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('xinlangweibo')">
-          <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('github')">
-          <img src="@/assets/img/wiki_github_logo.png" alt="">
-        </a>
-      </div> -->
     </el-form>
-  </el-dialog>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -75,7 +57,6 @@ export default {
       }
     }
     return {
-      envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
       registerLoading: false,
       sendCodeLoading: false,
@@ -144,12 +125,12 @@ export default {
           this.registerLoading = true
           //进行注册
           let registerInfo = await this.userRegister(payload).catch(e => {
-            console.log('e', e)
+            console.log('e',e)
             this.registerLoading = false
           })
-          console.log('registerInfo', registerInfo)
+          console.log('registerInfo',registerInfo)
           //注册成功进行登录
-          if (registerInfo.error.id === 0) {
+          if(registerInfo.error.id === 0){
             this.registerLoading = false
             this.handleClose()
             this.loading = true
@@ -157,16 +138,16 @@ export default {
               console.error(e)
               this.loading = false
             })
-            console.log('loginInfo', loginInfo)
+            console.log('loginInfo',loginInfo)
             this.loading = false
-            //手机号注册默认实名认证，尝试绑定手机号
+            //尝试手机号尝试实名认证,尝试绑定手机号
             let realNameAuthAndBind = {
               setRealNameInfo: true,
               cellphone: this.ruleForm.phoneNumber,
               smsCode: this.authCode
             }
             await this.verifyCellphoneTwo(realNameAuthAndBind)
-          } else {
+          }else{
             this.showMessage('error', this.$t('common.registerFailed'))
           }
         } else {
@@ -180,8 +161,8 @@ export default {
         cellphone: this.ruleForm.phoneNumber
       }
       let info = await this.verifyCellphoneOne(payload).catch(e => {
-        console.error(e)
-      })
+            console.error(e)
+          })
       this.sendCodeLoading = false
       let smsId = _.get(info, 'data.smsId')
       let message = info.error && info.error.message
@@ -212,47 +193,18 @@ export default {
         this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
         return
       }
-      let message2 = info.message && info.message.slice(0, 6)
+      let message2 =
+        info.message && info.message.slice(0, 6)
       if (message2 === '手机号已绑定') {
         this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
       }
     },
-    authorizedToLogin(provider) {
-      this.$auth
-        .authenticate(provider)
-        .then(async result => {
-          console.log('1', result)
-          this.handleLoginResult(result)
-        })
-        .catch(async result => {
-          console.log('2', result)
-          this.handleLoginResult(result)
-        })
-    },
-    async handleLoginResult(result) {
-      if (result && result.data && result.data.error == 0) {
-        if (result.data.token == 'token') {
-          // 用户未绑定  跳完善注册信息页
-          this.$router.push({ path: '/PerfectRegisterInfo' })
-        } else {
-          // 登录成功  进行页面跳转
-          let token = result.data.token
-          let userinfo = result.data.data
-          this.userThirdLogin({ token, userinfo })
-          this.handleClose()
-          this.showMessage('success', this.$t('common.loginSuccess'))
-        }
-      } else {
-        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
-        this.showMessage('error', this.$t('common.logonFailed'))
-      }
-    }
   }
 }
 </script>
-
 <style lang="scss">
+.perfect-register-info{
 .register-dialog {
   &.force-login {
     .el-dialog__header {
@@ -262,16 +214,19 @@ export default {
     }
   }
   .el-dialog {
-    .el-dialog__header {
+    .el-dialog__header{
       padding: 0;
     }
-    width: 30%;
+    width: 34%;
     min-width: 478px;
     padding: 40px 0 40px 0;
   }
   &-form {
-    width: 68%;
-    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding:50px 30px 10px;
+    width: 22%;
+    box-shadow: 2px 2px 3px #cccccc, -2px -2px 3px #cccccc;
+    margin: 80px auto 0;
     .el-form-item__content {
       .el-input__inner {
         &:focus {
@@ -279,20 +234,20 @@ export default {
         }
       }
     }
-    &-tip {
+    &-tip{
       line-height: 18px;
       margin-bottom: 18px;
-      .defaultAddress {
+      .defaultAddress{
         color: #ff0000;
         font-weight: 700;
       }
     }
-    .send-auth {
+    .send-auth{
       display: flex;
-      &-code {
-        flex: 1;
+      &-code{
+        flex: 1
       }
-      &-send-code {
+      &-send-code{
         width: 116px;
         margin-left: 8px;
         .send-code-button {
@@ -319,37 +274,6 @@ export default {
         cursor: pointer;
       }
     }
-    &-three-login {
-      a {
-        display: inline-block;
-        width: 24%;
-        text-align: center;
-        img {
-          cursor: pointer;
-        }
-      }
-      .title {
-        margin: 35px 0;
-        padding: 20px 0 35px;
-        text-align: center;
-        position: relative;
-        span {
-          background: #fff;
-          position: relative;
-          z-index: 2;
-          padding: 0 4px;
-        }
-        &::after {
-          content: '';
-          height: 2px;
-          width: 100%;
-          position: absolute;
-          right: 0;
-          top: 40%;
-          background: #d6e6f4;
-        }
-      }
-    }
     .login-btn {
       width: 100%;
       margin: 20px 0;
@@ -359,5 +283,6 @@ export default {
       border-radius: 6px;
     }
   }
+}
 }
 </style>

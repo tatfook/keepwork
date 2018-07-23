@@ -113,10 +113,10 @@
       <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'/>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
-      <RegisterDialog :show="isRegisterDialogShow" @close="closeRegisterDialog"/>
+      <RegisterDialog :show="isRegisterDialogShow" @close="closeRegisterDialog" />
     </div>
   </div>
 </template>
