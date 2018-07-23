@@ -89,13 +89,20 @@ export default {
           this.$message.error(this.$t('common.saveFail'))
         })
       this.loading = false
+      this.$emit('close')
     },
     handleClose() {
       this.$emit('close')
     },
     handleSelectColor(index) {
+      console.log(index)
+      console.log('index↑')
+      console.log(this.colorID)
+      console.log('colorID↑')
       if (this.colorID !== index) {
         this.colorID = index
+        console.log(this.colorID)
+        console.log('colorID = index ↑')
       }
     }
   },
