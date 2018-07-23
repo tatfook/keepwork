@@ -1,6 +1,12 @@
 <template>
-  <div v-loading='loading' class="skydrive-manager" droppable="true" @drop.prevent='handleDrop' @dragover.prevent>
-    <el-row class="skydrive-manager-header">
+  <div
+    v-loading='loading'
+    class="skydrive-manager"
+    :class="{'skydrive-manager-media-mode': mediaLibrary}"
+    droppable="true"
+    @drop.prevent='handleDrop'
+    @dragover.prevent>
+    <el-row v-if='defaultMode' class="skydrive-manager-header">
       <el-col :span="18">
         <div>
           {{ $t('skydrive.usage') }}
@@ -10,11 +16,42 @@
           {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
       </el-col>
-      <el-col :span="6" v-if='defaultMode'>
+      <el-col :span="6">
         <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
           <i slot="suffix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
+    </el-row>
+    <el-row v-else class="skydrive-manager-header">
+      <el-row class='skydrive-manager-header-usage-and-upload'>
+        <el-col :span="14">
+          <div>
+            {{ $t('skydrive.usage') }}
+            <span class="skydrive-manager-total">
+              <span class="skydrive-manager-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
+            </span>
+            {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
+          </div>
+        </el-col>
+        <el-col :span="10" class="skydrive-manager-upload">
+          {{ $t('skydrive.dragAndDrop') }}
+          <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
+            <span>{{ $t('skydrive.uploadFile') }}</span>
+            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4" multiple style="display:none;" @change="handleUploadFile">
+          </label>
+        </el-col>
+      </el-row>
+      <el-row class='skydrive-manager-header-tabs-and-search'>
+        <el-col :span="18" class='skydrive-manager-header-tabs'>
+          <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+          <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+        </el-col>
+        <el-col :span="6">
+          <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
+            <i slot="suffix" class="el-input__icon el-icon-search"></i>
+          </el-input>
+        </el-col>
+      </el-row>
     </el-row>
 
     <div v-if='defaultMode'>
@@ -133,7 +170,11 @@
 
     <div v-if='mediaLibraryMode'>
       <div class="skydrive-manager-media-library">
-        <div v-for="(file, index) in uploadingFiles" :key="index" class="skydrive-manager-media-uploading skydrive-manager-media-item" v-show="file.state !== 'success' && file.state != 'error'" :style='{
+        <div
+          v-for="(file, index) in uploadingFiles" :key="index"
+          class="skydrive-manager-media-uploading skydrive-manager-media-item"
+          v-show="file.state !== 'success' && file.state != 'error'"
+          :style='{
             backgroundImage: `url("${file.cover}")`
           }'>
           <div class="skydrive-manager-media-uploading-cover">
@@ -141,32 +182,27 @@
           <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
         </div>
         <div v-for='mediaItem in skyDriveMediaLibraryData'
-          :key='mediaItem.filename'
+          :key='mediaItem.key'
           class='skydrive-manager-media-item'
           :class='{selected: selectedMediaItem === mediaItem}'
           @click='handleSelectMediaItem(mediaItem)'
           :style='{
             backgroundImage: "url(" + mediaItem.downloadUrl + ")"
           }'>
+          <video :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <div class='skydrive-manager-media-item-cover'>
-            <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span>
+            <!-- <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span> -->
+            <i v-if="mediaItem.type==='videos'" class='skydrive-manager-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
           </div>
           <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
         </div>
       </div>
       <el-row class="skydrive-manager-footer">
-        <el-col :span="6">
+        <el-col :span="6" :offset="18">
           <el-button size="small" :type="availableSelectedMediaItem ? 'primary':''"
             :disabled='!availableSelectedMediaItem' round
             @click="handleInsert(availableSelectedMediaItem)"
           >{{ $t('common.apply') }}</el-button>
-        </el-col>
-        <el-col :span="10" :offset="8" class="skydrive-manager-upload">
-          {{ $t('skydrive.dragAndDrop') }}
-          <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
-            <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" multiple style="display:none;" @change="handleUploadFile">
-          </label>
         </el-col>
       </el-row>
     </div>
@@ -191,6 +227,7 @@ export default {
     return {
       defaultMode: !this.mediaLibrary,
       mediaLibraryMode: this.mediaLibrary,
+      mediaFilterType: 'image',
       loading: true,
       searchWord: '',
       multipleSelectionResults: [],
@@ -240,7 +277,7 @@ export default {
       ].sort(this.sortByUpdateAt)
     },
     skyDriveMediaLibraryData() {
-      let mediaDatas = this.skyDriveTableData.filter(({ type }) => /^image/.test(type))
+      let mediaDatas = this.skyDriveTableData.filter(({ type }) => new RegExp(`^${this.mediaFilterType}`).test(type))
       let sortedMediaDatas = mediaDatas.sort(this.sortByUpdateAt)
       return sortedMediaDatas
     },
@@ -511,6 +548,25 @@ export default {
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
+    handlePlay(mediaItem) {
+      let mediaItemVideoPreviewId = `mediaItemVideoPreview_${ Date.now() }`
+      this.$alert(`<div>
+          <style>.el-message-box__wrapper{background: black;}</style>
+          <video id="${mediaItemVideoPreviewId}" src="${mediaItem.downloadUrl}" controls></video>
+        </div>`, {
+        customClass: 'skydrive-manager-video-preview-dialog',
+        showConfirmButton: false,
+        dangerouslyUseHTMLString: true,
+        beforeClose: (action, instance, done) => {
+          let mediaItemVideoPreviewDom = document.querySelector(`#${ mediaItemVideoPreviewId }`)
+          mediaItemVideoPreviewDom && mediaItemVideoPreviewDom.pause()
+          done()
+        }
+      });
+    },
+    changeMediaFilterType(type) {
+      this.mediaFilterType = type
     }
   },
   filters: {
@@ -521,6 +577,42 @@ export default {
 
 <style lang="scss">
 .skydrive-manager {
+  &-media-mode {
+    .skydrive-manager-header {
+      margin: -30px -35px 20px -35px;
+      padding: 20px 35px 0 35px;
+      background: #E8E8E8;
+      &-usage-and-upload {
+        margin-bottom: 20px;
+        .skydrive-manager-upload {
+          position: relative;
+          top: -10px;
+        }
+      }
+      &-tabs-and-search {
+        .skydrive-manager-header-tabs {
+          position: relative;
+          left: -12px;
+          span {
+            cursor: pointer;
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 16px;
+            line-height: 16px;
+          }
+          .active {
+            background: white;
+          }
+        }
+        .el-input {
+          top: -10px;
+        }
+      }
+    }
+    .skydrive-manager-footer {
+      text-align: right;
+    }
+  }
   &-header {
     margin-bottom: 20px;
   }
@@ -604,17 +696,22 @@ export default {
     box-sizing: border-box;
     width: 100px;
     height: 100px;
-    margin: 5px;
+    margin: 5px 10px 5px 0px;
     background-size: cover;
     justify-content: space-between;
     background-color: #D1D1D1;
     position: relative;
-    cursor: pointer;
+    [class*='icon'] {
+      cursor: pointer;
+    }
     &.selected {
       border: 2px solid #3BA4FF;
       border-radius: 2px;
     }
     &-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       display: flex;
@@ -628,6 +725,29 @@ export default {
         word-break: break-all;
       }
     }
+    &-play {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 3px solid rgba(144,144,139, .8);
+      position: relative;
+      cursor: pointer;
+      &:after {
+        content: '';
+        display: block;
+        position: relative;
+        left: 2px;
+        box-sizing: border-box;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 0px 8px 12px;
+        border-color: transparent transparent transparent rgba(144,144,139, 1);
+      }
+    }
     .el-icon-delete {
       color: white;
       display: none;
@@ -637,10 +757,48 @@ export default {
     }
     &:hover, &.selected {
       .skydrive-manager-media-item-cover {
-        background: rgba(0, 0, 0, .5);
+        background: rgba(0, 0, 0, .4);
       }
       .el-icon-delete {
         display: block;
+      }
+      .skydrive-manager-media-item-play {
+        border: 3px solid #3BA4FF;
+        background: #3BA4FF;
+        &:after {
+          border-color: transparent transparent transparent white;
+        }
+      }
+    }
+  }
+  &-video-preview-dialog {
+    width: 900px;
+    min-height: 500px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    video {
+      max-width: 100%;
+      max-height: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+    .el-message-box__header {
+      padding: 30px 30px 10px;
+    }
+    .el-message-box__headerbtn {
+      top: -5px;
+      right: -5px; 
+      .el-message-box__close {
+        font-size: 3em;
+        color: white;
+      }
+    }
+    .el-message-box__content {
+      padding: 0;
+      p {
+        padding: 0;
+        margin: 0;
       }
     }
   }
