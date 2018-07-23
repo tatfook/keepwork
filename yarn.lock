@@ -5240,9 +5240,9 @@ markdown-it-mark@^2.0.0:
 
 markdown-it-prism@leopoldchen/markdown-it-prism:
   version "1.1.2"
-  resolved "https://codeload.github.com/leopoldchen/markdown-it-prism/tar.gz/d17f6b19c5084a36fe2b19322b5b09a303aff32d"
+  resolved "https://codeload.github.com/leopoldchen/markdown-it-prism/tar.gz/46f15f3454b8381f186462dc7b7d41e9156bed8b"
   dependencies:
-    prismjs "^1.5.1"
+    prismjs "^1.15.0"
 
 markdown-it-sub@^1.0.0:
   version "1.0.0"
@@ -6513,7 +6513,7 @@ prettysize@^1.1.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/prettysize/download/prettysize-1.1.0.tgz#c6c52f87161ff172ea435f375f99831dd9a97bb0"
 
-prismjs@^1.5.1:
+prismjs@^1.15.0:
   version "1.15.0"
   resolved "http://registry.npm.taobao.org/prismjs/download/prismjs-1.15.0.tgz#8801d332e472091ba8def94976c8877ad60398d9"
   optionalDependencies:
