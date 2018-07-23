@@ -99,7 +99,8 @@ export default {
       userLogin: 'user/login',
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
-      userRegister: 'user/register'
+      userRegister: 'user/register',
+      verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
@@ -139,10 +140,15 @@ export default {
             })
             console.log('loginInfo',loginInfo)
             this.loading = false
-            //尝试手机号尝试实名认证
-            //尝试绑定手机号
+            //尝试手机号尝试实名认证,尝试绑定手机号
+            let realNameAuthAndBind = {
+              setRealNameInfo: true,
+              cellphone: this.ruleForm.phoneNumber,
+              smsCode: this.authCode
+            }
+            await this.verifyCellphoneTwo(realNameAuthAndBind)
           }else{
-            this.showMessage('error', this.$t('user.registerFailed'))
+            this.showMessage('error', this.$t('common.registerFailed'))
           }
         } else {
           return false
@@ -152,7 +158,6 @@ export default {
     async sendAuthCode() {
       this.sendCodeLoading = true
       let payload = {
-        // setRealNameInfo: true,
         cellphone: this.ruleForm.phoneNumber
       }
       let info = await this.verifyCellphoneOne(payload).catch(e => {

@@ -118,7 +118,8 @@ export default {
       userLogin: 'user/login',
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
-      userRegister: 'user/register'
+      userRegister: 'user/register',
+      verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
@@ -143,12 +144,12 @@ export default {
           this.registerLoading = true
           //进行注册
           let registerInfo = await this.userRegister(payload).catch(e => {
-            console.log('e',e)
+            console.log('e', e)
             this.registerLoading = false
           })
-          console.log('registerInfo',registerInfo)
+          console.log('registerInfo', registerInfo)
           //注册成功进行登录
-          if(registerInfo.error.id === 0){
+          if (registerInfo.error.id === 0) {
             this.registerLoading = false
             this.handleClose()
             this.loading = true
@@ -156,12 +157,17 @@ export default {
               console.error(e)
               this.loading = false
             })
-            console.log('loginInfo',loginInfo)
+            console.log('loginInfo', loginInfo)
             this.loading = false
-            //尝试手机号尝试实名认证
-            //尝试绑定手机号
-          }else{
-            this.showMessage('error', this.$t('user.registerFailed'))
+            //手机号注册默认实名认证，尝试绑定手机号
+            let realNameAuthAndBind = {
+              setRealNameInfo: true,
+              cellphone: this.ruleForm.phoneNumber,
+              smsCode: this.authCode
+            }
+            await this.verifyCellphoneTwo(realNameAuthAndBind)
+          } else {
+            this.showMessage('error', this.$t('common.registerFailed'))
           }
         } else {
           return false
@@ -171,12 +177,11 @@ export default {
     async sendAuthCode() {
       this.sendCodeLoading = true
       let payload = {
-        // setRealNameInfo: true,
         cellphone: this.ruleForm.phoneNumber
       }
       let info = await this.verifyCellphoneOne(payload).catch(e => {
-            console.error(e)
-          })
+        console.error(e)
+      })
       this.sendCodeLoading = false
       let smsId = _.get(info, 'data.smsId')
       let message = info.error && info.error.message
@@ -207,8 +212,7 @@ export default {
         this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
         return
       }
-      let message2 =
-        info.message && info.message.slice(0, 6)
+      let message2 = info.message && info.message.slice(0, 6)
       if (message2 === '手机号已绑定') {
         this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
@@ -218,24 +222,24 @@ export default {
       this.$auth
         .authenticate(provider)
         .then(async result => {
-          console.log('1',result)
+          console.log('1', result)
           this.handleLoginResult(result)
         })
         .catch(async result => {
-          console.log('2',result)
+          console.log('2', result)
           this.handleLoginResult(result)
         })
     },
-    async handleLoginResult(result){
+    async handleLoginResult(result) {
       if (result && result.data && result.data.error == 0) {
-        if (result.data.token == "token"){
+        if (result.data.token == 'token') {
           // 用户未绑定  跳完善注册信息页
           this.$router.push({ path: '/register' })
         } else {
           // 登录成功  进行页面跳转
           let token = result.data.token
           let userinfo = result.data.data
-          this.userThirdLogin({token, userinfo})
+          this.userThirdLogin({ token, userinfo })
           this.handleClose()
           this.showMessage('success', this.$t('common.loginSuccess'))
         }
@@ -258,7 +262,7 @@ export default {
     }
   }
   .el-dialog {
-    .el-dialog__header{
+    .el-dialog__header {
       padding: 0;
     }
     width: 30%;
@@ -275,20 +279,20 @@ export default {
         }
       }
     }
-    &-tip{
+    &-tip {
       line-height: 18px;
       margin-bottom: 18px;
-      .defaultAddress{
+      .defaultAddress {
         color: #ff0000;
         font-weight: 700;
       }
     }
-    .send-auth{
+    .send-auth {
       display: flex;
-      &-code{
-        flex: 1
+      &-code {
+        flex: 1;
       }
-      &-send-code{
+      &-send-code {
         width: 116px;
         margin-left: 8px;
         .send-code-button {
