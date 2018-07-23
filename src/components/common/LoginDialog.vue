@@ -11,7 +11,7 @@
       <el-form-item>
         <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
       </el-form-item>
-      <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/wiki/join">{{$t('common.register')}}</a></div>
+      <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/register" @click.prevent="register">{{$t('common.register')}}</a></div>
       <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
         <div class="title">
           <span>{{$t('common.usingFollowingAccount')}}</span>
@@ -111,6 +111,10 @@ export default {
           return false
         }
       })
+    },
+    register(){
+      this.$emit('isRegisterShow')
+      this.$emit('close')
     },
     authorizedToLogin(provider) {
       this.$auth
