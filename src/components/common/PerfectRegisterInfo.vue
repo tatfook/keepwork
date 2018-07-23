@@ -63,6 +63,7 @@ export default {
       authCode: '',
       sendCodeDisabled: false,
       count: 60,
+      userThreeService: this.$route.query.userThreeService,
       ruleForm: {
         username: '',
         password: '',
@@ -100,7 +101,8 @@ export default {
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       userRegister: 'user/register',
-      verifyCellphoneTwo: 'user/verifyCellphoneTwo'
+      verifyCellphoneTwo: 'user/verifyCellphoneTwo',
+      thirdRegister: 'user/thirdRegister'
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
@@ -118,19 +120,20 @@ export default {
           let payload = {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
+            threeService: this.userThreeService,
             bind: true,
             setRealNameInfo: true,
             cellphone: this.ruleForm.phoneNumber
           }
           this.registerLoading = true
-          //进行注册
-          let registerInfo = await this.userRegister(payload).catch(e => {
+          //第三方进行注册
+          let thirdRegisterInfo = await this.thirdRegister(payload).catch(e => {
             console.log('e',e)
             this.registerLoading = false
           })
-          console.log('registerInfo',registerInfo)
+          console.log('thirdRegisterInfo',thirdRegisterInfo)
           //注册成功进行登录
-          if(registerInfo.error.id === 0){
+          if(thirdRegisterInfo.error.id === 0){
             this.registerLoading = false
             this.handleClose()
             this.loading = true
