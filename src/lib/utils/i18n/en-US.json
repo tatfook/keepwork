@@ -263,7 +263,9 @@
 
     "uploadingToSkyDriveText": "uploading file ...",
     "readFileFromLocal": "reading file from local ...",
-    "enlargeMdEditing": "Large window editing"
+    "enlargeMdEditing": "Large window editing",
+
+    "pleaseInput": "Please input"
   },
   "modList": {
     "recent": "Commonly used",

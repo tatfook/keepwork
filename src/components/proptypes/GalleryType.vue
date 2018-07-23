@@ -21,7 +21,7 @@
           </div>
         </div>
 
-        <el-input placeholder="Please input" v-model="item.link" class="input-with-select">
+        <el-input :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
             <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
             <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
             <el-select v-model="item.link" slot="append" placeholder="Select">

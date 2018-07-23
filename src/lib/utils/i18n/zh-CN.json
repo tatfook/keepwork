@@ -252,7 +252,9 @@
 
     "uploadingToSkyDriveText": "正在上传。。。",
     "readFileFromLocal": "正在读取文件。。。",
-    "enlargeMdEditing": "大窗口编辑"
+    "enlargeMdEditing": "大窗口编辑",
+
+    "pleaseInput": "请输入"
   },
   "modList": {
     "recent": "常用",
