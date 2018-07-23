@@ -59,7 +59,7 @@ export default {
 
 <style lang="scss">
 @import 'github-markdown-css/github-markdown.css';
-@import 'highlight.js/styles/github-gist.css';
+@import 'prismjs/themes/prism.css';
 
 .comp-markdown {
   color: unset;
