@@ -9,6 +9,7 @@ import {
 } from '@/lib/utils/gitlab'
 
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
+const SET_ACTIVE_PAGE_URL = 'SET_ACTIVE_PAGE_URL'
 
 const ADD_MOD = 'ADD_MOD'
 const DELETE_MOD = 'DELETE_MOD'
@@ -59,6 +60,7 @@ const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
 
 export const props = {
   SET_ACTIVE_PAGE,
+  SET_ACTIVE_PAGE_URL,
 
   ADD_MOD,
   DELETE_MOD,
@@ -131,6 +133,9 @@ const activeModList = state => {
 }
 
 const mutations = {
+  [SET_ACTIVE_PAGE_URL](state, { path }) {
+    Vue.set(state, 'activePageUrl', path)
+  },
   [SET_ACTIVE_PAGE](state, { username, path }) {
     Vue.set(state, 'activePageUrl', path)
     if (!state.openedFiles[username]) return
