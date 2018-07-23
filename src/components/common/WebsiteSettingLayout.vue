@@ -486,6 +486,7 @@ export default {
 .website-setting {
   display: flex;
   $column-height: auto;
+  height: 100%;
   &-layout-list{
     overflow: auto;
   }
@@ -535,8 +536,14 @@ export default {
       justify-content: space-between;
       padding: 0 10px;
       label {
+        flex: 1;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        width: 0;
+      }
+      &-btns{
+        white-space: nowrap;
       }
     }
     .display-state-btns {
@@ -604,6 +611,7 @@ export default {
       padding: 0 20px 0;
     }
     > main {
+      overflow: hidden;
       padding: 0 20px 0;
       flex: 1;
       position: relative;
@@ -626,7 +634,7 @@ export default {
   }
   &-styles {
     &-main {
-      max-height: 562px;
+      height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
     }
