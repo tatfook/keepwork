@@ -38,7 +38,7 @@
     </div>
 
     <div class="icons">
-      <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
+      <a :href="editorPageUrl" class="icon-item">
         <i class="iconfont icon-edit"></i>
       </a>
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
@@ -111,6 +111,11 @@ export default {
     },
     locationOrigin() {
       return location.origin
+    },
+    editorPageUrl() {
+      let isLocalHosted = process.env.HOST_ENV === 'localhost'
+      let editorPageUrl = isLocalHosted ? '/editor.html':'/wiki/wikieditor/'
+      return `${ editorPageUrl }#${ this.activePageUrl }`
     }
   },
   watch: {

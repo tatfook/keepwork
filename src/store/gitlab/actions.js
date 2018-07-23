@@ -117,9 +117,13 @@ const actions = {
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
   },
   async readFile({ dispatch }, { path, editorMode }) {
-    editorMode
-      ? await dispatch('readFileForOwner', { path })
-      : await dispatch('readFileForGuest', { path })
+    if (editorMode) {
+      await dispatch('readFileForOwner', { path }).catch(
+        e => dispatch('readFileForGuest', { path, forceAsGuest: true })
+      )
+    } else {
+      await dispatch('readFileForGuest', { path })
+    }
   },
   async readFileForOwner(context, { path: inputPath }) {
     let { commit } = context
@@ -134,7 +138,7 @@ const actions = {
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
-  async readFileForGuest(context, { path }) {
+  async readFileForGuest(context, { path, forceAsGuest = false }) {
     let { commit, dispatch, rootGetters } = context
 
     // load necessary info for guest to get the file content
@@ -152,6 +156,8 @@ const actions = {
     // this is special for private website
     let isPrivateWebsite = visibility === 'private'
     if (isPrivateWebsite) {
+      if (forceAsGuest) throw new Error('Cannot read private sites without permission!')
+
       await dispatch('readFileForOwner', { path })
       return
     }

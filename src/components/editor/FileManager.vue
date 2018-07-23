@@ -184,9 +184,11 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
-      if (this.checkUrlSite()) {
-        return this.$router.push('/')
-      }
+      // No need to jump to #/ at here
+      // please check EditorPage.vue L:64
+      // if (this.checkUrlSite()) {
+      //   return this.$router.push('/')
+      // }
       const sleep = async () =>
         new Promise(resolve => setTimeout(resolve, waitTime))
       let { sitepath } = this.activePageInfo
