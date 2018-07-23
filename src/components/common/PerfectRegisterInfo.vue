@@ -1,4 +1,5 @@
 <template>
+  <div class="perfect-register-info">
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
         <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
@@ -7,7 +8,7 @@
         {{$t('common.accountNoChange')}}<br>
         {{$t('common.useLettersOrNumber')}}<br>
         {{$t('common.defaultAddress')}}<br>
-        https://release.keepwork.com/???
+        <span class="defaultAddress">https://release.keepwork.com/???</span>
       </div>
       <el-form-item prop="password">
         <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
@@ -32,6 +33,7 @@
         <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">完善信息</el-button>
       </el-form-item>
     </el-form>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -197,6 +199,7 @@ export default {
 }
 </script>
 <style lang="scss">
+.perfect-register-info{
 .register-dialog {
   &.force-login {
     .el-dialog__header {
@@ -229,6 +232,10 @@ export default {
     &-tip{
       line-height: 18px;
       margin-bottom: 18px;
+      .defaultAddress{
+        color: #ff0000;
+        font-weight: 700;
+      }
     }
     .send-auth{
       display: flex;
@@ -271,5 +278,6 @@ export default {
       border-radius: 6px;
     }
   }
+}
 }
 </style>
