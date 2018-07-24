@@ -65,7 +65,7 @@ export default {
       isLoginForm: true,
       isRegisterForm: false,
       isPerfectRegisterInfo: false,
-      userThreeService: '',
+      userThreeService: {},
       ruleForm: {
         username: '',
         password: ''
@@ -169,7 +169,6 @@ export default {
           this.showMessage('success', this.$t('common.loginSuccess'))
         }
       } else {
-        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.showMessage('error', this.$t('common.logonFailed'))
       }
     }
