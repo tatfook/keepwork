@@ -133,7 +133,7 @@ export default {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
           this.$router.push({
-            name: '/PerfectRegisterInfo',
+            name: 'PerfectRegisterInfo',
             query: {
               userThreeService: result.data.data
             }
