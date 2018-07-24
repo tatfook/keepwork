@@ -116,7 +116,9 @@
       <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'/>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
-      <RegisterDialog :show="isRegisterDialogShow" @close="closeRegisterDialog" />
+      <el-dialog width="478px"  :visible.sync="isRegisterDialogShow" closed="closeRegisterDialog">
+        <RegisterDialog/>
+      </el-dialog>
     </div>
   </div>
 </template>

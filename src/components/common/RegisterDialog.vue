@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-loading="loading" title="" v-if='show' :visible.sync="show" class="register-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
+  <!-- <el-dialog v-loading="loading" title="" v-if='show' :visible.sync="show" class="register-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose"> -->
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
         <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
@@ -34,20 +34,15 @@
         <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
       </el-form-item>
     </el-form>
-  </el-dialog>
+  <!-- </el-dialog> -->
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'LoginDialog',
+  name: 'RegisterDialog',
   props: {
     show: Boolean,
-    forceLogin: {
-      required: false,
-      default: false,
-      type: Boolean
-    }
   },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
@@ -105,7 +100,7 @@ export default {
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
     handleClose() {
-      !this.forceLogin && this.$emit('close')
+     this.$emit('close')
     },
     showMessage(type, message) {
       this.$message({

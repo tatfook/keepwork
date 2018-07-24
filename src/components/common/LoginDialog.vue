@@ -1,46 +1,52 @@
 <template>
-<div>
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
-    <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-      <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
-      </el-form-item>
-       <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
-      </el-form-item>
-      <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
-      <el-form-item>
-        <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
-      </el-form-item>
-      <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/register" @click.prevent="register">{{$t('common.register')}}</a></div>
-      <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
-        <div class="title">
-          <span>{{$t('common.usingFollowingAccount')}}</span>
+    <div v-show="isLoginForm">
+      <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form-item prop="username">
+          <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
+        </el-form-item>
+        <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+        <el-form-item>
+          <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
+        </el-form-item>
+        <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a></div>
+        <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
+          <div class="title">
+            <span>{{$t('common.usingFollowingAccount')}}</span>
+          </div>
+          <a @click="authorizedToLogin('qq')">
+            <img src="@/assets/img/wiki_qq.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('weixin')">
+            <img src="@/assets/img/wiki_wechat.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('xinlangweibo')">
+            <img src="@/assets/img/wiki_sina_weibo.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('github')">
+            <img src="@/assets/img/wiki_github_logo.png" alt="">
+          </a>
         </div>
-        <a @click="authorizedToLogin('qq')">
-          <img src="@/assets/img/wiki_qq.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('weixin')">
-          <img src="@/assets/img/wiki_wechat.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('xinlangweibo')">
-          <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('github')">
-          <img src="@/assets/img/wiki_github_logo.png" alt="">
-        </a>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
+    <div v-show="isRegisterForm">
+        <RegisterDialog/>
+        <span @click="hasAccountToLogin" class="hasAccount">已有账号,直接登录</span>
+    </div>
+    <div v-show="isPerfectRegisterInfo">
+      <PerfectRegisterInfo/>
+    </div>
   </el-dialog>
-  <div @click.stop v-if="isPerfectRegisterInfoShow">
-    <PerfectRegisterInfo :show="isPerfectRegisterInfoShow" @close="closePerfectRegisterInfo" />
-  </div>
-</div>
+  
 
 </template>
 <script>
 import { mapActions } from 'vuex'
 import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
+import RegisterDialog from '@/components/common/RegisterDialog'
 
 export default {
   name: 'LoginDialog',
@@ -56,7 +62,9 @@ export default {
     return {
       envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
-      isPerfectRegisterInfoShow: false,
+      isLoginForm: true,
+      isRegisterForm: false,
+      isPerfectRegisterInfo: false,
       ruleForm: {
         username: '',
         password: ''
@@ -87,8 +95,10 @@ export default {
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
-    closePerfectRegisterInfo(){
-      this.isPerfectRegisterInfoShow = false
+    hasAccountToLogin(){
+      this.isLoginForm = true
+      this.isRegisterForm = false
+      this.isPerfectRegisterInfo = false
     },
     showMessage(type, message) {
       this.$message({
@@ -124,8 +134,9 @@ export default {
       })
     },
     register(){
-      this.$emit('isRegisterShow')
-      this.$emit('close')
+      this.isLoginForm = false
+      this.isRegisterForm = true
+      this.isPerfectRegisterInfo = false
     },
     authorizedToLogin(provider) {
       this.$auth
@@ -143,8 +154,10 @@ export default {
       if (result && result.data && result.data.error == 0) {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
-          this.isPerfectRegisterInfoShow = true
-          this.handleClose()
+          this.isLoginForm = false
+          this.isRegisterForm = false
+          this.isPerfectRegisterInfo = true
+          // this.handleClose()
         } else {
           // 登录成功  进行页面跳转
           let token = result.data.token
@@ -160,6 +173,7 @@ export default {
     }
   },
   components: {
+    RegisterDialog,
     PerfectRegisterInfo
   }
 }
@@ -167,6 +181,11 @@ export default {
 
 <style lang="scss">
 .login-dialog {
+  .hasAccount{
+    margin-left: 70px;
+    border-bottom: 1px solid #409eff;
+    cursor: pointer;
+  }
   &.force-login {
     .el-dialog__header {
       .el-dialog__headerbtn {
