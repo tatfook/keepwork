@@ -41,7 +41,8 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PerfectRegisterInfo',
   props: {
-    show: Boolean
+    show: Boolean,
+    userThreeService
   },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
@@ -58,7 +59,7 @@ export default {
       authCode: '',
       sendCodeDisabled: false,
       count: 60,
-      userThreeService: this.$route.query.userThreeService,
+      // userThreeService: this.$route.query.userThreeService,
       ruleForm: {
         username: '',
         password: '',
