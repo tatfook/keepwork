@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
     <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
@@ -31,9 +32,15 @@
       </div>
     </el-form>
   </el-dialog>
+  <div @click.stop v-if="isPerfectRegisterInfoShow">
+    <PerfectRegisterInfo :show="isPerfectRegisterInfoShow" @close="closePerfectRegisterInfo" />
+  </div>
+</div>
+
 </template>
 <script>
 import { mapActions } from 'vuex'
+import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
 
 export default {
   name: 'LoginDialog',
@@ -49,6 +56,7 @@ export default {
     return {
       envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
+      isPerfectRegisterInfoShow: false,
       ruleForm: {
         username: '',
         password: ''
@@ -78,6 +86,9 @@ export default {
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
+    },
+    closePerfectRegisterInfo(){
+      this.isPerfectRegisterInfoShow = false
     },
     showMessage(type, message) {
       this.$message({
@@ -132,12 +143,7 @@ export default {
       if (result && result.data && result.data.error == 0) {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
-          this.$router.push({
-            name: 'PerfectRegisterInfo',
-            query: {
-              userThreeService: result.data.data
-            }
-          })
+          this.isPerfectRegisterInfoShow = true
           this.handleClose()
         } else {
           // 登录成功  进行页面跳转

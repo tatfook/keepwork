@@ -1,5 +1,5 @@
 <template>
-  <div class="perfect-register-info">
+  <el-dialog v-if='show' :visible.sync="show" class="perfect-register-info" :before-close="handleClose">
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="username">
         <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
@@ -33,20 +33,15 @@
         <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.perfectInfo')}}</el-button>
       </el-form-item>
     </el-form>
-  </div>
+  </el-dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'LoginDialog',
+  name: 'PerfectRegisterInfo',
   props: {
-    show: Boolean,
-    forceLogin: {
-      required: false,
-      default: false,
-      type: Boolean
-    }
+    show: Boolean
   },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
@@ -105,7 +100,7 @@ export default {
       thirdRegister: 'user/thirdRegister'
     }),
     handleClose() {
-      !this.forceLogin && this.$emit('close')
+      this.$emit('close')
     },
     showMessage(type, message) {
       this.$message({

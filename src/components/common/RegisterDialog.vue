@@ -33,23 +33,6 @@
       <el-form-item>
         <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
       </el-form-item>
-      <!-- <div v-if="envIsForDevelopment" class="register-dialog-form-three-login">
-        <div class="title">
-          <span>{{$t('common.usingFollowingAccount')}}</span>
-        </div>
-        <a @click="authorizedToLogin('qq')">
-          <img src="@/assets/img/wiki_qq.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('weixin')">
-          <img src="@/assets/img/wiki_wechat.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('xinlangweibo')">
-          <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('github')">
-          <img src="@/assets/img/wiki_github_logo.png" alt="">
-        </a>
-      </div> -->
     </el-form>
   </el-dialog>
 </template>
@@ -218,36 +201,6 @@ export default {
         return
       }
     },
-    authorizedToLogin(provider) {
-      this.$auth
-        .authenticate(provider)
-        .then(async result => {
-          console.log('1', result)
-          this.handleLoginResult(result)
-        })
-        .catch(async result => {
-          console.log('2', result)
-          this.handleLoginResult(result)
-        })
-    },
-    async handleLoginResult(result) {
-      if (result && result.data && result.data.error == 0) {
-        if (result.data.token == 'token') {
-          // 用户未绑定  跳完善注册信息页
-          this.$router.push({ path: '/PerfectRegisterInfo' })
-        } else {
-          // 登录成功  进行页面跳转
-          let token = result.data.token
-          let userinfo = result.data.data
-          this.userThirdLogin({ token, userinfo })
-          this.handleClose()
-          this.showMessage('success', this.$t('common.loginSuccess'))
-        }
-      } else {
-        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
-        this.showMessage('error', this.$t('common.logonFailed'))
-      }
-    }
   }
 }
 </script>
