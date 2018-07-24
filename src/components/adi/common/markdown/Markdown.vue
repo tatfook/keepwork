@@ -67,7 +67,7 @@ export default {
 
 <style lang="scss">
 @import 'github-markdown-css/github-markdown.css';
-@import 'prismjs/themes/prism.css';
+@import 'highlight.js/styles/atom-one-light.css';
 
 .comp-markdown {
   color: unset;

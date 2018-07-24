@@ -335,6 +335,7 @@ bigFile:
   filename: ${filename}
   size: ${file.size}
 \`\`\``)
+    this.$refs.codemirror.foldAllCodes()
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.toggleSkyDrive({ showSkyDrive: false })
