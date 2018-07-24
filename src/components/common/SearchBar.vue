@@ -34,10 +34,12 @@ export default {
       if (this.searchScope === 'loginUser') {
         searchParams.username = this.loginUsername
       }
-      this.$router.push({
-        path: '/wiki/search',
-        query: searchParams
+      let searchParamsArr = []
+      _.forIn(searchParams, (value, key) => {
+        searchParamsArr.push(`${key}=${value}`)
       })
+      let searchUrl = encodeURI(`/wiki/search?${searchParamsArr.join('&')}`)
+      window.location.href = searchUrl
     }
   }
 }
