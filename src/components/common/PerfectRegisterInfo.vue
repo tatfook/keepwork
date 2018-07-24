@@ -42,7 +42,7 @@ export default {
   name: 'PerfectRegisterInfo',
   props: {
     show: Boolean,
-    userThreeService
+    userThreeService: Object
   },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
