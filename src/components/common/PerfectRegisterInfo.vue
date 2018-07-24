@@ -126,6 +126,7 @@ export default {
           }
           this.registerLoading = true
           //第三方进行注册
+          console.log('thirdeInfo',payload)
           let thirdRegisterInfo = await this.thirdRegister(payload).catch(e => {
             console.log('e',e)
             this.registerLoading = false
