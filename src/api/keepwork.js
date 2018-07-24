@@ -40,7 +40,7 @@ export const user = {
   unbindCellphone: (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: (...args) => post('/user/unbindEmail', ...args),
   register: (...args) => post('/user/register', ...args),
-  thirdRegister: (...args) => post('user/bindThreeService', ...args)
+  bindThreeService: (...args) => post('user/bindThreeService', ...args)
 }
 
 /*doc

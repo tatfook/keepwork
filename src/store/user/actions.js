@@ -59,8 +59,8 @@ const actions = {
     let registerInfo = await keepwork.user.register({ username, password }, null, true)
     return registerInfo
   },
-  async thirdRegister({ commit }, { username, password, threeService }) {
-    let thirdRegisterInfo = await keepwork.user.thirdRegister({ username, password, threeService }, null, true)
+  async thirdRegister({ commit }, payload) {
+    let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
     return thirdRegisterInfo
   },
   /*doc
