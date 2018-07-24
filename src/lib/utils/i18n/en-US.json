@@ -569,5 +569,9 @@
     "hideSystemHeader": "Hide system header (vip only)",
     "hideSystemFooter": "Hide system footer (vip only)",
     "siteNameMaxLen": "The site name must be less than 30 characters"
+  },
+  "search": {
+    "searchAll": "All Sites",
+    "searchMine": "My Sites"
   }
 }
