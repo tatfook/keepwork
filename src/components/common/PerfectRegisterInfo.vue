@@ -59,6 +59,7 @@ export default {
       authCode: '',
       sendCodeDisabled: false,
       count: 60,
+      smsId: '',
       // userThreeService: this.$route.query.userThreeService,
       ruleForm: {
         username: '',
@@ -119,7 +120,9 @@ export default {
             threeService: this.userThreeService,
             bind: true,
             setRealNameInfo: true,
-            cellphone: this.ruleForm.phoneNumber
+            cellphone: this.ruleForm.phoneNumber,
+            smsCode: this.authCode,
+            smsId: this.smsId
           }
           this.registerLoading = true
           //第三方进行注册
@@ -140,12 +143,12 @@ export default {
             console.log('loginInfo',loginInfo)
             this.loading = false
             //尝试手机号尝试实名认证,尝试绑定手机号
-            let realNameAuthAndBind = {
-              setRealNameInfo: true,
-              cellphone: this.ruleForm.phoneNumber,
-              smsCode: this.authCode
-            }
-            await this.verifyCellphoneTwo(realNameAuthAndBind)
+            // let realNameAuthAndBind = {
+            //   setRealNameInfo: true,
+            //   cellphone: this.ruleForm.phoneNumber,
+            //   smsCode: this.authCode
+            // }
+            // await this.verifyCellphoneTwo(realNameAuthAndBind)
           }else{
             this.showMessage('error', this.$t('common.registerFailed'))
           }
@@ -163,7 +166,7 @@ export default {
             console.error(e)
           })
       this.sendCodeLoading = false
-      let smsId = _.get(info, 'data.smsId')
+      this.smsId = _.get(info, 'data.smsId')
       let message = info.error && info.error.message
       if (message === 'success') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
