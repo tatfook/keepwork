@@ -37,7 +37,7 @@
         <span @click="hasAccountToLogin" class="hasAccount">已有账号,直接登录</span>
     </div>
     <div v-show="isPerfectRegisterInfo">
-      <PerfectRegisterInfo @close="handleClose"/>
+      <PerfectRegisterInfo @close="handleClose" :userThreeService="userThreeService"/>
     </div>
   </el-dialog>
   
@@ -65,6 +65,7 @@ export default {
       isLoginForm: true,
       isRegisterForm: false,
       isPerfectRegisterInfo: false,
+      userThreeService: '',
       ruleForm: {
         username: '',
         password: ''
@@ -157,6 +158,7 @@ export default {
           this.isLoginForm = false
           this.isRegisterForm = false
           this.isPerfectRegisterInfo = true
+          this.userThreeService = result.data.data
           // this.handleClose()
         } else {
           // 登录成功  进行页面跳转
