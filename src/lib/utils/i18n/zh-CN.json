@@ -460,6 +460,7 @@
   "skydrive": {
     "image": "图片",
     "video": "视频",
+    "nothingHere": "没有内容哦！",
 
     "mediaLibrary": "媒体库",
     "skyDrive": "网盘",
@@ -481,7 +482,9 @@
     "removeSelected": "删除选中",
     "dragAndDrop": "拖拽到本窗口上传",
     "uploadFile": "上传文件",
-    "notImageFileError": "文件不是图片类型",
+    "uploadImage": "上传图片",
+    "uploadVideo": "上传视频",
+    "notMediaFileError": "文件不是图片或者视频类型",
     "removeFileConfirmMsg": "确认删除文件？",
     "newFilenamePromptMsg": "请输入新的文件名",
     "nameConflictError": "文件名和现有名字重复",
