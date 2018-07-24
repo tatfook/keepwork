@@ -33,11 +33,11 @@
       </el-form>
     </div>
     <div v-show="isRegisterForm">
-        <RegisterDialog/>
+        <RegisterDialog @close="handleClose"/>
         <span @click="hasAccountToLogin" class="hasAccount">已有账号,直接登录</span>
     </div>
     <div v-show="isPerfectRegisterInfo">
-      <PerfectRegisterInfo/>
+      <PerfectRegisterInfo @close="handleClose"/>
     </div>
   </el-dialog>
   
