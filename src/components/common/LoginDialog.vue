@@ -158,6 +158,9 @@ export default {
         this.showMessage('error', this.$t('common.logonFailed'))
       }
     }
+  },
+  components: {
+    PerfectRegisterInfo
   }
 }
 </script>
