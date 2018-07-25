@@ -42,7 +42,7 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
-    this.basicMessage = _.clone(this.getPersonalSiteInfoByPath(this.sitePath))
+    this.basicMessage = _.clone(this.getSiteDetailInfoByPath(this.sitePath))
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },
@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getPersonalSiteInfoByPath: 'user/getPersonalSiteInfoByPath',
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       getSiteDetailInfoDataSourceByPath:
         'user/getSiteDetailInfoDataSourceByPath'
     }),
