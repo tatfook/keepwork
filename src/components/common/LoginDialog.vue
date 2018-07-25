@@ -34,7 +34,8 @@
     </div>
     <div v-show="isRegisterForm">
         <RegisterDialog @close="handleClose"/>
-        <span @click="hasAccountToLogin" class="hasAccount">已有账号,直接登录</span>
+        <div><span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span></div>
+        <div><span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span></div>
     </div>
     <div v-show="isPerfectRegisterInfo">
       <PerfectRegisterInfo @close="handleClose" :userThreeService="userThreeService"/>
@@ -171,6 +172,9 @@ export default {
       } else {
         this.showMessage('error', this.$t('common.logonFailed'))
       }
+    },
+    backHome(){
+      window.location.href=this.nowOrigin
     }
   },
   components: {

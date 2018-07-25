@@ -8,6 +8,7 @@
     "loginAccount": "Account (email or mobile phone number)",
     "forgetPassword": "Forgot password",
     "noAccount": "No account? Click ",
+    "alreadyOwnAccount": "Log in with an existing account",
     "usingFollowingAccount": "Log in directly with the following account",
     "inputUsername": "Please enter your username",
     "inputPassword": "Please enter your password",
