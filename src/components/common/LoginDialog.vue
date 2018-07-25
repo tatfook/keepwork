@@ -203,8 +203,7 @@ export default {
       padding: 0;
     }
     width: 478px;
-    height: 580px;
-    padding: 40px 0 60px 0;
+    padding: 40px 0;
   }
   &-form {
     width: 68%;
