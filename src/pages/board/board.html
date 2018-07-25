@@ -365,7 +365,11 @@
      */
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
 
-    App.main();
+    App.main(function(ui) {
+      window.board = ui;
+      window.onbeforeunload = null;
+      ui.keepwork.read();
+    });
   </script>
 </body>
 

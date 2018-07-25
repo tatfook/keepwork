@@ -1,7 +1,7 @@
 export default {
   props: {
+    cardValue: Object,
     editingKey: String,
-    originValue: String,
     activePropertyOptions: Object
   },
   data() {

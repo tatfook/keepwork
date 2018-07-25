@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import axios from 'axios'
 import compBaseMixin from '../comp.base.mixin'
 import boardProptypes from './board.proptypes'
 import { mapGetters, mapActions } from 'vuex'
@@ -57,11 +58,7 @@ export default {
   name: 'AdiBoard',
   bedbclick: true,
   dblclick(context) {
-    if (Boolean(window.mxClient)) {
-      context.$store.dispatch('setActivePropertyOptions', {visible: true})
-    } else {
-      setTimeout(this.dblclick(context), 500)
-    }
+    context.$store.dispatch('setActivePropertyOptions', { visible: true })
   },
   render(h) {
     let self = this
@@ -69,33 +66,55 @@ export default {
     return (
       <div class="comp-board">
         {(() => {
-          if (self.properties.data) {
-            let initPreviewRender = () => {
-              if (Boolean(window.mxClient)) {
-                initPreview(self.properties.data, svg => {
-                  self.svg = svg
-                })
-              } else {
-                setTimeout(initPreviewRender, 500)
-              }
-            }
-
-            initPreviewRender()
-
-            return h(
-              'div',
-              {
-                domProps: {
-                  innerHTML: self.svg
-                }
-              },
-              []
-            )
-          } else {
-            if(!self.properties.data && self.editMode) {
-              return <div class="mx-client-start">{self.$t(self.options.desc)}</div>
+          if (self.isNew) {
+            if(self.properties.svg){
+              return h(
+                'div',
+                {
+                  domProps: {
+                    innerHTML: self.svgData
+                  }
+                },
+                []
+              )
             } else {
-              return <div></div>
+              return (
+                <div class="mx-client-start">{self.$t(self.options.desc)}</div>
+              )
+            }
+          } else {
+            if (self.properties.data) {
+              let initPreviewRender = () => {
+                if (Boolean(window.mxClient)) {
+                  initPreview(self.properties.data, svg => {
+                    self.svg = svg
+                  })
+                } else {
+                  setTimeout(initPreviewRender, 500)
+                }
+              }
+
+              initPreviewRender()
+
+              return h(
+                'div',
+                {
+                  domProps: {
+                    innerHTML: self.svg
+                  }
+                },
+                []
+              )
+            } else {
+              if (!self.properties.data && self.editMode) {
+                return (
+                  <div class="mx-client-start">
+                    {self.$t(self.options.desc)}
+                  </div>
+                )
+              } else {
+                return <div />
+              }
             }
           }
         })()}
@@ -104,52 +123,51 @@ export default {
   },
   data() {
     return {
-      visible: false,
-      svg: ''
+      isNew: false,
+      svg: '',
+      svgData: ''
+    }
+  },
+  methods: {
+    initold() {
+      if (!window.mxClient) {
+        let boardScript = document.createElement('script')
+        boardScript.setAttribute(
+          'src',
+          '/static/adi/board/keepwork-board.min.js'
+        )
+
+        let graphEditorCss = document.createElement('link')
+        graphEditorCss.setAttribute('rel', 'stylesheet')
+        graphEditorCss.setAttribute('type', 'text/css')
+        graphEditorCss.setAttribute(
+          'href',
+          '/static/adi/board/assets/styles/grapheditor.css'
+        )
+
+        let body = document.querySelector('body')
+        body.appendChild(boardScript)
+        body.appendChild(graphEditorCss)
+      }
+    },
+    async initnew() {
+      this.svgData = await this.getSvgData()
+    },
+    async getSvgData() {
+      let response = await axios.get(this.properties.svg)
+
+      return (response && response.data) || ''
     }
   },
   mixins: [compBaseMixin],
-  computed: {
-    getDialogProps() {
-      let props = { visible: this.visible, fullscreen: true }
-      let on = {
-        'update:visible': v => {
-          this.visible = v
-        },
-        open: () => {
-          setTimeout(
-            function() {
-              this.loadBoardEditor()
-            }.bind(this),
-            0
-          )
-        }
-      }
-
-      return { props, on }
-    }
-  },
+  computed: {},
   created() {
-    //TODO: Rewrite mxGraph to es6 code
-
-    if (!window.mxClient) {
-      let boardScript = document.createElement('script')
-      boardScript.setAttribute(
-        'src',
-        '/static/adi/board/keepwork-board.min.js'
-      )
-
-      let graphEditorCss = document.createElement('link')
-      graphEditorCss.setAttribute('rel', 'stylesheet')
-      graphEditorCss.setAttribute('type', 'text/css')
-      graphEditorCss.setAttribute(
-        'href',
-        '/static/adi/board/assets/styles/grapheditor.css'
-      )
-
-      let body = document.querySelector('body')
-      body.appendChild(boardScript)
-      body.appendChild(graphEditorCss)
+    if (this.properties.xml && this.properties.svg) {
+      this.initnew()
+      this.isNew = true
+    } else {
+      this.initold()
+      this.isNew = false
     }
   }
 }

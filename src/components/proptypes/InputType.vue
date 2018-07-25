@@ -7,7 +7,6 @@ import protypesBaseMixin from './protypes.base.mixin'
 export default {
   name: 'InputType',
   props: {
-    editingKey: String,
     originValue: String
   },
   computed: {
