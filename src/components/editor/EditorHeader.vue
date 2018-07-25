@@ -117,8 +117,8 @@
       <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
     </div>
     <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
-      <center v-if="closeOneFile">{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}1</center>
-      <center v-else>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}2</center>
+      <center v-if="closeOneFile">{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
+      <center v-else>{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
       <span slot="footer" class="dialog-footer">
         <el-button type="warning" @click.stop="handleClose" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
         <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
