@@ -154,7 +154,7 @@ export default {
       this.svgData = await this.getSvgData()
     },
     async getSvgData() {
-      let response = await axios.get(this.properties.svg)
+      let response = await axios.get(this.properties.svg + '?bust' + Date.now())
 
       return (response && response.data) || ''
     }
