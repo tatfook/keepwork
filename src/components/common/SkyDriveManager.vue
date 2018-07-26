@@ -37,7 +37,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4" multiple style="display:none;" @change="handleUploadFile">
+            <input ref="mediaInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" multiple style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -174,11 +174,10 @@
           v-for="(file, index) in uploadingFiles" :key="index"
           class="skydrive-manager-media-uploading skydrive-manager-media-item"
           v-show="file.state !== 'success' && file.state != 'error'"
-          :style='{
-            backgroundImage: `url("${file.cover}")`
-          }'>
-          <div class="skydrive-manager-media-uploading-cover">
-          </div>
+          >
+          <img v-if="file.type === 'images'" :src="file.cover" class="skydrive-manager-media-item-img"/>
+          <div class="skydrive-manager-media-uploading-cover"></div>
+          <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
           <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
         </div>
         <div v-for='mediaItem in skyDriveMediaLibraryData'
@@ -186,15 +185,26 @@
           class='skydrive-manager-media-item'
           :class='{selected: selectedMediaItem === mediaItem}'
           @click='handleSelectMediaItem(mediaItem)'
-          :style='{
-            backgroundImage: "url(" + mediaItem.downloadUrl + ")"
-          }'>
-          <video :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          >
+          <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          <img v-if="mediaItem.type==='images'" :src="mediaItem.downloadUrl" class="skydrive-manager-media-item-img"/>
           <div class='skydrive-manager-media-item-cover'>
             <!-- <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span> -->
             <i v-if="mediaItem.type==='videos'" class='skydrive-manager-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
           </div>
           <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
+        </div>
+        <div v-if="!loading && !skyDriveMediaLibraryData.length && !uploadingFiles.length" class="skydrive-manager-media-library-placeholder">
+          <img src="@/assets/img/media_library_empty.png">
+          <span class="skydrive-manager-media-library-placeholder-tip">{{ $t('skydrive.nothingHere') }}</span>
+          <label v-if="mediaFilterType === 'image'" class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
+            <span>{{ $t('skydrive.uploadImage') }}</span>
+            <input ref="centerVideoInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none;" multiple @change="handleUploadFile">
+          </label>
+          <label v-if="mediaFilterType === 'video'" class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
+            <span>{{ $t('skydrive.uploadVideo') }}</span>
+            <input ref="centerVideoInput" type="file" accept=".mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" style="display:none;" multiple @change="handleUploadFile">
+          </label>
         </div>
       </div>
       <el-row class="skydrive-manager-footer">
@@ -218,6 +228,7 @@ import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import mediaProperties from '../adi/common/media/media.properties';
 const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
+
 export default {
   name: 'SkyDriveManager',
   props: {
@@ -321,6 +332,7 @@ export default {
           filename: file.name,
           ext: getFileExt(file),
           displaySize: this.biteToM(file.size) + 'MB',
+          type: file.type.split('/')[0]+'s',
           file: {
             downloadUrl: ''
           },
@@ -333,11 +345,10 @@ export default {
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
       this.filesQueueToUpload(files)
-      if (this.defaultMode) {
-        this.$refs.fileInput.value = ''
-      }else{
-        this.$refs.imageInput.value = ''
-      }
+      this.$refs.fileInput && (this.$refs.fileInput.value = '')
+      this.$refs.mediaInput && (this.$refs.mediaInput.value = '')
+      this.$refs.centerImageInput && (this.$refs.centerImageInput.value = '')
+      this.$refs.centerVideoInput && (this.$refs.centerVideoInput.value = '')
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])
@@ -345,12 +356,12 @@ export default {
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
-      if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) {
+      if (this.mediaLibraryMode && !/^(image|video)\/.*/.test(file.type)) {
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
         return this.$message({
           showClose: true,
-          message: this.$t('skydrive.notImageFileError'),
+          message: this.$t('skydrive.notMediaFileError'),
           type: 'error'
         })
       }
@@ -691,6 +702,17 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-wrap: wrap;
+    &-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &-tip {
+        margin: 30px auto 60px;
+      }
+    }
   }
   &-media-item {
     box-sizing: border-box;
@@ -707,6 +729,17 @@ export default {
     &.selected {
       border: 2px solid #3BA4FF;
       border-radius: 2px;
+    }
+    &-img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
     &-cover {
       position: absolute;

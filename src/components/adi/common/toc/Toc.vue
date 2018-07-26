@@ -2,7 +2,9 @@
   <div class="comp-toc">
     <div class="title">{{properties.title}}</div>
     <div :id="tocId" class="toc"></div>
-    <vue-markdown class="toc-source" :watches='["toc"]' :show="show" :source="code" :toc-id="tocId" :toc="toc" :toc-first-level="1" :toc-last-level="5" />
+    <div class="toc-source">
+      <vue-markdown :watches='["toc"]' :show="show" :source="code" :toc-id="tocId" :toc="toc" :toc-first-level="1" :toc-last-level="5" />
+    </div>
   </div>
 </template>
 <script>

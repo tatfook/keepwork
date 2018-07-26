@@ -38,7 +38,7 @@
     </div>
 
     <div class="icons">
-      <a :href="'/wiki/wikieditor/#' + activePageUrl" class="icon-item">
+      <a :href="editorPageUrl" class="icon-item">
         <i class="iconfont icon-edit"></i>
       </a>
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
@@ -52,22 +52,38 @@
         <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
       </span>
     </div>
+    <div @click.stop v-if="isLoginDialogShow">
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+    </div>
   </div>
 </template>
 <script>
 import 'social-share.js/dist/js/social-share.min.js'
 import 'social-share.js/dist/css/share.min.css'
+import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
   name: 'ToolHeader',
+  mounted() {
+    if (!this.userIsLogined) {
+      this.getProfile({ forceLogin: false })
+        .then(() => {
+          this.isLogin = true
+        })
+        .catch(() => {
+          this.isLogin = false
+        })
+    }
+  },
   data() {
     return {
       IS_GLOBAL_VERSION,
       starPending: false,
       breadcrumbsLoading: true,
-      siteList: []
+      siteList: [],
+      isLoginDialogShow: false,
     }
   },
   computed: {
@@ -78,8 +94,15 @@ export default {
       activePageStarInfo: 'user/activePageStarInfo',
       getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
-      userGetDetailByUsername: 'user/getDetailByUsername'
+      userGetDetailByUsername: 'user/getDetailByUsername',
+      userIsLogined: 'user/isLogined'
     }),
+    isLogin: {
+      get() {
+        return this.userIsLogined
+      },
+      set() {}
+    },
     siteDisplayName() {
       let { sitepath } = this.activePageInfo
       if (!sitepath) {
@@ -111,6 +134,11 @@ export default {
     },
     locationOrigin() {
       return location.origin
+    },
+    editorPageUrl() {
+      let isLocalHosted = process.env.HOST_ENV === 'localhost'
+      let editorPageUrl = isLocalHosted ? '/editor.html':'/wiki/wikieditor/'
+      return `${ editorPageUrl }#${ this.activePageUrl }`
     }
   },
   watch: {
@@ -165,16 +193,8 @@ export default {
     },
     async togglePageStar() {
       this.starPending = true
-      let isLogin = true
-      await this.getProfile().catch(e => {
-        isLogin = false
-      })
-      if (!isLogin) {
-        this.$message({
-          showClose: true,
-          message: this.$t('common.loginToStarPage'),
-          type: 'error'
-        })
+      if (!this.isLogin) {
+        this.isLoginDialogShow = true
         this.starPending = false
         return
       }
@@ -207,10 +227,16 @@ export default {
         targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
       if (!url) return
       location.pathname = url
+    },
+    closeLoginDialog(){
+      this.isLoginDialogShow = false
     }
   },
   filters: {
     hideMarkdownExt: (str = '') => str.replace(/\.md$/, '')
+  },
+  components: {
+    LoginDialog
   }
 }
 </script>

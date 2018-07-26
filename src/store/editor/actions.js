@@ -14,6 +14,7 @@ import { initPageState, initSiteState, initLayoutPageState } from './state'
 
 const {
   SET_ACTIVE_PAGE,
+  SET_ACTIVE_PAGE_URL,
 
   ADD_MOD,
   DELETE_MOD,
@@ -91,6 +92,7 @@ const actions = {
       dispatch,
       rootGetters: { 'user/username': username }
     } = context
+    commit(SET_ACTIVE_PAGE_URL, { path })
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
     const fullPath = getFileFullPathByPath(path)
