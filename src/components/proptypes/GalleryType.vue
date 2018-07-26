@@ -9,10 +9,23 @@
         @change="updateValue(item)">
 
         <div
+          v-if="!item.type || item.type === 'images'"
           class="gallery-type-item-img"
           :style="{
             backgroundImage: 'url(' + item.img + ')'
           }">
+          <div class="gallery-type-item-img-cover">
+            <span>
+              <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
+              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleRemove(index)"></el-button>
+            </span>
+          </div>
+        </div>
+
+        <div
+          v-if="item.type === 'videos'"
+          class="gallery-type-item-img">
+          <video :src="item.video" autoplay="autoplay" muted="true" loop="loop"></video>
           <div class="gallery-type-item-img-cover">
             <span>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
@@ -88,7 +101,9 @@ export default {
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
+
       this.galleryData.splice(index, 1)
+      this.handleChange()
     },
     handleUpdateImg(index) {
       this.selectedIndex = index
@@ -97,11 +112,25 @@ export default {
     openSkyDriveManagerDialog() {
       this.isSkyDriveManagerDialogShow = true
     },
-    closeSkyDriveManagerDialog({ url }) {
+    closeSkyDriveManagerDialog(payload) {
+      if(!payload) return
+
+      let { file, url } = payload
+
       this.isSkyDriveManagerDialogShow = false
       let item = this.galleryData[this.selectedIndex]
-      if (!url || !item) return
-      item.img = url
+      if (!file || !url || !item) return
+
+      item.type = file.type
+
+      if(file.type === 'images'){
+        item.img = url
+      }
+
+      if(file.type === 'videos'){
+        item.video = url
+      }
+
       this.handleChange()
     }
   },
@@ -173,11 +202,24 @@ export default {
     background-color: lightgray;
     background-size: cover;
     background-position: center;
+    overflow: hidden;
+    position: relative;
+
+    video {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
     &-cover {
       height: 100%;
+      width: 100%;
       background: rgba(0,0,0,.5);
       display: none;
+      position: absolute;
+      top: 0;
     }
+
     &:hover {
       .gallery-type-item-img-cover {
         display: flex;
