@@ -491,7 +491,7 @@
     "nameEmptyError": "The name cannot be empyt.",
     "nameContainSpecialCharacterError": "The name contains special characters.",
     "fileUploading":
-      "There are files being uploaded. After closing, the files will be canceled. Continue?"
+      "There are files being uploaded. After leaving, the files will be canceled. Continue?"
   },
   "user": {
     "displayName": "NickName:",
