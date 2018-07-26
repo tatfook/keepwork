@@ -6,9 +6,11 @@
     <el-main>
       <router-view @showPreview='showPreview' />
       <!-- <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '> -->
-        <div class="preview-site-wrap">
-            <div class="preview-site-close"><span>X</span></div>
-            <PageViewer id="previewWinSite" :showPreviewClose="showPreviewClose" @close="handleClosePreview"/>
+        <div class="preview-site-wrap" id="previewWinSite">
+            <div class="preview-site-close"><span @click="handleClosePreview">X</span></div>
+            <div class="preview-content-wrap">
+              <PageViewer/>
+            </div>
         </div>
       <!-- </el-dialog> -->
     </el-main>
@@ -111,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style >
 html,
 body,
 .el-container {
@@ -125,7 +127,6 @@ body {
 .el-main {
   height: 100%;
   padding: 17px 0;
-  background-color: #cdd4dc;
 }
 #editor {
   background: white;
@@ -144,8 +145,27 @@ body {
 .preview-win-fullscreen {
   width: 100% !important;
   height: 100%;
-  background-color: #cdd4dc;
-  max-width: 1080px;
+  padding: 10px;
+  overflow: hidden;
+}
+.preview-content-wrap{
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.preview-site-close {
+  overflow: hidden;
+}
+.preview-site-close span{
+  display: block;
+  text-align: center;
+  line-height: 50px;
+  height: 50px;
+  width: 50px;
+  float: right;
+  cursor: pointer;
+  color: #000;
 }
 </style>
 

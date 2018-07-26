@@ -3,7 +3,6 @@
     <div v-if='sidebarModList' class="toggle-sidebar-main-button" :class="{'position-right': (showSidebarOrMain === 'sidebar')}" @click="toggleSidebarMainShow">
       <i class="iconfont icon-arrowsdownline"></i>
     </div>
-    <div v-if="showPreviewClose" class="preview-site-close"><span @click="handleClosePreview">X</span></div>
     <component :is='layoutTemplate' :showSidebarOrMain='showSidebarOrMain' v-if='layout'>
       <mod-list-viewer v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' />
       <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
@@ -122,9 +121,6 @@ export default {
           break
       }
     },
-    handleClosePreview(){
-      this.$emit('close')
-    },
     toLogin(){
       this.isLoginDialogShow = true
     }
@@ -143,19 +139,6 @@ export default {
   }
   .toggle-sidebar-main-button {
     display: none;
-  }
-  .preview-site-close{
-    overflow: hidden;
-    span{
-      display: block;
-      text-align: center;
-      line-height: 50px;
-      height: 50px;
-      width: 50px;
-      float: right;
-      cursor: pointer;
-      color: #fff;
-    }
   }
 }
 @media (max-width: 768px) {
