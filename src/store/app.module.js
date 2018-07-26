@@ -75,7 +75,7 @@ const getters = {
     if (sidebar) pages.push(sidebar)
     return pages
   },
-  mainModList: state => (state.activePage ? state.activePage.modList : []),
+  mainModList: state => state.modList,
   headerModList: (state, { header }) => header && header.modList,
   footerModList: (state, { footer }) => footer && footer.modList,
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
