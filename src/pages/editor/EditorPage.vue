@@ -5,9 +5,12 @@
     </el-header>
     <el-main>
       <router-view @showPreview='showPreview' />
-      <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '>
-        <PageViewer />
-      </el-dialog>
+      <!-- <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '> -->
+        <div class="preview-site-wrap">
+            <div class="preview-site-close"><span>X</span></div>
+            <PageViewer id="previewWinSite" :showPreviewClose="showPreviewClose" @close="handleClosePreview"/>
+        </div>
+      <!-- </el-dialog> -->
     </el-main>
     <div @click.stop v-if="showLoginDialog">
       <LoginDialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose"/>
@@ -17,6 +20,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import fullscreen from 'vue-fullscreen'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
@@ -27,7 +31,9 @@ export default {
     return {
       loading: false,
       previewDialogVisible: false,
-      profileLoaded: false
+      profileLoaded: false,
+      isFullscreen: false,
+      showPreviewClose: false
     }
   },
   async mounted() {
@@ -74,7 +80,24 @@ export default {
       this.loading = false
     },
     showPreview() {
-      this.previewDialogVisible = true
+      // this.previewDialogVisible = true
+      this.showPreviewClose = true
+      this.$fullscreen.toggle(this.$el.querySelector('#previewWinSite'), {
+        wrap: false,
+        fullscreenClass: 'preview-win-fullscreen',
+        callback: this.fullscreenChange
+      })
+    },
+     fullscreenChange(fullscreen) {
+      this.isFullscreen = fullscreen
+    },
+    handleClosePreview(){
+      this.$fullscreen.toggle(this.$el.querySelector('#previewWinSite'), {
+        wrap: false,
+        fullscreenClass: 'preview-win-fullscreen',
+        callback: this.fullscreenChange
+      })
+      this.showPreviewClose = false
     },
     handleLoginDialogClose() {
       location.reload()
@@ -113,6 +136,16 @@ body {
 .preview-dialog .el-main{
   background-color: #fff;
   overflow: hidden;
+}
+.preview-site-wrap{
+  height: 0;
+  overflow: hidden;
+}
+.preview-win-fullscreen {
+  width: 100% !important;
+  height: 100%;
+  background-color: #cdd4dc;
+  max-width: 1080px;
 }
 </style>
 
