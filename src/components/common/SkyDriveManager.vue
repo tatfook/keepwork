@@ -174,11 +174,10 @@
           v-for="(file, index) in uploadingFiles" :key="index"
           class="skydrive-manager-media-uploading skydrive-manager-media-item"
           v-show="file.state !== 'success' && file.state != 'error'"
-          :style='{
-            backgroundImage: `url("${file.cover}")`
-          }'>
-          <div class="skydrive-manager-media-uploading-cover">
-          </div>
+          >
+          <img v-if="file.type === 'images'" :src="file.cover" class="skydrive-manager-media-item-img"/>
+          <div class="skydrive-manager-media-uploading-cover"></div>
+          <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
           <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
         </div>
         <div v-for='mediaItem in skyDriveMediaLibraryData'
@@ -186,10 +185,9 @@
           class='skydrive-manager-media-item'
           :class='{selected: selectedMediaItem === mediaItem}'
           @click='handleSelectMediaItem(mediaItem)'
-          :style='{
-            backgroundImage: "url(" + mediaItem.downloadUrl + ")"
-          }'>
-          <video :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          >
+          <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          <img v-if="mediaItem.type==='images'" :src="mediaItem.downloadUrl" class="skydrive-manager-media-item-img"/>
           <div class='skydrive-manager-media-item-cover'>
             <!-- <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span> -->
             <i v-if="mediaItem.type==='videos'" class='skydrive-manager-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
@@ -334,6 +332,7 @@ export default {
           filename: file.name,
           ext: getFileExt(file),
           displaySize: this.biteToM(file.size) + 'MB',
+          type: file.type.split('/')[0]+'s',
           file: {
             downloadUrl: ''
           },
@@ -730,6 +729,17 @@ export default {
     &.selected {
       border: 2px solid #3BA4FF;
       border-radius: 2px;
+    }
+    &-img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
     &-cover {
       position: absolute;
