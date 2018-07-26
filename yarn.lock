@@ -8255,21 +8255,22 @@ vue-markdown@leopoldchen/vue-markdown#master:
   version "2.2.3"
   resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/6df049705345a13a6d302dc91897b301aa2cac3d"
   dependencies:
-    markdown-it "^8.0.0"
+    highlight.js "^9.12.0"
+    markdown-it "^6.0.1"
     markdown-it-abbr "^1.0.3"
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
+    markdown-it-highlightjs "^3.0.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
-    markdown-it-prism leopoldchen/markdown-it-prism
     markdown-it-sub "^1.0.0"
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
     markdown-it-toc-and-anchor leopoldchen/markdown-it-toc-and-anchor
-    snabbdom "~0.6.6"
-    snabbdom-virtualize "^0.7.0"
+    snabbdom "~0.7.1"
+    snabbdom-virtualize leopoldchen/snabbdom-virtualize
 
 vue-router@^3.0.1:
   version "3.0.1"
