@@ -135,6 +135,7 @@ export default {
               console.error(e)
               this.loading = false
             })
+            window.location.reload()
             console.log('loginInfo', loginInfo)
             this.loading = false
           } else {

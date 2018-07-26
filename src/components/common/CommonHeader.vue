@@ -31,7 +31,7 @@
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-start">
           <span class="el-dropdown-link">
-            <img class="user-profile" :src='userProfile.portrait' alt="username">
+            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
             <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
@@ -75,7 +75,7 @@
       </el-menu-item>
       <el-submenu index='1' class="pull-right" v-if="isLogin">
         <template slot="title">
-          <img class="user-profile" :src='userProfile.portrait' alt="username">
+          <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
         </template>
         <el-menu-item index='1-1'>
           <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
@@ -217,6 +217,9 @@ export default {
     closeRegisterDialog() {
       this.isRegisterDialogShow = false
     }
+  },
+  filters: {
+    defaultPortrait: (str = '') => str.trim() || require('@/assets/img/default_portrait.png')
   },
   components: {
     PersonalCenterDialog,
