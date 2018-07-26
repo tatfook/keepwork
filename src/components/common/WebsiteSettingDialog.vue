@@ -2,7 +2,7 @@
   <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
     <div class="website-setting-sidebar">
       <ul>
-        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in websiteSettingNavs" :key="index" v-show="navItem.isShow">
+        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in filteredWebsiteSettingNavs" :key="index" v-show="navItem.isShow">
           <span :class="{'active': index === activeSettingIndex}" class="sidebar-nav-item">{{navItem.text}}</span>
         </li>
       </ul>
@@ -29,7 +29,8 @@ export default {
   },
   data() {
     return {
-      title: `//${location.host}/${this.sitePath}`
+      title: `//${location.host}/${this.sitePath}`,
+      activeSettingIndex: 0
     }
   },
   computed: {
@@ -37,22 +38,14 @@ export default {
       loginUsername: 'user/username'
     }),
     activeSettingComp() {
-      let activeSettingIndex = this.activeSettingIndex || 0
-      return _.get(this.websiteSettingNavs, `${activeSettingIndex}.comp`)
+      let activeSettingIndex = this.activeSettingIndex
+      return _.get(this.filteredWebsiteSettingNavs, `${activeSettingIndex}.comp`)
     },
     siteOwnsUsername() {
       return this.sitePath.split('/')[0]
     },
     isBasicSettingShow() {
       return this.siteOwnsUsername === this.loginUsername
-    },
-    activeSettingIndex: {
-      get() {
-        return _.findIndex(this.websiteSettingNavs, navItem => {
-          return navItem.isShow
-        })
-      },
-      set() {}
     },
     websiteSettingNavs() {
       return [
@@ -71,6 +64,11 @@ export default {
         //   comp: WebsiteSettingStyle
         // }
       ]
+    },
+    filteredWebsiteSettingNavs() {
+      return _.filter(this.websiteSettingNavs, navItem => {
+        return navItem.isShow
+      })
     }
   },
   methods: {
