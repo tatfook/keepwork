@@ -76,7 +76,6 @@ export default {
       this.$emit('close')
     },
     doActiveNavItem(index) {
-      console.log(index)
       this.activeSettingIndex = index
     }
   },
