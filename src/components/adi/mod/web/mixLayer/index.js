@@ -2,6 +2,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import styles from './mixLayer.styles'
 import templates from './mixLayer.templates'
 import mod from './mixLayer'
+import themeData from './mixLayer.theme'
 
 const name = 'ModMixLayer'
 
@@ -15,4 +16,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }

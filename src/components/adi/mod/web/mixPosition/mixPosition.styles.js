@@ -84,16 +84,16 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'color_7'],
-      subtitle: ['font_3', 'color_2'],
-      paragraph: ['font_9', 'color_4'],
-      button: ['font_10', 'color_0']
+      title: ['font_1', 'tColor'],
+      subtitle: ['font_3', 'sColor'],
+      paragraph: ['font_9', 'phoneFontsColor'],
+      button: ['font_10', 'fontsColor']
     },
     options: {
       theme: {
         button: {
           buttonStyle: {
-            'background-color': 'color_7'
+            'background-color': 'tColor'
           }
         }
       },
@@ -175,16 +175,16 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'color_7'],
-      subtitle: ['font_3', 'color_2'],
-      paragraph: ['font_9', 'color_4'],
-      button: ['font_10', 'color_0']
+      title: ['font_1', 'tColor'],
+      subtitle: ['font_3', 'sColor'],
+      paragraph: ['font_9', 'phoneFontsColor'],
+      button: ['font_10', 'fontsColor']
     },
     options: {
       theme: {
         button: {
           buttonStyle: {
-            'background-color': 'color_7'
+            'background-color': 'tColor'
           }
         }
       },
@@ -288,16 +288,16 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'color_7'],
-      subtitle: ['font_3', 'color_2'],
-      paragraph: ['font_9', 'color_4'],
-      button: ['font_10', 'color_0']
+      title: ['font_1', 'tColor'],
+      subtitle: ['font_3', 'sColor'],
+      paragraph: ['font_9', 'phoneFontsColor'],
+      button: ['font_10', 'fontsColor']
     },
     options: {
       theme: {
         button: {
           buttonStyle: {
-            'background-color': 'color_7'
+            'background-color': 'tColor'
           }
         }
       },
@@ -356,9 +356,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'color_7'],
-      subtitle: ['font_3', 'color_2'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_1', 'tColor'],
+      subtitle: ['font_3', 'sColor'],
+      paragraph: ['font_9', 'phoneFontsColor']
     },
     options: {
       theme: {},
@@ -417,9 +417,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'color_7'],
-      subtitle: ['font_3', 'color_2'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_1', 'tColor'],
+      subtitle: ['font_3', 'sColor'],
+      paragraph: ['font_9', 'phoneFontsColor']
     },
     options: {
       theme: {},
