@@ -144,7 +144,7 @@ export default {
             console.log('loginInfo',loginInfo)
             this.loading = false
           }else{
-            switch (registerInfo.error.message) {
+            switch (thirdRegisterInfo.error.message) {
               case '用户名已存在':
                 this.showMessage('error', this.$t('common.existAccount'))
                 break
