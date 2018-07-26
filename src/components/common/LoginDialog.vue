@@ -66,6 +66,7 @@ export default {
       isLoginForm: true,
       isRegisterForm: false,
       isPerfectRegisterInfo: false,
+      nowOrigin: document.location.origin,
       userThreeService: {},
       ruleForm: {
         username: '',

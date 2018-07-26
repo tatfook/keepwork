@@ -8,7 +8,7 @@
         {{$t('common.accountNoChange')}}<br>
         {{$t('common.useLettersOrNumber')}}<br>
         {{$t('common.defaultAddress')}}<br>
-        <span class="defaultAddress">https://release.keepwork.com/{{ruleForm.username}}</span>
+        <span class="defaultAddress">{{nowOrigin}}/{{ruleForm.username}}</span>
       </div>
       <el-form-item prop="password">
         <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
@@ -58,6 +58,7 @@ export default {
       sendCodeLoading: false,
       authCode: '',
       sendCodeDisabled: false,
+      nowOrigin: document.location.origin,
       count: 60,
       smsId: '',
       // userThreeService: this.$route.query.userThreeService,
