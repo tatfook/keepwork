@@ -33,6 +33,7 @@ export default {
   async mounted() {
     await this.userGetProfile().catch(e => console.error(e))
     this.profileLoaded = true
+    document.title = 'wikieditor'
   },
   watch: {
     $route: 'updateActivePage'
@@ -61,6 +62,8 @@ export default {
       await this.setActivePage({ path }).catch(e => {
         console.error(e)
         this.loading = false
+        // this.$router.push('/')
+        throw new Error('Set activeAage failed, goto initial page!')
       })
       await this.userGetWebsiteDetailInfoByPath({
         path: this.activePageInfo.sitepath

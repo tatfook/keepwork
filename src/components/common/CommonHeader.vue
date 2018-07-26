@@ -51,7 +51,9 @@
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
-            <el-dropdown-item divided><a @click.stop="logout">{{$t('common.logout')}}</a></el-dropdown-item>
+            <el-dropdown-item divided>
+              <a @click.stop="logout">{{$t('common.logout')}}</a>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -61,6 +63,9 @@
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
+      </el-menu-item>
+      <el-menu-item index='10' class="pull-right">
+        <SearchBar></SearchBar>
       </el-menu-item>
     </el-menu>
 
@@ -113,7 +118,12 @@
       <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin' />
+    </div>
+    <div @click.stop v-if="isRegisterDialogShow">
+      <el-dialog width="478px"  :visible.sync="isRegisterDialogShow" closed="closeRegisterDialog">
+        <RegisterDialog/>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -124,6 +134,8 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
+import RegisterDialog from '@/components/common/RegisterDialog'
+import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -134,6 +146,7 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
+      isRegisterDialogShow: false
     }
   },
   computed: {
@@ -191,7 +204,7 @@ export default {
     goLogin() {
       this.isLoginDialogShow = true
     },
-    closeLoginDialog(){
+    closeLoginDialog() {
       this.isLoginDialogShow = false
     },
     logout() {
@@ -199,13 +212,18 @@ export default {
       // window.location.reload()
     },
     goJoin() {
-      window.location = '/wiki/join?redirect=' + window.location.href
+      this.isRegisterDialogShow = true
+    },
+    closeRegisterDialog() {
+      this.isRegisterDialogShow = false
     }
   },
   components: {
     PersonalCenterDialog,
     SkyDriveManagerDialog,
-    LoginDialog
+    LoginDialog,
+    RegisterDialog,
+    SearchBar
   }
 }
 </script>
@@ -280,6 +298,9 @@ export default {
 }
 </style>
 <style lang="scss">
+.el-menu-item {
+  padding: 0 15px;
+}
 .el-menu-item [class^='el-icon-'] {
   width: 20px;
   font-size: 18px;

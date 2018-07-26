@@ -1,39 +1,53 @@
 <template>
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
-    <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-      <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
-      </el-form-item>
-       <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
-      </el-form-item>
-      <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
-      <el-form-item>
-        <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
-      </el-form-item>
-      <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="/wiki/join">{{$t('common.register')}}</a></div>
-      <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
-        <div class="title">
-          <span>{{$t('common.usingFollowingAccount')}}</span>
+    <div v-show="isLoginForm">
+      <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form-item prop="username">
+          <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
+        </el-form-item>
+        <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+        <el-form-item>
+          <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
+        </el-form-item>
+        <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a></div>
+        <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
+          <div class="title">
+            <span>{{$t('common.usingFollowingAccount')}}</span>
+          </div>
+          <a @click="authorizedToLogin('qq')">
+            <img src="@/assets/img/wiki_qq.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('weixin')">
+            <img src="@/assets/img/wiki_wechat.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('xinlangweibo')">
+            <img src="@/assets/img/wiki_sina_weibo.png" alt="">
+          </a>
+          <a @click="authorizedToLogin('github')">
+            <img src="@/assets/img/wiki_github_logo.png" alt="">
+          </a>
         </div>
-        <a @click="authorizedToLogin('qq')">
-          <img src="@/assets/img/wiki_qq.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('weixin')">
-          <img src="@/assets/img/wiki_wechat.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('xinlangweibo')">
-          <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-        </a>
-        <a @click="authorizedToLogin('github')">
-          <img src="@/assets/img/wiki_github_logo.png" alt="">
-        </a>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
+    <div v-show="isRegisterForm">
+        <RegisterDialog @close="handleClose"/>
+        <div><span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span></div>
+        <div><span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span></div>
+    </div>
+    <div v-show="isPerfectRegisterInfo">
+      <PerfectRegisterInfo @close="handleClose" :userThreeService="userThreeService"/>
+    </div>
   </el-dialog>
+  
+
 </template>
 <script>
 import { mapActions } from 'vuex'
+import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
+import RegisterDialog from '@/components/common/RegisterDialog'
 
 export default {
   name: 'LoginDialog',
@@ -49,6 +63,10 @@ export default {
     return {
       envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
+      isLoginForm: true,
+      isRegisterForm: false,
+      isPerfectRegisterInfo: false,
+      userThreeService: {},
       ruleForm: {
         username: '',
         password: ''
@@ -78,6 +96,11 @@ export default {
     }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
+    },
+    hasAccountToLogin(){
+      this.isLoginForm = true
+      this.isRegisterForm = false
+      this.isPerfectRegisterInfo = false
     },
     showMessage(type, message) {
       this.$message({
@@ -112,25 +135,32 @@ export default {
         }
       })
     },
+    register(){
+      this.isLoginForm = false
+      this.isRegisterForm = true
+      this.isPerfectRegisterInfo = false
+    },
     authorizedToLogin(provider) {
       this.$auth
         .authenticate(provider)
         .then(async result => {
           console.log('1',result)
           this.handleLoginResult(result)
-          this.isLoading = false
         })
         .catch(async result => {
           console.log('2',result)
           this.handleLoginResult(result)
-          this.isLoading = false
         })
     },
     async handleLoginResult(result){
       if (result && result.data && result.data.error == 0) {
         if (result.data.token == "token"){
           // 用户未绑定  跳完善注册信息页
-          window.location.href = '/wiki/join?redirect=' + window.location.href
+          this.isLoginForm = false
+          this.isRegisterForm = false
+          this.isPerfectRegisterInfo = true
+          this.userThreeService = result.data.data
+          // this.handleClose()
         } else {
           // 登录成功  进行页面跳转
           let token = result.data.token
@@ -140,16 +170,27 @@ export default {
           this.showMessage('success', this.$t('common.loginSuccess'))
         }
       } else {
-        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.showMessage('error', this.$t('common.logonFailed'))
       }
+    },
+    backHome(){
+      window.location.href=this.nowOrigin
     }
+  },
+  components: {
+    RegisterDialog,
+    PerfectRegisterInfo
   }
 }
 </script>
 
 <style lang="scss">
 .login-dialog {
+  .hasAccount{
+    margin-left: 70px;
+    border-bottom: 1px solid #409eff;
+    cursor: pointer;
+  }
   &.force-login {
     .el-dialog__header {
       .el-dialog__headerbtn {
@@ -162,8 +203,7 @@ export default {
       padding: 0;
     }
     width: 478px;
-    height: 580px;
-    padding: 40px 0 60px 0;
+    padding: 40px 0;
   }
   &-form {
     width: 68%;

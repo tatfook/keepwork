@@ -3,6 +3,7 @@
     <vue-markdown
       :toc="true"
       :source="validData"
+      :anchorAttributes="anchorAttributes"
       toc-anchor-link-symbol=""
       toc-anchor-class="iconfont icon-link_"/>
   </div>
@@ -49,6 +50,13 @@ export default {
       let isEmpty = !(this.properties.data && this.properties.data.trim())
       if (isEmpty && this.editMode) return this.$t(this.options.emptyData)
       return this.properties.data
+    }
+  },
+  data(){
+    return{
+      anchorAttributes: {
+        target: '_blank'
+      }
     }
   },
   components: {

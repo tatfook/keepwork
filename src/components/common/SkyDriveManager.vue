@@ -37,7 +37,7 @@
           {{ $t('skydrive.dragAndDrop') }}
           <label class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
             <span>{{ $t('skydrive.uploadFile') }}</span>
-            <input ref="imageInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4" multiple style="display:none;" @change="handleUploadFile">
+            <input ref="mediaInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" multiple style="display:none;" @change="handleUploadFile">
           </label>
         </el-col>
       </el-row>
@@ -196,6 +196,18 @@
           </div>
           <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
         </div>
+        <div v-if="!loading && !skyDriveMediaLibraryData.length && !uploadingFiles.length" class="skydrive-manager-media-library-placeholder">
+          <img src="@/assets/img/media_library_empty.png">
+          <span class="skydrive-manager-media-library-placeholder-tip">{{ $t('skydrive.nothingHere') }}</span>
+          <label v-if="mediaFilterType === 'image'" class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
+            <span>{{ $t('skydrive.uploadImage') }}</span>
+            <input ref="centerVideoInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none;" multiple @change="handleUploadFile">
+          </label>
+          <label v-if="mediaFilterType === 'video'" class="el-button skydrive-manager-upload-btn el-button--primary el-button--small is-round">
+            <span>{{ $t('skydrive.uploadVideo') }}</span>
+            <input ref="centerVideoInput" type="file" accept=".mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" style="display:none;" multiple @change="handleUploadFile">
+          </label>
+        </div>
       </div>
       <el-row class="skydrive-manager-footer">
         <el-col :span="6" :offset="18">
@@ -218,6 +230,7 @@ import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import mediaProperties from '../adi/common/media/media.properties';
 const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
+
 export default {
   name: 'SkyDriveManager',
   props: {
@@ -333,11 +346,10 @@ export default {
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
       this.filesQueueToUpload(files)
-      if (this.defaultMode) {
-        this.$refs.fileInput.value = ''
-      }else{
-        this.$refs.imageInput.value = ''
-      }
+      this.$refs.fileInput && (this.$refs.fileInput.value = '')
+      this.$refs.mediaInput && (this.$refs.mediaInput.value = '')
+      this.$refs.centerImageInput && (this.$refs.centerImageInput.value = '')
+      this.$refs.centerVideoInput && (this.$refs.centerVideoInput.value = '')
     },
     handleDrop(e) {
       let files = _.get(e, ['dataTransfer', 'files'])
@@ -345,12 +357,12 @@ export default {
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
-      if (this.mediaLibraryMode && !/^image\/.*/.test(file.type)) {
+      if (this.mediaLibraryMode && !/^(image|video)\/.*/.test(file.type)) {
         this.uploadingFiles[fileIndex].state = 'error'
         this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
         return this.$message({
           showClose: true,
-          message: this.$t('skydrive.notImageFileError'),
+          message: this.$t('skydrive.notMediaFileError'),
           type: 'error'
         })
       }
@@ -691,6 +703,17 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-wrap: wrap;
+    &-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &-tip {
+        margin: 30px auto 60px;
+      }
+    }
   }
   &-media-item {
     box-sizing: border-box;

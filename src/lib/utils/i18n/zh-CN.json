@@ -2,10 +2,13 @@
   "common": {
     "login": "登录",
     "register": "注册",
+    "accountName": "账户名",
+    "registerFailed": "注册失败",
     "password": "密码",
     "loginAccount": "登录账号 (推荐email或手机号)",
     "forgetPassword": "忘记密码",
     "noAccount": "没有账号？点击",
+    "alreadyOwnAccount": "使用已有账号登录",
     "usingFollowingAccount": "直接使用以下账号登录",
     "inputUsername": "请输入用户名",
     "inputPassword": "请输入密码",
@@ -23,6 +26,11 @@
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
     "chinese-englishSwitch": "切换为英文",
+    "accountNoChange": "登录账号注册后不可更改",
+    "useLettersOrNumber": "可以使用英文字母、数字组合(例如：keep123)",
+    "defaultAddress": "系统默认个人网址地址:",
+    "authCode": "验证码",
+    "perfectInfo": "完善信息",
 
     "features": "功能",
     "applicationCenter": "应用中心",
@@ -251,7 +259,9 @@
 
     "uploadingToSkyDriveText": "正在上传。。。",
     "readFileFromLocal": "正在读取文件。。。",
-    "enlargeMdEditing": "大窗口编辑"
+    "enlargeMdEditing": "大窗口编辑",
+
+    "pleaseInput": "请输入"
   },
   "modList": {
     "recent": "常用",
@@ -451,6 +461,7 @@
   "skydrive": {
     "image": "图片",
     "video": "视频",
+    "nothingHere": "没有内容哦！",
 
     "mediaLibrary": "媒体库",
     "skyDrive": "网盘",
@@ -472,7 +483,9 @@
     "removeSelected": "删除选中",
     "dragAndDrop": "拖拽到本窗口上传",
     "uploadFile": "上传文件",
-    "notImageFileError": "文件不是图片类型",
+    "uploadImage": "上传图片",
+    "uploadVideo": "上传视频",
+    "notMediaFileError": "文件不是图片或者视频类型",
     "removeFileConfirmMsg": "确认删除文件？",
     "newFilenamePromptMsg": "请输入新的文件名",
     "nameConflictError": "文件名和现有名字重复",
@@ -497,7 +510,6 @@
     "certifiedPhoneNumber": "认证手机:",
     "verificationCode": "短信验证码:",
     "emailVerificationCode": "邮箱验证码:",
-    "sendVerificationCode": "发送验证码",
     "resend": "重新发送",
     "countDownResend": "秒后重新发送",
     "sendingFrequent": "短信验证码发送过频繁",
@@ -545,5 +557,9 @@
     "hideSystemHeader": "隐藏系统Header (仅限vip)",
     "hideSystemFooter": "隐藏系统Footer (仅限vip)",
     "siteNameMaxLen": "网站名称需小于30个字符"
+  },
+  "search": {
+    "searchAll": "全部内容",
+    "searchMine": "我的网站"
   }
 }

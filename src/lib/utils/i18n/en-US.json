@@ -2,10 +2,13 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "accountName": "Account name",
+    "registerFailed": "Register Failed",
     "password": "Password",
     "loginAccount": "Account (email or mobile phone number)",
     "forgetPassword": "Forgot password",
     "noAccount": "No account? Click ",
+    "alreadyOwnAccount": "Log in with an existing account",
     "usingFollowingAccount": "Log in directly with the following account",
     "inputUsername": "Please enter your username",
     "inputPassword": "Please enter your password",
@@ -23,6 +26,11 @@
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
     "chinese-englishSwitch": "chinese simplified",
+    "accountNoChange": "Account name cannot be changed after registration",
+    "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
+    "defaultAddress": "The defaulted personal website address:",
+    "authCode": "Code",
+    "perfectInfo": "Perfect information",
 
     "features": "Features",
     "applicationCenter": "Application center",
@@ -262,7 +270,9 @@
 
     "uploadingToSkyDriveText": "uploading file ...",
     "readFileFromLocal": "reading file from local ...",
-    "enlargeMdEditing": "Large window editing"
+    "enlargeMdEditing": "Large window editing",
+
+    "pleaseInput": "Please input"
   },
   "modList": {
     "recent": "Commonly used",
@@ -463,6 +473,7 @@
   "skydrive": {
     "image": "Image",
     "video": "Video",
+    "nothingHere": "Empty",
 
     "mediaLibrary": "Media Library",
     "skyDrive": "Sky Drive",
@@ -484,7 +495,9 @@
     "removeSelected": "Remove",
     "dragAndDrop": "Drag And Drop",
     "uploadFile": "Upload",
-    "notImageFileError": "File is not image!",
+    "uploadImage": "Upload image",
+    "uploadVideo": "Upload video",
+    "notMediaFileError": "File is not image, nor video!",
     "removeFileConfirmMsg": "This will permanently delete the file. Continue?",
     "newFilenamePromptMsg": "Please input new filename",
     "nameConflictError": "The name already exists.",
@@ -510,7 +523,6 @@
     "certifiedPhoneNumber": "certified phone number:",
     "verificationCode": "verification code:",
     "emailVerificationCode": "Mail Code:",
-    "sendVerificationCode": "Send verification code",
     "resend": "resend",
     "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
@@ -558,5 +570,9 @@
     "hideSystemHeader": "Hide system header (vip only)",
     "hideSystemFooter": "Hide system footer (vip only)",
     "siteNameMaxLen": "The site name must be less than 30 characters"
+  },
+  "search": {
+    "searchAll": "All Sites",
+    "searchMine": "My Sites"
   }
 }

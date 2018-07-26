@@ -55,6 +55,14 @@ const actions = {
     Cookies.remove('token', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
   },
+  async register({ commit }, { username, password }) {
+    let registerInfo = await keepwork.user.register({ username, password }, null, true)
+    return registerInfo
+  },
+  async thirdRegister({ commit }, payload) {
+    let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
+    return thirdRegisterInfo
+  },
   /*doc
     getProfile
     dispatch this action first, in any action which depends on username.
@@ -94,9 +102,9 @@ const actions = {
     let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
     commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
   },
-  async verifyCellphoneOne(context, { setRealNameInfo, cellphone }) {
+  async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit, getters: { authRequestConfig } } = context
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ setRealNameInfo, cellphone }, authRequestConfig, true)
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone }, authRequestConfig, true)
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },
