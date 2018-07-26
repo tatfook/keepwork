@@ -93,6 +93,7 @@ export default {
         img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
         link: ''
       })
+      this.handleChange()
     },
     handlePlay() {
       let video = this.$el.querySelector('video')
