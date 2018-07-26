@@ -268,6 +268,7 @@
     "homePage": "Home page",
 
     "removeImgConfirmMsg": "Are you sure to remove this image?",
+    "removeVideoConfirmMsg": "Are you sure to remove this video?",
 
     "uploadingToSkyDriveText": "uploading file ...",
     "readFileFromLocal": "reading file from local ...",
@@ -469,7 +470,9 @@
     "path": "page path",
     "target": "target",
     "source": "source",
-    "ratio": "ratio(eg: 16/9)"
+    "ratio": "ratio(eg: 16/9)",
+    "autoplay": "auto play",
+    "playloop": "loop playback"
   },
   "skydrive": {
     "image": "Image",
