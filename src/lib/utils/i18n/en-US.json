@@ -2,6 +2,7 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "existAccount": "The username already exists",
     "accountName": "Account name",
     "registerFailed": "Register Failed",
     "password": "Password",
