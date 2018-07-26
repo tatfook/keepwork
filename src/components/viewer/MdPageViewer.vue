@@ -7,7 +7,7 @@
       <mod-list-viewer v-if='headerModList' slot='header' :modList='headerModList' :theme='theme' />
       <mod-list-viewer v-if='footerModList' slot='footer' :modList='footerModList' :theme='theme' />
       <mod-list-viewer v-if='sidebarModList' slot='sidebar' :modList='sidebarModList' :theme='theme' />
-      <mod-list-viewer :modList='modList' :theme='theme' />
+      <mod-list-viewer :modList='mainModList' :theme='theme' />
     </component>
     <div v-if="show404" class="img404">
       <img src="@/assets/img/no_right_to_access.png" alt="">
@@ -64,6 +64,7 @@ export default {
       headerModList: 'headerModList',
       footerModList: 'footerModList',
       sidebarModList: 'sidebarModList',
+      mainModList: "mainModList",
       themeConf: 'themeConf',
       userIsLogined:'user/isLogined',
       userGetSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath'
