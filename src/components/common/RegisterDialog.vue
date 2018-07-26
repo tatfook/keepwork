@@ -140,7 +140,7 @@ export default {
           } else {
             switch (registerInfo.error.message) {
               case '用户名已存在':
-                this.showMessage('error', '用户名已存在')
+                this.showMessage('error', this.$t('common.existAccount'))
                 this.registerLoading = false
                 break
               case '':

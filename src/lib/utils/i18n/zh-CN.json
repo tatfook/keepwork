@@ -2,6 +2,7 @@
   "common": {
     "login": "登录",
     "register": "注册",
+    "existAccount": "用户名已存在",
     "accountName": "账户名",
     "registerFailed": "注册失败",
     "password": "密码",

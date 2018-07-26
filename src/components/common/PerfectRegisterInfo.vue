@@ -143,17 +143,10 @@ export default {
             })
             console.log('loginInfo',loginInfo)
             this.loading = false
-            //尝试手机号尝试实名认证,尝试绑定手机号
-            // let realNameAuthAndBind = {
-            //   setRealNameInfo: true,
-            //   cellphone: this.ruleForm.phoneNumber,
-            //   smsCode: this.authCode
-            // }
-            // await this.verifyCellphoneTwo(realNameAuthAndBind)
           }else{
             switch (registerInfo.error.message) {
               case '用户名已存在':
-                this.showMessage('error', '用户名已存在')
+                this.showMessage('error', this.$t('common.existAccount'))
                 break
               case '':
                 break
