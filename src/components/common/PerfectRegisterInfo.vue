@@ -8,7 +8,7 @@
         {{$t('common.accountNoChange')}}<br>
         {{$t('common.useLettersOrNumber')}}<br>
         {{$t('common.defaultAddress')}}<br>
-        <span class="defaultAddress">https://release.keepwork.com/???</span>
+        <span class="defaultAddress">https://release.keepwork.com/{{ruleForm.username}}</span>
       </div>
       <el-form-item prop="password">
         <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
@@ -151,7 +151,16 @@ export default {
             // }
             // await this.verifyCellphoneTwo(realNameAuthAndBind)
           }else{
-            this.showMessage('error', this.$t('common.registerFailed'))
+            switch (registerInfo.error.message) {
+              case '用户名已存在':
+                this.showMessage('error', '用户名已存在')
+                break
+              case '':
+                break
+              default:
+                this.showMessage('error', this.$t('common.registerFailed'))
+                break
+            }
           }
         } else {
           return false
