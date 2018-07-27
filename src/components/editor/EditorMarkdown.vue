@@ -74,9 +74,6 @@ export default {
       activeMod: 'activeMod',
       cursorPos: 'cursorPos'
     }),
-    fileManagerButton() {
-      return document.getElementById('file-manager-button')
-    },
     options() {
       const save = () => Mousetrap.trigger('mod+s')
       const undo = () => Mousetrap.trigger('mod+z')
@@ -174,7 +171,8 @@ export default {
           let currentActiveModKey = this.activeMod && this.activeMod.key
           if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
           if (!this.preClickedMod || this.preClickedMod === 'Markdown') {
-            mod.cmd === 'Markdown' && this.fileManagerButton.click()
+            let fileManagerButton = document.getElementById('file-manager-button')
+            mod.cmd === 'Markdown' && fileManagerButton && fileManagerButton.click()
           }
           this.preClickedMod = mod.cmd
         }
