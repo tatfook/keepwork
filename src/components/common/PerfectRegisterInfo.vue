@@ -61,7 +61,6 @@ export default {
       nowOrigin: document.location.origin,
       count: 60,
       smsId: '',
-      // userThreeService: this.$route.query.userThreeService,
       ruleForm: {
         username: '',
         password: '',
