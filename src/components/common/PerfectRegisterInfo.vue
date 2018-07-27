@@ -155,6 +155,7 @@ export default {
                 break
               default:
                 this.showMessage('error', this.$t('common.registerFailed'))
+                this.registerLoading = false
                 break
             }
           }
