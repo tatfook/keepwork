@@ -32,18 +32,21 @@ export default {
       websiteSettingNavs: [
         {
           text: this.$t('setting.general'),
-          comp: WebsiteSettingBasicMessage
+          comp: WebsiteSettingBasicMessage,
+          isShow: true
         },
         {
           text: this.$t('setting.siteLayouts'),
-          comp: WebsiteSettingLayout
+          comp: WebsiteSettingLayout,
+          isShow: true
         },
         {
           text: this.$t('setting.siteStyle'),
-          comp: WebsiteSettingStyle
+          comp: WebsiteSettingStyle,
+          isShow: true
         }
       ],
-      activeSettingIndex: 2
+      activeSettingIndex: 0
     }
   },
   computed: {
