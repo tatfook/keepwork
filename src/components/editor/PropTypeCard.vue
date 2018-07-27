@@ -11,7 +11,15 @@
       </el-col>
     </el-row>
     <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-      <component :is='proptypes[propItem]' :prop='prop' :editingKey='index' :originValue='cardValue[index]' :activePropertyOptions='activePropertyOptions' @onPropertyChange='changeProptyData' @onChangeValue='changeActivePropty'></component>
+      <component 
+        :is='proptypes[propItem]'
+        :prop='prop'
+        :editingKey='index'
+        :originValue='cardValue[index]'
+        :cardValue='cardValue'
+        :activePropertyOptions='activePropertyOptions'
+        @onPropertyChange='changeProptyData'
+        @onChangeValue='changeActivePropty'></component>
     </el-row>
   </div>
 </template>

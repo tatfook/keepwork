@@ -6,7 +6,6 @@ import protypesBaseMixin from './protypes.base.mixin'
 export default {
   name: 'LinkType',
   props: {
-    editingKey: String,
     originValue: String
   },
   computed: {

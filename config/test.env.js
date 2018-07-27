@@ -14,5 +14,6 @@ module.exports = merge(devEnv, {
   ES_INDEX: `"test_kw_pages"`,
   ES_TYPE: `"pages"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
-  QQ_URL: `"http://wpa.qq.com"`
+  QQ_URL: `"http://wpa.qq.com"`,
+  BOARD: `"${this.KEEPWORK}/wiki/wikieditor/board.html?"`
 })

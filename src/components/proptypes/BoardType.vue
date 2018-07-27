@@ -2,68 +2,12 @@
 import protypesBaseMixin from './protypes.base.mixin'
 import { mapActions, mapGetters } from 'vuex'
 
-let isInitEditor = false
-
-const initEditor = (data, callback) => {
-  isInitEditor = true
-
-  let mxClientEle = document.querySelector('#mx-client')
-
-  if (!window.mxClient.isBrowserSupported()) {
-    mxClientEle.innerHTML('Browser is not supported!')
-  }
-
-  let mxClientHeight = window.innerHeight
-  let mxClientWidth = window.innerWidth
-
-  mxClientEle.style.width = mxClientWidth + 'px'
-  mxClientEle.style.height = mxClientHeight + 'px'
-
-  window.mxResources.loadDefaultBundle = false
-
-  let bundle =
-    window.mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
-    window.mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage)
-
-  window.mxUtils.getAll(
-    [bundle, window.STYLE_PATH + '/default.xml'],
-    function(xhr) {
-      window.mxResources.parse(xhr[0].getText())
-
-      let themes = new Object()
-      themes[
-        window.Graph.prototype.defaultThemeName
-      ] = xhr[1].getDocumentElement()
-
-      let ui = new window.Board(
-        new window.Editor(urlParams['chrome'] == '0', themes),
-        mxClientEle
-      )
-
-      if (
-        data &&
-        data.replace(/[\ \r\n]+/g, '').length > 0 &&
-        data.replace(/[\ \r\n]+/g, '') != 'blank'
-      ) {
-        let doc = ui.editor.graph.getDecompressData(data)
-
-        ui.editor.setGraphXml(doc.documentElement)
-      }
-
-      if (typeof callback == 'function') {
-        callback(ui)
-      }
-    },
-    function() {
-      mxClientEle.innerHTML =
-        '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>'
-    }
-  )
-}
-
 export default {
   name: 'BoardType',
   mixins: [protypesBaseMixin],
+  prop: {
+    originValue: String
+  },
   render(h) {
     return (
       <div>
@@ -77,15 +21,15 @@ export default {
         >
           {this.$t('card.openBoard')}
         </el-button>
-        <el-dialog {...this.getDialogProps}>
-          <div id="mx-client" />
+        <el-dialog class="board-dialog" {...this.getDialogProps}>
+          <iframe class="board-iframe" src={this.getBoardSrc} />
           <div
             class="mx-client-close"
             on-click={() => {
               this.closeEditor()
             }}
           >
-            关闭
+            {this.$t('editor.close')}
           </div>
         </el-dialog>
       </div>
@@ -102,29 +46,88 @@ export default {
       set() {}
     },
     getDialogProps() {
-      let props = { visible: this.visible, fullscreen: true }
+      let props = {
+        visible: this.visible,
+        fullscreen: true,
+        showClose: false
+      }
+
       let on = {
         'update:visible': v => {
           this.visible = v
         },
-        open: () => {
-          setTimeout(
-            function() {
-              this.loadBoardEditor()
-            }.bind(this),
-            0
-          )
-        }
+        open: () => {}
       }
 
       return { props, on }
     },
     visible: {
       get() {
-        return this.activePropertyOptions ? this.activePropertyOptions.visible : false
+        return this.activePropertyOptions
+          ? this.activePropertyOptions.visible
+          : false
       },
       set(state) {
-        this.setActivePropertyOptions({visible: state})
+        this.setActivePropertyOptions({ visible: state })
+      }
+    },
+    getBoardSrc() {
+      let board = window.document.querySelector('.board-iframe')
+
+      if (!board) {
+        let url = process.env.BOARD
+
+        if (this.cardValue && this.cardValue.xml) {
+          url = url + '&initxml=' + this.cardValue.xml
+        }
+
+        this.boardSrc = url
+
+        return url
+      } else {
+        return this.boardSrc
+      }
+    }
+  },
+  watch: {
+    visible(state) {
+      let board = window.document.querySelector('.board-iframe')
+
+      if (state) {
+        if (!board) {
+          return
+        }
+
+        if (!board.contentWindow.keepworkSaveUrl) {
+          board.contentWindow.keepworkSaveUrl = {}
+        }
+
+        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
+
+        if (this.cardValue && this.cardValue.xml) {
+          keepworkSaveUrl.xmlUrl = this.cardValue.xml
+        }
+
+        if (this.cardValue && this.cardValue.svg) {
+          keepworkSaveUrl.svgUrl = this.cardValue.svg
+        }
+
+        board.contentWindow.board.keepwork.read()
+      } else {
+        if (!board) {
+          return
+        }
+
+        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
+
+        if (
+          keepworkSaveUrl &&
+          keepworkSaveUrl.xmlUrl &&
+          keepworkSaveUrl.svgUrl
+        ) {
+          this.updateValue(keepworkSaveUrl.xmlUrl, 'xml')
+          this.updateValue(keepworkSaveUrl.svgUrl, 'svg')
+        }
       }
     }
   },
@@ -137,93 +140,52 @@ export default {
     ...mapGetters({
       activeProperty: 'activeProperty'
     }),
-    loadBoardEditor() {
-      if (window.mxClient && !isInitEditor) {
-        initEditor(this.inputTypeValue, ui => {
-          this.ui = ui
-        })
-      } else {
-        setTimeout(this.loadBoardEditor, 500)
-      }
-    },
     changeProptyData(changedData) {
       this.setActivePropertyData({
         data: changedData
       })
     },
     openEditor() {
-      if (Boolean(window.mxClient)) {
-        this.$emit('onChangeValue')
-        this.visible = true
-      } else {
-        setTimeout(this.openEditor, 500)
-      }
+      this.visible = true
     },
     closeEditor() {
-      if(!this.ui || !this.ui.getCurrentCompressData) {
-        return
-      }
-
       this.visible = false
-      isInitEditor = false
-
-      let data = this.ui.getCurrentCompressData()
-
-      if (this.activeProperty()) {
-        this.changeProptyData({ data })
-      }
-
-      let mxWindow = document.querySelectorAll('.mxWindow')
-
-      if (mxWindow) {
-        mxWindow.forEach(element => {
-          element.parentNode.removeChild(element)
-        })
-      }
-
-      let mxClientEle = document.querySelector('#mx-client')
-
-      while (mxClientEle.hasChildNodes()) {
-        mxClientEle.removeChild(mxClientEle.firstChild)
-      }
     },
-    updateValue(newVal) {
+    updateValue(newVal, editingKey) {
       var tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = newVal
+
+      tempChangedDataObj[editingKey || this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
       this.$emit('onChangeValue')
     }
-  },
-  created() {
-    //TODO: Rewrite mxGraph to es6 code
-
-    if (!window.mxClient) {
-      let boardScript = document.createElement('script')
-      boardScript.setAttribute(
-        'src',
-        './static/adi/board/keepwork-board.min.js'
-      )
-
-      let graphEditorCss = document.createElement('link')
-      graphEditorCss.setAttribute('rel', 'stylesheet')
-      graphEditorCss.setAttribute('type', 'text/css')
-      graphEditorCss.setAttribute(
-        'href',
-        './static/adi/board/assets/styles/grapheditor.css'
-      )
-
-      let body = document.querySelector('body')
-      body.appendChild(boardScript)
-      body.appendChild(graphEditorCss)
-    }
   }
 }
 </script>
+<style lang="scss">
+.board-dialog {
+  .el-dialog__header {
+    padding: 0;
+  }
+
+  .el-dialog__body {
+    height: 100%;
+    padding: 0px;
+    overflow: hidden;
+  }
+}
+</style>
+
 <style scoped>
 .el-button {
   font-size: 16px;
+}
+
+.board-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .mx-client-close {
@@ -244,7 +206,7 @@ export default {
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
-  margin-right: 16px;
+  margin-right: 55px;
   height: 27px;
   line-height: 27px;
   min-width: 54px;
