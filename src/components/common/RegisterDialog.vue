@@ -140,7 +140,9 @@ export default {
                 this.showMessage('error', this.$t('common.existAccount'))
                 this.registerLoading = false
                 break
-              case '':
+              case '验证码错误':
+                this.showMessage('error', this.$t('user.verificationCodeError'))
+                this.registerLoading = false
                 break
               default:
                 this.showMessage('error', this.$t('common.registerFailed'))
