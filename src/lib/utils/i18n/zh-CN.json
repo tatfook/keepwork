@@ -562,7 +562,19 @@
     "change": "修改",
     "hideSystemHeader": "隐藏系统Header (仅限vip)",
     "hideSystemFooter": "隐藏系统Footer (仅限vip)",
-    "siteNameMaxLen": "网站名称需小于30个字符"
+    "siteNameMaxLen": "网站名称需小于30个字符",
+    "large": "大号",
+    "medium": "中号",
+    "small": "小号",
+    "system": "系统默认",
+    "yahei": "微软雅黑",
+    "simhei": "黑体",
+    "Font": "字体:",
+    "font": "字体",
+    "color": "颜色:",
+    "fontSize": "字号:",
+    "pleaseSelect": "请选择",
+    "tips": "注意: 所选字体如浏览器不支持，会显示默认字体"
   },
   "search": {
     "searchAll": "全部内容",

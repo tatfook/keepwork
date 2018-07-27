@@ -2,7 +2,7 @@
   <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
     <div class="website-setting-sidebar">
       <ul>
-        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in websiteSettingNavs" :key="index">
+        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in filteredWebsiteSettingNavs" :key="index" v-show="navItem.isShow">
           <span :class="{'active': index === activeSettingIndex}" class="sidebar-nav-item">{{navItem.text}}</span>
         </li>
       </ul>
@@ -19,6 +19,7 @@ import Vue from 'vue'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'
 import WebsiteSettingStyle from './WebsiteSettingStyle'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'WebsiteSettingDialog',
@@ -29,29 +30,46 @@ export default {
   data() {
     return {
       title: `//${location.host}/${this.sitePath}`,
-      websiteSettingNavs: [
-        {
-          text: this.$t('setting.general'),
-          comp: WebsiteSettingBasicMessage,
-          isShow: true
-        },
-        {
-          text: this.$t('setting.siteLayouts'),
-          comp: WebsiteSettingLayout,
-          isShow: true
-        },
-        {
-          text: this.$t('setting.siteStyle'),
-          comp: WebsiteSettingStyle,
-          isShow: true
-        }
-      ],
       activeSettingIndex: 0
     }
   },
   computed: {
+    ...mapGetters({
+      loginUsername: 'user/username'
+    }),
     activeSettingComp() {
-      return this.websiteSettingNavs[this.activeSettingIndex].comp
+      let activeSettingIndex = this.activeSettingIndex
+      return _.get(this.filteredWebsiteSettingNavs, `${activeSettingIndex}.comp`)
+    },
+    siteOwnsUsername() {
+      return this.sitePath.split('/')[0]
+    },
+    isBasicSettingShow() {
+      return this.siteOwnsUsername === this.loginUsername
+    },
+    websiteSettingNavs() {
+      return [
+        {
+          text: this.$t('setting.general'),
+          comp: WebsiteSettingBasicMessage,
+          isShow: this.isBasicSettingShow
+        },
+        {
+          text: this.$t('setting.siteLayouts'),
+          comp: WebsiteSettingLayout,
+          isShow: this.isBasicSettingShow
+        },
+        {
+          text: this.$t('setting.siteStyle'),
+          comp: WebsiteSettingStyle,
+          isShow: this.isBasicSettingShow
+        }
+      ]
+    },
+    filteredWebsiteSettingNavs() {
+      return _.filter(this.websiteSettingNavs, navItem => {
+        return navItem.isShow
+      })
     }
   },
   methods: {

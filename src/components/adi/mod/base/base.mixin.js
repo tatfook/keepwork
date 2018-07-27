@@ -88,44 +88,28 @@ export default {
     jssClass(name) {
       return this.sheet.classes[name]
     },
-    conversionColorStyle(name) {
+    convertColorStyle(name) {
       let themeData = this.conf.themeData
       let gThemeName = this.themeConf.name
       let gThemeColorId = this.themeConf.colorID
       let cName = ''
-      let fName = ''
-      let phoneFonts = ''
-      let titleColor = ''
-      let subColor = ''
-      let subColorA = ''
-      let allName = ''
       if (themeData && gThemeName &&
         themeData[gThemeName] && themeData[gThemeName].colors &&
         (gThemeColorId === 0 || gThemeColorId) && name) {
         cName = themeData[gThemeName].colors[gThemeColorId][name]
-        fName = themeData[gThemeName].fonts[gThemeColorId][name]
-        phoneFonts = themeData[gThemeName].phoneFonts[gThemeColorId][name]
-        titleColor = themeData[gThemeName].titleColor[gThemeColorId][name]
-        subColor = themeData[gThemeName].subColor[gThemeColorId][name]
-        subColorA = themeData[gThemeName].subColorA[gThemeColorId][name]
-        allName = (cName || fName || phoneFonts || titleColor || subColor || subColorA)
-        console.log(allName)
-        return allName
+        return cName
       }
     },
     themeClass(name) {
-      if (this.conversionColorStyle(name)) {
-        return this.theme.sheet.classes[this.conversionColorStyle(name)]
+      if (this.convertColorStyle(name)) {
+        return this.theme.sheet.classes[this.convertColorStyle(name)]
       } else {
         return this.theme.sheet.classes[name]
       }
     },
     themeData(name) {
-      // console.log(this.conversionColorStyle(name))
-      // console.log(this.theme.data)
-      console.log(this.theme.data)
-      if (this.conversionColorStyle(name)) {
-        return this.theme.data[this.conversionColorStyle(name)]
+      if (this.convertColorStyle(name)) {
+        return this.theme.data[this.convertColorStyle(name)]
       } else {
         return this.theme.data[name]
       }

@@ -575,7 +575,19 @@
     "change": "Change",
     "hideSystemHeader": "Hide system header (vip only)",
     "hideSystemFooter": "Hide system footer (vip only)",
-    "siteNameMaxLen": "The site name must be less than 30 characters"
+    "siteNameMaxLen": "The site name must be less than 30 characters",
+    "large": "Large",
+    "medium": "Medium",
+    "small": "Small",
+    "system": "System",
+    "yahei": "Microsoft YaHei",
+    "simhei": "SimHei",
+    "Font": "Font",
+    "color": "Color",
+    "font": "font:",
+    "fontSize": "size:",
+    "pleaseSelect": "please select",
+    "tips": "Note: if the selected font is not supported by the browser, the default font will be displayed"
   },
   "search": {
     "searchAll": "All Sites",
