@@ -360,11 +360,12 @@
     </div>
   </div>
   <script type="text/javascript">
+    Menus.prototype.defaultMenuItems = ["edit", "view", "arrange", "extras"];
+
     /**
      * Main
      */
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
-
     App.main(function(ui) {
       window.board = ui;
       window.onbeforeunload = null;

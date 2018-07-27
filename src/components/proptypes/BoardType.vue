@@ -29,7 +29,7 @@ export default {
               this.closeEditor()
             }}
           >
-            关闭
+            {this.$t('editor.close')}
           </div>
         </el-dialog>
       </div>

@@ -67,6 +67,7 @@ export default {
       <div class="comp-board">
         {(() => {
           if (self.isNew) {
+            self.getSvgData()
             if(self.properties.svg){
               return h(
                 'div',
@@ -150,20 +151,15 @@ export default {
         body.appendChild(graphEditorCss)
       }
     },
-    async initnew() {
-      this.svgData = await this.getSvgData()
-    },
     async getSvgData() {
       let response = await axios.get(this.properties.svg + '?bust' + Date.now())
-
-      return (response && response.data) || ''
+      this.svgData = response && response.data || ''
     }
   },
   mixins: [compBaseMixin],
   computed: {},
   created() {
     if (this.properties.xml && this.properties.svg) {
-      this.initnew()
       this.isNew = true
     } else {
       this.initold()
