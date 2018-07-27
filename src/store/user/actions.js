@@ -87,8 +87,9 @@ const actions = {
       await dispatch('gitlab/createFile', { path: filePath, content, refreshRepositoryTree: false }, { root: true })
     }
   },
-  async register({ dispatch }, { username, password }) {
-    let registerInfo = await keepwork.user.register({ username, password }, null, true)
+  async register({ dispatch }, payload) {
+    let registerInfo = await keepwork.user.register(payload, null, true)
+    let { username, password } = payload
     if (registerInfo.error.id === 0) {
       await dispatch('login', { username, password })
       let userinfo = _.get(registerInfo, 'data.userinfo')
