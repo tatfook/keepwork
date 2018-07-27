@@ -131,14 +131,6 @@ export default {
           if (registerInfo.error.id === 0) {
             this.registerLoading = false
             this.handleClose()
-            this.loading = true
-            let loginInfo = await this.userLogin(payload).catch(e => {
-              console.error(e)
-              this.loading = false
-            })
-            window.location.reload()
-            console.log('loginInfo', loginInfo)
-            this.loading = false
           } else {
             switch (registerInfo.error.message) {
               case '用户名已存在':

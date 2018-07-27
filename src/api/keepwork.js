@@ -118,6 +118,7 @@ payload: {
 */
 export const pages = {
   star: (...args) => post('pages/star', ...args),
+  insert: (...args) => post('pages/insert', ...args),
   getDetail: (...args) => post('pages/getDetail', ...args)
 }
 

@@ -10,8 +10,9 @@ import {
 import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
+  tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
-  token: (state, { getToken }) => getToken(),
+  token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
   profile: (state, { getToken }) => {
     let token = getToken()
     let { token: profileUserToken } = state.profile
