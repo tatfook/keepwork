@@ -126,22 +126,19 @@ export default {
           }
           this.registerLoading = true
           //第三方进行注册
-          console.log('thirdeInfo',payload)
           let thirdRegisterInfo = await this.thirdRegister(payload).catch(e => {
-            console.log('e',e)
+            this.showMessage('error', this.$t('common.registerFailed'))
             this.registerLoading = false
           })
-          console.log('thirdRegisterInfo',thirdRegisterInfo)
           //注册成功进行登录
           if(thirdRegisterInfo.error.id === 0){
             this.registerLoading = false
-            this.handleClose()
             this.loading = true
             let loginInfo = await this.userLogin(payload).catch(e => {
               console.error(e)
               this.loading = false
             })
-            console.log('loginInfo',loginInfo)
+            this.handleClose()
             this.loading = false
           }else{
             switch (thirdRegisterInfo.error.message) {

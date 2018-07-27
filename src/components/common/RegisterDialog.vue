@@ -129,7 +129,6 @@ export default {
             console.log('e', e)
             this.registerLoading = false
           })
-          console.log('registerInfo', registerInfo)
           //注册成功进行登录
           if (registerInfo.error.id === 0) {
             this.registerLoading = false
