@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       gConst,
-      qiniuUploadSubscriptions: {}
+      qiniuUploadSubscriptions: {},
+      preClickedMod: ''
     }
   },
   components: {
@@ -59,11 +60,15 @@ export default {
         this.$nextTick(() => {
           this.editor.setCursor(CodeMirror.Pos(newCursor.line, newCursor.ch))
         })
+    },
+    activePage(page) {
+      this.preClickedMod = ''
     }
   },
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
+      activePage: 'activePage',
       code: 'code',
       modList: 'modList',
       activeMod: 'activeMod',
@@ -165,6 +170,11 @@ export default {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
           if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
+          if (!this.preClickedMod || this.preClickedMod === 'Markdown') {
+            let fileManagerButton = document.getElementById('file-manager-button')
+            mod.cmd === 'Markdown' && fileManagerButton && fileManagerButton.click()
+          }
+          this.preClickedMod = mod.cmd
         }
       })
     },
