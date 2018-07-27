@@ -55,8 +55,8 @@ const actions = {
     Cookies.remove('token', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
   },
-  async register({ commit }, { username, password }) {
-    let registerInfo = await keepwork.user.register({ username, password }, null, true)
+  async register({ commit }, payload) {
+    let registerInfo = await keepwork.user.register(payload, null, true)
     return registerInfo
   },
   async thirdRegister({ commit }, payload) {

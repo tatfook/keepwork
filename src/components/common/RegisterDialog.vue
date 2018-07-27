@@ -61,6 +61,7 @@ export default {
       sendCodeDisabled: false,
       nowOrigin: document.location.origin,
       count: 60,
+      smsId: '',
       ruleForm: {
         username: '',
         password: '',
@@ -118,7 +119,9 @@ export default {
             password: this.ruleForm.password,
             bind: true,
             setRealNameInfo: true,
-            cellphone: this.ruleForm.phoneNumber
+            cellphone: this.ruleForm.phoneNumber,
+            smsCode: this.authCode,
+            smsId: this.smsId
           }
           this.registerLoading = true
           //进行注册
@@ -167,7 +170,7 @@ export default {
         console.error(e)
       })
       this.sendCodeLoading = false
-      let smsId = _.get(info, 'data.smsId')
+      this.smsId = _.get(info, 'data.smsId')
       let message = info.error && info.error.message
       if (message === 'success') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
