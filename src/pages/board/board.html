@@ -289,7 +289,7 @@
     let boardRoot = '/static/board/src/main/webapp'
     var t0 = new Date();
 
-    mxBasePath = boardRoot;
+    mxBasePath = boardRoot + '/mxgraph';
     RESOURCES_PATH = boardRoot + '/resources';
     IMAGE_PATH = boardRoot + '/images';
 
@@ -368,7 +368,7 @@
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
     App.main(function(ui) {
       window.board = ui;
-      window.onbeforeunload = null;
+      // window.onbeforeunload = null;
       ui.keepwork.read();
     });
   </script>

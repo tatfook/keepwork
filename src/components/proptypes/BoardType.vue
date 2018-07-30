@@ -128,6 +128,8 @@ export default {
           this.updateValue(keepworkSaveUrl.xmlUrl, 'xml')
           this.updateValue(keepworkSaveUrl.svgUrl, 'svg')
         }
+
+        board.contentWindow.keepworkSaveUrl = {}
       }
     }
   },
