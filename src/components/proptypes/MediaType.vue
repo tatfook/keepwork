@@ -15,6 +15,7 @@ export default {
   props: {
     originValue: String
   },
+  mixins: [protypesBaseMixin],
   data() {
     return {
       isSkyDriveManagerDialogShow: false
