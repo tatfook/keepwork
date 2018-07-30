@@ -20,10 +20,10 @@ export default [
       theme: {
         pagePath: {
           nameFontSize: 'font_3',
-          nameFontColor: 'color_6',
-          labelFontColor: 'color_3',
+          nameFontColor: 'nameFontColor',
+          labelFontColor: 'labelFontColor',
           commonSize: 'font_5',
-          pageFontColor: 'color_8',
+          pageFontColor: 'pageFontColor',
 
           nameMobileSize: 'font_7',
           commonMobileSize: 'font_8'

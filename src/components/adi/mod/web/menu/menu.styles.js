@@ -13,13 +13,13 @@ export default [
     theme: {
       root: [],
       menu: ['mod-full-width', 'font_3'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColor']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColor',
+          fontColor: 'fontsColor'
         }
       },
       config: {
@@ -44,13 +44,13 @@ export default [
     theme: {
       root: [],
       menu: ['mod-full-width', 'font_3'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColor']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColor',
+          fontColor: 'fontsColor'
         }
       },
       config: {
@@ -79,13 +79,13 @@ export default [
     theme: {
       root: [],
       menu: ['mod-full-width', 'font_3'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColor']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColor',
+          fontColor: 'fontsColor'
         }
       },
       config: {
@@ -119,7 +119,7 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bg_color_4',
-          fontColor: 'color_0'
+          fontColor: 'fontsColor'
         }
       },
       config: {
@@ -151,7 +151,7 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bg_color_4',
-          fontColor: 'color_0'
+          fontColor: 'fontsColor'
         }
       },
       config: {
@@ -186,7 +186,7 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bg_color_4',
-          fontColor: 'color_0'
+          fontColor: 'fontsColor'
         }
       },
       config: {

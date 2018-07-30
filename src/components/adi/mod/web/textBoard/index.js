@@ -30,6 +30,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
 import styles from './textBoard.styles'
 import templates from './textBoard.templates'
+import themeData from './textBoard.theme'
 
 const name = 'ModTextBoard'
 
@@ -42,4 +43,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }

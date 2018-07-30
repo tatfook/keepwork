@@ -61,12 +61,12 @@ export default [
     },
     theme: {
       root: [],
-      desc: ['font_9', 'color_7']
+      desc: ['font_9', 'desc']
     },
     options: {
       theme: {
         pic: {
-          svgFillColor: 'color_4'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -128,12 +128,12 @@ export default [
     },
     theme: {
       root: [],
-      desc: ['font_9', 'color_7']
+      desc: ['font_9', 'desc']
     },
     options: {
       theme: {
         pic: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'desc'
         }
       },
       config: {

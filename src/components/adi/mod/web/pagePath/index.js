@@ -26,6 +26,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
 import styles from './pagePath.styles'
 import templates from './pagePath.templates'
+import themeData from './pagePath.theme'
 
 const name = 'ModPagePath'
 
@@ -35,4 +36,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }

@@ -88,11 +88,31 @@ export default {
     jssClass(name) {
       return this.sheet.classes[name]
     },
+    convertColorStyle(name) {
+      let themeData = this.conf.themeData
+      let gThemeName = this.themeConf.name
+      let gThemeColorId = this.themeConf.colorID
+      let cName = ''
+      if (themeData && gThemeName &&
+        themeData[gThemeName] && themeData[gThemeName].colors &&
+        (gThemeColorId === 0 || gThemeColorId) && name) {
+        cName = themeData[gThemeName].colors[gThemeColorId][name]
+        return cName
+      }
+    },
     themeClass(name) {
-      if (this.theme) return this.theme.sheet.classes[name]
+      if (this.convertColorStyle(name)) {
+        return this.theme.sheet.classes[this.convertColorStyle(name)]
+      } else {
+        return this.theme.sheet.classes[name]
+      }
     },
     themeData(name) {
-      if (this.theme) return this.theme.data[name]
+      if (this.convertColorStyle(name)) {
+        return this.theme.data[this.convertColorStyle(name)]
+      } else {
+        return this.theme.data[name]
+      }
     },
     compWrapperClass(name) {
       let classes = []
@@ -106,7 +126,10 @@ export default {
       let classes = []
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
-        this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
+        this.style.theme[name].forEach(el => {
+          classes.push(this.themeClass(el))
+        }
+        )
       }
       return _.flatten(classes)
     },
@@ -117,7 +140,6 @@ export default {
     generateOptionsStyle(name) {
       let self = this
       let options = {}
-
       if (self.style.options) {
         if (self.style.options.config && self.style.options.config[name]) {
           options = _.cloneDeep(self.style.options.config[name])
@@ -150,7 +172,6 @@ export default {
           })
         }
       }
-
       return options
     },
     compWrapperOptions(name) {
@@ -163,7 +184,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeProperty: 'activeProperty'
+      activeProperty: 'activeProperty',
+      activePageInfo: 'activePageInfo',
+      themeConf: 'themeConf',
+      userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct

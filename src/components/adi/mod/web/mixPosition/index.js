@@ -2,6 +2,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import styles from './mixPosition.styles'
 import templates from './mixPosition.templates'
 import mod from './mixPosition'
+import themeData from './mixPosition.theme'
 
 const name = 'ModMixPosition'
 
@@ -21,5 +22,6 @@ export default {
   components,
   properties,
   styles,
-  templates
+  templates,
+  themeData
 }

@@ -105,12 +105,15 @@ const actions = {
     let siteSetting = initSiteState()
     const sitePath = getFileSitePathByPath(path)
     await dispatch('user/getSiteLayoutConfig', { path: sitePath, editorMode: false })
+    await dispatch('user/getSiteThemeConfig', { path: sitePath, editorMode: false })
     let {
       'user/siteLayoutConfigBySitePath': siteLayoutConfigBySitePath,
+      'user/siteThemeConfigBySitePath': siteThemeConfigBySitePath,
       'user/layoutContentFilePathsByPath': layoutContentFilePathsByPath,
       'gitlab/getFileByPath': gitlabGetFileByPath
     } = rootGetters
     siteSetting.siteLayoutConfig = siteLayoutConfigBySitePath(sitePath)
+    siteSetting.theme = siteThemeConfigBySitePath(sitePath)
     let layoutContentFilePaths = layoutContentFilePathsByPath(path)
 
     await Promise.all(layoutContentFilePaths.map(async layoutContentFilePath => {

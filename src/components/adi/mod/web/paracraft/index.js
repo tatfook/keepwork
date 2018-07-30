@@ -2,6 +2,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import styles from './paracraft.styles'
 import templates from './paracraft.templates'
 import mod from './Paracraft'
+import themeData from './paracraft.theme'
 
 const name = 'ModParacraft'
 
@@ -26,4 +27,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }

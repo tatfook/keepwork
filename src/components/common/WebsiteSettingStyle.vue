@@ -3,23 +3,23 @@
     <el-row class="website-setting-style" type="flex">
       <el-col class="website-setting-font" :span="10">
         <header>
-          <h1>1.字体</h1>
+          <h1>1.{{$t('setting.Font')}}</h1>
         </header>
         <main>
           <el-row class="website-setting-font-family" type="flex" justify="center">
             <el-col :span="22">
-              <span class="website-setting-select-title">字体:</span>
-              <el-select class="website-setting-select" v-model="fontFamily" size="small" placeholder="请选择">
+              <span class="website-setting-select-title">{{$t('setting.font')}}</span>
+              <el-select class="website-setting-select" v-model="fontFamily" size="small" :placeholder="$t('setting.pleaseSelect')">
                 <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-              <div class="tips">注意: 所选字体如浏览器不支持，会显示默认字体</div>
+              <div class="tips">{{$t('setting.tips')}}</div>
             </el-col>
           </el-row>
           <el-row class="website-setting-font-size" type="flex" justify="center">
             <el-col :span="22">
-              <span class="website-setting-select-title">字号:</span>
-              <el-select class="website-setting-select" v-model="fontId" size="small" placeholder="请选择">
+              <span class="website-setting-select-title">{{$t('setting.fontSize')}}</span>
+              <el-select class="website-setting-select" v-model="fontID" size="small" :placeholder="$t('setting.pleaseSelect')">
                 <el-option v-for="item in fontSize" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -27,17 +27,17 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <p v-for="(size, index) in fontSizeList[fontId]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
+              <p v-for="(size, index) in fontSizeList[fontID]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
       </el-col>
       <el-col :span="11" class="website-setting-color">
         <header>
-          <h1>2.颜色</h1>
+          <h1>2.{{$t('setting.color')}}</h1>
         </header>
         <main>
-          <website-setting-sytle-color-preview :colorsList="colors" :colorsId.sync="colorsId" @handleSelectColor="handleSelectColor" />
+          <website-setting-sytle-color-preview :colorsList="colors" :colorID.sync="colorID" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
       <el-col :span="3" class="website-setting-btns">
@@ -73,37 +73,39 @@ export default {
     async handleSave() {
       this.loading = true
       let config = {
-        fontId: this.fontId,
+        fontID: this.fontID,
         fontFamily: this.fontFamily,
-        colorsId: this.colorsId
+        colorID: this.colorID,
+        name: 'classic'
       }
       await this.userSaveSiteThemeConfig({ sitePath: this.sitePath, config })
         .then(() => {
           this.$message({
-            message: '保存成功',
+            message: this.$t('common.saveSuccess'),
             type: 'success'
           })
         })
         .catch(() => {
-          this.$message.error('保存失败')
+          this.$message.error(this.$t('common.saveFail'))
         })
       this.loading = false
+      this.$emit('close')
     },
     handleClose() {
       this.$emit('close')
     },
     handleSelectColor(index) {
-      if (this.colorsId !== index) {
-        this.colorsId = index
+      if (this.colorID !== index) {
+        this.colorID = index
       }
     }
   },
   watch: {
     userSiteThemeConfigClone(config) {
-      let { fontId = 0, colorsId = 0, fontFamily = 'inherit' } = config || {}
-      this.fontId = fontId
+      let { fontID = 0, colorID = 0, fontFamily = 'inherit' } = config || {}
+      this.fontID = fontID
       this.fontFamily = fontFamily
-      this.colorsId = colorsId
+      this.colorID = colorID
     }
   },
   computed: {
@@ -134,30 +136,22 @@ export default {
   data() {
     return {
       loading: false,
-      colorsId: 0,
-      fontId: 0,
+      colorID: 0,
+      fontID: 0,
       fontFamily: 'inherit',
-      fontSizeName: ['小号', '中号', '大号'],
+      fontSizeName: [this.$t('setting.small'), this.$t('setting.medium'), this.$t('setting.large')],
       fontFamilyList: [
         {
           value: 'inherit',
-          label: '系统默认'
+          label: this.$t('setting.system')
         },
         {
           value: 'Microsoft YaHei',
-          label: '微软雅黑'
+          label: this.$t('setting.yahei')
         },
         {
           value: 'SimHei',
-          label: '黑体'
-        },
-        {
-          value: 'STXihei',
-          label: '华文细黑'
-        },
-        {
-          value: 'SimSun',
-          label: '宋体'
+          label: this.$t('setting.simhei')
         }
       ]
     }

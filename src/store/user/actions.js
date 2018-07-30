@@ -315,7 +315,7 @@ const actions = {
         commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
       })
       .catch(async () => {
-        config = ThemeHelper.defaultTheme()
+        config = ThemeHelper.defaultTheme
         commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
       })
   },

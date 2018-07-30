@@ -41,9 +41,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_2', 'color_4'],
-      subtitle: ['font_4', 'color_4'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_2', 'title'],
+      subtitle: ['font_4', 'subColor'],
+      paragraph: ['font_9', 'paragraph']
     },
     options: {
       theme: {},
@@ -77,9 +77,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_2', 'color_4'],
-      subtitle: ['font_4', 'color_4'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_2', 'title'],
+      subtitle: ['font_4', 'subColor'],
+      paragraph: ['font_9', 'paragraph']
     },
     options: {
       theme: {},
@@ -126,9 +126,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupARow: ['mod-full-width'],
-      title: ['font_2', 'color_4'],
-      subtitle: ['font_4', 'color_4'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_2', 'title'],
+      subtitle: ['font_4', 'subColor'],
+      paragraph: ['font_9', 'paragraph']
     },
     options: {
       theme: {},
@@ -175,9 +175,9 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupARow: ['mod-full-width'],
-      title: ['font_2', 'color_4'],
-      subtitle: ['font_4', 'color_4'],
-      paragraph: ['font_9', 'color_4']
+      title: ['font_2', 'title'],
+      subtitle: ['font_4', 'subColor'],
+      paragraph: ['font_9', 'paragraph']
     },
     options: {
       theme: {},

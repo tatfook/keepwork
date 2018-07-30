@@ -24,6 +24,7 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
 import styles from './text.styles'
 import templates from './text.templates'
+import themeData from './text.theme'
 
 const name = 'ModText'
 
@@ -34,4 +35,4 @@ const components = {
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }
