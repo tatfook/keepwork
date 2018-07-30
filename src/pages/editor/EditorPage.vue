@@ -126,8 +126,7 @@ body {
 }
 .el-main {
   height: 100%;
-  padding: 17px 0;
-  background-color: #cdd4dc;
+  padding: 0;
 }
 #editor {
   background: white;
