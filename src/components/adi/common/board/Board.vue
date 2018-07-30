@@ -66,8 +66,9 @@ export default {
     return (
       <div class="comp-board">
         {(() => {
-          if (self.isNew) {
+          if (self.isNew()) {
             self.getSvgData()
+
             if(self.properties.svg){
               return h(
                 'div',
@@ -124,12 +125,18 @@ export default {
   },
   data() {
     return {
-      isNew: false,
       svg: '',
       svgData: ''
     }
   },
   methods: {
+    isNew() {
+      if (this.properties.xml && this.properties.svg) {
+        return true
+      } else {
+        return false
+      }
+    },
     initold() {
       if (!window.mxClient) {
         let boardScript = document.createElement('script')
@@ -159,11 +166,8 @@ export default {
   mixins: [compBaseMixin],
   computed: {},
   created() {
-    if (this.properties.xml && this.properties.svg) {
-      this.isNew = true
-    } else {
+    if(!this.isNew()) {
       this.initold()
-      this.isNew = false
     }
   }
 }
