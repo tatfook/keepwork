@@ -6,6 +6,7 @@ import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
   name: 'InputType',
+  mixins: [protypesBaseMixin],
   props: {
     originValue: String
   },
