@@ -22,8 +22,7 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
-      <div class="bigfile-image"
-           v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
+      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
         <img :src="actualUrl" />
       </div>
       <div v-if="getType === handleExt['mp4']">
@@ -32,7 +31,8 @@
         </video>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src="actualUrl"></iframe>
+        <!-- <iframe :src="actualUrl"></iframe> -->
+        <iframe :src='"/static/pdf/web/viewer.html?file=" + encodeURIComponent(actualUrl)'></iframe>
       </div>
     </div>
   </div>
@@ -84,11 +84,12 @@ export default {
         sql: 'icon-sql'
       },
       handleExt: {
-        mp4:'mp4',
-        jpg:'jpg',
-        png:'png',
-        // pdf:'pdf',
-        gif:'gif'
+        mp4: 'mp4',
+        jpg: 'jpg',
+        png: 'png',
+        gif: 'gif',
+        pdf: 'pdf',
+        gif: 'gif'
       },
       otherExt: 'other'
     }
@@ -108,7 +109,7 @@ export default {
         a.target = '_blank'
         a.style.display = 'none'
         a.href = `${downloadUrl};attname=${filename}`
-        a.download = filename || ""
+        a.download = filename || ''
         document.body.appendChild(a)
         a.click()
 
@@ -155,7 +156,7 @@ export default {
     }),
     getIconClass() {
       if (this.properties.ext) {
-        if(this.ext[this.properties.ext]) {
+        if (this.ext[this.properties.ext]) {
           return this.ext[this.properties.ext]
         } else {
           return 'icon-ukown_file'
@@ -167,7 +168,7 @@ export default {
     getType() {
       let ext = this.properties.ext || ''
 
-      if(ext) {
+      if (ext) {
         let beHandle = false
 
         _.forEach(this.handleExt, item => {
@@ -197,12 +198,14 @@ export default {
 
       let result
 
-      await axios.get(src.replace("/raw#", "/rawurl#")).then((response) => {
-        result = response;
-      })
-      .catch((error) => {
-        this.actualUrl = src
-      })
+      await axios
+        .get(src.replace('/raw#', '/rawurl#'))
+        .then(response => {
+          result = response
+        })
+        .catch(error => {
+          this.actualUrl = src
+        })
 
       if (result && result.data && result.data.data) {
         this.actualUrl = result.data.data
@@ -232,6 +235,9 @@ export default {
       width: 100%;
       height: 1000px;
       border: none;
+      @media only screen and (max-width: 767px) {
+        height: 600px;
+      }
     }
   }
 
@@ -251,7 +257,8 @@ export default {
     align-items: center;
     justify-content: center;
 
-    .filename, .filesize{
+    .filename,
+    .filesize {
       width: 150px;
       overflow: hidden;
       white-space: nowrap;
@@ -259,7 +266,6 @@ export default {
     }
 
     .file-type-icon {
-
       .iconfont {
         margin-right: 16px;
         font-size: 45px;
