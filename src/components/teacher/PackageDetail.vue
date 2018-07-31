@@ -1,27 +1,26 @@
 <template>
   <div class="package-detail">
-    <img class="package-detail-cover" src="http://oy41jt2uj.bkt.clouddn.com/73e5b270-914e-11e8-b142-e9035cf67219.jpg?e=1533006779&token=LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:FvRUBTcr_ADDbD6ObVgJLP5NVRs=" alt="">
+    <img class="package-detail-cover" :src="packageCoverUrl" alt="">
     <div class="package-detail-text-desc">
-      <h1>Computer Science</h1>
+      <h1>{{packageDetail.title}}</h1>
       <div class="package-detail-content">
         <div class="package-detail-content-item">
           <span class="package-detail-label">包含:</span>
-          <span class="package-detail-lessons-count">10</span>
+          <span class="package-detail-lessons-count">{{packageLessonsCount}}</span>
           <span class="package-detail-info">门课程</span>
         </div>
         <div class="package-detail-content-item">
           <span class="package-detail-label">年龄:</span>
-          <span class="package-detail-info">全年龄段</span>
+          <span class="package-detail-info">{{packageDetail.ages_min}}-{{packageDetail.ages_max}}</span>
         </div>
       </div>
       <div class="package-detail-skills">
         <div class="package-detail-label">技能:</div>
-        <el-scrollbar class="package-detail-skills-detail">1. Learning installaton <br>2. Learning movement <br>3. learning edit mode <br>4. learning Animation producion process <br>4. learning Animation producion process
-        </el-scrollbar>
+        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.output}}</el-scrollbar>
       </div>
       <div class="package-detail-operations">
         <div class="package-detail-operate-item">
-          <span class="package-detail-price-count">8</span>
+          <span class="package-detail-price-count">{{packageDetail.cost}}</span>
           <span class="package-detail-label">知识币</span>
         </div>
         <el-button type="primary" class="package-detail-operate-item" @click="addPackage">增加</el-button>
@@ -30,18 +29,26 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'PackageDetail',
-  async mounted() {
-    await this.getPackageDetail({
+  props: {
+    packageDetail: Object
+  },
+  computed: {
+    packageLessonsCount() {
+      return _.get(this.packageDetail, 'lessons', []).length
+    },
+    packageCoverUrl(){
+      return _.get(this.packageDetail, 'extra.coverUrl', '')
+    }
+  },
+  data() {
+    return {
       packageId: '10'
-    })
+    }
   },
   methods: {
-    ...mapActions({
-      getPackageDetail: 'lesson/student/getPackageDetail'
-    }),
     addPackage() {
       this.$confirm('学习本课程包的课程，将花费8知识币。', '提示', {
         confirmButtonText: '确定',

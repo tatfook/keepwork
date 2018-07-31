@@ -2,16 +2,15 @@
   <div class="package-catalogue">
     <div class="package-catalogue-title">目录</div>
     <div class="package-catalogue-box">
-      <div class="package-catalogue-item" @click="toPackageDetail">
-        <img class="package-catalogue-item-cover" src="http://oy41jt2uj.bkt.clouddn.com/73e5b270-914e-11e8-b142-e9035cf67219.jpg?e=1533006779&token=LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:FvRUBTcr_ADDbD6ObVgJLP5NVRs=" alt="">
+      <div class="package-catalogue-item" v-for="(lesson, index) in lessonsList" :key='index' @click="toPackageDetail">
+        <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="">
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title">
-            <span>lesson title lesson title lesson titlenpm</span>
+            <span>{{lesson.lessonName}}</span>
           </div>
           <div class="package-catalogue-item-info">课程目标:</div>
           <div class="package-catalogue-item-goals">
-            <p class="package-catalogue-item-goals-item">lessons goals 1</p>
-            <p class="package-catalogue-item-goals-item">lessons goals 2</p>
+            <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">持续时间：
             <span>45min</span>
@@ -24,6 +23,14 @@
 <script>
 export default {
   name: 'PackageCatalogue',
+  props: {
+    packageDetail: Object
+  },
+  computed: {
+    lessonsList() {
+      return _.get(this.packageDetail, 'lessons', [])
+    }
+  },
   methods: {
     toPackageDetail() {
       this.$alert('请先添加课程包', '提示')
