@@ -7,5 +7,6 @@ export default {
   CodeReadLine: 'input',
   CodeWriteLine: 'input',
   Commands: 'input',
-  animations: 'animations'
+  animations: 'animations',
+  publish: 'publish'
 }

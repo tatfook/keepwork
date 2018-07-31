@@ -22,6 +22,9 @@ import AdiTab from './tab/Tab'
 import AdiCategoryList from './categoryList/categoryList'
 import AdiPageSwitching from './pageSwitching/PageSwitching'
 
+import AdiLesson from './lesson/Lesson'
+import AdiQuiz from './quiz/Quiz'
+
 export default {
   AdiMarkdown,
   AdiIFrame,
@@ -45,5 +48,7 @@ export default {
   AdiPagePath,
   AdiTab,
   AdiCategoryList,
-  AdiPageSwitching
+  AdiPageSwitching,
+  AdiLesson,
+  AdiQuiz
 }

@@ -303,7 +303,14 @@
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
-    "iframe": "iframe"
+    "iframe": "iframe",
+
+    "lesson": "课程",
+    "quiz": "问题",
+    "teachers": "教师可见",
+    "lessonShare": "分享课程",
+    "package": "课程包",
+    "lessonPackage": "课程包"
   },
   "adi": {
     "markdown": {
@@ -433,7 +440,21 @@
     "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表",
-    "pageSwitching": "页面切换"
+    "pageSwitching": "页面切换",
+
+    "lesson": "课程",
+    "lessonGoals": "课程目标:",
+    "quiz": "问题",
+    "teachers": "教师可见",
+    "lessonShare": "分享课程",
+    "lessonPackage": "课程包",
+    "overview": "概览",
+    "references": "参考",
+    "studentsPerformance": "学生成绩",
+    "summary": "概要",
+    "playParacraft": "玩 Paracraft",
+    "lessonPreview": "预览",
+    "catalogue": "目录："
   },
   "field": {
     "fileId": "字段",

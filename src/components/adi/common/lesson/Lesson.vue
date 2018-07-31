@@ -62,7 +62,8 @@ export default {
       btnInfo: 'Begin the Class',
       btnTip: '(Click here to begin the class)',
       references: 'There are no references.',
-      student: 'Teaching is not started yet.There is no record of students\' performance.',
+      student:
+        "Teaching is not started yet.There is no record of students' performance.",
       summary: 'Teaching is not started yet. There is no summary here.'
     }
   },
@@ -77,8 +78,7 @@ export default {
   },
   name: 'AdiLesson',
   mixins: [compBaseMixin],
-  async mounted() {
-  },
+  async mounted() {},
   methods: {
     loadCover() {
       return this.generateStyleString({
@@ -90,83 +90,26 @@ export default {
         'border-radius': '8px'
       })
     },
-    async initView() {
-      console.warn('initView-------->')
-      this.device = this.$route.query.device
-      if (this.device == 'pc' || this.device == 'pad') {
-        return this.hideHeaderAndLesson()
-      }
-      if (this.device == 'print') {
-        this.hideHeaderAndLesson()
-        let iframeTimer = setInterval(() => {
-          if (document.readyState == 'complete') {
-            var height = this.calcPageHeight(document)
-            var container = parent.document.getElementById('keepworkContainer')
-            container.style.height = height + 'px'
-            container.setAttribute('height', height)
-            container.setAttribute('ready', 'ready')
-            clearInterval(iframeTimer)
-          }
-        }, 500)
-        return
-      }
-
-      let lessonMod = this.getMod('ModLesson')
-      if (lessonMod && lessonMod.parentNode) {
-      }
-    },
-    getMods(name) {
-      return document.querySelectorAll(`div[data-mod=${name}]`)
-    },
-    getMod(name) {
-      return document.querySelector(`div[data-mod=${name}]`)
-    },
-    createMod(name, html) {},
-    hideMod(name, isHide = true) {
-      let mods = document.querySelectorAll(`div[data-mod=${name}]`)
-
-      mods &&
-        mods.forEach(
-          ele =>
-            isHide
-              ? ele.setAttribute('style', 'display: none')
-              : ele.setAttribute('style', 'display: block')
-        )
-    },
-    hideHeaderAndLesson() {
-      this.hideHeader()
-      this.hideMod('ModLesson')
-    },
-    hideHeader() {
-      // TODO: 应该优化下，避免dom操作
-      document
-        .querySelector('.index-page-header')
-        .setAttribute('hidden', 'hidden')
-      document.querySelector('.tool-header').setAttribute('hidden', 'hidden')
-    },
-    autoPageHeight(doc) {
-      let cHeight = Math.max(
-        doc.body.clientHeight,
-        doc.documentElement.clientHeight
-      )
-      let sHeight = Math.max(
-        doc.body.scrollHeight,
-        doc.documentElement.scrollHeight
-      )
-      let height = Math.max(cHeight, sHeight)
-      return height
-    },
     tabClick(tab, event) {
-      console.log(tab, event)
+      let modQuizs = document.querySelectorAll('div[data-mod="ModQuiz"]')
+      const toggleEles = (eles, flag = false) =>
+        eles.forEach(ele => ele.classList[flag ? 'add' : 'remove']('hide'))
+      modQuizs && toggleEles(modQuizs, tab.name !== 'first')
     },
     previewClick() {
       window.open(`${this.activePageUrl}?device=pc`, '_blank')
+    },
+    openAnimations() {
+      this.dialogVisible = true
     }
   }
 }
 </script>
 
 <style>
+.hide {
+  display: none;
+}
 .tab-fake-label {
   display: inline-block;
   padding: 0 20px;

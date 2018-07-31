@@ -8,6 +8,8 @@ import switchButton from './SwitchButtonType'
 import gallery from './GalleryType'
 import filter from './FilterType'
 import media from './MediaType'
+import animations from './AnimationsType'
+import publish from './PublishLesson'
 
 export default {
   input,
@@ -19,5 +21,7 @@ export default {
   switchButton,
   gallery,
   filter,
-  media
+  media,
+  animations,
+  publish
 }

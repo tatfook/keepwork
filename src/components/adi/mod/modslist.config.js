@@ -13,6 +13,9 @@ import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
 
+import ModLesson from './web/lesson'
+import ModQuiz from './web/quiz'
+
 var modsList = [
   {
     id: 1,
@@ -148,6 +151,22 @@ var modsList = [
         id: '7-2',
         label: 'modList.vipRead',
         mods: [ModVipRead]
+      }
+    ]
+  },
+  {
+    id: '9',
+    label: 'modList.lesson',
+    children: [
+      {
+        id: '9-1',
+        label: 'modList.lesson',
+        mods: [ModLesson]
+      },
+      {
+        id: '9-2',
+        label: 'modList.quiz',
+        mods: [ModQuiz]
       }
     ]
   }

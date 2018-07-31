@@ -314,7 +314,14 @@
     "categoryList": "Category list",
     "tab": "Tab",
     "pageSwitching": "Page switching",
-    "iframe": "iframe"
+    "iframe": "iframe",
+
+    "lesson": "Lesson",
+    "quiz": "Quiz",
+    "teachers": "Teachers",
+    "lessonShare": "LessonShare",
+    "package": "Package",
+    "lessonPackage": "Lesson Package"
   },
   "adi": {
     "markdown": {
@@ -444,7 +451,21 @@
     "pagePath": "Page path",
     "tab": "Tab",
     "categoryList": "Category list",
-    "pageSwitching": "Page switching"
+    "pageSwitching": "Page switching",
+
+    "lesson": "Lesson",
+    "lessonGoals": "Lesson Goals:",
+    "quiz":"Quiz",
+    "teachers":"Teachers",
+    "lessonShare":"LessonShare",
+    "lessonPackage":"Package",
+    "overview": "Overview",
+    "references": "References",
+    "studentsPerformance": "Students' Performance",
+    "summary": "Summary",
+    "playParacraft": "Play Paracraft",
+    "lessonPreview": "Preview",
+    "catalogue": "Catalogue:"
   },
   "field": {
     "fileId": "file Id",
