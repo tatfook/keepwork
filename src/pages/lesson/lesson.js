@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
-
+import 'element-ui/lib/theme-chalk/index.css'
 import LessonPage from './LessonPage'
 import router from './lesson.router'
 import { userModule, lessonModule, createPersistedState } from '@/store'

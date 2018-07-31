@@ -1,8 +1,7 @@
 <template>
-  <el-container id="lesson-page">
-    <h1>LessonPage.vue</h1>
+  <el-main id="lesson-page">
     <router-view/>
-  </el-container>
+  </el-main>
 </template>
 
 <script>

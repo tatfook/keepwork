@@ -48,11 +48,16 @@ export const _delete = (...args) => {
   )
 }
 
+export const admin = {
+  packages: (...args) => get('admin/packages', ...args)
+}
+
 export const packages = {
 }
 
 export const lesson = {
-  packages
+  packages,
+  admin
 }
 
 export default lesson
