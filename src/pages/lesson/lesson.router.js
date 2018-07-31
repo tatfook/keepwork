@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const Lesson = () => import('@/components/lesson/Lesson')
-const Maker = () => import('@/components/lesson/Maker')
+const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
 
@@ -15,9 +15,9 @@ export default new Router({
       component: Lesson
     },
     {
-      path: '/maker',
-      name: 'Maker',
-      component: Maker
+      path: '/center',
+      name: 'Center',
+      component: Center
     },
     {
       path: '/teacher',

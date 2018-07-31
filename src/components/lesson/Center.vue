@@ -1,5 +1,5 @@
 <template>
-  <h1>Lesson Maker :D</h1>
+  <h1>Lesson Center :D</h1>
 </template>
 
 <script>

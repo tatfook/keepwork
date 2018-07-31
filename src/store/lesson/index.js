@@ -1,4 +1,4 @@
-import maker from './maker'
+import center from './center'
 import student from './student'
 import teacher from './teacher'
 
@@ -10,7 +10,7 @@ export default {
   mutations: {},
 
   modules: {
-    maker,
+    center,
     student,
     teacher
   }
