@@ -21,6 +21,7 @@ const ModButton = () => import('./web/button')
 const ModPagePath = () => import('./web/pagePath')
 const ModCategoryList = () => import('./web/categoryList')
 const ModPageSwitching = () => import('./web/pageSwitching')
+const ModLesson = () => import('./web/lesson')
 
 export const modList = {
   ModMarkdown,
@@ -45,7 +46,8 @@ export const modList = {
   ModButton,
   ModPagePath,
   ModCategoryList,
-  ModPageSwitching
+  ModPageSwitching,
+  ModLesson
 }
 
 export const load = async modName => {
