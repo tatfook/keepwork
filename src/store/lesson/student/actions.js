@@ -7,10 +7,9 @@ let {
 
 const actions = {
   async getPackageDetail({ commit }, { packageId }) {
-    let detail = await lesson.admin.packages({
+    let detail = await lesson.admin.packageDetail({
       id: packageId
     })
-    console.log(detail)
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   }
 }

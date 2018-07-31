@@ -1,5 +1,7 @@
+import _ from 'lodash'
+
 const getters = {
-  packageDetail: (state) => state.packageDetail
+  studentPackageDetail: (state) => ({ packageId }) => _.get(state.packagesDetail, packageId)
 }
 
 export default getters
