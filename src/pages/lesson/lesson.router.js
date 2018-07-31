@@ -4,6 +4,7 @@ const Lesson = () => import('@/components/lesson/Lesson')
 const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
+const PackageDetailPage = () => import('@/components/teacher/PackageDetailPage')
 
 Vue.use(Router)
 
@@ -22,7 +23,14 @@ export default new Router({
     {
       path: '/teacher',
       name: 'Teacher',
-      component: Teacher
+      component: Teacher,
+      children: [
+        {
+          path: 'package',
+          name: 'Package',
+          component: PackageDetailPage
+        }
+      ]
     },
     {
       path: '/student',

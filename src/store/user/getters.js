@@ -211,6 +211,7 @@ const getters = {
     rootState,
     rootGetters
   ) => path => {
+    if (!path) return []
     let fullPath = getFileFullPathByPath(path)
     return comments[fullPath]
   },
