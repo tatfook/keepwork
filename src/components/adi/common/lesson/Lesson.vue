@@ -55,12 +55,12 @@ import PreviewData from './PreviewData'
 import { mapGetters } from 'vuex'
 import { lessonAPI } from '@/api'
 export default {
+  name: 'AdiLesson',
+  mixins: [compBaseMixin],
   data() {
     return {
       activeTab: 'first',
       dialogVisible: false,
-      btnInfo: 'Begin the Class',
-      btnTip: '(Click here to begin the class)',
       references: 'There are no references.',
       student:
         "Teaching is not started yet.There is no record of students' performance.",
@@ -76,9 +76,6 @@ export default {
   components: {
     'preview-data': PreviewData
   },
-  name: 'AdiLesson',
-  mixins: [compBaseMixin],
-  async mounted() {},
   methods: {
     loadCover() {
       return this.generateStyleString({
