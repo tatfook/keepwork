@@ -10,6 +10,7 @@ import filter from './FilterType'
 import media from './MediaType'
 import animations from './AnimationsType'
 import publish from './PublishLesson'
+import quiz from './quizType'
 
 export default {
   input,
@@ -23,5 +24,6 @@ export default {
   filter,
   media,
   animations,
-  publish
+  publish,
+  quiz
 }
