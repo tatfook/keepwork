@@ -2,34 +2,34 @@
   <div class="package-detail">
     <img class="package-detail-cover" :src="packageCoverUrl" alt="">
     <div class="package-detail-text-desc">
-      <h1>{{packageDetail.title}}</h1>
+      <h1>{{packageDetail.packageName}}</h1>
       <div class="package-detail-content">
         <div class="package-detail-content-item">
-          <span class="package-detail-label">包含:</span>
+          <span class="package-detail-label">{{$t('lesson.include')}}:</span>
           <span class="package-detail-lessons-count">{{packageLessonsCount}}</span>
-          <span class="package-detail-info">门课程</span>
+          <span class="package-detail-info">{{$t('lesson.lessonsCount')}}</span>
         </div>
         <div class="package-detail-content-item">
-          <span class="package-detail-label">年龄:</span>
-          <span class="package-detail-info">{{packageDetail.ages_min}}-{{packageDetail.ages_max}}</span>
+          <span class="package-detail-label">{{$t('lesson.ages')}}:</span>
+          <span class="package-detail-info">{{packageDetail.minAge}}-{{packageDetail.maxAge}}</span>
         </div>
       </div>
       <div class="package-detail-skills">
-        <div class="package-detail-label">技能:</div>
-        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.output}}</el-scrollbar>
+        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
+        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
       <div class="package-detail-operations">
         <div class="package-detail-operate-item">
           <span class="package-detail-price-count">{{packageDetail.cost}}</span>
-          <span class="package-detail-label">知识币</span>
+          <span class="package-detail-label">{{$t('lesson.coins')}}</span>
         </div>
-        <el-button type="primary" class="package-detail-operate-item" @click="addPackage">增加</el-button>
+        <el-button type="primary" class="package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PackageDetail',
   props: {
@@ -39,7 +39,7 @@ export default {
     packageLessonsCount() {
       return _.get(this.packageDetail, 'lessons', []).length
     },
-    packageCoverUrl(){
+    packageCoverUrl() {
       return _.get(this.packageDetail, 'extra.coverUrl', '')
     }
   },
@@ -49,23 +49,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      studentSubscribePackage: 'lesson/student/subscribePackage'
+    }),
     addPackage() {
-      this.$confirm('学习本课程包的课程，将花费8知识币。', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t('lesson.coins')}`,
+        this.$t('lesson.infoTitle'),
+        {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.sendAddPackageReqToBack()
       })
     },
-    sendAddPackageReqToBack() {
-      this.$message({
-        message: '恭喜你，课程包添加成功',
-        showClose: true,
-        type: 'success',
-        confirmButtonText: '确定',
-        callback: action => {}
-      })
+    async sendAddPackageReqToBack() {
+      await this.studentSubscribePackage({ packageId: this.packageId })
     }
   }
 }

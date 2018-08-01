@@ -712,5 +712,19 @@
   "search": {
     "searchAll": "All Sites",
     "searchMine": "My Sites"
+  },
+  "lesson": {
+    "include": "Includes",
+    "lessonsCount": "lessons",
+    "ages": "Ages",
+    "intro": "Intro",
+    "add": "增加",
+    "coins": "知识币",
+    "buyPackageInfo": "To learn lessons of this package, you have to invest ",
+    "infoTitle": "Info",
+    "catalogue": "Catalogue",
+    "lessonGoals": "Lesson Goals",
+    "duration": "Duration",
+    "addPackageFirst": "Please add the package first"
   }
 }
