@@ -1,6 +1,6 @@
 <template>
   <div class="comp-quiz" >
-    <div v-if="!isOperate" class="splic"></div>
+    <div class="splic"></div>
 
     <div v-for="(item, index) in properties.data" :id="item.id" :key="index">
       <div class="no">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div v-if="item.type == 3">
-          <el-input :disabled="isShow" type="textarea" maxlength="512" v-model="textAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
+          <el-input type="textarea" maxlength="512"  :placeholder="$t('card.textMatchPlaceholder')"></el-input>
         </div>
       </div>
     </div>

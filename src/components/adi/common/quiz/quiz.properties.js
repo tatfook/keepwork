@@ -7,8 +7,7 @@ export default {
       score: 1,
       desc: 'desc',
       answer: ['A'],
-      options: [{item: 'option 1'}]
+      options: [{ item: 'option 1' }]
     }
   ]
-
 }

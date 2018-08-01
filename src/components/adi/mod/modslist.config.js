@@ -15,6 +15,7 @@ import ModTextBoard from './web/textBoard'
 
 import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
+import ModHint from './web/hint'
 
 var modsList = [
   {
@@ -167,6 +168,11 @@ var modsList = [
         id: '9-2',
         label: 'modList.quiz',
         mods: [ModQuiz]
+      },
+      {
+        id: '9-3',
+        label: 'modList.hint',
+        mods: [ModHint]
       }
     ]
   }
