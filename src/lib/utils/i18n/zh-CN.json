@@ -584,7 +584,10 @@
     "atLeastSelect1": "至少选择一门课程",
 
     "submit": "提交",
-    "cancel": "取消"
+    "cancel": "取消",
+
+    "publish": "发布课程",
+    "hint": "提示"
   },
   "skydrive": {
     "image": "图片",

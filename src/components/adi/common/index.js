@@ -24,6 +24,7 @@ import AdiPageSwitching from './pageSwitching/PageSwitching'
 
 import AdiLesson from './lesson/Lesson'
 import AdiQuiz from './quiz/Quiz'
+import AdiHint from './hint/hint'
 
 export default {
   AdiMarkdown,
@@ -50,5 +51,6 @@ export default {
   AdiCategoryList,
   AdiPageSwitching,
   AdiLesson,
-  AdiQuiz
+  AdiQuiz,
+  AdiHint
 }

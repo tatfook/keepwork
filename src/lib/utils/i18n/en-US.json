@@ -593,7 +593,9 @@
     "pleaseInputSkills": "please input skills",
     "atLeastSelect1": "at least select 1 lesson",
     "submit": "submit",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "publish": "Publish Lesson",
+    "hint": "hint"
   },
   "skydrive": {
     "image": "Image",
