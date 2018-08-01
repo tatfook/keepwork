@@ -12,14 +12,14 @@ export const keepworkEndpoint = axios.create({
 })
 
 export const post = (...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
+  let [url, payload, config, returnOriginalData = true] = args
   return keepworkEndpoint.post(url, payload, config).then(
     res => returnOriginalData ? res.data : res.data.data
   )
 }
 
 export const put = (...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
+  let [url, payload, config, returnOriginalData = true] = args
   return keepworkEndpoint.put(url, payload, config).then(
     res => returnOriginalData ? res.data : res.data.data
   )
@@ -32,7 +32,7 @@ export const put = (...args) => {
  */
 
 export const get = (...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
+  let [url, payload, config, returnOriginalData = true] = args
   return keepworkEndpoint.get(url, {
     ...config,
     params: payload
@@ -42,7 +42,7 @@ export const get = (...args) => {
 }
 
 export const _delete = (...args) => {
-  let [url, , config, returnOriginalData = false] = args
+  let [url, , config, returnOriginalData = true] = args
   return keepworkEndpoint.delete(url, config).then(
     res => returnOriginalData ? res.data : res.data.data
   )
@@ -52,6 +52,7 @@ export const admin = {
 }
 
 export const packages = {
+  packagesList: (args) => get('packages/search')
   packageDetail: (args) => get(`packages/${args.id}/detail`),
   subscribe: (args) => post(`packages/${args.id}/subscribe`)
 }
