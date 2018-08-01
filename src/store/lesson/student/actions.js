@@ -7,10 +7,16 @@ let {
 
 const actions = {
   async getPackageDetail({ commit }, { packageId }) {
-    let detail = await lesson.admin.packageDetail({
+    let detail = await lesson.packages.packageDetail({
       id: packageId
     })
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
+  },
+  async subscribePackage({ context }, { packageId }) {
+    let subscribeResult = await lesson.packages.subscribe({
+      id: packageId
+    })
+    return subscribeResult
   }
 }
 

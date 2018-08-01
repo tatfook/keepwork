@@ -49,10 +49,11 @@ export const _delete = (...args) => {
 }
 
 export const admin = {
-  packageDetail: (args) => get(`admin/packages/${args.id}/detail`)
 }
 
 export const packages = {
+  packageDetail: (args) => get(`packages/${args.id}/detail`),
+  subscribe: (args) => post(`packages/${args.id}/subscribe`)
 }
 
 export const lesson = {

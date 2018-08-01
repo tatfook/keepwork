@@ -2,7 +2,7 @@
   <div class="package-detail">
     <img class="package-detail-cover" :src="packageCoverUrl" alt="">
     <div class="package-detail-text-desc">
-      <h1>{{packageDetail.title}}</h1>
+      <h1>{{packageDetail.packageName}}</h1>
       <div class="package-detail-content">
         <div class="package-detail-content-item">
           <span class="package-detail-label">包含:</span>
@@ -11,12 +11,12 @@
         </div>
         <div class="package-detail-content-item">
           <span class="package-detail-label">年龄:</span>
-          <span class="package-detail-info">{{packageDetail.ages_min}}-{{packageDetail.ages_max}}</span>
+          <span class="package-detail-info">{{packageDetail.minAge}}-{{packageDetail.maxAge}}</span>
         </div>
       </div>
       <div class="package-detail-skills">
         <div class="package-detail-label">技能:</div>
-        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.output}}</el-scrollbar>
+        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
       <div class="package-detail-operations">
         <div class="package-detail-operate-item">
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PackageDetail',
   props: {
@@ -39,7 +39,7 @@ export default {
     packageLessonsCount() {
       return _.get(this.packageDetail, 'lessons', []).length
     },
-    packageCoverUrl(){
+    packageCoverUrl() {
       return _.get(this.packageDetail, 'extra.coverUrl', '')
     }
   },
@@ -49,16 +49,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      studentSubscribePackage: 'lesson/student/subscribePackage'
+    }),
     addPackage() {
-      this.$confirm('学习本课程包的课程，将花费8知识币。', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        `学习本课程包的课程，将花费${this.packageDetail.cost}知识币。`,
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).then(() => {
         this.sendAddPackageReqToBack()
       })
     },
-    sendAddPackageReqToBack() {
+    async sendAddPackageReqToBack() {
+      await this.studentSubscribePackage({ packageId: this.packageId })
       this.$message({
         message: '恭喜你，课程包添加成功',
         showClose: true,
