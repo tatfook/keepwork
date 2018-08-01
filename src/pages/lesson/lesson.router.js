@@ -4,7 +4,7 @@ const Lesson = () => import('@/components/lesson/Lesson')
 const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
-const PackageDetailPage = () => import('@/components/teacher/PackageDetailPage')
+const PackageDetailPage = () => import('@/components/lesson/PackageDetailPage')
 
 Vue.use(Router)
 
