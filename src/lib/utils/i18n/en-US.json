@@ -28,7 +28,8 @@
     "realNameAuthentication": "Verified",
     "chinese-englishSwitch": "chinese simplified",
     "accountNoChange": "Account name cannot be changed after registration",
-    "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
+    "useLettersOrNumber":
+      "A combination of letters and numbers is allowed, for example, keep123.",
     "defaultAddress": "The defaulted personal website address:",
     "authCode": "Code",
     "perfectInfo": "Perfect information",
@@ -87,7 +88,8 @@
     "loginToStarPage": "You must login before star this page!",
     "confirmButtonText": "Confirm",
     "quickToTop": "Quick to top",
-    "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
+    "inputIsSensitive":
+      "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
     "saveFail": "Save Fail",
     "success": "Success",
@@ -164,8 +166,7 @@
     "openedFiles": "Opened",
     "myPersonalWebsites": "My websites",
     "myContributedWebsites": "Contributed websites",
-    "myContributedWebsitesTip":
-      "No contributed website",
+    "myContributedWebsitesTip": "No contributed website",
 
     "noPersonalWebsite": "No personal website",
     "createWebsiteNow": "Create one now!",
@@ -321,9 +322,13 @@
     "teachers": "Teachers",
     "lessonShare": "LessonShare",
     "package": "Package",
-    "lessonPackage": "Lesson Package"
+    "lessonPackage": "Lesson Package",
+    "hint": "Hint"
   },
   "adi": {
+    "hint": {
+      "content": "The editor said what he said to the teacher."
+    },
     "markdown": {
       "markdown": "Welcome to the Keepwork Markdown Editor"
     },
@@ -455,10 +460,10 @@
 
     "lesson": "Lesson",
     "lessonGoals": "Lesson Goals:",
-    "quiz":"Quiz",
-    "teachers":"Teachers",
-    "lessonShare":"LessonShare",
-    "lessonPackage":"Package",
+    "quiz": "Quiz",
+    "teachers": "Teachers",
+    "lessonShare": "LessonShare",
+    "lessonPackage": "Package",
     "overview": "Overview",
     "references": "References",
     "studentsPerformance": "Students' Performance",
@@ -482,7 +487,8 @@
     "duration": "Duration:",
     "viewSummary": "View Summary",
     "addPackageFirst": "Please add the package first",
-    "lessonPackageCost1": "To learn lessons of this package, you have to invest ",
+    "lessonPackageCost1":
+      "To learn lessons of this package, you have to invest ",
     "lessonPackageCost2": " coins.",
     "addPackageSuccess": "The package was successfully added!",
     "operationFail": "Operation failed please retry!",
@@ -516,7 +522,8 @@
     "rightAnswerColon": "Right Answer:",
     "yourAnswerColon": "Your Answer:",
     "explanationColon": "Explanation:",
-    "textMatchPlaceholder": "If your answer matches any text above, it's correct.",
+    "textMatchPlaceholder":
+      "If your answer matches any text above, it's correct.",
     "pleaseSelectOne": "Please select one answer!",
     "chooseTwoAnswer": "Choose at least two answers!",
     "pleaseInputAnswer": "Please input your answer!",
@@ -526,7 +533,9 @@
     "keepThreeOptions": "Please set at least three options",
     "keepTwoOptions": "Please set at least two options",
     "keepOneOption": "Please set at least one answer",
-    "coinsInsufficient": "Sorry. Your coins are insufficient."
+    "coinsInsufficient": "Sorry. Your coins are insufficient.",
+
+    "hint": "hint"
   },
   "field": {
     "fileId": "file Id",
@@ -593,7 +602,9 @@
     "pleaseInputSkills": "please input skills",
     "atLeastSelect1": "at least select 1 lesson",
     "submit": "submit",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "publish": "Publish Lesson",
+    "hint": "hint"
   },
   "skydrive": {
     "image": "Image",
@@ -641,7 +652,7 @@
     "confidentiality": "Private",
     "modifyAvatar": "Modify Avatar",
     "inputPhoneNumber": "Please enter your mobile phone number",
-    "wrongNumberFormat":"The number format is incorrect",
+    "wrongNumberFormat": "The number format is incorrect",
     "certificationStatus": "Certification status:",
     "certified": "certified",
     "unverified": "unverified",
@@ -651,9 +662,11 @@
     "resend": "resend",
     "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
-    "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
+    "codeExceedsTheSendingLimit":
+      "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
-    "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts",
+    "hasBeenBoundToOtherAccounts":
+      "The mobile phone number has been bound to other accounts",
     "modifyPwd": "Modify Password:",
     "accountBinding": "Account Binding",
     "oldPwd": "Old Password:",
@@ -707,10 +720,25 @@
     "font": "font:",
     "fontSize": "size:",
     "pleaseSelect": "please select",
-    "tips": "Note: if the selected font is not supported by the browser, the default font will be displayed"
+    "tips":
+      "Note: if the selected font is not supported by the browser, the default font will be displayed"
   },
   "search": {
     "searchAll": "All Sites",
     "searchMine": "My Sites"
+  },
+  "lesson": {
+    "include": "Includes",
+    "lessonsCount": "lessons",
+    "ages": "Ages",
+    "intro": "Intro",
+    "add": "增加",
+    "coins": "知识币",
+    "buyPackageInfo": "To learn lessons of this package, you have to invest ",
+    "infoTitle": "Info",
+    "catalogue": "Catalogue",
+    "lessonGoals": "Lesson Goals",
+    "duration": "Duration",
+    "addPackageFirst": "Please add the package first"
   }
 }

@@ -310,9 +310,14 @@
     "teachers": "教师可见",
     "lessonShare": "分享课程",
     "package": "课程包",
-    "lessonPackage": "课程包"
+    "lessonPackage": "课程包",
+
+    "hint": "提示"
   },
   "adi": {
+    "hint": {
+      "content": "编辑对老师说的话。"
+    },
     "markdown": {
       "markdown": "欢迎使用Keepwork Markdown编辑器"
     },
@@ -516,7 +521,8 @@
     "keepThreeOptions": "至少保留三个选项",
     "keepTwoOptions": "至少保留两个选项",
     "keepOneOption": "至少保留一个选项",
-    "coinsInsufficient": "对不起,你的知识币不够"
+    "coinsInsufficient": "对不起,你的知识币不够",
+    "hint": "提示"
   },
   "field": {
     "fileId": "字段",
@@ -584,7 +590,10 @@
     "atLeastSelect1": "至少选择一门课程",
 
     "submit": "提交",
-    "cancel": "取消"
+    "cancel": "取消",
+
+    "publish": "发布课程",
+    "hint": "提示"
   },
   "skydrive": {
     "image": "图片",
@@ -702,5 +711,19 @@
   "search": {
     "searchAll": "全部内容",
     "searchMine": "我的网站"
+  },
+  "lesson": {
+    "include": "包含",
+    "lessonsCount": "个课程",
+    "ages": "年龄",
+    "intro": "课程包简介",
+    "add": "增加",
+    "coins": "知识币",
+    "buyPackageInfo": "学习本课程包的课程，将花费",
+    "infoTitle": "提示",
+    "catalogue": "目录",
+    "lessonGoals": "课程目标",
+    "duration": "持续时间",
+    "addPackageFirst": "请先添加课程包"
   }
 }

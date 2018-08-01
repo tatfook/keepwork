@@ -5,8 +5,8 @@
   </div>
 </template>
 <script>
-import PackageDetail from './PackageDetail'
-import PackageCatalogue from './PackageCatalogue'
+import PackageDetail from './common/PackageDetail'
+import PackageCatalogue from './common/PackageCatalogue'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PackageDetailPage',

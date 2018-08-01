@@ -1,6 +1,6 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-title">目录</div>
+    <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
       <div class="package-catalogue-item" v-for="(lesson, index) in lessonsList" :key='index' @click="toPackageDetail">
         <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="">
@@ -8,11 +8,11 @@
           <div class="package-catalogue-item-title">
             <span>{{lesson.lessonName}}</span>
           </div>
-          <div class="package-catalogue-item-info">课程目标:</div>
+          <div class="package-catalogue-item-info">{{$t('lesson.lessonGoals')}}:</div>
           <div class="package-catalogue-item-goals">
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
-          <div class="package-catalogue-item-duration">持续时间：
+          <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>45min</span>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     toPackageDetail() {
-      this.$alert('请先添加课程包', '提示')
+      this.$alert(this.$t('lesson.addPackageFirst'), this.$t('lesson.infoTitle'))
     }
   }
 }
