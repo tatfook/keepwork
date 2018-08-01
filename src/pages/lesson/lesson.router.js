@@ -4,7 +4,8 @@ const Lesson = () => import('@/components/lesson/Lesson')
 const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
-const PackageDetailPage = () => import('@/components/lesson/PackageDetailPage')
+const StudentPackageDetailPage = () => import('@/components/lesson/student/PackageDetailPage')
+const TeacherPackageDetailPage = () => import('@/components/lesson/teacher/PackageDetailPage')
 
 Vue.use(Router)
 
@@ -27,15 +28,22 @@ export default new Router({
       children: [
         {
           path: 'package',
-          name: 'Package',
-          component: PackageDetailPage
+          name: 'TeacherPackage',
+          component: TeacherPackageDetailPage
         }
       ]
     },
     {
       path: '/student',
       name: 'Student',
-      component: Student
+      component: Student,
+      children: [
+        {
+          path: 'package',
+          name: 'StudentPackage',
+          component: StudentPackageDetailPage
+        }
+      ]
     }
   ]
 })

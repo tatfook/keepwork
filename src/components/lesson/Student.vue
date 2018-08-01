@@ -1,5 +1,5 @@
 <template>
-  <h1>Lesson Student :D</h1>
+  <router-view></router-view>
 </template>
 
 <script>
