@@ -5,25 +5,25 @@
       <h1>{{packageDetail.packageName}}</h1>
       <div class="package-detail-content">
         <div class="package-detail-content-item">
-          <span class="package-detail-label">包含:</span>
+          <span class="package-detail-label">{{$t('lesson.include')}}:</span>
           <span class="package-detail-lessons-count">{{packageLessonsCount}}</span>
-          <span class="package-detail-info">门课程</span>
+          <span class="package-detail-info">{{$t('lesson.lessonsCount')}}</span>
         </div>
         <div class="package-detail-content-item">
-          <span class="package-detail-label">年龄:</span>
+          <span class="package-detail-label">{{$t('lesson.ages')}}:</span>
           <span class="package-detail-info">{{packageDetail.minAge}}-{{packageDetail.maxAge}}</span>
         </div>
       </div>
       <div class="package-detail-skills">
-        <div class="package-detail-label">技能:</div>
+        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
       <div class="package-detail-operations">
         <div class="package-detail-operate-item">
           <span class="package-detail-price-count">{{packageDetail.cost}}</span>
-          <span class="package-detail-label">知识币</span>
+          <span class="package-detail-label">{{$t('lesson.coins')}}</span>
         </div>
-        <el-button type="primary" class="package-detail-operate-item" @click="addPackage">增加</el-button>
+        <el-button type="primary" class="package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
       </div>
     </div>
   </div>
@@ -54,11 +54,11 @@ export default {
     }),
     addPackage() {
       this.$confirm(
-        `学习本课程包的课程，将花费${this.packageDetail.cost}知识币。`,
-        '提示',
+        `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t('lesson.coins')}`,
+        this.$t('lesson.infoTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
           type: 'warning'
         }
       ).then(() => {
@@ -67,13 +67,6 @@ export default {
     },
     async sendAddPackageReqToBack() {
       await this.studentSubscribePackage({ packageId: this.packageId })
-      this.$message({
-        message: '恭喜你，课程包添加成功',
-        showClose: true,
-        type: 'success',
-        confirmButtonText: '确定',
-        callback: action => {}
-      })
     }
   }
 }
