@@ -2,7 +2,7 @@
   <div class="package-detail-page">
     <p>{{actorType}}</p>
     <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
-    <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail'></PackageCatalogue>
+    <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></PackageCatalogue>
   </div>
 </template>
 <script>
