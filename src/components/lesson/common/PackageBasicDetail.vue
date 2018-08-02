@@ -18,7 +18,7 @@
         <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div class="package-detail-operations">
+      <div class="package-detail-operations" v-show="!packageDetail.isSubscribe">
         <div class="package-detail-operate-item">
           <span class="package-detail-price-count">{{packageDetail.cost}}</span>
           <span class="package-detail-label">{{$t('lesson.coins')}}</span>
