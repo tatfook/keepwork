@@ -27,7 +27,7 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <p v-for="(size, index) in fontSizeList[fontID]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
+              <p v-for="(size, index) in fontSizeList" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
@@ -125,12 +125,9 @@ export default {
       }))
     },
     fontSizeList() {
-      const fonts = themeData.classic.fonts[0]
-      let big = [0, 3, 6, 9]
-      let small = [2, 5, 8, 9]
-      let midium = [1, 4, 7, 9]
-      let comp = [small, midium, big]
-      return comp.map(size => size.map(index => fonts[index]))
+      const fonts = themeData.classic.fonts[this.fontID]
+
+      return fonts
     }
   },
   data() {
@@ -194,6 +191,9 @@ export default {
     border-radius: 4px;
     padding: 20px;
     margin-top: 20px;
+    height: 360px;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   &-select-title {
     margin-right: 10px;
