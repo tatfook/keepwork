@@ -5,8 +5,11 @@ const About = () => import('@/components/lesson/About')
 const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
-const StudentPackageDetailPage = () => import('@/components/lesson/student/PackageDetailPage')
-const TeacherPackageDetailPage = () => import('@/components/lesson/teacher/PackageDetailPage')
+const StudentPackageDetailPage = () =>
+  import('@/components/lesson/student/PackageDetailPage')
+const TeacherPackageDetailPage = () =>
+  import('@/components/lesson/teacher/PackageDetailPage')
+const Learn = () => import('@/components/lesson/common/Learn')
 
 Vue.use(Router)
 
@@ -48,6 +51,11 @@ export default new Router({
           path: 'package/:id',
           name: 'StudentPackage',
           component: StudentPackageDetailPage
+        },
+        {
+          path: 'learn/:id',
+          name: 'Learn',
+          component: Learn
         }
       ]
     }

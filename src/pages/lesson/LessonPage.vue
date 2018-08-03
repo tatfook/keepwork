@@ -6,9 +6,7 @@
 
 <script>
 export default {
-  name: "LessonPage",
-  components: {
-  }
+  name: 'LessonPage',
 }
 </script>
 
