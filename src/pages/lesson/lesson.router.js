@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const Lesson = () => import('@/components/lesson/Lesson')
+const About = () => import('@/components/lesson/About')
 const Center = () => import('@/components/lesson/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
@@ -20,6 +21,11 @@ export default new Router({
       component: Lesson
     },
     {
+      path: '/about',
+      name: 'About',
+      component: About
+    },
+    {
       path: '/center',
       name: 'Center',
       component: Center
@@ -30,7 +36,7 @@ export default new Router({
       component: Teacher,
       children: [
         {
-          path: 'package',
+          path: 'package/:id',
           name: 'TeacherPackage',
           component: TeacherPackageDetailPage
         }
@@ -42,7 +48,7 @@ export default new Router({
       component: Student,
       children: [
         {
-          path: 'package',
+          path: 'package/:id',
           name: 'StudentPackage',
           component: StudentPackageDetailPage
         },

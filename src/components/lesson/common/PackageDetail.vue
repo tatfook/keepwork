@@ -1,8 +1,7 @@
 <template>
   <div class="package-detail-page">
-    <p>{{actorType}}</p>
     <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
-    <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail'></PackageCatalogue>
+    <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></PackageCatalogue>
   </div>
 </template>
 <script>
@@ -15,27 +14,27 @@ export default {
     await this.getPackageDetail({
       packageId: this.packageId
     })
-    this.packageDetail = this.studentPackageDetail({
+    this.packageDetail = this.lessonPackageDetail({
       packageId: this.packageId
     })
   },
   props: {
-    actorType: String
+    actorType: String,
+    packageId: String
   },
   computed: {
     ...mapGetters({
-      studentPackageDetail: 'lesson/student/studentPackageDetail'
+      lessonPackageDetail: 'lesson/packageDetail'
     })
   },
   data() {
     return {
-      packageId: '10',
       packageDetail: {}
     }
   },
   methods: {
     ...mapActions({
-      getPackageDetail: 'lesson/student/getPackageDetail'
+      getPackageDetail: 'lesson/getPackageDetail'
     })
   },
   components: {

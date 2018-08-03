@@ -19,10 +19,17 @@ export const post = (...args) => {
 }
 
 export const put = (...args) => {
-  let [url, payload, config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .put(url, payload, config)
-    .then(res => (returnOriginalData ? res.data : res.data.data))
+  let [url, payload, config] = args
+  return keepworkEndpoint.post(url, payload, config).then(
+    res => res.data
+  )
+}
+
+export const put = (...args) => {
+  let [url, payload, config] = args
+  return keepworkEndpoint.put(url, payload, config).then(
+    res => res.data
+  )
 }
 
 /**
@@ -42,10 +49,20 @@ export const get = (...args) => {
 }
 
 export const _delete = (...args) => {
-  let [url, , config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .delete(url, config)
-    .then(res => (returnOriginalData ? res.data : res.data.data))
+  let [url, payload, config] = args
+  return keepworkEndpoint.get(url, {
+    ...config,
+    params: payload
+  }).then(
+    res => res.data
+  )
+}
+
+export const _delete = (...args) => {
+  let [url, , config] = args
+  return keepworkEndpoint.delete(url, config).then(
+    res => res.data
+  )
 }
 
 export const admin = {}

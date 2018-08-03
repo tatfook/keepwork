@@ -729,9 +729,10 @@
   },
   "lesson": {
     "include": "Includes",
-    "lessonsCount": "lessons",
+    "lessonsCount": " lessons",
     "ages": "Ages",
     "intro": "Intro",
+    "packageIntro": "Intro",
     "add": "增加",
     "coins": "知识币",
     "buyPackageInfo": "To learn lessons of this package, you have to invest ",
@@ -739,6 +740,33 @@
     "catalogue": "Catalogue",
     "lessonGoals": "Lesson Goals",
     "duration": "Duration",
-    "addPackageFirst": "Please add the package first"
+    "addPackageFirst": "Please add the package first",
+    "about": {
+      "hottestLessons": "Hottest Lessons",
+      "teacher": "TEACHER",
+      "student": "STUDENT",
+      "engageStudents": "Engage your students with animations",
+      "playGame": "If you Play games, why not Make them?",
+      "teacherTalk": "Ever thought about showing the students great animation & games in class, and read the source code of them as they play to learn programming?",
+      "studentTalk": "Do you want to know how to make great animations and games? Here we will help you to read the source code of fun games and animations every day, and teach you creative skills to make one of your own.",
+      "aboutLessons": "About Lessons",
+      "animations": "Animations? why?",
+      "animationsTalk": "Animations and games is attractive to everyone, why not use them in class and read its source code. Learning (computer ) language by reading and writing is the best way, just like how you learn English language in class.",
+      "usage": "How do I use it in my class?",
+      "usageTalk": "Install Paracraft, open the lesson web page and play with the students in class. We will release more assistent tools for use in class in May 2018.",
+      "teachProgramming": "Can I teach programming with no code experience before?",
+      "teachProgrammingTalk": "Yes, all of our lessons are written in a way for everyone to learn by themselves. You can just learn with the student together in class. super easy and fun.",
+      "expensive": "Is it Expensive?",
+      "expensiveTalk": "Ask your parent or school teacher, it is only 0.2$ per day to have free access to all of our lessons. We release 5 new lessons every week.",
+      "beijingOpenUniversity": "Beijing Open University",
+      "zhejiangUniversity": "Zhejiang University",
+      "harbinInstituteOfTechnology": "Harbin Institute Of Technology",
+      "anhuiPolytechnicUniversity": "Anhui Polytechnic University",
+      "beijingUnionUniversity": "Beijing Union University",
+      "tatfook": "TATFOOK"
+    },
+    "haveLearn": "You have learned ",
+    "continue": "Continue",
+    "finished": "Finished"
   }
 }
