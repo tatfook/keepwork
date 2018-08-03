@@ -368,8 +368,9 @@
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
     App.main(function(ui) {
       window.board = ui;
+      window.keepworkSaveUrl = {};
       // window.onbeforeunload = null;
-      ui.keepwork.read();
+      ui.pickFile(App.MODE_KEEPWORK);
     });
   </script>
 </body>
