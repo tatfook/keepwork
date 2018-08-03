@@ -2,7 +2,7 @@
   <div class="about">
     <div class="about-carousel">
       <el-carousel indicator-position="outside">
-        <el-carousel-item v-for="img in imgUrls" :key="img" trigger="click">
+        <el-carousel-item v-for="img in imgUrls" :key="img">
           <img class="about-carousel-img" :src="img.url" alt="">
         </el-carousel-item>
       </el-carousel>
