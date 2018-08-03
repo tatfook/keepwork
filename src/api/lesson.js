@@ -25,13 +25,6 @@ export const put = (...args) => {
   )
 }
 
-export const put = (...args) => {
-  let [url, payload, config] = args
-  return keepworkEndpoint.put(url, payload, config).then(
-    res => res.data
-  )
-}
-
 /**
  * Be careful about the endpoint[method]'s args
  * get and _delete is a little different with post and put
@@ -46,16 +39,6 @@ export const get = (...args) => {
       params: payload
     })
     .then(res => (returnOriginalData ? res.data : res.data.data))
-}
-
-export const _delete = (...args) => {
-  let [url, payload, config] = args
-  return keepworkEndpoint.get(url, {
-    ...config,
-    params: payload
-  }).then(
-    res => res.data
-  )
 }
 
 export const _delete = (...args) => {

@@ -12,7 +12,7 @@ const actions = {
   },
   async getLessonContent({ commit }, { lessonId }) {
     let content = await lesson.getLessonContent({ lessonId })
-    commit(GET_LESSON_CONTENT_SUCCESS, {lessonId, content})
+    commit(GET_LESSON_CONTENT_SUCCESS, { lessonId, content })
   },
   async subscribePackage({ context }, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({
@@ -20,9 +20,5 @@ const actions = {
     })
     return subscribeResult
   }
-
-const actions = {
-
 }
-
 export default actions
