@@ -1,11 +1,11 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-progress" v-show="packageDetail.isSubscribe">
+    <div class="package-catalogue-progress" v-show="packageDetail.isSubscribe && !isTeacher">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
         <p>{{lessonProgressInfo}}</p>
       </div>
-      <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button">{{buttonText}}</el-button>
+      <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
@@ -15,14 +15,14 @@
           <div class="package-catalogue-item-title" @click="toPackageDetail(lesson)">
             <span>{{lesson.lessonName}}</span>
           </div>
-          <div class="package-catalogue-item-info">{{$t('lesson.lessonGoals')}}:</div>
+          <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
           <div class="package-catalogue-item-goals">
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>45min</span>
           </div>
-          <el-button v-show="lesson.isFinished" type="primary" size="small" class="package-catalogue-item-button">View Summary</el-button>
+          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">View Summary</el-button>
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">Finished
             <i class="el-icon-check"></i>
           </div>
@@ -49,6 +49,9 @@ export default {
       })
       return lessons
     },
+    continueLearnedLesson() {
+      return _.find(this.lessonsList, lesson => !lesson.isFinished)
+    },
     learnedLessons() {
       return _.get(this.packageDetail, 'learnedLessons', [])
     },
@@ -64,14 +67,13 @@ export default {
       return this.lessonProgressList.length / this.lessonsList.length * 100 || 0
     },
     lessonProgressInfo() {
-      return (
-        (this.actorType === 'teacher' ? '已教了' : '已学习') +
-        this.lessonProgressList.length +
-        '门课程'
-      )
+      return this.$t('lesson.haveLearn') + this.lessonProgressList.length + this.$t('lesson.lessonsCount')
     },
     buttonText() {
-      return this.lessonProgressPercent === 100 ? '完成' : '继续'
+      return this.lessonProgressPercent === 100 ? this.$t('lesson.continue') : this.$t('lesson.finished')
+    },
+    isTeacher(){
+      return this.actorType === 'teacher'
     }
   },
   methods: {
@@ -88,6 +90,14 @@ export default {
           this.$t('lesson.infoTitle')
         )
       }
+    },
+    toViewSummary(lesson) {
+      console.log(
+        `summary /student/packages/${this.packageDetail.id}/lessons/${lesson.id}`
+      )
+    },
+    continueToLearn() {
+      console.log('继续学习', this.continueLearnedLesson)
     }
   }
 }

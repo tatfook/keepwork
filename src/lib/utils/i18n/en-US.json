@@ -732,6 +732,7 @@
     "lessonsCount": "lessons",
     "ages": "Ages",
     "intro": "Intro",
+    "packageIntro": "Intro",
     "add": "增加",
     "coins": "知识币",
     "buyPackageInfo": "To learn lessons of this package, you have to invest ",
@@ -739,6 +740,9 @@
     "catalogue": "Catalogue",
     "lessonGoals": "Lesson Goals",
     "duration": "Duration",
-    "addPackageFirst": "Please add the package first"
+    "addPackageFirst": "Please add the package first",
+    "haveLearn": "You have learned ",
+    "continue": "Continue",
+    "finished": "Finished"
   }
 }

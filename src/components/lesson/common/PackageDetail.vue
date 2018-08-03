@@ -1,6 +1,5 @@
 <template>
   <div class="package-detail-page">
-    <p>{{actorType}}</p>
     <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
     <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></PackageCatalogue>
   </div>
@@ -20,7 +19,8 @@ export default {
     })
   },
   props: {
-    actorType: String
+    actorType: String,
+    packageId: String
   },
   computed: {
     ...mapGetters({
@@ -29,7 +29,6 @@ export default {
   },
   data() {
     return {
-      packageId: '10',
       packageDetail: {}
     }
   },
