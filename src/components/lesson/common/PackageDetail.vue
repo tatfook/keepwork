@@ -14,7 +14,7 @@ export default {
     await this.getPackageDetail({
       packageId: this.packageId
     })
-    this.packageDetail = this.studentPackageDetail({
+    this.packageDetail = this.lessonPackageDetail({
       packageId: this.packageId
     })
   },
@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      studentPackageDetail: 'lesson/student/studentPackageDetail'
+      lessonPackageDetail: 'lesson/packageDetail'
     })
   },
   data() {
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getPackageDetail: 'lesson/student/getPackageDetail'
+      getPackageDetail: 'lesson/getPackageDetail'
     })
   },
   components: {

@@ -729,7 +729,7 @@
   },
   "lesson": {
     "include": "Includes",
-    "lessonsCount": "lessons",
+    "lessonsCount": " lessons",
     "ages": "Ages",
     "intro": "Intro",
     "packageIntro": "Intro",

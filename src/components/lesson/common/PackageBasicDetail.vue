@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      studentSubscribePackage: 'lesson/student/subscribePackage'
+      lessonSubscribePackage: 'lesson/subscribePackage'
     }),
     addPackage() {
       this.$confirm(
@@ -64,7 +64,7 @@ export default {
       })
     },
     async sendAddPackageReqToBack() {
-      await this.studentSubscribePackage({ packageId: this.packageId })
+      await this.lessonSubscribePackage({ packageId: this.packageId })
     }
   }
 }
