@@ -94,12 +94,16 @@ export default {
       let board = window.document.querySelector('.board-iframe')
 
       if (state) {
+        this.compatible();
+
         if (!board) {
           return
         }
 
-        if (!board.contentWindow.keepworkSaveUrl) {
-          board.contentWindow.keepworkSaveUrl = {}
+        let boardWindow = board.contentWindow
+
+        if (!boardWindow.keepworkSaveUrl) {
+          boardWindow.keepworkSaveUrl = {}
         }
 
         let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
@@ -112,7 +116,7 @@ export default {
           keepworkSaveUrl.svgUrl = this.cardValue.svg
         }
 
-        board.contentWindow.board.keepwork.read()
+        boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
       } else {
         if (!board) {
           return
@@ -161,6 +165,25 @@ export default {
     },
     getFocus() {
       this.$emit('onChangeValue')
+    },
+    compatible() {
+      let self = this
+
+      function setOld() {
+        let board = window.document.querySelector('.board-iframe')
+
+        if (board) {
+          if (self.cardValue.data) {
+            board.contentWindow.boardOldData = self.cardValue.data
+          } else {
+            board.contentWindow.boardOldData = ''
+          }
+        } else {
+          setTimeout(setOld, 500)
+        }
+      }
+
+      setOld()
     }
   }
 }
