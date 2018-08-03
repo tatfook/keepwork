@@ -1,7 +1,5 @@
 <template>
-  <el-main id="lesson-page">
-    <router-view/>
-  </el-main>
+  <router-view id="lesson-page" />
 </template>
 
 <script>
@@ -11,10 +9,12 @@ export default {
 </script>
 
 <style lang="scss">
-  body{
-    margin: 0;
-    .el-main{
-      padding: 0;
-    }
-  }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <PackageDetail :actorType='actorType' :packageId='packageId'></PackageDetail>
+  <div class="student-package-detail-page">
+    <PackageDetail :actorType='actorType' :packageId='packageId'></PackageDetail>
+  </div>
 </template>
 <script>
 import PackageDetail from '../common/PackageDetail'
@@ -16,3 +18,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.student-package-detail-page {
+  background-color: #fbfbfb;
+  min-height: 100%;
+}
+</style>
