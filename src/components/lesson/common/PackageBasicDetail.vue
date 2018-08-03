@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="package-detail-skills">
-        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
+        <div class="package-detail-label">{{$t('lesson.packageIntro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
       <div class="package-detail-operations" v-show="!packageDetail.isSubscribe">
@@ -41,11 +41,9 @@ export default {
     },
     packageCoverUrl() {
       return _.get(this.packageDetail, 'extra.coverUrl', '')
-    }
-  },
-  data() {
-    return {
-      packageId: '10'
+    },
+    packageId(){
+      return _.get(this.packageDetail, 'id')
     }
   },
   methods: {

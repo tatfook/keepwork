@@ -716,7 +716,8 @@
     "include": "包含",
     "lessonsCount": "个课程",
     "ages": "年龄",
-    "intro": "课程包简介",
+    "intro": "简介",
+    "packageIntro": "课程包简介",
     "add": "增加",
     "coins": "知识币",
     "buyPackageInfo": "学习本课程包的课程，将花费",
@@ -724,6 +725,9 @@
     "catalogue": "目录",
     "lessonGoals": "课程目标",
     "duration": "持续时间",
-    "addPackageFirst": "请先添加课程包"
+    "addPackageFirst": "请先添加课程包",
+    "haveLearn": "已学习",
+    "continue": "继续",
+    "finished": "完成"
   }
 }
