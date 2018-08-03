@@ -33,7 +33,7 @@ export default new Router({
       component: Teacher,
       children: [
         {
-          path: 'package',
+          path: 'package/:id',
           name: 'TeacherPackage',
           component: TeacherPackageDetailPage
         }
@@ -45,7 +45,7 @@ export default new Router({
       component: Student,
       children: [
         {
-          path: 'package',
+          path: 'package/:id',
           name: 'StudentPackage',
           component: StudentPackageDetailPage
         }

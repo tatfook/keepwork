@@ -15,10 +15,10 @@
         </div>
       </div>
       <div class="package-detail-skills">
-        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
+        <div class="package-detail-label">{{$t('lesson.packageIntro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div class="package-detail-operations">
+      <div class="package-detail-operations" v-show="!packageDetail.isSubscribe">
         <div class="package-detail-operate-item">
           <span class="package-detail-price-count">{{packageDetail.cost}}</span>
           <span class="package-detail-label">{{$t('lesson.coins')}}</span>
@@ -41,16 +41,14 @@ export default {
     },
     packageCoverUrl() {
       return _.get(this.packageDetail, 'extra.coverUrl', '')
-    }
-  },
-  data() {
-    return {
-      packageId: '10'
+    },
+    packageId(){
+      return _.get(this.packageDetail, 'id')
     }
   },
   methods: {
     ...mapActions({
-      studentSubscribePackage: 'lesson/student/subscribePackage'
+      lessonSubscribePackage: 'lesson/subscribePackage'
     }),
     addPackage() {
       this.$confirm(
@@ -66,7 +64,7 @@ export default {
       })
     },
     async sendAddPackageReqToBack() {
-      await this.studentSubscribePackage({ packageId: this.packageId })
+      await this.lessonSubscribePackage({ packageId: this.packageId })
     }
   }
 }
