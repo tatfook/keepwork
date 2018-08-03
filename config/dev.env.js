@@ -12,6 +12,7 @@ module.exports = merge(prodEnv, {
   GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com"`,
   ES_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/es"`,
   STORAGE_GATEWAY_BASE_URL: `"https://api-stage${i18nDomainLabel('-')}.keepwork.com/storage/v0"`,
+  LESSON_API_PREFIX: `"http://easymock-node.keepwork.com/mock/5b596b61c0a3ad0022b14b12"`,
   ES_INDEX: `"www_pages_v1"`,
   ES_TYPE: `"pages"`,
   PARACRAFT: `"https://www.paracraft.cn"`,

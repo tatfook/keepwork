@@ -29,7 +29,10 @@ export const cmdList = [
   'Button',
   'PagePath',
   'CategoryList',
-  'PageSwitching'
+  'PageSwitching',
+  'Lesson',
+  'Quiz',
+  'Hint'
 ]
 
 export const oldCmdMapper = {
