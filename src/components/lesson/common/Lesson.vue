@@ -1,8 +1,8 @@
 <template>
-    <div class="lesson-contaienr">
+  <div class="lesson-contaienr">
 
-      lesson---->
-    </div>
+    lesson---->
+  </div>
 </template>
 
 <script>
@@ -17,4 +17,6 @@ export default {
 
 <style lang="scss">
 </style>
+
+
 

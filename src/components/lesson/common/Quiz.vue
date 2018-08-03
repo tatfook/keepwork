@@ -2,29 +2,51 @@
   <div class="quiz-container" :class="{'error': isError}">
     <div class="quiz-no">
       <i class="el-icon-edit-outline"></i>
-      问题
+      {{$t('card.quiz')}}
     </div>
     <div class="question">{{ question }}</div>
 
-    <el-radio-group class="quiz" v-if="isSingleChoice" v-model="answer">
+    <el-radio-group class="quiz" v-if="isSingleChoice" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
-        <el-radio :label="item.item">{{alphabet[index]}} {{item.item}}</el-radio>
+        <el-radio :disabled="isDone" :label="alphabet[index]">{{alphabet[index]}} {{item.item}}</el-radio>
       </div>
     </el-radio-group>
 
-    <el-checkbox-group class="quiz" v-if="isMutipleChoice" v-model="mutipleAnswer">
+    <el-checkbox-group class="quiz" v-if="isMutipleChoice" v-model="quizMutipleAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
-        <el-checkbox :label="item.item"></el-checkbox>
+        <el-checkbox :disabled="isDone" :label="alphabet[index]">{{alphabet[index]}} {{item.item}}</el-checkbox>
       </div>
     </el-checkbox-group>
 
-    <el-radio-group class="quiz" v-if="isTFNG" v-model="answer">
+    <el-radio-group  class="quiz" v-if="isTFNG" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
-        <el-radio :label="item.item">{{item.item}}</el-radio>
+        <el-radio :disabled="isDone" :label="alphabet[index]">{{item.item}}</el-radio>
       </div>
     </el-radio-group>
 
-    <el-button class="quiz-submit" size="small" type="primary">提交</el-button>
+    <div v-if="isTextMatch" class="quiz-text-match">
+      <div v-for="(item, index) in options" :key="index">
+        <div>{{$t('modList.text')}} {{index+1}}</div>
+        <pre>{{item.item}}</pre>
+      </div>
+      <el-input type="textarea" maxlength="512" v-model="quizAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
+    </div>
+
+    <div class="quiz-result">
+      <div v-if="isSingleChoice || isMutipleChoice || isTFNG" class="answer">
+        {{$t('card.rightAnswerColon')}}
+        <span :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
+      </div>
+      <div v-if="isTextMatch" class="answer">
+        {{$t('card.yourAnswerColon')}}
+        <span :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
+      </div>
+      <div class="desc">
+        {{$t('card.explanationColon')}}
+        <span :class="[isError ? 'error-highlight': 'highlight']">{{desc}}</span>
+      </div>
+    </div>
+    <el-button v-if="!isDone" class="quiz-submit" size="small" type="primary" @click="checkAnswer">{{$t('card.submit')}}</el-button>
   </div>
 </template>
 
@@ -43,15 +65,49 @@ export default {
   },
   data() {
     return {
-      answer: '',
-      mutipleAnswer: [],
-      isError: false
+      quizAnswer: '',
+      quizMutipleAnswer: [],
+      isError: false,
+      isRight: false,
+      isDone: false
     }
   },
   mounted() {
-    console.log(this.question)
+    console.log(this.answer)
   },
-  methods: {},
+  methods: {
+    checkAnswer() {
+      this.isSingleChoice && this.checkSingleChoice()
+      this.isMutipleChoice && this.checkMutipleChoice()
+      this.isTFNG && this.checkTFNG()
+      this.isTextMatch && this.checkTextMatch()
+    },
+    checkSingleChoice() {
+      if (!this.quizAnswer) {
+        return this.$message.error(this.$t('card.pleaseSelectOne'))
+      }
+      let result = this.answer.some(item => item === this.quizAnswer)
+      this.isError = !result
+      this.isRight = result
+      this.isDone = true
+    },
+    checkMutipleChoice() {
+      if (this.quizMutipleAnswer.length < 2) {
+        return this.$message.error(this.$t('card.chooseTwoAnswer'))
+      }
+    },
+    checkTFNG() {
+      // true or false
+      if (!this.quizAnswer) {
+        return this.$message.error(this.$t('card.pleaseSelectOne'))
+      }
+    },
+    checkTextMatch() {
+      if (!this.quizAnswer.trim()) {
+        return this.$message.error(this.$t('card.pleaseInputAnswer'))
+      }
+    }
+  },
   computed: {
     quizData() {
       return _.get(this.data, 'data.quiz.data[0]')
@@ -59,11 +115,16 @@ export default {
     question() {
       return _.get(this.quizData, 'title')
     },
+    answer() {
+      return _.get(this.quizData, 'answer')
+    },
+    desc() {
+      return _.get(this.quizData, 'desc')
+    },
     options() {
       return _.get(this.quizData, 'options')
     },
     quizType() {
-      // TODO: 应该要做到万一type错误的情况下要有提示
       return _.get(this.quizData, 'type', '0')
     },
     isSingleChoice() {
@@ -93,7 +154,6 @@ export default {
   font-size: 16px;
   border: 1px solid #fff;
   color: #4c4c4c;
-  counter-reset: no;
   .quiz-no {
     font-weight: 600;
     i {
@@ -123,6 +183,23 @@ export default {
       margin-left: $marginLeft;
     }
   }
+  .quiz-text-match {
+    padding: 20px 40px 0;
+  }
+  .quiz-result {
+    margin-left: 20px;
+    margin-top: $marginTop;
+    background: rgba(64, 158, 254, 0.05);
+    padding: 10px 20px;
+    .desc,
+    .answer {
+      font-weight: 600;
+      margin: 20px;
+    }
+    .highlight {
+      color: #409efe;
+    }
+  }
   .quiz-submit {
     margin-top: $marginTop;
     margin-left: $marginLeft;
@@ -133,6 +210,14 @@ export default {
 .el-checkbox__input.is-checked ~ .el-checkbox__label {
   font-weight: 600;
   color: black;
+}
+
+.el-radio__input.is-disabled+span.el-radio__label {
+  color: black;
+}
+
+.error-highlight {
+  color: #f53838;
 }
 
 .error {

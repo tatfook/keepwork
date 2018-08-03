@@ -20,9 +20,6 @@ export default {
   async mounted() {
     this.lessonId = this.$route.params.id || 1
     await this.getLessonContent({ lessonId: this.lessonId })
-    console.log(this.lesson)
-    console.log(this.alphabet)
-    console.log(this.lessonCompData)
   },
   methods: {
     ...mapActions({
@@ -52,8 +49,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
+.lesson-wrap {
+  counter-reset: no;
+}
 
+.quiz-no::after {
+  content: counter(no);
+  counter-increment: no;
+}
 </style>
-
