@@ -9,13 +9,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/api/**': {
-        target: 'http://www.xxx.com', // 接口的域名
-        secure: false,      // 接口为https，则需要配置这个参数
-        changeOrigin: true,     // 接口跨域，则需要配置这个参数
-      }
-    },
+    proxyTable: {},
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
