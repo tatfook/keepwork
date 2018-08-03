@@ -10,7 +10,12 @@
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
       <div class="package-catalogue-item" v-for="(lesson, index) in lessonsList" :key='index'>
-        <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toPackageDetail(lesson)">
+        <div class="package-catalogue-item-cover-box">
+          <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
+            <i class="el-icon-check"></i>
+          </div>
+          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toPackageDetail(lesson)">
+        </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toPackageDetail(lesson)">
             <span>{{lesson.lessonName}}</span>
@@ -23,9 +28,6 @@
             <span>45min</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">View Summary</el-button>
-          <div class="package-catalogue-item-mark" v-show="lesson.isFinished">Finished
-            <i class="el-icon-check"></i>
-          </div>
         </div>
       </div>
     </div>
@@ -67,12 +69,18 @@ export default {
       return this.lessonProgressList.length / this.lessonsList.length * 100 || 0
     },
     lessonProgressInfo() {
-      return this.$t('lesson.haveLearn') + this.lessonProgressList.length + this.$t('lesson.lessonsCount')
+      return (
+        this.$t('lesson.haveLearn') +
+        this.lessonProgressList.length +
+        this.$t('lesson.lessonsCount')
+      )
     },
     buttonText() {
-      return this.lessonProgressPercent === 100 ? this.$t('lesson.continue') : this.$t('lesson.finished')
+      return this.lessonProgressPercent === 100
+        ? this.$t('lesson.continue')
+        : this.$t('lesson.finished')
     },
-    isTeacher(){
+    isTeacher() {
       return this.actorType === 'teacher'
     }
   },
@@ -93,7 +101,9 @@ export default {
     },
     toViewSummary(lesson) {
       console.log(
-        `summary /student/packages/${this.packageDetail.id}/lessons/${lesson.id}`
+        `summary /student/packages/${this.packageDetail.id}/lessons/${
+          lesson.id
+        }`
       )
     },
     continueToLearn() {
@@ -104,12 +114,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .package-catalogue {
-  border: 1px solid #e5e5e5;
   padding-bottom: 30px;
   &-progress {
-    padding: 13px 40px;
-    border-bottom: 1px solid #e5e5e5;
-    color: #00e200;
+    padding: 13px 20px;
+    color: #818181;
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -128,32 +136,38 @@ export default {
   &-title {
     font-size: 16px;
     color: #333;
-    height: 55px;
-    line-height: 55px;
-    padding: 0 11px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
     font-weight: bold;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
   }
   &-item {
+    background-color: #fff;
     border: 1px solid #e5e5e5;
-    border-width: 1px 0;
-    padding: 3px 10px;
+    padding: 16px 20px;
     margin-bottom: 28px;
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #333;
     font-weight: lighter;
+    &-cover-box {
+      margin-right: 22px;
+      position: relative;
+      padding-left: 19px;
+    }
     &-cover {
       width: 250px;
       height: 146px;
       object-fit: cover;
-      margin-right: 22px;
       cursor: pointer;
     }
     &-detail {
       flex: 1;
       min-width: 0;
-      position: relative;
     }
     &-title {
       margin: 12px 0 8px;
@@ -173,22 +187,23 @@ export default {
     }
     &-mark {
       position: absolute;
-      top: 12px;
-      right: 15px;
+      top: -4px;
+      left: 0;
       font-size: 14px;
       color: #67c23a;
       .el-icon-check {
         font-weight: bold;
-        width: 24px;
-        height: 24px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
         background-color: #67c23a;
         color: #fff;
         text-align: center;
-        line-height: 24px;
-        font-size: 18px;
+        line-height: 38px;
+        font-size: 24px;
         margin-left: 4px;
         vertical-align: middle;
+        border: 2px solid #fff;
       }
     }
     &-button {
@@ -213,6 +228,18 @@ export default {
         left: 0;
         top: 10px;
       }
+    }
+  }
+}
+</style>
+<style lang="scss">
+.package-catalogue {
+  &-progress {
+    .el-progress-bar__outer {
+      background-color: #d2d2d2;
+    }
+    .el-progress-bar__inner {
+      background-color: #66cd2e;
     }
   }
 }

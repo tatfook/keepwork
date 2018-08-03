@@ -45,6 +45,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .package-detail-page {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding-top: 30px;
   &-catalogue {
     margin-top: 40px;
   }
