@@ -11,8 +11,4 @@ export default {
 </script>
 
 <style lang="scss">
-#lesson-page {
-  margin: 0;
-  padding: 0;
-}
 </style>
