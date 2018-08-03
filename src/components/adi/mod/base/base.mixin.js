@@ -69,11 +69,10 @@ export default {
     this.template = this.conf.templates[this.style.templateID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
-
     _.merge(this.theme.data, gThemeData)
 
     return (
-      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} class={this.getClasses('root')}>
+      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={'font-family: ' + this.themeConf.fontFamily } class={this.getClasses('root')}>
         {renderTemplate(h, this)}
       </div>
     )
@@ -92,12 +91,16 @@ export default {
       let themeData = this.conf.themeData
       let gThemeName = this.themeConf.name
       let gThemeColorId = this.themeConf.colorID
+      let gThemeFontId = this.themeConf.fontID
       let cName = ''
+      let fSize = ''
       if (themeData && gThemeName &&
         themeData[gThemeName] && themeData[gThemeName].colors &&
-        (gThemeColorId === 0 || gThemeColorId) && name) {
+        (gThemeColorId === 0 || gThemeColorId) &&
+        (gThemeFontId === 0 || gThemeFontId) && name) {
         cName = themeData[gThemeName].colors[gThemeColorId][name]
-        return cName
+        fSize = themeData[gThemeName].fontSize[gThemeFontId][name]
+        return (cName || fSize)
       }
     },
     themeClass(name) {

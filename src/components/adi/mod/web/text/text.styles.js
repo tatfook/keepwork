@@ -24,8 +24,8 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'title'],
-      paragraph: ['font_9', 'paragraph']
+      title: ['bigtitle', 'title'],
+      paragraph: ['auxiliaryText', 'paragraph']
     },
     options: {
       theme: {},
@@ -52,8 +52,8 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'title'],
-      paragraph: ['font_9', 'paragraph']
+      title: ['bigtitle', 'title'],
+      paragraph: ['auxiliaryText', 'paragraph']
     },
     options: {
       theme: {},
@@ -72,7 +72,7 @@ export default [
     props: {},
     theme: {
       root: ['mod-space', 'rootColor', 'fontsColor'],
-      paragraph: ['mod-full-width', 'font_9']
+      paragraph: ['mod-full-width', 'auxiliaryText']
     },
     options: {
       theme: {},

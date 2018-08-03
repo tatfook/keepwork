@@ -10,7 +10,7 @@
             <el-col :span="22">
               <span class="website-setting-select-title">{{$t('setting.font')}}</span>
               <el-select class="website-setting-select" v-model="fontFamily" size="small" :placeholder="$t('setting.pleaseSelect')">
-                <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in fontFamilyList" :key="item.value" :label="$t('setting.' + item.label)" :value="item.value">
                 </el-option>
               </el-select>
               <div class="tips">{{$t('setting.tips')}}</div>
@@ -124,9 +124,11 @@ export default {
         label: label
       }))
     },
+    fontFamilyList() {
+      return themeData.classic.fontFamily
+    },
     fontSizeList() {
       const fonts = themeData.classic.fonts[this.fontID]
-
       return fonts
     }
   },
@@ -137,20 +139,7 @@ export default {
       fontID: 0,
       fontFamily: 'inherit',
       fontSizeName: [this.$t('setting.small'), this.$t('setting.medium'), this.$t('setting.large')],
-      fontFamilyList: [
-        {
-          value: 'inherit',
-          label: this.$t('setting.system')
-        },
-        {
-          value: 'Microsoft YaHei',
-          label: this.$t('setting.yahei')
-        },
-        {
-          value: 'SimHei',
-          label: this.$t('setting.simhei')
-        }
-      ]
+
     }
   }
 }
