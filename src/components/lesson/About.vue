@@ -1,6 +1,12 @@
 <template>
   <div class="about">
-    <img class="about-img" src="@/assets/lessonImg/top_banner.png" alt="">
+    <div class="about-carousel">
+      <el-carousel indicator-position="outside">
+        <el-carousel-item v-for="img in imgUrls" :key="img">
+          <img class="about-carousel-img" :src="img.url" alt="">
+        </el-carousel-item>
+      </el-carousel>
+    </div>
     <div class="about-title">
       <img class="rectangle1" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
       <span class="topic">{{$t('lesson.about.hottestLessons')}}</span>
@@ -195,11 +201,14 @@
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
+import img1 from '@/assets/lessonImg/top_banner.png'
+import img2 from '@/assets/lessonImg/top_banner2.png'
 
 export default {
   data(){
     return{
-      isEn: locale ===  'en-US'
+      isEn: locale ===  'en-US',
+      imgUrls: [{"url": img1},{"url": img2}]
     }
   }
 }
@@ -207,9 +216,14 @@ export default {
 
 <style lang="scss">
 .about {
-  &-img {
-    width: 100%;
-    object-fit: cover;
+  &-carousel{
+    .el-carousel__container{
+      height: 500px !important;
+    }
+    &-img {
+      width: 100%;
+      object-fit: cover;
+    }
   }
   &-title {
     margin: 100px auto;
@@ -386,6 +400,11 @@ export default {
 <style lang="scss">
 @media (max-width: 768px) {
 .about{
+  &-carousel{
+    .el-carousel__container{
+      height: 200px !important;
+    }
+  }
   &-teacher-student {
     .content {
       &-img {
