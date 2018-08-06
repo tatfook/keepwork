@@ -12,6 +12,9 @@ export default {
   components: {
     'lesson-wrap': LessonWrap
   },
+  mounted() {
+    this.copyProhibited()
+  },
   data() {
     return {
       lessonId: ''
@@ -25,12 +28,14 @@ export default {
     ...mapActions({
       getLessonContent: 'lesson/student/getLessonContent'
     }),
-    genAlphabet() {
-      let start = 65
-      let alphabet = Array.from({ length: 26 }, () =>
-        String.fromCharCode(start++)
-      )
-      return alphabet
+    copyProhibited() {
+      document.oncontextmenu = new Function('event.returnValue=false')
+      document.onselectstart = new Function('event.returnValue=false')
+      document.onkeydown = () => {
+        if (event.ctrlKey && window.event.keyCode === 67) return false
+        if (event.ctrlKey && window.event.keyCode === 86) return false
+      }
+      document.body.oncopy = () => false
     }
   },
   computed: {

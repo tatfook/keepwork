@@ -1,10 +1,14 @@
 <template>
   <div class="quiz-container" :class="{'error': isError}">
+    <!-- <div class="splic"></div> -->
     <div class="quiz-no">
       <i class="el-icon-edit-outline"></i>
       {{$t('card.quiz')}}
     </div>
-    <div class="question">{{ question }}</div>
+    <div class="question">{{ question }}
+      <span v-if="isMutipleChoice">(
+        <span class="mutiple-choice-tips">{{$t('card.multipleChoices')}}</span>)</span>
+    </div>
 
     <el-radio-group class="quiz" v-if="isSingleChoice" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
@@ -18,7 +22,7 @@
       </div>
     </el-checkbox-group>
 
-    <el-radio-group  class="quiz" v-if="isTFNG" v-model="quizAnswer">
+    <el-radio-group class="quiz" v-if="isTFNG" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
         <el-radio :disabled="isDone" :label="alphabet[index]">{{item.item}}</el-radio>
       </div>
@@ -32,14 +36,14 @@
       <el-input type="textarea" maxlength="512" v-model="quizAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
     </div>
 
-    <div class="quiz-result">
+    <div v-if="isDone" class="quiz-result">
       <div v-if="isSingleChoice || isMutipleChoice || isTFNG" class="answer">
         {{$t('card.rightAnswerColon')}}
         <span :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
       </div>
       <div v-if="isTextMatch" class="answer">
         {{$t('card.yourAnswerColon')}}
-        <span :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
+        <span :class="[isError ? 'error-highlight': 'highlight']">{{quizAnswer}}</span>
       </div>
       <div class="desc">
         {{$t('card.explanationColon')}}
@@ -73,7 +77,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.answer)
+    // this.copyProhibited()
   },
   methods: {
     checkAnswer() {
@@ -87,25 +91,38 @@ export default {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
       }
       let result = this.answer.some(item => item === this.quizAnswer)
-      this.isError = !result
-      this.isRight = result
-      this.isDone = true
+      this.showResult(result)
     },
     checkMutipleChoice() {
       if (this.quizMutipleAnswer.length < 2) {
         return this.$message.error(this.$t('card.chooseTwoAnswer'))
       }
+      let quizMutipleAnswer = [...this.quizMutipleAnswer].sort()
+      let answer = [...this.answer].sort()
+      console.warn('answer: ', this.answer)
+      let result = JSON.stringify(quizMutipleAnswer) === JSON.stringify(answer)
+      this.showResult(result)
     },
     checkTFNG() {
       // true or false
       if (!this.quizAnswer) {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
       }
+      let result = this.answer[0] === this.quizAnswer
+      this.showResult(result)
     },
     checkTextMatch() {
-      if (!this.quizAnswer.trim()) {
+      let quizAnswer = this.quizAnswer.trim()
+      if (!quizAnswer.trim()) {
         return this.$message.error(this.$t('card.pleaseInputAnswer'))
       }
+      let result = this.answer.some(({ item }) => item.trim() === quizAnswer)
+      this.showResult(result)
+    },
+    showResult(result) {
+      this.isError = !result
+      this.isRight = result
+      this.isDone = true
     }
   },
   computed: {
@@ -116,7 +133,7 @@ export default {
       return _.get(this.quizData, 'title')
     },
     answer() {
-      return _.get(this.quizData, 'answer')
+      return this.isTextMatch ? this.options : _.get(this.quizData, 'answer')
     },
     desc() {
       return _.get(this.quizData, 'desc')
@@ -154,6 +171,8 @@ export default {
   font-size: 16px;
   border: 1px solid #fff;
   color: #4c4c4c;
+  max-width: 1080px;
+  margin: 0 auto;
   .quiz-no {
     font-weight: 600;
     i {
@@ -212,18 +231,32 @@ export default {
   color: black;
 }
 
-.el-radio__input.is-disabled+span.el-radio__label {
+.el-radio__input.is-disabled + span.el-radio__label,
+.el-checkbox__input.is-disabled + span.el-checkbox__label {
   color: black;
+}
+
+.splic {
+  height: 1px;
+  margin: 0 0 30px 40px;
+  border-bottom: 1px dashed #bfbfbf;
 }
 
 .error-highlight {
   color: #f53838;
 }
 
+.mutiple-choice-tips {
+  color: #ff414a;
+}
+
 .error {
   margin-bottom: 20px;
   border: 1px solid #f53838;
   background: rgba(245, 56, 56, 0.05);
+  .quiz-result {
+    background: none;
+  }
 }
 </style>
 
