@@ -752,6 +752,12 @@
     },
     "haveLearn": "已学习",
     "continue": "继续",
-    "finished": "完成"
+    "finished": "完成",
+    "aboutUs": "关于我们",
+    "lessonsCenter": "课程中心",
+    "studentColumn": "学生专栏",
+    "teacherColumn": "教师专栏",
+    "viewTeacherPage": "查看教师页",
+    "viewStudentPage": "查看学生页"
   }
 }
