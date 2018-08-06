@@ -1,3 +1,31 @@
+
+let defaultData = {
+  menu: {
+    mode: 'horizontal',
+    emptyData: [
+      {
+        name: 'adi.title.menu',
+        link: '#'
+      }
+    ],
+    emptyTarget: '_blank'
+  },
+  logo: {
+    emptySrc: require('@/../static/adi/title/bear.svg'),
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  },
+  businessName: {
+    emptyName: 'adi.title.businessName',
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  },
+  tagline: {
+    emptyName: 'adi.title.tagLine',
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  }
+}
 export default [
   // style 0
   {
@@ -496,6 +524,64 @@ export default [
           display: 'flex',
           justifyContent: 'flex-end'
         }
+      }
+    }
+  },
+  // style 15
+  {
+    templateID: 2,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center',
+        padding: '5px 0'
+      },
+      colLogo: {
+        float: 'left',
+        'max-width': '64px',
+        'margin-left': '5px'
+      },
+      logo: {
+        height: '64px',
+        width: '64px'
+      },
+      colBusinessName: {
+        float: 'left',
+        width: 'auto',
+        'margin-left': '5px'
+      },
+      colMenu: {
+        float: 'left'
+      },
+      menu: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        menu: {
+          'min-width': '40px'
+        }
+      }
+    },
+    props: {},
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width'],
+      colGroup: ['styleFourBackground'],
+      businessName: ['fontsColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'styleFourBackground',
+          fontColor: 'fontsColor'
+        },
+        logo: {
+          svgFillColor: 'fontsColor'
+        }
+      },
+      config: {
+        ...defaultData
       }
     }
   }

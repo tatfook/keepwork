@@ -58,7 +58,9 @@ const name = 'ModMenu'
 
 const components = {
   menu: 'AdiMenu',
-  footer: 'AdiFooter'
+  footer: 'AdiFooter',
+  logo: 'AdiMedia',
+  businessName: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)

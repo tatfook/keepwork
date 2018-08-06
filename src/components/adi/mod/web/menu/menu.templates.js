@@ -3,5 +3,11 @@ export default [
   [{ colMenu: 'menu' }],
 
   // template 1
-  [{ colFooter: 'footer' }]
+  [{ colFooter: 'footer' }],
+  // template 2
+  [
+    {
+      colGroup: [{ colLogo: 'logo' }, { colBusinessName: 'businessName' }, { colMenu: 'menu' }]
+    }
+  ]
 ]
