@@ -331,6 +331,7 @@ export default [
       }
     }
   },
+  // style 5
   {
     templateID: 2,
     data: {

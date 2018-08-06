@@ -8,7 +8,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       },
       {
         'bgColor': 'bg_color_7',
@@ -16,7 +16,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       },
       {
         'bgColor': 'bg_color_7',
@@ -24,7 +24,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       },
       {
         'bgColor': 'bg_color_7',
@@ -32,7 +32,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       },
       {
         'bgColor': 'bg_color_7',
@@ -40,7 +40,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       },
       {
         'bgColor': 'bg_color_7',
@@ -48,7 +48,7 @@ export default {
         'phoneFontsColor': 'color_4',
         'tColor': 'color_7',
         'sColor': 'color_2',
-        'subtitleA': 'color_3'
+        'styleFourBackground': 'bg_color_4'
       }
     ]
   }
