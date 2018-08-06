@@ -8,7 +8,7 @@
       <!-- <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '> -->
         <div class="preview-site-wrap" id="previewWinSite">
             <div class="preview-site-close"><span @click="handleClosePreview">X</span></div>
-            <div class="preview-content-wrap">
+            <div class="preview-content-wrap" v-if="showPreviewClose">
               <PageViewer/>
             </div>
         </div>
