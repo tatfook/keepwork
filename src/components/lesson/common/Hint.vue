@@ -13,9 +13,6 @@ export default {
     return {}
   },
   mounted() {
-    console.log('fafa')
-    console.log(this.data)
-    console.log(this.data.data.hint)
   },
   props: {
     data: Object

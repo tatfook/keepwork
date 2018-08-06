@@ -33,13 +33,14 @@
         <div>{{$t('modList.text')}} {{index+1}}</div>
         <pre>{{item.item}}</pre>
       </div>
-      <el-input type="textarea" maxlength="512" v-model="quizAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
+      <el-input v-if="!isDone" type="textarea" maxlength="512" v-model="quizAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
     </div>
 
     <div v-if="isDone" class="quiz-result">
       <div v-if="isSingleChoice || isMutipleChoice || isTFNG" class="answer">
         {{$t('card.rightAnswerColon')}}
-        <span :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
+        <span v-if="isTFNG" :class="[isError ? 'error-highlight': 'highlight']">{{TFNGAnswer}}</span>
+        <span v-else :class="[isError ? 'error-highlight': 'highlight']">{{answer}}</span>
       </div>
       <div v-if="isTextMatch" class="answer">
         {{$t('card.yourAnswerColon')}}
@@ -77,7 +78,6 @@ export default {
     }
   },
   mounted() {
-    // this.copyProhibited()
   },
   methods: {
     checkAnswer() {
@@ -99,7 +99,6 @@ export default {
       }
       let quizMutipleAnswer = [...this.quizMutipleAnswer].sort()
       let answer = [...this.answer].sort()
-      console.warn('answer: ', this.answer)
       let result = JSON.stringify(quizMutipleAnswer) === JSON.stringify(answer)
       this.showResult(result)
     },
@@ -134,6 +133,15 @@ export default {
     },
     answer() {
       return this.isTextMatch ? this.options : _.get(this.quizData, 'answer')
+    },
+    TFNGAnswer() {
+      if (this.answer[0] === 'A') {
+        return this.$t('card.true')
+      }
+      if (this.answer[0] === 'B') {
+        return this.$t('card.false')
+      }
+      return false
     },
     desc() {
       return _.get(this.quizData, 'desc')
