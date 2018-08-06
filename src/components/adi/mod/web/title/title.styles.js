@@ -275,6 +275,63 @@ export default [
   },
   // style 4
   {
+    templateID: 3,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center',
+        padding: '5px 0'
+      },
+      colLogo: {
+        float: 'left',
+        'max-width': '64px',
+        'margin-left': '5px'
+      },
+      logo: {
+        height: '64px',
+        width: '64px'
+      },
+      colBusinessName: {
+        float: 'left',
+        width: 'auto',
+        'margin-left': '5px'
+      },
+      colMenu: {
+        float: 'left'
+      },
+      menu: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        menu: {
+          'min-width': '40px'
+        }
+      }
+    },
+    props: {},
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width'],
+      colGroup: ['styleFourBackground'],
+      businessName: ['fontsColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'styleFourBackground',
+          fontColor: 'fontsColor'
+        },
+        logo: {
+          svgFillColor: 'fontsColor'
+        }
+      },
+      config: {
+        ...defaultData
+      }
+    }
+  },
+  {
     templateID: 2,
     data: {
       root: {},
