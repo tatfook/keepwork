@@ -237,6 +237,19 @@ const getters = {
     return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
   },
 
+  webPageTemplateConfig: state => state.webPageTemplateConfig,
+  getWebPageTemplates: (state, { webPageTemplateConfig = [] }) => categoryName => {
+    let categoriesMap = _.keyBy(webPageTemplateConfig, 'name')
+    return _.get(categoriesMap, [categoryName, 'templates'], [])
+  },
+  getWebPageTemplate: (state, { getWebPageTemplates }) => ({
+    categoryName,
+    templateName
+  }) => {
+    let templatesInCategory = getWebPageTemplates(categoryName)
+    return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
+  },
+
   activePageStarInfo: state => state.activePageStarInfo,
   siteThemeConfigs: state => state.siteThemeConfigs,
   siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || ThemeHelper.defaultTheme,

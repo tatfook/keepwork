@@ -10,6 +10,7 @@ const state = () => ({
   comments: {},
   siteDetailInfo: {},
   webTemplateConfig: [],
+  webPageTemplateConfig: [],
   siteLayoutConfigs: {},
   skyDrive: {},
   usersDetail: [],

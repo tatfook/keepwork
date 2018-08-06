@@ -201,6 +201,8 @@
 
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
+    "selectPageTemplate": "选择网页模板",
+    "setPageAccessAddress": "设定网页的访问地址",
     "theNextStep": "下一步",
     "previous": "上一步",
     "startEditing": "开始编辑",
@@ -211,6 +213,7 @@
     "alreadyExists": "同名网站已经存在",
     "defaultStyle": "默认样式",
     "forExample": "例如：mysite123",
+    "forPageExample": "例如: mypage123",
 
     "websiteNameCanOnly": "网站名只能由字母，数字和下划线组成",
     "setWebsiteName": "您还可以在 网站设置 页面设置网站名称",
