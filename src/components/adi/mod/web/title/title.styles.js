@@ -67,8 +67,8 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -129,8 +129,8 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -189,8 +189,8 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -250,8 +250,8 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -381,7 +381,7 @@ export default [
     options: {
       theme: {
         menuB: {
-          fontSize: 'font_6',
+          fontSize: 'subtitle',
           fontColor: 'color_3',
           color: 'svgFillColor',
           backgroundColor: 'color_5',

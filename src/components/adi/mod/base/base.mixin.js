@@ -69,11 +69,10 @@ export default {
     this.template = this.conf.templates[this.style.templateID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
-
     _.merge(this.theme.data, gThemeData)
 
     return (
-      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} class={this.getClasses('root')}>
+      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
         {renderTemplate(h, this)}
       </div>
     )
@@ -88,6 +87,13 @@ export default {
     jssClass(name) {
       return this.sheet.classes[name]
     },
+    getFontFamily() {
+      if (this.themeConf && this.themeConf.fontFamily) {
+        return 'font-family: ' + this.themeConf.fontFamily
+      } else {
+        return ''
+      }
+    },
     convertColorStyle(name) {
       let themeData = this.conf.themeData
       let gThemeName = this.themeConf.name
@@ -100,16 +106,28 @@ export default {
         return cName
       }
     },
+    convertFontStyle(name) {
+      let themeData = this.conf.themeData
+      let gThemeName = this.themeConf.name
+      let gThemeFontId = this.themeConf.fontID
+      let fSize = ''
+      if (themeData && gThemeName &&
+        themeData[gThemeName] && themeData[gThemeName].colors &&
+        (gThemeFontId === 0 || gThemeFontId) && name) {
+        fSize = themeData[gThemeName].fontSize[gThemeFontId][name]
+        return fSize
+      }
+    },
     themeClass(name) {
-      if (this.convertColorStyle(name)) {
-        return this.theme.sheet.classes[this.convertColorStyle(name)]
+      if (this.convertColorStyle(name) || this.convertFontStyle(name)) {
+        return this.theme.sheet.classes[this.convertColorStyle(name) || this.convertFontStyle(name)]
       } else {
         return this.theme.sheet.classes[name]
       }
     },
     themeData(name) {
       if (this.convertColorStyle(name)) {
-        return this.theme.data[this.convertColorStyle(name)]
+        return this.theme.data[this.convertColorStyle(name) || this.convertFontStyle(name)]
       } else {
         return this.theme.data[name]
       }

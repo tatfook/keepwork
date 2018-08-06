@@ -40,7 +40,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -71,7 +71,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -106,7 +106,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -140,7 +140,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -172,7 +172,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -207,7 +207,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -241,7 +241,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -272,7 +272,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -307,7 +307,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -342,7 +342,7 @@ export default [
     theme: {
       root: [],
       colFooterRow: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
       colFooter: ['bg_color_4']
     },
     options: {
@@ -375,7 +375,7 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
       colFooter: ['bg_color_4']
     },
     options: {
@@ -408,7 +408,7 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
       colFooter: ['bg_color_4']
     },
     options: {
@@ -441,7 +441,7 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
       colFooter: ['bg_color_0']
     },
     options: {
@@ -474,7 +474,7 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
       colFooter: ['bg_color_0']
     },
     options: {
@@ -507,7 +507,7 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
+      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
       colFooter: ['bg_color_0']
     },
     options: {

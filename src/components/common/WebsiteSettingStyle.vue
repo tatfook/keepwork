@@ -10,7 +10,7 @@
             <el-col :span="22">
               <span class="website-setting-select-title">{{$t('setting.font')}}</span>
               <el-select class="website-setting-select" v-model="fontFamily" size="small" :placeholder="$t('setting.pleaseSelect')">
-                <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in fontFamilyList" :key="item.value" :label="$t('setting.' + item.label)" :value="item.value">
                 </el-option>
               </el-select>
               <div class="tips">{{$t('setting.tips')}}</div>
@@ -27,7 +27,7 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <p v-for="(size, index) in fontSizeList[fontID]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
+              <p v-for="(size, index) in fontSizeList" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
@@ -124,13 +124,12 @@ export default {
         label: label
       }))
     },
+    fontFamilyList() {
+      return themeData.classic.fontFamily
+    },
     fontSizeList() {
-      const fonts = themeData.classic.fonts[0]
-      let big = [0, 3, 6, 9]
-      let small = [2, 5, 8, 9]
-      let midium = [1, 4, 7, 9]
-      let comp = [small, midium, big]
-      return comp.map(size => size.map(index => fonts[index]))
+      const fonts = themeData.classic.fonts[this.fontID]
+      return fonts
     }
   },
   data() {
@@ -140,20 +139,7 @@ export default {
       fontID: 0,
       fontFamily: 'inherit',
       fontSizeName: [this.$t('setting.small'), this.$t('setting.medium'), this.$t('setting.large')],
-      fontFamilyList: [
-        {
-          value: 'inherit',
-          label: this.$t('setting.system')
-        },
-        {
-          value: 'Microsoft YaHei',
-          label: this.$t('setting.yahei')
-        },
-        {
-          value: 'SimHei',
-          label: this.$t('setting.simhei')
-        }
-      ]
+
     }
   }
 }
@@ -194,6 +180,9 @@ export default {
     border-radius: 4px;
     padding: 20px;
     margin-top: 20px;
+    height: 360px;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   &-select-title {
     margin-right: 10px;

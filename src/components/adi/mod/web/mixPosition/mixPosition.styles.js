@@ -84,10 +84,10 @@ export default [
     theme: {
       root: ['mod-space'],
       colGroupRow: ['mod-full-width'],
-      title: ['font_1', 'tColor'],
-      subtitle: ['font_3', 'sColor'],
-      paragraph: ['font_9', 'phoneFontsColor'],
-      button: ['font_10', 'fontsColor']
+      title: ['bigtitle', 'tColor'],
+      subtitle: ['subtitle', 'sColor'],
+      paragraph: ['paragraphType', 'phoneFontsColor'],
+      button: ['buttonText', 'fontsColor']
     },
     options: {
       theme: {
