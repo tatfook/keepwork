@@ -12,6 +12,9 @@ export default {
   components: {
     'lesson-wrap': LessonWrap
   },
+  mounted() {
+    this.copyProhibited()
+  },
   data() {
     return {
       lessonId: ''
@@ -20,20 +23,19 @@ export default {
   async mounted() {
     this.lessonId = this.$route.params.id || 1
     await this.getLessonContent({ lessonId: this.lessonId })
-    console.log(this.lesson)
-    console.log(this.alphabet)
-    console.log(this.lessonCompData)
   },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/student/getLessonContent'
     }),
-    genAlphabet() {
-      let start = 65
-      let alphabet = Array.from({ length: 26 }, () =>
-        String.fromCharCode(start++)
-      )
-      return alphabet
+    copyProhibited() {
+      document.oncontextmenu = new Function('event.returnValue=false')
+      document.onselectstart = new Function('event.returnValue=false')
+      document.onkeydown = () => {
+        if (event.ctrlKey && window.event.keyCode === 67) return false
+        if (event.ctrlKey && window.event.keyCode === 86) return false
+      }
+      document.body.oncopy = () => false
     }
   },
   computed: {
@@ -52,8 +54,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
+.lesson-wrap {
+  counter-reset: no;
+}
 
+.quiz-no::after {
+  content: counter(no);
+  counter-increment: no;
+}
 </style>
-
