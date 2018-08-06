@@ -3,23 +3,63 @@
     <div class="lesson-header-nav">
       <div class="lesson-header-nav-box">
         <div class="lesson-header-nav-item">
-          ABOUT
+          {{$t('lesson.aboutUs')}}
         </div>
         <div class="lesson-header-nav-item">
-          LESSONS
+          {{$t('lesson.lessonsCenter')}}
         </div>
         <div class="lesson-header-nav-item">
-          STUDENT COLUMN
+          {{columnText}}
         </div>
       </div>
-      <div class="lesson-header-toggle-button">View Teacher`s Page</div>
+      <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link>
     </div>
 
   </div>
 </template>
 <script>
+const StudentPageReg = /^\/student/
+const TeacherPageReg = /^\/teacher/
 export default {
-  name: 'Header'
+  name: 'Header',
+  computed: {
+    nowFullPath() {
+      return this.$route.fullPath
+    },
+    isTeacherPage() {
+      return TeacherPageReg.test(this.nowFullPath)
+    },
+    isStudentPage() {
+      return StudentPageReg.test(this.nowFullPath)
+    },
+    columnText() {
+      if (this.isStudentPage) {
+        return this.$t('lesson.studentColumn')
+      }
+      if (this.isTeacherPage) {
+        return this.$t('lesson.teacherColumn')
+      }
+    },
+    statusTogglePath() {
+      let targetPath = ''
+      if (this.isTeacherPage) {
+        targetPath = _.replace(this.nowFullPath, /^\/teacher/, '/student')
+      } else {
+        targetPath = _.replace(this.nowFullPath, /^\/student/, '/teacher')
+      }
+      return {
+        path: targetPath
+      }
+    },
+    toggleButtonText() {
+      if (this.isStudentPage) {
+        return this.$t('lesson.viewTeacherPage')
+      }
+      if (this.isTeacherPage) {
+        return this.$t('lesson.viewStudentPage')
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -56,6 +96,7 @@ export default {
     color: #409efe;
     border-radius: 4px;
     font-size: 12px;
+    text-decoration: none;
   }
 }
 </style>
