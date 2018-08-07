@@ -11,8 +11,12 @@ export default {
   name: 'PackageDetailPage',
   data() {
     return {
-      actorType: 'teacher',
-      packageId: this.$route.params.id
+      actorType: 'teacher'
+    }
+  },
+  computed: {
+    packageId() {
+      return this.$route.params.id
     }
   },
   components: {

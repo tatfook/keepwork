@@ -45,6 +45,7 @@
     "vue-markdown": "leopoldchen/vue-markdown#master",
     "vue-router": "^3.0.1",
     "vue-scrollto": "^2.11.0",
+    "vue-test-utils": "^1.0.0-beta.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^2.4.0",
     "vuex-iframe-sync": "^1.4.1",
