@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-quiz" >
+  <div class="comp-quiz">
     <div class="splic"></div>
 
     <div v-for="(item, index) in properties.data" :id="item.id" :key="index">
@@ -13,7 +13,9 @@
         </div>
         <div :data-answer="item.answer" class="getData">
           <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 0 || item.type == 1 || item.type == 2" :key="index">
-            {{serialNo[index]}} {{opt.item}}
+            {{serialNo[index]}}
+            <span v-if="item.type == 2">{{$t(`card.${opt.item}`)}}</span>
+            <span v-else>{{opt.item}}</span>
           </div>
           <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 3" :key="index">
             <div>{{$t('modList.text')}} {{index+1}}: </div>
@@ -21,7 +23,7 @@
           </div>
         </div>
         <div v-if="item.type == 3">
-          <el-input type="textarea" maxlength="512"  :placeholder="$t('card.textMatchPlaceholder')"></el-input>
+          <el-input type="textarea" maxlength="512" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
         </div>
       </div>
     </div>
