@@ -53,8 +53,16 @@ export const admin = {}
 export const packages = {
   packagesList: args => get('packages/search'),
   packageDetail: args => get(`packages/${args.id}/detail`),
-  subscribe: args => post(`packages/${args.id}/subscribe`),
-  userSubscribes: args => get(`users/${args.id}/subscribes`)
+  subscribe: args => post(`packages/${args.id}/subscribe`)
+}
+
+export const users = {
+  userSubscribes: args => get(`users/${args.id}/subscribes`),
+  userSkills: args => get(`users/${args.id}/skills`)
+}
+
+export const classrooms = {
+  join: args => post('classrooms/join', ...args)
 }
 
 // const _get = ({ url, params, config, returnOriginalData = true }) =>
@@ -77,9 +85,11 @@ const fakerGet = async ({ lessonId }) => {
 export const getLessonContent = args => fakerGet(args)
 
 export const lesson = {
+  users,
   packages,
   admin,
-  getLessonContent
+  getLessonContent,
+  classrooms
 }
 
 export default lesson

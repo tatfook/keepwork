@@ -1,7 +1,12 @@
 import { lesson } from '@/api'
 import { props } from './mutations'
 
-let { GET_PACKAGE_DETAIL_SUCCESS, GET_LESSON_CONTENT_SUCCESS } = props
+let {
+  GET_PACKAGE_DETAIL_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
+  GET_USER_SUBSCRIBES,
+  GET_USER_SKILLS
+} = props
 
 const actions = {
   async getPackageDetail({ commit }, { packageId }) {
@@ -20,9 +25,16 @@ const actions = {
     })
     return subscribeResult
   },
-  async userSubscribes({ commit }, { userId }) {
-    let userSubscribeList = await lesson.packages.userSubscribes({ userId })
-    return userSubscribeList
+  async getUserSubscribes({ commit }, { userId }) {
+    let userSubscribeList = await lesson.users.userSubscribes({ userId })
+    commit(GET_USER_SUBSCRIBES, { userSubscribeList })
+  },
+  async getUserSkills({ commit }, { userId }) {
+    let userSkillsList = await lesson.users.userSkills({ userId })
+    commit(GET_USER_SKILLS, { userSkillsList })
+  },
+  async enterClassRoom({ commit }, { key }) {
+    await lesson.classrooms.join({ key })
   }
 }
 export default actions

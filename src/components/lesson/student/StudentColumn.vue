@@ -5,16 +5,11 @@
     <div class="profile">
       <img src="@/assets/lessonImg/cover1.png" alt="">
     </div>
-    <div class="nickname">Aimee</div>
-    <div class="skillpoints">10 skillpoints</div>
+    <div class="nickname">{{username}}</div>
+    <div class="skillpoints">{{skillpointsCount}} skillpoints</div>
     <div class="skills">
       <ul class="skills-list">
-        <li>技能名称1：<span>12</span></li>
-        <li>技能名称1：<span>12</span></li>
-        <li>技能名称1：<span>12</span></li>
-        <li>技能名称1：<span>12</span></li>
-        <li>技能名称1：<span>12</span></li>
-        <li>技能名称1：<span>12</span></li>
+        <li v-for="(skill,index) in skillsList" :key="index">{{skill.skillName}}：<span>{{skill.score}}</span></li>
       </ul>
     </div>
   </el-aside>
@@ -31,7 +26,7 @@
           <span class="search-input"><el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')"></el-input></span>
         </el-col>
         <el-col :md="6">
-          <span class="search-btn"><el-button :disabled="!classID" size="medium" type="primary"><label for="searchClass">{{$t('lesson.enter')}}</label></el-button></span>
+          <span class="search-btn"><el-button @click="enterClass" :disabled="!classID" size="medium" type="primary"><label for="searchClass">{{$t('lesson.enter')}}</label></el-button></span>
         </el-col>
       </el-row>
     </div>
@@ -56,25 +51,39 @@ export default {
   name: "student",
   data(){
     return{
-      classID: '',
-      subscribesList: []
+      classID: ''
     }
   },
   async mounted(){
     console.log('userId',this.userId)
+    console.log('username',this.username)
     let payload = {userId:1}
-    this.subscribesList = await this.getUserSubscribes(payload)
+    await this.getUserSubscribes(payload)
     console.log('subscribes',this.subscribesList)
+    await this.getUserSkills(payload)
+    console.log('skillsList',this.skillsList)
   },
   computed:{
     ...mapGetters({
-      userId: 'user/userId'
+      userId: 'user/userId',
+      username: 'user/username',
+      subscribesList: 'lesson/student/userSubscribeList',
+      skillsList: 'lesson/student/userSkillsList'
     }),
+    skillpointsCount(){
+      let sum = 0
+      this.skillsList.every(skill => sum += skill.score*1 );
+      return sum
+    }
   },
   methods:{
     ...mapActions({
-      getUserSubscribes: 'lesson/student/userSubscribes'
+      getUserSubscribes: 'lesson/student/getUserSubscribes',
+      getUserSkills: 'lesson/student/getUserSkills'
     }),
+    enterClass(){
+      //进入课堂
+    }
   },
   components: {
     UserSubscribePackages
