@@ -94,7 +94,7 @@ export default {
       let board = window.document.querySelector('.board-iframe')
 
       if (state) {
-        this.compatible();
+        this.compatible()
 
         if (!board) {
           return
@@ -116,7 +116,9 @@ export default {
           keepworkSaveUrl.svgUrl = this.cardValue.svg
         }
 
-        boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
+        if (boardWindow && boardWindow.board && boardWindow.board.pickFile) {
+          boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
+        }
       } else {
         if (!board) {
           return
@@ -169,21 +171,27 @@ export default {
     compatible() {
       let self = this
 
-      function setOld() {
+      function setdata() {
         let board = window.document.querySelector('.board-iframe')
 
         if (board) {
+          let boardType = (board.contentWindow.boardType = {})
+
+          boardType.close = () => {
+            self.visible = false
+          }
+
           if (self.cardValue.data) {
             board.contentWindow.boardOldData = self.cardValue.data
           } else {
             board.contentWindow.boardOldData = ''
           }
         } else {
-          setTimeout(setOld, 500)
+          setTimeout(setdata, 500)
         }
       }
 
-      setOld()
+      setdata()
     }
   }
 }
