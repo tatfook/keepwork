@@ -203,6 +203,8 @@
 
     "selectSiteTemplate": "Select template",
     "setAccessAddress": "Website URL",
+    "selectPageTemplate": "Select Page template",
+    "setPageAccessAddress": "Web Page URL",
     "theNextStep": "Next",
     "previous": "Prev",
     "startEditing": "Start editing",
@@ -213,6 +215,7 @@
     "alreadyExists": "Website with the same name already exists",
     "defaultStyle": "Default style",
     "forExample": "For example: mysite123",
+    "forPageExample": "For example: mypage123",
 
     "websiteNameCanOnly":
       "Website name can only consist of letters, numbers and underscores",
@@ -220,7 +223,9 @@
       "You can also set the site name on the site settings page",
     "privatePermissions":
       "Open VIP, additional support for privileges such as private permissions and rights management",
-    "createdSuccessfully":
+      "createdSuccessfully":
+      "Congratulations, the website was created successfully",
+      "webPageCreatedSuccessfully":
       "Congratulations, the website was created successfully",
     "lowerCaseLetters":
       "Can use lowercase letters, numbers (example: mysite123)",

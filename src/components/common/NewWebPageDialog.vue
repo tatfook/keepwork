@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
+  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-webpage-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
     <div class="full-height first-step" v-if="stepIndex===0">
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
@@ -9,8 +9,8 @@
             </el-menu-item>
           </el-menu>
         </el-col>
-        <el-col :span="21" class="new-website-templates">
-          <el-col :span="10" :offset='index%2 !== 0 ? 2 : 0' v-for='(template, index) in selectedCategory.templates' :class="{ active: selectedTemplateIndex === index }" class='new-website-template' :key='template.name'>
+        <el-col :span="21" class="new-webpage-templates">
+          <el-col :span="10" :offset='index%2 !== 0 ? 2 : 0' v-for='(template, index) in selectedCategory.templates' :class="{ active: selectedTemplateIndex === index }" class='new-webpage-template' :key='template.name'>
             <el-card :body-style="{padding: '0px'}" shadow="never">
               <div class="template-img" @click='setSelectedTemplateIndex(index)'>
                 <img :src="template.logoUrl">
@@ -22,32 +22,21 @@
       </el-row>
     </div>
     <div v-if="stepIndex===1">
-      <el-form class="website-name" :model="websiteNameForm" :rules="websiteNameFormRules" ref="websiteNameForm">
+      <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm">
         <el-form-item prop="value">
-          <el-input :placeholder="forExample.forExample" v-model="websiteNameForm.value">
-            <template slot="prepend">{{ locationOrigin }}/{{ username }}/</template>
-
+          <el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value">
+            <template slot="prepend">{{ locationOrigin }}/{{ folderPath }}/</template>
           </el-input>
         </el-form-item>
       </el-form>
-      <p class="info">
-        {{$t('editor.lowerCaseLetters')}}<br/> {{$t('editor.unchangeable')}}
-        <br/>
-        <span v-if="!IS_GLOBAL_VERSION">{{$t('editor.vipForwarding')}}</span>
-      </p>
     </div>
     <div v-if="stepIndex===2" class="success-info">
       <i class="el-icon-success"></i>
       <h1>
-        {{$t('editor.createdSuccessfully')}}
+        {{$t('editor.webPageCreatedSuccessfully')}}
       </h1>
       <p>{{$t('editor.URL')}}
-        <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
-        <br/> {{$t('editor.setWebsiteName')}}
-        <br/>
-        <span v-if="!IS_GLOBAL_VERSION">
-          {{$t('editor.privatePermissions')}}
-        </span>
+        <a :href="newPageUrl" target="_blank">{{newPageUrl}}</a>
       </p>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -67,34 +56,37 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
-  name: 'NewWebsiteDialog',
+  name: 'NewWebPageDialog',
   props: {
-    show: Boolean
+    show: Boolean,
+    sitePath: String,
+    folderPath: String
   },
   data() {
-    let websiteNameValidator = (rule, value, callback) => {
-      let trimmedValue = value.trim()
-      if (!trimmedValue) {
+    let webpageNameValidator = async (rule, str, callback) => {
+      await this.gitlabGetRepositoryTree({ path: this.sitePath })
+      let childNames = this.gitlabChildNamesByPath(this.folderPath)
+
+      let value = (str || '').trim()
+      if (!value) {
         this.isNameIllegal = true
-        return callback(new Error(this.$t('editor.canNotBeEmpty')))
+        return callback(new Error(this.$t('editor.required')))
       }
-      if (!/^[A-Za-z0-9_]+$/.test(trimmedValue)) {
+
+      if (!gitFilenameValidator(value)) {
         this.isNameIllegal = true
-        return callback(new Error(this.$t('editor.websiteNameCanOnly')))
+        return callback(new Error(this.$t('editor.nameRule')))
       }
-      if (/^[_]/.test(trimmedValue)) {
+
+      if (childNames.indexOf(value) > -1){
         this.isNameIllegal = true
-        return callback(
-          new Error(this.$t('editor.cannotBeginWithAnUnderscore'))
-        )
+        return callback(new Error(this.$t('editor.nameExist')))
       }
-      if (this.userPersonalWebsiteNames.indexOf(trimmedValue) > -1) {
-        this.isNameIllegal = true
-        return callback(new Error(this.$t('editor.alreadyExists')))
-      }
+
       this.isNameIllegal = false
       callback()
     }
@@ -105,10 +97,10 @@ export default {
       stepIndex: 0,
       steps: [
         {
-          title: this.$t('editor.selectSiteTemplate')
+          title: this.$t('editor.selectPageTemplate')
         },
         {
-          title: this.$t('editor.setAccessAddress')
+          title: this.$t('editor.setPageAccessAddress')
         },
         {
           title: ''
@@ -116,29 +108,29 @@ export default {
       ],
       selectedCategoryIndex: 0,
       selectedTemplateIndex: 0,
-      websiteNameForm: {
+      webpageNameForm: {
         value: ''
       },
-      websiteNameFormRules: {
+      webpageNameFormRules: {
         value: {
-          validator: websiteNameValidator
+          validator: webpageNameValidator
         }
       },
       isNameIllegal: true,
       locationOrigin: window.location.origin,
       forExample: {
-        forExample: this.$t('editor.forExample')
+        forExample: this.$t('editor.forPageExample')
       }
     }
   },
   computed: {
     ...mapGetters({
-      username: 'user/username',
-      userWebTemplateConfig: 'user/webTemplateConfig',
+      gitlabChildNamesByPath: 'gitlab/childNamesByPath',
+      userWebPageTemplateConfig: 'user/webPageTemplateConfig',
       userPersonalWebsiteNames: 'user/personalWebsiteNames'
     }),
     categories() {
-      return this.userWebTemplateConfig
+      return this.userWebPageTemplateConfig
     },
     selectedCategory() {
       return _.get(this.categories, [this.selectedCategoryIndex], {})
@@ -156,34 +148,24 @@ export default {
     title() {
       return this.currentStep.title
     },
-    websiteSetting() {
-      // to check the data structure, see doc/data_examples/webTemplateConfig.json
-      let { name: categoryName } = this.selectedCategory
-      let { name: templateName, logoUrl } = this.selectedTemplate
-      return {
-        categoryName,
-        type: categoryName, // seems useless
-        templateName,
-        logoUrl, // todo: add for new templates solution
-        styleName: this.$t('editor.defaultStyle') // seems useless
-      }
+    newFilePath() {
+      let newFileName = this.webpageNameForm.value
+      newFileName = suffixFileExtension(newFileName, 'md')
+      return `${this.folderPath}/${newFileName}`
     },
-    newSiteUrl() {
-      return `${this.locationOrigin}/${this.username}/${
-        this.websiteNameForm.value
-      }`
+    newPageUrl() {
+      return `${this.folderPath}/${this.webpageNameForm.value}`
     }
   },
   async mounted() {
-    await this.userGetWebTemplateConfig()
-    await this.userGetAllWebsite({ useCache: true })
+    await this.userGetWebPageTemplateConfig()
     this.loading = false
   },
   methods: {
     ...mapActions({
-      userCreateWebsite: 'user/createWebsite',
-      userGetWebTemplateConfig: 'user/getWebTemplateConfig',
-      userGetAllWebsite: 'user/getAllWebsite'
+      addNewWebPage: 'user/addNewWebPage',
+      gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
+      userGetWebPageTemplateConfig: 'user/getWebPageTemplateConfig'
     }),
     setSelectedCategoryIndex(index) {
       this.selectedCategoryIndex = index
@@ -214,27 +196,27 @@ export default {
       this.resetAndClose()
     },
     handleEdit() {
-      let path = `${this.username}/${this.websiteNameForm.value}/index`
-      this.$router.push('/' + path)
+      this.$router.push('/' + this.newPageUrl)
       this.resetAndClose()
     },
     resetAndClose() {
       this.$emit('close')
       this.stepIndex = 0
-      this.websiteNameForm.value = ''
+      this.webpageNameForm.value = ''
       this.resetSelectedCategoryIndex()
     },
     async handleSubmit() {
-      let valid = await this.$refs.websiteNameForm.validate()
+      let valid = await this.$refs.webpageNameForm.validate()
       if (!valid) return
-      await this.createWebsite()
+      await this.createNewPage()
       this.handleNextStep()
     },
-    async createWebsite() {
+    async createNewPage() {
       this.loading = true
-      let name = this.websiteNameForm.value
-      let websiteSetting = this.websiteSetting
-      await this.userCreateWebsite({ name, websiteSetting })
+      await this.addNewWebPage({
+        path: this.newFilePath,
+        template: this.selectedTemplate
+      })
       this.loading = false
     }
   }
@@ -256,7 +238,7 @@ export default {
   }
 }
 
-.new-website-dialog {
+.new-webpage-dialog {
   .full-height {
     height: 100%;
   }
@@ -332,7 +314,7 @@ export default {
     width: 500px;
     font-size: 16px;
   }
-  .website-name {
+  .webpage-name {
     .el-form-item__error {
       top: 12px;
       left: 515px;
