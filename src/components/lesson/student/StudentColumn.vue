@@ -55,6 +55,7 @@ export default {
     }
   },
   async mounted(){
+    await this.getProfile()
     console.log('userId',this.userId)
     console.log('username',this.username)
     let payload = {userId:1}
@@ -78,6 +79,7 @@ export default {
   },
   methods:{
     ...mapActions({
+      getProfile: 'user/getProfile',
       getUserSubscribes: 'lesson/student/getUserSubscribes',
       getUserSkills: 'lesson/student/getUserSkills'
     }),
