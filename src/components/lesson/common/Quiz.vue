@@ -179,6 +179,7 @@ export default {
   font-size: 16px;
   border: 1px solid #fff;
   color: #4c4c4c;
+  background: white;
   max-width: 1080px;
   margin: 0 auto;
   .quiz-no {
