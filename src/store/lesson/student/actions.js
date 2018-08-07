@@ -19,6 +19,10 @@ const actions = {
       id: packageId
     })
     return subscribeResult
+  },
+  async userSubscribes({ commit }, { userId }) {
+    let userSubscribeList = await lesson.packages.userSubscribes({ userId })
+    return userSubscribeList
   }
 }
 export default actions
