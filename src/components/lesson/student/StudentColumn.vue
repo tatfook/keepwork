@@ -177,11 +177,6 @@ export default {
     }
     .packages{
       margin: 44px 0 0;
-      .el-row{
-        .el-col{
-          
-        }
-      }
     }
   }
 }
