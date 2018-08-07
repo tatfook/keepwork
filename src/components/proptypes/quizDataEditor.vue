@@ -49,7 +49,7 @@
 
         <el-radio-group v-model="judgeAnswer">
           <span class="el-radio" v-for="(opt, index) in judgeOptions" :key="index">
-            <el-radio :label="serialNo[index]">{{opt.item}}</el-radio>
+            <el-radio :label="serialNo[index]">{{$t(`card.${opt.item}`)}}</el-radio>
           </span>
         </el-radio-group>
 
@@ -133,9 +133,9 @@ export default {
       singleOptions: [{item: 'option 1'}, {item: 'option 2'}],
       multipleOptions: [{item: 'option 1'}, {item: 'option 2'}, {item: 'option 3'}],
       judgeOptions: [{
-        item: this.$t('card.true')
+        item: true
       },{
-        item: this.$t('card.false')
+        item: false
       }],
       textOptions: [{item:'text match'}],
 
