@@ -53,7 +53,8 @@ export const admin = {}
 export const packages = {
   packagesList: args => get('packages/search'),
   packageDetail: args => get(`packages/${args.id}/detail`),
-  subscribe: args => post(`packages/${args.id}/subscribe`)
+  subscribe: args => post(`packages/${args.id}/subscribe`),
+  userSubscribes: args => get(`users/${args.id}/subscribes`)
 }
 
 // const _get = ({ url, params, config, returnOriginalData = true }) =>
