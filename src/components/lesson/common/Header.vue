@@ -18,6 +18,8 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
+
 const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
 export default {
