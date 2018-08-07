@@ -10,6 +10,7 @@ const StudentPackageDetailPage = () =>
 const TeacherPackageDetailPage = () =>
   import('@/components/lesson/teacher/PackageDetailPage')
 const Learn = () => import('@/components/lesson/common/Learn')
+const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 
 Vue.use(Router)
 
@@ -47,6 +48,11 @@ export default new Router({
       name: 'Student',
       component: Student,
       children: [
+        {
+          path: '/',
+          name: 'StudentColumn',
+          component: StudentColumn
+        },
         {
           path: 'package/:id',
           name: 'StudentPackage',
