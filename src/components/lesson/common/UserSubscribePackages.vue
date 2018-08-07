@@ -69,6 +69,7 @@ export default {
   .cover {
     width: 230px;
     height: 128px;
+    border-radius: 4px;
     margin: 0 auto;
     object-fit: cover;
     cursor: pointer;
