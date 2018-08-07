@@ -32,6 +32,9 @@
     <div @click.stop v-if='isWebsiteSettingShow'>
       <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
     </div>
+    <div @click.stop v-if='isNewWebPageDialogShow'>
+      <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
+    </div>
   </div>
 </template>
 <script>
@@ -39,6 +42,7 @@ import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
+import NewWebPageDialog from '@/components/common/NewWebPageDialog'
 
 export default {
   name: 'FileManagerCustomTreeNode',
@@ -54,6 +58,7 @@ export default {
       savePending: false,
       renamePending: false,
       isWebsiteSettingShow: false,
+      isNewWebPageDialogShow: false,
       isRename: false,
       isValidator: false,
       newName: ''
@@ -78,13 +83,14 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async addFile() {
-      let newFileName = await this.newFileNamePrompt()
-      newFileName = suffixFileExtension(newFileName, 'md')
-      let newFilePath = `${this.currentPath}/${newFileName}`
-      this.addFilePending = true
-      await this.gitlabCreateFile({ path: newFilePath })
-      this.expandFolder(newFilePath)
-      this.addFilePending = false
+      this.openNewWebPageDialog()
+      // let newFileName = await this.newFileNamePrompt()
+      // newFileName = suffixFileExtension(newFileName, 'md')
+      // let newFilePath = `${this.currentPath}/${newFileName}`
+      // this.addFilePending = true
+      // await this.gitlabCreateFile({ path: newFilePath })
+      // this.expandFolder(newFilePath)
+      // this.addFilePending = false
     },
     async addFolder() {
       let self = this
@@ -371,6 +377,12 @@ export default {
     },
     closeWebsiteSettingDialog() {
       this.isWebsiteSettingShow = false
+    },
+    openNewWebPageDialog() {
+      this.isNewWebPageDialogShow = true
+    },
+    closeNewWebPageDialog() {
+      this.isNewWebPageDialogShow = false
     }
   },
   computed: {
@@ -447,7 +459,8 @@ export default {
     }
   },
   components: {
-    WebsiteSettingDialog
+    WebsiteSettingDialog,
+    NewWebPageDialog,
   }
 }
 </script>

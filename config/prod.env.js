@@ -14,5 +14,6 @@ module.exports = {
   ES_TYPE: `"pages"`,
   IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
-  QQ_URL: `"http://wpa.qq.com"`
+  QQ_URL: `"http://wpa.qq.com"`,
+  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`
 }

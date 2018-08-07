@@ -8,24 +8,18 @@
 </template>
 
 <script>
+import protypesBaseMixin from './protypes.base.mixin'
 import filterDataEditor from './filterDataEditor.vue'
+
 export default {
   name: 'PageListType',
+  mixins: [protypesBaseMixin],
   props: {
-    editingKey: String,
     originValue: String
   },
   data() {
     return {
       isEditorShow: false
-    }
-  },
-  computed: {
-    inputTypeValue: {
-      get() {
-        return this.originValue
-      },
-      set() {}
     }
   },
   methods: {

@@ -13,9 +13,9 @@ import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'MediaType',
   props: {
-    editingKey: String,
     originValue: String
   },
+  mixins: [protypesBaseMixin],
   data() {
     return {
       isSkyDriveManagerDialogShow: false

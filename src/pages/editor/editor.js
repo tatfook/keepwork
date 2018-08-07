@@ -46,6 +46,7 @@ const store = new Vuex.Store({
       paths: [
         'user.profile',
         'user.webTemplateConfig',
+        'user.webPageTemplateConfig',
         'user.skyDrive',
         'editor.activeManagePaneComponent',
         'editor.activePage',

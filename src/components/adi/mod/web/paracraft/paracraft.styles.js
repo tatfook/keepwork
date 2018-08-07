@@ -175,22 +175,22 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'color_4'],
-      download: ['font_12', 'color_4'],
-      enter: ['font_12', 'color_0']
+      worldName: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'fontColor'],
+      enter: ['buttonText', 'enter']
     },
     options: {
       theme: {
         download: {
           buttonStyle: {
-            'background-color': 'color_1'
+            'background-color': 'download'
           }
         },
         enter: {
           buttonStyle: {
-            'background-color': 'color_8'
+            'background-color': 'bgEnter'
           }
         }
       },
@@ -338,18 +338,18 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'color_7'],
-      download: ['font_10'],
-      enter: ['font_10', 'color_0'],
-      desc: ['font_10', 'color_4']
+      worldName: ['paragraphType', 'worldName'],
+      download: ['buttonText'],
+      enter: ['buttonText', 'enter'],
+      desc: ['buttonText', 'fontColor']
     },
     options: {
       theme: {
         enter: {
           buttonStyle: {
-            'background-color': 'color_8'
+            'background-color': 'bgEnter'
           }
         }
       },
@@ -436,18 +436,18 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'color_7'],
-      download: ['font_10'],
-      enter: ['font_10', 'color_0'],
-      desc: ['font_10', 'color_4']
+      worldName: ['paragraphType', 'worldName'],
+      download: ['buttonText'],
+      enter: ['buttonText', 'enter'],
+      desc: ['buttonText', 'fontColor']
     },
     options: {
       theme: {
         enter: {
           buttonStyle: {
-            'background-color': 'color_8'
+            'background-color': 'bgEnter'
           }
         }
       },
@@ -676,27 +676,27 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'color_4'],
-      author: ['font_7', 'color_4'],
-      version: ['font_7', 'color_4'],
-      size: ['font_7', 'color_4'],
-      download: ['font_20', 'color_0'],
-      titleA: ['font_1'],
-      subtitleA: ['font_20', 'color_3'],
-      viewTimes: ['font_7']
+      worldName: ['paragraphType', 'fontColor'],
+      author: ['paragraphType', 'fontColor'],
+      version: ['paragraphType', 'fontColor'],
+      size: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'enter'],
+      titleA: ['bigtitle'],
+      subtitleA: ['buttonText', 'color_3'],
+      viewTimes: ['paragraphType']
     },
     options: {
       theme: {
         download: {
           buttonStyle: {
-            'background-color': 'color_7'
+            'background-color': 'worldName'
           }
         },
         enter: {
           buttonStyle: {
-            'background-color': 'color_8'
+            'background-color': 'bgEnter'
           }
         }
       },
@@ -893,27 +893,27 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'color_4'],
-      author: ['font_7', 'color_4'],
-      version: ['font_7', 'color_4'],
-      size: ['font_7', 'color_4'],
-      download: ['font_20', 'color_0'],
-      titleA: ['font_1'],
-      subtitleA: ['font_20', 'color_3'],
-      viewTimes: ['font_7']
+      worldName: ['paragraphType', 'fontColor'],
+      author: ['paragraphType', 'fontColor'],
+      version: ['paragraphType', 'fontColor'],
+      size: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'enter'],
+      titleA: ['bigtitle'],
+      subtitleA: ['buttonText', 'subtitleA'],
+      viewTimes: ['paragraphType']
     },
     options: {
       theme: {
         download: {
           buttonStyle: {
-            'background-color': 'color_7'
+            'background-color': 'worldName'
           }
         },
         enter: {
           buttonStyle: {
-            'background-color': 'color_8'
+            'background-color': 'bgEnter'
           }
         }
       },

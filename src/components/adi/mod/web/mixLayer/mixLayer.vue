@@ -34,7 +34,7 @@ import baseMixin from '../../base/base.mixin'
 export default {
   mixins: [baseMixin],
   created() {
-    let mixLayerArrColor = { color: this.themeData('color_4') }
+    let mixLayerArrColor = { color: this.themeData('phoneFontsColor') }
     let self = this
     function responsiveMode(index) {
       return self.conf.styles[index].data[

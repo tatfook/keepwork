@@ -4,13 +4,14 @@ export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
 export const EMPTY_GIT_FOLDER_KEEPER_REGEX = /^\.(git|keep|gitignore)/ // for .gitkeep, .keep, .gitignore, .gitignore.md
 export const CONFIG_FOLDER_NAME = '_config'
 
-let protocol = location && location.protocol ? location.protocol : 'http:'
 export const webTemplateProject = {
-  rawBaseUrl: `${protocol}//git.keepwork.com`,
+  rawBaseUrl: `https://git.keepwork.com`,
   dataSourceUsername: 'gitlab_rls_official',
   projectName: 'keepwork-template-v2',
   projectId: 36332,
-  configFullPath: 'config.json'
+  configFullPath: 'config.json',
+  pageTemplateRoot: 'webpage',
+  pageTemplateConfigFullPath: 'webpage/config.json'
 }
 
 /*doc

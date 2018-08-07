@@ -19,14 +19,14 @@ export default [
     options: {
       theme: {
         pagePath: {
-          nameFontSize: 'font_3',
-          nameFontColor: 'color_6',
-          labelFontColor: 'color_3',
-          commonSize: 'font_5',
-          pageFontColor: 'color_8',
+          nameFontSize: 'bigtitle',
+          nameFontColor: 'nameFontColor',
+          labelFontColor: 'labelFontColor',
+          commonSize: 'subtitle',
+          pageFontColor: 'pageFontColor',
 
-          nameMobileSize: 'font_7',
-          commonMobileSize: 'font_8'
+          nameMobileSize: 'auxiliaryText',
+          commonMobileSize: 'auxiliaryText'
         }
       },
       config: {

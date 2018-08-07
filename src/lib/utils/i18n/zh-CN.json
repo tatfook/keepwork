@@ -89,6 +89,7 @@
     "quickToTop": "返回顶部",
     "inputIsSensitive": "您输入的内容不符合互联网安全规范，请修改",
     "saveSuccess": "保存成功",
+    "saveFail": "保存失败",
     "success": "成功",
     "failure": "失败",
     "errorInfoTitle": "错误提示"
@@ -200,6 +201,8 @@
 
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
+    "selectPageTemplate": "选择网页模板",
+    "setPageAccessAddress": "设定网页的访问地址",
     "theNextStep": "下一步",
     "previous": "上一步",
     "startEditing": "开始编辑",
@@ -210,6 +213,7 @@
     "alreadyExists": "同名网站已经存在",
     "defaultStyle": "默认样式",
     "forExample": "例如：mysite123",
+    "forPageExample": "例如: mypage123",
 
     "websiteNameCanOnly": "网站名只能由字母，数字和下划线组成",
     "setWebsiteName": "您还可以在 网站设置 页面设置网站名称",
@@ -553,6 +557,7 @@
   "setting": {
     "general": "基本信息",
     "siteLayouts": "网站布局",
+    "siteStyle": "网站样式",
     "siteName": "网站名称",
     "siteLink": "网站地址",
     "siteLogo": "网站图标",
@@ -560,7 +565,20 @@
     "change": "修改",
     "hideSystemHeader": "隐藏系统Header (仅限vip)",
     "hideSystemFooter": "隐藏系统Footer (仅限vip)",
-    "siteNameMaxLen": "网站名称需小于30个字符"
+    "siteNameMaxLen": "网站名称需小于30个字符",
+    "large": "大号",
+    "medium": "中号",
+    "small": "小号",
+    "inherit": "系统默认",
+    "MicrosoftYaHei": "微软雅黑",
+    "SimHei": "黑体",
+    "STSong": "mac 华文宋体",
+    "Font": "字体:",
+    "font": "字体",
+    "color": "颜色:",
+    "fontSize": "字号:",
+    "pleaseSelect": "请选择",
+    "tips": "注意: 所选字体如浏览器不支持，会显示默认字体"
   },
   "search": {
     "searchAll": "全部内容",

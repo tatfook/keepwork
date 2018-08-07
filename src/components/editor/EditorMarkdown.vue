@@ -188,7 +188,7 @@ export default {
         change.removed[0] === ''
       )
     },
-    updateMarkdown(editor, changes) {
+    async updateMarkdown(editor, changes) {
       let code = editor.getValue()
       let cursor = editor.getCursor()
       if (code === undefined) return
