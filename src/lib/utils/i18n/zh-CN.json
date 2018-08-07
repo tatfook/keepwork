@@ -714,6 +714,7 @@
   },
   "lesson": {
     "include": "包含",
+    "packagesCount": "个课程包",
     "lessonsCount": "个课程",
     "ages": "年龄",
     "intro": "简介",
@@ -758,6 +759,9 @@
     "studentColumn": "学生专栏",
     "teacherColumn": "教师专栏",
     "viewTeacherPage": "查看教师页",
-    "viewStudentPage": "查看学生页"
+    "viewStudentPage": "查看学生页",
+    "enterClass": "从此处进入课堂",
+    "enterByClassId": "输入课堂ID",
+    "enter": "进入"
   }
 }

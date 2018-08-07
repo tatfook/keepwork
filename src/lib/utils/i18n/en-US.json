@@ -729,6 +729,7 @@
   },
   "lesson": {
     "include": "Includes",
+    "packagesCount": "packages",
     "lessonsCount": " lessons",
     "ages": "Ages",
     "intro": "Intro",
@@ -773,6 +774,9 @@
     "studentColumn": "STUDENT COLUMN",
     "teacherColumn": "TEACHER COLUMN",
     "viewTeacherPage": "View Teacher's Page",
-    "viewStudentPage": "View Student's Page"
+    "viewStudentPage": "View Student's Page",
+    "enterClass": "Enter the class from here",
+    "enterByClassId": "TYPE YOUR CLASS ID",
+    "enter": "Enter"
   }
 }

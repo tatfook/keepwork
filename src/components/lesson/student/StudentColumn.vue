@@ -25,17 +25,17 @@
           <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
         </el-col>
         <el-col :md="5">
-          <span class="tip">Enter the class from here</span>
+          <span class="tip">{{$t('lesson.enterClass')}}</span>
         </el-col>
         <el-col :md="11">
-          <span class="search-input"><el-input id="searchClass" size="medium" v-model="classID" placeholder="TYPE YOUR CLASS ID"></el-input></span>
+          <span class="search-input"><el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')"></el-input></span>
         </el-col>
         <el-col :md="6">
-          <span class="search-btn"><el-button :disabled="!classID" size="medium" type="primary"><label for="searchClass">Enter</label></el-button></span>
+          <span class="search-btn"><el-button :disabled="!classID" size="medium" type="primary"><label for="searchClass">{{$t('lesson.enter')}}</label></el-button></span>
         </el-col>
       </el-row>
     </div>
-    <div class="total-packages">Includes: <span>{{subscribesList.length}}</span> packages</div>
+    <div class="total-packages">{{$t('lesson.include')}}: <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
     <div class="packages">
       <el-row>
         <el-col :sm="12" :md="8" v-for="item in subscribesList" :key="item.id">
@@ -155,6 +155,7 @@ export default {
         display: block;
         padding-top: 20px;
         font-size: 14px;
+        text-align: center;
       }
       &-input{
         display: inline-block;

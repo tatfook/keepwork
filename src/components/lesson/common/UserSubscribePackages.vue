@@ -2,22 +2,24 @@
   <div class="packages-intro">
     <img @click="enterPackageDetail" class="cover" :src="packageCover" alt="">
     <h3 class="name">{{packageName}}</h3>
-    <p>Include:
-      <span>{{lessonsLength}}</span> lessons
+    <p>
+      {{$t('lesson.include')}}:
+      <span>{{lessonsLength}}</span>
+      {{$t('lesson.lessonsCount')}}
     </p>
-    <p>Ages: {{item.minAge}}-{{item.maxAge}}</p>
-    <p>Intro: {{item.intro}}</p>
+    <p>{{$t('lesson.ages')}}: {{item.minAge}}-{{item.maxAge}}</p>
+    <p>{{$t('lesson.intro')}}: {{item.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
         <el-progress :stroke-width="10" :percentage="learnedRatio" status="success" color="#66cd2e"></el-progress>
-        <p>Have learned {{item.learnedLessons.length}} lessons</p>
+        <p>{{$t('lesson.haveLearn')}} {{item.learnedLessons.length}} {{$t('lesson.lessonsCount')}}</p>
       </div>
     </div>
     <div v-if="item.learnedLessons.length !==item.lessons.length">
-      <el-button @click="enterPackageDetail" class="learn-button" type="primary">{{startToLearn ? 'Start to learn':'Continue'}}</el-button>
+      <el-button @click="enterPackageDetail" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
     </div>
     <div v-else class="finished"><img src="@/assets/lessonImg/finished.png" alt="">
-      <span class="finished-tip">Finished</span>
+      <span class="finished-tip">{{$t('lesson.finished')}}</span>
     </div>
   </div>
 </template>
