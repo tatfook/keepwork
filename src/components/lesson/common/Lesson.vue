@@ -5,7 +5,6 @@
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
-
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
@@ -21,34 +20,37 @@
         </div>
       </el-col>
     </el-row>
-
-    <el-row :gutter="20" class="lesson-progress-wrap">
-      <el-col :span="4" class="lesson-award">
-        <jewel-box />
-      </el-col>
-      <el-col :span="16" class="lesson-progress">
-        <div class="my-progress">
-          <span class="progress-point start"></span>
-          <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="50" status="success"></el-progress>
-          <span class="progress-point end grey"></span>
-        </div>
-      </el-col>
-      <el-col :span="4" class="lesson-references">
-        <referencse/>
-      </el-col>
-    </el-row>
+    <div class="division"></div>
+    <keep-wrok-sticky>
+      <el-row :gutter="20" class="lesson-progress-wrap">
+        <el-col :span="2" class="lesson-award">
+          <lesson-jewel-box />
+        </el-col>
+        <el-col :span="18">
+          <lesson-progress/>
+        </el-col>
+        <el-col :span="4" class="lesson-references">
+          <lesson-referencse/>
+        </el-col>
+      </el-row>
+    </keep-wrok-sticky>
 
   </el-row>
 </template>
 
 <script>
-import JewelBox from './JewelBox'
-import Referencse from './References'
+import _ from 'lodash'
+import LessonJewelBox from './LessonJewelBox'
+import LessonProgress from './LessonProgress'
+import LessonReferences from './LessonReferences'
+import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'Lesson',
   components: {
-    'jewel-box': JewelBox,
-    referencse: Referencse
+    'lesson-jewel-box': LessonJewelBox,
+    'lesson-progress': LessonProgress,
+    'keep-wrok-sticky': KeepWorkSticky,
+    'lesson-referencse': LessonReferences
   },
   data() {
     return {
@@ -100,6 +102,13 @@ export default {
 body {
   background: rgb(250, 250, 250);
 }
+
+.division {
+  height: 30px;
+  background: white;
+  border-bottom: 1px solid #d2d2d2;
+}
+
 .lesson-container {
   max-width: 1080px;
   margin: 30px auto;
@@ -151,56 +160,22 @@ body {
       }
     }
   }
-
   .lesson-progress-wrap {
-    border-top: 1px solid $grey;
-    margin: 40px 5px;
-    padding: 40px 0;
+    box-sizing: border-box;
+    background: white;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    &.el-row {
+      // fix inline elrow style margin-left and right -10px;
+      margin: 0 !important;
+    }
     .lesson-award {
     }
 
-    .lesson-progress {
-      .my-progress {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        .progress-point {
-          $size: 30px;
-          display: inline-block;
-          height: $size;
-          width: $size;
-          border-radius: 50%;
-          background: $green;
-          border: 6px solid white;
-          box-shadow: 1px 3px 6px rgb(185, 185, 185);
-          &.grey {
-            $size: 33px;
-            background: $grey;
-            height: $size;
-            width: $size;
-            border: 3px solid white;
-          }
-          &.start {
-            position: relative;
-            z-index: 9;
-            margin-right: -25px;
-          }
-          &.end {
-            position: relative;
-            margin-left: -25px;
-            z-index: 9;
-          }
-        }
-        .progress-line {
-          flex: 1;
-        }
-        .el-progress-bar__outer {
-          background-color: $grey;
-        }
-      }
-    }
-
     .lesson-references {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

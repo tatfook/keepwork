@@ -174,6 +174,7 @@ export default {
 
 <style lang="scss">
 .quiz-container {
+  box-sizing: border-box;
   margin-top: 10px;
   padding: 10px;
   font-size: 16px;
