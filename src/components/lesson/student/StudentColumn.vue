@@ -42,7 +42,7 @@
           <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
         <div class="packages">
           <el-row>
-            <el-col :sm="12" :md="8" v-for="item in subscribesList" :key="item.id">
+            <el-col :sm="12" :md="8" v-for="item in sortedSubscribesList" :key="item.id">
               <UserSubscribePackages :item="item" />
             </el-col>
           </el-row>
@@ -86,6 +86,9 @@ export default {
       let sum = 0
       this.skillsList.every(skill => (sum += skill.score * 1))
       return sum
+    },
+    sortedSubscribesList(){
+      return this.subscribesList.sort((obj1, obj2) => obj1.updatedAt < obj2.updatedAt)
     }
   },
   methods: {
