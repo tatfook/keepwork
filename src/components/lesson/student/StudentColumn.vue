@@ -3,7 +3,7 @@
 <el-container class="student">
   <el-aside width="274px">
     <div class="profile">
-      <img src="@/assets/lessonImg/cover1.png" alt="">
+      <img :src='userProfile.portrait' alt="portrait">
     </div>
     <div class="nickname">{{username}}</div>
     <div class="skillpoints">{{skillpointsCount}} skillpoints</div>
@@ -66,6 +66,7 @@ export default {
   },
   computed:{
     ...mapGetters({
+      userProfile: 'user/profile',
       userId: 'user/userId',
       username: 'user/username',
       subscribesList: 'lesson/student/userSubscribeList',
@@ -85,6 +86,14 @@ export default {
     }),
     enterClass(){
       //进入课堂
+      let key = 12345
+      if(this.classID !== key){
+        this.$message({
+          showClose: true,
+          message: "Class with this ID does't exist.",
+          type: 'error'
+        })
+      }
     }
   },
   components: {

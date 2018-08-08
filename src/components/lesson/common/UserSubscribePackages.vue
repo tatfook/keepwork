@@ -1,14 +1,10 @@
 <template>
   <div class="packages-intro">
     <img @click="enterPackageDetail" class="cover" :src="packageCover" alt="">
-    <h3 class="name">{{packageName}}</h3>
-    <p>
-      {{$t('lesson.include')}}:
-      <span>{{lessonsLength}}</span>
-      {{$t('lesson.lessonsCount')}}
-    </p>
+    <h3 :class="['name',showProgress ? 'islearning' : '']">{{packageName}}</h3>
+    <p>{{$t('lesson.include')}}: <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
     <p>{{$t('lesson.ages')}}: {{item.minAge}}-{{item.maxAge}}</p>
-    <p>{{$t('lesson.intro')}}: {{item.intro}}</p>
+    <p class="intro">{{$t('lesson.intro')}}: {{item.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
         <el-progress :stroke-width="10" :percentage="learnedRatio" status="success" color="#66cd2e"></el-progress>
@@ -76,14 +72,23 @@ export default {
   }
   .name{
     cursor: pointer;
+    margin-bottom: 5px;
+  }
+  .islearning{
+    color: #409eff;
   }
   p {
     margin: 0;
     line-height: 30px;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;  
   }
   .progress {
+    margin-top: 12px;
     height: 45px;
+    font-size: 14px;
     .el-progress {
       .el-icon-circle-check {
         display: none;
