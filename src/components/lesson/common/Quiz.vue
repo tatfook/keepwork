@@ -77,8 +77,7 @@ export default {
       isDone: false
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -233,39 +232,74 @@ export default {
     margin-top: $marginTop;
     margin-left: $marginLeft;
   }
-}
+  .el-checkbox__inner {
+    // border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    &::after {
+      // border: 2px solid #fff;
+      border-width: 2px;
+      height: 11px;
+      width: 5px;
+      left: 5px;
+    }
+  }
 
-.el-radio__input.is-checked ~ .el-radio__label,
-.el-checkbox__input.is-checked ~ .el-checkbox__label {
-  font-weight: 600;
-  color: black;
-}
+  .el-radio__input .el-radio__inner {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    &::after {
+      box-sizing: content-box;
+      display: inline-block;
+      content: '';
+      border: 2px solid #fff;
+      background: none;
+      border-radius: 0;
+      border-left: 0;
+      border-top: 0;
+      height: 11px;
+      width: 5px;
+      left: 3px;
+      position: absolute;
+      top: 8px;
+      -webkit-transform: rotate(45deg) scaleY(0);
+      transform: rotate(45deg) translate(-50%, -50%) scale(1);
+    }
+  }
 
-.el-radio__input.is-disabled + span.el-radio__label,
-.el-checkbox__input.is-disabled + span.el-checkbox__label {
-  color: black;
-}
+  .el-radio__input.is-checked ~ .el-radio__label,
+  .el-checkbox__input.is-checked ~ .el-checkbox__label {
+    font-weight: 600;
+    color: black;
+  }
 
-.splic {
-  height: 1px;
-  margin: 0 0 30px 40px;
-  border-bottom: 1px dashed #bfbfbf;
-}
+  .el-radio__input.is-disabled + span.el-radio__label,
+  .el-checkbox__input.is-disabled + span.el-checkbox__label {
+    color: black;
+  }
 
-.error-highlight {
-  color: #f53838;
-}
+  .splic {
+    height: 1px;
+    margin: 0 0 30px 40px;
+    border-bottom: 1px dashed #bfbfbf;
+  }
 
-.mutiple-choice-tips {
-  color: #ff414a;
-}
+  .error-highlight {
+    color: #f53838;
+  }
 
-.error {
-  margin-bottom: 20px;
-  border: 1px solid #f53838;
-  background: rgba(245, 56, 56, 0.05);
-  .quiz-result {
-    background: none;
+  .mutiple-choice-tips {
+    color: #ff414a;
+  }
+
+  .error {
+    margin-bottom: 20px;
+    border: 1px solid #f53838;
+    background: rgba(245, 56, 56, 0.05);
+    .quiz-result {
+      background: none;
+    }
   }
 }
 </style>
