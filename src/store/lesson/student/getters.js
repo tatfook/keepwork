@@ -8,6 +8,7 @@ const getters = {
   lessonContentFormat: (state, { lessonContent }) => lessonId =>
     Parser.buildBlockList(lessonContent(lessonId)),
   userSubscribeList: state => state.userSubscribeList,
-  userSkillsList: state => state.userSkillsList
+  userSkillsList: state => state.userSkillsList,
+  enterClassInfo: state => state.enterClassInfo
 }
 export default getters
