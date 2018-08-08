@@ -154,7 +154,7 @@ export default {
       return `${this.folderPath}/${newFileName}`
     },
     newPageUrl() {
-      return `${this.folderPath}/${this.webpageNameForm.value}`
+      return `${this.locationOrigin}/${this.folderPath}/${this.webpageNameForm.value}`
     }
   },
   async mounted() {
