@@ -101,5 +101,26 @@ export default {
     text-decoration: none;
   }
 }
+@media (max-width: 1200px) {
+  .lesson-header {
+    &-toggle-button {
+      right: 15px;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .lesson-header {
+    &-nav {
+      &-box {
+        text-align: left;
+      }
+      &-item {
+        margin: 0;
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+    }
+  }
+}
 </style>
 
