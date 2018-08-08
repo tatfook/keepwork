@@ -5,7 +5,8 @@ let {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   GET_USER_SUBSCRIBES,
-  GET_USER_SKILLS
+  GET_USER_SKILLS,
+  ENTER_CLASSROOM
 } = props
 
 const actions = {
@@ -34,7 +35,8 @@ const actions = {
     commit(GET_USER_SKILLS, { userSkillsList })
   },
   async enterClassRoom({ commit }, { key }) {
-    await lesson.classrooms.join({ key })
+    let enterClassInfo = await lesson.classrooms.join({ key })
+    commit(ENTER_CLASSROOM, { enterClassInfo })
   }
 }
 export default actions

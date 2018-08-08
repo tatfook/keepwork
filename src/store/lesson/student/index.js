@@ -6,7 +6,8 @@ const state = () => ({
   packagesDetail: {},
   lessons: {},
   userSubscribeList: [],
-  userSkillsList: []
+  userSkillsList: [],
+  enterClassInfo: []
 })
 
 export default {
