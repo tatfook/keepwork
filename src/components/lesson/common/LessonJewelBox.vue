@@ -67,7 +67,7 @@ export default {
     animation: fade-in;
     animation-duration: 0.5s;
     top: 110px;
-    left: -47px;
+    left: -26px;
     z-index: 998;
     min-height: 60px;
     width: 800px;
