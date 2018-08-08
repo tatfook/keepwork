@@ -31,7 +31,7 @@
         </video>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src='"/static/pdf/web/viewer.html?file=" + encodeURIComponent(actualUrl)'></iframe>
+        <iframe :src='"/static/pdf/web/viewer.html?file=" + encodeURIComponent(this.properties.src || "")'></iframe>
       </div>
     </div>
   </div>
