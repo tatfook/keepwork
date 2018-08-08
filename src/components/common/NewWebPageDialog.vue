@@ -36,7 +36,7 @@
         {{$t('editor.webPageCreatedSuccessfully')}}
       </h1>
       <p>{{$t('editor.URL')}}
-        <a :href="newPageUrl" target="_blank">{{newPageUrl}}</a>
+        <a :href="newPageFullUrl" target="_blank">{{newPageFullUrl}}</a>
       </p>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -154,7 +154,10 @@ export default {
       return `${this.folderPath}/${newFileName}`
     },
     newPageUrl() {
-      return `${this.locationOrigin}/${this.folderPath}/${this.webpageNameForm.value}`
+      return `${this.folderPath}/${this.webpageNameForm.value}`
+    },
+    newPageFullUrl() {
+      return `${this.locationOrigin}/${this.newPageUrl}`
     }
   },
   async mounted() {
