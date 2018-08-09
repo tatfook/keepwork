@@ -73,6 +73,12 @@ export default {
     quizs() {
       return this.originData.filter(item => item.cmd === 'Quiz')
     },
+    quizFinishCount() {
+      return this.quizs.filter(item => item)
+    },
+    quizCount() {
+      return this.quizs.length
+    },
     lesson() {
       return _.get(this.data, 'data.lesson', {})
     },

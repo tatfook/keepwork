@@ -9,7 +9,7 @@ const StudentPackageDetailPage = () =>
   import('@/components/lesson/student/PackageDetailPage')
 const TeacherPackageDetailPage = () =>
   import('@/components/lesson/teacher/PackageDetailPage')
-const Learn = () => import('@/components/lesson/common/Learn')
+const Study = () => import('@/components/lesson/common/Study')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 
 Vue.use(Router)
@@ -56,12 +56,19 @@ export default new Router({
         {
           path: 'package/:id',
           name: 'StudentPackage',
-          component: StudentPackageDetailPage
+          component: StudentPackageDetailPage,
+          children: [
+            {
+              path: 'lesson/:id',
+              name: 'Study',
+              component: Study
+            }
+          ]
         },
         {
           path: 'learn/:id',
           name: 'Learn',
-          component: Learn
+          component: Study
         }
       ]
     }
