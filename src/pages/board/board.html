@@ -395,9 +395,12 @@
      * Main
      */
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
-    App.main(function(ui) {
-      window.board = ui;
-    });
+
+    setTimeout(function() {
+      App.main(function(ui) {
+        window.board = ui;
+      });
+    }, 300)
   </script>
 </body>
 
