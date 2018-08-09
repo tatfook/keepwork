@@ -25,35 +25,75 @@
         </div>
         <el-button type="primary" class="package-detail-operate-button package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
       </div>
+      <div @click.stop v-if="isLoginDialogShow">
+        <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
+      </div>
     </div>
   </div>
 </template>
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
+import LoginDialog from '@/components/common/LoginDialog'
 export default {
   name: 'PackageBasicDetail',
   props: {
     packageDetail: Object
   },
+  mounted() {
+    if (!this.userIsLogined) {
+      this.userGetProfile({ forceLogin: false })
+        .then(() => {
+          this.isLogin = true
+        })
+        .catch(() => {
+          this.isLogin = false
+        })
+    }
+  },
   computed: {
+    ...mapGetters({
+      userProfile: 'user/profile',
+      userIsLogined: 'user/isLogined'
+    }),
+    isLogin: {
+      get() {
+        return this.userIsLogined
+      },
+      set() {}
+    },
     packageLessonsCount() {
       return _.get(this.packageDetail, 'lessons', []).length
     },
     packageCoverUrl() {
       return _.get(this.packageDetail, 'extra.coverUrl', '')
     },
-    packageId(){
+    packageId() {
       return _.get(this.packageDetail, 'id')
+    }
+  },
+  data() {
+    return {
+      isLoginDialogShow: false
     }
   },
   methods: {
     ...mapActions({
+      userGetProfile: 'user/getProfile',
       lessonSubscribePackage: 'lesson/subscribePackage'
     }),
     addPackage() {
+      if (this.isLogin) {
+        this.confirmAdd()
+      } else {
+        this.isLoginDialogShow = true
+      }
+    },
+    confirmAdd() {
       this.$confirm(
-        `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t('lesson.coins')}`,
+        `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t(
+          'lesson.coins'
+        )}`,
         this.$t('lesson.infoTitle'),
         {
           confirmButtonText: this.$t('common.Sure'),
@@ -66,7 +106,13 @@ export default {
     },
     async sendAddPackageReqToBack() {
       await this.lessonSubscribePackage({ packageId: this.packageId })
+    },
+    closeLoginDialog() {
+      this.isLoginDialogShow = false
     }
+  },
+  components: {
+    LoginDialog
   }
 }
 </script>
