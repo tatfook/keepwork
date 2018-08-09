@@ -1,18 +1,9 @@
 <template>
 <div class="lesson-packages">
   <el-row :gutter="20" class="lesson-packages-subject">
-    <el-col :span="8">
+    <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
         <div class="subject-desc">
-          <img class="subject-cover" src="https://git.keepwork.com/gitlab_rls_ddxy1230/keepworkdatasource/raw/master/ddxy1230_images/img_1525526741696.png" alt="">
-          <h4 :class="['subject-title',false ? 'beLearning':'']">Computer Science</h4>
-          <span>Includes: 10 lessons</span>
-          <span>Ages: suitable for all</span>
-          <span>Intro : installation,movement,edit mode</span>
-        </div>
-    </el-col>
-    <el-col v-for="coursePackage in packagesList" :key="coursePackage.id" :span="8">
-        <div class="subject-desc">
-          <img class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
+          <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
           <h4 :class="['subject-title',false ? 'beLearning':'']">{{coursePackage.packageName}}</h4>
           <span>Includes: {{coursePackage.cost}} lessons</span>
           <span>Ages: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
@@ -38,16 +29,25 @@ export default {
       packages: 'lesson/center/packagesList'
     }),
     packagesList() {
-      return _.get(this.packages, 'rows')
+      return _.get(this.packages, 'rows',[])
+    },
+    sortedPackagesList(){
+      return this.packagesList.sort((obj1, obj2) => obj1.updatedAt < obj2.updatedAt)
     }
   },
   async mounted(){
     await this.getPackagesList()
+    console.log('packages',this.packages)
   },
   methods:{
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
-    })
+    }),
+    enterPackageDetailPage(packageId){
+      this.$router.push({
+        path: `package/${packageId}`,
+      })
+    }
   }
 }
 </script>
@@ -60,15 +60,17 @@ export default {
   .lesson-packages-subject .subject-desc {
     width: 278px;
     margin:20px auto;
-    img {
+    .subject-cover {
       width: 278px;
       height: 160px;
       object-fit: cover;
       margin: 0 auto;
       border-radius: 6px;
+      cursor: pointer;
     }
     .subject-title{
       margin-bottom: 10px;
+      cursor: pointer;
     }
     .beLearning{
       color: #409eff;

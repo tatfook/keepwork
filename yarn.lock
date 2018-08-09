@@ -8255,22 +8255,21 @@ vue-markdown@leopoldchen/vue-markdown#master:
   version "2.2.3"
   resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/6df049705345a13a6d302dc91897b301aa2cac3d"
   dependencies:
-    highlight.js "^9.12.0"
-    markdown-it "^6.0.1"
+    markdown-it "^8.0.0"
     markdown-it-abbr "^1.0.3"
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
-    markdown-it-highlightjs "^3.0.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
+    markdown-it-prism leopoldchen/markdown-it-prism
     markdown-it-sub "^1.0.0"
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
     markdown-it-toc-and-anchor leopoldchen/markdown-it-toc-and-anchor
-    snabbdom "~0.7.1"
-    snabbdom-virtualize leopoldchen/snabbdom-virtualize
+    snabbdom "~0.6.6"
+    snabbdom-virtualize "^0.7.0"
 
 vue-router@^3.0.1:
   version "3.0.1"
@@ -8299,6 +8298,12 @@ vue-template-compiler@^2.5.16:
 vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
+
+vue-test-utils@^1.0.0-beta.11:
+  version "1.0.0-beta.11"
+  resolved "http://registry.npm.taobao.org/vue-test-utils/download/vue-test-utils-1.0.0-beta.11.tgz#41b7fa53e0061d16ecbe18cfeea197c909d4ab8a"
+  dependencies:
+    lodash "^4.17.4"
 
 vue@^2.2.1, vue@^2.5.14, vue@^2.5.2:
   version "2.5.16"

@@ -5,7 +5,10 @@ import mutations from './mutations'
 const state = () => ({
   packagesDetail: {},
   lessons: {},
-  lessonSelfStudy: {}
+  lessonSelfStudy: {},
+  userSubscribeList: [],
+  userSkillsList: [],
+  enterClassInfo: []
 })
 
 export default {

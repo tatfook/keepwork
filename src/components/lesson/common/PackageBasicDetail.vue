@@ -23,15 +23,16 @@
           <span class="package-detail-price-count">{{packageDetail.cost}}</span>
           <span class="package-detail-label">{{$t('lesson.coins')}}</span>
         </div>
-        <el-button type="primary" class="package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
+        <el-button type="primary" class="package-detail-operate-button package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'PackagBasiceDetail',
+  name: 'PackageBasicDetail',
   props: {
     packageDetail: Object
   },
