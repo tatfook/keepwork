@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 export default {
   name: 'PackageCatalogue',
   props: {
@@ -43,7 +44,7 @@ export default {
   computed: {
     lessonsList() {
       let lessons = _.get(this.packageDetail, 'lessons', [])
-      _.map(this.lessonProgressList, finishedLessonId => {
+      _.map(this.lessonFinishedList, finishedLessonId => {
         let finishedLessonInLessonListIndex = _.findIndex(lessons, lesson => {
           return lesson.id === finishedLessonId
         })
@@ -60,25 +61,25 @@ export default {
     teachedLessons() {
       return _.get(this.packageDetail, 'teachedLessons', [])
     },
-    lessonProgressList() {
+    lessonFinishedList() {
       return this.actorType === 'teacher'
         ? this.teachedLessons
         : this.learnedLessons
     },
     lessonProgressPercent() {
-      return this.lessonProgressList.length / this.lessonsList.length * 100 || 0
+      return this.lessonFinishedList.length / this.lessonsList.length * 100 || 0
     },
     lessonProgressInfo() {
       return (
         this.$t('lesson.haveLearn') +
-        this.lessonProgressList.length +
+        this.lessonFinishedList.length +
         this.$t('lesson.lessonsCount')
       )
     },
     buttonText() {
       return this.lessonProgressPercent === 100
-        ? this.$t('lesson.continue')
-        : this.$t('lesson.finished')
+        ? this.$t('lesson.finished')
+        : this.$t('lesson.continue')
     },
     isTeacher() {
       return this.actorType === 'teacher'

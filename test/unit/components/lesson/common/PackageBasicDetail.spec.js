@@ -1,11 +1,11 @@
-import { mount } from 'vue-test-utils'
+import { shallow } from 'vue-test-utils'
 import PackageBasicDetailComp from '@/components/lesson/common/PackageBasicDetail'
 
 describe('PackageBasicDetail component test', () => {
   let cmp
   const FakeCoverUrl = 'https://keepwork.com/fakeCoverUrl.jpg'
   beforeEach(() => {
-    cmp = mount(PackageBasicDetailComp, {
+    cmp = shallow(PackageBasicDetailComp, {
       propsData: {
         packageDetail: {
           isSubscribe: false
