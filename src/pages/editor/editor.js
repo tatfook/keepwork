@@ -44,19 +44,8 @@ const store = new Vuex.Store({
   plugins: [
     createPersistedState({
       paths: [
-        'user.profile',
-        'user.webTemplateConfig',
-        'user.webPageTemplateConfig',
-        'user.skyDrive',
-        'editor.activeManagePaneComponent',
-        'editor.activePage',
-        'editor.activePageUrl',
-        'editor.filemanagerTreeNodeExpandMapByPath',
-        'editor.openedFiles',
-        'editor.showingCol',
-        'editor.siteSettings',
-        'editor.updateRecentUrlList'
-      ] // , 'gitlab']
+        'editor.openedFiles'
+      ]
     }),
     broadcast('frameViewport')
   ]

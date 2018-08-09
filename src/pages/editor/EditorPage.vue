@@ -71,7 +71,7 @@ export default {
         console.error(e)
         this.loading = false
         // this.$router.push('/')
-        throw new Error('Set activeAage failed, goto initial page!')
+        throw new Error('Set activePage failed, goto initial page!')
       })
       await this.userGetWebsiteDetailInfoByPath({
         path: this.activePageInfo.sitepath

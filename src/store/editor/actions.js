@@ -42,9 +42,11 @@ const {
 
   UPDATE_FILEMANAGER_TREE_NODE_EXPANDED,
 
+  LOAD_PAGE_DATA,
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE,
+  CLOSE_ALL_OPENED_FILE,
 
   SET_EDITING_AREA,
   SET_NEW_MOD_POSITION,
@@ -59,28 +61,8 @@ const {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  CLOSE_ALL_OPENED_FILE,
   ADD_RECENT_OPENED_SITE
 } = props
-
-const cacheAvailable = pageData => {
-  if (_.isEmpty(pageData)) return false
-
-  let savedExpires = 5 * 60 * 1000 // 5 mins
-  let unsavedExpires = 2 * 24 * 60 * 60 * 1000 // 2 days
-  let now = Date.now()
-
-  let { timestamp, saved } = pageData
-  let cachedTime = now - timestamp
-
-  let saveExpired = cachedTime > savedExpires
-  let unsavedExpired = cachedTime > unsavedExpires
-
-  if (saved && !saveExpired) return true
-  if (!saved && !unsavedExpired) return true
-
-  return false
-}
 
 const actions = {
   async setActivePage(context, { path, editorMode = true }) {
@@ -89,9 +71,13 @@ const actions = {
       state,
       getters,
       commit,
-      dispatch,
-      rootGetters: { 'user/username': username }
+      dispatch
     } = context
+    // load profile and websites info to get correct projectIds for reading files
+    await dispatch('user/getAllPersonalAndContributedSite', {root: true})
+    let {
+      'user/username': username
+    } = context.rootGetters
     commit(SET_ACTIVE_PAGE_URL, { path })
 
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
@@ -99,20 +85,17 @@ const actions = {
     const sitePath = getFileSitePathByPath(path)
     const siteData = state.siteSettings[sitePath]
 
-    // load profile and websites info to get correct projectIds for reading files
-    await dispatch('user/getAllPersonalAndContributedSite', {root: true})
-
-    if (!cacheAvailable(siteData)) {
+    if (!siteData) {
       await dispatch('refreshSiteSettings', { sitePath })
     }
 
-    const pageData = getters.openedFiles[fullPath]
-    const needReload = !cacheAvailable(pageData)
+    const pageData = getters.openedPages[fullPath]
+    const needReload = !pageData
     if (needReload) {
-      await dispatch('refreshOpenedFile', { path, editorMode })
+      await dispatch('loadActivePage', { path, editorMode })
     }
-    await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
 
+    await dispatch('refreshCode') // force refresh code after change activepage to make sure the code is the transferred one
     commit(SET_ACTIVE_PAGE, { path, username })
 
     if (needReload) {
@@ -120,6 +103,21 @@ const actions = {
         newCode: getters.code,
         cursor: { line: 0, ch: 0 }
       })
+    }
+  },
+  async loadActivePage(
+    { commit, dispatch, getters },
+    { path, editorMode = true }) {
+    const fullPath = getFileFullPathByPath(path)
+    let file = getters.openedFiles[fullPath]
+    if (!file) await dispatch('refreshOpenedFile', { path, editorMode })
+
+    file = getters.openedFiles[fullPath]
+    if (file) {
+      let pageData = initPageState()
+      pageData.content = file.content || ''
+      pageData.modList = Parser.buildBlockList(pageData.content)
+      commit(LOAD_PAGE_DATA, {path: fullPath, pageData})
     }
   },
   async saveActivePage({ getters, dispatch }) {
@@ -434,15 +432,13 @@ const actions = {
 
     let { content } = file
 
-    let pageData = initPageState()
-    pageData.modList = Parser.buildBlockList(content)
-
     let fullPath = getFileFullPathByPath(path)
     let timestamp = Date.now()
+    let saved = true
     let commitPayload = {
       username,
       path: fullPath,
-      data: { timestamp, path, content, ...pageData }
+      data: { timestamp, path, content, saved }
     }
     commit(RESET_OPENED_FILE, commitPayload)
     if (getFileFullPathByPath(getters.activePageUrl) === fullPath) {
@@ -476,8 +472,11 @@ const actions = {
       commit(SET_ACTIVE_PAGE, null)
     }
   },
-  closeAllOpenedFile({ commit }, getters) {
-    commit(CLOSE_ALL_OPENED_FILE)
+  closeAllOpenedFile({ commit, rootGetters }) {
+    let {
+      'user/username': username
+    } = rootGetters
+    commit(CLOSE_ALL_OPENED_FILE, {username})
   },
   toggleSkyDrive({commit}, { showSkyDrive }) {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })

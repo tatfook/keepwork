@@ -218,17 +218,7 @@ export default {
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
-        return this.foldCodes(editor)
-      }
-    },
-    foldCodes(cm) {
-      let mod = Parser.getBlockByCursorLine(this.modList, this.cursorPos.line)
-      let lineBegin = mod && mod.lineBegin - 1
-      let lineEnd = mod && mod.lineBegin + mod.md.length
-      for (let line = cm.firstLine(); line <= cm.lastLine(); ++line) {
-        mod && lineBegin <= line && line <= lineEnd
-          ? cm.foldCode({ line: line, ch: 0 }, null, 'unfold')
-          : cm.foldCode({ line: line, ch: 0 }, null, 'fold')
+        this.foldAllCodes(this.editor)
       }
     },
     foldAllCodes(cm = this.editor) {
