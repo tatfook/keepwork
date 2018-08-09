@@ -39,6 +39,9 @@ export default {
     return {}
   },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    }),
     inputTypeValue: {
       get() {
         return this.originValue
@@ -72,21 +75,7 @@ export default {
       }
     },
     getBoardSrc() {
-      let board = window.document.querySelector('.board-iframe')
-
-      if (!board) {
-        let url = process.env.BOARD
-
-        if (this.cardValue && this.cardValue.xml) {
-          url = url + '&initxml=' + this.cardValue.xml
-        }
-
-        this.boardSrc = url
-
-        return url
-      } else {
-        return this.boardSrc
-      }
+      return process.env.BOARD || ''
     }
   },
   watch: {
@@ -94,37 +83,15 @@ export default {
       let board = window.document.querySelector('.board-iframe')
 
       if (state) {
-        this.compatible()
-
+        this.setContentWindowData()
+      } else {
         if (!board) {
           return
         }
 
         let boardWindow = board.contentWindow
 
-        if (!boardWindow.keepworkSaveUrl) {
-          boardWindow.keepworkSaveUrl = {}
-        }
-
-        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
-
-        if (this.cardValue && this.cardValue.xml) {
-          keepworkSaveUrl.xmlUrl = this.cardValue.xml
-        }
-
-        if (this.cardValue && this.cardValue.svg) {
-          keepworkSaveUrl.svgUrl = this.cardValue.svg
-        }
-
-        if (boardWindow && boardWindow.board && boardWindow.board.pickFile) {
-          boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
-        }
-      } else {
-        if (!board) {
-          return
-        }
-
-        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
+        let keepworkSaveUrl = boardWindow.keepworkSaveUrl
 
         if (
           keepworkSaveUrl &&
@@ -135,7 +102,9 @@ export default {
           this.updateValue(keepworkSaveUrl.svgUrl, 'svg')
         }
 
-        board.contentWindow.keepworkSaveUrl = {}
+        boardWindow.keepworkSaveUrl = {}
+        boardWindow.boardOldData = ''
+        boardWindow.pagePath = ''
       }
     }
   },
@@ -168,24 +137,54 @@ export default {
     getFocus() {
       this.$emit('onChangeValue')
     },
-    compatible() {
+    setContentWindowData() {
       let self = this
 
       function setdata() {
         let board = window.document.querySelector('.board-iframe')
 
         if (board) {
-          let boardType = (board.contentWindow.boardType = {})
+          let boardWindow = board.contentWindow
 
-          boardType.close = () => {
+          // set save url
+          if (!boardWindow.keepworkSaveUrl) {
+            boardWindow.keepworkSaveUrl = {}
+          }
+
+          if (self.cardValue && self.cardValue.xml) {
+            boardWindow.keepworkSaveUrl.xmlUrl = self.cardValue.xml
+          }
+
+          if (self.cardValue && self.cardValue.svg) {
+            boardWindow.keepworkSaveUrl.svgUrl = self.cardValue.svg
+          }
+
+          boardWindow.boardType = {}
+          boardWindow.boardType.close = () => {
             self.visible = false
           }
 
+          // set site page path
+          let activePageInfo = self.activePageInfo
+          boardWindow.pagePath = activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
+
+          // set old data
           if (self.cardValue.data) {
-            board.contentWindow.boardOldData = self.cardValue.data
+            boardWindow.boardOldData = self.cardValue.data
           } else {
-            board.contentWindow.boardOldData = ''
+            boardWindow.boardOldData = ''
           }
+
+          // pick file
+          function pickFile() {
+            if (boardWindow && boardWindow.board && boardWindow.board.pickFile) {
+              boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
+            } else {
+              setTimeout(pickFile, 500)
+            }
+          }
+
+          pickFile()
         } else {
           setTimeout(setdata, 500)
         }
