@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-loading='loading'>
     <el-row class="website-setting-style" type="flex">
-      <el-col class="website-setting-font" :span="10">
+      <el-col class="website-setting-font" :span="12">
         <header>
           <h1>1.{{$t('setting.Font')}}</h1>
         </header>
@@ -32,7 +32,7 @@
           </el-row>
         </main>
       </el-col>
-      <el-col :span="11" class="website-setting-color">
+      <el-col :span="12" class="website-setting-color">
         <header>
           <h1>2.{{$t('setting.color')}}</h1>
         </header>
@@ -40,15 +40,17 @@
           <website-setting-sytle-color-preview :colorsList="colors" :colorID.sync="colorID" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
-      <el-col :span="3" class="website-setting-btns">
+      <!-- <el-col :span="3" class="website-setting-btns">
         <el-button @click="handleSave" type="primary">{{$t('editor.save')}}</el-button>
         <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
-      </el-col>
+      </el-col> -->
     </el-row>
+    <DialogOperations class="website-setting-style-operations" @save="handleSave" @close="handleClose"></DialogOperations>
   </div>
 </template>
 
 <script>
+import DialogOperations from './DialogOperations'
 import themeData from '@/lib/theme/theme.data'
 import { mapActions, mapGetters } from 'vuex'
 import WebsiteSettingSytleColorPreview from './WebSiteSettingSytleColorPreview'
@@ -58,6 +60,7 @@ export default {
     sitePath: String
   },
   components: {
+    DialogOperations,
     WebsiteSettingSytleColorPreview
   },
   async mounted() {
@@ -138,8 +141,11 @@ export default {
       colorID: 0,
       fontID: 0,
       fontFamily: 'inherit',
-      fontSizeName: [this.$t('setting.small'), this.$t('setting.medium'), this.$t('setting.large')],
-
+      fontSizeName: [
+        this.$t('setting.small'),
+        this.$t('setting.medium'),
+        this.$t('setting.large')
+      ]
     }
   }
 }
@@ -149,12 +155,14 @@ export default {
 .container {
   height: 100%;
   overflow: hidden;
+  display: flex;
 }
 .website-setting {
   $column-height: 100%;
   &-style {
+    border-right: 15px solid #cdd4db;
+    flex: 1;
     min-height: $column-height;
-    min-width: 1000px;
   }
   &-font,
   &-color {
@@ -165,7 +173,7 @@ export default {
       border-left: 1px solid #bcbcbc;
       height: 100%;
       margin-left: -20px;
-      padding: 10px 20px;
+      padding: 10px 0;
     }
   }
   &-font-size,
@@ -182,7 +190,7 @@ export default {
     margin-top: 20px;
     height: 360px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   &-select-title {
     margin-right: 10px;
@@ -193,6 +201,9 @@ export default {
     h1 {
       padding-left: 0;
     }
+  }
+  &-style-operations{
+    width: 175px;
   }
 }
 .website-setting-preview-fontsize {

@@ -11,7 +11,7 @@
             <div
               v-for='(layout) in siteLayoutsMap'
               :key='layout.id'
-              class="website-setting-layout-item" 
+              class="website-setting-layout-item"
               :class="{
                 active: selectedLayoutId==layout.id,
                 is_default: unsavedDefaultLayoutId==layout.id
@@ -141,7 +141,7 @@
         </main>
       </el-col>
     </el-row>
-    <DialogOperations class="website-setting-operations" @save="handleSave" @close="handleClose"></DialogOperations>
+    <DialogOperations class="website-setting-layout-operations" @save="handleSave" @close="handleClose"></DialogOperations>
   </div>
 </template>
 
@@ -706,7 +706,7 @@ export default {
       margin: 15px 0 0 !important;
     }
   }
-  &-operations{
+  &-layout-operations{
     width: 175px;
   }
 }
