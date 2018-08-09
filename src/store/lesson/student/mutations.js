@@ -49,7 +49,7 @@ const mutations = {
     _lessonDetail.quiz[index].result = result
     _lessonDetail.quiz[index].answer = answer
     Vue.set(state, 'lessonDetail', _lessonDetail)
-  }
+  },
   [SET_ENTER_CLASS_ID](state, { key }) {
     Vue.set(state, 'enterClassId', key)
   }
