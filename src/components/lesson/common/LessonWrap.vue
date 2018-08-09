@@ -1,6 +1,6 @@
 <template>
   <div>
-    <lesson v-if="data.cmd === 'Lesson'" :data="data" />
+    <lesson v-if="data.cmd === 'Lesson'" :data="data" :originData="originData"  />
     <hint v-else-if="data.cmd === 'Hint'" :data="data" />
     <quiz v-else-if="data.cmd === 'Quiz'" :data="data" />
   </div>
@@ -18,7 +18,8 @@ export default {
     hint: Hint
   },
   props: {
-    data: Object
+    data: Object,
+    originData: Array
   }
 }
 </script>

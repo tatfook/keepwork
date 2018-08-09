@@ -58,10 +58,11 @@ export default {
     }
   },
   props: {
-    data: Object
+    data: Object,
+    originData: Array
   },
   mounted() {
-    console.log(this.data)
+    console.log(this.quizs)
   },
   methods: {
     openAnimations() {
@@ -69,6 +70,9 @@ export default {
     }
   },
   computed: {
+    quizs() {
+      return this.originData.filter(item => item.cmd === 'Quiz')
+    },
     lesson() {
       return _.get(this.data, 'data.lesson', {})
     },

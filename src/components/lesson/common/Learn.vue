@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-wrap v-for="(item,index) in lesson" :key="index" :data="item" />
+    <lesson-wrap v-for="(item,index) in lesson" :key="index" :data="item" :originData="lesson" />
   </div>
 </template>
 
@@ -43,10 +43,6 @@ export default {
       lessonContent: 'lesson/student/lessonContent',
       lessonContentFormat: 'lesson/student/lessonContentFormat'
     }),
-    alphabet() {
-      console.warn('genAlphabet--->')
-      return this.genAlphabet()
-    },
     lesson() {
       return this.lessonContentFormat(this.lessonId)
     }
@@ -57,6 +53,7 @@ export default {
 <style lang="scss">
 .lesson-wrap {
   counter-reset: no;
+  padding-bottom: 300px;
 }
 
 .quiz-no::after {

@@ -1,13 +1,14 @@
 <template>
-  <div class="quiz-container" :class="{'error': isError}">
+  <div class="quiz-container">
     <!-- <div class="splic"></div> -->
-    <div class="quiz-no">
-      <i class="el-icon-edit-outline"></i>
-      {{$t('card.quiz')}}
+    <div class="quiz-no-wrap">
+      <i class="quiz-icon"></i>
+      <span class="quiz-no">
+        {{$t('card.quiz')}}
+      </span>
+      <span v-if="isMutipleChoice" class="mutiple-choice-tips">({{$t('card.multipleChoices')}})</span>
     </div>
     <div class="question">{{ question }}
-      <span v-if="isMutipleChoice">(
-        <span class="mutiple-choice-tips">{{$t('card.multipleChoices')}}</span>)</span>
     </div>
 
     <el-radio-group class="quiz" v-if="isSingleChoice" v-model="quizAnswer">
@@ -36,7 +37,7 @@
       <el-input v-if="!isDone" type="textarea" maxlength="512" v-model="quizAnswer" :placeholder="$t('card.textMatchPlaceholder')"></el-input>
     </div>
 
-    <div v-if="isDone" class="quiz-result">
+    <div v-if="isDone" class="quiz-result" :class="{'error': isError}">
       <div v-if="isSingleChoice || isMutipleChoice || isTFNG" class="answer">
         {{$t('card.rightAnswerColon')}}
         <span v-if="isTFNG" :class="[isError ? 'error-highlight': 'highlight']">{{TFNGAnswer}}</span>
@@ -77,8 +78,7 @@ export default {
       isDone: false
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -183,17 +183,34 @@ export default {
   background: white;
   max-width: 1080px;
   margin: 0 auto;
-  .quiz-no {
-    font-weight: 600;
+  .quiz-no-wrap {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
     i {
       color: #1982ff;
+      display: inline-block;
+      width: 41px;
+      height: 38px;
       font-size: 22px;
       font-weight: 600;
       padding-right: 12px;
-      vertical-align: middle;
+      background: url('../../../assets/lessonImg/editIcon.png') no-repeat center
+        #fff;
+    }
+    .quiz-no {
+      margin-left: 10px;
+      display: inline-block;
+      font-weight: 600;
+      height: 38px;
+    }
+    .mutiple-choice-tips {
+      margin-left: 10px;
+      display: inline-block;
+      height: 38px;
     }
   }
-  $marginLeft: 40px;
+  $marginLeft: 60px;
   $marginTop: 20px;
   .question {
     margin-left: $marginLeft;
@@ -233,39 +250,81 @@ export default {
     margin-top: $marginTop;
     margin-left: $marginLeft;
   }
-}
+  .el-checkbox__inner {
+    // border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    &::after {
+      // border: 2px solid #fff;
+      border-width: 2px;
+      height: 11px;
+      width: 5px;
+      left: 5px;
+    }
+  }
 
-.el-radio__input.is-checked ~ .el-radio__label,
-.el-checkbox__input.is-checked ~ .el-checkbox__label {
-  font-weight: 600;
-  color: black;
-}
+  .el-radio__input {
+    .el-radio__inner {
+      height: 20px;
+      width: 20px;
+    }
+    &.is-checked .el-radio__inner {
+      &::after {
+        box-sizing: content-box;
+        display: inline-block;
+        content: '';
+        border: 2px solid #fff;
+        background: none;
+        border-radius: 0;
+        border-left: 0;
+        border-top: 0;
+        height: 11px;
+        width: 5px;
+        left: 3px;
+        position: absolute;
+        top: 8px;
+        transform: rotate(45deg) translate(-50%, -50%) scale(1);
+      }
+    }
+    &.is-checked.is-disabled .el-radio__inner {
+      &::after {
+        border-color: #c0c4cc;
+      }
+    }
+  }
 
-.el-radio__input.is-disabled + span.el-radio__label,
-.el-checkbox__input.is-disabled + span.el-checkbox__label {
-  color: black;
-}
+  .el-radio__input.is-checked ~ .el-radio__label,
+  .el-checkbox__input.is-checked ~ .el-checkbox__label {
+    font-weight: 600;
+    color: black;
+  }
 
-.splic {
-  height: 1px;
-  margin: 0 0 30px 40px;
-  border-bottom: 1px dashed #bfbfbf;
-}
+  .el-radio__input.is-disabled + span.el-radio__label,
+  .el-checkbox__input.is-disabled + span.el-checkbox__label {
+    color: black;
+  }
 
-.error-highlight {
-  color: #f53838;
-}
+  .splic {
+    height: 1px;
+    margin: 0 0 30px 40px;
+    border-bottom: 1px dashed #bfbfbf;
+  }
 
-.mutiple-choice-tips {
-  color: #ff414a;
-}
+  .error-highlight {
+    color: #f53838;
+  }
 
-.error {
-  margin-bottom: 20px;
-  border: 1px solid #f53838;
-  background: rgba(245, 56, 56, 0.05);
-  .quiz-result {
-    background: none;
+  .mutiple-choice-tips {
+    color: #ff414a;
+  }
+
+  .error {
+    margin-bottom: 20px;
+    border: 1px solid #f53838;
+    background: rgba(245, 56, 56, 0.05);
+    .quiz-result {
+      background: none;
+    }
   }
 }
 </style>
