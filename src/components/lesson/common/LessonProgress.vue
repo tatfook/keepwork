@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      isShowQuizResult: true,
+      isShowQuizResult: false,
       quizList: [
         {
           name: 'quiz1',
