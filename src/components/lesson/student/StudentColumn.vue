@@ -96,7 +96,8 @@ export default {
       getProfile: 'user/getProfile',
       getUserSubscribes: 'lesson/student/getUserSubscribes',
       getUserSkills: 'lesson/student/getUserSkills',
-      enterClassRoom: 'lesson/student/enterClassRoom'
+      enterClassRoom: 'lesson/student/enterClassRoom',
+      setEnterClassID: 'lesson/student/setEnterClassID'
     }),
     async enterClass() {
       //进入课堂
@@ -104,6 +105,7 @@ export default {
       await this.enterClassRoom({ key })
       console.log(this.enterClassInfo)
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
+        await this.setEnterClassID({ key })
         this.$router.push({
           path: `packages/${this.enterClassInfo.packageId}/lessons/${
             this.enterClassInfo.lessonId

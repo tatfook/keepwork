@@ -8,7 +8,8 @@ const state = () => ({
   lessonSelfStudy: {},
   userSubscribeList: [],
   userSkillsList: [],
-  enterClassInfo: []
+  enterClassInfo: [],
+  enterClassId: Number
 })
 
 export default {

@@ -11,6 +11,7 @@ const getters = {
     lessonContentFormat(lessonId).filter(item => item.cmd === 'Quiz'),
   userSubscribeList: state => state.userSubscribeList,
   userSkillsList: state => state.userSkillsList,
-  enterClassInfo: state => state.enterClassInfo
+  enterClassInfo: state => state.enterClassInfo,
+  enterClassId: state => state.enterClassId
 }
 export default getters
