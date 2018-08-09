@@ -14,10 +14,10 @@
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
           </div>
-          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toPackageDetail(lesson)">
+          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toLessonDetail(lesson)">
         </div>
         <div class="package-catalogue-item-detail">
-          <div class="package-catalogue-item-title" @click="toPackageDetail(lesson)">
+          <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
             <span>{{lesson.lessonName}}</span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
@@ -86,7 +86,7 @@ export default {
     }
   },
   methods: {
-    toPackageDetail(lesson) {
+    toLessonDetail(lesson) {
       if (this.packageDetail.isSubscribe) {
         console.log(
           `go to /student/packages/${this.packageDetail.id}/lessons/${
