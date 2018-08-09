@@ -1,26 +1,33 @@
 <template>
+<div>
+  <Header/>
+
 <div class="lesson-packages">
+  <div class="packages-sum">{{$t('lesson.include')}}: <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
   <el-row :gutter="20" class="lesson-packages-subject">
     <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
         <div class="subject-desc">
           <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
           <h4 :class="['subject-title',false ? 'beLearning':'']">{{coursePackage.packageName}}</h4>
-          <span>Includes: {{coursePackage.cost}} lessons</span>
-          <span>Ages: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
-          <span>Intro : {{coursePackage.intro}}</span>
+          <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
+          <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
+          <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
           <div class="purchase-lesson-package">
-            <p class="purchase-tip">Return 100 coins after purchase</p>
-            <div><el-button class="purchase-button" plain>RMB: ￥100.00</el-button></div>
-            <div><el-button class="purchase-button" plain>Coins: 1000 coins</el-button></div>
+            <p class="purchase-tip">Return <span class="red">100</span> coins after purchase</p>
+            <div class="purchase-money" plain>RMB: <span class="red">￥100.00</span></div>
+            <div class="purchase-money" plain>Coins: <span class="red">1000</span> coins</div>
           </div>
         </div>
     </el-col>
   </el-row>
 </div>
+</div>
+
 </template>
 
 <script>
 import _ from 'lodash'
+import Header from './Header'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -53,6 +60,9 @@ export default {
         path: `package/${packageId}`,
       })
     }
+  },
+  components: {
+    Header
   }
 }
 </script>
@@ -61,9 +71,13 @@ export default {
 .lesson-packages {
   max-width: 1200px;
   margin: 0 auto;
+  .packages-sum{
+    padding: 60px 0 5px 20px;
+    font-size: 17px;
+  }
   .lesson-packages-subject .subject-desc {
     width: 287px;
-    padding: 34px 34px 0;
+    padding: 34px 34px 6px;
     margin:20px auto;
     border: solid 2px #d2d2d2;
     border-radius: 1px;
@@ -76,6 +90,7 @@ export default {
       cursor: pointer;
     }
     .subject-title{
+      font-size: 18px;
       margin-bottom: 10px;
       cursor: pointer;
     }
@@ -90,16 +105,26 @@ export default {
     .purchase-lesson-package{
       margin: 10px 0;
       border-top: 1px solid #e3e3e3;
-      .purchase-tip{
-        margin:14px 0 2px 0;
+      .red{
+        color: #e4461f;
+        display: inline;
       }
-      .purchase-button{
+      .purchase-tip{
+        color: #3491f0;
+        margin:14px 0 5px 0;
+        font-size: 14px;
+      }
+      .purchase-money{
+        font-size: 14px;
         width: 159px;
-        height: 31px;
+        height: 27px;
+        border: solid 2px #f3f3f3;
+        text-align: center;
         padding: 0;
         line-height: 30px;
         border-radius: 15px;
         margin: 5px 0;
+        cursor: default;
       }
     }
     
