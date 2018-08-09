@@ -1,5 +1,6 @@
 <template>
   <div class="student-wrap">
+    <Header/>
     <el-container class="student">
       <el-aside width="274px">
         <div class="profile">
@@ -54,7 +55,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import UserSubscribePackages from '@/components/lesson/common/UserSubscribePackages'
+import Header from '../common/Header'
+import UserSubscribePackages from '../common/UserSubscribePackages'
 
 export default {
   name: 'student',
@@ -87,8 +89,10 @@ export default {
       this.skillsList.every(skill => (sum += skill.score * 1))
       return sum
     },
-    sortedSubscribesList(){
-      return this.subscribesList.sort((obj1, obj2) => obj1.updatedAt < obj2.updatedAt)
+    sortedSubscribesList() {
+      return this.subscribesList.sort(
+        (obj1, obj2) => obj1.updatedAt < obj2.updatedAt
+      )
     }
   },
   methods: {
@@ -107,7 +111,7 @@ export default {
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
         await this.setEnterClassID({ key })
         this.$router.push({
-          path: `packages/${this.enterClassInfo.packageId}/lessons/${
+          path: `student/packages/${this.enterClassInfo.packageId}/lessons/${
             this.enterClassInfo.lessonId
           }`
         })
@@ -121,6 +125,7 @@ export default {
     }
   },
   components: {
+    Header,
     UserSubscribePackages
   }
 }

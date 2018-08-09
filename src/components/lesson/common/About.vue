@@ -1,5 +1,6 @@
 <template>
   <div class="about">
+    <Header/>
     <div class="about-carousel">
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="img in imgUrls" :key="img">
@@ -203,6 +204,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import img1 from '@/assets/lessonImg/top_banner.png'
 import img2 from '@/assets/lessonImg/top_banner2.png'
+import Header from './Header'
 
 export default {
   data(){
@@ -210,6 +212,9 @@ export default {
       isEn: locale ===  'en-US',
       imgUrls: [{"url": img1},{"url": img2}]
     }
+  },
+  components: {
+    Header
   }
 }
 </script>
