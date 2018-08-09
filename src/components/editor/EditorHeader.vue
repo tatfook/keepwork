@@ -18,7 +18,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
-                <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
+                <div class="kp-icon"><i class="iconfont icon-setting"></i></div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='currentDisabled' @click.stop="openWebsiteSettingDialog">{{$t('editor.setUpTheWebsite')}}</button>
                   <button :disabled='currentDisabled' @click.stop="goSettingPage">{{$t('editor.setUpThePage')}}</button>
@@ -60,20 +60,20 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button :disabled='currentDisabled' @click="changeView('ModsList')"><i class="iconfont icon-mod"></i>{{$t('editor.modules')}}</button>                  
-                <button :disabled='currentDisabled' @click="openSkyDriveManagerDialog"><i class="iconfont icon-lfile"></i>{{$t('modList.bigFile')}}</button>                  
+                <button :disabled='currentDisabled' @click="changeView('ModsList')"><i class="iconfont icon-mod"></i>{{$t('editor.modules')}}</button>
+                <button :disabled='currentDisabled' @click="openSkyDriveManagerDialog"><i class="iconfont icon-lfile"></i>{{$t('modList.bigFile')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <button :disabled='currentDisabled' @click='toggleCodeWin'><i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
-                <button><i class="iconfont icon-help"></i><a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
-                <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>                  
+                <button><i class="iconfont icon-help"></i><a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>
+                <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click="backHome"><i class="iconfont icon-home"></i>{{$t('editor.backHomePage')}}</button>                  
+                <button @click="backHome"><i class="iconfont icon-home"></i>{{$t('editor.backHomePage')}}</button>
               </div>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -236,7 +236,7 @@ export default {
       return (url || '').replace(/\.md$/,'')
     },
     isActivePageSaved() {
-      let { saved } = this.activeAreaData || {}
+      let { saved } = this.activeAreaData.file || this.activeAreaData || {}
       return saved === false ? false : true
     }
   },
@@ -617,9 +617,9 @@ export default {
   display: flex;
   &:hover{
     .kp-icon{
-      background-color:rgba(40, 140, 233, 0.1);          
+      background-color:rgba(40, 140, 233, 0.1);
       .iconfont{
-      color: #409EFF;        
+      color: #409EFF;
       }
     }
   }
@@ -671,12 +671,12 @@ export default {
 }
 .isDisabled{
     .iconfont{
-      color: #CcC !important;        
-    }    
+      color: #CcC !important;
+    }
   &:hover{
     .kp-icon{
       .iconfont{
-      color: #CcC !important;        
+      color: #CcC !important;
       }
     }
   }

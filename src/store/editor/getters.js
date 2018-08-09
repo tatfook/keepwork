@@ -29,8 +29,11 @@ const getters = {
     return {...pageInfo, saved}
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  code: (state, { activeAreaData }) =>
-    (activeAreaData && activeAreaData.content) || '',
+  code: (state, { activeAreaData }) => {
+    if (!activeAreaData) return ''
+    if (activeAreaData.file) return activeAreaData.file.content
+    return activeAreaData.content
+  },
   themeConf: (state, { siteSetting }) => {
     if (siteSetting) return siteSetting.theme
     return {}

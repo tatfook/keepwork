@@ -115,8 +115,8 @@ const actions = {
     file = getters.openedFiles[fullPath]
     if (file) {
       let pageData = initPageState()
-      pageData.content = file.content || ''
-      pageData.modList = Parser.buildBlockList(pageData.content)
+      pageData.file = file
+      pageData.modList = Parser.buildBlockList(file.content)
       commit(LOAD_PAGE_DATA, {path: fullPath, pageData})
     }
   },
