@@ -1,14 +1,17 @@
 import _ from 'lodash'
-import Parser from '@/lib/mod/parser'
 
 const getters = {
   studentPackageDetail: state => ({ packageId }) =>
     _.get(state.packagesDetail, packageId),
-  lessonContent: state => lessonId => _.get(state.lessons, lessonId),
-  lessonContentFormat: (state, { lessonContent }) => lessonId =>
-    Parser.buildBlockList(lessonContent(lessonId)),
-  lessonQuiz: (state, { lessonContentFormat }) => lessonId =>
-    lessonContentFormat(lessonId).filter(item => item.cmd === 'Quiz'),
+  lessonDetail: state => state.lessonDetail,
+  lessonQuiz: state => state.lessonDetail.quiz,
+  lessonQuizProgress: (state, { lessonQuizDone, lessonQuizCount }) =>
+    (lessonQuizDone / lessonQuizCount) * 100,
+  lessonIsDone: (state, { lessonQuizDone, lessonQuizCount }) =>
+    lessonQuizDone === lessonQuizCount && lessonQuizCount !== 0,
+  lessonQuizCount: state => state.lessonDetail.quiz.length,
+  lessonQuizDone: state =>
+    state.lessonDetail.quiz.filter(item => !!item.answer).length || 0,
   userSubscribeList: state => state.userSubscribeList,
   userSkillsList: state => state.userSkillsList,
   enterClassInfo: state => state.enterClassInfo,

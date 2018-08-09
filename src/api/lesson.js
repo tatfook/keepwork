@@ -82,13 +82,13 @@ const fakerGet = async ({ lessonId }) => {
   return axios.get(faker[lessonId]).then(res => res.data)
 }
 
-export const getLessonContent = args => fakerGet(args)
+export const fetchLessonData = args => fakerGet(args)
 
 export const lesson = {
   users,
   packages,
   admin,
-  getLessonContent,
+  fetchLessonData,
   classrooms
 }
 

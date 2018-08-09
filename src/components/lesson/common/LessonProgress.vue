@@ -1,25 +1,26 @@
 <template>
-    <div class="lesson-progress">
-        <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start">
-            <div class="progress-point-number">{{progressNumer}}
-                <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
-                    <div class="quiz-result-list">
-                        <div class="quiz-result-list-container">
-                            <div v-for="(quiz, index) in quizList" :key="index" class="quiz-status-wrap" :class="{'default': quiz.status === 0}">
-                                <span class="quiz-number">Quiz {{index+1}}</span>
-                                <span class="quiz-status" :class="{'right': quiz.status === 1, 'wrong':quiz.status === 2}"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="lesson-progress">
+    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" :class="{'noStart': lessonQuizDone === 0}">
+      <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
+        <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
+          <div class="quiz-result-list">
+            <div class="quiz-result-list-container">
+              <div v-for="(quiz, index) in lessonQuiz" :key="index" class="quiz-status-wrap" :class="{'default': quiz.result === null}">
+                <span class="quiz-number">Quiz {{index+1}}</span>
+                <span class="quiz-status" :class="{'right': quiz.result === true, 'wrong':quiz.result === false}"></span>
+              </div>
             </div>
-        </span>
-        <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="50" status="success"></el-progress>
-        <span class="progress-point end grey"></span>
-    </div>
+          </div>
+        </div>
+      </div>
+    </span>
+    <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
+    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']"></span>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'LessonProgress',
   props: {
@@ -31,40 +32,21 @@ export default {
   data() {
     return {
       isShowQuizResult: false,
-      quizList: [
-        {
-          name: 'quiz1',
-          status: 2
-        },
-        {
-          name: 'quiz2',
-          status: 1
-        },
-        {
-          name: 'quiz3',
-          status: 1
-        },
-        {
-          name: 'quiz4',
-          status: 1
-        },
-        {
-          name: 'quiz5',
-          status: 0
-        },
-        {
-          name: 'quiz6',
-          status: 0
-        },
-        {
-          name: 'quiz7',
-          status: 0
-        },
-        {
-          name: 'quiz8',
-          status: 0
-        }
-      ]
+      quizList: []
+    }
+  },
+  computed: {
+    ...mapGetters({
+      lessonQuiz: 'lesson/student/lessonQuiz',
+      lessonQuizCount: 'lesson/student/lessonQuizCount',
+      lessonQuizDone: 'lesson/student/lessonQuizDone',
+      lessonQuizProgress: 'lesson/student/lessonQuizProgress',
+      lessonIsDone: 'lesson/student/lessonIsDone'
+    })
+  },
+  watch: {
+    lessonQuizProgress(val) {
+      console.log(val)
     }
   },
   methods: {
@@ -102,11 +84,23 @@ export default {
       width: $size;
       border: 3px solid white;
     }
+    &.finish {
+      $size: 33px;
+      cursor: pointer;
+      background: $green;
+    }
     &.start {
       position: relative;
       z-index: 9;
       margin-right: -25px;
       cursor: pointer;
+      &.noStart {
+        $size: 33px;
+        height: $size;
+        width: $size;
+        border: 3px solid white;
+        background: $grey;
+      }
     }
     &.end {
       position: relative;
@@ -146,7 +140,6 @@ export default {
       width: 100%;
       box-sizing: border-box;
       background: white;
-      min-height: 400px;
       z-index: 998;
       padding: 20px;
       position: relative;
