@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-wrap v-for="(item,index) in lesson" :key="index" :data="item" :originData="lesson" />
+    <lesson-wrap v-for="(item,index) in lesson" :key="index" :data="item" />
   </div>
 </template>
 
@@ -22,11 +22,12 @@ export default {
   },
   async mounted() {
     this.lessonId = this.$route.params.id || 1
-    await this.getLessonContent({ lessonId: this.lessonId })
+    await this.fetchLessonData({ lessonId: this.lessonId })
+    console.log(this.lessonDetail)
   },
   methods: {
     ...mapActions({
-      getLessonContent: 'lesson/student/getLessonContent'
+      fetchLessonData: 'lesson/student/fetchLessonData'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')
@@ -40,11 +41,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonContent: 'lesson/student/lessonContent',
-      lessonContentFormat: 'lesson/student/lessonContentFormat'
+      lessonDetail: 'lesson/student/lessonDetail'
     }),
     lesson() {
-      return this.lessonContentFormat(this.lessonId)
+      return this.lessonDetail.modList || []
     }
   }
 }

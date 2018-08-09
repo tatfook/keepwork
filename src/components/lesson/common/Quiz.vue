@@ -59,6 +59,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapActions } from 'vuex'
 export default {
   name: 'Quiz',
   props: {
@@ -78,8 +79,10 @@ export default {
       isDone: false
     }
   },
-  mounted() {},
   methods: {
+    ...mapActions({
+      doQuiz: 'lesson/student/doQuiz'
+    }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
       this.isMutipleChoice && this.checkMutipleChoice()
@@ -91,7 +94,7 @@ export default {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
       }
       let result = this.answer.some(item => item === this.quizAnswer)
-      this.showResult(result)
+      this.showResultAndSubmit(result, this.quizAnswer)
     },
     checkMutipleChoice() {
       if (this.quizMutipleAnswer.length < 2) {
@@ -100,7 +103,7 @@ export default {
       let quizMutipleAnswer = [...this.quizMutipleAnswer].sort()
       let answer = [...this.answer].sort()
       let result = JSON.stringify(quizMutipleAnswer) === JSON.stringify(answer)
-      this.showResult(result)
+      this.showResultAndSubmit(result, quizMutipleAnswer)
     },
     checkTFNG() {
       // true or false
@@ -108,7 +111,7 @@ export default {
         return this.$message.error(this.$t('card.pleaseSelectOne'))
       }
       let result = this.answer[0] === this.quizAnswer
-      this.showResult(result)
+      this.showResultAndSubmit(result, this.quizAnswer)
     },
     checkTextMatch() {
       let quizAnswer = this.quizAnswer.trim()
@@ -116,15 +119,22 @@ export default {
         return this.$message.error(this.$t('card.pleaseInputAnswer'))
       }
       let result = this.answer.some(({ item }) => item.trim() === quizAnswer)
-      this.showResult(result)
+      this.showResultAndSubmit(result, quizAnswer)
     },
-    showResult(result) {
+    showResultAndSubmit(result, answer) {
       this.isError = !result
       this.isRight = result
       this.isDone = true
+      this.submit(result, answer)
+    },
+    submit(result, answer) {
+      this.doQuiz({ key: this.key, result, answer })
     }
   },
   computed: {
+    key() {
+      return this.data.key
+    },
     quizData() {
       return _.get(this.data, 'data.quiz.data[0]')
     },

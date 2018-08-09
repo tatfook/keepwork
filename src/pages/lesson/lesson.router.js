@@ -56,17 +56,10 @@ export default new Router({
         {
           path: 'package/:id',
           name: 'StudentPackage',
-          component: StudentPackageDetailPage,
-          children: [
-            {
-              path: 'lesson/:id',
-              name: 'Study',
-              component: Study
-            }
-          ]
+          component: StudentPackageDetailPage
         },
         {
-          path: 'learn/:id',
+          path: 'package/:id/lesson/:id',
           name: 'Learn',
           component: Study
         }
