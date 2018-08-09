@@ -67,20 +67,20 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'color_4'],
-      tagline: ['font_3', 'color_2'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColors']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColors',
+          fontColor: 'fontsColor'
         },
         logo: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -129,19 +129,19 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'color_4'],
-      tagline: ['font_3', 'color_2'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColors']
     },
     options: {
       theme: {
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColors',
+          fontColor: 'fontsColor'
         },
         logo: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -189,20 +189,20 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'color_4'],
-      tagline: ['font_3', 'color_2'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColors']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColors',
+          fontColor: 'fontsColor'
         },
         logo: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -250,20 +250,20 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'color_4'],
-      tagline: ['font_3', 'color_2'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
-      colMenu: ['bg_color_7']
+      colMenu: ['bgColors']
     },
     options: {
       theme: {
         // 子组件的style参数
         menu: {
-          menuBackground: 'bg_color_7',
-          fontColor: 'color_0'
+          menuBackground: 'bgColors',
+          fontColor: 'fontsColor'
         },
         logo: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -274,6 +274,64 @@ export default [
     cover: require('@/../static/adi/title/title2.png')
   },
   // style 4
+  {
+    templateID: 3,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center',
+        padding: '5px 0'
+      },
+      colLogo: {
+        float: 'left',
+        'max-width': '64px',
+        'margin-left': '5px'
+      },
+      logo: {
+        height: '64px',
+        width: '64px'
+      },
+      colBusinessName: {
+        float: 'left',
+        width: 'auto',
+        'margin-left': '5px'
+      },
+      colMenu: {
+        float: 'left'
+      },
+      menu: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        menu: {
+          'min-width': '40px'
+        }
+      }
+    },
+    props: {},
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width'],
+      colGroup: ['styleFourBackground'],
+      businessName: ['fontsColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'styleFourBackground',
+          fontColor: 'fontsColor'
+        },
+        logo: {
+          svgFillColor: 'fontsColor'
+        }
+      },
+      config: {
+        ...defaultData
+      }
+    }
+  },
+  // style 5
   {
     templateID: 2,
     data: {
@@ -323,14 +381,14 @@ export default [
     options: {
       theme: {
         menuB: {
-          fontSize: 'font_6',
+          fontSize: 'subtitle',
           fontColor: 'color_3',
-          color: 'color_7',
+          color: 'svgFillColor',
           backgroundColor: 'color_5',
-          borderBottomColor: 'color_7'
+          borderBottomColor: 'svgFillColor'
         },
         logo: {
-          svgFillColor: 'color_7'
+          svgFillColor: 'svgFillColor'
         }
       },
       config: {

@@ -41,6 +41,7 @@ const UPDATE_FILEMANAGER_TREE_NODE_EXPANDED =
 const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 const SET_EDITING_AREA = 'SET_EDITING_AREA'
 
+const LOAD_PAGE_DATA = 'LOAD_PAGE_DATA'
 const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
@@ -91,9 +92,11 @@ export const props = {
   SET_NEW_MOD_POSITION,
   SET_EDITING_AREA,
 
+  LOAD_PAGE_DATA,
   RESET_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE,
+  CLOSE_ALL_OPENED_FILE,
 
   REFRESH_SITE_SETTINGS,
   UPDATE_OPENED_LAYOUT_FILE,
@@ -105,7 +108,6 @@ export const props = {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  CLOSE_ALL_OPENED_FILE,
   ADD_RECENT_OPENED_SITE
 }
 
@@ -138,8 +140,7 @@ const mutations = {
   },
   [SET_ACTIVE_PAGE](state, { username, path }) {
     Vue.set(state, 'activePageUrl', path)
-    if (!state.openedFiles[username]) return
-    const pageData = state.openedFiles[username][getFileFullPathByPath(path)]
+    const pageData = state.openedPages[getFileFullPathByPath(path)]
     Vue.set(state, 'activePage', pageData)
     if (pageData) {
       Vue.set(state.activePage, 'activeMod', null)
@@ -280,6 +281,9 @@ const mutations = {
   [UPDATE_CURSOR_POSITION](state, cursor) {
     Vue.set(state.activePage, 'cursorPos', cursor)
   },
+  [LOAD_PAGE_DATA](state, {path, pageData}) {
+    Vue.set(state.openedPages, path, pageData)
+  },
   [RESET_OPENED_FILE](state, { username, path, data }) {
     let _path = path.split('/')
     if (!_path[0] && !_path[1]) return
@@ -304,9 +308,14 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
+    Vue.set(state.openedPages, path, null)
   },
-  [CLOSE_ALL_OPENED_FILE](state) {
-    Vue.set(state, 'openedFiles', {})
+  [CLOSE_ALL_OPENED_FILE](state, {username}) {
+    Vue.set(state, 'openedFiles', {
+      ...state.openedFiles,
+      [username]: {}
+    })
+    Vue.set(state, 'openedPages', {})
   },
   [REFRESH_SITE_SETTINGS](state, { sitePath, siteSetting }) {
     Vue.set(state.siteSettings, sitePath, siteSetting)

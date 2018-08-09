@@ -8,7 +8,7 @@ export default [
     theme: {
       root: [],
       rootRow: ['mod-full-width'],
-      title: ['color_0']
+      title: ['titleColor']
     },
     options: {
       theme: {},

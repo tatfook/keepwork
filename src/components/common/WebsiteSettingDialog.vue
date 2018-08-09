@@ -57,12 +57,13 @@ export default {
         {
           text: this.$t('setting.siteLayouts'),
           comp: WebsiteSettingLayout,
-          isShow: true
+          isShow: this.isBasicSettingShow
+        },
+        {
+          text: this.$t('setting.siteStyle'),
+          comp: WebsiteSettingStyle,
+          isShow: this.isBasicSettingShow
         }
-        // {
-        //   text: '网站样式',
-        //   comp: WebsiteSettingStyle
-        // }
       ]
     },
     filteredWebsiteSettingNavs() {

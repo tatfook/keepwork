@@ -4,7 +4,6 @@ import SimpleUndo from '@/lib/utils/undo/simpleUndo'
 export const initPageState = () => {
   return {
     modList: [],
-    saved: true,
     activeMod: null,
     activeProperty: null,
     activeArea: 'main',
@@ -39,6 +38,7 @@ export const initSiteState = () => {
 const state = () => ({
   activePage: null,
   activePageUrl: '',
+  openedPages: {},
   openedFiles: {},
   siteSettings: {},
   filemanagerTreeNodeExpandMapByPath: {},

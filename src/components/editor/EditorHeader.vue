@@ -10,7 +10,9 @@
           <el-dropdown-menu slot="dropdown" class="kp-dropdown-menu-content">
             <el-dropdown-item>
               <div class="kp-menu-top">
-                <div class="kp-icon"><i class="iconfont icon-add1"></i></div>
+                <div class="kp-icon">
+                  <i class="iconfont icon-add1"></i>
+                </div>
                 <div class="kp-submenu-top-content">
                   <button @click.stop="openNewWebsiteDialog">{{$t('editor.newWebsite')}}</button>
                 </div>
@@ -18,7 +20,9 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
-                <div class="kp-icon"><i class="iconfont icon-setting"></i></div>                
+                <div class="kp-icon">
+                  <i class="iconfont icon-setting"></i>
+                </div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='currentDisabled' @click.stop="openWebsiteSettingDialog">{{$t('editor.setUpTheWebsite')}}</button>
                   <button :disabled='currentDisabled' @click.stop="goSettingPage">{{$t('editor.setUpThePage')}}</button>
@@ -27,7 +31,9 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
-                <div class="kp-icon"><i class="iconfont icon-delete1"></i></div>
+                <div class="kp-icon">
+                  <i class="iconfont icon-delete1"></i>
+                </div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='currentDisabled' @click="removeCurrentPage(currentPagePath)">{{$t('editor.deleteTheCurrentPage')}}</button>
                 </div>
@@ -35,16 +41,20 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div :class="['kp-menu-top',isSaveAll ? 'isDisabled disabled-bgc':'']">
-                <div class="kp-icon"><i class="iconfont icon-save1" ></i></div>
+                <div class="kp-icon">
+                  <i class="iconfont icon-save1"></i>
+                </div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='isActivePageSaved' @click.stop="save">{{$t('editor.save')}}</button>
                   <button :disabled='isSaveAll' @click.stop="saveAllOpenedFiles">{{$t('editor.saveAll')}}</button>
                 </div>
               </div>
-              </el-dropdown-item>
+            </el-dropdown-item>
             <el-dropdown-item divided>
               <div :class="['kp-menu-top',currentDisabled ? 'isDisabled disabled-bgc':'']">
-                <div class="kp-icon"><i class="iconfont icon-close1"></i></div>
+                <div class="kp-icon">
+                  <i class="iconfont icon-close1"></i>
+                </div>
                 <div class="kp-submenu-top-content">
                   <button :disabled='currentDisabled' @click.stop="handleCloseConfirm">{{$t('editor.close')}}</button>
                   <button :disabled='currentDisabled' @click.stop="closeAllOpenedFilesConfirm">{{$t('editor.closeAll')}}</button>
@@ -53,27 +63,38 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'><i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
-                <button @click.stop='undo' :disabled='!canUndo'><i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
-                <button @click.stop='redo' :disabled='!canRedo'><i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
+                <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'>
+                  <i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                <button @click.stop='undo' :disabled='!canUndo'>
+                  <i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
+                <button @click.stop='redo' :disabled='!canRedo'>
+                  <i class="iconfont icon-redo"></i>{{$t('editor.redo')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button :disabled='currentDisabled' @click="changeView('ModsList')"><i class="iconfont icon-mod"></i>{{$t('editor.modules')}}</button>                  
-                <button :disabled='currentDisabled' @click="openSkyDriveManagerDialog"><i class="iconfont icon-lfile"></i>{{$t('modList.bigFile')}}</button>                  
+                <button :disabled='currentDisabled' @click="changeView('ModsList')">
+                  <i class="iconfont icon-mod"></i>{{$t('editor.modules')}}</button>
+                <button :disabled='currentDisabled' @click="openSkyDriveManagerDialog">
+                  <i class="iconfont icon-lfile"></i>{{$t('modList.bigFile')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button :disabled='currentDisabled' @click='toggleCodeWin'><i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
-                <button><i class="iconfont icon-help"></i><a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a></button>                  
-                <button @click="toggleLanguage"><i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>                  
+                <button :disabled='currentDisabled' @click='toggleCodeWin'>
+                  <i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
+                <button>
+                  <i class="iconfont icon-help"></i>
+                  <a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
+                </button>
+                <button @click="toggleLanguage">
+                  <i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
-                <button @click="backHome"><i class="iconfont icon-home"></i>{{$t('editor.backHomePage')}}</button>                  
+                <button @click="backHome">
+                  <i class="iconfont icon-home"></i>{{$t('editor.backHomePage')}}</button>
               </div>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -180,7 +201,7 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
     }),
-    isEnglish(){
+    isEnglish() {
       return locale === 'en-US' ? true : false
     },
     activeFilePath() {
@@ -192,16 +213,16 @@ export default {
     fileName() {
       return this.activePageInfo.sitename + '/' + this.activePageInfo.pagename
     },
-    currentPath(){
+    currentPath() {
       return this.activePageInfo.sitepath
     },
-    currentPagePath(){
+    currentPagePath() {
       return this.activePageInfo.barePath
     },
     hasUnSaveOpenedFiles() {
       return this.unSavedOpenedFiles.length > 0
     },
-    isSaveAll(){
+    isSaveAll() {
       return this.unSavedOpenedFiles.length === 0
     },
     unSavedOpenedFiles() {
@@ -233,10 +254,11 @@ export default {
     activePageFullUrl() {
       let { fullPath = '' } = this.activePageInfo
       let url = `${this.nowOrigin}/${fullPath}`
-      return (url || '').replace(/\.md$/,'')
+      return (url || '').replace(/\.md$/, '')
     },
     isActivePageSaved() {
-      let { saved } = this.activeAreaData || {}
+      if (!this.activeAreaData) return true
+      let { saved } = this.activeAreaData.file || this.activeAreaData
       return saved === false ? false : true
     }
   },
@@ -259,7 +281,7 @@ export default {
       if (this.isActivePageSaved) {
         return
       }
-      if(!this.savePending) {
+      if (!this.savePending) {
         this.savePending = true
         await this.saveActivePage()
           .then(() => {
@@ -292,7 +314,7 @@ export default {
     closeWebsiteSettingDialog() {
       this.isWebsiteSettingShow = false
     },
-    goSettingPage(){
+    goSettingPage() {
       this.setActiveManagePaneComponent({
         name: 'PageSetting',
         props: {
@@ -300,7 +322,7 @@ export default {
         }
       })
     },
-    removeCurrentPage(path){
+    removeCurrentPage(path) {
       let pathArr = path.split('/')
       let siteName = pathArr.slice(1, 2).join()
       let pageName = pathArr.slice(-1).join()
@@ -333,20 +355,21 @@ export default {
       let paths = this.unSavedOpenedFilesPaths
       let isSuccess = true
       this.savePending = true
-      while(num--) {
+      while (num--) {
         await this.savePageByPath(paths[num]).catch(e => {
-          this.$message.error(this.$t("editor.saveFail"));
+          this.$message.error(this.$t('editor.saveFail'))
           isSuccess = false
         })
       }
-      isSuccess && this.$message({
-          message: this.$t("editor.saveSuccess"),
+      isSuccess &&
+        this.$message({
+          message: this.$t('editor.saveSuccess'),
           type: 'success'
-        });
+        })
       this.savePending = false
     },
     handleCloseOpenedFile() {
-      let path = _.get(this.activePageInfo,'fullPath','')
+      let path = _.get(this.activePageInfo, 'fullPath', '')
       this.closeAndReset(path)
       this.handleCloseDialog()
       this.closeOneFile = false
@@ -371,8 +394,15 @@ export default {
       if (this.unSavedOpenedFilesPaths.length > 0) {
         this.dialogVisible = true
         let path = this.unSavedOpenedFilesPaths[0]
-        let siteName = path.split('/').slice(1, 2).join()
-        let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
+        let siteName = path
+          .split('/')
+          .slice(1, 2)
+          .join()
+        let fileName = path
+          .split('/')
+          .slice(-1)
+          .join()
+          .replace(/\.md$/, '')
         this.toBeCloseFileName = `${siteName}/${fileName}`
         this.toBeCloseFilePath = path
       } else {
@@ -389,22 +419,26 @@ export default {
       this.savePending = true
       let path = this.toBeCloseFilePath
       await this.savePageByPath(path)
-      .then(() => {
-        this.closeAndResetFile(path)
-        this.savePending = false
-        this.checkHasNext()
-      })
-      .catch(e => {
-        this.$message.error(this.$t("editor.saveFail"));
-        this.handleCloseAllDialog()
-        this.savePending = false
-      })
+        .then(() => {
+          this.closeAndResetFile(path)
+          this.savePending = false
+          this.checkHasNext()
+        })
+        .catch(e => {
+          this.$message.error(this.$t('editor.saveFail'))
+          this.handleCloseAllDialog()
+          this.savePending = false
+        })
     },
-    handleClose(){
-      return this.closeOneFile  ? this.handleCloseOpenedFile() : this.handleCloseOpenedFileAndNext()
+    handleClose() {
+      return this.closeOneFile
+        ? this.handleCloseOpenedFile()
+        : this.handleCloseOpenedFileAndNext()
     },
-    saveHandleClose(){
-      return this.closeOneFile  ? this.saveAndCloseOpenedFile() : this.saveAndCloseOpenedFileAndNext()
+    saveHandleClose() {
+      return this.closeOneFile
+        ? this.saveAndCloseOpenedFile()
+        : this.saveAndCloseOpenedFileAndNext()
     },
     closeAndResetFile(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
@@ -451,7 +485,7 @@ export default {
     },
     async handleCloseConfirm() {
       this.closeOneFile = true
-      let path = _.get(this.activePageInfo,'fullPath','')
+      let path = _.get(this.activePageInfo, 'fullPath', '')
       if (this.isActivePageSaved) {
         this.closeAndReset(path)
       } else {
@@ -464,26 +498,29 @@ export default {
       if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
       _path.length === 0
         ? this.$router.push('/')
-        : this.$nextTick(() => this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` }))
+        : this.$nextTick(() =>
+            this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` })
+          )
     },
     changeView(type) {
       this.setActiveManagePaneComponent(type)
     },
     openSkyDriveManagerDialog() {
-      this.toggleSkyDrive({ showSkyDrive:true })
+      this.toggleSkyDrive({ showSkyDrive: true })
     },
     toggleCodeWin() {
       this.resetShowingCol({
         isCodeShow: !this.isCodeShow,
         isPreviewShow: true
       })
-      this.isCodeShow && this.$store.dispatch('setAddingArea', {
-        area: this.gConst.ADDING_AREA_ADI
-      })
+      this.isCodeShow &&
+        this.$store.dispatch('setAddingArea', {
+          area: this.gConst.ADDING_AREA_ADI
+        })
     },
     toggleLanguage,
-    backHome(){
-      window.location.href=this.nowOrigin
+    backHome() {
+      window.location.href = this.nowOrigin
     }
   },
   components: {
@@ -494,10 +531,10 @@ export default {
 </script>
 
 <style scoped>
-.kp-dropdown-menu{
+.kp-dropdown-menu {
   padding: 0 0 0 10px;
 }
-.kp-dropdown-menu:hover{
+.kp-dropdown-menu:hover {
   background-color: rgba(40, 140, 233, 0.1);
 }
 .el-menu-item.is-active {
@@ -510,27 +547,27 @@ export default {
 .unsaved-tip span {
   line-height: 1.7em;
   position: relative;
-  top: .3em;
-  border-bottom: 2px solid #F7BC2A !important;
+  top: 0.3em;
+  border-bottom: 2px solid #f7bc2a !important;
 }
 .save-btn:not(.is-disabled) .icon-save {
-  background: #F7BC2A;
-  border-color: #F7BC2A;
+  background: #f7bc2a;
+  border-color: #f7bc2a;
   color: white;
 }
-.el-dropdown-link{
+.el-dropdown-link {
   padding: 20px 0;
 }
 .kp-logo {
   width: 127px;
 }
-.el-dropdown-menu__item{
+.el-dropdown-menu__item {
   line-height: 24px;
   padding: 0;
 }
-.el-dropdown-menu__item:hover{
+.el-dropdown-menu__item:hover {
   color: inherit;
-  background-color: inherit
+  background-color: inherit;
 }
 
 .li-btn {
@@ -613,35 +650,35 @@ export default {
     color: #303133;
   }
 }
-.kp-menu-top{
+.kp-menu-top {
   display: flex;
-  &:hover{
-    .kp-icon{
-      background-color:rgba(40, 140, 233, 0.1);          
-      .iconfont{
-      color: #409EFF;        
+  &:hover {
+    .kp-icon {
+      background-color: rgba(40, 140, 233, 0.1);
+      .iconfont {
+        color: #409eff;
       }
     }
   }
-  &.disabled-bgc:hover{
-    .kp-icon{
-        background-color:#f5f5f5;
+  &.disabled-bgc:hover {
+    .kp-icon {
+      background-color: #f5f5f5;
     }
   }
-  .kp-icon{
+  .kp-icon {
     width: 20px;
-    padding:0 4px 0 20px;
+    padding: 0 4px 0 20px;
     height: 24px;
-    .iconfont{
+    .iconfont {
       border: none;
       line-height: 24px;
       width: 0;
-      font-size: inherit
+      font-size: inherit;
     }
   }
-  .kp-submenu-top-content{
+  .kp-submenu-top-content {
     flex: 1;
-    button{
+    button {
       width: 100%;
       height: 24px;
       border: none;
@@ -652,49 +689,49 @@ export default {
       margin-top: -1px;
       padding: 0 0 0 10px;
       cursor: pointer;
-      &:focus{
+      &:focus {
         outline: none;
       }
-      &:hover{
+      &:hover {
         background-color: rgba(40, 140, 233, 0.1);
-        color: #409EFF;
+        color: #409eff;
       }
-      &[disabled]{
+      &[disabled] {
         color: #ccc;
         cursor: default;
-        &:hover{
+        &:hover {
           background-color: #f5f5f5;
         }
       }
     }
   }
 }
-.isDisabled{
-    .iconfont{
-      color: #CcC !important;        
-    }    
-  &:hover{
-    .kp-icon{
-      .iconfont{
-      color: #CcC !important;        
+.isDisabled {
+  .iconfont {
+    color: #ccc !important;
+  }
+  &:hover {
+    .kp-icon {
+      .iconfont {
+        color: #ccc !important;
       }
     }
   }
 }
-.kp-dropdown-menu-content{
-  &.el-popper[x-placement^=bottom] {
+.kp-dropdown-menu-content {
+  &.el-popper[x-placement^='bottom'] {
     min-width: 164px;
     max-width: 200px;
     left: 40px !important;
   }
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     cursor: default;
   }
   .el-dropdown-menu__item--divided:before {
     margin: 0;
   }
 }
-.kp-menu button{
+.kp-menu button {
   display: block;
   width: 100%;
   height: 24px;
@@ -705,13 +742,13 @@ export default {
   cursor: pointer;
   text-align: left;
   padding-left: 56px;
-  .kp-menu-help{
+  .kp-menu-help {
     display: inline-block;
     width: 100%;
     height: 24px;
     line-height: 24px;
   }
-  .iconfont{
+  .iconfont {
     border: none;
     font-size: 14px;
     width: 0;
@@ -719,30 +756,30 @@ export default {
     line-height: 24px;
     position: absolute;
     left: 20px;
-    top:0;
+    top: 0;
   }
-  &:hover{
-    color: #409EFF;
+  &:hover {
+    color: #409eff;
     background-color: rgba(40, 140, 233, 0.1);
-    .iconfont{
-      color: #409EFF;
+    .iconfont {
+      color: #409eff;
     }
   }
-  &:focus{
+  &:focus {
     outline: none;
   }
-  a{
+  a {
     text-decoration: none;
     color: inherit;
   }
 }
-.kp-menu button[disabled]{
-  &:hover{
+.kp-menu button[disabled] {
+  &:hover {
     background-color: #f5f5f5;
   }
   color: #ccc;
   cursor: default;
-  .iconfont{
+  .iconfont {
     color: #ccc;
   }
 }

@@ -16,11 +16,6 @@
                 <img :src="template.logoUrl">
                 <span class="template-info">{{ template.name }}</span>
               </div>
-              <div class="bottom">
-                <!-- <a class="el-button el-button--text" :href="template.previewUrl" target="_blank">
-                  <i class="iconfont icon-eyes"></i> 预 览 【新版本预览先隐藏】
-                </a> -->
-              </div>
             </el-card>
           </el-col>
         </el-col>

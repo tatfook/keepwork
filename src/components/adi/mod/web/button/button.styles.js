@@ -13,7 +13,7 @@ export default [
     props: {},
     theme: {
       root: ['mod-full-width'],
-      button: ['color_0']
+      button: ['fontsColor']
     },
     options: {},
     useImage: false,

@@ -24,6 +24,8 @@ const {
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS,
   GET_WEB_TEMPLATE_FILELIST_SUCCESS,
   GET_WEB_TEMPLATE_FILE_SUCCESS,
   SET_PAGE_STAR_DETAIL,
@@ -218,6 +220,12 @@ const actions = {
     let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, {config})
   },
+  async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
+    if (!_.isEmpty(webPageTemplateConfig)) return
+    let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
+    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath)
+    commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, {config})
+  },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
     let { fileList } = webTemplate
@@ -259,6 +267,20 @@ const actions = {
     }
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
+  },
+  async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
+    let { content, contentPath } = template
+    if (typeof content === 'string') return content
+
+    let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
+    content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, `${pageTemplateRoot}/${contentPath}`)
+    commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, {template, content})
+
+    return content
+  },
+  async addNewWebPage({ dispatch }, { path, template }) {
+    let content = await dispatch('getContentOfWebPageTemplate', { template })
+    await dispatch('gitlab/createFile', { path, content }, { root: true })
   },
   async getAllWebsite(context, payload) {
     let { useCache = false } = payload || {}
@@ -355,7 +377,7 @@ const actions = {
         commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
       })
       .catch(async () => {
-        config = ThemeHelper.defaultTheme()
+        config = ThemeHelper.defaultTheme
         commit(GET_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
       })
   },

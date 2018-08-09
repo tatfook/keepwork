@@ -8,7 +8,9 @@ import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
-  openedFiles: (state, getters, rootState, { 'user/username': username }) =>
+  openedPages: (state) =>
+    state.openedPages || {},
+  openedFiles: (state, { 'user/username': username }) =>
     state.openedFiles[username] || {},
   showOpenedFiles: (state, { openedFiles, 'user/personalAndContributedSiteNameList': allSiteNameList }) => {
     let _openedKeys = _.filter(_.keys(openedFiles), key => allSiteNameList.includes(key.split('/')[1]))
@@ -20,15 +22,18 @@ const getters = {
   hasOpenedFiles: (state, { openedFiles }) => _.values(openedFiles).length > 0,
   activePage: state => state.activePage,
   activePageUrl: state => state.activePageUrl,
-  activePageInfo: (state, { activePageUrl, openedFiles }) => {
+  activePageInfo: (state, { activePageUrl, openedPages }) => {
     let pageInfo = getPageInfoByPath(activePageUrl)
     let { fullPath } = pageInfo
-    let { saved } = openedFiles[fullPath] || {}
+    let { saved } = openedPages[fullPath] || {}
     return {...pageInfo, saved}
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  code: (state, { activeAreaData }) =>
-    (activeAreaData && activeAreaData.content) || '',
+  code: (state, { activeAreaData }) => {
+    if (!activeAreaData) return ''
+    if (activeAreaData.file) return activeAreaData.file.content
+    return activeAreaData.content
+  },
   themeConf: (state, { siteSetting }) => {
     if (siteSetting) return siteSetting.theme
     return {}

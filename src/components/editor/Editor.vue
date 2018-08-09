@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="0" type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
+  <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
@@ -396,6 +396,10 @@ bigFile:
 </script>
 
 <style scoped>
+.editor-page-container {
+  background-color: #cdd4db;
+  padding: 17px 0;
+}
 .full-height {
   height: 100%;
 }

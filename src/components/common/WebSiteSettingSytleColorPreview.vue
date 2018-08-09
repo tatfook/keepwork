@@ -1,10 +1,10 @@
 <template>
   <div class="colors-preview">
     <div v-for="(colors, index) in colorsList" :key="index" class="colors-preview-row">
-      <div class="colors-preview-row-container" :class="{isSelected: index == colorsId}" @click="handleSelect(index)">
+      <div class="colors-preview-row-container" :class="{isSelected: index == colorID}" @click="handleSelect(index)">
         <div v-for="color in colors" :style="{background: color}" :key="color" class="colors-preview-row-item"></div>
       </div>
-      <div v-if="index == colorsId" class="colors-preview-select"></div>
+      <div v-if="index == colorID" class="colors-preview-select"></div>
       <div v-else class="colors-preview-empty"></div>
     </div>
   </div>
@@ -18,7 +18,7 @@ export default {
       type: Array,
       default: []
     },
-    colorsId: {
+    colorID: {
       type: Number,
       default: 0
     }

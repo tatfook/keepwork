@@ -6,7 +6,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './index.router'
 import VueI18n from 'vue-i18n'
-import { appModule, userModule, gitlabModule, createPersistedState } from '@/store'
+import { appModule, userModule, gitlabModule } from '@/store'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -35,12 +35,7 @@ const store = new Vuex.Store({
     app: appModule,
     user: userModule,
     gitlab: gitlabModule
-  },
-  plugins: [
-    createPersistedState({
-      paths: ['user']
-    })
-  ]
+  }
 })
 
 /* eslint-disable no-new */

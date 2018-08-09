@@ -52,14 +52,17 @@ import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
 import styles from './menu.styles'
 import templates from './menu.templates'
+import themeData from './menu.theme'
 
 const name = 'ModMenu'
 
 const components = {
   menu: 'AdiMenu',
-  footer: 'AdiFooter'
+  footer: 'AdiFooter',
+  logo: 'AdiMedia',
+  businessName: 'AdiTitle'
 }
 
 const properties = generateProperties(name, components)
 
-export default { mod, name, components, properties, styles, templates }
+export default { mod, name, components, properties, styles, templates, themeData }

@@ -69,11 +69,10 @@ export default {
     this.template = this.conf.templates[this.style.templateID || 0]
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
-
     _.merge(this.theme.data, gThemeData)
 
     return (
-      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} class={this.getClasses('root')}>
+      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
         {renderTemplate(h, this)}
       </div>
     )
@@ -88,11 +87,50 @@ export default {
     jssClass(name) {
       return this.sheet.classes[name]
     },
+    getFontFamily() {
+      if (this.themeConf && this.themeConf.fontFamily) {
+        return 'font-family: ' + this.themeConf.fontFamily
+      } else {
+        return ''
+      }
+    },
+    convertColorStyle(name) {
+      let themeData = this.conf.themeData
+      let gThemeName = this.themeConf.name
+      let gThemeColorId = this.themeConf.colorID
+      let cName = ''
+      if (themeData && gThemeName &&
+        themeData[gThemeName] && themeData[gThemeName].colors &&
+        (gThemeColorId === 0 || gThemeColorId) && name) {
+        cName = themeData[gThemeName].colors[gThemeColorId][name]
+        return cName
+      }
+    },
+    convertFontStyle(name) {
+      let themeData = this.conf.themeData
+      let gThemeName = this.themeConf.name
+      let gThemeFontId = this.themeConf.fontID
+      let fSize = ''
+      if (themeData && gThemeName &&
+        themeData[gThemeName] && themeData[gThemeName].colors &&
+        (gThemeFontId === 0 || gThemeFontId) && name) {
+        fSize = themeData[gThemeName].fontSize[gThemeFontId][name]
+        return fSize
+      }
+    },
     themeClass(name) {
-      if (this.theme) return this.theme.sheet.classes[name]
+      if (this.convertColorStyle(name) || this.convertFontStyle(name)) {
+        return this.theme.sheet.classes[this.convertColorStyle(name) || this.convertFontStyle(name)]
+      } else {
+        return this.theme.sheet.classes[name]
+      }
     },
     themeData(name) {
-      if (this.theme) return this.theme.data[name]
+      if (this.convertColorStyle(name)) {
+        return this.theme.data[this.convertColorStyle(name) || this.convertFontStyle(name)]
+      } else {
+        return this.theme.data[name]
+      }
     },
     compWrapperClass(name) {
       let classes = []
@@ -106,7 +144,10 @@ export default {
       let classes = []
       if (this.jssClass(name)) classes.push(this.jssClass(name))
       if (this.style.theme && this.style.theme[name]) {
-        this.style.theme[name].forEach(el => classes.push(this.themeClass(el)))
+        this.style.theme[name].forEach(el => {
+          classes.push(this.themeClass(el))
+        }
+        )
       }
       return _.flatten(classes)
     },
@@ -117,7 +158,6 @@ export default {
     generateOptionsStyle(name) {
       let self = this
       let options = {}
-
       if (self.style.options) {
         if (self.style.options.config && self.style.options.config[name]) {
           options = _.cloneDeep(self.style.options.config[name])
@@ -150,7 +190,6 @@ export default {
           })
         }
       }
-
       return options
     },
     compWrapperOptions(name) {
@@ -163,7 +202,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeProperty: 'activeProperty'
+      activeProperty: 'activeProperty',
+      activePageInfo: 'activePageInfo',
+      themeConf: 'themeConf',
+      userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct

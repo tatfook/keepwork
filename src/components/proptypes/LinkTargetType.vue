@@ -10,8 +10,8 @@ import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
   name: 'LinkTargetType',
+  mixins: [protypesBaseMixin],
   props: {
-    editingKey: String,
     originValue: String
   },
   data() {

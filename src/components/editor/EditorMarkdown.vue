@@ -36,7 +36,9 @@ export default {
     return {
       gConst,
       qiniuUploadSubscriptions: {},
-      preClickedMod: ''
+      preClickedMod: '',
+      parserTimer: null,
+      parserCache: {}
     }
   },
   components: {
@@ -50,6 +52,10 @@ export default {
     this.editor.on('drop', this.onDropFile)
     this.editor.on('paste', this.onPaste)
     this.editor.on('mousedown', this.handleClick)
+    this.enableParserTick()
+  },
+  beforeDestroy() {
+    this.disableParserTick()
   },
   watch: {
     activeMod(newActiveMod, oldActiveMod) {
@@ -188,74 +194,31 @@ export default {
         change.removed[0] === ''
       )
     },
-    updateMarkdown(editor, changes) {
+    enableParserTick() {
+      this.parserTimer = setInterval(() => {
+        this.flushParserCache()
+      }, 1000)
+    },
+    disableParserTick() {
+      if (this.parserTimer) window.clearTimeout(this.parserTimer)
+    },
+    flushParserCache() {
+      if (
+        this.parserCache.code === undefined ||
+        this.parserCache.code === this.code
+      )
+        return
+      return this.$store.dispatch('updateMarkDown', this.parserCache)
+    },
+    async updateMarkdown(editor, changes) {
       let code = editor.getValue()
       let cursor = editor.getCursor()
+      this.parserCache.code = code
+      this.parserCache.cursor = cursor
       if (code === undefined) return
       if (code === this.code) {
         // update by ADI
-        return this.foldCodes(editor)
-      }
-
-      if (changes.length > 1) {
-        return this.$store.dispatch('updateMarkDown', {
-          code,
-          cursor
-        })
-      }
-
-      let change = changes[0]
-
-      if (this.checkIfInComposing(change)) return
-      let mod = Parser.getActiveBlock(this.modList, change.from.line + 1)
-      if (!mod) {
-        return this.$store.dispatch('updateMarkDown', {
-          code,
-          cursor
-        })
-      }
-
-      // the new input might create a new cmd
-      let text = _.cloneDeep(change.text)
-      if (text.length > 0) {
-        if (text[0] !== '') text[0] = editor.getLine(change.from.line)
-        if (text[text.length - 1] !== '')
-          text[text.length - 1] = editor.getLine(change.to.line)
-      }
-      // the last line of removed code might broke the cmd
-      let removed = _.cloneDeep(change.removed)
-      if (removed.length > 0) {
-        if (removed[0] !== '') removed[0] = editor.getLine(change.from.line)
-        if (removed[removed.length - 1] !== '')
-          removed[removed.length - 1] = editor.getLine(change.to.line)
-      }
-      if (
-        Parser.willAffectModData(mod, removed) ||
-        Parser.willAffectModData(mod, text)
-      ) {
-        // if there are some changes affect the mod data, will try to rebuild all
-        return this.$store.dispatch('updateMarkDown', {
-          code,
-          cursor
-        })
-      }
-      const key = mod.key
-      const modType = mod.modType
-      this.$store.dispatch('updateMarkDownBlock', {
-        code,
-        key,
-        modType,
-        cursor
-      })
-    },
-    foldCodes(cm) {
-      let mod = Parser.getBlockByCursorLine(this.modList, this.cursorPos.line)
-      let lineBegin = mod && mod.lineBegin - 1
-      let lineEnd = mod && mod.lineBegin + mod.md.length
-      for (let line = cm.firstLine(); line <= cm.lastLine(); ++line) {
-        mod && lineBegin <= line && line <= lineEnd
-          ? cm.foldCode({ line: line, ch: 0 }, null, 'unfold')
-          : cm.foldCode({ line: line, ch: 0 }, null, 'fold')
+        this.foldAllCodes(this.editor)
       }
     },
     foldAllCodes(cm = this.editor) {
@@ -419,12 +382,17 @@ export default {
       let lineNo = coords ? coords.line : this.editor.getCursor().line
       let originText = this.editor.getLine(lineNo)
       if (originText) {
-        this.replaceLine(lineNo, originText + '\n' + this.$t('editor.readFileFromLocal'))
+        this.replaceLine(
+          lineNo,
+          originText + '\n' + this.$t('editor.readFileFromLocal')
+        )
         lineNo++
       } else {
         this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
       }
-      let filename = `${(formatDate()||'').replace(/\s|\:/g, '_')}-${(Date.now()+'').replace(/\d*(\d{3})$/,'$1')}-${file.name}`
+      let filename = `${(formatDate() || '').replace(/\s|\:/g, '_')}-${(
+        Date.now() + ''
+      ).replace(/\d*(\d{3})$/, '$1')}-${file.name}`
 
       await this.userUploadFileAndUseInSite({
         file,
@@ -437,14 +405,16 @@ export default {
         onProgress: progress => {
           this.replaceLine(lineNo, this.$t('editor.uploadingToSkyDriveText'))
         }
-      }).then(async ({file, url}) => {
-        this.replaceLine(lineNo, '')
-        this.$emit('insertBigfile', {file, url: `${url}#${file.filename}`})
-      }).catch(err => {
-        console.error(err)
-        this.replaceLine(lineNo, '')
-        this.insertLink(null, '***Upload Failed!***', coords)
       })
+        .then(async ({ file, url }) => {
+          this.replaceLine(lineNo, '')
+          this.$emit('insertBigfile', { file, url: `${url}#${file.filename}` })
+        })
+        .catch(err => {
+          console.error(err)
+          this.replaceLine(lineNo, '')
+          this.insertLink(null, '***Upload Failed!***', coords)
+        })
     },
     onDropFile(cm, evt) {
       let files = evt.dataTransfer.files

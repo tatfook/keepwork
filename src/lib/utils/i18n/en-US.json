@@ -89,6 +89,7 @@
     "quickToTop": "Quick to top",
     "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
+    "saveFail": "Save Fail",
     "success": "Success",
     "failure": "Failure",
     "errorInfoTitle": "Error"
@@ -202,6 +203,8 @@
 
     "selectSiteTemplate": "Select template",
     "setAccessAddress": "Website URL",
+    "selectPageTemplate": "Select Page template",
+    "setPageAccessAddress": "Web Page URL",
     "theNextStep": "Next",
     "previous": "Prev",
     "startEditing": "Start editing",
@@ -212,6 +215,7 @@
     "alreadyExists": "Website with the same name already exists",
     "defaultStyle": "Default style",
     "forExample": "For example: mysite123",
+    "forPageExample": "For example: mypage123",
 
     "websiteNameCanOnly":
       "Website name can only consist of letters, numbers and underscores",
@@ -221,6 +225,8 @@
       "Open VIP, additional support for privileges such as private permissions and rights management",
     "createdSuccessfully":
       "Congratulations, the website was created successfully",
+    "webPageCreatedSuccessfully":
+      "Congratulations, the page was created successfully",
     "lowerCaseLetters":
       "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore":
@@ -566,6 +572,7 @@
   "setting": {
     "general": "Basic Info",
     "siteLayouts": "Layouts",
+    "siteStyle": "Style",
     "siteName": "Name",
     "siteLink": "Link",
     "siteLogo": "Logo",
@@ -573,7 +580,20 @@
     "change": "Change",
     "hideSystemHeader": "Hide system header (vip only)",
     "hideSystemFooter": "Hide system footer (vip only)",
-    "siteNameMaxLen": "The site name must be less than 30 characters"
+    "siteNameMaxLen": "The site name must be less than 30 characters",
+    "large": "Large",
+    "medium": "Medium",
+    "small": "Small",
+    "inherit": "System",
+    "MicrosoftYaHei": "Microsoft YaHei",
+    "SimHei": "SimHei",
+    "STSong": "Mac STSong",
+    "Font": "Font",
+    "color": "Color",
+    "font": "font:",
+    "fontSize": "size:",
+    "pleaseSelect": "please select",
+    "tips": "Note: if the selected font is not supported by the browser, the default font will be displayed"
   },
   "search": {
     "searchAll": "All Sites",

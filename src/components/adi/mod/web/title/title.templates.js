@@ -35,5 +35,11 @@ export default [
     {
       colGroup: [{ colLogoB: 'logo' }, { colMenuB: 'menuB' }]
     }
+  ],
+  // template 3
+  [
+    {
+      colGroup: [{ colLogo: 'logo' }, { colBusinessName: 'businessName' }, { colMenu: 'menu' }]
+    }
   ]
 ]

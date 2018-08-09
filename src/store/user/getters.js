@@ -8,6 +8,7 @@ import {
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
+import ThemeHelper from '@/lib/theme'
 
 const getters = {
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
@@ -237,9 +238,22 @@ const getters = {
     return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
   },
 
+  webPageTemplateConfig: state => state.webPageTemplateConfig,
+  getWebPageTemplates: (state, { webPageTemplateConfig = [] }) => categoryName => {
+    let categoriesMap = _.keyBy(webPageTemplateConfig, 'name')
+    return _.get(categoriesMap, [categoryName, 'templates'], [])
+  },
+  getWebPageTemplate: (state, { getWebPageTemplates }) => ({
+    categoryName,
+    templateName
+  }) => {
+    let templatesInCategory = getWebPageTemplates(categoryName)
+    return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
+  },
+
   activePageStarInfo: state => state.activePageStarInfo,
   siteThemeConfigs: state => state.siteThemeConfigs,
-  siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || {},
+  siteThemeConfigBySitePath: (state, { siteThemeConfigs }) => sitePath => siteThemeConfigs[sitePath] || ThemeHelper.defaultTheme,
   siteLayoutConfigs: state => state.siteLayoutConfigs,
   siteLayoutConfigBySitePath: (state, { siteLayoutConfigs }) => sitePath => siteLayoutConfigs[sitePath] || {},
   siteLayoutsBySitePath: (state, { siteLayoutConfigBySitePath }) => sitePath => {
