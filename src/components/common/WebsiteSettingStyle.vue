@@ -40,10 +40,6 @@
           <website-setting-sytle-color-preview :colorsList="colors" :colorID.sync="colorID" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
-      <!-- <el-col :span="3" class="website-setting-btns">
-        <el-button @click="handleSave" type="primary">{{$t('editor.save')}}</el-button>
-        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
-      </el-col> -->
     </el-row>
     <DialogOperations class="website-setting-style-operations" @save="handleSave" @close="handleClose"></DialogOperations>
   </div>
