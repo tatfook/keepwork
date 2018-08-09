@@ -5,13 +5,15 @@ const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const GET_USER_SUBSCRIBES = 'GET_USER_SUBSCRIBES'
 const GET_USER_SKILLS = 'GET_USER_SKILLS'
 const ENTER_CLASSROOM = 'ENTER_CLASSROOM'
+const SET_ENTER_CLASS_ID = 'SET_ENTER_CLASS_ID'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   GET_USER_SUBSCRIBES,
   GET_USER_SKILLS,
-  ENTER_CLASSROOM
+  ENTER_CLASSROOM,
+  SET_ENTER_CLASS_ID
 }
 
 const mutations = {
@@ -35,6 +37,9 @@ const mutations = {
   },
   [ENTER_CLASSROOM](state, { enterClassInfo }) {
     Vue.set(state, 'enterClassInfo', enterClassInfo)
+  },
+  [SET_ENTER_CLASS_ID](state, { key }) {
+    Vue.set(state, 'enterClassId', key)
   }
 }
 
