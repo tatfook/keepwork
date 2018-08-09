@@ -9,7 +9,8 @@ const state = () => ({
   lessonQuiz: {},
   userSubscribeList: [],
   userSkillsList: [],
-  enterClassInfo: []
+  enterClassInfo: [],
+  enterClassId: Number
 })
 
 export default {

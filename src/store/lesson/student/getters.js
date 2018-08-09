@@ -14,6 +14,7 @@ const getters = {
     state.lessonDetail.quiz.filter(item => !!item.answer).length || 0,
   userSubscribeList: state => state.userSubscribeList,
   userSkillsList: state => state.userSkillsList,
-  enterClassInfo: state => state.enterClassInfo
+  enterClassInfo: state => state.enterClassInfo,
+  enterClassId: state => state.enterClassId
 }
 export default getters

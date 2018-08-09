@@ -8,6 +8,7 @@ const GET_USER_SKILLS = 'GET_USER_SKILLS'
 const ENTER_CLASSROOM = 'ENTER_CLASSROOM'
 const DO_QUIZ = 'DO_QUIZ'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
+const SET_ENTER_CLASS_ID = 'SET_ENTER_CLASS_ID'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
@@ -16,7 +17,8 @@ export const props = {
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
   SAVE_LESSON_DETAIL,
-  DO_QUIZ
+  DO_QUIZ,
+  SET_ENTER_CLASS_ID
 }
 
 const mutations = {
@@ -47,6 +49,9 @@ const mutations = {
     _lessonDetail.quiz[index].result = result
     _lessonDetail.quiz[index].answer = answer
     Vue.set(state, 'lessonDetail', _lessonDetail)
+  }
+  [SET_ENTER_CLASS_ID](state, { key }) {
+    Vue.set(state, 'enterClassId', key)
   }
 }
 

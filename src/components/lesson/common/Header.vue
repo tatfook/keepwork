@@ -2,13 +2,13 @@
   <div class="lesson-header">
     <div class="lesson-header-nav">
       <div class="lesson-header-nav-box">
-        <div class="lesson-header-nav-item">
+        <div @click="goToAboutUs" class="lesson-header-nav-item">
           {{$t('lesson.aboutUs')}}
         </div>
-        <div class="lesson-header-nav-item">
+        <div @click="goToLessonsCenter" class="lesson-header-nav-item">
           {{$t('lesson.lessonsCenter')}}
         </div>
-        <div class="lesson-header-nav-item">
+        <div @click="goToSpecialColumn" class="lesson-header-nav-item">
           {{columnText}}
         </div>
       </div>
@@ -59,6 +59,29 @@ export default {
       }
       if (this.isTeacherPage) {
         return this.$t('lesson.viewStudentPage')
+      }
+    }
+  },
+  methods: {
+    goToAboutUs() {
+      if (this.isStudentPage) {
+        this.$router.push({
+          path: `/student/about`
+        })
+      }
+    },
+    goToLessonsCenter() {
+      if (this.isStudentPage) {
+        this.$router.push({
+          path: `/student/center`
+        })
+      }
+    },
+    goToSpecialColumn(){
+      if (this.isStudentPage) {
+        this.$router.push({
+          path: `/student`
+        })
       }
     }
   }

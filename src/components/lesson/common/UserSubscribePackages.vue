@@ -52,7 +52,7 @@ export default {
       let packageId = this.item.id
       console.log(packageId)
       this.$router.push({
-        path: `package/${packageId}`,
+        path: `student/package/${packageId}`,
       })
     }
   }

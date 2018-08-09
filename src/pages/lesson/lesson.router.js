@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const Lesson = () => import('@/components/lesson/Lesson')
-const About = () => import('@/components/lesson/About')
-const Center = () => import('@/components/lesson/Center')
+const About = () => import('@/components/lesson/common/About')
+const Center = () => import('@/components/lesson/common/Center')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
 const StudentPackageDetailPage = () =>
@@ -21,16 +21,16 @@ export default new Router({
       name: 'Lesson',
       component: Lesson
     },
-    {
-      path: '/about',
-      name: 'About',
-      component: About
-    },
-    {
-      path: '/center',
-      name: 'Center',
-      component: Center
-    },
+    // {
+    //   path: '/about',
+    //   name: 'About',
+    //   component: About
+    // },
+    // {
+    //   path: '/center',
+    //   name: 'Center',
+    //   component: Center
+    // },
     {
       path: '/teacher',
       name: 'Teacher',
@@ -52,6 +52,16 @@ export default new Router({
           path: '/',
           name: 'StudentColumn',
           component: StudentColumn
+        },
+        {
+          path: 'about',
+          name: 'About',
+          component: About
+        },
+        {
+          path: 'center',
+          name: 'Center',
+          component: Center
         },
         {
           path: 'package/:id',

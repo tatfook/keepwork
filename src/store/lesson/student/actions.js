@@ -9,7 +9,8 @@ let {
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
   SAVE_LESSON_DETAIL,
-  DO_QUIZ
+  DO_QUIZ,
+  SET_ENTER_CLASS_ID
 } = props
 
 const actions = {
@@ -52,6 +53,9 @@ const actions = {
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, { key, result, answer })
+  },
+  async setEnterClassID({ commit }, { key }) {
+    commit(SET_ENTER_CLASS_ID, { key })
   }
 }
 export default actions
