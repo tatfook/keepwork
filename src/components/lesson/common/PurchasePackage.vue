@@ -21,12 +21,35 @@
 <script>
 import PackageBasicDetail from './PackageBasicDetail'
 import CoinPurchase from './CoinPurchase'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PurchasePackage',
-  props: {
-    packageDetail: Object
+  async mounted() {
+    await this.getPackageDetail({
+      packageId: this.packageId
+    })
+    this.packageDetail = this.lessonPackageDetail({
+      packageId: this.packageId
+    })
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      lessonPackageDetail: 'lesson/packageDetail'
+    }),
+    packageId() {
+      return this.$route.params.id
+    }
+  },
+  data() {
+    return {
+      packageDetail: {}
+    }
+  },
+  methods: {
+    ...mapActions({
+      getPackageDetail: 'lesson/getPackageDetail'
+    })
+  },
   components: {
     PackageBasicDetail,
     CoinPurchase
