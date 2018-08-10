@@ -20,7 +20,6 @@ const SET_IS_MULTIPLE_TEXT_DIALOG_SHOW = 'SET_IS_MULTIPLE_TEXT_DIALOG_SHOW'
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
 const SET_ACTIVE_PROPERTY_OPTIONS = 'SET_ACTIVE_PROPERTY_OPTIONS'
-const REFRESH_MOD_ATTRIBUTES = 'REFRESH_MOD_ATTRIBUTES'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
 const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
 
@@ -42,7 +41,7 @@ const SET_NEW_MOD_POSITION = 'SET_NEW_MOD_POSITION'
 const SET_EDITING_AREA = 'SET_EDITING_AREA'
 
 const LOAD_PAGE_DATA = 'LOAD_PAGE_DATA'
-const RESET_OPENED_FILE = 'RESET_OPENED_FILE'
+const ADD_OPENED_FILE = 'ADD_OPENED_FILE'
 const UPDATE_OPENED_FILE = 'UPDATE_OPENED_FILE'
 const CLOSE_OPENED_FILE = 'CLOSE_OPENED_FILE'
 const CLOSE_ALL_OPENED_FILE = 'CLOSE_ALL_OPENED_FILE'
@@ -72,7 +71,6 @@ export const props = {
   SET_ACTIVE_MOD,
   SET_ACTIVE_PROPERTY,
   SET_ACTIVE_PROPERTY_OPTIONS,
-  REFRESH_MOD_ATTRIBUTES,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
 
@@ -93,7 +91,7 @@ export const props = {
   SET_EDITING_AREA,
 
   LOAD_PAGE_DATA,
-  RESET_OPENED_FILE,
+  ADD_OPENED_FILE,
   UPDATE_OPENED_FILE,
   CLOSE_OPENED_FILE,
   CLOSE_ALL_OPENED_FILE,
@@ -190,10 +188,6 @@ const mutations = {
   [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
     Vue.set(state, 'activePropertyOptions', payload)
   },
-  [REFRESH_MOD_ATTRIBUTES](state, { key, code }) {
-    const modList = activeModList(state)
-    Parser.updateBlockCode(modList, key, code)
-  },
   [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
     let newData = { ...activePropertyData, ...data }
     const modList = activeModList(state)
@@ -284,21 +278,21 @@ const mutations = {
   [LOAD_PAGE_DATA](state, {path, pageData}) {
     Vue.set(state.openedPages, path, pageData)
   },
-  [RESET_OPENED_FILE](state, { username, path, data }) {
+  [ADD_OPENED_FILE](state, { username, path, data }) {
     let _path = path.split('/')
     if (!_path[0] && !_path[1]) return
     Vue.set(state.openedFiles, username, {
-      ..._.get(state, ['openedFiles', username]),
+      ...state.openedFiles[username],
       [path]: data
     })
   },
-  [UPDATE_OPENED_FILE](state, { username, path, partialUpdatedFileInfo }) {
+  [UPDATE_OPENED_FILE](state, { username, path, data }) {
     let _path = path.split('/')
     if (!_path[0] && !_path[1]) return
     _.merge(state.openedFiles, {
       [username]: {
         [path]: {
-          ...partialUpdatedFileInfo
+          ...data
         }
       }
     })
@@ -308,7 +302,7 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
-    Vue.set(state.openedPages, path, null)
+    _.omit(state.openedPages, path)
   },
   [CLOSE_ALL_OPENED_FILE](state, {username}) {
     Vue.set(state, 'openedFiles', {

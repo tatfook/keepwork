@@ -95,6 +95,8 @@
     "errorInfoTitle": "Error"
   },
   "editor": {
+    "hint": "Hint",
+    "pullServerData": "Do you drop local changes and re-read the server version?",
     "files": "Files",
     "modules": "MOD",
     "save": "Save",
@@ -129,7 +131,7 @@
     "setUpThePage": "Set up the page",
     "deleteTheCurrentPage": "Delete the current page",
 
-    "refresh": "Refresh",
+    "reload": "reload",
     "close": "Close",
     "closeAll": "Close all",
     "delete": "Delete",

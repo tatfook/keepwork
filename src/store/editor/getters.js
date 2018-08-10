@@ -29,10 +29,8 @@ const getters = {
     return {...pageInfo, saved}
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
-  code: (state, { activeAreaData }) => {
-    if (!activeAreaData) return ''
-    if (activeAreaData.file) return activeAreaData.file.content
-    return activeAreaData.content
+  code: (state, { activeAreaFile }) => {
+    return (activeAreaFile && activeAreaFile.content) || ''
   },
   themeConf: (state, { siteSetting }) => {
     if (siteSetting) return siteSetting.theme
@@ -46,6 +44,9 @@ const getters = {
       return siteSetting.pages[targetLayoutContentFilePath]
     }
     return activePage
+  },
+  activeAreaFile: (state, {activeAreaData}) => {
+    return activeAreaData && (activeAreaData.file || activeAreaData)
   },
   modList: (state, { activeAreaData }) =>
     activeAreaData && activeAreaData.modList,

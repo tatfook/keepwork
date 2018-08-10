@@ -7,7 +7,7 @@
     <span class="file-manager-buttons-container">
       <el-button v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
       </el-button>
-      <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
+      <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
       </el-button>
       <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
       </el-button>
@@ -96,6 +96,15 @@ export default {
           this.handleCloseDialog()
           this.savePending = false
         })
+    },
+    confirmRefresh(){
+      this.$confirm(this.$t('editor.pullServerData'), this.$t('editor.hint'), {
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.refreshOpenedFile(this.data)
+      }).catch((err) => { console.warn(err) });
     },
     closeAndReset(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
