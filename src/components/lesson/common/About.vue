@@ -393,7 +393,7 @@ export default {
     }
   }
   &-badge {
-    margin: 0 auto;
+    margin: 0 auto 20px;
     width: 80%;
     text-align: center;
     .tatfook{
