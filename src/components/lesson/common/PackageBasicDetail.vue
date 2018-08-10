@@ -16,11 +16,11 @@
       </div>
       <div class="package-detail-skills">
         <div class="package-detail-label">{{$t('lesson.packageIntro')}}:</div>
-        <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
+        <el-scrollbar class="package-detail-skills-detail" :class="{'package-detail-skills-detail-isSubscribe': packageDetail.isSubscribe}">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
+      <div v-show="!packageDetail.isSubscribe" class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
       </div>
-      <div class="package-detail-costs">
+      <div v-show="!packageDetail.isSubscribe" class="package-detail-costs">
         <div class="package-detail-costs-item">
           <span class="package-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-detail-costs-value">￥ {{packageDetail.rmb}}</span>
@@ -30,7 +30,7 @@
           <span class="package-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
         </div>
       </div>
-      <el-button type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <el-button v-show="!packageDetail.isSubscribe" type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
       </div>
@@ -172,16 +172,20 @@ $dangerColor: #e4461f;
     white-space: pre-line;
     font-size: 16px;
     line-height: 30px;
+    &-isSubscribe {
+      height: 190px;
+    }
   }
   &-backcoin {
     color: #3491f0;
     font-size: 16px;
+    margin-top: 6px;
     span {
       color: $dangerColor;
     }
   }
   &-costs {
-    margin: 7px 0 16px;
+    margin: 7px 0;
     &-item {
       display: inline-block;
       border: 1px solid #f3f3f3;
