@@ -136,7 +136,7 @@ $dangerColor: #e4461f;
   }
   &-text-desc {
     flex: 1;
-    margin-left: 55px;
+    margin-left: 25px;
     color: #4c4c4c;
     min-width: 0;
   }
