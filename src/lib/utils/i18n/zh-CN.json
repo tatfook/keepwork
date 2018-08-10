@@ -762,6 +762,7 @@
     "viewStudentPage": "查看学生页",
     "enterClass": "从此处进入课堂",
     "enterByClassId": "输入课堂ID",
-    "enter": "进入"
+    "enter": "进入",
+    "share": "分享"
   }
 }

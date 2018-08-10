@@ -17,8 +17,8 @@ export const props = {
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
   SAVE_LESSON_DETAIL,
-  DO_QUIZ,
-  SET_ENTER_CLASS_ID
+  SET_ENTER_CLASS_ID,
+  DO_QUIZ
 }
 
 const mutations = {
