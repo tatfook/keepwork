@@ -9,7 +9,7 @@
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div class="package-catalogue-item" v-for="(lesson, index) in lessonsList" :key='index'>
+      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !packageDetail.isSubscribe}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
@@ -93,7 +93,10 @@ export default {
             lesson.id
           }`
         )
-      } else {
+      }
+    },
+    handleUnSubscribe() {
+      if (!this.packageDetail.isSubscribe) {
         this.$alert(
           this.$t('lesson.addPackageFirst'),
           this.$t('lesson.infoTitle')
@@ -179,6 +182,14 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
       cursor: pointer;
+    }
+    &-disabled {
+      background-color: #bfbfbf;
+      cursor: not-allowed;
+    }
+    &-disabled &-title,
+    &-disabled &-cover {
+      cursor: not-allowed;
     }
     &-info {
       color: #999;

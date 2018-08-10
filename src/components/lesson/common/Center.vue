@@ -1,27 +1,26 @@
 <template>
-<div>
-  <Header/>
-
-<div class="lesson-packages">
-  <div class="packages-sum">{{$t('lesson.include')}}: <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
-  <el-row :gutter="20" class="lesson-packages-subject">
-    <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
-        <div class="subject-desc">
-          <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
-          <h4 :class="['subject-title',false ? 'beLearning':'']">{{coursePackage.packageName}}</h4>
-          <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
-          <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
-          <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
-          <div class="purchase-lesson-package">
-            <p class="purchase-tip">Return <span class="red">100</span> coins after purchase</p>
-            <div class="purchase-money" plain>RMB: <span class="red">￥100.00</span></div>
-            <div class="purchase-money" plain>Coins: <span class="red">1000</span> coins</div>
+  <div>
+    <Header/>
+    <div class="lesson-packages">
+      <div class="packages-sum">{{$t('lesson.include')}}: <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
+      <el-row :gutter="20" class="lesson-packages-subject">
+        <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
+          <div class="subject-desc">
+            <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
+            <h4 :class="['subject-title',false ? 'beLearning':'']">{{coursePackage.packageName}}</h4>
+            <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
+            <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
+            <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
+            <div class="purchase-lesson-package">
+              <p class="purchase-tip">Return <span class="red">100</span> coins after purchase</p>
+              <div class="purchase-money" plain>RMB: <span class="red">￥100.00</span></div>
+              <div class="purchase-money" plain>Coins: <span class="red">1000</span> coins</div>
+            </div>
           </div>
-        </div>
-    </el-col>
-  </el-row>
-</div>
-</div>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
 
 </template>
 
@@ -32,32 +31,33 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Center',
-  data(){
-    return {
-    }
+  data() {
+    return {}
   },
   computed: {
     ...mapGetters({
       packages: 'lesson/center/packagesList'
     }),
     packagesList() {
-      return _.get(this.packages, 'rows',[])
+      return _.get(this.packages, 'rows', [])
     },
-    sortedPackagesList(){
-      return this.packagesList.sort((obj1, obj2) => obj1.updatedAt < obj2.updatedAt)
+    sortedPackagesList() {
+      return this.packagesList.sort(
+        (obj1, obj2) => obj1.updatedAt < obj2.updatedAt
+      )
     }
   },
-  async mounted(){
+  async mounted() {
     await this.getPackagesList()
-    console.log('packages',this.packages)
+    console.log('packages', this.packages)
   },
-  methods:{
+  methods: {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
-    enterPackageDetailPage(packageId){
+    enterPackageDetailPage(packageId) {
       this.$router.push({
-        path: `package/${packageId}`,
+        path: `package/${packageId}`
       })
     }
   },
@@ -71,14 +71,14 @@ export default {
 .lesson-packages {
   max-width: 1200px;
   margin: 0 auto;
-  .packages-sum{
+  .packages-sum {
     padding: 60px 0 5px 20px;
     font-size: 17px;
   }
   .lesson-packages-subject .subject-desc {
     width: 287px;
     padding: 34px 34px 6px;
-    margin:20px auto;
+    margin: 20px auto;
     border: solid 2px #d2d2d2;
     border-radius: 1px;
     .subject-cover {
@@ -89,12 +89,12 @@ export default {
       border-radius: 6px;
       cursor: pointer;
     }
-    .subject-title{
+    .subject-title {
       font-size: 18px;
       margin-bottom: 10px;
       cursor: pointer;
     }
-    .beLearning{
+    .beLearning {
       color: #409eff;
     }
     span {
@@ -102,19 +102,19 @@ export default {
       font-size: 14px;
       line-height: 22px;
     }
-    .purchase-lesson-package{
+    .purchase-lesson-package {
       margin: 10px 0;
       border-top: 1px solid #e3e3e3;
-      .red{
+      .red {
         color: #e4461f;
         display: inline;
       }
-      .purchase-tip{
+      .purchase-tip {
         color: #3491f0;
-        margin:14px 0 5px 0;
+        margin: 14px 0 5px 0;
         font-size: 14px;
       }
-      .purchase-money{
+      .purchase-money {
         font-size: 14px;
         width: 159px;
         height: 27px;
@@ -127,7 +127,6 @@ export default {
         cursor: default;
       }
     }
-    
   }
 }
 </style>
