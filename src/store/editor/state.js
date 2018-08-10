@@ -17,6 +17,7 @@ export const initPageState = () => {
 export const initLayoutPageState = () => {
   return {
     modList: [],
+    content: '',
     saved: true,
     undoManager: new SimpleUndo(),
     newModPosition: gConst.POSITION_AFTER // after active mod
@@ -41,6 +42,7 @@ const state = () => ({
   openedPages: {},
   openedFiles: {},
   siteSettings: {},
+  openenLayoutFiles: {},
   filemanagerTreeNodeExpandMapByPath: {},
 
   activeManagePaneComponent: {
