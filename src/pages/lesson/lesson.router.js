@@ -22,22 +22,20 @@ export default new Router({
       component: Lesson
     },
     {
-      path: '/student/about',
-      name: 'About',
-      component: About,
-      alias: '/teacher/about'
-    },
-    {
-      path: '/student/center',
-      name: 'Center',
-      component: Center,
-      alias: '/teacher/center'
-    },
-    {
       path: '/teacher',
       name: 'Teacher',
       component: Teacher,
       children: [
+        {
+          path: 'about',
+          name: 'About',
+          component: About
+        },
+        {
+          path: 'center',
+          name: 'Center',
+          component: Center
+        },
         {
           path: 'package/:id',
           name: 'TeacherPackage',
@@ -54,6 +52,16 @@ export default new Router({
           path: '/',
           name: 'StudentColumn',
           component: StudentColumn
+        },
+        {
+          path: 'about',
+          name: 'About',
+          component: About
+        },
+        {
+          path: 'center',
+          name: 'Center',
+          component: Center
         },
         {
           path: 'package/:id',
