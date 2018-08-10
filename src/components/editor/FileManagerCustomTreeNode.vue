@@ -200,8 +200,8 @@ export default {
         cancelButtonText: this.$t('el.messagebox.cancel'),
         type: 'warning'
       }).then(() => {
-        refreshOpenedFile(this.data)
-      }).catch(() => {});
+        this.refreshOpenedFile(this.data)
+      }).catch((err) => { console.warn(err) });
     },
     async toggleRename() {
       if (this.isFolder) {
