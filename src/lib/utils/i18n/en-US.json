@@ -131,7 +131,7 @@
     "setUpThePage": "Set up the page",
     "deleteTheCurrentPage": "Delete the current page",
 
-    "refresh": "Refresh",
+    "reload": "reload",
     "close": "Close",
     "closeAll": "Close all",
     "delete": "Delete",
