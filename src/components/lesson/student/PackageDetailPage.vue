@@ -28,6 +28,5 @@ export default {
 <style lang="scss" scoped>
 .student-package-detail-page {
   background-color: #fbfbfb;
-  min-height: 100%;
 }
 </style>
