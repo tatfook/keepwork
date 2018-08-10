@@ -7,7 +7,7 @@
     <span class="file-manager-buttons-container">
       <el-button v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
       </el-button>
-      <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='confirmRefresh'>
+      <el-button class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
       </el-button>
       <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
       </el-button>

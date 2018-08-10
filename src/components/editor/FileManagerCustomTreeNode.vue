@@ -16,7 +16,7 @@
     <span class="file-manager-buttons-container" v-if="!isRename">
       <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
       </el-button>
-      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='confirmRefresh'>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
       </el-button>
       <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
