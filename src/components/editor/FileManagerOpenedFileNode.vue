@@ -103,8 +103,8 @@ export default {
         cancelButtonText: this.$t('el.messagebox.cancel'),
         type: 'warning'
       }).then(() => {
-        refreshOpenedFile(this.data)
-      }).catch(() => {});
+        this.refreshOpenedFile(this.data)
+      }).catch((err) => { console.warn(err) });
     },
     closeAndReset(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
