@@ -487,6 +487,9 @@
     "duration": "Duration:",
     "viewSummary": "View Summary",
     "addPackageFirst": "Please add the package first",
+    "backInfo": "Returns {backCoinCount} coins after purchase",
+    "rmbPrice": "RMB",
+    "coinsPrice": "Coins",
     "lessonPackageCost1":
       "To learn lessons of this package, you have to invest ",
     "lessonPackageCost2": " coins.",

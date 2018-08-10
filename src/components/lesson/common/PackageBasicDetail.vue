@@ -18,13 +18,19 @@
         <div class="package-detail-label">{{$t('lesson.packageIntro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div class="package-detail-operations" v-show="!packageDetail.isSubscribe">
-        <div class="package-detail-operate-item">
-          <span class="package-detail-price-count">{{packageDetail.cost}}</span>
-          <span class="package-detail-label">{{$t('lesson.coins')}}</span>
-        </div>
-        <el-button type="primary" class="package-detail-operate-button package-detail-operate-item" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <div class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
       </div>
+      <div class="package-detail-costs">
+        <div class="package-detail-costs-item">
+          <span class="package-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
+          <span class="package-detail-costs-value">￥ {{packageDetail.rmb}}</span>
+        </div>
+        <div class="package-detail-costs-item">
+          <span class="package-detail-costs-label">{{$t('lesson.coinsPrice')}}:</span>
+          <span class="package-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
+        </div>
+      </div>
+      <el-button type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
       </div>
@@ -70,6 +76,9 @@ export default {
     },
     packageId() {
       return _.get(this.packageDetail, 'id')
+    },
+    backCoinHtml() {
+      return `<span>${this.packageDetail.rmb}</span>`
     }
   },
   data() {
@@ -116,12 +125,13 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+$dangerColor: #e4461f;
 .package-detail {
   display: flex;
   &-cover {
-    width: 470px;
-    height: 310px;
+    width: 435px;
+    height: 288px;
     object-fit: cover;
   }
   &-text-desc {
@@ -131,7 +141,7 @@ export default {
     min-width: 0;
   }
   &-content {
-    margin: 15px 0;
+    margin: 12px 0;
     &-item {
       display: inline-block;
       margin-right: 30px;
@@ -140,7 +150,7 @@ export default {
   }
   h1 {
     margin: 0;
-    font-size: 18px;
+    font-size: 20px;
     color: #111;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -154,14 +164,37 @@ export default {
     color: #818181;
   }
   &-lessons-count {
-    color: #ff414a;
+    color: $dangerColor;
   }
   &-skills-detail {
-    margin: 20px 0;
-    height: 110px;
+    margin: 0;
+    height: 70px;
     white-space: pre-line;
     font-size: 16px;
     line-height: 30px;
+  }
+  &-backcoin {
+    color: #3491f0;
+    font-size: 16px;
+    span {
+      color: $dangerColor;
+    }
+  }
+  &-costs {
+    margin: 7px 0 16px;
+    &-item {
+      display: inline-block;
+      border: 1px solid #f3f3f3;
+      background-color: #fff;
+      margin-right: 16px;
+      font-size: 16px;
+      color: #111;
+      padding: 8px 20px 8px 15px;
+      border-radius: 50px;
+    }
+    &-value {
+      color: $dangerColor;
+    }
   }
   &-operate-item {
     display: inline-block;
@@ -171,9 +204,9 @@ export default {
     color: #ff4c4c;
   }
   .el-button--primary {
-    font-size: 18px;
-    margin-left: 30px;
-    width: 140px;
+    font-size: 14px;
+    margin-left: 0;
+    width: 266px;
   }
 }
 </style>
