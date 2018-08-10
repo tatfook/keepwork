@@ -1,7 +1,6 @@
 <template>
   <div>
-    <lesson v-if="data.cmd === 'Lesson'" :data="data"   />
-    <hint v-else-if="data.cmd === 'Hint'" :data="data" />
+    <hint v-if="data.cmd === 'Hint'" :data="data" />
     <quiz v-else-if="data.cmd === 'Quiz'" :data="data" />
   </div>
 </template>

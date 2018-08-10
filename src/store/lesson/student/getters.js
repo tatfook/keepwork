@@ -6,12 +6,13 @@ const getters = {
   lessonDetail: state => state.lessonDetail,
   lessonQuiz: state => state.lessonDetail.quiz,
   lessonQuizProgress: (state, { lessonQuizDone, lessonQuizCount }) =>
-    (lessonQuizDone / lessonQuizCount) * 100,
-  lessonIsDone: (state, { lessonQuizDone, lessonQuizCount }) =>
-    lessonQuizDone === lessonQuizCount && lessonQuizCount !== 0,
-  lessonQuizCount: state => state.lessonDetail.quiz.length,
+    (lessonQuizDone / lessonQuizCount) * 100 || 0,
+  // lessonIsDone: (state, { lessonQuizDone, lessonQuizCount }) =>
+  //   lessonQuizDone === lessonQuizCount && lessonQuizCount !== 0,
+  lessonIsDone: (state, { lessonQuizDone, lessonQuizCount }) => true,
+  lessonQuizCount: state => _.get(state, 'lessonDetail.quiz.length', 0),
   lessonQuizDone: state =>
-    state.lessonDetail.quiz.filter(item => !!item.answer).length || 0,
+    _.filter(state.lessonDetail.quiz, ({ answer }) => !!answer).length,
   userSubscribeList: state => state.userSubscribeList,
   userSkillsList: state => state.userSkillsList,
   enterClassInfo: state => state.enterClassInfo,

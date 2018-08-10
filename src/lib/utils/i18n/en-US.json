@@ -780,6 +780,7 @@
     "viewStudentPage": "View Student's Page",
     "enterClass": "Enter the class from here",
     "enterByClassId": "TYPE YOUR CLASS ID",
-    "enter": "Enter"
+    "enter": "Enter",
+    "share": "SHARE"
   }
 }

@@ -44,11 +44,6 @@ export default {
       lessonIsDone: 'lesson/student/lessonIsDone'
     })
   },
-  watch: {
-    lessonQuizProgress(val) {
-      console.log(val)
-    }
-  },
   methods: {
     showProgressList() {
       this.isShowQuizResult = true

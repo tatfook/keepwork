@@ -20,9 +20,7 @@ export const post = (...args) => {
 
 export const put = (...args) => {
   let [url, payload, config] = args
-  return keepworkEndpoint.post(url, payload, config).then(
-    res => res.data
-  )
+  return keepworkEndpoint.post(url, payload, config).then(res => res.data)
 }
 
 /**
@@ -43,9 +41,7 @@ export const get = (...args) => {
 
 export const _delete = (...args) => {
   let [url, , config] = args
-  return keepworkEndpoint.delete(url, config).then(
-    res => res.data
-  )
+  return keepworkEndpoint.delete(url, config).then(res => res.data)
 }
 
 export const admin = {}
@@ -75,11 +71,13 @@ export const classrooms = {
 
 const fakerGet = async ({ lessonId }) => {
   const faker = {
-    1: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/%E8%AF%BE%E7%A8%8B------------------.md?_random=0.3457455379477845',
+    1: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/%E8%AF%BE%E7%A8%8B------------------.md',
     2: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F.md',
     3: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/212.md?_random=0.5285638094528637'
   }
-  return axios.get(faker[lessonId]).then(res => res.data)
+  return axios
+    .get(`${faker[lessonId]}?_random=${Math.random()}`)
+    .then(res => res.data)
 }
 
 export const fetchLessonData = args => fakerGet(args)
