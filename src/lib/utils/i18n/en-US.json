@@ -319,7 +319,8 @@
     "categoryList": "Category list",
     "tab": "Tab",
     "pageSwitching": "Page switching",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "ppt": "PowerPoint"
   },
   "adi": {
     "markdown": {
@@ -449,7 +450,8 @@
     "pagePath": "Page path",
     "tab": "Tab",
     "categoryList": "Category list",
-    "pageSwitching": "Page switching"
+    "pageSwitching": "Page switching",
+    "ppt": "PPT"
   },
   "field": {
     "fileId": "file Id",

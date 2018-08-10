@@ -307,7 +307,8 @@
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
-    "iframe": "iframe"
+    "iframe": "iframe",
+    "ppt": "幻灯片演示文件"
   },
   "adi": {
     "markdown": {
@@ -437,7 +438,8 @@
     "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表",
-    "pageSwitching": "页面切换"
+    "pageSwitching": "页面切换",
+    "ppt": "PPT"
   },
   "field": {
     "fileId": "字段",

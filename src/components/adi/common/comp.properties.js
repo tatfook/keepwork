@@ -21,6 +21,7 @@ import AdiPagePath from './pagePath/pagePath.properties'
 import AdiTab from './tab/tab.properties'
 import AdiCategoryList from './categoryList/categoryList.properties'
 import AdiPageSwitching from './pageSwitching/pageSwitching.properties'
+import AdiPpt from './ppt/ppt.properties'
 
 export default {
   AdiMarkdown,
@@ -45,5 +46,6 @@ export default {
   AdiPagePath,
   AdiTab,
   AdiCategoryList,
-  AdiPageSwitching
+  AdiPageSwitching,
+  AdiPpt
 }

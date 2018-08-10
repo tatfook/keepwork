@@ -21,6 +21,7 @@ import ModButton from './web/button'
 import ModPagePath from './web/pagePath'
 import ModCategoryList from './web/categoryList'
 import ModPageSwitching from './web/pageSwitching'
+import ModPpt from './web/ppt'
 
 export const modList = {
   ModMarkdown,
@@ -45,7 +46,8 @@ export const modList = {
   ModButton,
   ModPagePath,
   ModCategoryList,
-  ModPageSwitching
+  ModPageSwitching,
+  ModPpt
 }
 
 export const load = modName => {
