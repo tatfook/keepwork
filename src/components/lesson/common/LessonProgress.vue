@@ -1,12 +1,12 @@
 <template>
   <div class="lesson-progress">
-    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" :class="{'noStart': lessonQuizDone === 0}">
+    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz" :class="{'noStart': lessonQuizDone === 0}">
       <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
           <div class="quiz-result-list">
             <div class="quiz-result-list-container">
               <div v-for="(quiz, index) in lessonQuiz" :key="index" class="quiz-status-wrap" :class="{'default': quiz.result === null}">
-                <span class="quiz-number">Quiz {{index+1}}</span>
+                <span class="quiz-number">{{$t('lesson.quiz')}} {{index+1}}</span>
                 <span class="quiz-status" :class="{'right': quiz.result === true, 'wrong':quiz.result === false}"></span>
               </div>
             </div>
@@ -15,12 +15,12 @@
       </div>
     </span>
     <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
-    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']"></span>
+    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary"></span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'LessonProgress',
   props: {
@@ -45,11 +45,20 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      switchSummary: 'lesson/student/switchSummary'
+    }),
     showProgressList() {
       this.isShowQuizResult = true
     },
     hideProgressList() {
       this.isShowQuizResult = false
+    },
+    showSummary() {
+      this.lessonIsDone && this.switchSummary(true)
+    },
+    showQuiz() {
+      this.switchSummary(false)
     }
   }
 }

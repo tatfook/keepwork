@@ -792,6 +792,12 @@
     "enterClass": "Enter the class from here",
     "enterByClassId": "TYPE YOUR CLASS ID",
     "enter": "Enter",
-    "share": "SHARE"
+    "share": "SHARE",
+    "styles": "{number} styles are avaliable. Please select one.",
+    "shareSummary": "Share Summary",
+    "stylePreview": "Style {number} Preview",
+    "shareSummaryByNet": "Click the social network to share summary",
+    "references":"References",
+    "quiz": "Quiz"
   }
 }

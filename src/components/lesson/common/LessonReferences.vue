@@ -2,9 +2,9 @@
   <div>
     <div @click="showReferences" class="lesson-references-wrap">
       <span class="references-icon"></span>
-      <span class="references-title">References</span>
+      <span class="references-title">{{$t('lesson.references')}}</span>
     </div>
-    <el-dialog :append-to-body="true" class="references-dialog" center :visible.sync="isShowReferences" title="References" @close="closeReferences" width="600px">
+    <el-dialog :append-to-body="true" class="references-dialog" center :visible.sync="isShowReferences" :title="$t('lesson.references')" @close="closeReferences" width="600px">
       <el-row style="z-index:999" :gutter="20">
         <el-scrollbar class="referencs-files-wrap" :native="false">
           <el-col :span="8" v-for="(file, index) in files" :key="index" class="references-file">

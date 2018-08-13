@@ -1,49 +1,54 @@
 <template>
-    <div class="lesson-summary">
-        <div class="lesson-summary-wrap">
-            <div class="summary-title">{{title}}</div>
-            <div class="summary-body">
-                <div class="word first">
-                    This is my
-                    <span class="highlight">1st</span> day of learning
-                    <span class="highlight">computer science</span> on Keepwork.
-                </div>
-                <div class="word second">
-                    Today, I read
-                    <span class="highlight">20</span> lines of code, wrote
-                    <span class="highlight">5</span> lines of code, and learned 1 computer command.
-                </div>
-            </div>
-            <div class="summary-share" @click="showSharePanel">
-                <span class="summary-share-icon"></span>
-                {{$t('lesson.share')}}
-            </div>
-            <img class="summary-boy" src="../../../assets/lessonImg/summary/boy.png" alt="">
+  <div class="lesson-summary">
+    <div class="lesson-summary-wrap">
+      <div class="summary-title">{{title}}</div>
+      <div class="summary-body">
+        <div class="word first">
+          This is my
+          <span class="highlight">1st</span> day of learning
+          <span class="highlight">{{lessonTitle}}</span> on Keepwork.
         </div>
-
-        <el-dialog :append-to-body="true" class="summary-share-dialog" center :visible.sync="isShowSharePanel" title="Share Summary" @close="hideSharePanel" width="1080px">
-            <el-row :gutter="20">
-                <el-col class="share-icons-wrap" :span="4">
-                    <div class="share-icons">
-                        <span class="facebook-icon"></span>
-                        <span class="twitter-icon"></span>
-                        <span class="google-icon"></span>
-                    </div>
-                </el-col>
-                <el-col class="share-style" :span="20">
-                    <div class="share-style-title">
-                        3 styles are avaliable. Please select one.
-                    </div>
-                    <div class="share-style-select-panel">
-                        <lesson-summary-share-style-select/>
-                    </div>
-                </el-col>
-            </el-row>
-        </el-dialog>
+        <div class="word second">
+          Today, I read
+          <span class="highlight">{{lessonCodeReadLine}}</span> lines of code, wrote
+          <span class="highlight">{{lessonWriteLine}}</span> lines of code, and learned
+          <span class="highlight">{{lessonCommands}}</span> computer command.
+        </div>
+      </div>
+      <div class="summary-share" @click="showSharePanel">
+        <span class="summary-share-icon"></span>
+        {{$t('lesson.share')}}
+      </div>
+      <img class="summary-boy" src="../../../assets/lessonImg/summary/boy.png" alt="">
     </div>
+
+    <el-dialog :append-to-body="true" class="summary-share-dialog" center :visible.sync="isShowSharePanel" :title="$t('lesson.shareSummary')" @close="hideSharePanel" width="920px">
+      <el-row :gutter="20">
+        <el-col class="share-icons-wrap" :span="6">
+          <div class="share-icons">
+            <span class="facebook-icon"></span>
+            <span class="twitter-icon"></span>
+            <span class="google-icon"></span>
+          </div>
+          <div class="share-tips">
+            {{$t('lesson.shareSummaryByNet')}}
+          </div>
+        </el-col>
+        <el-col class="share-style" :span="18">
+          <div class="share-style-title">
+            {{$t('lesson.styles', { number: 3})}}
+          </div>
+          <div class="share-style-select-panel">
+            <lesson-summary-share-style-select/>
+          </div>
+        </el-col>
+      </el-row>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 export default {
   name: 'LessonSummary',
@@ -52,8 +57,34 @@ export default {
   },
   data() {
     return {
-      isShowSharePanel: true,
+      isShowSharePanel: false,
       title: 'Congratulations. Learning is finished. Here is the summary.'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      lessonDetail: 'lesson/student/lessonDetail'
+    }),
+    lesson() {
+      return this.lessonDetail.modList || []
+    },
+    lessonData() {
+      return _.get(this.lessonHeader, 'data.lesson', {})
+    },
+    lessonHeader() {
+      return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
+    },
+    lessonTitle() {
+      return _.get(this.lessonData, 'Title', '')
+    },
+    lessonCodeReadLine() {
+      return _.get(this.lessonData, 'lessonCodeReadLine', 0)
+    },
+    lessonWriteLine() {
+      return _.get(this.lessonData, 'lessonWriteLine', 0)
+    },
+    lessonCommands() {
+      return _.get(this.lessonData, 'Commands', 0)
     }
   },
   methods: {
@@ -170,6 +201,10 @@ $blue: #4093fe;
             no-repeat center;
         }
       }
+    }
+    .share-tips {
+      padding: 10px;
+      color: #929292;
     }
   }
 
