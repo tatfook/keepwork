@@ -12,9 +12,9 @@
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
-              <p class="purchase-tip">Return <span class="red">100</span> coins after purchase</p>
-              <div class="purchase-money" plain>RMB: <span class="red">￥100.00</span></div>
-              <div class="purchase-money" plain>Coins: <span class="red">1000</span> coins</div>
+              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>1000</span>` })"></div>
+              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}: <span class="red">￥100.00</span></div>
+              <div class="purchase-money" plain>{{$t('lesson.coinsPrice')}}: <span class="red">1000</span> {{$t('lesson.coins')}}</div>
             </div>
           </div>
         </el-col>
@@ -116,14 +116,15 @@ export default {
       }
       .purchase-money {
         font-size: 14px;
-        width: 159px;
+        width: 165px;
         height: 27px;
         border: solid 2px #f3f3f3;
-        text-align: center;
+        text-align: left;
         padding: 0;
         line-height: 30px;
         border-radius: 15px;
         margin: 5px 0;
+        padding-left: 5px;
         cursor: default;
       }
     }
