@@ -1,19 +1,40 @@
 <template>
   <div class="coin-purchase">
     <div class="coin-purchase-info">
-      <el-checkbox v-model='isPayByCoin'>{{$t('lesson.purchaseWithCoins')}}</el-checkbox>
+      <el-checkbox v-model='isPayByCoin' v-show="isUserHaveEnoughCoin">{{$t('lesson.purchaseWithCoins')}}</el-checkbox>
+      <span v-show="!isUserHaveEnoughCoin">{{$t('lesson.purchaseWithCoins')}}</span>
     </div>
     <div class="coin-purchase-card" :class="{'coin-purchase-card-selected': isPayByCoin}">
       <label class="coin-purchase-card-label">{{$t('lesson.availableCoins')}}</label>
       <div class="coin-purchase-card-value">
-        <img class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_available.png" alt=""> 1300 coins
+        <img v-show="isUserHaveEnoughCoin" class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_available.png" alt="">
+        <img v-show="!isUserHaveEnoughCoin" class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_disabled.png" alt="">
+        {{restCoin}} {{$t('lesson.coins')}}
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'CoinPurchase',
+  props: {
+    packageDetail: Object
+  },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/profile'
+    }),
+    restCoin() {
+      return _.get(this.userProfile, 'coin', 0)
+    },
+    packageNeedCoinsCount() {
+      return _.get(this.packageDetail, 'coin')
+    },
+    isUserHaveEnoughCoin() {
+      return this.restCoin >= this.packageNeedCoinsCount
+    }
+  },
   data() {
     return {
       isPayByCoin: false
@@ -23,6 +44,9 @@ export default {
 </script>
 <style lang="scss">
 .coin-purchase {
+  &-info {
+    color: #333;
+  }
   &-card {
     width: 266px;
     height: 127px;
@@ -71,6 +95,7 @@ export default {
   }
   .el-checkbox__label {
     font-size: 16px;
+    color: #333;
   }
   .el-checkbox__input.is-checked + .el-checkbox__label {
     color: #333;

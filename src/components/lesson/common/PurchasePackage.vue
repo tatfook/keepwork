@@ -10,35 +10,63 @@
     </div>
     <div class="purchase-package-container" v-show="!isResultShow">
       <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
-      <CoinPurchase ref="coinPurchaseComp" class="purchase-package-coin"></CoinPurchase>
+      <CoinPurchase ref="coinPurchaseComp" :packageDetail='packageDetail' class="purchase-package-coin"></CoinPurchase>
       <div class="purchase-package-info">{{$t('lesson.youNeedToPay')}}{{payCount}}</div>
       <el-button @click="subscribePackage" class="purchase-package-button" size="medium" type="primary">{{$t('lesson.goToPay')}}
         <i class="el-icon-back"></i>
       </el-button>
     </div>
     <PurchasePackageResult v-show="isResultShow"></PurchasePackageResult>
+    <div @click.stop v-if="isLoginDialogShow">
+      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
+    </div>
   </div>
 </template>
 <script>
 import PackageBasicDetail from './PackageBasicDetail'
 import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
+import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PurchasePackage',
   async mounted() {
+    if (!this.userIsLogined) {
+      await this.userGetProfile({ forceLogin: false })
+        .then(() => {
+          this.isLogin = true
+        })
+        .catch(() => {
+          this.isLogin = false
+        })
+    }
+    if (!this.isLogin) {
+      this.isLoginDialogShow = true
+      return
+    }
     await this.getPackageDetail({
       packageId: this.packageId
     })
     this.packageDetail = this.lessonPackageDetail({
       packageId: this.packageId
     })
+    if (this.packageDetail.isSubscribe) {
+      this.handleAlreadyPurchased()
+    }
     this.isMounted = true
+    this.isLoading = false
   },
   computed: {
     ...mapGetters({
+      userIsLogined: 'user/isLogined',
       lessonPackageDetail: 'lesson/packageDetail'
     }),
+    isLogin: {
+      get() {
+        return this.userIsLogined
+      },
+      set() {}
+    },
     packageId() {
       return this.$route.params.id
     },
@@ -51,29 +79,66 @@ export default {
       return this.isPayByCoin
         ? `${this.packageDetail.coin} ${this.$t('lesson.coins')}`
         : `￥ ${this.packageDetail.rmb}`
+    },
+    nowPath() {
+      return this.$route.path
+    },
+    packageDetailPath() {
+      return _.replace(this.nowPath, '/purchase', '')
     }
   },
   data() {
     return {
       packageDetail: {},
-      isLoading: false,
+      isLoginDialogShow: false,
+      isLoading: true,
       isResultShow: false,
       isMounted: false
     }
   },
   methods: {
     ...mapActions({
+      userGetProfile: 'user/getProfile',
       getPackageDetail: 'lesson/getPackageDetail',
       lessonSubscribePackage: 'lesson/subscribePackage'
     }),
     async subscribePackage() {
       this.isLoading = true
-      await this.lessonSubscribePackage({ packageId: this.packageId })
+      if (this.isPayByCoin) {
+        await this.lessonSubscribePackage({ packageId: this.packageId })
+        this.isResultShow = true
+      } else {
+        let origin = window.location.origin
+        window.location.href = `${origin}/wiki/pay`
+      }
       this.isLoading = false
-      this.isResultShow = true
+    },
+    handleAlreadyPurchased() {
+      this.$alert(
+        this.$t('lesson.havePurchased'),
+        this.$t('lesson.infoTitle'),
+        {
+          confirmButtonText: this.$t('lesson.viewPackage'),
+          callback: action => {
+            this.backToPackageDetailPage()
+          }
+        }
+      )
+    },
+    backToPackageDetailPage() {
+      this.$router.push({
+        path: this.packageDetailPath
+      })
+    },
+    closeLoginDialog() {
+      this.$message({
+        message: this.$t('lesson.loginBeforePurchase'),
+        type: 'warning'
+      })
     }
   },
   components: {
+    LoginDialog,
     PackageBasicDetail,
     PurchasePackageResult,
     CoinPurchase

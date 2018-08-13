@@ -754,6 +754,8 @@
     "goToPay": "Proceed to checkout",
     "purchaseWithCoins": "Purchase it with coins",
     "availableCoins": "Available Coins",
+    "havePurchased": "You have added this package!",
+    "loginBeforePurchase": "You should login before add this package!",
     "about": {
       "hottestLessons": "Hottest Lessons",
       "teacher": "TEACHER",
