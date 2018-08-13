@@ -43,8 +43,8 @@
           <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
         <div class="packages">
           <el-row>
-            <el-col :sm="12" :md="8" v-for="packageDtail in sortedSubscribesList" :key="packageDtail.id">
-              <UserSubscribePackages :packageDtail="packageDtail" />
+            <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
+              <UserSubscribePackages :packageDetail="packageDetail" />
             </el-col>
           </el-row>
         </div>
