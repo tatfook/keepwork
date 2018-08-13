@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="lesson-page">
     <CommonHeader></CommonHeader>
-    <router-view id="lesson-page" />
+    <router-view class="lesson-page-main-content" id="lesson-page" />
   </div>
 </template>
 
@@ -23,5 +23,14 @@ body {
 body {
   margin: 0;
   padding: 0;
+}
+.lesson-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  &-main-content {
+    min-height: auto;
+    flex: 1;
+  }
 }
 </style>

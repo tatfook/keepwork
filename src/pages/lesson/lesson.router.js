@@ -13,6 +13,7 @@ const LessonStudy = () => import('@/components/lesson/common/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const LessonSummaryShare = () =>
   import('@/components/lesson/common/LessonSummaryShare')
+const PurchasePackage = () => import('@/components/lesson/common/PurchasePackage')
 
 Vue.use(Router)
 
@@ -23,31 +24,35 @@ export default new Router({
       name: 'Lesson',
       component: Lesson
     },
-    // {
-    //   path: '/about',
-    //   name: 'About',
-    //   component: About
-    // },
-    // {
-    //   path: '/center',
-    //   name: 'Center',
-    //   component: Center
-    // },
     {
       path: '/teacher',
       name: 'Teacher',
       component: Teacher,
       children: [
         {
+          path: 'about',
+          name: 'TeacherAbout',
+          component: About
+        },
+        {
+          path: 'center',
+          name: 'TeacherCenter',
+          component: Center
+        },
+        {
           path: 'package/:id',
           name: 'TeacherPackage',
           component: TeacherPackageDetailPage
+        },
+        {
+          path: 'package/:id/purchase',
+          name: 'TeacherPurchase',
+          component: PurchasePackage
         }
       ]
     },
     {
       path: '/student',
-      name: 'Student',
       component: Student,
       children: [
         {
@@ -57,12 +62,12 @@ export default new Router({
         },
         {
           path: 'about',
-          name: 'About',
+          name: 'StudentAbout',
           component: About
         },
         {
           path: 'center',
-          name: 'Center',
+          name: 'StudentCenter',
           component: Center
         },
         {
@@ -71,7 +76,12 @@ export default new Router({
           component: StudentPackageDetailPage
         },
         {
-          path: 'package/:id/lesson/:id',
+          path: 'package/:id/purchase',
+          name: 'StudentPurchase',
+          component: PurchasePackage
+        },
+        {
+          path: 'package/:id/lesson/:lessonId',
           name: 'LessonStudy',
           component: LessonStudy
         },

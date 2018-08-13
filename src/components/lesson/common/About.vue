@@ -3,7 +3,7 @@
     <Header/>
     <div class="about-carousel">
       <el-carousel indicator-position="outside">
-        <el-carousel-item v-for="img in imgUrls" :key="img">
+        <el-carousel-item v-for="(img,index) in imgUrls" :key="index">
           <img class="about-carousel-img" :src="img.url" alt="">
         </el-carousel-item>
       </el-carousel>
@@ -393,7 +393,7 @@ export default {
     }
   }
   &-badge {
-    margin: 0 auto;
+    margin: 0 auto 20px;
     width: 80%;
     text-align: center;
     .tatfook{

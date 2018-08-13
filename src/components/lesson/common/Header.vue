@@ -68,12 +68,20 @@ export default {
         this.$router.push({
           path: `/student/about`
         })
+      }else{
+        this.$router.push({
+          path: `/teacher/about`
+        })
       }
     },
     goToLessonsCenter() {
       if (this.isStudentPage) {
         this.$router.push({
           path: `/student/center`
+        })
+      }else{
+        this.$router.push({
+          path: `/teacher/center`
         })
       }
     },
