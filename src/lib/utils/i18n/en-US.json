@@ -389,7 +389,8 @@
       }
     },
     "board": {
-      "desc": "Click the edit button on the left to start editing"
+      "desc": "Double click or edit using the left property panel",
+      "saving": "File is not save or saving"
     },
     "qq": {
       "desc": "Customer Service"

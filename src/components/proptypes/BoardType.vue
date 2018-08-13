@@ -80,17 +80,16 @@ export default {
   },
   watch: {
     visible(state) {
-      let board = window.document.querySelector('.board-iframe')
-
       if (state) {
         this.setContentWindowData()
       } else {
+        let board = this.getBoard()
+
         if (!board) {
           return
         }
 
         let boardWindow = board.contentWindow
-
         let keepworkSaveUrl = boardWindow.keepworkSaveUrl
 
         if (
@@ -126,6 +125,28 @@ export default {
       this.visible = true
     },
     closeEditor() {
+      let board = this.getBoard()
+
+      if (!board) {
+        return false
+      }
+
+      let boardWindow = board.contentWindow
+
+      if (!boardWindow.board || !boardWindow.board.currentFile) {
+        return false
+      }
+
+      if (
+        boardWindow.board.currentFile.modified ||
+        boardWindow.board.currentFile.savingFile
+      ) {
+        alert(this.$t('adi.board.saving'))
+        return false
+      }
+
+      boardWindow.board.currentFile.close(true)
+
       this.visible = false
     },
     updateValue(newVal, editingKey) {
@@ -137,11 +158,14 @@ export default {
     getFocus() {
       this.$emit('onChangeValue')
     },
+    getBoard() {
+      return window.document.querySelector('.board-iframe')
+    },
     setContentWindowData() {
       let self = this
 
       function setdata() {
-        let board = window.document.querySelector('.board-iframe')
+        let board = self.getBoard()
 
         if (board) {
           let boardWindow = board.contentWindow
@@ -166,7 +190,8 @@ export default {
 
           // set site page path
           let activePageInfo = self.activePageInfo
-          boardWindow.pagePath = activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
+          boardWindow.pagePath =
+            activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
 
           // set old data
           if (self.cardValue.data) {
@@ -177,7 +202,11 @@ export default {
 
           // pick file
           function pickFile() {
-            if (boardWindow && boardWindow.board && boardWindow.board.pickFile) {
+            if (
+              boardWindow &&
+              boardWindow.board &&
+              boardWindow.board.pickFile
+            ) {
               boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
             } else {
               setTimeout(pickFile, 500)
