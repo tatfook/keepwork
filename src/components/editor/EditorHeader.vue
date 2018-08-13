@@ -64,7 +64,7 @@
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'>
-                  <i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
+                  <i class="iconfont icon-refresh1"></i>{{$t('editor.reload')}}</button>
                 <button @click.stop='undo' :disabled='!canUndo'>
                   <i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
                 <button @click.stop='redo' :disabled='!canRedo'>
