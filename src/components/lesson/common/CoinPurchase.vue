@@ -1,10 +1,10 @@
 <template>
   <div class="coin-purchase">
     <div class="coin-purchase-info">
-      <el-checkbox v-model='isPayByCoin'>使用知识币购买</el-checkbox>
+      <el-checkbox v-model='isPayByCoin'>{{$t('lesson.purchaseWithCoins')}}</el-checkbox>
     </div>
     <div class="coin-purchase-card" :class="{'coin-purchase-card-selected': isPayByCoin}">
-      <label class="coin-purchase-card-label">可用知识币</label>
+      <label class="coin-purchase-card-label">{{$t('lesson.availableCoins')}}</label>
       <div class="coin-purchase-card-value">
         <img class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_available.png" alt=""> 1300 coins
       </div>

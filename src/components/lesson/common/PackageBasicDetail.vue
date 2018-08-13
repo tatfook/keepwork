@@ -68,6 +68,12 @@ export default {
       },
       set() {}
     },
+    nowPath(){
+      return this.$route.path
+    },
+    purchasePath(){
+      return this.nowPath + '/purchase'
+    },
     packageLessonsCount() {
       return _.get(this.packageDetail, 'lessons', []).length
     },
@@ -88,34 +94,35 @@ export default {
   },
   methods: {
     ...mapActions({
-      userGetProfile: 'user/getProfile',
-      lessonSubscribePackage: 'lesson/subscribePackage'
+      userGetProfile: 'user/getProfile'
     }),
     addPackage() {
       if (this.isLogin) {
-        this.confirmAdd()
+        this.$router.push({
+          path: this.purchasePath
+        })
       } else {
         this.isLoginDialogShow = true
       }
     },
-    confirmAdd() {
-      this.$confirm(
-        `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t(
-          'lesson.coins'
-        )}`,
-        this.$t('lesson.infoTitle'),
-        {
-          confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel'),
-          type: 'warning'
-        }
-      ).then(() => {
-        this.sendAddPackageReqToBack()
-      })
-    },
-    async sendAddPackageReqToBack() {
-      await this.lessonSubscribePackage({ packageId: this.packageId })
-    },
+    // confirmAdd() {
+    //   this.$confirm(
+    //     `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t(
+    //       'lesson.coins'
+    //     )}`,
+    //     this.$t('lesson.infoTitle'),
+    //     {
+    //       confirmButtonText: this.$t('common.Sure'),
+    //       cancelButtonText: this.$t('common.Cancel'),
+    //       type: 'warning'
+    //     }
+    //   ).then(() => {
+    //     this.sendAddPackageReqToBack()
+    //   })
+    // },
+    // async sendAddPackageReqToBack() {
+    //   await this.lessonSubscribePackage({ packageId: this.packageId })
+    // },
     closeLoginDialog() {
       this.isLoginDialogShow = false
     }
