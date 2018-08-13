@@ -1,8 +1,8 @@
 <template>
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" />
-    <lesson-summary v-if="!lessonQuizDone" />
-    <lesson-wrap v-else v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <lesson-summary v-show="isShowSummary" />
+    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
   </div>
 </template>
 
@@ -18,19 +18,16 @@ export default {
     'lesson-header': LessonHeader,
     'lesson-summary': LessonSummary
   },
-  mounted() {
-    this.copyProhibited()
-    console.warn(this.lesson)
-  },
   data() {
     return {
       lessonId: ''
     }
   },
   async mounted() {
+    this.copyProhibited()
     this.lessonId = this.$route.params.id || 1
     await this.fetchLessonData({ lessonId: this.lessonId })
-    console.log(this.lessonDetail)
+    console.warn(this.lessonHeader)
   },
   methods: {
     ...mapActions({
@@ -49,7 +46,8 @@ export default {
   computed: {
     ...mapGetters({
       lessonDetail: 'lesson/student/lessonDetail',
-      lessonQuizDone: 'lesson/student/lessonQuizDone'
+      lessonQuizDone: 'lesson/student/lessonQuizDone',
+      isShowSummary: 'lesson/student/isShowSummary'
     }),
     lesson() {
       return this.lessonDetail.modList || []
@@ -67,7 +65,7 @@ export default {
 <style lang="scss">
 .lesson-wrap {
   counter-reset: no;
-  padding-bottom: 300px;
+  padding-bottom: 200px;
 }
 
 .quiz-no::after {

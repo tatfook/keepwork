@@ -10,7 +10,8 @@ let {
   ENTER_CLASSROOM,
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
-  SET_ENTER_CLASS_ID
+  SET_ENTER_CLASS_ID,
+  SWITCH_SUMMARY
 } = props
 
 const actions = {
@@ -53,6 +54,9 @@ const actions = {
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, { key, result, answer })
+  },
+  async switchSummary({ commit }, flag) {
+    commit(SWITCH_SUMMARY, flag)
   },
   async setEnterClassID({ commit }, { key }) {
     commit(SET_ENTER_CLASS_ID, { key })

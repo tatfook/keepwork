@@ -175,8 +175,7 @@ export default {
       return this.quizType === '3'
     },
     alphabet() {
-      let start = 65
-      return Array.from({ length: 26 }, () => String.fromCharCode(start++))
+      return Array.from({ length: 26 }, (i, index) => String.fromCharCode(65 + index))
     }
   }
 }
