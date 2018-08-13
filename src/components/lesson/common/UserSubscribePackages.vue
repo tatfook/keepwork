@@ -3,15 +3,15 @@
     <img @click="enterPackageDetail" class="cover" :src="packageCover" alt="">
     <h3 :class="['name',showProgress ? 'islearning' : '']">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}: <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
-    <p>{{$t('lesson.ages')}}: {{item.minAge}}-{{item.maxAge}}</p>
-    <p class="intro">{{$t('lesson.intro')}}: {{item.intro}}</p>
+    <p>{{$t('lesson.ages')}}: {{packageDtail.minAge}}-{{packageDtail.maxAge}}</p>
+    <p class="intro">{{$t('lesson.intro')}}: {{packageDtail.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
         <el-progress :stroke-width="10" :percentage="learnedRatio" status="success" color="#66cd2e"></el-progress>
-        <p>{{$t('lesson.haveLearn')}} {{item.learnedLessons.length}} {{$t('lesson.lessonsCount')}}</p>
+        <p>{{$t('lesson.haveLearn')}} {{packageDtail.learnedLessons.length}} {{$t('lesson.lessonsCount')}}</p>
       </div>
     </div>
-    <div v-if="item.learnedLessons.length !==item.lessons.length">
+    <div v-if="packageDtail.learnedLessons.length !==packageDtail.lessons.length">
       <el-button @click="enterPackageDetail" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
     </div>
     <div v-else class="finished"><img src="@/assets/lessonImg/finished.png" alt="">
@@ -25,31 +25,31 @@ import _ from 'lodash'
 export default {
   name: 'UserSubscribesPackages',
   props: {
-    item: {}
+    packageDtail: {}
   },
   computed:{
     packageCover(){
-      return _.get(this.item,'extra.coverUrl')
+      return _.get(this.packageDtail,'extra.coverUrl')
     },
     packageName(){
-      return this.item.packageName
+      return this.packageDtail.packageName
     },
     lessonsLength(){
-      return this.item.lessons.length;
+      return this.packageDtail.lessons.length;
     },
     showProgress(){
-      return !(this.item.learnedLessons.length === 0 || this.item.learnedLessons.length === this.item.lessons.length)
+      return !(this.packageDtail.learnedLessons.length === 0 || this.packageDtail.learnedLessons.length === this.packageDtail.lessons.length)
     },
     learnedRatio(){
-      return Math.ceil((this.item.learnedLessons.length / this.item.lessons.length) * 100)
+      return Math.ceil((this.packageDtail.learnedLessons.length / this.packageDtail.lessons.length) * 100)
     },
     startToLearn(){
-      return this.item.learnedLessons.length === 0
+      return this.packageDtail.learnedLessons.length === 0
     }
   },
   methods:{
     enterPackageDetail(){
-      let packageId = this.item.id
+      let packageId = this.packageDtail.id
       console.log(packageId)
       this.$router.push({
         path: `student/package/${packageId}`,
