@@ -31,12 +31,12 @@ export default new Router({
       children: [
         {
           path: 'about',
-          name: 'About',
+          name: 'TeacherAbout',
           component: About
         },
         {
           path: 'center',
-          name: 'Center',
+          name: 'TeacherCenter',
           component: Center
         },
         {
@@ -46,14 +46,14 @@ export default new Router({
         },
         {
           path: 'package/:id/purchase',
-          name: 'Purchase',
+          name: 'TeacherPurchase',
           component: PurchasePackage
         }
       ]
     },
     {
       path: '/student',
-      name: 'Student',
+      // name: 'Student',
       component: Student,
       children: [
         {
@@ -63,12 +63,12 @@ export default new Router({
         },
         {
           path: 'about',
-          name: 'About',
+          name: 'StudentAbout',
           component: About
         },
         {
           path: 'center',
-          name: 'Center',
+          name: 'StudentCenter',
           component: Center
         },
         {
@@ -78,11 +78,11 @@ export default new Router({
         },
         {
           path: 'package/:id/purchase',
-          name: 'Purchase',
+          name: 'StudentPurchase',
           component: PurchasePackage
         },
         {
-          path: 'package/:id/lesson/:id',
+          path: 'package/:id/lesson/:lessonId',
           name: 'LessonStudy',
           component: LessonStudy
         },
