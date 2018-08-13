@@ -739,6 +739,8 @@
     "goToPay": "去支付",
     "purchaseWithCoins": "使用知识币购买",
     "availableCoins": "可用知识币",
+    "havePurchased": "您已经购买过此课程包!",
+    "loginBeforePurchase": "购买课程包前请先登录！",
     "about": {
       "hottestLessons": "热门课程",
       "teacher": "教师",

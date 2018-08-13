@@ -1,5 +1,5 @@
 <template>
-  <div class="package-detail-page">
+  <div class="package-detail-page" v-loading="isLoading">
     <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
     <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></PackageCatalogue>
   </div>
@@ -17,6 +17,7 @@ export default {
     this.packageDetail = this.lessonPackageDetail({
       packageId: this.packageId
     })
+    this.isLoading = false
   },
   props: {
     actorType: String,
@@ -29,6 +30,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       packageDetail: {}
     }
   },
