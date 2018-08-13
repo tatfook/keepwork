@@ -105,24 +105,6 @@ export default {
         this.isLoginDialogShow = true
       }
     },
-    // confirmAdd() {
-    //   this.$confirm(
-    //     `${this.$t('lesson.buyPackageInfo')}${this.packageDetail.cost}${this.$t(
-    //       'lesson.coins'
-    //     )}`,
-    //     this.$t('lesson.infoTitle'),
-    //     {
-    //       confirmButtonText: this.$t('common.Sure'),
-    //       cancelButtonText: this.$t('common.Cancel'),
-    //       type: 'warning'
-    //     }
-    //   ).then(() => {
-    //     this.sendAddPackageReqToBack()
-    //   })
-    // },
-    // async sendAddPackageReqToBack() {
-    //   await this.lessonSubscribePackage({ packageId: this.packageId })
-    // },
     closeLoginDialog() {
       this.isLoginDialogShow = false
     }
