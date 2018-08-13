@@ -53,7 +53,6 @@ export default new Router({
     },
     {
       path: '/student',
-      // name: 'Student',
       component: Student,
       children: [
         {
