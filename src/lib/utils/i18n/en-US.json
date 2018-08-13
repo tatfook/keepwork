@@ -280,7 +280,10 @@
     "readFileFromLocal": "reading file from local ...",
     "enlargeMdEditing": "Large window editing",
 
-    "pleaseInput": "Please input"
+    "pleaseInput": "Please input",
+
+    "beginToShow": "Begin to show",
+    "pptPresentation": "Ppt presentation"
   },
   "modList": {
     "recent": "Commonly used",
