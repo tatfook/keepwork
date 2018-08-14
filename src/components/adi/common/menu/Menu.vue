@@ -125,7 +125,7 @@ export default {
           </el-menu>
         </div>
       )
-    } else {
+    } else if (this.options.text === 'footer') {
       return (
         <div class="comp-footer">
           <div
