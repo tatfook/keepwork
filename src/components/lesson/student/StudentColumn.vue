@@ -44,7 +44,7 @@
         <div class="packages">
           <el-row>
             <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
-              <UserSubscribePackages :packageDetail="packageDetail" />
+              <StudentSubscribePackages :packageDetail="packageDetail" />
             </el-col>
           </el-row>
         </div>
@@ -56,7 +56,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Header from '../common/Header'
-import UserSubscribePackages from '../common/UserSubscribePackages'
+import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
   name: 'student',
@@ -126,7 +126,7 @@ export default {
   },
   components: {
     Header,
-    UserSubscribePackages
+    StudentSubscribePackages
   }
 }
 </script>

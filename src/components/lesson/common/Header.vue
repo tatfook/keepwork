@@ -90,6 +90,10 @@ export default {
         this.$router.push({
           path: `/student`
         })
+      }else{
+        this.$router.push({
+          path: `/teacher`
+        })
       }
     }
   }
