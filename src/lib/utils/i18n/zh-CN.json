@@ -95,6 +95,9 @@
     "errorInfoTitle": "错误提示"
   },
   "editor": {
+    "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
+    "paracraftDownload": "点击下载",
+    
     "hint": "提示",
     "pullServerData": "你是否放弃本地修改，重新读取服务器版本？",
     "files": "文件",
