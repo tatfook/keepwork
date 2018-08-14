@@ -53,6 +53,7 @@ export const packages = {
 }
 
 export const users = {
+  getUserDetail: args => get('users'),
   userSubscribes: args => get(`users/${args.id}/subscribes`),
   userSkills: args => get(`users/${args.id}/skills`)
 }
