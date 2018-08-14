@@ -10,10 +10,13 @@ describe('PackageBasicDetail component test', () => {
   let actions, getters, store
 
   const FakeCoverUrl = 'https://keepwork.com/fakeCoverUrl.jpg'
+  const FakePath = '/student/package/10'
+  const FakeName = 'StudentPackage'
+  const FakeRmbCount = 5
   beforeEach(() => {
     const $route = {
-      path: '/student/package/10',
-      name: 'StudentPackage'
+      path: FakePath,
+      name: FakeName
     }
     actions = {
       userGetProfile: jest.fn()
@@ -33,7 +36,8 @@ describe('PackageBasicDetail component test', () => {
       localVue,
       propsData: {
         packageDetail: {
-          isSubscribe: false
+          isSubscribe: false,
+          rmb: FakeRmbCount
         }
       },
       mocks: {
@@ -44,6 +48,18 @@ describe('PackageBasicDetail component test', () => {
   })
 
   describe('test PackageBasicDetail computed data', () => {
+    it('isLogin should be true', () => {
+      expect(cmp.vm.isLogin).toBe(true)
+    })
+    it('nowPath should equal FakePath', () => {
+      expect(cmp.vm.nowPath).toEqual(FakePath)
+    })
+    it('nowPageName should equal FakeName', () => {
+      expect(cmp.vm.nowPageName).toEqual(FakeName)
+    })
+    it('purchasePath should equal "/student/package/10/purchase"', () => {
+      expect(cmp.vm.purchasePath).toEqual(FakePath + '/purchase')
+    })
     it('lessons count of package should be 2', () => {
       cmp.setProps({
         packageDetail: {
@@ -71,6 +87,60 @@ describe('PackageBasicDetail component test', () => {
         }
       })
       expect(cmp.vm.packageId).toEqual('2')
+    })
+    it('backCoinHtml should equal "<span>FakeRmbCount</span>"', () => {
+      expect(cmp.vm.backCoinHtml).toEqual(`<span>${FakeRmbCount}</span>`)
+    })
+    it('isPurchaseButtonHide should be false', () => { // packageDetail.isSubscribe === false && nowPageName !== 'StudentPurchase' && nowPageName !== 'TeacherPurchase'
+      expect(cmp.vm.isPurchaseButtonHide).toBe(false)
+    })
+    it('isPurchaseButtonHide should be true', () => { // packageDetail.isSubscribe === true && nowPageName !== 'StudentPurchase' && nowPageName !== 'TeacherPurchase'
+      cmp.setProps({
+        packageDetail: {
+          isSubscribe: true
+        }
+      })
+      expect(cmp.vm.isPurchaseButtonHide).toBe(true)
+    })
+    it('isPurchaseButtonHide should be true', () => { // packageDetail.isSubscribe === false && nowPageName === 'StudentPurchase' && nowPageName !== 'TeacherPurchase'
+      cmp = shallow(PackageBasicDetailComp, {
+        store,
+        localVue,
+        propsData: {
+          packageDetail: {
+            isSubscribe: false,
+            rmb: FakeRmbCount
+          }
+        },
+        mocks: {
+          $route: {
+            path: '/student/package/10/purchase',
+            name: 'StudentPurchase'
+          },
+          $t: key => key
+        }
+      })
+      expect(cmp.vm.isPurchaseButtonHide).toBe(true)
+    })
+    it('isPurchaseButtonHide should be true', () => { // packageDetail.isSubscribe === false && nowPageName !== 'StudentPurchase' && nowPageName === 'TeacherPurchase'
+      cmp = shallow(PackageBasicDetailComp, {
+        store,
+        localVue,
+        propsData: {
+          packageDetail: {
+            isSubscribe: false,
+            rmb: FakeRmbCount
+          }
+        },
+        mocks: {
+          $route: {
+            path: '/teacher/package/10/purchase',
+            name: 'TeacherPurchase'
+          },
+          $t: key => key
+        }
+      })
+      expect(cmp.vm.isPurchaseButtonHide).toBe(true)
     })
   })
 

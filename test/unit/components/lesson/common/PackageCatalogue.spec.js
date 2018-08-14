@@ -6,9 +6,11 @@ describe('PackageCatalogue component test', () => {
   const LessonCoverUrlSelector = '.package-catalogue-item-cover'
   const LessonTitleSelector = '.package-catalogue-item-title'
   const ViewSummaryBtnSelector = '.package-catalogue-item-button'
+  const CatalogueItemSelector = '.package-catalogue-item'
   const ContinueToLearnBtnSelector = '.package-catalogue-progress-button'
   const ToLessonDetailFn = jest.fn()
   const ToViewSummaryFn = jest.fn()
+  const HandleUnSubscribeFn = jest.fn()
   const ContinueToLearnFn = jest.fn()
   beforeEach(() => {
     cmp = shallow(PackageCatalogueComp, {
@@ -136,6 +138,15 @@ describe('PackageCatalogue component test', () => {
       })
       triggerObj.trigger('click')
       expect(ToLessonDetailFn).toBeCalled()
+    })
+    it('handleUnSubscribe should be called if catalogue-item clicked', () => {
+      expect(cmp.contains(CatalogueItemSelector)).toBe(true)
+      let triggerObj = cmp.find(CatalogueItemSelector)
+      cmp.setMethods({
+        handleUnSubscribe: HandleUnSubscribeFn
+      })
+      triggerObj.trigger('click')
+      expect(HandleUnSubscribeFn).toBeCalled()
     })
     it('toViewSummary should be called if toViewSummaryButton clicked', () => {
       expect(cmp.contains(ViewSummaryBtnSelector)).toBe(true)
