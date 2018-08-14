@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-header :data="lessonHeader" />
+    <lesson-header :data="lessonHeader" :isTeacher="true" />
     <lesson-summary v-show="isShowSummary" />
     <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
   </div>
@@ -8,15 +8,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import LessonWrap from './LessonWrap'
-import LessonHeader from './LessonHeader'
-import LessonSummary from './LessonSummary'
+import LessonWrap from '../common/LessonWrap'
+import LessonHeader from '../common/LessonHeader'
+import LessonTeacherSummary from './LessonTeacherSummary'
 export default {
   name: 'Learn',
   components: {
     'lesson-wrap': LessonWrap,
     'lesson-header': LessonHeader,
-    'lesson-summary': LessonSummary
+    'lesson-summary': LessonTeacherSummary
   },
   data() {
     return {
@@ -24,8 +24,7 @@ export default {
     }
   },
   async mounted() {
-    this.copyProhibited()
-    this.lessonId = this.$route.params.id || 1
+    this.lessonId = this.$route.params.lessonId || 1
     await this.fetchLessonData({ lessonId: this.lessonId })
     console.warn(this.lessonHeader)
   },
@@ -33,20 +32,10 @@ export default {
     ...mapActions({
       fetchLessonData: 'lesson/student/fetchLessonData'
     }),
-    copyProhibited() {
-      document.oncontextmenu = new Function('event.returnValue=false')
-      document.onselectstart = new Function('event.returnValue=false')
-      document.onkeydown = () => {
-        if (event.ctrlKey && window.event.keyCode === 67) return false
-        if (event.ctrlKey && window.event.keyCode === 86) return false
-      }
-      document.body.oncopy = () => false
-    }
   },
   computed: {
     ...mapGetters({
       lessonDetail: 'lesson/student/lessonDetail',
-      lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary'
     }),
     lesson() {

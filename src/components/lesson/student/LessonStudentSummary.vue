@@ -39,7 +39,7 @@
             {{$t('lesson.styles', { number: 3})}}
           </div>
           <div class="share-style-select-panel">
-            <lesson-summary-share-style-select/>
+            <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
           </div>
         </el-col>
       </el-row>
@@ -51,7 +51,7 @@
 import { mapGetters } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 export default {
-  name: 'LessonSummary',
+  name: 'LessonStudentSummary',
   components: {
     'lesson-summary-share-style-select': LessonSummaryShareStyleSelect
   },
@@ -85,6 +85,15 @@ export default {
     },
     lessonCommands() {
       return _.get(this.lessonData, 'Commands', 0)
+    },
+    lessonSummary() {
+      return {
+        day: 1,
+        name: this.lessonTitle,
+        read: this.lessonCodeReadLine,
+        write: this.lessonWriteLine,
+        command: this.lessonCommands
+      }
     }
   },
   methods: {

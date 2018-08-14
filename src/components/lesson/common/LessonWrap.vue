@@ -7,13 +7,11 @@
 
 <script>
 import Quiz from './quiz'
-import Lesson from './Lesson'
 import Hint from './Hint'
 export default {
   name: 'LessonWrap',
   components: {
     quiz: Quiz,
-    lesson: Lesson,
     hint: Hint
   },
   props: {

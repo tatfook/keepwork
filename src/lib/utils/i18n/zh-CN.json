@@ -779,6 +779,10 @@
     "stylePreview": "样式 {number} 预览",
     "shareSummaryByNet": "选择一个社交网络分享你的学习总结",
     "references": "素材",
-    "quiz": "问题"
+    "quiz": "问题",
+    "todayIs": "今天是 {date}",
+    "learning": "我正在keepwork学习 {name} . 点击",
+    "here": "这里",
+    "join": "跟我一起学习"
   }
 }

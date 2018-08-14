@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-progress">
+  <div class="lesson-student-progress">
     <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz" :class="{'noStart': lessonQuizDone === 0}">
       <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
@@ -66,7 +66,7 @@ export default {
 
 
 <style lang="scss">
-.lesson-progress {
+.lesson-student-progress {
   $green: #66cd2e;
   $grey: #d2d2d2;
   display: flex;

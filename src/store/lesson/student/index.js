@@ -7,7 +7,7 @@ const state = () => ({
   lessonData: {},
   lessonDetail: {},
   lessonQuiz: {},
-  isShowSummary: false,
+  isShowStudentSummary: true,
   userSubscribeList: [],
   userSkillsList: [],
   enterClassInfo: [],

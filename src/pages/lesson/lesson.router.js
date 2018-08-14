@@ -9,11 +9,14 @@ const StudentPackageDetailPage = () =>
   import('@/components/lesson/student/PackageDetailPage')
 const TeacherPackageDetailPage = () =>
   import('@/components/lesson/teacher/PackageDetailPage')
-const LessonStudy = () => import('@/components/lesson/common/Lesson')
+const LessonStudent = () => import('@/components/lesson/student/Lesson')
+const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const LessonSummaryShare = () =>
-  import('@/components/lesson/common/LessonSummaryShare')
-const PurchasePackage = () => import('@/components/lesson/common/PurchasePackage')
+  import('@/components/lesson/student/LessonSummaryShare')
+const PurchasePackage = () =>
+  import('@/components/lesson/common/PurchasePackage')
+const Share = () => import('@/components/lesson/Share')
 
 Vue.use(Router)
 
@@ -48,6 +51,11 @@ export default new Router({
           path: 'package/:id/purchase',
           name: 'TeacherPurchase',
           component: PurchasePackage
+        },
+        {
+          path: 'package/:id/lesson/:lessonId',
+          name: 'LessonTeacher',
+          component: LessonTeacher
         }
       ]
     },
@@ -82,11 +90,23 @@ export default new Router({
         },
         {
           path: 'package/:id/lesson/:lessonId',
-          name: 'LessonStudy',
-          component: LessonStudy
+          name: 'LessonStudent',
+          component: LessonStudent
         },
         {
-          path: 'share/:id',
+          path: 'share/package/:packageId/lesson/:lessonId',
+          name: 'LessonSummaryShare',
+          component: LessonSummaryShare
+        }
+      ]
+    },
+    {
+      path: '/share',
+      name: 'Share',
+      component: Share,
+      children: [
+        {
+          path: 'package/:packageId/lesson/:lessonId/style/:styleId',
           name: 'LessonSummaryShare',
           component: LessonSummaryShare
         }

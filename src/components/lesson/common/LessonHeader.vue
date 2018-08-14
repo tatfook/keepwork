@@ -22,12 +22,20 @@
     </el-row>
     <div class="division"></div>
     <keep-wrok-sticky>
-      <el-row :gutter="20" class="lesson-progress-wrap">
+      <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
+        <el-col :span="20">
+          <lesson-teacher-progress/>
+        </el-col>
+        <el-col :span="4" class="lesson-references">
+          <lesson-referencse/>
+        </el-col>
+      </el-row>
+      <el-row v-else :gutter="20" class="lesson-progress-wrap">
         <el-col :span="2" class="lesson-award">
           <lesson-jewel-box />
         </el-col>
         <el-col :span="18">
-          <lesson-progress/>
+          <lesson-student-progress/>
         </el-col>
         <el-col :span="4" class="lesson-references">
           <lesson-referencse/>
@@ -40,15 +48,17 @@
 
 <script>
 import _ from 'lodash'
-import LessonJewelBox from './LessonJewelBox'
-import LessonProgress from './LessonProgress'
+import LessonJewelBox from '../student/LessonJewelBox'
+import LessonStudentProgress from '../student/LessonStudentProgress'
+import LessonTeacherProgress from '../teacher/LessonTeacherProgress'
 import LessonReferences from './LessonReferences'
 import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
   components: {
     'lesson-jewel-box': LessonJewelBox,
-    'lesson-progress': LessonProgress,
+    'lesson-student-progress': LessonStudentProgress,
+    'lesson-teacher-progress': LessonTeacherProgress,
     'keep-wrok-sticky': KeepWorkSticky,
     'lesson-referencse': LessonReferences
   },
@@ -58,7 +68,8 @@ export default {
     }
   },
   props: {
-    data: Object
+    data: Object,
+    isTeacher: false
   },
   methods: {
     openAnimations() {
