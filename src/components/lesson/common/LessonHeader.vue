@@ -5,6 +5,15 @@
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
+    <el-dialog :visible.sync="classIdVisible" center class="class-id-dialog" width="50%">
+      <div>The class ID is
+        <span class="class-id">123 456 789</span> Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Stuents’Performance</div>
+      <div>
+        <span class="tips">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
+      <span slot="footer">
+        <el-button type="primary">OK</el-button>
+      </span>
+    </el-dialog>
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
@@ -17,6 +26,8 @@
           <el-scrollbar class="lesson-desc-goals-list" :native="false">
             {{lessonGoals}}
           </el-scrollbar>
+          <el-button @click="beginTheClass" type="primary">上课</el-button>
+          <el-button @click="dimissTheClass" type="primary">下课</el-button>
         </div>
       </el-col>
     </el-row>
@@ -64,7 +75,8 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false
+      dialogVisible: false,
+      classIdVisible: true
     }
   },
   props: {
@@ -74,7 +86,11 @@ export default {
   methods: {
     openAnimations() {
       this.dialogVisible = true
-    }
+    },
+    beginTheClass() {
+      this.classIdVisible = true
+    },
+    dimissTheClass() {}
   },
   computed: {
     lesson() {
@@ -122,6 +138,16 @@ body {
   margin: 50px auto 0;
   $green: #66cd2e;
   $grey: #d2d2d2;
+  .class-id-dialog {
+    .class-id {
+      color: #f75858;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    .tips {
+      color: #f75858;
+    }
+  }
 
   .lesson-cover {
     height: 340px;
@@ -178,13 +204,21 @@ body {
       // fix inline elrow style margin-left and right -10px;
       margin: 0 !important;
     }
-    .lesson-award {
-    }
-
     .lesson-references {
       display: flex;
       justify-content: flex-end;
     }
+  }
+  .full-class {
+    width: 100%;
+    height: 100%;
+  }
+
+  .full-font {
+    font-size: 160px;
+    font-weight: bold;
+    margin-top: 30%;
+    display: inline-block;
   }
 }
 </style>

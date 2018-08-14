@@ -1,7 +1,7 @@
 <template>
   <div>
     <hint v-if="data.cmd === 'Hint'" :data="data" />
-    <quiz v-else-if="data.cmd === 'Quiz'" :data="data" />
+    <quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" />
   </div>
 </template>
 
@@ -16,7 +16,11 @@ export default {
   },
   props: {
     data: Object,
-    originData: Array
+    originData: Array,
+    isPreview: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>

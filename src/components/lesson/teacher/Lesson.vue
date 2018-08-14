@@ -2,7 +2,7 @@
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" :isTeacher="true" />
     <lesson-summary v-show="isShowSummary" />
-    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
   </div>
 </template>
 
