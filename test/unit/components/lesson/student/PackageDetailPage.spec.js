@@ -13,13 +13,16 @@ describe('package detail of student', () => {
     Cmp = shallow(PackageDetailPageComp, {
       mocks: {
         $route,
-        $t: () => {}
+        $t: () => { }
       }
     })
   })
 
   it('equal actorType to "student"', () => {
     expect(Cmp.vm.actorType).toEqual('student')
+  })
+  it('packageId should equal "10"', () => {
+    expect(Cmp.vm.packageId).toEqual('10')
   })
 
   it('contain Header Comp', () => {
