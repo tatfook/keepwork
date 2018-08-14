@@ -21,6 +21,9 @@ describe('package detail of teacher', () => {
   it('equal actorType to "teacher"', () => {
     expect(Cmp.vm.actorType).toEqual('teacher')
   })
+  it('packageId should equal "10"', () => {
+    expect(Cmp.vm.packageId).toEqual('10')
+  })
 
   it('contain Header Comp', () => {
     expect(Cmp.contains(Header)).toBe(true)
