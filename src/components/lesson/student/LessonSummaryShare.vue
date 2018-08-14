@@ -1,16 +1,50 @@
 <template>
-  <div class="lesson-summary-share-wrap" :class="`style-${styleIndex}`">
-    <div class="lesson-summary-share" :class="`style-${styleIndex}`">
+  <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`]">
+    <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`]">
       <div class="left">
         <div class="shadow"></div>
       </div>
       <div class="main">
         <div class="movie"></div>
-        <div class="summary-word">
-          <div class="summary-word-time">{{time}}</div>
-          <div class="summary-word-link">{{link}}</div>
-          <div class="summary-word-line">{{line1}}</div>
-          <div class="summary-word-line">{{line2}}</div>
+        <div v-if="isEn" class="summary-word">
+          <div class="summary-word-time">
+            {{$t('lesson.todayIs', {date: today})}}
+          </div>
+          <div class="summary-word-link">
+            I am learning {{summary.name}} on Keepwork. Click
+            <a @click.prevent="toAboutPage" href="" class="highlight link">here</a> to join and learn with me
+          </div>
+          <div class="summary-word-line">
+            This is my
+            <span class="highlight">{{summary.day}}st</span> day of learning
+            <span class="highlight">{{summary.name}}</span> on Keepwork.
+          </div>
+          <div class="summary-word-line">
+            Today, I read
+            <span class="highlight">{{summary.read}}</span> lines of code, wrote
+            <span class="highlight">{{summary.write}}</span> lines of code, and learned
+            <span class="highlight">{{summary.command}}</span> computer command.
+          </div>
+        </div>
+        <div v-else class="summary-word">
+          <div class="summary-word-time">
+            {{$t('lesson.todayIs', {date: today})}}
+          </div>
+          <div class="summary-word-link">
+            我正在keepwork学习 {{summary.name}} . 点击
+            <a @click.prevent="toAboutPage" href="" class="highlight link">这里</a> 加入，并和我一起学习
+          </div>
+          <div class="summary-word-line">
+            这是我第在keepwork学习
+            <span class="highlight">{{summary.name}}</span> 的第
+            <span class="highlight">{{summary.day}}</span> 天
+          </div>
+          <div class="summary-word-line">
+            今天，我读了
+            <span class="highlight">{{summary.read}}</span> 行代码, 写了
+            <span class="highlight">{{summary.write}}</span> 行代码, 学习了
+            <span class="highlight">{{summary.command}}</span> 个电脑命令
+          </div>
         </div>
       </div>
     </div>
@@ -18,6 +52,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'LessonSummaryShare',
   props: {
@@ -28,19 +64,61 @@ export default {
     styleIndex: {
       type: Number,
       default: 1
+    },
+    lessonSummary: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
     return {
-      time: 'Today is 20th Apr. 2018.',
-      link:
-        'I am learning computer science on Keepwork. Click here to join and learn with me',
-      line1: 'This is my 1st day of learning computer science on Keepwork.',
-      line2:
-        'Today, I read 20 lines of code, wrote 5 lines of code, and learned 1 computer command.'
+      style: 1,
+      summary: {}
     }
   },
-  mounted() {}
+  mounted() {
+    if (this.isPreview) {
+      this.summary = _.merge(this.summary, this.lessonSummary)
+    } else {
+      this.style = Number(this.$route.params.styleId) || 1
+      this.$set(this.summary, _.merge(this.summary, this.$route.query))
+    }
+    console.warn(this.summary)
+  },
+  computed: {
+    today() {
+      const MONTH = [
+        'Jan',
+        'Feb',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ]
+      let time = new Date()
+      let year = time.getFullYear()
+      let month = time.getMonth()
+      let day = time.getDate()
+      return this.isEn
+        ? `${day}th ${MONTH[month]}. ${year}.`
+        : `${year}年 ${month}月 ${day}日`
+    },
+    isEn() {
+      return locale === 'en-US'
+    }
+  },
+  methods: {
+    toAboutPage() {
+      this.$router.push({ path: '/student/about' })
+    }
+  }
 }
 </script>
 
@@ -102,6 +180,13 @@ $mainHeight: 630px;
         margin-top: 50px;
         min-width: 660px;
         color: black;
+        .highlight {
+          color: #409efe;
+          font-weight: 600;
+        }
+        .link {
+          color: #ec761a;
+        }
         &-time {
           font-size: 28px;
           font-weight: 600;

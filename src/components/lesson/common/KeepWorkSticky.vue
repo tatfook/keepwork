@@ -32,6 +32,7 @@ export default {
   methods: {
     async handleScroll() {
       await this.$nextTick()
+      if (!this.$refs.sticky) return
       let clientRect = this.$refs.sticky.getBoundingClientRect()
       let top = clientRect.top
       let scrollTop =

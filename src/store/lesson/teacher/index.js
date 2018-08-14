@@ -3,6 +3,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = () => ({
+  isShowSummary: false
 })
 
 export default {

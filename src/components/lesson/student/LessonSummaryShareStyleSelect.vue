@@ -9,7 +9,7 @@
       <img src="../../../assets/lessonImg/summary/right.png" alt="next">
     </div>
     <el-dialog class="preview-dialog" :title="$t('lesson.stylePreview', {number: currentStyle})" :visible.sync="dialogVisible" :append-to-body="true" width="90%">
-      <lesson-summary-share :styleIndex="currentStyle" />
+      <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :lessonSummary="lessonSummary" />
     </el-dialog>
   </div>
 </template>
@@ -22,10 +22,18 @@ export default {
   components: {
     'lesson-summary-share': LessonSummaryShare
   },
+  props: {
+    lessonSummary: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       currentStyle: 1,
-      dialogVisible: false,
+      dialogVisible: true,
       styles: [1, 2, 3]
     }
   },

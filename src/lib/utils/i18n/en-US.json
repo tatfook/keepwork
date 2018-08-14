@@ -798,6 +798,7 @@
     "stylePreview": "Style {number} Preview",
     "shareSummaryByNet": "Click the social network to share summary",
     "references":"References",
-    "quiz": "Quiz"
+    "quiz": "Quiz",
+    "todayIs": "Today is {date}"
   }
 }
