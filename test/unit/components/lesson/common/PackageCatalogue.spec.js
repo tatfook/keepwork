@@ -27,7 +27,8 @@ describe('PackageCatalogue component test', () => {
         actorType: ''
       },
       mocks: {
-        $t: key => key
+        $t: key => key,
+        $alert: () => {}
       }
     })
   })

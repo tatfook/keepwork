@@ -1,17 +1,43 @@
-import { shallow } from 'vue-test-utils'
+import { shallow, createLocalVue } from 'vue-test-utils'
+import Vuex from 'vuex'
 import PackageBasicDetailComp from '@/components/lesson/common/PackageBasicDetail'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 describe('PackageBasicDetail component test', () => {
   let cmp
+  let actions, getters, store
+
   const FakeCoverUrl = 'https://keepwork.com/fakeCoverUrl.jpg'
   beforeEach(() => {
+    const $route = {
+      path: '/student/package/10',
+      name: 'StudentPackage'
+    }
+    actions = {
+      userGetProfile: jest.fn()
+    }
+    getters = {
+      'user/profile': () => { },
+      'user/isLogined': () => true
+    }
+    store = new Vuex.Store({
+      state: {},
+      actions,
+      getters
+    })
+
     cmp = shallow(PackageBasicDetailComp, {
+      store,
+      localVue,
       propsData: {
         packageDetail: {
           isSubscribe: false
         }
       },
       mocks: {
+        $route,
         $t: key => key
       }
     })
