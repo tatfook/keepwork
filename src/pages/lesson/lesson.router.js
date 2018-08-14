@@ -12,6 +12,7 @@ const TeacherPackageDetailPage = () =>
 const LessonStudent = () => import('@/components/lesson/student/Lesson')
 const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
+const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -32,6 +33,11 @@ export default new Router({
       name: 'Teacher',
       component: Teacher,
       children: [
+        {
+          path: '/',
+          name: 'TeacherColumn',
+          component: TeacherColumn
+        },
         {
           path: 'about',
           name: 'TeacherAbout',
