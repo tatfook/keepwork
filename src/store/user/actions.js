@@ -37,10 +37,11 @@ const {
 } = props
 
 const actions = {
-  async login({ commit }, payload) {
+  async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
       info.data.token && Cookies.set('token', info.data.token)
+      await dispatch('lesson/getUserDetail', null, { root: true })
       commit(LOGIN_SUCCESS, info.data)
     }
     return info

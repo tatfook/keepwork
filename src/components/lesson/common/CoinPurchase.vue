@@ -1,20 +1,20 @@
 <template>
   <div class="coin-purchase">
     <div class="coin-purchase-info">
-      <el-checkbox v-model='isPayByCoin' v-show="isUserHaveEnoughCoin">{{$t('lesson.purchaseWithCoins')}}</el-checkbox>
+      <el-checkbox class="coin-purchase-checkbox" v-model='isPayByCoin' v-show="isUserHaveEnoughCoin">{{$t('lesson.purchaseWithCoins')}}</el-checkbox>
       <span v-show="!isUserHaveEnoughCoin">{{$t('lesson.purchaseWithCoins')}}</span>
     </div>
     <div class="coin-purchase-card" :class="{'coin-purchase-card-selected': isPayByCoin}">
       <label class="coin-purchase-card-label">{{$t('lesson.availableCoins')}}</label>
       <div class="coin-purchase-card-value">
         <img v-show="isUserHaveEnoughCoin" class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_available.png" alt="">
-        <img v-show="!isUserHaveEnoughCoin" class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_disabled.png" alt="">
-        {{restCoin}} {{$t('lesson.coins')}}
+        <img v-show="!isUserHaveEnoughCoin" class="coin-purchase-card-bg-icon" src="@/assets/lessonImg/coin_disabled.png" alt=""> {{restCoin}} {{$t('lesson.coins')}}
       </div>
     </div>
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import { mapGetters } from 'vuex'
 export default {
   name: 'CoinPurchase',
@@ -23,10 +23,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile'
+      userinfo: 'lesson/userinfo'
     }),
     restCoin() {
-      return _.get(this.userProfile, 'coin', 0)
+      return _.get(this.userinfo, 'coin', 0)
     },
     packageNeedCoinsCount() {
       return _.get(this.packageDetail, 'coin')
