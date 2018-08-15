@@ -27,10 +27,10 @@
     </div>
     <div class="teacher-summary-chart">
       <div class="teacher-summary-chart-accuracy-rate">
-        <!-- <schart :canvasId="canvasId" :type="type" :width="width" :height="height" :data="data" :options="options"></schart> -->
+        <AccuracyRateChart />
       </div>
       <div class="teacher-summary-chart-student-number">
-        <!-- <schart :canvasId="canvasId" :type="type" :width="width" :height="height" :data="data" :options="options"></schart> -->
+        <NumberOfStudentsChart/>
       </div>
     </div>
     <div class="teacher-summary-detailed">
@@ -102,6 +102,9 @@
   </div>
 </template>
 <script>
+import AccuracyRateChart from './AccuracyRateChart'
+import NumberOfStudentsChart from './NumberOfStudentsChart'
+
 export default {
   data() {
     return {
@@ -146,6 +149,10 @@ export default {
         path: `/teacher/student/1/record`
       })
     }
+  },
+  components: {
+    AccuracyRateChart,
+    NumberOfStudentsChart
   }
 }
 </script>
@@ -185,10 +192,9 @@ export default {
     }
   }
   &-chart {
-    width: 100%;
+    padding: 12px;
     background: #f8f8ff;
     display: flex;
-    height: 422px;
     &-accuracy-rate {
       width: 50%;
     }
