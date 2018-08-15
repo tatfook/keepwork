@@ -5,6 +5,19 @@
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
+    <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
+      <div>The class ID is
+        <span class="class-id">123 456 789</span>
+      </div>
+      <div>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu
+        <span class="performance">Stuents'Performance</span>
+      </div>
+      <div class="tips">
+        <span class="attention">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
+      <span slot="footer">
+        <el-button class="lesson-confirm-button" type="primary">OK</el-button>
+      </span>
+    </el-dialog>
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
@@ -17,6 +30,11 @@
           <el-scrollbar class="lesson-desc-goals-list" :native="false">
             {{lessonGoals}}
           </el-scrollbar>
+          <div class="lesson-button-wrap">
+            <el-button @click="beginTheClass" type="primary" class="lesson-button" size="medium">上课</el-button>
+            <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">下课</el-button> -->
+            <span class="lesson-button-tips">(Click here to begin the class)</span>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -62,19 +80,32 @@ export default {
     'keep-wrok-sticky': KeepWorkSticky,
     'lesson-referencse': LessonReferences
   },
-  data() {
-    return {
-      dialogVisible: false
-    }
-  },
   props: {
     data: Object,
-    isTeacher: false
+    isTeacher: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      classIdDialogVisible: false
+    }
+  },
+  mounted() {
+    // teacher identity
+    if (this.isTeacher) {
+    }
   },
   methods: {
     openAnimations() {
       this.dialogVisible = true
-    }
+    },
+    beginTheClass() {
+      this.classIdDialogVisible = true
+    },
+    dimissTheClass() {}
   },
   computed: {
     lesson() {
@@ -122,6 +153,24 @@ body {
   margin: 50px auto 0;
   $green: #66cd2e;
   $grey: #d2d2d2;
+  .class-id-dialog {
+    .class-id {
+      color: #f75858;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    .performance {
+      color: #1982ff;
+      font-weight: 500;
+    }
+    .tips {
+      margin-top: 20px;
+      color: #a9a9a9;
+      .attention {
+        color: #f75858;
+      }
+    }
+  }
 
   .lesson-cover {
     height: 340px;
@@ -168,6 +217,20 @@ body {
       }
     }
   }
+  .lesson-button-wrap {
+    .lesson-button {
+      height: 36px;
+      width: 190px;
+      &:last-child {
+        display: none;
+      }
+    }
+    .lesson-button-tips {
+      color: #a9a9a9;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+  }
   .lesson-progress-wrap {
     box-sizing: border-box;
     background: white;
@@ -178,13 +241,29 @@ body {
       // fix inline elrow style margin-left and right -10px;
       margin: 0 !important;
     }
-    .lesson-award {
-    }
-
     .lesson-references {
       display: flex;
       justify-content: flex-end;
     }
+  }
+
+  .class-id-dialog {
+    .lesson-confirm-button {
+      height: 52px;
+      width: 158px;
+      font-size: 18px;
+    }
+  }
+  .full-class {
+    width: 100%;
+    height: 100%;
+  }
+
+  .full-font {
+    font-size: 160px;
+    font-weight: bold;
+    margin-top: 30%;
+    display: inline-block;
   }
 }
 </style>

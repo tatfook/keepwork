@@ -781,8 +781,9 @@
     "references": "素材",
     "quiz": "问题",
     "todayIs": "今天是 {date}",
-    "learning": "我正在keepwork学习 {name} . 点击",
-    "here": "这里",
-    "join": "跟我一起学习"
+    "showAll": "显示全部",
+    "hideAll": "隐藏全部",
+    "showAllTips": "点击显示老师的笔记",
+    "hideAllTips": "点击隐藏老师的笔记"
   }
 }

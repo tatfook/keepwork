@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-container">
+  <div class="quiz-container" :class="{'isPreview': isPreview}">
     <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
       <i class="quiz-icon"></i>
@@ -52,7 +52,7 @@
         <span :class="[isError ? 'error-highlight': 'highlight']">{{desc}}</span>
       </div>
     </div>
-    <el-button v-if="!isDone" class="quiz-submit" size="small" type="primary" @click="checkAnswer">{{$t('card.submit')}}</el-button>
+    <el-button v-if="!isDone && !isPreview" class="quiz-submit" size="small" type="primary" @click="checkAnswer">{{$t('card.submit')}}</el-button>
   </div>
 </template>
 
@@ -68,6 +68,10 @@ export default {
       default() {
         return {}
       }
+    },
+    isPreview: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -175,7 +179,9 @@ export default {
       return this.quizType === '3'
     },
     alphabet() {
-      return Array.from({ length: 26 }, (i, index) => String.fromCharCode(65 + index))
+      return Array.from({ length: 26 }, (i, index) =>
+        String.fromCharCode(65 + index)
+      )
     }
   }
 }
@@ -192,6 +198,24 @@ export default {
   background: white;
   max-width: 1080px;
   margin: 0 auto;
+  &.isPreview {
+    .el-radio__input,
+    .el-checkbox__inner,
+    .el-textarea {
+      display: none;
+    }
+    .el-radio__input.is-checked ~ .el-radio__label,
+    .el-checkbox__input.is-checked ~ .el-checkbox__label {
+      color: #606266;
+      font-weight: normal;
+    }
+
+    .el-radio__input.is-disabled + span.el-radio__label,
+    .el-checkbox__input.is-disabled + span.el-checkbox__label {
+      color: #606266;
+      font-weight: normal;
+    }
+  }
   .quiz-no-wrap {
     display: flex;
     align-items: center;
