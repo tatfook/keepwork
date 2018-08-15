@@ -5,7 +5,8 @@ import mutations from './mutations'
 const state = () => ({
   isShowLesson: true,
   isShowSummary: false,
-  isShowStudentStatus: false
+  isShowStudentStatus: false,
+  isShowHint: true
 })
 
 export default {

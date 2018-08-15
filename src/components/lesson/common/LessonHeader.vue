@@ -5,13 +5,17 @@
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
-    <el-dialog :visible.sync="classIdVisible" center class="class-id-dialog" width="50%">
+    <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
       <div>The class ID is
-        <span class="class-id">123 456 789</span> Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu Stuents’Performance</div>
-      <div>
-        <span class="tips">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
+        <span class="class-id">123 456 789</span>
+      </div>
+      <div>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu
+        <span class="performance">Stuents'Performance</span>
+      </div>
+      <div class="tips">
+        <span class="attention">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
       <span slot="footer">
-        <el-button type="primary">OK</el-button>
+        <el-button class="lesson-confirm-button" type="primary">OK</el-button>
       </span>
     </el-dialog>
     <el-row>
@@ -26,8 +30,11 @@
           <el-scrollbar class="lesson-desc-goals-list" :native="false">
             {{lessonGoals}}
           </el-scrollbar>
-          <el-button @click="beginTheClass" type="primary">上课</el-button>
-          <el-button @click="dimissTheClass" type="primary">下课</el-button>
+          <div class="lesson-button-wrap">
+            <el-button @click="beginTheClass" type="primary" class="lesson-button" size="medium">上课</el-button>
+            <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">下课</el-button> -->
+            <span class="lesson-button-tips">(Click here to begin the class)</span>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -73,22 +80,30 @@ export default {
     'keep-wrok-sticky': KeepWorkSticky,
     'lesson-referencse': LessonReferences
   },
+  props: {
+    data: Object,
+    isTeacher: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       dialogVisible: false,
-      classIdVisible: true
+      classIdDialogVisible: false
     }
   },
-  props: {
-    data: Object,
-    isTeacher: false
+  mounted() {
+    // teacher identity
+    if (this.isTeacher) {
+    }
   },
   methods: {
     openAnimations() {
       this.dialogVisible = true
     },
     beginTheClass() {
-      this.classIdVisible = true
+      this.classIdDialogVisible = true
     },
     dimissTheClass() {}
   },
@@ -144,8 +159,16 @@ body {
       font-weight: bold;
       font-size: 22px;
     }
+    .performance {
+      color: #1982ff;
+      font-weight: 500;
+    }
     .tips {
-      color: #f75858;
+      margin-top: 20px;
+      color: #a9a9a9;
+      .attention {
+        color: #f75858;
+      }
     }
   }
 
@@ -194,6 +217,20 @@ body {
       }
     }
   }
+  .lesson-button-wrap {
+    .lesson-button {
+      height: 36px;
+      width: 190px;
+      &:last-child {
+        display: none;
+      }
+    }
+    .lesson-button-tips {
+      color: #a9a9a9;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+  }
   .lesson-progress-wrap {
     box-sizing: border-box;
     background: white;
@@ -207,6 +244,14 @@ body {
     .lesson-references {
       display: flex;
       justify-content: flex-end;
+    }
+  }
+
+  .class-id-dialog {
+    .lesson-confirm-button {
+      height: 52px;
+      width: 158px;
+      font-size: 18px;
     }
   }
   .full-class {

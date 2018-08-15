@@ -780,6 +780,10 @@
     "shareSummaryByNet": "选择一个社交网络分享你的学习总结",
     "references": "素材",
     "quiz": "问题",
-    "todayIs": "今天是 {date}"
+    "todayIs": "今天是 {date}",
+    "showAll": "显示全部",
+    "hideAll": "隐藏全部",
+    "showAllTips": "点击显示老师的笔记",
+    "hideAllTips": "点击隐藏老师的笔记"
   }
 }

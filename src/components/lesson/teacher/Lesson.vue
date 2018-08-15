@@ -2,6 +2,7 @@
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" :isTeacher="true" />
     <lesson-summary v-show="isShowSummary" />
+    <lesson-hint-toggle />
     <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
   </div>
 </template>
@@ -11,12 +12,14 @@ import { mapGetters, mapActions } from 'vuex'
 import LessonWrap from '../common/LessonWrap'
 import LessonHeader from '../common/LessonHeader'
 import LessonTeacherSummary from './LessonTeacherSummary'
+import LessonHintToggle from './LessonHintToggle'
 export default {
   name: 'Learn',
   components: {
     'lesson-wrap': LessonWrap,
     'lesson-header': LessonHeader,
-    'lesson-summary': LessonTeacherSummary
+    'lesson-summary': LessonTeacherSummary,
+    'lesson-hint-toggle': LessonHintToggle
   },
   data() {
     return {

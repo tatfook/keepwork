@@ -799,6 +799,10 @@
     "shareSummaryByNet": "Click the social network to share summary",
     "references":"References",
     "quiz": "Quiz",
-    "todayIs": "Today is {date}"
+    "todayIs": "Today is {date}",
+    "showAll": "Show All",
+    "hideAll": "Hide All",
+    "showAllTips": "Click to show all notes for teacher",
+    "hideAllTips": "Click to hide all notes for teacher"
   }
 }
