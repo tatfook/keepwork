@@ -784,6 +784,7 @@
     "showAll": "显示全部",
     "hideAll": "隐藏全部",
     "showAllTips": "点击显示老师的笔记",
-    "hideAllTips": "点击隐藏老师的笔记"
+    "hideAllTips": "点击隐藏老师的笔记",
+    "teachers": "老师需注意:"
   }
 }

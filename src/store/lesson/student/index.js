@@ -10,8 +10,8 @@ const state = () => ({
   isShowStudentSummary: true,
   userSubscribeList: [],
   userSkillsList: [],
-  enterClassInfo: [],
-  enterClassId: Number
+  enterClassInfo: {},
+  enterClassId: null
 })
 
 export default {
