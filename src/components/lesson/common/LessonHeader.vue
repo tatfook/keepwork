@@ -1,10 +1,12 @@
 <template>
   <el-row class="lesson-header">
+    <!-- vidioDialog -->
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media">
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
+    <!-- classIdDialog -->
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
       <div>The class ID is
         <span class="class-id">123 456 789</span>
@@ -15,13 +17,30 @@
       <div class="tips">
         <span class="attention">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
       <span slot="footer">
-        <el-button class="lesson-confirm-button" type="primary">OK</el-button>
+        <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">OK</el-button>
       </span>
     </el-dialog>
+    <!-- classId full screen -->
+    <el-dialog :visible.sync="classIdFullScreen" fullscreen="true" custom-class="class-id-full-page" top="0">
+      <div class="full-font">123 456 789</div>
+    </el-dialog>
+    <!-- lesson info -->
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
       <el-col :span="10" class="lesson-desc">
+        <div v-if="isTeacher" class="class-id-sign-wrap">
+          <el-tooltip placement="top" effect="light">
+            <div slot="content">Click to full page</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: 123 456 789</div>
+          </el-tooltip>
+          <el-tooltip placement="bottom" effect="light">
+            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px;">
+              Class ID is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.
+            </div>
+            <span class="question-mark-icon"></span>
+          </el-tooltip>
+        </div>
         <div class="lesson-desc-title">
           {{$t('card.lesson')}} {{lessonNo}}: {{title}}
         </div>
@@ -30,8 +49,8 @@
           <el-scrollbar class="lesson-desc-goals-list" :native="false">
             {{lessonGoals}}
           </el-scrollbar>
-          <div class="lesson-button-wrap">
-            <el-button @click="beginTheClass" type="primary" class="lesson-button" size="medium">上课</el-button>
+          <div v-if="isTeacher" class="lesson-button-wrap">
+            <el-button @click="beginTheClass" type="primary" class="lesson-button" size="medium">Begin the class</el-button>
             <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">下课</el-button> -->
             <span class="lesson-button-tips">(Click here to begin the class)</span>
           </div>
@@ -90,7 +109,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      classIdDialogVisible: false
+      classIdDialogVisible: false,
+      classIdFullScreen: false
     }
   },
   mounted() {
@@ -102,7 +122,14 @@ export default {
     openAnimations() {
       this.dialogVisible = true
     },
+    classIdToFullScreen() {
+      this.classIdFullScreen = true
+    },
     beginTheClass() {
+      // TODO: 请求classroom接口, 成功后弹出classId
+      // if (false) {
+      //   return this.$message.error('上课失败，请干嘛干嘛')
+      // }
       this.classIdDialogVisible = true
     },
     dimissTheClass() {}
@@ -195,7 +222,31 @@ body {
 
   .lesson-desc {
     padding: 0 20px;
-
+    position: relative;
+    .class-id-sign-wrap {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: -36px;
+      .class-id-sign {
+        font-size: 20px;
+        background: #ed9f21;
+        display: inline-block;
+        padding: 1px 10px;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+      }
+      .question-mark-icon {
+        display: inline-block;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        margin-left: 5px;
+        background: url('../../../assets/lessonImg/question_mark.png') no-repeat
+          center center;
+      }
+    }
     &-title {
       font-size: 20px;
       color: black;
@@ -249,21 +300,19 @@ body {
 
   .class-id-dialog {
     .lesson-confirm-button {
-      height: 52px;
+      height: 42px;
       width: 158px;
       font-size: 18px;
     }
   }
-  .full-class {
-    width: 100%;
-    height: 100%;
-  }
-
-  .full-font {
-    font-size: 160px;
-    font-weight: bold;
-    margin-top: 30%;
-    display: inline-block;
+  .class-id-full-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .full-font {
+      font-size: 15vw;
+      font-weight: bold;
+    }
   }
 }
 </style>

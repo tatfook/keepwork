@@ -18,6 +18,13 @@ export const post = (...args) => {
     .then(res => (returnOriginalData ? res.data : res.data.data))
 }
 
+export const _post = args => {
+  let { url, payload, config, returnOriginalData = true } = args
+  return keepworkEndpoint
+    .post(url, payload, config)
+    .then(res => (returnOriginalData ? res.data : res.data.data))
+}
+
 export const put = (...args) => {
   let [url, payload, config] = args
   return keepworkEndpoint.post(url, payload, config).then(res => res.data)
@@ -52,6 +59,10 @@ export const packages = {
   subscribe: args => post(`packages/${args.id}/subscribe`)
 }
 
+export const lessons = {
+  lessonDetail: args => get(`lessons/${args.id}/detail`)
+}
+
 export const users = {
   getUserDetail: args => get('users'),
   userSubscribes: args => get(`users/${args.id}/subscribes`),
@@ -59,7 +70,8 @@ export const users = {
 }
 
 export const classrooms = {
-  join: args => post('classrooms/join', ...args)
+  join: args => post('classrooms/join', ...args),
+  begin: args => _post('classrooms', args)
 }
 
 // const _get = ({ url, params, config, returnOriginalData = true }) =>

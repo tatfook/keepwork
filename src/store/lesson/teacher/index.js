@@ -6,7 +6,8 @@ const state = () => ({
   isShowLesson: true,
   isShowSummary: false,
   isShowStudentStatus: false,
-  isShowHint: true
+  isShowHint: true,
+  classId: null
 })
 
 export default {

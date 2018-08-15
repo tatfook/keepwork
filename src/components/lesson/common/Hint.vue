@@ -1,6 +1,6 @@
 <template>
   <div class="hint-container">
-    <span class="hint-title">教师:</span>
+    <div class="hint-title">{{$t('lesson.teachers')}}</div>
     <div class="hint-content">{{content}}</div>
   </div>
 </template>
@@ -12,8 +12,7 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-  },
+  mounted() {},
   props: {
     data: Object
   },
@@ -32,16 +31,24 @@ export default {
   min-height: 100px;
   padding: 20px;
   margin: 0 auto;
-  background: rgb(240, 240, 240);
+  background: #fef6ef;
   box-sizing: border-box;
   .hint-title {
-    color: #ff414a;
-    display: block;
+    color: #fd7a05;
+    font-weight: 600;
+    background: white;
+    display: inline-block;
+    height: 49px;
+    line-height: 38px;
+    text-align: center;
+    width: 122px;
+    background: url('../../../assets/lessonImg/teachers_pop.png') no-repeat
+      center center;
   }
   .hint-content {
     white-space: normal;
     word-wrap: break-word;
-    margin-top: 10px;
+    margin-top: 20px;
   }
 }
 </style>
