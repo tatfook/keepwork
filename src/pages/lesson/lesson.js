@@ -10,9 +10,11 @@ import router from './lesson.router'
 import { userModule, lessonModule, createPersistedState } from '@/store'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
+import Vhistogram from 'v-charts/lib/histogram.common'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.component(Vhistogram.name, Vhistogram)
 
 const i18n = new VueI18n({
   locale,

@@ -1727,6 +1727,10 @@ compute-scroll-into-view@1.0.5:
   version "1.0.5"
   resolved "http://registry.npm.taobao.org/compute-scroll-into-view/download/compute-scroll-into-view-1.0.5.tgz#dea9ce0edb17d981ea0d56e52b85c840430b91bf"
 
+compute-scroll-into-view@1.0.7:
+  version "1.0.7"
+  resolved "http://registry.npm.taobao.org/compute-scroll-into-view/download/compute-scroll-into-view-1.0.7.tgz#ad8dbe51093c31d60cf6c2df497b2c077bd9e7d2"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -1888,7 +1892,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-env@^5.1.4:
+cross-env@^5.2.0:
   version "5.2.0"
   resolved "http://registry.npm.taobao.org/cross-env/download/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
   dependencies:
@@ -2383,6 +2387,16 @@ ecc-jsbn@~0.1.1:
   resolved "http://registry.npm.taobao.org/ecc-jsbn/download/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
   dependencies:
     jsbn "~0.1.0"
+
+echarts-amap@1.0.0-rc.6:
+  version "1.0.0-rc.6"
+  resolved "http://registry.npm.taobao.org/echarts-amap/download/echarts-amap-1.0.0-rc.6.tgz#5782a74daee52ed44ce3f8f62577561783f09e16"
+
+echarts@^4.1.0:
+  version "4.1.0"
+  resolved "http://registry.npm.taobao.org/echarts/download/echarts-4.1.0.tgz#d588c95f73c1a9928b9c73d5b769751c3185bcdc"
+  dependencies:
+    zrender "4.0.4"
 
 editorconfig@^0.13.2:
   version "0.13.3"
@@ -3521,7 +3535,7 @@ he@1.1.x, he@^1.1.0:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/he/download/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
-highlight.js@^9.12.0, highlight.js@^9.9.0:
+highlight.js@^9.12.0:
   version "9.12.0"
   resolved "http://registry.npm.taobao.org/highlight.js/download/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
 
@@ -3594,7 +3608,7 @@ html-webpack-plugin@^2.30.1:
     pretty-error "^2.0.2"
     toposort "^1.0.0"
 
-htmlparser2@3.9.2, htmlparser2@^3.8.2:
+htmlparser2@^3.8.2:
   version "3.9.2"
   resolved "http://registry.npm.taobao.org/htmlparser2/download/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
   dependencies:
@@ -3745,6 +3759,12 @@ imurmurhash@^0.1.4:
 in-publish@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/in-publish/download/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
+
+increase-memory-limit@^1.0.6:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/increase-memory-limit/download/increase-memory-limit-1.0.6.tgz#0bac263c248ba8242939976142e8a706a81b0cfc"
+  dependencies:
+    glob "^7.1.1"
 
 indent-string@^2.1.0:
   version "2.1.0"
@@ -5104,10 +5124,6 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "http://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
-lodash.flow@^3.1.0:
-  version "3.5.0"
-  resolved "http://registry.npm.taobao.org/lodash.flow/download/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
-
 lodash.get@^4.4.2:
   version "4.4.2"
   resolved "http://registry.npm.taobao.org/lodash.get/download/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -5226,13 +5242,6 @@ markdown-it-footnote@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/markdown-it-footnote/download/markdown-it-footnote-2.0.0.tgz#14e9c4f68ff12cf354fa365ae378276e8104ca94"
 
-markdown-it-highlightjs@^3.0.0:
-  version "3.0.0"
-  resolved "http://registry.npm.taobao.org/markdown-it-highlightjs/download/markdown-it-highlightjs-3.0.0.tgz#ed3dd619ca2b98e6bf2112d163bf444043340210"
-  dependencies:
-    highlight.js "^9.9.0"
-    lodash.flow "^3.1.0"
-
 markdown-it-ins@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/markdown-it-ins/download/markdown-it-ins-2.0.0.tgz#a5aa6a30f1e2f71e9497567cfdff40f1fde67483"
@@ -5265,9 +5274,9 @@ markdown-it-task-lists@^2.0.1:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/markdown-it-task-lists/download/markdown-it-task-lists-2.1.1.tgz#f68f4d2ac2bad5a2c373ba93081a1a6848417088"
 
-markdown-it-toc-and-anchor@leopoldchen/markdown-it-toc-and-anchor:
-  version "4.1.3"
-  resolved "https://codeload.github.com/leopoldchen/markdown-it-toc-and-anchor/tar.gz/77c1cf26bce0d5e7d1e00b0e9a5d94b211f1c7f5"
+markdown-it-toc-and-anchor@^4.1.2:
+  version "4.1.2"
+  resolved "http://registry.npm.taobao.org/markdown-it-toc-and-anchor/download/markdown-it-toc-and-anchor-4.1.2.tgz#b271f694a70bf719e6b728056d7bd931d364214d"
   dependencies:
     clone "^2.1.0"
     uslug "^1.0.4"
@@ -5788,6 +5797,10 @@ num2fraction@^1.2.2:
 number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/number-is-nan/download/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
+
+numerify@1.2.9:
+  version "1.2.9"
+  resolved "http://registry.npm.taobao.org/numerify/download/numerify-1.2.9.tgz#af4696bb1d57f8d3970a615d8b0cd53d932bd559"
 
 nwsapi@^2.0.0:
   version "2.0.6"
@@ -7151,6 +7164,12 @@ scroll-into-view-if-needed@2.2.14:
   dependencies:
     compute-scroll-into-view "1.0.5"
 
+scroll-into-view-if-needed@^2.2.16:
+  version "2.2.16"
+  resolved "http://registry.npm.taobao.org/scroll-into-view-if-needed/download/scroll-into-view-if-needed-2.2.16.tgz#208232f4d7bb531130177b6c02d760d1e1796cbd"
+  dependencies:
+    compute-scroll-into-view "1.0.7"
+
 scss-tokenizer@^0.2.3:
   version "0.2.3"
   resolved "http://registry.npm.taobao.org/scss-tokenizer/download/scss-tokenizer-0.2.3.tgz#8eb06db9a9723333824d3f5530641149847ce5d1"
@@ -7341,16 +7360,6 @@ smooth-scroll-into-view-if-needed@^1.1.10:
   resolved "http://registry.npm.taobao.org/smooth-scroll-into-view-if-needed/download/smooth-scroll-into-view-if-needed-1.1.18.tgz#7a2c85d2103397d67451b689d3df0d1bc139e77f"
   dependencies:
     scroll-into-view-if-needed "2.2.14"
-
-snabbdom-virtualize@leopoldchen/snabbdom-virtualize:
-  version "0.7.0"
-  resolved "https://codeload.github.com/leopoldchen/snabbdom-virtualize/tar.gz/1eff808cc2200d4e81fb57f274857c01bc4de470"
-  dependencies:
-    htmlparser2 "3.9.2"
-
-snabbdom@~0.7.1:
-  version "0.7.1"
-  resolved "http://registry.npm.taobao.org/snabbdom/download/snabbdom-0.7.1.tgz#c1e9eddfad2c02ebc2cf66aaefb040419d059597"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -8118,6 +8127,10 @@ utila@~0.4:
   version "0.4.0"
   resolved "http://registry.npm.taobao.org/utila/download/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
 
+utils-lite@0.1.10:
+  version "0.1.10"
+  resolved "http://registry.npm.taobao.org/utils-lite/download/utils-lite-0.1.10.tgz#d2908c0482e23c31e6b082558540e7134ffad7d7"
+
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
@@ -8125,6 +8138,14 @@ utils-merge@1.0.1:
 uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
   version "3.3.2"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
+v-charts@^1.17.10:
+  version "1.17.10"
+  resolved "http://registry.npm.taobao.org/v-charts/download/v-charts-1.17.10.tgz#4b4762ae11f7092c7fe8429d4229eb62405512da"
+  dependencies:
+    echarts-amap "1.0.0-rc.6"
+    numerify "1.2.9"
+    utils-lite "0.1.10"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.3"
@@ -8251,11 +8272,12 @@ vue-loader@^13.3.0:
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-markdown@leopoldchen/vue-markdown#master:
-  version "2.2.3"
-  resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/6df049705345a13a6d302dc91897b301aa2cac3d"
+vue-markdown@^2.2.3:
+  version "2.2.4"
+  resolved "http://registry.npm.taobao.org/vue-markdown/download/vue-markdown-2.2.4.tgz#db0f774178f3bc91ee18c626d86a3a0d2de22746"
   dependencies:
-    markdown-it "^8.0.0"
+    highlight.js "^9.12.0"
+    markdown-it "^6.0.1"
     markdown-it-abbr "^1.0.3"
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
@@ -8263,13 +8285,10 @@ vue-markdown@leopoldchen/vue-markdown#master:
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
-    markdown-it-prism leopoldchen/markdown-it-prism
     markdown-it-sub "^1.0.0"
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
-    markdown-it-toc-and-anchor leopoldchen/markdown-it-toc-and-anchor
-    snabbdom "~0.6.6"
-    snabbdom-virtualize "^0.7.0"
+    markdown-it-toc-and-anchor "^4.1.2"
 
 vue-router@^3.0.1:
   version "3.0.1"
@@ -8746,3 +8765,7 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zrender@4.0.4:
+  version "4.0.4"
+  resolved "http://registry.npm.taobao.org/zrender/download/zrender-4.0.4.tgz#910e60d888f00c9599073f23758dd23345fe48fd"
