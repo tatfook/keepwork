@@ -2,7 +2,7 @@
   <div class="teacher-summary">
     <div class="teacher-summary-print-and-email">
       <el-button type="primary">Print</el-button>
-      <el-button type="primary">Send to Mailbox</el-button>
+      <el-button type="primary" @click="sendEmail">Send to Mailbox</el-button>
     </div>
     <div class="teacher-summary-brief">
       <p class="date">Mondat 20th,April,2018</p>
@@ -37,9 +37,9 @@
       <h4>Detailed:</h4>
       <div class="teacher-summary-detailed-change">
         <span>
-          <el-button type="primary" size="mini">Change All</el-button> (Give full marks to all students)</span>
+          <el-button type="primary" size="mini" @click="change('changeAll')">Change All</el-button> (Give full marks to all students)</span>
         <span>
-          <el-button type="primary" size="mini">Change</el-button> (Give full marks to selected students)</span>
+          <el-button type="primary" size="mini" @click="change('change')">Change</el-button> (Give full marks to selected students)</span>
       </div>
       <div class="teacher-summary-detailed-table">
         <div class="teacher-summary-detailed-table-title">
@@ -55,20 +55,7 @@
           <ul class="student-record">
             <li class="every-student">
               <el-checkbox class="every-student-checkbox"></el-checkbox>
-              <span><img class="portraits" src="@/assets/lessonImg/cover1.png" alt=""> </span>
-              <span class="desc">William Smith</span>
-              <span class="desc">keepgo1230</span>
-              <span class="desc">40%</span>
-              <span class="desc">4</span>
-              <span class="desc">2</span>
-              <span class="desc">0</span>
-              <span class="">
-                <el-button type="primary" size="mini">View Details</el-button>
-              </span>
-            </li>
-            <li class="every-student">
-              <el-checkbox class="every-student-checkbox"></el-checkbox>
-              <span><img class="portraits" src="@/assets/lessonImg/cover1.png" alt=""> </span>
+              <img class="portraits" src="@/assets/lessonImg/cover1.png" alt="">
               <span class="desc">William Smith</span>
               <span class="desc">keepgo1230</span>
               <span class="desc">40%</span>
@@ -92,17 +79,67 @@
                 <el-button type="primary" size="mini">View Details</el-button>
               </span>
             </li>
-
           </ul>
         </div>
       </div>
     </div>
+    <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
+      <div class="tip">
+        <div class="tip-img"><img src="@/assets/lessonImg/reminder.png" alt=""></div>
+        <div class="tip-text">{{changeSelected === 'changeAll' ? ' you sure you want to give full marks to all students?' : 'Are you sure you want to give full marks to selected students?'}}</div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="changeDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="toChangeStudentMarks">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog class="teacher-summary-success-send-email" :visible.sync="successSendEmailDialogVisible" width="30%" center>
+      <div class="success">
+        <img src="@/assets/lessonImg/email.png" alt="">
+        <p>The summary has been successfully sent to your mailbox</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {}
+    return {
+      successSendEmailDialogVisible: false,
+      changeDialogVisible: false,
+      changeSelected: ''
+    }
+  },
+  methods: {
+    change(type) {
+      this.changeSelected = type
+      this.changeDialogVisible = true
+    },
+    toChangeStudentMarks() {
+      alert('改变分数')
+      this.changeDialogVisible = false
+    },
+    sendEmail() {
+      this.$prompt('请输入邮箱', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: '邮箱格式不正确'
+      })
+        .then(({ value }) => {
+          // this.$message({
+          //   type: 'success',
+          //   message: '你的邮箱是: ' + value
+          // })
+          this.successSendEmailDialogVisible = true
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消发送'
+          })
+        })
+    }
   }
 }
 </script>
@@ -132,10 +169,10 @@ export default {
     }
     .skillpoints {
       display: flex;
-      .points-list{
+      .points-list {
         margin: 0;
         list-style: none;
-        li{
+        li {
           margin: 5px;
         }
       }
@@ -200,6 +237,26 @@ export default {
           }
         }
       }
+    }
+  }
+  &-change {
+    text-align: center;
+    .tip {
+      display: flex;
+      &-text {
+        font-size: 18px;
+        line-height: 49px;
+        color: #f75858;
+        text-align: center;
+        text-indent: 16px;
+      }
+    }
+  }
+  &-success-send-email {
+    .success {
+      text-align: center;
+      // width: 199px;
+      margin: 0 auto;
     }
   }
 }
