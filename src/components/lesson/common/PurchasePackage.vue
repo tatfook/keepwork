@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import PackageBasicDetail from './PackageBasicDetail'
 import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
