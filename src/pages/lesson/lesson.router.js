@@ -18,6 +18,7 @@ const LessonSummaryShare = () =>
 const PurchasePackage = () =>
   import('@/components/lesson/common/PurchasePackage')
 const Share = () => import('@/components/lesson/Share')
+const LessonStudentRecord = () => import('@/components/lesson/teacher/LessonStudentRecord')
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
           path: 'package/:id/lesson/:lessonId',
           name: 'LessonTeacher',
           component: LessonTeacher
+        },
+        {
+          path: 'student/:studentId/record',
+          name: 'LessonStudentRecord',
+          component: LessonStudentRecord
         }
       ]
     },
