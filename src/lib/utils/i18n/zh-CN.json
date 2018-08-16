@@ -92,7 +92,8 @@
     "saveFail": "保存失败",
     "success": "成功",
     "failure": "失败",
-    "errorInfoTitle": "错误提示"
+    "errorInfoTitle": "错误提示",
+    "canNotUseIE": "此功能无法在IE下使用"
   },
   "editor": {
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",

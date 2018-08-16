@@ -285,7 +285,8 @@
     "readFileFromLocal": "reading file from local ...",
     "enlargeMdEditing": "Large window editing",
 
-    "pleaseInput": "Please input"
+    "pleaseInput": "Please input",
+    "canNotUseIE": "This function cannot be used under IE."
   },
   "modList": {
     "recent": "Commonly used",
