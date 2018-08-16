@@ -30,7 +30,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
       parentIndex = index
     }
 
-    if (m.options.text === 'menu' && !menuData.child) {
+    if (m.options.type === 'menu' && !menuData.child) {
       return (
         <el-menu-item
           index={getIndexString(index)}
@@ -46,7 +46,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           </a>
         </el-menu-item>
       )
-    } else if (m.options.text === 'menu' && menuData.child) {
+    } else if (m.options.type === 'menu' && menuData.child) {
       return (
         <el-submenu
           index={getIndexString(index)}
@@ -67,7 +67,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </el-submenu>
       )
-    } else if (m.options.text !== 'menu' && menuData.child) {
+    } else if (m.options.type !== 'menu' && menuData.child) {
       return (
         <div
           index={getIndexString(index)}
@@ -111,7 +111,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
 export default {
   name: 'AdiMenu',
   render(h) {
-    if (this.options.text === 'menu') {
+    if (this.options.type === 'menu') {
       return (
         <div class="comp-menu">
           <el-menu
@@ -125,7 +125,7 @@ export default {
           </el-menu>
         </div>
       )
-    } else if (this.options.text === 'footer') {
+    } else if (this.options.type === 'footer') {
       return (
         <div class="comp-footer">
           <div

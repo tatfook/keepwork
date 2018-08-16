@@ -85,7 +85,10 @@ export default [
       },
       config: {
         // 子组件配置参数
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     },
     cover: require('@/../static/adi/title/title1.png')
@@ -146,7 +149,10 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu',
+          itemStyle: { float: 'right' }
+        })
       }
     },
     cover: require('@/../static/adi/title/title1.png')
@@ -207,7 +213,10 @@ export default [
       },
       config: {
         // 子组件配置参数
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     },
     cover: require('@/../static/adi/title/title2.png')
@@ -268,7 +277,10 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu',
+          itemStyle: { float: 'right' }
+        })
       }
     },
     cover: require('@/../static/adi/title/title2.png')
@@ -327,7 +339,10 @@ export default [
         }
       },
       config: {
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     }
   },
@@ -392,7 +407,10 @@ export default [
         }
       },
       config: {
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     }
   }
