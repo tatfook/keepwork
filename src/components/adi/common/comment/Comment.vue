@@ -3,20 +3,20 @@
     <div class="style-0" v-if="getStyleId === 0">
       <div v-if="properties.switch.value">
         <h3>{{$t(options.title)}}</h3>
+        <div class="comment-input">
+          <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
+          <el-button @click="commit">{{$t(options.commit)}}</el-button>
+        </div>
         <div class="comment-box">
           <div class="comment-item" v-for='comment in activePageCommentList' :key='comment._id'>
             <img :src="comment.userInfo.portrait">
             <div class="text">
               <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ comment.updateTime }}</p>
+              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
               <p>{{ comment.content }}</p>
             </div>
             <a class="delete-btn" @click="deleteComment(comment._id)">{{$t(options.delete)}}</a>
           </div>
-        </div>
-        <div class="comment-input">
-          <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
-          <el-button @click="commit">{{$t(options.commit)}}</el-button>
         </div>
       </div>
       <div class="shutup-comment" v-if="!properties.switch.value">
@@ -36,7 +36,7 @@
             <img :src="comment.userInfo.portrait">
             <div class="text">
               <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ comment.updateTime }}</p>
+              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
               <p>{{ comment.content }}</p>
               <hr>
             </div>
@@ -91,7 +91,7 @@ export default {
     async commit() {
       let { content } = this
 
-      if(!content) {
+      if (!content) {
         return
       }
 
@@ -104,6 +104,14 @@ export default {
       this.loading = true
       await this.deleteCommentById({ _id: commentId })
       this.loading = false
+    },
+    getFormatDate(date) {
+      if (typeof date === 'string') {
+        date = date.split(' ')[1]
+          ? date.split(' ')[0] + date.split(' ')[1].replace(/-/g, ':')
+          : date
+      }
+      return date
     }
   }
 }
@@ -180,7 +188,7 @@ export default {
         textarea {
           resize: none;
           width: 100%;
-          height: 110px;
+          height: 50px;
           border: 2px solid #d4d4d4;
           outline: none;
           background-color: #eeeeee;
@@ -204,7 +212,7 @@ export default {
         font-weight: 900;
         font-size: 22px;
 
-        img{
+        img {
           vertical-align: middle;
           margin-right: 10px;
         }
