@@ -411,7 +411,9 @@
       "delete": "delete",
       "commit": "submit",
       "close": "Comments are closed",
-      "notice": "Share your ideas!"
+      "notice": "Share your ideas!",
+      "work_review": "Work review",
+      "publish": "Publish"
     }
   },
   "card": {
