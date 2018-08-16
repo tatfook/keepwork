@@ -1,3 +1,4 @@
+import _ from 'lodash'
 
 let defaultData = {
   menu: {
@@ -52,6 +53,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -83,6 +85,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -118,6 +121,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -152,12 +156,12 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
       }
     }
-    // cover: require('@/../static/adi/menu/menu.png'),
   },
   // style 4
   {
@@ -184,6 +188,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -219,6 +224,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -253,6 +259,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -284,6 +291,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -319,6 +327,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -330,9 +339,9 @@ export default [
   },
   // style 9
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -342,19 +351,20 @@ export default [
     theme: {
       root: [],
       colFooterRow: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -364,9 +374,9 @@ export default [
   },
   // style 10
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -375,19 +385,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -397,9 +408,9 @@ export default [
   },
   // style 11
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -408,19 +419,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
@@ -430,9 +442,9 @@ export default [
   },
   // style 12
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -441,19 +453,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -463,9 +476,9 @@ export default [
   },
   // style 13
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -474,19 +487,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -496,9 +510,9 @@ export default [
   },
   // style 14
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -507,19 +521,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'auxiliaryText', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
@@ -529,7 +544,7 @@ export default [
   },
   // style 15
   {
-    templateID: 2,
+    templateID: 1,
     data: {
       root: {},
       colGroupRow: {
@@ -581,7 +596,10 @@ export default [
         }
       },
       config: {
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     }
   }

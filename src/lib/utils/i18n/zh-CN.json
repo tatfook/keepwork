@@ -92,9 +92,13 @@
     "saveFail": "保存失败",
     "success": "成功",
     "failure": "失败",
-    "errorInfoTitle": "错误提示"
+    "errorInfoTitle": "错误提示",
+    "canNotUseIE": "此功能无法在IE下使用"
   },
   "editor": {
+    "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
+    "paracraftDownload": "点击下载",
+    
     "hint": "提示",
     "pullServerData": "你是否放弃本地修改，重新读取服务器版本？",
     "files": "文件",
@@ -377,7 +381,8 @@
       }
     },
     "board": {
-      "desc": "点击左侧编辑按钮开始编辑"
+      "desc": "双击或使用左侧属性面板编辑",
+      "saving": "文件未保存或正在保存中"
     },
     "qq": {
       "desc": "客服中心"
@@ -394,7 +399,9 @@
       "delete": "删除",
       "commit": "提交",
       "close": "评论功能已关闭",
-      "notice": "分享你的想法！"
+      "notice": "分享你的想法！",
+      "work_review": "作品评论",
+      "publish": "发布"
     }
   },
   "card": {

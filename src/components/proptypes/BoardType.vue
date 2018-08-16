@@ -80,17 +80,16 @@ export default {
   },
   watch: {
     visible(state) {
-      let board = window.document.querySelector('.board-iframe')
-
       if (state) {
         this.setContentWindowData()
       } else {
+        let board = this.getBoard()
+
         if (!board) {
           return
         }
 
         let boardWindow = board.contentWindow
-
         let keepworkSaveUrl = boardWindow.keepworkSaveUrl
 
         if (
@@ -123,9 +122,66 @@ export default {
       })
     },
     openEditor() {
+      if (this.IEVersion() > 0) {
+        alert(this.$t('common.canNotUseIE'))
+        return false
+      }
+
       this.visible = true
     },
+    IEVersion() {
+      let userAgent = navigator.userAgent //取得浏览器的userAgent字符串
+      let isIE =
+        userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 //判断是否IE<11浏览器
+      // let isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器
+      let isIE11 =
+        userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1
+
+      if (isIE) {
+        let reIE = new RegExp('MSIE (\\d+\\.\\d+);')
+        reIE.test(userAgent)
+        let fIEVersion = parseFloat(RegExp['$1'])
+
+        if (fIEVersion == 7) {
+          return 7
+        } else if (fIEVersion == 8) {
+          return 8
+        } else if (fIEVersion == 9) {
+          return 9
+        } else if (fIEVersion == 10) {
+          return 10
+        } else {
+          return 6 //IE版本<=7
+        }
+      } else if (isIE11) {
+        return 11 //IE11
+      } else {
+        return -1 //不是ie浏览器
+      }
+    },
     closeEditor() {
+      let board = this.getBoard()
+
+      if (!board) {
+        return false
+      }
+
+      let boardWindow = board.contentWindow
+
+      if (!boardWindow.board || !boardWindow.board.currentFile) {
+        return false
+      }
+
+      if (
+        boardWindow.board.currentFile.modified ||
+        boardWindow.board.currentFile.savingFile
+      ) {
+        alert(this.$t('adi.board.saving'))
+        return false
+      }
+
+      boardWindow.board.currentFile.close(true)
+
       this.visible = false
     },
     updateValue(newVal, editingKey) {
@@ -137,11 +193,14 @@ export default {
     getFocus() {
       this.$emit('onChangeValue')
     },
+    getBoard() {
+      return window.document.querySelector('.board-iframe')
+    },
     setContentWindowData() {
       let self = this
 
       function setdata() {
-        let board = window.document.querySelector('.board-iframe')
+        let board = self.getBoard()
 
         if (board) {
           let boardWindow = board.contentWindow
@@ -166,7 +225,8 @@ export default {
 
           // set site page path
           let activePageInfo = self.activePageInfo
-          boardWindow.pagePath = activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
+          boardWindow.pagePath =
+            activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
 
           // set old data
           if (self.cardValue.data) {
@@ -177,7 +237,11 @@ export default {
 
           // pick file
           function pickFile() {
-            if (boardWindow && boardWindow.board && boardWindow.board.pickFile) {
+            if (
+              boardWindow &&
+              boardWindow.board &&
+              boardWindow.board.pickFile
+            ) {
               boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
             } else {
               setTimeout(pickFile, 500)

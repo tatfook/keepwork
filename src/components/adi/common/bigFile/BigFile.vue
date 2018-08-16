@@ -41,7 +41,7 @@ import compBaseMixin from '../comp.base.mixin'
 import { keepwork } from '@/api'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
-import prettysize from 'prettysize'
+import filesize from 'filesize'
 import _ from 'lodash'
 
 export default {
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     getSize() {
-      return prettysize(this.properties.size)
+      return filesize(this.properties.size)
     },
     async download() {
       let downloadUrl = this.actualUrl
