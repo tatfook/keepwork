@@ -29,9 +29,9 @@ export default [
         'margin-top': '-20px'
       }
     }
-  },
+  }
   // style 1
-  {
+  /* {
     data: {
       root: {}
     },
@@ -45,9 +45,9 @@ export default [
       config: {
         comment: {
           styleId: 1,
-          title: 'adi.comment.headline',
+          title: 'Work review',
           delete: 'adi.comment.delete',
-          commit: 'adi.comment.commit',
+          commit: 'Publish',
           close: 'adi.comment.close',
           notice: 'adi.comment.notice'
         }
@@ -61,5 +61,5 @@ export default [
         'margin-top': '-20px'
       }
     }
-  }
+  } */
 ]
