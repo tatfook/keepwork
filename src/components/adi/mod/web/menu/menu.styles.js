@@ -53,7 +53,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -85,7 +85,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -121,7 +121,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -156,7 +156,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -188,7 +188,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -224,7 +224,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -259,7 +259,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -291,7 +291,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -327,7 +327,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'menu',
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -364,7 +364,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -398,7 +398,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -432,7 +432,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
@@ -466,7 +466,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -500,7 +500,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -534,7 +534,7 @@ export default [
       },
       config: {
         menu: {
-          text: 'footer',
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
@@ -598,7 +598,7 @@ export default [
       config: {
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
-          text: 'menu'
+          type: 'menu'
         })
       }
     }
