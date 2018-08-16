@@ -1,6 +1,5 @@
 <template>
   <div class="about">
-    <Header/>
     <div class="about-carousel">
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="(img,index) in imgUrls" :key="index">
@@ -121,8 +120,8 @@
           <p>Hi, Parents and Teachers,</p>
           <p>I am Xizhi, the developer of <a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a> and the 3d animation & game making tool called <a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>.
            In 1989, at the age of 7, I wrote my first program on a IBM PC in my father’s lab. From March 2018,
-           I made a decision to create one computer science lesson every week using Paracraft and NPL. 
-           Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own. 
+           I made a decision to create one computer science lesson every week using Paracraft and NPL.
+           Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own.
            Click <a href="#">here</a> to read my autobiography on programming.</p>
           <p>All software used in the lessons are free and open source, including paracraft and NPL. 
             All lessons we sell are also free to read online, 
@@ -204,7 +203,6 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import img1 from '@/assets/lessonImg/aboutPageImg/top_banner.png'
 import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
-import Header from './Header'
 
 const TeacherPageReg = /^\/teacher/
 const StudentPageReg = /^\/student/
@@ -249,9 +247,6 @@ export default {
         })
       }
     }
-  },
-  components: {
-    Header
   }
 }
 </script>

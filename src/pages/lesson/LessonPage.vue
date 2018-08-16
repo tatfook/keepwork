@@ -1,15 +1,18 @@
 <template>
   <div class="lesson-page">
     <CommonHeader></CommonHeader>
+    <LessonHeader></LessonHeader>
     <router-view class="lesson-page-main-content" id="lesson-page" />
   </div>
 </template>
 
 <script>
 import CommonHeader from '@/components/common/CommonHeader'
+import LessonHeader from '@/components/lesson/common/Header'
 export default {
   name: 'LessonPage',
   components: {
+    LessonHeader,
     CommonHeader
   }
 }
