@@ -3,6 +3,7 @@ import Router from 'vue-router'
 const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
+const HerePage = () => import('@/components/lesson/common/HerePage')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
 const StudentPackageDetailPage = () =>
@@ -50,6 +51,11 @@ export default new Router({
           component: Center
         },
         {
+          path: 'here',
+          name: 'HerePage',
+          component: HerePage
+        },
+        {
           path: 'package/:id',
           name: 'TeacherPackage',
           component: TeacherPackageDetailPage
@@ -89,6 +95,11 @@ export default new Router({
           path: 'center',
           name: 'StudentCenter',
           component: Center
+        },
+        {
+          path: 'here',
+          name: 'HerePage',
+          component: HerePage
         },
         {
           path: 'package/:id',
