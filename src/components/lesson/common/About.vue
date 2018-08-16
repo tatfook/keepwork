@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="about-carousel">
-      <el-carousel indicator-position="outside">
+      <el-carousel indicator-position="outside" @change="getImgIndex" @click.native="downloadTool">
         <el-carousel-item v-for="(img,index) in imgUrls" :key="index">
           <img class="about-carousel-img" :src="img.url" alt="">
         </el-carousel-item>
@@ -210,7 +210,8 @@ export default {
   data(){
     return{
       isEn: locale ===  'en-US',
-      imgUrls: [{"url": img1},{"url": img2}]
+      imgUrls: [{"url": img1},{"url": img2}],
+      imgIndex:0
     }
   },
   computed: {
@@ -225,6 +226,14 @@ export default {
     },
   },
   methods: {
+    getImgIndex(index){
+     this.imgIndex = index
+    },
+    downloadTool(){
+      if(this.imgIndex === 1){
+        window.location.href= 'http://www.paracraft.cn/download?lang=zh'
+      }
+    },
     gotoLessons(){
       if (this.isStudentPage) {
         this.$router.push({
@@ -258,8 +267,9 @@ export default {
       height: 500px !important;
     }
     &-img {
-      width: 100%;
+      // width: 100%;
       object-fit: cover;
+      cursor: pointer;
     }
   }
   &-title {
