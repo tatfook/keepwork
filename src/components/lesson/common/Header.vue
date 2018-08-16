@@ -2,13 +2,13 @@
   <div class="lesson-header">
     <div class="lesson-header-nav">
       <div class="lesson-header-nav-box">
-        <div @click="goToAboutUs" class="lesson-header-nav-item">
+        <div @click="goToAboutUs" class="lesson-header-nav-item" :class="{'active': activeNavType === 'about'}">
           {{$t('lesson.aboutUs')}}
         </div>
-        <div @click="goToLessonsCenter" class="lesson-header-nav-item">
+        <div @click="goToLessonsCenter" class="lesson-header-nav-item" :class="{'active': activeNavType === 'lessons'}">
           {{$t('lesson.lessonsCenter')}}
         </div>
-        <div @click="goToSpecialColumn" class="lesson-header-nav-item">
+        <div @click="goToSpecialColumn" class="lesson-header-nav-item" :class="{'active': activeNavType === 'column'}">
           {{columnText}}
         </div>
       </div>
@@ -22,11 +22,26 @@ import _ from 'lodash'
 
 const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
+const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
+const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
+const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)$/
 export default {
   name: 'Header',
   computed: {
     nowFullPath() {
       return this.$route.fullPath
+    },
+    nowPagename() {
+      return this.$route.name
+    },
+    activeNavType() {
+      let type
+      type = AboutActivePageNameReg.test(this.nowPagename)
+        ? 'about'
+        : LessonsActivePageNameReg.test(this.nowPagename)
+          ? 'lessons'
+          : ColumnActivePageNameReg.test(this.nowPagename) ? 'column' : ''
+      return type
     },
     isTeacherPage() {
       return TeacherPageReg.test(this.nowFullPath)
@@ -68,7 +83,7 @@ export default {
         this.$router.push({
           path: `/student/about`
         })
-      }else{
+      } else {
         this.$router.push({
           path: `/teacher/about`
         })
@@ -79,18 +94,18 @@ export default {
         this.$router.push({
           path: `/student/center`
         })
-      }else{
+      } else {
         this.$router.push({
           path: `/teacher/center`
         })
       }
     },
-    goToSpecialColumn(){
+    goToSpecialColumn() {
       if (this.isStudentPage) {
         this.$router.push({
           path: `/student`
         })
-      }else{
+      } else {
         this.$router.push({
           path: `/teacher`
         })
@@ -118,6 +133,7 @@ export default {
       border-radius: 34px;
       padding: 6px 18px;
     }
+    &-item.active,
     &-item:hover {
       background-color: #409efe;
       color: #fff;

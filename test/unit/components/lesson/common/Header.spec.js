@@ -6,7 +6,8 @@ describe('Header Comp test', () => {
 
   describe('test Header on student packageDetailPage', () => {
     const $route = {
-      fullPath: '/student/package/10'
+      fullPath: '/student/package/10',
+      name: 'StudentPackage'
     }
     beforeEach(() => {
       Cmp = shallow(HeaderComp, {
@@ -19,6 +20,48 @@ describe('Header Comp test', () => {
 
     it('fullPath equals to "/student/package/10"', () => {
       expect(Cmp.vm.nowFullPath).toEqual('/student/package/10')
+    })
+    it('nowPagename equals to "StudentPackage"', () => {
+      expect(Cmp.vm.nowPagename).toEqual('StudentPackage')
+    })
+    it('activeNavType should equal to ""', () => {
+      expect(Cmp.vm.activeNavType).toEqual('')
+    })
+    it('activeNavType should equal to "about" if pagename is "TeacherAbout"', () => {
+      let fakeCmp = shallow(HeaderComp, {
+        mocks: {
+          $route: {
+            fullPath: '/teacher/about',
+            name: 'TeacherAbout'
+          },
+          $t: key => key
+        }
+      })
+      expect(fakeCmp.vm.activeNavType).toEqual('about')
+    })
+    it('activeNavType should equal to "lessons" if pagename is "StudentCenter"', () => {
+      let fakeCmp = shallow(HeaderComp, {
+        mocks: {
+          $route: {
+            fullPath: '/student/center',
+            name: 'StudentCenter'
+          },
+          $t: key => key
+        }
+      })
+      expect(fakeCmp.vm.activeNavType).toEqual('lessons')
+    })
+    it('activeNavType should equal to "column" if pagename is "TeacherColumn"', () => {
+      let fakeCmp = shallow(HeaderComp, {
+        mocks: {
+          $route: {
+            fullPath: '/teacher',
+            name: 'TeacherColumn'
+          },
+          $t: key => key
+        }
+      })
+      expect(fakeCmp.vm.activeNavType).toEqual('column')
     })
     it('isTeacherPage should be false', () => {
       expect(Cmp.vm.isTeacherPage).toBe(false)

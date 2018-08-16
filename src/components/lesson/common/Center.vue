@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header/>
     <div class="lesson-packages">
       <div class="packages-sum">{{$t('lesson.include')}}: <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
       <el-row :gutter="20" class="lesson-packages-subject">
@@ -26,7 +25,6 @@
 
 <script>
 import _ from 'lodash'
-import Header from './Header'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -60,9 +58,6 @@ export default {
         path: `package/${packageId}`
       })
     }
-  },
-  components: {
-    Header
   }
 }
 </script>
