@@ -13,7 +13,6 @@ import AdiComment from './comment/comment.properties'
 import AdiInnerModal from './innerModal/innerModal.properties'
 import AdiNumber from './number/number.properties'
 import AdiPageList from './pageList/pageList.properties'
-import AdiFooter from './footer/footer.properties'
 import AdiToc from './toc/toc.properties'
 import AdiBigFile from './bigFile/bigFile.properties'
 import AdiBreadCrumb from './breadCrumb/breadCrumb.properties'
@@ -38,7 +37,6 @@ export default {
   AdiInnerModal,
   AdiNumber,
   AdiPageList,
-  AdiFooter,
   AdiToc,
   AdiBigFile,
   AdiBreadCrumb,

@@ -95,6 +95,9 @@
     "errorInfoTitle": "Error"
   },
   "editor": {
+    "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
+    "paracraftDownload": "Download",
+
     "hint": "Hint",
     "pullServerData": "Do you drop local changes and re-read the server version?",
     "files": "Files",
@@ -282,7 +285,8 @@
     "readFileFromLocal": "reading file from local ...",
     "enlargeMdEditing": "Large window editing",
 
-    "pleaseInput": "Please input"
+    "pleaseInput": "Please input",
+    "canNotUseIE": "This function cannot be used under IE."
   },
   "modList": {
     "recent": "Commonly used",
@@ -389,7 +393,8 @@
       }
     },
     "board": {
-      "desc": "Click the edit button on the left to start editing"
+      "desc": "Double click or edit using the left property panel",
+      "saving": "File is not save or saving"
     },
     "qq": {
       "desc": "Customer Service"

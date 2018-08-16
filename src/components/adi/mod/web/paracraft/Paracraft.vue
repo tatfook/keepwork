@@ -94,12 +94,12 @@ export default {
               <p style="font-size: 18px;margin-top: 40px;width: 100%;">
                 {self.modData.paracraftInfo.desc_info
                   ? self.modData.paracraftInfo.desc_info
-                  : '如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft'}
+                  : self.$t('editor.notParacraft')}
               </p>
               <el-button on-click={this.downloadUrl} plain>
                 {self.modData.paracraftInfo.download_info
                   ? self.modData.paracraftInfo.download_info
-                  : '点击下载'}
+                  : self.$t('editor.paracraftDownload')}
               </el-button>
             </div>
           )
