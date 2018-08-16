@@ -9,30 +9,30 @@
       </el-carousel>
     </div>
     <div class="about-title">
-      <img class="rectangle1" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
+      <img class="rectangle1" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
       <span class="topic">{{$t('lesson.about.hottestLessons')}}</span>
-      <img class="rectangle2" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
+      <img class="rectangle2" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
     </div>
     <div class="about-video">
       <el-row :gutter="20">
         <el-col :sm="8" :xs="24">
           <div class="video">
             <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/play1.png" alt="">
+            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
         <el-col :sm="8" :xs="24">
           <div class="video">
             <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/play1.png" alt="">
+            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
         <el-col :sm="8" :xs="24">
           <div class="video">
             <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/play1.png" alt="">
+            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
@@ -40,24 +40,24 @@
     </div>
     <div class="about-view-more">
       <div class="about-view-more-btn">
-        <img src="@/assets/lessonImg/view_more_lesson.png" alt="">
-        <span class="tip">View More Lessons</span>
-        <img class="next next-1" src="@/assets/lessonImg/next.png" alt="">
-        <img class="next next-2" src="@/assets/lessonImg/next.png" alt="">
-        <img class="next next-3" src="@/assets/lessonImg/next.png" alt="">
+        <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt="">
+        <span class="tip" @click="gotoLessons">{{$t('lesson.about.viewMoreLessons')}}</span>
+        <img class="next next-1" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
+        <img class="next next-2" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
+        <img class="next next-3" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
       </div>
     </div>
     <div class="about-teacher-student">
       <div class="content">
       <el-row>
         <el-col class="right-line" :sm="12" :xs="24">
-          <div class="content-img"><img src="@/assets/lessonImg/teacher.png" alt=""></div>
+          <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/teacher.png" alt=""></div>
           <h3>{{$t('lesson.about.teacher')}}</h3>
           <h5>{{$t('lesson.about.engageStudents')}}</h5>
           <p>{{$t('lesson.about.teacherTalk')}}</p>
         </el-col>
         <el-col :sm="12" :xs="24">
-          <div class="content-img"><img src="@/assets/lessonImg/student.png" alt=""></div>
+          <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/student.png" alt=""></div>
           <h3>{{$t('lesson.about.student')}}</h3>
           <h5>{{$t('lesson.about.playGame')}}</h5>
           <p>{{$t('lesson.about.studentTalk')}}</p>
@@ -67,15 +67,15 @@
       </div>
     </div>
     <div class="about-title">
-      <img class="rectangle1" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
+      <img class="rectangle1" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
       <span class="topic">{{$t('lesson.about.aboutLessons')}}</span>
-      <img class="rectangle2" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
+      <img class="rectangle2" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
     </div>
     <div class="about-lesson">
       <el-row>
         <el-col :sm="12" :xs="24">
           <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/animation.png" alt=""></div>
+            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
             <div class="desc-text">
               <h5>{{$t('lesson.about.animations')}}</h5>
               <p>{{$t('lesson.about.animationsTalk')}}</p>
@@ -84,7 +84,7 @@
         </el-col>
         <el-col :sm="12" :xs="24">
           <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/solve_problem.png" alt=""></div>
+            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>
             <div class="desc-text">
               <h5>{{$t('lesson.about.usage')}}</h5>
               <p>{{$t('lesson.about.usageTalk')}}</p>
@@ -93,7 +93,7 @@
         </el-col>
         <el-col :sm="12" :xs="24">
           <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/convenient_service.png" alt=""></div>
+            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>
             <div class="desc-text">
               <h5>{{$t('lesson.about.teachProgramming')}}</h5>
               <p>{{$t('lesson.about.teachProgrammingTalk')}}</p>
@@ -102,7 +102,7 @@
         </el-col>
         <el-col :sm="12" :xs="24">
           <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/friendly_prices.png" alt=""></div>
+            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
             <div class="desc-text">
               <h5>{{$t('lesson.about.expensive')}}</h5>
               <p>{{$t('lesson.about.expensiveTalk')}}</p>
@@ -116,10 +116,10 @@
         <div class="about-letter-content">
           <div class="about-letter-content-title">
           <span>A Letter to Parents and Teachers</span>
-          <span><img class="letter" src="@/assets/lessonImg/letter.png" alt=""></span>
+          <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
           </div>
           <p>Hi, Parents and Teachers,</p>
-          <p>I am Xizhi, the developer of <a href="#">Neural Parallel Language</a> and the 3d animation & game making tool called <a href="#">Paracraft</a>.
+          <p>I am Xizhi, the developer of <a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a> and the 3d animation & game making tool called <a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>.
            In 1989, at the age of 7, I wrote my first program on a IBM PC in my father’s lab. From March 2018,
            I made a decision to create one computer science lesson every week using Paracraft and NPL. 
            Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own. 
@@ -127,10 +127,10 @@
           <p>All software used in the lessons are free and open source, including paracraft and NPL. 
             All lessons we sell are also free to read online, 
             and we only charge you a small subscription fee in order for your kids to read the source code of the animation or game while they play it. 
-            We encourage you to see the <a href="#">lessons</a> yourself and read together with your kids, as I would do the same thing with my own child.</p>
+            We encourage you to see the <a href="#" @click.stop.prevent="gotoLessons">lessons</a> yourself and read together with your kids, as I would do the same thing with my own child.</p>
           <p>I have a small International team that is doing Artificial Intelligence research using NPL and paracraft. 
             The software and language that is taught in our lessons is the same set of tools we use for our serious research in AI. 
-            Our NPL research center at Tatfook has open sourced over <a href="#">2 million lines of code</a> written by <a href="#">ourselves on github</a>. 
+            Our NPL research center at Tatfook has open sourced over <a href="https://github.com/LiXizhi/NPLRuntime/wiki">2 million lines of code</a> written by <a href="https://github.com/tatfook">ourselves on github</a>. 
             Your payment or donation will greatly help us to continue our work with more and more talented programmers and scientists.</p>
           <p>Finally, if you or your kids want to join us one day, please email me: lixizhi@yeah.net</p>
 
@@ -145,19 +145,19 @@
         <div class="about-letter-content">
           <div class="about-letter-content-title">
           <span>致家长和老师的一封信</span>
-          <span><img class="letter" src="@/assets/lessonImg/letter.png" alt=""></span>
+          <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
           </div>
           <p>各位家长和老师，你们好！</p>
-          <p>我是西峙，NPL语言<a href="#">Neural Parallel Language</a>和3D动画游戏制作软件Paracraft的开发者。
+          <p>我是西峙，NPL语言<a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a>和3D动画游戏制作软件Paracraft的开发者。
             在1989年，我七岁的时候就利用IBM计算机在我父亲的实验室编写了我的第一个程序。
-            从2018年3月起，我决定利用<a href="#">Paracraft</a>和NPL语言在每周都创建一节计算机课程。
-            我想通过课程向全世界所有的儿童包括我自己来分享我十二年的编程生活。点击<a href="#">这里</a>来阅读我的编程生涯自传。</p>
+            从2018年3月起，我决定利用<a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>和NPL语言在每周都创建一节计算机课程。
+            我想通过课程向全世界所有的儿童包括我自己来分享我十二年的编程生活。点击<a href="#" @click.stop.prevent="gotoHere">这里</a>来阅读我的编程生涯自传。</p>
           <p>在课程中所有的软件都是免费并且开源的，包括paracraft和NPL。
             我们的所有课程都可以在线免费阅读，我们只收取你一小部分订阅费用为了帮助你的孩子在玩的过程中阅读动画或者游戏的源代码。
-            我们鼓励你自己去看<a href="#">课程</a>并和你的孩子一起阅读，因为我也在和我自己的孩子在做同样的事情。</p>
+            我们鼓励你自己去看<a href="#" @click.stop.prevent="gotoLessons">课程</a>并和你的孩子一起阅读，因为我也在和我自己的孩子在做同样的事情。</p>
           <p>我有一个小的国际团队在用NPL和paracraft做人工智能。
             我们课程中的软件和语言是和我们应用在人工智能研究中同样一套工具。
-            我们的大富科技NPL研究中心已经开源了两百万行代码可以在<a href="#">我们的github</a>中查看。你的付款或者捐赠将极大的帮助我们与更多的有天赋的程序员或者科学家工作。</p>
+            我们的大富科技NPL研究中心已经开源了<a href="https://github.com/LiXizhi/NPLRuntime/wiki">两百万行代码</a>可以在<a href="https://github.com/tatfook">我们的github</a>中查看。你的付款或者捐赠将极大的帮助我们与更多的有天赋的程序员或者科学家工作。</p>
           <p>最后，如果你的孩子有一天想加入我们，可以联系我 ：lixizhi@yeah.net</p>
           大富网络科技有限公司技术总监<br>
           李西峙<br>
@@ -165,34 +165,34 @@
       </div>
     </div>
     <div class="about-title">
-      <img class="rectangle1" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
-      <span class="topic">Partners</span>
-      <img class="rectangle2" src="@/assets/lessonImg/RoundedRectangle.png" alt="">
+      <img class="rectangle1" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
+      <span class="topic">{{$t('lesson.about.Partners')}}</span>
+      <img class="rectangle2" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
     </div>
     <div class="about-badge">
       <el-row>
         <el-col :span="4">
-          <div class="img-wrap"><img src="@/assets/lessonImg/beijing_open_university.png" alt=""></div>
+          <div class="img-wrap"><img src="@/assets/lessonImg/aboutPageImg/beijing_open_university.png" alt=""></div>
           <div>{{$t('lesson.about.beijingOpenUniversity')}}</div>
         </el-col>
         <el-col :span="4">
-          <div class="img-wrap"><img src="@/assets/lessonImg/zhejiang_university_logo.png" alt=""></div>
+          <div class="img-wrap"><img src="@/assets/lessonImg/aboutPageImg/zhejiang_university_logo.png" alt=""></div>
           <div>{{$t('lesson.about.zhejiangUniversity')}}</div>
         </el-col>
         <el-col :span="4">
-          <div class="img-wrap"><img src="@/assets/lessonImg/harbin_institute_of_technology.png" alt=""></div>
+          <div class="img-wrap"><img src="@/assets/lessonImg/aboutPageImg/harbin_institute_of_technology.png" alt=""></div>
           <div>{{$t('lesson.about.harbinInstituteOfTechnology')}}</div>
         </el-col>
         <el-col :span="4">
-          <div class="img-wrap"><img src="@/assets/lessonImg/anhui_polytechnic_university.png" alt=""></div>
+          <div class="img-wrap"><img src="@/assets/lessonImg/aboutPageImg/anhui_polytechnic_university.png" alt=""></div>
           <div>{{$t('lesson.about.anhuiPolytechnicUniversity')}}</div>
         </el-col>
         <el-col :span="4">
-          <div class="img-wrap"><img src="@/assets/lessonImg/beijing_union_university.png" alt=""></div>
+          <div class="img-wrap"><img src="@/assets/lessonImg/aboutPageImg/beijing_union_university.png" alt=""></div>
           <div>{{$t('lesson.about.beijingUnionUniversity')}}</div>
         </el-col>
         <el-col :span="4">
-          <div class="img-wrap"><img class="tatfook" src="@/assets/lessonImg/tatfook.png" alt=""></div>
+          <div class="img-wrap"><img class="tatfook" src="@/assets/lessonImg/aboutPageImg/tatfook.png" alt=""></div>
           <div>{{$t('lesson.about.tatfook')}}</div>
         </el-col>
       </el-row>
@@ -202,15 +202,52 @@
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
-import img1 from '@/assets/lessonImg/top_banner.png'
-import img2 from '@/assets/lessonImg/top_banner2.png'
+import img1 from '@/assets/lessonImg/aboutPageImg/top_banner.png'
+import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
 import Header from './Header'
 
+const TeacherPageReg = /^\/teacher/
+const StudentPageReg = /^\/student/
 export default {
   data(){
     return{
       isEn: locale ===  'en-US',
       imgUrls: [{"url": img1},{"url": img2}]
+    }
+  },
+  computed: {
+    nowFullPath() {
+      return this.$route.fullPath
+    },
+    isTeacherPage() {
+      return TeacherPageReg.test(this.nowFullPath)
+    },
+    isStudentPage() {
+      return StudentPageReg.test(this.nowFullPath)
+    },
+  },
+  methods: {
+    gotoLessons(){
+      if (this.isStudentPage) {
+        this.$router.push({
+          path: `/student/center`
+        })
+      }else{
+        this.$router.push({
+          path: `/teacher/center`
+        })
+      }
+    },
+    gotoHere(){
+      if (this.isStudentPage) {
+        this.$router.push({
+          path: `/student/here`
+        })
+      }else{
+        this.$router.push({
+          path: `/teacher/here`
+        })
+      }
     }
   },
   components: {
@@ -293,9 +330,12 @@ export default {
       .tip {
         position: absolute;
         top: 20px;
-        left: 50px;
+        left: 25px;
         font-size: 18px;
         color: #ffffff;
+        text-align: center;
+        display: inline-block;
+        width: 200px;
       }
       .next {
         position: absolute;
@@ -351,11 +391,12 @@ export default {
       display: flex;
       margin: 12px 20px;
       .desc-img {
-        width: 180px;
+        width: 170px;
         padding: 20px 0;
+        text-align: center
       }
       .desc-text {
-        float: 1;
+        flex: 1;
         padding-left: 20px;
         min-height: 220px;
       }
@@ -449,10 +490,13 @@ export default {
       }
       .tip {
         position: absolute;
-        top: 12px;
-        left: 20px;
-        font-size: 14px;
+        top: 20px;
+        left: 25px;
+        font-size: 18px;
         color: #ffffff;
+        text-align: center;
+        display: inline-block;
+        width: 200px;
       }
       .next {
         width: 12px;
