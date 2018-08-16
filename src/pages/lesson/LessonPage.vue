@@ -36,6 +36,7 @@ body {
   display: flex;
   flex-direction: column;
   &-main-content {
+    background: #f8f8f8;
     min-height: auto;
     flex: 1;
   }

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="teacher-wrap">
+
   </div>
 </template>
 <script>
@@ -10,4 +11,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.teacher-wrap{
+}
+
+</style>
+
 
