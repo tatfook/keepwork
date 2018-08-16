@@ -21,7 +21,7 @@
       </span>
     </el-dialog>
     <!-- classId full screen -->
-    <el-dialog :visible.sync="classIdFullScreen" fullscreen="true" custom-class="class-id-full-page" top="0">
+    <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
       <div class="full-font">123 456 789</div>
     </el-dialog>
     <!-- lesson info -->
@@ -30,12 +30,12 @@
       </el-col>
       <el-col :span="10" class="lesson-desc">
         <div v-if="isTeacher" class="class-id-sign-wrap">
-          <el-tooltip placement="top" effect="light">
+          <el-tooltip placement="bottom">
             <div slot="content">Click to full page</div>
             <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: 123 456 789</div>
           </el-tooltip>
-          <el-tooltip placement="bottom" effect="light">
-            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px;">
+          <el-tooltip placement="bottom">
+            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
               Class ID is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.
             </div>
             <span class="question-mark-icon"></span>

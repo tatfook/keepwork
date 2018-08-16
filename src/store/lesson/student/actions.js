@@ -4,7 +4,7 @@ import Parser from '@/lib/mod/parser'
 
 let {
   GET_PACKAGE_DETAIL_SUCCESS,
-  GET_LESSON_DATA_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
   GET_USER_SUBSCRIBES,
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
@@ -21,9 +21,9 @@ const actions = {
     })
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   },
-  async fetchLessonData({ commit }, { lessonId }) {
-    let content = await lesson.fetchLessonData({ lessonId })
-    commit(GET_LESSON_DATA_SUCCESS, { lessonId, content })
+  async getLessonContent({ commit }, { lessonId }) {
+    let content = await lesson.lessons.lessonContent({ lessonId })
+    commit(GET_LESSON_CONTENT_SUCCESS, { lessonId, content })
     let modList = Parser.buildBlockList(content)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')

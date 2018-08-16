@@ -1,8 +1,9 @@
 <template>
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" />
-    <lesson-summary v-show="isShowSummary" />
-    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <!-- <lesson-summary v-show="isShowSummary" /> -->
+    <lesson-summary />
+    <!-- <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" /> -->
   </div>
 </template>
 
@@ -26,12 +27,12 @@ export default {
   async mounted() {
     this.copyProhibited()
     this.lessonId = this.$route.params.lessonId || 1
-    await this.fetchLessonData({ lessonId: this.lessonId })
+    await this.getLessonContent({ lessonId: this.lessonId })
     console.warn(this.lessonHeader)
   },
   methods: {
     ...mapActions({
-      fetchLessonData: 'lesson/student/fetchLessonData'
+      getLessonContent: 'lesson/student/getLessonContent'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')

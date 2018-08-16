@@ -3,7 +3,8 @@
     <div class="button" :class="{'is-disabled': currentStyle === 1}" @click="prevStyle">
       <img src="../../../assets/lessonImg/summary/left.png" alt="prev">
     </div>
-    <div class="style-preview" :class="`style-${currentStyle}`" @click.stop="previewCurrentStyle">
+    <div class="style-preview">
+      <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary"/>
     </div>
     <div class="button" :class="{'is-disabled': currentStyle === styles.length}" @click="nextStyle">
       <img src="../../../assets/lessonImg/summary/right.png" alt="next">
@@ -33,7 +34,7 @@ export default {
   data() {
     return {
       currentStyle: 1,
-      dialogVisible: true,
+      dialogVisible: false,
       styles: [1, 2, 3]
     }
   },

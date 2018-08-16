@@ -1,11 +1,13 @@
 <template>
-    <div class="lesson-teacher-progress">
-        <span class="progress-point start pointer"></span>
-        <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
-        <span class="progress-point middle"></span>
-        <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
-        <span class="progress-point end"></span>
-    </div>
+  <div class="lesson-teacher-progress">
+    <span class="progress-point start pointer">
+
+    </span>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
+    <span class="progress-point middle"></span>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
+    <span class="progress-point end"></span>
+  </div>
 </template>
 
 <script>
@@ -49,6 +51,16 @@ export default {
       z-index: 9;
     }
     &.pointer {
+      $size: 33px;
+      height: $size;
+      width: $size;
+      border-width: 3px;
+      cursor: pointer;
+      background: $green;
+    }
+
+    &.click {
+      $size: 30px;
       $size: 30px;
       height: $size;
       width: $size;

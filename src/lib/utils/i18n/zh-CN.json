@@ -837,8 +837,8 @@
     "todayIs": "今天是 {date}",
     "showAll": "显示全部",
     "hideAll": "隐藏全部",
-    "showAllTips": "点击显示老师的笔记",
-    "hideAllTips": "点击隐藏老师的笔记",
+    "showAllTips": "点击显示给老师的提示",
+    "hideAllTips": "点击隐藏给老师的提示",
     "teachers": "老师需注意:"
   }
 }
