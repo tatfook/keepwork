@@ -1,6 +1,5 @@
 <template>
   <div class="here-page">
-    <Header/>
     <div class="here-page-content">
       <div class="here-page-content-title">
         <img class="rectangle1" src="@/assets/lessonImg/aboutPageImg/rounded_rectangle.png" alt="">
@@ -141,15 +140,11 @@
 </template>
 
 <script>
-import Header from './Header'
 
 export default {
   data() {
     return {}
   },
-  components: {
-    Header
-  }
 }
 </script>
 
