@@ -502,16 +502,16 @@ const actions = {
     commit(DELETE_COMMENT_SUCCESS, { _id })
     await dispatch('getActivePageComments')
   },
-  async getCommentsByPageUrl({ commit }, { url: path }) {
+  async getCommentsByPageUrl({ commit }, { url: path, page }) {
     let fullPath = getFileFullPathByPath(path)
 
-    let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath})
+    let { commentList, total } = await keepwork.websiteComment.getByPageUrl({url: fullPath, page: page})
 
-    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList})
+    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList, commentTotal: total})
   },
-  async getActivePageComments(context) {
+  async getActivePageComments(context, { page }) {
     let { dispatch, rootGetters: { activePageUrl } } = context
-    await dispatch('getCommentsByPageUrl', {url: activePageUrl})
+    await dispatch('getCommentsByPageUrl', {url: activePageUrl, page: page})
   },
   async starPages(context, { url }) {
     let { commit, dispatch, getters } = context

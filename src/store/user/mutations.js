@@ -113,10 +113,10 @@ const mutations = {
   [CREATE_COMMENT_SUCCESS]: doNothing,
   [DELETE_COMMENT_SUCCESS]: doNothing,
   [UPSERT_WEBSITE_SUCCESS]: doNothing,
-  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, {url, commentList}) {
+  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, {url, commentList, commentTotal}) {
     Vue.set(state, 'comments', {
       ...state.comments,
-      [url]: commentList
+      [url]: {commentList, commentTotal}
     })
   },
   [GET_SITE_DETAIL_INFO_SUCCESS](state, {username, sitename, detailInfo}) {
