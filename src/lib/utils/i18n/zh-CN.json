@@ -396,7 +396,6 @@
     },
     "comment": {
       "title": "我要评论",
-      "headline": "评论展示",
       "delete": "删除",
       "commit": "提交",
       "close": "评论功能已关闭",
