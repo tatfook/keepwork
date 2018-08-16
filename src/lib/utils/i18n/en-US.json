@@ -407,6 +407,7 @@
     },
     "comment": {
       "title": "I want to comment",
+      "headline": "Comment exhibition",
       "delete": "delete",
       "commit": "submit",
       "close": "Comments are closed",
