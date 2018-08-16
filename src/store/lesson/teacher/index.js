@@ -5,9 +5,11 @@ import mutations from './mutations'
 const state = () => ({
   isShowLesson: true,
   isShowSummary: false,
-  isShowStudentStatus: false,
+  isShowPerformance: false,
   isShowHint: true,
-  classId: null
+  classId: null,
+  lessonDetail: {},
+  lessonContent: {}
 })
 
 export default {

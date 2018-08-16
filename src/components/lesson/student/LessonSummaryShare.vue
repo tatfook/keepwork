@@ -1,6 +1,6 @@
 <template>
-  <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`]">
-    <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`]">
+  <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
+    <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
       <div class="left">
         <div class="shadow"></div>
       </div>
@@ -70,6 +70,10 @@ export default {
       default() {
         return {}
       }
+    },
+    isSmall: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -130,7 +134,6 @@ $mainHeight: 630px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 1080px;
   &.style-1 {
     background: #409efe;
   }
@@ -140,14 +143,17 @@ $mainHeight: 630px;
   &.style-3 {
     background: #5fffff;
   }
+  &.small {
+    height: 350px;
+  }
   .lesson-summary-share {
-    max-width: 1150px;
-    min-width: 720px;
-    min-height: 720px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    &.small {
+      transform: scale(0.4);
+    }
     .main {
       height: $mainHeight;
       padding: 26px;
@@ -287,9 +293,8 @@ $mainHeight: 630px;
     }
 
     &.style-3 {
-      $mainHeight: 460px;
+      // $mainHeight: 630px;
       display: flex;
-      max-width: 100%;
       min-width: 100%;
       .left {
         flex: 1;
@@ -303,6 +308,7 @@ $mainHeight: 630px;
           height: $mainHeight;
           overflow-y: hidden;
           display: block;
+          min-width: 200px;
           background: url('../../../assets/lessonImg/summary/bg-left.png')
             no-repeat right bottom;
           background-size: auto $mainHeight;

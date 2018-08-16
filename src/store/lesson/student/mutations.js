@@ -2,7 +2,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
-const GET_LESSON_DATA_SUCCESS = 'GET_LESSON_DATA_SUCCESS'
+const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const GET_USER_SUBSCRIBES = 'GET_USER_SUBSCRIBES'
 const GET_USER_SKILLS = 'GET_USER_SKILLS'
 const ENTER_CLASSROOM = 'ENTER_CLASSROOM'
@@ -13,7 +13,7 @@ const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
-  GET_LESSON_DATA_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
   GET_USER_SUBSCRIBES,
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
@@ -30,8 +30,8 @@ const mutations = {
       [detail.id]: detail
     })
   },
-  [GET_LESSON_DATA_SUCCESS](state, { lessonId, content }) {
-    Vue.set(state, 'lessonData', { lessonId, content })
+  [GET_LESSON_CONTENT_SUCCESS](state, payload) {
+    Vue.set(state, 'lessonData', payload)
   },
   [SAVE_LESSON_DETAIL](state, payload) {
     Vue.set(state, 'lessonDetail', payload)

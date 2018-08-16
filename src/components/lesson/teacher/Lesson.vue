@@ -27,19 +27,22 @@ export default {
     }
   },
   async mounted() {
-    this.lessonId = this.$route.params.lessonId || 1
-    await this.fetchLessonData({ lessonId: this.lessonId })
+    // this.lessonId = this.$route.params.lessonId || 1
+    // await this.getLessonData({ lessonId: this.lessonId })
+    let lessonId = 1
+    await this.getLessonContent(lessonId)
     console.warn(this.lessonHeader)
   },
   methods: {
     ...mapActions({
-      fetchLessonData: 'lesson/student/fetchLessonData'
-    }),
+      getLessonContent: 'lesson/teacher/getLessonContent'
+    })
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'lesson/student/lessonDetail',
-      isShowSummary: 'lesson/student/isShowSummary'
+      lessonDetail: 'lesson/teacher/lessonDetail',
+      isShowSummary: 'lesson/teacher/isShowSummary',
+      lessonDetail: 'lesson/teacher/lessonDetail'
     }),
     lesson() {
       return this.lessonDetail.modList || []

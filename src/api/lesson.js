@@ -60,7 +60,9 @@ export const packages = {
 }
 
 export const lessons = {
-  lessonDetail: args => get(`lessons/${args.id}/detail`)
+  lessonContent: args => get(`lesson/${args.lessonId}/contents`),
+  lessonContentByVersion: args =>
+    get(`lesson/${args.lessonId}/contents?version=${args.version || 1}`)
 }
 
 export const users = {
@@ -74,32 +76,11 @@ export const classrooms = {
   begin: args => _post('classrooms', args)
 }
 
-// const _get = ({ url, params, config, returnOriginalData = true }) =>
-//   keepworkEndpoint
-//     .get(url, {
-//       ...config,
-//       params
-//     })
-//     .then(res => (returnOriginalData ? res.data : res.data.data))
-
-const fakerGet = async ({ lessonId }) => {
-  const faker = {
-    1: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/%E8%AF%BE%E7%A8%8B------------------.md',
-    2: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F%E2%9C%94%EF%B8%8F.md',
-    3: 'https://git-stage.keepwork.com/gitlab_www_kevinxft/keepwork333333333333333/raw/master/kevinxft/333333333333333/212.md?_random=0.5285638094528637'
-  }
-  return axios
-    .get(`${faker[lessonId]}?_random=${Math.random()}`)
-    .then(res => res.data)
-}
-
-export const fetchLessonData = args => fakerGet(args)
-
 export const lesson = {
   users,
   packages,
+  lessons,
   admin,
-  fetchLessonData,
   classrooms
 }
 
