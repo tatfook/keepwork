@@ -1,6 +1,5 @@
 <template>
   <div class="about">
-    <Header/>
     <div class="about-carousel">
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="(img,index) in imgUrls" :key="index">
@@ -121,16 +120,16 @@
           <p>Hi, Parents and Teachers,</p>
           <p>I am Xizhi, the developer of <a href="#">Neural Parallel Language</a> and the 3d animation & game making tool called <a href="#">Paracraft</a>.
            In 1989, at the age of 7, I wrote my first program on a IBM PC in my father’s lab. From March 2018,
-           I made a decision to create one computer science lesson every week using Paracraft and NPL. 
-           Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own. 
+           I made a decision to create one computer science lesson every week using Paracraft and NPL.
+           Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own.
            Click <a href="#">here</a> to read my autobiography on programming.</p>
-          <p>All software used in the lessons are free and open source, including paracraft and NPL. 
-            All lessons we sell are also free to read online, 
-            and we only charge you a small subscription fee in order for your kids to read the source code of the animation or game while they play it. 
+          <p>All software used in the lessons are free and open source, including paracraft and NPL.
+            All lessons we sell are also free to read online,
+            and we only charge you a small subscription fee in order for your kids to read the source code of the animation or game while they play it.
             We encourage you to see the <a href="#">lessons</a> yourself and read together with your kids, as I would do the same thing with my own child.</p>
-          <p>I have a small International team that is doing Artificial Intelligence research using NPL and paracraft. 
-            The software and language that is taught in our lessons is the same set of tools we use for our serious research in AI. 
-            Our NPL research center at Tatfook has open sourced over <a href="#">2 million lines of code</a> written by <a href="#">ourselves on github</a>. 
+          <p>I have a small International team that is doing Artificial Intelligence research using NPL and paracraft.
+            The software and language that is taught in our lessons is the same set of tools we use for our serious research in AI.
+            Our NPL research center at Tatfook has open sourced over <a href="#">2 million lines of code</a> written by <a href="#">ourselves on github</a>.
             Your payment or donation will greatly help us to continue our work with more and more talented programmers and scientists.</p>
           <p>Finally, if you or your kids want to join us one day, please email me: lixizhi@yeah.net</p>
 
@@ -204,7 +203,6 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import img1 from '@/assets/lessonImg/top_banner.png'
 import img2 from '@/assets/lessonImg/top_banner2.png'
-import Header from './Header'
 
 export default {
   data(){
@@ -212,9 +210,6 @@ export default {
       isEn: locale ===  'en-US',
       imgUrls: [{"url": img1},{"url": img2}]
     }
-  },
-  components: {
-    Header
   }
 }
 </script>

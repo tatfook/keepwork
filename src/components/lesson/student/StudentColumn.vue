@@ -1,6 +1,5 @@
 <template>
   <div class="student-wrap">
-    <Header/>
     <el-container class="student">
       <el-aside width="274px">
         <div class="profile">
@@ -55,7 +54,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Header from '../common/Header'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
@@ -125,7 +123,6 @@ export default {
     }
   },
   components: {
-    Header,
     StudentSubscribePackages
   }
 }
