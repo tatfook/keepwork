@@ -88,11 +88,12 @@ export default {
   methods: {
     toLessonDetail(lesson) {
       if (this.packageDetail.isSubscribe) {
-        console.log(
-          `go to /student/packages/${this.packageDetail.id}/lessons/${
-            lesson.id
-          }`
-        )
+        let targetLessonPath = `/${this.actorType}/package/${
+          this.packageDetail.id
+        }/lesson/${lesson.id}`
+        this.$router.push({
+          path: targetLessonPath
+        })
       }
     },
     handleUnSubscribe() {
@@ -104,14 +105,20 @@ export default {
       }
     },
     toViewSummary(lesson) {
-      console.log(
-        `summary /student/packages/${this.packageDetail.id}/lessons/${
-          lesson.id
-        }`
-      )
+      let targetLessonPath = `/${this.actorType}/package/${
+        this.packageDetail.id
+      }/lesson/${lesson.id}`
+      this.$router.push({
+        path: targetLessonPath
+      })
     },
     continueToLearn() {
-      console.log('继续学习', this.continueLearnedLesson)
+      let targetLessonPath = `/${this.actorType}/package/${
+        this.packageDetail.id
+      }/lesson/${this.continueLearnedLesson.id}`
+      this.$router.push({
+        path: targetLessonPath
+      })
     }
   }
 }

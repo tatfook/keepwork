@@ -4,7 +4,7 @@
       <i class="iconfont icon-chenggong"></i>
     </div>
     <p class="purchase-package-result-text">{{$t('lesson.purchaseSuccess')}}</p>
-    <p class="purchase-package-result-text">{{$t('lesson.coinsWillBeBack', { backCoinCount: '100' })}}</p>
+    <p class="purchase-package-result-text">{{$t('lesson.coinsWillBeBack', { backCoinCount: packageDetail.rmb })}}</p>
     <el-button type="primary" class="purchase-package-result-button" @click="backToPackageDetailPage">{{$t('lesson.viewPackage')}}</el-button>
   </div>
 </template>
@@ -12,6 +12,9 @@
 import _ from 'lodash'
 export default {
   name: 'PurchasePackageResult',
+  props: {
+     packageDetail: Object
+  },
   computed: {
     nowPath() {
       return this.$route.path
