@@ -61,7 +61,6 @@ export default {
   .teacher {
     margin: 0 auto;
     max-width: 1150px;
-    // border: 1px solid red;
     .el-aside {
       padding: 80px 0;
       background: #fff;
@@ -77,17 +76,20 @@ export default {
         &-title {
           margin-left: 12px;
         }
+        &:hover {
+          background: rgb(236, 233, 233);
+        }
       }
       .active {
         background: #409efe;
         color: #fff;
+        &:hover {
+          background: #409efe;
+        }
       }
     }
     .el-main {
       overflow: hidden;
-      margin-top: 60px;
-      background: #fff;
-      // border: 1px solid red;
       padding: 0;
     }
   }
