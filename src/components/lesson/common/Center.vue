@@ -6,7 +6,7 @@
         <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
           <div class="subject-desc">
             <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
-            <h4 :class="['subject-title',false ? 'beLearning':'']">{{coursePackage.packageName}}</h4>
+            <h4 :class="['subject-title']">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
@@ -88,9 +88,6 @@ export default {
       font-size: 18px;
       margin-bottom: 10px;
       cursor: pointer;
-    }
-    .beLearning {
-      color: #409eff;
     }
     span {
       display: block;
