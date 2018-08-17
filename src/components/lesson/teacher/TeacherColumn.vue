@@ -1,17 +1,22 @@
 <template>
   <div class="teacher-column">
-    <NotActivatedTeacherRole/>
+    <NotActivatedTeacherRole v-if="activatedTeacherRole"/>
+    <ActivatedTeacherRole/>
   </div>
 </template>
 
 <script>
 import NotActivatedTeacherRole from './NotActivatedTeacherRole'
+import ActivatedTeacherRole from './ActivatedTeacherRole'
 export default {
   data(){
-    return{}
+    return{
+      activatedTeacherRole: false
+    }
   },
   components: {
-    NotActivatedTeacherRole
+    NotActivatedTeacherRole,
+    ActivatedTeacherRole
   }
 }
 </script>

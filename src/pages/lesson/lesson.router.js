@@ -14,6 +14,8 @@ const LessonStudent = () => import('@/components/lesson/student/Lesson')
 const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
+const Teach = () => import('@/components/lesson/teacher/TeacherColumnTEACH')
+const Review = () => import('@/components/lesson/teacher/TeacherColumnREVIEW')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -38,7 +40,19 @@ export default new Router({
         {
           path: '/',
           name: 'TeacherColumn',
-          component: TeacherColumn
+          component: TeacherColumn,
+          children: [
+            {
+              path: '/',
+              name: 'Teach',
+              component: Teach
+            },
+            {
+              path: 'review',
+              name: 'Review',
+              component: Review
+            }
+          ]
         },
         {
           path: 'about',
