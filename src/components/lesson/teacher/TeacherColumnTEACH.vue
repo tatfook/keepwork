@@ -63,6 +63,8 @@ export default {
 
 <style lang="scss">
 .teach {
+  margin-top: 60px;
+  background: #fff;
   &-nothing {
     width: 100%;
     height: 660px;
