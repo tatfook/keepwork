@@ -1,5 +1,5 @@
 <template>
-  <el-row class="lesson-header">
+  <el-row class="lesson-header-container">
     <!-- vidioDialog -->
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media">
@@ -9,7 +9,7 @@
     <!-- classIdDialog -->
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
       <div>The class ID is
-        <span class="class-id">123 456 789</span>
+        <span class="class-id">{{classId}}</span>
       </div>
       <div>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu
         <span class="performance">Stuents'Performance</span>
@@ -22,17 +22,17 @@
     </el-dialog>
     <!-- classId full screen -->
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">123 456 789</div>
+      <div class="full-font">{{classId | idPretty}}</div>
     </el-dialog>
     <!-- lesson info -->
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
       <el-col :span="10" class="lesson-desc">
-        <div v-if="isTeacher" class="class-id-sign-wrap">
+        <div v-if="isTeacher && isBeInClass" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">Click to full page</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: 123 456 789</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: {{classId}}</div>
           </el-tooltip>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
@@ -50,9 +50,9 @@
             {{lessonGoals}}
           </el-scrollbar>
           <div v-if="isTeacher" class="lesson-button-wrap">
-            <el-button @click="beginTheClass" type="primary" class="lesson-button" size="medium">Begin the class</el-button>
-            <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">下课</el-button> -->
-            <span class="lesson-button-tips">(Click here to begin the class)</span>
+            <el-button @click="handleBeginTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.dismiss')}}</el-button> -->
+            <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
           </div>
         </div>
       </el-col>
@@ -84,6 +84,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
+import qs from 'qs'
 import _ from 'lodash'
 import LessonJewelBox from '../student/LessonJewelBox'
 import LessonStudentProgress from '../student/LessonStudentProgress'
@@ -98,6 +101,13 @@ export default {
     'lesson-teacher-progress': LessonTeacherProgress,
     'keep-wrok-sticky': KeepWorkSticky,
     'lesson-referencse': LessonReferences
+  },
+  filters: {
+    idPretty(value) {
+      return _.map(_.chunk(value.toString().split(''), 3), i =>
+        i.join('')
+      ).join(' ')
+    }
   },
   props: {
     data: Object,
@@ -119,22 +129,41 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      beginTheClass: 'lesson/teacher/beginTheClass'
+    }),
     openAnimations() {
       this.dialogVisible = true
     },
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    beginTheClass() {
-      // TODO: 请求classroom接口, 成功后弹出classId
-      // if (false) {
-      //   return this.$message.error('上课失败，请干嘛干嘛')
-      // }
-      this.classIdDialogVisible = true
+    async handleBeginTheClass() {
+      const { packageId, lessonId } = this.$route.params
+      await this.beginTheClass({
+        packageId: Number(packageId),
+        lessonId: Number(lessonId)
+      })
+        .then(res => {
+          this.classIdDialogVisible = true
+        })
+        .catch(e => {
+          this.$message.error(this.$t('lesson.beginTheClassFail'))
+          console.error(e)
+        })
     },
     dimissTheClass() {}
   },
   computed: {
+    ...mapGetters({
+      classRoom: 'lesson/teacher/classRoom'
+    }),
+    classId() {
+      return this.classRoom.key || '123456789'
+    },
+    isBeInClass() {
+      return !!this.classRoom.key
+    },
     lesson() {
       return _.get(this.data, 'data.lesson', {})
     },
@@ -175,7 +204,7 @@ body {
   border-bottom: 1px solid #d2d2d2;
 }
 
-.lesson-header {
+.lesson-header-container {
   max-width: 1080px;
   margin: 50px auto 0;
   $green: #66cd2e;

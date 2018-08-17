@@ -22,21 +22,23 @@ export default {
     'lesson-hint-toggle': LessonHintToggle
   },
   data() {
-    return {
-      lessonId: ''
-    }
+    return {}
   },
   async mounted() {
-    // this.lessonId = this.$route.params.lessonId || 1
-    // await this.getLessonData({ lessonId: this.lessonId })
-    let lessonId = 1
+    // let lessonId = this.$route.params.lessonId || 1
+    const { packageId, lessonId } = this.$route.params
+    console.log('packageId', packageId, 'lessonId', lessonId)
     await this.getLessonContent(lessonId)
-    console.warn(this.lessonHeader)
   },
   methods: {
     ...mapActions({
-      getLessonContent: 'lesson/teacher/getLessonContent'
-    })
+      getLessonContent: 'lesson/teacher/getLessonContent',
+      beginTheClass: 'lesson/teacher/beginTheClass'
+    }),
+    async handleBeginTheClass({ packageId, lessonId, extra }) {
+      console.log(this.lessonHeader)
+      // await this.beginTheClass()
+    }
   },
   computed: {
     ...mapGetters({

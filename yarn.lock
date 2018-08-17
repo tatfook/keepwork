@@ -6636,6 +6636,10 @@ qs@6.5.1:
   version "6.5.1"
   resolved "http://registry.npm.taobao.org/qs/download/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
+qs@^6.5.2:
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
+
 qs@~6.4.0:
   version "6.4.0"
   resolved "http://registry.npm.taobao.org/qs/download/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
@@ -8282,7 +8286,7 @@ vue-markdown@leopoldchen/vue-markdown#master:
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
-    markdown-it-highlight "^0.2.0"
+    markdown-it-highlightjs "^3.0.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"

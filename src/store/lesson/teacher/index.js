@@ -4,10 +4,10 @@ import mutations from './mutations'
 
 const state = () => ({
   isShowLesson: true,
-  isShowSummary: false,
   isShowPerformance: false,
+  isShowSummary: false,
   isShowHint: true,
-  classId: null,
+  classRoom: null,
   lessonDetail: {},
   lessonContent: {}
 })
