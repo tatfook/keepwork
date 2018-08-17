@@ -14,8 +14,8 @@ const LessonStudent = () => import('@/components/lesson/student/Lesson')
 const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
-const Teach = () => import('@/components/lesson/teacher/TeacherColumnTEACH')
-const Review = () => import('@/components/lesson/teacher/TeacherColumnREVIEW')
+const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
+const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
