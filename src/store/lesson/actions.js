@@ -7,8 +7,9 @@ let {
 } = props
 
 const actions = {
-  async getUserDetail({ commit }) {
-    let userLessonInfo = await lesson.users.getUserDetail()
+  async getUserDetail(context) {
+    let { commit, rootGetters: { 'user/authRequestConfig': authRequestConfig } } = context
+    let userLessonInfo = await lesson.users.getUserDetail(null, authRequestConfig)
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
   },
   async getPackageDetail({ commit }, { packageId }) {
