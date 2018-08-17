@@ -7,9 +7,10 @@ let {
 } = props
 
 const actions = {
-  async getUserDetail(context) {
+  async getUserDetail(context, { token }) {
     let { commit, rootGetters: { 'user/authRequestConfig': authRequestConfig } } = context
-    let userLessonInfo = await lesson.users.getUserDetail(null, authRequestConfig)
+    let authConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : authRequestConfig
+    let userLessonInfo = await lesson.users.getUserDetail(null, authConfig)
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
   },
   async getPackageDetail({ commit }, { packageId }) {
