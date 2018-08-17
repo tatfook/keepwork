@@ -39,12 +39,12 @@ export default new Router({
       children: [
         {
           path: '/',
-          name: 'TeacherColumn',
+          // name: 'TeacherColumn',
           component: TeacherColumn,
           children: [
             {
               path: '/',
-              name: 'Teach',
+              name: 'TeacherColumn',
               component: Teach
             },
             {
