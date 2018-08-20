@@ -9,7 +9,7 @@
             <h4 :class="['subject-title']">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
-            <span>{{$t('lesson.intro')}} : {{coursePackage.intro}}</span>
+            <span>{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>1000</span>` })"></div>
               <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}: <span class="red">￥100.00</span></div>

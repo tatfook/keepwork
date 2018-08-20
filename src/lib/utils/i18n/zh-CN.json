@@ -858,6 +858,14 @@
     "hideAll": "隐藏全部",
     "showAllTips": "点击显示给老师的提示",
     "hideAllTips": "点击隐藏给老师的提示",
-    "teachers": "老师需注意:"
+    "teachers": "老师需注意:",
+    "teach": "授课",
+    "review": "评估",
+    "lessonManagement": "课程",
+    "noLessonHint": "暂未添加课程包",
+    "teachingTime": "最新授课时间",
+    "noRecord": "暂无授课记录！",
+    "sortByTeachingTime": "点击按授课时间排序",
+    "viewSummary": "查看课程总结"
   }
 }

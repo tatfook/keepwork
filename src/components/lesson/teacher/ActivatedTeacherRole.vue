@@ -4,15 +4,15 @@
       <el-aside width="260px">
         <div :class="['item',{active: 0 === itmeActive}]" @click="showItem('TEACH')">
           <i class='iconfont icon-teach'></i>
-          <span class="item-title">TEACH</span>
+          <span class="item-title">{{$t('lesson.teach')}}</span>
         </div>
         <div :class="['item',{active: 1 === itmeActive}]" @click="showItem('REVIEW')">
           <i class='iconfont icon-review'></i>
-          <span class="item-title">REVIEW</span>
+          <span class="item-title">{{$t('lesson.review')}}</span>
         </div>
         <div :class="['item',{active: 2 === itmeActive}]" @click="showItem('MANAGEMENT')">
           <i class='iconfont icon-setting'></i>
-          <span class="item-title">LESSON MANAGEMENT</span>
+          <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
         </div>
       </el-aside>
       <el-main>
