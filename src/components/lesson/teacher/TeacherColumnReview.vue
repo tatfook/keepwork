@@ -59,6 +59,7 @@
 
 <script>
 export default {
+  name: "TeacherColumnReview",
   data() {
     return {
       noRecord: false

@@ -207,6 +207,7 @@ import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
 const TeacherPageReg = /^\/teacher/
 const StudentPageReg = /^\/student/
 export default {
+  name: "About",
   data(){
     return{
       isEn: locale ===  'en-US',

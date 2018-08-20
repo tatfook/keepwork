@@ -53,6 +53,7 @@
 
 <script>
 export default {
+  name: "TeacherColumnTeach",
   data() {
     return {
       noPackages: false

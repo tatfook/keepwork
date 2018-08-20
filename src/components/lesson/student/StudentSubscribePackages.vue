@@ -1,5 +1,5 @@
 <template>
-  <div class="packages-intro">
+  <div class="packages-intro" v-loading='loading'>
     <div class="cover-wrap"><img @click="enterPackageDetail" class="cover" :src="packageCover" alt=""></div>
     <h3 :class="['name',showProgress ? 'islearning' : '']">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}: <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
@@ -26,6 +26,11 @@ export default {
   name: 'UserSubscribesPackages',
   props: {
     packageDetail: {}
+  },
+  data(){
+    return{
+      loading: true
+    }
   },
   computed:{
     packageCover(){
@@ -118,4 +123,3 @@ export default {
   }
 }
 </style>
-

@@ -4,6 +4,7 @@
 
 <script>
   export default {
+    name: "NumberOfStudentsChart",
     data () {
       this.chartSettings = {
         yAxisName: ['Number of Students (total: 50)'],

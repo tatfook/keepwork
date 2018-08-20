@@ -57,7 +57,7 @@ import { mapGetters, mapActions } from 'vuex'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
-  name: 'student',
+  name: 'StudentColumn',
   data() {
     return {
       classID: ''
