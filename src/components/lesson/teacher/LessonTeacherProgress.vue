@@ -2,21 +2,21 @@
   <div class="lesson-teacher-progress">
     <span class="progress-point start">
       <div class="name">{{$t('lesson.lessonPlan')}}</div>
-      <div class="pointer light" :class="[{'selected': isShowLesson}]" @click="handleChangeView('lesson')"></div>
+      <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('lesson')"></div>
     </span>
     <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div class="name">
         {{$t('lesson.performance')}}
       </div>
-      <div class="pointer" :class="[{'selected': isShowPerformance, 'light': isBeInClass}]" @click="handleChangeView('performance')"></div>
+      <div :class="['pointer',{'selected': isShowPerformance, 'light': isBeInClass}]" @click="handleChangeView('performance')"></div>
     </span>
-    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isClassIsOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
       <div class="name">
         {{$t('lesson.summary')}}
       </div>
-      <div class="pointer" :class="[{'selected': isShowSummary}]" @click="handleChangeView('summary')"></div>
+      <div :class="['pointer',{'selected': isShowSummary, 'light': isClassIsOver }]" @click="handleChangeView('summary')"></div>
     </span>
   </div>
 </template>
@@ -36,7 +36,8 @@ export default {
       isShowLesson: 'lesson/teacher/isShowLesson',
       isShowPerformance: 'lesson/teacher/isShowPerformance',
       isShowSummary: 'lesson/teacher/isShowSummary',
-      isBeInClass: 'lesson/teacher/isBeInClass'
+      isBeInClass: 'lesson/teacher/isBeInClass',
+      isClassIsOver: 'lesson/teacher/isClassIsOver'
     })
   },
   methods: {
@@ -46,11 +47,11 @@ export default {
       toggleSummary: 'lesson/teacher/toggleSummary'
     }),
     handleChangeView(name) {
-      if (!this.isSummary && name === 'summary') return
+      if (!this.isClassIsOver && name === 'summary') return
       if (!this.isBeInClass && name === 'performance') return
-      this.isBeInClass && this.togglePerformance('performance' === name)
-      this.isSummary && this.togglePerformance('summary' === name)
       this.toggleLesson('lesson' === name)
+      this.isBeInClass && this.togglePerformance('performance' === name)
+      this.isClassIsOver && this.toggleSummary('summary' === name)
     }
   }
 }
@@ -121,9 +122,6 @@ export default {
     &.line-2 {
       margin-left: -25px;
     }
-  }
-  .el-progress-bar__outer {
-    background-color: $grey;
   }
 }
 </style>

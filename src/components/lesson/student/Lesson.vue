@@ -1,9 +1,9 @@
 <template>
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" />
-    <!-- <lesson-summary v-show="isShowSummary" /> -->
-    <lesson-summary />
-    <!-- <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" /> -->
+    <lesson-summary v-show="isShowSummary" />
+    <!-- <lesson-summary /> -->
+    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
 <style lang="scss">
 .lesson-wrap {
   counter-reset: no;
-  padding-bottom: 200px;
+  padding-bottom: 20px;
 }
 
 .quiz-no::after {

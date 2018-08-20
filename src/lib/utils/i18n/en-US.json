@@ -812,7 +812,7 @@
       "core7": "Key Point-7"
     },
     "notActivatedText": {
-      "hint":"If you are a teacher and wish to get access to the teaching function, please input the activation code here.",
+      "hint": "If you are a teacher and wish to get access to the teaching function, please input the activation code here.",
       "getActivationCode": "If you wish to get the activation code, please contact lixizhi@paraengine.com",
       "inputPlaceholder": "Please input the activation code.",
       "buttonText": "Activate",
@@ -857,6 +857,8 @@
     "teachers": "Teachers:",
     "begin": "Begin the class",
     "beginTips": "(Click here to begin the class)",
+    "dismiss": "Dismiss the class",
+    "dismissTips": "(Click here to dismiss the class)",
     "lessonPlan": "Lesson Plan",
     "performance": "Students'Performance",
     "summary": "Summary",

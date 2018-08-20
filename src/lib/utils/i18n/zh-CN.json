@@ -816,7 +816,7 @@
       "core7": "核心内容七"
     },
     "notActivatedText": {
-      "hint":"您已成为本系统的学生用户。如果您是一位教育工作者，需要使用授课功能，请在下方输入激活码：",
+      "hint": "您已成为本系统的学生用户。如果您是一位教育工作者，需要使用授课功能，请在下方输入激活码：",
       "getActivationCode": "如需获取激活码，请联系 lixizhi@paraengine.com",
       "inputPlaceholder": "请输入激活码",
       "buttonText": "激活",
@@ -861,6 +861,8 @@
     "teachers": "老师需注意:",
     "begin": "开始上课",
     "beginTips": "(点击这里开始上课)",
+    "dismiss": "下课",
+    "dismissTips": "(点击这里下课)",
     "lessonPlan": "课堂内容",
     "performance": "学生状态",
     "summary": "课堂总结",

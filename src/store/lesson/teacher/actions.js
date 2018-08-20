@@ -1,14 +1,18 @@
 import { props } from './mutations'
 import { lesson } from '@/api'
 import Parser from '@/lib/mod/parser'
+import _ from 'lodash'
+const SUCCESS_FLAG = 'OK'
 const {
   TOGGLE_HINT,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
+  DISMISS_THE_CLASS_SUCCESS,
   TOGGLE_LESSON,
   TOGGLE_PERFORMANCE,
-  TOGGLE_SUMMARY
+  TOGGLE_SUMMARY,
+  UPDATE_LEARN_RECORDS_SUCCESS
 } = props
 
 const actions = {
@@ -20,7 +24,6 @@ const actions = {
       commit,
       rootGetters: { 'user/authRequestConfig': config }
     } = context
-    console.log('token', config)
     let res = await lesson.lessons.lessonContent({
       lessonId,
       config
@@ -34,8 +37,31 @@ const actions = {
       commit,
       rootGetters: { 'user/authRequestConfig': config }
     } = context
-    let classRoom = await lesson.classrooms.begin({ payload, config })
-    commit(BEGIN_THE_CLASS_SUCCESS, classRoom)
+    let classroom = await lesson.classrooms.begin({ payload, config })
+    commit(BEGIN_THE_CLASS_SUCCESS, classroom)
+  },
+  async dismissTheClass(context, payload) {
+    const {
+      commit,
+      getters: { classroom, classId },
+      rootGetters: { 'user/authRequestConfig': config }
+    } = context
+    let flag = await lesson.classrooms.dismiss({ classId, config })
+    if (flag === SUCCESS_FLAG) {
+      let _classroom = _.clone(classroom)
+      _classroom.state = 2
+      commit(DISMISS_THE_CLASS_SUCCESS, _classroom)
+    }
+  },
+  async updateLearnRecords(context, payload) {
+    const {
+      commit,
+      getters: { classId },
+      rootGetters: { 'user/authRequestConfig': config }
+    } = context
+    let learnRecords = await lesson.classrooms.learnRecords({ classId, config })
+    console.warn(learnRecords)
+    commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
   toggleLesson({ commit }, flag) {
     commit(TOGGLE_LESSON, flag)

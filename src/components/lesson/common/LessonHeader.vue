@@ -9,7 +9,7 @@
     <!-- classIdDialog -->
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
       <div>The class ID is
-        <span class="class-id">{{classId}}</span>
+        <span class="class-id">{{classroomId}}</span>
       </div>
       <div>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu
         <span class="performance">Stuents'Performance</span>
@@ -20,9 +20,9 @@
         <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">OK</el-button>
       </span>
     </el-dialog>
-    <!-- classId full screen -->
+    <!-- classroomId full screen -->
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">{{classId | idPretty}}</div>
+      <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
     <!-- lesson info -->
     <el-row>
@@ -32,11 +32,11 @@
         <div v-if="isTeacher && isBeInClass" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">Click to full page</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: {{classId}}</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: {{classroomId}}</div>
           </el-tooltip>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
-              Class ID is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.
+              <span style="color:red"> Class ID</span> is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.
             </div>
             <span class="question-mark-icon"></span>
           </el-tooltip>
@@ -50,9 +50,10 @@
             {{lessonGoals}}
           </el-scrollbar>
           <div v-if="isTeacher" class="lesson-button-wrap">
-            <el-button @click="handleBeginTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-            <!-- <el-button @click="dimissTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.dismiss')}}</el-button> -->
-            <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+            <el-button v-if="isBeInClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+            <el-button v-else @click="handleBeginTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <span v-if="isBeInClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+            <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
           </div>
         </div>
       </el-col>
@@ -120,7 +121,8 @@ export default {
     return {
       dialogVisible: false,
       classIdDialogVisible: false,
-      classIdFullScreen: false
+      classIdFullScreen: false,
+      _interval: null
     }
   },
   mounted() {
@@ -130,13 +132,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      beginTheClass: 'lesson/teacher/beginTheClass'
+      beginTheClass: 'lesson/teacher/beginTheClass',
+      dismissTheClass: 'lesson/teacher/dismissTheClass',
+      updateLearnRecords: 'lesson/teacher/updateLearnRecords'
     }),
     openAnimations() {
       this.dialogVisible = true
     },
     classIdToFullScreen() {
       this.classIdFullScreen = true
+    },
+    intervalUpdateLearnRecords() {
+      clearInterval(this._interval)
+      this._interval = setInterval(this.updateLearnRecords, 3 * 1000)
     },
     async handleBeginTheClass() {
       const { packageId, lessonId } = this.$route.params
@@ -146,24 +154,31 @@ export default {
       })
         .then(res => {
           this.classIdDialogVisible = true
+          this.intervalUpdateLearnRecords()
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
           console.error(e)
         })
     },
-    dimissTheClass() {}
+    async handleDismissTheClass() {
+      await this.dismissTheClass()
+        .then(res => {
+          console.log(res)
+        })
+        .catch(e => {
+          this.$message.error('失败')
+          console.error(e)
+        })
+    }
   },
   computed: {
     ...mapGetters({
-      classRoom: 'lesson/teacher/classRoom'
+      classroom: 'lesson/teacher/classroom',
+      isBeInClass: 'lesson/teacher/isBeInClass',
+      classroomId: 'lesson/teacher/classroomId',
+      isClassIsOver: 'lesson/teacher/isClassIsOver'
     }),
-    classId() {
-      return this.classRoom.key || '123456789'
-    },
-    isBeInClass() {
-      return !!this.classRoom.key
-    },
     lesson() {
       return _.get(this.data, 'data.lesson', {})
     },
@@ -194,14 +209,9 @@ export default {
 
 
 <style lang="scss">
-body {
-  background: rgb(250, 250, 250);
-}
-
 .division {
   height: 30px;
   background: white;
-  border-bottom: 1px solid #d2d2d2;
 }
 
 .lesson-header-container {
@@ -301,8 +311,9 @@ body {
     .lesson-button {
       height: 36px;
       width: 190px;
-      &:last-child {
-        display: none;
+      &.class-is-over {
+        background: #d2d2d2;
+        border-color: #d2d2d2;
       }
     }
     .lesson-button-tips {
