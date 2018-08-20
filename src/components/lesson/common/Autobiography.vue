@@ -156,6 +156,7 @@ export default {
     margin: 0 auto 26px;
     padding: 50px 20px;
     background: #fff;
+    line-height: 26px;
     &-title {
       margin: 0 auto;
       text-align: center;

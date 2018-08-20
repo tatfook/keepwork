@@ -93,7 +93,7 @@ export default {
       border-radius: 10px;
       border: solid 2px #e9e5e5;
       margin:0 25px 0 18px;
-      text-align: center;
+      text-align: left;
       line-height: 35px;
       .time {
         font-weight: 700;
