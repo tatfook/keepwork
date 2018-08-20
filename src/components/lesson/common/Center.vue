@@ -1,19 +1,23 @@
 <template>
   <div>
     <div class="lesson-packages">
-      <div class="packages-sum">{{$t('lesson.include')}}: <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
+      <div class="packages-sum">{{$t('lesson.include')}}:
+        <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
       <el-row :gutter="20" class="lesson-packages-subject">
         <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
           <div class="subject-desc">
-            <img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt="">
+            <div class="img-wrap"><img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
             <h4 :class="['subject-title']">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
-            <span>{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
+            <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>1000</span>` })"></div>
-              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}: <span class="red">￥100.00</span></div>
-              <div class="purchase-money" plain>{{$t('lesson.coinsPrice')}}: <span class="red">1000</span> {{$t('lesson.coins')}}</div>
+              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
+                <span class="red">￥100.00</span>
+              </div>
+              <div class="purchase-money" plain>{{$t('lesson.coinsPrice')}}:
+                <span class="red">1000</span> {{$t('lesson.coins')}}</div>
             </div>
           </div>
         </el-col>
@@ -76,13 +80,19 @@ export default {
     margin: 20px auto;
     border: solid 2px #d2d2d2;
     border-radius: 1px;
-    .subject-cover {
+    background: #fff;
+    .img-wrap {
       width: 287px;
       height: 160px;
-      object-fit: cover;
-      margin: 0 auto;
       border-radius: 6px;
-      cursor: pointer;
+      .subject-cover {
+        width: 287px;
+        height: 160px;
+        object-fit: cover;
+        margin: 0 auto;
+        border-radius: 6px;
+        cursor: pointer;
+      }
     }
     .subject-title {
       font-size: 18px;
@@ -93,6 +103,9 @@ export default {
       display: block;
       font-size: 14px;
       line-height: 22px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .purchase-lesson-package {
       margin: 10px 0;

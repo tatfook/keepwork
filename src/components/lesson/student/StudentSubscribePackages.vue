@@ -4,7 +4,7 @@
     <h3 :class="['name',showProgress ? 'islearning' : '']">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}: <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
     <p>{{$t('lesson.ages')}}: {{packageDetail.minAge}}-{{packageDetail.maxAge}}</p>
-    <p class="intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
+    <p class="intro" :title="packageDetail.intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
         <el-progress :stroke-width="10" :percentage="learnedRatio" status="success" color="#66cd2e"></el-progress>
