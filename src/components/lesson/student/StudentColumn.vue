@@ -67,7 +67,7 @@ export default {
     await this.getProfile()
     console.log('userId', this.userId)
     console.log('username', this.username)
-    let payload = { userId: 1 }
+    let payload = { userId: this.userId }
     await this.getUserSubscribes(payload)
     console.log('subscribes', this.subscribesList)
     await this.getUserSkills(payload)
