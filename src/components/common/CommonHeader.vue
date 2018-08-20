@@ -112,17 +112,17 @@
       </el-submenu>
     </el-menu>
     <div @click.stop v-if='isPersonalCenterShow'>
-      <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
+      <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
-      <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+      <sky-drive-manager-dialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin' />
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
       <el-dialog width="478px"  :visible.sync="isRegisterDialogShow">
-        <RegisterDialog @close="closeRegisterDialog"/>
+        <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
   </div>

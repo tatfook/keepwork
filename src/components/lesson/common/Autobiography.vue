@@ -142,6 +142,7 @@
 <script>
 
 export default {
+  name: "Autobiography",
   data() {
     return {}
   },
@@ -151,10 +152,13 @@ export default {
 <style lang="scss">
 .here-page {
   &-content {
-    width: 820px;
+    width: 860px;
     margin: 0 auto 26px;
+    padding: 50px 20px;
+    background: #fff;
+    line-height: 26px;
     &-title {
-      margin: 50px auto 0;
+      margin: 0 auto;
       text-align: center;
       display: flex;
       align-items: center;

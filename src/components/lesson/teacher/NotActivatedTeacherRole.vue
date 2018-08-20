@@ -5,8 +5,8 @@
         <p>{{$t('lesson.notActivatedText.hint')}}</p>
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
         <div class="teacher-top-hint-input">
-          <el-input class="active-code-input" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
-          <el-button class="active-code-button" type="primary" size="small">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
+          <el-input class="active-code-input" v-model="activeCode" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
+          <el-button class="active-code-button" type="primary" size="small" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
         </div>
       </div>
       <div class="teacher-acquire">
@@ -48,9 +48,39 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  name: "NotActivatedTeacherRole",
   data() {
     return {
+      activeCode: ''
+    }
+  },
+  async mounted(){
+    await this.getProfile()
+  },
+  computed: {
+    ...mapGetters({
+      userId: 'user/userId',
+      isToBeTeacherSuccess: 'lesson/isToBeTeacherSuccess'
+    })
+  },
+  methods: {
+    ...mapActions({
+      getProfile: 'user/getProfile',
+      toBeTeacher: 'lesson/toBeTeacher'
+    }),
+    async activateTeacherIdentity(){
+      let payload = {userId: this.userId, key: this.activeCode}
+      await this.toBeTeacher(payload)
+      console.log(this.isToBeTeacherSuccess)
+      if(this.isToBeTeacherSuccess === 1){}else{
+        this.$alert('Incorrect activation code. Please check it and try again.', '', {
+          confirmButtonText: '确定',
+          callback: action => {}
+        });
+      }
     }
   }
 }

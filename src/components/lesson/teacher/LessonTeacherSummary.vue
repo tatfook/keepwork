@@ -27,10 +27,10 @@
     </div>
     <div class="teacher-summary-chart">
       <div class="teacher-summary-chart-accuracy-rate">
-        <AccuracyRateChart />
+        <accuracy-rate-chart></accuracy-rate-chart>
       </div>
       <div class="teacher-summary-chart-student-number">
-        <NumberOfStudentsChart/>
+        <number-of-students-chart></number-of-students-chart>
       </div>
     </div>
     <div class="teacher-summary-detailed">
@@ -106,6 +106,7 @@ import AccuracyRateChart from './AccuracyRateChart'
 import NumberOfStudentsChart from './NumberOfStudentsChart'
 
 export default {
+  name: "LessonTeacherSummary",
   data() {
     return {
       successSendEmailDialogVisible: false,
@@ -161,6 +162,7 @@ export default {
   width: 1069px;
   margin: 0 auto;
   padding: 0 40px 40px;
+  background: #fff;
   &-print-and-email {
     padding: 29px 0 0 816px;
   }

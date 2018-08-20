@@ -866,6 +866,14 @@
     "lessonPlan": "课堂内容",
     "performance": "学生状态",
     "summary": "课堂总结",
-    "beginTheClassFail": "上课失败"
+    "beginTheClassFail": "上课失败",
+    "teach": "授课",
+    "review": "评估",
+    "lessonManagement": "课程管理",
+    "noLessonHint": "暂未添加课程包",
+    "teachingTime": "最新授课时间",
+    "noRecord": "暂无授课记录！",
+    "sortByTeachingTime": "点击按授课时间排序",
+    "viewSummary": "查看课程总结"
   }
 }

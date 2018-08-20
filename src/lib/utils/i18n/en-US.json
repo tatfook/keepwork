@@ -862,6 +862,14 @@
     "lessonPlan": "Lesson Plan",
     "performance": "Students'Performance",
     "summary": "Summary",
-    "beginTheClassFail": "operation fail"
+    "beginTheClassFail": "operation fail",
+    "teach": "TEACH",
+    "review": "REVIEW",
+    "lessonManagement": "Lesson Management",
+    "noLessonHint": "You haven't added any panckages. Please enter Lessons to view.",
+    "teachingTime": "Latest teaching time",
+    "noRecord": "There is no teaching record yet.",
+    "sortByTeachingTime": "Click to sort by teaching time",
+    "viewSummary": "View Summary"
   }
 }

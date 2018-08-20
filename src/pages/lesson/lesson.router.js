@@ -3,7 +3,7 @@ import Router from 'vue-router'
 const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
-const HerePage = () => import('@/components/lesson/common/HerePage')
+const Autobiography = () => import('@/components/lesson/common/Autobiography')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
 const StudentPackageDetailPage = () =>
@@ -66,9 +66,9 @@ export default new Router({
           component: Center
         },
         {
-          path: 'here',
-          name: 'HerePage',
-          component: HerePage
+          path: 'autobiography',
+          name: 'Autobiography',
+          component: Autobiography
         },
         {
           path: 'package/:id',
@@ -112,9 +112,9 @@ export default new Router({
           component: Center
         },
         {
-          path: 'here',
-          name: 'HerePage',
-          component: HerePage
+          path: 'autobiography',
+          name: 'Autobiography',
+          component: Autobiography
         },
         {
           path: 'package/:id',

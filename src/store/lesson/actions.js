@@ -3,7 +3,8 @@ import { props } from './mutations'
 
 let {
   GET_USER_INFO_SUCCESS,
-  GET_PACKAGE_DETAIL_SUCCESS
+  GET_PACKAGE_DETAIL_SUCCESS,
+  TO_BE_TEACHER
 } = props
 
 const actions = {
@@ -11,6 +12,7 @@ const actions = {
     let { commit, rootGetters: { 'user/authRequestConfig': authRequestConfig } } = context
     let authConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : authRequestConfig
     let userLessonInfo = await lesson.users.getUserDetail(null, authConfig)
+    console.log('1', userLessonInfo)
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
   },
   async getPackageDetail(context, { packageId }) {
@@ -28,6 +30,11 @@ const actions = {
       config
     })
     return subscribeResult
+  },
+  async toBeTeacher(context, { userId, key }) {
+    let { commit, rootGetters: { 'user/authRequestConfig': config } } = context
+    let isToBeTeacherSuccess = await lesson.users.toBeTeacher({ userId, key, config })
+    commit(TO_BE_TEACHER, isToBeTeacherSuccess)
   }
 }
 

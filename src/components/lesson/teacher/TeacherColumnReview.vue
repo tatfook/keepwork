@@ -2,7 +2,7 @@
   <div class="review">
     <div class="review-nothing" v-if="noRecord">
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
-      <p class="review-nothing-hint">There is no teaching record yet.</p>
+      <p class="review-nothing-hint">{{$t('lesson.noRecord')}}</p>
     </div>
     <div class="review-list" v-else>
       <div class="review-list-class-hours">
@@ -17,7 +17,7 @@
           <span class="red">35</span> mins</div>
       </div>
 
-      <p class="review-list-sort"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">Click to sort by teaching time</p>
+      <p class="review-list-sort"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</p>
 
       <div class="review-list-package">
         <div class="package">
@@ -26,13 +26,13 @@
             <img src="@/assets/lessonImg/cover1.png" alt="">
           </div>
           <div class="package-brief">
-            <h4 class="name">Package：Tutorial: Installation</h4>
-            <p><span class="brief-title">Lesson 1：</span>Tutorial: Installation, Movement and Edit Mode</p>
-            <p><span class="brief-title">Intro:</span><br>Then the wandering soul wild crane stands still the memory. Ship to go medium long things of the past.Wait for a ship’s</p>
-            <p><span class="brief-title">Duration:</span>  45mins</p>
+            <h4 class="name">{{$t('modList.package')}}：Tutorial: Installation</h4>
+            <p><span class="brief-title">{{$t('modList.lesson')}} 1：</span>Tutorial: Installation, Movement and Edit Mode</p>
+            <p><span class="brief-title">{{$t('lesson.intro')}}:</span><br>Then the wandering soul wild crane stands still the memory. Ship to go medium long things of the past.Wait for a ship’s</p>
+            <p><span class="brief-title">{{$t('lesson.duration')}}:</span>  45mins</p>
           </div>
           <div class="package-summary">
-            <el-button type="primary">View Summary</el-button>
+            <el-button type="primary">{{$t('lesson.viewSummary')}}</el-button>
           </div>
         </div>
 
@@ -59,6 +59,7 @@
 
 <script>
 export default {
+  name: "TeacherColumnReview",
   data() {
     return {
       noRecord: false
@@ -92,7 +93,7 @@ export default {
       border-radius: 10px;
       border: solid 2px #e9e5e5;
       margin:0 25px 0 18px;
-      text-align: center;
+      text-align: left;
       line-height: 35px;
       .time {
         font-weight: 700;

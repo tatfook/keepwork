@@ -40,10 +40,10 @@
         </div>
         <div class="total-packages">{{$t('lesson.include')}}:
           <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
-        <div class="packages">
+        <div class="packages" v-loading='loading'>
           <el-row>
             <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
-              <StudentSubscribePackages :packageDetail="packageDetail" />
+              <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
             </el-col>
           </el-row>
         </div>
@@ -57,9 +57,10 @@ import { mapGetters, mapActions } from 'vuex'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
-  name: 'student',
+  name: 'StudentColumn',
   data() {
     return {
+      loading: true,
       classID: ''
     }
   },
@@ -67,11 +68,12 @@ export default {
     await this.getProfile()
     console.log('userId', this.userId)
     console.log('username', this.username)
-    let payload = { userId: 1 }
+    let payload = { userId: this.userId }
     await this.getUserSubscribes(payload)
     console.log('subscribes', this.subscribesList)
     await this.getUserSkills(payload)
     console.log('skillsList', this.skillsList)
+    this.loading = false
   },
   computed: {
     ...mapGetters({

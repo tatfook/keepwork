@@ -9,7 +9,7 @@
         <li v-for="(site,index) in recentOpenedList" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
       </ul>
     </div>
-    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'/>
+    <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
     <div style="height: 100px;"></div>
   </div>
 </template>
@@ -66,5 +66,5 @@ export default {
     }
     }
   }
-} 
+}
 </style>

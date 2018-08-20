@@ -14,7 +14,14 @@
     </div>
     <div class="about-video">
       <el-row :gutter="20">
-        <el-col :sm="8" :xs="24">
+        <el-col :sm="8" :xs="24" v-for="n in 3" :key="n">
+          <div class="video" @click="watchVideo">
+            <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
+            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
+          </div>
+          <span class="video-title">Actors & Animations</span>
+        </el-col>
+        <!-- <el-col :sm="8" :xs="24">
           <div class="video">
             <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
             <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
@@ -27,14 +34,7 @@
             <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
-        </el-col>
-        <el-col :sm="8" :xs="24">
-          <div class="video">
-            <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
-          </div>
-          <span class="video-title">Actors & Animations</span>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
     <div class="about-view-more">
@@ -48,21 +48,21 @@
     </div>
     <div class="about-teacher-student">
       <div class="content">
-      <el-row>
-        <el-col class="right-line" :sm="12" :xs="24">
-          <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/teacher.png" alt=""></div>
-          <h3>{{$t('lesson.about.teacher')}}</h3>
-          <h5>{{$t('lesson.about.engageStudents')}}</h5>
-          <p>{{$t('lesson.about.teacherTalk')}}</p>
-        </el-col>
-        <el-col :sm="12" :xs="24">
-          <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/student.png" alt=""></div>
-          <h3>{{$t('lesson.about.student')}}</h3>
-          <h5>{{$t('lesson.about.playGame')}}</h5>
-          <p>{{$t('lesson.about.studentTalk')}}</p>
-        </el-col>
-      </el-row>
-      <div class="line hidden-xs-only"></div>
+        <el-row>
+          <el-col class="right-line" :sm="12" :xs="24">
+            <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/teacher.png" alt=""></div>
+            <h3>{{$t('lesson.about.teacher')}}</h3>
+            <h5>{{$t('lesson.about.engageStudents')}}</h5>
+            <p>{{$t('lesson.about.teacherTalk')}}</p>
+          </el-col>
+          <el-col :sm="12" :xs="24">
+            <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/student.png" alt=""></div>
+            <h3>{{$t('lesson.about.student')}}</h3>
+            <h5>{{$t('lesson.about.playGame')}}</h5>
+            <p>{{$t('lesson.about.studentTalk')}}</p>
+          </el-col>
+        </el-row>
+        <div class="line hidden-xs-only"></div>
       </div>
     </div>
     <div class="about-title">
@@ -114,28 +114,22 @@
       <div class="about-letter-border">
         <div class="about-letter-content">
           <div class="about-letter-content-title">
-          <span>A Letter to Parents and Teachers</span>
-          <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
+            <span>A Letter to Parents and Teachers</span>
+            <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
           </div>
           <p>Hi, Parents and Teachers,</p>
-          <p>I am Xizhi, the developer of <a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a> and the 3d animation & game making tool called <a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>.
-           In 1989, at the age of 7, I wrote my first program on a IBM PC in my father’s lab. From March 2018,
-           I made a decision to create one computer science lesson every week using Paracraft and NPL.
-           Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own.
-           Click <a href="#">here</a> to read my autobiography on programming.</p>
-          <p>All software used in the lessons are free and open source, including paracraft and NPL. 
-            All lessons we sell are also free to read online, 
-            and we only charge you a small subscription fee in order for your kids to read the source code of the animation or game while they play it. 
-            We encourage you to see the <a href="#" @click.stop.prevent="gotoLessons">lessons</a> yourself and read together with your kids, as I would do the same thing with my own child.</p>
-          <p>I have a small International team that is doing Artificial Intelligence research using NPL and paracraft. 
-            The software and language that is taught in our lessons is the same set of tools we use for our serious research in AI. 
-            Our NPL research center at Tatfook has open sourced over <a href="https://github.com/LiXizhi/NPLRuntime/wiki">2 million lines of code</a> written by <a href="https://github.com/tatfook">ourselves on github</a>. 
-            Your payment or donation will greatly help us to continue our work with more and more talented programmers and scientists.</p>
+          <p>I am Xizhi, the developer of
+            <a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a> and the 3d animation & game making tool called
+            <a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>. In 1989, at the age of 7, I wrote my first program on a IBM PC in my father’s lab. From March 2018, I made a decision to create one computer science lesson every week using Paracraft and NPL. Throughout the lessons, I want to share my first 12 years of programming life with all kids around the world including my own. Click
+            <a href="#">here</a> to read my autobiography on programming.</p>
+          <p>All software used in the lessons are free and open source, including paracraft and NPL. All lessons we sell are also free to read online, and we only charge you a small subscription fee in order for your kids to read the source code of the animation or game while they play it. We encourage you to see the
+            <a href="#" @click.stop.prevent="gotoLessons">lessons</a> yourself and read together with your kids, as I would do the same thing with my own child.</p>
+          <p>I have a small International team that is doing Artificial Intelligence research using NPL and paracraft. The software and language that is taught in our lessons is the same set of tools we use for our serious research in AI. Our NPL research center at Tatfook has open sourced over
+            <a href="https://github.com/LiXizhi/NPLRuntime/wiki">2 million lines of code</a> written by
+            <a href="https://github.com/tatfook">ourselves on github</a>. Your payment or donation will greatly help us to continue our work with more and more talented programmers and scientists.</p>
           <p>Finally, if you or your kids want to join us one day, please email me: lixizhi@yeah.net</p>
 
-          Best<br>
-          Xizhi, Li<br>
-          CTO of Tatfook Network Co.<br>
+          Best<br> Xizhi, Li<br> CTO of Tatfook Network Co.<br>
         </div>
       </div>
     </div>
@@ -143,23 +137,22 @@
       <div class="about-letter-border">
         <div class="about-letter-content">
           <div class="about-letter-content-title">
-          <span>致家长和老师的一封信</span>
-          <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
+            <span>致家长和老师的一封信</span>
+            <span><img class="letter" src="@/assets/lessonImg/aboutPageImg/letter.png" alt=""></span>
           </div>
           <p>各位家长和老师，你们好！</p>
-          <p>我是西峙，NPL语言<a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a>和3D动画游戏制作软件Paracraft的开发者。
-            在1989年，我七岁的时候就利用IBM计算机在我父亲的实验室编写了我的第一个程序。
-            从2018年3月起，我决定利用<a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>和NPL语言在每周都创建一节计算机课程。
-            我想通过课程向全世界所有的儿童包括我自己来分享我十二年的编程生活。点击<a href="#" @click.stop.prevent="gotoHere">这里</a>来阅读我的编程生涯自传。</p>
-          <p>在课程中所有的软件都是免费并且开源的，包括paracraft和NPL。
-            我们的所有课程都可以在线免费阅读，我们只收取你一小部分订阅费用为了帮助你的孩子在玩的过程中阅读动画或者游戏的源代码。
-            我们鼓励你自己去看<a href="#" @click.stop.prevent="gotoLessons">课程</a>并和你的孩子一起阅读，因为我也在和我自己的孩子在做同样的事情。</p>
-          <p>我有一个小的国际团队在用NPL和paracraft做人工智能。
-            我们课程中的软件和语言是和我们应用在人工智能研究中同样一套工具。
-            我们的大富科技NPL研究中心已经开源了<a href="https://github.com/LiXizhi/NPLRuntime/wiki">两百万行代码</a>可以在<a href="https://github.com/tatfook">我们的github</a>中查看。你的付款或者捐赠将极大的帮助我们与更多的有天赋的程序员或者科学家工作。</p>
+          <p>我是西峙，NPL语言
+            <a href="https://keepwork.com/intro/keepwork/NPL">Neural Parallel Language</a>和3D动画游戏制作软件Paracraft的开发者。 在1989年，我七岁的时候就利用IBM计算机在我父亲的实验室编写了我的第一个程序。 从2018年3月起，我决定利用
+            <a href="https://keepwork.com/intro/keepwork/paracraft">Paracraft</a>和NPL语言在每周都创建一节计算机课程。 我想通过课程向全世界所有的儿童包括我自己来分享我十二年的编程生活。点击
+            <a href="#" @click.stop.prevent="gotoHere">这里</a>来阅读我的编程生涯自传。</p>
+          <p>在课程中所有的软件都是免费并且开源的，包括paracraft和NPL。 我们的所有课程都可以在线免费阅读，我们只收取你一小部分订阅费用为了帮助你的孩子在玩的过程中阅读动画或者游戏的源代码。 我们鼓励你自己去看
+            <a href="#" @click.stop.prevent="gotoLessons">课程</a>并和你的孩子一起阅读，因为我也在和我自己的孩子在做同样的事情。</p>
+          <p>我有一个小的国际团队在用NPL和paracraft做人工智能。 我们课程中的软件和语言是和我们应用在人工智能研究中同样一套工具。 我们的大富科技NPL研究中心已经开源了
+            <a href="https://github.com/LiXizhi/NPLRuntime/wiki">两百万行代码</a>可以在
+            <a href="https://github.com/tatfook">我们的github</a>中查看。你的付款或者捐赠将极大的帮助我们与更多的有天赋的程序员或者科学家工作。</p>
           <p>最后，如果你的孩子有一天想加入我们，可以联系我 ：lixizhi@yeah.net</p>
-          大富网络科技有限公司技术总监<br>
-          李西峙<br>
+          大富网络科技有限公司技术总监<br> 李西峙
+          <br>
         </div>
       </div>
     </div>
@@ -196,6 +189,11 @@
         </el-col>
       </el-row>
     </div>
+    <el-dialog :visible.sync="videoDialogVisible" width="50%">
+      <video controls="" width="100%" autoplay="" name="media">
+        <!-- <source :src="animation" type="video/mp4"> -->
+      </video>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -207,11 +205,13 @@ import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
 const TeacherPageReg = /^\/teacher/
 const StudentPageReg = /^\/student/
 export default {
-  data(){
-    return{
-      isEn: locale ===  'en-US',
-      imgUrls: [{"url": img1},{"url": img2}],
-      imgIndex:0
+  name: 'About',
+  data() {
+    return {
+      isEn: locale === 'en-US',
+      imgUrls: [{ url: img1 }, { url: img2 }],
+      imgIndex: 0,
+      videoDialogVisible: false
     }
   },
   computed: {
@@ -223,36 +223,39 @@ export default {
     },
     isStudentPage() {
       return StudentPageReg.test(this.nowFullPath)
-    },
+    }
   },
   methods: {
-    getImgIndex(index){
-     this.imgIndex = index
+    getImgIndex(index) {
+      this.imgIndex = index
     },
-    downloadTool(){
-      if(this.imgIndex === 1){
-        window.location.href= 'http://www.paracraft.cn/download?lang=zh'
+    downloadTool() {
+      if (this.imgIndex === 1) {
+        window.location.href = 'http://www.paracraft.cn/download?lang=zh'
       }
     },
-    gotoLessons(){
+    watchVideo(){
+      this.videoDialogVisible = true
+    },
+    gotoLessons() {
       if (this.isStudentPage) {
         this.$router.push({
           path: `/student/center`
         })
-      }else{
+      } else {
         this.$router.push({
           path: `/teacher/center`
         })
       }
     },
-    gotoHere(){
+    gotoHere() {
       if (this.isStudentPage) {
         this.$router.push({
-          path: `/student/here`
+          path: `/student/autobiography`
         })
-      }else{
+      } else {
         this.$router.push({
-          path: `/teacher/here`
+          path: `/teacher/autobiography`
         })
       }
     }
@@ -262,8 +265,8 @@ export default {
 
 <style lang="scss">
 .about {
-  &-carousel{
-    .el-carousel__container{
+  &-carousel {
+    .el-carousel__container {
       height: 500px !important;
     }
     &-img {
@@ -365,9 +368,9 @@ export default {
       text-align: center;
       position: relative;
       &-img {
-       width: 396px;
-       height: 383px;
-       margin: 0 auto;
+        width: 396px;
+        height: 383px;
+        margin: 0 auto;
       }
       p {
         text-align: left;
@@ -378,7 +381,7 @@ export default {
           padding: 0 20px;
         }
       }
-      .line{
+      .line {
         width: 2px;
         height: 100%;
         background: #fff;
@@ -398,7 +401,7 @@ export default {
       .desc-img {
         width: 170px;
         padding: 20px 0;
-        text-align: center
+        text-align: center;
       }
       .desc-text {
         flex: 1;
@@ -427,12 +430,12 @@ export default {
         #fff 120px
       );
     }
-    &-content{
+    &-content {
       padding: 110px 190px;
       background-color: #fff;
-      &-title{
+      &-title {
         text-align: center;
-        span{
+        span {
           font-size: 40px;
         }
       }
@@ -442,7 +445,7 @@ export default {
     margin: 0 auto 20px;
     width: 80%;
     text-align: center;
-    .tatfook{
+    .tatfook {
       margin: 20px 0;
     }
   }
@@ -450,112 +453,112 @@ export default {
 </style>
 <style lang="scss">
 @media (max-width: 768px) {
-.about{
-  &-carousel{
-    .el-carousel__container{
-      height: 200px !important;
+  .about {
+    &-carousel {
+      .el-carousel__container {
+        height: 200px !important;
+      }
     }
-  }
-  &-teacher-student {
-    .content {
-      &-img {
-        width: 200px;
-        height: 200px;
-        img{
+    &-teacher-student {
+      .content {
+        &-img {
+          width: 200px;
+          height: 200px;
+          img {
+            width: 100%;
+          }
+        }
+      }
+    }
+    &-lesson {
+      width: 80%;
+      margin: 0 auto;
+      padding: 10px;
+      &-desc {
+        display: block;
+        .desc-img {
+          margin: 0 auto;
+          padding: 20px 0;
+        }
+        .desc-text {
+          padding-left: 20px;
+          min-height: 220px;
+        }
+      }
+    }
+    &-view-more {
+      &-btn {
+        text-align: center;
+        width: 222px;
+        height: 50px;
+        margin: 0 auto;
+        position: relative;
+        img {
+          width: 100%;
+        }
+        .tip {
+          position: absolute;
+          top: 20px;
+          left: 25px;
+          font-size: 18px;
+          color: #ffffff;
+          text-align: center;
+          display: inline-block;
+          width: 200px;
+        }
+        .next {
+          width: 12px;
+          position: absolute;
+          top: 16px;
+          left: 150px;
+          &-2 {
+            left: 160px;
+          }
+          &-3 {
+            left: 170px;
+          }
+        }
+      }
+    }
+    &-letter {
+      background: #f8edd9;
+      margin: 40px 0;
+      padding: 20px;
+      &-border {
+        width: 80%;
+        margin: 0 auto;
+        padding: 26px;
+      }
+      &-content {
+        padding: 10px;
+        &-title {
+          text-align: center;
+          span {
+            font-size: 20px;
+          }
+          .letter {
+            width: 40px;
+          }
+        }
+      }
+    }
+    &-badge {
+      margin: 0 auto;
+      width: 80%;
+      text-align: center;
+      font-size: 14px;
+      .img-wrap {
+        width: 40px;
+        height: 50px;
+        max-width: 86px;
+        img {
           width: 100%;
         }
       }
-    }
-  }
-  &-lesson {
-    width: 80%;
-    margin: 0 auto;
-    padding: 10px;
-    &-desc {
-      display: block;
-      .desc-img {
-        margin: 0 auto;
-        padding: 20px 0;
-      }
-      .desc-text {
-        padding-left: 20px;
-        min-height: 220px;
+      .tatfook {
+        margin: 20px 0;
       }
     }
   }
-   &-view-more {
-    &-btn {
-      text-align: center;
-      width: 222px;
-      height: 50px;
-      margin: 0 auto;
-      position: relative;
-      img{
-        width: 100%;
-      }
-      .tip {
-        position: absolute;
-        top: 20px;
-        left: 25px;
-        font-size: 18px;
-        color: #ffffff;
-        text-align: center;
-        display: inline-block;
-        width: 200px;
-      }
-      .next {
-        width: 12px;
-        position: absolute;
-        top: 16px;
-        left: 150px;
-        &-2 {
-          left: 160px;
-        }
-        &-3 {
-          left: 170px;
-        }
-      }
-    }
-  }
-  &-letter {
-    background: #f8edd9;
-    margin: 40px 0;
-    padding: 20px;
-    &-border {
-      width: 80%;
-      margin: 0 auto;
-      padding: 26px;
-    }
-    &-content{
-      padding: 10px;
-      &-title{
-        text-align: center;
-        span{
-          font-size: 20px;
-        }
-        .letter{
-          width: 40px;
-        }
-      }
-    }
-  }
-  &-badge {
-    margin: 0 auto;
-    width: 80%;
-    text-align: center;
-    font-size: 14px;
-    .img-wrap{
-      width:40px;
-      height:50px;
-      max-width: 86px;
-      img{
-        width:100%;
-      }
-    }
-    .tatfook{
-      margin: 20px 0;
-    }
-  }
-}
 }
 </style>
