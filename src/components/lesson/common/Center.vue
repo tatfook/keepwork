@@ -85,11 +85,11 @@ export default {
       width: 287px;
       height: 160px;
       border-radius: 6px;
+      margin: 0 auto;
       .subject-cover {
         width: 287px;
         height: 160px;
         object-fit: cover;
-        margin: 0 auto;
         border-radius: 6px;
         cursor: pointer;
       }
