@@ -28,8 +28,7 @@
     "realNameAuthentication": "Verified",
     "chinese-englishSwitch": "chinese simplified",
     "accountNoChange": "Account name cannot be changed after registration",
-    "useLettersOrNumber":
-      "A combination of letters and numbers is allowed, for example, keep123.",
+    "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
     "defaultAddress": "The defaulted personal website address:",
     "authCode": "Code",
     "perfectInfo": "Perfect information",
@@ -88,8 +87,7 @@
     "loginToStarPage": "You must login before star this page!",
     "confirmButtonText": "Confirm",
     "quickToTop": "Quick to top",
-    "inputIsSensitive":
-      "The content you entered does not comply with Internet security regulations, please modify",
+    "inputIsSensitive": "The content you entered does not comply with Internet security regulations, please modify",
     "saveSuccess": "Save Success",
     "saveFail": "Save Fail",
     "success": "Success",
@@ -103,8 +101,7 @@
     "saveAll": "Save all",
     "saveSuccess": "File saved successfully",
     "saveFail": "File save failed",
-    "unSaveConfirm":
-      "The content you have modified is not saved. Are you sure you want to continue？",
+    "unSaveConfirm": "The content you have modified is not saved. Are you sure you want to continue？",
     "closeDialogTitle": "Close Warning",
     "unsavedTip": "File content is unsaved",
     "copySuccess": "Link copied successfully",
@@ -192,8 +189,7 @@
     "insertChild": "Add children",
     "noData": "No data, please add",
     "delNotice": "Delete",
-    "menuDelMsg":
-      "Are you sure to delete this node? Child nodes are also deleted directly",
+    "menuDelMsg": "Are you sure to delete this node? Child nodes are also deleted directly",
     "menuItem": "Menu Item",
     "fullScreen": "Full Screen",
     "exitFullScreen": "Exit Full Screen",
@@ -215,26 +211,18 @@
     "defaultStyle": "Default style",
     "forExample": "For example: mysite123",
 
-    "websiteNameCanOnly":
-      "Website name can only consist of letters, numbers and underscores",
-    "setWebsiteName":
-      "You can also set the site name on the site settings page",
-    "privatePermissions":
-      "Open VIP, additional support for privileges such as private permissions and rights management",
-    "createdSuccessfully":
-      "Congratulations, the website was created successfully",
-    "lowerCaseLetters":
-      "Can use lowercase letters, numbers (example: mysite123)",
-    "cannotBeginWithAnUnderscore":
-      "Website name cannot start with an underscore",
+    "websiteNameCanOnly": "Website name can only consist of letters, numbers and underscores",
+    "setWebsiteName": "You can also set the site name on the site settings page",
+    "privatePermissions": "Open VIP, additional support for privileges such as private permissions and rights management",
+    "createdSuccessfully": "Congratulations, the website was created successfully",
+    "lowerCaseLetters": "Can use lowercase letters, numbers (example: mysite123)",
+    "cannotBeginWithAnUnderscore": "Website name cannot start with an underscore",
 
     "openRegularExpressionEditor": "Editor",
     "matchingRule": "The matching rule：",
     "pageListLogic": "The page list logic",
-    "supportWildcard":
-      "Support wildcard: * (represents lots of charachter) , ? (represents a charachter)",
-    "supportBooleanCalculation":
-      "Support Boolean calculation: || (or)、&& (and)、! (not)",
+    "supportWildcard": "Support wildcard: * (represents lots of charachter) , ? (represents a charachter)",
+    "supportBooleanCalculation": "Support Boolean calculation: || (or)、&& (and)、! (not)",
     "layoutPlan": "Plan",
     "layoutManagement": "Layout management",
     "pageTitle": "Page Title",
@@ -261,8 +249,7 @@
     "deleteFolderBefore": "Are you sure you want to delete ",
     "deleteFolderAfter": " folder and its documents ?",
     "documents": " documents ?",
-    "areYouSureYouWantToDeleteThisFolder":
-      "Are you sure you want to delete this folder ?",
+    "areYouSureYouWantToDeleteThisFolder": "Are you sure you want to delete this folder ?",
     "videoNotSupport": "Your browser does not support the video tag.",
     "notFound": "Content cannot be found",
 
@@ -342,20 +329,17 @@
     },
     "text": {
       "title": "Ljubljana",
-      "paragraph":
-        "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
+      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
     },
     "mixLayer": {
       "title": "University of California",
       "subtitle": "Top Research University",
-      "paragraph":
-        "The University of California, Berkeley is one of the most prestigious and top public research universities in the United States, located on the hills of the East Bay Berkeley, San Francisco. Founded in 1868 by the California College and the College of Agriculture, Mining, and Mechanics, it was relocated to Berkeley, near San Francisco, in 1873. Berkeley was the oldest one at the University of California. It is also a founding member of the Association of American Universities. Its mascots have changed from the emblem of California, so their students often call themselves \"Golden Bears.\" The University of California, Berkeley, along with Stanford University and the Massachusetts Institute of Technology, are honored as the academic leaders of engineering science and technology in the United States."
+      "paragraph": "The University of California, Berkeley is one of the most prestigious and top public research universities in the United States, located on the hills of the East Bay Berkeley, San Francisco. Founded in 1868 by the California College and the College of Agriculture, Mining, and Mechanics, it was relocated to Berkeley, near San Francisco, in 1873. Berkeley was the oldest one at the University of California. It is also a founding member of the Association of American Universities. Its mascots have changed from the emblem of California, so their students often call themselves \"Golden Bears.\" The University of California, Berkeley, along with Stanford University and the Massachusetts Institute of Technology, are honored as the academic leaders of engineering science and technology in the United States."
     },
     "mixPosition": {
       "title": "One person, one road, people on the way",
       "subtitle": "We have been traveling",
-      "paragraph":
-        "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……",
+      "paragraph": "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……",
       "button": "MORE"
     },
     "paracraft": {
@@ -389,8 +373,7 @@
         "name": "Enter"
       },
       "desc": {
-        "data":
-          "Work Description: \r never memorized the memory, can not remember where to go, what landscapes to see, who met. Although the classmates said that traveling is not about memory, it is at the time of lunch, lunch and dinner. May not eat well, but it is still wiped the other side of the mouth of the oil stains. It doesn't really matter what the landscape is."
+        "data": "Work Description: \r never memorized the memory, can not remember where to go, what landscapes to see, who met. Although the classmates said that traveling is not about memory, it is at the time of lunch, lunch and dinner. May not eat well, but it is still wiped the other side of the mouth of the oil stains. It doesn't really matter what the landscape is."
       }
     },
     "board": {
@@ -487,8 +470,7 @@
     "duration": "Duration:",
     "viewSummary": "View Summary",
     "addPackageFirst": "Please add the package first",
-    "lessonPackageCost1":
-      "To learn lessons of this package, you have to invest ",
+    "lessonPackageCost1": "To learn lessons of this package, you have to invest ",
     "lessonPackageCost2": " coins.",
     "addPackageSuccess": "The package was successfully added!",
     "operationFail": "Operation failed please retry!",
@@ -522,8 +504,7 @@
     "rightAnswerColon": "Right Answer:",
     "yourAnswerColon": "Your Answer:",
     "explanationColon": "Explanation:",
-    "textMatchPlaceholder":
-      "If your answer matches any text above, it's correct.",
+    "textMatchPlaceholder": "If your answer matches any text above, it's correct.",
     "pleaseSelectOne": "Please select one answer!",
     "chooseTwoAnswer": "Choose at least two answers!",
     "pleaseInputAnswer": "Please input your answer!",
@@ -639,8 +620,7 @@
     "nameConflictError": "The name already exists.",
     "nameEmptyError": "The name cannot be empyt.",
     "nameContainSpecialCharacterError": "The name contains special characters.",
-    "fileUploading":
-      "There are files being uploaded. After leaving, the files will be canceled. Continue?"
+    "fileUploading": "There are files being uploaded. After leaving, the files will be canceled. Continue?"
   },
   "user": {
     "displayName": "NickName:",
@@ -662,11 +642,9 @@
     "resend": "resend",
     "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
-    "codeExceedsTheSendingLimit":
-      "The verification code exceeds the sending limit",
+    "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
-    "hasBeenBoundToOtherAccounts":
-      "The mobile phone number has been bound to other accounts",
+    "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts",
     "modifyPwd": "Modify Password:",
     "accountBinding": "Account Binding",
     "oldPwd": "Old Password:",
@@ -720,8 +698,7 @@
     "font": "font:",
     "fontSize": "size:",
     "pleaseSelect": "please select",
-    "tips":
-      "Note: if the selected font is not supported by the browser, the default font will be displayed"
+    "tips": "Note: if the selected font is not supported by the browser, the default font will be displayed"
   },
   "search": {
     "searchAll": "All Sites",
@@ -774,7 +751,7 @@
       "teachProgrammingTalk": "Yes, all of our lessons are written in a way for everyone to learn by themselves. You can just learn with the student together in class. super easy and fun.",
       "expensive": "Is it Expensive?",
       "expensiveTalk": "Ask your parent or school teacher, it is only 0.2$ per day to have free access to all of our lessons. We release 5 new lessons every week.",
-      "Partners": "Partners",      
+      "Partners": "Partners",
       "beijingOpenUniversity": "Beijing Open University",
       "zhejiangUniversity": "Zhejiang University",
       "harbinInstituteOfTechnology": "Harbin Institute Of Technology",
@@ -835,7 +812,7 @@
       "core7": "Key Point-7"
     },
     "notActivatedText": {
-      "hint":"If you are a teacher and wish to get access to the teaching function, please input the activation code here.",
+      "hint": "If you are a teacher and wish to get access to the teaching function, please input the activation code here.",
       "getActivationCode": "If you wish to get the activation code, please contact lixizhi@paraengine.com",
       "inputPlaceholder": "Please input the activation code.",
       "buttonText": "Activate",
@@ -870,7 +847,7 @@
     "shareSummary": "Share Summary",
     "stylePreview": "Style {number} Preview",
     "shareSummaryByNet": "Click the social network to share summary",
-    "references":"References",
+    "references": "References",
     "quiz": "Quiz",
     "todayIs": "Today is {date}",
     "showAll": "Show All",
@@ -878,6 +855,14 @@
     "showAllTips": "Click to show all notes for teacher",
     "hideAllTips": "Click to hide all notes for teacher",
     "teachers": "Teachers:",
+    "begin": "Begin the class",
+    "beginTips": "(Click here to begin the class)",
+    "dismiss": "Dismiss the class",
+    "dismissTips": "(Click here to dismiss the class)",
+    "lessonPlan": "Lesson Plan",
+    "performance": "Students'Performance",
+    "summary": "Summary",
+    "beginTheClassFail": "operation fail",
     "teach": "TEACH",
     "review": "REVIEW",
     "lessonManagement": "Lesson Management",

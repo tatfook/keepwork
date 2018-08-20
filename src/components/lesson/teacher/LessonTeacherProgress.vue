@@ -1,20 +1,58 @@
 <template>
   <div class="lesson-teacher-progress">
-    <span class="progress-point start pointer">
-
+    <span class="progress-point start">
+      <div class="name">{{$t('lesson.lessonPlan')}}</div>
+      <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('lesson')"></div>
     </span>
-    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
-    <span class="progress-point middle"></span>
-    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="0" status="success"></el-progress>
-    <span class="progress-point end"></span>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass ? 100 : 0" status="success"></el-progress>
+    <span class="progress-point middle">
+      <div class="name">
+        {{$t('lesson.performance')}}
+      </div>
+      <div :class="['pointer',{'selected': isShowPerformance, 'light': isBeInClass}]" @click="handleChangeView('performance')"></div>
+    </span>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isClassIsOver ? 100 : 0" status="success"></el-progress>
+    <span class="progress-point end">
+      <div class="name">
+        {{$t('lesson.summary')}}
+      </div>
+      <div :class="['pointer',{'selected': isShowSummary, 'light': isClassIsOver }]" @click="handleChangeView('summary')"></div>
+    </span>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonTeacherProgress',
   data() {
-    return {}
+    return {
+      isSelect: true,
+      isSummary: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isShowLesson: 'lesson/teacher/isShowLesson',
+      isShowPerformance: 'lesson/teacher/isShowPerformance',
+      isShowSummary: 'lesson/teacher/isShowSummary',
+      isBeInClass: 'lesson/teacher/isBeInClass',
+      isClassIsOver: 'lesson/teacher/isClassIsOver'
+    })
+  },
+  methods: {
+    ...mapActions({
+      toggleLesson: 'lesson/teacher/toggleLesson',
+      togglePerformance: 'lesson/teacher/togglePerformance',
+      toggleSummary: 'lesson/teacher/toggleSummary'
+    }),
+    handleChangeView(name) {
+      if (!this.isClassIsOver && name === 'summary') return
+      if (!this.isBeInClass && name === 'performance') return
+      this.toggleLesson('lesson' === name)
+      this.isBeInClass && this.togglePerformance('performance' === name)
+      this.isClassIsOver && this.toggleSummary('summary' === name)
+    }
   }
 }
 </script>
@@ -28,45 +66,52 @@ export default {
   align-items: center;
   .progress-point {
     position: relative;
-    z-index: 998;
-    $size: 33px;
-    display: inline-block;
-    height: $size;
-    width: $size;
-    border-radius: 50%;
-    background: $grey;
-    border: 3px solid white;
-    box-shadow: 1px 3px 6px rgb(185, 185, 185);
+    color: #818181;
+    display: flex;
+    height: 44px;
     &.start {
       position: relative;
       z-index: 9;
       margin-right: -25px;
       cursor: pointer;
     }
-    &.middle {
-    }
     &.end {
       position: relative;
       margin-left: -25px;
       z-index: 9;
     }
-    &.pointer {
+    .name {
+      position: absolute;
+      width: 100px;
+      text-align: center;
+      top: -24px;
+      left: -27px;
+    }
+    .pointer {
       $size: 33px;
       height: $size;
       width: $size;
-      border-width: 3px;
-      cursor: pointer;
       background: $green;
-    }
-
-    &.click {
-      $size: 30px;
-      $size: 30px;
+      position: relative;
+      z-index: 998;
       height: $size;
       width: $size;
-      border-width: 6px;
-      cursor: pointer;
-      background: $green;
+      border-radius: 50%;
+      background: $grey;
+      border: 3px solid white;
+      box-shadow: 1px 3px 6px rgb(185, 185, 185);
+      &.light {
+        background: $green;
+        cursor: pointer;
+      }
+      &.selected {
+        $size: 30px;
+        height: $size;
+        width: $size;
+        border: 6px solid white;
+        cursor: pointer;
+        background: $green;
+      }
     }
   }
   .progress-line {
@@ -77,9 +122,6 @@ export default {
     &.line-2 {
       margin-left: -25px;
     }
-  }
-  .el-progress-bar__outer {
-    background-color: $grey;
   }
 }
 </style>

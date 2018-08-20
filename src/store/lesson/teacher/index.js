@@ -3,11 +3,11 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = () => ({
-  isShowLesson: true,
+  isShowLesson: false,
+  isShowPerformance: true,
   isShowSummary: false,
-  isShowPerformance: false,
   isShowHint: true,
-  classId: null,
+  classroom: {},
   lessonDetail: {},
   lessonContent: {}
 })

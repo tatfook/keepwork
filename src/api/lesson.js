@@ -19,15 +19,13 @@ export const post = (...args) => {
 }
 
 export const _post = args => {
-  let { url, payload, config, returnOriginalData = true } = args
-  return keepworkEndpoint
-    .post(url, payload, config)
-    .then(res => (returnOriginalData ? res.data : res.data.data))
+  const { url, payload, config } = args
+  return keepworkEndpoint.post(url, payload, config).then(res => res.data)
 }
 
 export const put = (...args) => {
   let [url, payload, config] = args
-  return keepworkEndpoint.post(url, payload, config).then(res => res.data)
+  return keepworkEndpoint.put(url, payload, config).then(res => res.data)
 }
 
 /**
@@ -55,14 +53,18 @@ export const admin = {}
 
 export const packages = {
   packagesList: args => get('packages/search'),
-  packageDetail: ({ packageId, config }) => get(`packages/${packageId}/detail`, null, config),
-  subscribe: ({ packageId, config }) => post(`packages/${packageId}/subscribe`, null, config)
+  packageDetail: ({ packageId, config }) =>
+    get(`packages/${packageId}/detail`, null, config),
+  subscribe: ({ packageId, config }) =>
+    post(`packages/${packageId}/subscribe`, null, config)
 }
 
 export const lessons = {
-  lessonContent: args => get(`lesson/${args.lessonId}/contents`),
-  lessonContentByVersion: args =>
-    get(`lesson/${args.lessonId}/contents?version=${args.version || 1}`)
+  lessonContent: ({ lessonId, config }) => {
+    return get(`lessons/${lessonId}/contents`, null, config)
+  },
+  lessonContentByVersion: ({ lessonId, version = 1 }) =>
+    get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
 export const users = {
@@ -73,8 +75,12 @@ export const users = {
 }
 
 export const classrooms = {
-  join: args => post('classrooms/join', ...args),
-  begin: args => _post('classrooms', args)
+  join: ({ payload, config }) => post('classrooms/join', payload, config),
+  begin: ({ payload, config }) => post(`classrooms`, payload, config),
+  dismiss: ({ classId, config }) =>
+    put(`classrooms/${classId}/dismiss`, null, config),
+  learnRecords: ({ classId, config }) =>
+    get(`classrooms/${classId}/learnRecords`, null, config)
 }
 
 export const lesson = {
