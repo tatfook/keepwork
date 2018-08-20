@@ -1,9 +1,9 @@
 <template>
   <div class="lesson-page">
-    <CommonHeader></CommonHeader>
-    <LessonHeader></LessonHeader>
+    <common-header></common-header>
+    <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" id="lesson-page" />
-    <CommonFooter class="container"/>
+    <common-footer class="container"></common-footer>
   </div>
 </template>
 

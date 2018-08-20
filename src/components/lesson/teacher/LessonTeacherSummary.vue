@@ -27,10 +27,10 @@
     </div>
     <div class="teacher-summary-chart">
       <div class="teacher-summary-chart-accuracy-rate">
-        <AccuracyRateChart />
+        <accuracy-rate-chart></accuracy-rate-chart>
       </div>
       <div class="teacher-summary-chart-student-number">
-        <NumberOfStudentsChart/>
+        <number-of-students-chart></number-of-students-chart>
       </div>
     </div>
     <div class="teacher-summary-detailed">

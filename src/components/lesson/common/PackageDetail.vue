@@ -1,7 +1,7 @@
 <template>
   <div class="package-detail-page" v-loading="isLoading">
-    <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
-    <PackageCatalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></PackageCatalogue>
+    <package-basic-detail :packageDetail='packageDetail'></package-basic-detail>
+    <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></package-catalogue>
   </div>
 </template>
 <script>

@@ -1,11 +1,11 @@
 <template>
   <div class="account-binding">
-    <EmailBind></EmailBind>
-    <PhoneBind></PhoneBind>
-    <ThirdPartyBinding type='qq'></ThirdPartyBinding>
-    <ThirdPartyBinding type='weixin'></ThirdPartyBinding>
-    <ThirdPartyBinding type='xinlangweibo'></ThirdPartyBinding>
-    <ThirdPartyBinding type='github'></ThirdPartyBinding>
+    <email-bind></email-bind>
+    <phone-bind></phone-bind>
+    <third-party-binding type='qq'></third-party-binding>
+    <third-party-binding type='weixin'></third-party-binding>
+    <third-party-binding type='xinlangweibo'></third-party-binding>
+    <third-party-binding type='github'></third-party-binding>
   </div>
 </template>
 <script>
