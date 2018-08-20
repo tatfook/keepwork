@@ -1,8 +1,9 @@
 <template>
-  <div class="packages-intro" v-loading='loading'>
+  <div class="packages-intro">
     <div class="cover-wrap"><img @click="enterPackageDetail" class="cover" :src="packageCover" alt=""></div>
-    <h3 :class="['name',showProgress ? 'islearning' : '']">{{packageName}}</h3>
-    <p>{{$t('lesson.include')}}: <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
+    <h3 :class="['name',showProgress ? 'islearning' : '']" @click="enterPackageDetail">{{packageName}}</h3>
+    <p>{{$t('lesson.include')}}:
+      <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
     <p>{{$t('lesson.ages')}}: {{packageDetail.minAge}}-{{packageDetail.maxAge}}</p>
     <p class="intro" :title="packageDetail.intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
     <div class="progress">
@@ -27,37 +28,43 @@ export default {
   props: {
     packageDetail: {}
   },
-  data(){
-    return{
-      loading: true
-    }
+  data() {
+    return {}
   },
-  computed:{
-    packageCover(){
-      return _.get(this.packageDetail,'extra.coverUrl')
+  computed: {
+    packageCover() {
+      return _.get(this.packageDetail, 'extra.coverUrl')
     },
-    packageName(){
+    packageName() {
       return this.packageDetail.packageName
     },
-    lessonsLength(){
-      return this.packageDetail.lessons.length;
+    lessonsLength() {
+      return this.packageDetail.lessons.length
     },
-    showProgress(){
-      return !(this.packageDetail.learnedLessons.length === 0 || this.packageDetail.learnedLessons.length === this.packageDetail.lessons.length)
+    showProgress() {
+      return !(
+        this.packageDetail.learnedLessons.length === 0 ||
+        this.packageDetail.learnedLessons.length ===
+          this.packageDetail.lessons.length
+      )
     },
-    learnedRatio(){
-      return Math.ceil((this.packageDetail.learnedLessons.length / this.packageDetail.lessons.length) * 100)
+    learnedRatio() {
+      return Math.ceil(
+        this.packageDetail.learnedLessons.length /
+          this.packageDetail.lessons.length *
+          100
+      )
     },
-    startToLearn(){
+    startToLearn() {
       return this.packageDetail.learnedLessons.length === 0
     }
   },
-  methods:{
-    enterPackageDetail(){
+  methods: {
+    enterPackageDetail() {
       let packageId = this.packageDetail.id
       console.log(packageId)
       this.$router.push({
-        path: `student/package/${packageId}`,
+        path: `student/package/${packageId}`
       })
     }
   }
@@ -67,25 +74,25 @@ export default {
 .packages-intro {
   width: 230px;
   margin: 0 auto;
-  .cover-wrap{
+  .cover-wrap {
     width: 230px;
     height: 128px;
     border-radius: 4px;
     margin: 0 auto;
-  .cover {
-    width: 230px;
-    height: 128px;
-    border-radius: 4px;
-    object-fit: cover;
-    cursor: pointer;
-  }
+    .cover {
+      width: 230px;
+      height: 128px;
+      border-radius: 4px;
+      object-fit: cover;
+      cursor: pointer;
+    }
   }
 
-  .name{
+  .name {
     cursor: pointer;
     margin-bottom: 5px;
   }
-  .islearning{
+  .islearning {
     color: #409eff;
   }
   p {
@@ -94,7 +101,7 @@ export default {
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;  
+    text-overflow: ellipsis;
   }
   .progress {
     margin-top: 12px;
@@ -106,7 +113,7 @@ export default {
       }
     }
   }
-  .learn-button{
+  .learn-button {
     height: 28px;
     padding: 0 6px;
     margin-bottom: 16px;

@@ -68,7 +68,8 @@ export const lessons = {
 export const users = {
   getUserDetail: (...args) => get('users', ...args),
   userSubscribes: args => get(`users/${args.userId}/subscribes`),
-  userSkills: args => get(`users/${args.userId}/skills`)
+  userSkills: args => get(`users/${args.userId}/skills`),
+  toBeTeacher: ({userId, key, config}) => post(`users/${userId}/teacher`, {key}, config)
 }
 
 export const classrooms = {

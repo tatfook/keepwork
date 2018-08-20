@@ -40,7 +40,7 @@
         </div>
         <div class="total-packages">{{$t('lesson.include')}}:
           <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
-        <div class="packages">
+        <div class="packages" v-loading='loading'>
           <el-row>
             <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
               <StudentSubscribePackages :packageDetail="packageDetail" />
@@ -60,6 +60,7 @@ export default {
   name: 'StudentColumn',
   data() {
     return {
+      loading: true,
       classID: ''
     }
   },
@@ -72,6 +73,7 @@ export default {
     console.log('subscribes', this.subscribesList)
     await this.getUserSkills(payload)
     console.log('skillsList', this.skillsList)
+    this.loading = false
   },
   computed: {
     ...mapGetters({

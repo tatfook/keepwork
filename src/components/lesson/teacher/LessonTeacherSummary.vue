@@ -162,6 +162,7 @@ export default {
   width: 1069px;
   margin: 0 auto;
   padding: 0 40px 40px;
+  background: #fff;
   &-print-and-email {
     padding: 29px 0 0 816px;
   }

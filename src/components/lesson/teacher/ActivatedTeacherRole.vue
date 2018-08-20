@@ -69,6 +69,9 @@ export default {
       overflow: hidden;
       margin-right: 38px;
       .item {
+        font-weight: 700;
+        color: #111;
+        font-size: 14px;
         height: 63px;
         line-height: 63px;
         cursor: pointer;
