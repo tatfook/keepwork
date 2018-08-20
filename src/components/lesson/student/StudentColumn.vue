@@ -130,7 +130,6 @@ export default {
 
 <style lang="scss">
 .student-wrap {
-  background: #fbfbfb;
   .student {
     margin: 0 auto;
     max-width: 1150px;

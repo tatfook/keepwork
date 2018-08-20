@@ -41,8 +41,8 @@ const actions = {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
       info.data.token && Cookies.set('token', info.data.token)
-      await dispatch('lesson/getUserDetail', null, { root: true })
       commit(LOGIN_SUCCESS, info.data)
+      await dispatch('lesson/getUserDetail', { token: info.data.token }, { root: true })
     }
     return info
   },

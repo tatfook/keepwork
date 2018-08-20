@@ -16,7 +16,7 @@
         <i class="el-icon-back"></i>
       </el-button>
     </div>
-    <PurchasePackageResult v-show="isResultShow"></PurchasePackageResult>
+    <PurchasePackageResult v-show="isResultShow" :packageDetail='packageDetail'></PurchasePackageResult>
     <div @click.stop v-if="isLoginDialogShow">
       <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
     </div>
