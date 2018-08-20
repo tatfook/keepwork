@@ -9,16 +9,16 @@
       </div>
     </div>
     <div class="purchase-package-container" v-show="!isResultShow">
-      <PackageBasicDetail :packageDetail='packageDetail'></PackageBasicDetail>
-      <CoinPurchase ref="coinPurchaseComp" :packageDetail='packageDetail' class="purchase-package-coin"></CoinPurchase>
+      <package-basic-detail :packageDetail='packageDetail'></package-basic-detail>
+      <coin-purchase ref="coinPurchaseComp" :packageDetail='packageDetail' class="purchase-package-coin"></coin-purchase>
       <div class="purchase-package-info">{{$t('lesson.youNeedToPay')}}{{payCount}}</div>
       <el-button @click="subscribePackage" class="purchase-package-button" size="medium" type="primary">{{$t('lesson.goToPay')}}
         <i class="el-icon-back"></i>
       </el-button>
     </div>
-    <PurchasePackageResult v-show="isResultShow" :packageDetail='packageDetail'></PurchasePackageResult>
+    <purchase-package-result v-show="isResultShow" :packageDetail='packageDetail'></purchase-package-result>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" />
     </div>
   </div>
 </template>

@@ -53,7 +53,7 @@
       </span>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
     </div>
   </div>
 </template>

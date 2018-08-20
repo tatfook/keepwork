@@ -15,9 +15,9 @@
       <!-- <el-button type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button> -->
       <el-button v-if="!userIsLogined" type="primary" round @click="toLogin">{{$t('common.login')}}</el-button>
     </div>
-    <QuickToTop/>
+    <quick-to-top></quick-to-top>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog"/>
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="menu-type">
     <el-button plain type='primary' size='mini' @click='isMenuEditorShow = true'>{{$t('editor.openMenuEditor')}}</el-button>
-    <treeDataEditor :isEditorShow='isMenuEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></treeDataEditor>
+    <tree-data-editor :isEditorShow='isMenuEditorShow' :originalTreeData='originValue' @finishEditing='finishEditing' @cancel='cancel'></tree-data-editor>
   </div>
 
 </template>

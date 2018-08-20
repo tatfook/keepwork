@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-if='show' 
+    v-if='show'
     :title="title"
     class="skydrive-manager-dialog"
     :class="{'skydrive-manager-dialog-media-mode': mediaLibrary}"
@@ -8,7 +8,7 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
-    <SkyDriveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'/>
+    <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager>
   </el-dialog>
 </template>
 

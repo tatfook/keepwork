@@ -1,7 +1,7 @@
 <template>
   <div class="menu-type">
     <el-button plain type='primary' size='mini' @click='isQAEditorShow = true'>{{this.$t('card.openQuizEditor')}}</el-button>
-    <quizDataEditor :isEditorShow='isQAEditorShow' :originalQuizData='originValue' @finishEditing='finishEditing' @cancel='cancel'></quizDataEditor>
+    <quiz-data-editor :isEditorShow='isQAEditorShow' :originalQuizData='originValue' @finishEditing='finishEditing' @cancel='cancel'></quiz-data-editor>
   </div>
 
 </template>

@@ -33,15 +33,15 @@
       </el-form>
     </div>
     <div v-show="isRegisterForm">
-        <RegisterDialog @close="handleClose"/>
+        <register-dialog @close="handleClose"></register-dialog>
         <div><span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span></div>
         <div><span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span></div>
     </div>
     <div v-show="isPerfectRegisterInfo">
-      <PerfectRegisterInfo @close="handleClose" :userThreeService="userThreeService"/>
+      <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
   </el-dialog>
-  
+
 
 </template>
 <script>

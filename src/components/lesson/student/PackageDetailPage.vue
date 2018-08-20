@@ -1,6 +1,6 @@
 <template>
   <div class="student-package-detail-page">
-    <PackageDetail :actorType='actorType' :packageId='packageId'></PackageDetail>
+    <package-detail :actorType='actorType' :packageId='packageId'></package-detail>
   </div>
 </template>
 <script>
