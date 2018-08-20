@@ -2,16 +2,16 @@
   <div class="teach">
     <div class="teach-nothing" v-if="noPackages">
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
-      <p class="teach-nothing-hint">You haven't added any panckages. Please enter Lessons to view.</p>
-      <el-button type="primary">View Lessons</el-button>
+      <p class="teach-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
+      <el-button type="primary">{{$t('lesson.lessonsCenter')}}</el-button>
     </div>
     <div class="teach-packages" v-else>
-      <div class="teach-packages-total">Includes: 3 packages</div>
+      <div class="teach-packages-total">{{$t('lesson.include')}}: <span>3</span> {{$t('lesson.packagesCount')}}</div>
       <div class="teach-packages-list">
         <el-row>
           <el-col :sm="12" :xs="22">
             <div class="package">
-              <p class="time">Latest teaching time:
+              <p class="time">{{$t('lesson.teachingTime')}}:
                 <span class="red-text">11:20 20/8/2018</span>
               </p>
               <div class="package-cover"><img src="@/assets/lessonImg/cover1.png" alt=""></div>

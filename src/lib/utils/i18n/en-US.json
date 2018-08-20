@@ -877,6 +877,14 @@
     "hideAll": "Hide All",
     "showAllTips": "Click to show all notes for teacher",
     "hideAllTips": "Click to hide all notes for teacher",
-    "teachers": "Teachers:"
+    "teachers": "Teachers:",
+    "teach": "TEACH",
+    "review": "REVIEW",
+    "lessonManagement": "Lesson Management",
+    "noLessonHint": "You haven't added any panckages. Please enter Lessons to view.",
+    "teachingTime": "Latest teaching time",
+    "noRecord": "There is no teaching record yet.",
+    "sortByTeachingTime": "Click to sort by teaching time",
+    "viewSummary": "View Summary"
   }
 }
