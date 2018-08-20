@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  name: "ActivatedTeacherRole",
   data() {
     return {
       itmeActive: 0

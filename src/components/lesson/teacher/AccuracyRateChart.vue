@@ -4,6 +4,7 @@
 
 <script>
   export default {
+    name: "AccuracyRateChart",
     data () {
       this.chartSettings = {
         yAxisName: [' Accuracy Rate (%)'],

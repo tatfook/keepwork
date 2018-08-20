@@ -106,6 +106,7 @@ import AccuracyRateChart from './AccuracyRateChart'
 import NumberOfStudentsChart from './NumberOfStudentsChart'
 
 export default {
+  name: "LessonTeacherSummary",
   data() {
     return {
       successSendEmailDialogVisible: false,

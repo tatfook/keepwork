@@ -9,6 +9,7 @@
 import NotActivatedTeacherRole from './NotActivatedTeacherRole'
 import ActivatedTeacherRole from './ActivatedTeacherRole'
 export default {
+  name: "TeacherColumn",
   data(){
     return{
       activatedTeacherRole: false

@@ -1,30 +1,27 @@
 <template>
-  <div>
-    <div class="lesson-packages">
+    <div class="lesson-packages" v-loading='loading'>
       <div class="packages-sum">{{$t('lesson.include')}}:
         <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
       <el-row :gutter="20" class="lesson-packages-subject">
         <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
           <div class="subject-desc">
-            <div class="img-wrap"><img @click="enterPackageDetailPage(coursePackage.id)" class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
-            <h4 :class="['subject-title']">{{coursePackage.packageName}}</h4>
+            <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
+            <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>1000</span>` })"></div>
               <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
-                <span class="red">￥100.00</span>
+                <span class="red">￥{{coursePackage.rmb}}</span>
               </div>
-              <div class="purchase-money" plain>{{$t('lesson.coinsPrice')}}:
-                <span class="red">1000</span> {{$t('lesson.coins')}}</div>
+              <div class="purchase-money">{{$t('lesson.coinsPrice')}}:
+                <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}</div>
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
-  </div>
-
 </template>
 
 <script>
@@ -34,7 +31,9 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Center',
   data() {
-    return {}
+    return {
+      loading: true
+    }
   },
   computed: {
     ...mapGetters({
@@ -52,6 +51,7 @@ export default {
   async mounted() {
     await this.getPackagesList()
     console.log('packages', this.packages)
+    this.loading = false
   },
   methods: {
     ...mapActions({
@@ -86,12 +86,12 @@ export default {
       height: 160px;
       border-radius: 6px;
       margin: 0 auto;
+      cursor: pointer;
       .subject-cover {
         width: 287px;
         height: 160px;
         object-fit: cover;
         border-radius: 6px;
-        cursor: pointer;
       }
     }
     .subject-title {
