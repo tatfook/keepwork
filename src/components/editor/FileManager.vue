@@ -39,7 +39,7 @@
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
-          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
+          <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </div>
       </el-collapse-transition>
     </div>

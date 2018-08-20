@@ -3,7 +3,7 @@
     <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @input='updateValue' @focus='getFocus'>
       <i @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
     </el-input>
-    <SkyDriveManagerDialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>

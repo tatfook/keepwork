@@ -9,7 +9,7 @@
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
-        <SkyDriveManagerDialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog' />
+        <sky-drive-manager-dialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
@@ -79,13 +79,13 @@
           </el-col>
         </el-scrollbar>
       </el-row>
-      <EditorMarkdown ref='codemirror' @insertBigfile='insertBigfile'/>
+      <editor-markdown ref='codemirror' @insertBigfile='insertBigfile'></editor-markdown>
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <el-row>
         <el-col :span="3">&nbsp;</el-col>
         <el-col :span="21">
-          <editorWelcome />
+          <editor-welcome></editor-welcome>
         </el-col>
       </el-row>
       <div class="guid-help">

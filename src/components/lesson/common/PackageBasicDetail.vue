@@ -32,7 +32,7 @@
       </div>
       <el-button v-show="!isPurchaseButtonHide" type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
-        <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" />
+        <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-column">
-    <NotActivatedTeacherRole v-if="activatedTeacherRole"/>
-    <ActivatedTeacherRole/>
+    <not-activated-teacher-role v-if="activatedTeacherRole"></not-activated-teacher-role>
+    <activated-teacher-role></activated-teacher-role>
   </div>
 </template>
 

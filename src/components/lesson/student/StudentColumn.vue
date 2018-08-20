@@ -43,7 +43,7 @@
         <div class="packages">
           <el-row>
             <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
-              <StudentSubscribePackages :packageDetail="packageDetail" />
+              <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
             </el-col>
           </el-row>
         </div>
