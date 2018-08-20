@@ -153,8 +153,7 @@ export default {
               : self.style.options.config.enter.emptyLink
 
             let url =
-              protocol +
-              ':// protocol="' +
+              'protocol="' +
               protocol +
               '" paramA="' +
               paramA +
@@ -165,7 +164,15 @@ export default {
               '" cmd/loadworld ' +
               link
 
-            window.open(url)
+            if (typeof url !== 'string' || !url) {
+              return false
+            }
+
+            if (typeof protocol !== 'string' || !protocol) {
+              return false
+            }
+
+            window.open(protocol + "://" + encodeURIComponent(url))
 
             self.isShowInnerModal = true
           }
