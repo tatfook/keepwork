@@ -68,7 +68,7 @@ export default {
 
       _.forEach(all , (dom, key) => {
         dom.style.height = null
-        dom.style.height = dom.offsetHeight * 0.24 + 'px'
+        dom.style.height = dom.offsetHeight * 0.24074 + 'px'
       })
     }
   }
@@ -107,28 +107,8 @@ export default {
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.357);
+      transform: scale(0.24074);
       transform-origin: top left;
-    }
-  }
-}
-
-@media screen and (max-width: 1920px) {
-  .render {
-    background-color: white;
-    overflow: hidden;
-    margin: auto;
-    margin-bottom: 12px;
-    position: relative;
-
-    .render-mod-container {
-      overflow: hidden;
-
-      .render-mod {
-        width: 1080px;
-        transform: scale(0.24);
-        transform-origin: top left;
-      }
     }
   }
 }
