@@ -16,6 +16,7 @@ export const { get, post, put } = endpoint
 export const admin = {}
 
 export const packages = {
+  getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`)
@@ -23,8 +24,7 @@ export const packages = {
 
 export const lessons = {
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
-  lessonContentByVersion: async ({ lessonId, version = 1 }) =>
-    get(`lessons/${lessonId}/contents?version=${version}`)
+  lessonContentByVersion: async ({ lessonId, version = 1 }) => get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
 export const users = {
@@ -32,12 +32,14 @@ export const users = {
   userSubscribes: args => get(`users/${args.userId}/subscribes`),
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, config }) =>
-    post(`users/${userId}/teacher`, { key }, config)
+    post(`users/${userId}/teacher`, { key }, config),
+  getTeachingRecords: async () => get(`packages`, null, config)
 }
 
 export const classrooms = {
   join: ({ payload, config }) => post('classrooms/join', payload, config),
   begin: ({ payload, config }) => post(`classrooms`, payload, config),
+  getTeachingListing: async () => get(`classrooms`, null, config),
   dismiss: ({ classId, config }) =>
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>

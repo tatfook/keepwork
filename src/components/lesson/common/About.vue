@@ -14,27 +14,13 @@
     </div>
     <div class="about-video">
       <el-row :gutter="20">
-        <el-col :sm="8" :xs="24" v-for="n in 3" :key="n">
-          <div class="video" @click="watchVideo">
-            <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
+        <el-col :sm="8" :xs="24" v-for="(lessonPackage,index) in hotsPackages" v-if="index < 3" :key="lessonPackage.id">
+          <div class="video" @click="enterPackageDetail(lessonPackage.id)">
+            <img class="video-cover" :src="lessonPackage.extra.coverUrl" alt="">
             <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
-        <!-- <el-col :sm="8" :xs="24">
-          <div class="video">
-            <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
-          </div>
-          <span class="video-title">Actors & Animations</span>
-        </el-col>
-        <el-col :sm="8" :xs="24">
-          <div class="video">
-            <img class="video-cover" src="@/assets/lessonImg/cover1.png" alt="">
-            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
-          </div>
-          <span class="video-title">Actors & Animations</span>
-        </el-col> -->
       </el-row>
     </div>
     <div class="about-view-more">
@@ -189,16 +175,12 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="videoDialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media">
-        <!-- <source :src="animation" type="video/mp4"> -->
-      </video>
-    </el-dialog>
   </div>
 </template>
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
+import { lesson } from '@/api'
 import img1 from '@/assets/lessonImg/aboutPageImg/top_banner.png'
 import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
 
@@ -211,8 +193,12 @@ export default {
       isEn: locale === 'en-US',
       imgUrls: [{ url: img1 }, { url: img2 }],
       imgIndex: 0,
-      videoDialogVisible: false
+      hotsPackages: [],
+      animation: ''
     }
+  },
+  async mounted(){
+    this.hotsPackages = await lesson.packages.getHotsPackages()
   },
   computed: {
     nowFullPath() {
@@ -234,8 +220,10 @@ export default {
         window.location.href = 'http://www.paracraft.cn/download?lang=zh'
       }
     },
-    watchVideo(){
-      this.videoDialogVisible = true
+    enterPackageDetail(packageId){
+      this.$router.push({
+        path: `package/${packageId}`
+      })
     },
     gotoLessons() {
       if (this.isStudentPage) {

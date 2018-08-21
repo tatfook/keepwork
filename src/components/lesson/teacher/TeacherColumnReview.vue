@@ -1,6 +1,6 @@
 <template>
   <div class="review">
-    <div class="review-nothing" v-if="noRecord">
+    <div class="review-nothing" v-if="sortedTeachList.length === 0">
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
       <p class="review-nothing-hint">{{$t('lesson.noRecord')}}</p>
     </div>
@@ -20,35 +20,19 @@
       <p class="review-list-sort"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</p>
 
       <div class="review-list-package">
-        <div class="package">
+        <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
           <div class="package-cover">
-            <p class="teach-time">11:20 20/4/2018</p>
+            <p class="teach-time">{{lessonPackage.updatedAt}}</p>
             <img src="@/assets/lessonImg/cover1.png" alt="">
           </div>
           <div class="package-brief">
-            <h4 class="name">{{$t('modList.package')}}：Tutorial: Installation</h4>
-            <p><span class="brief-title">{{$t('modList.lesson')}} 1：</span>Tutorial: Installation, Movement and Edit Mode</p>
+            <h4 class="name">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
+            <p><span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.lessonId}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
             <p><span class="brief-title">{{$t('lesson.intro')}}:</span><br>Then the wandering soul wild crane stands still the memory. Ship to go medium long things of the past.Wait for a ship’s</p>
             <p><span class="brief-title">{{$t('lesson.duration')}}:</span>  45mins</p>
           </div>
           <div class="package-summary">
             <el-button type="primary">{{$t('lesson.viewSummary')}}</el-button>
-          </div>
-        </div>
-
-        <div class="package">
-          <div class="package-cover">
-            <p class="teach-time">11:20 20/4/2018</p>
-            <img src="@/assets/lessonImg/cover1.png" alt="">
-          </div>
-          <div class="package-brief">
-            <h4 class="name">Package：Tutorial: Installation</h4>
-            <p><span class="brief-title">Lesson 1：</span>Tutorial: Installation, Movement and Edit Mode</p>
-            <p><span class="brief-title">Intro:</span><br>Then the wandering soul wild crane stands still the memory. Ship to go medium long things of the past.Wait for a ship’s</p>
-            <p><span class="brief-title">Duration:</span>  45mins</p>
-          </div>
-          <div class="package-summary">
-            <el-button type="primary">View Summary</el-button>
           </div>
         </div>
       </div>
@@ -58,12 +42,33 @@
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
+import { lesson } from '@/api'
+import _ from 'lodash'
+
 export default {
-  name: "TeacherColumnReview",
+  name: "TeacherColumnTeach",
   data() {
     return {
-      noRecord: false
+      loading: false,
+      noPackages: false,
+      teachList: []
     }
+  },
+  async mounted(){
+    let resData = await lesson.classrooms.getTeachingListing()
+    this.teachList = _.get(resData, `rows`, [])
+    console.log('teachList',this.teachList)
+  },
+  computed: {
+    sortedTeachList(){
+      return this.teachList.sort(this.sortByUpdateAt)
+    }
+  },
+  methods:{
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
   }
 }
 </script>
@@ -122,6 +127,7 @@ export default {
           width: 210px;
           .teach-time{
             margin: 0 0 4px;
+            font-size: 14px;
           }
           img {
             width: 209px;

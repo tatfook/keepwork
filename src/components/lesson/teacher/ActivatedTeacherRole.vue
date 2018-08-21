@@ -114,6 +114,7 @@ export default {
     .el-main {
       overflow: hidden;
       padding: 0;
+      // min-height: calc(100vh - 61px - 63px -104px);
     }
   }
 }

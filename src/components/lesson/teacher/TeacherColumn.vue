@@ -37,7 +37,7 @@ export default {
 
 <style lang="scss">
 .teacher-column{
-  height: calc(100vh - 61px - 63px -104px);
-  overflow: auto;
+  // height: calc(100vh - 61px - 63px -104px);
+  // overflow: auto;
 }
 </style>
