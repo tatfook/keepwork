@@ -45,6 +45,7 @@ const actions = {
     })
     commit(SAVE_LESSON_DETAIL, {
       lessonId,
+      lesson: _lesson,
       modList
     })
   },
