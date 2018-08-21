@@ -68,7 +68,7 @@ export default {
 
       _.forEach(all , (dom, key) => {
         dom.style.height = null
-        dom.style.height = dom.offsetHeight * 0.24 + 'px'
+        dom.style.height = dom.offsetHeight * 0.24074 + 'px'
       })
     }
   }
@@ -126,7 +126,7 @@ export default {
 
       .render-mod {
         width: 1080px;
-        transform: scale(0.24);
+        transform: scale(0.24074);
         transform-origin: top left;
       }
     }

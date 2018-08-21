@@ -127,7 +127,7 @@ export default {
       let all = this.$el.querySelectorAll('[class="style-cover render"]')
 
       _.forEach(all, (dom, key) => {
-        dom.style.height = dom.offsetHeight * 0.1245 + 'px'
+        dom.style.height = dom.offsetHeight * 0.125 + 'px'
       })
 
       setTimeout(() => {
@@ -201,7 +201,7 @@ export default {
     .render-mod-container {
       width: 135px;
       .render-mod {
-        transform: scale(0.1245);
+        transform: scale(0.125);
       }
     }
   }
