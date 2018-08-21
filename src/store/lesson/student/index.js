@@ -7,11 +7,12 @@ const state = () => ({
   lessonData: {},
   lessonDetail: {},
   lessonQuiz: {},
-  isShowStudentSummary: true,
+  isShowStudentSummary: false,
   userSubscribeList: [],
   userSkillsList: [],
   enterClassInfo: {},
-  enterClassId: null
+  enterClassId: null,
+  studentName: ''
 })
 
 export default {

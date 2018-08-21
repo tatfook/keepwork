@@ -1,5 +1,15 @@
 <template>
   <div class="lesson-student-performance-wrap">
+    <div class="tips">
+      <span class="pointer right">
+        <span class="icon"></span>
+        <span class="name">right</span>
+      </span>
+      <span class="pointer wrong">
+        <span class="icon"></span>
+        <span class="name">wrong</span>
+      </span>
+    </div>
     <el-table :data="fakerData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark">
       <el-table-column v-for="(item,index) in tableProps" :key="index" :prop="item" :label="item" sortable>
 
@@ -66,10 +76,38 @@ export default {
 
 
 <style lang="scss">
+$green: #27ce2f;
+$red: #f53838;
 .lesson-student-performance-wrap {
   max-width: 1080px;
   background: white;
   margin: 0 auto;
+  .tips {
+    padding: 10px 5px;
+    .pointer {
+      $size: 20px;
+      display: inline-flex;
+      align-items: center;
+      margin-right: 20px;
+      .icon {
+        display: inline-block;
+        height: $size;
+        width: $size;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      &.right {
+        .icon {
+          background: $green;
+        }
+      }
+      &.wrong {
+        .icon {
+          background: $red;
+        }
+      }
+    }
+  }
 }
 </style>
 

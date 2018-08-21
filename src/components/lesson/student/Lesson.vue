@@ -1,9 +1,9 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-header :data="lessonHeader" />
-    <lesson-summary v-show="isShowSummary" />
-    <!-- <lesson-summary /> -->
-    <lesson-wrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <LessonStudentStatus v-if="isBeInClassroom" />
+    <LessonHeader :data="lessonHeaderData" />
+    <LessonSummary v-show="isShowSummary" />
+    <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
   </div>
 </template>
 
@@ -12,12 +12,14 @@ import { mapGetters, mapActions } from 'vuex'
 import LessonWrap from '../common/LessonWrap'
 import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
+import LessonStudentStatus from './LessonStudentStatus'
 export default {
   name: 'Learn',
   components: {
-    'lesson-wrap': LessonWrap,
-    'lesson-header': LessonHeader,
-    'lesson-summary': LessonSummary
+    LessonWrap,
+    LessonHeader,
+    LessonSummary,
+    LessonStudentStatus
   },
   data() {
     return {
@@ -25,7 +27,7 @@ export default {
     }
   },
   async mounted() {
-    this.copyProhibited()
+    // this.copyProhibited()
     this.lessonId = this.$route.params.lessonId || 1
     await this.getLessonContent({ lessonId: this.lessonId })
     console.warn(this.lessonHeader)
@@ -48,12 +50,13 @@ export default {
     ...mapGetters({
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
-      isShowSummary: 'lesson/student/isShowSummary'
+      isShowSummary: 'lesson/student/isShowSummary',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     lesson() {
       return this.lessonDetail.modList || []
     },
-    lessonHeader() {
+    lessonHeaderData() {
       return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
     },
     lessonMain() {
