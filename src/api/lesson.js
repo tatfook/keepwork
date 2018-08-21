@@ -33,13 +33,13 @@ export const users = {
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, config }) =>
     post(`users/${userId}/teacher`, { key }, config),
-  getTeachingRecords: async () => get(`packages`, null, config)
+  getTeachingRecords: async () => get(`packages`)
 }
 
 export const classrooms = {
   join: ({ payload, config }) => post('classrooms/join', payload, config),
   begin: ({ payload, config }) => post(`classrooms`, payload, config),
-  getTeachingListing: async () => get(`classrooms`, null, config),
+  getTeachingListing: async () => get(`classrooms`),
   dismiss: ({ classId, config }) =>
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>
