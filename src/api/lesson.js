@@ -11,41 +11,47 @@ export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
+export const {
+  get,
+  post,
+  put
+} = endpoint
+
 export const admin = {}
 
 export const packages = {
-  packagesList: async (params) => endpoint.get('packages/search', params || {}),
+  packagesList: async (params) => get('packages/search', params || {}),
   packageDetail: async ({
     packageId
-  }) => endpoint.get(`packages/${packageId}/detail`),
-  subscribe: ({
+  }) => get(`packages/${packageId}/detail`),
+  subscribe: async ({
     packageId
-  }) => endpoint.post(`packages/${packageId}/subscribe`)
+  }) => post(`packages/${packageId}/subscribe`)
 }
 
 export const lessons = {
   lessonContent: async ({
     lessonId
-  }) => endpoint.get(`lessons/${lessonId}/contents`),
+  }) => get(`lessons/${lessonId}/contents`),
   lessonContentByVersion: async ({
     lessonId,
     version = 1
   }) =>
-    endpoint.get(`lessons/${lessonId}/contents?version=${version}`)
+    get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
 export const users = {
-  getUserDetail: async () => endpoint.get('users'),
+  getUserDetail: async () => get('users'),
   userSubscribes: async ({
     userId
-  }) => endpoint.get(`users/${userId}/subscribes`),
+  }) => get(`users/${userId}/subscribes`),
   userSkills: async ({
     userId
-  }) => endpoint.get(`users/${userId}/skills`),
+  }) => get(`users/${userId}/skills`),
   toBeTeacher: async ({
     userId,
     key
-  }) => endpoint.post(`users/${userId}/teacher`, {
+  }) => post(`users/${userId}/teacher`, {
     key
   })
 }
@@ -53,18 +59,18 @@ export const users = {
 export const classrooms = {
   join: async ({
     payload
-  }) => endpoint.post('classrooms/join', payload),
+  }) => post('classrooms/join', payload),
   begin: async ({
     payload
-  }) => endpoint.post(`classrooms`, payload),
+  }) => post(`classrooms`, payload),
   dismiss: async ({
     classId
   }) =>
-    endpoint.put(`classrooms/${classId}/dismiss`),
+    put(`classrooms/${classId}/dismiss`),
   learnRecords: async ({
     classId
   }) =>
-    endpoint.get(`classrooms/${classId}/learnRecords`)
+    get(`classrooms/${classId}/learnRecords`)
 }
 
 export const lesson = {

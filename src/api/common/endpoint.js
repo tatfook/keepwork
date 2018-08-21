@@ -1,13 +1,16 @@
 import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import axiosRetry from 'axios-retry'
+
+axiosRetry(axios, { retries: 3 })
 
 const DEFAULT_CONFIG = {
   baseURL: process.env.KEEPWORK_API_PREFIX,
   timeout: 2000,
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    'Content-Type': 'application/json; charset=UTF-8'
   }
 }
 
@@ -34,12 +37,11 @@ const createEndpoint = (config, parseResponse = true) => {
 
   endpoint.interceptors.response.use(
     response => {
-      return parseResponse ? response.data || response : response
+      return parseResponse ? response.data.data || response.data : response.data
     },
     error => {
       console.error(error.message)
-      console.error(error.response.data)
-      return Promise.resolve(error.response)
+      return Promise.reject(error)
     }
   )
 

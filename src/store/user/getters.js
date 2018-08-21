@@ -25,8 +25,6 @@ const getters = {
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
   userId: (state, { profile: { _id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
-  authRequestConfig: (state, { token }) =>
-    token ? { headers: { Authorization: `Bearer ${token}` } } : {},
   realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
