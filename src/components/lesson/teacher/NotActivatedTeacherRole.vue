@@ -49,6 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { lesson } from '@/api'
 
 export default {
   name: "NotActivatedTeacherRole",
@@ -63,26 +64,28 @@ export default {
   computed: {
     ...mapGetters({
       userId: 'user/userId',
-      isToBeTeacherSuccess: 'lesson/isToBeTeacherSuccess'
+      userinfo: 'lesson/userinfo'
     })
   },
   methods: {
     ...mapActions({
       getProfile: 'user/getProfile',
-      toBeTeacher: 'lesson/toBeTeacher'
+      getUserDetail: 'lesson/getUserDetail'
     }),
     async activateTeacherIdentity(){
       let payload = {userId: this.userId, key: this.activeCode}
-      await this.toBeTeacher(payload)
-      console.log('isToBeTeacherSuccess',this.isToBeTeacherSuccess)
-      if(this.isToBeTeacherSuccess === 1){}else{
-        this.$alert(`<span style="color:#f75858;">`+this.$t('lesson.notActivatedText.wrongCodeHint')+`</span>`, '', {
-          confirmButtonText: this.$t('common.Sure'),
-          center: true,
-          dangerouslyUseHTMLString: true,
-          callback: action => {}
-        });
-      }
+      await lesson.users.toBeTeacher(payload).then(res => {
+        if(res[0] === 1){
+          this.getUserDetail()
+        }else{
+          this.$alert(`<span style="color:#f75858;">`+this.$t('lesson.notActivatedText.wrongCodeHint')+`</span>`, '', {
+            confirmButtonText: this.$t('common.Sure'),
+            center: true,
+            dangerouslyUseHTMLString: true,
+            callback: action => {}
+          });
+        }
+      }).catch(err => console.log('err',err))
     }
   }
 }

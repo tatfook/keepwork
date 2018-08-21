@@ -1,5 +1,5 @@
 <template>
-  <div class="teach">
+  <div class="teach" v-loading="loading">
     <div class="teach-nothing" v-if="noPackages">
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
       <p class="teach-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
@@ -9,19 +9,19 @@
       <div class="teach-packages-total">{{$t('lesson.include')}}: <span>3</span> {{$t('lesson.packagesCount')}}</div>
       <div class="teach-packages-list">
         <el-row>
-          <el-col :sm="12" :xs="22">
+          <el-col :sm="12" :xs="22" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
             <div class="package">
               <p class="time">{{$t('lesson.teachingTime')}}:
-                <span class="red-text">11:20 20/8/2018</span>
+                <span class="red-text">{{lessonPackage.updatedAt}}</span>
               </p>
-              <div class="package-cover"><img src="@/assets/lessonImg/cover1.png" alt=""></div>
-              <h4>Blocks</h4>
-              <p>{{$t('lesson.include')}}: 5 {{$t('lesson.lessonsCount')}}</p>
+              <div class="package-cover"><img :src="lessonPackage.extra.cover" alt=""></div>
+              <h4 class="title">{{lessonPackage.extra.packageName}}</h4>
+              <p>{{$t('lesson.include')}}: {{sortedTeachList.length}}  {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: 5~100</p>
-              <p>{{$t('lesson.intro')}} : ******************22222222***</p>
+              <p title="title">{{$t('lesson.intro')}} : ******************22222222***</p>
             </div>
           </el-col>
-          <el-col :sm="12" :xs="22">
+          <!-- <el-col :sm="12" :xs="22">
             <div class="package">
               <p class="time">Latest teaching time:
                 <span class="red-text">11:20 20/8/2018</span>
@@ -32,19 +32,8 @@
               <p>{{$t('lesson.ages')}}: 5~100</p>
               <p>{{$t('lesson.intro')}} : ******************22222222***</p>
             </div>
-          </el-col>
-          <el-col :sm="12" :xs="22">
-            <div class="package">
-              <p class="time">Latest teaching time:
-                <span class="red-text">11:20 20/8/2018</span>
-              </p>
-              <div class="package-cover"><img src="@/assets/lessonImg/cover1.png" alt=""></div>
-              <h4>Blocks</h4>
-              <p>{{$t('lesson.include')}}: 5 {{$t('lesson.lessonsCount')}}</p>
-              <p>{{$t('lesson.ages')}}: 5~100</p>
-              <p>{{$t('lesson.intro')}} : ******************22222222***</p>
-            </div>
-          </el-col>
+          </el-col> -->
+          
         </el-row>
       </div>
     </div>
@@ -52,12 +41,33 @@
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
+import { lesson } from '@/api'
+import _ from 'lodash'
+
 export default {
   name: "TeacherColumnTeach",
   data() {
     return {
-      noPackages: false
+      loading: false,
+      noPackages: false,
+      teachList: []
     }
+  },
+  async mounted(){
+    let resData = await lesson.users.getTeachingRecords()
+    // this.teachList = _.get(resData, `rows`, [])
+    console.log('resData',resData)
+  },
+  computed: {
+    sortedTeachList(){
+      return this.teachList.sort(this.sortByUpdateAt)
+    }
+  },
+  methods:{
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
   }
 }
 </script>
@@ -107,11 +117,15 @@ export default {
             width: 303px;
             height: 188px;
             border-radius: 2px;
+            cursor: pointer;
             img {
               width: 303px;
               height: 188px;
               object-fit: cover;
             }
+          }
+          .title{
+            cursor: pointer;
           }
         }
       }

@@ -26,7 +26,8 @@ export const packages = {
   }) => get(`packages/${packageId}/detail`),
   subscribe: async ({
     packageId
-  }) => post(`packages/${packageId}/subscribe`)
+  }) => post(`packages/${packageId}/subscribe`),
+  getHotsPackages: async () => get(`packages/hots`)
 }
 
 export const lessons = {
@@ -53,7 +54,8 @@ export const users = {
     key
   }) => post(`users/${userId}/teacher`, {
     key
-  })
+  }),
+  getTeachingRecords: async () => get(`packages`)
 }
 
 export const classrooms = {
@@ -63,6 +65,7 @@ export const classrooms = {
   begin: async ({
     payload
   }) => post(`classrooms`, payload),
+  getTeachingListing: async () => get(`classrooms`),
   dismiss: async ({
     classId
   }) =>
