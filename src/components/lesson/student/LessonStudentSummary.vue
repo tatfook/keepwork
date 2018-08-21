@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      isShowSharePanel: true,
+      isShowSharePanel: false,
       title: 'Congratulations. Learning is finished. Here is the summary.'
     }
   },

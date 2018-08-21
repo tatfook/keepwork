@@ -17,7 +17,13 @@ const getters = {
   userSkillsList: state => state.userSkillsList,
   enterClassInfo: state => state.enterClassInfo,
   classroomId: (state, { enterClassInfo }) => enterClassInfo.classroomId || '',
+  classId: (state, { enterClassInfo }) => enterClassInfo.id || '',
   isBeInClassroom: (state, { classroomId }) => !!classroomId,
-  enterClassId: state => state.enterClassId
+  enterClassId: state => state.enterClassId,
+  studentName: state => state.studentName,
+  learnRecords: (state, { studentName, lessonQuiz }) => ({
+    name: studentName,
+    quiz: lessonQuiz
+  })
 }
 export default getters

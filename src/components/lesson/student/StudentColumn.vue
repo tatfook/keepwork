@@ -107,11 +107,9 @@ export default {
       //进入课堂
       let key = this.classID
       await this.enterClassRoom({ key })
-      console.log(this.enterClassInfo)
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
-        await this.setEnterClassID({ key })
         this.$router.push({
-          path: `student/packages/${this.enterClassInfo.packageId}/lessons/${
+          path: `student/package/${this.enterClassInfo.packageId}/lesson/${
             this.enterClassInfo.lessonId
           }`
         })

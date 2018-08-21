@@ -29,8 +29,13 @@ const actions = {
       config
     })
     let modList = Parser.buildBlockList(res.content)
+    let _lesson = _.get(
+      modList.find(item => item.cmd === 'Lesson'),
+      'data.lesson',
+      {}
+    )
     commit(GET_LESSON_CONTENT_SUCCESS, { lessonId, content: res.content })
-    commit(SAVE_LESSON_DETAIL, { lessonId, modList })
+    commit(SAVE_LESSON_DETAIL, { lessonId, lesson: _lesson, modList })
   },
   async beginTheClass(context, payload) {
     const {
