@@ -270,7 +270,7 @@ export default {
       height: 500px !important;
     }
     &-img {
-      // width: 100%;
+      width: 100%;
       object-fit: cover;
       cursor: pointer;
     }

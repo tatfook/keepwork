@@ -12,7 +12,6 @@ export const props = {
 
 const mutations = {
   [GET_USER_INFO_SUCCESS](state, userDetailInfo) {
-    console.warn(userDetailInfo)
     Vue.set(state, 'userinfo', userDetailInfo)
   },
   [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {

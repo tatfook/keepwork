@@ -8,7 +8,7 @@ import mutations from './mutations'
 const state = {
   userinfo: {},
   packagesDetail: {},
-  isToBeTeacherSuccess: null
+  isToBeTeacherSuccess: 0
 }
 export default {
   namespaced: true,

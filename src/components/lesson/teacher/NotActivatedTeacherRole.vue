@@ -5,8 +5,8 @@
         <p>{{$t('lesson.notActivatedText.hint')}}</p>
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
         <div class="teacher-top-hint-input">
-          <el-input class="active-code-input" v-model="activeCode" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
-          <el-button class="active-code-button" type="primary" size="small" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
+          <el-input class="active-code-input" v-model="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
+          <el-button class="active-code-button" type="primary" size="mini" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
         </div>
       </div>
       <div class="teacher-acquire">
@@ -14,30 +14,30 @@
         <el-row :gutter="60">
           <el-col :sm="12" :xs="22" v-for="n in 2" :key="n">
             <div class="acquire-item">
-              <div class="role">{{n === 1 ? $t('lesson.notActivatedText.roleStudent') : $t('lesson.notActivatedText.roleTeacher')}}</div>
+              <div :class="['role',n === 2 ? 'role-teacher':'']">{{n === 1 ? $t('lesson.notActivatedText.roleStudent') : $t('lesson.notActivatedText.roleTeacher')}}</div>
               <div class="access">
                 <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege1')}}</p>
+                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege1')}}</p>
                 <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege2')}}</p>
+                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege2')}}</p>
                 <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege3')}}</p>
+                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege3')}}</p>
                 <p>
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege4')}}</p>
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege4')}}</p>
                 <div class="teaching-function">
                   <p>
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege5')}}</p>
+                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege5')}}</p>
                   <p>
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege6')}}</p>
+                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege6')}}</p>
                   <p>
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege7')}}</p>
+                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege7')}}</p>
                   <p>
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege8')}}</p>
+                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege8')}}</p>
                   <p>
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege9')}}</p>
+                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege9')}}</p>
                 </div>
                 <p>
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/finished.png" alt=""></span>{{$t('lesson.notActivatedText.privilege10')}}</p>
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege10')}}</p>
               </div>
             </div>
           </el-col>
@@ -74,10 +74,12 @@ export default {
     async activateTeacherIdentity(){
       let payload = {userId: this.userId, key: this.activeCode}
       await this.toBeTeacher(payload)
-      console.log(this.isToBeTeacherSuccess)
+      console.log('isToBeTeacherSuccess',this.isToBeTeacherSuccess)
       if(this.isToBeTeacherSuccess === 1){}else{
-        this.$alert('Incorrect activation code. Please check it and try again.', '', {
-          confirmButtonText: '确定',
+        this.$alert(`<span style="color:#f75858;">`+this.$t('lesson.notActivatedText.wrongCodeHint')+`</span>`, '', {
+          confirmButtonText: this.$t('common.Sure'),
+          center: true,
+          dangerouslyUseHTMLString: true,
           callback: action => {}
         });
       }
@@ -92,6 +94,7 @@ export default {
     max-width: 1150px;
     margin: 0 auto;
     &-top-hint {
+      font-size: 14px;
       background: rgba(64, 158, 254, 0.1);
       padding: 25px;
       .red-hint {
@@ -109,7 +112,9 @@ export default {
       .acquire-item {
         width: 545px;
         margin-bottom: 15px;
-        box-shadow: 1px 1px 5px #a5a3a3, -1px -1px 5px #a5a3a3;
+        font-size: 14px;
+        line-height: 30px;
+        box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
         .role {
           height: 86px;
           text-align: center;
@@ -120,6 +125,9 @@ export default {
           justify-content: center;
           align-items: center;
         }
+        .role-teacher{
+          background: #409efe ;
+        }
         .access {
           padding: 44px 25px;
           background: #fff;
@@ -129,8 +137,8 @@ export default {
             .img-wrap {
               margin-right: 8px;
               display: inline-block;
-              width: 24px;
-              height: 24px;
+              width: 20px;
+              height: 20px;
               .not-student-privilege{
                 visibility: hidden;
               }
