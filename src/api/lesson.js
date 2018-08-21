@@ -11,32 +11,19 @@ export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
-export const {
-  get,
-  post,
-  put
-} = endpoint
+export const { get, post, put } = endpoint
 
 export const admin = {}
 
 export const packages = {
-  packagesList: async (params) => get('packages/search', params || {}),
-  packageDetail: async ({
-    packageId
-  }) => get(`packages/${packageId}/detail`),
-  subscribe: async ({
-    packageId
-  }) => post(`packages/${packageId}/subscribe`)
+  packagesList: async params => get('packages/search', params || {}),
+  packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
+  subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`)
 }
 
 export const lessons = {
-  lessonContent: async ({
-    lessonId
-  }) => get(`lessons/${lessonId}/contents`),
-  lessonContentByVersion: async ({
-    lessonId,
-    version = 1
-  }) =>
+  lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
+  lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
@@ -58,21 +45,13 @@ export const classrooms = {
   uploadLearnRecords: ({ classId, learnRecords, config }) =>
     put(`learnRecords/${classId}`, { extra: learnRecords }, config),
   getUserDetail: async () => get('users'),
-  userSubscribes: async ({
-    userId
-  }) => get(`users/${userId}/subscribes`),
-  userSkills: async ({
-    userId
-  }) => get(`users/${userId}/skills`),
-  toBeTeacher: async ({
-    userId,
-    key
-  }) => post(`users/${userId}/teacher`, {
-    key
-  })
+  userSubscribes: async ({ userId }) => get(`users/${userId}/subscribes`),
+  userSkills: async ({ userId }) => get(`users/${userId}/skills`),
+  toBeTeacher: async ({ userId, key }) =>
+    post(`users/${userId}/teacher`, {
+      key
+    })
 }
-
-
 
 export const lesson = {
   users,
