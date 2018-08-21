@@ -3,20 +3,20 @@
     <div class="style-0" v-if="getStyleId === 0">
       <div v-if="properties.switch.value">
         <h3>{{$t(options.title)}}</h3>
+        <div class="comment-input">
+          <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
+          <el-button @click="commit">{{$t(options.commit)}}</el-button>
+        </div>
         <div class="comment-box">
-          <div class="comment-item" v-for='comment in activePageCommentList' :key='comment._id'>
+          <div class="comment-item" v-for='comment in getCommentList' :key='comment._id'>
             <img :src="comment.userInfo.portrait">
             <div class="text">
               <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ comment.updateTime }}</p>
+              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
               <p>{{ comment.content }}</p>
             </div>
             <a class="delete-btn" @click="deleteComment(comment._id)">{{$t(options.delete)}}</a>
           </div>
-        </div>
-        <div class="comment-input">
-          <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
-          <el-button @click="commit">{{$t(options.commit)}}</el-button>
         </div>
       </div>
       <div class="shutup-comment" v-if="!properties.switch.value">
@@ -32,11 +32,11 @@
           </div>
           <h3><img :src="getStyleOneId">{{$t(options.title)}}</h3>
           <hr>
-          <div class="comment-item" v-for='comment in activePageCommentList' :key='comment._id'>
+          <div class="comment-item" v-for='comment in getCommentList' :key='comment._id'>
             <img :src="comment.userInfo.portrait">
             <div class="text">
               <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ comment.updateTime }}</p>
+              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
               <p>{{ comment.content }}</p>
               <hr>
             </div>
@@ -48,6 +48,9 @@
         {{$t(options.close)}}
       </div>
     </div>
+
+    <el-pagination class="pagination" layout="prev, pager, next" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" :total="total">
+    </el-pagination>
   </div>
 </template>
 
@@ -61,13 +64,14 @@ export default {
   data() {
     return {
       loading: false,
-      content: ''
+      content: '',
+      currentPage: 1,
+      pageSize: 10,
+      total: 0
     }
   },
   async mounted() {
-    this.loading = true
-    await this.getActivePageComments()
-    this.loading = false
+    this.loadComments()
   },
   computed: {
     ...mapGetters({
@@ -78,6 +82,16 @@ export default {
     },
     getStyleOneId() {
       return require('@/../static/adi/comment/style-1-title-icon.png')
+    },
+    getCommentList() {
+      if (
+        this.activePageCommentList &&
+        this.activePageCommentList.commentList
+      ) {
+        return this.activePageCommentList.commentList
+      }
+
+      return []
     }
   },
   methods: {
@@ -91,7 +105,7 @@ export default {
     async commit() {
       let { content } = this
 
-      if(!content) {
+      if (!content) {
         return
       }
 
@@ -104,6 +118,35 @@ export default {
       this.loading = true
       await this.deleteCommentById({ _id: commentId })
       this.loading = false
+    },
+    getFormatDate(date) {
+      if (typeof date === 'string') {
+        date = date.split(' ')[1]
+          ? date.split(' ')[0] + ' ' + date.split(' ')[1].replace(/-/g, ':')
+          : date
+      }
+      return date
+    },
+    async loadComments(page) {
+      this.loading = true
+
+      page || this.currentPage
+
+      await this.getActivePageComments({ page: page })
+
+      if (
+        this.activePageCommentList &&
+        this.activePageCommentList.commentTotal
+      ) {
+        this.total = this.activePageCommentList.commentTotal
+      } else {
+        this.total = 0
+      }
+
+      this.loading = false
+    },
+    handleCurrentChange(page) {
+      this.loadComments(page)
     }
   }
 }
@@ -180,7 +223,7 @@ export default {
         textarea {
           resize: none;
           width: 100%;
-          height: 110px;
+          height: 50px;
           border: 2px solid #d4d4d4;
           outline: none;
           background-color: #eeeeee;
@@ -204,7 +247,7 @@ export default {
         font-weight: 900;
         font-size: 22px;
 
-        img{
+        img {
           vertical-align: middle;
           margin-right: 10px;
         }
@@ -260,6 +303,10 @@ export default {
       padding: 60px;
       text-align: center;
     }
+  }
+
+  .pagination {
+    text-align: center;
   }
 }
 </style>

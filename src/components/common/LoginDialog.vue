@@ -13,7 +13,7 @@
           <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
         </el-form-item>
         <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a></div>
-        <div v-if="envIsForDevelopment" class="login-dialog-form-three-login">
+        <div class="login-dialog-form-three-login">
           <div class="title">
             <span>{{$t('common.usingFollowingAccount')}}</span>
           </div>
@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      envIsForDevelopment: process.env.NODE_ENV === 'development',
+      // envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
       isLoginForm: true,
       isRegisterForm: false,

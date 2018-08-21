@@ -10,6 +10,7 @@ const state = () => ({
   comments: {},
   siteDetailInfo: {},
   webTemplateConfig: [],
+  webPageTemplateConfig: [],
   siteLayoutConfigs: {},
   skyDrive: {},
   usersDetail: [],
@@ -17,7 +18,8 @@ const state = () => ({
   siteFiles: {},
   sendCodeInfo: {},
   authCodeInfo: {},
-  threeServices: []
+  threeServices: [],
+  tokenUpdateAt: null
 })
 
 export default {

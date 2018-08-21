@@ -92,9 +92,15 @@
     "saveFail": "保存失败",
     "success": "成功",
     "failure": "失败",
-    "errorInfoTitle": "错误提示"
+    "errorInfoTitle": "错误提示",
+    "canNotUseIE": "此功能无法在IE下使用"
   },
   "editor": {
+    "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
+    "paracraftDownload": "点击下载",
+    
+    "hint": "提示",
+    "pullServerData": "你是否放弃本地修改，重新读取服务器版本？",
     "files": "文件",
     "modules": "模块",
     "save": "保存",
@@ -128,7 +134,7 @@
     "setUpThePage": "设置页面",
     "deleteTheCurrentPage": "删除当前页面",
 
-    "refresh": "刷新",
+    "reload": "重新加载",
     "close": "关闭",
     "closeAll": "关闭全部",
     "delete": "删除",
@@ -201,6 +207,8 @@
 
     "selectSiteTemplate": "选择网站模板",
     "setAccessAddress": "设定网站的访问地址",
+    "selectPageTemplate": "选择网页模板",
+    "setPageAccessAddress": "设定网页的访问地址",
     "theNextStep": "下一步",
     "previous": "上一步",
     "startEditing": "开始编辑",
@@ -211,11 +219,13 @@
     "alreadyExists": "同名网站已经存在",
     "defaultStyle": "默认样式",
     "forExample": "例如：mysite123",
+    "forPageExample": "例如: mypage123",
 
     "websiteNameCanOnly": "网站名只能由字母，数字和下划线组成",
     "setWebsiteName": "您还可以在 网站设置 页面设置网站名称",
     "privatePermissions": "开启VIP ，额外支持私有权限以及权限管理等特权",
     "createdSuccessfully": "恭喜您，网站创建成功",
+    "webPageCreatedSuccessfully": "恭喜您，网页创建成功",
     "lowerCaseLetters": "可使用小写字母、数字（例如：mysite123）",
     "cannotBeginWithAnUnderscore": "网站名不能以下划线开头",
 
@@ -379,7 +389,8 @@
       }
     },
     "board": {
-      "desc": "点击左侧编辑按钮开始编辑"
+      "desc": "双击或使用左侧属性面板编辑",
+      "saving": "文件未保存或正在保存中"
     },
     "qq": {
       "desc": "客服中心"
@@ -396,7 +407,9 @@
       "delete": "删除",
       "commit": "提交",
       "close": "评论功能已关闭",
-      "notice": "分享你的想法！"
+      "notice": "分享你的想法！",
+      "work_review": "作品评论",
+      "publish": "发布"
     }
   },
   "card": {
@@ -694,9 +707,10 @@
     "large": "大号",
     "medium": "中号",
     "small": "小号",
-    "system": "系统默认",
-    "yahei": "微软雅黑",
-    "simhei": "黑体",
+    "inherit": "系统默认",
+    "MicrosoftYaHei": "微软雅黑",
+    "SimHei": "黑体",
+    "STSong": "mac 华文宋体",
     "Font": "字体:",
     "font": "字体",
     "color": "颜色:",

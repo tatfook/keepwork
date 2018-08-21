@@ -61,6 +61,7 @@ export default {
       sendCodeDisabled: false,
       nowOrigin: document.location.origin,
       count: 60,
+      smsId: '',
       ruleForm: {
         username: '',
         password: '',
@@ -118,7 +119,9 @@ export default {
             password: this.ruleForm.password,
             bind: true,
             setRealNameInfo: true,
-            cellphone: this.ruleForm.phoneNumber
+            cellphone: this.ruleForm.phoneNumber,
+            smsCode: this.authCode,
+            smsId: this.smsId
           }
           this.registerLoading = true
           //进行注册
@@ -126,26 +129,19 @@ export default {
             console.log('e', e)
             this.registerLoading = false
           })
-          console.log('registerInfo', registerInfo)
           //注册成功进行登录
           if (registerInfo.error.id === 0) {
             this.registerLoading = false
             this.handleClose()
-            this.loading = true
-            let loginInfo = await this.userLogin(payload).catch(e => {
-              console.error(e)
-              this.loading = false
-            })
-            window.location.reload()
-            console.log('loginInfo', loginInfo)
-            this.loading = false
           } else {
             switch (registerInfo.error.message) {
               case '用户名已存在':
                 this.showMessage('error', this.$t('common.existAccount'))
                 this.registerLoading = false
                 break
-              case '':
+              case '验证码错误':
+                this.showMessage('error', this.$t('user.verificationCodeError'))
+                this.registerLoading = false
                 break
               default:
                 this.showMessage('error', this.$t('common.registerFailed'))
@@ -167,7 +163,7 @@ export default {
         console.error(e)
       })
       this.sendCodeLoading = false
-      let smsId = _.get(info, 'data.smsId')
+      this.smsId = _.get(info, 'data.smsId')
       let message = info.error && info.error.message
       if (message === 'success') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))

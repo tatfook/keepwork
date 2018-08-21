@@ -3,5 +3,9 @@ export default [
   [{ colMenu: 'menu' }],
 
   // template 1
-  [{ colFooter: 'footer' }]
+  [
+    {
+      colGroup: [{ colLogo: 'logo' }, { colBusinessName: 'businessName' }, { colMenu: 'menu' }]
+    }
+  ]
 ]

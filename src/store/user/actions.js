@@ -6,6 +6,9 @@ import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
+import contactContent from '@/assets/source/contact.md'
+import profileContent from '@/assets/source/profile.md'
+import siteContent from '@/assets/source/site.md'
 
 const {
   LOGIN_SUCCESS,
@@ -21,6 +24,8 @@ const {
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS,
   GET_WEB_TEMPLATE_FILELIST_SUCCESS,
   GET_WEB_TEMPLATE_FILE_SUCCESS,
   SET_PAGE_STAR_DETAIL,
@@ -35,6 +40,21 @@ const {
   GET_USER_THREE_SERVICES_SUCCESS,
   SET_AUTH_CODE_INFO
 } = props
+
+const USER_PROFILE_PAGES_CONTENTS = [
+  {
+    fileName: 'profile',
+    content: profileContent
+  },
+  {
+    fileName: 'site',
+    content: siteContent
+  },
+  {
+    fileName: 'contact',
+    content: contactContent
+  }
+]
 
 const actions = {
   async login({ commit, dispatch }, payload) {
@@ -56,8 +76,30 @@ const actions = {
     Cookies.remove('token', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
   },
-  async register({ commit }, { username, password }) {
-    let registerInfo = await keepwork.user.register({ username, password }, null, true)
+  async createUserProfilePageToBack(context, { username }) {
+    let { getters: { authRequestConfig } } = context
+    let profilePageUrl = `/${username}`
+    await keepwork.pages.insert({ url: profilePageUrl }, authRequestConfig)
+  },
+  async createUserProfilePagesToGit(context, { defaultSiteDataSource }) {
+    let { dispatch } = context
+    let { username } = defaultSiteDataSource
+    for (let index = 0; index < USER_PROFILE_PAGES_CONTENTS.length; index++) {
+      let { content, fileName } = USER_PROFILE_PAGES_CONTENTS[index]
+      let filePath = encodeURI(`${username}_datas/${fileName}.md`)
+      await dispatch('gitlab/createFile', { path: filePath, content, refreshRepositoryTree: false }, { root: true })
+    }
+  },
+  async register({ dispatch }, payload) {
+    let registerInfo = await keepwork.user.register(payload, null, true)
+    let { username, password } = payload
+    if (registerInfo.error.id === 0) {
+      await dispatch('login', { username, password })
+      let userinfo = _.get(registerInfo, 'data.userinfo')
+      let { defaultSiteDataSource } = userinfo
+      await dispatch('createUserProfilePageToBack', { username })
+      await dispatch('createUserProfilePagesToGit', { defaultSiteDataSource })
+    }
     return registerInfo
   },
   async thirdRegister({ commit }, payload) {
@@ -179,6 +221,12 @@ const actions = {
     let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, {config})
   },
+  async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
+    if (!_.isEmpty(webPageTemplateConfig)) return
+    let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
+    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath)
+    commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, {config})
+  },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
     let { fileList } = webTemplate
@@ -220,6 +268,20 @@ const actions = {
     }
     let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
+  },
+  async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
+    let { content, contentPath } = template
+    if (typeof content === 'string') return content
+
+    let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
+    content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, `${pageTemplateRoot}/${contentPath}`)
+    commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, {template, content})
+
+    return content
+  },
+  async addNewWebPage({ dispatch }, { path, template }) {
+    let content = await dispatch('getContentOfWebPageTemplate', { template })
+    await dispatch('gitlab/createFile', { path, content }, { root: true })
   },
   async getAllWebsite(context, payload) {
     let { useCache = false } = payload || {}
@@ -441,16 +503,16 @@ const actions = {
     commit(DELETE_COMMENT_SUCCESS, { _id })
     await dispatch('getActivePageComments')
   },
-  async getCommentsByPageUrl({ commit }, { url: path }) {
+  async getCommentsByPageUrl({ commit }, { url: path, page }) {
     let fullPath = getFileFullPathByPath(path)
 
-    let { commentList } = await keepwork.websiteComment.getByPageUrl({url: fullPath})
+    let { commentList, total } = await keepwork.websiteComment.getByPageUrl({url: fullPath, page: page})
 
-    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList})
+    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList, commentTotal: total})
   },
-  async getActivePageComments(context) {
+  async getActivePageComments(context, { page }) {
     let { dispatch, rootGetters: { activePageUrl } } = context
-    await dispatch('getCommentsByPageUrl', {url: activePageUrl})
+    await dispatch('getCommentsByPageUrl', {url: activePageUrl, page: page})
   },
   async starPages(context, { url }) {
     let { commit, dispatch, getters } = context

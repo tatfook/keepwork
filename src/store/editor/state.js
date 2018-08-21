@@ -4,7 +4,6 @@ import SimpleUndo from '@/lib/utils/undo/simpleUndo'
 export const initPageState = () => {
   return {
     modList: [],
-    saved: true,
     activeMod: null,
     activeProperty: null,
     activeArea: 'main',
@@ -18,6 +17,7 @@ export const initPageState = () => {
 export const initLayoutPageState = () => {
   return {
     modList: [],
+    content: '',
     saved: true,
     undoManager: new SimpleUndo(),
     newModPosition: gConst.POSITION_AFTER // after active mod
@@ -39,8 +39,10 @@ export const initSiteState = () => {
 const state = () => ({
   activePage: null,
   activePageUrl: '',
+  openedPages: {},
   openedFiles: {},
   siteSettings: {},
+  openenLayoutFiles: {},
   filemanagerTreeNodeExpandMapByPath: {},
 
   activeManagePaneComponent: {

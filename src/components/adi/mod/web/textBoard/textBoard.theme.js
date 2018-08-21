@@ -49,6 +49,29 @@ export default {
         'subColor': 'color_4',
         'subtitleA': 'color_4'
       }
+    ],
+    fontSize: [
+      {
+        'bigtitle': 'font_0',
+        'subtitle': 'font_1',
+        'paragraphType': 'font_2',
+        'auxiliaryText': 'font_3',
+        'buttonText': 'font_4'
+      },
+      {
+        'bigtitle': 'font_0',
+        'subtitle': 'font_1',
+        'paragraphType': 'font_2',
+        'auxiliaryText': 'font_3',
+        'buttonText': 'font_4'
+      },
+      {
+        'bigtitle': 'font_0',
+        'subtitle': 'font_1',
+        'paragraphType': 'font_2',
+        'auxiliaryText': 'font_3',
+        'buttonText': 'font_4'
+      }
     ]
   }
 }

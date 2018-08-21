@@ -1,3 +1,32 @@
+import _ from 'lodash'
+
+let defaultData = {
+  menu: {
+    mode: 'horizontal',
+    emptyData: [
+      {
+        name: 'adi.title.menu',
+        link: '#'
+      }
+    ],
+    emptyTarget: '_blank'
+  },
+  logo: {
+    emptySrc: require('@/../static/adi/title/bear.svg'),
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  },
+  businessName: {
+    emptyName: 'adi.title.businessName',
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  },
+  tagline: {
+    emptyName: 'adi.title.tagLine',
+    emptyLink: '#',
+    emptyTarget: '_blank'
+  }
+}
 export default [
   // style 0
   {
@@ -12,7 +41,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -24,6 +53,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -43,7 +73,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -55,6 +85,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -78,7 +109,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bgColor']
     },
     options: {
@@ -90,6 +121,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -112,7 +144,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -124,12 +156,12 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
       }
     }
-    // cover: require('@/../static/adi/menu/menu.png'),
   },
   // style 4
   {
@@ -144,7 +176,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -156,6 +188,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -179,7 +212,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_4']
     },
     options: {
@@ -191,6 +224,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -213,7 +247,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -225,6 +259,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank'
         }
@@ -244,7 +279,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -256,6 +291,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           menuStyle: {
@@ -279,7 +315,7 @@ export default [
     },
     theme: {
       root: [],
-      menu: ['mod-full-width', 'font_3'],
+      menu: ['mod-full-width', 'auxiliaryText'],
       colMenu: ['bg_color_0']
     },
     options: {
@@ -291,6 +327,7 @@ export default [
       },
       config: {
         menu: {
+          type: 'menu',
           mode: 'horizontal',
           emptyTarget: '_blank',
           itemStyle: {
@@ -302,9 +339,9 @@ export default [
   },
   // style 9
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -314,19 +351,20 @@ export default [
     theme: {
       root: [],
       colFooterRow: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -336,9 +374,9 @@ export default [
   },
   // style 10
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -347,19 +385,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -369,9 +408,9 @@ export default [
   },
   // style 11
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -380,19 +419,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_0'],
-      colFooter: ['bg_color_4']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_0'],
+      colMenu: ['bg_color_4']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_4',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
@@ -402,9 +442,9 @@ export default [
   },
   // style 12
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -413,19 +453,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
@@ -435,9 +476,9 @@ export default [
   },
   // style 13
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -446,19 +487,20 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
@@ -468,9 +510,9 @@ export default [
   },
   // style 14
   {
-    templateID: 1,
+    templateID: 0,
     data: {
-      footer: {
+      menu: {
         margin: 'auto'
       }
     },
@@ -479,23 +521,85 @@ export default [
     },
     theme: {
       root: [],
-      footer: ['mod-full-width', 'font_3', 'color_4'],
-      colFooter: ['bg_color_0']
+      menu: ['mod-full-width', 'auxiliaryText', 'color_4'],
+      colMenu: ['bg_color_0']
     },
     options: {
       theme: {
-        footer: {
+        menu: {
           footerBackground: 'bg_color_0',
           itemTop: 'font_5',
           itemOther: 'font_8'
         }
       },
       config: {
-        footer: {
+        menu: {
+          type: 'footer',
           emptyTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
         }
+      }
+    }
+  },
+  // style 15
+  {
+    templateID: 1,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center',
+        padding: '5px 0'
+      },
+      colLogo: {
+        float: 'left',
+        'max-width': '64px',
+        'margin-left': '5px'
+      },
+      logo: {
+        height: '64px',
+        width: '64px'
+      },
+      colBusinessName: {
+        float: 'left',
+        width: 'auto',
+        'margin-left': '5px'
+      },
+      colMenu: {
+        float: 'left'
+      },
+      menu: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        menu: {
+          'min-width': '40px'
+        }
+      }
+    },
+    props: {},
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width'],
+      colGroup: ['styleFourBackground'],
+      businessName: ['fontsColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'styleFourBackground',
+          fontColor: 'fontsColor'
+        },
+        logo: {
+          svgFillColor: 'fontsColor'
+        }
+      },
+      config: {
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     }
   }

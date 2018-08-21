@@ -8,7 +8,7 @@
       <!-- <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '> -->
         <div class="preview-site-wrap" id="previewWinSite">
             <div class="preview-site-close"><span @click="handleClosePreview">X</span></div>
-            <div class="preview-content-wrap">
+            <div class="preview-content-wrap" v-if="showPreviewClose">
               <PageViewer/>
             </div>
         </div>
@@ -71,7 +71,7 @@ export default {
         console.error(e)
         this.loading = false
         // this.$router.push('/')
-        throw new Error('Set activeAage failed, goto initial page!')
+        throw new Error('Set activePage failed, goto initial page!')
       })
       await this.userGetWebsiteDetailInfoByPath({
         path: this.activePageInfo.sitepath

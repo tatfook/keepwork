@@ -11,8 +11,9 @@ import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 
 const getters = {
+  tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
-  token: (state, { getToken }) => getToken(),
+  token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
   profile: (state, { getToken }) => {
     let token = getToken()
     let { token: profileUserToken } = state.profile
@@ -235,6 +236,19 @@ const getters = {
     templateName
   }) => {
     let templatesInCategory = getWebTemplates(categoryName)
+    return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
+  },
+
+  webPageTemplateConfig: state => state.webPageTemplateConfig,
+  getWebPageTemplates: (state, { webPageTemplateConfig = [] }) => categoryName => {
+    let categoriesMap = _.keyBy(webPageTemplateConfig, 'name')
+    return _.get(categoriesMap, [categoryName, 'templates'], [])
+  },
+  getWebPageTemplate: (state, { getWebPageTemplates }) => ({
+    categoryName,
+    templateName
+  }) => {
+    let templatesInCategory = getWebPageTemplates(categoryName)
     return _.get(_.keyBy(templatesInCategory, 'name'), [templateName], {})
   },
 

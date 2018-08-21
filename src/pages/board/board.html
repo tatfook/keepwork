@@ -88,6 +88,30 @@
     }
 
     /**
+     * get keepwork language setting
+     */
+    (function() {
+      var cookie = document.cookie.split(";");
+      var lang = '';
+
+      for (var item in cookie) {
+        var currentItem = cookie[item] && cookie[item].replace(' ', '') || '';
+
+        if (currentItem.substring(0, 5) === "lang=") {
+          lang = currentItem.substring(5)
+        }
+      }
+
+      if (lang === 'en-US') {
+        lang = 'en';
+      } else {
+        lang = 'zh';
+      }
+
+      urlParams['lang'] = lang;
+    })();
+
+    /**
      * Adds meta tags with application name (depends on offline URL parameter)
      */
     (function () {
@@ -292,6 +316,11 @@
     mxBasePath = boardRoot + '/mxgraph';
     RESOURCES_PATH = boardRoot + '/resources';
     IMAGE_PATH = boardRoot + '/images';
+    STYLE_PATH = boardRoot + '/styles';
+    SHAPES_PATH = boardRoot + '/shapes';
+    STENCIL_PATH = boardRoot + '/stencils';
+    IMG_LIB_PATH = boardRoot + '/img/lib';
+    GRAPH_IMAGE_PATH = boardRoot + '/img';
 
     // Changes paths for local development environment
     if (urlParams['dev'] == '1') {
@@ -366,11 +395,12 @@
      * Main
      */
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
-    App.main(function(ui) {
-      window.board = ui;
-      // window.onbeforeunload = null;
-      ui.keepwork.read();
-    });
+
+    setTimeout(function() {
+      App.main(function(ui) {
+        window.board = ui;
+      });
+    }, 300)
   </script>
 </body>
 

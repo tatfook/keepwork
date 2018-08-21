@@ -81,20 +81,32 @@ export default {
     ],
     fonts: [
       [
-        46, // 大标题
-        36, // 大标题
         28, // 大标题
-        22, // 副标题
-        18, // 副标题
         16, // 副标题
-        14, // 段落文字
-        13, // 段落文字
         12, // 段落文字
         12, // 辅助文字
         12 // button 文字
+      ],
+      [
+        36,
+        18,
+        13, // 段落文字
+        12, // 辅助文字
+        12 // button 文字
+      ],
+      [
+        46, // 大标题
+        22, // 副标题
+        14, // 段落文字
+        12, // 辅助文字
+        12 // button 文字
       ]
-      // [16, 18, 20, 24, 28, 36],
-      // [24, 26, 28, 32, 36, 42]
+    ],
+    fontFamily: [
+      {label: 'inherit', value: 'inherit'},
+      {label: 'MicrosoftYaHei', value: 'Microsoft YaHei'},
+      {label: 'SimHei', value: 'SimHei'},
+      {label: 'STSong', value: 'STSong'}
     ]
   }
   // horizontal: {

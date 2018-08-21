@@ -35,9 +35,6 @@ const store = new Vuex.Store({
     editor: editorModule
   },
   plugins: [
-    // createPersistedState({
-    //   paths: ['user', 'gitlab', 'editor']
-    // }),
     transfer()
   ]
 })
