@@ -5,82 +5,66 @@ name: Lesson API
 category: API
 ---
 */
-import axios from 'axios'
+import createEndpoint from './common/endpoint'
 
-export const keepworkEndpoint = axios.create({
+export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
-
-export const post = (...args) => {
-  let [url, payload, config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .post(url, payload, config)
-    .then(res => (returnOriginalData ? res.data : res.data.data))
-}
-
-export const _post = args => {
-  const { url, payload, config } = args
-  return keepworkEndpoint.post(url, payload, config).then(res => res.data)
-}
-
-export const put = (...args) => {
-  let [url, payload, config] = args
-  return keepworkEndpoint.put(url, payload, config).then(res => res.data)
-}
-
-/**
- * Be careful about the endpoint[method]'s args
- * get and _delete is a little different with post and put
- * https://github.com/axios/axios#instance-methods
- */
-
-export const get = (...args) => {
-  let [url, payload, config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .get(url, {
-      ...config,
-      params: payload
-    })
-    .then(res => (returnOriginalData ? res.data : res.data.data))
-}
-
-export const _delete = (...args) => {
-  let [url, , config] = args
-  return keepworkEndpoint.delete(url, config).then(res => res.data)
-}
 
 export const admin = {}
 
 export const packages = {
-  packagesList: args => get('packages/search'),
-  packageDetail: ({ packageId, config }) =>
-    get(`packages/${packageId}/detail`, null, config),
-  subscribe: ({ packageId, config }) =>
-    post(`packages/${packageId}/subscribe`, null, config)
+  packagesList: async (params) => endpoint.get('packages/search', params || {}),
+  packageDetail: async ({
+    packageId
+  }) => endpoint.get(`packages/${packageId}/detail`),
+  subscribe: ({
+    packageId
+  }) => endpoint.post(`packages/${packageId}/subscribe`)
 }
 
 export const lessons = {
-  lessonContent: ({ lessonId, config }) => {
-    return get(`lessons/${lessonId}/contents`, null, config)
-  },
-  lessonContentByVersion: ({ lessonId, version = 1 }) =>
-    get(`lessons/${lessonId}/contents?version=${version}`)
+  lessonContent: async ({
+    lessonId
+  }) => endpoint.get(`lessons/${lessonId}/contents`),
+  lessonContentByVersion: async ({
+    lessonId,
+    version = 1
+  }) =>
+    endpoint.get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
 export const users = {
-  getUserDetail: (...args) => get('users', ...args),
-  userSubscribes: args => get(`users/${args.userId}/subscribes`),
-  userSkills: args => get(`users/${args.userId}/skills`),
-  toBeTeacher: ({userId, key, config}) => post(`users/${userId}/teacher`, {key}, config)
+  getUserDetail: async () => endpoint.get('users'),
+  userSubscribes: async ({
+    userId
+  }) => endpoint.get(`users/${userId}/subscribes`),
+  userSkills: async ({
+    userId
+  }) => endpoint.get(`users/${userId}/skills`),
+  toBeTeacher: async ({
+    userId,
+    key
+  }) => endpoint.post(`users/${userId}/teacher`, {
+    key
+  })
 }
 
 export const classrooms = {
-  join: ({ payload, config }) => post('classrooms/join', payload, config),
-  begin: ({ payload, config }) => post(`classrooms`, payload, config),
-  dismiss: ({ classId, config }) =>
-    put(`classrooms/${classId}/dismiss`, null, config),
-  learnRecords: ({ classId, config }) =>
-    get(`classrooms/${classId}/learnRecords`, null, config)
+  join: async ({
+    payload
+  }) => endpoint.post('classrooms/join', payload),
+  begin: async ({
+    payload
+  }) => endpoint.post(`classrooms`, payload),
+  dismiss: async ({
+    classId
+  }) =>
+    endpoint.put(`classrooms/${classId}/dismiss`),
+  learnRecords: async ({
+    classId
+  }) =>
+    endpoint.get(`classrooms/${classId}/learnRecords`)
 }
 
 export const lesson = {

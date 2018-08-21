@@ -1,7 +1,7 @@
-import axios from 'axios'
+import createEndpoint from './common/endpoint'
 import Cookies from 'js-cookie'
 
-const client = axios.create({
+const client = createEndpoint({
   baseURL: process.env.ES_GATEWAY_BASE_URL
 })
 

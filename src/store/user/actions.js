@@ -42,7 +42,7 @@ const actions = {
     if (info.data) {
       info.data.token && Cookies.set('token', info.data.token)
       commit(LOGIN_SUCCESS, info.data)
-      await dispatch('lesson/getUserDetail', { token: info.data.token }, { root: true })
+      await dispatch('lesson/getUserDetail')
     }
     return info
   },

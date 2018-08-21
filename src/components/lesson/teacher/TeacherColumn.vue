@@ -16,11 +16,10 @@ export default {
     }
   },
   async mounted() {
-    await this.getUserDetail(this.getToken)
+    await this.getUserDetail()
   },
   computed: {
     ...mapGetters({
-      getToken: 'user/getToken',
       userinfo: 'lesson/userinfo'
     })
   },

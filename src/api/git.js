@@ -1,4 +1,4 @@
-import axios from 'axios'
+import createEndpoint from './common/endpoint'
 import { Base64 } from 'js-base64'
 import es from './esGateway'
 
@@ -8,11 +8,11 @@ const defaultConfig = {
 }
 
 const gitLabAPIGenerator = ({ url, token }) => {
-  const instance = axios.create({
+  const instance = createEndpoint({
     baseURL: url + '/api/v4/',
     timeout: 30 * 1000,
     headers: { 'private-token': token }
-  })
+  }, false)
   return {
     projects: {
       repository: {
