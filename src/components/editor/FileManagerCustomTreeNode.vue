@@ -16,7 +16,7 @@
     <span class="file-manager-buttons-container" v-if="!isRename">
       <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
       </el-button>
-      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.refresh")' @click.stop='refreshOpenedFile(data)'>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
       </el-button>
       <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
@@ -32,6 +32,9 @@
     <div @click.stop v-if='isWebsiteSettingShow'>
       <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'></website-setting-dialog>
     </div>
+    <div @click.stop v-if='isNewWebPageDialogShow'>
+      <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
+    </div>
   </div>
 </template>
 <script>
@@ -39,6 +42,7 @@ import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
+import NewWebPageDialog from '@/components/common/NewWebPageDialog'
 
 export default {
   name: 'FileManagerCustomTreeNode',
@@ -54,6 +58,7 @@ export default {
       savePending: false,
       renamePending: false,
       isWebsiteSettingShow: false,
+      isNewWebPageDialogShow: false,
       isRename: false,
       isValidator: false,
       newName: ''
@@ -78,13 +83,14 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async addFile() {
-      let newFileName = await this.newFileNamePrompt()
-      newFileName = suffixFileExtension(newFileName, 'md')
-      let newFilePath = `${this.currentPath}/${newFileName}`
-      this.addFilePending = true
-      await this.gitlabCreateFile({ path: newFilePath })
-      this.expandFolder(newFilePath)
-      this.addFilePending = false
+      this.openNewWebPageDialog()
+      // let newFileName = await this.newFileNamePrompt()
+      // newFileName = suffixFileExtension(newFileName, 'md')
+      // let newFilePath = `${this.currentPath}/${newFileName}`
+      // this.addFilePending = true
+      // await this.gitlabCreateFile({ path: newFilePath })
+      // this.expandFolder(newFilePath)
+      // this.addFilePending = false
     },
     async addFolder() {
       let self = this
@@ -187,6 +193,15 @@ export default {
       data.savePending = true
       await this.savePageByPath(path)
       data.savePending = false
+    },
+    confirmRefresh(){
+      this.$confirm(this.$t('editor.pullServerData'), this.$t('editor.hint'), {
+        confirmButtonText: this.$t('el.messagebox.confirm'),
+        cancelButtonText: this.$t('el.messagebox.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.refreshOpenedFile(this.data)
+      }).catch((err) => { console.warn(err) });
     },
     async toggleRename() {
       if (this.isFolder) {
@@ -371,6 +386,12 @@ export default {
     },
     closeWebsiteSettingDialog() {
       this.isWebsiteSettingShow = false
+    },
+    openNewWebPageDialog() {
+      this.isNewWebPageDialogShow = true
+    },
+    closeNewWebPageDialog() {
+      this.isNewWebPageDialogShow = false
     }
   },
   computed: {
@@ -447,7 +468,8 @@ export default {
     }
   },
   components: {
-    WebsiteSettingDialog
+    WebsiteSettingDialog,
+    NewWebPageDialog,
   }
 }
 </script>

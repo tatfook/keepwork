@@ -15,6 +15,14 @@ const renderTemplate = (h, m, data, parentIndex) => {
     }
   }
 
+  function getClass() {
+    if (parentIndex != 1) {
+      return 'footer-subtitle'
+    } else {
+      return 'footer-title'
+    }
+  }
+
   return _.map(data, menuData => {
     index++
 
@@ -22,7 +30,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
       parentIndex = index
     }
 
-    if (!menuData.child) {
+    if (m.options.type === 'menu' && !menuData.child) {
       return (
         <el-menu-item
           index={getIndexString(index)}
@@ -38,7 +46,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           </a>
         </el-menu-item>
       )
-    } else {
+    } else if (m.options.type === 'menu' && menuData.child) {
       return (
         <el-submenu
           index={getIndexString(index)}
@@ -59,6 +67,43 @@ const renderTemplate = (h, m, data, parentIndex) => {
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </el-submenu>
       )
+    } else if (m.options.type !== 'menu' && menuData.child) {
+      return (
+        <div
+          index={getIndexString(index)}
+          style={m.options.itemStyle}
+          class={getClass()}
+        >
+          <a
+            target={
+              m.properties.target ? m.properties.target : m.options.emptyTarget
+            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
+            href={menuData.link}
+          >
+            {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
+          </a>
+          {renderTemplate(h, m, menuData.child, getIndexString(index))}
+        </div>
+      )
+    } else {
+      return (
+        <div
+          index={getIndexString(index)}
+          style={m.options.itemStyle}
+          class={getClass()}
+        >
+          <a
+            target={
+              m.properties.target ? m.properties.target : m.options.emptyTarget
+            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
+            href={menuData.link}
+          >
+            {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
+          </a>
+        </div>
+      )
     }
   })
 }
@@ -66,19 +111,39 @@ const renderTemplate = (h, m, data, parentIndex) => {
 export default {
   name: 'AdiMenu',
   render(h) {
-    return (
-      <div class="comp-menu">
-        <el-menu
-          mode={this.mode}
-          background-color={this.options.menuBackground}
-          text-color={this.options.fontColor}
-          active-text-color={this.options.fontColor}
-          style={this.menuStyle}
-        >
-          {renderTemplate(h, this)}
-        </el-menu>
-      </div>
-    )
+    if (this.options.type === 'menu') {
+      return (
+        <div class="comp-menu">
+          <el-menu
+            mode={this.mode}
+            background-color={this.options.menuBackground}
+            text-color={this.options.fontColor}
+            active-text-color={this.options.fontColor}
+            style={this.menuStyle}
+          >
+            {renderTemplate(h, this)}
+          </el-menu>
+        </div>
+      )
+    } else if (this.options.type === 'footer') {
+      return (
+        <div class="comp-footer">
+          <div
+            background-color={this.options.footerBackground}
+            style={
+              'display:' +
+              this.options.display +
+              ';' +
+              'justify-content:' +
+              this.options.justifyContent +
+              ';'
+            }
+          >
+            {renderTemplate(h, this)}
+          </div>
+        </div>
+      )
+    }
   },
   mixins: [compBaseMixin],
   computed: {
@@ -87,6 +152,16 @@ export default {
     },
     itemStyle() {
       return this.generateStyleString(this.options.itemStyle)
+    },
+    getItemTopStyle() {
+      return this.generateStyleString({
+        'font-size': this.options.itemTop
+      })
+    },
+    getItemOtherStyle() {
+      return this.generateStyleString({
+        'font-size': this.options.itemOther
+      })
     },
     mode() {
       return this.options.mode
@@ -105,19 +180,15 @@ export default {
 a {
   text-decoration: none;
   color: unset;
-  display: inline-block;
-  height: 100%;
-  padding-left: 20px;
-  padding-right: 40px;
-  position: relative;
-  z-index: 999;
 }
 .el-menu--horizontal {
   .el-menu {
     .el-submenu {
-      .el-submenu__title { //子菜单
+      .el-submenu__title {
+        //子菜单
         padding: 0;
-        a { //子菜单文字与超链接
+        a {
+          //子菜单文字与超链接
           height: 100%;
           width: 200px;
           margin-left: -10px;
@@ -127,8 +198,8 @@ a {
           position: relative;
           z-index: 999;
         }
-        .el-submenu__icon-arrow { //子菜单图片
-
+        .el-submenu__icon-arrow {
+          //子菜单图片
         }
       }
     }
@@ -144,6 +215,14 @@ a {
   }
 }
 .comp-menu {
+  a {
+    display: inline-block;
+    height: 100%;
+    padding-left: 20px;
+    padding-right: 40px;
+    position: relative;
+    z-index: 999;
+  }
   height: 100%;
   .el-menu {
     height: 100%;
@@ -159,6 +238,7 @@ a {
   border: none;
 }
 </style>
+
 <style lang="scss">
 .comp-menu {
   a {
@@ -179,6 +259,31 @@ a {
         margin-left: -20px;
       }
     }
+  }
+}
+
+.comp-footer {
+  height: 100%;
+  padding: 40px 0;
+  font-weight: bold;
+  a {
+    display: block;
+    text-decoration: none;
+    color: unset;
+  }
+  .footer-title {
+    padding: 0 20px;
+  }
+  .footer-title > a {
+    padding-bottom: 10px;
+    line-height: 22px;
+  }
+  .footer-subtitle {
+    font-weight: normal;
+  }
+  .footer-subtitle > a {
+    padding-top: 15px;
+    line-height: 22px;
   }
 }
 

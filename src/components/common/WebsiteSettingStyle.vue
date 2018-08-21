@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-loading='loading'>
     <el-row class="website-setting-style" type="flex">
-      <el-col class="website-setting-font" :span="10">
+      <el-col class="website-setting-font" :span="12">
         <header>
           <h1>1.{{$t('setting.Font')}}</h1>
         </header>
@@ -10,7 +10,7 @@
             <el-col :span="22">
               <span class="website-setting-select-title">{{$t('setting.font')}}</span>
               <el-select class="website-setting-select" v-model="fontFamily" size="small" :placeholder="$t('setting.pleaseSelect')">
-                <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in fontFamilyList" :key="item.value" :label="$t('setting.' + item.label)" :value="item.value">
                 </el-option>
               </el-select>
               <div class="tips">{{$t('setting.tips')}}</div>
@@ -27,12 +27,12 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="24" class="website-setting-preview-fontsize">
-              <p v-for="(size, index) in fontSizeList[fontID]" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
+              <p v-for="(size, index) in fontSizeList" :style="{fontSize: `${size}px`, fontFamily: fontFamily}" :key="index">你好,Hello.</p>
             </el-col>
           </el-row>
         </main>
       </el-col>
-      <el-col :span="11" class="website-setting-color">
+      <el-col :span="12" class="website-setting-color">
         <header>
           <h1>2.{{$t('setting.color')}}</h1>
         </header>
@@ -40,15 +40,13 @@
           <website-setting-sytle-color-preview :colorsList="colors" :colorID.sync="colorID" @handleSelectColor="handleSelectColor" />
         </main>
       </el-col>
-      <el-col :span="3" class="website-setting-btns">
-        <el-button @click="handleSave" type="primary">{{$t('editor.save')}}</el-button>
-        <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
-      </el-col>
     </el-row>
+    <DialogOperations class="website-setting-style-operations" @save="handleSave" @close="handleClose"></DialogOperations>
   </div>
 </template>
 
 <script>
+import DialogOperations from './DialogOperations'
 import themeData from '@/lib/theme/theme.data'
 import { mapActions, mapGetters } from 'vuex'
 import WebsiteSettingSytleColorPreview from './WebSiteSettingSytleColorPreview'
@@ -58,6 +56,7 @@ export default {
     sitePath: String
   },
   components: {
+    DialogOperations,
     WebsiteSettingSytleColorPreview
   },
   async mounted() {
@@ -124,13 +123,12 @@ export default {
         label: label
       }))
     },
+    fontFamilyList() {
+      return themeData.classic.fontFamily
+    },
     fontSizeList() {
-      const fonts = themeData.classic.fonts[0]
-      let big = [0, 3, 6, 9]
-      let small = [2, 5, 8, 9]
-      let midium = [1, 4, 7, 9]
-      let comp = [small, midium, big]
-      return comp.map(size => size.map(index => fonts[index]))
+      const fonts = themeData.classic.fonts[this.fontID]
+      return fonts
     }
   },
   data() {
@@ -139,20 +137,10 @@ export default {
       colorID: 0,
       fontID: 0,
       fontFamily: 'inherit',
-      fontSizeName: [this.$t('setting.small'), this.$t('setting.medium'), this.$t('setting.large')],
-      fontFamilyList: [
-        {
-          value: 'inherit',
-          label: this.$t('setting.system')
-        },
-        {
-          value: 'Microsoft YaHei',
-          label: this.$t('setting.yahei')
-        },
-        {
-          value: 'SimHei',
-          label: this.$t('setting.simhei')
-        }
+      fontSizeName: [
+        this.$t('setting.small'),
+        this.$t('setting.medium'),
+        this.$t('setting.large')
       ]
     }
   }
@@ -163,12 +151,14 @@ export default {
 .container {
   height: 100%;
   overflow: hidden;
+  display: flex;
 }
 .website-setting {
   $column-height: 100%;
   &-style {
+    border-right: 15px solid #cdd4db;
+    flex: 1;
     min-height: $column-height;
-    min-width: 1000px;
   }
   &-font,
   &-color {
@@ -179,7 +169,7 @@ export default {
       border-left: 1px solid #bcbcbc;
       height: 100%;
       margin-left: -20px;
-      padding: 10px 20px;
+      padding: 10px 0;
     }
   }
   &-font-size,
@@ -194,6 +184,9 @@ export default {
     border-radius: 4px;
     padding: 20px;
     margin-top: 20px;
+    height: 360px;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   &-select-title {
     margin-right: 10px;
@@ -204,6 +197,9 @@ export default {
     h1 {
       padding-left: 0;
     }
+  }
+  &-style-operations{
+    width: 175px;
   }
 }
 .website-setting-preview-fontsize {

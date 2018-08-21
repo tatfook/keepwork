@@ -11,7 +11,7 @@
         {{$t('editor.setting')}}
       </span>
     </div>
-    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false">
+    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false" :draggable='true'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
           <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>

@@ -5,42 +5,30 @@ name: Keepwork API
 category: API
 ---
 */
-import axios from 'axios'
+import createEndpoint from './common/endpoint'
 
-export const keepworkEndpoint = axios.create({
+export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 })
 
-export const post = (...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
-  return keepworkEndpoint.post(url, payload, config).then(
-    res => returnOriginalData ? res.data : res.data.data
-  )
-}
-
-export const put = (...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
-  return keepworkEndpoint.put(url, payload, config).then(
-    res => returnOriginalData ? res.data : res.data.data
-  )
-}
+const {post, put} = keepworkEndpoint
 
 export const user = {
-  login: (...args) => post('/user/login', ...args),
-  getProfile: (...args) => post('/user/getProfile', ...args),
-  getDetailByName: (...args) => post('/user/getDetailByName', ...args),
-  updateUserInfo: (...args) => put('/user/updateUserInfo', ...args),
-  update: (...args) => put('/user/update', ...args),
-  changepw: (...args) => post('/user/changepw', ...args),
-  getByEmail: (...args) => post('/user/getByEmail', ...args),
-  verifyEmailOne: (...args) => post('/user/verifyEmailOne', ...args),
-  verifyEmailTwo: (...args) => post('/user/verifyEmailTwo', ...args),
-  verifyCellphoneOne: (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneTwo: (...args) => post('/user/verifyCellphoneTwo', ...args),
-  unbindCellphone: (...args) => post('/user/unbindCellphone', ...args),
-  unbindEmail: (...args) => post('/user/unbindEmail', ...args),
-  register: (...args) => post('/user/register', ...args),
-  bindThreeService: (...args) => post('user/bindThreeService', ...args)
+  login: async (...args) => post('/user/login', ...args),
+  getProfile: async (...args) => post('/user/getProfile', ...args),
+  getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
+  updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
+  update: async (...args) => put('/user/update', ...args),
+  changepw: async (...args) => post('/user/changepw', ...args),
+  getByEmail: async (...args) => post('/user/getByEmail', ...args),
+  verifyEmailOne: async (...args) => post('/user/verifyEmailOne', ...args),
+  verifyEmailTwo: async (...args) => post('/user/verifyEmailTwo', ...args),
+  verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
+  verifyCellphoneTwo: async (...args) => post('/user/verifyCellphoneTwo', ...args),
+  unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
+  unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
+  register: async (...args) => post('/user/register', ...args),
+  bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 
 /*doc
@@ -85,11 +73,11 @@ payload: {
 ```
 */
 export const website = {
-  upsert: (...args) => post('website/upsert', ...args),
-  getByName: (...args) => post('website/getByName', ...args),
-  getAllByUsername: (...args) => post('website/getAllByUsername', ...args),
-  getDetailInfo: (...args) => post('website/getDetailInfo', ...args),
-  updateByName: (...args) => post('website/updateByName', ...args)
+  upsert: async (...args) => post('website/upsert', ...args),
+  getByName: async (...args) => post('website/getByName', ...args),
+  getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
+  getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
+  updateByName: async (...args) => post('website/updateByName', ...args)
 }
 
 /*doc
@@ -117,16 +105,17 @@ payload: {
 ```
 */
 export const pages = {
-  star: (...args) => post('pages/star', ...args),
-  getDetail: (...args) => post('pages/getDetail', ...args)
+  star: async (...args) => post('pages/star', ...args),
+  insert: async (...args) => post('pages/insert', ...args),
+  getDetail: async (...args) => post('pages/getDetail', ...args)
 }
 
 export const siteUser = {
-  getSiteListByMemberName: (...args) => post('site_user/getSiteListByMemberName', ...args)
+  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args)
 }
 
 export const siteDataSource = {
-  getByUsername: (...args) => post('site_data_source/getByUsername', ...args)
+  getByUsername: async (...args) => post('site_data_source/getByUsername', ...args)
 }
 
 /*doc
@@ -155,37 +144,37 @@ payload: {
 ```
 */
 export const websiteComment = {
-  create: (...args) => post('website_comment/create', ...args),
-  getByPageUrl: (...args) => post('website_comment/getByPageUrl', ...args),
-  deleteById: (...args) => post('website_comment/deleteById', ...args)
+  create: async (...args) => post('website_comment/create', ...args),
+  getByPageUrl: async (...args) => post('website_comment/getByPageUrl', ...args),
+  deleteById: async (...args) => post('website_comment/deleteById', ...args)
 }
 
 export const sensitiveWords = {
-  query: (...args) => post('sensitive_words/query', ...args)
+  query: async (...args) => post('sensitive_words/query', ...args)
 }
 
 export const bigfile = {
-  upload: (...args) => post('bigfile/upload', ...args),
-  getByUsername: (...args) => post('bigfile/getByUsername', ...args),
-  getUserStoreInfo: (...args) => post('bigfile/getUserStoreInfo', ...args),
-  deleteById: (...args) => post('bigfile/deleteById', ...args),
-  updateById: (...args) => post('bigfile/updateById', ...args),
-  getByFilenameList: (...args) => post('bigfile/getByFilenameList', args),
-  changeFilename: (...args) => post('bigfile/changeFilename', ...args),
-  getDownloadUrlById: (...args) => post('bigfile/getDownloadUrlById', ...args),
-  getDownloadUrlByKey: (...args) => post('bigfile/getDownloadUrlByKey', ...args)
+  upload: async (...args) => post('bigfile/upload', ...args),
+  getByUsername: async (...args) => post('bigfile/getByUsername', ...args),
+  getUserStoreInfo: async (...args) => post('bigfile/getUserStoreInfo', ...args),
+  deleteById: async (...args) => post('bigfile/deleteById', ...args),
+  updateById: async (...args) => post('bigfile/updateById', ...args),
+  getByFilenameList: async (...args) => post('bigfile/getByFilenameList', args),
+  changeFilename: async (...args) => post('bigfile/changeFilename', ...args),
+  getDownloadUrlById: async (...args) => post('bigfile/getDownloadUrlById', ...args),
+  getDownloadUrlByKey: async (...args) => post('bigfile/getDownloadUrlByKey', ...args)
 }
 
 export const qiniu = {
-  uploadToken: (...args) => post('qiniu/uploadToken', ...args),
-  deleteFile: (...args) => post('qiniu/deleteFile', ...args),
-  getUid: (...args) => post('qiniu/getUid', ...args)
+  uploadToken: async (...args) => post('qiniu/uploadToken', ...args),
+  deleteFile: async (...args) => post('qiniu/deleteFile', ...args),
+  getUid: async (...args) => post('qiniu/getUid', ...args)
 }
 
 export const userThreeService = {
-  getByUsername: (...args) => post('user_three_service/getByUsername', ...args),
-  deleteById: (...args) => post('user_three_service/deleteById', ...args),
-  unbind: (...args) => post('user_three_service/unbind', ...args)
+  getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
+  deleteById: async (...args) => post('user_three_service/deleteById', ...args),
+  unbind: async (...args) => post('user_three_service/unbind', ...args)
 }
 
 export const keepwork = {

@@ -67,8 +67,8 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -85,7 +85,10 @@ export default [
       },
       config: {
         // 子组件配置参数
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     },
     cover: require('@/../static/adi/title/title1.png')
@@ -129,8 +132,8 @@ export default [
     theme: {
       root: [],
       colGroupRow: ['mod-full-width'],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -146,7 +149,10 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu',
+          itemStyle: { float: 'right' }
+        })
       }
     },
     cover: require('@/../static/adi/title/title1.png')
@@ -189,8 +195,8 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -207,7 +213,10 @@ export default [
       },
       config: {
         // 子组件配置参数
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     },
     cover: require('@/../static/adi/title/title2.png')
@@ -250,8 +259,8 @@ export default [
     },
     theme: {
       root: [],
-      businessName: ['font_1', 'sbusinessName'],
-      tagline: ['font_3', 'tagline'],
+      businessName: ['bigtitle', 'sbusinessName'],
+      tagline: ['subtitle', 'tagline'],
       menu: ['mod-full-width'],
       colMenu: ['bgColors']
     },
@@ -268,12 +277,76 @@ export default [
       },
       config: {
         ...defaultData,
-        menu: _.merge({}, defaultData.menu, { itemStyle: { float: 'right' } })
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu',
+          itemStyle: { float: 'right' }
+        })
       }
     },
     cover: require('@/../static/adi/title/title2.png')
   },
   // style 4
+  {
+    templateID: 3,
+    data: {
+      root: {},
+      colGroupRow: {
+        display: 'flex',
+        'align-items': 'center',
+        padding: '5px 0'
+      },
+      colLogo: {
+        float: 'left',
+        'max-width': '64px',
+        'margin-left': '5px'
+      },
+      logo: {
+        height: '64px',
+        width: '64px'
+      },
+      colBusinessName: {
+        float: 'left',
+        width: 'auto',
+        'margin-left': '5px'
+      },
+      colMenu: {
+        float: 'left'
+      },
+      menu: {
+        width: 'auto'
+      },
+      '@media only screen and (max-width: 767px)': {
+        menu: {
+          'min-width': '40px'
+        }
+      }
+    },
+    props: {},
+    theme: {
+      root: [],
+      colGroupRow: ['mod-full-width'],
+      colGroup: ['styleFourBackground'],
+      businessName: ['fontsColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'styleFourBackground',
+          fontColor: 'fontsColor'
+        },
+        logo: {
+          svgFillColor: 'fontsColor'
+        }
+      },
+      config: {
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
+      }
+    }
+  },
+  // style 5
   {
     templateID: 2,
     data: {
@@ -323,7 +396,7 @@ export default [
     options: {
       theme: {
         menuB: {
-          fontSize: 'font_6',
+          fontSize: 'subtitle',
           fontColor: 'color_3',
           color: 'svgFillColor',
           backgroundColor: 'color_5',
@@ -334,7 +407,10 @@ export default [
         }
       },
       config: {
-        ...defaultData
+        ...defaultData,
+        menu: _.merge({}, defaultData.menu, {
+          type: 'menu'
+        })
       }
     }
   }

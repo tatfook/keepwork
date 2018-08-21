@@ -39,6 +39,9 @@ export default {
     return {}
   },
   computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo'
+    }),
     inputTypeValue: {
       get() {
         return this.originValue
@@ -72,53 +75,22 @@ export default {
       }
     },
     getBoardSrc() {
-      let board = window.document.querySelector('.board-iframe')
-
-      if (!board) {
-        let url = process.env.BOARD
-
-        if (this.cardValue && this.cardValue.xml) {
-          url = url + '&initxml=' + this.cardValue.xml
-        }
-
-        this.boardSrc = url
-
-        return url
-      } else {
-        return this.boardSrc
-      }
+      return process.env.BOARD || ''
     }
   },
   watch: {
     visible(state) {
-      let board = window.document.querySelector('.board-iframe')
-
       if (state) {
-        if (!board) {
-          return
-        }
-
-        if (!board.contentWindow.keepworkSaveUrl) {
-          board.contentWindow.keepworkSaveUrl = {}
-        }
-
-        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
-
-        if (this.cardValue && this.cardValue.xml) {
-          keepworkSaveUrl.xmlUrl = this.cardValue.xml
-        }
-
-        if (this.cardValue && this.cardValue.svg) {
-          keepworkSaveUrl.svgUrl = this.cardValue.svg
-        }
-
-        board.contentWindow.board.keepwork.read()
+        this.setContentWindowData()
       } else {
+        let board = this.getBoard()
+
         if (!board) {
           return
         }
 
-        let keepworkSaveUrl = board.contentWindow.keepworkSaveUrl
+        let boardWindow = board.contentWindow
+        let keepworkSaveUrl = boardWindow.keepworkSaveUrl
 
         if (
           keepworkSaveUrl &&
@@ -129,7 +101,9 @@ export default {
           this.updateValue(keepworkSaveUrl.svgUrl, 'svg')
         }
 
-        board.contentWindow.keepworkSaveUrl = {}
+        boardWindow.keepworkSaveUrl = {}
+        boardWindow.boardOldData = ''
+        boardWindow.pagePath = ''
       }
     }
   },
@@ -148,9 +122,66 @@ export default {
       })
     },
     openEditor() {
+      if (this.IEVersion() > 0) {
+        alert(this.$t('common.canNotUseIE'))
+        return false
+      }
+
       this.visible = true
     },
+    IEVersion() {
+      let userAgent = navigator.userAgent //取得浏览器的userAgent字符串
+      let isIE =
+        userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 //判断是否IE<11浏览器
+      // let isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器
+      let isIE11 =
+        userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1
+
+      if (isIE) {
+        let reIE = new RegExp('MSIE (\\d+\\.\\d+);')
+        reIE.test(userAgent)
+        let fIEVersion = parseFloat(RegExp['$1'])
+
+        if (fIEVersion == 7) {
+          return 7
+        } else if (fIEVersion == 8) {
+          return 8
+        } else if (fIEVersion == 9) {
+          return 9
+        } else if (fIEVersion == 10) {
+          return 10
+        } else {
+          return 6 //IE版本<=7
+        }
+      } else if (isIE11) {
+        return 11 //IE11
+      } else {
+        return -1 //不是ie浏览器
+      }
+    },
     closeEditor() {
+      let board = this.getBoard()
+
+      if (!board) {
+        return false
+      }
+
+      let boardWindow = board.contentWindow
+
+      if (!boardWindow.board || !boardWindow.board.currentFile) {
+        return false
+      }
+
+      if (
+        boardWindow.board.currentFile.modified ||
+        boardWindow.board.currentFile.savingFile
+      ) {
+        alert(this.$t('adi.board.saving'))
+        return false
+      }
+
+      boardWindow.board.currentFile.close(true)
+
       this.visible = false
     },
     updateValue(newVal, editingKey) {
@@ -161,6 +192,69 @@ export default {
     },
     getFocus() {
       this.$emit('onChangeValue')
+    },
+    getBoard() {
+      return window.document.querySelector('.board-iframe')
+    },
+    setContentWindowData() {
+      let self = this
+
+      function setdata() {
+        let board = self.getBoard()
+
+        if (board) {
+          let boardWindow = board.contentWindow
+
+          // set save url
+          if (!boardWindow.keepworkSaveUrl) {
+            boardWindow.keepworkSaveUrl = {}
+          }
+
+          if (self.cardValue && self.cardValue.xml) {
+            boardWindow.keepworkSaveUrl.xmlUrl = self.cardValue.xml
+          }
+
+          if (self.cardValue && self.cardValue.svg) {
+            boardWindow.keepworkSaveUrl.svgUrl = self.cardValue.svg
+          }
+
+          boardWindow.boardType = {}
+          boardWindow.boardType.close = () => {
+            self.visible = false
+          }
+
+          // set site page path
+          let activePageInfo = self.activePageInfo
+          boardWindow.pagePath =
+            activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
+
+          // set old data
+          if (self.cardValue.data) {
+            boardWindow.boardOldData = self.cardValue.data
+          } else {
+            boardWindow.boardOldData = ''
+          }
+
+          // pick file
+          function pickFile() {
+            if (
+              boardWindow &&
+              boardWindow.board &&
+              boardWindow.board.pickFile
+            ) {
+              boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
+            } else {
+              setTimeout(pickFile, 500)
+            }
+          }
+
+          pickFile()
+        } else {
+          setTimeout(setdata, 500)
+        }
+      }
+
+      setdata()
     }
   }
 }

@@ -15,6 +15,8 @@ const GET_SITE_DETAIL_INFO_SUCCESS = 'GET_SITE_DETAIL_INFO_SUCCESS'
 const GET_CONTRIBUTED_WEBSITE_SUCCESS = 'GET_CONTRIBUTED_WEBSITE_SUCCESS'
 const UPSERT_WEBSITE_SUCCESS = 'UPSERT_WEBSITE_SUCCESS'
 const GET_WEB_TEMPLATE_CONFIG_SUCCESS = 'GET_WEB_TEMPLATE_CONFIG_SUCCESS'
+const GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS = 'GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS'
+const GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS = 'GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS'
 const GET_WEB_TEMPLATE_FILELIST_SUCCESS = 'GET_WEB_TEMPLATE_FILELIST_SUCCESS'
 const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
@@ -43,6 +45,8 @@ export const props = {
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS,
+  GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS,
   GET_WEB_TEMPLATE_FILELIST_SUCCESS,
   GET_WEB_TEMPLATE_FILE_SUCCESS,
   SET_PAGE_STAR_DETAIL,
@@ -64,6 +68,7 @@ const doNothing = state => {
 const mutations = {
   [LOGIN_SUCCESS](state, {token, userinfo: profile}) {
     Vue.set(state, 'profile', {...profile, token})
+    Vue.set(state, 'tokenUpdateAt', Date.now())
   },
   [LOGOUT](state) {
     Vue.set(state, 'profile', {})
@@ -108,10 +113,10 @@ const mutations = {
   [CREATE_COMMENT_SUCCESS]: doNothing,
   [DELETE_COMMENT_SUCCESS]: doNothing,
   [UPSERT_WEBSITE_SUCCESS]: doNothing,
-  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, {url, commentList}) {
+  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, {url, commentList, commentTotal}) {
     Vue.set(state, 'comments', {
       ...state.comments,
-      [url]: commentList
+      [url]: {commentList, commentTotal}
     })
   },
   [GET_SITE_DETAIL_INFO_SUCCESS](state, {username, sitename, detailInfo}) {
@@ -122,6 +127,12 @@ const mutations = {
   },
   [GET_WEB_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
     Vue.set(state, 'webTemplateConfig', config)
+  },
+  [GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
+    Vue.set(state, 'webPageTemplateConfig', config)
+  },
+  [GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS](state, {template, content}) {
+    Vue.set(template, 'content', content)
   },
   [GET_WEB_TEMPLATE_FILELIST_SUCCESS](state, {webTemplate, fileList}) {
     Vue.set(webTemplate, 'fileList', fileList)

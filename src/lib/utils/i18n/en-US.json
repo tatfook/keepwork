@@ -95,6 +95,11 @@
     "errorInfoTitle": "Error"
   },
   "editor": {
+    "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
+    "paracraftDownload": "Download",
+
+    "hint": "Hint",
+    "pullServerData": "Do you drop local changes and re-read the server version?",
     "files": "Files",
     "modules": "MOD",
     "save": "Save",
@@ -128,7 +133,7 @@
     "setUpThePage": "Set up the page",
     "deleteTheCurrentPage": "Delete the current page",
 
-    "refresh": "Refresh",
+    "reload": "reload",
     "close": "Close",
     "closeAll": "Close all",
     "delete": "Delete",
@@ -200,6 +205,8 @@
 
     "selectSiteTemplate": "Select template",
     "setAccessAddress": "Website URL",
+    "selectPageTemplate": "Select Page template",
+    "setPageAccessAddress": "Web Page URL",
     "theNextStep": "Next",
     "previous": "Prev",
     "startEditing": "Start editing",
@@ -210,6 +217,7 @@
     "alreadyExists": "Website with the same name already exists",
     "defaultStyle": "Default style",
     "forExample": "For example: mysite123",
+    "forPageExample": "For example: mypage123",
 
     "websiteNameCanOnly": "Website name can only consist of letters, numbers and underscores",
     "setWebsiteName": "You can also set the site name on the site settings page",
@@ -263,7 +271,8 @@
     "readFileFromLocal": "reading file from local ...",
     "enlargeMdEditing": "Large window editing",
 
-    "pleaseInput": "Please input"
+    "pleaseInput": "Please input",
+    "canNotUseIE": "This function cannot be used under IE."
   },
   "modList": {
     "recent": "Commonly used",
@@ -377,7 +386,8 @@
       }
     },
     "board": {
-      "desc": "Click the edit button on the left to start editing"
+      "desc": "Double click or edit using the left property panel",
+      "saving": "File is not save or saving"
     },
     "qq": {
       "desc": "Customer Service"
@@ -394,7 +404,9 @@
       "delete": "delete",
       "commit": "submit",
       "close": "Comments are closed",
-      "notice": "Share your ideas!"
+      "notice": "Share your ideas!",
+      "work_review": "Work review",
+      "publish": "Publish"
     }
   },
   "card": {
@@ -690,9 +702,10 @@
     "large": "Large",
     "medium": "Medium",
     "small": "Small",
-    "system": "System",
-    "yahei": "Microsoft YaHei",
-    "simhei": "SimHei",
+    "inherit": "System",
+    "MicrosoftYaHei": "Microsoft YaHei",
+    "SimHei": "SimHei",
+    "STSong": "Mac STSong",
     "Font": "Font",
     "color": "Color",
     "font": "font:",
@@ -813,6 +826,7 @@
     },
     "notActivatedText": {
       "hint": "If you are a teacher and wish to get access to the teaching function, please input the activation code here.",
+      "wrongCodeHint": "Incorrect activation code. Please check it and try again.      ",
       "getActivationCode": "If you wish to get the activation code, please contact lixizhi@paraengine.com",
       "inputPlaceholder": "Please input the activation code.",
       "buttonText": "Activate",

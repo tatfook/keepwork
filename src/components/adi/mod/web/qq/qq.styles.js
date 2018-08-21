@@ -61,7 +61,7 @@ export default [
     },
     theme: {
       root: [],
-      desc: ['font_9', 'desc']
+      desc: ['auxiliaryText', 'desc']
     },
     options: {
       theme: {
@@ -128,7 +128,7 @@ export default [
     },
     theme: {
       root: [],
-      desc: ['font_9', 'desc']
+      desc: ['auxiliaryText', 'desc']
     },
     options: {
       theme: {

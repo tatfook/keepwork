@@ -175,11 +175,11 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'fontColor'],
-      download: ['font_12', 'fontColor'],
-      enter: ['font_12', 'enter']
+      worldName: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'fontColor'],
+      enter: ['buttonText', 'enter']
     },
     options: {
       theme: {
@@ -338,12 +338,12 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'worldName'],
-      download: ['font_10'],
-      enter: ['font_10', 'enter'],
-      desc: ['font_10', 'fontColor']
+      worldName: ['paragraphType', 'worldName'],
+      download: ['buttonText'],
+      enter: ['buttonText', 'enter'],
+      desc: ['buttonText', 'fontColor']
     },
     options: {
       theme: {
@@ -436,12 +436,12 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'worldName'],
-      download: ['font_10'],
-      enter: ['font_10', 'enter'],
-      desc: ['font_10', 'fontColor']
+      worldName: ['paragraphType', 'worldName'],
+      download: ['buttonText'],
+      enter: ['buttonText', 'enter'],
+      desc: ['buttonText', 'fontColor']
     },
     options: {
       theme: {
@@ -676,16 +676,16 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'fontColor'],
-      author: ['font_7', 'fontColor'],
-      version: ['font_7', 'fontColor'],
-      size: ['font_7', 'fontColor'],
-      download: ['font_20', 'enter'],
-      titleA: ['font_1'],
-      subtitleA: ['font_20', 'color_3'],
-      viewTimes: ['font_7']
+      worldName: ['paragraphType', 'fontColor'],
+      author: ['paragraphType', 'fontColor'],
+      version: ['paragraphType', 'fontColor'],
+      size: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'enter'],
+      titleA: ['bigtitle'],
+      subtitleA: ['buttonText', 'color_3'],
+      viewTimes: ['paragraphType']
     },
     options: {
       theme: {
@@ -893,16 +893,16 @@ export default [
       }
     },
     theme: {
-      root: ['font_6', 'mod-space'],
+      root: ['paragraphType', 'mod-space'],
       rootRow: ['mod-full-width'],
-      worldName: ['font_4', 'fontColor'],
-      author: ['font_7', 'fontColor'],
-      version: ['font_7', 'fontColor'],
-      size: ['font_7', 'fontColor'],
-      download: ['font_20', 'enter'],
-      titleA: ['font_1'],
-      subtitleA: ['font_20', 'subtitleA'],
-      viewTimes: ['font_7']
+      worldName: ['paragraphType', 'fontColor'],
+      author: ['paragraphType', 'fontColor'],
+      version: ['paragraphType', 'fontColor'],
+      size: ['paragraphType', 'fontColor'],
+      download: ['buttonText', 'enter'],
+      titleA: ['bigtitle'],
+      subtitleA: ['buttonText', 'subtitleA'],
+      viewTimes: ['paragraphType']
     },
     options: {
       theme: {

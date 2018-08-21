@@ -8,32 +8,23 @@ let {
 } = props
 
 const actions = {
-  async getUserDetail(context, { token }) {
-    let { commit, rootGetters: { 'user/authRequestConfig': authRequestConfig } } = context
-    let authConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : authRequestConfig
-    let userLessonInfo = await lesson.users.getUserDetail(null, authConfig)
-    console.log('1', userLessonInfo)
+  async getUserDetail(context) {
+    let { commit } = context
+    let userLessonInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
   },
   async getPackageDetail(context, { packageId }) {
-    let { commit, rootGetters: { 'user/authRequestConfig': config } } = context
-    let detail = await lesson.packages.packageDetail({
-      packageId,
-      config
-    })
+    let { commit } = context
+    let detail = await lesson.packages.packageDetail({ packageId })
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   },
   async subscribePackage(context, { packageId }) {
-    let { rootGetters: { 'user/authRequestConfig': config } } = context
-    let subscribeResult = await lesson.packages.subscribe({
-      packageId,
-      config
-    })
+    let subscribeResult = await lesson.packages.subscribe({ packageId })
     return subscribeResult
   },
   async toBeTeacher(context, { userId, key }) {
-    let { commit, rootGetters: { 'user/authRequestConfig': config } } = context
-    let isToBeTeacherSuccess = await lesson.users.toBeTeacher({ userId, key, config })
+    let { commit } = context
+    let isToBeTeacherSuccess = await lesson.users.toBeTeacher({ userId, key })
     commit(TO_BE_TEACHER, isToBeTeacherSuccess)
   }
 }

@@ -2,10 +2,8 @@
   <div>
     <div v-if='modConf.name == "ModMarkdown" || !style.useImage' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
       <div class="render-mod-container--click-prevent"></div>
-      <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [], true)">
-        <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
-          <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
-        </div>
+      <div class="render-mod-container">
+        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
       </div>
     </div>
     <img v-if='style.useImage && modConf.name != "ModMarkdown"' class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in modConf.styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
@@ -21,12 +19,24 @@ export default {
   props: {
     mod: Object
   },
+  mounted() {
+    this.autoResizePreview()
+  },
+  updated() {
+    this.autoResizePreview()
+  },
   computed: {
     ...mapGetters({
       themeConf: 'themeConf'
     }),
     modConf() {
-      return modLoader.load(this.mod.modType)
+      let modConf = modLoader.load(this.mod.modType)
+
+      _.forEach(modConf.styles, (item, key) => {
+        item.container = ''
+      })
+
+      return modConf
     },
     theme() {
       let globalTheme = themeFactory.generate(this.themeConf)
@@ -34,29 +44,11 @@ export default {
 
       return globalTheme
     }
-    // styles() {
-    //   return mods[this.mod.modType].styles
-    // }
   },
   methods: {
     ...mapActions({
       updateActiveModStyle: 'updateActiveModStyle'
     }),
-    generateStyleString(style, isOutter) {
-      let string = ''
-
-      if (style) {
-        _.forEach(style, (value, key) => {
-          if (isOutter) {
-            string = string + key + ':' + (parseInt(value) + 20) + 'px;'
-          } else {
-            string = string + key + ':' + value + ';'
-          }
-        })
-      }
-
-      return string
-    },
     changeStyle(styleID) {
       this.updateActiveModStyle(styleID)
     },
@@ -70,6 +62,14 @@ export default {
       currentMod.data.styleID = index
 
       return currentMod
+    },
+    autoResizePreview() {
+      let all = this.$el.querySelectorAll('.render-mod-container')
+
+      _.forEach(all , (dom, key) => {
+        dom.style.height = null
+        dom.style.height = dom.offsetHeight * 0.24 + 'px'
+      })
     }
   }
 }
@@ -88,13 +88,12 @@ export default {
 }
 
 .render {
-  // width: 295px;
-  height: auto;
   background-color: white;
   overflow: hidden;
   margin: auto;
   margin-bottom: 12px;
   position: relative;
+  padding: 10px;
 
   .render-mod-container--click-prevent {
     position: absolute;
@@ -104,15 +103,32 @@ export default {
   }
 
   .render-mod-container {
-    border: 10px solid white;
-    // width: 275px;
-    height: 290px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
       transform: scale(0.357);
       transform-origin: top left;
+    }
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .render {
+    background-color: white;
+    overflow: hidden;
+    margin: auto;
+    margin-bottom: 12px;
+    position: relative;
+
+    .render-mod-container {
+      overflow: hidden;
+
+      .render-mod {
+        width: 1080px;
+        transform: scale(0.24);
+        transform-origin: top left;
+      }
     }
   }
 }

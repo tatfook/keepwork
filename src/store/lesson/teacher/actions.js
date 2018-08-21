@@ -1,5 +1,9 @@
-import { props } from './mutations'
-import { lesson } from '@/api'
+import {
+  props
+} from './mutations'
+import {
+  lesson
+} from '@/api'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 const SUCCESS_FLAG = 'OK'
@@ -16,42 +20,54 @@ const {
 } = props
 
 const actions = {
-  toggleHint({ commit }) {
+  toggleHint({
+    commit
+  }) {
     commit(TOGGLE_HINT)
   },
   async getLessonContent(context, lessonId) {
     const {
-      commit,
-      rootGetters: { 'user/authRequestConfig': config }
+      commit
     } = context
     let res = await lesson.lessons.lessonContent({
-      lessonId,
-      config
+      lessonId
     })
     let modList = Parser.buildBlockList(res.content)
+
     let _lesson = _.get(
       modList.find(item => item.cmd === 'Lesson'),
       'data.lesson',
       {}
     )
-    commit(GET_LESSON_CONTENT_SUCCESS, { lessonId, content: res.content })
-    commit(SAVE_LESSON_DETAIL, { lessonId, lesson: _lesson, modList })
+    commit(GET_LESSON_CONTENT_SUCCESS, {
+      lessonId,
+      content: res.content
+    })
+    commit(SAVE_LESSON_DETAIL, {
+      lessonId,
+      modList
+    })
   },
   async beginTheClass(context, payload) {
     const {
-      commit,
-      rootGetters: { 'user/authRequestConfig': config }
+      commit
     } = context
-    let classroom = await lesson.classrooms.begin({ payload, config })
+    let classroom = await lesson.classrooms.begin({
+      payload
+    })
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)
   },
   async dismissTheClass(context, payload) {
     const {
       commit,
-      getters: { classroom, classId },
-      rootGetters: { 'user/authRequestConfig': config }
+      getters: {
+        classroom,
+        classId
+      }
     } = context
-    let flag = await lesson.classrooms.dismiss({ classId, config })
+    let flag = await lesson.classrooms.dismiss({
+      classId
+    })
     if (flag === SUCCESS_FLAG) {
       let _classroom = _.clone(classroom)
       _classroom.state = 2
@@ -61,20 +77,29 @@ const actions = {
   async updateLearnRecords(context, payload) {
     const {
       commit,
-      getters: { classId },
-      rootGetters: { 'user/authRequestConfig': config }
+      getters: {
+        classId
+      }
     } = context
-    let learnRecords = await lesson.classrooms.learnRecords({ classId, config })
+    let learnRecords = await lesson.classrooms.learnRecords({
+      classId
+    })
     console.warn(learnRecords)
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
-  toggleLesson({ commit }, flag) {
+  toggleLesson({
+    commit
+  }, flag) {
     commit(TOGGLE_LESSON, flag)
   },
-  togglePerformance({ commit }, flag) {
+  togglePerformance({
+    commit
+  }, flag) {
     commit(TOGGLE_PERFORMANCE, flag)
   },
-  toggleSummary({ commit }, flag) {
+  toggleSummary({
+    commit
+  }, flag) {
     commit(TOGGLE_SUMMARY, flag)
   }
 }

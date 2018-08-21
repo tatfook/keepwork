@@ -23,5 +23,6 @@ module.exports = {
     '!src/router/index.js',
     '!**/node_modules/**'
   ],
+  testURL: 'http://localhost/',
   testResultsProcessor: 'jest-jenkins-reporter'
 }

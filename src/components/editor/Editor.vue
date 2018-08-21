@@ -3,7 +3,7 @@
     <el-col id="managerWin" class="manager-win">
       <el-row class="toolbar">
         <el-button-group>
-          <el-button class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
+          <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
           <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" :title="$t('editor.modules')"></el-button>
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>

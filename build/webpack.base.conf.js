@@ -51,6 +51,10 @@ module.exports = {
         include: [resolve('src'), resolve('test')]
       },
       {
+        test: /\.md$/,
+        loader: 'raw-loader'
+      },
+      {
         test: /\.scss$/,
         loaders: ['style', 'css', 'sass']
       },

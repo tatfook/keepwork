@@ -5,65 +5,38 @@ name: Lesson API
 category: API
 ---
 */
-import axios from 'axios'
+import createEndpoint from './common/endpoint'
 
-export const keepworkEndpoint = axios.create({
+export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
-export const post = (...args) => {
-  let [url, payload, config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .post(url, payload, config)
-    .then(res => (returnOriginalData ? res.data : res.data.data))
-}
-
-export const _post = args => {
-  const { url, payload, config } = args
-  return keepworkEndpoint.post(url, payload, config).then(res => res.data)
-}
-
-export const put = (...args) => {
-  let [url, payload, config] = args
-  return keepworkEndpoint.put(url, payload, config).then(res => res.data)
-}
-
-/**
- * Be careful about the endpoint[method]'s args
- * get and _delete is a little different with post and put
- * https://github.com/axios/axios#instance-methods
- */
-
-export const get = (...args) => {
-  let [url, payload, config, returnOriginalData = true] = args
-  return keepworkEndpoint
-    .get(url, {
-      ...config,
-      params: payload
-    })
-    .then(res => (returnOriginalData ? res.data : res.data.data))
-}
-
-export const _delete = (...args) => {
-  let [url, , config] = args
-  return keepworkEndpoint.delete(url, config).then(res => res.data)
-}
+export const {
+  get,
+  post,
+  put
+} = endpoint
 
 export const admin = {}
 
 export const packages = {
-  packagesList: args => get('packages/search'),
-  packageDetail: ({ packageId, config }) =>
-    get(`packages/${packageId}/detail`, null, config),
-  subscribe: ({ packageId, config }) =>
-    post(`packages/${packageId}/subscribe`, null, config)
+  packagesList: async (params) => get('packages/search', params || {}),
+  packageDetail: async ({
+    packageId
+  }) => get(`packages/${packageId}/detail`),
+  subscribe: async ({
+    packageId
+  }) => post(`packages/${packageId}/subscribe`)
 }
 
 export const lessons = {
-  lessonContent: ({ lessonId, config }) => {
-    return get(`lessons/${lessonId}/contents`, null, config)
-  },
-  lessonContentByVersion: ({ lessonId, version = 1 }) =>
+  lessonContent: async ({
+    lessonId
+  }) => get(`lessons/${lessonId}/contents`),
+  lessonContentByVersion: async ({
+    lessonId,
+    version = 1
+  }) =>
     get(`lessons/${lessonId}/contents?version=${version}`)
 }
 
@@ -83,8 +56,23 @@ export const classrooms = {
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
   uploadLearnRecords: ({ classId, learnRecords, config }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }, config)
+    put(`learnRecords/${classId}`, { extra: learnRecords }, config),
+  getUserDetail: async () => get('users'),
+  userSubscribes: async ({
+    userId
+  }) => get(`users/${userId}/subscribes`),
+  userSkills: async ({
+    userId
+  }) => get(`users/${userId}/skills`),
+  toBeTeacher: async ({
+    userId,
+    key
+  }) => post(`users/${userId}/teacher`, {
+    key
+  })
 }
+
+
 
 export const lesson = {
   users,
