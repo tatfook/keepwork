@@ -33,6 +33,12 @@ const actions = {
       lessonId
     })
     let modList = Parser.buildBlockList(res.content)
+
+    let _lesson = _.get(
+      modList.find(item => item.cmd === 'Lesson'),
+      'data.lesson',
+      {}
+    )
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
       content: res.content

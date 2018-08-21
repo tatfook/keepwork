@@ -41,6 +41,22 @@ export const lessons = {
 }
 
 export const users = {
+  getUserDetail: (...args) => get('users', ...args),
+  userSubscribes: args => get(`users/${args.userId}/subscribes`),
+  userSkills: args => get(`users/${args.userId}/skills`),
+  toBeTeacher: ({ userId, key, config }) =>
+    post(`users/${userId}/teacher`, { key }, config)
+}
+
+export const classrooms = {
+  join: ({ payload, config }) => post('classrooms/join', payload, config),
+  begin: ({ payload, config }) => post(`classrooms`, payload, config),
+  dismiss: ({ classId, config }) =>
+    put(`classrooms/${classId}/dismiss`, null, config),
+  learnRecords: ({ classId, config }) =>
+    get(`classrooms/${classId}/learnRecords`, null, config),
+  uploadLearnRecords: ({ classId, learnRecords, config }) =>
+    put(`learnRecords/${classId}`, { extra: learnRecords }, config),
   getUserDetail: async () => get('users'),
   userSubscribes: async ({
     userId
@@ -56,22 +72,7 @@ export const users = {
   })
 }
 
-export const classrooms = {
-  join: async ({
-    payload
-  }) => post('classrooms/join', payload),
-  begin: async ({
-    payload
-  }) => post(`classrooms`, payload),
-  dismiss: async ({
-    classId
-  }) =>
-    put(`classrooms/${classId}/dismiss`),
-  learnRecords: async ({
-    classId
-  }) =>
-    get(`classrooms/${classId}/learnRecords`)
-}
+
 
 export const lesson = {
   users,

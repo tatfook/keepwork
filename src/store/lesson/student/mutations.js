@@ -10,6 +10,8 @@ const DO_QUIZ = 'DO_QUIZ'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const SET_ENTER_CLASS_ID = 'SET_ENTER_CLASS_ID'
 const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
+const SET_STUDENT_NAME = 'SET_STUDENT_NAME'
+const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
@@ -20,7 +22,9 @@ export const props = {
   SAVE_LESSON_DETAIL,
   SET_ENTER_CLASS_ID,
   DO_QUIZ,
-  SWITCH_SUMMARY
+  SWITCH_SUMMARY,
+  SET_STUDENT_NAME,
+  LEAVE_THE_CLASS
 }
 
 const mutations = {
@@ -57,6 +61,12 @@ const mutations = {
   },
   [SET_ENTER_CLASS_ID](state, { key }) {
     Vue.set(state, 'enterClassId', key)
+  },
+  [SET_STUDENT_NAME](state, name) {
+    Vue.set(state, 'studentName', name)
+  },
+  [LEAVE_THE_CLASS](state) {
+    Vue.set(state, 'enterClassInfo', {})
   }
 }
 

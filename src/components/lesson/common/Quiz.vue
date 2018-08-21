@@ -85,7 +85,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      doQuiz: 'lesson/student/doQuiz'
+      doQuiz: 'lesson/student/doQuiz',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
     }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -131,8 +132,9 @@ export default {
       this.isDone = true
       this.submit(result, answer)
     },
-    submit(result, answer) {
+    async submit(result, answer) {
       this.doQuiz({ key: this.key, result, answer })
+      await this.uploadLearnRecords()
     }
   },
   computed: {

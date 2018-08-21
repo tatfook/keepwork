@@ -142,9 +142,12 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    intervalUpdateLearnRecords() {
-      clearInterval(this._interval)
-      this._interval = setInterval(this.updateLearnRecords, 3 * 1000)
+    async intervalUpdateLearnRecords(time = 3000) {
+      await this.updateLearnRecords()
+      this._interval = setTimeout(() => this.intervalUpdateLearnRecords(), time)
+    },
+    closeUpdateLearnRecords() {
+      clearTimeout(this._interval)
     },
     async handleBeginTheClass() {
       const { packageId, lessonId } = this.$route.params
@@ -158,6 +161,7 @@ export default {
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
+          this.closeUpdateLearnRecords()
           console.error(e)
         })
     },
@@ -165,6 +169,7 @@ export default {
       await this.dismissTheClass()
         .then(res => {
           console.log(res)
+          this.closeUpdateLearnRecords()
         })
         .catch(e => {
           this.$message.error('失败')
@@ -177,7 +182,8 @@ export default {
       classroom: 'lesson/teacher/classroom',
       isBeInClass: 'lesson/teacher/isBeInClass',
       classroomId: 'lesson/teacher/classroomId',
-      isClassIsOver: 'lesson/teacher/isClassIsOver'
+      isClassIsOver: 'lesson/teacher/isClassIsOver',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     lesson() {
       return _.get(this.data, 'data.lesson', {})
