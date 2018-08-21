@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-column">
-    <not-activated-teacher-role v-if="activatedTeacherRole"></not-activated-teacher-role>
-    <activated-teacher-role v-else></activated-teacher-role>
+    <activated-teacher-role v-if="userinfo.identify === 2"></activated-teacher-role>
+    <not-activated-teacher-role v-else></not-activated-teacher-role>
   </div>
 </template>
 
@@ -13,21 +13,15 @@ export default {
   name: 'TeacherColumn',
   data() {
     return {
-      activatedTeacherRole: true
     }
-  },
-  computed: {
-    ...mapGetters({
-      userinfo: 'lesson/userinfo'
-    })
   },
   async mounted() {
     await this.getUserDetail(this.getToken)
-    setTimeout(() => console.log('userinfo', this.userinfo),3000)
   },
   computed: {
     ...mapGetters({
-      getToken: 'user/getToken'
+      getToken: 'user/getToken',
+      userinfo: 'lesson/userinfo'
     })
   },
   methods: {
@@ -43,6 +37,8 @@ export default {
 </script>
 
 <style lang="scss">
+.teacher-column{
+  height: calc(100vh - 61px - 63px -104px);
+  overflow: auto;
+}
 </style>
-
-

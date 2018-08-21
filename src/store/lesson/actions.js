@@ -12,7 +12,6 @@ const actions = {
     let { commit, rootGetters: { 'user/authRequestConfig': authRequestConfig } } = context
     let authConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : authRequestConfig
     let userLessonInfo = await lesson.users.getUserDetail(null, authConfig)
-    console.log('1', userLessonInfo)
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
   },
   async getPackageDetail(context, { packageId }) {
@@ -33,8 +32,9 @@ const actions = {
   },
   async toBeTeacher(context, { userId, key }) {
     let { commit, rootGetters: { 'user/authRequestConfig': config } } = context
-    let isToBeTeacherSuccess = await lesson.users.toBeTeacher({ userId, key, config })
-    commit(TO_BE_TEACHER, isToBeTeacherSuccess)
+    await lesson.users.toBeTeacher({ userId, key, config }).then((res) => {
+      commit(TO_BE_TEACHER, res)
+    }).catch(err => { console.error(err) })
   }
 }
 
