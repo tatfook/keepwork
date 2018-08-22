@@ -49,7 +49,14 @@
       </div>
     </div>
 
-    <el-pagination class="pagination" layout="prev, pager, next" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" :total="total">
+    <el-pagination
+      v-if="isShowPagination"
+      class="pagination"
+      layout="prev, pager, next"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -92,6 +99,13 @@ export default {
       }
 
       return []
+    },
+    isShowPagination() {
+      if (typeof this.total === 'number' && this.total > 0) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -146,12 +160,9 @@ export default {
         this.activePageCommentList.commentList &&
         this.activePageCommentList.commentList.length === 0
       ) {
-        if(typeof this.currentPage === 'number' && this.currentPage !== 1) {
+        if (typeof this.currentPage === 'number' && this.currentPage !== 1) {
           this.loadComments(this.currentPage - 1)
         }
-
-        this.loading = false
-        return false;
       }
 
       if (

@@ -194,6 +194,7 @@ export default {
       width: 1080px;
       transform: scale(0.254);
       transform-origin: top left;
+      position: unset;
     }
   }
 }
