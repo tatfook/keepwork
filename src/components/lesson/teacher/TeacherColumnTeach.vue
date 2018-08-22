@@ -1,22 +1,18 @@
 <template>
   <div class="teach" v-loading="loading">
-    <div class="teach-nothing" v-if="noPackages">
-      <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
-      <p class="teach-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
-      <el-button type="primary">{{$t('lesson.lessonsCenter')}}</el-button>
-    </div>
-    <div class="teach-packages" v-else>
-      <div class="teach-packages-total">{{$t('lesson.include')}}: <span>3</span> {{$t('lesson.packagesCount')}}</div>
+    <div class="teach-packages" v-show="sortedTeachList.length && !loading">
+      <div class="teach-packages-total">{{$t('lesson.include')}}:
+        <span>{{sortedTeachList.length}}</span> {{$t('lesson.packagesCount')}}</div>
       <div class="teach-packages-list">
         <el-row>
           <el-col :sm="12" :xs="22" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
             <div class="package">
               <p class="time">{{$t('lesson.teachingTime')}}:
-                <span class="red-text">{{lessonPackage.updatedAt}}</span>
+                <span class="red-text">{{lessonPackage.updatedAt | formatTime}}</span>
               </p>
               <div class="package-cover"><img :src="lessonPackage.extra.cover" alt=""></div>
               <h4 class="title">{{lessonPackage.extra.packageName}}</h4>
-              <p>{{$t('lesson.include')}}: {{sortedTeachList.length}}  {{$t('lesson.lessonsCount')}}</p>
+              <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: 5~100</p>
               <p title="title">{{$t('lesson.intro')}} : ******************22222222***</p>
             </div>
@@ -33,41 +29,59 @@
               <p>{{$t('lesson.intro')}} : ******************22222222***</p>
             </div>
           </el-col> -->
-          
+
         </el-row>
       </div>
+    </div>
+    <div class="teach-nothing" v-show="!sortedTeachList.length && !loading">
+      <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
+      <p class="teach-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
+      <el-button type="primary">{{$t('lesson.lessonsCenter')}}</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
+import dayjs from 'dayjs'
 
 export default {
-  name: "TeacherColumnTeach",
+  name: 'TeacherColumnTeach',
   data() {
     return {
-      loading: false,
-      noPackages: false,
+      loading: true,
       teachList: []
     }
   },
-  async mounted(){
-    let resData = await lesson.users.getTeachingRecords()
-    // this.teachList = _.get(resData, `rows`, [])
-    console.log('resData',resData)
+  async beforeCreate() {
+    await lesson.packages
+      .getTaughtPackages()
+      .then(res => {
+        console.log(res)
+        this.teachList = res
+        this.loading = false
+      })
+      .catch(err => {
+        console.log(err)
+      })
   },
   computed: {
-    sortedTeachList(){
+    sortedTeachList() {
+
       return this.teachList.sort(this.sortByUpdateAt)
     }
   },
-  methods:{
+  methods: {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
-    },
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 }
 </script>
@@ -124,7 +138,7 @@ export default {
               object-fit: cover;
             }
           }
-          .title{
+          .title {
             cursor: pointer;
           }
         }

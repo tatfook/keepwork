@@ -19,7 +19,8 @@ export const packages = {
   getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
-  subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`)
+  subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
+  getTaughtPackages: async () => get(`packages/teach`)
 }
 
 export const lessons = {
@@ -48,7 +49,8 @@ export const classrooms = {
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
   uploadLearnRecords: ({ classId, learnRecords, config }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }, config)
+    put(`learnRecords/${classId}`, { extra: learnRecords }, config),
+  getClassroomLearnRecords: (id) => get(`classrooms/${id}/learnRecords`)
 }
 
 export const lesson = {
