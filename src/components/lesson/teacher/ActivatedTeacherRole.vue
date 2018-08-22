@@ -2,7 +2,7 @@
   <div class="activated-teacher-role">
     <el-container class="teacher">
       <el-aside width="260px">
-        <el-menu default-active="1" class="el-menu-vertical-demo">
+        <el-menu :default-active="itmeActive" class="el-menu-vertical-demo">
           <el-menu-item index="1" @click="showItem('TEACH')">
             <i class="iconfont icon-teach"></i>
             <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
@@ -44,26 +44,37 @@ export default {
   name: 'ActivatedTeacherRole',
   data() {
     return {
-      itmeActive: 0
+      itmeActive: '1'
+    }
+  },
+  mounted() {
+    switch (this.$route.name) {
+      case 'TeacherColumnReview':
+        this.itmeActive = '2'
+        break
+      case '':
+        break
+      default:
+        this.itmeActive = '1'
     }
   },
   methods: {
     showItem(itemName) {
       switch (itemName) {
         case 'TEACH':
-          this.itmeActive = 0
+          this.itmeActive = '1'
           this.$router.push({
             path: `/teacher`
           })
           break
         case 'REVIEW':
-          this.itmeActive = 1
+          this.itmeActive = '2'
           this.$router.push({
             path: `/teacher/review`
           })
           break
         case 'MANAGEMENT':
-          this.itmeActive = 2
+          this.itmeActive = '3'
           break
         default:
           break

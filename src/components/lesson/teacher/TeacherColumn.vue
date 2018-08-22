@@ -9,6 +9,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import NotActivatedTeacherRole from './NotActivatedTeacherRole'
 import ActivatedTeacherRole from './ActivatedTeacherRole'
+
 export default {
   name: 'TeacherColumn',
   data() {

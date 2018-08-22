@@ -1737,6 +1737,10 @@ compute-scroll-into-view@1.0.5:
   version "1.0.5"
   resolved "http://registry.npm.taobao.org/compute-scroll-into-view/download/compute-scroll-into-view-1.0.5.tgz#dea9ce0edb17d981ea0d56e52b85c840430b91bf"
 
+compute-scroll-into-view@1.0.7:
+  version "1.0.7"
+  resolved "http://registry.npm.taobao.org/compute-scroll-into-view/download/compute-scroll-into-view-1.0.7.tgz#ad8dbe51093c31d60cf6c2df497b2c077bd9e7d2"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -2106,6 +2110,10 @@ data-urls@^1.0.0:
 date-now@^0.1.4:
   version "0.1.4"
   resolved "http://registry.npm.taobao.org/date-now/download/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
+
+dayjs@^1.7.5:
+  version "1.7.5"
+  resolved "http://registry.npm.taobao.org/dayjs/download/dayjs-1.7.5.tgz#14715cb565d1f8cb556a8531cb14bf1fc33067cc"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -3765,6 +3773,12 @@ imurmurhash@^0.1.4:
 in-publish@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/in-publish/download/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
+
+increase-memory-limit@^1.0.6:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/increase-memory-limit/download/increase-memory-limit-1.0.6.tgz#0bac263c248ba8242939976142e8a706a81b0cfc"
+  dependencies:
+    glob "^7.1.1"
 
 indent-string@^2.1.0:
   version "2.1.0"
@@ -7162,6 +7176,12 @@ scroll-into-view-if-needed@2.2.14:
   dependencies:
     compute-scroll-into-view "1.0.5"
 
+scroll-into-view-if-needed@^2.2.16:
+  version "2.2.16"
+  resolved "http://registry.npm.taobao.org/scroll-into-view-if-needed/download/scroll-into-view-if-needed-2.2.16.tgz#208232f4d7bb531130177b6c02d760d1e1796cbd"
+  dependencies:
+    compute-scroll-into-view "1.0.7"
+
 scss-tokenizer@^0.2.3:
   version "0.2.3"
   resolved "http://registry.npm.taobao.org/scss-tokenizer/download/scss-tokenizer-0.2.3.tgz#8eb06db9a9723333824d3f5530641149847ce5d1"
@@ -8274,7 +8294,7 @@ vue-loader@^13.3.0:
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-markdown@leopoldchen/vue-markdown#master:
+"vue-markdown@github:leopoldchen/vue-markdown#master":
   version "2.2.3"
   resolved "https://codeload.github.com/leopoldchen/vue-markdown/tar.gz/b589a39c243b01b222fa8f1a48292aa57790c1f2"
   dependencies:

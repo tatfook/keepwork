@@ -41,7 +41,7 @@ const createEndpoint = (config, parseResponse = true) => {
     },
     error => {
       console.error(error.message)
-      return Promise.resolve(error.response)
+      return Promise.reject(error)
     }
   )
 

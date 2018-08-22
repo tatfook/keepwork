@@ -6,8 +6,6 @@ import _ from 'lodash'
 let {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
-  GET_USER_SUBSCRIBES,
-  GET_USER_SKILLS,
   ENTER_CLASSROOM,
   // RESUME_CLASSROOM,
   SAVE_LESSON_DETAIL,
@@ -64,7 +62,7 @@ const actions = {
     let enterClassInfo = await lesson.classrooms.join({ key: key })
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
-  async resumeTheClass(context) {
+ // async resumeTheClass(context) {
     // const {
     //   rootGetters: {
     //     'lesson/userinfo': {
@@ -72,6 +70,15 @@ const actions = {
     //     }
     //   }
     // } = context
+  //}
+  async enterClassRoom(context, { key }) {
+    const {
+      commit,
+      rootGetters: { 'user/authRequestConfig': config }
+    } = context
+    let payload = { key: key }
+    let enterClassInfo = await lesson.classrooms.join({ payload, config })
+    commit(ENTER_CLASSROOM, { enterClassInfo })
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, { key, result, answer })

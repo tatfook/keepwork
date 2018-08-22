@@ -7,7 +7,7 @@
         </div>
         <div class="nickname">{{username}}</div>
         <div class="skillpoints">{{skillpointsCount}} skillpoints</div>
-        <div class="skills">
+        <div class="skills" :loading="loadingSkillsPoint">
           <ul class="skills-list">
             <li v-for="(skill,index) in skillsList" :key="index">{{skill.skillName}}：
               <span>{{skill.score}}</span>
@@ -54,6 +54,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { lesson } from '@/api'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
@@ -61,50 +62,66 @@ export default {
   data() {
     return {
       loading: true,
-      classID: ''
+      classID: '',
+      skillsList: [],
+      subscribesList: [],
+      loadingSkillsPoint: true
     }
   },
   async mounted() {
     await this.getProfile()
-    console.log('userId', this.userId)
-    console.log('username', this.username)
     let payload = { userId: this.userId }
-    await this.getUserSubscribes(payload)
-    console.log('subscribes', this.subscribesList)
-    await this.getUserSkills(payload)
-    console.log('skillsList', this.skillsList)
-    this.loading = false
+    await lesson.users
+      .userSubscribes(payload)
+      .then(res => {
+        console.log('res', res)
+        this.subscribesList = res
+        this.loading = false
+      })
+      .catch(error => console.log(error))
+    await lesson.users
+      .userSkills(payload)
+      .then(res => {
+        this.skillsList = res
+        this.loadingSkillsPoint = false
+      })
+      .catch(error => console.log(error))
   },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
       userId: 'user/userId',
       username: 'user/username',
-      subscribesList: 'lesson/student/userSubscribeList',
-      skillsList: 'lesson/student/userSkillsList',
       enterClassInfo: 'lesson/student/enterClassInfo'
     }),
     skillpointsCount() {
       let sum = 0
-      this.skillsList.every(skill => (sum += skill.score * 1))
+      if (this.skillsList.length === 0) {
+        sum = 0
+      } else {
+        this.skillsList = [{ score: 20 }, { score: 10 }]
+        this.skillsList.every(skill => (sum += skill.score * 1))
+      }
       return sum
     },
     sortedSubscribesList() {
-      return this.subscribesList.sort(
-        (obj1, obj2) => obj1.updatedAt < obj2.updatedAt
-      )
+      if (this.subscribesList.length === 0) {
+        return this.subscribesList
+      } else {
+        return this.subscribesList.sort(this.sortByUpdateAt)
+      }
     }
   },
   methods: {
     ...mapActions({
       getProfile: 'user/getProfile',
-      getUserSubscribes: 'lesson/student/getUserSubscribes',
-      getUserSkills: 'lesson/student/getUserSkills',
       enterClassRoom: 'lesson/student/enterClassRoom',
       setEnterClassID: 'lesson/student/setEnterClassID'
     }),
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
     async enterClass() {
-      //进入课堂
       let key = this.classID
       await this.enterClassRoom({ key })
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
