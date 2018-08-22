@@ -16,7 +16,7 @@ export default {
     return {
     }
   },
-  async mounted() {
+  async created() {
     await this.getUserDetail()
   },
   computed: {

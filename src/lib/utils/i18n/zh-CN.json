@@ -889,6 +889,7 @@
     "teachingTime": "最新授课时间",
     "noRecord": "暂无授课记录！",
     "sortByTeachingTime": "点击按授课时间排序",
-    "viewSummary": "查看课程总结"
+    "viewSummary": "查看课程总结",
+    "skillsPoints": "技能点"
   }
 }

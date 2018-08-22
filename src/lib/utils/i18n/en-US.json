@@ -884,6 +884,7 @@
     "teachingTime": "Latest teaching time",
     "noRecord": "There is no teaching record yet.",
     "sortByTeachingTime": "Click to sort by teaching time",
-    "viewSummary": "View Summary"
+    "viewSummary": "View Summary",
+    "skillsPoints": "SkillsPoints"
   }
 }

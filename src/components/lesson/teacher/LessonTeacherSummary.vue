@@ -1,19 +1,19 @@
 <template>
-  <div class="teacher-summary">
+  <div class="teacher-summary" v-loading="loading">
     <div class="teacher-summary-print-and-email">
       <el-button type="primary">Print</el-button>
       <el-button type="primary" @click="sendEmail">Send to Mailbox</el-button>
     </div>
     <div class="teacher-summary-brief">
-      <p class="date">Mondat 20th,April,2018</p>
+      <p class="date">{{currentRecord.createdAt | formatTime}}</p>
       <p>
-        <span class="brief-title">Lesson 1:</span> Tutorial: Installation,Movement and Edit Mode</p>
+        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> Tutorial: Installation,Movement and Edit Mode</p>
       <p>
-        <span class="brief-title">Intro:</span> ********</p>
+        <span class="brief-title">{{$t('lesson.intro')}}:</span> ********</p>
       <p>
-        <span class="brief-title">Durations:</span> 45mins</p>
+        <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
       <div class="skillpoints">
-        <div class="brief-title skill">Skillpoints:</div>
+        <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
             <li>1.learning installation</li>
@@ -104,14 +104,37 @@
 <script>
 import AccuracyRateChart from './AccuracyRateChart'
 import NumberOfStudentsChart from './NumberOfStudentsChart'
+import { lesson } from '@/api'
+import dayjs from 'dayjs'
 
 export default {
   name: "LessonTeacherSummary",
   data() {
     return {
+      loading: true,
       successSendEmailDialogVisible: false,
       changeDialogVisible: false,
-      changeSelected: ''
+      changeSelected: '',
+      currentRecord: {}
+    }
+  },
+  props: {
+    classData: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  async mounted(){
+    if(JSON.stringify(this.classData) == '{}'){
+      let id = this.$route.params.classId
+      console.log(1,id)
+      await lesson.classrooms.getClassroomLearnRecords(id).then(res => {
+        console.log('res',res)
+        this.currentRecord = res[0]
+        this.loading = false
+      }).catch(err => console.log(err))
     }
   },
   methods: {
@@ -149,6 +172,11 @@ export default {
        this.$router.push({
         path: `/teacher/student/1/record`
       })
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   components: {
