@@ -9,8 +9,7 @@ const state = () => ({
   lessonQuiz: {},
   isShowStudentSummary: false,
   enterClassInfo: {},
-  enterClassId: null,
-  studentName: ''
+  enterClassId: ''
 })
 
 export default {

@@ -18,9 +18,14 @@ const getters = {
   classId: (state, { enterClassInfo }) => enterClassInfo.id || '',
   isBeInClassroom: (state, { classroomId }) => !!classroomId,
   enterClassId: state => state.enterClassId,
-  studentName: state => state.studentName,
-  learnRecords: (state, { studentName, lessonQuiz }) => ({
-    name: studentName,
+  learnRecords: (
+    state,
+    { lessonQuiz },
+    rootState,
+    { 'lesson/userinfo': userinfo }
+  ) => ({
+    name: userinfo.nickname,
+    username: userinfo.username,
     quiz: lessonQuiz
   })
 }

@@ -125,10 +125,11 @@ export default {
       _interval: null
     }
   },
-  mounted() {
-    // teacher identity
-    if (this.isTeacher) {
-    }
+  async beforeCreate() {
+    // 查看是否有课堂
+  },
+  async destroyed() {
+    this.clearUpdateLearnRecords()
   },
   methods: {
     ...mapActions({
@@ -142,11 +143,11 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    async intervalUpdateLearnRecords(time = 3000) {
+    async intervalUpdateLearnRecords(delay = 5000) {
       await this.updateLearnRecords()
-      this._interval = setTimeout(() => this.intervalUpdateLearnRecords(), time)
+      this._interval = setTimeout(() => this.intervalUpdateLearnRecords(), delay)
     },
-    closeUpdateLearnRecords() {
+    clearUpdateLearnRecords() {
       clearTimeout(this._interval)
     },
     async handleBeginTheClass() {
@@ -161,7 +162,7 @@ export default {
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
-          this.closeUpdateLearnRecords()
+          this.clearUpdateLearnRecords()
           console.error(e)
         })
     },
@@ -169,7 +170,7 @@ export default {
       await this.dismissTheClass()
         .then(res => {
           console.log(res)
-          this.closeUpdateLearnRecords()
+          this.clearUpdateLearnRecords()
         })
         .catch(e => {
           this.$message.error('失败')

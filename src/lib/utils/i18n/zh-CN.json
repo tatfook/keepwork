@@ -889,6 +889,8 @@
     "teachingTime": "最新授课时间",
     "noRecord": "暂无授课记录！",
     "sortByTeachingTime": "点击按授课时间排序",
-    "viewSummary": "查看课程总结"
+    "viewSummary": "查看课程总结",
+    "leaveTheClass": "离开课堂",
+    "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据"
   }
 }
