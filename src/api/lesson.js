@@ -54,12 +54,17 @@ export const classrooms = {
   getClassroomLearnRecords: (id) => get(`classrooms/${id}/learnRecords`)
 }
 
+export const subjects = {
+  getAllSubjects: () => get('subjects')
+}
+
 export const lesson = {
   users,
   packages,
   lessons,
   admin,
-  classrooms
+  classrooms,
+  subjects
 }
 
 export default lesson

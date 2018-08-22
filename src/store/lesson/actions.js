@@ -5,7 +5,8 @@ import { props } from './mutations'
 let {
   GET_USER_INFO_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
-  GET_PACKAGE_DETAIL_SUCCESS
+  GET_PACKAGE_DETAIL_SUCCESS,
+  GET_ALL_SUBJECTS_SUCCESS
   // TO_BE_TEACHER
 } = props
 
@@ -34,12 +35,20 @@ const actions = {
   },
   async getUserPackages(context, { useCache = true }) {
     let { commit, getters: { userPackages } } = context
-    if (userPackages.length && useCache) {
+    if (userPackages && userPackages.length && useCache) {
       return
     }
     let packages = await lesson.packages.getUserPackages()
     let packageRows = _.get(packages, 'rows')
     commit(GET_USER_PACKAGES_SUCCESS, { userPackages: packageRows })
+  },
+  async getAllSubjects(context, { useCache = true }) {
+    let { commit, getters: { subjects } } = context
+    if (subjects && subjects.length && useCache) {
+      return
+    }
+    let allSubjects = await lesson.subjects.getAllSubjects()
+    commit(GET_ALL_SUBJECTS_SUCCESS, { subjects: allSubjects })
   }
 }
 

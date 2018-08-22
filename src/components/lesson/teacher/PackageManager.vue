@@ -9,20 +9,22 @@
     <div class="package-manager-selector">
       <div class="package-manager-selector-item">
         <label for="subjectSelector">Subject</label>
-        <el-select id="subjectSelector" v-model="subject" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <el-select id="subjectSelector" v-model="searchParams.subjectId">
+          <el-option :key='null' label='all' :value='null'></el-option>
+          <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
           </el-option>
         </el-select>
       </div>
       <div class="package-manager-selector-item">
         <label for="statusSelector">Status</label>
-        <el-select id="statusSelector" v-model="status" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <el-select id="statusSelector" v-model="searchParams.stateId" placeholder="All">
+          <el-option label='all' :value='null'></el-option>
+          <el-option v-for="item in allStates" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </div>
       <div class="package-manager-selector-item package-manager-selector-box">
-        <el-input class="package-manager-selector-search-box" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="searchName">
+        <el-input class="package-manager-selector-search-box" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="searchParams.name">
         </el-input>
       </div>
     </div>
@@ -32,7 +34,7 @@
         </el-table-column>
         <el-table-column prop="packageName" label="name">
         </el-table-column>
-        <el-table-column prop="subjectId" label="Subject" width="190">
+        <el-table-column prop="subjectDetail.subjectName" label="Subject" width="190">
         </el-table-column>
         <el-table-column label="Status" width="125">
           <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
@@ -56,47 +58,73 @@ export default {
   name: 'PackageManager',
   async mounted() {
     await this.lessonGetUserPackages({})
+    await this.lessonGetAllSubjects({})
   },
   data() {
     return {
-      options: [
+      allStates: [
         {
-          value: '选项1',
-          label: '黄金糕'
+          value: 0,
+          label: 'Not submitted'
         },
         {
-          value: '选项2',
-          label: '双皮奶'
+          value: 1,
+          label: 'Pending review'
         },
         {
-          value: '选项3',
-          label: '蚵仔煎'
+          value: 2,
+          label: 'Approved'
         },
         {
-          value: '选项4',
-          label: '龙须面'
+          value: 3,
+          label: 'Reject'
         },
         {
-          value: '选项5',
-          label: '北京烤鸭'
+          value: 4,
+          label: 'Disabled'
         }
       ],
-      searchName: '',
-      subject: '',
-      status: ''
+      searchParams: {
+        name: '',
+        subjectId: null,
+        stateId: null
+      }
     }
   },
   computed: {
     ...mapGetters({
-      lessonUserPackages: 'lesson/userPackages'
+      lessonUserPackages: 'lesson/userPackages',
+      lessonSubjects: 'lesson/subjects'
     }),
     filteredPackageList() {
-      return this.lessonUserPackages
+      let subjectFilteredPackageList = this.getSubjectFilteredPackageList(
+        this.lessonUserPackages
+      )
+      let stateFilteredPackageList = this.getStateFilteredPackageList(
+        subjectFilteredPackageList
+      )
+      let nameFilteredPackageList = this.getNameFilteredPackageList(
+        stateFilteredPackageList
+      )
+      let containSubjectNamePackageList = _.map(
+        nameFilteredPackageList,
+        (obj, index) => {
+          let subjectId = obj.subjectId
+          if (!subjectId) {
+            return obj
+          }
+          let targetSubject = _.find(this.lessonSubjects, { id: subjectId })
+          obj.subjectDetail = targetSubject
+          return obj
+        }
+      )
+      return containSubjectNamePackageList
     }
   },
   methods: {
     ...mapActions({
-      lessonGetUserPackages: 'lesson/getUserPackages'
+      lessonGetUserPackages: 'lesson/getUserPackages',
+      lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
     getStatusText(packageDetail) {
       let statusText = ''
@@ -143,6 +171,33 @@ export default {
     },
     isRevocable(packageDetail) {
       return packageDetail.state === 1
+    },
+    getSubjectFilteredPackageList(originList) {
+      let searchedSubjectId = this.searchParams.subjectId
+      return searchedSubjectId
+        ? _.filter(originList, {
+            subjectId: searchedSubjectId
+          })
+        : originList
+    },
+    getStateFilteredPackageList(originList) {
+      let searchedStateId = this.searchParams.stateId
+      return typeof searchedStateId === 'number'
+        ? _.filter(originList, packageDetail => {
+            console.log(searchedStateId)
+            return packageDetail.state === searchedStateId
+          })
+        : originList
+    },
+    getNameFilteredPackageList(originList) {
+      let searchText = this.searchParams.name
+      if (searchText.length <= 0) {
+        return originList
+      }
+      let reg = new RegExp(searchText)
+      return _.filter(originList, packageDetail => {
+        return reg.test(packageDetail.packageName)
+      })
     }
   }
 }

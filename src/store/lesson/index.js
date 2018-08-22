@@ -7,6 +7,7 @@ import mutations from './mutations'
 
 const state = {
   userPackages: [],
+  allSubjects: [],
   userinfo: {},
   packagesDetail: {}
 }
