@@ -16,6 +16,7 @@ export const { get, post, put } = endpoint
 export const admin = {}
 
 export const packages = {
+  getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),

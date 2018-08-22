@@ -1,8 +1,10 @@
+import _ from 'lodash'
 import { lesson } from '@/api'
 import { props } from './mutations'
 
 let {
   GET_USER_INFO_SUCCESS,
+  GET_USER_PACKAGES_SUCCESS,
   GET_PACKAGE_DETAIL_SUCCESS
   // TO_BE_TEACHER
 } = props
@@ -29,6 +31,15 @@ const actions = {
     } = context
     await lesson.users.setNickname({ nickname, id })
     await dispatch('getUserDetail')
+  },
+  async getUserPackages(context, { useCache = true }) {
+    let { commit, getters: { userPackages } } = context
+    if (userPackages.length && useCache) {
+      return
+    }
+    let packages = await lesson.packages.getUserPackages()
+    let packageRows = _.get(packages, 'rows')
+    commit(GET_USER_PACKAGES_SUCCESS, { userPackages: packageRows })
   }
 }
 

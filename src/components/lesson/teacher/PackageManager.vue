@@ -28,21 +28,22 @@
     </div>
     <div class="package-manager-details">
       <el-table class="package-manager-table" :data="filteredPackageList" height="450" style="width: 100%">
-        <el-table-column prop="id" label="No." width="70">
+        <el-table-column type="index" label="No." width="70">
         </el-table-column>
-        <el-table-column prop="name" label="name">
+        <el-table-column prop="packageName" label="name">
         </el-table-column>
-        <el-table-column prop="subject" label="Subject" width="190">
+        <el-table-column prop="subjectId" label="Subject" width="190">
         </el-table-column>
-        <el-table-column prop="status" label="Status" width="150">
+        <el-table-column label="Status" width="125">
+          <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
         </el-table-column>
-        <el-table-column prop="operations" label="" width="160">
-          <template class="package-manager-table-icon" slot-scope="scope">
-            <i class="iconfont icon-submit"></i>
-            <i class="iconfont icon-edit--"></i>
-            <i class="iconfont icon-delete1"></i>
-            <i class="iconfont icon-Release"></i>
-            <i class="iconfont icon-recall"></i>
+        <el-table-column label="" width="180" class-name="package-manager-table-operations">
+          <template slot-scope="scope">
+            <i v-if="isSubmitable(scope.row)" class="iconfont icon-submit"></i>
+            <i v-if="isEditable(scope.row)" class="iconfont icon-edit--"></i>
+            <i v-if="isDeletable(scope.row)" class="iconfont icon-delete1"></i>
+            <i v-if="isReleasable(scope.row)" class="iconfont icon-Release"></i>
+            <i v-if="isRevocable(scope.row)" class="iconfont icon-recall"></i>
           </template>
         </el-table-column>
       </el-table>
@@ -50,8 +51,12 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PackageManager',
+  async mounted() {
+    await this.lessonGetUserPackages({})
+  },
   data() {
     return {
       options: [
@@ -78,39 +83,66 @@ export default {
       ],
       searchName: '',
       subject: '',
-      status: '',
-      filteredPackageList: [
-        {
-          id: 1,
-          name: 'Enjoy the beauty of your youth',
-          subject: 'Computer Science',
-          status: 'Not submitted'
-        },
-        {
-          id: 2,
-          name: 'Enjoy the beauty of your youth',
-          subject: 'Computer Science',
-          status: 'Rejected'
-        },
-        {
-          id: 3,
-          name: 'Enjoy the beauty of your youth',
-          subject: 'Computer Science',
-          status: 'Pending review'
-        },
-        {
-          id: 4,
-          name: 'Enjoy the beauty of your youth',
-          subject: 'Computer Science',
-          status: 'Approved'
-        },
-        {
-          id: 5,
-          name: 'Enjoy the beauty of your youth',
-          subject: 'Computer Science',
-          status: 'Disabled'
-        }
-      ]
+      status: ''
+    }
+  },
+  computed: {
+    ...mapGetters({
+      lessonUserPackages: 'lesson/userPackages'
+    }),
+    filteredPackageList() {
+      return this.lessonUserPackages
+    }
+  },
+  methods: {
+    ...mapActions({
+      lessonGetUserPackages: 'lesson/getUserPackages'
+    }),
+    getStatusText(packageDetail) {
+      let statusText = ''
+      switch (packageDetail.state) {
+        case 0:
+          statusText = 'Not submitted'
+          break
+        case 1:
+          statusText = 'Pending review'
+          break
+        case 2:
+          statusText = 'Approved'
+          break
+        case 3:
+          statusText = 'Reject'
+          break
+        case 4:
+          statusText = 'Disabled'
+          break
+        default:
+          break
+      }
+      return statusText
+    },
+    isSubmitable(packageDetail) {
+      return (
+        packageDetail.state === 0 ||
+        packageDetail.state === 3 ||
+        packageDetail.state === 4
+      )
+    },
+    isEditable(packageDetail) {
+      return packageDetail.state != 1
+    },
+    isDeletable(packageDetail) {
+      return (
+        packageDetail.state === 0 ||
+        packageDetail.state === 3 ||
+        packageDetail.state === 4
+      )
+    },
+    isReleasable(packageDetail) {
+      return packageDetail.state === 2
+    },
+    isRevocable(packageDetail) {
+      return packageDetail.state === 1
     }
   }
 }
@@ -152,7 +184,7 @@ export default {
       display: inline-block;
       margin-right: 86px;
       .el-select {
-        width: 100px;
+        width: 120px;
         margin-left: 8px;
         .el-select__caret.is-reverse {
           line-height: 0;
@@ -196,16 +228,29 @@ export default {
     tr,
     th {
       text-align: center;
+      color: #414141;
     }
     td,
     th.is-leaf {
       border-color: #d2d2d2;
+      padding: 11px 0;
+    }
+    th.is-leaf {
+      padding: 15px 0;
     }
     .iconfont {
       font-size: 20px;
-      line-height: 1;
       color: #b3b3b3;
       margin-right: 30px;
+    }
+    .iconfont:last-child {
+      margin-right: 0;
+    }
+    &-operations {
+      text-align: right;
+      .cell {
+        padding: 0 20px;
+      }
     }
   }
 }

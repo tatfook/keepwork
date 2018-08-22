@@ -2,10 +2,12 @@ import Vue from 'vue'
 
 const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS'
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
+const GET_USER_PACKAGES_SUCCESS = 'GET_USER_PACKAGES_SUCCESS'
 
 export const props = {
   GET_USER_INFO_SUCCESS,
-  GET_PACKAGE_DETAIL_SUCCESS
+  GET_PACKAGE_DETAIL_SUCCESS,
+  GET_USER_PACKAGES_SUCCESS
 }
 
 const mutations = {
@@ -17,6 +19,9 @@ const mutations = {
       ...state.packagesDetail,
       [detail.id]: detail
     })
+  },
+  [GET_USER_PACKAGES_SUCCESS](state, { userPackages }) {
+    Vue.set(state, 'userPackages', userPackages)
   }
 }
 
