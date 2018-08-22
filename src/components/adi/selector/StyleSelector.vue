@@ -88,6 +88,7 @@ export default {
 }
 
 .render {
+  width: 284px;
   background-color: white;
   overflow: hidden;
   margin: auto;
