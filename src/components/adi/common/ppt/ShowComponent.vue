@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="dialog" :title="$t('editor.pptPresentation')" :visible.sync="isDialogShow" :before-close="handleClose" center>0
+  <!-- <el-dialog class="dialog" :title="$t('editor.pptPresentation')" :visible.sync="isDialogShow" :before-close="handleClose" center>0 -->
     <div class="reveal">1
       <div class="slides">2
         <!-- <section>Slide 1</section>
@@ -47,31 +47,31 @@
         </section>
       </div>
     </div>
-  </el-dialog>
+  <!-- </el-dialog> -->
 </template>
 
 <script>
 
-// import compBaseMixin from '../comp.base.mixin'
+import compBaseMixin from '../comp.base.mixin'
 
-// import '/node_modules/reveal.js/css/reveal.css'
-// import '/node_modules/reveal.js/css/theme/black.css'
+// import '/node_modules/reveal.js/css/reveal'
+// import '/node_modules/reveal.js/css/theme/black'
 
-import reveal from 'reveal.js/js/reveal.js'
-// import 'reveal.js/lib/js/head.min.js'
+import reveal from 'reveal.js/js/reveal'
+// import 'reveal.js/lib/js/head.min'
 // import reveal from 'reveal.js'
 window.Reveal = reveal
-import Marked from 'reveal.js/plugin/markdown/marked.js'
+import Marked from 'reveal.js/plugin/markdown/marked'
 window.marked = Marked
-// import Markdown  from 'reveal.js/plugin/markdown/markdown.js'
+import Markdown  from 'reveal.js/plugin/markdown/markdown'
 // Markdown.initialize()
 
-import classList from 'reveal.js/lib/js/classList.js'
-// import highlight from 'reveal.js/plugin/highlight/highlight.js'
-// import search from 'reveal.js/plugin/search/search.js'
-// import zoom from 'reveal.js/plugin/zoom-js/zoom.js'
-// import notes from 'reveal.js/plugin/notes/notes.js'
-// import math from 'reveal.js/plugin/math/math.js'
+import classList from 'reveal.js/lib/js/classList'
+// import highlight from 'reveal.js/plugin/highlight/highlight'
+// import search from 'reveal.js/plugin/search/search'
+// import zoom from 'reveal.js/plugin/zoom-js/zoom'
+// import notes from 'reveal.js/plugin/notes/notes'
+// import math from 'reveal.js/plugin/math/math'
 
 export default {
   // name: '',
@@ -106,7 +106,7 @@ export default {
       dependencies: [
         { src: classList, condition: function() { return !document.body.classList; } },
         { src: Marked, condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-        // { src: markdown, condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: markdown, condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
         // { src: highlight, async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
         // { src: search, async: true },
         // { src: zoom, async: true },
