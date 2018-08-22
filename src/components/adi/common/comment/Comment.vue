@@ -113,11 +113,16 @@ export default {
       await this.createCommentForActivePage({ content })
       this.content = ''
       this.loading = false
+
+      this.currentPage = 1
+      this.loadComments()
     },
     async deleteComment(commentId) {
       this.loading = true
-      await this.deleteCommentById({ _id: commentId })
+      await this.deleteCommentById({ _id: commentId, page: this.currentPage })
       this.loading = false
+
+      this.loadComments(this.currentPage)
     },
     getFormatDate(date) {
       if (typeof date === 'string') {
@@ -132,7 +137,21 @@ export default {
 
       page || this.currentPage
 
+      this.currentPage = page
+
       await this.getActivePageComments({ page: page })
+
+      if (
+        this.activePageCommentList &&
+        this.activePageCommentList.commentList &&
+        this.activePageCommentList.commentList.length === 0
+      ) {
+        if(this.currentPage !== 1) {
+          this.loadComments(this.currentPage - 1)
+        }
+
+        return false;
+      }
 
       if (
         this.activePageCommentList &&
