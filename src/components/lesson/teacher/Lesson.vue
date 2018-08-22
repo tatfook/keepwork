@@ -1,8 +1,8 @@
 <template>
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" :isTeacher="true" />
-    <!-- <lesson-hint-toggle v-show="isShowLesson" />
-    <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" /> -->
+    <lesson-hint-toggle v-show="isShowLesson" />
+    <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
     <lesson-performance v-show="isShowPerformance" />
     <lesson-summary v-show="isShowSummary" />
   </div>
@@ -24,16 +24,19 @@ export default {
     'lesson-performance': LessonStudentPerformance,
     'lesson-hint-toggle': LessonHintToggle
   },
-  data() {
-    return {}
-  },
-  async mounted() {
+  async created() {
+    console.log('------created------')
     const { packageId, lessonId } = this.$route.params
-    await this.getLessonContent(lessonId)
+    console.log(packageId, lessonId)
+    await Promise.all([this.getCurrentClass(), this.getLessonContent(lessonId)])
+    // await this.getCurrentClass()
+    // await this.getLessonContent(lessonId)
   },
+  async mounted() {},
   methods: {
     ...mapActions({
-      getLessonContent: 'lesson/teacher/getLessonContent'
+      getLessonContent: 'lesson/teacher/getLessonContent',
+      getCurrentClass: 'lesson/teacher/getCurrentClass'
     })
   },
   computed: {

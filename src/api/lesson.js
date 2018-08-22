@@ -35,13 +35,15 @@ export const users = {
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, config }) =>
     post(`users/${userId}/teacher`, { key }, config),
-  getTeachingRecords: async () => get(`packages`)
+  getTeachingRecords: async () => get(`packages`),
+  setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname })
 }
 
 export const classrooms = {
-  join: ({ payload, config }) => post('classrooms/join', payload, config),
+  join: payload => post('classrooms/join', payload),
   begin: ({ payload, config }) => post(`classrooms`, payload, config),
   getTeachingListing: async () => get(`classrooms`),
+  currentClass: () => get(`classrooms/current`),
   dismiss: ({ classId, config }) =>
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>

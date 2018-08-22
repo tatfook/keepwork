@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Quiz from './quiz'
+import Quiz from './Quiz'
 import Hint from './Hint'
 import { mapGetters } from 'vuex'
 export default {

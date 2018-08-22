@@ -1,9 +1,5 @@
-import {
-  props
-} from './mutations'
-import {
-  lesson
-} from '@/api'
+import { props } from './mutations'
+import { lesson } from '@/api'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 const SUCCESS_FLAG = 'OK'
@@ -16,19 +12,16 @@ const {
   TOGGLE_LESSON,
   TOGGLE_PERFORMANCE,
   TOGGLE_SUMMARY,
-  UPDATE_LEARN_RECORDS_SUCCESS
+  UPDATE_LEARN_RECORDS_SUCCESS,
+  GET_CURRENT_CLASSROOM_SUCCESS
 } = props
 
 const actions = {
-  toggleHint({
-    commit
-  }) {
+  toggleHint({ commit }) {
     commit(TOGGLE_HINT)
   },
   async getLessonContent(context, lessonId) {
-    const {
-      commit
-    } = context
+    const { commit } = context
     let res = await lesson.lessons.lessonContent({
       lessonId
     })
@@ -50,9 +43,7 @@ const actions = {
     })
   },
   async beginTheClass(context, payload) {
-    const {
-      commit
-    } = context
+    const { commit } = context
     let classroom = await lesson.classrooms.begin({
       payload
     })
@@ -61,10 +52,7 @@ const actions = {
   async dismissTheClass(context, payload) {
     const {
       commit,
-      getters: {
-        classroom,
-        classId
-      }
+      getters: { classroom, classId }
     } = context
     let flag = await lesson.classrooms.dismiss({
       classId
@@ -78,9 +66,7 @@ const actions = {
   async updateLearnRecords(context, payload) {
     const {
       commit,
-      getters: {
-        classId
-      }
+      getters: { classId }
     } = context
     let learnRecords = await lesson.classrooms.learnRecords({
       classId
@@ -88,19 +74,19 @@ const actions = {
     console.warn(learnRecords)
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
-  toggleLesson({
-    commit
-  }, flag) {
+  async getCurrentClass({ commit }) {
+    await lesson.classrooms
+      .currentClass()
+      .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
+      .catch(e => console.warn('can\'t find the classroom', e))
+  },
+  toggleLesson({ commit }, flag) {
     commit(TOGGLE_LESSON, flag)
   },
-  togglePerformance({
-    commit
-  }, flag) {
+  togglePerformance({ commit }, flag) {
     commit(TOGGLE_PERFORMANCE, flag)
   },
-  toggleSummary({
-    commit
-  }, flag) {
+  toggleSummary({ commit }, flag) {
     commit(TOGGLE_SUMMARY, flag)
   }
 }

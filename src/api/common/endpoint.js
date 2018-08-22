@@ -7,7 +7,7 @@ axiosRetry(axios, { retries: 3 })
 
 const DEFAULT_CONFIG = {
   baseURL: process.env.KEEPWORK_API_PREFIX,
-  timeout: 2000,
+  timeout: 5000,
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json; charset=UTF-8'
@@ -41,7 +41,7 @@ const createEndpoint = (config, parseResponse = true) => {
     },
     error => {
       console.error(error.message)
-      return Promise.resolve(error.response)
+      return Promise.reject(error)
     }
   )
 

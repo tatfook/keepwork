@@ -885,6 +885,8 @@
     "noRecord": "There is no teaching record yet.",
     "sortByTeachingTime": "Click to sort by teaching time",
     "viewSummary": "View Summary",
-    "skillsPoints": "SkillsPoints"
+    "skillsPoints": "SkillsPoints",
+    "leaveTheClass": "Leave the class",
+    "leaveTheClassTips": "Are you sure you want to leave the class? Your learning data will not be saved."
   }
 }
