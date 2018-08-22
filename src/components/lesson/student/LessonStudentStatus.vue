@@ -2,16 +2,16 @@
   <div class="lesson-student-status">
     <el-row class="student-info" type="flex" align="middle">
       <el-col :span="5">
-        <span>Class ID: {{classroomId}}</span>
+        <span>Class ID: {{enterClassId}}</span>
       </el-col>
       <el-col :span="5">
         <span>Name: {{studentName}}</span>
       </el-col>
-      <el-col :span="14" push="10">
+      <el-col :span="14" :push="10">
         <el-button type="primary" size="mini">Leave the class</el-button>
       </el-col>
     </el-row>
-    <el-dialog title="Please input your name here" :visible.sync="isDialogVisible" center>
+    <el-dialog title="Please input your name here" center :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  >
       <el-input v-model="name" placeholder="name" :autofocus="true"></el-input>
       <div slot="footer">
         <el-button @click="handleSetStudentName" type="primary">OK</el-button>
@@ -34,11 +34,12 @@ export default {
     ...mapGetters({
       classroomId: 'lesson/student/classroomId',
       studentName: 'lesson/student/studentName',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      enterClassId: 'lesson/student/enterClassId'
     })
   },
   mounted() {
-    if (!!this.studentName && isBeInClassroom) {
+    if (!this.studentName && this.isBeInClassroom) {
       this.isDialogVisible = true
     }
   },

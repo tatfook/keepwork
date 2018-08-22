@@ -11,7 +11,7 @@ const state = () => ({
   userSubscribeList: [],
   userSkillsList: [],
   enterClassInfo: {},
-  enterClassId: null,
+  enterClassId: '',
   studentName: ''
 })
 
