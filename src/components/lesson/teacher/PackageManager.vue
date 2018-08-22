@@ -37,7 +37,7 @@
         <el-table-column prop="status" label="Status" width="150">
         </el-table-column>
         <el-table-column prop="operations" label="" width="160">
-          <template slot-scope="scope">
+          <template class="package-manager-table-icon" slot-scope="scope">
             <i class="iconfont icon-submit"></i>
             <i class="iconfont icon-edit--"></i>
             <i class="iconfont icon-delete1"></i>
@@ -117,9 +117,11 @@ export default {
 </script>
 <style lang="scss">
 .package-manager {
+  padding-top: 48px;
   &-overview {
     margin-bottom: 20px;
     display: flex;
+    align-items: flex-end;
   }
   &-total {
     flex: 1;
@@ -130,20 +132,33 @@ export default {
   &-new-button {
     font-size: 18px;
     font-weight: bold;
+    padding: 16px 15px;
+    width: 266px;
     i {
       margin-right: 9px;
       font-weight: normal;
+      font-size: 22px;
+      vertical-align: middle;
     }
   }
   &-selector {
     margin-bottom: 20px;
     background-color: #fff;
     text-align: center;
+    font-size: 14px;
+    color: #b3b3b3;
+    padding: 22px 0;
     &-item {
       display: inline-block;
       margin-right: 86px;
       .el-select {
         width: 100px;
+        margin-left: 8px;
+        .el-select__caret.is-reverse {
+          line-height: 0;
+          top: -6px;
+          position: relative;
+        }
       }
     }
     &-item:last-child {
@@ -162,6 +177,7 @@ export default {
     &-search-box {
       .el-input__inner {
         border-radius: 28px;
+        background-color: #f2f8ff;
       }
       .el-input__suffix {
         top: 0;
@@ -171,9 +187,25 @@ export default {
       }
     }
   }
+  &-details {
+    padding: 10px 20px;
+    background-color: #fff;
+  }
   &-table {
-    tr, th {
+    border: 1px solid #d2d2d2;
+    tr,
+    th {
       text-align: center;
+    }
+    td,
+    th.is-leaf {
+      border-color: #d2d2d2;
+    }
+    .iconfont {
+      font-size: 20px;
+      line-height: 1;
+      color: #b3b3b3;
+      margin-right: 30px;
     }
   }
 }

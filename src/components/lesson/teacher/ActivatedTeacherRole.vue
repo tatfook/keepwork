@@ -16,18 +16,8 @@
               <i class="iconfont icon-setting"></i>
               <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
             </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
+            <el-menu-item index="3-1">课程管理</el-menu-item>
+            <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">课程包管理</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -71,6 +61,12 @@ export default {
           this.itmeActive = '2'
           this.$router.push({
             path: `/teacher/review`
+          })
+          break
+        case 'PACKAGE_MANAGER':
+          this.itmeActive = 1
+          this.$router.push({
+            path: `/teacher/packageManager`
           })
           break
         case 'MANAGEMENT':
