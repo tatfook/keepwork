@@ -9,6 +9,7 @@ let {
 
 const actions = {
   async getUserDetail(context) {
+    console.warn('getUserDetail----------------->')
     let { commit } = context
     let userLessonInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
@@ -27,6 +28,7 @@ const actions = {
       dispatch,
       getters: { userId: id }
     } = context
+    console.log(id)
     await lesson.users.setNickname({ nickname, id })
     await dispatch('getUserDetail')
   }

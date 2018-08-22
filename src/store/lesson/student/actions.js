@@ -7,7 +7,7 @@ let {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   ENTER_CLASSROOM,
-  // RESUME_CLASSROOM,
+  RESUME_CLASSROOM,
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
   SET_ENTER_CLASS_ID,
@@ -67,17 +67,22 @@ const actions = {
     let enterClassInfo = await lesson.classrooms.join({
       key: key
     })
+    enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
   async resumeTheClass(context) {
     const {
+      commit,
       rootGetters: {
-        'lesson/userinfo': {
-          extra: { classroomId }
-        }
+        'lesson/userinfo': { extra = {} }
       }
     } = context
-    console.log(classroomId)
+    let { classroomId = null } = extra
+    if (classroomId) {
+      let classroom = await lesson.classrooms.getClassroomById(classroomId)
+      commit(RESUME_CLASSROOM, classroom)
+      console.log(classroom)
+    }
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, {
@@ -106,7 +111,9 @@ const actions = {
       key
     })
   },
-  async leaveTheClass({ commit }) {
+  async leaveTheClass({ commit, dispatch }) {
+    await lesson.classrooms.leave()
+    await dispatch('lesson/getUserDetail', null, { root: true })
     commit(LEAVE_THE_CLASS)
   }
 }

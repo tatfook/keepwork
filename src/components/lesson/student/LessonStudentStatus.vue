@@ -35,9 +35,12 @@ export default {
       classroomId: 'lesson/student/classroomId',
       studentName: 'lesson/student/studentName',
       isBeInClassroom: 'lesson/student/isBeInClassroom',
-      enterClassId: 'lesson/student/enterClassId',
+      enterClassInfo: 'lesson/student/enterClassInfo',
       userinfo: 'lesson/userinfo'
     }),
+    enterClassId() {
+      return _.get(this.enterClassInfo, 'key', '')
+    },
     nickname() {
       return _.get(this.userinfo, 'nickname', '')
     },
@@ -52,10 +55,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      setNickname: 'lesson/setNickname'
+      setNickname: 'lesson/setNickname',
+      leaveTheClass: 'lesson/student/leaveTheClass'
     }),
     async handleLeaveTheClass() {
-      console.log('leave the class--------->')
+      this.$confirm(this.$t('lesson.leaveTheClassTips'), this.$t('lesson.leaveTheClass'), {
+        distinguishCancelAndClose: true,
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel')
+      })
+      .then( async () => {
+        await this.leaveTheClass()
+        this.$router.push(`/student`)
+      })
+      .catch(action => console.log(action))
     },
     async handleSetNickname() {
       if (this.name.trim() !== '') {

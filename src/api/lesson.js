@@ -42,8 +42,10 @@ export const users = {
 export const classrooms = {
   join: payload => post('classrooms/join', payload),
   begin: ({ payload, config }) => post(`classrooms`, payload, config),
+  leave: () => post(`classrooms/quit`),
   getTeachingListing: async () => get(`classrooms`),
   currentClass: () => get(`classrooms/current`),
+  getClassroomById: id => get(`classrooms/${id}`),
   dismiss: ({ classId, config }) =>
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>
