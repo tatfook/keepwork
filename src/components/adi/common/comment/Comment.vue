@@ -146,10 +146,11 @@ export default {
         this.activePageCommentList.commentList &&
         this.activePageCommentList.commentList.length === 0
       ) {
-        if(this.currentPage !== 1) {
+        if(typeof this.currentPage === 'number' && this.currentPage !== 1) {
           this.loadComments(this.currentPage - 1)
         }
 
+        this.loading = false
         return false;
       }
 
