@@ -44,49 +44,89 @@
         </el-row>
       </div>
     </div>
+    <div @click.stop v-if="isLoginDialogShow">
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
+import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
-  name: "NotActivatedTeacherRole",
+  name: 'NotActivatedTeacherRole',
   data() {
     return {
+      isLoginDialogShow: false,
       activeCode: ''
     }
   },
-  async mounted(){
-    await this.getProfile()
+  mounted() {
+    if (!this.userIsLogined) {
+      this.getProfile({ forceLogin: false })
+        .then(() => {
+          this.isLogin = true
+        })
+        .catch(() => {
+          this.isLogin = false
+        })
+    }
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
+      userIsLogined: 'user/isLogined',
       userId: 'user/userId',
       userinfo: 'lesson/userinfo'
-    })
+    }),
+    isLogin: {
+      get() {
+        return this.userIsLogined
+      },
+      set() {}
+    }
   },
   methods: {
     ...mapActions({
       getProfile: 'user/getProfile',
       getUserDetail: 'lesson/getUserDetail'
     }),
-    async activateTeacherIdentity(){
-      let payload = {userId: this.userId, key: this.activeCode}
-      await lesson.users.toBeTeacher(payload).then(res => {
-        if(res[0] === 1){
-          this.getUserDetail()
-        }else{
-          this.$alert(`<span style="color:#f75858;">`+this.$t('lesson.notActivatedText.wrongCodeHint')+`</span>`, '', {
-            confirmButtonText: this.$t('common.Sure'),
-            center: true,
-            dangerouslyUseHTMLString: true,
-            callback: action => {}
-          });
-        }
-      }).catch(err => console.log('err',err))
+    async activateTeacherIdentity() {
+      if (this.isLogin) {
+        let payload = { userId: this.userId, key: this.activeCode }
+        await lesson.users
+          .toBeTeacher(payload)
+          .then(res => {
+            if (res[0] === 1) {
+              this.getUserDetail()
+            } else {
+              this.$alert(
+                `<span style="color:#f75858;">` +
+                  this.$t('lesson.notActivatedText.wrongCodeHint') +
+                  `</span>`,
+                '',
+                {
+                  confirmButtonText: this.$t('common.Sure'),
+                  center: true,
+                  dangerouslyUseHTMLString: true,
+                  callback: action => {}
+                }
+              )
+            }
+          })
+          .catch(err => console.log('err', err))
+      } else {
+        this.isLoginDialogShow = true
+      }
+    },
+    closeLoginDialog() {
+      this.isLoginDialogShow = false
     }
+  },
+  components: {
+    LoginDialog
   }
 }
 </script>
@@ -128,8 +168,8 @@ export default {
           justify-content: center;
           align-items: center;
         }
-        .role-teacher{
-          background: #409efe ;
+        .role-teacher {
+          background: #409efe;
         }
         .access {
           padding: 44px 25px;
@@ -142,7 +182,7 @@ export default {
               display: inline-block;
               width: 20px;
               height: 20px;
-              .not-student-privilege{
+              .not-student-privilege {
                 visibility: hidden;
               }
             }

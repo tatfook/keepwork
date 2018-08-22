@@ -50,7 +50,7 @@ export default new Router({
             },
             {
               path: 'review',
-              name: 'Review',
+              name: 'TeacherColumnReview',
               component: Review
             }
           ]

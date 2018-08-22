@@ -1,6 +1,6 @@
 <template>
-  <div class="review">
-    <div class="review-nothing" v-if="sortedTeachList.length === 0">
+  <div class="review" v-loading="loading">
+    <div class="review-nothing" v-if="!sortedTeachList.length && !loading" v-cloak>
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
       <p class="review-nothing-hint">{{$t('lesson.noRecord')}}</p>
     </div>
@@ -50,7 +50,7 @@ export default {
   name: "TeacherColumnTeach",
   data() {
     return {
-      loading: false,
+      loading: true,
       noPackages: false,
       teachList: []
     }
@@ -58,6 +58,7 @@ export default {
   async mounted(){
     let resData = await lesson.classrooms.getTeachingListing()
     this.teachList = _.get(resData, `rows`, [])
+    this.loading = false
     console.log('teachList',this.teachList)
   },
   computed: {
@@ -75,6 +76,9 @@ export default {
 
 <style lang="scss">
 .review {
+  [v-cloak]{
+    display: none;
+  }
   &-nothing {
     width: 100%;
     height: 660px;

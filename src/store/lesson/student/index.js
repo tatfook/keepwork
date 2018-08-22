@@ -8,8 +8,6 @@ const state = () => ({
   lessonDetail: {},
   lessonQuiz: {},
   isShowStudentSummary: false,
-  userSubscribeList: [],
-  userSkillsList: [],
   enterClassInfo: {},
   enterClassId: null,
   studentName: ''

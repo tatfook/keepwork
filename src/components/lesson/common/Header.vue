@@ -24,7 +24,7 @@ const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
 const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
 const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
-const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)$/
+const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)*/
 export default {
   name: 'Header',
   computed: {
