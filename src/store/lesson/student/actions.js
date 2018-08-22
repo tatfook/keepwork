@@ -20,14 +20,19 @@ const actions = {
     let detail = await lesson.packages.packageDetail({
       id: packageId
     })
-    commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
+    commit(GET_PACKAGE_DETAIL_SUCCESS, {
+      detail
+    })
   },
   async getLessonContent(context, { lessonId }) {
     const {
       commit,
       rootGetters: { 'user/authRequestConfig': config }
     } = context
-    let res = await lesson.lessons.lessonContent({ lessonId, config })
+    let res = await lesson.lessons.lessonContent({
+      lessonId,
+      config
+    })
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
@@ -41,8 +46,16 @@ const actions = {
       'data.lesson',
       {}
     )
-    commit(GET_LESSON_CONTENT_SUCCESS, { lessonId, content: res.content })
-    commit(SAVE_LESSON_DETAIL, { lessonId, lesson: _lesson, quiz, modList })
+    commit(GET_LESSON_CONTENT_SUCCESS, {
+      lessonId,
+      content: res.content
+    })
+    commit(SAVE_LESSON_DETAIL, {
+      lessonId,
+      lesson: _lesson,
+      quiz,
+      modList
+    })
   },
   async subscribePackage({ context }, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({
@@ -50,38 +63,28 @@ const actions = {
     })
     return subscribeResult
   },
-  async getUserSubscribes({ commit }, { userId }) {
-    let userSubscribeList = await lesson.users.userSubscribes({ userId })
-    commit(GET_USER_SUBSCRIBES, { userSubscribeList })
-  },
-  async getUserSkills({ commit }, { userId }) {
-    let userSkillsList = await lesson.users.userSkills({ userId })
-    commit(GET_USER_SKILLS, { userSkillsList })
-  },
   async enterClassRoom({ commit }, { key }) {
-    let enterClassInfo = await lesson.classrooms.join({ key: key })
+    let enterClassInfo = await lesson.classrooms.join({
+      key: key
+    })
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
- // async resumeTheClass(context) {
-    // const {
-    //   rootGetters: {
-    //     'lesson/userinfo': {
-    //       extra: { classroomId }
-    //     }
-    //   }
-    // } = context
-  //}
-  async enterClassRoom(context, { key }) {
+  async resumeTheClass(context) {
     const {
-      commit,
-      rootGetters: { 'user/authRequestConfig': config }
+      rootGetters: {
+        'lesson/userinfo': {
+          extra: { classroomId }
+        }
+      }
     } = context
-    let payload = { key: key }
-    let enterClassInfo = await lesson.classrooms.join({ payload, config })
-    commit(ENTER_CLASSROOM, { enterClassInfo })
+    console.log(classroomId)
   },
   async doQuiz({ commit }, { key, result, answer }) {
-    commit(DO_QUIZ, { key, result, answer })
+    commit(DO_QUIZ, {
+      key,
+      result,
+      answer
+    })
   },
   async uploadLearnRecords(context) {
     const {
@@ -99,7 +102,9 @@ const actions = {
     commit(SWITCH_SUMMARY, flag)
   },
   async setEnterClassID({ commit }, { key }) {
-    commit(SET_ENTER_CLASS_ID, { key })
+    commit(SET_ENTER_CLASS_ID, {
+      key
+    })
   },
   async leaveTheClass({ commit }) {
     commit(LEAVE_THE_CLASS)
