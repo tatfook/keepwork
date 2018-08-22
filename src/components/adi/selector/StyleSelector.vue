@@ -66,15 +66,15 @@ export default {
     autoResizePreview() {
       let all = this.$el.querySelectorAll('.render-mod-container')
 
-      let reset = 0
+      let refactor = 0
       if(window.innerWidth <= 1920){
-        reset = 0.1245
+        refactor = 0.24
       }else {
-        reset = 0.34
+        refactor = 0.357
       }
       _.forEach(all , (dom, key) => {
         dom.style.height = null
-        dom.style.height = dom.offsetHeight * reset + 'px'
+        dom.style.height = dom.offsetHeight * refactor + 'px'
       })
     }
   }

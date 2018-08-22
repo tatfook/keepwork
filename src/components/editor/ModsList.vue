@@ -124,16 +124,16 @@ export default {
 
       this.updatedHeight = true
 
-      let all = this.$el.querySelectorAll('[class="style-cover render"]')
+      let all = this.$el.querySelectorAll('[class="render-mod-container"]')
 
-      let reset = 0
+      let refactor = 0
       if(window.innerWidth <= 1920){
-        reset = 0.1245
+        refactor = 0.1245
       }else {
-        reset = 0.26
+        refactor = 0.254
       }
       _.forEach(all, (dom, key) => {
-        dom.style.height = dom.offsetHeight * reset + 'px'
+        dom.style.height = dom.offsetHeight * refactor + 'px'
       })
 
       setTimeout(() => {
@@ -148,7 +148,7 @@ export default {
   height: 100%;
 }
 .style-cover {
-  width: 90%;
+  width: 275px;
   cursor: pointer;
   display: block;
   margin: auto;
@@ -174,7 +174,6 @@ export default {
   overflow: auto;
 }
 .render {
-  width: 275px;
   background-color: white;
   overflow: hidden;
   margin-bottom: 12px;
@@ -193,7 +192,7 @@ export default {
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.259);
+      transform: scale(0.254);
       transform-origin: top left;
     }
   }
