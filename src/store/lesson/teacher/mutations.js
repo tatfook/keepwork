@@ -11,6 +11,7 @@ const TOGGLE_PERFORMANCE = 'TOGGLE_PERFORMANCE'
 const TOGGLE_SUMMARY = 'TOGGLE_SUMMARY'
 const DISMISS_THE_CLASS_SUCCESS = 'DISMISS_THE_CLASS_SUCCESS'
 const UPDATE_LEARN_RECORDS_SUCCESS = 'UPDATE_LEARN_RECORDS_SUCCESS'
+const GET_CURRENT_CLASSROOM_SUCCESS = 'GET_CURRENT_CLASSROOM_SUCCESS'
 
 export const props = {
   PUBLISH_LESSON,
@@ -22,7 +23,8 @@ export const props = {
   TOGGLE_LESSON,
   TOGGLE_PERFORMANCE,
   TOGGLE_SUMMARY,
-  UPDATE_LEARN_RECORDS_SUCCESS
+  UPDATE_LEARN_RECORDS_SUCCESS,
+  GET_CURRENT_CLASSROOM_SUCCESS
 }
 
 const mutations = {
@@ -39,6 +41,9 @@ const mutations = {
     Vue.set(state, 'classroom', payload)
   },
   [DISMISS_THE_CLASS_SUCCESS](state, payload) {
+    Vue.set(state, 'classroom', payload)
+  },
+  [GET_CURRENT_CLASSROOM_SUCCESS](state, payload) {
     Vue.set(state, 'classroom', payload)
   },
   [UPDATE_LEARN_RECORDS_SUCCESS](state, payload) {

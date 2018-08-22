@@ -1,6 +1,7 @@
 <template>
   <div class="lesson-wrap">
     <LessonStudentStatus v-if="isBeInClassroom" />
+    <!-- <LessonStudentStatus /> -->
     <LessonHeader :data="lessonHeaderData" />
     <LessonSummary v-show="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
@@ -26,15 +27,18 @@ export default {
       lessonId: ''
     }
   },
+  created() {
+    this.resumeTheClass()
+  },
   async mounted() {
     // this.copyProhibited()
     this.lessonId = this.$route.params.lessonId || 1
     await this.getLessonContent({ lessonId: this.lessonId })
-    console.warn(this.lessonHeader)
   },
   methods: {
     ...mapActions({
-      getLessonContent: 'lesson/student/getLessonContent'
+      getLessonContent: 'lesson/student/getLessonContent',
+      resumeTheClass: 'lesson/student/resumeTheClass'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')
@@ -51,8 +55,12 @@ export default {
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      userinfo: 'lesson/userinfo'
     }),
+    currentClassroomId() {
+      return _.get(this.userinfo, 'extra.classroomId', '')
+    },
     lesson() {
       return this.lessonDetail.modList || []
     },

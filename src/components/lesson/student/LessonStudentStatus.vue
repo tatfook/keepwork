@@ -5,16 +5,16 @@
         <span>Class ID: {{enterClassId}}</span>
       </el-col>
       <el-col :span="5">
-        <span>Name: {{studentName}}</span>
+        <span>Name: {{nickname}}</span>
       </el-col>
       <el-col :span="14" :push="10">
-        <el-button type="primary" size="mini">Leave the class</el-button>
+        <el-button type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
       </el-col>
     </el-row>
-    <el-dialog title="Please input your name here" center :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  >
+    <el-dialog title="Please input your name here" center :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
       <el-input v-model="name" placeholder="name" :autofocus="true"></el-input>
       <div slot="footer">
-        <el-button @click="handleSetStudentName" type="primary">OK</el-button>
+        <el-button @click="handleSetNickname" type="primary">OK</el-button>
       </div>
     </el-dialog>
   </div>
@@ -35,22 +35,36 @@ export default {
       classroomId: 'lesson/student/classroomId',
       studentName: 'lesson/student/studentName',
       isBeInClassroom: 'lesson/student/isBeInClassroom',
-      enterClassId: 'lesson/student/enterClassId'
-    })
+      enterClassId: 'lesson/student/enterClassId',
+      userinfo: 'lesson/userinfo'
+    }),
+    nickname() {
+      return _.get(this.userinfo, 'nickname', '')
+    },
+    isNeedToSetNickname() {
+      return !this.nickname
+    }
   },
   mounted() {
-    if (!this.studentName && this.isBeInClassroom) {
+    if (this.isNeedToSetNickname && this.isBeInClassroom) {
       this.isDialogVisible = true
     }
   },
   methods: {
     ...mapActions({
-      setStudentName: 'lesson/student/setStudentName'
+      setNickname: 'lesson/setNickname'
     }),
-    handleSetStudentName() {
+    async handleLeaveTheClass() {
+      console.log('leave the class--------->')
+    },
+    async handleSetNickname() {
       if (this.name.trim() !== '') {
-        this.setStudentName(this.name)
-        this.isDialogVisible = false
+        await this.setNickname(this.name)
+          .then(res => (this.isDialogVisible = false))
+          .catch(e => {
+            console.error(e)
+            this.$message.error('设置昵称失败')
+          })
       }
     }
   }

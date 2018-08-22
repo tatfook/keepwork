@@ -21,6 +21,14 @@ const actions = {
   async subscribePackage(context, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({ packageId })
     return subscribeResult
+  },
+  async setNickname(context, nickname) {
+    const {
+      dispatch,
+      getters: { userId: id }
+    } = context
+    await lesson.users.setNickname({ nickname, id })
+    await dispatch('getUserDetail')
   }
 }
 

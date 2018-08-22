@@ -9,11 +9,11 @@ let {
   GET_USER_SUBSCRIBES,
   GET_USER_SKILLS,
   ENTER_CLASSROOM,
+  // RESUME_CLASSROOM,
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
   SET_ENTER_CLASS_ID,
   SWITCH_SUMMARY,
-  SET_STUDENT_NAME,
   LEAVE_THE_CLASS
 } = props
 
@@ -30,7 +30,6 @@ const actions = {
       rootGetters: { 'user/authRequestConfig': config }
     } = context
     let res = await lesson.lessons.lessonContent({ lessonId, config })
-    console.warn(res)
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
@@ -61,14 +60,18 @@ const actions = {
     let userSkillsList = await lesson.users.userSkills({ userId })
     commit(GET_USER_SKILLS, { userSkillsList })
   },
-  async enterClassRoom(context, { key }) {
-    const {
-      commit,
-      rootGetters: { 'user/authRequestConfig': config }
-    } = context
-    let payload = { key: key }
-    let enterClassInfo = await lesson.classrooms.join({ payload, config })
-    commit(ENTER_CLASSROOM, { enterClassInfo })
+  async enterClassRoom({ commit }, { key }) {
+    let enterClassInfo = await lesson.classrooms.join({ key: key })
+    commit(ENTER_CLASSROOM, enterClassInfo)
+  },
+  async resumeTheClass(context) {
+    // const {
+    //   rootGetters: {
+    //     'lesson/userinfo': {
+    //       extra: { classroomId }
+    //     }
+    //   }
+    // } = context
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, { key, result, answer })
@@ -78,7 +81,6 @@ const actions = {
       getters: { classId, learnRecords },
       rootGetters: { 'user/authRequestConfig': config }
     } = context
-    console.warn(classId)
     console.warn(learnRecords)
     await lesson.classrooms.uploadLearnRecords({
       classId,
@@ -91,9 +93,6 @@ const actions = {
   },
   async setEnterClassID({ commit }, { key }) {
     commit(SET_ENTER_CLASS_ID, { key })
-  },
-  async setStudentName({ commit }, name) {
-    commit(SET_STUDENT_NAME, name)
   },
   async leaveTheClass({ commit }) {
     commit(LEAVE_THE_CLASS)

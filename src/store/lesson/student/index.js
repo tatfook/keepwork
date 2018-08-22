@@ -11,8 +11,7 @@ const state = () => ({
   userSubscribeList: [],
   userSkillsList: [],
   enterClassInfo: {},
-  enterClassId: '',
-  studentName: ''
+  enterClassId: ''
 })
 
 export default {

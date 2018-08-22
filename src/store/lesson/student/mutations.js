@@ -10,7 +10,6 @@ const DO_QUIZ = 'DO_QUIZ'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const SET_ENTER_CLASS_ID = 'SET_ENTER_CLASS_ID'
 const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
-const SET_STUDENT_NAME = 'SET_STUDENT_NAME'
 const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 
 export const props = {
@@ -23,7 +22,6 @@ export const props = {
   SET_ENTER_CLASS_ID,
   DO_QUIZ,
   SWITCH_SUMMARY,
-  SET_STUDENT_NAME,
   LEAVE_THE_CLASS
 }
 
@@ -49,6 +47,9 @@ const mutations = {
   [ENTER_CLASSROOM](state, { enterClassInfo }) {
     Vue.set(state, 'enterClassInfo', enterClassInfo)
   },
+  [ENTER_CLASSROOM](state, payload) {
+    Vue.set(state, 'enterClassInfo', payload)
+  },
   [DO_QUIZ](state, { key, result, answer }) {
     let _lessonDetail = _.clone(state.lessonDetail)
     let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
@@ -61,9 +62,6 @@ const mutations = {
   },
   [SET_ENTER_CLASS_ID](state, { key }) {
     Vue.set(state, 'enterClassId', key)
-  },
-  [SET_STUDENT_NAME](state, name) {
-    Vue.set(state, 'studentName', name)
   },
   [LEAVE_THE_CLASS](state) {
     Vue.set(state, 'enterClassInfo', {})

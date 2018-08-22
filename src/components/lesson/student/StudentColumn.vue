@@ -110,7 +110,7 @@ export default {
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
         this.setEnterClassID({ key })
         this.$router.push({
-          path: `student/package/${this.enterClassInfo.packageId}/lesson/${
+          path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
             this.enterClassInfo.lessonId
           }`
         })
