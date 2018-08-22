@@ -28,7 +28,7 @@ export const lessons = {
 }
 
 export const users = {
-  getUserDetail: (...args) => get('users', ...args),
+  getUserDetail: () => get('users'),
   userSubscribes: args => get(`users/${args.userId}/subscribes`),
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, config }) =>
@@ -45,14 +45,7 @@ export const classrooms = {
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
   uploadLearnRecords: ({ classId, learnRecords, config }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }, config),
-  getUserDetail: async () => get('users'),
-  userSubscribes: async ({ userId }) => get(`users/${userId}/subscribes`),
-  userSkills: async ({ userId }) => get(`users/${userId}/skills`),
-  toBeTeacher: async ({ userId, key }) =>
-    post(`users/${userId}/teacher`, {
-      key
-    })
+    put(`learnRecords/${classId}`, { extra: learnRecords }, config)
 }
 
 export const lesson = {

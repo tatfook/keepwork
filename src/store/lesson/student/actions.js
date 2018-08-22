@@ -6,8 +6,6 @@ import _ from 'lodash'
 let {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
-  GET_USER_SUBSCRIBES,
-  GET_USER_SKILLS,
   ENTER_CLASSROOM,
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
@@ -52,14 +50,6 @@ const actions = {
       id: packageId
     })
     return subscribeResult
-  },
-  async getUserSubscribes({ commit }, { userId }) {
-    let userSubscribeList = await lesson.users.userSubscribes({ userId })
-    commit(GET_USER_SUBSCRIBES, { userSubscribeList })
-  },
-  async getUserSkills({ commit }, { userId }) {
-    let userSkillsList = await lesson.users.userSkills({ userId })
-    commit(GET_USER_SKILLS, { userSkillsList })
   },
   async enterClassRoom(context, { key }) {
     const {
