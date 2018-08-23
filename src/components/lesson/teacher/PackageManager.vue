@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="package-manager-details">
-      <el-table class="package-manager-table" :data="filteredPackageList" height="450" style="width: 100%">
+      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
         <el-table-column type="index" label="No." width="70">
         </el-table-column>
         <el-table-column prop="packageName" label="name">
@@ -41,18 +41,36 @@
         </el-table-column>
         <el-table-column label="" width="180" class-name="package-manager-table-operations">
           <template slot-scope="scope">
-            <i v-if="isSubmitable(scope.row)" class="iconfont icon-submit"></i>
-            <i v-if="isEditable(scope.row)" class="iconfont icon-edit--"></i>
-            <i v-if="isDeletable(scope.row)" class="iconfont icon-delete1"></i>
-            <i v-if="isReleasable(scope.row)" class="iconfont icon-Release"></i>
-            <i v-if="isRevocable(scope.row)" class="iconfont icon-recall"></i>
+            <el-tooltip v-if="isSubmitable(scope.row)" effect="dark" content="submit" placement="top">
+              <i class="iconfont icon-submit" @click="toSubmit(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isEditable(scope.row)" effect="dark" content="edit" placement="top">
+              <i class="iconfont icon-edit--" @click="toEdit(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isDeletable(scope.row)" effect="dark" content="delete" placement="top">
+              <i class="iconfont icon-delete1" @click="toDelete(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isReleasable(scope.row)" effect="dark" content="release" placement="top">
+              <i class="iconfont icon-Release" @click="toRelease(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isRevocable(scope.row)" effect="dark" content="revoca" placement="top">
+              <i class="iconfont icon-recall" @click="toRevoca(scope.row)"></i>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <el-dialog class="package-manager-info-dialog" :class="{'package-manager-info-dialog-danger': infoDialogData.type === 'danger'}" :visible.sync="isInfoDialogVisible" width="560px" :before-close="handleClose">
+      <i class="iconfont" :class="{'icon-submit': infoDialogData.iconType === 'submit', 'icon-delete': infoDialogData.iconType === 'delete'}"></i>
+      <div class="package-manager-info-dialog-para" v-for="(para, index) in infoDialogData.paras" :key="index">{{para}}</div>
+      <span slot="footer" class="package-manager-info-dialog-footer">
+        <el-button type="primary" @click="isInfoDialogVisible = false">{{$t('common.Sure')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PackageManager',
@@ -88,12 +106,21 @@ export default {
         name: '',
         subjectId: null,
         stateId: null
-      }
+      },
+      isTableLoading: false,
+      isInfoDialogVisible: false,
+      infoDialogData: {
+        paras: [],
+        type: '', // danger or default
+        iconType: '' // submit or delete
+      },
+      editingPackageId: null
     }
   },
   computed: {
     ...mapGetters({
-      lessonUserPackages: 'lesson/userPackages',
+      lessonUserPackages: 'lesson/teacher/userPackages',
+      lessonPackageLessons: 'lesson/teacher/packageLessons',
       lessonSubjects: 'lesson/subjects'
     }),
     filteredPackageList() {
@@ -119,11 +146,23 @@ export default {
         }
       )
       return containSubjectNamePackageList
+    },
+    editingPackageDetail() {
+      let packageDetail = _.find(this.filteredPackageList, {
+        id: this.editingPackageId
+      })
+      packageDetail.lessons = _.get(
+        this.lessonPackageLessons,
+        this.editingPackageId
+      )
+      return packageDetail
     }
   },
   methods: {
     ...mapActions({
-      lessonGetUserPackages: 'lesson/getUserPackages',
+      lessonGetUserPackages: 'lesson/teacher/getUserPackages',
+      lessonAuditPackage: 'lesson/teacher/auditPackage',
+      lessonGetLessonList: 'lesson/teacher/getLessonList',
       lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
     getStatusText(packageDetail) {
@@ -198,6 +237,82 @@ export default {
       return _.filter(originList, packageDetail => {
         return reg.test(packageDetail.packageName)
       })
+    },
+    async isPackageInfoComplete() {
+      let {
+        subjectId,
+        minAge,
+        maxAge,
+        intro,
+        rmb,
+        extra
+      } = this.editingPackageDetail
+      if (
+        typeof subjectId !== 'number' ||
+        typeof minAge !== 'number' ||
+        typeof maxAge !== 'number' ||
+        typeof rmb !== 'number' ||
+        !intro ||
+        !extra.coverUrl
+      ) {
+        return false
+      }
+      await this.lessonGetLessonList({ packageId: this.editingPackageId })
+      let { lessons } = this.editingPackageDetail
+      if (!lessons || lessons.length <= 0) {
+        return false
+      }
+      return true
+    },
+    async toSubmit(packageDetail) {
+      this.isTableLoading = true
+      this.editingPackageId = packageDetail.id
+      let isComplete = await this.isPackageInfoComplete()
+      if (!isComplete) {
+        this.infoDialogData = {
+          paras: [
+            'Please complete the package information before submitting it.'
+          ],
+          type: 'danger', // danger or default
+          iconType: 'submit' // submit or delete
+        }
+        this.isInfoDialogVisible = true
+        this.isTableLoading = false
+        return
+      }
+      await this.lessonAuditPackage({
+        packageId: packageDetail.id,
+        state: 1
+      })
+      this.infoDialogData = {
+        paras: [
+          'Successfully submitted.',
+          'The result wil be informed within 5 workdays.'
+        ],
+        iconType: 'submit' // submit or delete
+      }
+      this.isInfoDialogVisible = true
+      this.isTableLoading = false
+    },
+    toEdit(packageDetail) {
+      console.log('toEdit')
+    },
+    toDelete(packageDetail) {
+      console.log('toDelete')
+    },
+    toRelease(packageDetail) {
+      console.log('toRelease')
+    },
+    async toRevoca(packageDetail) {
+      this.isTableLoading = true
+      await this.lessonAuditPackage({
+        packageId: packageDetail.id,
+        state: 0
+      })
+      this.isTableLoading = false
+    },
+    handleClose() {
+      this.isInfoDialogVisible = false
     }
   }
 }
@@ -297,6 +412,7 @@ export default {
       font-size: 20px;
       color: #b3b3b3;
       margin-right: 30px;
+      cursor: pointer;
     }
     .iconfont:last-child {
       margin-right: 0;
@@ -306,6 +422,42 @@ export default {
       .cell {
         padding: 0 20px;
       }
+    }
+  }
+  &-info-dialog {
+    text-align: center;
+    .el-icon-close {
+      font-size: 20px;
+      color: #cecece;
+      font-weight: bold;
+    }
+    .el-dialog__body {
+      font-size: 16px;
+      color: #414141;
+      padding: 30px 20px 0;
+    }
+    &-danger {
+      .el-dialog__body {
+        color: #f75858;
+      }
+    }
+    .iconfont {
+      font-size: 88px;
+      color: #cecece;
+      line-height: 1;
+      margin-bottom: 28px;
+      display: inline-block;
+    }
+    .el-dialog__footer {
+      padding: 30px 0;
+      text-align: center;
+    }
+    .el-button--primary {
+      width: 103px;
+      font-size: 17px;
+    }
+    &-para {
+      margin-bottom: 14px;
     }
   }
 }

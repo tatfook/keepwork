@@ -1,5 +1,4 @@
 import Vue from 'vue'
-// import _ from 'lodash'
 
 const PUBLISH_LESSON = 'PUBLISH_LESSON'
 const TOGGLE_HINT = 'TOGGLE_HINT'
@@ -12,6 +11,8 @@ const TOGGLE_SUMMARY = 'TOGGLE_SUMMARY'
 const DISMISS_THE_CLASS_SUCCESS = 'DISMISS_THE_CLASS_SUCCESS'
 const UPDATE_LEARN_RECORDS_SUCCESS = 'UPDATE_LEARN_RECORDS_SUCCESS'
 const GET_CURRENT_CLASSROOM_SUCCESS = 'GET_CURRENT_CLASSROOM_SUCCESS'
+const GET_PACKAGE_LESSON_LIST_SUCCESS = 'GET_PACKAGE_LESSON_LIST_SUCCESS'
+const GET_USER_PACKAGES_SUCCESS = 'GET_USER_PACKAGES_SUCCESS'
 
 export const props = {
   PUBLISH_LESSON,
@@ -24,6 +25,8 @@ export const props = {
   TOGGLE_PERFORMANCE,
   TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
+  GET_PACKAGE_LESSON_LIST_SUCCESS,
+  GET_USER_PACKAGES_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS
 }
 
@@ -54,6 +57,15 @@ const mutations = {
   },
   [TOGGLE_PERFORMANCE](state, payload) {
     Vue.set(state, 'isShowPerformance', payload)
+  },
+  [GET_USER_PACKAGES_SUCCESS](state, { userPackages }) {
+    Vue.set(state, 'userPackages', userPackages)
+  },
+  [GET_PACKAGE_LESSON_LIST_SUCCESS](state, { packageId, lessons }) {
+    Vue.set(state, 'packageLessons', {
+      ...state.packageLessons,
+      [packageId]: lessons
+    })
   },
   [TOGGLE_SUMMARY](state, payload) {
     Vue.set(state, 'isShowSummary', payload)

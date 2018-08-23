@@ -21,7 +21,9 @@ export const packages = {
   packagesList: async params => get('packages/search', params || {}),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
-  getTaughtPackages: async () => get(`packages/teach`)
+  getTaughtPackages: async () => get(`packages/teach`),
+  audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
+  getLessonList: async ({ packageId }) => get(`packages/${packageId}/lessons`)
 }
 
 export const lessons = {

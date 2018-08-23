@@ -9,8 +9,10 @@ const getters = {
   isBeInClass: (state, { classId }) => !!classId,
   isClassIsOver: (state, { classroom }) => classroom.state === 2,
   classroomId: (state, { classroom }) => classroom.key || '',
-  classId: (state, { classroom }) => classroom.id,
-  learnRecords: state => state.learnRecords || null
+  learnRecords: state => state.learnRecords || null,
+  userPackages: (state) => state.userPackages,
+  packageLessons: state => state.packageLessons,
+  classId: (state, { classroom }) => classroom.id
 }
 
 export default getters

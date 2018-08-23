@@ -13,6 +13,8 @@ const {
   TOGGLE_PERFORMANCE,
   TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
+  GET_PACKAGE_LESSON_LIST_SUCCESS,
+  GET_USER_PACKAGES_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS
 } = props
 
@@ -87,6 +89,29 @@ const actions = {
   },
   toggleSummary({ commit }, flag) {
     commit(TOGGLE_SUMMARY, flag)
+  },
+  async getUserPackages(context, { useCache = true }) {
+    let { commit, getters: { userPackages } } = context
+    if (userPackages && userPackages.length && useCache) {
+      return
+    }
+    let packages = await lesson.packages.getUserPackages()
+    let packageRows = _.get(packages, 'rows')
+    commit(GET_USER_PACKAGES_SUCCESS, { userPackages: packageRows })
+  },
+  async auditPackage(context, { packageId, state }) {
+    let { dispatch } = context
+    await lesson.packages.audit({ packageId, state: state })
+    await dispatch('getUserPackages', { useCache: false })
+  },
+  async getLessonList(context, { packageId, useCache = true }) {
+    let { commit, getters: { packageLessons } } = context
+    let targetPackageLessons = _.get(packageLessons, packageId, [])
+    if (useCache && targetPackageLessons.length > 0) {
+      return
+    }
+    let lessons = await lesson.packages.getLessonList({ packageId })
+    commit(GET_PACKAGE_LESSON_LIST_SUCCESS, { packageId, lessons })
   }
 }
 
