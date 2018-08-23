@@ -10,7 +10,7 @@
               <p class="time">{{$t('lesson.teachingTime')}}:
                 <span class="red-text">{{lessonPackage.updatedAt | formatTime}}</span>
               </p>
-              <div class="package-cover" @click="enterPackage()"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
+              <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 class="title">{{lessonPackage.extra.packageName}}</h4>
               <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: {{lessonPackage.minAge}}~{{lessonPackage.maxAge}}</p>
@@ -56,13 +56,17 @@ export default {
   },
   computed: {
     sortedTeachList() {
-
       return this.teachList.sort(this.sortByUpdateAt)
     }
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
+    enterPackage(packageId){
+      this.$router.push({
+        path: `teacher/package/${packageId}`
+      })
     }
   },
   filters: {
