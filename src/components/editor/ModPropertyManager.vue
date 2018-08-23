@@ -8,7 +8,7 @@
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>                
         <div class='styles-container'>
-          <style-selector :mod='activeMod' />
+          <style-selector v-if="activePropertyTabType === 'style'" :mod='activeMod' />
         </div>
       </el-tab-pane>
       <!-- <el-tab-pane label='Theme'>
@@ -48,6 +48,7 @@ export default {
     },
     tabClickHandle(tabItem) {
       let activeName = tabItem.name
+      this.activeName = activeName.name
       this.setActivePropertyTabType(activeName)
     },
     cardValues(key) {

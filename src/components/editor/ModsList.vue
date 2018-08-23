@@ -8,10 +8,8 @@
       <div v-for='mod in activeModsList' :key='mod.name'>
         <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
           <div class="render-mod-container--click-prevent"></div>
-          <div class="render-mod-container" :style="generateStyleString(style.preview && style.preview.outter || [])">
-            <div :style="generateStyleString(style.preview && style.preview.inner ||[])">
-              <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
-            </div>
+          <div class="render-mod-container">
+            <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
           </div>
         </div>
         <img v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
@@ -52,6 +50,9 @@ export default {
       this.$refs.tree.setCurrentNode(mods[0])
       this.activeModsList = mods[0].mods
     }
+  },
+  updated() {
+    this.autoResizePreview()
   },
   data() {
     return {
@@ -115,6 +116,29 @@ export default {
       currentMod.properties.styleID = index
 
       return currentMod
+    },
+    autoResizePreview() {
+      if (this.updatedHeight) {
+        return false;
+      }
+
+      this.updatedHeight = true
+
+      let all = this.$el.querySelectorAll('[class="render-mod-container"]')
+
+      let refactor = 0
+      if(window.innerWidth <= 1920){
+        refactor = 0.1245
+      }else {
+        refactor = 0.254
+      }
+      _.forEach(all, (dom, key) => {
+        dom.style.height = dom.offsetHeight * refactor + 'px'
+      })
+
+      setTimeout(() => {
+        this.updatedHeight = null
+      },0)
     }
   }
 }
@@ -124,11 +148,14 @@ export default {
   height: 100%;
 }
 .style-cover {
-  width: 100%;
+  width: 275px;
   cursor: pointer;
   display: block;
+  margin: auto;
   margin-bottom: 12px;
   border: 2px solid transparent;
+  padding: 10px;
+  background-color: white;
 }
 .style-cover:hover {
   border: 2px solid #bcbcbc;
@@ -147,11 +174,8 @@ export default {
   overflow: auto;
 }
 .render {
-  width: 295px;
-  height: 200px;
   background-color: white;
   overflow: hidden;
-  margin: auto;
   margin-bottom: 12px;
   position: relative;
 
@@ -163,25 +187,24 @@ export default {
   }
 
   .render-mod-container {
-    border: 10px solid white;
-    height: 300px;
-    width: 275px;
+    width: 272px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.26);
+      transform: scale(0.254);
       transform-origin: top left;
+      position: unset;
     }
   }
 }
 @media screen and (max-width: 1920px) {
   .style-cover {
-    width: 98%;
+    width: 135px;
+    padding: 8px;
   }
+
   .render {
-    width: 155px;
-    height: 130px;
     .render-mod-container {
       width: 135px;
       .render-mod {
