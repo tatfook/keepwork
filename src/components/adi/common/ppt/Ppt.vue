@@ -1,7 +1,7 @@
 <template>
   <div class="comp-ppt">
     <el-button plain type='info' size='mini' @click='isPptShow = true'>{{$t('editor.beginToShow')}}</el-button>
-    <showComponent :isEditorShow='isPptShow' @cancel='cancel'></showComponent>
+    <showComponent :isEditorShow='isPptShow' :originalTreeData='originValue' @cancel='cancel'></showComponent>
   </div>
 </template>
 
@@ -12,6 +12,9 @@ import showComponent from './ShowComponent'
 
 export default {
   name: 'AdiPpt',
+  props: {
+    originValue: String
+  },
   data() {
     return {
       isPptShow: false
