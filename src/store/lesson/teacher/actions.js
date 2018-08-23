@@ -104,6 +104,16 @@ const actions = {
     await lesson.packages.audit({ packageId, state: state })
     await dispatch('getUserPackages', { useCache: false })
   },
+  async releasePackage(context, { packageDetail }) {
+    let { dispatch } = context
+    await lesson.packages.release({ packageDetail })
+    await dispatch('getUserPackages', { useCache: false })
+  },
+  async deletePackage(context, { packageId }) {
+    let { dispatch } = context
+    await lesson.packages.delete({ packageId })
+    await dispatch('getUserPackages', { useCache: false })
+  },
   async getLessonList(context, { packageId, useCache = true }) {
     let { commit, getters: { packageLessons } } = context
     let targetPackageLessons = _.get(packageLessons, packageId, [])

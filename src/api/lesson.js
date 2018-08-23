@@ -11,7 +11,7 @@ export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
-export const { get, post, put } = endpoint
+export const { get, post, put, delete: deleteMethod } = endpoint
 
 export const admin = {}
 
@@ -23,6 +23,8 @@ export const packages = {
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
   audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
+  release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
+  delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
   getLessonList: async ({ packageId }) => get(`packages/${packageId}/lessons`)
 }
 
