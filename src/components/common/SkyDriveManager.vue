@@ -43,8 +43,13 @@
       </el-row>
       <el-row class='skydrive-manager-header-tabs-and-search'>
         <el-col :span="18" class='skydrive-manager-header-tabs'>
-          <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-          <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+          <div v-if ="isImgLoopMod">
+            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+            <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+          </div>
+          <div v-else>
+            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+          </div>
         </el-col>
         <el-col :span="6">
           <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
@@ -308,6 +313,13 @@ export default {
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90 ? 'skydrive-manager-total-used-danger' : (usedPercent >= 70 ? 'skydrive-manager-total-used-warning' : '')
+    },
+    isImgLoopMod() {
+      if (this.$store.getters.activeProperty === 'imgLoop') {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
