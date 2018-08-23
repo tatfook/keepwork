@@ -1,7 +1,7 @@
 <template>
   <div class="package-manager">
     <div class="package-manager-overview">
-      <div class="package-manager-total">Packages: 10</div>
+      <div class="package-manager-total">Packages: {{lessonUserPackages.length}}</div>
       <el-button type="primary" class="package-manager-new-button">
         <i class="iconfont icon-add"></i>New Package
       </el-button>
@@ -48,7 +48,7 @@
               <i class="iconfont icon-edit--" @click="toEdit(scope.row)"></i>
             </el-tooltip>
             <el-tooltip v-if="isDeletable(scope.row)" effect="dark" content="delete" placement="top">
-              <i class="iconfont icon-delete1" @click="toDelete(scope.row)"></i>
+              <i class="iconfont icon-delete1" @click="confirmDelete(scope.row)"></i>
             </el-tooltip>
             <el-tooltip v-if="isReleasable(scope.row)" effect="dark" content="release" placement="top">
               <i class="iconfont icon-Release" @click="toRelease(scope.row)"></i>
@@ -60,18 +60,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog class="package-manager-info-dialog" :class="{'package-manager-info-dialog-danger': infoDialogData.type === 'danger'}" :visible.sync="isInfoDialogVisible" width="560px" :before-close="handleClose">
-      <i class="iconfont" :class="{'icon-submit': infoDialogData.iconType === 'submit', 'icon-delete': infoDialogData.iconType === 'delete'}"></i>
-      <div class="package-manager-info-dialog-para" v-for="(para, index) in infoDialogData.paras" :key="index">{{para}}</div>
-      <span slot="footer" class="package-manager-info-dialog-footer">
-        <el-button type="primary" @click="isInfoDialogVisible = false">{{$t('common.Sure')}}</el-button>
-      </span>
-    </el-dialog>
+    <OperateResultDialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></OperateResultDialog>
   </div>
 </template>
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'PackageManager',
   async mounted() {
@@ -112,7 +107,8 @@ export default {
       infoDialogData: {
         paras: [],
         type: '', // danger or default
-        iconType: '' // submit or delete
+        iconType: '', // submit or delete or release or revoca
+        continueFnNameAfterEnsure: ''
       },
       editingPackageId: null
     }
@@ -162,6 +158,8 @@ export default {
     ...mapActions({
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonAuditPackage: 'lesson/teacher/auditPackage',
+      lessonReleasePackage: 'lesson/teacher/releasePackage',
+      lessonDeletePackage: 'lesson/teacher/deletePackage',
       lessonGetLessonList: 'lesson/teacher/getLessonList',
       lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
@@ -223,7 +221,6 @@ export default {
       let searchedStateId = this.searchParams.stateId
       return typeof searchedStateId === 'number'
         ? _.filter(originList, packageDetail => {
-            console.log(searchedStateId)
             return packageDetail.state === searchedStateId
           })
         : originList
@@ -289,7 +286,7 @@ export default {
           'Successfully submitted.',
           'The result wil be informed within 5 workdays.'
         ],
-        iconType: 'submit' // submit or delete
+        iconType: 'submit'
       }
       this.isInfoDialogVisible = true
       this.isTableLoading = false
@@ -297,11 +294,37 @@ export default {
     toEdit(packageDetail) {
       console.log('toEdit')
     },
-    toDelete(packageDetail) {
-      console.log('toDelete')
+    async confirmDelete(packageDetail) {
+      this.editingPackageId = packageDetail.id
+      this.infoDialogData = {
+        paras: [
+          'Are you sure you want to delete the package?',
+          "(This operation won't delete lessons beonged to this package)"
+        ],
+        iconType: 'delete',
+        type: 'danger',
+        continueFnNameAfterEnsure: 'toDelete'
+      }
+      this.isInfoDialogVisible = true
     },
-    toRelease(packageDetail) {
-      console.log('toRelease')
+    async toDelete() {
+      this.isTableLoading = true
+      await this.lessonDeletePackage({ packageId: this.editingPackageId })
+      this.isTableLoading = false
+    },
+    async toRelease(packageDetail) {
+      this.isTableLoading = true
+      this.editingPackageId = packageDetail.id
+      await this.lessonGetLessonList({ packageId: this.editingPackageId })
+      await this.lessonReleasePackage({
+        packageDetail: this.editingPackageDetail
+      })
+      this.infoDialogData = {
+        paras: ['Successfully released.'],
+        iconType: 'release'
+      }
+      this.isInfoDialogVisible = true
+      this.isTableLoading = false
     },
     async toRevoca(packageDetail) {
       this.isTableLoading = true
@@ -309,11 +332,22 @@ export default {
         packageId: packageDetail.id,
         state: 0
       })
+      this.infoDialogData = {
+        paras: ['Successfully revoca.'],
+        iconType: 'revoca'
+      }
+      this.isInfoDialogVisible = true
       this.isTableLoading = false
     },
-    handleClose() {
+    handleClose(continueFnNameAfterEnsure) {
       this.isInfoDialogVisible = false
+      if (continueFnNameAfterEnsure === 'toDelete') {
+        this.toDelete()
+      }
     }
+  },
+  components: {
+    OperateResultDialog
   }
 }
 </script>
@@ -422,42 +456,6 @@ export default {
       .cell {
         padding: 0 20px;
       }
-    }
-  }
-  &-info-dialog {
-    text-align: center;
-    .el-icon-close {
-      font-size: 20px;
-      color: #cecece;
-      font-weight: bold;
-    }
-    .el-dialog__body {
-      font-size: 16px;
-      color: #414141;
-      padding: 30px 20px 0;
-    }
-    &-danger {
-      .el-dialog__body {
-        color: #f75858;
-      }
-    }
-    .iconfont {
-      font-size: 88px;
-      color: #cecece;
-      line-height: 1;
-      margin-bottom: 28px;
-      display: inline-block;
-    }
-    .el-dialog__footer {
-      padding: 30px 0;
-      text-align: center;
-    }
-    .el-button--primary {
-      width: 103px;
-      font-size: 17px;
-    }
-    &-para {
-      margin-bottom: 14px;
     }
   }
 }
