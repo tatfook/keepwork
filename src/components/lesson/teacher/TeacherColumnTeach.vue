@@ -10,26 +10,13 @@
               <p class="time">{{$t('lesson.teachingTime')}}:
                 <span class="red-text">{{lessonPackage.updatedAt | formatTime}}</span>
               </p>
-              <div class="package-cover"><img :src="lessonPackage.extra.cover" alt=""></div>
+              <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 class="title">{{lessonPackage.extra.packageName}}</h4>
               <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
-              <p>{{$t('lesson.ages')}}: 5~100</p>
-              <p title="title">{{$t('lesson.intro')}} : ******************22222222***</p>
+              <p>{{$t('lesson.ages')}}: {{lessonPackage.minAge}}~{{lessonPackage.maxAge}}</p>
+              <p title="title">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
             </div>
           </el-col>
-          <!-- <el-col :sm="12" :xs="22">
-            <div class="package">
-              <p class="time">Latest teaching time:
-                <span class="red-text">11:20 20/8/2018</span>
-              </p>
-              <div class="package-cover"><img src="@/assets/lessonImg/cover1.png" alt=""></div>
-              <h4>Blocks</h4>
-              <p>{{$t('lesson.include')}}: 5 {{$t('lesson.lessonsCount')}}</p>
-              <p>{{$t('lesson.ages')}}: 5~100</p>
-              <p>{{$t('lesson.intro')}} : ******************22222222***</p>
-            </div>
-          </el-col> -->
-
         </el-row>
       </div>
     </div>
@@ -69,13 +56,17 @@ export default {
   },
   computed: {
     sortedTeachList() {
-
       return this.teachList.sort(this.sortByUpdateAt)
     }
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
+    enterPackage(packageId){
+      this.$router.push({
+        path: `teacher/package/${packageId}`
+      })
     }
   },
   filters: {
@@ -147,4 +138,3 @@ export default {
   }
 }
 </style>
-

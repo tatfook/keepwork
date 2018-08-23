@@ -41,46 +41,33 @@
         <span>
           <el-button type="primary" size="mini" @click="change('change')">Change</el-button> (Give full marks to selected students)</span>
       </div>
-      <div class="teacher-summary-detailed-table">
-        <div class="teacher-summary-detailed-table-title">
-          <el-checkbox label="NO."></el-checkbox>
-          <span class="title">Name <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-          <span class="title">Username <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-          <span class="title">Accuracy Rate <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-          <span class="title">Right <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-          <span class="title">Wrong <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-          <span class="title">Empty <img width="14" src="@/assets/lessonImg/summary/sort.png" alt=""></span>
-        </div>
-        <div class="teacher-summary-detailed-table-content">
-          <ul class="student-record">
-            <li class="every-student">
-              <el-checkbox class="every-student-checkbox"></el-checkbox>
-              <img class="portraits" src="@/assets/lessonImg/cover1.png" alt="">
-              <span class="desc">William Smith</span>
-              <span class="desc">keepgo1230</span>
-              <span class="desc">40%</span>
-              <span class="desc">4</span>
-              <span class="desc">2</span>
-              <span class="desc">0</span>
-              <span class="">
-                <el-button type="primary" size="mini" @click="singleStudentRecord(student)">View Details</el-button>
-              </span>
-            </li>
-            <li class="every-student">
-              <el-checkbox class="every-student-checkbox"></el-checkbox>
-              <img class="portraits" src="@/assets/lessonImg/cover1.png" alt="">
-              <span class="desc">William Smith</span>
-              <span class="desc">keepgo1230</span>
-              <span class="desc">40%</span>
-              <span class="desc">4</span>
-              <span class="desc">2</span>
-              <span class="desc">0</span>
-              <span class="">
-                <el-button type="primary" size="mini" @click="singleStudentRecord(student)">View Details</el-button>
-              </span>
-            </li>
-          </ul>
-        </div>
+      <div class="teacher-summary-detailed-table">      
+        <el-table :data="tableData6" border style="width: 100%">
+          <el-table-column type="selection" width="55">
+          </el-table-column>
+          <el-table-column prop="portrait" label="NO." width="80PX">
+            <template slot-scope="props">
+              <div class="portrait"><img :src="props.row.portrait" alt=""></div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="Name">
+          </el-table-column>
+          <el-table-column prop="amount1" label="Username">
+          </el-table-column>
+          <el-table-column prop="amount2" sortable  width="180" label="Accuracy Rate">
+          </el-table-column>
+          <el-table-column prop="amount3" sortable label="Right">
+          </el-table-column>
+          <el-table-column prop="amount3" sortable label="Wrong">
+          </el-table-column>
+          <el-table-column prop="amount3" sortable label="Empty">
+          </el-table-column>
+          <el-table-column label=" ">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">View Detail</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </div>
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
@@ -106,16 +93,54 @@ import AccuracyRateChart from './AccuracyRateChart'
 import NumberOfStudentsChart from './NumberOfStudentsChart'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
 export default {
-  name: "LessonTeacherSummary",
+  name: 'LessonTeacherSummary',
   data() {
     return {
       loading: true,
       successSendEmailDialogVisible: false,
       changeDialogVisible: false,
       changeSelected: '',
-      currentRecord: {}
+      currentRecord: [],
+      tableData6: [
+        {
+          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          name: '王小虎',
+          amount1: '234',
+          amount2: '3.2',
+          amount3: 10
+        },
+        {
+          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          name: '王小虎',
+          amount1: '165',
+          amount2: '4.43',
+          amount3: 12
+        },
+        {
+          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          name: '王小虎',
+          amount1: '324',
+          amount2: '1.9',
+          amount3: 9
+        },
+        {
+          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          name: '王小虎',
+          amount1: '621',
+          amount2: '2.2',
+          amount3: 17
+        },
+        {
+          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          name: '王小虎',
+          amount1: '539',
+          amount2: '4.1',
+          amount3: 15
+        }
+      ]
     }
   },
   props: {
@@ -126,16 +151,38 @@ export default {
       }
     }
   },
-  async mounted(){
-    if(JSON.stringify(this.classData) == '{}'){
+  async mounted() {
+    if (JSON.stringify(this.classData) == '{}') {
       let id = this.$route.params.classId
-      console.log(1,id)
-      await lesson.classrooms.getClassroomLearnRecords(id).then(res => {
-        console.log('res',res)
-        this.currentRecord = res[0]
-        this.loading = false
-      }).catch(err => console.log(err))
+      console.log(1, id)
+      await lesson.classrooms
+        .getClassroomLearnRecords(id)
+        .then(res => {
+          console.log('res', res)
+          this.currentRecord = res
+          this.loading = false
+        })
+        .catch(err => console.log(err))
     }
+    console.log('rate', this.singleStudentRightRate)
+    console.log('rate', this.singleStudentWrongRate)
+  },
+  computed: {
+    singleStudentRightRate() {
+      let rightAnswer = _.filter(this.currentRecord[0].extra.quiz, {
+        result: true
+      }).length
+      let allQuiz = this.currentRecord[0].extra.quiz.length
+      return rightAnswer / allQuiz * 100 + '%'
+    },
+    singleStudentWrongRate() {
+      let wrongAnswer = _.filter(this.currentRecord[0].extra.quiz, {
+        result: false
+      }).length
+      let allQuiz = this.currentRecord[0].extra.quiz.length
+      return wrongAnswer / allQuiz * 100 + '%'
+    },
+    singleStudentEmptyRate() {}
   },
   methods: {
     change(type) {
@@ -167,9 +214,9 @@ export default {
           })
         })
     },
-    singleStudentRecord(student){
+    singleStudentRecord(student) {
       // student/:studentId/record
-       this.$router.push({
+      this.$router.push({
         path: `/teacher/student/1/record`
       })
     }
@@ -239,6 +286,17 @@ export default {
     }
     &-table {
       border: 1px solid #a4a4a4;
+      .portrait{
+        width: 34px;
+        height: 34px;
+        // border: 1px solid #a4a4a4;
+        border-radius: 50%;
+        overflow: hidden;
+        img{
+          width: 100%;
+          // object-fit: cover;
+        }
+      }
       &-title {
         padding: 14px;
         border-bottom: 1px solid #a4a4a4;

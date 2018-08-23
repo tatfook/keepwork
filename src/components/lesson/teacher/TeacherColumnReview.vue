@@ -4,13 +4,13 @@
       <div class="review-list-class-hours">
         <div>Attend</div>
         <div class="time">
-          <span class="red">25</span> class</div>
+          <span class="red">{{sortedTeachList.length}}</span> class</div>
       </div>
       <div class="review-list-class-hours">
         <div>Total Teaching Time</div>
         <div class="time">
-          <span class="red">2</span> hours
-          <span class="red">35</span> mins</div>
+          <span class="red" v-cloak>{{hours}}</span> hours
+          <span class="red">{{mins}}</span> mins</div>
       </div>
 
       <p class="review-list-sort"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</p>
@@ -19,7 +19,7 @@
         <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
           <div class="package-cover">
             <p class="teach-time">{{lessonPackage.updatedAt | formatTime}}</p>
-            <img src="@/assets/lessonImg/cover1.png" alt="">
+            <img :src="lessonPackage.extra.coverUrl" alt="">
           </div>
           <div class="package-brief">
             <h4 class="name">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
@@ -68,6 +68,14 @@ export default {
   computed: {
     sortedTeachList() {
       return this.teachList.sort(this.sortByUpdateAt)
+    },
+    hours(){
+      let longTime = this.sortedTeachList.length * 45
+      return parseInt(longTime / 60)
+    },
+    mins(){
+      let longTime = this.sortedTeachList.length * 45
+      return (longTime / 60 - parseInt(longTime / 60)) * 60
     }
   },
   methods: {
