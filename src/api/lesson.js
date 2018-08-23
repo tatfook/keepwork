@@ -16,6 +16,7 @@ export const { get, post, put } = endpoint
 export const admin = {}
 
 export const packages = {
+  getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
@@ -53,12 +54,17 @@ export const classrooms = {
   getClassroomLearnRecords: (id) => get(`classrooms/${id}/learnRecords`)
 }
 
+export const subjects = {
+  getAllSubjects: () => get('subjects')
+}
+
 export const lesson = {
   users,
   packages,
   lessons,
   admin,
-  classrooms
+  classrooms,
+  subjects
 }
 
 export default lesson
