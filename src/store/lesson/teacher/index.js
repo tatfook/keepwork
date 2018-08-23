@@ -9,6 +9,8 @@ const state = () => ({
   isShowHint: true,
   classroom: {},
   lessonDetail: {},
+  userPackages: [],
+  packageLessons: {},
   lessonContent: {}
 })
 
