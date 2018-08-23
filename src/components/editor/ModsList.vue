@@ -124,10 +124,16 @@ export default {
 
       this.updatedHeight = true
 
-      let all = this.$el.querySelectorAll('[class="style-cover render"]')
+      let all = this.$el.querySelectorAll('[class="render-mod-container"]')
 
+      let refactor = 0
+      if(window.innerWidth <= 1920){
+        refactor = 0.1245
+      }else {
+        refactor = 0.254
+      }
       _.forEach(all, (dom, key) => {
-        dom.style.height = dom.offsetHeight * 0.1245 + 'px'
+        dom.style.height = dom.offsetHeight * refactor + 'px'
       })
 
       setTimeout(() => {
@@ -142,13 +148,13 @@ export default {
   height: 100%;
 }
 .style-cover {
-  width: 100%;
+  width: 275px;
   cursor: pointer;
   display: block;
   margin: auto;
   margin-bottom: 12px;
   border: 2px solid transparent;
-  padding: 8px;
+  padding: 10px;
   background-color: white;
 }
 .style-cover:hover {
@@ -168,7 +174,6 @@ export default {
   overflow: auto;
 }
 .render {
-  width: 295px;
   background-color: white;
   overflow: hidden;
   margin-bottom: 12px;
@@ -182,19 +187,21 @@ export default {
   }
 
   .render-mod-container {
-    width: 275px;
+    width: 272px;
     overflow: hidden;
 
     .render-mod {
       width: 1080px;
-      transform: scale(0.26);
+      transform: scale(0.254);
       transform-origin: top left;
+      position: unset;
     }
   }
 }
 @media screen and (max-width: 1920px) {
   .style-cover {
     width: 135px;
+    padding: 8px;
   }
 
   .render {

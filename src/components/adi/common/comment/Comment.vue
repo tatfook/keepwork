@@ -49,7 +49,14 @@
       </div>
     </div>
 
-    <el-pagination class="pagination" layout="prev, pager, next" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" :total="total">
+    <el-pagination
+      v-if="isShowPagination"
+      class="pagination"
+      layout="prev, pager, next"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -92,6 +99,13 @@ export default {
       }
 
       return []
+    },
+    isShowPagination() {
+      if (typeof this.total === 'number' && this.total > 0) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -113,11 +127,16 @@ export default {
       await this.createCommentForActivePage({ content })
       this.content = ''
       this.loading = false
+
+      this.currentPage = 1
+      this.loadComments()
     },
     async deleteComment(commentId) {
       this.loading = true
-      await this.deleteCommentById({ _id: commentId })
+      await this.deleteCommentById({ _id: commentId, page: this.currentPage })
       this.loading = false
+
+      this.loadComments(this.currentPage)
     },
     getFormatDate(date) {
       if (typeof date === 'string') {
@@ -132,7 +151,19 @@ export default {
 
       page || this.currentPage
 
+      this.currentPage = page
+
       await this.getActivePageComments({ page: page })
+
+      if (
+        this.activePageCommentList &&
+        this.activePageCommentList.commentList &&
+        this.activePageCommentList.commentList.length === 0
+      ) {
+        if (typeof this.currentPage === 'number' && this.currentPage !== 1) {
+          this.loadComments(this.currentPage - 1)
+        }
+      }
 
       if (
         this.activePageCommentList &&
