@@ -212,15 +212,15 @@ export default {
         this.actualUrl = src
       }
 
-      if(this.getType === this.handleExt['mp4']) {
-        let video = this.$el.querySelector('video')
+      // if(this.getType === this.handleExt['mp4']) {
+      //   let video = this.$el.querySelector('video')
 
-        if (video) {
-          video.oncanplaythrough = () => {
-              video.style.opacity = 1
-          }
-        }
-      }
+      //   if (video) {
+      //     video.oncanplaythrough = () => {
+      //         video.style.opacity = 1
+      //     }
+      //   }
+      // }
     }
   }
 }
@@ -229,7 +229,7 @@ export default {
 .comp-bigfile {
   video {
     width: 100%;
-    opacity: 0;
+    // opacity: 0;
   }
 
   img {
