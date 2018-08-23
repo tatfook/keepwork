@@ -70,7 +70,8 @@ const actions = {
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
-  async resumeTheClass({ commit }) {
+  async resumeTheClass({ commit, dispatch }) {
+    await dispatch('lesson/getUserDetail', null, { root: true })
     await lesson.classrooms
       .currentClass()
       .then(classroom => {
