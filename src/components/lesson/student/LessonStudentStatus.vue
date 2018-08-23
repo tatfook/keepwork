@@ -59,16 +59,22 @@ export default {
       leaveTheClass: 'lesson/student/leaveTheClass'
     }),
     async handleLeaveTheClass() {
-      this.$confirm(this.$t('lesson.leaveTheClassTips'), this.$t('lesson.leaveTheClass'), {
-        distinguishCancelAndClose: true,
-        confirmButtonText: this.$t('common.Sure'),
-        cancelButtonText: this.$t('common.Cancel')
-      })
-      .then( async () => {
-        await this.leaveTheClass()
-        this.$router.push(`/student`)
-      })
-      .catch(action => console.log(action))
+      this.$confirm(
+        this.$t('lesson.leaveTheClassTips'),
+        this.$t('lesson.leaveTheClass'),
+        {
+          center: true,
+          type: 'warning',
+          distinguishCancelAndClose: true,
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel')
+        }
+      )
+        .then(async () => {
+          await this.leaveTheClass()
+          this.$router.push(`/student`)
+        })
+        .catch(action => console.log(action))
     },
     async handleSetNickname() {
       if (this.name.trim() !== '') {
