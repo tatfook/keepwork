@@ -1,14 +1,24 @@
 <template>
-  <div class="comp-ppt">
-    <el-button plain type='info' size='mini' @click='isPptShow = true'>{{$t('editor.beginToShow')}}</el-button>
-    <showComponent :isEditorShow='isPptShow' :originalTreeData='originValue' @cancel='cancel'></showComponent>
+  <div class="comp-ppt" style="height: 300px;">
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <vue-markdown
+            :source="'# HAHAHA\n## UUUUUUUU\n ### OOOOOO \n ```@Paracraft```'"/>
+        </section>
+        <section>Vertical Slide 1</section>
+        <section>Vertical Slide 2</section>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-
 import compBaseMixin from '../comp.base.mixin'
-import showComponent from './ShowComponent'
+import Reveal from 'reveal.js'
+import VueMarkdown from 'vue-markdown'
+import 'reveal.js/css/reveal.css'
+import 'reveal.js/css/theme/white.css'
 
 export default {
   name: 'AdiPpt',
@@ -22,20 +32,35 @@ export default {
   },
   mixins: [compBaseMixin],
   components: {
-    showComponent
+    VueMarkdown
   },
   computed: {},
   methods: {
-    cancel(){
+    cancel() {
       this.isPptShow = false
-    },
+    }
   },
-  created() {}
+  mounted() {
+    let wrapper = this.$el.querySelector('.reveal')
+    let slides = this.$el.querySelector('.reveal .slides')
+
+    console.log(wrapper)
+    console.log(slides)
+
+    Reveal.initialize({
+      markdown: {
+        smartypants: true
+      },
+      dom: {
+        wrapper: wrapper,
+        slides: slides
+      }
+    })
+  }
 }
 </script>
 
 <style lang="scss">
-.comp-ppt{
-
+.comp-ppt {
 }
 </style>
