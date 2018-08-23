@@ -9,7 +9,7 @@ import gallery from './GalleryType'
 import filter from './FilterType'
 import media from './MediaType'
 import animations from './AnimationsType'
-import quiz from './quizType'
+import quiz from './QuizType'
 
 export default {
   input,
