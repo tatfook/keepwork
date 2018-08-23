@@ -12,7 +12,8 @@ const getters = {
   learnRecords: state => state.learnRecords || null,
   userPackages: (state) => state.userPackages,
   packageLessons: state => state.packageLessons,
-  classId: (state, { classroom }) => classroom.id
+  classId: (state, { classroom }) => classroom.id,
+  classroomLearnRecord: status => status.classroomLearnRecord
 }
 
 export default getters

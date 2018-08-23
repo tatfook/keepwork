@@ -15,7 +15,8 @@ const {
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
-  GET_CURRENT_CLASSROOM_SUCCESS
+  GET_CURRENT_CLASSROOM_SUCCESS,
+  GET_CLASSROOM_LEARN_RECORDS
 } = props
 
 const actions = {
@@ -112,6 +113,12 @@ const actions = {
     }
     let lessons = await lesson.packages.getLessonList({ packageId })
     commit(GET_PACKAGE_LESSON_LIST_SUCCESS, { packageId, lessons })
+  },
+  async getClassLearnRecords({ commit }, { id }) {
+    await lesson.classrooms.getClassroomLearnRecords(id).then(res => {
+      console.log('res', res)
+      commit(GET_CLASSROOM_LEARN_RECORDS, res)
+    }).catch(err => console.log(err))
   }
 }
 

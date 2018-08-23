@@ -10,47 +10,41 @@
       </p>
     </div>
     <div class="lesson-student-record-content">
-      <p class="nameInfo"><span class="nameInfo-name">Name: <span class="name">William Smith</span></span> <span class="nameInfo-username">UserName: <span class="name">Keepgo1230</span></span></p>
-      <p class="accuracy-rate">Accuracy Rate: 40%</p>
+      <p class="nameInfo"><span class="nameInfo-name">Name: <span class="name">{{student.name}}</span></span> <span class="nameInfo-username">UserName: <span class="name">{{student.username}}</span></span></p>
+      <p class="accuracy-rate">Accuracy Rate: {{student.accuracyRate}}</p>
       <p class="right-wrong">
         <span class="sign"><i class="i right"></i> right</span> 
         <span class="sign"><i class="i wrong"></i> Wrong</span>
       </p>
       <div class="lesson-student-record-content-table">
         <ul class="table">
-          <li class="table-cell">
-            <div class="question-number">quiz1</div>
-            <div class="answer right-answer">A</div>
-          </li>
-          <li class="table-cell">
-            <div class="question-number">quiz1</div>
-            <div class="answer right-answer">A</div>
-          </li>
-          <li class="table-cell">
-            <div class="question-number">quiz1</div>
-            <div class="answer wrong-answer">A</div>
-          </li>
-          <li class="table-cell">
-            <div class="question-number">quiz1</div>
-            <div class="answer wrong-answer">A</div>
-          </li>
-          <li class="table-cell">
-            <div class="question-number">quiz1</div>
-            <div class="answer wrong-answer">A</div>
+          <li class="table-cell" v-for="(quiz,index) in records" :key="index">
+            <div class="question-number">quiz{{index + 1}}</div>
+            <div :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{quiz.data.answer.toString()}}</div>
           </li>
         </ul>
       </div>
-    </div>>>
+    </div>
   </div>
 </div>
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   name: "LessonStudentRecord",
   data(){
-    return{}
-  }
+    return{
+      student:{},
+      records:[]
+    }
+  },
+  mounted(){
+    this.student = this.$route.query.student
+    this.records = _.get(this.$route.query.student,'quiz',[])
+    console.log('qui',this.records)
+}
 }
 </script>
 

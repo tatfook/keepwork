@@ -41,30 +41,30 @@
         <span>
           <el-button type="primary" size="mini" @click="change('change')">Change</el-button> (Give full marks to selected students)</span>
       </div>
-      <div class="teacher-summary-detailed-table">      
-        <el-table :data="tableData6" border style="width: 100%">
+      <div class="teacher-summary-detailed-table">
+        <el-table :data="newRecord" border style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
-          <el-table-column prop="portrait" label="NO." width="80PX">
+          <el-table-column prop="portrait" label="NO." width="80px">
             <template slot-scope="props">
               <div class="portrait"><img :src="props.row.portrait" alt=""></div>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="Name">
           </el-table-column>
-          <el-table-column prop="amount1" label="Username">
+          <el-table-column prop="username" label="Username">
           </el-table-column>
-          <el-table-column prop="amount2" sortable  width="180" label="Accuracy Rate">
+          <el-table-column prop="accuracyRate" sortable width="180" label="Accuracy Rate">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Right">
+          <el-table-column prop="right" sortable label="Right">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Wrong">
+          <el-table-column prop="wrong" sortable label="Wrong">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Empty">
+          <el-table-column prop="empty" sortable label="Empty">
           </el-table-column>
           <el-table-column label=" ">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">View Detail</el-button>
+              <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">View Detail</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -94,6 +94,7 @@ import NumberOfStudentsChart from './NumberOfStudentsChart'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { mapActions,mapGetters } from 'vuex'
 
 export default {
   name: 'LessonTeacherSummary',
@@ -106,41 +107,58 @@ export default {
       currentRecord: [],
       tableData6: [
         {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          portrait:
+            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
           name: '王小虎',
-          amount1: '234',
-          amount2: '3.2',
-          amount3: 10
+          username: '234',
+          accuracyRate: '3.2',
+          right: 10,
+          wrong: 12,
+          empty: 2
         },
         {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          portrait:
+            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
           name: '王小虎',
-          amount1: '165',
-          amount2: '4.43',
-          amount3: 12
+          username: '165',
+          accuracyRate: '4.43',
+          right: 12,
+          wrong: 12,
+          empty: 2
         },
         {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          portrait:
+            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
           name: '王小虎',
-          amount1: '324',
-          amount2: '1.9',
-          amount3: 9
+          username: '324',
+          accuracyRate: '1.9',
+          right: 9,
+          wrong: 12,
+          empty: 2
         },
         {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          portrait:
+            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
           name: '王小虎',
-          amount1: '621',
-          amount2: '2.2',
-          amount3: 17
+          username: '621',
+          accuracyRate: '2.2',
+          right: 17,
+          wrong: 12,
+          empty: 2
         },
         {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
+          portrait:
+            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
           name: '王小虎',
-          amount1: '539',
-          amount2: '4.1',
-          amount3: 15
+          username: '539',
+          accuracyRate: '4.1',
+          right: 15,
+          wrong: 12,
+          empty: 2
         }
-      ]
+      ],
+      newRecord: [],
+      multipleSelection: []
     }
   },
   props: {
@@ -155,36 +173,32 @@ export default {
     if (JSON.stringify(this.classData) == '{}') {
       let id = this.$route.params.classId
       console.log(1, id)
-      await lesson.classrooms
-        .getClassroomLearnRecords(id)
-        .then(res => {
-          console.log('res', res)
-          this.currentRecord = res
-          this.loading = false
+      await this.getClassLearnRecords({id})
+      this.currentRecord = _.map(this.classroomLearnRecord,
+        ({ extra: { portrait, name, username, quiz } }) => ({portrait,name,username,quiz})
+      )
+      console.log('currentRecord', this.currentRecord)
+      this.loading = false
+      let newCurrentRecord = _.map(this.currentRecord, ({portrait, name, username, quiz}) => {
+        let accuracyRate = this.singleStudentRightRate(quiz)
+        let right = _.filter(quiz, {result: true}).length
+        let wrong = _.filter(quiz, {result: false}).length
+        let empty = quiz.length - right - wrong
+        return {portrait, name, username, accuracyRate, right, wrong, empty, quiz}
         })
-        .catch(err => console.log(err))
+      console.log('newCurentRecord',newCurrentRecord)
+      this.newRecord = newCurrentRecord
     }
-    console.log('rate', this.singleStudentRightRate)
-    console.log('rate', this.singleStudentWrongRate)
   },
   computed: {
-    singleStudentRightRate() {
-      let rightAnswer = _.filter(this.currentRecord[0].extra.quiz, {
-        result: true
-      }).length
-      let allQuiz = this.currentRecord[0].extra.quiz.length
-      return rightAnswer / allQuiz * 100 + '%'
-    },
-    singleStudentWrongRate() {
-      let wrongAnswer = _.filter(this.currentRecord[0].extra.quiz, {
-        result: false
-      }).length
-      let allQuiz = this.currentRecord[0].extra.quiz.length
-      return wrongAnswer / allQuiz * 100 + '%'
-    },
-    singleStudentEmptyRate() {}
+    ...mapGetters({
+      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
+    })
   },
   methods: {
+    ...mapActions({
+      getClassLearnRecords: 'lesson/teacher/getClassLearnRecords'
+    }),
     change(type) {
       this.changeSelected = type
       this.changeDialogVisible = true
@@ -214,11 +228,25 @@ export default {
           })
         })
     },
-    singleStudentRecord(student) {
+    singleStudentRecord(index, student) {
+      console.log('index', index)
+      console.log('student', student)
       // student/:studentId/record
       this.$router.push({
-        path: `/teacher/student/1/record`
+        path: `/teacher/student/${student.username}/record`,
+        query: {student}
       })
+    },
+    singleStudentRightRate(quiz) {
+      let rightAnswer = _.filter(quiz, {
+        result: true
+      }).length
+      let allQuiz = quiz.length
+      return rightAnswer / allQuiz * 100 + '%'
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log('multipleSelection',this.multipleSelection)
     }
   },
   filters: {
@@ -286,15 +314,13 @@ export default {
     }
     &-table {
       border: 1px solid #a4a4a4;
-      .portrait{
+      .portrait {
         width: 34px;
         height: 34px;
-        // border: 1px solid #a4a4a4;
         border-radius: 50%;
         overflow: hidden;
-        img{
+        img {
           width: 100%;
-          // object-fit: cover;
         }
       }
       &-title {

@@ -93,7 +93,7 @@ export default new Router({
           component: LessonTeacher
         },
         {
-          path: 'student/:studentId/record',
+          path: 'student/:username/record',
           name: 'LessonStudentRecord',
           component: LessonStudentRecord
         },
