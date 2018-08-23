@@ -63,7 +63,6 @@ export default {
         this.$t('lesson.leaveTheClassTips'),
         this.$t('lesson.leaveTheClass'),
         {
-          center: true,
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
@@ -82,7 +81,7 @@ export default {
           .then(res => (this.isDialogVisible = false))
           .catch(e => {
             console.error(e)
-            this.$message.error('设置昵称失败')
+            this.$message.error(this.$t('common.failure'))
           })
       }
     }

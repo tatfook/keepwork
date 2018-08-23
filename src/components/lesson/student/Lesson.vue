@@ -32,6 +32,7 @@ export default {
     // this.copyProhibited()
     this.lessonId = this.$route.params.lessonId || 1
     await this.getLessonContent({ lessonId: this.lessonId })
+    console.log(this.enterClassInfo)
   },
   methods: {
     ...mapActions({
@@ -54,7 +55,8 @@ export default {
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',
       isBeInClassroom: 'lesson/student/isBeInClassroom',
-      userinfo: 'lesson/userinfo'
+      userinfo: 'lesson/userinfo',
+      enterClassInfo: 'lesson/student/enterClassInfo'
     }),
     currentClassroomId() {
       return _.get(this.userinfo, 'extra.classroomId', '')

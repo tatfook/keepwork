@@ -3,14 +3,17 @@
     <div class="tips">
       <span class="pointer right">
         <span class="icon"></span>
-        <span class="name">right</span>
+        <span class="name">{{$t('lesson.right')}}</span>
       </span>
       <span class="pointer wrong">
         <span class="icon"></span>
-        <span class="name">wrong</span>
+        <span class="name">{{$t('lesson.wrong')}}</span>
       </span>
     </div>
-    <el-table :data="fakerData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark">
+    <div class="refresh-data-wrap" v-if="isBeInClass && !learnRecords">
+      <el-button @click="handleRefreshLearnRecords" icon="el-icon-refresh" size="medium">点击刷新数据</el-button>
+    </div>
+    <el-table v-else :data="fakerData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark">
       <el-table-column v-for="(item,index) in tableProps" :key="index" :prop="item" :label="item" sortable>
 
       </el-table-column>
@@ -32,40 +35,27 @@ export default {
           quiz1: 'A',
           quiz2: 'A',
           quiz3: 'B'
-        },
-        {
-          name: '鸡屎菜',
-          username: 'mango',
-          state: '4/5',
-          quiz1: 'A',
-          quiz2: 'B',
-          quiz3: 'C'
-        },
-        {
-          name: '小丸子',
-          username: 'xwz',
-          state: '2/5',
-          quiz1: 'B',
-          quiz2: 'B',
-          quiz3: 'C'
-        },
-        {
-          name: '炮姐',
-          username: 'bilibili',
-          state: 'finished',
-          quiz1: 'B',
-          quiz2: 'B',
-          quiz3: 'D'
         }
       ]
     }
   },
+  mounted() {
+  },
   methods: {
-    getLearnRecords() {}
+    handleRefreshLearnRecords() {
+      this.$emit('intervalUpdateLearnRecords')
+    }
+  },
+  watch: {
+    learnRecords(value) {
+      console.dir(value)
+    }
   },
   computed: {
     ...mapGetters({
-      classroomId: 'lesson/teacher/classroomId'
+      classroomId: 'lesson/teacher/classroomId',
+      isBeInClass: 'lesson/teacher/isBeInClass',
+      learnRecords: 'lesson/teacher/learnRecords'
     }),
     tableProps(value) {
       return Object.keys(this.fakerData[0])
@@ -107,6 +97,13 @@ $red: #f53838;
         }
       }
     }
+  }
+  .refresh-data-wrap {
+    display: flex;
+    height: 200px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

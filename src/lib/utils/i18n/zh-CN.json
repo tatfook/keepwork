@@ -893,6 +893,8 @@
     "viewSummary": "查看课程总结",
     "skillsPoints": "技能点",
     "leaveTheClass": "离开课堂",
-    "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据"
+    "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
+    "right": "对",
+    "wrong": "错"
   }
 }
