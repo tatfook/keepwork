@@ -1,10 +1,10 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-header :data="lessonHeader" :isTeacher="true" />
+    <lesson-header :data="lessonHeader" :isTeacher="true" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
     <lesson-hint-toggle v-show="isShowLesson" />
     <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
-    <lesson-performance v-show="isShowPerformance" />
-    <lesson-summary v-show="isShowSummary" />
+    <lesson-performance v-show="isShowPerformance" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" />
+    <lesson-summary v-if="isShowSummary" />
   </div>
 </template>
 
@@ -24,27 +24,43 @@ export default {
     'lesson-performance': LessonStudentPerformance,
     'lesson-hint-toggle': LessonHintToggle
   },
-  async created() {
-    console.log('------created------')
-    const { packageId, lessonId } = this.$route.params
-    console.log(packageId, lessonId)
-    await Promise.all([this.getCurrentClass(), this.getLessonContent(lessonId)])
-    // await this.getCurrentClass()
-    // await this.getLessonContent(lessonId)
+  data() {
+    return {
+      _interval: null
+    }
   },
-  async mounted() {},
+  async created() {
+    const { packageId, lessonId } = this.$route.params
+    await Promise.all([this.getCurrentClass(), this.getLessonContent(lessonId)])
+  },
+  async destroy() {
+    this.clearUpdateLearnRecords()
+  },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/teacher/getLessonContent',
-      getCurrentClass: 'lesson/teacher/getCurrentClass'
-    })
+      getCurrentClass: 'lesson/teacher/getCurrentClass',
+      updateLearnRecords: 'lesson/teacher/updateLearnRecords'
+    }),
+    async intervalUpdateLearnRecords(delay = 3000) {
+      await this.updateLearnRecords()
+      clearTimeout(this._interval)
+      this._interval = setTimeout(
+        () => this.intervalUpdateLearnRecords(),
+        delay
+      )
+    },
+    clearUpdateLearnRecords() {
+      clearTimeout(this._interval)
+    }
   },
   computed: {
     ...mapGetters({
       isShowLesson: 'lesson/teacher/isShowLesson',
       isShowPerformance: 'lesson/teacher/isShowPerformance',
       isShowSummary: 'lesson/teacher/isShowSummary',
-      lessonDetail: 'lesson/teacher/lessonDetail'
+      lessonDetail: 'lesson/teacher/lessonDetail',
+      isBeInClass: 'lesson/teacher/isBeInClass'
     }),
     lesson() {
       return this.lessonDetail.modList || []

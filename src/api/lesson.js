@@ -51,9 +51,9 @@ export const classrooms = {
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
-  uploadLearnRecords: ({ classId, learnRecords, config }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }, config),
-  getClassroomLearnRecords: (id) => get(`classrooms/${id}/learnRecords`)
+  uploadLearnRecords: ({ classId, learnRecords }) =>
+    put(`learnRecords/${classId}`, { extra: learnRecords }),
+  getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`)
 }
 
 export const subjects = {

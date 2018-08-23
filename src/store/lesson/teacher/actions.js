@@ -71,14 +71,13 @@ const actions = {
     let learnRecords = await lesson.classrooms.learnRecords({
       classId
     })
-    console.warn(learnRecords)
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
   async getCurrentClass({ commit }) {
     await lesson.classrooms
       .currentClass()
       .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
-      .catch(e => console.warn('can\'t find the classroom', e))
+      .catch(e => console.warn("can't find the classroom", e))
   },
   toggleLesson({ commit }, flag) {
     commit(TOGGLE_LESSON, flag)

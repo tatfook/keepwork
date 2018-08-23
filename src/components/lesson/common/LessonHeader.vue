@@ -125,12 +125,6 @@ export default {
       _interval: null
     }
   },
-  async beforeCreate() {
-    // 查看是否有课堂
-  },
-  async destroyed() {
-    this.clearUpdateLearnRecords()
-  },
   methods: {
     ...mapActions({
       beginTheClass: 'lesson/teacher/beginTheClass',
@@ -143,16 +137,9 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    async intervalUpdateLearnRecords(delay = 5000) {
-      await this.updateLearnRecords()
-      this._interval = setTimeout(
-        () => this.intervalUpdateLearnRecords(),
-        delay
-      )
-    },
-    clearUpdateLearnRecords() {
-      clearTimeout(this._interval)
-    },
+    // clearUpdateLearnRecords() {
+    //   this.$emit('clearUpdateLearnRecords')
+    // },
     async handleBeginTheClass() {
       const { packageId, lessonId } = this.$route.params
       await this.beginTheClass({
@@ -161,11 +148,11 @@ export default {
       })
         .then(res => {
           this.classIdDialogVisible = true
-          this.intervalUpdateLearnRecords()
+          this.$emit('intervalUpdateLearnRecords')
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
-          this.clearUpdateLearnRecords()
+          this.$emit('clearUpdateLearnRecords')
           console.error(e)
         })
     },
@@ -174,7 +161,6 @@ export default {
         this.$t('lesson.dismissConfirm'),
         this.$t('lesson.dismiss'),
         {
-          center: true,
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
@@ -185,7 +171,7 @@ export default {
           await this.dismissTheClass()
             .then(res => {
               console.log(res)
-              this.clearUpdateLearnRecords()
+              this.$emit('clearUpdateLearnRecords')
             })
             .catch(e => {
               this.$message.error(this.$t('lesson.failure'))

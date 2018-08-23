@@ -70,19 +70,16 @@ const actions = {
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
-  async resumeTheClass(context) {
-    const {
-      commit,
-      rootGetters: {
-        'lesson/userinfo': { extra = {} }
-      }
-    } = context
-    let { classroomId = null } = extra
-    if (classroomId) {
-      let classroom = await lesson.classrooms.getClassroomById(classroomId)
-      commit(RESUME_CLASSROOM, classroom)
-      console.log(classroom)
-    }
+  async resumeTheClass({ commit }) {
+    await lesson.classrooms
+      .currentClass()
+      .then(classroom => {
+        let _classroom = _.clone(classroom)
+        _classroom['id'] = classroom.learnRecordId
+        _classroom['classroomId'] = classroom.id
+        commit(RESUME_CLASSROOM, _classroom)
+      })
+      .catch(e => console.error(e))
   },
   async doQuiz({ commit }, { key, result, answer }) {
     commit(DO_QUIZ, {
@@ -93,14 +90,12 @@ const actions = {
   },
   async uploadLearnRecords(context) {
     const {
-      getters: { classId, learnRecords },
-      rootGetters: { 'user/authRequestConfig': config }
+      getters: { classId, learnRecords }
     } = context
     console.warn(learnRecords)
     await lesson.classrooms.uploadLearnRecords({
       classId,
-      learnRecords,
-      config
+      learnRecords
     })
   },
   async switchSummary({ commit }, flag) {
