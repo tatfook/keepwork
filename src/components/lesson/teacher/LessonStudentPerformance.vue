@@ -11,44 +11,57 @@
       </span>
     </div>
     <div class="refresh-data-wrap" v-if="isBeInClass && !learnRecords">
-      <el-button @click="handleRefreshLearnRecords" icon="el-icon-refresh" size="medium">点击刷新数据</el-button>
+      <el-button @click="handleRefreshLearnRecords" icon="el-icon-refresh" type="warning" size="medium">{{$t('lesson.clickToRefresh')}}</el-button>
     </div>
-    <el-table v-else :data="fakerData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark">
-      <el-table-column v-for="(item,index) in tableProps" :key="index" :prop="item" :label="item" sortable>
-
+    <el-table v-else :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark">
+      <el-table-column v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="item" sortable>
+      </el-table-column>
+      <el-table-column v-for="(item) in tableQuizzes" :key="item" :label="item" :formatter="formatQuiz" sortable>
       </el-table-column>
     </el-table>
+    <el-button @click="testData"> 疯狂输出</el-button>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonStudentPerformance',
   data() {
     return {
-      fakerData: [
-        {
-          name: '王小八',
-          username: 'keep2',
-          state: '3/5',
-          quiz1: 'A',
-          quiz2: 'A',
-          quiz3: 'B'
-        }
-      ]
+      fakerData: []
     }
   },
   mounted() {
+    // console.log(this.tableData)
   },
   methods: {
     handleRefreshLearnRecords() {
       this.$emit('intervalUpdateLearnRecords')
-    }
-  },
-  watch: {
-    learnRecords(value) {
-      console.dir(value)
+    },
+    formatQuiz(row, column) {
+      console.log(row[0])
+      return row.answer
+    },
+    testData() {
+      console.log(this.tableData)
+    },
+    countState(quiz) {
+      let finishCount = quiz.reduce((count, cur) => {
+        cur.result !== null && count++
+        return count
+      }, 0)
+      let state =
+        finishCount === quiz.length ? 'finish' : `${finishCount}/${quiz.length}`
+      return state
+    },
+    makeQuizzes(quiz) {
+      return quiz.reduce((obj, cur, index) => {
+        let { result, answer, data: { options } } = cur
+        obj[`quiz${index + 1}`] = { answer, result, options }
+        return obj
+      }, {})
     }
   },
   computed: {
@@ -57,8 +70,33 @@ export default {
       isBeInClass: 'lesson/teacher/isBeInClass',
       learnRecords: 'lesson/teacher/learnRecords'
     }),
-    tableProps(value) {
-      return Object.keys(this.fakerData[0])
+    learnRecordsFilter() {
+      return this.learnRecords.map(
+        ({ userId, state, extra: { name, portrait, quiz, username } }) => ({
+          userId,
+          state,
+          name,
+          portrait,
+          quiz,
+          username
+        })
+      )
+    },
+    tableData() {
+      let _table = this.learnRecordsFilter.map(item => {
+        const { portrait, name, username, quiz } = item
+        let state = this.countState(quiz)
+        let quizzes = this.makeQuizzes(quiz)
+        return { portrait, name, username, state, ...quizzes }
+      })
+      return _table
+    },
+    tableUserInfo() {
+      return ['portrait', 'name', 'username', 'state']
+    },
+    tableQuizzes() {
+      const { quiz } = this.learnRecordsFilter[0]
+      return quiz.map((item, index) => `quiz${index + 1}`)
     }
   }
 }

@@ -170,7 +170,6 @@ export default {
         .then(async () => {
           await this.dismissTheClass()
             .then(res => {
-              console.log(res)
               this.$emit('clearUpdateLearnRecords')
             })
             .catch(e => {
