@@ -115,8 +115,8 @@ export default {
   methods: {
     ...mapActions({
       getProfile: 'user/getProfile',
-      enterClassRoom: 'lesson/student/enterClassRoom',
-      setEnterClassID: 'lesson/student/setEnterClassID'
+      enterClassRoom: 'lesson/student/enterClassRoom'
+      // setEnterClassID: 'lesson/student/setEnterClassID'
     }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
@@ -125,7 +125,7 @@ export default {
       let key = this.classID
       await this.enterClassRoom({ key })
       if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
-        this.setEnterClassID({ key })
+        // this.setEnterClassID({ key })
         this.$router.push({
           path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
             this.enterClassInfo.lessonId

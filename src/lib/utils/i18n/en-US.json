@@ -873,6 +873,7 @@
     "beginTips": "(Click here to begin the class)",
     "dismiss": "Dismiss the class",
     "dismissTips": "(Click here to dismiss the class)",
+    "dismissConfirm": "Are you sure you want to leave ? This operation will be irrevocable.",
     "lessonPlan": "Lesson Plan",
     "performance": "Students'Performance",
     "summary": "Summary",

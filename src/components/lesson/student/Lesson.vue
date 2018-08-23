@@ -1,7 +1,6 @@
 <template>
   <div class="lesson-wrap">
     <LessonStudentStatus v-if="isBeInClassroom" />
-    <!-- <LessonStudentStatus /> -->
     <LessonHeader :data="lessonHeaderData" />
     <LessonSummary v-show="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
@@ -27,10 +26,9 @@ export default {
       lessonId: ''
     }
   },
-  created() {
-    this.resumeTheClass()
-  },
+  created() {},
   async mounted() {
+    await this.resumeTheClass()
     // this.copyProhibited()
     this.lessonId = this.$route.params.lessonId || 1
     await this.getLessonContent({ lessonId: this.lessonId })

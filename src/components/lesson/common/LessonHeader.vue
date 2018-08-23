@@ -145,7 +145,10 @@ export default {
     },
     async intervalUpdateLearnRecords(delay = 5000) {
       await this.updateLearnRecords()
-      this._interval = setTimeout(() => this.intervalUpdateLearnRecords(), delay)
+      this._interval = setTimeout(
+        () => this.intervalUpdateLearnRecords(),
+        delay
+      )
     },
     clearUpdateLearnRecords() {
       clearTimeout(this._interval)
@@ -167,15 +170,29 @@ export default {
         })
     },
     async handleDismissTheClass() {
-      await this.dismissTheClass()
-        .then(res => {
-          console.log(res)
-          this.clearUpdateLearnRecords()
+      await this.$confirm(
+        this.$t('lesson.dismissConfirm'),
+        this.$t('lesson.dismiss'),
+        {
+          center: true,
+          type: 'warning',
+          distinguishCancelAndClose: true,
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel')
+        }
+      )
+        .then(async () => {
+          await this.dismissTheClass()
+            .then(res => {
+              console.log(res)
+              this.clearUpdateLearnRecords()
+            })
+            .catch(e => {
+              this.$message.error(this.$t('lesson.failure'))
+              console.error(e)
+            })
         })
-        .catch(e => {
-          this.$message.error('失败')
-          console.error(e)
-        })
+        .catch(e => console.error(e))
     }
   },
   computed: {
@@ -326,7 +343,7 @@ export default {
     .lesson-button-tips {
       color: #a9a9a9;
       font-size: 14px;
-      margin-left: 10px;
+      margin-left: 5px;
     }
   }
   .lesson-progress-wrap {

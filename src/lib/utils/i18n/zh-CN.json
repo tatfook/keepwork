@@ -878,6 +878,7 @@
     "beginTips": "(点击这里开始上课)",
     "dismiss": "下课",
     "dismissTips": "(点击这里下课)",
+    "dismissConfirm": "你确定要下课吗？该操作将不可撤销。",
     "lessonPlan": "课堂内容",
     "performance": "学生状态",
     "summary": "课堂总结",
