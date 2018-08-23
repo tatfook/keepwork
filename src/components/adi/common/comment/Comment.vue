@@ -118,9 +118,14 @@ export default {
     }),
     async commit() {
       let { content } = this
+      let checkContent = ''
 
-      if (!content) {
-        return
+      if (typeof content === 'string') {
+        checkContent = content.replace(/ /g, "")
+      }
+
+      if (!checkContent) {
+        return false
       }
 
       this.loading = true
