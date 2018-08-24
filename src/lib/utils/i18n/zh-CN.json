@@ -921,6 +921,11 @@
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
     "right": "对",
     "wrong": "错",
-    "clickToRefresh": "点击刷新"
+    "clickToRefresh": "点击刷新",
+    "username": "用户名",
+    "accuracyRate": "正确率",
+    "totalStudent": "学生数:(",
+    "student": "学生",
+    "accuracy": "正确率"
   }
 }

@@ -16,7 +16,7 @@ import Vue from 'vue'
     },
     data () {
       this.chartSettings = {
-        yAxisName: [' Accuracy Rate (%)'],
+        yAxisName: [`${this.$t('lesson.accuracyRate')}(%)`],
         yAxisType: ['percent'],
         // xAxisTpe: ['category'],
         itemStyle: {
