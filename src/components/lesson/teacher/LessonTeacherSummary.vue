@@ -151,19 +151,20 @@ export default {
     console.log(this.totalStudent)
     this.currentRecord = _.map(
       this.classroomLearnRecord,
-      ({ extra: { portrait, name, username, quiz }, createdAt }) => ({
+      ({ extra: { portrait, name, username, quiz }, createdAt,lessonId }) => ({
         portrait,
         name,
         username,
         quiz,
-        createdAt
+        createdAt,
+        lessonId
       })
     )
     //Answer questions for each student
     let currentLessonName = this.lessonName
     let newCurrentRecord = _.map(
       this.currentRecord,
-      ({ portrait, name, username, quiz = [], createdAt,lessonName }) => {
+      ({ portrait, name, username, quiz = [], createdAt,lessonName,lessonId }) => {
         let accuracyRate = this.singleStudentRightRate(quiz)
         let right = _.filter(quiz, { result: true }).length
         let wrong = _.filter(quiz, { result: false }).length
@@ -181,6 +182,7 @@ export default {
           empty,
           quiz,
           createdAt,
+          lessonId,
           lessonName: currentLessonName
         }
       }

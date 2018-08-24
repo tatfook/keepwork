@@ -3,7 +3,7 @@
   <div class="lesson-student-record">
     <div class="lesson-student-record-title">
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> {{student.lessonName}}</p>
+        <span class="brief-title">{{$t('modList.lesson')}} {{student.lessonId}}:</span> {{student.lessonName}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins
         <span class="date">{{student.createdAt | formatTime}}</span>
