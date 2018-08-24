@@ -22,7 +22,7 @@ import AdiTab from './tab/Tab'
 import AdiCategoryList from './categoryList/categoryList'
 import AdiPageSwitching from './pageSwitching/PageSwitching'
 import AdiPpt from './ppt/Ppt'
-import AdiShowComponent from './ppt/ShowComponent'
+// import AdiShowComponent from './ppt/ShowComponent'
 
 export default {
   AdiMarkdown,
@@ -48,6 +48,6 @@ export default {
   AdiTab,
   AdiCategoryList,
   AdiPageSwitching,
-  AdiPpt,
-  AdiShowComponent
+  AdiPpt
+  // AdiShowComponent
 }
