@@ -136,9 +136,9 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    // clearUpdateLearnRecords() {
-    //   this.$emit('clearUpdateLearnRecords')
-    // },
+    leaveConfirm(event) {
+      event.returnValue = 'are you ok?'
+    },
     async handleBeginTheClass() {
       const { packageId, lessonId } = this.$route.params
       await this.beginTheClass({
@@ -148,6 +148,7 @@ export default {
         .then(res => {
           this.classIdDialogVisible = true
           this.$emit('intervalUpdateLearnRecords')
+          window.addEventListener('beforeunload', this.leaveConfirm, true)
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
@@ -170,6 +171,11 @@ export default {
           await this.dismissTheClass()
             .then(res => {
               this.$emit('clearUpdateLearnRecords')
+              window.removeEventListener(
+                'beforeunload',
+                this.leaveConfirm,
+                true
+              )
             })
             .catch(e => {
               this.$message.error(this.$t('lesson.failure'))

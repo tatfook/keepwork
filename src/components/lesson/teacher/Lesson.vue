@@ -33,14 +33,19 @@ export default {
     const { packageId, lessonId } = this.$route.params
     await Promise.all([this.getCurrentClass(), this.getLessonContent(lessonId)])
   },
-  async destroy() {
+  async mounted() {
+
+  },
+  async destroyed() {
     this.clearUpdateLearnRecords()
+    this.leaveTheClassroom()
   },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/teacher/getLessonContent',
       getCurrentClass: 'lesson/teacher/getCurrentClass',
-      updateLearnRecords: 'lesson/teacher/updateLearnRecords'
+      updateLearnRecords: 'lesson/teacher/updateLearnRecords',
+      leaveTheClassroom: 'lesson/teacher/leaveTheClassroom'
     }),
     async intervalUpdateLearnRecords(delay = 3000) {
       await this.updateLearnRecords()
@@ -60,7 +65,8 @@ export default {
       isShowPerformance: 'lesson/teacher/isShowPerformance',
       isShowSummary: 'lesson/teacher/isShowSummary',
       lessonDetail: 'lesson/teacher/lessonDetail',
-      isBeInClass: 'lesson/teacher/isBeInClass'
+      isBeInClass: 'lesson/teacher/isBeInClass',
+      isClassIsOver: 'lesson/teacher/isClassIsOver'
     }),
     lesson() {
       return this.lessonDetail.modList || []
@@ -71,6 +77,12 @@ export default {
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.isBeInClass && !this.isClassIsOver) {
+      return this.$message.error('你还在上课呢')
+    }
+    next()
   }
 }
 </script>

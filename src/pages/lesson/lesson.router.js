@@ -25,7 +25,8 @@ const PurchasePackage = () =>
 const Share = () => import('@/components/lesson/Share')
 const LessonStudentRecord = () =>
   import('@/components/lesson/teacher/LessonStudentRecord')
-const LessonSummary = () => import('@/components/lesson/teacher/LessonTeacherSummary')
+const LessonSummary = () =>
+  import('@/components/lesson/teacher/LessonTeacherSummary')
 
 Vue.use(Router)
 

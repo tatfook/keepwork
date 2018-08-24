@@ -15,7 +15,8 @@ const {
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
-  GET_CLASSROOM_LEARN_RECORDS
+  GET_CLASSROOM_LEARN_RECORDS,
+  LEAVE_THE_CLASSROOM
 } = props
 
 const actions = {
@@ -81,6 +82,9 @@ const actions = {
       .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
       .catch(e => console.warn("can't find the classroom", e))
   },
+  async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
+    isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
+  },
   toggleLesson({ commit }, flag) {
     commit(TOGGLE_LESSON, flag)
   },
@@ -91,7 +95,10 @@ const actions = {
     commit(TOGGLE_SUMMARY, flag)
   },
   async getUserPackages(context, { useCache = true }) {
-    let { commit, getters: { userPackages } } = context
+    let {
+      commit,
+      getters: { userPackages }
+    } = context
     if (userPackages && userPackages.length && useCache) {
       return
     }
@@ -115,7 +122,10 @@ const actions = {
     await dispatch('getUserPackages', { useCache: false })
   },
   async getLessonList(context, { packageId, useCache = true }) {
-    let { commit, getters: { packageLessons } } = context
+    let {
+      commit,
+      getters: { packageLessons }
+    } = context
     let targetPackageLessons = _.get(packageLessons, packageId, [])
     if (useCache && targetPackageLessons.length > 0) {
       return
@@ -124,10 +134,13 @@ const actions = {
     commit(GET_PACKAGE_LESSON_LIST_SUCCESS, { packageId, lessons })
   },
   async getClassLearnRecords({ commit }, { id }) {
-    await lesson.classrooms.getClassroomLearnRecords(id).then(res => {
-      console.log('res', res)
-      commit(GET_CLASSROOM_LEARN_RECORDS, res)
-    }).catch(err => console.log(err))
+    await lesson.classrooms
+      .getClassroomLearnRecords(id)
+      .then(res => {
+        console.log('res', res)
+        commit(GET_CLASSROOM_LEARN_RECORDS, res)
+      })
+      .catch(err => console.log(err))
   }
 }
 

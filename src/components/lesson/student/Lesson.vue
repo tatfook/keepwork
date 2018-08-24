@@ -26,7 +26,15 @@ export default {
       lessonId: ''
     }
   },
-  created() {},
+  created() {
+    console.log('created=-------------->')
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.isBeInClassroom) {
+      return this.$message.error('你还在上课')
+    }
+    next()
+  },
   async mounted() {
     await this.resumeTheClass()
     // this.copyProhibited()
