@@ -43,7 +43,6 @@ export default {
   name: 'LessonStudentPerformance',
   data() {
     return {
-      fakerData: [],
       TRF: '2',
       defaultAvatar: avatar
     }

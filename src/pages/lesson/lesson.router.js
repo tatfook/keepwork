@@ -16,7 +16,8 @@ const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
-const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
+const PackageManager = () =>
+  import('@/components/lesson/teacher/PackageManager')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -24,7 +25,8 @@ const PurchasePackage = () =>
 const Share = () => import('@/components/lesson/Share')
 const LessonStudentRecord = () =>
   import('@/components/lesson/teacher/LessonStudentRecord')
-const LessonSummary = () => import('@/components/lesson/teacher/LessonTeacherSummary')
+const LessonSummary = () =>
+  import('@/components/lesson/teacher/LessonTeacherSummary')
 
 Vue.use(Router)
 

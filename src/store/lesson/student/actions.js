@@ -72,12 +72,14 @@ const actions = {
   },
   async resumeTheClass({ commit, dispatch }) {
     await dispatch('lesson/getUserDetail', null, { root: true })
+    // TODO: 恢复作答记录 learnRecords/:id
     await lesson.classrooms
       .currentClass()
       .then(classroom => {
         let _classroom = _.clone(classroom)
         _classroom['id'] = classroom.learnRecordId
         _classroom['classroomId'] = classroom.id
+        console.warn(_classroom)
         commit(RESUME_CLASSROOM, _classroom)
       })
       .catch(e => console.error(e))

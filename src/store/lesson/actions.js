@@ -10,7 +10,6 @@ let {
 
 const actions = {
   async getUserDetail(context) {
-    console.warn('getUserDetail----------------->')
     let { commit } = context
     let userLessonInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
