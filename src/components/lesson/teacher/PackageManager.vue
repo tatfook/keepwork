@@ -1,59 +1,59 @@
 <template>
   <div class="package-manager">
     <div class="package-manager-overview">
-      <div class="package-manager-total">Packages: {{lessonUserPackages.length}}</div>
+      <div class="package-manager-total">{{$t('lesson.packCount')}}: {{lessonUserPackages.length}}</div>
       <el-button type="primary" class="package-manager-new-button">
-        <i class="iconfont icon-add"></i>New Package
+        <i class="iconfont icon-add"></i>{{$t('lesson.newPackage')}}
       </el-button>
     </div>
     <div class="package-manager-selector">
       <div class="package-manager-selector-item">
-        <label for="subjectSelector">Subject</label>
+        <label for="subjectSelector">{{$t('lesson.subjectLabel')}}</label>
         <el-select id="subjectSelector" v-model="searchParams.subjectId">
-          <el-option :key='null' label='all' :value='null'></el-option>
+          <el-option :key='null' :label='$t("lesson.all")' :value='null'></el-option>
           <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
           </el-option>
         </el-select>
       </div>
       <div class="package-manager-selector-item">
-        <label for="statusSelector">Status</label>
-        <el-select id="statusSelector" v-model="searchParams.stateId" placeholder="All">
-          <el-option label='all' :value='null'></el-option>
+        <label for="statusSelector">{{$t('lesson.statusLabel')}}</label>
+        <el-select id="statusSelector" v-model="searchParams.stateId">
+          <el-option :label='$t("lesson.all")' :value='null'></el-option>
           <el-option v-for="item in allStates" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </div>
       <div class="package-manager-selector-item package-manager-selector-box">
-        <el-input class="package-manager-selector-search-box" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="searchParams.name">
+        <el-input class="package-manager-selector-search-box" :placeholder="$t('lesson.searchByName')" suffix-icon="el-icon-search" v-model="searchParams.name">
         </el-input>
       </div>
     </div>
     <div class="package-manager-details">
       <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
-        <el-table-column type="index" label="No." width="70">
+        <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
-        <el-table-column prop="packageName" label="name">
+        <el-table-column prop="packageName" :label="$t('lesson.nameLabel')">
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" label="Subject" width="190">
+        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
-        <el-table-column label="Status" width="125">
+        <el-table-column :label="$t('lesson.statusLabel')" width="125">
           <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
         </el-table-column>
         <el-table-column label="" width="180" class-name="package-manager-table-operations">
           <template slot-scope="scope">
-            <el-tooltip v-if="isSubmitable(scope.row)" effect="dark" content="submit" placement="top">
+            <el-tooltip v-if="isSubmitable(scope.row)" effect="dark" :content="$t('lesson.submit')" placement="top">
               <i class="iconfont icon-submit" @click="toSubmit(scope.row)"></i>
             </el-tooltip>
-            <el-tooltip v-if="isEditable(scope.row)" effect="dark" content="edit" placement="top">
+            <el-tooltip v-if="isEditable(scope.row)" effect="dark" :content="$t('lesson.edit')" placement="top">
               <i class="iconfont icon-edit--" @click="toEdit(scope.row)"></i>
             </el-tooltip>
-            <el-tooltip v-if="isDeletable(scope.row)" effect="dark" content="delete" placement="top">
+            <el-tooltip v-if="isDeletable(scope.row)" effect="dark" :content="$t('lesson.delete')" placement="top">
               <i class="iconfont icon-delete1" @click="confirmDelete(scope.row)"></i>
             </el-tooltip>
-            <el-tooltip v-if="isReleasable(scope.row)" effect="dark" content="release" placement="top">
+            <el-tooltip v-if="isReleasable(scope.row)" effect="dark" :content="$t('lesson.release')" placement="top">
               <i class="iconfont icon-Release" @click="toRelease(scope.row)"></i>
             </el-tooltip>
-            <el-tooltip v-if="isRevocable(scope.row)" effect="dark" content="revoca" placement="top">
+            <el-tooltip v-if="isRevocable(scope.row)" effect="dark" :content="$t('lesson.recall')" placement="top">
               <i class="iconfont icon-recall" @click="toRevoca(scope.row)"></i>
             </el-tooltip>
           </template>
@@ -78,23 +78,23 @@ export default {
       allStates: [
         {
           value: 0,
-          label: 'Not submitted'
+          label: this.$t('lesson.notSubmitted')
         },
         {
           value: 1,
-          label: 'Pending review'
+          label: this.$t('lesson.pendingReview')
         },
         {
           value: 2,
-          label: 'Approved'
+          label: this.$t('lesson.approved')
         },
         {
           value: 3,
-          label: 'Reject'
+          label: this.$t('lesson.rejected')
         },
         {
           value: 4,
-          label: 'Disabled'
+          label: this.$t('lesson.disabled')
         }
       ],
       searchParams: {
@@ -167,19 +167,19 @@ export default {
       let statusText = ''
       switch (packageDetail.state) {
         case 0:
-          statusText = 'Not submitted'
+          statusText = this.$t('lesson.notSubmitted')
           break
         case 1:
-          statusText = 'Pending review'
+          statusText = this.$t('lesson.pendingReview')
           break
         case 2:
-          statusText = 'Approved'
+          statusText = this.$t('lesson.approved')
           break
         case 3:
-          statusText = 'Reject'
+          statusText = this.$t('lesson.rejected')
           break
         case 4:
-          statusText = 'Disabled'
+          statusText = this.$t('lesson.disabled')
           break
         default:
           break
@@ -267,9 +267,7 @@ export default {
       let isComplete = await this.isPackageInfoComplete()
       if (!isComplete) {
         this.infoDialogData = {
-          paras: [
-            'Please complete the package information before submitting it.'
-          ],
+          paras: [this.$t('lesson.pleaseCompleteInfo')],
           type: 'danger', // danger or default
           iconType: 'submit' // submit or delete
         }
@@ -283,8 +281,8 @@ export default {
       })
       this.infoDialogData = {
         paras: [
-          'Successfully submitted.',
-          'The result wil be informed within 5 workdays.'
+          this.$t('lesson.successfullySubmitted'),
+          this.$t('lesson.successfullySubmittedDetail')
         ],
         iconType: 'submit'
       }
@@ -298,8 +296,8 @@ export default {
       this.editingPackageId = packageDetail.id
       this.infoDialogData = {
         paras: [
-          'Are you sure you want to delete the package?',
-          "(This operation won't delete lessons beonged to this package)"
+          this.$t('lesson.deletePackageConfirm'),
+          this.$t('lesson.deletePackageInfo')
         ],
         iconType: 'delete',
         type: 'danger',
@@ -320,7 +318,7 @@ export default {
         packageDetail: this.editingPackageDetail
       })
       this.infoDialogData = {
-        paras: ['Successfully released.'],
+        paras: [this.$t('lesson.successfullyReleased')],
         iconType: 'release'
       }
       this.isInfoDialogVisible = true
@@ -333,7 +331,7 @@ export default {
         state: 0
       })
       this.infoDialogData = {
-        paras: ['Successfully revoca.'],
+        paras: [this.$t('lesson.successfullyRecall')],
         iconType: 'revoca'
       }
       this.isInfoDialogVisible = true
