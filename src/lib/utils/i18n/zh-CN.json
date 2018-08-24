@@ -922,10 +922,23 @@
     "right": "对",
     "wrong": "错",
     "clickToRefresh": "点击刷新",
+    "name":"姓名",
     "username": "用户名",
     "accuracyRate": "正确率",
     "totalStudent": "学生数:(",
     "student": "学生",
-    "accuracy": "正确率"
+    "accuracy": "正确率",
+    "activatedTeaching": "授课功能已激活！",
+    "detailed": "答题详情",
+    "changeAll": "全部更改",
+    "fullAllStudents": "给所有学生满分",
+    "change": "部分更改",
+    "fullSelectedStudents": "给选定的学生满分",
+    "rightNumber": "正确",
+    "wrongNumber": "错误",
+    "emptyNumber": "未答",
+    "confirmFullAll": "你确定给所有的学生满分吗？",
+    "confirmFullSelected": "你确定给选定的学生满分吗？",
+    "viewDetail": "查看详情"
   }
 }

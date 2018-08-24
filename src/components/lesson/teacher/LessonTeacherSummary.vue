@@ -34,12 +34,12 @@
       </div>
     </div>
     <div class="teacher-summary-detailed">
-      <h4>Detailed:</h4>
+      <h4>{{$t('lesson.detailed')}}:</h4>
       <div class="teacher-summary-detailed-change">
         <span>
-          <el-button type="primary" size="mini" @click="change('changeAll')">Change All</el-button> (Give full marks to all students)</span>
+          <el-button type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
         <span>
-          <el-button type="primary" size="mini" @click="change('change')">Change</el-button> (Give full marks to selected students)</span>
+          <el-button type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
       <div class="teacher-summary-detailed-table">
         <el-table :data="newRecord" border style="width: 100%" @selection-change="handleSelectionChange">
@@ -50,21 +50,21 @@
               <div class="portrait"><img :src="props.row.portrait" alt=""></div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="Name">
+          <el-table-column prop="name" :label='$t("lesson.name")'>
           </el-table-column>
-          <el-table-column prop="username" label="Username">
+          <el-table-column prop="username" :label='$t("lesson.username")'>
           </el-table-column>
-          <el-table-column prop="accuracyRate" sortable width="180" label="Accuracy Rate">
+          <el-table-column prop="accuracyRate" sortable width="180" :label='$t("lesson.accuracyRate")'>
           </el-table-column>
-          <el-table-column prop="right" sortable label="Right">
+          <el-table-column prop="right" sortable :label='$t("lesson.rightNumber")'>
           </el-table-column>
-          <el-table-column prop="wrong" sortable label="Wrong">
+          <el-table-column prop="wrong" sortable :label='$t("lesson.wrongNumber")'>
           </el-table-column>
-          <el-table-column prop="empty" sortable label="Empty">
+          <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
           </el-table-column>
           <el-table-column label=" ">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">View Detail</el-button>
+              <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -73,11 +73,11 @@
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
       <div class="tip">
         <div class="tip-img"><img src="@/assets/lessonImg/reminder.png" alt=""></div>
-        <div class="tip-text">{{changeSelected === 'changeAll' ? ' you sure you want to give full marks to all students?' : 'Are you sure you want to give full marks to selected students?'}}</div>
+        <div class="tip-text">{{changeSelected === 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="changeDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="toChangeStudentMarks">确 定</el-button>
+        <el-button @click="changeDialogVisible = false">{{$t('common.Cancel')}}</el-button>
+        <el-button type="primary" @click="toChangeStudentMarks">{{$t('common.Sure')}}</el-button>
       </span>
     </el-dialog>
     <el-dialog class="teacher-summary-success-send-email" :visible.sync="successSendEmailDialogVisible" width="30%" center>
@@ -146,7 +146,6 @@ export default {
       this.loading = false
       return
     }
-    console.warn('------------------------------>')
     console.log(this.classroomLearnRecord.length)
     this.totalStudent = this.classroomLearnRecord.length
     console.log(this.totalStudent)

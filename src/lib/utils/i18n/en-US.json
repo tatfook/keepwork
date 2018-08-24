@@ -917,10 +917,23 @@
     "right": "right",
     "wrong": "wrong",
     "clickToRefresh": "Click to refresh",
+    "name":"Name",
     "username": "UserName",
     "accuracyRate": "Accuracy Rate",
     "totalStudent": "Number of Students (total:",
     "student": "student",
-    "accuracy": "accuracy"
+    "accuracy": "accuracy",
+    "activatedTeaching": "The teaching function has been activated!",
+    "detailed": "Detailed",
+    "changeAll": "Change All",
+    "fullAllStudents": "Give full marks to all students",
+    "change": "Change",
+    "fullSelectedStudents": "Give full marks to selected students",
+    "rightNumber": "Right",
+    "wrongNumber": "Wrong",
+    "emptyNumber": "Empty",
+    "confirmFullAll": " you sure you want to give full marks to all students?",
+    "confirmFullSelected": "Are you sure you want to give full marks to selected students?",
+    "viewDetail": "View Detail"
   }
 }
