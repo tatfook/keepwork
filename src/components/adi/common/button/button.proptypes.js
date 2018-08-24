@@ -6,5 +6,8 @@ export default {
   src: 'media',
   color: 'input',
   fontSize: 'input',
+  borderWidth: 'input',
+  borderStyle: 'input',
+  borderColor: 'input',
   target: 'linkTarget'
 }

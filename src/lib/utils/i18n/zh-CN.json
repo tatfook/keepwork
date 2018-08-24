@@ -509,7 +509,10 @@
     "source": "来源",
     "ratio": "宽高比例(如16/9)",
     "autoplay": "自动播放",
-    "playloop": "循环播放"
+    "playloop": "循环播放",
+    "borderWidth": "按钮边框粗细",
+    "borderStyle": "按钮边框样式",
+    "borderColor": "按钮边框颜色"
   },
   "skydrive": {
     "image": "图片",

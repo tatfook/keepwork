@@ -169,48 +169,32 @@ export default [
         'justify-content': 'center'
       },
       colGroupA: {
-        width: '22%'
+        width: 'auto'
       },
       colGroupB: {
-        width: '22%',
+        width: 'auto',
         margin: '0 2% 0 2%'
       },
       colGroupC: {
-        width: '22%',
+        width: 'auto',
         margin: '0 2% 0 0'
       },
       colGroupD: {
-        width: '22%'
+        width: 'auto'
       },
       buttonA: {
-        width: '60%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
       buttonB: {
-        width: '60%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
       buttonC: {
-        width: '60%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
       buttonD: {
-        width: '60%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
-      '@media only screen and (max-width: 767px)': {
+      '@media only screen and (max-width: 867px)': {
         colGroupRow: {
           display: 'block'
         },
@@ -229,32 +213,16 @@ export default [
           width: '100%'
         },
         buttonA: {
-          width: '30%',
-          height: '32px',
-          'text-align': 'center',
-          border: '1px solid',
-          'box-shadow': '1px 1px'
+          'text-align': 'center'
         },
         buttonB: {
-          width: '30%',
-          height: '32px',
-          'text-align': 'center',
-          border: '1px solid',
-          'box-shadow': '1px 1px'
+          'text-align': 'center'
         },
         buttonC: {
-          width: '30%',
-          height: '32px',
-          'text-align': 'center',
-          border: '1px solid',
-          'box-shadow': '1px 1px'
+          'text-align': 'center'
         },
         buttonD: {
-          width: '30%',
-          height: '32px',
-          'text-align': 'center',
-          border: '1px solid',
-          'box-shadow': '1px 1px'
+          'text-align': 'center'
         }
       }
     },
@@ -285,26 +253,22 @@ export default [
       theme: {
         buttonA: {
           buttonAStyle: {
-            'border-color': 'title',
-            'box-shadow': 'title'
+            'border-color': 'title'
           }
         },
         buttonB: {
           buttonBStyle: {
-            'border-color': 'title',
-            'box-shadow': 'title'
+            'border-color': 'title'
           }
         },
         buttonC: {
           buttonCStyle: {
-            'border-color': 'title',
-            'box-shadow': 'title'
+            'border-color': 'title'
           }
         },
         buttonD: {
           buttonDStyle: {
-            'border-color': 'title',
-            'box-shadow': 'title'
+            'border-color': 'title'
           }
         }
       },
@@ -328,28 +292,20 @@ export default [
         'justify-content': 'center'
       },
       colGroupA: {
-        width: '45%',
+        width: 'auto',
         'margin-right': '2.5%'
       },
       colGroupB: {
-        width: '45%',
+        width: 'auto',
         'margin-left': '2.5%'
       },
       buttonA: {
-        width: '40%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
       buttonB: {
-        width: '40%',
-        height: '32px',
-        'text-align': 'center',
-        border: '1px solid',
-        'box-shadow': '1px 1px'
+        'text-align': 'center'
       },
-      '@media only screen and (max-width: 767px)': {
+      '@media only screen and (max-width: 867px)': {
         colGroupRow: {
           display: 'block'
         },
@@ -361,18 +317,10 @@ export default [
           'margin-top': '20px'
         },
         buttonA: {
-          width: '30%',
-          height: '32px',
           'text-align': 'center'
-          // border: '1px solid',
-          // 'box-shadow': '1px 1px'
         },
         buttonB: {
-          width: '30%',
-          height: '32px',
           'text-align': 'center'
-          // border: '1px solid',
-          // 'box-shadow': '1px 1px'
         }
       }
     },
@@ -395,16 +343,12 @@ export default [
       theme: {
         buttonA: {
           buttonAStyle: {
-            // 'border-color': 'title',
-            border: '1px solid title',
-            'box-shadow': '1px 1px title'
+            'border-color': 'title'
           }
         },
         buttonB: {
           buttonBStyle: {
-            // 'border-color': 'title',
-            border: '1px solid title',
-            'box-shadow': '1px 1px title'
+            'border-color': 'title'
           }
         }
       },

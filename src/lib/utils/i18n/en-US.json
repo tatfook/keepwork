@@ -521,7 +521,10 @@
     "source": "source",
     "ratio": "ratio(eg: 16/9)",
     "autoplay": "auto play",
-    "playloop": "loop playback"
+    "playloop": "loop playback",
+    "borderWidth": "border width",
+    "borderStyle": "border style",
+    "borderColor": "border color"
   },
   "skydrive": {
     "image": "Image",
