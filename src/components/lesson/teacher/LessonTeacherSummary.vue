@@ -94,7 +94,7 @@ import NumberOfStudentsChart from './NumberOfStudentsChart'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
 
 export default {
@@ -110,7 +110,7 @@ export default {
       multipleSelection: [],
       studentNumberRate: [],
       quizChartData: {
-        columns: ['questionNumber', 'accuracy', ],
+        columns: ['questionNumber', 'accuracy'],
         rows: []
       },
       studentChartData: {
@@ -131,55 +131,44 @@ export default {
     let id
     if (JSON.stringify(this.classData) == '{}') {
       id = this.$route.params.classId
-    }else{
+    } else {
       id = this.classData.id //Please ask Kevin to add.
     }
-    await this.getClassLearnRecords({id})
-    this.currentRecord = _.map(this.classroomLearnRecord,
-      ({ extra: { portrait, name, username, quiz } ,createdAt}) => ({portrait,name,username,quiz,createdAt})
+    await this.getClassLearnRecords({ id })
+    this.currentRecord = _.map(
+      this.classroomLearnRecord,
+      ({ extra: { portrait, name, username, quiz }, createdAt }) => ({
+        portrait,
+        name,
+        username,
+        quiz,
+        createdAt
+      })
     )
     //Answer questions for each student
-    let newCurrentRecord = _.map(this.currentRecord, ({portrait, name, username, quiz}) => {
-      let accuracyRate = this.singleStudentRightRate(quiz)
-      let right = _.filter(quiz, {result: true}).length
-      let wrong = _.filter(quiz, {result: false}).length
-      let empty = quiz.length - right - wrong
-      return {portrait, name, username, accuracyRate, right, wrong, empty, quiz}
-    })
-    //The accuracy rate of each question
-    let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
-    for(let j = 0;j < newCurrentRecord[0].quiz.length; j++){
-      for(let i = 0;i < newCurrentRecord.length;i++){
-        if(newCurrentRecord[i].quiz[j].result){
-          accuracyRateArr[j] += 1
+    let newCurrentRecord = _.map(
+      this.currentRecord,
+      ({ portrait, name, username, quiz }) => {
+        let accuracyRate = this.singleStudentRightRate(quiz)
+        let right = _.filter(quiz, { result: true }).length
+        let wrong = _.filter(quiz, { result: false }).length
+        let empty = quiz.length - right - wrong
+        return {
+          portrait,
+          name,
+          username,
+          accuracyRate,
+          right,
+          wrong,
+          empty,
+          quiz
         }
       }
-    }
-    _.forEach(accuracyRateArr,(i,n) => {
-      Vue.set(this.quizChartData.rows, n, { 'questionNumber': `Q${++n}`, 'accuracy': i })
-    })
+    )
+    //The accuracy rate of each question
+    this.getQuizChartData(newCurrentRecord)
     //Pass the number of
-      let PassRateArr = Array.apply(null,Array(3)).map(() => 0);
-      _.forEach(newCurrentRecord, (i) => {
-        if(parseInt(i.accuracyRate) < 60){
-          PassRateArr[0] += 1
-        }else if(parseInt(i.accuracyRate) > 80){
-          PassRateArr[2] += 1
-        }else{
-          PassRateArr[1] += 1
-        }
-      })
-      _.forEach(PassRateArr,(i,n) => {
-        let rate = '';
-        if(n === 0){
-          rate = '<60%'
-        }else if(n === 1){
-          rate = '60%-80%'
-        }else{
-          rate = '>80%'
-        }
-        Vue.set(this.studentChartData.rows, n, { 'accuracyRate': rate, 'students': i })
-      })
+    this.getStudentChartData(newCurrentRecord)
     this.newRecord = newCurrentRecord
     this.loading = false
   },
@@ -226,7 +215,7 @@ export default {
       console.log('student', student)
       this.$router.push({
         path: `/teacher/student/${student.username}/record`,
-        query: {student}
+        query: { student }
       })
     },
     singleStudentRightRate(quiz) {
@@ -236,9 +225,51 @@ export default {
       let allQuiz = quiz.length
       return rightAnswer / allQuiz * 100 + '%'
     },
+    getQuizChartData(newCurrentRecord) {
+      let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
+      for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
+        for (let i = 0; i < newCurrentRecord.length; i++) {
+          if (newCurrentRecord[i].quiz[j].result) {
+            accuracyRateArr[j] += 1
+          }
+        }
+      }
+      _.forEach(accuracyRateArr, (i, n) => {
+        Vue.set(this.quizChartData.rows, n, {
+          questionNumber: `Q${++n}`,
+          accuracy: i
+        })
+      })
+    },
+    getStudentChartData(newCurrentRecord) {
+      let PassRateArr = Array.apply(null, Array(3)).map(() => 0)
+      _.forEach(newCurrentRecord, i => {
+        if (parseInt(i.accuracyRate) < 60) {
+          PassRateArr[0] += 1
+        } else if (parseInt(i.accuracyRate) > 80) {
+          PassRateArr[2] += 1
+        } else {
+          PassRateArr[1] += 1
+        }
+      })
+      _.forEach(PassRateArr, (i, n) => {
+        let rate = ''
+        if (n === 0) {
+          rate = '<60%'
+        } else if (n === 1) {
+          rate = '60%-80%'
+        } else {
+          rate = '>80%'
+        }
+        Vue.set(this.studentChartData.rows, n, {
+          accuracyRate: rate,
+          students: i
+        })
+      })
+    },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log('multipleSelection',this.multipleSelection)
+      this.multipleSelection = val
+      console.log('multipleSelection', this.multipleSelection)
     }
   },
   filters: {
