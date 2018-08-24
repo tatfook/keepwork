@@ -27,10 +27,10 @@
     </div>
     <div class="teacher-summary-chart">
       <div class="teacher-summary-chart-accuracy-rate">
-        <accuracy-rate-chart></accuracy-rate-chart>
+        <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
       </div>
       <div class="teacher-summary-chart-student-number">
-        <number-of-students-chart></number-of-students-chart>
+        <number-of-students-chart :studentChartData="studentChartData"></number-of-students-chart>
       </div>
     </div>
     <div class="teacher-summary-detailed">
@@ -41,30 +41,30 @@
         <span>
           <el-button type="primary" size="mini" @click="change('change')">Change</el-button> (Give full marks to selected students)</span>
       </div>
-      <div class="teacher-summary-detailed-table">      
-        <el-table :data="tableData6" border style="width: 100%">
+      <div class="teacher-summary-detailed-table">
+        <el-table :data="newRecord" border style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
-          <el-table-column prop="portrait" label="NO." width="80PX">
+          <el-table-column prop="portrait" label="NO." width="80px">
             <template slot-scope="props">
               <div class="portrait"><img :src="props.row.portrait" alt=""></div>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="Name">
           </el-table-column>
-          <el-table-column prop="amount1" label="Username">
+          <el-table-column prop="username" label="Username">
           </el-table-column>
-          <el-table-column prop="amount2" sortable  width="180" label="Accuracy Rate">
+          <el-table-column prop="accuracyRate" sortable width="180" label="Accuracy Rate">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Right">
+          <el-table-column prop="right" sortable label="Right">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Wrong">
+          <el-table-column prop="wrong" sortable label="Wrong">
           </el-table-column>
-          <el-table-column prop="amount3" sortable label="Empty">
+          <el-table-column prop="empty" sortable label="Empty">
           </el-table-column>
           <el-table-column label=" ">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">View Detail</el-button>
+              <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">View Detail</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -94,6 +94,8 @@ import NumberOfStudentsChart from './NumberOfStudentsChart'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
+import Vue from 'vue'
 
 export default {
   name: 'LessonTeacherSummary',
@@ -104,43 +106,17 @@ export default {
       changeDialogVisible: false,
       changeSelected: '',
       currentRecord: [],
-      tableData6: [
-        {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          amount1: '234',
-          amount2: '3.2',
-          amount3: 10
-        },
-        {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          amount1: '165',
-          amount2: '4.43',
-          amount3: 12
-        },
-        {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          amount1: '324',
-          amount2: '1.9',
-          amount3: 9
-        },
-        {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          amount1: '621',
-          amount2: '2.2',
-          amount3: 17
-        },
-        {
-          portrait: 'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          amount1: '539',
-          amount2: '4.1',
-          amount3: 15
-        }
-      ]
+      newRecord: [],
+      multipleSelection: [],
+      studentNumberRate: [],
+      quizChartData: {
+        columns: ['questionNumber', 'accuracy'],
+        rows: []
+      },
+      studentChartData: {
+        columns: ['accuracyRate', 'students'],
+        rows: []
+      }
     }
   },
   props: {
@@ -152,39 +128,59 @@ export default {
     }
   },
   async mounted() {
+    let id
     if (JSON.stringify(this.classData) == '{}') {
-      let id = this.$route.params.classId
-      console.log(1, id)
-      await lesson.classrooms
-        .getClassroomLearnRecords(id)
-        .then(res => {
-          console.log('res', res)
-          this.currentRecord = res
-          this.loading = false
-        })
-        .catch(err => console.log(err))
+      id = this.$route.params.classId
+    } else {
+      id = this.classData.id //Please ask Kevin to add.
     }
-    console.log('rate', this.singleStudentRightRate)
-    console.log('rate', this.singleStudentWrongRate)
+    await this.getClassLearnRecords({ id })
+    this.currentRecord = _.map(
+      this.classroomLearnRecord,
+      ({ extra: { portrait, name, username, quiz }, createdAt }) => ({
+        portrait,
+        name,
+        username,
+        quiz,
+        createdAt
+      })
+    )
+    //Answer questions for each student
+    let newCurrentRecord = _.map(
+      this.currentRecord,
+      ({ portrait, name, username, quiz }) => {
+        let accuracyRate = this.singleStudentRightRate(quiz)
+        let right = _.filter(quiz, { result: true }).length
+        let wrong = _.filter(quiz, { result: false }).length
+        let empty = quiz.length - right - wrong
+        return {
+          portrait,
+          name,
+          username,
+          accuracyRate,
+          right,
+          wrong,
+          empty,
+          quiz
+        }
+      }
+    )
+    //The accuracy rate of each question
+    this.getQuizChartData(newCurrentRecord)
+    //Pass the number of
+    this.getStudentChartData(newCurrentRecord)
+    this.newRecord = newCurrentRecord
+    this.loading = false
   },
   computed: {
-    singleStudentRightRate() {
-      let rightAnswer = _.filter(this.currentRecord[0].extra.quiz, {
-        result: true
-      }).length
-      let allQuiz = this.currentRecord[0].extra.quiz.length
-      return rightAnswer / allQuiz * 100 + '%'
-    },
-    singleStudentWrongRate() {
-      let wrongAnswer = _.filter(this.currentRecord[0].extra.quiz, {
-        result: false
-      }).length
-      let allQuiz = this.currentRecord[0].extra.quiz.length
-      return wrongAnswer / allQuiz * 100 + '%'
-    },
-    singleStudentEmptyRate() {}
+    ...mapGetters({
+      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
+    })
   },
   methods: {
+    ...mapActions({
+      getClassLearnRecords: 'lesson/teacher/getClassLearnRecords'
+    }),
     change(type) {
       this.changeSelected = type
       this.changeDialogVisible = true
@@ -214,11 +210,66 @@ export default {
           })
         })
     },
-    singleStudentRecord(student) {
-      // student/:studentId/record
+    singleStudentRecord(index, student) {
+      console.log('index', index)
+      console.log('student', student)
       this.$router.push({
-        path: `/teacher/student/1/record`
+        path: `/teacher/student/${student.username}/record`,
+        query: { student }
       })
+    },
+    singleStudentRightRate(quiz) {
+      let rightAnswer = _.filter(quiz, {
+        result: true
+      }).length
+      let allQuiz = quiz.length
+      return rightAnswer / allQuiz * 100 + '%'
+    },
+    getQuizChartData(newCurrentRecord) {
+      let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
+      for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
+        for (let i = 0; i < newCurrentRecord.length; i++) {
+          if (newCurrentRecord[i].quiz[j].result) {
+            accuracyRateArr[j] += 1
+          }
+        }
+      }
+      _.forEach(accuracyRateArr, (i, n) => {
+        Vue.set(this.quizChartData.rows, n, {
+          questionNumber: `Q${++n}`,
+          accuracy: i
+        })
+      })
+    },
+    getStudentChartData(newCurrentRecord) {
+      let PassRateArr = Array.apply(null, Array(3)).map(() => 0)
+      _.forEach(newCurrentRecord, i => {
+        if (parseInt(i.accuracyRate) < 60) {
+          PassRateArr[0] += 1
+        } else if (parseInt(i.accuracyRate) > 80) {
+          PassRateArr[2] += 1
+        } else {
+          PassRateArr[1] += 1
+        }
+      })
+      _.forEach(PassRateArr, (i, n) => {
+        let rate = ''
+        if (n === 0) {
+          rate = '<60%'
+        } else if (n === 1) {
+          rate = '60%-80%'
+        } else {
+          rate = '>80%'
+        }
+        Vue.set(this.studentChartData.rows, n, {
+          accuracyRate: rate,
+          students: i
+        })
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+      console.log('multipleSelection', this.multipleSelection)
     }
   },
   filters: {
@@ -286,15 +337,13 @@ export default {
     }
     &-table {
       border: 1px solid #a4a4a4;
-      .portrait{
+      .portrait {
         width: 34px;
         height: 34px;
-        // border: 1px solid #a4a4a4;
         border-radius: 50%;
         overflow: hidden;
-        img{
+        img {
           width: 100%;
-          // object-fit: cover;
         }
       }
       &-title {
