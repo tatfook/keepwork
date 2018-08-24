@@ -27,10 +27,10 @@
     </div>
     <div class="teacher-summary-chart">
       <div class="teacher-summary-chart-accuracy-rate">
-        <accuracy-rate-chart></accuracy-rate-chart>
+        <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
       </div>
       <div class="teacher-summary-chart-student-number">
-        <number-of-students-chart></number-of-students-chart>
+        <number-of-students-chart :studentChartData="studentChartData"></number-of-students-chart>
       </div>
     </div>
     <div class="teacher-summary-detailed">
@@ -95,6 +95,7 @@ import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { mapActions,mapGetters } from 'vuex'
+import Vue from 'vue'
 
 export default {
   name: 'LessonTeacherSummary',
@@ -105,60 +106,17 @@ export default {
       changeDialogVisible: false,
       changeSelected: '',
       currentRecord: [],
-      tableData6: [
-        {
-          portrait:
-            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          username: '234',
-          accuracyRate: '3.2',
-          right: 10,
-          wrong: 12,
-          empty: 2
-        },
-        {
-          portrait:
-            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          username: '165',
-          accuracyRate: '4.43',
-          right: 12,
-          wrong: 12,
-          empty: 2
-        },
-        {
-          portrait:
-            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          username: '324',
-          accuracyRate: '1.9',
-          right: 9,
-          wrong: 12,
-          empty: 2
-        },
-        {
-          portrait:
-            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          username: '621',
-          accuracyRate: '2.2',
-          right: 17,
-          wrong: 12,
-          empty: 2
-        },
-        {
-          portrait:
-            'https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png',
-          name: '王小虎',
-          username: '539',
-          accuracyRate: '4.1',
-          right: 15,
-          wrong: 12,
-          empty: 2
-        }
-      ],
       newRecord: [],
-      multipleSelection: []
+      multipleSelection: [],
+      studentNumberRate: [],
+      quizChartData: {
+        columns: ['questionNumber', 'accuracy', ],
+        rows: []
+      },
+      studentChartData: {
+        columns: ['accuracyRate', 'students'],
+        rows: []
+      }
     }
   },
   props: {
@@ -170,25 +128,60 @@ export default {
     }
   },
   async mounted() {
+    let id
     if (JSON.stringify(this.classData) == '{}') {
-      let id = this.$route.params.classId
-      console.log(1, id)
-      await this.getClassLearnRecords({id})
-      this.currentRecord = _.map(this.classroomLearnRecord,
-        ({ extra: { portrait, name, username, quiz } }) => ({portrait,name,username,quiz})
-      )
-      console.log('currentRecord', this.currentRecord)
-      this.loading = false
-      let newCurrentRecord = _.map(this.currentRecord, ({portrait, name, username, quiz}) => {
-        let accuracyRate = this.singleStudentRightRate(quiz)
-        let right = _.filter(quiz, {result: true}).length
-        let wrong = _.filter(quiz, {result: false}).length
-        let empty = quiz.length - right - wrong
-        return {portrait, name, username, accuracyRate, right, wrong, empty, quiz}
-        })
-      console.log('newCurentRecord',newCurrentRecord)
-      this.newRecord = newCurrentRecord
+      id = this.$route.params.classId
+    }else{
+      id = this.classData.id //Please ask Kevin to add.
     }
+    await this.getClassLearnRecords({id})
+    this.currentRecord = _.map(this.classroomLearnRecord,
+      ({ extra: { portrait, name, username, quiz } ,createdAt}) => ({portrait,name,username,quiz,createdAt})
+    )
+    //Answer questions for each student
+    let newCurrentRecord = _.map(this.currentRecord, ({portrait, name, username, quiz}) => {
+      let accuracyRate = this.singleStudentRightRate(quiz)
+      let right = _.filter(quiz, {result: true}).length
+      let wrong = _.filter(quiz, {result: false}).length
+      let empty = quiz.length - right - wrong
+      return {portrait, name, username, accuracyRate, right, wrong, empty, quiz}
+    })
+    //The accuracy rate of each question
+    let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
+    for(let j = 0;j < newCurrentRecord[0].quiz.length; j++){
+      for(let i = 0;i < newCurrentRecord.length;i++){
+        if(newCurrentRecord[i].quiz[j].result){
+          accuracyRateArr[j] += 1
+        }
+      }
+    }
+    _.forEach(accuracyRateArr,(i,n) => {
+      Vue.set(this.quizChartData.rows, n, { 'questionNumber': `Q${++n}`, 'accuracy': i })
+    })
+    //Pass the number of
+      let PassRateArr = Array.apply(null,Array(3)).map(() => 0);
+      _.forEach(newCurrentRecord, (i) => {
+        if(parseInt(i.accuracyRate) < 60){
+          PassRateArr[0] += 1
+        }else if(parseInt(i.accuracyRate) > 80){
+          PassRateArr[2] += 1
+        }else{
+          PassRateArr[1] += 1
+        }
+      })
+      _.forEach(PassRateArr,(i,n) => {
+        let rate = '';
+        if(n === 0){
+          rate = '<60%'
+        }else if(n === 1){
+          rate = '60%-80%'
+        }else{
+          rate = '>80%'
+        }
+        Vue.set(this.studentChartData.rows, n, { 'accuracyRate': rate, 'students': i })
+      })
+    this.newRecord = newCurrentRecord
+    this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -231,7 +224,6 @@ export default {
     singleStudentRecord(index, student) {
       console.log('index', index)
       console.log('student', student)
-      // student/:studentId/record
       this.$router.push({
         path: `/teacher/student/${student.username}/record`,
         query: {student}

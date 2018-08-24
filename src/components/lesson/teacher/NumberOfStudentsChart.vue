@@ -1,10 +1,18 @@
 <template>
-  <ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram>
+  <ve-histogram :data="studentChartData" :settings="chartSettings"></ve-histogram>
 </template>
 
 <script>
   export default {
     name: "NumberOfStudentsChart",
+    props: {
+      studentChartData: {
+        type: Object,
+        default(){
+          return {}
+        }
+      }
+    },
     data () {
       this.chartSettings = {
         yAxisName: ['Number of Students (total: 50)'],
@@ -14,14 +22,14 @@
         },
       }
       return {
-        chartData: {
-          columns: ['正确率', '学生数'],
-          rows: [
-            { '正确率': '<60%', '学生数': 20},
-            { '正确率': '60%-80%', '学生数': 30},
-            { '正确率': '>80%', '学生数': 20},
-          ]
-        }
+        // studentChartData: {
+        //   columns: ['accuracyRate', 'students'],
+        //   rows: [
+        //     { 'accuracyRate': '<60%', 'students': 20},
+        //     { 'accuracyRate': '60%-80%', 'students': 30},
+        //     { 'accuracyRate': '>80%', 'students': 20},
+        //   ]
+        // }
       }
     }
   }
