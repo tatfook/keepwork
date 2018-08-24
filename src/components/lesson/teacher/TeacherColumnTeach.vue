@@ -11,7 +11,7 @@
                 <span class="red-text">{{lessonPackage.updatedAt | formatTime}}</span>
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
-              <h4 class="title">{{lessonPackage.extra.packageName}}</h4>
+              <h4 class="title">{{lessonPackage.packageName}}111</h4>
               <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: {{lessonPackage.minAge}}~{{lessonPackage.maxAge}}</p>
               <p title="title">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>

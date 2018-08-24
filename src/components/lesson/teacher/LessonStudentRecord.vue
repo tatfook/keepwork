@@ -20,7 +20,8 @@
         <ul class="table">
           <li class="table-cell" v-for="(quiz,index) in records" :key="index">
             <div class="question-number">quiz{{index + 1}}</div>
-            <div :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{quiz.answer}}</div>
+            <div v-if="quiz.data.type == 2" :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{ formatTRF(quiz.answer)}}</div>
+            <div v-else :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{quiz.answer | formatQuiz}}</div>
           </li>
         </ul>
       </div>
@@ -47,9 +48,23 @@ export default {
     console.log('qui',this.records)
     console.log('student',this.student)
   },
+  methods: {
+    formatTRF(value) {
+      if (value === 'A') {
+        return this.$t('lesson.right')
+      }
+      if (value === 'B') {
+        return this.$t('lesson.wrong')
+      }
+      return ''
+    },
+  },
   filters: {
     formatTime(time) {
       return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+    },
+    formatQuiz(value) {
+      return value ? value.toString() : ''
     }
   },
 }

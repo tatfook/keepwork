@@ -919,6 +919,8 @@
     "clickToRefresh": "Click to refresh",
     "username": "UserName",
     "accuracyRate": "Accuracy Rate",
-    "totalStudent": "Number of Students (total:"
+    "totalStudent": "Number of Students (total:",
+    "student": "student",
+    "accuracy": "accuracy"
   }
 }

@@ -924,6 +924,8 @@
     "clickToRefresh": "点击刷新",
     "username": "用户名",
     "accuracyRate": "正确率",
-    "totalStudent": "学生总数:("
+    "totalStudent": "学生数:(",
+    "student": "学生",
+    "accuracy": "正确率"
   }
 }

@@ -113,11 +113,11 @@ export default {
       multipleSelection: [],
       studentNumberRate: [],
       quizChartData: {
-        columns: ['questionNumber', 'accuracy'],
+        columns: ['questionNumber', `${this.$t('lesson.accuracy')}`],
         rows: []
       },
       studentChartData: {
-        columns: ['accuracyRate', 'students'],
+        columns: ['accuracyRate', `${this.$t('lesson.student')}`],
         rows: []
       },
       totalStudent: 0
@@ -258,7 +258,7 @@ export default {
       _.forEach(accuracyRateArr, (i, n) => {
         Vue.set(this.quizChartData.rows, n, {
           questionNumber: `Q${++n}`,
-          accuracy: i
+          [`${this.$t('lesson.accuracy')}`]: i
         })
       })
     },
@@ -287,7 +287,7 @@ export default {
         }
         Vue.set(this.studentChartData.rows, n, {
           accuracyRate: rate,
-          students: i
+          [`${this.$t('lesson.student')}`]: i
         })
       })
     },
