@@ -2,7 +2,6 @@ import { props } from './mutations'
 import { lesson } from '@/api'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
-const SUCCESS_FLAG = 'OK'
 const {
   TOGGLE_HINT,
   GET_LESSON_CONTENT_SUCCESS,
@@ -60,7 +59,7 @@ const actions = {
     let flag = await lesson.classrooms.dismiss({
       classId
     })
-    if (flag === SUCCESS_FLAG) {
+    if (flag) {
       let _classroom = _.clone(classroom)
       _classroom.state = 2
       commit(DISMISS_THE_CLASS_SUCCESS, _classroom)

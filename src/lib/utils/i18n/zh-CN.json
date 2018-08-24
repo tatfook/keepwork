@@ -920,6 +920,7 @@
     "leaveTheClass": "离开课堂",
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
     "right": "对",
-    "wrong": "错"
+    "wrong": "错",
+    "clickToRefresh": "点击刷新"
   }
 }

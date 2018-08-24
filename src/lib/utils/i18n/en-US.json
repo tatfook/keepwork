@@ -915,6 +915,7 @@
     "leaveTheClass": "Leave the class",
     "leaveTheClassTips": "Are you sure you want to leave the class? Your learning data will not be saved.",
     "right": "right",
-    "wrong": "wrong"
+    "wrong": "wrong",
+    "clickToRefresh": "Click to refresh"
   }
 }

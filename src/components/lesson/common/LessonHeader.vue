@@ -58,8 +58,7 @@
         </div>
       </el-col>
     </el-row>
-    <div class="division"></div>
-    <keep-wrok-sticky>
+    <keep-work-sticky>
       <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
         <el-col :span="20">
           <lesson-teacher-progress/>
@@ -79,7 +78,7 @@
           <lesson-referencse/>
         </el-col>
       </el-row>
-    </keep-wrok-sticky>
+    </keep-work-sticky>
 
   </el-row>
 </template>
@@ -100,7 +99,7 @@ export default {
     'lesson-jewel-box': LessonJewelBox,
     'lesson-student-progress': LessonStudentProgress,
     'lesson-teacher-progress': LessonTeacherProgress,
-    'keep-wrok-sticky': KeepWorkSticky,
+    'keep-work-sticky': KeepWorkSticky,
     'lesson-referencse': LessonReferences
   },
   filters: {
@@ -170,7 +169,6 @@ export default {
         .then(async () => {
           await this.dismissTheClass()
             .then(res => {
-              console.log(res)
               this.$emit('clearUpdateLearnRecords')
             })
             .catch(e => {
@@ -219,11 +217,6 @@ export default {
 
 
 <style lang="scss">
-.division {
-  height: 30px;
-  background: white;
-}
-
 .lesson-header-container {
   max-width: 1080px;
   margin: 50px auto 0;
