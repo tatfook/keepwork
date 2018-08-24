@@ -31,7 +31,7 @@
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
           </div>
           <div class="package-summary">
-            <el-button type="primary" @click="viewSummary(lessonPackage.packageId,lessonPackage.lessonId,lessonPackage.id)">{{$t('lesson.viewSummary')}}</el-button>
+            <el-button type="primary" @click="viewSummary(lessonPackage)">{{$t('lesson.viewSummary')}}</el-button>
           </div>
         </div>
       </div>
@@ -82,9 +82,10 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    viewSummary(packageId,lessonId,classId){
+    viewSummary(lessonPackage){
      this.$router.push({
-        path: `package/${packageId}/lesson/${lessonId}/class/${classId}/summary`
+        path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary`,
+        query: {lessonPackage}
       })
     }
   },

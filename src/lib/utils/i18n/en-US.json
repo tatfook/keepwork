@@ -916,6 +916,9 @@
     "leaveTheClassTips": "Are you sure you want to leave the class? Your learning data will not be saved.",
     "right": "right",
     "wrong": "wrong",
-    "clickToRefresh": "Click to refresh"
+    "clickToRefresh": "Click to refresh",
+    "username": "UserName",
+    "accuracyRate": "Accuracy Rate",
+    "totalStudent": "Number of Students (total:"
   }
 }

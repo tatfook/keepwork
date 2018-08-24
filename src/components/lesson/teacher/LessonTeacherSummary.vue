@@ -5,11 +5,11 @@
       <el-button type="primary" @click="sendEmail">Send to Mailbox</el-button>
     </div>
     <div class="teacher-summary-brief">
-      <p class="date">{{currentRecord.createdAt | formatTime}}</p>
+      <p class="date">{{createdAt | formatTime}}</p>
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> Tutorial: Installation,Movement and Edit Mode</p>
+        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> {{lessonName}}</p>
       <p>
-        <span class="brief-title">{{$t('lesson.intro')}}:</span> ********</p>
+        <span class="brief-title">{{$t('lesson.intro')}}:</span> {{lessonGoals}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
       <div class="skillpoints">
@@ -30,7 +30,7 @@
         <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
       </div>
       <div class="teacher-summary-chart-student-number">
-        <number-of-students-chart :studentChartData="studentChartData"></number-of-students-chart>
+        <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
       </div>
     </div>
     <div class="teacher-summary-detailed">
@@ -102,6 +102,9 @@ export default {
   data() {
     return {
       loading: true,
+      lessonName: null,
+      lessonGoals: null,
+      createdAt: null,
       successSendEmailDialogVisible: false,
       changeDialogVisible: false,
       changeSelected: '',
@@ -116,7 +119,8 @@ export default {
       studentChartData: {
         columns: ['accuracyRate', 'students'],
         rows: []
-      }
+      },
+      totalStudent: 0
     }
   },
   props: {
@@ -128,13 +132,24 @@ export default {
     }
   },
   async mounted() {
-    let id
+    this.lessonName = this.$route.query.lessonPackage.extra.lessonName
+    this.lessonGoals = this.$route.query.lessonPackage.extra.lessonGoals
+    this.createdAt = this.$route.query.lessonPackage.createdAt
+    let id = ''
     if (JSON.stringify(this.classData) == '{}') {
       id = this.$route.params.classId
     } else {
       id = this.classData.id //Please ask Kevin to add.
     }
     await this.getClassLearnRecords({ id })
+    if (this.classroomLearnRecord.length === 0) {
+      this.loading = false
+      return
+    }
+    console.warn('------------------------------>')
+    console.log(this.classroomLearnRecord.length)
+    this.totalStudent = this.classroomLearnRecord.length
+    console.log(this.totalStudent)
     this.currentRecord = _.map(
       this.classroomLearnRecord,
       ({ extra: { portrait, name, username, quiz }, createdAt }) => ({
@@ -146,13 +161,17 @@ export default {
       })
     )
     //Answer questions for each student
+    let currentLessonName = this.lessonName
     let newCurrentRecord = _.map(
       this.currentRecord,
-      ({ portrait, name, username, quiz }) => {
+      ({ portrait, name, username, quiz = [], createdAt,lessonName }) => {
         let accuracyRate = this.singleStudentRightRate(quiz)
         let right = _.filter(quiz, { result: true }).length
         let wrong = _.filter(quiz, { result: false }).length
         let empty = quiz.length - right - wrong
+        console.log('right',right)
+        console.log('wrong',wrong)
+        console.log('empty',empty)
         return {
           portrait,
           name,
@@ -161,7 +180,9 @@ export default {
           right,
           wrong,
           empty,
-          quiz
+          quiz,
+          createdAt,
+          lessonName: currentLessonName
         }
       }
     )
@@ -175,7 +196,7 @@ export default {
   computed: {
     ...mapGetters({
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
-    })
+    }),
   },
   methods: {
     ...mapActions({
@@ -218,7 +239,7 @@ export default {
         query: { student }
       })
     },
-    singleStudentRightRate(quiz) {
+    singleStudentRightRate(quiz = []) {
       let rightAnswer = _.filter(quiz, {
         result: true
       }).length
@@ -229,7 +250,7 @@ export default {
       let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
       for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
         for (let i = 0; i < newCurrentRecord.length; i++) {
-          if (newCurrentRecord[i].quiz[j].result) {
+          if (newCurrentRecord[i].quiz[j] && newCurrentRecord[i].quiz[j].result) {
             accuracyRateArr[j] += 1
           }
         }
@@ -244,22 +265,25 @@ export default {
     getStudentChartData(newCurrentRecord) {
       let PassRateArr = Array.apply(null, Array(3)).map(() => 0)
       _.forEach(newCurrentRecord, i => {
-        if (parseInt(i.accuracyRate) < 60) {
-          PassRateArr[0] += 1
-        } else if (parseInt(i.accuracyRate) > 80) {
+        if (parseInt(i.accuracyRate) > 80) {
           PassRateArr[2] += 1
-        } else {
+        } else if (
+          60 <= parseInt(i.accuracyRate) &&
+          parseInt(i.accuracyRate) <= 80
+        ) {
           PassRateArr[1] += 1
+        } else {
+          PassRateArr[0] += 1
         }
       })
       _.forEach(PassRateArr, (i, n) => {
         let rate = ''
-        if (n === 0) {
-          rate = '<60%'
+        if (n === 2) {
+          rate = '>80%'
         } else if (n === 1) {
           rate = '60%-80%'
         } else {
-          rate = '>80%'
+          rate = '<60%'
         }
         Vue.set(this.studentChartData.rows, n, {
           accuracyRate: rate,
