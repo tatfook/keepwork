@@ -24,9 +24,9 @@
       </el-row>
     </div>
     <div class="about-view-more">
-      <div class="about-view-more-btn">
+      <div class="about-view-more-btn" @click="gotoLessons">
         <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt="">
-        <span class="tip" @click="gotoLessons">{{$t('lesson.about.viewMoreLessons')}}</span>
+        <span class="tip">{{$t('lesson.about.viewMoreLessons')}}</span>
         <img class="next next-1" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-2" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-3" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
