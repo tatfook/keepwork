@@ -7,7 +7,7 @@
     <div class="teacher-summary-brief">
       <p class="date">{{createdAt | formatTime}}</p>
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> {{lessonName}}</p>
+        <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.intro')}}:</span> {{lessonGoals}}</p>
       <p>
@@ -101,6 +101,7 @@ export default {
       loading: true,
       lessonName: null,
       lessonGoals: null,
+      lessonNo: null,
       createdAt: null,
       skillsList: [],
       successSendEmailDialogVisible: false,
@@ -130,6 +131,7 @@ export default {
   async mounted() {
     this.lessonName = this.$route.query.lessonPackage.extra.lessonName
     this.lessonGoals = this.$route.query.lessonPackage.extra.lessonGoals
+    this.lessonNo = this.$route.query.lessonPackage.extra.lessonNo || 0
     this.createdAt = this.$route.query.lessonPackage.createdAt
     if (JSON.stringify(this.classData) == '{}') {
       this.classid = this.$route.params.classId
@@ -141,15 +143,9 @@ export default {
       this.loading = false
       return
     }
-    console.log(this.classroomLearnRecord.length)
     this.totalStudent = this.classroomLearnRecord.length
-    console.log(this.totalStudent)
-    //Access to skills point
     this.getLessonSkill(1)
-    //Answer questions for each student
-    //The accuracy rate of each question
     this.getQuizChartData(this.newCurrentRecord)
-    //Pass the number of
     this.getStudentChartData(this.newCurrentRecord)
     this.loading = false
   },
@@ -166,7 +162,7 @@ export default {
         username,
         quiz,
         createdAt,
-        lessonId
+        lessonId,
       })
       )
       console.log('currentrecord',currentRecord)
@@ -188,7 +184,8 @@ export default {
           quiz,
           createdAt,
           lessonId,
-          lessonName: this.lessonName
+          lessonName: this.lessonName,
+          lessonNo: this.lessonNo
         }
       })
     }
@@ -204,37 +201,25 @@ export default {
     },
     async toChangeStudentMarks() {
       if(this.changeSelected === 'changeAll'){
-        // let learnRecordsArr = _.map(this.classroomLearnRecord, (student) => {
-        //   console.log('student',student)
-        //   for(let i = 0;i < student.extra.quiz.length; i++){
-        //     Vue.set(student.extra.quiz[i], `result`,  true)
-        //     console.log('quiz[i]',student.extra.quiz[i])
-        //   }
-        //   return student
-        // })
+        this.handleSelectionChange(this.newCurrentRecord)
         let learnRecordsArr = this.modifiedGrades(this.classroomLearnRecord)
-        // console.log('modiied',learnRecordsArr)
-        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr}).then(res => {
-          console.log('modifyRecords',res)
-        }).catch(err => console.log(err))
+        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
       }else{
+        if(this.multipleSelection.length == 0){
+          this.changeDialogVisible = false
+          this.$alert('请选择需要修改成绩的学生！', '', {
+            confirmButtonText: this.$t('common.Sure'),
+            center: true,
+            callback: action => {}
+          });
+          return
+        }
         let updataRecordsArr = null
         for(let i = 0; i < this.multipleSelection.length;i++){
           updataRecordsArr = this.classroomLearnRecord.filter(item => item.extra.username === this.multipleSelection[i].username)
         }
-        console.log('selectedRecords',updataRecordsArr)
-        // let learnRecordsArr = _.map(updataRecordsArr, (student) => {
-        //   console.log('student',student)
-        //   for(let i = 0;i < student.extra.quiz.length; i++){
-        //     Vue.set(student.extra.quiz[i], `result`,  true)
-        //     console.log('quiz[i]',student.extra.quiz[i])
-        //   }
-        //   return student
-        // })
         let learnRecordsArr = this.modifiedGrades(updataRecordsArr)
-        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr}).then(res => {
-          console.log('modifyRecords',res)
-        }).catch(err => console.log(err))
+        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
       }
       this.getQuizChartData(this.newCurrentRecord)
       this.getStudentChartData(this.newCurrentRecord)
@@ -242,10 +227,8 @@ export default {
     },
     modifiedGrades(record){
       let learnRecordsArr = _.map(record, (student) => {
-        console.log('student',student)
         for(let i = 0;i < student.extra.quiz.length; i++){
           Vue.set(student.extra.quiz[i], `result`,  true)
-          console.log('quiz[i]',student.extra.quiz[i])
         }
         return student
       })
@@ -253,8 +236,8 @@ export default {
     },
     sendEmail() {
       this.$prompt('请输入邮箱', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
         inputErrorMessage: '邮箱格式不正确'
       })
@@ -274,13 +257,10 @@ export default {
     },
     getLessonSkill(lessonId){
       lesson.lessons.getSkills({lessonId}).then(res => {
-        console.log('skillres',res)
         this.skillsList = res
       }).catch( err => {console.log(err)})
     },
     singleStudentRecord(index, student) {
-      console.log('index', index)
-      console.log('student', student)
       this.$router.push({
         path: `/teacher/student/${student.username}/record`,
         query: { student }
@@ -340,7 +320,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
-      console.log('multipleSelection', this.multipleSelection)
+      // console.log('multipleSelection', this.multipleSelection)
     }
   },
   filters: {
