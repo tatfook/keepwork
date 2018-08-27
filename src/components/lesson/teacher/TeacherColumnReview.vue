@@ -24,7 +24,7 @@
           <div class="package-brief">
             <h4 class="name" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
-              <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.lessonId}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
+              <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
             <p>
               <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</p>
             <p>

@@ -7,7 +7,7 @@
     <div class="teacher-summary-brief">
       <p class="date">{{createdAt | formatTime}}</p>
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} 1:</span> {{lessonName}}</p>
+        <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.intro')}}:</span> {{lessonGoals}}</p>
       <p>
@@ -16,11 +16,7 @@
         <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li>1.learning installation</li>
-            <li>2.learning movement</li>
-            <li>3.learning edit mode</li>
-            <li>4.learning Animation production process</li>
-            <li>5.learning any problem</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill}}</li>
           </ul>
         </div>
       </div>
@@ -42,7 +38,7 @@
           <el-button type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
       <div class="teacher-summary-detailed-table">
-        <el-table :data="newRecord" border style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="newCurrentRecord" border style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="portrait" label="NO." width="80px">
@@ -73,7 +69,7 @@
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
       <div class="tip">
         <div class="tip-img"><img src="@/assets/lessonImg/reminder.png" alt=""></div>
-        <div class="tip-text">{{changeSelected === 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
+        <div class="tip-text">{{changeSelected == 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="changeDialogVisible = false">{{$t('common.Cancel')}}</el-button>
@@ -101,15 +97,16 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      classid: null,
       loading: true,
       lessonName: null,
       lessonGoals: null,
+      lessonNo: null,
       createdAt: null,
+      skillsList: [],
       successSendEmailDialogVisible: false,
       changeDialogVisible: false,
       changeSelected: '',
-      currentRecord: [],
-      newRecord: [],
       multipleSelection: [],
       studentNumberRate: [],
       quizChartData: {
@@ -134,22 +131,30 @@ export default {
   async mounted() {
     this.lessonName = this.$route.query.lessonPackage.extra.lessonName
     this.lessonGoals = this.$route.query.lessonPackage.extra.lessonGoals
+    this.lessonNo = this.$route.query.lessonPackage.extra.lessonNo || 0
     this.createdAt = this.$route.query.lessonPackage.createdAt
-    let id = ''
     if (JSON.stringify(this.classData) == '{}') {
-      id = this.$route.params.classId
+      this.classid = this.$route.params.classId
     } else {
-      id = this.classData.id //Please ask Kevin to add.
+      this.classid = this.classData.id //Please ask Kevin to add.
     }
-    await this.getClassLearnRecords({ id })
+    await this.getClassLearnRecords({ id:this.classid })
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
       return
     }
-    console.log(this.classroomLearnRecord.length)
     this.totalStudent = this.classroomLearnRecord.length
-    console.log(this.totalStudent)
-    this.currentRecord = _.map(
+    this.getLessonSkill(1)
+    this.getQuizChartData(this.newCurrentRecord)
+    this.getStudentChartData(this.newCurrentRecord)
+    this.loading = false
+  },
+  computed: {
+    ...mapGetters({
+      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
+    }),
+    newCurrentRecord(){
+      let currentRecord = _.map(
       this.classroomLearnRecord,
       ({ extra: { portrait, name, username, quiz }, createdAt,lessonId }) => ({
         portrait,
@@ -157,21 +162,17 @@ export default {
         username,
         quiz,
         createdAt,
-        lessonId
+        lessonId,
       })
-    )
-    //Answer questions for each student
-    let currentLessonName = this.lessonName
-    let newCurrentRecord = _.map(
-      this.currentRecord,
-      ({ portrait, name, username, quiz = [], createdAt,lessonName,lessonId }) => {
+      )
+      console.log('currentrecord',currentRecord)
+      return _.map(
+      currentRecord,
+      ({ portrait, name, username, quiz = [], createdAt,lessonId }) => {
         let accuracyRate = this.singleStudentRightRate(quiz)
         let right = _.filter(quiz, { result: true }).length
         let wrong = _.filter(quiz, { result: false }).length
         let empty = quiz.length - right - wrong
-        console.log('right',right)
-        console.log('wrong',wrong)
-        console.log('empty',empty)
         return {
           portrait,
           name,
@@ -183,38 +184,60 @@ export default {
           quiz,
           createdAt,
           lessonId,
-          lessonName: currentLessonName
+          lessonName: this.lessonName,
+          lessonNo: this.lessonNo
         }
-      }
-    )
-    //The accuracy rate of each question
-    this.getQuizChartData(newCurrentRecord)
-    //Pass the number of
-    this.getStudentChartData(newCurrentRecord)
-    this.newRecord = newCurrentRecord
-    this.loading = false
-  },
-  computed: {
-    ...mapGetters({
-      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
-    }),
+      })
+    }
   },
   methods: {
     ...mapActions({
-      getClassLearnRecords: 'lesson/teacher/getClassLearnRecords'
+      getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
+      modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
-    change(type) {
+    async change(type) {
       this.changeSelected = type
       this.changeDialogVisible = true
     },
-    toChangeStudentMarks() {
-      alert('改变分数')
+    async toChangeStudentMarks() {
+      if(this.changeSelected === 'changeAll'){
+        this.handleSelectionChange(this.newCurrentRecord)
+        let learnRecordsArr = this.modifiedGrades(this.classroomLearnRecord)
+        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
+      }else{
+        if(this.multipleSelection.length == 0){
+          this.changeDialogVisible = false
+          this.$alert('请选择需要修改成绩的学生！', '', {
+            confirmButtonText: this.$t('common.Sure'),
+            center: true,
+            callback: action => {}
+          });
+          return
+        }
+        let updataRecordsArr = null
+        for(let i = 0; i < this.multipleSelection.length;i++){
+          updataRecordsArr = this.classroomLearnRecord.filter(item => item.extra.username === this.multipleSelection[i].username)
+        }
+        let learnRecordsArr = this.modifiedGrades(updataRecordsArr)
+        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
+      }
+      this.getQuizChartData(this.newCurrentRecord)
+      this.getStudentChartData(this.newCurrentRecord)
       this.changeDialogVisible = false
+    },
+    modifiedGrades(record){
+      let learnRecordsArr = _.map(record, (student) => {
+        for(let i = 0;i < student.extra.quiz.length; i++){
+          Vue.set(student.extra.quiz[i], `result`,  true)
+        }
+        return student
+      })
+      return learnRecordsArr
     },
     sendEmail() {
       this.$prompt('请输入邮箱', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
         inputErrorMessage: '邮箱格式不正确'
       })
@@ -232,9 +255,12 @@ export default {
           })
         })
     },
+    getLessonSkill(lessonId){
+      lesson.lessons.getSkills({lessonId}).then(res => {
+        this.skillsList = res
+      }).catch( err => {console.log(err)})
+    },
     singleStudentRecord(index, student) {
-      console.log('index', index)
-      console.log('student', student)
       this.$router.push({
         path: `/teacher/student/${student.username}/record`,
         query: { student }
@@ -294,7 +320,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
-      console.log('multipleSelection', this.multipleSelection)
+      // console.log('multipleSelection', this.multipleSelection)
     }
   },
   filters: {
