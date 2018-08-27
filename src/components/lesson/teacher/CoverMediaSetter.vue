@@ -6,7 +6,7 @@
       <el-radio label="url">输入url地址</el-radio>
     </el-radio-group>
     <div class="cover-media-setter-from-bigfile" v-show="imageSourceType === 'bigfile'">
-      <div class="cover-media-setter-add-button">
+      <div class="cover-media-setter-add-button" @click="showSkyDriveManagerDialog">
         <i class="el-icon-plus"></i>
       </div>
     </div>
@@ -20,17 +20,32 @@
         </template>
       </el-input>
     </div>
+    <sky-drive-manager-dialog :show='isSkyDriveShow' :mediaLibrary='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'CoverMediaSetter',
   data() {
     return {
       imageSourceType: 'bigfile', // bigfile or url
       bigfileTypeUrl: '',
-      urlTypeUrl: ''
+      urlTypeUrl: '',
+      isSkyDriveShow: false
     }
+  },
+  methods: {
+    showSkyDriveManagerDialog() {
+      this.isSkyDriveShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isSkyDriveShow = false
+      console.log(file, url)
+    }
+  },
+  components: {
+    SkyDriveManagerDialog
   }
 }
 </script>
