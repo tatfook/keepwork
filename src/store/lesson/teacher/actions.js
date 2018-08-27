@@ -139,10 +139,17 @@ const actions = {
     await lesson.classrooms
       .getClassroomLearnRecords(id)
       .then(res => {
-        console.log('res', res)
+        console.log('getClassroomLearnRecords', res)
         commit(GET_CLASSROOM_LEARN_RECORDS, res)
       })
       .catch(err => console.log(err))
+  },
+  async modifyClassLearnRecords({ dispatch }, { id, learnRecordsArr }) {
+    await lesson.classrooms.modifyClassroomLearnRecords({ id, learnRecordsArr }).then(res => {
+      console.log('modifyClassroomRecords', res)
+      // commit(GET_CLASSROOM_LEARN_RECORDS, res)
+      dispatch('getClassLearnRecords', { id })
+    }).catch(err => console.log(err))
   }
 }
 

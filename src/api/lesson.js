@@ -31,7 +31,8 @@ export const packages = {
 export const lessons = {
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
-    get(`lessons/${lessonId}/contents?version=${version}`)
+    get(`lessons/${lessonId}/contents?version=${version}`),
+  getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`)
 }
 
 export const users = {
@@ -57,7 +58,8 @@ export const classrooms = {
     get(`classrooms/${classId}/learnRecords`, null, config),
   uploadLearnRecords: ({ classId, learnRecords }) =>
     put(`learnRecords/${classId}`, { extra: learnRecords }),
-  getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`)
+  getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
+  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr)
 }
 
 export const subjects = {

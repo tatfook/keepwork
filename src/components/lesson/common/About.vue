@@ -18,15 +18,16 @@
           <div class="video" @click="enterPackageDetail(lessonPackage.id)">
             <img class="video-cover" :src="lessonPackage.extra.coverUrl" alt="">
             <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
+            <img class="video-play hovering" src="@/assets/lessonImg/play2.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
       </el-row>
     </div>
     <div class="about-view-more">
-      <div class="about-view-more-btn">
+      <div class="about-view-more-btn" @click="gotoLessons">
         <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt="">
-        <span class="tip" @click="gotoLessons">{{$t('lesson.about.viewMoreLessons')}}</span>
+        <span class="tip">{{$t('lesson.about.viewMoreLessons')}}</span>
         <img class="next next-1" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-2" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-3" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
@@ -303,6 +304,14 @@ export default {
         left: 50%;
         margin-left: -52px;
         margin-top: -52px;
+      }
+      .hovering{
+        display: none;
+      }
+    }
+    .video:hover{
+      .hovering{
+        display: block;
       }
     }
     .video-title {

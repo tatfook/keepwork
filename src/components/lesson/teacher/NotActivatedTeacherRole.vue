@@ -6,7 +6,7 @@
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
         <div class="teacher-top-hint-input">
           <el-input class="active-code-input" v-model="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
-          <el-button class="active-code-button" type="primary" size="mini" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
+          <el-button class="active-code-button" :disabled="!activeCode" type="primary" size="mini" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
         </div>
       </div>
       <div class="teacher-acquire">
@@ -99,24 +99,27 @@ export default {
         await lesson.users
           .toBeTeacher(payload)
           .then(res => {
-            if (res[0] === 1) {
-              this.getUserDetail()
-            } else {
-              this.$alert(
-                `<span style="color:#f75858;">` +
-                  this.$t('lesson.notActivatedText.wrongCodeHint') +
-                  `</span>`,
-                '',
-                {
-                  confirmButtonText: this.$t('common.Sure'),
-                  center: true,
-                  dangerouslyUseHTMLString: true,
-                  callback: action => {}
-                }
-              )
-            }
+            this.getUserDetail()
+            this.$message({
+              message: this.$t('lesson.activatedTeaching'),
+              type: 'success',
+              showClose: true
+            })
           })
-          .catch(err => console.log('err', err))
+          .catch(err => {
+            this.$alert(
+              `<span style="color:#f75858;">` +
+                this.$t('lesson.notActivatedText.wrongCodeHint') +
+                `</span>`,
+              '',
+              {
+                confirmButtonText: this.$t('common.Sure'),
+                center: true,
+                dangerouslyUseHTMLString: true,
+                callback: action => {}
+              }
+            )
+          })
       } else {
         this.isLoginDialogShow = true
       }

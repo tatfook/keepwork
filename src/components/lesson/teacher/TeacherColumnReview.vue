@@ -19,19 +19,19 @@
         <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
           <div class="package-cover">
             <p class="teach-time">{{lessonPackage.updatedAt | formatTime}}</p>
-            <img :src="lessonPackage.extra.coverUrl" alt="">
+            <img :src="lessonPackage.extra.coverUrl" alt="" @click="enterPackage(lessonPackage.packageId)">
           </div>
           <div class="package-brief">
-            <h4 class="name">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
+            <h4 class="name" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
-              <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.lessonId}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
+              <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
             <p>
               <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</p>
             <p>
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
           </div>
           <div class="package-summary">
-            <el-button type="primary" @click="viewSummary(lessonPackage.packageId,lessonPackage.lessonId,lessonPackage.id)">{{$t('lesson.viewSummary')}}</el-button>
+            <el-button type="primary" @click="viewSummary(lessonPackage)">{{$t('lesson.viewSummary')}}</el-button>
           </div>
         </div>
       </div>
@@ -82,9 +82,15 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    viewSummary(packageId,lessonId,classId){
+    viewSummary(lessonPackage){
      this.$router.push({
-        path: `package/${packageId}/lesson/${lessonId}/class/${classId}/summary`
+        path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary`,
+        query: {lessonPackage}
+      })
+    },
+    enterPackage(packageId){
+      this.$router.push({
+        path: `package/${packageId}`
       })
     }
   },
@@ -161,6 +167,7 @@ export default {
             width: 209px;
             height: 121px;
             object-fit: cover;
+            cursor: pointer;
           }
         }
         &-brief {
@@ -170,6 +177,7 @@ export default {
           .name {
             font-size: 18px;
             margin: 15px 0;
+            cursor: pointer;
           }
           .brief-title {
             font-weight: 700;
