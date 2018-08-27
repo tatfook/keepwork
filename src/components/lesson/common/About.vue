@@ -18,6 +18,7 @@
           <div class="video" @click="enterPackageDetail(lessonPackage.id)">
             <img class="video-cover" :src="lessonPackage.extra.coverUrl" alt="">
             <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
+            <img class="video-play hovering" src="@/assets/lessonImg/play2.png" alt="">
           </div>
           <span class="video-title">Actors & Animations</span>
         </el-col>
@@ -303,6 +304,14 @@ export default {
         left: 50%;
         margin-left: -52px;
         margin-top: -52px;
+      }
+      .hovering{
+        display: none;
+      }
+    }
+    .video:hover{
+      .hovering{
+        display: block;
       }
     }
     .video-title {
