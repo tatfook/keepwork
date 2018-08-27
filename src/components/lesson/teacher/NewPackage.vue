@@ -12,16 +12,18 @@
       </div>
     </div>
     <div class="new-package-tabs">
-      <el-button class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">基本信息</el-button>
-      <el-button class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">目录</el-button>
+      <el-button @click="setActiveTab('basic')" class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">基本信息</el-button>
+      <el-button @click="setActiveTab('catalogue')" class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">目录</el-button>
     </div>
     <PackageBasicInfo v-show="activeTab === 'basic'"></PackageBasicInfo>
-    <CoverMediaSetter class="new-package-media-setter"></CoverMediaSetter>
+    <CoverMediaSetter v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
+    <CatalogueManager v-show="activeTab === 'catalogue'"></CatalogueManager>
   </div>
 </template>
 <script>
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
+import CatalogueManager from './CatalogueManager'
 export default {
   name: 'NewPackage',
   data() {
@@ -29,8 +31,17 @@ export default {
       activeTab: 'basic' //basic or catalogue
     }
   },
+  methods: {
+    setActiveTab(type) {
+      if (type === this.activeTab) {
+        return
+      }
+      this.activeTab = type
+    }
+  },
   components: {
     PackageBasicInfo,
+    CatalogueManager,
     CoverMediaSetter
   }
 }
