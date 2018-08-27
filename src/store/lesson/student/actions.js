@@ -63,7 +63,7 @@ const actions = {
     })
     return subscribeResult
   },
-  async enterClassRoom({ commit }, { key }) {
+  async enterClassRoom({ commit, dispatch }, { key }) {
     let enterClassInfo = await lesson.classrooms.join({
       key: key
     })
@@ -95,6 +95,7 @@ const actions = {
     const {
       getters: { classId, learnRecords }
     } = context
+    console.log('------------>')
     console.warn(learnRecords)
     await lesson.classrooms.uploadLearnRecords({
       classId,

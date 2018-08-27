@@ -4,19 +4,19 @@
       <div class="name">{{$t('lesson.lessonPlan')}}</div>
       <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('lesson')"></div>
     </span>
-    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass && !reset ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div class="name">
         {{$t('lesson.performance')}}
       </div>
-      <div :class="['pointer',{'selected': isShowPerformance, 'light': isBeInClass}]" @click="handleChangeView('performance')"></div>
+      <div :class="['pointer',{'selected': isShowPerformance && !reset, 'light': isBeInClass && !reset}]" @click="handleChangeView('performance')"></div>
     </span>
-    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isClassIsOver ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isClassIsOver && !reset ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
       <div class="name">
         {{$t('lesson.summary')}}
       </div>
-      <div :class="['pointer',{'selected': isShowSummary, 'light': isClassIsOver }]" @click="handleChangeView('summary')"></div>
+      <div :class="['pointer',{'selected': isShowSummary && !reset , 'light': isClassIsOver && !reset }]" @click="handleChangeView('summary')"></div>
     </span>
   </div>
 </template>
@@ -25,6 +25,9 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonTeacherProgress',
+  props: {
+    reset: false
+  },
   data() {
     return {
       isSelect: true,
@@ -47,6 +50,7 @@ export default {
       toggleSummary: 'lesson/teacher/toggleSummary'
     }),
     handleChangeView(name) {
+      if (this.reset) return
       if (!this.isClassIsOver && name === 'summary') return
       if (!this.isBeInClass && name === 'performance') return
       this.toggleLesson('lesson' === name)

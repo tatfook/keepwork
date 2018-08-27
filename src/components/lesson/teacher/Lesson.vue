@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-header :data="lessonHeader" :isTeacher="true" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
+    <lesson-header :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
     <lesson-hint-toggle v-show="isShowLesson" />
     <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
     <lesson-performance v-show="isShowPerformance" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" />
@@ -29,12 +29,22 @@ export default {
       _interval: null
     }
   },
-  async created() {
-    const { packageId, lessonId } = this.$route.params
-    await Promise.all([this.getCurrentClass(), this.getLessonContent(lessonId)])
-  },
   async mounted() {
-
+    const { packageId, lessonId } = this.$route.params
+    await this.getCurrentClass()
+    await this.getLessonContent(lessonId)
+    if (!this.isInCurrentClass) {
+      const h = this.$createElement
+      this.$notify({
+        title: '你还在授课中',
+        message: h('span', {style: 'curosr: pointer'}, '点击返回课堂'),
+        type: 'warning',
+        position: 'top-left',
+        duration: 0,
+        showClose: false,
+        onClick: this.backToClassroom
+      })
+    }
   },
   async destroyed() {
     this.clearUpdateLearnRecords()
@@ -57,6 +67,11 @@ export default {
     },
     clearUpdateLearnRecords() {
       clearTimeout(this._interval)
+    },
+    backToClassroom() {
+      const { packageId, lessonId } = this.classroom
+      this.$router.push(`/teacher/package/${packageId}/lesson/${lessonId}`)
+      this.$router.go(0)
     }
   },
   computed: {
@@ -66,8 +81,15 @@ export default {
       isShowSummary: 'lesson/teacher/isShowSummary',
       lessonDetail: 'lesson/teacher/lessonDetail',
       isBeInClass: 'lesson/teacher/isBeInClass',
-      isClassIsOver: 'lesson/teacher/isClassIsOver'
+      isClassIsOver: 'lesson/teacher/isClassIsOver',
+      classroom: 'lesson/teacher/classroom'
     }),
+    isInCurrentClass() {
+      const { packageId: pid, lessonId: lid } = this.$route.params
+      const { packageId, lessonId } = this.classroom
+      let flag = packageId == pid && lessonId == lid
+      return this.isBeInClass ? flag : true
+    },
     lesson() {
       return this.lessonDetail.modList || []
     },
@@ -79,9 +101,21 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (this.isBeInClass && !this.isClassIsOver) {
-      return this.$message.error('你还在上课呢')
-    }
+    // if (this.isBeInClass && !this.isClassIsOver) {
+    //   return this.$message.error('你还在上课呢')
+    // }
+    next()
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log('Enter')
+    console.log(to)
+    next()
+  },
+  beforeRouteUpdate (to, from, next) {
+    console.log('update')
+    console.log(to)
+    const { packageId, lessonId } = to
+
     next()
   }
 }

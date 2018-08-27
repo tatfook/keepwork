@@ -29,7 +29,7 @@
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
       <el-col :span="10" class="lesson-desc">
-        <div v-if="isTeacher && isBeInClass" class="class-id-sign-wrap">
+        <div v-if="isTeacher && isBeInClass && isInCurrentClass" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">Click to full page</div>
             <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: {{classroomId}}</div>
@@ -50,18 +50,19 @@
             {{lessonGoals}}
           </el-scrollbar>
           <div v-if="isTeacher" class="lesson-button-wrap">
-            <el-button v-if="isBeInClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-            <el-button v-else @click="handleBeginTheClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-            <span v-if="isBeInClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+            <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+            <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
             <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
           </div>
+
         </div>
       </el-col>
     </el-row>
     <keep-work-sticky>
       <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
         <el-col :span="20">
-          <lesson-teacher-progress/>
+          <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
         <el-col :span="4" class="lesson-references">
           <lesson-referencse/>
@@ -114,6 +115,10 @@ export default {
     isTeacher: {
       type: Boolean,
       default: false
+    },
+    isInCurrentClass: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -140,6 +145,7 @@ export default {
       event.returnValue = 'are you ok?'
     },
     async handleBeginTheClass() {
+      if (!this.isInCurrentClass) return
       const { packageId, lessonId } = this.$route.params
       await this.beginTheClass({
         packageId: Number(packageId),
@@ -187,10 +193,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      classroom: 'lesson/teacher/classroom',
       isBeInClass: 'lesson/teacher/isBeInClass',
       classroomId: 'lesson/teacher/classroomId',
       isClassIsOver: 'lesson/teacher/isClassIsOver',
+      classroom: 'lesson/teacher/classroom',
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     lesson() {
