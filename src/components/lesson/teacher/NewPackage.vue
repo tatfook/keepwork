@@ -23,7 +23,7 @@
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
 export default {
-  name: 'newPackage',
+  name: 'NewPackage',
   data() {
     return {
       activeTab: 'basic' //basic or catalogue
