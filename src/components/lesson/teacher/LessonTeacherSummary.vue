@@ -120,31 +120,29 @@ export default {
       totalStudent: 0
     }
   },
-  props: {
-    classData: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
-  },
+  // props: {
+  //   classData: {
+  //     type: Object,
+  //     default() {
+  //       return {}
+  //     }
+  //   }
+  // },
   async mounted() {
-    this.lessonName = this.$route.query.lessonPackage.extra.lessonName
-    this.lessonGoals = this.$route.query.lessonPackage.extra.lessonGoals
-    this.lessonNo = this.$route.query.lessonPackage.extra.lessonNo || 0
-    this.createdAt = this.$route.query.lessonPackage.createdAt
-    if (JSON.stringify(this.classData) == '{}') {
+    console.log('params', this.$route.params)
+    // if (JSON.stringify(this.classData) == '{}') {
       this.classid = this.$route.params.classId
-    } else {
-      this.classid = this.classData.id //Please ask Kevin to add.
-    }
-    await this.getClassLearnRecords({ id: this.classid })
+    // } else {
+    //   this.classid = this.classData.id //Please ask Kevin to add.
+    // }
+    await this.getClassLearnRecords({ id:this.classid })
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
       return
     }
     this.totalStudent = this.classroomLearnRecord.length
-    this.getLessonSkill(1)
+    this.getSingleLessonDetail(this.$route.params.classId)
+    this.getLessonSkill(this.$route.params.lessonId)
     this.getQuizChartData(this.newCurrentRecord)
     this.getStudentChartData(this.newCurrentRecord)
     this.loading = false
@@ -155,42 +153,35 @@ export default {
     }),
     newCurrentRecord() {
       let currentRecord = _.map(
-        this.classroomLearnRecord,
-        ({
-          extra: { portrait, name, username, quiz },
-          createdAt,
-          lessonId
-        }) => ({
+      this.classroomLearnRecord,
+      ({ extra: { portrait, name, username, quiz }, createdAt,lessonId, userId}) => ({
+        portrait,
+        name,
+        username,
+        quiz,
+        createdAt,
+        lessonId,
+        userId
+      })
+      )
+      console.log('currentrecord',currentRecord)
+      return _.map(
+      currentRecord,
+      ({ portrait, name, username, quiz = [], createdAt,lessonId,userId }) => {
+        let accuracyRate = this.singleStudentRightRate(quiz)
+        let right = _.filter(quiz, { result: true }).length
+        let wrong = _.filter(quiz, { result: false }).length
+        let empty = quiz.length - right - wrong
+        return {
           portrait,
           name,
           username,
           quiz,
           createdAt,
-          lessonId
-        })
-      )
-      console.log('currentrecord', currentRecord)
-      return _.map(
-        currentRecord,
-        ({ portrait, name, username, quiz = [], createdAt, lessonId }) => {
-          let accuracyRate = this.singleStudentRightRate(quiz)
-          let right = _.filter(quiz, { result: true }).length
-          let wrong = _.filter(quiz, { result: false }).length
-          let empty = quiz.length - right - wrong
-          return {
-            portrait,
-            name,
-            username,
-            accuracyRate,
-            right,
-            wrong,
-            empty,
-            quiz,
-            createdAt,
-            lessonId,
-            lessonName: this.lessonName,
-            lessonNo: this.lessonNo
-          }
+          lessonId,
+          userId,
+          lessonName: this.lessonName,
+          lessonNo: this.lessonNo
         }
       )
     }
@@ -268,20 +259,24 @@ export default {
           })
         })
     },
-    getLessonSkill(lessonId) {
-      lesson.lessons
-        .getSkills({ lessonId })
-        .then(res => {
-          this.skillsList = res
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    getSingleLessonDetail(classId){
+      lesson.classrooms.getClassroomById(classId).then(res => {
+        console.log('getClassroomById',res)
+        this.createdAt = res.createdAt
+        this.lessonNo = res.extra.lessonNo
+        this.lessonName = res.extra.lessonName
+        this.lessonGoals = res.extra.lessonGoals
+      }).catch( err => {console.log(err)})
+    },
+    getLessonSkill(lessonId){
+      lesson.lessons.getSkills({lessonId}).then(res => {
+        this.skillsList = res
+      }).catch( err => {console.log(err)})
     },
     singleStudentRecord(index, student) {
       this.$router.push({
-        path: `/teacher/student/${student.username}/record`,
-        query: { student }
+        path: `/teacher/student/${student.userId}/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`,
+        // query: { student }
       })
     },
     singleStudentRightRate(quiz = []) {

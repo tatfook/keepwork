@@ -126,7 +126,7 @@ export default new Router({
           ]
         },
         {
-          path: 'student/:username/record',
+          path: 'student/:userId/lessonNo/:lessonNo/lessonName/:lessonName/record',
           name: 'LessonStudentRecord',
           component: LessonStudentRecord
         },

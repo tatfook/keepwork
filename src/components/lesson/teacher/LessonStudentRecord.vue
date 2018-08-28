@@ -3,15 +3,15 @@
   <div class="lesson-student-record">
     <div class="lesson-student-record-title">
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} {{student.lessonNo}}:</span> {{student.lessonName}}</p>
+        <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins
-        <span class="date">{{student.createdAt | formatTime}}</span>
+        <span class="date">{{createdAt | formatTime}}</span>
       </p>
     </div>
     <div class="lesson-student-record-content">
-      <p class="nameInfo"><span class="nameInfo-name">{{$t('lesson.name')}}: <span class="name">{{student.name}}</span></span> <span class="nameInfo-username">{{$t('lesson.username')}}: <span class="name">{{student.username}}</span></span></p>
-      <p class="accuracy-rate">{{$t('lesson.accuracyRate')}}: {{student.accuracyRate}}</p>
+      <p class="nameInfo"><span class="nameInfo-name">{{$t('lesson.name')}}: <span class="name">{{name}}</span></span> <span class="nameInfo-username">{{$t('lesson.username')}}: <span class="name">{{username}}</span></span></p>
+      <p class="accuracy-rate">{{$t('lesson.accuracyRate')}}: {{accuracyRate}}</p>
       <p class="right-wrong">
         <span class="sign"><i class="i right"></i> {{$t('lesson.right')}}</span> 
         <span class="sign"><i class="i wrong"></i> {{$t('lesson.wrong')}}</span>
@@ -33,20 +33,42 @@
 <script>
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
   name: "LessonStudentRecord",
   data(){
     return{
+      lessonNo: this.$route.params.lessonNo,
+      lessonName: this.$route.params.lessonName,
+      userId: this.$route.params.userId,
+      createdAt: '',
+      name: '',
+      username: '',
       student:{},
-      records:[]
+      records:[],
+      accuracyRate: ''
     }
   },
   mounted(){
-    this.student = this.$route.query.student
-    this.records = _.get(this.$route.query.student,'quiz',[])
-    console.log('qui',this.records)
-    console.log('student',this.student)
+    console.log('params',this.$route.params)
+    console.log('paramsuserid',this.$route.params.userId)
+    console.log('studentrecodAll',this.classroomLearnRecord)
+    let studentId = this.$route.params.userId
+    let currentStudent = _.filter(this.classroomLearnRecord,{ userId : Number(studentId)})
+    this.student
+    console.log('currentStudent',currentStudent)
+    this.createdAt = _.get(currentStudent[0],'createdAt','')
+    this.name = _.get(currentStudent[0].extra,'name','')
+    this.username = _.get(currentStudent[0].extra,'username','')
+    this.records = _.get(currentStudent[0].extra,'quiz',[])
+    console.log('record',this.records)
+    this.accuracyRate = this.singleStudentRightRate(this.records)
+  },
+  computed: {
+    ...mapGetters({
+      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
+    }),
   },
   methods: {
     formatTRF(value) {
@@ -57,6 +79,13 @@ export default {
         return this.$t('lesson.wrong')
       }
       return ''
+    },
+    singleStudentRightRate(quiz = []) {
+      let rightAnswer = _.filter(quiz, {
+        result: true
+      }).length
+      let allQuiz = quiz.length
+      return rightAnswer / allQuiz * 100 + '%'
     },
   },
   filters: {
