@@ -129,6 +129,7 @@ export default {
   //   }
   // },
   async mounted() {
+    console.warn(this.$route.params)
     this.classid = this.$route.params.classId
     await this.getClassLearnRecords({ id: this.classid })
     if (this.classroomLearnRecord.length === 0) {

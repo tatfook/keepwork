@@ -40,7 +40,10 @@ export default {
       isBeInClass: 'lesson/teacher/isBeInClass',
       isClassIsOver: 'lesson/teacher/isClassIsOver',
       classId: 'lesson/teacher/classId'
-    })
+    }),
+    lessonId() {
+      return this.$route.params.lessonId
+    }
   },
   watch: {
     $route({ name }) {
@@ -62,7 +65,10 @@ export default {
       this.isBeInClass && 'performance' === name && this.$router.push({ name })
       this.isClassIsOver &&
         'summary' === name &&
-        this.$router.push({ name, params: { classId: this.classId } })
+        this.$router.push({
+          name,
+          params: { classId: this.classId, lessonId: Number(this.lessonId) }
+        })
     }
   }
 }
