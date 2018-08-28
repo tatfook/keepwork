@@ -33,7 +33,7 @@
 <script>
 import _ from 'lodash'
 import dayjs from 'dayjs'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: "LessonStudentRecord",
@@ -50,19 +50,14 @@ export default {
       accuracyRate: ''
     }
   },
-  mounted(){
-    console.log('params',this.$route.params)
-    console.log('paramsuserid',this.$route.params.userId)
-    console.log('studentrecodAll',this.classroomLearnRecord)
+  async mounted(){
+    await this.getClassLearnRecords({ id:this.$route.params.classId })
     let studentId = this.$route.params.userId
     let currentStudent = _.filter(this.classroomLearnRecord,{ userId : Number(studentId)})
-    this.student
-    console.log('currentStudent',currentStudent)
     this.createdAt = _.get(currentStudent[0],'createdAt','')
     this.name = _.get(currentStudent[0].extra,'name','')
     this.username = _.get(currentStudent[0].extra,'username','')
     this.records = _.get(currentStudent[0].extra,'quiz',[])
-    console.log('record',this.records)
     this.accuracyRate = this.singleStudentRightRate(this.records)
   },
   computed: {
@@ -71,6 +66,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      getClassLearnRecords: 'lesson/teacher/getClassLearnRecords'
+    }),
     formatTRF(value) {
       if (value === 'A') {
         return this.$t('lesson.right')
