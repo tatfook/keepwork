@@ -271,7 +271,7 @@ export default {
     },
     singleStudentRecord(index, student) {
       this.$router.push({
-        path: `/teacher/student/${student.userId}/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`,
+        path: `/teacher/student/${student.userId}/classId/${this.classid}/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`,
         // query: { student }
       })
     },

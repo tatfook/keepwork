@@ -64,13 +64,13 @@ export default {
           })
           break
         case 'PACKAGE_MANAGER':
-          this.itmeActive = 1
+          this.itmeActive = '3-1'
           this.$router.push({
             path: `/teacher/packageManager`
           })
           break
         case 'MANAGEMENT':
-          this.itmeActive = '3'
+          this.itmeActive = '3-2'
           break
         default:
           break
