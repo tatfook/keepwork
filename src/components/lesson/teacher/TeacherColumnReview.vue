@@ -84,8 +84,7 @@ export default {
     },
     viewSummary(lessonPackage){
      this.$router.push({
-        path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary`,
-        query: {lessonPackage}
+        path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary`
       })
     },
     enterPackage(packageId){
