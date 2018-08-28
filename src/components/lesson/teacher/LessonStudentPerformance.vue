@@ -126,6 +126,7 @@ export default {
         : []
     },
     tableDataFaker() {
+      // 为了造假数据使用
       return this.tableData
         .map(item => Array.from({ length: 10 }, () => item))
         .reduce((arr, cur) => [...arr, ...cur], [])
