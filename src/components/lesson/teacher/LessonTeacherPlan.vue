@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lesson-plan">
     <lesson-hint-toggle />
     <lesson-wrap v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
   </div>
@@ -31,4 +31,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.lesson-plan {
+  max-width: 1149px;
+  padding: 0 15px;
+}
+</style>
+
 

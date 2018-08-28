@@ -230,7 +230,7 @@ export default {
 
 <style lang="scss">
 .lesson-header-container {
-  max-width: 1149px;
+  max-width: 1229px;
   margin: 50px auto 0;
   $green: #66cd2e;
   $grey: #d2d2d2;

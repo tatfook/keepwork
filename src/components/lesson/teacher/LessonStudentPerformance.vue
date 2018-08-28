@@ -160,12 +160,12 @@ export default {
 $green: #27ce2f;
 $red: #f53838;
 .lesson-student-performance-wrap {
-  max-width: 1149px;
+  max-width: 1229px;
   background: white;
   margin: 0 auto;
   font-weight: bold;
   .tips {
-    padding: 10px 5px;
+    padding: 10px 40px;
     .pointer {
       $size: 20px;
       display: inline-flex;
