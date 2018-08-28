@@ -129,13 +129,9 @@ export default {
   //   }
   // },
   async mounted() {
-    console.log('params', this.$route.params)
-    // if (JSON.stringify(this.classData) == '{}') {
-      this.classid = this.$route.params.classId
-    // } else {
-    //   this.classid = this.classData.id //Please ask Kevin to add.
-    // }
-    await this.getClassLearnRecords({ id:this.classid })
+    console.warn(this.$route.params)
+    this.classid = this.$route.params.classId
+    await this.getClassLearnRecords({ id: this.classid })
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
       return
@@ -151,43 +147,57 @@ export default {
     ...mapGetters({
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
     }),
-    newCurrentRecord(){
+    newCurrentRecord() {
       let currentRecord = _.map(
-      this.classroomLearnRecord,
-      ({ extra: { portrait, name, username, quiz }, createdAt,lessonId, userId}) => ({
-        portrait,
-        name,
-        username,
-        quiz,
-        createdAt,
-        lessonId,
-        userId
-      })
-      )
-      console.log('currentrecord',currentRecord)
-      return _.map(
-      currentRecord,
-      ({ portrait, name, username, quiz = [], createdAt,lessonId,userId }) => {
-        let accuracyRate = this.singleStudentRightRate(quiz)
-        let right = _.filter(quiz, { result: true }).length
-        let wrong = _.filter(quiz, { result: false }).length
-        let empty = quiz.length - right - wrong
-        return {
+        this.classroomLearnRecord,
+        ({
+          extra: { portrait, name, username, quiz },
+          createdAt,
+          lessonId,
+          userId
+        }) => ({
           portrait,
           name,
           username,
-          accuracyRate,
-          right,
-          wrong,
-          empty,
           quiz,
           createdAt,
           lessonId,
-          userId,
-          lessonName: this.lessonName,
-          lessonNo: this.lessonNo
+          userId
+        })
+      )
+      console.log('currentrecord', currentRecord)
+      return _.map(
+        currentRecord,
+        ({
+          portrait,
+          name,
+          username,
+          quiz = [],
+          createdAt,
+          lessonId,
+          userId
+        }) => {
+          let accuracyRate = this.singleStudentRightRate(quiz)
+          let right = _.filter(quiz, { result: true }).length
+          let wrong = _.filter(quiz, { result: false }).length
+          let empty = quiz.length - right - wrong
+          return {
+            portrait,
+            name,
+            username,
+            accuracyRate,
+            right,
+            wrong,
+            empty,
+            quiz,
+            createdAt,
+            lessonId,
+            userId,
+            lessonName: this.lessonName,
+            lessonNo: this.lessonNo
+          }
         }
-      })
+      )
     }
   },
   methods: {
@@ -200,35 +210,43 @@ export default {
       this.changeDialogVisible = true
     },
     async toChangeStudentMarks() {
-      if(this.changeSelected === 'changeAll'){
+      if (this.changeSelected === 'changeAll') {
         this.handleSelectionChange(this.newCurrentRecord)
         let learnRecordsArr = this.modifiedGrades(this.classroomLearnRecord)
-        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
-      }else{
-        if(this.multipleSelection.length == 0){
+        await this.modifyClassLearnRecords({
+          id: this.classid,
+          learnRecordsArr
+        })
+      } else {
+        if (this.multipleSelection.length == 0) {
           this.changeDialogVisible = false
           this.$alert('请选择需要修改成绩的学生！', '', {
             confirmButtonText: this.$t('common.Sure'),
             center: true,
             callback: action => {}
-          });
+          })
           return
         }
         let updataRecordsArr = null
-        for(let i = 0; i < this.multipleSelection.length;i++){
-          updataRecordsArr = this.classroomLearnRecord.filter(item => item.extra.username === this.multipleSelection[i].username)
+        for (let i = 0; i < this.multipleSelection.length; i++) {
+          updataRecordsArr = this.classroomLearnRecord.filter(
+            item => item.extra.username === this.multipleSelection[i].username
+          )
         }
         let learnRecordsArr = this.modifiedGrades(updataRecordsArr)
-        await this.modifyClassLearnRecords({id:this.classid, learnRecordsArr})
+        await this.modifyClassLearnRecords({
+          id: this.classid,
+          learnRecordsArr
+        })
       }
       this.getQuizChartData(this.newCurrentRecord)
       this.getStudentChartData(this.newCurrentRecord)
       this.changeDialogVisible = false
     },
-    modifiedGrades(record){
-      let learnRecordsArr = _.map(record, (student) => {
-        for(let i = 0;i < student.extra.quiz.length; i++){
-          Vue.set(student.extra.quiz[i], `result`,  true)
+    modifiedGrades(record) {
+      let learnRecordsArr = _.map(record, student => {
+        for (let i = 0; i < student.extra.quiz.length; i++) {
+          Vue.set(student.extra.quiz[i], `result`, true)
         }
         return student
       })
@@ -255,15 +273,21 @@ export default {
           })
         })
     },
-    getSingleLessonDetail(classId){
-      lesson.classrooms.getClassroomById(classId).then(res => {
-        console.log('getClassroomById',res)
-        this.createdAt = res.createdAt
-        this.lessonNo = res.extra.lessonNo
-        this.lessonName = res.extra.lessonName
-        this.lessonGoals = res.extra.lessonGoals
-      }).catch( err => {console.log(err)})
+    getSingleLessonDetail(classId) {
+      lesson.classrooms
+        .getClassroomById(classId)
+        .then(res => {
+          console.log('getClassroomById', res)
+          this.createdAt = res.createdAt
+          this.lessonNo = res.extra.lessonNo
+          this.lessonName = res.extra.lessonName
+          this.lessonGoals = res.extra.lessonGoals
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
+
     getLessonSkill(lessonId){
       lesson.lessons.getSkills({lessonId}).then(res => {
         console.log('skill',res)
@@ -272,7 +296,9 @@ export default {
     },
     singleStudentRecord(index, student) {
       this.$router.push({
-        path: `/teacher/student/${student.userId}/classId/${this.classid}/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`,
+        path: `/teacher/student/${student.userId}/classId/${
+          this.classid
+        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
         // query: { student }
       })
     },
@@ -287,7 +313,10 @@ export default {
       let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
       for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
         for (let i = 0; i < newCurrentRecord.length; i++) {
-          if (newCurrentRecord[i].quiz[j] && newCurrentRecord[i].quiz[j].result) {
+          if (
+            newCurrentRecord[i].quiz[j] &&
+            newCurrentRecord[i].quiz[j].result
+          ) {
             accuracyRateArr[j] += 1
           }
         }
