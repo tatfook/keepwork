@@ -16,6 +16,7 @@ export const { get, post, put, delete: deleteMethod } = endpoint
 export const admin = {}
 
 export const packages = {
+  create: async ({ newPackageData }) => post('packages', newPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
@@ -29,6 +30,7 @@ export const packages = {
 }
 
 export const lessons = {
+  getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),

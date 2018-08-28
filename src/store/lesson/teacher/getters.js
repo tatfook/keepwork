@@ -11,6 +11,7 @@ const getters = {
   classroomId: (state, { classroom }) => classroom.key || '',
   learnRecords: state => state.learnRecords || null,
   userPackages: state => state.userPackages,
+  userLessons: state => state.userLessons,
   packageLessons: state => state.packageLessons,
   classId: (state, { classroom }) => classroom.id,
   classroomLearnRecord: status => status.classroomLearnRecord

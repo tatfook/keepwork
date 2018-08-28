@@ -6,38 +6,79 @@
         <el-breadcrumb-item>新建课程包</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="new-package-header-operations">
-        <el-button round>取消</el-button>
-        <el-button round>保存</el-button>
-        <el-button round type="primary">提交</el-button>
+        <el-button round @click="cancelAddPackage">取消</el-button>
+        <el-button round @click="savePackage">保存</el-button>
+        <el-button round type="primary" @click="submitPackage">提交</el-button>
       </div>
     </div>
     <div class="new-package-tabs">
       <el-button @click="setActiveTab('basic')" class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">基本信息</el-button>
       <el-button @click="setActiveTab('catalogue')" class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">目录</el-button>
     </div>
-    <PackageBasicInfo v-show="activeTab === 'basic'"></PackageBasicInfo>
-    <CoverMediaSetter v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
-    <CatalogueManager v-show="activeTab === 'catalogue'"></CatalogueManager>
+    <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'"></PackageBasicInfo>
+    <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
+    <CatalogueManager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></CatalogueManager>
   </div>
 </template>
 <script>
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
 import CatalogueManager from './CatalogueManager'
+import { mapActions } from 'vuex'
 export default {
   name: 'NewPackage',
   data() {
     return {
-      activeTab: 'basic' //basic or catalogue
+      activeTab: 'catalogue' //basic or catalogue
+    }
+  },
+  computed: {
+    newPackageBasicInfo() {
+      return this.$refs.basicInfoComponent.newPackageDetail
+    },
+    newPackageCoverUrl() {
+      return this.$refs.coverUrlComponent.newPackageCoverUrl
+    },
+    newPackageLessons() {
+      let lessons = this.$refs.lessonListComponent.catalogues
+      let lessonsId = []
+      _.forEach(lessons, lesson => {
+        lessonsId.push(lesson.id)
+      })
+      return lessonsId
+    },
+    newPackageData() {
+      return _.assign(
+        this.newPackageBasicInfo,
+        {
+          extra: { coverUrl: this.newPackageCoverUrl }
+        },
+        { lessons: this.newPackageLessons }
+      )
     }
   },
   methods: {
+    ...mapActions({
+      createNewPackage: 'lesson/teacher/createNewPackage'
+    }),
     setActiveTab(type) {
       if (type === this.activeTab) {
         return
       }
       this.activeTab = type
-    }
+    },
+    cancelAddPackage() {
+      this.$router.push('/teacher/packageManager')
+    },
+    async savePackage() {
+      let newPackageData = this.newPackageData
+      await this.createNewPackage({ newPackageData })
+      this.$message({
+        message: '保存成功',
+        type: 'success'
+      })
+    },
+    submitPackage() {}
   },
   components: {
     PackageBasicInfo,

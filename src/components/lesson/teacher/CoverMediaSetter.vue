@@ -14,7 +14,7 @@
       <el-input placeholder="请输入内容" v-model="urlTypeUrl">
         <template slot="append">
           <el-popover placement="top" width="250" trigger="hover" popper-class='cover-media-setter-image-preview'>
-            <img src="http://g.hiphotos.baidu.com/image/h%3D300/sign=a102682e4fa7d933a0a8e2739d4ad194/6f061d950a7b0208d5456ddb6fd9f2d3572cc878.jpg" alt="图片预览">
+            <img :src="urlTypeUrl" alt="图片预览">
             <el-button slot="reference">预览</el-button>
           </el-popover>
         </template>
@@ -29,10 +29,15 @@ export default {
   name: 'CoverMediaSetter',
   data() {
     return {
-      imageSourceType: 'bigfile', // bigfile or url
+      imageSourceType: 'url', // bigfile or url
       bigfileTypeUrl: '',
       urlTypeUrl: '',
       isSkyDriveShow: false
+    }
+  },
+  computed: {
+    newPackageCoverUrl() {
+      return this.imageSourceType === 'url' ? this.urlTypeUrl : this.bigfileTypeUrl
     }
   },
   methods: {

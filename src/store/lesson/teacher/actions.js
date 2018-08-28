@@ -14,6 +14,7 @@ const {
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
+  GET_USER_LESSONS_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
   GET_CLASSROOM_LEARN_RECORDS,
   LEAVE_THE_CLASSROOM
@@ -107,6 +108,23 @@ const actions = {
     let packages = await lesson.packages.getUserPackages()
     let packageRows = _.get(packages, 'rows')
     commit(GET_USER_PACKAGES_SUCCESS, { userPackages: packageRows })
+  },
+  async getUserLessons(context, { useCache = true }) {
+    let {
+      commit,
+      getters: { userLessons }
+    } = context
+    if (userLessons && userLessons.length && useCache) {
+      return
+    }
+    let lessons = await lesson.lessons.getUserLessons()
+    let lessonsRows = _.get(lessons, 'rows')
+    commit(GET_USER_LESSONS_SUCCESS, { userLessons: lessonsRows })
+  },
+  async createNewPackage(context, { newPackageData }) {
+    let { dispatch } = context
+    await lesson.packages.create({ newPackageData })
+    await dispatch('getUserPackages', { useCache: false })
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context

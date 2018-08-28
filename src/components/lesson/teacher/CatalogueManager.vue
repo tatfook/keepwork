@@ -1,11 +1,11 @@
 <template>
   <div class="catalogue-manager">
     <div class="catalogue-manager-title">目录:
-      <el-button type="success" round size="small" v-show="catalogues.length > 0">添加课程</el-button>
+      <el-button type="success" round size="small" v-show="catalogues.length > 0" @click="showLessonsListModal">添加课程</el-button>
     </div>
     <div class="catalogue-manager-empty" v-show="catalogues.length <= 0">
       <div class="catalogue-manager-empty-info">请先添加课程</div>
-      <el-button type="primary">添加课程</el-button>
+      <el-button type="primary" @click="showLessonsListModal">添加课程</el-button>
     </div>
     <div class="catalogue-manager-list" v-show="catalogues.length > 0">
       <div class="catalogue-manager-item" v-for="(lesson, index) in catalogues" :key='index'>
@@ -16,11 +16,11 @@
         <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>
         <div class="catalogue-manager-item-date">{{lesson.updatedAt}}</div>
         <div class="catalogue-manager-item-operations">
-          <el-tooltip effect="dark" content="下移" placement="top">
+          <el-tooltip v-if="index > 0" effect="dark" content="上移" placement="top">
             <span class="iconfont icon-move-up"></span>
           </el-tooltip>
-          <el-tooltip effect="dark" content="上移" placement="top">
-            <span class="iconfont icon-move-up"></span>
+          <el-tooltip v-if="index < (catalogues.length-1)" effect="dark" content="下移" placement="top">
+            <span class="iconfont icon-move-up catalogue-manager-item-icon-down"></span>
           </el-tooltip>
           <el-tooltip effect="dark" content="删除" placement="top">
             <span class="iconfont icon-delete1"></span>
@@ -28,39 +28,39 @@
         </div>
       </div>
     </div>
+    <lessons-list-dialog :isDialogShow='isLessonsListModalShow' @close='handleClose' @save='setPackageLessonsList'></lessons-list-dialog>
   </div>
 </template>
 <script>
+import dayjs from 'dayjs'
+import { mapActions, mapGetters } from 'vuex'
+import LessonsListDialog from './LessonsListDialog'
 export default {
   name: 'CatalogueManager',
   data() {
     return {
-      catalogues: [
-        {
-          lessonName: 'Enjoy the beauty of your youth',
-          updatedAt: '2018-06-02 10:20',
-          extra: {
-            coverUrl:
-              'http://g.hiphotos.baidu.com/image/h%3D300/sign=a102682e4fa7d933a0a8e2739d4ad194/6f061d950a7b0208d5456ddb6fd9f2d3572cc878.jpg'
-          }
-        },
-        {
-          lessonName: 'Enjoy the beauty of your youth',
-          updatedAt: '2018-06-02 10:20',
-          extra: {
-            coverUrl:
-              'http://g.hiphotos.baidu.com/image/h%3D300/sign=a102682e4fa7d933a0a8e2739d4ad194/6f061d950a7b0208d5456ddb6fd9f2d3572cc878.jpg'
-          }
-        },
-        {
-          lessonName: 'Enjoy the beauty of your youth',
-          updatedAt: '2018-06-02 10:20',
-          extra: {
-            coverUrl:
-              'http://g.hiphotos.baidu.com/image/h%3D300/sign=a102682e4fa7d933a0a8e2739d4ad194/6f061d950a7b0208d5456ddb6fd9f2d3572cc878.jpg'
-          }
-        }
-      ]
+      catalogues: [],
+      isLessonsListModalShow: false
+    }
+  },
+  methods: {
+    showLessonsListModal() {
+      this.isLessonsListModalShow = true
+    },
+    handleClose() {
+      this.isLessonsListModalShow = false
+    },
+    setPackageLessonsList(addedLessons) {
+      this.catalogues = addedLessons
+      this.handleClose()
+    }
+  },
+  components: {
+    LessonsListDialog
+  },
+  filters: {
+    formatDate(date) {
+      return dayjs(date).format('YYYY-MM-DD HH:mm')
     }
   }
 }
@@ -122,17 +122,24 @@ export default {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
       overflow: hidden;
+      word-wrap: break-word;
     }
     &-operations {
       width: 100px;
       color: #b3b3b3;
       margin-left: 100px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       .iconfont {
         font-size: 18px;
         cursor: pointer;
       }
+      .iconfont + .iconfont {
+        margin-left: 22px;
+      }
+    }
+    &-icon-down {
+      transform: rotate(180deg);
     }
   }
   &-item:last-child {
