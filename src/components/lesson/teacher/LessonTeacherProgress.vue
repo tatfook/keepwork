@@ -2,7 +2,7 @@
   <div class="lesson-teacher-progress">
     <span class="progress-point start">
       <div class="name">{{$t('lesson.lessonPlan')}}</div>
-      <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('lesson')"></div>
+      <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('plan')"></div>
     </span>
     <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass && !reset ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
@@ -44,18 +44,18 @@ export default {
     })
   },
   methods: {
-    ...mapActions({
-      toggleLesson: 'lesson/teacher/toggleLesson',
-      togglePerformance: 'lesson/teacher/togglePerformance',
-      toggleSummary: 'lesson/teacher/toggleSummary'
-    }),
+    // ...mapActions({
+    //   toggleLesson: 'lesson/teacher/toggleLesson',
+    //   togglePerformance: 'lesson/teacher/togglePerformance',
+    //   toggleSummary: 'lesson/teacher/toggleSummary'
+    // }),
     handleChangeView(name) {
       if (this.reset) return
       if (!this.isClassIsOver && name === 'summary') return
       if (!this.isBeInClass && name === 'performance') return
-      this.toggleLesson('lesson' === name)
-      this.isBeInClass && this.togglePerformance('performance' === name)
-      this.isClassIsOver && this.toggleSummary('summary' === name)
+      'plan' === name && this.$router.push({ name })
+      this.isBeInClass && 'performance' === name && this.$router.push({ name })
+      this.isClassIsOver && 'summary' === name && this.$router.push({ name })
     }
   }
 }
