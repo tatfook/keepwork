@@ -1,9 +1,17 @@
 <template>
   <div class="lesson-wrap">
-    <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
+    <LessonStudentStatus v-if="isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-show="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <el-dialog :visible="!isCurrentClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
+      <span slot="title">
+        你正处于上课状态,请点击按钮返回当前所在的课堂
+      </span>
+      <span slot="footer">
+        <el-button type="primary" @click="backToClassroom" :loading="!isCurrentClassroom && isRefresh">确定返回</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -23,28 +31,25 @@ export default {
   },
   data() {
     return {
-      isCurrentClassroom: false
+      isCurrentClassroom: true,
+      isRefresh: false
     }
   },
-  created() {
-    console.log('created=-------------->')
-  },
+  created() {},
   beforeRouteLeave(to, from, next) {
-    if (this.isBeInClassroom) {
-      return this.$message.error('你还在上课')
-    }
     next()
   },
   async mounted() {
     const { packageId, lessonId } = this.$route.params
     await this.resumeTheClass()
     // this.copyProhibited()
-    await this.getLessonContent({ lessonId })
-    if (this.isBeInClassroom) {
-      const { packageId: _packageId, lesson: _lessonId } = this.enterClassInfo
-      this.isCurrentClassroom = packageId === _packageId && lessonId === _lessonId
-      this.isCurrentClassroom && (await this.uploadLearnRecords())
+    const { packageId: _packageId, lessonId: _lessonId } = this.enterClassInfo
+    this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+    if (!this.isCurrentClassroom) {
+      return
     }
+    await this.getLessonContent({ lessonId })
+    this.isCurrentClassroom && (await this.uploadLearnRecords())
   },
   methods: {
     ...mapActions({
@@ -60,6 +65,12 @@ export default {
         if (event.ctrlKey && window.event.keyCode === 86) return false
       }
       document.body.oncopy = () => false
+    },
+    backToClassroom() {
+      const { packageId, lessonId } = this.enterClassInfo
+      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
+      this.isRefresh = true
+      this.$router.go(0)
     }
   },
   computed: {
