@@ -116,7 +116,6 @@ export default {
     ...mapActions({
       getProfile: 'user/getProfile',
       enterClassRoom: 'lesson/student/enterClassRoom'
-      // setEnterClassID: 'lesson/student/setEnterClassID'
     }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
@@ -124,20 +123,20 @@ export default {
     async enterClass() {
       let key = this.classID
       await this.enterClassRoom({ key })
-      if (this.enterClassInfo.packageId && this.enterClassInfo.lessonId) {
-        // this.setEnterClassID({ key })
-        this.$router.push({
-          path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
-            this.enterClassInfo.lessonId
-          }`
+        .then(res => {
+          this.$router.push({
+            path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
+              this.enterClassInfo.lessonId
+            }`
+          })
         })
-      } else {
-        this.$message({
-          showClose: true,
-          message: "Class with this ID does't exist.",
-          type: 'error'
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: this.$t('lesson.wrongKey'),
+            type: 'error'
+          })
         })
-      }
     }
   },
   components: {

@@ -884,6 +884,7 @@
     "viewTeacherPage": "查看教师页",
     "viewStudentPage": "查看学生页",
     "enterClass": "从此处进入课堂",
+    "wrongKey": "您输入的课堂ID不存在！",
     "enterByClassId": "输入课堂ID",
     "enter": "进入",
     "share": "分享",
