@@ -47,7 +47,8 @@ export default {
       enterClassInfo: 'lesson/student/enterClassInfo'
     }),
     isInClassroom() {
-      return this.enterClassInfo.state !== 2
+      const state = this.enterClassInfo.state
+      return state == undefined ? false : state != 2
     },
     lessonsList() {
       let lessons = _.get(this.packageDetail, 'lessons', [])
@@ -94,6 +95,8 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
+      console.log(this.enterClassInfo)
+      console.log(this.isInClassroom)
       if (this.isInClassroom) {
         const { name, params: { id: _packageId } } = this.$route
         const { packageId, lessonId } = this.enterClassInfo

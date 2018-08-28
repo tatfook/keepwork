@@ -1,10 +1,10 @@
 <template>
   <div class="lesson-wrap">
-    <LessonStudentStatus v-if="isCurrentClassroom" />
+    <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-show="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
-    <el-dialog :visible="!isCurrentClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
+    <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
         你正处于上课状态,请点击按钮返回当前所在的课堂
       </span>
@@ -43,10 +43,11 @@ export default {
     const { packageId, lessonId } = this.$route.params
     await this.resumeTheClass()
     // this.copyProhibited()
-    const { packageId: _packageId, lessonId: _lessonId } = this.enterClassInfo
-    this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
-    if (!this.isCurrentClassroom) {
-      return
+    if (this.isBeInClassroom) {
+      console.log(this.isBeInClassroom)
+      const { packageId: _packageId, lessonId: _lessonId } = this.enterClassInfo
+      this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+      if (!this.isCurrentClassroom) return
     }
     await this.getLessonContent({ lessonId })
     this.isCurrentClassroom && (await this.uploadLearnRecords())
