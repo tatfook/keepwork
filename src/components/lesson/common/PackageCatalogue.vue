@@ -95,9 +95,13 @@ export default {
   methods: {
     toLessonDetail(lesson) {
       if (this.isInClassroom) {
-        const { name } = this.$route
-        if (name === 'StudentPackage')
-          return this.$message.error('你正在上课中')
+        const { name, params: { id: _packageId } } = this.$route
+        const { packageId, lessonId } = this.enterClassInfo
+        if (
+          name === 'StudentPackage' &&
+          (_packageId != packageId || lesson.id != lessonId)
+        )
+          return this.$message.error('你正在上课中,请返回当前课堂')
       }
       if (this.packageDetail.isSubscribe) {
         let targetLessonPath = `/${this.actorType}/package/${

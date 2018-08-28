@@ -193,12 +193,12 @@ export default {
 .quiz-container {
   box-sizing: border-box;
   margin-top: 10px;
-  padding: 10px;
+  padding: 10px 15px;
   font-size: 16px;
   border: 1px solid #fff;
   color: #4c4c4c;
   background: white;
-  max-width: 1149px;
+  max-width: 1229px;
   margin: 0 auto;
   &.isPreview {
     .el-radio__input,

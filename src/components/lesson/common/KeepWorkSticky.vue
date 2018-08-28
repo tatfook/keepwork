@@ -10,7 +10,7 @@ export default {
   props: {
     width: {
       type: Number,
-      default: 1149
+      default: 1229
     },
     resetTop: {
       type: Number,
