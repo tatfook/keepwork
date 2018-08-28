@@ -8,31 +8,34 @@
       <el-button type="primary" @click="showLessonsListModal">添加课程</el-button>
     </div>
     <div class="catalogue-manager-list" v-show="catalogues.length > 0">
-      <div class="catalogue-manager-item" v-for="(lesson, index) in catalogues" :key='index'>
-        <div class="catalogue-manager-item-index">{{index}}</div>
-        <div class="catalogue-manager-item-cover">
-          <img :src='lesson.extra.coverUrl' alt="">
+      <vue-draggable v-model="catalogues" :options="{handle:'.catalogue-manager-item-icon-down'}">
+        <div class="catalogue-manager-item" v-for="(lesson, index) in catalogues" :key='index'>
+          <div class="catalogue-manager-item-index">{{index}}</div>
+          <div class="catalogue-manager-item-cover">
+            <img :src='lesson.extra.coverUrl' alt="">
+          </div>
+          <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>
+          <div class="catalogue-manager-item-date">{{lesson.updatedAt}}</div>
+          <div class="catalogue-manager-item-operations">
+            <el-tooltip v-if="index > 0" effect="dark" content="上移" placement="top">
+              <span class="iconfont icon-move-up"></span>
+            </el-tooltip>
+            <el-tooltip v-if="index < (catalogues.length-1)" effect="dark" content="下移" placement="top">
+              <span class="iconfont icon-move-up catalogue-manager-item-icon-down"></span>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="删除" placement="top">
+              <span class="iconfont icon-delete1"></span>
+            </el-tooltip>
+          </div>
         </div>
-        <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>
-        <div class="catalogue-manager-item-date">{{lesson.updatedAt}}</div>
-        <div class="catalogue-manager-item-operations">
-          <el-tooltip v-if="index > 0" effect="dark" content="上移" placement="top">
-            <span class="iconfont icon-move-up"></span>
-          </el-tooltip>
-          <el-tooltip v-if="index < (catalogues.length-1)" effect="dark" content="下移" placement="top">
-            <span class="iconfont icon-move-up catalogue-manager-item-icon-down"></span>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="删除" placement="top">
-            <span class="iconfont icon-delete1"></span>
-          </el-tooltip>
-        </div>
-      </div>
+      </vue-draggable>
     </div>
     <lessons-list-dialog :isDialogShow='isLessonsListModalShow' @close='handleClose' @save='setPackageLessonsList'></lessons-list-dialog>
   </div>
 </template>
 <script>
 import dayjs from 'dayjs'
+import VueDraggable from 'vuedraggable'
 import { mapActions, mapGetters } from 'vuex'
 import LessonsListDialog from './LessonsListDialog'
 export default {
@@ -56,6 +59,7 @@ export default {
     }
   },
   components: {
+    VueDraggable,
     LessonsListDialog
   },
   filters: {
