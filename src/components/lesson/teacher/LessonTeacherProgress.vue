@@ -2,21 +2,21 @@
   <div class="lesson-teacher-progress">
     <span class="progress-point start">
       <div class="name">{{$t('lesson.lessonPlan')}}</div>
-      <div :class="['pointer','light',{'selected': isShowLesson}]" @click="handleChangeView('plan')"></div>
+      <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('plan')"></div>
     </span>
-    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isBeInClass && !reset ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isBeInClass ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div class="name">
         {{$t('lesson.performance')}}
       </div>
-      <div :class="['pointer',{'selected': isShowPerformance && !reset, 'light': isBeInClass && !reset}]" @click="handleChangeView('performance')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClass}]" @click="handleChangeView('performance')"></div>
     </span>
-    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="isClassIsOver && !reset ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassIsOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
       <div class="name">
         {{$t('lesson.summary')}}
       </div>
-      <div :class="['pointer',{'selected': isShowSummary && !reset , 'light': isClassIsOver && !reset }]" @click="handleChangeView('summary')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassIsOver}]" @click="handleChangeView('summary')"></div>
     </span>
   </div>
 </template>
@@ -30,32 +30,39 @@ export default {
   },
   data() {
     return {
-      isSelect: true,
-      isSummary: false
+      isShowPlan: true,
+      isShowPerformance: false,
+      isShowSummary: false
     }
   },
   computed: {
     ...mapGetters({
-      isShowLesson: 'lesson/teacher/isShowLesson',
-      isShowPerformance: 'lesson/teacher/isShowPerformance',
-      isShowSummary: 'lesson/teacher/isShowSummary',
       isBeInClass: 'lesson/teacher/isBeInClass',
-      isClassIsOver: 'lesson/teacher/isClassIsOver'
+      isClassIsOver: 'lesson/teacher/isClassIsOver',
+      classId: 'lesson/teacher/classId'
     })
   },
+  watch: {
+    $route({ name }) {
+      this.isShowPlan = false
+      this.isShowPerformance = false
+      this.isShowSummary = false
+      this[
+        `isShow${name.toLowerCase().replace(/\b[a-z]/g, s => s.toUpperCase())}`
+      ] = true
+    }
+  },
   methods: {
-    // ...mapActions({
-    //   toggleLesson: 'lesson/teacher/toggleLesson',
-    //   togglePerformance: 'lesson/teacher/togglePerformance',
-    //   toggleSummary: 'lesson/teacher/toggleSummary'
-    // }),
     handleChangeView(name) {
       if (this.reset) return
+
       if (!this.isClassIsOver && name === 'summary') return
       if (!this.isBeInClass && name === 'performance') return
       'plan' === name && this.$router.push({ name })
       this.isBeInClass && 'performance' === name && this.$router.push({ name })
-      this.isClassIsOver && 'summary' === name && this.$router.push({ name })
+      this.isClassIsOver &&
+        'summary' === name &&
+        this.$router.push({ name, params: { classId: this.classId } })
     }
   }
 }
