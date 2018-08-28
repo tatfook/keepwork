@@ -34,8 +34,9 @@ export default {
 
 <style lang="scss">
 .lesson-plan {
-  max-width: 1149px;
+  max-width: 1229px;
   padding: 0 15px;
+  margin: 0 auto;
 }
 </style>
 
