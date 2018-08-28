@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-wrap">
-    <LessonStudentStatus v-if="isBeInClassroom" />
-    <LessonHeader :data="lessonHeaderData" />
+    <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
+    <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-show="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
   </div>
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      lessonId: ''
+      isCurrentClassroom: false
     }
   },
   created() {
@@ -36,16 +36,21 @@ export default {
     next()
   },
   async mounted() {
+    const { packageId, lessonId } = this.$route.params
     await this.resumeTheClass()
     // this.copyProhibited()
-    this.lessonId = this.$route.params.lessonId || 1
-    await this.getLessonContent({ lessonId: this.lessonId })
-    console.log(this.enterClassInfo)
+    await this.getLessonContent({ lessonId })
+    if (this.isBeInClassroom) {
+      const { packageId: _packageId, lesson: _lessonId } = this.enterClassInfo
+      this.isCurrentClassroom = packageId === _packageId && lessonId === _lessonId
+      this.isCurrentClassroom && (await this.uploadLearnRecords())
+    }
   },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/student/getLessonContent',
-      resumeTheClass: 'lesson/student/resumeTheClass'
+      resumeTheClass: 'lesson/student/resumeTheClass',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')

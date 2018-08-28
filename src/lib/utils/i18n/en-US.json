@@ -917,6 +917,7 @@
     "right": "right",
     "wrong": "wrong",
     "clickToRefresh": "Click to refresh",
+    "state": "state",
     "name":"Name",
     "username": "UserName",
     "accuracyRate": "Accuracy Rate",

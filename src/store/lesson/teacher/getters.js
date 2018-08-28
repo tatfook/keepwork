@@ -10,7 +10,7 @@ const getters = {
   isClassIsOver: (state, { classroom }) => classroom.state === 2,
   classroomId: (state, { classroom }) => classroom.key || '',
   learnRecords: state => state.learnRecords || null,
-  userPackages: (state) => state.userPackages,
+  userPackages: state => state.userPackages,
   packageLessons: state => state.packageLessons,
   classId: (state, { classroom }) => classroom.id,
   classroomLearnRecord: status => status.classroomLearnRecord

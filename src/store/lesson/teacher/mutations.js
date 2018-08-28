@@ -45,6 +45,7 @@ const mutations = {
     Vue.set(state, 'lessonDetail', payload)
   },
   [BEGIN_THE_CLASS_SUCCESS](state, payload) {
+    console.warn(payload)
     Vue.set(state, 'classroom', payload)
   },
   [DISMISS_THE_CLASS_SUCCESS](state, payload) {

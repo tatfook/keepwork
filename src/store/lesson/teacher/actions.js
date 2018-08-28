@@ -23,8 +23,7 @@ const actions = {
   toggleHint({ commit }) {
     commit(TOGGLE_HINT)
   },
-  async getLessonContent(context, lessonId) {
-    const { commit } = context
+  async getLessonContent({ commit }, lessonId) {
     let res = await lesson.lessons.lessonContent({
       lessonId
     })
@@ -80,7 +79,10 @@ const actions = {
     await lesson.classrooms
       .currentClass()
       .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
-      .catch(e => console.warn("can't find the classroom", e))
+      .catch(e => {
+        console.error("can't find the classroom", e)
+        commit(LEAVE_THE_CLASSROOM)
+      })
   },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
