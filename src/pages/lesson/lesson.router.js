@@ -16,7 +16,8 @@ const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
-const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
+const PackageManager = () =>
+  import('@/components/lesson/teacher/PackageManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
@@ -27,6 +28,9 @@ const LessonStudentRecord = () =>
   import('@/components/lesson/teacher/LessonStudentRecord')
 const LessonSummary = () =>
   import('@/components/lesson/teacher/LessonTeacherSummary')
+const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
+const LessonPerformance = () =>
+  import('@/components/lesson/teacher/LessonStudentPerformance')
 
 Vue.use(Router)
 
@@ -97,7 +101,29 @@ export default new Router({
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonTeacher',
-          component: LessonTeacher
+          component: LessonTeacher,
+          children: [
+            {
+              path: '/',
+              name: 'LessonTeacherPlan',
+              component: LessonPlan
+            },
+            {
+              path: 'plan',
+              name: 'plan',
+              component: LessonPlan
+            },
+            {
+              path: 'performance',
+              name: 'performance',
+              component: LessonPerformance
+            },
+            {
+              path: 'summary',
+              name: 'summary',
+              component: LessonSummary
+            }
+          ]
         },
         {
           path: 'student/:username/record',

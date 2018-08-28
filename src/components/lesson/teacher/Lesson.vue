@@ -1,10 +1,11 @@
 <template>
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
-    <lesson-hint-toggle v-show="isShowLesson" />
+    <router-view></router-view>
+    <!-- <lesson-hint-toggle v-show="isShowLesson" />
     <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
     <lesson-performance v-show="isShowPerformance" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" />
-    <lesson-summary v-if="isShowSummary" />
+    <lesson-summary v-if="isShowSummary" /> -->
   </div>
 </template>
 
@@ -30,14 +31,17 @@ export default {
     }
   },
   async mounted() {
-    const { packageId, lessonId } = this.$route.params
+    const { name, params: { packageId, lessonId } } = this.$route
     await this.getCurrentClass()
     await this.getLessonContent(lessonId)
+    if (name === 'summary' || (name === 'performance' && !this.isBeInClass)) {
+      this.$router.push({ name: 'plan' })
+    }
     if (!this.isInCurrentClass) {
       const h = this.$createElement
       this.$notify({
         title: '你还在授课中',
-        message: h('span', {style: 'curosr: pointer'}, '点击返回课堂'),
+        message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
         type: 'warning',
         position: 'top-left',
         duration: 0,
@@ -100,22 +104,14 @@ export default {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     }
   },
-  beforeRouteLeave(to, from, next) {
-    // if (this.isBeInClass && !this.isClassIsOver) {
-    //   return this.$message.error('你还在上课呢')
-    // }
-    next()
-  },
-  beforeRouteEnter(to, from, next) {
-    console.log('Enter')
-    console.log(to)
-    next()
-  },
-  beforeRouteUpdate (to, from, next) {
-    console.log('update')
-    console.log(to)
-    const { packageId, lessonId } = to
-
+  beforeRouteUpdate(to, from, next) {
+    const { name } = to
+    if (name === 'summary' && !this.isClassIsOver) {
+      return this.$router.push({ name: 'plan' })
+    }
+    if (name === 'performance' && !this.isBeInClass) {
+      return this.$router.push({ name: 'plan' })
+    }
     next()
   }
 }
