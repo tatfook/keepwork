@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'PackageCatalogue',
@@ -42,6 +43,12 @@ export default {
     actorType: String
   },
   computed: {
+    ...mapGetters({
+      enterClassInfo: 'lesson/student/enterClassInfo'
+    }),
+    isInClassroom() {
+      return this.enterClassInfo.state !== 2
+    },
     lessonsList() {
       let lessons = _.get(this.packageDetail, 'lessons', [])
       _.map(this.lessonFinishedList, finishedLessonId => {
@@ -87,6 +94,11 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
+      if (this.isInClassroom) {
+        const { name } = this.$route
+        if (name === 'StudentPackage')
+          return this.$message.error('你正在上课中')
+      }
       if (this.packageDetail.isSubscribe) {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id

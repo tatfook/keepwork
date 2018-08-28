@@ -79,7 +79,6 @@ const actions = {
         let _classroom = _.clone(classroom)
         _classroom['id'] = classroom.learnRecordId
         _classroom['classroomId'] = classroom.id
-        console.warn(_classroom)
         commit(RESUME_CLASSROOM, _classroom)
       })
       .catch(e => console.error(e))
@@ -95,7 +94,6 @@ const actions = {
     const {
       getters: { classId, learnRecords }
     } = context
-    console.log('------------>')
     console.warn(learnRecords)
     await lesson.classrooms.uploadLearnRecords({
       classId,
