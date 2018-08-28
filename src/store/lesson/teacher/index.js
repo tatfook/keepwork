@@ -10,6 +10,7 @@ const state = () => ({
   classroom: {},
   lessonDetail: {},
   userPackages: [],
+  userLessons: [],
   packageLessons: {},
   lessonContent: {},
   classroomLearnRecord: []

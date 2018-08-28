@@ -2,7 +2,7 @@
   <div class="package-manager">
     <div class="package-manager-overview">
       <div class="package-manager-total">{{$t('lesson.packCount')}}: {{lessonUserPackages.length}}</div>
-      <el-button type="primary" class="package-manager-new-button">
+      <el-button type="primary" class="package-manager-new-button" @click="toNewPackagePage">
         <i class="iconfont icon-add"></i>{{$t('lesson.newPackage')}}
       </el-button>
     </div>
@@ -336,6 +336,9 @@ export default {
       }
       this.isInfoDialogVisible = true
       this.isTableLoading = false
+    },
+    toNewPackagePage() {
+      this.$router.push({ path: '/teacher/newPackage' })
     },
     handleClose(continueFnNameAfterEnsure) {
       this.isInfoDialogVisible = false
