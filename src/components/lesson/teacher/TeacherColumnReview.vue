@@ -13,7 +13,7 @@
           <span class="red">{{mins}}</span> mins</div>
       </div>
 
-      <p class="review-list-sort"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</p>
+      <p class="review-list-sort"><span class="text" @click="sequence"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</span></p>
 
       <div class="review-list-package">
         <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
@@ -56,7 +56,8 @@ export default {
     return {
       loading: true,
       noPackages: false,
-      teachList: []
+      teachList: [],
+      positiveSequence: true
     }
   },
   async mounted() {
@@ -80,7 +81,10 @@ export default {
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
-      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+      return this.positiveSequence ? (obj1.updatedAt >= obj2.updatedAt ? -1 : 1) : (obj1.updatedAt <= obj2.updatedAt ? -1 : 1)
+    },
+    sequence(){
+      this.positiveSequence = !this.positiveSequence
     },
     viewSummary(lessonPackage){
      this.$router.push({
@@ -144,8 +148,11 @@ export default {
     }
     &-sort {
       margin-top: 50px;
+      .text{
+      cursor: pointer;
       .sort-img {
         margin: 0 10px 0 18px;
+      }
       }
     }
     &-package {
