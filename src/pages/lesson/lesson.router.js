@@ -119,7 +119,7 @@ export default new Router({
               component: LessonPerformance
             },
             {
-              path: 'summary/:classId',
+              path: 'summary/:classId/:lessonId',
               name: 'summary',
               component: LessonSummary
             }
