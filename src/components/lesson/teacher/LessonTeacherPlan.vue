@@ -8,10 +8,9 @@
 <script>
 import LessonHintToggle from './LessonHintToggle'
 import LessonWrap from '../common/LessonWrap'
-// import quiz from
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'LessonTeacherQuiz',
+  name: 'LessonTeacherPlan',
   components: {
     LessonHintToggle,
     LessonWrap
