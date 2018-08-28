@@ -27,7 +27,7 @@ export default {
 
 <style lang="scss">
 .hint-container {
-  max-width: 1080px;
+  max-width: 1149px;
   min-height: 100px;
   padding: 20px;
   margin: 0 auto;

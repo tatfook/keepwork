@@ -38,7 +38,7 @@ export default {
       this.$router.push({ name: 'plan' })
     }
     this.isInCurrentClass
-      ? this.intervalUpdateLearnRecord()
+      ? this.intervalUpdateLearnRecords()
       : this.notifyBackRoom()
   },
   async destroyed() {
@@ -52,7 +52,7 @@ export default {
       updateLearnRecords: 'lesson/teacher/updateLearnRecords',
       leaveTheClassroom: 'lesson/teacher/leaveTheClassroom'
     }),
-    async intervalUpdateLearnRecord(delay = 3000) {
+    async intervalUpdateLearnRecords(delay = 3000) {
       await this.updateLearnRecords()
       clearTimeout(this._interval)
       this._interval = setTimeout(

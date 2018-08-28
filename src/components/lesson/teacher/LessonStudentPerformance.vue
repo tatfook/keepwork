@@ -160,7 +160,7 @@ export default {
 $green: #27ce2f;
 $red: #f53838;
 .lesson-student-performance-wrap {
-  max-width: 1080px;
+  max-width: 1149px;
   background: white;
   margin: 0 auto;
   font-weight: bold;
