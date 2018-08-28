@@ -38,11 +38,15 @@ export default {
   computed: {
     ...mapGetters({
       isBeInClass: 'lesson/teacher/isBeInClass',
-      isClassIsOver: 'lesson/teacher/isClassIsOver'
+      isClassIsOver: 'lesson/teacher/isClassIsOver',
+      classId: 'lesson/teacher/classId'
     })
   },
   watch: {
     $route({ name }) {
+      this.isShowPlan = false
+      this.isShowPerformance = false
+      this.isShowSummary = false
       this[
         `isShow${name.toLowerCase().replace(/\b[a-z]/g, s => s.toUpperCase())}`
       ] = true
@@ -51,14 +55,14 @@ export default {
   methods: {
     handleChangeView(name) {
       if (this.reset) return
-      this.isShowPlan = false
-      this.isShowPerformance = false
-      this.isShowSummary = false
+
       if (!this.isClassIsOver && name === 'summary') return
       if (!this.isBeInClass && name === 'performance') return
       'plan' === name && this.$router.push({ name })
       this.isBeInClass && 'performance' === name && this.$router.push({ name })
-      this.isClassIsOver && 'summary' === name && this.$router.push({ name })
+      this.isClassIsOver &&
+        'summary' === name &&
+        this.$router.push({ name, params: { classId: this.classId } })
     }
   }
 }
