@@ -16,7 +16,7 @@
         <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill.skillName}}</li>
           </ul>
         </div>
       </div>
@@ -266,6 +266,7 @@ export default {
     },
     getLessonSkill(lessonId){
       lesson.lessons.getSkills({lessonId}).then(res => {
+        console.log('skill',res)
         this.skillsList = res
       }).catch( err => {console.log(err)})
     },
@@ -365,16 +366,20 @@ export default {
       color: #111111;
       font-weight: bold;
     }
-    .skill {
-      display: inline-block;
-    }
     .skillpoints {
       display: flex;
-      .points-list {
-        margin: 0;
-        list-style: none;
-        li {
-          margin: 5px;
+      .skill {
+        width: 100px;
+        display: inline-block;
+      }
+      .points{
+        flex: 1;
+        .points-list {
+          margin: 0;
+          list-style: none;
+          li {
+            margin: 5px;
+          }
         }
       }
     }
