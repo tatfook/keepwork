@@ -362,7 +362,7 @@ export default {
 </script>
 <style lang="scss">
 .teacher-summary {
-  width: 1069px;
+  width: 1149px;
   margin: 0 auto;
   padding: 0 40px 40px;
   background: #fff;

@@ -2,10 +2,6 @@
   <div class="lesson-wrap">
     <lesson-header :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
     <router-view></router-view>
-    <!-- <lesson-hint-toggle v-show="isShowLesson" />
-    <lesson-wrap v-show="isShowLesson" v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" />
-    <lesson-performance v-show="isShowPerformance" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" />
-    <lesson-summary v-if="isShowSummary" /> -->
   </div>
 </template>
 
@@ -34,21 +30,16 @@ export default {
     const { name, params: { packageId, lessonId } } = this.$route
     await this.getCurrentClass()
     await this.getLessonContent(lessonId)
-    if (name === 'summary' || (name === 'performance' && !this.isBeInClass)) {
+    if (
+      name === 'summary' ||
+      (name === 'performance' && !this.isBeInClass) ||
+      !this.isInCurrentClass
+    ) {
       this.$router.push({ name: 'plan' })
     }
-    if (!this.isInCurrentClass) {
-      const h = this.$createElement
-      this.$notify({
-        title: '你还在授课中',
-        message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
-        type: 'warning',
-        position: 'top-left',
-        duration: 0,
-        showClose: false,
-        onClick: this.backToClassroom
-      })
-    }
+    this.isInCurrentClass
+      ? this.intervalUpdateLearnRecords()
+      : this.notifyBackRoom()
   },
   async destroyed() {
     this.clearUpdateLearnRecords()
@@ -76,6 +67,18 @@ export default {
       const { packageId, lessonId } = this.classroom
       this.$router.push(`/teacher/package/${packageId}/lesson/${lessonId}`)
       this.$router.go(0)
+    },
+    notifyBackRoom() {
+      const h = this.$createElement
+      this.$notify({
+        title: '你还在授课中',
+        message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
+        type: 'warning',
+        position: 'top-left',
+        duration: 0,
+        showClose: false,
+        onClick: this.backToClassroom
+      })
     }
   },
   computed: {
@@ -104,12 +107,12 @@ export default {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     }
   },
-  beforeRouteUpdate(to, from, next) {
-    const { name } = to
+  beforeRouteUpdate({ name }, from, next) {
     if (name === 'summary' && !this.isClassIsOver) {
       return this.$router.push({ name: 'plan' })
     }
     if (name === 'performance' && !this.isBeInClass) {
+      this.intervalUpdateLearnRecords()
       return this.$router.push({ name: 'plan' })
     }
     next()

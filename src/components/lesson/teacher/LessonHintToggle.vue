@@ -35,7 +35,7 @@ export default {
 
 <style lang="scss">
 .lesson-hint-toggle {
-  max-width: 1080px;
+  max-width: 1149px;
   margin: 0 auto;
   display: flex;
   height: 50px;

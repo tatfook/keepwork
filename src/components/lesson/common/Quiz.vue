@@ -198,7 +198,7 @@ export default {
   border: 1px solid #fff;
   color: #4c4c4c;
   background: white;
-  max-width: 1080px;
+  max-width: 1149px;
   margin: 0 auto;
   &.isPreview {
     .el-radio__input,
