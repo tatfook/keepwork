@@ -120,18 +120,8 @@ export default {
       totalStudent: 0
     }
   },
-  // props: {
-  //   classData: {
-  //     type: Object,
-  //     default() {
-  //       return {}
-  //     }
-  //   }
-  // },
   async mounted() {
-    console.warn(this.$route.params)
-    this.classid = this.$route.params.classId
-    await this.getClassLearnRecords({ id: this.classid })
+    await this.getClassLearnRecords({ id: this.$route.params.classId })
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
       return
@@ -165,7 +155,6 @@ export default {
           userId
         })
       )
-      console.log('currentrecord', currentRecord)
       return _.map(
         currentRecord,
         ({
@@ -299,7 +288,6 @@ export default {
         path: `/teacher/student/${student.userId}/classId/${
           this.classid
         }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
-        // query: { student }
       })
     },
     singleStudentRightRate(quiz = []) {
@@ -359,7 +347,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
-      // console.log('multipleSelection', this.multipleSelection)
     }
   },
   filters: {
@@ -407,7 +394,7 @@ export default {
           margin: 0;
           list-style: none;
           li {
-            margin: 5px;
+            margin-bottom: 5px;
           }
         }
       }
