@@ -92,7 +92,14 @@
     "saveFail": "Save Fail",
     "success": "Success",
     "failure": "Failure",
-    "errorInfoTitle": "Error"
+    "errorInfoTitle": "Error",
+    "weekday0": "Sunday",
+    "weekday1": "Monday",
+    "weekday2": "Tuesday",
+    "weekday3": "Wednesday",
+    "weekday4": "Thursday",
+    "weekday5": "Friday",
+    "weekday6": "Saturday"
   },
   "editor": {
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -936,9 +943,10 @@
     "emptyNumber": "Empty",
     "confirmFullAll": " you sure you want to give full marks to all students?",
     "confirmFullSelected": "Are you sure you want to give full marks to selected students?",
-    "viewDetail": "View Detail",
+    "viewDetail": "View Details",
     "SelfStudyIsCompleted": "Congratulations. Learning is finished. Here is the summary.",
     "StudiedForManyDays": "This is my {howManyDays} day of learning {lessonTitle} on Keepwork.",
-    "todayRecords": "Today, I read {readCodeLinesCount} lines of code, wrote {wroteCodeLinesCount} lines of code, and learned {commandLines} computer command."
+    "todayRecords": "Today, I read {readCodeLinesCount} lines of code, wrote {wroteCodeLinesCount} lines of code, and learned {commandLines} computer command.",
+    "accuracyAnalysis": "Accuracy Analysis"
   }
 }
