@@ -42,7 +42,9 @@ export const users = {
   toBeTeacher: ({ userId, key, config }) =>
     post(`users/${userId}/teacher`, { key }, config),
   getTeachingRecords: async () => get(`packages`),
-  setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname })
+  setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
+  uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
+  createLearnRecords: payload => post(`learnRecords`, payload)
 }
 
 export const classrooms = {

@@ -35,15 +35,19 @@ export default {
       isRefresh: false
     }
   },
-  created() {},
+  // created() {},
   beforeRouteLeave(to, from, next) {
+    if (!this.isBeInClassroom) {
+      this.clearLearnRecordsId()
+      this.clearLessonData()
+    }
     next()
   },
-  async mounted() {
+  async created() {
     const { packageId, lessonId } = this.$route.params
-    await this.resumeTheClass()
+    this.isBeInClassroom && (await this.resumeTheClass())
     // this.copyProhibited()
-    // 不在课堂中直接返回
+    // 不在课堂中直接返
     if (!this.isBeInClassroom) {
       return await this.getLessonContent({ lessonId })
     }
@@ -57,7 +61,7 @@ export default {
     if (this.isCurrentClassroom) {
       await this.getLessonContent({ lessonId })
       await this.resumeQuiz({ id })
-      // await this.uploadLearnRecords()
+      await this.uploadLearnRecords()
     }
   },
   methods: {
@@ -65,7 +69,9 @@ export default {
       getLessonContent: 'lesson/student/getLessonContent',
       resumeTheClass: 'lesson/student/resumeTheClass',
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
-      resumeQuiz: 'lesson/student/resumeQuiz'
+      resumeQuiz: 'lesson/student/resumeQuiz',
+      clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
+      clearLessonData: 'lesson/student/clearLessonData'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')

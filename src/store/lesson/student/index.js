@@ -4,12 +4,12 @@ import mutations from './mutations'
 
 const state = () => ({
   packagesDetail: {},
-  lessonData: {},
   lessonDetail: {},
   lessonQuiz: {},
   isShowStudentSummary: false,
   enterClassInfo: {},
-  enterClassId: ''
+  enterClassId: '',
+  learnRecordsId: ''
 })
 
 export default {
