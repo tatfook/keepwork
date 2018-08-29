@@ -39,9 +39,15 @@
           </el-row>
         </div>
         <div class="total-packages">{{$t('lesson.include')}}:
-          <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
+          <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}
+        </div>
         <div class="packages" v-loading='loading'>
-          <el-row>
+          <div class="packages-nothing" v-if="!sortedSubscribesList.length && !loading">
+            <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
+            <p class="packages-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
+            <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
+          </div>
+          <el-row v-else>
             <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
               <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
             </el-col>
@@ -137,6 +143,11 @@ export default {
             type: 'error'
           })
         })
+    },
+    gotoLessonsCenter(){
+      this.$router.push({
+        path: `/student/center`
+      })
     }
   },
   components: {
@@ -239,6 +250,21 @@ export default {
       }
       .packages {
         margin: 44px 0 0;
+        &-nothing {
+          margin-top: 60px;
+          width: 100%;
+          height: 500px;
+          background: #fff;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          &-hint {
+            font-size: 20px;
+            line-height: 30px;
+            color: #111111;
+          }
+        }
       }
     }
   }

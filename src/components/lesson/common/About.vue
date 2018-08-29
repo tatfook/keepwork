@@ -182,8 +182,10 @@
 import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import { lesson } from '@/api'
-import img1 from '@/assets/lessonImg/aboutPageImg/top_banner.png'
+import img1 from '@/assets/lessonImg/aboutPageImg/top_banner1.png'
 import img2 from '@/assets/lessonImg/aboutPageImg/top_banner2.png'
+import img3 from '@/assets/lessonImg/aboutPageImg/top_banner3.png'
+import img4 from '@/assets/lessonImg/aboutPageImg/top_banner4.png'
 
 const TeacherPageReg = /^\/teacher/
 const StudentPageReg = /^\/student/
@@ -192,7 +194,8 @@ export default {
   data() {
     return {
       isEn: locale === 'en-US',
-      imgUrls: [{ url: img1 }, { url: img2 }],
+      imgUrls1: [{ url: img1 }, { url: img2 }],
+      imgUrls2: [{ url: img3 }, { url: img4 }],
       imgIndex: 0,
       hotsPackages: [],
       animation: ''
@@ -202,6 +205,9 @@ export default {
     this.hotsPackages = await lesson.packages.getHotsPackages()
   },
   computed: {
+    imgUrls(){
+      return this.isEn ? this.imgUrls1 : this.imgUrls2
+    },
     nowFullPath() {
       return this.$route.fullPath
     },
