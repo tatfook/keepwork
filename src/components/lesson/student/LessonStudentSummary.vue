@@ -3,27 +3,9 @@
     <div class="lesson-summary-wrap">
       <div class="summary-title">{{title}}</div>
       <div class="summary-body">
-        <div class="word first" v-if="isEn">
-          This is my
-          <span class="highlight">1st</span> day of learning
-          <span class="highlight">{{lessonTitle}}</span> on Keepwork.
+        <div class="word first" v-html="$t('lesson.StudiedForManyDays', {howManyDays: `<span class='highlight'>1st</span>`,lessonTitle: `<span class='highlight'>${lessonTitle}</span>`})">
         </div>
-        <div class="word first" v-else>
-          这是我
-          <span class="highlight">第1天</span>在一网乾坤上学习
-          <span class="highlight">{{lessonTitle}}。</span>
-        </div>
-        <div class="word second" v-if="isEn">
-          Today, I read
-          <span class="highlight">{{lessonCodeReadLine}}</span> lines of code, wrote
-          <span class="highlight">{{lessonWriteLine}}</span> lines of code, and learned
-          <span class="highlight">{{lessonCommands}}</span> computer command.
-        </div>
-        <div class="word second" v-else>
-          今天，我读了
-          <span class="highlight">{{lessonCodeReadLine}}</span> 行代码，写了
-          <span class="highlight">{{lessonWriteLine}}</span> 行代码，学习了
-          <span class="highlight">{{lessonCommands}}</span> 个计算机指令。
+        <div class="word second" v-html="$t('lesson.todayRecords', {readCodeLinesCount:`<span class='highlight'>${lessonCodeReadLine}</span>`, wroteCodeLinesCount: `<span class='highlight'>${lessonWriteLine}</span>`, commandLines: `<span class='highlight'>${lessonCommands}</span>`})">
         </div>
       </div>
       <div class="summary-share" @click="showSharePanel">
@@ -60,7 +42,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { locale } from '@/lib/utils/i18n'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 export default {
   name: 'LessonStudentSummary',
@@ -70,8 +51,7 @@ export default {
   data() {
     return {
       isShowSharePanel: false,
-      title: this.$t('lesson.SelfStudyIsCompleted'),
-      isEn: locale === 'en-US'
+      title: this.$t('lesson.SelfStudyIsCompleted')
     }
   },
   computed: {

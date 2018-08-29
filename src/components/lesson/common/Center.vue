@@ -8,11 +8,11 @@
           <div class="subject-desc">
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
             <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
-            <span>{{$t('lesson.include')}}: {{coursePackage.cost}} {{$t('lesson.lessonsCount')}}</span>
+            <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
-              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>1000</span>` })"></div>
+              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
               <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
                 <span class="red">￥{{coursePackage.rmb}}</span>
               </div>

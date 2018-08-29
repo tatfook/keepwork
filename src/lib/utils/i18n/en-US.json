@@ -937,6 +937,8 @@
     "confirmFullAll": " you sure you want to give full marks to all students?",
     "confirmFullSelected": "Are you sure you want to give full marks to selected students?",
     "viewDetail": "View Detail",
-    "SelfStudyIsCompleted": "Congratulations. Learning is finished. Here is the summary."
+    "SelfStudyIsCompleted": "Congratulations. Learning is finished. Here is the summary.",
+    "StudiedForManyDays": "This is my {howManyDays} day of learning {lessonTitle} on Keepwork.",
+    "todayRecords": "Today, I read {readCodeLinesCount} lines of code, wrote {wroteCodeLinesCount} lines of code, and learned {commandLines} computer command."
   }
 }
