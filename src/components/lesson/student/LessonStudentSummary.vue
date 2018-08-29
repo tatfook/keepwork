@@ -3,16 +3,9 @@
     <div class="lesson-summary-wrap">
       <div class="summary-title">{{title}}</div>
       <div class="summary-body">
-        <div class="word first">
-          This is my
-          <span class="highlight">1st</span> day of learning
-          <span class="highlight">{{lessonTitle}}</span> on Keepwork.
+        <div class="word first" v-html="$t('lesson.StudiedForManyDays', {howManyDays: `<span class='highlight'>1st</span>`,lessonTitle: `<span class='highlight'>${lessonTitle}</span>`})">
         </div>
-        <div class="word second">
-          Today, I read
-          <span class="highlight">{{lessonCodeReadLine}}</span> lines of code, wrote
-          <span class="highlight">{{lessonWriteLine}}</span> lines of code, and learned
-          <span class="highlight">{{lessonCommands}}</span> computer command.
+        <div class="word second" v-html="$t('lesson.todayRecords', {readCodeLinesCount:`<span class='highlight'>${lessonCodeReadLine}</span>`, wroteCodeLinesCount: `<span class='highlight'>${lessonWriteLine}</span>`, commandLines: `<span class='highlight'>${lessonCommands}</span>`})">
         </div>
       </div>
       <div class="summary-share" @click="showSharePanel">
@@ -58,7 +51,7 @@ export default {
   data() {
     return {
       isShowSharePanel: false,
-      title: 'Congratulations. Learning is finished. Here is the summary.'
+      title: this.$t('lesson.SelfStudyIsCompleted')
     }
   },
   computed: {
