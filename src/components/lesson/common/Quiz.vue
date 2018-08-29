@@ -86,7 +86,9 @@ export default {
   methods: {
     ...mapActions({
       doQuiz: 'lesson/student/doQuiz',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      createLearnRecords: 'lesson/student/createLearnRecords',
+      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords'
     }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -134,7 +136,21 @@ export default {
     },
     async submit(result, answer) {
       this.doQuiz({ key: this.key, result, answer })
-      await this.uploadLearnRecords()
+      if (this.isBeInClassroom) {
+        return await this.uploadLearnRecords()
+      }
+      const { packageId, lessonId } = this.$route.params
+      // 首次需要先创建学习记录
+      !this.learnRecordsId &&
+        (await this.createLearnRecords({
+          packageId: Number(packageId),
+          lessonId: Number(lessonId)
+        }))
+      await this.uploadSelfLearnRecords({
+        packageId: Number(packageId),
+        lessonId: Number(lessonId),
+        state: this.lessonIsDone ? 1 : 0
+      })
     }
   },
   watch: {
@@ -153,7 +169,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'lesson/student/lessonDetail'
+      lessonDetail: 'lesson/student/lessonDetail',
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      learnRecordsId: 'lesson/student/learnRecordsId',
+      lessonIsDone: 'lesson/student/lessonIsDone'
     }),
     modList() {
       return this.lessonDetail.modList
@@ -163,12 +182,6 @@ export default {
     },
     key() {
       return _.get(this.data, 'data.quiz.data[0].id')
-    },
-    isAnswered() {
-      return !!_.get(this.data, 'state.answer', '')
-    },
-    state() {
-      return _.get(this.data, 'state')
     },
     quizData() {
       return _.get(this.data, 'data.quiz.data[0]')

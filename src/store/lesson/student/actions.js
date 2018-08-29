@@ -13,7 +13,10 @@ let {
   RESUME_QUIZ,
   SET_ENTER_CLASS_ID,
   SWITCH_SUMMARY,
-  LEAVE_THE_CLASS
+  LEAVE_THE_CLASS,
+  CREATE_LEARN_RECORDS_SUCCESS,
+  CLEAR_LEARN_RECORDS_ID,
+  CLEAR_LESSON_DATA
 } = props
 
 const actions = {
@@ -39,7 +42,7 @@ const actions = {
       .filter(({ cmd }) => cmd === 'Quiz')
       .map(({ data: { quiz: { data } } }) => ({
         key: data[0].id,
-        data: [0],
+        data: data[0],
         result: null
       }))
     let _lesson = _.get(
@@ -57,6 +60,7 @@ const actions = {
       quiz,
       modList
     })
+    commit(CLEAR_LEARN_RECORDS_ID)
   },
   async subscribePackage({ context }, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({
@@ -108,7 +112,6 @@ const actions = {
           }
         }
       })
-      console.warn('lessonDetail--->', _lessonDetail)
       commit(RESUME_QUIZ, _lessonDetail)
     }
   },
@@ -120,22 +123,58 @@ const actions = {
     { key, result, answer }
   ) {
     let _lessonDetail = _.clone(lessonDetail)
-    console.warn('key', key)
-    console.warn('quiz', lessonDetail.quiz)
     let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
     _lessonDetail.quiz[index].result = result
     _lessonDetail.quiz[index].answer = answer
     commit(DO_QUIZ, _lessonDetail)
   },
+  async createLearnRecords(
+    {
+      commit,
+      getters: { learnRecords }
+    },
+    { packageId, lessonId, state = 0 }
+  ) {
+    let res = await lesson.users.createLearnRecords({
+      packageId,
+      lessonId,
+      state,
+      extra: learnRecords
+    }).catch(e => console.error(e))
+    if (res) {
+      commit(CREATE_LEARN_RECORDS_SUCCESS, res.id)
+    }
+  },
+  async uploadSelfLearnRecords(
+    {
+      getters: { learnRecordsId, learnRecords }
+    },
+    { packageId, lessonId, state = 0 }
+  ) {
+    learnRecordsId &&
+      (await lesson.users
+        .uploadSelfLearnRecords(learnRecordsId, {
+          packageId,
+          lessonId,
+          state,
+          extra: learnRecords
+        })
+        .catch(e => console.error(e)))
+  },
   async uploadLearnRecords(context) {
     const {
       getters: { classId, learnRecords }
     } = context
-    console.warn(learnRecords)
     await lesson.classrooms.uploadLearnRecords({
       classId,
       learnRecords
     })
+  },
+  async clearLearnRecordsId({ commit }) {
+    commit(CLEAR_LEARN_RECORDS_ID)
+  },
+  async clearLessonData({ commit }) {
+    commit(CLEAR_LESSON_DATA)
   },
   async switchSummary({ commit }, flag) {
     commit(SWITCH_SUMMARY, flag)

@@ -11,6 +11,9 @@ const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
 const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 const RESUME_CLASSROOM = 'RESUME_CLASSROOM'
 const RESUME_QUIZ = 'RESUME_QUIZ'
+const CREATE_LEARN_RECORDS_SUCCESS = 'CREATE_LEARN_RECORDS_SUCCESS'
+const CLEAR_LEARN_RECORDS_ID = 'CLEAR_LEARN_RECORDS_ID'
+const CLEAR_LESSON_DATA = 'CLEAR_LESSON_DATA'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
@@ -23,7 +26,10 @@ export const props = {
   DO_QUIZ,
   SWITCH_SUMMARY,
   LEAVE_THE_CLASS,
-  RESUME_QUIZ
+  RESUME_QUIZ,
+  CREATE_LEARN_RECORDS_SUCCESS,
+  CLEAR_LEARN_RECORDS_ID,
+  CLEAR_LESSON_DATA
 }
 
 const mutations = {
@@ -62,6 +68,15 @@ const mutations = {
   },
   [LEAVE_THE_CLASS](state) {
     Vue.set(state, 'enterClassInfo', {})
+  },
+  [CREATE_LEARN_RECORDS_SUCCESS](state, id) {
+    Vue.set(state, 'learnRecordsId', id)
+  },
+  [CLEAR_LEARN_RECORDS_ID](state) {
+    Vue.set(state, 'learnRecordsId', '')
+  },
+  [CLEAR_LESSON_DATA](state) {
+    Vue.set(state, 'lessonDetail', '')
   }
 }
 
