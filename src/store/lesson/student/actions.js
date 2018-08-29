@@ -10,6 +10,7 @@ let {
   RESUME_CLASSROOM,
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
+  RESUME_QUIZ,
   SET_ENTER_CLASS_ID,
   SWITCH_SUMMARY,
   LEAVE_THE_CLASS
@@ -36,9 +37,9 @@ const actions = {
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
-      .map(({ key, data }) => ({
-        key: key,
-        data: data.quiz.data[0],
+      .map(({ data: { quiz: { data } } }) => ({
+        key: data[0].id,
+        data: [0],
         result: null
       }))
     let _lesson = _.get(
@@ -72,23 +73,59 @@ const actions = {
   },
   async resumeTheClass({ commit, dispatch }) {
     await dispatch('lesson/getUserDetail', null, { root: true })
-    // TODO: 恢复作答记录 learnRecords/:id
-    await lesson.classrooms
+    let classroom = await lesson.classrooms
       .currentClass()
-      .then(classroom => {
-        let _classroom = _.clone(classroom)
-        _classroom['id'] = classroom.learnRecordId
-        _classroom['classroomId'] = classroom.id
-        commit(RESUME_CLASSROOM, _classroom)
-      })
       .catch(e => console.error(e))
+    if (!classroom) {
+      return console.error('当前没有上课')
+    }
+    const { learnRecordId, id } = classroom
+    let _classroom = _.clone(classroom)
+    _classroom['id'] = learnRecordId
+    _classroom['classroomId'] = id
+    commit(RESUME_CLASSROOM, _classroom)
   },
-  async doQuiz({ commit }, { key, result, answer }) {
-    commit(DO_QUIZ, {
-      key,
-      result,
-      answer
-    })
+  async resumeQuiz(
+    {
+      commit,
+      getters: { lessonQuiz, lessonDetail }
+    },
+    { id }
+  ) {
+    let learnRecords = await lesson.classrooms
+      .learnRecordsById(id)
+      .catch(e => console.error(`can't find learnRecords`))
+    if (learnRecords && learnRecords.extra.quiz) {
+      let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
+      let _lessonDetail = _.clone(lessonDetail)
+      _lessonDetail.quiz = quiz
+      let filterQuiz = _.filter(quiz, ({ answer }) => answer)
+      _.forEach(_lessonDetail.modList, q => {
+        if (q.cmd === 'Quiz') {
+          let quiz = _.find(filterQuiz, o => o.key === q.data.quiz.data[0].id)
+          if (quiz) {
+            q.state = { result: quiz.result, answer: quiz.answer }
+          }
+        }
+      })
+      console.warn('lessonDetail--->', _lessonDetail)
+      commit(RESUME_QUIZ, _lessonDetail)
+    }
+  },
+  async doQuiz(
+    {
+      commit,
+      getters: { lessonDetail }
+    },
+    { key, result, answer }
+  ) {
+    let _lessonDetail = _.clone(lessonDetail)
+    console.warn('key', key)
+    console.warn('quiz', lessonDetail.quiz)
+    let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
+    _lessonDetail.quiz[index].result = result
+    _lessonDetail.quiz[index].answer = answer
+    commit(DO_QUIZ, _lessonDetail)
   },
   async uploadLearnRecords(context) {
     const {

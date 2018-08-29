@@ -43,20 +43,29 @@ export default {
     const { packageId, lessonId } = this.$route.params
     await this.resumeTheClass()
     // this.copyProhibited()
-    if (this.isBeInClassroom) {
-      console.log(this.isBeInClassroom)
-      const { packageId: _packageId, lessonId: _lessonId } = this.enterClassInfo
-      this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
-      if (!this.isCurrentClassroom) return
+    // 不在课堂中直接返回
+    if (!this.isBeInClassroom) {
+      return await this.getLessonContent({ lessonId })
     }
-    await this.getLessonContent({ lessonId })
-    this.isCurrentClassroom && (await this.uploadLearnRecords())
+    // 判断是否是进入同一个课程包和课程，这种情况只有用户手动输入路由并且刷新页面才会存在
+    const {
+      packageId: _packageId,
+      lessonId: _lessonId,
+      id
+    } = this.enterClassInfo
+    this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+    if (this.isCurrentClassroom) {
+      await this.getLessonContent({ lessonId })
+      await this.resumeQuiz({ id })
+      // await this.uploadLearnRecords()
+    }
   },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/student/getLessonContent',
       resumeTheClass: 'lesson/student/resumeTheClass',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      resumeQuiz: 'lesson/student/resumeQuiz'
     }),
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')

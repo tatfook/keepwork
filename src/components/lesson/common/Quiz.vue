@@ -59,7 +59,7 @@
 
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Quiz',
   props: {
@@ -137,9 +137,38 @@ export default {
       await this.uploadLearnRecords()
     }
   },
+  watch: {
+    quizzes(quizzes) {
+      let quiz = quizzes.find(
+        ({ data: { quiz: { data } } }) => data[0].id === this.key
+      )
+      if (quiz && quiz.state && quiz.state.answer) {
+        this.isDone = true
+        this.isError = !quiz.state.result
+        this.isRight = quiz.state.result
+        this.quizAnswer = quiz.state.answer
+        this.quizMutipleAnswer = quiz.state.answer
+      }
+    }
+  },
   computed: {
+    ...mapGetters({
+      lessonDetail: 'lesson/student/lessonDetail'
+    }),
+    modList() {
+      return this.lessonDetail.modList
+    },
+    quizzes() {
+      return this.modList.filter(item => item.cmd === 'Quiz')
+    },
     key() {
-      return this.data.key
+      return _.get(this.data, 'data.quiz.data[0].id')
+    },
+    isAnswered() {
+      return !!_.get(this.data, 'state.answer', '')
+    },
+    state() {
+      return _.get(this.data, 'state')
     },
     quizData() {
       return _.get(this.data, 'data.quiz.data[0]')

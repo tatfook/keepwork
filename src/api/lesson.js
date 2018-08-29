@@ -53,6 +53,7 @@ export const classrooms = {
   leave: () => post(`classrooms/quit`),
   getTeachingListing: async () => get(`classrooms`),
   currentClass: () => get(`classrooms/current`),
+  learnRecordsById: id => get(`learnRecords/${id}`),
   getClassroomById: id => get(`classrooms/${id}`),
   dismiss: ({ classId, config }) =>
     put(`classrooms/${classId}/dismiss`, null, config),
