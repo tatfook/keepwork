@@ -5,7 +5,7 @@
     </el-header>
     <el-main class="index-page-main">
       <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
-      <router-view/>
+      <router-view :pageLoading="pageLoading"/>
     </el-main>
     <el-aside></el-aside>
     <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
@@ -25,6 +25,11 @@ export default {
     CommonHeader,
     CommonFooter,
     ToolHeader
+  },
+  data() {
+    return {
+      pageLoading: false
+    }
   },
   watch: {
     $route: 'updateActivePage',
@@ -55,16 +60,16 @@ export default {
       return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : originPath
     },
     async updateActivePage() {
+      this.pageLoading = true
       let path = this.$router.currentRoute.path
-
-      let pathItemArr = _.without(_.split(path, '/'), '')
-      let isLackPagename = pathItemArr.length === 2
-      if (isLackPagename) {
-        path = await this.getPathWithPagename(path)
-        this.$router.replace({path: path})
-      }
-      await this.setActivePage({ path, editorMode: false })
       try {
+        let pathItemArr = _.without(_.split(path, '/'), '')
+        let isLackPagename = pathItemArr.length === 2
+        if (isLackPagename) {
+          path = await this.getPathWithPagename(path)
+          this.$router.replace({path: path})
+        }
+        await this.setActivePage({ path, editorMode: false })
         await this.userInitPageDetail({
           url: path,
           visitor: this.username || ''
@@ -72,6 +77,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.pageLoading = false
     }
   },
   computed: {

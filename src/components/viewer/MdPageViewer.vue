@@ -1,5 +1,5 @@
 <template>
-  <div class="md-page-viewer">
+  <div class="md-page-viewer" v-loading="pageLoading">
     <div v-if='sidebarModList' class="toggle-sidebar-main-button" :class="{'position-right': (showSidebarOrMain === 'sidebar')}" @click="toggleSidebarMainShow">
       <i class="iconfont icon-arrowsdownline"></i>
     </div>
@@ -36,12 +36,11 @@ export default {
     showPreviewClose: {
       type: Boolean,
       default: false
-    }
+    },
+    pageLoading: Boolean
   },
   data() {
     return {
-      mountedSecondsTimer: NaN,
-      mountedSeconds: 0,
       showSidebarOrMain: 'main',
       isLoginDialogShow: false
     }
@@ -52,14 +51,6 @@ export default {
     }).catch(e => console.error(e))
 
     this.isLoginDialogShow = !this.userIsLogined && this.isSitePrivate
-    this.mountedSecondsTimer = setInterval(() => {
-      this.mountedSeconds+=3
-      // stop update mountedSeconds for better performance
-      clearInterval(this.mountedSecondsTimer)
-    }, 3000)
-  },
-  unmounted() {
-    clearInterval(this.mountedSecondsTimer)
   },
   computed: {
     ...mapGetters({
@@ -86,10 +77,7 @@ export default {
       return this.siteVisibility === 'private'
     },
     show404() {
-      return !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined && this.mounted3SecondsAgo
-    },
-    mounted3SecondsAgo() {
-      return this.mountedSeconds >= 3
+      return !this.pageLoading && !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined
     },
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)
