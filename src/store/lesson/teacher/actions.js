@@ -123,8 +123,11 @@ const actions = {
   },
   async createNewPackage(context, { newPackageData }) {
     let { dispatch } = context
-    await lesson.packages.create({ newPackageData })
+    let newPackageDetail = await lesson.packages.create({ newPackageData }).catch((error) => {
+      return Promise.reject(error.response)
+    })
     await dispatch('getUserPackages', { useCache: false })
+    return newPackageDetail
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
@@ -133,7 +136,9 @@ const actions = {
   },
   async releasePackage(context, { packageDetail }) {
     let { dispatch } = context
-    await lesson.packages.release({ packageDetail })
+    await lesson.packages.release({ packageDetail }).catch((error) => {
+      return Promise.reject(error.response)
+    })
     await dispatch('getUserPackages', { useCache: false })
   },
   async deletePackage(context, { packageId }) {

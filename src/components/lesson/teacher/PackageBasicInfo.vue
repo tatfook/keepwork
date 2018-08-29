@@ -26,7 +26,7 @@
         <div class="package-basic-info-name-intro">
           <div class="package-basic-info-name">
             <label class="package-basic-info-label" for="nameInput">名称</label>
-            <el-input id="nameInput" v-model="newPackageDetail.packageName"></el-input>
+            <el-input id="nameInput" v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
           </div>
           <div class="package-basic-info-intro">
             <label class="package-basic-info-label" for="introInput">简介</label>
@@ -35,9 +35,13 @@
         </div>
         <div class="package-basic-info-price">
           <label class="package-basic-info-label" for="priceInput">价格</label>
-          <el-input id="priceInput" placeholder="请输入内容" v-model="newPackageDetail.rmb">
+          <div class="package-basic-info-price-input">
+            <span class="package-basic-info-price-prepend">￥</span>
+            <el-input-number v-model="newPackageDetail.rmb" :min="0" :controls='false'></el-input-number>
+          </div>
+          <!-- <el-input id="priceInput" placeholder="请输入内容" v-model="newPackageDetail.rmb">
             <template slot="prepend">￥</template>
-          </el-input>
+          </el-input> -->
         </div>
       </div>
     </div>
@@ -75,6 +79,10 @@ export default {
     ...mapActions({
       lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
+    trimPackageName() {
+      let oldPackageName = this.newPackageDetail.packageName
+      this.newPackageDetail.packageName = _.trim(oldPackageName)
+    },
     handleFitAgeTypeChange(value) {
       switch (value) {
         case 'all':
@@ -163,11 +171,30 @@ export default {
   &-price {
     width: 150px;
     margin-left: 30px;
-    .el-input-group__prepend {
-      padding: 0 12px;
+    &-input {
+      display: flex;
+    }
+    &-prepend {
+      line-height: 38px;
+      padding: 0;
+      width: 38px;
+      text-align: center;
+      flex-shrink: 0;
       color: #333;
       background-color: #eee;
-      border-color: #ccc;
+      border: 1px solid #ccc;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+    .el-input-number {
+      width: 100%;
+      .el-input__inner {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        text-align: left;
+        color: #999;
+      }
     }
   }
   .el-input__inner {

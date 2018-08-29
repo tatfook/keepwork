@@ -25,11 +25,12 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonsListDialog',
   props: {
+    selectedLessonIds: Array,
     isDialogShow: Boolean
   },
   async mounted() {
     await this.getUserLessons({})
-    this.lessonList = this.userLessons
+    this.lessonList = _.cloneDeep(this.userLessons)
   },
   data() {
     return {
@@ -59,11 +60,23 @@ export default {
     ...mapActions({
       getUserLessons: 'lesson/teacher/getUserLessons'
     }),
+    initLessonIsSelect(deletLessonIds) {
+      for (let i = 0; i < deletLessonIds.length; i++) {
+        let index = _.findIndex(this.lessonList, { id: deletLessonIds[i] })
+        index >= 0 && (this.lessonList[index].isSelect = false)
+      }
+    },
     handleClose() {
       this.$emit('close')
     },
     toAdd() {
       this.$emit('save', this.selectedLessons)
+    }
+  },
+  watch: {
+    selectedLessonIds(newVal, oldVal) {
+      let deletLessonIds = _.difference(oldVal, newVal)
+      this.initLessonIsSelect(deletLessonIds)
     }
   },
   filters: {

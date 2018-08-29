@@ -6,9 +6,9 @@
         <el-breadcrumb-item>新建课程包</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="new-package-header-operations">
-        <el-button round @click="cancelAddPackage">取消</el-button>
-        <el-button round @click="savePackage">保存</el-button>
-        <el-button round type="primary" @click="submitPackage">提交</el-button>
+        <el-button round @click="toPackageManagerPage">取消</el-button>
+        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">保存</el-button>
+        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">提交</el-button>
       </div>
     </div>
     <div class="new-package-tabs">
@@ -27,9 +27,14 @@ import CatalogueManager from './CatalogueManager'
 import { mapActions } from 'vuex'
 export default {
   name: 'NewPackage',
+  mounted() {
+    this.isMounted = true
+  },
   data() {
     return {
-      activeTab: 'catalogue' //basic or catalogue
+      isMounted: false,
+      newSavingPackageId: null,
+      activeTab: 'basic' //basic or catalogue
     }
   },
   computed: {
@@ -40,12 +45,7 @@ export default {
       return this.$refs.coverUrlComponent.newPackageCoverUrl
     },
     newPackageLessons() {
-      let lessons = this.$refs.lessonListComponent.catalogues
-      let lessonsId = []
-      _.forEach(lessons, lesson => {
-        lessonsId.push(lesson.id)
-      })
-      return lessonsId
+      return this.$refs.lessonListComponent.selectedLessonIds
     },
     newPackageData() {
       return _.assign(
@@ -55,10 +55,45 @@ export default {
         },
         { lessons: this.newPackageLessons }
       )
+    },
+    isPackageNameEmpty() {
+      if (!this.isMounted) {
+        return true
+      }
+      let packageName = this.newPackageData && this.newPackageData.packageName
+      return !packageName || packageName == ''
+    },
+    isPackageInfoComplete() {
+      if (!this.isMounted) {
+        return false
+      }
+      let {
+        subjectId,
+        minAge,
+        maxAge,
+        intro,
+        rmb,
+        extra,
+        lessons
+      } = this.newPackageData
+      if (
+        typeof subjectId !== 'number' ||
+        typeof minAge !== 'number' ||
+        typeof maxAge !== 'number' ||
+        typeof rmb !== 'number' ||
+        !intro ||
+        !extra.coverUrl ||
+        !lessons ||
+        lessons.length <= 0
+      ) {
+        return false
+      }
+      return true
     }
   },
   methods: {
     ...mapActions({
+      lessonAuditPackage: 'lesson/teacher/auditPackage',
       createNewPackage: 'lesson/teacher/createNewPackage'
     }),
     setActiveTab(type) {
@@ -67,18 +102,95 @@ export default {
       }
       this.activeTab = type
     },
-    cancelAddPackage() {
+    toPackageManagerPage() {
       this.$router.push('/teacher/packageManager')
     },
-    async savePackage() {
+    async savePackage({ isShowMessage = true }) {
+      if (this.isPackageNameEmpty) {
+        this.$message({
+          message: '填写名称后才能保存',
+          type: 'warning'
+        })
+        return
+      }
       let newPackageData = this.newPackageData
-      await this.createNewPackage({ newPackageData })
-      this.$message({
-        message: '保存成功',
-        type: 'success'
+      await this.createNewPackage({
+        newPackageData
       })
+        .then(newPackageDetail => {
+          this.newSavingPackageId = newPackageDetail.id
+          if (isShowMessage) {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            this.toPackageManagerPage()
+          }
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = '请先登录'
+              break
+            case 409:
+              errorMsg = '课程包名称已经存在'
+              break
+            default:
+              errorMsg = '保存失败，请稍后重试'
+              break
+          }
+          this.$message({
+            message: errorMsg,
+            type: 'error'
+          })
+          return Promise.reject(new Error('Create new package failed'))
+        })
     },
-    submitPackage() {}
+    async submitToAudit() {
+      await this.lessonAuditPackage({
+        packageId: this.newSavingPackageId,
+        state: 1
+      })
+        .then(result => {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          })
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = '请先登录'
+              break
+            default:
+              errorMsg = '提交失败，请稍后重试'
+              break
+          }
+          this.$message({
+            message: errorMsg,
+            type: 'error'
+          })
+          return Promise.reject(new Error('Submit package to audit failed'))
+        })
+    },
+    async submitPackage() {
+      if (!this.isPackageInfoComplete) {
+        this.$message({
+          message: '信息填写完整后才能提交',
+          type: 'warning'
+        })
+        return
+      }
+      await this.savePackage({ isShowMessage: false }).then(async () => {
+        await this.submitToAudit().then(() => {
+          this.toPackageManagerPage()
+        })
+      })
+    }
   },
   components: {
     PackageBasicInfo,
