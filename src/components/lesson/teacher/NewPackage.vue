@@ -6,7 +6,7 @@
         <el-breadcrumb-item>新建课程包</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="new-package-header-operations">
-        <el-button round @click="cancelAddPackage">取消</el-button>
+        <el-button round @click="toPackageManagerPage">取消</el-button>
         <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">保存</el-button>
         <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">提交</el-button>
       </div>
@@ -33,7 +33,8 @@ export default {
   data() {
     return {
       isMounted: false,
-      activeTab: 'catalogue' //basic or catalogue
+      newSavingPackageId: null,
+      activeTab: 'basic' //basic or catalogue
     }
   },
   computed: {
@@ -97,6 +98,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      lessonAuditPackage: 'lesson/teacher/auditPackage',
       createNewPackage: 'lesson/teacher/createNewPackage'
     }),
     setActiveTab(type) {
@@ -105,10 +107,10 @@ export default {
       }
       this.activeTab = type
     },
-    cancelAddPackage() {
+    toPackageManagerPage() {
       this.$router.push('/teacher/packageManager')
     },
-    async savePackage() {
+    async savePackage({ isShowMessage = true }) {
       if (this.isPackageNameEmpty) {
         this.$message({
           message: '填写名称后才能保存',
@@ -117,13 +119,27 @@ export default {
         return
       }
       let newPackageData = this.newPackageData
-      await this.createNewPackage({ newPackageData })
+      let newPackageDetail = await this.createNewPackage({ newPackageData })
+      this.newSavingPackageId = newPackageDetail.id
+      if (isShowMessage) {
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+        this.toPackageManagerPage()
+      }
+    },
+    async submitToAudit() {
+      await this.lessonAuditPackage({
+        packageId: this.newSavingPackageId,
+        state: 1
+      })
       this.$message({
-        message: '保存成功',
+        message: '提交成功',
         type: 'success'
       })
     },
-    submitPackage() {
+    async submitPackage() {
       if (!this.isPackageInfoComplete) {
         this.$message({
           message: '信息填写完整后才能提交',
@@ -131,6 +147,9 @@ export default {
         })
         return
       }
+      await this.savePackage({ isShowMessage: false })
+      await this.submitToAudit()
+      this.toPackageManagerPage()
     }
   },
   components: {

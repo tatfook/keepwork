@@ -123,8 +123,9 @@ const actions = {
   },
   async createNewPackage(context, { newPackageData }) {
     let { dispatch } = context
-    await lesson.packages.create({ newPackageData })
+    let newPackageDetail = await lesson.packages.create({ newPackageData })
     await dispatch('getUserPackages', { useCache: false })
+    return newPackageDetail
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
