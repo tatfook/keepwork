@@ -114,25 +114,68 @@ export default {
         return
       }
       let newPackageData = this.newPackageData
-      let newPackageDetail = await this.createNewPackage({ newPackageData })
-      this.newSavingPackageId = newPackageDetail.id
-      if (isShowMessage) {
-        this.$message({
-          message: '保存成功',
-          type: 'success'
+      await this.createNewPackage({
+        newPackageData
+      })
+        .then(newPackageDetail => {
+          this.newSavingPackageId = newPackageDetail.id
+          if (isShowMessage) {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            this.toPackageManagerPage()
+          }
+          return Promise.resolve()
         })
-        this.toPackageManagerPage()
-      }
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = '请先登录'
+              break
+            case 409:
+              errorMsg = '课程包名称已经存在'
+              break
+            default:
+              errorMsg = '保存失败，请稍后重试'
+              break
+          }
+          this.$message({
+            message: errorMsg,
+            type: 'error'
+          })
+          return Promise.reject(new Error('Create new package failed'))
+        })
     },
     async submitToAudit() {
       await this.lessonAuditPackage({
         packageId: this.newSavingPackageId,
         state: 1
       })
-      this.$message({
-        message: '提交成功',
-        type: 'success'
-      })
+        .then(result => {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          })
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = '请先登录'
+              break
+            default:
+              errorMsg = '提交失败，请稍后重试'
+              break
+          }
+          this.$message({
+            message: errorMsg,
+            type: 'error'
+          })
+          return Promise.reject(new Error('Submit package to audit failed'))
+        })
     },
     async submitPackage() {
       if (!this.isPackageInfoComplete) {
@@ -142,9 +185,11 @@ export default {
         })
         return
       }
-      await this.savePackage({ isShowMessage: false })
-      await this.submitToAudit()
-      this.toPackageManagerPage()
+      await this.savePackage({ isShowMessage: false }).then(async () => {
+        await this.submitToAudit().then(() => {
+          this.toPackageManagerPage()
+        })
+      })
     }
   },
   components: {
