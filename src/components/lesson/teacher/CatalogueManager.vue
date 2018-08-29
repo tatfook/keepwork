@@ -21,13 +21,13 @@
               <span class="iconfont icon-drag"></span>
             </el-tooltip>
             <el-tooltip effect="dark" content="删除" placement="top">
-              <span class="iconfont icon-delete1"></span>
+              <span class="iconfont icon-delete1" @click="deleteLessonFromCatalogue(index)"></span>
             </el-tooltip>
           </div>
         </div>
       </vue-draggable>
     </div>
-    <lessons-list-dialog :isDialogShow='isLessonsListModalShow' @close='handleClose' @save='setPackageLessonsList'></lessons-list-dialog>
+    <lessons-list-dialog :isDialogShow='isLessonsListModalShow' :selectedLessonIds='selectedLessonIds' @close='handleClose' @save='setPackageLessonsList'></lessons-list-dialog>
   </div>
 </template>
 <script>
@@ -43,6 +43,15 @@ export default {
       isLessonsListModalShow: false
     }
   },
+  computed: {
+    selectedLessonIds() {
+      let lessonIds = []
+      _.forEach(this.catalogues, lesson => {
+        lessonIds.push(lesson.id)
+      })
+      return lessonIds
+    }
+  },
   methods: {
     showLessonsListModal() {
       this.isLessonsListModalShow = true
@@ -53,6 +62,9 @@ export default {
     setPackageLessonsList(addedLessons) {
       this.catalogues = addedLessons
       this.handleClose()
+    },
+    deleteLessonFromCatalogue(index) {
+      this.catalogues.splice(index, 1)
     }
   },
   components: {

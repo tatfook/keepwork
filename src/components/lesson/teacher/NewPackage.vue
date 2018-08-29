@@ -45,12 +45,7 @@ export default {
       return this.$refs.coverUrlComponent.newPackageCoverUrl
     },
     newPackageLessons() {
-      let lessons = this.$refs.lessonListComponent.catalogues
-      let lessonsId = []
-      _.forEach(lessons, lesson => {
-        lessonsId.push(lesson.id)
-      })
-      return lessonsId
+      return this.$refs.lessonListComponent.selectedLessonIds
     },
     newPackageData() {
       return _.assign(
