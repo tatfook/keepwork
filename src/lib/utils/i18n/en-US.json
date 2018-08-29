@@ -936,6 +936,7 @@
     "emptyNumber": "Empty",
     "confirmFullAll": " you sure you want to give full marks to all students?",
     "confirmFullSelected": "Are you sure you want to give full marks to selected students?",
-    "viewDetail": "View Detail"
+    "viewDetail": "View Detail",
+    "SelfStudyIsCompleted": "Congratulations. Learning is finished. Here is the summary."
   }
 }

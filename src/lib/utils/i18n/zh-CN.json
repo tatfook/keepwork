@@ -941,6 +941,7 @@
     "emptyNumber": "未答",
     "confirmFullAll": "你确定给所有的学生满分吗？",
     "confirmFullSelected": "你确定给选定的学生满分吗？",
-    "viewDetail": "查看详情"
+    "viewDetail": "查看详情",
+    "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结："
   }
 }
