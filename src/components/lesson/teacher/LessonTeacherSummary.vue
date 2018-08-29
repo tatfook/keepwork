@@ -5,7 +5,8 @@
       <el-button type="primary" @click="sendEmail">Send to Mailbox</el-button>
     </div>
     <div class="teacher-summary-brief">
-      <p class="date">{{createdAt | formatTime}}</p>
+      <p class="date">
+        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span>{{creationDate}}</p>
       <p>
         <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
       <p>
@@ -22,20 +23,21 @@
       </div>
     </div>
     <div class="teacher-summary-chart">
-      <div class="teacher-summary-chart-accuracy-rate">
-        <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
-      </div>
-      <div class="teacher-summary-chart-student-number">
-        <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
+      <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
+      <div class="teacher-summary-chart-box">
+        <div class="teacher-summary-chart-box-accuracy-rate">
+          <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
+        </div>
+        <div class="teacher-summary-chart-box-student-number">
+          <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
+        </div>
       </div>
     </div>
     <div class="teacher-summary-detailed">
       <h4>{{$t('lesson.detailed')}}:</h4>
       <div class="teacher-summary-detailed-change">
-        <span>
-          <el-button type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
-        <span>
-          <el-button type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
+        <span class="chang-button"><el-button type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
+        <span class="chang-button"><el-button type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
       <div class="teacher-summary-detailed-table">
         <el-table :data="newCurrentRecord" border style="width: 100%" @selection-change="handleSelectionChange">
@@ -46,9 +48,9 @@
               <div class="portrait"><img :src="props.row.portrait" alt=""></div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" :label='$t("lesson.name")'>
+          <el-table-column prop="name" sortable :label='$t("lesson.name")'>
           </el-table-column>
-          <el-table-column prop="username" :label='$t("lesson.username")'>
+          <el-table-column prop="username" sortable :label='$t("lesson.username")'>
           </el-table-column>
           <el-table-column prop="accuracyRate" sortable width="180" :label='$t("lesson.accuracyRate")'>
           </el-table-column>
@@ -90,6 +92,7 @@ import NumberOfStudentsChart from './NumberOfStudentsChart'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
 
@@ -97,6 +100,7 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      isEn: locale === 'en-US',
       classid: null,
       loading: true,
       lessonName: null,
@@ -137,6 +141,31 @@ export default {
     ...mapGetters({
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
     }),
+    getWeekDay() {
+      let time = dayjs(this.createdAt).format('YYYY-MM-DD')
+      let day = time.split('-')
+      let Day = new Date(day[0], parseInt(day[1] - 1), day[2])
+      return String(Day.getDay())
+    },
+    creationDate(){
+      let year = dayjs(this.createdAt).year()
+      let monthNum = dayjs(this.createdAt).month()
+      let monthArr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','','Nov','Dec']
+      let month = monthArr[monthNum]
+      let todayDate = dayjs(this.createdAt).date()
+      let hours = dayjs(this.createdAt).format('YYYY-MM-DD HH:mm:ss').split(' ')[1]
+      let suffix = ['st','nd','rd','th']
+      if(todayDate % 10 < 1 || todayDate % 10 > 3){
+        todayDate = todayDate + suffix[3]
+      }else if(todayDate % 10 == 1){
+        todayDate = todayDate + suffix[0]
+      }else if(todayDate % 10 == 2){
+        todayDate = todayDate + suffix[1]
+      }else{
+        todayDate = todayDate + suffix[2]
+      }
+      return this.isEn ? (month + ' ' + todayDate + ' ' + year + '  ' +  hours) : dayjs(this.createdAt).format('YYYY-MM-DD HH:mm:ss')
+    },
     newCurrentRecord() {
       let currentRecord = _.map(
         this.classroomLearnRecord,
@@ -277,11 +306,16 @@ export default {
         })
     },
 
-    getLessonSkill(lessonId){
-      lesson.lessons.getSkills({lessonId}).then(res => {
-        console.log('skill',res)
-        this.skillsList = res
-      }).catch( err => {console.log(err)})
+    getLessonSkill(lessonId) {
+      lesson.lessons
+        .getSkills({ lessonId })
+        .then(res => {
+          console.log('skill', res)
+          this.skillsList = res
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     singleStudentRecord(index, student) {
       this.$router.push({
@@ -295,7 +329,7 @@ export default {
         result: true
       }).length
       let allQuiz = quiz.length
-      return rightAnswer / allQuiz * 100 + '%'
+      return allQuiz == 0 ? 0 + '%' :  rightAnswer / allQuiz * 100 + '%'
     },
     getQuizChartData(newCurrentRecord) {
       let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
@@ -376,6 +410,9 @@ export default {
       line-height: 30px;
       letter-spacing: 0px;
       color: #111111;
+      .week {
+        margin-right: 25px;
+      }
     }
     .brief-title {
       font-size: 16px;
@@ -388,7 +425,7 @@ export default {
         width: 100px;
         display: inline-block;
       }
-      .points{
+      .points {
         flex: 1;
         .points-list {
           margin: 0;
@@ -403,18 +440,23 @@ export default {
   &-chart {
     padding: 12px;
     background: #f8f8ff;
-    display: flex;
-    &-accuracy-rate {
-      width: 50%;
-    }
-    &-student-number {
-      width: 50%;
+    &-box {
+      display: flex;
+      &-accuracy-rate {
+        flex: 1;
+      }
+      &-student-number {
+        flex: 1;
+      }
     }
   }
   &-detailed {
     margin-top: 59px;
     &-change {
       margin-bottom: 22px;
+      .chang-button{
+        margin-right: 40px;
+      }
     }
     &-table {
       border: 1px solid #a4a4a4;

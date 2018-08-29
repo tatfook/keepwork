@@ -93,7 +93,14 @@
     "success": "成功",
     "failure": "失败",
     "errorInfoTitle": "错误提示",
-    "canNotUseIE": "此功能无法在IE下使用"
+    "canNotUseIE": "此功能无法在IE下使用",
+    "weekday0": "星期天",
+    "weekday1": "星期一",
+    "weekday2": "星期二",
+    "weekday3": "星期三",
+    "weekday4": "星期四",
+    "weekday5": "星期五",
+    "weekday6": "星期六"
   },
   "editor": {
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -944,6 +951,7 @@
     "viewDetail": "查看详情",
     "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结：",
     "StudiedForManyDays": "这是我 {howManyDays} 在一网乾坤上学习{lessonTitle}。",
-    "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。"
+    "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。",
+    "accuracyAnalysis": "答题准确率分析"
   }
 }
