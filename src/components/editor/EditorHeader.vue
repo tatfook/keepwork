@@ -197,6 +197,7 @@ export default {
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
+      activeAreaFile: 'activeAreaFile',
       activePage: 'activePage',
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
@@ -257,7 +258,7 @@ export default {
       return (url || '').replace(/\.md$/, '')
     },
     isActivePageSaved() {
-      let { saved } = this.activeAreaData || {}
+      let { saved } = this.activeAreaFile || {}
       return saved === false ? false : true
     }
   },

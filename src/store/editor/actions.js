@@ -407,14 +407,14 @@ const actions = {
     dispatch('refreshCode')
   },
   async setActiveArea({ commit, getters, dispatch }, area) {
-    let { activeArea, activeAreaData } = getters
+    let { activeArea, activeAreaData, activeAreaFile } = getters
     if (activeArea === area) return
     // save current area unless it is main area
     if (
       activeArea &&
       activeAreaData &&
       activeArea !== LayoutHelper.Const.MAIN_AREA &&
-      !activeAreaData.saved
+      !activeAreaFile.saved
     ) {
       await dispatch('saveSiteConfigPage', activeAreaData)
     }
