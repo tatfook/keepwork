@@ -23,7 +23,7 @@
     <div class="teach-nothing" v-show="!sortedTeachList.length && !loading">
       <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
       <p class="teach-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
-      <el-button type="primary">{{$t('lesson.lessonsCenter')}}</el-button>
+      <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
     </div>
   </div>
 </template>
@@ -66,6 +66,11 @@ export default {
     enterPackage(packageId){
       this.$router.push({
         path: `teacher/package/${packageId}`
+      })
+    },
+    gotoLessonsCenter(){
+      this.$router.push({
+        path: `/teacher/center`
       })
     }
   },
