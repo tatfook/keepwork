@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import _ from 'lodash'
 
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
@@ -11,6 +10,7 @@ const SET_ENTER_CLASS_ID = 'SET_ENTER_CLASS_ID'
 const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
 const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 const RESUME_CLASSROOM = 'RESUME_CLASSROOM'
+const RESUME_QUIZ = 'RESUME_QUIZ'
 
 export const props = {
   GET_PACKAGE_DETAIL_SUCCESS,
@@ -22,7 +22,8 @@ export const props = {
   RESUME_CLASSROOM,
   DO_QUIZ,
   SWITCH_SUMMARY,
-  LEAVE_THE_CLASS
+  LEAVE_THE_CLASS,
+  RESUME_QUIZ
 }
 
 const mutations = {
@@ -47,12 +48,11 @@ const mutations = {
   [RESUME_CLASSROOM](state, payload) {
     Vue.set(state, 'enterClassInfo', payload)
   },
-  [DO_QUIZ](state, { key, result, answer }) {
-    let _lessonDetail = _.clone(state.lessonDetail)
-    let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
-    _lessonDetail.quiz[index].result = result
-    _lessonDetail.quiz[index].answer = answer
-    Vue.set(state, 'lessonDetail', _lessonDetail)
+  [RESUME_QUIZ](state, payload) {
+    Vue.set(state, 'lessonDetail', payload)
+  },
+  [DO_QUIZ](state, payload) {
+    Vue.set(state, 'lessonDetail', payload)
   },
   [SWITCH_SUMMARY](state, flag) {
     Vue.set(state, 'isShowSummary', flag)
