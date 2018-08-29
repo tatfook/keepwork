@@ -7,8 +7,8 @@
       </el-breadcrumb>
       <div class="new-package-header-operations">
         <el-button round @click="cancelAddPackage">取消</el-button>
-        <el-button round @click="savePackage">保存</el-button>
-        <el-button round type="primary" @click="submitPackage">提交</el-button>
+        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">保存</el-button>
+        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">提交</el-button>
       </div>
     </div>
     <div class="new-package-tabs">
@@ -27,8 +27,12 @@ import CatalogueManager from './CatalogueManager'
 import { mapActions } from 'vuex'
 export default {
   name: 'NewPackage',
+  mounted() {
+    this.isMounted = true
+  },
   data() {
     return {
+      isMounted: false,
       activeTab: 'catalogue' //basic or catalogue
     }
   },
@@ -55,6 +59,40 @@ export default {
         },
         { lessons: this.newPackageLessons }
       )
+    },
+    isPackageNameEmpty() {
+      if (!this.isMounted) {
+        return true
+      }
+      let packageName = this.newPackageData && this.newPackageData.packageName
+      return !packageName || packageName == ''
+    },
+    isPackageInfoComplete() {
+      if (!this.isMounted) {
+        return false
+      }
+      let {
+        subjectId,
+        minAge,
+        maxAge,
+        intro,
+        rmb,
+        extra,
+        lessons
+      } = this.newPackageData
+      if (
+        typeof subjectId !== 'number' ||
+        typeof minAge !== 'number' ||
+        typeof maxAge !== 'number' ||
+        typeof rmb !== 'number' ||
+        !intro ||
+        !extra.coverUrl ||
+        !lessons ||
+        lessons.length <= 0
+      ) {
+        return false
+      }
+      return true
     }
   },
   methods: {
@@ -71,6 +109,13 @@ export default {
       this.$router.push('/teacher/packageManager')
     },
     async savePackage() {
+      if (this.isPackageNameEmpty) {
+        this.$message({
+          message: '填写名称后才能保存',
+          type: 'warning'
+        })
+        return
+      }
       let newPackageData = this.newPackageData
       await this.createNewPackage({ newPackageData })
       this.$message({
@@ -78,7 +123,15 @@ export default {
         type: 'success'
       })
     },
-    submitPackage() {}
+    submitPackage() {
+      if (!this.isPackageInfoComplete) {
+        this.$message({
+          message: '信息填写完整后才能提交',
+          type: 'warning'
+        })
+        return
+      }
+    }
   },
   components: {
     PackageBasicInfo,

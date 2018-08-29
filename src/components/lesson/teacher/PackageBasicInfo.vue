@@ -26,7 +26,7 @@
         <div class="package-basic-info-name-intro">
           <div class="package-basic-info-name">
             <label class="package-basic-info-label" for="nameInput">名称</label>
-            <el-input id="nameInput" v-model="newPackageDetail.packageName"></el-input>
+            <el-input id="nameInput" v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
           </div>
           <div class="package-basic-info-intro">
             <label class="package-basic-info-label" for="introInput">简介</label>
@@ -75,6 +75,10 @@ export default {
     ...mapActions({
       lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
+    trimPackageName() {
+      let oldPackageName = this.newPackageDetail.packageName
+      this.newPackageDetail.packageName = _.trim(oldPackageName)
+    },
     handleFitAgeTypeChange(value) {
       switch (value) {
         case 'all':
