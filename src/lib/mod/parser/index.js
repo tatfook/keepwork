@@ -16,7 +16,6 @@ const buildBlockList = mdText => {
   if (!mdText) return []
   let mdLines = mdText.split('\n')
   let blockList = []
-  let started = null
   let curModBlock = null
   let preModBlock = null
   const beginModBlock = (line, lineNumber) => {
@@ -55,8 +54,7 @@ const buildBlockList = mdText => {
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
-    } else if (!started || line.trim() !== '') {
-      started = true
+    } else if (line.trim() !== '') {
       beginModBlock(line, lineNumber + 1)
     }
   })
