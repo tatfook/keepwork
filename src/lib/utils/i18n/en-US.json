@@ -938,7 +938,7 @@
     "teach": "TEACH",
     "review": "REVIEW",
     "lessonManagement": "Lesson Management",
-    "noLessonHint": "You haven't added any panckages. Please enter Lessons to view.",
+    "noLessonHint": "You haven't added any packages. Please enter Lessons to view.",
     "teachingTime": "Latest teaching time",
     "noRecord": "There is no teaching record yet.",
     "sortByTeachingTime": "Click to sort by teaching time",
@@ -985,7 +985,6 @@
     "resumeOldClass": "Resume Old Class",
     "enterNewClass": "Enter New Class",
     "notifyTips": "You have a class already started.{spanStart} Resume Class?{spanEnd}",
-    "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
-    "reviseGrades": "Please select students who need to revise their grades!"
+    "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}"
   }
 }
