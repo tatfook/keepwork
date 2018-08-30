@@ -60,7 +60,8 @@ const actions = {
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
-      info.data.token && Cookies.set('token', info.data.token)
+      Cookies.set('token', info.data.token)
+      window.localStorage.setItem('satellizer_token', info.data.token)
       commit(LOGIN_SUCCESS, info.data)
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
@@ -68,6 +69,7 @@ const actions = {
   },
   thirdLogin({ commit }, {userinfo, token}) {
     Cookies.set('token', token)
+    window.localStorage.setItem('satellizer_token', token)
     commit(LOGIN_SUCCESS, {userinfo, token})
   },
   logout({ commit }) {

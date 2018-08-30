@@ -55,12 +55,22 @@
         </div>
       </el-main>
     </el-container>
+    <div class="be-in-class" v-show="beInClassDialog">
+      <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
+        <div class="hint"><i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">{{$t('lesson.resumeOldClass')}}</el-button>
+          <el-button type="primary" @click="dialogVisible = false">{{$t('lesson.enterNewClass')}}</el-button>
+        </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
+import _ from 'lodash'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
@@ -71,7 +81,8 @@ export default {
       classID: '',
       skillsList: [],
       subscribesList: [],
-      loadingSkillsPoint: true
+      loadingSkillsPoint: true,
+      beInClassDialog: false
     }
   },
   async mounted() {
@@ -110,11 +121,29 @@ export default {
       }
       return sum
     },
+    continuingStudyPackages(){
+      let continuingStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length > 0 && i.learnedLessons.length < i.lessons.length
+      })
+      return continuingStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    startStudyPackages(){
+      let startStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length == 0 && i.lessons.length != 0
+      })
+      return startStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    finishedStudyPackages(){
+      let finishedStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length == i.lessons.length
+      })
+      return finishedStudyPackagesList.sort(this.sortByUpdateAt)
+    },
     sortedSubscribesList() {
       if (this.subscribesList.length === 0) {
         return this.subscribesList
       } else {
-        return this.subscribesList.sort(this.sortByUpdateAt)
+        return _.concat(this.continuingStudyPackages,this.startStudyPackages,this.finishedStudyPackages)
       }
     }
   },
@@ -144,10 +173,13 @@ export default {
           })
         })
     },
-    gotoLessonsCenter(){
+    gotoLessonsCenter() {
       this.$router.push({
         path: `/student/center`
       })
+    },
+    handleClose(){
+      this.beInClassDialog = false
     }
   },
   components: {
@@ -264,6 +296,21 @@ export default {
             line-height: 30px;
             color: #111111;
           }
+        }
+      }
+    }
+  }
+  .be-in-class{
+    .el-dialog__body{
+      .hint{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        color: rgb(229, 65, 4);
+        .redIcon{
+          margin-right:10px;
+          font-size: 30px;
         }
       }
     }
