@@ -36,8 +36,8 @@
     <div class="teacher-summary-detailed">
       <h4>{{$t('lesson.detailed')}}:</h4>
       <div class="teacher-summary-detailed-change">
-        <span class="chang-button"><el-button type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
-        <span class="chang-button"><el-button type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
+        <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
+        <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
       <div class="teacher-summary-detailed-table">
         <el-table :data="newCurrentRecord" border style="width: 100%" @selection-change="handleSelectionChange">
