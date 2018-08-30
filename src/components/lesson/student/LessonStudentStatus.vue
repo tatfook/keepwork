@@ -78,7 +78,6 @@ export default {
     async setNicknameHandle() {
       if (this.name.trim() === '') return
       this.isLoading = true
-      console.log(this.name)
       await this.setNickname(this.name)
         .then(() => {
           this.isLoading = false
