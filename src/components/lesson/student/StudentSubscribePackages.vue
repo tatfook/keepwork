@@ -1,6 +1,6 @@
 <template>
   <div class="packages-intro">
-    <div class="cover-wrap"><img @click="enterPackageDetail" class="cover" :src="packageCover" alt=""></div>
+    <div class="cover-wrap" @click="enterPackageDetail"><img class="cover" :src="packageCover" alt=""></div>
     <h3 :class="['name',showProgress ? 'islearning' : '']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
@@ -93,12 +93,12 @@ export default {
     height: 128px;
     border-radius: 4px;
     margin: 0 auto;
+      cursor: pointer;
     .cover {
       width: 230px;
       height: 128px;
       border-radius: 4px;
       object-fit: cover;
-      cursor: pointer;
     }
   }
 
