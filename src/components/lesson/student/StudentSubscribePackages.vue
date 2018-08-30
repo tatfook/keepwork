@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-if="packageDetail.learnedLessons.length !==packageDetail.lessons.length">
-      <el-button @click="enterPackageDetail" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
+      <el-button @click="attendClass" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
     </div>
     <div v-else class="finished"><img src="@/assets/lessonImg/finished.png" alt="">
       <span class="finished-tip">{{$t('lesson.finished')}}</span>
@@ -62,10 +62,24 @@ export default {
   methods: {
     enterPackageDetail() {
       let packageId = this.packageDetail.id
-      console.log(packageId)
       this.$router.push({
         path: `student/package/${packageId}`
       })
+    },
+    attendClass(){
+      if(this.startToLearn){
+        let packageId = this.packageDetail.id
+        let lessonId = this.packageDetail.lessons[0].id
+        this.$router.push({
+          path: `student/package/${packageId}/lesson/${lessonId}`
+        })
+      }else{
+        let packageId = this.packageDetail.id
+        let lessonId = this.packageDetail.lessons.length
+        this.$router.push({
+          path: `student/package/${packageId}/lesson/${lessonId}`
+        })
+      }
     }
   }
 }
