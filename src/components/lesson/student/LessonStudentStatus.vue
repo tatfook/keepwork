@@ -21,10 +21,10 @@
         <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
       </el-col>
     </el-row>
-    <el-dialog title="Please input your name here" center :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
-      <el-input v-model="name" placeholder="name" :autofocus="true"></el-input>
+    <el-dialog :title="$t('lesson.pleaseInputName')" center custom-class="input-name-dialog" :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+      <el-input v-model="name" :placeholder="$t('lesson.name')" :autofocus="true"></el-input>
       <div slot="footer">
-        <el-button @click="handleSetNickname" type="primary">OK</el-button>
+        <el-button @click="handleSetNickname" :disabled="!name.trim()" style="width: 140px" type="primary">OK</el-button>
       </div>
     </el-dialog>
   </div>
@@ -165,6 +165,24 @@ export default {
     }
     .edit-loading {
       margin-left: 8px;
+    }
+  }
+  .input-name-dialog {
+    width: 500px;
+    padding: 30px 50px;
+    box-sizing: border-box;
+    .el-input__inner {
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
+      text-align: center;
+      font-size: 24px;
+      color: #409eff;
+    }
+    .el-button--primary.is-disabled {
+      background: #abadb1;
+      border: none;
     }
   }
 }

@@ -991,8 +991,8 @@
     "enterNewClass": "进入新课堂",
     "notifyTips": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
     "notifyTipsStudent": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
-    "reviseGrades": "请选择需要修改成绩的学生！",
     "classId": "班级 ID:",
-    "nickName": "名称"
+    "nickName": "名称",
+    "pleaseInputName": "请输入你的名字"
   }
 }
