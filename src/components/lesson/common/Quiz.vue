@@ -175,7 +175,7 @@ export default {
       lessonIsDone: 'lesson/student/lessonIsDone'
     }),
     modList() {
-      return this.lessonDetail.modList
+      return this.lessonDetail.modList || []
     },
     quizzes() {
       return this.modList.filter(item => item.cmd === 'Quiz')

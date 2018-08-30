@@ -31,15 +31,13 @@ export default {
     await this.getCurrentClass()
     await this.getLessonContent(lessonId)
     if (
-      name === 'summary' ||
-      (name === 'performance' && !this.isBeInClass) ||
+      name === 'LessonTeacherSummary' ||
+      (name === 'LessonTeacherPerformance' && !this.isBeInClass) ||
       !this.isInCurrentClass
     ) {
-      this.$router.push({ name: 'plan' })
+      this.$router.push({ name: 'LessonTeacherPlan' })
     }
-    this.isInCurrentClass
-      ? this.intervalUpdateLearnRecords()
-      : this.notifyBackRoom()
+    this.isInCurrentClass && this.intervalUpdateLearnRecords()
   },
   async destroyed() {
     this.clearUpdateLearnRecords()
@@ -63,23 +61,18 @@ export default {
     clearUpdateLearnRecords() {
       clearTimeout(this._interval)
     },
-    backToClassroom() {
-      const { packageId, lessonId } = this.classroom
-      this.$router.push(`/teacher/package/${packageId}/lesson/${lessonId}`)
-      this.$router.go(0)
-    },
-    notifyBackRoom() {
-      const h = this.$createElement
-      this.$notify({
-        title: '你还在授课中',
-        message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
-        type: 'warning',
-        position: 'top-left',
-        duration: 0,
-        showClose: false,
-        onClick: this.backToClassroom
-      })
-    }
+    // notifyBackRoom() {
+    //   const h = this.$createElement
+    //   this.$notify({
+    //     title: '你还在授课中',
+    //     message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
+    //     type: 'warning',
+    //     position: 'top-left',
+    //     duration: 0,
+    //     showClose: false,
+    //     onClick: this.backToClassroom
+    //   })
+    // }
   },
   computed: {
     ...mapGetters({
@@ -108,10 +101,10 @@ export default {
     }
   },
   beforeRouteUpdate({ name }, from, next) {
-    if (name === 'summary' && !this.isClassIsOver) {
+    if (name === 'LessonTeacherSummary' && !this.isClassIsOver) {
       return this.$router.push({ name: 'plan' })
     }
-    if (name === 'performance' && !this.isBeInClass) {
+    if (name === 'LessonTeacherPerformance' && !this.isBeInClass) {
       this.intervalUpdateLearnRecords()
       return this.$router.push({ name: 'plan' })
     }

@@ -110,17 +110,17 @@ export default new Router({
             },
             {
               path: 'plan',
-              name: 'plan',
+              name: 'LessonTeacherPlan',
               component: LessonPlan
             },
             {
               path: 'performance',
-              name: 'performance',
+              name: 'LessonTeacherPerformance',
               component: LessonPerformance
             },
             {
               path: 'summary/:classId/:lessonId',
-              name: 'summary',
+              name: 'LessonTeacherSummary',
               component: LessonSummary
             }
           ]

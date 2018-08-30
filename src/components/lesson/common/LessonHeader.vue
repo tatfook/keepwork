@@ -11,7 +11,7 @@
       </div>
       <div v-html="$t('lesson.studentEnterClassId',{StuentsPerformance:`<span class='performance'>${$t('lesson.StuentsPerformance')}</span>`})">
       </div>
-      <div class="tips" v-html="$t('lesson.studentAttention',{Attention:`<span class='attention'>${$t('lesson.attention')}:</span>`})">
+      <div class="tips" v-html="$t('lesson.studentAttention',{Attention:`<span class='attention'>${$t('lesson.attention')}</span>`})">
       </div>
       <span slot="footer">
         <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">{{$t('common.Sure')}}</el-button>

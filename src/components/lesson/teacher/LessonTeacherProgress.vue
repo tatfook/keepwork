@@ -2,21 +2,21 @@
   <div class="lesson-teacher-progress">
     <span class="progress-point start">
       <div class="name">{{$t('lesson.lessonPlan')}}</div>
-      <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('plan')"></div>
+      <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('LessonTeacherPlan')"></div>
     </span>
     <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isBeInClass ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div class="name">
         {{$t('lesson.performance')}}
       </div>
-      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClass}]" @click="handleChangeView('performance')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClass}]" @click="handleChangeView('LessonTeacherPerformance')"></div>
     </span>
     <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassIsOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
       <div class="name">
         {{$t('lesson.summary')}}
       </div>
-      <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassIsOver}]" @click="handleChangeView('summary')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassIsOver}]" @click="handleChangeView('LessonTeacherSummary')"></div>
     </span>
   </div>
 </template>
@@ -58,13 +58,17 @@ export default {
   methods: {
     handleChangeView(name) {
       if (this.reset) return
+      if (!this.isClassIsOver && name === 'LessonTeacherSummary') return
+      if (!this.isBeInClass && name === 'LessonTeacherPerformance') return
 
-      if (!this.isClassIsOver && name === 'summary') return
-      if (!this.isBeInClass && name === 'performance') return
-      'plan' === name && this.$router.push({ name })
-      this.isBeInClass && 'performance' === name && this.$router.push({ name })
+      'LessonTeacherPlan' === name && this.$router.push({ name })
+
+      this.isBeInClass &&
+        'LessonTeacherPerformance' === name &&
+        this.$router.push({ name })
+
       this.isClassIsOver &&
-        'summary' === name &&
+        'LessonTeacherSummary' === name &&
         this.$router.push({
           name,
           params: { classId: this.classId, lessonId: Number(this.lessonId) }
