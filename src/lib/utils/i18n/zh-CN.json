@@ -952,6 +952,14 @@
     "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结：",
     "StudiedForManyDays": "这是我 {howManyDays} 在一网乾坤上学习{lessonTitle}。",
     "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。",
-    "accuracyAnalysis": "答题准确率分析"
+    "accuracyAnalysis": "答题准确率分析",
+    "class": "课堂",
+    "fullPage": "点击全屏显示",
+    "classIdExplain":"{classId}是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
+    "curentClassId": "课堂ID ：",
+    "studentEnterClassId": "请让您的学生输入课堂ID，进入课堂。您可以在“{StuentsPerformance}”菜单下，查看学生的实时状态。",
+    "StuentsPerformance": "学生状态",
+    "studentAttention": "{Attention}: 课堂ID是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
+    "attention": "注意"  
   }
 }
