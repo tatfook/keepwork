@@ -47,14 +47,14 @@
         <el-row>
           <el-col class="right-line" :sm="12" :xs="24">
             <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/teacher.png" alt=""></div>
-            <h3>{{$t('lesson.about.teacher')}}</h3>
-            <h5>{{$t('lesson.about.engageStudents')}}</h5>
+            <h1>{{$t('lesson.about.teacher')}}</h1>
+            <h5 style="font-size:24px;">{{$t('lesson.about.engageStudents')}}</h5>
             <p>{{$t('lesson.about.teacherTalk')}}</p>
           </el-col>
           <el-col :sm="12" :xs="24">
             <div class="content-img"><img src="@/assets/lessonImg/aboutPageImg/student.png" alt=""></div>
-            <h3>{{$t('lesson.about.student')}}</h3>
-            <h5>{{$t('lesson.about.playGame')}}</h5>
+            <h1>{{$t('lesson.about.student')}}</h1>
+            <h5 style="font-size:24px;">{{$t('lesson.about.playGame')}}</h5>
             <p>{{$t('lesson.about.studentTalk')}}</p>
           </el-col>
         </el-row>
