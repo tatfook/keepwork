@@ -97,6 +97,7 @@ const actions = {
 
     commit(SET_ACTIVE_PAGE, { path, username })
     await dispatch('refreshModList')
+    await dispatch('refreshCode')
 
     if (needReload) {
       commit(INIT_UNDO, {
