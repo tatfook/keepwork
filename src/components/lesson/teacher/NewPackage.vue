@@ -2,18 +2,18 @@
   <div class="new-package">
     <div class="new-package-header">
       <el-breadcrumb class="new-package-header-breadcrumb" separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>课程包</el-breadcrumb-item>
-        <el-breadcrumb-item>新建课程包</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('lesson.packageManage.package')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('lesson.newPackage')}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="new-package-header-operations">
-        <el-button round @click="toPackageManagerPage">取消</el-button>
-        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">保存</el-button>
-        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">提交</el-button>
+        <el-button round @click="toPackageManagerPage">{{$t('common.Cancel')}}</el-button>
+        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
+        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
       </div>
     </div>
     <div class="new-package-tabs">
-      <el-button @click="setActiveTab('basic')" class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">基本信息</el-button>
-      <el-button @click="setActiveTab('catalogue')" class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">目录</el-button>
+      <el-button @click="setActiveTab('basic')" class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">{{$t('lesson.packageManage.basicInfo')}}</el-button>
+      <el-button @click="setActiveTab('catalogue')" class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">{{$t('lesson.catalogue')}}</el-button>
     </div>
     <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'"></PackageBasicInfo>
     <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
@@ -108,7 +108,7 @@ export default {
     async savePackage({ isShowMessage = true }) {
       if (this.isPackageNameEmpty) {
         this.$message({
-          message: '填写名称后才能保存',
+          message: this.$t('lesson.packageManage.nameIsRequiredInfo'),
           type: 'warning'
         })
         return
@@ -121,7 +121,7 @@ export default {
           this.newSavingPackageId = newPackageDetail.id
           if (isShowMessage) {
             this.$message({
-              message: '保存成功',
+              message: this.$t("common.saveSuccess"),
               type: 'success'
             })
             this.toPackageManagerPage()
@@ -132,13 +132,13 @@ export default {
           let errorMsg = ''
           switch (error.status) {
             case 401:
-              errorMsg = '请先登录'
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
               break
             case 409:
-              errorMsg = '课程包名称已经存在'
+              errorMsg = this.$t('lesson.packageManage.packageNameConflict')
               break
             default:
-              errorMsg = '保存失败，请稍后重试'
+              errorMsg = this.$t("common.saveFail")
               break
           }
           this.$message({
@@ -155,7 +155,7 @@ export default {
       })
         .then(result => {
           this.$message({
-            message: '提交成功',
+            message: this.$t('lesson.successfullySubmitted'),
             type: 'success'
           })
           return Promise.resolve()
@@ -164,10 +164,10 @@ export default {
           let errorMsg = ''
           switch (error.status) {
             case 401:
-              errorMsg = '请先登录'
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
               break
             default:
-              errorMsg = '提交失败，请稍后重试'
+              errorMsg = this.$t('lesson.failedSubmit')
               break
           }
           this.$message({
@@ -180,7 +180,7 @@ export default {
     async submitPackage() {
       if (!this.isPackageInfoComplete) {
         this.$message({
-          message: '信息填写完整后才能提交',
+          message: this.$t('lesson.pleaseCompleteInfo'),
           type: 'warning'
         })
         return
