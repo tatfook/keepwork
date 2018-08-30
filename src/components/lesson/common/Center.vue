@@ -50,7 +50,6 @@ export default {
   },
   async mounted() {
     await this.getPackagesList()
-    console.log('packages', this.packages)
     this.loading = false
     console.log('sortedPackagesList',this.sortedPackagesList)
   },

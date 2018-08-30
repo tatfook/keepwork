@@ -980,6 +980,8 @@
     "StuentsPerformance": "Stuents'Performance",
     "studentAttention": "{Attention}: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
     "attention": "Attention",
+    "notifyTips": "You have a class already started.{spanStart} Resume Class?{spanEnd}",
+    "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
     "reviseGrades": "Please select students who need to revise their grades!"
   }
 }

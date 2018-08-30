@@ -46,7 +46,6 @@ export default {
     await lesson.packages
       .getTaughtPackages()
       .then(res => {
-        console.log(res)
         this.teachList = res
         this.loading = false
       })

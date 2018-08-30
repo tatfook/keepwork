@@ -2,10 +2,10 @@ import _ from 'lodash'
 
 const getters = {
   userinfo: state => state.userinfo,
-  userId: (state, { userinfo }) => _.get(userinfo, 'id', ''),
+  isLogin: (state, { userId }) => !!userId,
   packageDetail: state => ({ packageId }) =>
     _.get(state.packagesDetail, packageId),
-  subjects: (state) => state.subjects
+  subjects: state => state.subjects
 }
 
 export default getters
