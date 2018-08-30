@@ -4,7 +4,7 @@
       <el-input :placeholder="$t('lesson.packageManage.searchByName')" prefix-icon="iconfont icon-Amplification__" v-model="searchName">
       </el-input>
     </div>
-    <div class="lessons-list-dialog-box">
+    <div class="lessons-list-dialog-box" v-show="nameFilteredLessonList.length > 0">
       <div class="lessons-list-dialog-item" v-for="(lesson, index) in nameFilteredLessonList" :key="index">
         <span class="lessons-list-dialog-item-name">{{lesson.lessonName}}</span>
         <span class="lessons-list-dialog-item-date">{{lesson.updatedAt | formatDate(formatType)}}</span>
@@ -12,6 +12,11 @@
           <el-checkbox v-model="lesson.isSelect"></el-checkbox>
         </span>
       </div>
+    </div>
+    <div class="lessons-list-dialog-empty" v-show="nameFilteredLessonList.length <= 0">
+      <img src="@/assets/lessonImg/no_packages.png" alt="">
+      <p class="lessons-list-dialog-empty-info" v-show="searchName.length > 0">{{$t('lesson.packageManage.searchResultIsEmpty')}}</p>
+      <p class="lessons-list-dialog-empty-info" v-show="searchName.length <= 0">{{$t('lesson.packageManage.lessonListIsEmpty')}}</p>
     </div>
     <div class="lessons-list-dialog-operations">
       <el-button type="info" @click="handleClose">{{$t('common.Cancel')}}</el-button>
@@ -122,10 +127,10 @@ export default {
     }
   }
   &-box {
-    max-height: 295px;
+    height: 295px;
     overflow: auto;
     padding: 0 20px 25px;
-    margin: 24px 0 75px;
+    margin: 15px 0 58px;
   }
   &-item {
     padding: 15px 0;
@@ -157,6 +162,18 @@ export default {
       left: 9px;
       top: 4px;
       border-width: 2px;
+    }
+  }
+  &-empty {
+    text-align: center;
+    padding: 125px 0;
+    img {
+      width: 120px;
+    }
+    &-info {
+      font-size: 20px;
+      color: #111;
+      margin: 20px 0 0;
     }
   }
   &-operations {

@@ -801,6 +801,8 @@
       "addLesson": "Add Lessons",
       "adjustOrder": "move up & down",
       "searchByName": "Search lessons by name",
+      "lessonListIsEmpty": "You have not created any lessons.",
+      "searchResultIsEmpty": "No results.",
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "about": {

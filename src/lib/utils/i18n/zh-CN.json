@@ -806,6 +806,8 @@
       "addLesson": "添加课程",
       "adjustOrder": "上下移动",
       "searchByName": "按课程名称搜索",
+      "lessonListIsEmpty": "您暂未创建课程。",
+      "searchResultIsEmpty": "无法搜索到该课程。",
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "about": {
