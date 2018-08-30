@@ -70,6 +70,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
+import _ from 'lodash'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
@@ -81,7 +82,7 @@ export default {
       skillsList: [],
       subscribesList: [],
       loadingSkillsPoint: true,
-      beInClassDialog: true
+      beInClassDialog: false
     }
   },
   async mounted() {
@@ -120,11 +121,29 @@ export default {
       }
       return sum
     },
+    continuingStudyPackages(){
+      let continuingStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length > 0 && i.learnedLessons.length < i.lessons.length
+      })
+      return continuingStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    startStudyPackages(){
+      let startStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length == 0 && i.lessons.length != 0
+      })
+      return startStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    finishedStudyPackages(){
+      let finishedStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+        return i.learnedLessons.length == i.lessons.length
+      })
+      return finishedStudyPackagesList.sort(this.sortByUpdateAt)
+    },
     sortedSubscribesList() {
       if (this.subscribesList.length === 0) {
         return this.subscribesList
       } else {
-        return this.subscribesList.sort(this.sortByUpdateAt)
+        return _.concat(this.continuingStudyPackages,this.startStudyPackages,this.finishedStudyPackages)
       }
     }
   },
@@ -158,6 +177,9 @@ export default {
       this.$router.push({
         path: `/student/center`
       })
+    },
+    handleClose(){
+      this.beInClassDialog = false
     }
   },
   components: {
