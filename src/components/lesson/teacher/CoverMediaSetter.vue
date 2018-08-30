@@ -24,11 +24,34 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+
+const BigfileUrlReg = new RegExp('keepwork.com')
 export default {
   name: 'CoverMediaSetter',
+  props: {
+    isEditing: Boolean
+  },
+  async mounted() {
+    if (this.isEditing) {
+      await this.getPackageDetail({ packageId: this.editingPackageId })
+      let editingPackageDetail = this.lessonPackageDetail({
+        packageId: this.editingPackageId
+      })
+      let coverUrl = _.get(editingPackageDetail, 'extra.coverUrl')
+      if (coverUrl && BigfileUrlReg.test(coverUrl)) {
+        this.imageSourceType = 'bigfile'
+        this.bigfileTypeUrl = coverUrl
+      } else {
+        this.imageSourceType = 'url'
+        this.urlTypeUrl = coverUrl
+      }
+    }
+  },
   data() {
     return {
+      editingPackageId: _.get(this.$route.params, 'id'),
       imageSourceType: 'url', // bigfile or url
       bigfileTypeUrl: '',
       urlTypeUrl: '',
@@ -36,11 +59,19 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      lessonPackageDetail: 'lesson/packageDetail'
+    }),
     newPackageCoverUrl() {
-      return this.imageSourceType === 'url' ? this.urlTypeUrl : this.bigfileTypeUrl
+      return this.imageSourceType === 'url'
+        ? this.urlTypeUrl
+        : this.bigfileTypeUrl
     }
   },
   methods: {
+    ...mapActions({
+      getPackageDetail: 'lesson/getPackageDetail'
+    }),
     showSkyDriveManagerDialog() {
       this.isSkyDriveShow = true
     },

@@ -1,26 +1,13 @@
 <template>
   <div class="new-package">
-    <div class="new-package-header">
-      <el-breadcrumb class="new-package-header-breadcrumb" separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>{{$t('lesson.packageManage.package')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('lesson.newPackage')}}</el-breadcrumb-item>
-      </el-breadcrumb>
-      <div class="new-package-header-operations">
-        <el-button round @click="toPackageManagerPage">{{$t('common.Cancel')}}</el-button>
-        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
-        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
-      </div>
-    </div>
-    <div class="new-package-tabs">
-      <el-button @click="setActiveTab('basic')" class="new-package-tabs-item" :class="{'active': activeTab === 'basic'}">{{$t('lesson.packageManage.basicInfo')}}</el-button>
-      <el-button @click="setActiveTab('catalogue')" class="new-package-tabs-item" :class="{'active': activeTab === 'catalogue'}">{{$t('lesson.catalogue')}}</el-button>
-    </div>
+    <PackageEditorHeader :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></PackageEditorHeader>
     <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'"></PackageBasicInfo>
     <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
     <CatalogueManager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></CatalogueManager>
   </div>
 </template>
 <script>
+import PackageEditorHeader from './PackageEditorHeader'
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
 import CatalogueManager from './CatalogueManager'
@@ -97,9 +84,6 @@ export default {
       createNewPackage: 'lesson/teacher/createNewPackage'
     }),
     setActiveTab(type) {
-      if (type === this.activeTab) {
-        return
-      }
       this.activeTab = type
     },
     toPackageManagerPage() {
@@ -193,56 +177,10 @@ export default {
     }
   },
   components: {
+    PackageEditorHeader,
     PackageBasicInfo,
     CatalogueManager,
     CoverMediaSetter
   }
 }
 </script>
-<style lang="scss">
-.new-package {
-  padding: 37px 0 0;
-  &-header {
-    display: flex;
-    &-breadcrumb {
-      flex: 1;
-      .el-breadcrumb__inner {
-        color: #b3b3b3;
-      }
-      .el-breadcrumb__item:last-child .el-breadcrumb__inner {
-        color: #333;
-      }
-    }
-    &-operations {
-      font-size: 17px;
-      .el-button {
-        width: 90px;
-      }
-      .el-button + .el-button {
-        margin-left: 7px;
-      }
-    }
-  }
-  &-tabs {
-    margin: 56px 0 14px;
-    display: flex;
-    justify-content: space-between;
-    .el-button {
-      width: 50%;
-      font-size: 18px;
-      background-color: #d2d2d2;
-      border-color: #b3b3b3;
-      color: #fff;
-    }
-    .el-button + .el-button {
-      margin-left: 27px;
-    }
-    .el-button.active {
-      background-color: #409efe;
-    }
-  }
-  &-media-setter {
-    margin-top: 35px;
-  }
-}
-</style>

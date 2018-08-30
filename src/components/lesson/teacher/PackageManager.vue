@@ -290,7 +290,7 @@ export default {
       this.isTableLoading = false
     },
     toEdit(packageDetail) {
-      console.log('toEdit')
+      this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
     },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id
