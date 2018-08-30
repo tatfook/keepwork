@@ -26,11 +26,11 @@
         <div class="package-basic-info-name-intro">
           <div class="package-basic-info-name">
             <label class="package-basic-info-label" for="nameInput">{{$t('lesson.nameLabel')}}</label>
-            <el-input id="nameInput" v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
+            <el-input id="nameInput" :maxlength='255' v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
           </div>
           <div class="package-basic-info-intro">
             <label class="package-basic-info-label" for="introInput">{{$t('lesson.intro')}}</label>
-            <el-input type="textarea" id="introInput" resize='none' v-model="newPackageDetail.intro"></el-input>
+            <el-input type="textarea" id="introInput" :maxlength='512' resize='none' v-model="newPackageDetail.intro"></el-input>
           </div>
         </div>
         <div class="package-basic-info-price">
@@ -39,9 +39,6 @@
             <span class="package-basic-info-price-prepend">￥</span>
             <el-input-number v-model="newPackageDetail.rmb" :min="0" :controls='false'></el-input-number>
           </div>
-          <!-- <el-input id="priceInput" placeholder="请输入内容" v-model="newPackageDetail.rmb">
-            <template slot="prepend">￥</template>
-          </el-input> -->
         </div>
       </div>
     </div>
