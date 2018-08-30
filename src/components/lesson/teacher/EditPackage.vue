@@ -1,9 +1,9 @@
 <template>
   <div class="edit-package">
     <PackageEditorHeader :activeTab='activeTab' @changeActiveType='setActiveTab'></PackageEditorHeader>
-    <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'"></PackageBasicInfo>
-    <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="edit-package-media-setter"></CoverMediaSetter>
-    <CatalogueManager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></CatalogueManager>
+    <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'" :isEditing='true'></PackageBasicInfo>
+    <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" :isEditing='true' class="edit-package-media-setter"></CoverMediaSetter>
+    <CatalogueManager ref="lessonListComponent" v-show="activeTab === 'catalogue'" :isEditing='true'></CatalogueManager>
   </div>
 </template>
 <script>
