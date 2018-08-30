@@ -101,6 +101,9 @@ export default {
         font-size: 18px;
         margin-bottom: 10px;
         cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       span {
         display: block;
