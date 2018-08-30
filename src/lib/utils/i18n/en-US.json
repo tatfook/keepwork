@@ -979,6 +979,7 @@
     "studentEnterClassId": "Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu {StuentsPerformance}",
     "StuentsPerformance": "Stuents'Performance",
     "studentAttention": "{Attention}: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
-    "attention": "Attention"
+    "attention": "Attention",
+    "reviseGrades": "Please select students who need to revise their grades!"
   }
 }

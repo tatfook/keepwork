@@ -984,6 +984,7 @@
     "studentEnterClassId": "请让您的学生输入课堂ID，进入课堂。您可以在“{StuentsPerformance}”菜单下，查看学生的实时状态。",
     "StuentsPerformance": "学生状态",
     "studentAttention": "{Attention}: 课堂ID是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
-    "attention": "注意"  
+    "attention": "注意",
+    "reviseGrades": "请选择需要修改成绩的学生！"
   }
 }
