@@ -1,7 +1,7 @@
 <template>
   <div class="packages-intro">
     <div class="cover-wrap"><img @click="enterPackageDetail" class="cover" :src="packageCover" alt=""></div>
-    <h3 :class="['name',showProgress ? 'islearning' : '']" @click="enterPackageDetail">{{packageName}}</h3>
+    <h3 :class="['name',showProgress ? 'islearning' : '']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
     <p>{{$t('lesson.ages')}}: {{packageDetail.minAge}}-{{packageDetail.maxAge}}</p>
@@ -91,6 +91,9 @@ export default {
   .name {
     cursor: pointer;
     margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .islearning {
     color: #409eff;
