@@ -238,7 +238,7 @@ export default {
       } else {
         if (this.multipleSelection.length == 0) {
           this.changeDialogVisible = false
-          this.$alert('请选择需要修改成绩的学生！', '', {
+          this.$alert(this.$t('lesson.reviseGrades'), '', {
             confirmButtonText: this.$t('common.Sure'),
             center: true,
             callback: action => {}
