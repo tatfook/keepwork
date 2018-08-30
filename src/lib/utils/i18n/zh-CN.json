@@ -985,6 +985,10 @@
     "StuentsPerformance": "学生状态",
     "studentAttention": "{Attention}: 课堂ID是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
     "attention": "注意",
+    "reviseGrades": "请选择需要修改成绩的学生！",
+    "beInClass": "有课堂正在进行。",
+    "resumeOldClass": "返回旧课堂",
+    "enterNewClass": "进入新课堂",
     "notifyTips": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
     "notifyTipsStudent": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
     "reviseGrades": "请选择需要修改成绩的学生！"
