@@ -45,20 +45,22 @@ export default {
       return _.get(this.packages, 'rows', [])
     },
     sortedPackagesList() {
-      return this.packagesList.sort(
-        (obj1, obj2) => obj1.updatedAt < obj2.updatedAt
-      )
+      return this.packagesList.sort(this.sortByUpdateAt)
     }
   },
   async mounted() {
     await this.getPackagesList()
     console.log('packages', this.packages)
     this.loading = false
+    console.log('sortedPackagesList',this.sortedPackagesList)
   },
   methods: {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
     enterPackageDetailPage(packageId) {
       this.$router.push({
         path: `package/${packageId}`
