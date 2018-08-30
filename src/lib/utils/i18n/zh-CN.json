@@ -987,6 +987,8 @@
     "attention": "注意",
     "notifyTips": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
     "notifyTipsStudent": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
-    "reviseGrades": "请选择需要修改成绩的学生！"
+    "reviseGrades": "请选择需要修改成绩的学生！",
+    "classId": "班级 ID:",
+    "nickName": "名称"
   }
 }

@@ -35,6 +35,8 @@ const store = new Vuex.Store({
     createPersistedState({
       paths: [
         'lesson.userinfo',
+        'lesson.student.enterClassInfo',
+        'lesson.teacher.classroom',
         'user.profile',
         'user.webTemplateConfig',
         'user.skyDrive'

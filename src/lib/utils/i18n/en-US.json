@@ -982,6 +982,8 @@
     "attention": "Attention",
     "notifyTips": "You have a class already started.{spanStart} Resume Class?{spanEnd}",
     "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
-    "reviseGrades": "Please select students who need to revise their grades!"
+    "reviseGrades": "Please select students who need to revise their grades!",
+    "classId": "Class ID:",
+    "nickName": "Name:"
   }
 }
