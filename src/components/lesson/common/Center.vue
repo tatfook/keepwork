@@ -7,7 +7,7 @@
         <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
           <div class="subject-desc">
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
-            <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
+            <h4 :title="coursePackage.packageName" :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
@@ -79,6 +79,7 @@ export default {
     }
     .lesson-packages-subject .subject-desc {
       width: 287px;
+      height: 415px;
       padding: 34px 34px 6px;
       margin: 20px auto;
       border: solid 2px #d2d2d2;
@@ -100,6 +101,7 @@ export default {
       .subject-title {
         font-size: 18px;
         margin-bottom: 10px;
+        height: 24px;
         cursor: pointer;
         white-space: nowrap;
         overflow: hidden;
