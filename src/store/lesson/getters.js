@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 const getters = {
   userinfo: state => state.userinfo,
-  isLogin: (state, { userId }) => !!userId,
+  userId: (state, { userinfo }) => _.get(userinfo, 'id', ''),
   packageDetail: state => ({ packageId }) =>
     _.get(state.packagesDetail, packageId),
   subjects: state => state.subjects

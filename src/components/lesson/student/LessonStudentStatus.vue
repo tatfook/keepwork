@@ -2,13 +2,23 @@
   <div class="lesson-student-status">
     <el-row class="student-info" type="flex" align="middle">
       <el-col :span="5">
-        <span>Class ID: {{enterClassId}}</span>
+        <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
       </el-col>
       <el-col :span="5">
-        <span>Name: {{nickname}}</span>
+        <span class="nickname-wrap" v-if="isEditNickName">
+          <el-input class="name-input" :autofocus="true" v-model="name">
+          </el-input>
+          <i v-show="isLoading" class="el-icon-loading edit-loading"></i>
+          <i v-show="!isLoading" @click="setNicknameHandle" class="el-icon-circle-check-outline edit-confirm"></i>
+          <i v-show="!isLoading" @click="switchEdit" class="el-icon-circle-close-outline edit-cancel"></i>
+        </span>
+        <span class="nickname-wrap" v-else>
+          <span>{{$t('lesson.nickName')}} {{nickname}}</span>
+          <i @click="switchEdit" class="el-icon-edit-outline edit-status"></i>
+        </span>
       </el-col>
       <el-col :span="14" :push="10">
-        <el-button type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+        <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
       </el-col>
     </el-row>
     <el-dialog title="Please input your name here" center :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
@@ -27,7 +37,10 @@ export default {
   data() {
     return {
       isDialogVisible: false,
-      name: ''
+      name: '',
+      editInput: '',
+      isEditNickName: false,
+      isLoading: false
     }
   },
   computed: {
@@ -58,6 +71,23 @@ export default {
       setNickname: 'lesson/setNickname',
       leaveTheClass: 'lesson/student/leaveTheClass'
     }),
+    switchEdit() {
+      this.name = ''
+      this.isEditNickName = !this.isEditNickName
+    },
+    async setNicknameHandle() {
+      if (this.name.trim() === '') return
+      this.isLoading = true
+      await this.setNickname(this.name)
+        .then(() => {
+          this.isLoading = false
+          this.switchEdit()
+        })
+        .catch(e => {
+          this.isLoading = false
+          this.switchEdit()
+        })
+    },
     async handleLeaveTheClass() {
       this.$confirm(
         this.$t('lesson.leaveTheClassTips'),
@@ -78,7 +108,9 @@ export default {
     async handleSetNickname() {
       if (this.name.trim() !== '') {
         await this.setNickname(this.name)
-          .then(res => (this.isDialogVisible = false))
+          .then(res => {
+            this.isDialogVisible = false
+          })
           .catch(e => {
             console.error(e)
             this.$message.error(this.$t('common.failure'))
@@ -99,6 +131,41 @@ export default {
     width: 1080px;
     margin: 0 auto;
     height: inherit;
+  }
+  .leave-button {
+    background: white;
+    border-color: white;
+    color: #424242;
+    &:hover {
+      background: #409eff;
+      color: white;
+      border-color: #409eff;
+    }
+  }
+  .nickname-wrap {
+    display: inline-flex;
+    align-items: center;
+    .name-input {
+      // background: #409eff;
+      height: 24px;
+      font-weight: 500;
+      .el-input__inner {
+        height: 24px;
+      }
+    }
+    .edit-status,
+    .edit-cancel,
+    .edit-confirm {
+      cursor: pointer;
+      font-size: 24px;
+      margin-left: 8px;
+      &:hover {
+        color: #409eff;
+      }
+    }
+    .edit-loading {
+      margin-left: 8px;
+    }
   }
 }
 </style>
