@@ -14,13 +14,22 @@
     </div>
     <div class="about-video">
       <el-row :gutter="20">
-        <el-col :sm="8" :xs="24" v-for="(lessonPackage,index) in hotsPackages" v-if="index < 3" :key="lessonPackage.id">
-          <div class="video" @click="enterPackageDetail(lessonPackage.id)">
-            <img class="video-cover" :src="lessonPackage.extra.coverUrl" alt="">
-            <img class="video-play" src="@/assets/lessonImg/aboutPageImg/play1.png" alt="">
-            <img class="video-play hovering" src="@/assets/lessonImg/play2.png" alt="">
+        <el-col :sm="8" :xs="24" v-for="(coursePackage,index) in hotsPackages" v-if="index < 3" :key="coursePackage.id">
+          <div class="subject-desc">
+            <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
+            <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
+            <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
+            <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
+            <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
+            <div class="purchase-lesson-package">
+              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
+              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
+                <span class="red">￥{{coursePackage.rmb}}</span>
+              </div>
+              <div class="purchase-money">{{$t('lesson.coinsPrice')}}:
+                <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}</div>
+            </div>
           </div>
-          <span class="video-title">Actors & Animations</span>
         </el-col>
       </el-row>
     </div>
@@ -203,6 +212,7 @@ export default {
   },
   async mounted(){
     this.hotsPackages = await lesson.packages.getHotsPackages()
+    console.log('hotsPackages', this.hotsPackages)
   },
   computed: {
     imgUrls(){
@@ -253,6 +263,11 @@ export default {
           path: `/teacher/autobiography`
         })
       }
+    },
+    enterPackageDetailPage(packageId) {
+      this.$router.push({
+        path: `package/${packageId}`
+      })
     }
   }
 }
@@ -289,45 +304,67 @@ export default {
     }
   }
   &-video {
-    text-align: center;
     width: 80%;
     margin: 0 auto;
-    .video {
-      margin: 0 auto;
-      max-width: 365px;
-      position: relative;
-      .video-cover {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .video-play {
-        width: 70%;
-        max-width: 105px;
-        position: absolute;
+    .subject-desc {
+      width: 287px;
+      padding: 34px 34px 6px;
+      margin: 20px auto;
+      border: solid 2px #d2d2d2;
+      border-radius: 1px;
+      background: #fff;
+      .img-wrap {
+        width: 287px;
+        height: 160px;
+        border-radius: 6px;
+        margin: 0 auto;
         cursor: pointer;
-        top: 50%;
-        left: 50%;
-        margin-left: -52px;
-        margin-top: -52px;
+        .subject-cover {
+          width: 287px;
+          height: 160px;
+          object-fit: cover;
+          border-radius: 6px;
+        }
       }
-      .hovering{
-        display: none;
+      .subject-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        cursor: pointer;
       }
-    }
-    .video:hover{
-      .hovering{
+      span {
         display: block;
+        font-size: 14px;
+        line-height: 22px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-    }
-    .video-title {
-      display: block;
-      width: 100%;
-      text-align: center;
-      font-size: 24px;
-      color: #333333;
-      height: 20px;
-      margin: 44px 0;
+      .purchase-lesson-package {
+        margin: 10px 0;
+        border-top: 1px solid #e3e3e3;
+        .red {
+          color: #e4461f;
+          display: inline;
+        }
+        .purchase-tip {
+          color: #3491f0;
+          margin: 14px 0 5px 0;
+          font-size: 14px;
+        }
+        .purchase-money {
+          font-size: 14px;
+          width: 165px;
+          height: 27px;
+          border: solid 2px #f3f3f3;
+          text-align: left;
+          padding: 0;
+          line-height: 30px;
+          border-radius: 15px;
+          margin: 5px 0;
+          padding-left: 5px;
+          cursor: default;
+        }
+      }
     }
   }
   &-view-more {
