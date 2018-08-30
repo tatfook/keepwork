@@ -906,7 +906,7 @@
     "beginTips": "(Click here to begin the class)",
     "dismiss": "Dismiss the class",
     "dismissTips": "(Click here to dismiss the class)",
-    "dismissConfirm": "Are you sure you want to leave ? This operation will be irrevocable.",
+    "dismissConfirm": "Are you sure you want to dismiss the class ? This operation will be irrevocable.",
     "lessonPlan": "Lesson Plan",
     "performance": "Students'Performance",
     "summary": "Summary",
@@ -947,6 +947,14 @@
     "SelfStudyIsCompleted": "Congratulations. Learning is finished. Here is the summary.",
     "StudiedForManyDays": "This is my {howManyDays} day of learning {lessonTitle} on Keepwork.",
     "todayRecords": "Today, I read {readCodeLinesCount} lines of code, wrote {wroteCodeLinesCount} lines of code, and learned {commandLines} computer command.",
-    "accuracyAnalysis": "Accuracy Analysis"
+    "accuracyAnalysis": "Accuracy Analysis",
+    "class": "Class",
+    "fullPage": "Click to full page",
+    "classIdExplain":"{classId} is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
+    "curentClassId": "The class ID is ",
+    "studentEnterClassId": "Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu {StuentsPerformance}",
+    "StuentsPerformance": "Stuents'Performance",
+    "studentAttention": "{Attention}: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
+    "attention": "Attention"
   }
 }

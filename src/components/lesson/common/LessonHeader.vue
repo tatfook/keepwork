@@ -1,42 +1,37 @@
 <template>
   <el-row class="lesson-header-container">
-    <!-- vidioDialog -->
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media">
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
-    <!-- classIdDialog -->
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
-      <div>The class ID is
+      <div>{{$t('lesson.curentClassId')}}
         <span class="class-id">{{classroomId}}</span>
       </div>
-      <div>Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu
-        <span class="performance">Stuents'Performance</span>
+      <div v-html="$t('lesson.studentEnterClassId',{StuentsPerformance:`<span class='performance'>${$t('lesson.StuentsPerformance')}</span>`})">
       </div>
-      <div class="tips">
-        <span class="attention">Attention:</span> Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.</div>
+      <div class="tips" v-html="$t('lesson.studentAttention',{Attention:`<span class='attention'>${$t('lesson.attention')}:</span>`})">
+      </div>
       <span slot="footer">
-        <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">OK</el-button>
+        <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">{{$t('common.Sure')}}</el-button>
       </span>
     </el-dialog>
-    <!-- classroomId full screen -->
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
       <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
-    <!-- lesson info -->
     <el-row>
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
       <el-col :span="10" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
-            <div slot="content">Click to full page</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> Class ID: {{classroomId}}</div>
+            <div slot="content">{{$t('lesson.fullPage')}}</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: {{classroomId}}</div>
           </el-tooltip>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
-              <span style="color:red"> Class ID</span> is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.
+              <div v-html="$t('lesson.classIdExplain',{ classId: `<span style='color:red'> ${$t('lesson.class')} ID</span>` })"></div>
             </div>
             <span class="question-mark-icon"></span>
           </el-tooltip>
