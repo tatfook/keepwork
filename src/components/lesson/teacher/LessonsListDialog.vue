@@ -1,21 +1,21 @@
 <template>
-  <el-dialog class="lessons-list-dialog" :visible.sync="isDialogShow" width="455px" :before-close="handleClose" title="添加课程">
+  <el-dialog class="lessons-list-dialog" :visible.sync="isDialogShow" width="455px" :before-close="handleClose" :title="$t('lesson.packageManage.addLesson')">
     <div class="lessons-list-dialog-search">
-      <el-input placeholder="按课程名称搜索" prefix-icon="iconfont icon-Amplification__" v-model="searchName">
+      <el-input :placeholder="$t('lesson.packageManage.searchByName')" prefix-icon="iconfont icon-Amplification__" v-model="searchName">
       </el-input>
     </div>
     <div class="lessons-list-dialog-box">
       <div class="lessons-list-dialog-item" v-for="(lesson, index) in nameFilteredLessonList" :key="index">
         <span class="lessons-list-dialog-item-name">{{lesson.lessonName}}</span>
-        <span class="lessons-list-dialog-item-date">{{lesson.updatedAt | formatDate}}</span>
+        <span class="lessons-list-dialog-item-date">{{lesson.updatedAt | formatDate(formatType)}}</span>
         <span class="lessons-list-dialog-item-checkbox">
           <el-checkbox v-model="lesson.isSelect"></el-checkbox>
         </span>
       </div>
     </div>
     <div class="lessons-list-dialog-operations">
-      <el-button type="info" @click="handleClose">取消</el-button>
-      <el-button type="primary" @click="toAdd">添加</el-button>
+      <el-button type="info" @click="handleClose">{{$t('common.Cancel')}}</el-button>
+      <el-button type="primary" @click="toAdd">{{$t('common.add')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       searchName: '',
+      formatType: this.$t('lesson.packageManage.formatType'),
       lessonList: []
     }
   },
@@ -80,8 +81,8 @@ export default {
     }
   },
   filters: {
-    formatDate(date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm')
+    formatDate(date, formatType) {
+      return dayjs(date).format(formatType)
     }
   }
 }

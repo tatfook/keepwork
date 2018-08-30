@@ -3,17 +3,17 @@
     <div class="package-basic-info-row">
       <div class="package-basic-info-subject-and-ages">
         <div class="package-basic-info-subject">
-          <label class="package-basic-info-label" for="subjectSelector">科目</label>
+          <label class="package-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="newPackageDetail.subjectId">
             <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
             </el-option>
           </el-select>
         </div>
         <div class="package-basic-info-ages">
-          <label class="package-basic-info-label">年龄</label>
+          <label class="package-basic-info-label">{{$t('lesson.packageManage.Age')}}</label>
           <el-radio-group v-model="fitAgeType" @change="handleFitAgeTypeChange">
-            <el-radio label="all">所有人群</el-radio>
-            <el-radio label="custom">自定义</el-radio>
+            <el-radio label="all">{{$t('lesson.packageManage.SuitableForAll')}}</el-radio>
+            <el-radio label="custom">{{$t('lesson.packageManage.Customize')}}</el-radio>
           </el-radio-group>
           <div class="package-basic-info-custom" v-show="fitAgeType==='custom'">
             <el-input-number class="package-basic-info-age-input" v-model="tempMinAge" :min="1" :max="tempMaxAge" :controls='false' @change='changeMinAgeValue'></el-input-number>
@@ -25,23 +25,20 @@
       <div class="package-basic-info-name-intro-price">
         <div class="package-basic-info-name-intro">
           <div class="package-basic-info-name">
-            <label class="package-basic-info-label" for="nameInput">名称</label>
-            <el-input id="nameInput" v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
+            <label class="package-basic-info-label" for="nameInput">{{$t('lesson.nameLabel')}}</label>
+            <el-input id="nameInput" :maxlength='255' v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
           </div>
           <div class="package-basic-info-intro">
-            <label class="package-basic-info-label" for="introInput">简介</label>
-            <el-input type="textarea" id="introInput" resize='none' v-model="newPackageDetail.intro"></el-input>
+            <label class="package-basic-info-label" for="introInput">{{$t('lesson.intro')}}</label>
+            <el-input type="textarea" id="introInput" :maxlength='512' resize='none' v-model="newPackageDetail.intro"></el-input>
           </div>
         </div>
         <div class="package-basic-info-price">
-          <label class="package-basic-info-label" for="priceInput">价格</label>
+          <label class="package-basic-info-label" for="priceInput">{{$t('lesson.packageManage.priceLabel')}}</label>
           <div class="package-basic-info-price-input">
             <span class="package-basic-info-price-prepend">￥</span>
             <el-input-number v-model="newPackageDetail.rmb" :min="0" :controls='false'></el-input-number>
           </div>
-          <!-- <el-input id="priceInput" placeholder="请输入内容" v-model="newPackageDetail.rmb">
-            <template slot="prepend">￥</template>
-          </el-input> -->
         </div>
       </div>
     </div>

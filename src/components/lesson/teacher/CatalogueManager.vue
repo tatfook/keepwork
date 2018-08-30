@@ -1,11 +1,11 @@
 <template>
   <div class="catalogue-manager">
-    <div class="catalogue-manager-title">目录:
-      <el-button type="success" round size="small" v-show="catalogues.length > 0" @click="showLessonsListModal">添加课程</el-button>
+    <div class="catalogue-manager-title">{{$t('lesson.catalogue')}}
+      <el-button type="success" round size="small" v-show="catalogues.length > 0" @click="showLessonsListModal">{{$t('lesson.packageManage.addLesson')}}</el-button>
     </div>
     <div class="catalogue-manager-empty" v-show="catalogues.length <= 0">
-      <div class="catalogue-manager-empty-info">请先添加课程</div>
-      <el-button type="primary" @click="showLessonsListModal">添加课程</el-button>
+      <div class="catalogue-manager-empty-info">{{$t('lesson.addLessonFirst')}}</div>
+      <el-button type="primary" @click="showLessonsListModal">{{$t('lesson.packageManage.addLesson')}}</el-button>
     </div>
     <div class="catalogue-manager-list" v-show="catalogues.length > 0">
       <vue-draggable v-model="catalogues" :options="{handle:'.icon-drag'}">
@@ -15,12 +15,12 @@
             <img :src='lesson.extra.coverUrl' alt="">
           </div>
           <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>
-          <div class="catalogue-manager-item-date">{{lesson.updatedAt}}</div>
+          <div class="catalogue-manager-item-date">{{lesson.updatedAt | formatDate(formatType)}}</div>
           <div class="catalogue-manager-item-operations">
-            <el-tooltip effect="dark" content="上下移动" placement="top">
+            <el-tooltip effect="dark" :content="$t('lesson.packageManage.adjustOrder')" placement="top">
               <span class="iconfont icon-drag"></span>
             </el-tooltip>
-            <el-tooltip effect="dark" content="删除" placement="top">
+            <el-tooltip effect="dark" :content="$t('common.remove')" placement="top">
               <span class="iconfont icon-delete1" @click="deleteLessonFromCatalogue(index)"></span>
             </el-tooltip>
           </div>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       catalogues: [],
+      formatType: this.$t('lesson.packageManage.formatType'),
       isLessonsListModalShow: false
     }
   },
@@ -72,8 +73,8 @@ export default {
     LessonsListDialog
   },
   filters: {
-    formatDate(date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm')
+    formatDate(date, formatType) {
+      return dayjs(date).format(formatType)
     }
   }
 }
