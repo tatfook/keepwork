@@ -145,17 +145,20 @@ export default {
       userUploadFileAndUseInSite: 'user/uploadFileAndUseInSite',
       setActiveMod: 'setActiveMod'
     }),
-    addMod() {
+    updateActiveCursor() {
       this.$store.dispatch('setAddingArea', {
         area: gConst.ADDING_AREA_MARKDOWN,
         cursorPosition: this.activeCursorLine
       })
+    },
+    addMod() {
+      this.updateActiveCursor()
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     highlightCodeByMod(mod) {
       if (mod.modType === 'ModMarkdown') return
       let lineBegin = mod.lineBegin - 1
-      let lineEnd = BlockHelper.endLine(mod) - 1
+      let lineEnd = BlockHelper.endLine(mod)
       this.clearHighlight()
       for (let i = lineBegin; i < lineEnd; i++) {
         this.editor.addLineClass(i, 'gutter', 'mark-text')
@@ -171,8 +174,9 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursorLine(this.modList || [], line)
+        let mod = Parser.getBlockByCursorLine(this.modList || [], line + 1)
         if (mod) {
+          this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
           if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
           if(mod.cmd === 'Markdown') {
