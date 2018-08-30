@@ -116,7 +116,6 @@ export default {
       if (this.skillsList.length === 0) {
         sum = 0
       } else {
-        this.skillsList = [{ score: 20 }, { score: 10 }]
         this.skillsList.every(skill => (sum += skill.score * 1))
       }
       return sum

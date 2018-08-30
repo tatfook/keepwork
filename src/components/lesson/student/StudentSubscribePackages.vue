@@ -1,6 +1,6 @@
 <template>
   <div class="packages-intro">
-    <div class="cover-wrap"><img @click="enterPackageDetail" class="cover" :src="packageCover" alt=""></div>
+    <div class="cover-wrap" @click="enterPackageDetail"><img class="cover" :src="packageCover" alt=""></div>
     <h3 :class="['name',showProgress ? 'islearning' : '']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-if="packageDetail.learnedLessons.length !==packageDetail.lessons.length">
-      <el-button @click="enterPackageDetail" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
+      <el-button @click="attendClass" class="learn-button" type="primary">{{startToLearn ? $t('card.startToLearn') : $t('card.continue')}}</el-button>
     </div>
     <div v-else class="finished"><img src="@/assets/lessonImg/finished.png" alt="">
       <span class="finished-tip">{{$t('lesson.finished')}}</span>
@@ -62,10 +62,24 @@ export default {
   methods: {
     enterPackageDetail() {
       let packageId = this.packageDetail.id
-      console.log(packageId)
       this.$router.push({
         path: `student/package/${packageId}`
       })
+    },
+    attendClass(){
+      if(this.startToLearn){
+        let packageId = this.packageDetail.id
+        let lessonId = this.packageDetail.lessons[0].id
+        this.$router.push({
+          path: `student/package/${packageId}/lesson/${lessonId}`
+        })
+      }else{
+        let packageId = this.packageDetail.id
+        let lessonId = this.packageDetail.lessons.length
+        this.$router.push({
+          path: `student/package/${packageId}/lesson/${lessonId}`
+        })
+      }
     }
   }
 }
@@ -79,12 +93,12 @@ export default {
     height: 128px;
     border-radius: 4px;
     margin: 0 auto;
+      cursor: pointer;
     .cover {
       width: 230px;
       height: 128px;
       border-radius: 4px;
       object-fit: cover;
-      cursor: pointer;
     }
   }
 
