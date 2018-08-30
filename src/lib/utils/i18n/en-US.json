@@ -68,6 +68,7 @@
     "OK": "OK",
     "Sure": "Confirm",
     "Cancel": "Cancel",
+    "Save": "Save",
 
     "action": "Action",
     "search": "Search",
@@ -727,7 +728,7 @@
   "lesson": {
     "include": "Includes",
     "all": "All",
-    "newPackage": "New Packages",
+    "newPackage": "New Package",
     "subjectLabel": "Subject",
     "statusLabel": "Status",
     "searchByName": "Search by name",
@@ -745,6 +746,7 @@
     "disabled": "Disabled",
     "pleaseCompleteInfo": "Please complete the package information before submitting it.",
     "successfullySubmitted": "Successfully submitted.",
+    "failedSubmit": "Submission failed.",
     "successfullyReleased": "Successfully released.",
     "successfullyRecall": "Successfully recall.",
     "successfullySubmittedDetail": "The result will be informed within 5 workdays.",
@@ -764,6 +766,7 @@
     "lessonGoals": "Lesson Goals",
     "duration": "Duration",
     "addPackageFirst": "Please add the package first",
+    "addLessonFirst": "Please add lessons to this package.",
     "backInfo": "Returns {backCoinCount} coins after purchase",
     "rmbPrice": "RMB",
     "coinsPrice": "Coins",
@@ -778,6 +781,27 @@
     "availableCoins": "Available Coins",
     "havePurchased": "You have added this package!",
     "loginBeforePurchase": "You should login before add this package!",
+    "packageManage":{
+      "package": "Packages",
+      "Submit": "Submit",
+      "basicInfo": "Basic Info.",
+      "nameIsRequiredInfo": "Name is required.",
+      "pleaseLogin": "Please login to continue.",
+      "packageNameConflict": "The package name already exists.",
+      "Subject": "Subject",
+      "Age": "Ages",
+      "SuitableForAll": "Suitable for all",
+      "Customize": "Customize",
+      "priceLabel": "Price",
+      "cover": "Cover Image",
+      "selectFile": "Choose File",
+      "inputUrl": "Enter url",
+      "preview": "preview",
+      "addLesson": "Add Lessons",
+      "adjustOrder": "move up & down",
+      "searchByName": "Search lessons by name",
+      "formatType": "HH:mm DD/MM/YYYY"
+    },
     "about": {
       "hottestLessons": "Hottest Lessons",
       "teacher": "TEACHER",
@@ -957,6 +981,7 @@
     "studentAttention": "{Attention}: Class ID is the unique identifier for this class. Students in this class need to login with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
     "attention": "Attention",
     "notifyTips": "You have a class already started.{spanStart} Resume Class?{spanEnd}",
-    "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}"
+    "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
+    "reviseGrades": "Please select students who need to revise their grades!"
   }
 }

@@ -24,7 +24,7 @@
       <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
       </el-col>
       <el-col :span="10" class="lesson-desc">
-        <div v-if="isTeacher && isBeInClass && isInCurrentClass" class="class-id-sign-wrap">
+        <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
             <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: {{classroomId}}</div>
