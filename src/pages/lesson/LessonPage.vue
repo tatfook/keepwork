@@ -1,6 +1,8 @@
 <template>
   <div class="lesson-page">
-    <common-header></common-header>
+    <div class="lesson-page-header">
+      <common-header class="container"></common-header>
+    </div>
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" id="lesson-page" />
     <common-footer class="container"></common-footer>
@@ -35,6 +37,10 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  &-header{
+    height: 60px;
+    border-bottom: 1px solid #e6e6e6;
+  }
   &-main-content {
     background: #f8f8f8;
     min-height: auto;
