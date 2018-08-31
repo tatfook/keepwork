@@ -104,7 +104,7 @@ export default {
     return {
       isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
-      currenClassInfo: {},
+      currenClassInfo: { extra: {}},
       classid: null,
       loading: true,
       lessonName: null,
@@ -119,19 +119,32 @@ export default {
       studentNumberRate: [],
       quizChartData: {
         columns: ['questionNumber', `${this.$t('lesson.accuracy')}`],
-        rows: []
+        rows: [
+            {questionNumber: `Q1`,
+            [`${this.$t('lesson.accuracy')}`]: 0},
+        ]
       },
       studentChartData: {
         columns: ['accuracyRate', `${this.$t('lesson.student')}`],
-        rows: []
+        rows: [
+          {accuracyRate: '<60%',
+          [`${this.$t('lesson.student')}`]: 0},
+          {accuracyRate: '60%-80%',
+          [`${this.$t('lesson.student')}`]: 0},
+          {accuracyRate: '>80%',
+          [`${this.$t('lesson.student')}`]: 0},
+        ]
       },
       totalStudent: 0
     }
   },
   async mounted() {
     await lesson.classrooms.getClassroomById( this.$route.params.classId ).then(res => {
-      console.log('getClassroomById',res)
+      console.log('getClassroomById11',res)
       this.currenClassInfo = res
+      this.lessonNo = res.extra.lessonNo
+      console.warn(res.extra)
+      console.log('lessonNo',this.lessonNo)
     }).catch(err => console.log(err))
     await this.getClassLearnRecords({ id: this.$route.params.classId })
     if (this.classroomLearnRecord.length === 0) {
@@ -139,11 +152,7 @@ export default {
       return
     }
     this.totalStudent = this.classroomLearnRecord.length
-    // this.getSingleLessonDetail(this.$route.params.classId)
-    // this.getLessonSkill(this.$route.params.lessonId)
-    // this.getQuizChartData(this.newCurrentRecord)
-    // this.getStudentChartData(this.newCurrentRecord)
-    await Promise.all([this.getSingleLessonDetail(this.$route.params.classId),this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
+    await Promise.all([this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
     this.loading = false
     console.log('classroomLearnRecord',this.classroomLearnRecord)
   },
@@ -307,20 +316,6 @@ export default {
           })
         })
     },
-    getSingleLessonDetail(classId) {
-      lesson.classrooms
-        .getClassroomById(classId)
-        .then(res => {
-          console.log('getClassroomById', res)
-          this.createdAt = res.createdAt
-          this.lessonNo = res.extra.lessonNo || 0
-          this.lessonName = res.extra.lessonName
-          this.lessonGoals = res.extra.lessonGoals
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
     getLessonSkill(lessonId) {
       lesson.lessons
         .getSkills({ lessonId })
@@ -347,23 +342,23 @@ export default {
       return allQuiz == 0 ? 0 + '%' :  rightAnswer / allQuiz * 100 + '%'
     },
     getQuizChartData(newCurrentRecord) {
-      let accuracyRateArr = Array.apply(null, Array(10)).map(() => 0)
-      for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
-        for (let i = 0; i < newCurrentRecord.length; i++) {
-          if (
-            newCurrentRecord[i].quiz[j] &&
-            newCurrentRecord[i].quiz[j].result
-          ) {
-            accuracyRateArr[j] += 1
+        let accuracyRateArr = Array.apply(null, Array(newCurrentRecord[0].quiz.length)).map(() => 0)
+        for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
+          for (let i = 0; i < newCurrentRecord.length; i++) {
+            if (
+              newCurrentRecord[i].quiz[j] &&
+              newCurrentRecord[i].quiz[j].result
+            ) {
+              accuracyRateArr[j] += 1
+            }
           }
         }
-      }
-      _.forEach(accuracyRateArr, (i, n) => {
-        Vue.set(this.quizChartData.rows, n, {
-          questionNumber: `Q${++n}`,
-          [`${this.$t('lesson.accuracy')}`]: i
+        _.forEach(accuracyRateArr, (i, n) => {
+          Vue.set(this.quizChartData.rows, n, {
+            questionNumber: `Q${++n}`,
+            [`${this.$t('lesson.accuracy')}`]: i
+          })
         })
-      })
     },
     getStudentChartData(newCurrentRecord) {
       let PassRateArr = Array.apply(null, Array(3)).map(() => 0)
