@@ -2,7 +2,7 @@
   <div class="quiz-container" :class="{'isPreview': isPreview}">
     <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
-      <i class="quiz-icon" v-show="!isPrint"></i>
+      <i class="quiz-icon"></i>
       <span class="quiz-no">
         {{$t('card.quiz')}}
       </span>
