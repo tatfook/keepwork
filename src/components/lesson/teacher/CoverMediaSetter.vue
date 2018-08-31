@@ -24,21 +24,18 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 
 const BigfileUrlReg = new RegExp('keepwork.com')
 export default {
   name: 'CoverMediaSetter',
   props: {
+    editingPackageDetail: Object,
     isEditing: Boolean
   },
   async mounted() {
     if (this.isEditing) {
-      await this.getPackageDetail({ packageId: this.editingPackageId })
-      let editingPackageDetail = this.lessonPackageDetail({
-        packageId: this.editingPackageId
-      })
+      let editingPackageDetail = this.editingPackageDetail
       let coverUrl = _.get(editingPackageDetail, 'extra.coverUrl')
       if (coverUrl && BigfileUrlReg.test(coverUrl)) {
         this.imageSourceType = 'bigfile'
@@ -59,9 +56,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
-    }),
     newPackageCoverUrl() {
       return this.imageSourceType === 'url'
         ? this.urlTypeUrl
@@ -69,9 +63,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getPackageDetail: 'lesson/getPackageDetail'
-    }),
     showSkyDriveManagerDialog() {
       this.isSkyDriveShow = true
     },

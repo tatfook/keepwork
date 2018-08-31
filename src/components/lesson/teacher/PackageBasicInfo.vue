@@ -49,15 +49,19 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PackageBasicInfo',
   props: {
+    editingPackageDetail: Object,
     isEditing: Boolean
   },
   async mounted() {
     await this.lessonGetAllSubjects({})
     if (this.isEditing) {
-      await this.getPackageDetail({ packageId: this.editingPackageId })
-      let editingPackageDetail = this.lessonPackageDetail({
-        packageId: this.editingPackageId
-      })
+      let editingPackageDetail = this.editingPackageDetail
+      let { minAge, maxAge } = editingPackageDetail
+      if (minAge !== 0 || maxAge !== 0) {
+        this.fitAgeType = 'custom'
+        this.tempMinAge = minAge
+        this.tempMaxAge = maxAge
+      }
       this.newPackageDetail = _.clone(editingPackageDetail)
     } else {
       this.newPackageDetail.subjectId = this.lessonSubjects[0].id
@@ -65,7 +69,6 @@ export default {
   },
   data() {
     return {
-      editingPackageId: _.get(this.$route.params, 'id'),
       fitAgeType: 'all', //all or custom
       tempMinAge: 1,
       tempMaxAge: 30,
@@ -81,13 +84,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail',
       lessonSubjects: 'lesson/subjects'
     })
   },
   methods: {
     ...mapActions({
-      getPackageDetail: 'lesson/getPackageDetail',
       lessonGetAllSubjects: 'lesson/getAllSubjects'
     }),
     trimPackageName() {
