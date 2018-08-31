@@ -787,7 +787,7 @@
     "availableCoins": "可用知识币",
     "havePurchased": "您已经购买过此课程包!",
     "loginBeforePurchase": "购买课程包前请先登录！",
-    "packageManage":{
+    "packageManage": {
       "package": "课程包",
       "Submit": "提交",
       "Release": "发布",
@@ -959,7 +959,7 @@
     "wrong": "错",
     "clickToRefresh": "点击刷新",
     "state": "状态",
-    "name":"姓名",
+    "name": "姓名",
     "username": "用户名",
     "accuracyRate": "正确率",
     "totalStudent": "学生数:(",
@@ -983,7 +983,7 @@
     "accuracyAnalysis": "答题准确率分析",
     "class": "课堂",
     "fullPage": "点击全屏显示",
-    "classIdExplain":"{classId}是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
+    "classIdExplain": "{classId}是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
     "curentClassId": "课堂ID ：",
     "studentEnterClassId": "请让您的学生输入课堂ID，进入课堂。您可以在“{StuentsPerformance}”菜单下，查看学生的实时状态。",
     "StuentsPerformance": "学生状态",
@@ -998,6 +998,9 @@
     "classId": "班级 ID:",
     "nickName": "名称",
     "pleaseInputName": "请输入你的名字",
-    "classIsOver": "课堂已经结束"
+    "classIsOver": "课堂已经结束",
+    "teacherFunction": "授课功能还未激活，是否去教师列表激活?",
+    "no": "不了",
+    "activate": "去激活"
   }
 }

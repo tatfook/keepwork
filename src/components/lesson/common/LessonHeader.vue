@@ -140,6 +140,29 @@ export default {
       event.returnValue = 'are you ok?'
     },
     async handleBeginTheClass() {
+      if (this.userInfo.identify !== 2) {
+        const h = this.$createElement
+        // this.$t('lesson.teacherFunction')
+        return this.$confirm(
+          h(
+            'span',
+            { style: 'color: #F56C6C' },
+            this.$t('lesson.teacherFunction')
+          ),
+          '',
+          {
+            confirmButtonText: this.$t('lesson.activate'),
+            cancelButtonText: this.$t('lesson.no'),
+            type: 'warning'
+          }
+        )
+          .then(() => {
+            this.$router.push(`/teacher`)
+          })
+          .catch(e => {
+            console.error(e)
+          })
+      }
       if (!this.isInCurrentClass) return
       const { packageId, lessonId } = this.$route.params
       await this.beginTheClass({
@@ -192,7 +215,8 @@ export default {
       classroomId: 'lesson/teacher/classroomId',
       isClassIsOver: 'lesson/teacher/isClassIsOver',
       classroom: 'lesson/teacher/classroom',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      userInfo: 'lesson/userinfo'
     }),
     lesson() {
       return _.get(this.data, 'data.lesson', {})
