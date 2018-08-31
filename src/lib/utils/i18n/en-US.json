@@ -993,6 +993,9 @@
     "classId": "Class ID:",
     "nickName": "Name:",
     "pleaseInputName": "Please input your name here",
-    "classIsOver": "class is over"
+    "classIsOver": "class is over",
+    "teacherFunction": "The teaching function is not enabled yet. Go to activate in TEACHER COLUMN?",
+    "no": "No",
+    "activate": "To activate"
   }
 }
