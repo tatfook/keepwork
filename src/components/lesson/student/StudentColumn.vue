@@ -101,6 +101,7 @@ export default {
       .then(res => {
         this.skillsList = res
         this.loadingSkillsPoint = false
+        console.log('sorttudiedpackages',this.sortedSubscribesList)
       })
       .catch(error => console.log(error))
   },
