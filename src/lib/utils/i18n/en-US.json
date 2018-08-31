@@ -992,6 +992,7 @@
     "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
     "classId": "Class ID:",
     "nickName": "Name:",
-    "pleaseInputName": "Please input your name here"
+    "pleaseInputName": "Please input your name here",
+    "classIsOver": "class is over"
   }
 }

@@ -91,7 +91,6 @@ export default {
     await lesson.users
       .userSubscribes(payload)
       .then(res => {
-        console.log('res', res)
         this.subscribesList = res
         this.loading = false
       })
@@ -101,7 +100,6 @@ export default {
       .then(res => {
         this.skillsList = res
         this.loadingSkillsPoint = false
-        console.log('sorttudiedpackages',this.sortedSubscribesList)
       })
       .catch(error => console.log(error))
   },

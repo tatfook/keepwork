@@ -188,6 +188,14 @@ const actions = {
     await lesson.classrooms.leave()
     await dispatch('lesson/getUserDetail', null, { root: true })
     commit(LEAVE_THE_CLASS)
+  },
+  async checkClassroom({ commit, dispatch }) {
+    await lesson.classrooms.currentClass()
+      .catch(e => {
+        console.warn('课堂已经不在了')
+        commit(LEAVE_THE_CLASS)
+        return Promise.reject(e)
+      })
   }
 }
 export default actions

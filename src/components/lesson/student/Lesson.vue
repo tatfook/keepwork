@@ -32,10 +32,10 @@ export default {
   data() {
     return {
       isCurrentClassroom: true,
-      isRefresh: false
+      isRefresh: false,
+      _interval: null
     }
   },
-  // created() {},
   beforeRouteLeave(to, from, next) {
     if (!this.isBeInClassroom) {
       this.clearLearnRecordsId()
@@ -64,6 +64,12 @@ export default {
       await this.uploadLearnRecords()
     }
   },
+  mounted() {
+    this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+  },
+  destroyed() {
+    clearTimeout(this._interval)
+  },
   methods: {
     ...mapActions({
       getLessonContent: 'lesson/student/getLessonContent',
@@ -71,8 +77,25 @@ export default {
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
       resumeQuiz: 'lesson/student/resumeQuiz',
       clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
-      clearLessonData: 'lesson/student/clearLessonData'
+      clearLessonData: 'lesson/student/clearLessonData',
+      checkClassroom: 'lesson/student/checkClassroom'
     }),
+    async intervalCheckClass(delay = 8 * 1000) {
+      console.warn('检查课堂是否还在')
+      await this.checkClassroom()
+      clearTimeout(this._interval)
+      this._interval = setTimeout(
+        async () =>
+          await this.intervalCheckClass().catch(
+            e =>
+              this.$message({
+                message: this.$t('lesson.classIsOver'),
+                type: 'warning'
+              }) && this._notify.close()
+          ),
+        delay
+      )
+    },
     copyProhibited() {
       document.oncontextmenu = new Function('event.returnValue=false')
       document.onselectstart = new Function('event.returnValue=false')

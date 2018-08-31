@@ -8,7 +8,6 @@ let {
 const actions = {
   async getPackagesList({ commit }, payload) {
     let packagesList = await lesson.packages.packagesList()
-    console.log('packagesList', packagesList)
     commit(GET_PACKAGES_LIST, packagesList)
   }
 }

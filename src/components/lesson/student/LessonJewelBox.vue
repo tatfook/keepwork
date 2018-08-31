@@ -1,9 +1,13 @@
 <template>
-    <span @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isClicked }">
-        <div v-show="isShowTips" @click.stop class="tips-wrap">
-            <span class="tips">{{tips}}</span>
-        </div>
-    </span>
+  <span @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isClicked }">
+    <div v-show="isShowTips" @click.stop class="tips-wrap">
+      <span class="tips">
+        To get the coins, you must meet the following three conditions:
+        1. The learning time of this lesson should be no less than 5 minutes. Have learned 00：20
+        2. Answers for all quizzes should be correct.
+        3. Your locked coins should be no less than the coins that you will  get.  There are 100 locked coins in your account at present. </span>
+    </div>
+  </span>
 </template>
 
 <script>
@@ -22,6 +26,8 @@ export default {
             2. Answers for all quizzes should be correct.
             3. Your locked coins should be no less than the coins that you will  get.  There are 100 locked coins in your account at present. `
     }
+  },
+  mounted() {
   },
   methods: {
     handleClick() {
@@ -77,6 +83,7 @@ export default {
     .tips {
       z-index: 34;
       padding: 40px;
+      font-size: 16px;
       display: inline-block;
       background-color: #fff;
       white-space: pre-line;

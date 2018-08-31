@@ -212,7 +212,6 @@ export default {
   },
   async mounted(){
     this.hotsPackages = await lesson.packages.getHotsPackages()
-    console.log('hotsPackages', this.hotsPackages)
   },
   computed: {
     imgUrls(){
