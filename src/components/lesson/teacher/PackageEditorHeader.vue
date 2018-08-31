@@ -6,10 +6,10 @@
         <el-breadcrumb-item>{{$t('lesson.newPackage')}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="package-editor-header-header-operations">
-        <el-button round @click="toPackageManagerPage">{{$t('common.Cancel')}}</el-button>
-        <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
-        <el-button round type="primary" v-if="isSubmitable" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
-        <el-button round type="primary" v-if="isReleasable" :class="{'is-disabled': !isPackageInfoComplete}" @click="releasePackage">{{$t('lesson.packageManage.Release')}}</el-button>
+        <el-button round @click="toPackageManagerPage" class="package-editor-header-header-cancel-button">{{$t('common.Cancel')}}</el-button>
+        <el-button round @click="savePackage" class="package-editor-header-header-save-button" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
+        <el-button round type="primary" v-if="isSubmitable" class="package-editor-header-header-submit-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
+        <el-button round type="primary" v-if="isReleasable" class="package-editor-header-header-release-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="releasePackage">{{$t('lesson.packageManage.Release')}}</el-button>
       </div>
     </div>
     <div class="package-editor-header-tabs">
@@ -78,6 +78,22 @@ export default {
       .el-button + .el-button {
         margin-left: 7px;
       }
+    }
+    &-cancel-button:hover {
+      background-color: #d95450;
+      color: #fff;
+      border-color: transparent;
+    }
+    &-save-button:hover {
+      background-color: #17da98;
+      color: #fff;
+      border-color: transparent;
+    }
+    &-submit-button:hover,
+    &-release-button:hover {
+      background-color: #6291c1;
+      color: #fff;
+      border-color: transparent;
     }
   }
   &-tabs {

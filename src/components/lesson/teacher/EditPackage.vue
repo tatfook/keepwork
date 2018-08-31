@@ -49,7 +49,8 @@ export default {
       )
     },
     isReleasable() {
-      return this.editingPackageDetail.state === 2
+      return false
+      // return this.editingPackageDetail.state === 2 // The first version temporarily removes the release function
     },
     updatingPackageBasicInfo() {
       return this.$refs.basicInfoComponent.newPackageDetail
@@ -199,7 +200,7 @@ export default {
           message: this.$t('lesson.pleaseCompleteInfo'),
           type: 'warning'
         })
-        return
+        return Promise.reject(new Error('Package info not complete'))
       }
       await this.updatePackage({ isShowMessage: false })
         .then(() => {
@@ -211,12 +212,19 @@ export default {
     },
     async submitPackage() {
       this.isLoading = true
-      await this.beforeSubmitOrRelease().then(async () => {
-        await this.submitToAudit().then(() => {
-          this.toPackageManagerPage()
+      await this.beforeSubmitOrRelease()
+        .then(async () => {
+          await this.submitToAudit()
+            .then(() => {
+              this.toPackageManagerPage()
+            })
+            .catch(() => {
+              this.isLoading = false
+            })
         })
-      })
-      this.isLoading = false
+        .catch(() => {
+          this.isLoading = false
+        })
     },
     async releasePackage() {
       await this.beforeSubmitOrRelease().then(async () => {
