@@ -8,13 +8,13 @@
           <el-col :sm="12" :xs="22" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
             <div class="package">
               <p class="time">{{$t('lesson.teachingTime')}}:
-                <span class="red-text">{{lessonPackage.updatedAt | formatTime}}</span>
+                <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span>
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
-              <h4 class="title">{{lessonPackage.packageName}}</h4>
+              <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
               <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: {{lessonPackage.minAge}}~{{lessonPackage.maxAge}}</p>
-              <p title="title">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
+              <p :title="lessonPackage.intro">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
             </div>
           </el-col>
         </el-row>
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
-      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+      return obj1.lastTeachDate >= obj2.lastTeachDate ? -1 : 1
     },
     enterPackage(packageId){
       this.$router.push({
@@ -135,6 +135,9 @@ export default {
           }
           .title {
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
       }
