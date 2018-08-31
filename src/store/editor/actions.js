@@ -75,7 +75,7 @@ const actions = {
       dispatch
     } = context
     // load profile and websites info to get correct projectIds for reading files
-    await dispatch('user/getAllPersonalAndContributedSite', {root: true})
+    // await dispatch('user/getAllPersonalAndContributedSite', {root: true})
     let {
       'user/username': username
     } = context.rootGetters

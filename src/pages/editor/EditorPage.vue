@@ -1,5 +1,5 @@
 <template>
-  <el-container v-loading="showLoading" id="editor">
+  <el-container v-if="presetLoaded" v-loading="loading" id="editor">
     <el-header>
       <EditorHeader></EditorHeader>
     </el-header>
@@ -14,9 +14,6 @@
         </div>
       <!-- </el-dialog> -->
     </el-main>
-    <div @click.stop v-if="showLoginDialog">
-      <LoginDialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose"/>
-    </div>
   </el-container>
 </template>
 
@@ -31,17 +28,21 @@ export default {
   name: 'EditorPage',
   data() {
     return {
-      loading: false,
+      presetLoaded: false,
+      loading: true,
       previewDialogVisible: false,
       profileLoaded: false,
       isFullscreen: false,
       showPreviewClose: false
     }
   },
+  async created() {
+    await this.loadEditorPresets()
+    this.presetLoaded = true
+    await this.updateActivePage()
+  },
   async mounted() {
-    await this.userGetProfile().catch(e => console.error(e))
-    this.profileLoaded = true
-    document.title = 'wikieditor'
+    document.title = 'Keepwork Editor'
   },
   watch: {
     $route: 'updateActivePage'
@@ -50,21 +51,25 @@ export default {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
       userIsLogined: 'user/isLogined',
-    }),
-    showLoginDialog() {
-      return this.profileLoaded && !this.userIsLogined
-    },
-    showLoading() {
-      return !this.showLoginDialog && this.loading
-    }
+    })
   },
   methods: {
     ...mapActions({
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
-      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath'
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
+      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite'
     }),
+    async loadEditorPresets() {
+      await this.userGetProfile({useCache: false}).catch(err => {
+        console.error(err)
+      })
+      await this.getAllPersonalAndContributedSite().catch(err => {
+        console.error(err)
+      })
+    },
     async updateActivePage() {
+      if (!this.presetLoaded) return
       this.loading = true
       let path = this.$router.currentRoute.path
       await this.setActivePage({ path }).catch(e => {

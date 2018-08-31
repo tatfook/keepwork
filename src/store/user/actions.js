@@ -108,15 +108,11 @@ const actions = {
     let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
     return thirdRegisterInfo
   },
-  /*doc
-    getProfile
-    dispatch this action first, in any action which depends on username.
-  */
   async getProfile(context, {forceLogin = true, useCache = true} = {}) {
-    let { commit, getters: { isLogined, token } } = context
-    if (isLogined && useCache) return
-    let profile = await keepwork.user.getProfile()
-    commit(GET_PROFILE_SUCCESS, {...profile, token})
+    let { commit, getters: { token } } = context
+    if (useCache) return
+    const profile = await keepwork.user.getProfile()
+    await commit(GET_PROFILE_SUCCESS, {...profile, token})
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
@@ -156,7 +152,6 @@ const actions = {
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
-    await dispatch('getProfile')
 
     return Promise.all([
       dispatch('getAllPersonalWebsite', { useCache }),
@@ -165,7 +160,6 @@ const actions = {
   },
   async getAllPersonalWebsite({ dispatch }, payload) {
     let { useCache = false } = payload || {}
-    await dispatch('getProfile')
 
     return Promise.all([
       dispatch('getAllWebsite', { useCache }),
@@ -266,8 +260,7 @@ const actions = {
   },
   async getAllWebsite(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
     let { username, personalSiteList } = getters
     if (useCache && personalSiteList.length) return
@@ -277,8 +270,7 @@ const actions = {
   },
   async getAllSiteDataSource(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
     let { username, siteDataSourcesMap } = getters
     if (useCache && !_.isEmpty(siteDataSourcesMap)) return
@@ -288,11 +280,10 @@ const actions = {
   },
   async getAllContributedWebsite(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
-    let { username, contributedSiteList } = getters
-    if (useCache && !_.isEmpty(contributedSiteList)) return
+    let { username } = getters
+    if (useCache) return
 
     let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username})
     list = _.values(list).filter(({siteinfo, siteuser} = {}) => siteinfo && siteuser)
@@ -513,27 +504,23 @@ const actions = {
     ])
   },
   async getInfoFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, dispatch, getters } = context
+    let { commit, getters } = context
     let { username, skyDriveInfo } = getters
     if (useCache && !_.isEmpty(skyDriveInfo)) return
 
-    await dispatch('getProfile')
     let info = await skyDrive.info()
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
   },
   async getFileListFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, dispatch, getters } = context
+    let { commit, getters } = context
     let { username, skyDriveFileList } = getters
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
-    await dispatch('getProfile')
     let filelist = await skyDrive.list({pageSize: 10000000})
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
     return filelist
   },
   async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
-    let { dispatch } = context
-    await dispatch('getProfile')
     let { key } = await skyDrive.upload({file, filename, onStart, onProgress})
     return { key }
   },

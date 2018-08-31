@@ -20,7 +20,7 @@ const getters = {
     if (!token || !profileUserToken || profileUserToken !== token) return {}
     return state.profile
   },
-  isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
+  isLogined: (state, { token }) => !!token,
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
   userId: (state, { profile: { _id: userId } }) => userId,
