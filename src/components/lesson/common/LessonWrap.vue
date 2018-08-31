@@ -1,7 +1,7 @@
 <template>
   <div>
     <hint v-if="data.cmd === 'Hint' && isShowHint" :data="data" />
-    <quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" />
+    <quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" :isPrint="isPrint"/>
   </div>
 </template>
 
@@ -19,6 +19,10 @@ export default {
     data: Object,
     originData: Array,
     isPreview: {
+      type: Boolean,
+      default: false
+    },
+    isPrint: {
       type: Boolean,
       default: false
     }

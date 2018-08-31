@@ -72,6 +72,10 @@ export default {
     isPreview: {
       type: Boolean,
       default: false
+    },
+    isPrint: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

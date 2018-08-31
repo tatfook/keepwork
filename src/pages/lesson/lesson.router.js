@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const Lesson = () => import('@/components/lesson/Lesson')
+// const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
@@ -32,6 +32,7 @@ const LessonSummary = () =>
 const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
 const LessonPerformance = () =>
   import('@/components/lesson/teacher/LessonStudentPerformance')
+const Print = () => import('@/components/lesson/teacher/Print')
 
 Vue.use(Router)
 
@@ -40,7 +41,7 @@ export default new Router({
     {
       path: '*',
       name: 'Lesson',
-      component: Lesson
+      component: Center
     },
     {
       path: '/teacher',
@@ -140,6 +141,11 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId/class/:classId/summary',
           name: 'LessonSummary',
           component: LessonSummary
+        },
+        {
+          path: 'package/:packageId/lesson/:lessonId/class/:classId/summary/print',
+          name: 'Print',
+          component: Print
         }
       ]
     },

@@ -1,12 +1,12 @@
 <template>
   <div class="teacher-summary" v-loading="loading">
     <div class="teacher-summary-print-and-email">
-      <el-button type="primary">Print</el-button>
-      <el-button type="primary" @click="sendEmail">Send to Mailbox</el-button>
+      <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">Print</el-button>
+      <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">Send to Mailbox</el-button>
     </div>
     <div class="teacher-summary-brief">
       <p class="date">
-        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span>{{creationDate}}</p>
+        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">Number Of Student: 50</span></p>
       <p>
         <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
       <p>
@@ -21,6 +21,8 @@
           </ul>
         </div>
       </div>
+      <!-- <p v-show="isPrintPage">
+        <span class="brief-title">{{$t('lesson.StuentsPerformance')}}:</span> 学生总数50</p> -->
     </div>
     <div class="teacher-summary-chart">
       <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
@@ -35,7 +37,7 @@
     </div>
     <div class="teacher-summary-detailed">
       <h4>{{$t('lesson.detailed')}}:</h4>
-      <div class="teacher-summary-detailed-change">
+      <div class="teacher-summary-detailed-change" v-show="!isPrintPage">
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
@@ -60,7 +62,7 @@
           </el-table-column>
           <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
           </el-table-column>
-          <el-table-column label=" ">
+          <el-table-column label=" " v-if="!isPrintPage">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
             </template>
@@ -100,6 +102,7 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
       classid: null,
       loading: true,
@@ -131,10 +134,11 @@ export default {
       return
     }
     this.totalStudent = this.classroomLearnRecord.length
-    this.getSingleLessonDetail(this.$route.params.classId)
-    this.getLessonSkill(this.$route.params.lessonId)
-    this.getQuizChartData(this.newCurrentRecord)
-    this.getStudentChartData(this.newCurrentRecord)
+    // this.getSingleLessonDetail(this.$route.params.classId)
+    // this.getLessonSkill(this.$route.params.lessonId)
+    // this.getQuizChartData(this.newCurrentRecord)
+    // this.getStudentChartData(this.newCurrentRecord)
+    Promise.all([this.getSingleLessonDetail(this.$route.params.classId),this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
     this.loading = false
   },
   computed: {
@@ -270,6 +274,12 @@ export default {
       })
       return learnRecordsArr
     },
+    gotoPrint(){
+      this.$router.push({
+        // path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary/print`
+        path: `summary/print`
+      })
+    },
     sendEmail() {
       this.$prompt('请输入邮箱', '提示', {
         confirmButtonText: this.$t('common.Sure'),
@@ -305,7 +315,6 @@ export default {
           console.log(err)
         })
     },
-
     getLessonSkill(lessonId) {
       lesson.lessons
         .getSkills({ lessonId })
