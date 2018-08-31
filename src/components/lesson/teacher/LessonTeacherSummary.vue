@@ -8,9 +8,9 @@
       <p class="date">
         <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">Number Of Student: 50</span></p>
       <p>
-        <span class="brief-title">{{$t('modList.lesson')}} {{lessonNo}}:</span> {{lessonName}}</p>
+        <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
       <p>
-        <span class="brief-title">{{$t('lesson.intro')}}:</span> {{lessonGoals}}</p>
+        <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
       <div class="skillpoints">
@@ -104,6 +104,7 @@ export default {
     return {
       isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
+      currenClassInfo: {},
       classid: null,
       loading: true,
       lessonName: null,
@@ -128,6 +129,10 @@ export default {
     }
   },
   async mounted() {
+    await lesson.classrooms.getClassroomById( this.$route.params.classId ).then(res => {
+      console.log('getClassroomById',res)
+      this.currenClassInfo = res
+    }).catch(err => console.log(err))
     await this.getClassLearnRecords({ id: this.$route.params.classId })
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
@@ -138,26 +143,27 @@ export default {
     // this.getLessonSkill(this.$route.params.lessonId)
     // this.getQuizChartData(this.newCurrentRecord)
     // this.getStudentChartData(this.newCurrentRecord)
-    Promise.all([this.getSingleLessonDetail(this.$route.params.classId),this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
+    await Promise.all([this.getSingleLessonDetail(this.$route.params.classId),this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
     this.loading = false
+    console.log('classroomLearnRecord',this.classroomLearnRecord)
   },
   computed: {
     ...mapGetters({
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
     }),
     getWeekDay() {
-      let time = dayjs(this.createdAt).format('YYYY-MM-DD')
+      let time = dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
       let day = time.split('-')
       let Day = new Date(day[0], parseInt(day[1] - 1), day[2])
       return String(Day.getDay())
     },
     creationDate(){
-      let year = dayjs(this.createdAt).year()
+      let year = dayjs(this.currenClassInfo.createdAt).year()
       let monthNum = dayjs(this.createdAt).month()
       let monthArr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','','Nov','Dec']
       let month = monthArr[monthNum]
-      let todayDate = dayjs(this.createdAt).date()
-      let hours = dayjs(this.createdAt).format('YYYY-MM-DD HH:mm:ss').split(' ')[1]
+      let todayDate = dayjs(this.currenClassInfo.createdAt).date()
+      let hours = dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD HH:mm:ss').split(' ')[1]
       let suffix = ['st','nd','rd','th']
       if(todayDate % 10 < 1 || todayDate % 10 > 3){
         todayDate = todayDate + suffix[3]
@@ -168,7 +174,7 @@ export default {
       }else{
         todayDate = todayDate + suffix[2]
       }
-      return this.isEn ? (month + ' ' + todayDate + ' ' + year + '  ' +  hours) : dayjs(this.createdAt).format('YYYY-MM-DD HH:mm:ss')
+      return this.isEn ? (month + ' ' + todayDate + ' ' + year + '  ' +  hours) : dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD HH:mm:ss')
     },
     newCurrentRecord() {
       let currentRecord = _.map(
@@ -307,7 +313,7 @@ export default {
         .then(res => {
           console.log('getClassroomById', res)
           this.createdAt = res.createdAt
-          this.lessonNo = res.extra.lessonNo
+          this.lessonNo = res.extra.lessonNo || 0
           this.lessonName = res.extra.lessonName
           this.lessonGoals = res.extra.lessonGoals
         })

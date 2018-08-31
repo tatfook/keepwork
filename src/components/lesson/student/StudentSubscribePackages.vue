@@ -88,6 +88,7 @@ export default {
 .packages-intro {
   width: 230px;
   margin: 0 auto 10px;
+  border: 1px solid transparent;
   .cover-wrap {
     width: 230px;
     height: 128px;
