@@ -40,7 +40,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             target={m.menuTarget}
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.getNameMenu(menuData)}
           </a>
         </el-menu-item>
       )
@@ -55,7 +55,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
               target={m.menuTarget}
               href={menuData.link}
             >
-              {m.getNameMune(menuData)}
+              {m.getNameMenu(menuData)}
             </a>
           </template>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
@@ -73,7 +73,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             style={m.getItemStyle(parentIndex)}
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.getNameMenu(menuData)}
           </a>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </div>
@@ -90,7 +90,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             style={m.getItemStyle(parentIndex)}
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.getNameMenu(menuData)}
           </a>
         </div>
       )
@@ -163,7 +163,7 @@ export default {
     }
   },
   methods: {
-    getNameMune(menuData) {
+    getNameMenu(menuData) {
       return this.isEmptyData ? this.$t(menuData.name) : menuData.name
     },
     getItemStyle(parentIndex) {
