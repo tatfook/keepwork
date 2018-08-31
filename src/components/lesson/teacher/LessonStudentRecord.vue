@@ -83,7 +83,7 @@ export default {
         result: true
       }).length
       let allQuiz = quiz.length
-      return rightAnswer / allQuiz * 100 + '%'
+      return allQuiz == 0 ? 0 + '%' :  rightAnswer / allQuiz * 100 + '%'
     },
   },
   filters: {
