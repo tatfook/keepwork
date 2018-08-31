@@ -781,7 +781,7 @@
     "availableCoins": "Available Coins",
     "havePurchased": "You have added this package!",
     "loginBeforePurchase": "You should login before add this package!",
-    "packageManage":{
+    "packageManage": {
       "package": "Packages",
       "Submit": "Submit",
       "basicInfo": "Basic Info.",
@@ -950,7 +950,7 @@
     "wrong": "wrong",
     "clickToRefresh": "Click to refresh",
     "state": "state",
-    "name":"Name",
+    "name": "Name",
     "username": "UserName",
     "accuracyRate": "Accuracy Rate",
     "totalStudent": "Number of Students (total:",
@@ -974,7 +974,7 @@
     "accuracyAnalysis": "Accuracy Analysis",
     "class": "Class",
     "fullPage": "Click to full page",
-    "classIdExplain":"{classId} is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
+    "classIdExplain": "{classId} is the unique identifier for this class. Students in this class need to enter the class with this identifier to start learning the lesson. This ensures the student learning data is sent to the system correctly.",
     "curentClassId": "The class ID is ",
     "studentEnterClassId": "Please let your students login with this identifier to play paracraft. And you could view students' real-time information below the menu {StuentsPerformance}",
     "StuentsPerformance": "Stuents'Performance",
@@ -986,8 +986,8 @@
     "enterNewClass": "Enter New Class",
     "notifyTips": "You have a class already started.{spanStart} Resume Class?{spanEnd}",
     "notifyTipsStudent": "You have entered a class.{spanStart} Resume Class?{spanEnd}",
-    "reviseGrades": "Please select students who need to revise their grades!",
     "classId": "Class ID:",
-    "nickName": "Name:"
+    "nickName": "Name:",
+    "pleaseInputName": "Please input your name here"
   }
 }
