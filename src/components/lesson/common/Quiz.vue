@@ -2,7 +2,7 @@
   <div class="quiz-container" :class="{'isPreview': isPreview}">
     <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
-      <i class="quiz-icon"></i>
+      <i class="quiz-icon" v-show="!isPrint"></i>
       <span class="quiz-no">
         {{$t('card.quiz')}}
       </span>
@@ -70,6 +70,10 @@ export default {
       }
     },
     isPreview: {
+      type: Boolean,
+      default: false
+    },
+    isPrint: {
       type: Boolean,
       default: false
     }
