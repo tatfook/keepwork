@@ -32,7 +32,7 @@
       <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
-        <el-table-column prop="packageName" :label="$t('lesson.nameLabel')">
+        <el-table-column class-name="package-manager-table-packagename" prop="packageName" :label="$t('lesson.nameLabel')">
         </el-table-column>
         <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
@@ -65,6 +65,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
@@ -204,7 +205,8 @@ export default {
       )
     },
     isReleasable(packageDetail) {
-      return packageDetail.state === 2
+      return false
+      // return packageDetail.state === 2 // The first version temporarily removes the release function
     },
     isRevocable(packageDetail) {
       return packageDetail.state === 1
@@ -451,6 +453,11 @@ export default {
     }
     .iconfont:last-child {
       margin-right: 0;
+    }
+    &-packagename {
+      .cell {
+        white-space: nowrap;
+      }
     }
     &-operations {
       text-align: right;

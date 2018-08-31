@@ -129,6 +129,13 @@ const actions = {
     await dispatch('getUserPackages', { useCache: false })
     return newPackageDetail
   },
+  async updatePackage(context, { updatingPackageData }) {
+    let { dispatch } = context
+    await lesson.packages.update({ updatingPackageData }).catch((error) => {
+      return Promise.reject(error.response)
+    })
+    await dispatch('getUserPackages', { useCache: false })
+  },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
     await lesson.packages.audit({ packageId, state: state })

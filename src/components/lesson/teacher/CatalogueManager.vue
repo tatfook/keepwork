@@ -33,19 +33,16 @@
 <script>
 import dayjs from 'dayjs'
 import VueDraggable from 'vuedraggable'
-import { mapActions, mapGetters } from 'vuex'
 import LessonsListDialog from './LessonsListDialog'
 export default {
   name: 'CatalogueManager',
   props: {
+    editingPackageDetail: Object,
     isEditing: Boolean
   },
   async mounted() {
     if (this.isEditing) {
-      await this.getPackageDetail({ packageId: this.editingPackageId })
-      let editingPackageDetail = this.lessonPackageDetail({
-        packageId: this.editingPackageId
-      })
+      let editingPackageDetail = this.editingPackageDetail
       let lessons = _.get(editingPackageDetail, 'lessons', [])
       this.catalogues = _.clone(lessons)
     }
@@ -59,9 +56,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
-    }),
     selectedLessonIds() {
       let lessonIds = []
       _.forEach(this.catalogues, lesson => {
@@ -71,9 +65,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getPackageDetail: 'lesson/getPackageDetail'
-    }),
     showLessonsListModal() {
       this.isLessonsListModalShow = true
     },

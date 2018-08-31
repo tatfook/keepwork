@@ -785,6 +785,7 @@
     "packageManage": {
       "package": "Packages",
       "Submit": "Submit",
+      "Release": "Release",
       "basicInfo": "Basic Info.",
       "nameIsRequiredInfo": "Name is required.",
       "pleaseLogin": "Please login to continue.",
@@ -801,6 +802,8 @@
       "addLesson": "Add Lessons",
       "adjustOrder": "move up & down",
       "searchByName": "Search lessons by name",
+      "lessonListIsEmpty": "You have not created any lessons.",
+      "searchResultIsEmpty": "No results.",
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "about": {
