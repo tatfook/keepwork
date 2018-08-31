@@ -785,6 +785,7 @@
     "packageManage": {
       "package": "Packages",
       "Submit": "Submit",
+      "Release": "Release",
       "basicInfo": "Basic Info.",
       "nameIsRequiredInfo": "Name is required.",
       "pleaseLogin": "Please login to continue.",

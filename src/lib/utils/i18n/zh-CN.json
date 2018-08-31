@@ -790,6 +790,7 @@
     "packageManage":{
       "package": "课程包",
       "Submit": "提交",
+      "Release": "发布",
       "basicInfo": "基本信息",
       "nameIsRequiredInfo": "请输入课程包名称。",
       "pleaseLogin": "请先登录",

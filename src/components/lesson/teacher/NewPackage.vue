@@ -51,7 +51,7 @@ export default {
       return !packageName || packageName == ''
     },
     isPackageInfoComplete() {
-      if (!this.isMounted) {
+      if (!this.isMounted || this.isPackageNameEmpty) {
         return false
       }
       let {

@@ -8,7 +8,8 @@
       <div class="package-editor-header-header-operations">
         <el-button round @click="toPackageManagerPage">{{$t('common.Cancel')}}</el-button>
         <el-button round @click="savePackage" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
-        <el-button round type="primary" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
+        <el-button round type="primary" v-if="isSubmitable" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
+        <el-button round type="primary" v-if="isReleasable" :class="{'is-disabled': !isPackageInfoComplete}" @click="releasePackage">{{$t('lesson.packageManage.Release')}}</el-button>
       </div>
     </div>
     <div class="package-editor-header-tabs">
@@ -22,6 +23,14 @@ export default {
   name: 'PackageEditorHeader',
   props: {
     activeTab: String,
+    isSubmitable: {
+      type: Boolean,
+      default: true
+    },
+    isReleasable: {
+      type: Boolean,
+      default: false
+    },
     isPackageNameEmpty: Boolean,
     isPackageInfoComplete: Boolean
   },
@@ -37,6 +46,9 @@ export default {
     },
     submitPackage() {
       this.$emit('submitPackage')
+    },
+    releasePackage() {
+      this.$emit('releasePackage')
     },
     toPackageManagerPage() {
       this.$router.push('/teacher/packageManager')

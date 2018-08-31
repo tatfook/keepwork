@@ -17,6 +17,7 @@ export const admin = {}
 
 export const packages = {
   create: async ({ newPackageData }) => post('packages', newPackageData),
+  update: async ({ updatingPackageData }) => put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
   packagesList: async params => get('packages/search', params || {}),
