@@ -7,8 +7,8 @@
         <el-row>
           <el-col :sm="12" :xs="22" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
             <div class="package">
-              <p class="time">{{$t('lesson.teachingTime')}}:
-                <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span>
+              <p class="time"><span v-show="lessonPackage.lastTeachDate">{{$t('lesson.teachingTime')}}:
+                <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span></span>
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
@@ -46,8 +46,10 @@ export default {
     await lesson.packages
       .getTaughtPackages()
       .then(res => {
+        console.log('teachPackage',res)
         this.teachList = res
         this.loading = false
+        console.log('sortteachPackage',this.sortedTeachList)
       })
       .catch(err => {
         console.log(err)
@@ -110,7 +112,7 @@ export default {
       .el-row {
         .package {
           width: 305px;
-          margin: 10px auto 30px;
+          margin: 10px auto 50px;
           p {
             font-size: 14px;
             white-space: nowrap;
@@ -118,6 +120,7 @@ export default {
             text-overflow: ellipsis;
           }
           .time {
+            height: 20px;
             .red-text {
               color: #ff0c0c;
             }
