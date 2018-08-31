@@ -87,7 +87,7 @@ export default {
 <style lang="scss">
 .packages-intro {
   width: 230px;
-  margin: 0 auto;
+  margin: 0 auto 10px;
   .cover-wrap {
     width: 230px;
     height: 128px;
