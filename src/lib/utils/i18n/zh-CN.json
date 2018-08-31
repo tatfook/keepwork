@@ -993,6 +993,7 @@
     "notifyTipsStudent": "有课堂正在进行。{spanStart} 返回课堂？{spanEnd}",
     "classId": "班级 ID:",
     "nickName": "名称",
-    "pleaseInputName": "请输入你的名字"
+    "pleaseInputName": "请输入你的名字",
+    "classIsOver": "课堂已经结束"
   }
 }

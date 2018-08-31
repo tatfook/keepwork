@@ -51,7 +51,6 @@ export default {
   async mounted() {
     await this.getPackagesList()
     this.loading = false
-    console.log('sortedPackagesList',this.sortedPackagesList)
   },
   methods: {
     ...mapActions({

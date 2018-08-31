@@ -5,7 +5,7 @@
         <source :src="animation" type="video/mp4">
       </video>
     </el-dialog>
-    <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="50%">
+    <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="600">
       <div>{{$t('lesson.curentClassId')}}
         <span class="class-id">{{classroomId}}</span>
       </div>

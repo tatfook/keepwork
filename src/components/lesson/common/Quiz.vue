@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-container" :class="{'isPreview': isPreview}">
+  <div class="quiz-container" :class="{'is-preview': isPreview}">
     <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
       <i class="quiz-icon"></i>
@@ -246,7 +246,7 @@ export default {
   background: white;
   max-width: 1229px;
   margin: 0 auto;
-  &.isPreview {
+  &.is-preview {
     .el-radio__input,
     .el-checkbox__inner,
     .el-textarea {
