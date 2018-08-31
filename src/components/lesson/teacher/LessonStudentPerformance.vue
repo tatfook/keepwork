@@ -10,10 +10,10 @@
         <span class="name">{{$t('lesson.wrong')}}</span>
       </span>
     </div>
-    <div class="refresh-data-wrap" v-if="isBeInClass && !learnRecords">
+    <!-- <div class="refresh-data-wrap" v-if="isBeInClass && !learnRecords">
       <el-button @click="handleRefreshLearnRecords" icon="el-icon-refresh" type="warning" size="medium">{{$t('lesson.clickToRefresh')}}</el-button>
-    </div>
-    <el-table class="performance-table" v-else :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" height="500" tooltip-effect="dark" :default-expand-all="false">
+    </div> -->
+    <el-table class="performance-table" :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" height="500" tooltip-effect="dark" :default-expand-all="false">
       <el-table-column v-if="isHasData" fixed prop="name" :label="$t('lesson.name')" sortable min-width="140" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <div class="userinfo">
@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column fixed v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :label="item" :prop="item" sortable min-width="100" align="center" :show-overflow-tooltip="true">
+      <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :render-header="(h, params) => renderLastHeader(h,params)" sortable min-width="100" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <span v-if="props.row[`quiz${index+1}`]['type'] === TRF" :class="['answer', props.row[`quiz${index + 1}`]['result'] ? 'right': 'wrong'  ]">{{ formatTRF(props.row[`quiz${index+1}`]['answer']) }}</span>
           <span v-else :class="['answer', props.row[`quiz${index + 1}`]['result'] ? 'right': 'wrong'  ]">{{props.row[`quiz${index+1}`]['answer'] | formatQuiz }}</span>
@@ -39,6 +39,7 @@
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import avatar from '@/assets/lessonImg/default_avatar.png'
+import TableHeaderPopover from './TableHeaderPopover'
 export default {
   name: 'LessonStudentPerformance',
   data() {
@@ -47,8 +48,8 @@ export default {
       defaultAvatar: avatar
     }
   },
-  mounted() {
-    // console.log(this.tableData)
+  components: {
+    TableHeaderPopover
   },
   filters: {
     formatQuiz(value) {
@@ -73,9 +74,14 @@ export default {
       }
       return ''
     },
+    renderLastHeader(h, { column, $index }) {
+      let tableHeaderIndex = $index - 2
+      let quizIndex = tableHeaderIndex - 1
+      let quiz = this.tableHeaderQuizzesPopover[quizIndex]
+      return <TableHeaderPopover index={tableHeaderIndex} quiz={quiz} />
+    },
     testData() {
-      console.log(this.tableData)
-      console.log(this.tableDataFaker)
+      console.log(this.tableHeaderQuizzesPopover[0])
     },
     countState(quiz) {
       let finishCount = quiz.reduce((count, cur) => {
@@ -125,6 +131,19 @@ export default {
           )
         : []
     },
+    tableHeaderQuizzesPopover() {
+      if (!this.isHasData) return []
+      let quiz = this.learnRecordsFilter[0].quiz
+      return (
+        quiz &&
+        quiz.map(({ data: { answer, type, title, options } }) => ({
+          answer,
+          type,
+          title,
+          options
+        }))
+      )
+    },
     tableDataFaker() {
       // 为了造假数据使用
       return this.tableData
@@ -150,6 +169,11 @@ export default {
             (item, index) => `quiz${index + 1}`
           )
         : []
+    },
+    alphabet() {
+      return Array.from({ length: 26 }, (i, index) =>
+        String.fromCharCode(65 + index)
+      )
     }
   }
 }
@@ -223,6 +247,9 @@ $red: #f53838;
         color: $red;
       }
     }
+  }
+  .quiz-pop {
+    background: black;
   }
 }
 </style>
