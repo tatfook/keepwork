@@ -18,7 +18,7 @@
       <div class="review-list-package">
         <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
           <div class="package-cover">
-            <p class="teach-time">{{lessonPackage.updatedAt | formatTime}}</p>
+            <p class="teach-time">{{lessonPackage.createdAt | formatTime}}</p>
             <img :src="lessonPackage.extra.coverUrl" alt="" @click="enterPackage(lessonPackage.packageId)">
           </div>
           <div class="package-brief">
@@ -64,7 +64,6 @@ export default {
     let resData = await lesson.classrooms.getTeachingListing()
     this.teachList = _.get(resData, `rows`, [])
     this.loading = false
-    console.log('teachList', this.teachList)
   },
   computed: {
     sortedTeachList() {
@@ -81,7 +80,7 @@ export default {
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
-      return this.positiveSequence ? (obj1.updatedAt >= obj2.updatedAt ? -1 : 1) : (obj1.updatedAt <= obj2.updatedAt ? -1 : 1)
+      return this.positiveSequence ? (obj1.createdAt >= obj2.createdAt ? -1 : 1) : (obj1.createdAt <= obj2.createdAt ? -1 : 1)
     },
     sequence(){
       this.positiveSequence = !this.positiveSequence
