@@ -48,7 +48,7 @@
             <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
           </div>
           <el-row v-else>
-            <el-col :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
+            <el-col class="group-line" :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
               <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
             </el-col>
           </el-row>
@@ -101,6 +101,7 @@ export default {
       .then(res => {
         this.skillsList = res
         this.loadingSkillsPoint = false
+        console.log('sorttudiedpackages',this.sortedSubscribesList)
       })
       .catch(error => console.log(error))
   },
@@ -281,6 +282,7 @@ export default {
       }
       .packages {
         margin: 44px 0 0;
+        padding: 0 12px;
         &-nothing {
           margin-top: 60px;
           width: 100%;
@@ -295,6 +297,10 @@ export default {
             line-height: 30px;
             color: #111111;
           }
+        }
+        .group-line{
+          border-bottom:1px solid #d2d2d2;
+          margin-bottom:20px;
         }
       }
     }
