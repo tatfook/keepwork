@@ -145,17 +145,20 @@ export default {
       userUploadFileAndUseInSite: 'user/uploadFileAndUseInSite',
       setActiveMod: 'setActiveMod'
     }),
-    addMod() {
+    updateActiveCursor() {
       this.$store.dispatch('setAddingArea', {
         area: gConst.ADDING_AREA_MARKDOWN,
         cursorPosition: this.activeCursorLine
       })
+    },
+    addMod() {
+      this.updateActiveCursor()
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     highlightCodeByMod(mod) {
       if (mod.modType === 'ModMarkdown') return
       let lineBegin = mod.lineBegin - 1
-      let lineEnd = BlockHelper.endLine(mod) - 1
+      let lineEnd = BlockHelper.endLine(mod)
       this.clearHighlight()
       for (let i = lineBegin; i < lineEnd; i++) {
         this.editor.addLineClass(i, 'gutter', 'mark-text')
@@ -171,14 +174,13 @@ export default {
       this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
-        let mod = Parser.getBlockByCursorLine(this.modList || [], line)
+        let mod = Parser.getBlockByCursorLine(this.modList || [], line + 1)
         if (mod) {
           this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
           if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
-          if (!this.preClickedMod || this.preClickedMod === 'Markdown') {
-            let fileManagerButton = document.getElementById('file-manager-button')
-            mod.cmd === 'Markdown' && fileManagerButton && fileManagerButton.click()
+          if(mod.cmd === 'Markdown') {
+            this.$store.dispatch('setActiveManagePaneComponent', 'FileManager')
           }
           this.preClickedMod = mod.cmd
         }
@@ -223,12 +225,6 @@ export default {
     },
     foldAllCodes(cm = this.editor) {
       for (var l = cm.firstLine(); l <= cm.lastLine(); ++l) {
-        // function isOnEdit only check the content of a mod, doesn't include the mod cmd
-        // and cm.firstLine() equal to 0, but the line number start with 1,
-        // that's why we use l + 2 here to check if it is the cmd line
-        // if (!this.activeMod || !BlockHelper.isOnEdit(this.activeMod, l + 2))
-
-        // fold all
         cm.foldCode({ line: l, ch: 0 }, null, 'fold')
       }
     },

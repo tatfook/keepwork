@@ -16,13 +16,12 @@ const buildBlockList = mdText => {
   if (!mdText) return []
   let mdLines = mdText.split('\n')
   let blockList = []
-  let started = null
   let curModBlock = null
   let preModBlock = null
   const beginModBlock = (line, lineNumber) => {
     let cmd = CmdHelper.parseCmd(line)
     if (!cmd) {
-      let mdBegin = preModBlock ? BlockHelper.endLine(preModBlock) : 1
+      let mdBegin = preModBlock ? BlockHelper.endLine(preModBlock) + 1 : 1
       curModBlock = new ModBlock(cmd, mdBegin)
       // keep the blank lines for markdown mod
       for (let i = mdBegin; i < lineNumber; i++) {
@@ -55,8 +54,7 @@ const buildBlockList = mdText => {
       } else {
         BlockHelper.addLine(curModBlock, line)
       }
-    } else if (!started || line.trim() !== '') {
-      started = true
+    } else if (line.trim() !== '') {
       beginModBlock(line, lineNumber + 1)
     }
   })
@@ -230,7 +228,7 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
   while (tempIndex <= endIndex) {
     let curBlock = blockList[tempIndex]
     let preBlock = blockList[tempIndex - 1]
-    let position = preBlock ? BlockHelper.endLine(preBlock) + 1 : 1
+    let position = preBlock ? BlockHelper.endLine(preBlock) + 2 : 1
     BlockHelper.modifyBegin(curBlock, position - curBlock.lineBegin)
     tempIndex++
   }
@@ -248,7 +246,7 @@ const addBlockAfterIndex = (blockList, index, newBlock) => {
   if (preBlock) {
     beginLine = BlockHelper.endLine(preBlock)
     // just for beautify, see also in buildMarkdown function
-    if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 1
+    if (!BlockHelper.isMarkdownMod(preBlock)) beginLine += 2
   }
   BlockHelper.modifyBegin(newBlock, beginLine - newBlock.lineBegin)
   blockList.splice(index + 1, 0, newBlock)
@@ -292,20 +290,19 @@ const getActiveBlock = (blockList, beginLine) => {
 
 const getBlockByCursorLine = (blockList, beginLine) => {
   if (beginLine === 0) return false
-  beginLine += 1
   return blockList.find(mod => {
     return BlockHelper.isOnCursor(mod, beginLine)
   })
 }
 
-const addBlockToMarkdown = (code, position = 0, modName, styleID) => {
+const addBlockToMarkdown = (code, position = 0, modName, content) => {
   if (CmdHelper.isMarkdownCmd(getCmd(modName))) return code
 
   let mdLines = code.split('\n')
   let cmdCode = '```@' + getCmd(modName) + '\n'
-  if (styleID) cmdCode += 'styleID: ' + styleID
+  if (content) cmdCode += content
   cmdCode += '\n```\n'
-  mdLines.splice(position + 1, 0, cmdCode)
+  mdLines.splice(position, 0, cmdCode)
   return mdLines.join('\n')
 }
 

@@ -325,17 +325,20 @@ export default {
       if (!url) return
       let ext = file.ext || (file.filename || '').split('.').pop()
       let filename = file.filename || url
-      console.log('insertBigfile: ', JSON.stringify(file), url)
-      this.$refs.codemirror.addNewLine(null, `\`\`\`@BigFile
-styleID: 0
+      const modContent = `
 bigFile:
   src: >-
     ${url}
   ext: ${ext}
   filename: ${filename}
   size: ${file.size}
-\`\`\``)
-    this.$refs.codemirror.foldAllCodes()
+`
+      const payload = {
+        modName: 'ModBigFile',
+        modContent
+      }
+      this.$refs.codemirror.updateActiveCursor()
+      this.$store.dispatch('addModToMarkdown', payload)
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.toggleSkyDrive({ showSkyDrive: false })
