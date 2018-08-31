@@ -14,19 +14,19 @@
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
-      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
       </el-button>
-      <el-button v-if="isHasOpened" class="iconfont icon-refresh" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh edit-hover" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
       </el-button>
       <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-add_file" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
+      <el-button v-if="isAddable" class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-folder_" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
+      <el-button v-if="isAddable" class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-delete" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+      <el-button v-if="isRemovable" class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-set_up" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.settings")'>
+      <el-button v-if="isSettable" class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.settings")'>
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -509,7 +509,7 @@ export default {
   color: #ffac33;
 }
 .edit-hover:hover {
-  color: #1780dc !important;
+  color: #409eff !important;
 }
 
 .rename-wrapper {
