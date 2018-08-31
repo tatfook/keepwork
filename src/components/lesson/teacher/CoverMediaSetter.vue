@@ -2,7 +2,7 @@
   <div class="cover-media-setter">
     <label class='cover-media-setter-title'>{{$t('lesson.packageManage.cover')}}</label>
     <el-radio-group class="cover-media-setter-radio-group" v-model="imageSourceType">
-      <el-radio label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio>
+      <!-- <el-radio label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio> -->
       <el-radio label="url">{{$t('lesson.packageManage.inputUrl')}}</el-radio>
     </el-radio-group>
     <div class="cover-media-setter-from-bigfile" v-show="imageSourceType === 'bigfile'">
