@@ -14,7 +14,7 @@
     </div>
     <div class="about-video">
       <el-row :gutter="20">
-        <el-col :sm="8" :xs="24" v-for="(coursePackage,index) in hotsPackages" v-if="index < 3" :key="coursePackage.id">
+        <el-col :sm="24" :md="8" v-for="(coursePackage,index) in hotsPackages" v-if="index < 3" :key="coursePackage.id">
           <div class="subject-desc">
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
             <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
@@ -35,7 +35,7 @@
     </div>
     <div class="about-view-more">
       <div class="about-view-more-btn" @click="gotoLessons">
-        <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt="">
+        <!-- <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt=""> -->
         <span class="tip">{{$t('lesson.about.viewMoreLessons')}}</span>
         <img class="next next-1" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-2" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
@@ -390,19 +390,19 @@ export default {
   }
   &-view-more {
     &-btn {
-      text-align: center;
       width: 322px;
-      height: 77px;
       margin: 0 auto;
       position: relative;
       cursor: pointer;
+      height: 77px;
+      background: url('../../../assets/lessonImg/aboutPageImg/view_more_lesson.png') no-repeat;
+      background-size: cover;
+      padding-left: 20px;
       .tip {
-        position: absolute;
-        top: 20px;
-        left: 25px;
+        text-align: center;
+        line-height: 70px;
         font-size: 18px;
         color: #ffffff;
-        text-align: center;
         display: inline-block;
         width: 200px;
       }
@@ -545,34 +545,27 @@ export default {
     }
     &-view-more {
       &-btn {
-        text-align: center;
         width: 222px;
         height: 50px;
         margin: 0 auto;
         position: relative;
-        img {
-          width: 100%;
-        }
         .tip {
-          position: absolute;
-          top: 20px;
-          left: 25px;
-          font-size: 18px;
           color: #ffffff;
-          text-align: center;
           display: inline-block;
-          width: 200px;
+          width: 180px;
+          line-height: 45px;
+          font-size: 14px;
         }
         .next {
           width: 12px;
           position: absolute;
-          top: 16px;
-          left: 150px;
+          top: 18px;
+          left: 180px;
           &-2 {
-            left: 160px;
+            left: 190px;
           }
           &-3 {
-            left: 170px;
+            left: 200px;
           }
         }
       }
@@ -605,11 +598,11 @@ export default {
       text-align: center;
       font-size: 14px;
       .img-wrap {
-        width: 40px;
         height: 50px;
         max-width: 86px;
+        text-align: center;
         img {
-          width: 100%;
+          width: 40px;
         }
       }
       .tatfook {
