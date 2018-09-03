@@ -33,6 +33,8 @@ export const packages = {
 export const lessons = {
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
+  lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
+  rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`)

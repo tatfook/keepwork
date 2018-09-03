@@ -1,6 +1,7 @@
 <template>
   <div class="lesson-student-progress">
     <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz" :class="{'noStart': lessonQuizDone === 0}">
+      <div class="progress-point-title">{{$t('lesson.lessonPlan')}}</div>
       <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
           <div class="quiz-result-list">
@@ -15,7 +16,9 @@
       </div>
     </span>
     <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
-    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary"></span>
+    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary">
+      <div class="progress-point-title">{{$t('lesson.summary')}}</div>
+    </span>
   </div>
 </template>
 
@@ -110,6 +113,13 @@ export default {
       position: relative;
       margin-left: -25px;
       z-index: 9;
+    }
+    &-title {
+      min-width: 100px;
+      position: relative;
+      margin-top: -25px;
+      margin-left: -22px;
+      color: #686868;
     }
     &-number {
       display: block;
