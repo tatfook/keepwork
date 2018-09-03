@@ -6,7 +6,7 @@
       <div v-for="(item,index) in options" :class="['pop-answer',{'is-right-answer': item.isRightAnswer}]" :key="index">
         {{alphabet[index]}} : {{item.item}}
       </div>
-      <div class="pop-desc">{{$t('card.explanation')}} : {{desc}}</div>
+      <div class="pop-desc">{{$t('card.explanation')}} {{desc}}</div>
     </div>
     <span>{{$t('lesson.quiz')}}{{index}}</span>
   </el-tooltip>
