@@ -136,11 +136,12 @@ export default {
       let quiz = this.learnRecordsFilter[0].quiz
       return (
         quiz &&
-        quiz.map(({ data: { answer, type, title, options } }) => ({
+        quiz.map(({ data: { answer, type, title, options, desc } }) => ({
           answer,
           type,
           title,
-          options
+          options,
+          desc
         }))
       )
     },
