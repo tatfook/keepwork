@@ -6,6 +6,7 @@
       <div v-for="(item,index) in options" :class="['pop-answer',{'is-right-answer': item.isRightAnswer}]" :key="index">
         {{alphabet[index]}} : {{item.item}}
       </div>
+      <div class="pop-desc">{{$t('card.explanation')}} : {{desc}}</div>
     </div>
     <span>{{$t('lesson.quiz')}}{{index}}</span>
   </el-tooltip>
@@ -16,6 +17,9 @@ export default {
   name: 'TableHeaderPopover',
   data() {
     return {}
+  },
+  mounted() {
+    console.log(this.quiz)
   },
   props: {
     index: 0,
@@ -43,6 +47,9 @@ export default {
               : { item, isRightAnswer }
           })
     },
+    desc() {
+      return this.quiz.desc || 'hehehehe'
+    },
     answer() {
       return this.quiz.answer
     },
@@ -66,6 +73,7 @@ $green: #27c12f;
 .table-header-pop {
   font-size: 14px;
   padding: 20px;
+  min-width: 200px;
   .pop-title {
     margin-top: 10px;
   }
@@ -74,6 +82,9 @@ $green: #27c12f;
     &.is-right-answer {
       color: $green;
     }
+  }
+  .pop-desc {
+    margin-top: 10px;
   }
 }
 </style>
