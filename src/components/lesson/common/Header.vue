@@ -36,11 +36,15 @@ export default {
     },
     activeNavType() {
       let type
-      type = AboutActivePageNameReg.test(this.nowPagename)
-        ? 'about'
-        : LessonsActivePageNameReg.test(this.nowPagename)
-          ? 'lessons'
-          : ColumnActivePageNameReg.test(this.nowPagename) ? 'column' : ''
+      if(this.nowPagename === "Lesson"){
+        type = 'lessons'
+      }else{
+        type = AboutActivePageNameReg.test(this.nowPagename)
+          ? 'about'
+          : LessonsActivePageNameReg.test(this.nowPagename)
+            ? 'lessons'
+            : ColumnActivePageNameReg.test(this.nowPagename) ? 'column' : ''
+      }
       return type
     },
     isTeacherPage() {
