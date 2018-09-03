@@ -295,18 +295,22 @@ export default {
         path: `summary/print`
       })
     },
-    sendEmail() {
+    async sendEmail() {
       this.$prompt('请输入邮箱', '提示', {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
         inputErrorMessage: '邮箱格式不正确'
       })
-        .then(({ value }) => {
-          // this.$message({
-          //   type: 'success',
-          //   message: '你的邮箱是: ' + value
-          // })
+        .then(async ({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '你的邮箱是: ' + value
+          })
+          let to = value
+          let subject = '课程 1：老铁稳'
+          let html = '<h1>这里是邮箱内容</h1>'
+          await lesson.emails.sendEmails({to, subject, html}).then(res => {console.log(res)}).catch(err => {console.log(err)})
           this.successSendEmailDialogVisible = true
         })
         .catch(() => {

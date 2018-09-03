@@ -72,13 +72,18 @@ export const subjects = {
   getAllSubjects: () => get('subjects')
 }
 
+export const emails = {
+  sendEmails: ({to, subject, html}) => post('emails', {to, subject, html})
+}
+
 export const lesson = {
   users,
   packages,
   lessons,
   admin,
   classrooms,
-  subjects
+  subjects,
+  emails
 }
 
 export default lesson
