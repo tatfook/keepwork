@@ -283,7 +283,8 @@
     "readFileFromLocal": "正在读取文件。。。",
     "enlargeMdEditing": "大窗口编辑",
 
-    "pleaseInput": "请输入"
+    "pleaseInput": "请输入",
+    "changePic": "更换图片"
   },
   "modList": {
     "recent": "常用",
