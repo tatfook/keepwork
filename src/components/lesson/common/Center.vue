@@ -121,6 +121,9 @@ export default {
         .red {
           color: #e4461f;
           display: inline;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .purchase-tip {
           color: #3491f0;
@@ -129,16 +132,19 @@ export default {
         }
         .purchase-money {
           font-size: 14px;
-          width: 165px;
+          display: inline-block;
+          padding: 0 12px;
           height: 27px;
           border: solid 2px #f3f3f3;
           text-align: left;
-          padding: 0;
-          line-height: 30px;
+          line-height: 27px;
           border-radius: 15px;
-          margin: 5px 0;
-          padding-left: 5px;
+          margin: 2px 0;
           cursor: default;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 280px;
         }
       }
     }
