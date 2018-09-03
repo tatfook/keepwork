@@ -312,6 +312,7 @@ export default {
   }
   .quiz-text-match {
     padding: 20px 40px 0;
+    user-select: none;
   }
   .quiz-result {
     margin-left: 20px;
