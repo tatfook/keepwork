@@ -2,10 +2,13 @@
   <span @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isClicked }">
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
-        To get the coins, you must meet the following three conditions:
-        1. The learning time of this lesson should be no less than 5 minutes. Have learned 00：20
-        2. Answers for all quizzes should be correct.
-        3. Your locked coins should be no less than the coins that you will  get.  There are 100 locked coins in your account at present. </span>
+        <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
+        <div class="tips-row">{{$t('lesson.jewelTips1')}}
+          <span class="tips-time">{{time}}</span>
+        </div>
+        <div class="tips-row">{{$t('lesson.jewelTips2')}}</div>
+        <div class="tips-row" v-html="$t('lesson.jewelTips3', {lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div>
+      </span>
     </div>
   </span>
 </template>
@@ -20,15 +23,12 @@ export default {
   data() {
     return {
       isClicked: false,
-      isShowTips: false,
-      tips: `To get the coins, you must meet the following three conditions:
-            1. The learning time of this lesson should be no less than 5 minutes. Have learned  00：20
-            2. Answers for all quizzes should be correct.
-            3. Your locked coins should be no less than the coins that you will  get.  There are 100 locked coins in your account at present. `
+      isShowTips: true,
+      lockCoin: 998,
+      time: '03:48'
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     handleClick() {
       this.isClicked = !this.isClicked
@@ -37,7 +37,7 @@ export default {
       this.isShowTips = true
     },
     closeTips() {
-      this.isShowTips = false
+      this.isShowTips = true
     }
   }
 }
@@ -86,8 +86,15 @@ export default {
       font-size: 16px;
       display: inline-block;
       background-color: #fff;
-      white-space: pre-line;
       word-wrap: break-word;
+      .tips-time,
+      .tips-coin {
+        color: #ec761a;
+        font-weight: bold;
+      }
+      .tips-row {
+        line-height: 30px;
+      }
     }
     &::before {
       content: '';
