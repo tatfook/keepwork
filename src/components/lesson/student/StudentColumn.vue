@@ -80,7 +80,6 @@ export default {
       loading: true,
       classID: '',
       skillsList: [],
-      subscribesList: [],
       loadingSkillsPoint: true,
       beInClassDialog: false
     }
@@ -88,13 +87,8 @@ export default {
   async mounted() {
     await this.getProfile()
     let payload = { userId: this.userId }
-    await lesson.users
-      .userSubscribes(payload)
-      .then(res => {
-        this.subscribesList = res
-        this.loading = false
-      })
-      .catch(error => console.log(error))
+    await this.getUserSubscribes(payload)
+    this.loading = false
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -108,7 +102,8 @@ export default {
       userProfile: 'user/profile',
       userId: 'user/userId',
       username: 'user/username',
-      enterClassInfo: 'lesson/student/enterClassInfo'
+      enterClassInfo: 'lesson/student/enterClassInfo',
+      subscribesList: 'lesson/student/subscribesList'
     }),
     skillpointsCount() {
       let sum = 0
@@ -148,7 +143,8 @@ export default {
   methods: {
     ...mapActions({
       getProfile: 'user/getProfile',
-      enterClassRoom: 'lesson/student/enterClassRoom'
+      enterClassRoom: 'lesson/student/enterClassRoom',
+      getUserSubscribes: 'lesson/student/getUserSubscribes'
     }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1

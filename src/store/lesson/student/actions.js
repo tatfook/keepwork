@@ -4,6 +4,7 @@ import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 
 let {
+  SET_USER_SUBSCRIBES,
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   ENTER_CLASSROOM,
@@ -20,6 +21,10 @@ let {
 } = props
 
 const actions = {
+  async getUserSubscribes({ commit }, { userId }) {
+    let userSubscribes = await lesson.users.userSubscribes({ userId })
+    commit(SET_USER_SUBSCRIBES, userSubscribes)
+  },
   async getPackageDetail({ commit }, { packageId }) {
     let detail = await lesson.packages.packageDetail({
       id: packageId

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 const getters = {
+  subscribesList: state => state.subscribesList,
   studentPackageDetail: state => ({ packageId }) =>
     _.get(state.packagesDetail, packageId),
   lessonDetail: state => state.lessonDetail,
