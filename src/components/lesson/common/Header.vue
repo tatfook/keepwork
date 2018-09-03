@@ -48,7 +48,7 @@ export default {
     },
     isStudentPage() {
       // return StudentPageReg.test(this.nowFullPath)
-      return !TeacherPageReg.test(this.nowFullPath)
+      return !this.isTeacherPage
     },
     columnText() {
       if (this.isStudentPage) {
