@@ -1000,6 +1000,6 @@
     "jewelTipsTitle": "To get the coins, you must meet the following three conditions:",
     "jewelTips1": "1. The learning time of this lesson should be no less than 5 minutes. Have learned ",
     "jewelTips2": "2. Answers for all quizzes should be correct.",
-    "jewelTips3": "3. Your locked coins should be no less than the coins that you will  get.  There are {lockCoin} locked coins in your account at present."
+    "jewelTips3": "3. Your locked coins should be no less than {reward} coins.  There are {lockCoin} locked coins in your account at present."
   }
 }

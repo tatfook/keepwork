@@ -46,7 +46,6 @@ export default {
   async created() {
     const { packageId, lessonId } = this.$route.params
     this.isBeInClassroom && (await this.resumeTheClass())
-    // this.copyProhibited()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
       return await this.getLessonContent({ lessonId })
@@ -95,15 +94,6 @@ export default {
           ),
         delay
       )
-    },
-    copyProhibited() {
-      document.oncontextmenu = new Function('event.returnValue=false')
-      document.onselectstart = new Function('event.returnValue=false')
-      document.onkeydown = () => {
-        if (event.ctrlKey && window.event.keyCode === 67) return false
-        if (event.ctrlKey && window.event.keyCode === 86) return false
-      }
-      document.body.oncopy = () => false
     },
     backToClassroom() {
       const { packageId, lessonId } = this.enterClassInfo

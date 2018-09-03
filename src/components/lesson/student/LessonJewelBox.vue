@@ -1,43 +1,81 @@
 <template>
-  <span @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isClicked }">
+  <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
         <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
         <div class="tips-row">{{$t('lesson.jewelTips1')}}
-          <span class="tips-time">{{time}}</span>
+          <span class="tips-time">{{time | toMinute}}</span>
         </div>
         <div class="tips-row">{{$t('lesson.jewelTips2')}}</div>
-        <div class="tips-row" v-html="$t('lesson.jewelTips3', {lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div>
+        <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div>
       </span>
     </div>
   </span>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'JewelBox',
   props: {
     data: Object
   },
+  filters: {
+    toMinute(time) {
+      let minute = Math.floor(time / 60)
+        .toString()
+        .padStart(2, '0')
+      let second = (time % 60).toString().padStart(2, '0')
+      return `${minute}:${second}`
+    }
+  },
   data() {
     return {
       isClicked: false,
-      isShowTips: true,
-      lockCoin: 998,
-      time: '03:48'
+      isShowTips: false,
+      needTime: 300,
+      time: 0,
+      reward: 10,
+      _timer: null
     }
   },
-  mounted() {},
+  mounted() {
+    this.startTimer()
+  },
+  computed: {
+    ...mapGetters({
+      lockCoin: 'lesson/lockCoin',
+      lessonUserId: 'lesson/student/lessonUserId',
+      userinfo: 'lesson/userinfo',
+      isQuizAllRight: 'lesson/student/isQuizAllRight'
+    }),
+    userId() {
+      return this.userinfo.id
+    },
+    isJewelOpen() {
+      return this.time >= this.needTime && this.lockCoin >= this.reward && this.isQuizAllRight
+    },
+    isShowJewel() {
+      return this.lessonUserId !== this.userId
+    }
+  },
   methods: {
     handleClick() {
       this.isClicked = !this.isClicked
+    },
+    startTimer() {
+      this.time++
+      clearTimeout(this._timer)
+      this._timer = setTimeout(() => {
+        this.startTimer()
+      }, 1000)
     },
     showTips() {
       this.isShowTips = true
     },
     closeTips() {
-      this.isShowTips = true
+      this.isShowTips = false
     }
   }
 }

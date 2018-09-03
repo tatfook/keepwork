@@ -28,15 +28,11 @@ const actions = {
       detail
     })
   },
-  async getLessonContent(context, { lessonId }) {
-    const {
-      commit,
-      rootGetters: { 'user/authRequestConfig': config }
-    } = context
-    let res = await lesson.lessons.lessonContent({
-      lessonId,
-      config
-    })
+  async getLessonContent({ commit }, { lessonId }) {
+    let [res, detail] = await Promise.all([
+      lesson.lessons.lessonContent({ lessonId }),
+      lesson.lessons.lessonDetail({ lessonId })
+    ])
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
@@ -45,18 +41,13 @@ const actions = {
         data: data[0],
         result: null
       }))
-    let _lesson = _.get(
-      modList.find(item => item.cmd === 'Lesson'),
-      'data.lesson',
-      {}
-    )
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
       content: res.content
     })
     commit(SAVE_LESSON_DETAIL, {
       lessonId,
-      lesson: _lesson,
+      lesson: detail,
       quiz,
       modList
     })
@@ -131,16 +122,18 @@ const actions = {
   async createLearnRecords(
     {
       commit,
-      getters: { learnRecords }
+      getters: { learnRecords, lessonUserId }
     },
     { packageId, lessonId, state = 0 }
   ) {
-    let res = await lesson.users.createLearnRecords({
-      packageId,
-      lessonId,
-      state,
-      extra: learnRecords
-    }).catch(e => console.error(e))
+    let res = await lesson.users
+      .createLearnRecords({
+        packageId,
+        lessonId,
+        state,
+        extra: learnRecords
+      })
+      .catch(e => console.error(e))
     if (res) {
       commit(CREATE_LEARN_RECORDS_SUCCESS, res.id)
     }
@@ -190,12 +183,11 @@ const actions = {
     commit(LEAVE_THE_CLASS)
   },
   async checkClassroom({ commit, dispatch }) {
-    await lesson.classrooms.currentClass()
-      .catch(e => {
-        console.warn('课堂已经不在了')
-        commit(LEAVE_THE_CLASS)
-        return Promise.reject(e)
-      })
+    await lesson.classrooms.currentClass().catch(e => {
+      console.warn('课堂已经不在了')
+      commit(LEAVE_THE_CLASS)
+      return Promise.reject(e)
+    })
   }
 }
 export default actions

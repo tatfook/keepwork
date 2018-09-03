@@ -25,23 +25,19 @@ const actions = {
     commit(TOGGLE_HINT)
   },
   async getLessonContent({ commit }, lessonId) {
-    let res = await lesson.lessons.lessonContent({
-      lessonId
-    })
+    let [res, detail] = await Promise.all([
+      lesson.lessons.lessonContent({ lessonId }),
+      lesson.lessons.lessonDetail({ lessonId })
+    ])
     let modList = Parser.buildBlockList(res.content)
 
-    let _lesson = _.get(
-      modList.find(item => item.cmd === 'Lesson'),
-      'data.lesson',
-      {}
-    )
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
       content: res.content
     })
     commit(SAVE_LESSON_DETAIL, {
       lessonId,
-      lesson: _lesson,
+      lesson: detail,
       modList
     })
   },
@@ -123,15 +119,17 @@ const actions = {
   },
   async createNewPackage(context, { newPackageData }) {
     let { dispatch } = context
-    let newPackageDetail = await lesson.packages.create({ newPackageData }).catch((error) => {
-      return Promise.reject(error.response)
-    })
+    let newPackageDetail = await lesson.packages
+      .create({ newPackageData })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
     await dispatch('getUserPackages', { useCache: false })
     return newPackageDetail
   },
   async updatePackage(context, { updatingPackageData }) {
     let { dispatch } = context
-    await lesson.packages.update({ updatingPackageData }).catch((error) => {
+    await lesson.packages.update({ updatingPackageData }).catch(error => {
       return Promise.reject(error.response)
     })
     await dispatch('getUserPackages', { useCache: false })
@@ -143,7 +141,7 @@ const actions = {
   },
   async releasePackage(context, { packageDetail }) {
     let { dispatch } = context
-    await lesson.packages.release({ packageDetail }).catch((error) => {
+    await lesson.packages.release({ packageDetail }).catch(error => {
       return Promise.reject(error.response)
     })
     await dispatch('getUserPackages', { useCache: false })
@@ -175,11 +173,14 @@ const actions = {
       .catch(err => console.log(err))
   },
   async modifyClassLearnRecords({ dispatch }, { id, learnRecordsArr }) {
-    await lesson.classrooms.modifyClassroomLearnRecords({ id, learnRecordsArr }).then(res => {
-      console.log('modifyClassroomRecords', res)
-      // commit(GET_CLASSROOM_LEARN_RECORDS, res)
-      dispatch('getClassLearnRecords', { id })
-    }).catch(err => console.log(err))
+    await lesson.classrooms
+      .modifyClassroomLearnRecords({ id, learnRecordsArr })
+      .then(res => {
+        console.log('modifyClassroomRecords', res)
+        // commit(GET_CLASSROOM_LEARN_RECORDS, res)
+        dispatch('getClassLearnRecords', { id })
+      })
+      .catch(err => console.log(err))
   }
 }
 
