@@ -105,7 +105,7 @@ export default {
       isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
       currenClassInfo: { extra: {}},
-      classid: null,
+      classid: this.$route.params.classId,
       loading: true,
       lessonName: null,
       lessonGoals: null,
@@ -142,9 +142,8 @@ export default {
     await lesson.classrooms.getClassroomById( this.$route.params.classId ).then(res => {
       console.log('getClassroomById11',res)
       this.currenClassInfo = res
-      this.lessonNo = res.extra.lessonNo
-      console.warn(res.extra)
-      console.log('lessonNo',this.lessonNo)
+      this.lessonNo = res.extra.lessonNo || 0
+      this.lessonName = res.extra.lessonName
     }).catch(err => console.log(err))
     await this.getClassLearnRecords({ id: this.$route.params.classId })
     if (this.classroomLearnRecord.length === 0) {
