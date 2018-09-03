@@ -165,7 +165,6 @@ background: rgb(250, 250, 250);
       }
     }
     &-table{
-      border: 1px solid #d2d2d2;
       display: flex;
       .table{
         width: 100%;
@@ -174,21 +173,26 @@ background: rgb(250, 250, 250);
         list-style: none;
         text-align: center;
         zoom: 1;
+        margin-bottom: -1px;
         .table-cell{
           float: left;
           width: 20%;
           .question-number{
             height: 65px;
             line-height: 65px;
-            border-bottom:  1px solid #d2d2d2;
+            border:  1px solid #d2d2d2;
+            margin-top: -1px;
+            margin-left: -1px;
           }
           .answer{
-            border-bottom:  1px solid #d2d2d2;
+            border:  1px solid #d2d2d2;
             height: 50px;
             line-height: 50px;
             overflow: hidden;           
             white-space: nowrap;
             text-overflow: ellipsis;
+            margin-top: -1px;
+            margin-left: -1px;
           }
           .right-answer{
             color: #27ce2f;
