@@ -509,6 +509,7 @@ bigFile:
 }
 .guid-col {
   background: url('../../assets/img/background.png') no-repeat top right #fff;
+  background-size: 45%;
   display: flex;
   justify-content: center;
   flex-direction: column;
