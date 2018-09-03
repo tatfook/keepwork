@@ -1,8 +1,5 @@
 const getters = {
   isShowHint: state => state.isShowHint,
-  isShowLesson: state => state.isShowLesson,
-  isShowPerformance: state => state.isShowPerformance,
-  isShowSummary: state => state.isShowSummary,
   lessonData: state => state.lessonData,
   lessonDetail: state => state.lessonDetail,
   classroom: state => state.classroom,
