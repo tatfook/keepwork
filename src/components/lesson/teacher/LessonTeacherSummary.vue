@@ -167,7 +167,7 @@ export default {
     },
     creationDate(){
       let year = dayjs(this.currenClassInfo.createdAt).year()
-      let monthNum = dayjs(this.createdAt).month()
+      let monthNum = dayjs(this.currenClassInfo.createdAt).month()
       let monthArr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','','Nov','Dec']
       let month = monthArr[monthNum]
       let todayDate = dayjs(this.currenClassInfo.createdAt).date()
@@ -359,7 +359,7 @@ export default {
         _.forEach(accuracyRateArr, (i, n) => {
           Vue.set(this.quizChartData.rows, n, {
             questionNumber: `Q${++n}`,
-            [`${this.$t('lesson.accuracy')}`]: i
+            [`${this.$t('lesson.accuracy')}`]: (i / newCurrentRecord.length)
           })
         })
     },

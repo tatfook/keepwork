@@ -957,7 +957,7 @@
     "name": "Name",
     "username": "UserName",
     "accuracyRate": "Accuracy Rate",
-    "totalStudent": "Number of Students (total:",
+    "totalStudent": "                     Students (total:",
     "student": "student",
     "accuracy": "accuracy",
     "activatedTeaching": "The teaching function has been activated!",
