@@ -68,41 +68,57 @@
     </div>
     <div class="about-lesson">
       <el-row>
-        <el-col :sm="12" :xs="24">
-          <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
-            <div class="desc-text">
-              <h5>{{$t('lesson.about.animations')}}</h5>
-              <p>{{$t('lesson.about.animationsTalk')}}</p>
-            </div>
-          </div>
+        <el-col :md="12" :xs="24">
+          <el-row>
+              <el-col :span="8">
+                <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
+              </el-col>
+              <el-col :span="16">
+                <div class="desc-text">
+                  <h2>{{$t('lesson.about.animations')}}</h2>
+                  <p>{{$t('lesson.about.animationsTalk')}}</p>
+                </div>
+              </el-col>
+            </el-row>
         </el-col>
-        <el-col :sm="12" :xs="24">
-          <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>
-            <div class="desc-text">
-              <h5>{{$t('lesson.about.usage')}}</h5>
-              <p>{{$t('lesson.about.usageTalk')}}</p>
-            </div>
-          </div>
+        <el-col :md="12" :xs="24">
+          <el-row>
+            <el-col :span="8">
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>                
+            </el-col>
+            <el-col :span="16">
+              <div class="desc-text">
+                <h2>{{$t('lesson.about.usage')}}</h2>
+                <p>{{$t('lesson.about.usageTalk')}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col :sm="12" :xs="24">
-          <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>
-            <div class="desc-text">
-              <h5>{{$t('lesson.about.teachProgramming')}}</h5>
-              <p>{{$t('lesson.about.teachProgrammingTalk')}}</p>
-            </div>
-          </div>
+        <el-col :md="12" :xs="24">
+          <el-row>
+            <el-col :span="8">
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>                
+            </el-col>
+            <el-col :span="16">
+              <div class="desc-text">
+                <h2>{{$t('lesson.about.teachProgramming')}}</h2>
+                <p>{{$t('lesson.about.teachProgrammingTalk')}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col :sm="12" :xs="24">
-          <div class="about-lesson-desc">
-            <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
-            <div class="desc-text">
-              <h5>{{$t('lesson.about.expensive')}}</h5>
-              <p>{{$t('lesson.about.expensiveTalk')}}</p>
-            </div>
-          </div>
+        <el-col :md="12" :xs="24">
+          <el-row>
+            <el-col :span="8">
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>                
+            </el-col>
+            <el-col :span="16">
+              <div class="desc-text">
+                <h2>{{$t('lesson.about.expensive')}}</h2>
+                <p>{{$t('lesson.about.expensiveTalk')}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </div>
@@ -440,19 +456,15 @@ export default {
     width: 80%;
     margin: 0 auto;
     padding: 10px;
-    &-desc {
-      display: flex;
-      margin: 12px 20px;
-      .desc-img {
-        width: 170px;
-        padding: 20px 0;
-        text-align: center;
-      }
-      .desc-text {
-        flex: 1;
-        padding-left: 20px;
-        min-height: 220px;
-      }
+    .desc-img {
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .desc-text {
+      flex: 1;
+      padding-left: 20px;
+      min-height: 256px;
     }
   }
   &-letter {
@@ -487,7 +499,7 @@ export default {
     }
   }
   &-badge {
-    margin: 0 auto 20px;
+    margin: 0 auto 160px;
     width: 80%;
     text-align: center;
     .tatfook {
