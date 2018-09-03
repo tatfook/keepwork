@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+const SET_USER_SUBSCRIBES = 'SET_USER_SUBSCRIBES'
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const GET_USER_SUBSCRIBES = 'GET_USER_SUBSCRIBES'
@@ -16,6 +17,7 @@ const CLEAR_LEARN_RECORDS_ID = 'CLEAR_LEARN_RECORDS_ID'
 const CLEAR_LESSON_DATA = 'CLEAR_LESSON_DATA'
 
 export const props = {
+  SET_USER_SUBSCRIBES,
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   GET_USER_SUBSCRIBES,
@@ -33,6 +35,9 @@ export const props = {
 }
 
 const mutations = {
+  [SET_USER_SUBSCRIBES](state, userSubscribes) {
+    Vue.set(state, 'subscribesList', userSubscribes)
+  },
   [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
     Vue.set(state, 'packagesDetail', {
       ...state.packagesDetail,
