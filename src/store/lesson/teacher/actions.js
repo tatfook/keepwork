@@ -127,6 +127,30 @@ const actions = {
     await dispatch('getUserPackages', { useCache: false })
     return newPackageDetail
   },
+  async addLessonToPackage(context, { packageId, lessonId, isLastOne = true }) {
+    let { dispatch } = context
+    await lesson.packages.addLesson({
+      packageId,
+      lessonId
+    }).then(() => {
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error.response)
+    })
+    if (isLastOne) {
+      await dispatch('getUserPackages', { useCache: false })
+    }
+  },
+  async createNewLesson(context, { newLessonData }) {
+    let { dispatch } = context
+    let newLessonDetail = await lesson.lessons
+      .create({ newLessonData })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
+    await dispatch('getUserLessons', { useCache: false })
+    return newLessonDetail
+  },
   async updatePackage(context, { updatingPackageData }) {
     let { dispatch } = context
     await lesson.packages.update({ updatingPackageData }).catch(error => {

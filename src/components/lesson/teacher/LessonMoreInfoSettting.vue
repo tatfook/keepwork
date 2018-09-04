@@ -3,7 +3,7 @@
     <cover-media-setter ref="videoUrlComponent"></cover-media-setter>
     <div class="lesson-more-info-setting-intro">
       <div class="lesson-more-info-setting-label">简介</div>
-      <el-input type="textarea" placeholder="简介" resize='none' v-model="moreInfoData.intro">
+      <el-input type="textarea" placeholder="简介" resize='none' v-model="moreInfoData.goals">
       </el-input>
     </div>
     <div class="lesson-more-info-setting-duration">
@@ -16,6 +16,13 @@
     <div class="lesson-more-info-setting-skills">
       <div class="lesson-more-info-setting-label">技能点</div>
       <el-button type='primary' @click="showAddSkillsDialog">添加</el-button>
+      <div class="lesson-more-info-setting-skills-list">
+        <div class="lesson-more-info-setting-skills-item" v-for="(skill, index) in moreInfoData.skills" :key="index">
+          <span class="lesson-more-info-setting-skills-item-label">{{skill.skillName}}</span>
+          <el-input-number size="mini" v-model="skill.score" :controls='false' :min='1'></el-input-number>
+          <i class="el-icon-delete" @click="removeSkill(index)"></i>
+        </div>
+      </div>
     </div>
     <div class="lesson-more-info-setting-references">
       <div class="lesson-more-info-setting-label">素材</div>
@@ -42,16 +49,17 @@ export default {
   name: 'LessonMoreInfoSettting',
   async mounted() {
     await this.getAllSkills({})
-    this.skillList = _.clone(this.lessonSkills)
+    this.skillList = _.cloneDeep(this.lessonSkills)
+    this.isMounted = true
   },
   data() {
     return {
       isSkillDialogShow: false,
       skillList: [],
-      newLessonSkills: [],
+      isMounted: false,
       moreInfoData: {
         duration: '45min',
-        intro: '',
+        goals: '',
         videoUrl: '',
         skills: []
       }
@@ -64,13 +72,13 @@ export default {
     selectedSkills() {
       return _.filter(this.skillList, { isSelect: true })
     },
-    videoUrl: {
-      get() {
-        return this.$refs.videoUrlComponent.newPackageCoverUrl
-      },
-      set(newVideoUrl) {
-        this.moreInfoData.videoUrl = newVideoUrl
+    videoUrl() {
+      if (!this.isMounted) {
+        return ''
       }
+      let newVideoUrl = this.$refs.videoUrlComponent.newPackageCoverUrl
+      this.moreInfoData.videoUrl = newVideoUrl
+      return newVideoUrl
     }
   },
   methods: {
@@ -84,14 +92,21 @@ export default {
       this.isSkillDialogShow = false
     },
     toAdd() {
-      this.newLessonSkills = []
+      this.moreInfoData.skills = []
       _.forEach(this.selectedSkills, selectSkill => {
-        this.newLessonSkills.push({
+        this.moreInfoData.skills.push({
           id: selectSkill.id,
           skillName: selectSkill.skillName,
           score: 1
         })
       })
+      this.handleClose()
+    },
+    removeSkill(index) {
+      let removintSkill = this.moreInfoData.skills[index]
+      this.moreInfoData.skills.splice(index, 1)
+      let skillListIndex = _.findIndex(this.skillList, { id: removintSkill.id })
+      skillListIndex >= 0 && (this.skillList[skillListIndex].isSelect = false)
     }
   },
   components: {
@@ -116,6 +131,32 @@ export default {
   &-skills,
   &-references {
     margin-top: 35px;
+  }
+  &-skills {
+    &-list {
+      margin-top: 25px;
+    }
+    &-item {
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #333;
+      &-label {
+        margin-right: 5px;
+      }
+      .el-input-number {
+        width: 190px;
+        .el-input__inner {
+          text-align: left;
+        }
+      }
+      .el-icon-delete {
+        font-size: 20px;
+        color: #b3b3b3;
+        vertical-align: middle;
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    }
   }
   &-skills-dialog {
     .el-dialog__header {

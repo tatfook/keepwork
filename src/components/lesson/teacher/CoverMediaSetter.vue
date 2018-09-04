@@ -57,9 +57,10 @@ export default {
   },
   computed: {
     newPackageCoverUrl() {
-      return this.imageSourceType === 'url'
-        ? this.urlTypeUrl
-        : this.bigfileTypeUrl
+      let newCoverUrl =
+        this.imageSourceType === 'url' ? this.urlTypeUrl : this.bigfileTypeUrl
+      this.$emit('urlChange', newCoverUrl)
+      return newCoverUrl
     }
   },
   methods: {

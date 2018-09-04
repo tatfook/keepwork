@@ -27,10 +27,12 @@ export const packages = {
   audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
   release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
   delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
+  addLesson: async ({ packageId, lessonId }) => post(`packages/${packageId}/lessons`, { lessonId }),
   getLessonList: async ({ packageId }) => get(`packages/${packageId}/lessons`)
 }
 
 export const lessons = {
+  create: async ({ newLessonData }) => post('lessons', newLessonData),
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),

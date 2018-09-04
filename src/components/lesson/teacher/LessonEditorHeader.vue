@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     saveLesson() {
-      this.$emit('savePackage', {})
+      this.$emit('saveLesson', {})
     },
     toLessonManagerPage() {
       console.log('toLessonManagerPage page')

@@ -811,6 +811,11 @@
       "searchResultIsEmpty": "无法搜索到该课程。",
       "formatType": "YYYY-MM-DD HH:mm"
     },
+    "lessonManage": {
+      "nameIsRequiredInfo": "请输入课程名称。",
+      "pleaseLogin": "请先登录",
+      "packageNameConflict": "课程名称已经存在"
+    },
     "about": {
       "hottestLessons": "热门课程",
       "teacher": "教师",

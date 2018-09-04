@@ -806,6 +806,11 @@
       "searchResultIsEmpty": "No results.",
       "formatType": "HH:mm DD/MM/YYYY"
     },
+    "lessonManage": {
+      "nameIsRequiredInfo": "Name is required.",
+      "pleaseLogin": "Please login to continue.",
+      "packageNameConflict": "The lesson name already exists."
+    },
     "about": {
       "hottestLessons": "Hottest Lessons",
       "teacher": "TEACHER",
