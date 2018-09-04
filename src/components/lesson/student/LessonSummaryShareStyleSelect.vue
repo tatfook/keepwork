@@ -3,7 +3,7 @@
     <div class="button" :class="{'is-disabled': currentStyle === 1}" @click="prevStyle">
       <img src="../../../assets/lessonImg/summary/left.png" alt="prev">
     </div>
-    <div class="style-preview">
+    <div class="style-preview" @click="previewCurrentStyle">
       <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary"/>
     </div>
     <div class="button" :class="{'is-disabled': currentStyle === styles.length}" @click="nextStyle">
