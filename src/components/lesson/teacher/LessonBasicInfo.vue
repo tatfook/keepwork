@@ -3,7 +3,7 @@
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url">
         <label class="lesson-basic-info-label" for="linkUrlInput">链接页面是</label>
-        <el-input id="linkUrlInput" placeholder="请输入内容" v-model="editingLessonDetail.url">
+        <el-input id="linkUrlInput" placeholder="请输入内容" v-model="tempUrl" @blur='setUrl'>
           <template slot="prepend">{{linkPagePrefix}}</template>
         </el-input>
       </div>
@@ -15,7 +15,7 @@
             </el-option>
           </el-select>
         </div>
-        <div class="lesson-basic-info-packages">
+        <div class="lesson-basic-info-packages" v-loading='isPackageZoneLoading'>
           <label class="lesson-basic-info-label" for="priceInput">课程包</label>
           <div class="lesson-basic-info-packages-list">
             <el-checkbox-group v-model="belongToPackageIds">
@@ -23,10 +23,10 @@
             </el-checkbox-group>
           </div>
           <div class="lesson-basic-info-packages-new-editor" v-show="isNewPackageEditorShow">
-            <el-checkbox :checked='true'></el-checkbox>
+            <el-checkbox v-model="isNewPackageSelected"></el-checkbox>
             <el-input v-model="newPackageName" size="small"></el-input>
-            <i class="el-icon-circle-close" @click="hideNewPackageEditor"></i>
-            <i class="el-icon-circle-check-outline" @click="createNewPackage"></i>
+            <i class="el-icon-circle-close" :title="$t('common.Cancel')" @click="hideNewPackageEditor"></i>
+            <i class="el-icon-circle-check-outline" :title="$t('common.Save')" @click="createNewPackage"></i>
           </div>
           <div class="lesson-basic-info-packages-new" @click="showNewPackageEditor">
             <i class="el-icon-circle-plus-outline"></i>新建课程包
@@ -35,7 +35,7 @@
       </div>
       <div class="lesson-basic-info-name">
         <label class="lesson-basic-info-label" for="priceInput">名称</label>
-        <el-input v-model="editingLessonDetail.lessonName"></el-input>
+        <el-input v-model="editingLessonDetail.lessonName" :maxlength='255'></el-input>
       </div>
     </div>
   </div>
@@ -49,6 +49,9 @@ export default {
     isEditing: Boolean
   },
   async mounted() {
+    this.isPackageZoneLoading = true
+    await this.lessonGetUserPackages({})
+    this.isPackageZoneLoading = false
     await this.lessonGetAllSubjects({})
     if (this.isEditing) {
       let editingPackageDetail = this.editingPackageDetail
@@ -65,6 +68,9 @@ export default {
       newPackageName: '',
       belongToPackageIds: [],
       isNewPackageEditorShow: false,
+      isPackageZoneLoading: false,
+      isNewPackageSelected: true,
+      tempUrl: '',
       editingLessonDetail: {
         url: '',
         subjectId: null,
@@ -87,27 +93,35 @@ export default {
   },
   methods: {
     ...mapActions({
+      lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
       teacherCreateNewPackage: 'lesson/teacher/createNewPackage'
     }),
     showNewPackageEditor() {
+      this.newPackageName = ''
+      this.isNewPackageSelected = true
       this.isNewPackageEditorShow = true
     },
     hideNewPackageEditor() {
       this.isNewPackageEditorShow = false
     },
     async createNewPackage() {
+      this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
           packageName: this.newPackageName
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
-        console.log(packageDetail)
-        console.log(id)
-        this.belongToPackageIds.push(id)
         this.hideNewPackageEditor()
+        if (this.isNewPackageSelected) {
+          this.belongToPackageIds.push(id)
+        }
       })
+      this.isPackageZoneLoading = false
+    },
+    setUrl() {
+      this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
     }
   }
 }
@@ -198,18 +212,22 @@ export default {
         font-size: 20px;
         margin-right: 3px;
         color: #ccc;
+        cursor: pointer;
       }
       .el-icon-circle-check-outline {
         font-size: 20px;
         color: #17da98;
+        cursor: pointer;
       }
     }
     &-new {
       margin-top: 8px;
       color: #17da98;
       cursor: pointer;
-      .el-icon-circle-plus {
+      .el-icon-circle-plus-outline {
         margin-right: 6px;
+        font-size: 16px;
+        vertical-align: middle;
       }
     }
   }
