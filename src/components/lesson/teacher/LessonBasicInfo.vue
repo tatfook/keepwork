@@ -2,8 +2,8 @@
   <div class="lesson-basic-info">
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url">
-        <label class="lesson-basic-info-label" for="linkUrlInput">链接页面是</label>
-        <el-input id="linkUrlInput" placeholder="请输入内容" v-model="tempUrl" @blur='setUrl'>
+        <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
+        <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" v-model="tempUrl" @blur='setUrl'>
           <template slot="prepend">{{linkPagePrefix}}</template>
         </el-input>
       </div>
@@ -16,7 +16,7 @@
           </el-select>
         </div>
         <div class="lesson-basic-info-packages" v-loading='isPackageZoneLoading'>
-          <label class="lesson-basic-info-label" for="priceInput">课程包</label>
+          <label class="lesson-basic-info-label" for="priceInput">{{$t('lesson.packageManage.package')}}</label>
           <div class="lesson-basic-info-packages-list">
             <el-checkbox-group v-model="belongToPackageIds">
               <el-checkbox v-for='(packageDetail, index) in userPackages' :key="index" :label="packageDetail.id">{{packageDetail.packageName}}</el-checkbox>
@@ -29,13 +29,13 @@
             <i class="el-icon-circle-check-outline" :title="$t('common.Save')" @click="createNewPackage"></i>
           </div>
           <div class="lesson-basic-info-packages-new" @click="showNewPackageEditor">
-            <i class="el-icon-circle-plus-outline"></i>新建课程包
+            <i class="el-icon-circle-plus-outline"></i>{{$t('lesson.newPackage')}}
           </div>
         </div>
       </div>
       <div class="lesson-basic-info-name">
-        <label class="lesson-basic-info-label" for="priceInput">名称</label>
-        <el-input v-model="editingLessonDetail.lessonName" :maxlength='255'></el-input>
+        <label class="lesson-basic-info-label" for="priceInput">{{$t('lesson.nameLabel')}}</label>
+        <el-input v-model="editingLessonDetail.lessonName" :placeholder="$t('lesson.pleaseInput')" :maxlength='255'></el-input>
       </div>
     </div>
   </div>
@@ -142,6 +142,9 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 46px;
+    &-label {
+      margin: 0;
+    }
     .el-input-group {
       margin-left: 10px;
       max-width: 480px;

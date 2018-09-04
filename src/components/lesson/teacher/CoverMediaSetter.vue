@@ -1,6 +1,9 @@
 <template>
   <div class="cover-media-setter">
-    <label class='cover-media-setter-title'>{{$t('lesson.packageManage.cover')}}</label>
+    <label class='cover-media-setter-title'>
+      <span class='cover-media-setter-title-sub'>{{subTitle}}</span>
+      {{componentTitle}}
+    </label>
     <el-radio-group class="cover-media-setter-radio-group" v-model="imageSourceType">
       <!-- <el-radio label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio> -->
       <el-radio label="url">{{$t('lesson.packageManage.inputUrl')}}</el-radio>
@@ -30,6 +33,8 @@ const BigfileUrlReg = new RegExp('keepwork.com')
 export default {
   name: 'CoverMediaSetter',
   props: {
+    title: String,
+    subTitle: String,
     editingPackageDetail: Object,
     isEditing: Boolean
   },
@@ -56,6 +61,9 @@ export default {
     }
   },
   computed: {
+    componentTitle() {
+      return this.title || this.$t('lesson.packageManage.cover')
+    },
     newPackageCoverUrl() {
       let newCoverUrl =
         this.imageSourceType === 'url' ? this.urlTypeUrl : this.bigfileTypeUrl
@@ -81,6 +89,15 @@ export default {
 .cover-media-setter {
   height: 260px;
   background-color: #fff;
+  &-title {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    &-sub {
+      font-weight: normal;
+      color: #409efe;
+    }
+  }
   &-radio-group {
     display: block;
     margin-top: 30px;

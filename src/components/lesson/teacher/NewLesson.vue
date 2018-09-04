@@ -5,7 +5,7 @@
     <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
     <div class="new-lesson-more-info">
       <div class="new-lesson-more-info-button" :class="{'is-append': isMoreInfoShow}" @click="toggleMoreSettingInfo">
-        <span v-show="!isMoreInfoShow">更多信息</span>
+        <span v-show="!isMoreInfoShow">{{$t('lesson.lessonManage.moreInfo')}}</span>
         <i class="el-icon-d-arrow-right"></i>
       </div>
       <lesson-more-info-settting v-show="isMoreInfoShow" ref="moreInfoComponent"></lesson-more-info-settting>
