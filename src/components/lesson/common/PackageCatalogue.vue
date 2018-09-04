@@ -44,7 +44,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      enterClassInfo: 'lesson/student/enterClassInfo'
+      enterClassInfo: 'lesson/student/enterClassInfo',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     isInClassroom() {
       const state = this.enterClassInfo.state
@@ -95,8 +96,6 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
-      console.log(this.enterClassInfo)
-      console.log(this.isInClassroom)
       if (this.isInClassroom) {
         const { name, params: { id: _packageId } } = this.$route
         const { packageId, lessonId } = this.enterClassInfo
@@ -132,6 +131,9 @@ export default {
       })
     },
     continueToLearn() {
+      if(this.isBeInClassroom){
+        return this.$message.error(this.$t('lesson.beInClass'));
+      }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
       }/lesson/${this.continueLearnedLesson.id}`
