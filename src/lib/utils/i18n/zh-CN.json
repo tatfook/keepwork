@@ -732,6 +732,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "pleaseInput": "请输入...",
     "include": "包含",
     "all": "全部",
     "newPackage": "新建课程包",
@@ -810,6 +811,17 @@
       "lessonListIsEmpty": "您暂未创建课程。",
       "searchResultIsEmpty": "无法搜索到该课程。",
       "formatType": "YYYY-MM-DD HH:mm"
+    },
+    "lessonManage": {
+      "addSkillPoint": "添加技能",
+      "addReference": "添加素材",
+      "moreInfo": "更多信息",
+      "linkPageLabel": "链接页面是",
+      "optionalLabel": "(可选)",
+      "videoLabel": "课程视频",
+      "nameIsRequiredInfo": "请输入课程名称。",
+      "pleaseLogin": "请先登录",
+      "packageNameConflict": "课程名称已经存在"
     },
     "about": {
       "hottestLessons": "热门课程",

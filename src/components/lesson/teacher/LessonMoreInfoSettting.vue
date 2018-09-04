@@ -1,27 +1,37 @@
 <template>
   <div class="lesson-more-info-setting">
-    <cover-media-setter ref="videoUrlComponent"></cover-media-setter>
+    <cover-media-setter ref="videoUrlComponent" :title='coverSetterTitle' :subTitle='coverSetterSubTitle'></cover-media-setter>
     <div class="lesson-more-info-setting-intro">
-      <div class="lesson-more-info-setting-label">简介</div>
-      <el-input type="textarea" placeholder="简介" resize='none' v-model="moreInfoData.intro">
+      <div class="lesson-more-info-setting-label">{{$t('lesson.intro')}}</div>
+      <el-input type="textarea" :placeholder="$t('lesson.intro')" resize='none' v-model="moreInfoData.goals">
       </el-input>
     </div>
     <div class="lesson-more-info-setting-duration">
-      <div class="lesson-more-info-setting-label">时长</div>
-      <el-select v-model="moreInfoData.duration" placeholder="请选择">
-        <el-option label="45min" value="45分钟">
+      <div class="lesson-more-info-setting-label">{{$t('lesson.duration')}}</div>
+      <el-select v-model="moreInfoData.duration">
+        <el-option label="45min" value="45min">
         </el-option>
       </el-select>
     </div>
     <div class="lesson-more-info-setting-skills">
-      <div class="lesson-more-info-setting-label">技能点</div>
-      <el-button type='primary' @click="showAddSkillsDialog">添加</el-button>
+      <div class="lesson-more-info-setting-label">{{$t('lesson.skillsPoints')}}</div>
+      <el-button type='primary' @click="showAddSkillsDialog">{{$t('common.add')}}</el-button>
+      <div class="lesson-more-info-setting-skills-list">
+        <div class="lesson-more-info-setting-skills-item" v-for="(skill, index) in moreInfoData.skills" :key="index">
+          <span class="lesson-more-info-setting-skills-item-label">{{skill.skillName}}</span>
+          <el-input-number size="mini" v-model="skill.score" :controls='false' :min='1'></el-input-number>
+          <i class="el-icon-delete" @click="removeSkill(index)"></i>
+        </div>
+      </div>
     </div>
     <div class="lesson-more-info-setting-references">
-      <div class="lesson-more-info-setting-label">素材</div>
-      <el-button type='primary'>添加素材</el-button>
+      <div class="lesson-more-info-setting-label">
+        <span class="lesson-more-info-setting-references-label">{{$t('lesson.lessonManage.optionalLabel')}}</span>
+        {{$t('lesson.references')}}
+      </div>
+      <el-button type='primary' @click="addReferences">{{$t('lesson.lessonManage.addReference')}}</el-button>
     </div>
-    <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :visible.sync="isSkillDialogShow" title="添加技能" :before-close="handleClose">
+    <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :visible.sync="isSkillDialogShow" :title="$t('lesson.lessonManage.addSkillPoint')" :before-close="handleClose">
       <div class="lesson-more-info-setting-skills-dialog-list">
         <div class="lesson-more-info-setting-skills-dialog-item" v-for="(skill, index) in skillList" :key="index">
           <span>{{skill.skillName}}</span>
@@ -42,16 +52,19 @@ export default {
   name: 'LessonMoreInfoSettting',
   async mounted() {
     await this.getAllSkills({})
-    this.skillList = _.clone(this.lessonSkills)
+    this.skillList = _.cloneDeep(this.lessonSkills)
+    this.isMounted = true
   },
   data() {
     return {
       isSkillDialogShow: false,
       skillList: [],
-      newLessonSkills: [],
+      isMounted: false,
+      coverSetterTitle: this.$t('lesson.lessonManage.videoLabel'),
+      coverSetterSubTitle: this.$t('lesson.lessonManage.optionalLabel'),
       moreInfoData: {
         duration: '45min',
-        intro: '',
+        goals: '',
         videoUrl: '',
         skills: []
       }
@@ -64,13 +77,13 @@ export default {
     selectedSkills() {
       return _.filter(this.skillList, { isSelect: true })
     },
-    videoUrl: {
-      get() {
-        return this.$refs.videoUrlComponent.newPackageCoverUrl
-      },
-      set(newVideoUrl) {
-        this.moreInfoData.videoUrl = newVideoUrl
+    videoUrl() {
+      if (!this.isMounted) {
+        return ''
       }
+      let newVideoUrl = this.$refs.videoUrlComponent.newPackageCoverUrl
+      this.moreInfoData.videoUrl = newVideoUrl
+      return newVideoUrl
     }
   },
   methods: {
@@ -84,14 +97,24 @@ export default {
       this.isSkillDialogShow = false
     },
     toAdd() {
-      this.newLessonSkills = []
+      this.moreInfoData.skills = []
       _.forEach(this.selectedSkills, selectSkill => {
-        this.newLessonSkills.push({
+        this.moreInfoData.skills.push({
           id: selectSkill.id,
           skillName: selectSkill.skillName,
           score: 1
         })
       })
+      this.handleClose()
+    },
+    removeSkill(index) {
+      let removintSkill = this.moreInfoData.skills[index]
+      this.moreInfoData.skills.splice(index, 1)
+      let skillListIndex = _.findIndex(this.skillList, { id: removintSkill.id })
+      skillListIndex >= 0 && (this.skillList[skillListIndex].isSelect = false)
+    },
+    addReferences() {
+      this.$message('添加素材功能尚未开发')
     }
   },
   components: {
@@ -110,12 +133,45 @@ export default {
     line-height: 24px;
   }
   &-intro {
-    margin-top: 20px;
+    margin: 20px 0;
+    .el-textarea__inner {
+      height: 150px;
+      max-width: 655px;
+    }
   }
-  &-duration,
   &-skills,
   &-references {
     margin-top: 35px;
+    &-label {
+      color: #409efe;
+      font-weight: normal;
+    }
+  }
+  &-skills {
+    &-list {
+      margin-top: 25px;
+    }
+    &-item {
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #333;
+      &-label {
+        margin-right: 5px;
+      }
+      .el-input-number {
+        width: 190px;
+        .el-input__inner {
+          text-align: left;
+        }
+      }
+      .el-icon-delete {
+        font-size: 20px;
+        color: #b3b3b3;
+        vertical-align: middle;
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    }
   }
   &-skills-dialog {
     .el-dialog__header {

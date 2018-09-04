@@ -727,6 +727,7 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "pleaseInput": "please input...",
     "include": "Includes",
     "all": "All",
     "newPackage": "New Package",
@@ -805,6 +806,17 @@
       "lessonListIsEmpty": "You have not created any lessons.",
       "searchResultIsEmpty": "No results.",
       "formatType": "HH:mm DD/MM/YYYY"
+    },
+    "lessonManage": {
+      "addSkillPoint": "Add Skillpoints",
+      "addReference": "Add References",
+      "moreInfo": "More information",
+      "linkPageLabel": "The link page is",
+      "optionalLabel": "(optional)",
+      "videoLabel": "Video",
+      "nameIsRequiredInfo": "Name is required.",
+      "pleaseLogin": "Please login to continue.",
+      "packageNameConflict": "The lesson name already exists."
     },
     "about": {
       "hottestLessons": "Hottest Lessons",

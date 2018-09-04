@@ -1,11 +1,11 @@
 <template>
-  <div class="new-lesson">
-    <lesson-editor-header></lesson-editor-header>
+  <div class="new-lesson" v-loading='isLoading'>
+    <lesson-editor-header @saveLesson='saveNewLesson'></lesson-editor-header>
     <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
     <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
     <div class="new-lesson-more-info">
       <div class="new-lesson-more-info-button" :class="{'is-append': isMoreInfoShow}" @click="toggleMoreSettingInfo">
-        <span v-show="!isMoreInfoShow">更多信息</span>
+        <span v-show="!isMoreInfoShow">{{$t('lesson.lessonManage.moreInfo')}}</span>
         <i class="el-icon-d-arrow-right"></i>
       </div>
       <lesson-more-info-settting v-show="isMoreInfoShow" ref="moreInfoComponent"></lesson-more-info-settting>
@@ -17,10 +17,17 @@ import CoverMediaSetter from './CoverMediaSetter'
 import LessonEditorHeader from './LessonEditorHeader'
 import LessonBasicInfo from './LessonBasicInfo'
 import LessonMoreInfoSettting from './LessonMoreInfoSettting'
+import { mapActions } from 'vuex'
 export default {
   name: 'NewLesson',
+  mounted() {
+    this.isMounted = true
+  },
   data() {
     return {
+      isLoading: false,
+      isMounted: false,
+      editingLessonId: undefined,
       isMoreInfoShow: false
     }
   },
@@ -36,11 +43,108 @@ export default {
     },
     newLessonMoreInfo() {
       return this.$refs.moreInfoComponent.moreInfoData
+    },
+    isLessonNameEmpty() {
+      if (!this.isMounted) {
+        return true
+      }
+      let lessonName = this.newLessonData && this.newLessonData.lessonName
+      return !lessonName || lessonName == ''
+    },
+    newLessonData() {
+      return _.assign(
+        this.newLessonBasicInfo,
+        _.omit(this.newLessonMoreInfo, ['videoUrl']),
+        {
+          extra: {
+            coverUrl: this.newLessonCoverUrl,
+            videoUrl: this.newLessonMoreInfo.videoUrl
+          }
+        }
+      )
     }
   },
   methods: {
+    ...mapActions({
+      createNewLesson: 'lesson/teacher/createNewLesson',
+      addLessonToPackage: 'lesson/teacher/addLessonToPackage'
+    }),
     toggleMoreSettingInfo() {
       this.isMoreInfoShow = !this.isMoreInfoShow
+    },
+    async addLessonToPackages() {
+      let lessonId = this.editingLessonId
+      let packageIds = this.newLessonSelectPackageIds
+      let isLastOne = false
+      for (let i = 0; i < packageIds.length; i++) {
+        let packageId = packageIds[i]
+        if (i === (packageId.length - 1)) {
+          isLastOne = true
+        }
+        await this.addLessonToPackage({
+          packageId,
+          lessonId,
+          isLastOne
+        })
+          .then(() => {
+            this.$notify({
+              title: '成功',
+              message: '这是一条成功的提示消息' + packageId,
+              type: 'success'
+            })
+          })
+          .catch(() => {
+            this.$notify({
+              title: '失败',
+              message: '这是一条失败的提示消息' + packageId,
+              type: 'error'
+            })
+          })
+      }
+    },
+    async saveNewLesson() {
+      if (this.isLessonNameEmpty) {
+        this.$message({
+          message: this.$t('lesson.lessonManage.nameIsRequiredInfo'),
+          type: 'warning'
+        })
+        return
+      }
+      this.isLoading = true
+      let newLessonData = this.newLessonData
+      await this.createNewLesson({
+        newLessonData
+      })
+        .then(lessonDetail => {
+          this.isLoading = false
+          this.editingLessonId = lessonDetail.id
+          this.$message({
+            message: this.$t('common.saveSuccess'),
+            type: 'success'
+          })
+          this.addLessonToPackages()
+          // this.toPackageManagerPage()
+        })
+        .catch(error => {
+          this.isLoading = false
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = this.$t('lesson.lessonManage.pleaseLogin')
+              break
+            case 409:
+              errorMsg = this.$t('lesson.lessonManage.packageNameConflict')
+              break
+            default:
+              errorMsg = this.$t('common.saveFail')
+              break
+          }
+          this.$message({
+            message: errorMsg,
+            type: 'error'
+          })
+          return Promise.reject(new Error('Create new Lesson failed'))
+        })
     }
   },
   components: {
