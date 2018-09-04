@@ -22,6 +22,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserSubscribesPackages',
@@ -32,6 +33,9 @@ export default {
     return {}
   },
   computed: {
+    ...mapGetters({
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
+    }),
     packageCover() {
       return _.get(this.packageDetail, 'extra.coverUrl')
     },
@@ -67,6 +71,9 @@ export default {
       })
     },
     attendClass(){
+      if(this.isBeInClassroom){
+        return this.$message.error(this.$t('lesson.beInClass'));
+      }
       if(this.startToLearn){
         let packageId = this.packageDetail.id
         let lessonId = this.packageDetail.lessons[0].id
