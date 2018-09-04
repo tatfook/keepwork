@@ -1,6 +1,5 @@
 <template>
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
-    <div v-if="isJewelOpen" class="reward-coin">{{reward}}</div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
         <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
@@ -17,7 +16,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
-import { lesson } from '@/api'
 export default {
   name: 'JewelBox',
   props: {
@@ -38,44 +36,25 @@ export default {
       isShowTips: false,
       needTime: 300,
       time: 0,
-      reward: 0,
+      reward: 10,
       _timer: null
     }
   },
   mounted() {
     this.startTimer()
   },
-  watch: {
-    isJewelOpen(value) {
-      if (value) {
-        console.log(this.learnRecordsId)
-        lesson.lessons
-          .rewardCoin({ id: this.learnRecordsId })
-          .then(res => {
-            console.log(res)
-            this.reward = res
-          })
-          .catch(e => console.error(e))
-      }
-    }
-  },
   computed: {
     ...mapGetters({
       lockCoin: 'lesson/lockCoin',
       lessonUserId: 'lesson/student/lessonUserId',
       userinfo: 'lesson/userinfo',
-      isQuizAllRight: 'lesson/student/isQuizAllRight',
-      learnRecordsId: 'lesson/student/learnRecordsId'
+      isQuizAllRight: 'lesson/student/isQuizAllRight'
     }),
     userId() {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return (
-        // this.time >= this.needTime &&
-        // this.lockCoin >= this.reward &&
-        this.learnRecordsId && this.isQuizAllRight
-      )
+      return this.time >= this.needTime && this.lockCoin >= this.reward && this.isQuizAllRight
     },
     isShowJewel() {
       return this.lessonUserId !== this.userId
@@ -124,15 +103,6 @@ export default {
   &.opened {
     background: url('../../../assets/lessonImg/jewelbox2.png') no-repeat center
       #fff;
-  }
-  .reward-coin {
-    text-align: center;
-    position: absolute;
-    margin-top: -25px;
-    width: 49px;
-    font-size: 12px;
-    background: #ec761a;
-    color: white;
   }
   .tips-wrap {
     $shadow: 1px 10px 40px rgb(170, 170, 170);

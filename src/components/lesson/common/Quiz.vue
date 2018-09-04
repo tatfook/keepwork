@@ -108,8 +108,8 @@ export default {
       this.showResultAndSubmit(result, this.quizAnswer)
     },
     checkMutipleChoice() {
-      if (this.quizMutipleAnswer.length < 2) {
-        return this.$message.error(this.$t('card.chooseTwoAnswer'))
+      if (this.quizMutipleAnswer.length < 1) {
+        return this.$message.error(this.$t('card.pleaseSelectOne'))
       }
       let quizMutipleAnswer = [...this.quizMutipleAnswer].sort()
       let answer = [...this.answer].sort()
