@@ -22,7 +22,7 @@
               <div class="purchase-money">
                 <span class="money">
                   {{$t('lesson.coinsPrice')}}:
-                  <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}0000000000000000000000000000000000000
+                  <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}
                 </span>
               </div>
             </div>
