@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       isShowTips: false,
-      needTime: 11,
+      needTime: 300,
       time: 0,
       reward: 10,
       _timer: null,
