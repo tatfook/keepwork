@@ -79,7 +79,6 @@ export default {
 <style lang="scss">
 .cover-media-setter {
   height: 260px;
-  padding: 35px;
   background-color: #fff;
   &-radio-group {
     display: block;

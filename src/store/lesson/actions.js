@@ -4,6 +4,7 @@ import { props } from './mutations'
 let {
   GET_USER_INFO_SUCCESS,
   GET_PACKAGE_DETAIL_SUCCESS,
+  GET_ALL_SKILLS_SUCCESS,
   GET_ALL_SUBJECTS_SUCCESS
   // TO_BE_TEACHER
 } = props
@@ -31,6 +32,14 @@ const actions = {
     console.log(id)
     await lesson.users.setNickname({ nickname, id })
     await dispatch('getUserDetail')
+  },
+  async getAllSkills(context, { useCache = true }) {
+    let { commit, getters: { skills } } = context
+    if (skills && skills.length && useCache) {
+      return
+    }
+    let allSkills = await lesson.skills.getAllSkills()
+    commit(GET_ALL_SKILLS_SUCCESS, { skills: allSkills })
   },
   async getAllSubjects(context, { useCache = true }) {
     let { commit, getters: { subjects } } = context
