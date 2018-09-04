@@ -1,5 +1,9 @@
 <template>
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
+    <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
+      <div class="tips">领取成功</div>
+      <div class="coin">{{coin}}</div>
+    </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
         <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
@@ -15,6 +19,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
   name: 'JewelBox',
@@ -32,32 +37,66 @@ export default {
   },
   data() {
     return {
-      isClicked: false,
       isShowTips: false,
-      needTime: 300,
+      needTime: 11,
       time: 0,
       reward: 10,
-      _timer: null
+      _timer: null,
+      isReward: true,
+      coin: 0
     }
   },
-  mounted() {
-    this.startTimer()
+  watch: {
+    isConditions(value) {
+      if (value && this._learnRecordId) {
+        lesson.lessons
+          .rewardCoin({ id: this._learnRecordId })
+          .then(coin => (this.coin = coin))
+          .catch(e => console.error(e))
+      }
+    }
+  },
+  async mounted() {
+    console.log(this.isShowJewel)
+    const { packageId, lessonId } = this.$route.params
+    let flag = await lesson.lessons.isReward({ packageId, lessonId })
+    if (!flag) {
+      console.warn('这个课程包的课程没有领取过知识币')
+      this.isReward = false
+      this.startTimer()
+    }
   },
   computed: {
     ...mapGetters({
       lockCoin: 'lesson/lockCoin',
       lessonUserId: 'lesson/student/lessonUserId',
       userinfo: 'lesson/userinfo',
-      isQuizAllRight: 'lesson/student/isQuizAllRight'
+      isQuizAllRight: 'lesson/student/isQuizAllRight',
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      enterClassInfo: 'lesson/student/enterClassInfo',
+      learnRecordsId: 'lesson/student/learnRecordsId'
     }),
+    _learnRecordId() {
+      return this.isBeInClassroom
+        ? this.enterClassInfo.learnRecordId
+        : this.learnRecordsId
+    },
     userId() {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return this.time >= this.needTime && this.lockCoin >= this.reward && this.isQuizAllRight
+      return this.coin > 0
+    },
+    isConditions() {
+      return (
+        this.time >= this.needTime &&
+        this.lockCoin >= this.reward &&
+        this.isQuizAllRight &&
+        this._learnRecordId
+      )
     },
     isShowJewel() {
-      return this.lessonUserId !== this.userId
+      return this.lessonUserId !== this.userId && !this.isReward
     }
   },
   methods: {
@@ -96,13 +135,39 @@ export default {
 .jewel-box {
   display: inline-block;
   height: 38px;
-  width: 49px;
+  width: 66px;
   cursor: pointer;
+  position: relative;
   background: url('../../../assets/lessonImg/jewelbox.png') no-repeat center
     #fff;
   &.opened {
     background: url('../../../assets/lessonImg/jewelbox2.png') no-repeat center
       #fff;
+  }
+  &-coin-wrap {
+    position: absolute;
+    top: -52px;
+    left: 0;
+    right: -7px;
+    font-size: 14px;
+    .tips {
+      text-align: center;
+      margin: 0 auto;
+      color: #818181;
+    }
+    .coin {
+      background: #ec761a;
+      text-align: center;
+      color: white;
+      width: 70%;
+      margin: 5px auto;
+    }
+    // width: 46px;
+    // font-size: 14px;
+    // line-height: 16px;
+    // text-align: center;
+    // margin: 0 auto;
+    // color: white;
   }
   .tips-wrap {
     $shadow: 1px 10px 40px rgb(170, 170, 170);

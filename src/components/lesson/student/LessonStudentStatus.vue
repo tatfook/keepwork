@@ -24,7 +24,7 @@
     <el-dialog :title="$t('lesson.pleaseInputName')" center custom-class="input-name-dialog" :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
       <el-input v-model="name" :placeholder="$t('lesson.name')" :autofocus="true"></el-input>
       <div slot="footer">
-        <el-button @click="handleSetNickname" :disabled="!name.trim()" style="width: 140px" type="primary">{{$t('lesson.OK')}}</el-button>
+        <el-button @click="handleSetNickname" :disabled="!name.trim()" style="width: 140px" type="primary">{{$t('common.OK')}}</el-button>
       </div>
     </el-dialog>
   </div>
