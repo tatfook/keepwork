@@ -359,7 +359,7 @@ export default {
   .lesson-progress-wrap {
     box-sizing: border-box;
     background: white;
-    padding: 40px 20px;
+    padding: 60px 20px;
     display: flex;
     align-items: center;
     &.el-row {
