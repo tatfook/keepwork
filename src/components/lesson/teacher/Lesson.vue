@@ -60,7 +60,7 @@ export default {
     },
     clearUpdateLearnRecords() {
       clearTimeout(this._interval)
-    },
+    }
     // notifyBackRoom() {
     //   const h = this.$createElement
     //   this.$notify({
