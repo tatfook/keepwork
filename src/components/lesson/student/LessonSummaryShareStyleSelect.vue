@@ -3,7 +3,7 @@
     <div class="button" :class="{'is-disabled': currentStyle === 1}" @click="prevStyle">
       <img src="../../../assets/lessonImg/summary/left.png" alt="prev">
     </div>
-    <div class="style-preview">
+    <div class="style-preview" @click="previewCurrentStyle">
       <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary"/>
     </div>
     <div class="button" :class="{'is-disabled': currentStyle === styles.length}" @click="nextStyle">
@@ -67,6 +67,7 @@ export default {
     flex: 1;
     height: 350px;
     width: 500px;
+    overflow: hidden;
     cursor: pointer;
     &.style-1 {
       background: url('../../../assets/lessonImg/sharePreviewImg/style1.png')
