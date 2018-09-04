@@ -4,7 +4,7 @@
       <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">Print</el-button>
       <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">Send to Mailbox</el-button>
     </div>
-    <div class="teacher-summary-brief">
+    <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
         <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">Number Of Student: 50</span></p>
       <p>
@@ -24,7 +24,7 @@
       <!-- <p v-show="isPrintPage">
         <span class="brief-title">{{$t('lesson.StuentsPerformance')}}:</span> 学生总数50</p> -->
     </div>
-    <div class="teacher-summary-chart">
+    <div class="teacher-summary-chart" ref="lessonChart">
       <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
       <div class="teacher-summary-chart-box">
         <div class="teacher-summary-chart-box-accuracy-rate">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="teacher-summary-detailed">
+    <div class="teacher-summary-detailed" ref="lessonSummary">
       <h4>{{$t('lesson.detailed')}}:</h4>
       <div class="teacher-summary-detailed-change" v-show="!isPrintPage">
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
@@ -295,6 +295,9 @@ export default {
       })
     },
     async sendEmail() {
+      let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
+      let lessonChartHtml = this.$refs.lessonChart.innerHTML
+      let lessonSummaryHtml = this.$refs.lessonSummary.innerHTML
       this.$prompt('请输入邮箱', '提示', {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
@@ -307,8 +310,8 @@ export default {
             message: '你的邮箱是: ' + value
           })
           let to = value
-          let subject = '课程 1：老铁稳'
-          let html = '<h1>这里是邮箱内容</h1>'
+          let subject = this.$t('modList.lesson') + (this.currenClassInfo.extra.lessonNo || 0) + ':' +  this.currenClassInfo.extra.lessonName
+          let html = lessonIntroHtml + lessonChartHtml + lessonSummaryHtml
           await lesson.emails.sendEmails({to, subject, html}).then(res => {console.log(res)}).catch(err => {console.log(err)})
           this.successSendEmailDialogVisible = true
         })
