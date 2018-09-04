@@ -67,6 +67,7 @@ export default {
     flex: 1;
     height: 350px;
     width: 500px;
+    overflow: hidden;
     cursor: pointer;
     &.style-1 {
       background: url('../../../assets/lessonImg/sharePreviewImg/style1.png')
