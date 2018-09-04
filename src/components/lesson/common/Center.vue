@@ -13,11 +13,18 @@
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
-              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
-                <span class="red">￥{{coursePackage.rmb}}</span>
+              <div class="purchase-money" plain>
+                <span class="money">
+                  {{$t('lesson.rmbPrice')}}:
+                  <span class="red">￥{{coursePackage.rmb}}</span>
+                </span>
               </div>
-              <div class="purchase-money">{{$t('lesson.coinsPrice')}}:
-                <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}</div>
+              <div class="purchase-money">
+                <span class="money">
+                  {{$t('lesson.coinsPrice')}}:
+                  <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}0000000000000000000000000000000000000
+                </span>
+              </div>
             </div>
           </div>
         </el-col>
@@ -131,20 +138,22 @@ export default {
           font-size: 14px;
         }
         .purchase-money {
-          font-size: 14px;
-          display: inline-block;
-          padding: 0 12px;
-          height: 27px;
-          border: solid 2px #f3f3f3;
-          text-align: left;
-          line-height: 27px;
-          border-radius: 15px;
           margin: 2px 0;
           cursor: default;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 280px;
+          .money{
+            font-size: 14px;
+            display: inline-block;
+            padding: 0 12px;
+            height: 27px;
+            border: solid 2px #f3f3f3;
+            text-align: left;
+            line-height: 27px;
+            border-radius: 15px;
+            max-width: 255px;
+          }
         }
       }
     }
