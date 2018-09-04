@@ -6,6 +6,7 @@ const getters = {
   lockCoin: (state, { userinfo }) => _.get(userinfo, 'lockCoin', 0),
   packageDetail: state => ({ packageId }) =>
     _.get(state.packagesDetail, packageId),
+  skills: state => state.skills,
   subjects: state => state.subjects
 }
 

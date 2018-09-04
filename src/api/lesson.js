@@ -75,7 +75,11 @@ export const subjects = {
 }
 
 export const emails = {
-  sendEmails: ({to, subject, html}) => post('emails', {to, subject, html})
+  sendEmails: ({ to, subject, html }) => post('emails', { to, subject, html })
+}
+
+export const skills = {
+  getAllSkills: () => get('skills')
 }
 
 export const lesson = {
@@ -84,8 +88,9 @@ export const lesson = {
   lessons,
   admin,
   classrooms,
-  subjects,
-  emails
+  emails,
+  skills,
+  subjects
 }
 
 export default lesson

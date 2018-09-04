@@ -20,6 +20,7 @@ const PackageManager = () =>
   import('@/components/lesson/teacher/PackageManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
+const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -62,6 +63,11 @@ export default new Router({
               path: 'review',
               name: 'TeacherColumnReview',
               component: Review
+            },
+            {
+              path: 'lesson/new',
+              name: 'TeacherColumnNewLesson',
+              component: NewLesson
             },
             {
               path: 'newPackage',

@@ -1,9 +1,9 @@
 <template>
   <div class="new-package">
-    <PackageEditorHeader :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></PackageEditorHeader>
-    <PackageBasicInfo ref="basicInfoComponent" v-show="activeTab === 'basic'"></PackageBasicInfo>
-    <CoverMediaSetter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></CoverMediaSetter>
-    <CatalogueManager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></CatalogueManager>
+    <package-editor-header :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
+    <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
+    <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
+    <catalogue-manager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></catalogue-manager>
   </div>
 </template>
 <script>
@@ -105,7 +105,7 @@ export default {
           this.newSavingPackageId = newPackageDetail.id
           if (isShowMessage) {
             this.$message({
-              message: this.$t("common.saveSuccess"),
+              message: this.$t('common.saveSuccess'),
               type: 'success'
             })
             this.toPackageManagerPage()
@@ -122,7 +122,7 @@ export default {
               errorMsg = this.$t('lesson.packageManage.packageNameConflict')
               break
             default:
-              errorMsg = this.$t("common.saveFail")
+              errorMsg = this.$t('common.saveFail')
               break
           }
           this.$message({
@@ -184,3 +184,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.new-package {
+  &-media-setter {
+    padding: 35px;
+  }
+}
+</style>
