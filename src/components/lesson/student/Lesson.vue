@@ -65,6 +65,7 @@ export default {
   },
   mounted() {
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    console.log(this.lessonHeaderData)
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -121,8 +122,7 @@ export default {
       return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
     },
     lessonMain() {
-      // TODO: 这里应该还有bigfile和markdown
-      return this.lesson.filter(({ cmd }) => cmd === 'Quiz')
+      return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     }
   }
 }

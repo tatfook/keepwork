@@ -1,19 +1,25 @@
 <template>
   <div>
-    <hint v-if="data.cmd === 'Hint' && isShowHint" :data="data" />
-    <quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" :isPrint="isPrint"/>
+    <Hint v-if="data.cmd === 'Hint' && isShowHint" :data="data" />
+    <Quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" :isPrint="isPrint" />
+    <Markdown v-else-if="data.cmd === 'Markdown'" :data="data" />
+    <BigFile v-else-if="data.cmd === 'BigFile'" :data="data" />
   </div>
 </template>
 
 <script>
 import Quiz from './Quiz'
 import Hint from './Hint'
+import Markdown from './Markdown'
+import BigFile from './BigFile'
 import { mapGetters } from 'vuex'
 export default {
   name: 'LessonWrap',
   components: {
-    quiz: Quiz,
-    hint: Hint
+    Quiz,
+    Hint,
+    Markdown,
+    BigFile
   },
   props: {
     data: Object,
