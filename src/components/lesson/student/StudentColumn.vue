@@ -59,8 +59,8 @@
       <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
         <div class="hint"><i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">{{$t('lesson.resumeOldClass')}}</el-button>
-          <el-button type="primary" @click="dialogVisible = false">{{$t('lesson.enterNewClass')}}</el-button>
+          <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
+          <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
         </span>
       </el-dialog>
     </div>
@@ -150,6 +150,13 @@ export default {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     async enterClass() {
+      if(JSON.stringify(this.enterClassInfo) == "{}"){
+        this.enterNewClass()
+      }else{
+        this.beInClassDialog = true
+      }
+    },
+    async enterNewClass(){
       let key = this.classID
       await this.enterClassRoom({ key })
         .then(res => {
@@ -165,7 +172,12 @@ export default {
             message: this.$t('lesson.wrongKey'),
             type: 'error'
           })
+          this.beInClassDialog = false
         })
+    },
+    async backCurrentClass(){
+      const { packageId, lessonId } = this.enterClassInfo
+      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
     },
     gotoLessonsCenter() {
       this.$router.push({
