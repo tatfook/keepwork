@@ -492,7 +492,10 @@
     "pagePath": "Page path",
     "tab": "Tab",
     "categoryList": "Category list",
-    "pageSwitching": "Page switching"
+    "pageSwitching": "Page switching",
+    "titleA": "title",
+    "subtitleA": "subtitle",
+    "backgroundImage": "background picture"
   },
   "field": {
     "fileId": "file Id",
