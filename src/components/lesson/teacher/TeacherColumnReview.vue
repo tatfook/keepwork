@@ -2,15 +2,15 @@
   <div class="review" v-loading="loading">
     <div class="review-list" v-show="sortedTeachList.length && !loading">
       <div class="review-list-class-hours">
-        <div>Attend</div>
+        <div>{{$t('lesson.attended')}}</div>
         <div class="time">
-          <span class="red">{{sortedTeachList.length}}</span> class</div>
+          <span class="red">{{sortedTeachList.length}}</span> {{$t('lesson.classes')}}</div>
       </div>
       <div class="review-list-class-hours">
-        <div>Total Teaching Time</div>
+        <div>{{$t('lesson.totalTeachingTime')}}</div>
         <div class="time">
-          <span class="red" v-cloak>{{hours}}</span> hours
-          <span class="red">{{mins}}</span> mins</div>
+          <span class="red" v-cloak>{{hours}}</span> {{$t('lesson.hours')}}
+          <span class="red">{{mins}}</span> {{$t('lesson.mins')}}</div>
       </div>
 
       <p class="review-list-sort"><span class="text" @click="sequence"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</span></p>
@@ -19,16 +19,16 @@
         <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
           <div class="package-cover">
             <p class="teach-time">{{lessonPackage.createdAt | formatTime}}</p>
-            <img :src="lessonPackage.extra.coverUrl" alt="" @click="enterPackage(lessonPackage.packageId)">
+            <img :src="lessonPackage.extra.coverUrl" alt="" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)">
           </div>
           <div class="package-brief">
             <h4 class="name" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
-              <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</p>
+              <span class="lesson-name" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)"><span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</span></p>
             <p>
               <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</p>
             <p>
-              <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
+              <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
           </div>
           <div class="package-summary">
             <el-button type="primary" @click="viewSummary(lessonPackage)">{{$t('lesson.viewSummary')}}</el-button>
@@ -93,6 +93,11 @@ export default {
     enterPackage(packageId){
       this.$router.push({
         path: `package/${packageId}`
+      })
+    },
+    enterLesson(packageId,lessonId){
+      this.$router.push({
+        path: `package/${packageId}/lesson/${lessonId}`
       })
     }
   },
@@ -182,6 +187,9 @@ export default {
           .name {
             font-size: 18px;
             margin: 15px 0;
+            cursor: pointer;
+          }
+          .lesson-name{
             cursor: pointer;
           }
           .brief-title {
