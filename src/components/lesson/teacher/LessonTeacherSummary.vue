@@ -3,6 +3,7 @@
     <div class="teacher-summary-print-and-email">
       <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">Print</el-button>
       <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">Send to Mailbox</el-button>
+      <!-- <el-button type="primary" @click="html2img" v-show="!isPrintPage">html2img</el-button> -->
     </div>
     <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
@@ -34,6 +35,8 @@
           <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
         </div>
       </div>
+    </div>
+    <div class="teacher-summary-chart-copy">
     </div>
     <div class="teacher-summary-detailed" ref="lessonSummary">
       <h4>{{$t('lesson.detailed')}}:</h4>
@@ -91,6 +94,7 @@
 <script>
 import AccuracyRateChart from './AccuracyRateChart'
 import NumberOfStudentsChart from './NumberOfStudentsChart'
+import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -102,6 +106,7 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      fakerImg:'',
       isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
       currenClassInfo: { extra: {}},
@@ -241,6 +246,17 @@ export default {
       getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
       modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
+    html2img() {
+      let _html = this.$refs.lessonChart
+      console.log(_html)
+      html2canvas(_html).then(res => {
+        let _base64 = res.toDataURL()
+        console.log(_base64)
+        this.fakerImg = _base64
+        // document.querySelector('.faker-img').
+        // document.querySelector('.teacher-summary-chart-copy').appendChild(res)
+      })
+    },
     async change(type) {
       this.changeSelected = type
       this.changeDialogVisible = true
@@ -298,6 +314,10 @@ export default {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
       let lessonChartHtml = this.$refs.lessonChart.innerHTML
       let lessonSummaryHtml = this.$refs.lessonSummary.innerHTML
+      let _lessonChart = this.$refs.lessonChart
+      let chart = await html2canvas(_lessonChart)
+      chart = chart.toDataURL()
+      console.log(chart)
       this.$prompt('请输入邮箱', '提示', {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
@@ -311,7 +331,7 @@ export default {
           })
           let to = value
           let subject = this.$t('modList.lesson') + (this.currenClassInfo.extra.lessonNo || 0) + ':' +  this.currenClassInfo.extra.lessonName
-          let html = lessonIntroHtml + lessonChartHtml + lessonSummaryHtml
+          let html = lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
           await lesson.emails.sendEmails({to, subject, html}).then(res => {console.log(res)}).catch(err => {console.log(err)})
           this.successSendEmailDialogVisible = true
         })
