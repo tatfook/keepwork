@@ -67,7 +67,8 @@ export default {
   },
   computed: {
     sortedTeachList() {
-      return this.teachList.sort(this.sortByUpdateAt)
+      let classIsOver = _.filter(this.teachList, (i) => {return i.state == 2})
+      return classIsOver.sort(this.sortByUpdateAt)
     },
     hours(){
       let longTime = this.sortedTeachList.length * 45
