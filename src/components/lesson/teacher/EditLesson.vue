@@ -21,6 +21,8 @@ export default {
     this.editingLessonDetail = this.lessonDetail({
       lessonId: this.editingLessonId
     })
+    let ids = this.getIdsArray(_.get(this.editingLessonDetail, 'packages', []))
+    this.originBelongPackageIds = ids
     this.isGettingData = false
     this.isLoading = false
     this.$nextTick(() => {
@@ -29,10 +31,11 @@ export default {
   },
   data() {
     return {
-      editingLessonId: _.get(this.$route.params, 'id'),
+      editingLessonId: _.toInteger(_.get(this.$route.params, 'id')),
       isGettingData: true,
       isLoading: false,
       isMounted: false,
+      originBelongPackageIds: [],
       editingLessonDetail: {}
     }
   },
@@ -54,6 +57,16 @@ export default {
     },
     updatingMoreInfo() {
       return this.$refs.moreInfoComponent.moreInfoData
+    },
+    addingPackageIds() {
+      let newLessonPackageIds = this.updatingSelectPackageIds
+      let oldLessonPackageIds = this.originBelongPackageIds
+      return _.difference(newLessonPackageIds, oldLessonPackageIds)
+    },
+    removingPackageIds() {
+      let newLessonPackageIds = this.updatingSelectPackageIds
+      let oldLessonPackageIds = this.originBelongPackageIds
+      return _.difference(oldLessonPackageIds, newLessonPackageIds)
     },
     isLessonNameEmpty() {
       if (!this.isMounted) {
@@ -86,6 +99,14 @@ export default {
       teacherAddLessonToPackage: 'lesson/teacher/addLessonToPackage',
       teacherRemoveLessonFromPackage: 'lesson/teacher/removeLessonFromPackage'
     }),
+    getIdsArray(packageObjArray) {
+      let packageIds = []
+      _.forEach(packageObjArray, packageDetail => {
+        let { id } = packageDetail
+        packageIds.push(id)
+      })
+      return packageIds
+    },
     toLessonManagerPage() {
       this.$router.push('/teacher/lessonManager')
     },
@@ -167,8 +188,8 @@ export default {
             message: this.$t('common.saveSuccess'),
             type: 'success'
           })
-          // await this.addLessonToPackages()
-          // await this.removeLessonFromPackages()
+          await this.removeLessonFromPackages()
+          await this.addLessonToPackages()
           this.toLessonManagerPage()
           return Promise.resolve()
         })

@@ -28,7 +28,9 @@ export const packages = {
   release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
   delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
   addLesson: async ({ packageId, lessonId }) => post(`packages/${packageId}/lessons`, { lessonId }),
-  removeLesson: async ({ packageId, lessonId }) => deleteMethod(`packages/${packageId}/lessons`, { lessonId }),
+  removeLesson: async ({ packageId, lessonId }) => {
+    return deleteMethod(`packages/${packageId}/lessons?lessonId=${lessonId}`)
+  },
   getLessonList: async ({ packageId }) => get(`packages/${packageId}/lessons`)
 }
 
