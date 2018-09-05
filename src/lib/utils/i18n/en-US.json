@@ -1020,6 +1020,7 @@
     "classes": "classes",
     "hours": "hours",
     "mins": "mins",
-    "totalTeachingTime": "Total Teaching Time"
+    "totalTeachingTime": "Total Teaching Time",
+    "haveEnteredClass": "You have entered the class."
   }
 }
