@@ -965,7 +965,7 @@
     "teachingTime": "最新授课时间",
     "noRecord": "暂无授课记录！",
     "sortByTeachingTime": "点击按授课时间排序",
-    "viewSummary": "查看课程总结",
+    "viewSummary": "查看课堂总结",
     "skillsPoints": "技能点",
     "leaveTheClass": "离开课堂",
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
@@ -1020,6 +1020,11 @@
     "jewelTips1": "1. 本次本课的学习时长不得低于5分钟。你已学了 ",
     "jewelTips2": "2. 本次本课的测试题须全部作答正确。",
     "jewelTips3": "3. 账户中，待解锁知识币数量不得低于 {reward} 知识币。你的待解锁知识币为 {lockCoin} 知识币。",
-    "receiveSuccess": "领取成功"
+    "receiveSuccess": "领取成功",
+    "attended": "已教",
+    "classes": "课堂",
+    "hours": "小时",
+    "mins": "分钟",
+    "totalTeachingTime": "总授课时长"
   }
 }
