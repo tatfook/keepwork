@@ -1025,6 +1025,7 @@
     "classes": "堂课",
     "hours": "小时",
     "mins": "分钟",
-    "totalTeachingTime": "总授课时长"
+    "totalTeachingTime": "总授课时长",
+    "haveEnteredClass": "您已进入该课堂。"
   }
 }

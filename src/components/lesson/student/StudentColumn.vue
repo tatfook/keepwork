@@ -26,7 +26,7 @@
             </el-col>
             <el-col :md="11">
               <span class="search-input">
-                <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')"></el-input>
+                <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
               </span>
             </el-col>
             <el-col :md="6">
@@ -152,6 +152,9 @@ export default {
     async enterClass() {
       if(JSON.stringify(this.enterClassInfo) == "{}"){
         this.enterNewClass()
+      }else if(this.classID == this.enterClassInfo.key){
+        this.$message.success(this.$t('lesson.haveEnteredClass'))
+        this.backCurrentClass()
       }else{
         this.beInClassDialog = true
       }
