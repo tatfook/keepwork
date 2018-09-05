@@ -1,25 +1,25 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <PackageEditorHeader :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></PackageEditorHeader>
-    <PackageBasicInfo ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail'></PackageBasicInfo>
-    <CoverMediaSetter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-lesson-media-setter"></CoverMediaSetter>
-    <CatalogueManager ref="lessonListComponent" v-if="!isGettingData" v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></CatalogueManager>
+    <lesson-editor-header v-if="!isGettingData" :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='updateLesson'></lesson-editor-header>
+    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-basic-info>
+    <cover-media-setter v-if="!isGettingData" class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
+    <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import PackageEditorHeader from './PackageEditorHeader'
-import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
-import CatalogueManager from './CatalogueManager'
+import LessonEditorHeader from './LessonEditorHeader'
+import LessonBasicInfo from './LessonBasicInfo'
+import LessonMoreInfoSettting from './LessonMoreInfoSettting'
 export default {
-  name: 'EditPackage',
+  name: 'EditLesson',
   async mounted() {
     this.isLoading = true
     this.isGettingData = true
-    await this.getPackageDetail({ packageId: this.editingPackageId })
-    this.editingPackageDetail = this.lessonPackageDetail({
-      packageId: this.editingPackageId
+    await this.getLessonDetail({ lessonId: this.editingLessonId })
+    this.editingLessonDetail = this.lessonDetail({
+      lessonId: this.editingLessonId
     })
     this.isGettingData = false
     this.isLoading = false
@@ -29,119 +29,147 @@ export default {
   },
   data() {
     return {
-      editingPackageId: _.get(this.$route.params, 'id'),
+      editingLessonId: _.get(this.$route.params, 'id'),
       isGettingData: true,
       isLoading: false,
       isMounted: false,
-      editingPackageDetail: {},
-      activeTab: 'basic' //basic or catalogue
+      editingLessonDetail: {}
     }
   },
   computed: {
     ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
+      lessonDetail: 'lesson/lessonDetail'
     }),
-    isSubmitable() {
-      return (
-        this.editingPackageDetail.state === 0 ||
-        this.editingPackageDetail.state === 3 ||
-        this.editingPackageDetail.state === 4
-      )
+    editingCoverUrl() {
+      return _.get(this.editingLessonDetail, 'extra.coverUrl')
     },
-    isReleasable() {
-      return false
-      // return this.editingPackageDetail.state === 2 // The first version temporarily removes the release function
+    updatingSelectPackageIds() {
+      return this.$refs.basicInfoComponent.belongToPackageIds
     },
-    updatingPackageBasicInfo() {
-      return this.$refs.basicInfoComponent.newPackageDetail
+    updatingBasicInfo() {
+      return this.$refs.basicInfoComponent.editingLessonDetail
     },
-    updatingPackageCoverUrl() {
+    updatingCoverUrl() {
       return this.$refs.coverUrlComponent.newPackageCoverUrl
     },
-    updatingPackageLessons() {
-      return this.$refs.lessonListComponent.selectedLessonIds
+    updatingMoreInfo() {
+      return this.$refs.moreInfoComponent.moreInfoData
     },
-    updatingPackageId() {
-      return this.editingPackageDetail.id
-    },
-    updatingPackageData() {
-      return _.assign(
-        this.updatingPackageBasicInfo,
-        {
-          extra: { coverUrl: this.updatingPackageCoverUrl }
-        },
-        { lessons: this.updatingPackageLessons }
-      )
-    },
-    isPackageNameEmpty() {
+    isLessonNameEmpty() {
       if (!this.isMounted) {
         return true
       }
-      let packageName =
-        this.updatingPackageData && this.updatingPackageData.packageName
-      return !packageName || packageName == ''
+      let lessonName =
+        this.updatingLessonData && this.updatingLessonData.lessonName
+      return !lessonName || lessonName == ''
     },
-    isPackageInfoComplete() {
-      if (!this.isMounted || this.isPackageNameEmpty) {
-        return false
-      }
-      let {
-        subjectId,
-        minAge,
-        maxAge,
-        intro,
-        rmb,
-        extra,
-        lessons
-      } = this.updatingPackageData
-      if (
-        typeof subjectId !== 'number' ||
-        typeof minAge !== 'number' ||
-        typeof maxAge !== 'number' ||
-        typeof rmb !== 'number' ||
-        !intro ||
-        !extra.coverUrl ||
-        !lessons ||
-        lessons.length <= 0
-      ) {
-        return false
-      }
-      return true
+    updatingLessonData() {
+      return _.assign(
+        {
+          id: this.editingLessonId
+        },
+        this.updatingBasicInfo,
+        _.omit(this.updatingMoreInfo, ['videoUrl']),
+        {
+          extra: {
+            coverUrl: this.updatingCoverUrl,
+            videoUrl: this.updatingMoreInfo.videoUrl
+          }
+        }
+      )
     }
   },
   methods: {
     ...mapActions({
-      teacherUpdatePackage: 'lesson/teacher/updatePackage',
-      lessonAuditPackage: 'lesson/teacher/auditPackage',
-      getPackageDetail: 'lesson/getPackageDetail'
+      teacherUpdateLesson: 'lesson/teacher/updateLesson',
+      getLessonDetail: 'lesson/getLessonDetail',
+      teacherAddLessonToPackage: 'lesson/teacher/addLessonToPackage',
+      teacherRemoveLessonFromPackage: 'lesson/teacher/removeLessonFromPackage'
     }),
-    toPackageManagerPage() {
-      this.$router.push('/teacher/packageManager')
+    toLessonManagerPage() {
+      this.$router.push('/teacher/lessonManager')
     },
-    setActiveTab(type) {
-      this.activeTab = type
+    async addLessonToPackages() {
+      let lessonId = this.editingLessonId
+      let packageIds = this.addingPackageIds
+      let isLastOne = false
+      for (let i = 0; i < packageIds.length; i++) {
+        let packageId = packageIds[i]
+        if (i === packageId.length - 1) {
+          isLastOne = true
+        }
+        await this.teacherAddLessonToPackage({
+          packageId,
+          lessonId,
+          isLastOne
+        })
+          .then(() => {
+            this.$notify({
+              title: '成功',
+              message: '这是一条成功的提示消息' + packageId,
+              type: 'success'
+            })
+          })
+          .catch(() => {
+            this.$notify({
+              title: '失败',
+              message: '这是一条失败的提示消息' + packageId,
+              type: 'error'
+            })
+          })
+      }
     },
-    async updatePackage({ isShowMessage = true }) {
-      if (this.isPackageNameEmpty) {
+    async removeLessonFromPackages() {
+      let lessonId = this.editingLessonId
+      let packageIds = this.removingPackageIds
+      let isLastOne = false
+      for (let i = 0; i < packageIds.length; i++) {
+        let packageId = packageIds[i]
+        if (i === packageId.length - 1) {
+          isLastOne = true
+        }
+        await this.teacherRemoveLessonFromPackage({
+          packageId,
+          lessonId,
+          isLastOne
+        })
+          .then(() => {
+            this.$notify({
+              title: '成功',
+              message: '这是一条成功的提示消息' + packageId,
+              type: 'success'
+            })
+          })
+          .catch(() => {
+            this.$notify({
+              title: '失败',
+              message: '这是一条失败的提示消息' + packageId,
+              type: 'error'
+            })
+          })
+      }
+    },
+    async updateLesson() {
+      if (this.isLessonNameEmpty) {
         this.$message({
-          message: this.$t('lesson.packageManage.nameIsRequiredInfo'),
+          message: this.$t('lesson.lessonManage.nameIsRequiredInfo'),
           type: 'warning'
         })
         return
       }
-      let updatingPackageData = this.updatingPackageData
+      let updatingData = this.updatingLessonData
       this.isLoading = true
-      await this.teacherUpdatePackage({
-        updatingPackageData
+      await this.teacherUpdateLesson({
+        updatingData
       })
-        .then(() => {
-          if (isShowMessage) {
-            this.$message({
-              message: this.$t('common.saveSuccess'),
-              type: 'success'
-            })
-            this.toPackageManagerPage()
-          }
+        .then(async () => {
+          this.$message({
+            message: this.$t('common.saveSuccess'),
+            type: 'success'
+          })
+          // await this.addLessonToPackages()
+          // await this.removeLessonFromPackages()
+          this.toLessonManagerPage()
           return Promise.resolve()
         })
         .catch(error => {
@@ -161,82 +189,27 @@ export default {
             message: errorMsg,
             type: 'error'
           })
-          return Promise.reject(new Error('Create new package failed'))
+          return Promise.reject(new Error('Update lesson failed'))
         })
       this.isLoading = false
-    },
-    async submitToAudit() {
-      await this.lessonAuditPackage({
-        packageId: this.updatingPackageId,
-        state: 1
-      })
-        .then(result => {
-          this.$message({
-            message: this.$t('lesson.successfullySubmitted'),
-            type: 'success'
-          })
-          return Promise.resolve()
-        })
-        .catch(error => {
-          let errorMsg = ''
-          switch (error.status) {
-            case 401:
-              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
-              break
-            default:
-              errorMsg = this.$t('lesson.failedSubmit')
-              break
-          }
-          this.$message({
-            message: errorMsg,
-            type: 'error'
-          })
-          return Promise.reject(new Error('Submit package to audit failed'))
-        })
-    },
-    async beforeSubmitOrRelease() {
-      if (!this.isPackageInfoComplete) {
-        this.$message({
-          message: this.$t('lesson.pleaseCompleteInfo'),
-          type: 'warning'
-        })
-        return Promise.reject(new Error('Package info not complete'))
-      }
-      await this.updatePackage({ isShowMessage: false })
-        .then(() => {
-          return Promise.resolve()
-        })
-        .catch(() => {
-          return Promise.reject(new Error('Update package failed'))
-        })
-    },
-    async submitPackage() {
-      this.isLoading = true
-      await this.beforeSubmitOrRelease()
-        .then(async () => {
-          await this.submitToAudit()
-            .then(() => {
-              this.toPackageManagerPage()
-            })
-            .catch(() => {
-              this.isLoading = false
-            })
-        })
-        .catch(() => {
-          this.isLoading = false
-        })
-    },
-    async releasePackage() {
-      await this.beforeSubmitOrRelease().then(async () => {
-        console.log('release package api')
-      })
     }
   },
   components: {
-    PackageEditorHeader,
-    PackageBasicInfo,
-    CatalogueManager,
-    CoverMediaSetter
+    LessonEditorHeader,
+    LessonBasicInfo,
+    CoverMediaSetter,
+    LessonMoreInfoSettting
   }
 }
 </script>
+<style lang="scss">
+.edit-lesson {
+  &-cover {
+    padding: 35px;
+  }
+  &-more-info {
+    background-color: #fff;
+    padding: 0 36px 44px;
+  }
+}
+</style>

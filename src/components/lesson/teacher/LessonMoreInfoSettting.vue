@@ -50,9 +50,19 @@ import CoverMediaSetter from './CoverMediaSetter'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonMoreInfoSettting',
+  props: {
+    editingLessonDetailProp: Object,
+    isEditing: Boolean
+  },
   async mounted() {
     await this.getAllSkills({})
     this.skillList = _.cloneDeep(this.lessonSkills)
+    if (this.isEditing) {
+      let editingLessonDetailProp = this.editingLessonDetailProp
+      let { goals, extra, skills } = editingLessonDetailProp
+      let { videoUrl } = extra
+      this.moreInfoData = { goals, videoUrl, skills, duration: '45min' }
+    }
     this.isMounted = true
   },
   data() {

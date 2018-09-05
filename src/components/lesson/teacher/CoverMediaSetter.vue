@@ -36,12 +36,13 @@ export default {
     title: String,
     subTitle: String,
     editingPackageDetail: Object,
+    editingCoverUrl: String,
     isEditing: Boolean
   },
   async mounted() {
     if (this.isEditing) {
       let editingPackageDetail = this.editingPackageDetail
-      let coverUrl = _.get(editingPackageDetail, 'extra.coverUrl')
+      let coverUrl = this.editingCoverUrl || _.get(editingPackageDetail, 'extra.coverUrl')
       if (coverUrl && BigfileUrlReg.test(coverUrl)) {
         this.imageSourceType = 'bigfile'
         this.bigfileTypeUrl = coverUrl

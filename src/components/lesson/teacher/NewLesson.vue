@@ -1,6 +1,6 @@
 <template>
   <div class="new-lesson" v-loading='isLoading'>
-    <lesson-editor-header @saveLesson='saveNewLesson'></lesson-editor-header>
+    <lesson-editor-header :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
     <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
     <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
     <div class="new-lesson-more-info">
@@ -115,14 +115,14 @@ export default {
       await this.createNewLesson({
         newLessonData
       })
-        .then(lessonDetail => {
+        .then(async lessonDetail => {
           this.isLoading = false
           this.editingLessonId = lessonDetail.id
           this.$message({
             message: this.$t('common.saveSuccess'),
             type: 'success'
           })
-          this.addLessonToPackages()
+          await this.addLessonToPackages()
           this.toLessonManagerPage()
         })
         .catch(error => {
@@ -133,7 +133,7 @@ export default {
               errorMsg = this.$t('lesson.lessonManage.pleaseLogin')
               break
             case 409:
-              errorMsg = this.$t('lesson.lessonManage.packageNameConflict')
+              errorMsg = this.$t('lesson.lessonManage.lessonNameConflict')
               break
             default:
               errorMsg = this.$t('common.saveFail')

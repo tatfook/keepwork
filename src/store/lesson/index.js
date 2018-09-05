@@ -9,6 +9,7 @@ const state = {
   skills: [],
   subjects: [],
   userinfo: {},
+  lessonsDetail: {},
   packagesDetail: {}
 }
 export default {

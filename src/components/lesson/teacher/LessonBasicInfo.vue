@@ -45,7 +45,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonBasicInfo',
   props: {
-    editingPackageDetail: Object,
+    editingLessonDetailProp: Object,
     isEditing: Boolean
   },
   async mounted() {
@@ -54,11 +54,14 @@ export default {
     this.isPackageZoneLoading = false
     await this.lessonGetAllSubjects({})
     if (this.isEditing) {
-      let editingPackageDetail = this.editingPackageDetail
-      let { minAge, maxAge } = editingPackageDetail
-      if (minAge !== 0 || maxAge !== 0) {
-      }
-      this.editingLessonDetail = _.clone(editingPackageDetail)
+      let editingLessonDetailProp = this.editingLessonDetailProp
+      let { url, subjectId, lessonName, packages } = editingLessonDetailProp
+      _.forEach(packages, packageDetail => {
+        let { id } = packageDetail
+        this.belongToPackageIds.push(id)
+      })
+      this.tempUrl = url && url.replace(new RegExp(this.linkPagePrefix), '')
+      this.editingLessonDetail = { url, subjectId, lessonName }
     } else {
       this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
     }
