@@ -814,6 +814,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "lessonTitle": "课程",
       "lessonsCount": "课程数",
       "addSkillPoint": "添加技能",
       "addReference": "添加素材",

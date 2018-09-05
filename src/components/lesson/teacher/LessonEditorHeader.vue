@@ -1,8 +1,8 @@
 <template>
   <div class="lesson-editor-header">
     <el-breadcrumb class="lesson-editor-header-breadcrumb" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>课程</el-breadcrumb-item>
-      <el-breadcrumb-item>新建课程</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('lesson.lessonManage.lessonTitle')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{isEditing ? lessonName : $t('lesson.newLesson')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="lesson-editor-header-operations">
       <el-button round @click="toLessonManagerPage" class="lesson-editor-header-cancel-button">{{$t('common.Cancel')}}</el-button>
@@ -14,7 +14,18 @@
 export default {
   name: 'LessonEditorHeader',
   props: {
+    editingLessonDetailProp: Object,
+    isEditing: Boolean,
     isLessonNameEmpty: Boolean
+  },
+  computed: {
+    lessonName() {
+      if (this.isEditing) {
+        let { lessonName } = this.editingLessonDetailProp
+        return lessonName
+      }
+      return undefined
+    }
   },
   methods: {
     saveLesson() {
@@ -28,8 +39,9 @@ export default {
 </script>
 <style lang="scss">
 .lesson-editor-header {
-  padding: 37px 0 0;
+  padding: 36px 0 26px;
   display: flex;
+  align-items: center;
   &-breadcrumb {
     flex: 1;
     .el-breadcrumb__inner {

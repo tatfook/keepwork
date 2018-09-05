@@ -809,6 +809,7 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "lessonTitle": "Lessons",
       "lessonsCount": "Lessons",
       "addSkillPoint": "Add Skillpoints",
       "addReference": "Add References",

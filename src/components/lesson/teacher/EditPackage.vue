@@ -1,6 +1,6 @@
 <template>
   <div class="edit-package" v-loading='isLoading'>
-    <package-editor-header :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
+    <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
     <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
     <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
     <catalogue-manager ref="lessonListComponent" v-if="!isGettingData" v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></catalogue-manager>

@@ -1,6 +1,6 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <lesson-editor-header v-if="!isGettingData" :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='updateLesson'></lesson-editor-header>
+    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' @saveLesson='updateLesson'></lesson-editor-header>
     <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-basic-info>
     <cover-media-setter v-if="!isGettingData" class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
     <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
