@@ -1022,7 +1022,7 @@
     "jewelTips3": "3. 账户中，待解锁知识币数量不得低于 {reward} 知识币。你的待解锁知识币为 {lockCoin} 知识币。",
     "receiveSuccess": "领取成功",
     "attended": "已教",
-    "classes": "课堂",
+    "classes": "堂课",
     "hours": "小时",
     "mins": "分钟",
     "totalTeachingTime": "总授课时长"
