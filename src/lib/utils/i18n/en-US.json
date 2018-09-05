@@ -809,6 +809,7 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "lessonTitle": "Lessons",
       "lessonsCount": "Lessons",
       "addSkillPoint": "Add Skillpoints",
       "addReference": "Add References",
@@ -818,7 +819,7 @@
       "videoLabel": "Video",
       "nameIsRequiredInfo": "Name is required.",
       "pleaseLogin": "Please login to continue.",
-      "packageNameConflict": "The lesson name already exists."
+      "lessonNameConflict": "The lesson name already exists."
     },
     "about": {
       "hottestLessons": "Hottest Lessons",

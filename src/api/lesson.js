@@ -28,11 +28,15 @@ export const packages = {
   release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
   delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
   addLesson: async ({ packageId, lessonId }) => post(`packages/${packageId}/lessons`, { lessonId }),
+  removeLesson: async ({ packageId, lessonId }) => {
+    return deleteMethod(`packages/${packageId}/lessons?lessonId=${lessonId}`)
+  },
   getLessonList: async ({ packageId }) => get(`packages/${packageId}/lessons`)
 }
 
 export const lessons = {
   create: async ({ newLessonData }) => post('lessons', newLessonData),
+  update: async ({ updatingData }) => put(`lessons/${updatingData.id}`, updatingData),
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),

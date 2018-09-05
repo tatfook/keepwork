@@ -814,6 +814,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "lessonTitle": "课程",
       "lessonsCount": "课程数",
       "addSkillPoint": "添加技能",
       "addReference": "添加素材",
@@ -823,7 +824,7 @@
       "videoLabel": "课程视频",
       "nameIsRequiredInfo": "请输入课程名称。",
       "pleaseLogin": "请先登录",
-      "packageNameConflict": "课程名称已经存在"
+      "lessonNameConflict": "课程名称已经存在"
     },
     "about": {
       "hottestLessons": "热门课程",

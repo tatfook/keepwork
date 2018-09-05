@@ -3,7 +3,7 @@
     <div class="package-editor-header-header">
       <el-breadcrumb class="package-editor-header-header-breadcrumb" separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>{{$t('lesson.packageManage.package')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('lesson.newPackage')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{isEditing ? packageName : $t('lesson.newPackage')}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="package-editor-header-header-operations">
         <el-button round @click="toPackageManagerPage" class="package-editor-header-header-cancel-button">{{$t('common.Cancel')}}</el-button>
@@ -23,6 +23,8 @@ export default {
   name: 'PackageEditorHeader',
   props: {
     activeTab: String,
+    editingPackageDetail: Object,
+    isEditing: Boolean,
     isSubmitable: {
       type: Boolean,
       default: true
@@ -33,6 +35,15 @@ export default {
     },
     isPackageNameEmpty: Boolean,
     isPackageInfoComplete: Boolean
+  },
+  computed: {
+    packageName() {
+      if (this.isEditing) {
+        let { packageName } = this.editingPackageDetail
+        return packageName
+      }
+      return undefined
+    }
   },
   methods: {
     setActiveTab(type) {

@@ -4,6 +4,7 @@ import { props } from './mutations'
 let {
   GET_USER_INFO_SUCCESS,
   GET_PACKAGE_DETAIL_SUCCESS,
+  GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
   GET_ALL_SUBJECTS_SUCCESS
   // TO_BE_TEACHER
@@ -19,6 +20,11 @@ const actions = {
     let { commit } = context
     let detail = await lesson.packages.packageDetail({ packageId })
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
+  },
+  async getLessonDetail(context, { lessonId }) {
+    let { commit } = context
+    let detail = await lesson.lessons.lessonDetail({ lessonId })
+    commit(GET_LESSON_DETAIL_SUCCESS, { detail })
   },
   async subscribePackage(context, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({ packageId })

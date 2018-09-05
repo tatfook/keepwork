@@ -50,9 +50,25 @@ import CoverMediaSetter from './CoverMediaSetter'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonMoreInfoSettting',
+  props: {
+    editingLessonDetailProp: Object,
+    isEditing: Boolean
+  },
   async mounted() {
     await this.getAllSkills({})
     this.skillList = _.cloneDeep(this.lessonSkills)
+    if (this.isEditing) {
+      let editingLessonDetailProp = this.editingLessonDetailProp
+      let { goals, extra, skills } = editingLessonDetailProp
+      let { videoUrl } = extra
+      let formatedSkills = this.formatSkill(skills)
+      this.moreInfoData = {
+        goals,
+        videoUrl,
+        skills: formatedSkills,
+        duration: '45min'
+      }
+    }
     this.isMounted = true
   },
   data() {
@@ -90,6 +106,22 @@ export default {
     ...mapActions({
       getAllSkills: 'lesson/getAllSkills'
     }),
+    formatSkill(originSkills) {
+      let skills = []
+      _.forEach(originSkills, skill => {
+        let indexInSkillList = _.findIndex(this.skillList, {
+          id: skill.skillId
+        })
+        this.skillList[indexInSkillList].isSelect = true
+        let skillDetail = this.skillList[indexInSkillList]
+        skills.push({
+          id: skill.skillId,
+          skillName: skillDetail.skillName,
+          score: skill.score
+        })
+      })
+      return skills
+    },
     showAddSkillsDialog() {
       this.isSkillDialogShow = true
     },
