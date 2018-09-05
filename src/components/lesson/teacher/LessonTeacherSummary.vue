@@ -3,7 +3,6 @@
     <div class="teacher-summary-print-and-email">
       <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">Print</el-button>
       <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">Send to Mailbox</el-button>
-      <!-- <el-button type="primary" @click="html2img" v-show="!isPrintPage">html2img</el-button> -->
     </div>
     <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
@@ -22,8 +21,6 @@
           </ul>
         </div>
       </div>
-      <!-- <p v-show="isPrintPage">
-        <span class="brief-title">{{$t('lesson.StuentsPerformance')}}:</span> 学生总数50</p> -->
     </div>
     <div class="teacher-summary-chart" ref="lessonChart">
       <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
@@ -40,17 +37,17 @@
     </div>
     <div class="teacher-summary-detailed" ref="lessonSummary">
       <h4>{{$t('lesson.detailed')}}:</h4>
-      <div class="teacher-summary-detailed-change" v-show="!isPrintPage">
+      <div class="teacher-summary-detailed-change hidden" v-show="!isPrintPage">
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
       <div class="teacher-summary-detailed-table">
-        <el-table :data="newCurrentRecord" border style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="portrait" label="NO." width="80px">
             <template slot-scope="props">
-              <div class="portrait"><img :src="props.row.portrait" alt=""></div>
+              <div class="portrait"><img style="width:100%;object-fit:cover" :src="props.row.portrait" alt=""></div>
             </template>
           </el-table-column>
           <el-table-column prop="name" sortable :label='$t("lesson.name")'>
@@ -67,7 +64,7 @@
           </el-table-column>
           <el-table-column label=" " v-if="!isPrintPage">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
+              <el-button class="hidden" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -239,24 +236,19 @@ export default {
           }
         }
       )
-    }
+    },
+    tableDataFaker() {
+      // 为了造假数据使用
+      return this.newCurrentRecord
+        .map(item => Array.from({ length: 100 }, () => item))
+        .reduce((arr, cur) => [...arr, ...cur], [])
+    },
   },
   methods: {
     ...mapActions({
       getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
       modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
-    html2img() {
-      let _html = this.$refs.lessonChart
-      console.log(_html)
-      html2canvas(_html).then(res => {
-        let _base64 = res.toDataURL()
-        console.log(_base64)
-        this.fakerImg = _base64
-        // document.querySelector('.faker-img').
-        // document.querySelector('.teacher-summary-chart-copy').appendChild(res)
-      })
-    },
     async change(type) {
       this.changeSelected = type
       this.changeDialogVisible = true
@@ -314,10 +306,10 @@ export default {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
       let lessonChartHtml = this.$refs.lessonChart.innerHTML
       let lessonSummaryHtml = this.$refs.lessonSummary.innerHTML
+      lessonSummaryHtml = `<style>.hidden{display:none}.el-checkbox__input{display:none}.portrait{width: 34px;height: 34px;border-radius: 50%;overflow: hidden;margin:5px auto;}.email-text-center{text-align:center;}</style>` + lessonSummaryHtml
       let _lessonChart = this.$refs.lessonChart
       let chart = await html2canvas(_lessonChart)
       chart = chart.toDataURL()
-      console.log(chart)
       this.$prompt('请输入邮箱', '提示', {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
@@ -332,8 +324,11 @@ export default {
           let to = value
           let subject = this.$t('modList.lesson') + (this.currenClassInfo.extra.lessonNo || 0) + ':' +  this.currenClassInfo.extra.lessonName
           let html = lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
-          await lesson.emails.sendEmails({to, subject, html}).then(res => {console.log(res)}).catch(err => {console.log(err)})
-          this.successSendEmailDialogVisible = true
+          await lesson.emails.sendEmails({to, subject, html}).then(res => {
+            this.successSendEmailDialogVisible = true
+          }).catch(err => {
+            this.$message.error('发送失败')
+          })
         })
         .catch(() => {
           this.$message({
@@ -503,46 +498,7 @@ export default {
         overflow: hidden;
         img {
           width: 100%;
-        }
-      }
-      &-title {
-        padding: 14px;
-        border-bottom: 1px solid #a4a4a4;
-        .title {
-          width: 140px;
-          display: inline-block;
-          text-align: center;
-          font-size: 14px;
-          font-weight: 700;
-        }
-      }
-      &-content {
-        .student-record {
-          padding: 0;
-          margin: 0;
-          .every-student {
-            list-style: none;
-            padding: 4px 14px;
-            border-bottom: 1px solid #a4a4a4;
-            display: flex;
-            align-items: center;
-            &-checkbox {
-              margin-right: 7px;
-            }
-            .desc {
-              width: 140px;
-              display: inline-block;
-              font-size: 14px;
-              text-align: center;
-              margin-right: 5px;
-            }
-            .portraits {
-              width: 34px;
-              height: 34px;
-              border-radius: 50%;
-              object-fit: cover;
-            }
-          }
+          object-fit: cover;
         }
       }
     }
@@ -563,7 +519,6 @@ export default {
   &-success-send-email {
     .success {
       text-align: center;
-      // width: 199px;
       margin: 0 auto;
     }
   }
