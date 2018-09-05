@@ -441,7 +441,9 @@ export default {
       if (!file.checkPassed) {
         return
       }
-      let toCopyLink = await this.getSiteFileUrl(file)
+
+      let toCopyPrefix = await this.getSiteFileUrl(file)
+      let toCopyLink = `${toCopyPrefix}#${file.filename}`
 
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),
@@ -828,24 +830,24 @@ export default {
       display: block;
       margin: 0 auto;
     }
-    .el-message-box__header {
-      padding: 30px 30px 10px;
-    }
-    .el-message-box__headerbtn {
-      top: -5px;
-      right: -5px; 
-      .el-message-box__close {
-        font-size: 3em;
-        color: white;
-      }
-    }
-    .el-message-box__content {
-      padding: 0;
-      p {
-        padding: 0;
-        margin: 0;
-      }
-    }
+    // .el-message-box__header {
+    //   padding: 30px 30px 10px;
+    // }
+    // .el-message-box__headerbtn {
+    //   top: -5px;
+    //   right: -5px; 
+    //   .el-message-box__close {
+    //     font-size: 3em;
+    //     color: white;
+    //   }
+    // }
+    // .el-message-box__content {
+    //   padding: 0;
+    //   p {
+    //     padding: 0;
+    //     margin: 0;
+    //   }
+    // }
   }
   &-media-uploading{
     padding: 0 15px;
@@ -861,6 +863,14 @@ export default {
     .el-progress{
       position: relative;
       top: 45px;
+    }
+  }
+}
+.el-popup-parent--hidden {
+  .el-message-box__content {
+    p {
+      word-wrap:break-word; 
+      word-break:break-all;
     }
   }
 }
