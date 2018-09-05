@@ -16,7 +16,7 @@
               <i class="iconfont icon-setting"></i>
               <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
             </template>
-            <el-menu-item index="3-1">课程管理</el-menu-item>
+            <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">课程管理</el-menu-item>
             <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">课程包管理</el-menu-item>
           </el-submenu>
         </el-menu>
@@ -63,8 +63,14 @@ export default {
             path: `/teacher/review`
           })
           break
-        case 'PACKAGE_MANAGER':
+        case 'LESSON_MANAGER':
           this.itmeActive = '3-1'
+          this.$router.push({
+            path: `/teacher/lessonManager`
+          })
+          break
+        case 'PACKAGE_MANAGER':
+          this.itmeActive = '3-2'
           this.$router.push({
             path: `/teacher/packageManager`
           })

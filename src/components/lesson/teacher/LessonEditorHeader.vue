@@ -21,8 +21,7 @@ export default {
       this.$emit('saveLesson', {})
     },
     toLessonManagerPage() {
-      console.log('toLessonManagerPage page')
-      // this.$router.push('/teacher/packageManager')
+      this.$router.push('/teacher/lessonManager')
     }
   }
 }

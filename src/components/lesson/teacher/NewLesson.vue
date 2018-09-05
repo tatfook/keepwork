@@ -78,7 +78,7 @@ export default {
       let isLastOne = false
       for (let i = 0; i < packageIds.length; i++) {
         let packageId = packageIds[i]
-        if (i === (packageId.length - 1)) {
+        if (i === packageId.length - 1) {
           isLastOne = true
         }
         await this.addLessonToPackage({
@@ -123,7 +123,7 @@ export default {
             type: 'success'
           })
           this.addLessonToPackages()
-          // this.toPackageManagerPage()
+          this.toLessonManagerPage()
         })
         .catch(error => {
           this.isLoading = false
@@ -145,6 +145,9 @@ export default {
           })
           return Promise.reject(new Error('Create new Lesson failed'))
         })
+    },
+    toLessonManagerPage() {
+      this.$router.push('/teacher/lessonManager')
     }
   },
   components: {

@@ -736,6 +736,7 @@
     "include": "包含",
     "all": "全部",
     "newPackage": "新建课程包",
+    "newLesson": "新建课程",
     "subjectLabel": "学科",
     "statusLabel": "状态",
     "searchByName": "按名称搜索",
@@ -813,6 +814,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "lessonsCount": "课程数",
       "addSkillPoint": "添加技能",
       "addReference": "添加素材",
       "moreInfo": "更多信息",

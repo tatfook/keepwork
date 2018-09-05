@@ -72,7 +72,7 @@ export default {
       isNewPackageSelected: true,
       tempUrl: '',
       editingLessonDetail: {
-        url: '',
+        url: undefined,
         subjectId: null,
         lessonName: ''
       }
@@ -121,6 +121,10 @@ export default {
       this.isPackageZoneLoading = false
     },
     setUrl() {
+      if (this.tempUrl == '') {
+        this.editingLessonDetail.url = undefined
+        return
+      }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
     }
   }
