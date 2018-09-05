@@ -731,6 +731,7 @@
     "include": "Includes",
     "all": "All",
     "newPackage": "New Package",
+    "newLesson": "New Lesson",
     "subjectLabel": "Subject",
     "statusLabel": "Status",
     "searchByName": "Search by name",
@@ -808,6 +809,7 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "lessonsCount": "Lessons",
       "addSkillPoint": "Add Skillpoints",
       "addReference": "Add References",
       "moreInfo": "More information",

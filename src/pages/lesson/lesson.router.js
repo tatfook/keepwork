@@ -16,10 +16,11 @@ const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
-const PackageManager = () =>
-  import('@/components/lesson/teacher/PackageManager')
+const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
+const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
+const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
@@ -68,6 +69,16 @@ export default new Router({
               path: 'lesson/new',
               name: 'TeacherColumnNewLesson',
               component: NewLesson
+            },
+            {
+              path: 'lessonManager',
+              name: 'TeacherLessonManager',
+              component: LessonManager
+            },
+            {
+              path: 'lesson/:id/edit',
+              name: 'TeacherColumnEditLesson',
+              component: EditLesson
             },
             {
               path: 'newPackage',
