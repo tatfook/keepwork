@@ -25,8 +25,8 @@
             <h4 class="name" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
               <span class="lesson-name" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)"><span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</span></p>
-            <p>
-              <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</p>
+            <p class="package-intro">
+              <span :title="lessonPackage.extra.lessonGoals"><span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</span></p>
             <p>
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
           </div>
@@ -163,7 +163,7 @@ export default {
     &-package {
       .package {
         padding: 18px;
-        height: 224px;
+        height: 200px;
         margin-bottom: 20px;
         background-color: #ffffff;
         border: solid 1px #e5e5e5;
@@ -192,6 +192,12 @@ export default {
           }
           .lesson-name{
             cursor: pointer;
+          }
+          .package-intro{
+            width: 376px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .brief-title {
             font-weight: 700;
