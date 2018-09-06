@@ -44,6 +44,7 @@ export const lessons = {
   lessonDetailByUrl: async ({ url }) => get(`lessons/detail?url=${url}`),
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
   isReward: async ({ packageId, lessonId }) => get(`learnRecords/isReward?packageId=${packageId}&lessonId=${lessonId}`),
+  delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`)

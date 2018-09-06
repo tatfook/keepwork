@@ -821,7 +821,9 @@
       "videoLabel": "Video",
       "nameIsRequiredInfo": "Name is required.",
       "pleaseLogin": "Please login to continue.",
-      "lessonNameConflict": "The lesson name already exists."
+      "lessonNameConflict": "The lesson name already exists.",
+      "deleteLessonConfirm": "Are you sure you want to delete the lesson?",
+      "deleteLessonInfo": "(The operation will delete the lesson in packages, and will make inconvenience to the users who have bought packages this lesson belonged to.)"
     },
     "about": {
       "hottestLessons": "Hottest Lessons",

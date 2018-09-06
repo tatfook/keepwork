@@ -60,7 +60,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <OperateResultDialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></OperateResultDialog>
+    <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
   </div>
 </template>
 <script>

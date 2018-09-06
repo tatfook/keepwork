@@ -29,10 +29,10 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" v-loading="isTableLoading" :data="filteredLessonList" height="450" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" v-loading="isTableLoading" :data="filteredLessonList" height="450" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
-        <el-table-column type='expand' width="40">
+        <el-table-column prop='packages' type='expand' width="40">
           <template slot-scope="expandProps">
             <div class="lesson-manager-table-expand">
               <div class="lesson-manager-table-package-item" v-for="(packageItem, index) in expandProps.row.packages" :key="index">
@@ -60,22 +60,30 @@
         </el-table-column>
         <el-table-column class-name="lesson-manager-table-lessonName" prop="lessonName" :label="$t('lesson.nameLabel')">
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="200">
+        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
-        <el-table-column label="" width="165" class-name="lesson-manager-table-operations">
+        <el-table-column label="" width="180" class-name="lesson-manager-table-operations">
           <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="$t('lesson.edit')" placement="top">
+            <el-tooltip v-if="isEditable(scope.row)" effect="dark" :content="$t('lesson.edit')" placement="top">
               <i class="iconfont icon-edit--" @click="toEdit(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isReleasable(scope.row)" effect="dark" :content="$t('lesson.release')" placement="top">
+              <i class="iconfont icon-Release" @click="toRelease(scope.row)"></i>
+            </el-tooltip>
+            <el-tooltip v-if="isDeletable(scope.row)" effect="dark" :content="$t('lesson.delete')" placement="top">
+              <i class="iconfont icon-delete1" @click="confirmDelete(scope.row)"></i>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
   </div>
 </template>
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
   async mounted() {
@@ -163,8 +171,16 @@ export default {
   methods: {
     ...mapActions({
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
-      lessonGetAllSubjects: 'lesson/getAllSubjects'
+      lessonGetAllSubjects: 'lesson/getAllSubjects',
+      lessonDeleteLesson: 'lesson/teacher/deleteLesson'
     }),
+    getRowClass({ row, rowIndex }) {
+      let { packages } = row
+      if (packages.length <= 0) {
+        return 'lesson-manager-table-no-expand'
+      }
+      return ''
+    },
     getSubjectFilteredPackageList(originList) {
       let searchedSubjectId = this.searchParams.subjectId
       return searchedSubjectId
@@ -194,17 +210,62 @@ export default {
         return reg.test(lessonDetail.lessonName)
       })
     },
+    isEditable(lessonDetail) {
+      let { packages } = lessonDetail
+      let pendingReviewPackageIndex = _.findIndex(packages, { state: 1 })
+      return pendingReviewPackageIndex === -1
+    },
+    isReleasable(lessonDetail) {
+      // The first version temporarily removes the release function
+      // let { packages } = lessonDetail
+      // let approvedPackageIndex = _.findIndex(packages, { state: 2 })
+      // return this.isEditable(lessonDetail) && approvedPackageIndex >= 0
+      return false
+    },
+    isDeletable(lessonDetail) {
+      return this.isEditable(lessonDetail)
+    },
     toNewLessonPage() {
       this.$router.push({ path: '/teacher/lesson/new' })
     },
     toEdit(lessonDetail) {
       this.$router.push(`/teacher/lesson/${lessonDetail.id}/edit`)
+    },
+    async toRelease(lessonDetail) {
+      console.log(lessonDetail)
+    },
+    async confirmDelete(lessonDetail) {
+      this.editingLessonId = lessonDetail.id
+      this.infoDialogData = {
+        paras: [
+          this.$t('lesson.lessonManage.deleteLessonConfirm'),
+          this.$t('lesson.lessonManage.deleteLessonInfo')
+        ],
+        iconType: 'delete',
+        type: 'danger',
+        continueFnNameAfterEnsure: 'toDelete'
+      }
+      this.isInfoDialogVisible = true
+    },
+    async toDelete() {
+      this.isTableLoading = true
+      await this.lessonDeleteLesson({ lessonId: this.editingLessonId })
+      this.isTableLoading = false
+    },
+    handleClose(continueFnNameAfterEnsure) {
+      this.isInfoDialogVisible = false
+      if (continueFnNameAfterEnsure === 'toDelete') {
+        this.toDelete()
+      }
     }
   },
   filters: {
     transformStateValue(stateId, statesArray) {
       return _.find(statesArray, { id: stateId }).value
     }
+  },
+  components: {
+    OperateResultDialog
   }
 }
 </script>
@@ -319,7 +380,7 @@ export default {
     &-operations {
       text-align: right;
       .cell {
-        padding: 0 20px;
+        padding: 0 30px 0 20px;
       }
     }
     &-index {
@@ -329,6 +390,11 @@ export default {
       display: flex;
       flex-wrap: wrap;
       margin-bottom: -1px;
+    }
+    &-no-expand {
+      .el-icon-arrow-right {
+        display: none;
+      }
     }
     &-package-item {
       width: 50%;
