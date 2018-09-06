@@ -259,11 +259,6 @@ export default {
         window.location.href = 'http://www.paracraft.cn/download?lang=zh'
       }
     },
-    enterPackageDetail(packageId) {
-      this.$router.push({
-        path: `package/${packageId}`
-      })
-    },
     gotoLessons() {
       if (this.isStudentPage) {
         this.$router.push({
