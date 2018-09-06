@@ -814,6 +814,8 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "noIntro": "暂无简介",
+      "packageLabel": "课程包",
       "lessonTitle": "课程",
       "lessonsCount": "课程数",
       "addSkillPoint": "添加技能",

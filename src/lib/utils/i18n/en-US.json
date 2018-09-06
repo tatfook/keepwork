@@ -809,6 +809,8 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "noIntro": "No Intro",
+      "packageLabel": "Package",
       "lessonTitle": "Lessons",
       "lessonsCount": "Lessons",
       "addSkillPoint": "Add Skillpoints",
