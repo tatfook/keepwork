@@ -75,7 +75,8 @@ export const classrooms = {
   uploadLearnRecords: ({ classId, learnRecords }) =>
     put(`learnRecords/${classId}`, { extra: learnRecords }),
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
-  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr)
+  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr),
+  isValidKey: key => get(`classrooms/valid?key=${key}`)
 }
 
 export const subjects = {
