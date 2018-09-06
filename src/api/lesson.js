@@ -37,6 +37,7 @@ export const packages = {
 export const lessons = {
   create: async ({ newLessonData }) => post('lessons', newLessonData),
   update: async ({ updatingData }) => put(`lessons/${updatingData.id}`, updatingData),
+  release: async ({ id, content }) => post(`lessons/${id}/contents`, { content }),
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),

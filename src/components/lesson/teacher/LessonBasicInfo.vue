@@ -3,7 +3,7 @@
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url">
         <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
-        <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" v-model="tempUrl" @blur='setUrl'>
+        <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @blur='setUrl'>
           <template slot="prepend">{{linkPagePrefix}}</template>
         </el-input>
       </div>
@@ -46,7 +46,11 @@ export default {
   name: 'LessonBasicInfo',
   props: {
     editingLessonDetailProp: Object,
-    isEditing: Boolean
+    isEditing: Boolean,
+    isEditorMod: {
+      type: Boolean,
+      default: false
+    }
   },
   async mounted() {
     this.isPackageZoneLoading = true
@@ -60,8 +64,13 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = url && url.replace(new RegExp(this.linkPagePrefix), '')
-      this.editingLessonDetail = { url, subjectId, lessonName }
+      this.tempUrl = this.isEditorMod ? this.activePageUrl.replace(`/${this.username}/`,'') : url && url.replace(new RegExp(this.linkPagePrefix), '')
+      let origin = window.location.origin
+      if (origin === 'http://localhost:8080') {
+        origin = 'https://stage.keepwork.com'
+      }
+      let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
+      this.editingLessonDetail = { url: _url, subjectId, lessonName }
     } else {
       this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
     }
@@ -85,7 +94,8 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       lessonSubjects: 'lesson/subjects',
-      userPackages: 'lesson/teacher/userPackages'
+      userPackages: 'lesson/teacher/userPackages',
+      activePageUrl: 'activePageUrl'
     }),
     username() {
       return _.get(this.userProfile, 'username')

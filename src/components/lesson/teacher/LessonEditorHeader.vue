@@ -5,7 +5,7 @@
       <el-breadcrumb-item>{{isEditing ? lessonName : $t('lesson.newLesson')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="lesson-editor-header-operations">
-      <el-button round @click="toLessonManagerPage" class="lesson-editor-header-cancel-button">{{$t('common.Cancel')}}</el-button>
+      <el-button round @click="cancel" class="lesson-editor-header-cancel-button">{{$t('common.Cancel')}}</el-button>
       <el-button round @click="saveLesson" class="lesson-editor-header-save-button" :class="{'is-disabled': isLessonNameEmpty}">{{$t('common.Save')}}</el-button>
     </div>
   </div>
@@ -16,7 +16,11 @@ export default {
   props: {
     editingLessonDetailProp: Object,
     isEditing: Boolean,
-    isLessonNameEmpty: Boolean
+    isLessonNameEmpty: Boolean,
+    isEditorMod: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     lessonName() {
@@ -30,6 +34,9 @@ export default {
   methods: {
     saveLesson() {
       this.$emit('saveLesson', {})
+    },
+    cancel() {
+      this.isEditorMod ? this.$emit('resetCancel') : this.toLessonManagerPage()
     },
     toLessonManagerPage() {
       this.$router.push('/teacher/lessonManager')

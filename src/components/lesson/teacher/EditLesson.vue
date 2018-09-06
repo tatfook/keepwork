@@ -1,7 +1,7 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' @saveLesson='updateLesson'></lesson-editor-header>
-    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-basic-info>
+    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson'  @resetCancel="resetCancel"></lesson-editor-header>
+    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
     <cover-media-setter v-if="!isGettingData" class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
     <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
   </div>
@@ -15,6 +15,7 @@ import LessonMoreInfoSettting from './LessonMoreInfoSettting'
 export default {
   name: 'EditLesson',
   async mounted() {
+    this.isEditorMod && console.log('编辑器模式😀😀😀😀')
     this.isLoading = true
     this.isGettingData = true
     await this.getLessonDetail({ lessonId: this.editingLessonId })
@@ -29,9 +30,18 @@ export default {
       this.isMounted = true
     })
   },
+  props: {
+    isEditorMod: {
+      type: Boolean,
+      default: false
+    },
+    lessonId: ''
+  },
   data() {
     return {
-      editingLessonId: _.toInteger(_.get(this.$route.params, 'id')),
+      editingLessonId: this.isEditorMod
+        ? this.lessonId
+        : _.toInteger(_.get(this.$route.params, 'id')),
       isGettingData: true,
       isLoading: false,
       isMounted: false,
@@ -190,7 +200,7 @@ export default {
           })
           await this.removeLessonFromPackages()
           await this.addLessonToPackages()
-          this.toLessonManagerPage()
+          this.isEditorMod ? this.resetCancel() : this.toLessonManagerPage()
           return Promise.resolve()
         })
         .catch(error => {
@@ -213,6 +223,10 @@ export default {
           return Promise.reject(new Error('Update lesson failed'))
         })
       this.isLoading = false
+    },
+    resetCancel() {
+      this.$emit('refresh')
+      this.$emit('cancel')
     }
   },
   components: {
