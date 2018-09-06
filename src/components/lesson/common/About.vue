@@ -17,17 +17,25 @@
         <el-col :sm="24" :md="8" v-for="(coursePackage,index) in hotsPackages" v-if="index < 3" :key="coursePackage.id">
           <div class="subject-desc">
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
-            <h4 :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
+            <h4 :title="coursePackage.packageName" :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
-              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
-              <div class="purchase-money" plain>{{$t('lesson.rmbPrice')}}:
-                <span class="red">￥{{coursePackage.rmb}}</span>
+              <div :class="['purchase-tip',{'hidden': coursePackage.rmb == 0}]" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
+              <div :class="['purchase-money',{'hidden': coursePackage.rmb == 0}]">
+                <span class="money">
+                  {{$t('lesson.rmbPrice')}}:
+                  <span class="red">￥{{coursePackage.rmb}}</span>
+                </span>
               </div>
-              <div class="purchase-money">{{$t('lesson.coinsPrice')}}:
-                <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}</div>
+              <div class="purchase-money">
+                <span class="money free" v-if="coursePackage.rmb == 0">{{$t('lesson.free')}}</span>
+                <span class="money" v-else>
+                  {{$t('lesson.coinsPrice')}}:
+                  <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}
+                </span>
+              </div>
             </div>
           </div>
         </el-col>
@@ -35,7 +43,6 @@
     </div>
     <div class="about-view-more">
       <div class="about-view-more-btn" @click="gotoLessons">
-        <!-- <img src="@/assets/lessonImg/aboutPageImg/view_more_lesson.png" alt=""> -->
         <span class="tip">{{$t('lesson.about.viewMoreLessons')}}</span>
         <img class="next next-1" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
         <img class="next next-2" src="@/assets/lessonImg/aboutPageImg/next.png" alt="">
@@ -70,21 +77,21 @@
       <el-row>
         <el-col :md="12" :xs="24">
           <el-row>
-              <el-col :span="8">
-                <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
-              </el-col>
-              <el-col :span="16">
-                <div class="desc-text">
-                  <h2>{{$t('lesson.about.animations')}}</h2>
-                  <p>{{$t('lesson.about.animationsTalk')}}</p>
-                </div>
-              </el-col>
-            </el-row>
+            <el-col :span="8">
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
+            </el-col>
+            <el-col :span="16">
+              <div class="desc-text">
+                <h2>{{$t('lesson.about.animations')}}</h2>
+                <p>{{$t('lesson.about.animationsTalk')}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
         <el-col :md="12" :xs="24">
           <el-row>
             <el-col :span="8">
-              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>                
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>
             </el-col>
             <el-col :span="16">
               <div class="desc-text">
@@ -97,7 +104,7 @@
         <el-col :md="12" :xs="24">
           <el-row>
             <el-col :span="8">
-              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>                
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>
             </el-col>
             <el-col :span="16">
               <div class="desc-text">
@@ -110,7 +117,7 @@
         <el-col :md="12" :xs="24">
           <el-row>
             <el-col :span="8">
-              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>                
+              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
             </el-col>
             <el-col :span="16">
               <div class="desc-text">
@@ -226,11 +233,11 @@ export default {
       animation: ''
     }
   },
-  async mounted(){
+  async mounted() {
     this.hotsPackages = await lesson.packages.getHotsPackages()
   },
   computed: {
-    imgUrls(){
+    imgUrls() {
       return this.isEn ? this.imgUrls1 : this.imgUrls2
     },
     nowFullPath() {
@@ -251,11 +258,6 @@ export default {
       if (this.imgIndex === 1) {
         window.location.href = 'http://www.paracraft.cn/download?lang=zh'
       }
-    },
-    enterPackageDetail(packageId){
-      this.$router.push({
-        path: `package/${packageId}`
-      })
     },
     gotoLessons() {
       if (this.isStudentPage) {
@@ -324,6 +326,7 @@ export default {
     margin: 0 auto;
     .subject-desc {
       width: 287px;
+      height: 415px;
       padding: 34px 34px 6px;
       margin: 20px auto;
       border: solid 2px #d2d2d2;
@@ -345,7 +348,11 @@ export default {
       .subject-title {
         font-size: 18px;
         margin-bottom: 10px;
+        height: 24px;
         cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       span {
         display: block;
@@ -358,6 +365,9 @@ export default {
       .purchase-lesson-package {
         margin: 10px 0;
         border-top: 1px solid #e3e3e3;
+        .hidden {
+          visibility: hidden;
+        }
         .red {
           color: #e4461f;
           display: inline;
@@ -371,20 +381,25 @@ export default {
           font-size: 14px;
         }
         .purchase-money {
-          font-size: 14px;
-          display: inline-block;
-          padding: 0 12px;
-          height: 27px;
-          border: solid 2px #f3f3f3;
-          text-align: left;
-          line-height: 27px;
-          border-radius: 15px;
           margin: 2px 0;
           cursor: default;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 280px;
+          .free {
+            color: #67c23a;
+          }
+          .money {
+            font-size: 14px;
+            display: inline-block;
+            padding: 0 12px;
+            height: 27px;
+            border: solid 2px #f3f3f3;
+            text-align: left;
+            line-height: 27px;
+            border-radius: 15px;
+            max-width: 255px;
+          }
         }
       }
     }
@@ -396,7 +411,8 @@ export default {
       position: relative;
       cursor: pointer;
       height: 77px;
-      background: url('../../../assets/lessonImg/aboutPageImg/view_more_lesson.png') no-repeat;
+      background: url('../../../assets/lessonImg/aboutPageImg/view_more_lesson.png')
+        no-repeat;
       background-size: cover;
       padding-left: 20px;
       .tip {
