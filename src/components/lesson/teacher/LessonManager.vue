@@ -29,13 +29,13 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" v-loading="isTableLoading" :data="filteredLessonList" height="450" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" height="450" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
         <el-table-column prop='packages' type='expand' width="40">
           <template slot-scope="expandProps">
             <div class="lesson-manager-table-expand">
-              <div class="lesson-manager-table-package-item" v-for="(packageItem, index) in expandProps.row.packages" :key="index">
+              <div class="lesson-manager-table-package-item" :class="{'lesson-manager-table-package-item-active': searchParams.packageId === packageItem.id}" v-for="(packageItem, index) in expandProps.row.packages" :key="index">
                 <span class="lesson-manager-table-package-item-name">{{packageItem.packageName}}</span>
                 <el-popover popper-class='lesson-manager-table-package-popver' placement="bottom-start" trigger="click">
                   <div class="lesson-manager-table-package-popver-box">
@@ -87,8 +87,13 @@ import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
   async mounted() {
-    await this.lessonGetUserLessons({})
-    await this.lessonGetAllSubjects({})
+    this.isTableLoading = true
+    await Promise.all([
+      this.lessonGetUserPackages({}),
+      this.lessonGetUserLessons({}),
+      this.lessonGetAllSubjects({})
+    ])
+    this.isTableLoading = false
   },
   data() {
     return {
@@ -106,6 +111,7 @@ export default {
         continueFnNameAfterEnsure: ''
       },
       editingLessonId: null,
+      expandRowKeys: [],
       statesArray: [
         {
           id: 0,
@@ -147,9 +153,15 @@ export default {
       let namefilteredLessonList = this.getNamefilteredLessonList(
         packageFilteredLessonList
       )
+      let searchedPackageId = this.searchParams.packageId
+      let isSearchingPackage = typeof searchedPackageId === 'number'
+      this.expandRowKeys = []
       let containSubjectNamePackageList = _.map(
         namefilteredLessonList,
         (obj, index) => {
+          if (isSearchingPackage) {
+            this.expandRowKeys.push(obj.id)
+          }
           let subjectId = obj.subjectId
           if (!subjectId) {
             return obj
@@ -170,6 +182,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
       lessonDeleteLesson: 'lesson/teacher/deleteLesson'
@@ -180,6 +193,9 @@ export default {
         return 'lesson-manager-table-no-expand'
       }
       return ''
+    },
+    setRowKey(row) {
+      return row.id
     },
     getSubjectFilteredPackageList(originList) {
       let searchedSubjectId = this.searchParams.subjectId
@@ -404,6 +420,11 @@ export default {
       padding: 0 48px;
       position: relative;
       border-bottom: 1px solid #d2d2d2;
+      &-active {
+        border: 2px solid #409efe;
+        border-radius: 4px;
+        box-shadow: 0 0 0 2px #c9e4ff;
+      }
       &-name {
         flex: 1;
         white-space: nowrap;
