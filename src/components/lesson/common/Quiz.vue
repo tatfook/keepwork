@@ -49,7 +49,7 @@
       </div>
       <div class="desc">
         {{$t('card.explanationColon')}}
-        <span :class="[isError ? 'error-highlight': 'highlight']">{{desc}}</span>
+        <span :class="['explan',isError ? 'error-highlight': 'highlight']">{{desc}}</span>
       </div>
     </div>
     <el-button v-if="!isDone && !isPreview" class="quiz-submit" size="small" type="primary" @click="checkAnswer">{{$t('card.submit')}}</el-button>
@@ -313,6 +313,9 @@ export default {
   .quiz-text-match {
     padding: 20px 40px 0;
     user-select: none;
+    pre {
+      white-space: pre-line;
+    }
   }
   .quiz-result {
     margin-left: 20px;
@@ -326,6 +329,9 @@ export default {
     }
     .highlight {
       color: #409efe;
+    }
+    .explan {
+      word-break: break-all;
     }
   }
   .quiz-submit {
