@@ -20,6 +20,7 @@ import AdiPagePath from './pagePath/pagePath.properties'
 import AdiTab from './tab/tab.properties'
 import AdiCategoryList from './categoryList/categoryList.properties'
 import AdiPageSwitching from './pageSwitching/pageSwitching.properties'
+import AdiIcon from './icon/icon.properties'
 
 import AdiLesson from './lesson/lesson.properties'
 import AdiQuiz from './quiz/quiz.properties'
@@ -48,6 +49,7 @@ export default {
   AdiTab,
   AdiCategoryList,
   AdiPageSwitching,
+  AdiIcon,
   AdiLesson,
   AdiQuiz,
   AdiHint
