@@ -1,18 +1,18 @@
 <template>
   <div class="teacher-summary" v-loading="loading">
     <div class="teacher-summary-print-and-email">
-      <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">Print</el-button>
-      <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">Send to Mailbox</el-button>
+      <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">{{$t('lesson.print')}}</el-button>
+      <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">{{$t('lesson.sendToMailbox')}}</el-button>
     </div>
     <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
-        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">Number Of Student: 50</span></p>
+        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
       <p>
         <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
       <p>
-        <span class="brief-title">{{$t('lesson.duration')}}:</span> 45mins</p>
+        <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
       <div class="skillpoints">
         <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
         <div class="points">
@@ -83,7 +83,7 @@
     <el-dialog class="teacher-summary-success-send-email" :visible.sync="successSendEmailDialogVisible" width="30%" center>
       <div class="success">
         <img src="@/assets/lessonImg/email.png" alt="">
-        <p>The summary has been successfully sent to your mailbox</p>
+        <p>{{$t('lesson.successSendToEmail')}}(<span class="email-address">{{emailAddress}}</span>).</p>
       </div>
     </el-dialog>
   </div>
@@ -103,7 +103,7 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
-      fakerImg:'',
+      emailAddress: '',
       isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
       currenClassInfo: { extra: {}},
@@ -142,7 +142,6 @@ export default {
   },
   async mounted() {
     await lesson.classrooms.getClassroomById( this.$route.params.classId ).then(res => {
-      console.log('getClassroomById11',res)
       this.currenClassInfo = res
       this.lessonNo = res.extra.lessonNo || 0
       this.lessonName = res.extra.lessonName
@@ -155,7 +154,6 @@ export default {
     this.totalStudent = this.classroomLearnRecord.length
     await Promise.all([this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
     this.loading = false
-    console.log('classroomLearnRecord',this.classroomLearnRecord)
   },
   computed: {
     ...mapGetters({
@@ -310,30 +308,27 @@ export default {
       let _lessonChart = this.$refs.lessonChart
       let chart = await html2canvas(_lessonChart)
       chart = chart.toDataURL()
-      this.$prompt('请输入邮箱', '提示', {
+      this.$prompt(this.$t('lesson.inputEmail'), this.$t('editor.hint'), {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: '邮箱格式不正确'
+        inputErrorMessage: this.$t('lesson.wrongEmail')
       })
         .then(async ({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '你的邮箱是: ' + value
-          })
+          this.emailAddress = value
           let to = value
           let subject = this.$t('modList.lesson') + (this.currenClassInfo.extra.lessonNo || 0) + ':' +  this.currenClassInfo.extra.lessonName
           let html = lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
           await lesson.emails.sendEmails({to, subject, html}).then(res => {
             this.successSendEmailDialogVisible = true
           }).catch(err => {
-            this.$message.error('发送失败')
+            this.$message.error(this.$t('lesson.failSend'))
           })
         })
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '取消发送'
+            message: this.$t('lesson.cancelSend')
           })
         })
     },
@@ -341,7 +336,6 @@ export default {
       lesson.lessons
         .getSkills({ lessonId })
         .then(res => {
-          console.log('skill', res)
           this.skillsList = res
         })
         .catch(err => {
@@ -520,6 +514,9 @@ export default {
     .success {
       text-align: center;
       margin: 0 auto;
+    }
+    .email-address{
+      color: #409eff;
     }
   }
 }
