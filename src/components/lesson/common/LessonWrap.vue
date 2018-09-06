@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Hint v-if="data.cmd === 'Hint' && isShowHint" :data="data" />
+    <Hint v-if="isTeacher && data.cmd === 'Hint' && isShowHint" :data="data" />
     <Quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" :isPrint="isPrint" />
     <Markdown v-else-if="data.cmd === 'Markdown'" :data="data" />
     <BigFile v-else-if="data.cmd === 'BigFile'" :data="data" />
@@ -29,6 +29,10 @@ export default {
       default: false
     },
     isPrint: {
+      type: Boolean,
+      default: false
+    },
+    isTeacher: {
       type: Boolean,
       default: false
     }

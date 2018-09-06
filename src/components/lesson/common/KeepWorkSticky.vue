@@ -14,7 +14,7 @@ export default {
     },
     resetTop: {
       type: Number,
-      default: 410
+      default: 310
     },
     fixedTop: {
       type: Number,

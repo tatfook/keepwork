@@ -1,6 +1,5 @@
 <template>
   <div class="lesson-menu">
-    <!-- <el-button plain type='primary' @click.stop="getLessonDetailByUrl">编辑课程</el-button> -->
     <div width="460px" center="">
       <div class="select-title">Link the page to</div>
       <div class="select-desc">Select one lesson from the drop-down box, or creat a new one.</div>
@@ -10,9 +9,12 @@
       </el-select>
       <div class="button-wrap">
         <el-button type="primary" @click="() => dialogVisible = true">Edit</el-button>
-        <el-button v-show="isLinked">Release</el-button>
+        <transition name="el-zoom-in-top">
+          <el-button v-show="isLinked">Release</el-button>
+        </transition>
       </div>
     </div>
+    <!-- <el-button plain type='primary' @click.stop="getLessonDetailByUrl">编辑课程</el-button> -->
     <el-dialog :visible.sync="dialogVisible" width="1080px" :append-to-body="true" top="0">
       <new-lesson></new-lesson>
     </el-dialog>
@@ -39,9 +41,9 @@ export default {
         console.log('好像成功了')
         this.lessonId = res.id
         this.selectValue = res.id
+        this.isShow = true
       })
       .catch(e => {
-        this.selectDialogVisible = true
         console.error(e)
       })
   },
@@ -95,19 +97,6 @@ export default {
     ...mapActions({
       getUserLessons: 'lesson/teacher/getUserLessons'
     }),
-    async getLessonDetailByUrl() {
-      console.log(`${stageUrl}${pageUrl}`)
-      await lesson.lessons
-        .lessonDetailByUrl({ url: encodeURIComponent(`${stageUrl}${pageUrl}`) })
-        .then(res => {
-          console.log('好像成功了')
-        })
-        .catch(e => {
-          this.selectDialogVisible = true
-          console.error(e)
-        })
-      console.log(window.location)
-    },
     showDialog() {
       this.dialogVisible = true
     }
@@ -134,7 +123,6 @@ export default {
   }
   .button-wrap {
     margin-top: 10px;
-    text-align: center;
   }
 }
 </style>
