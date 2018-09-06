@@ -12,15 +12,16 @@
             <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
-              <div class="purchase-tip" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
-              <div class="purchase-money" plain>
+              <div :class="['purchase-tip',{'hidden': coursePackage.rmb == 0}]" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
+              <div :class="['purchase-money',{'hidden': coursePackage.rmb == 0}]">
                 <span class="money">
                   {{$t('lesson.rmbPrice')}}:
                   <span class="red">￥{{coursePackage.rmb}}</span>
                 </span>
               </div>
               <div class="purchase-money">
-                <span class="money">
+                <span class="money free" v-if="coursePackage.rmb == 0">{{$t('lesson.free')}}</span>
+                <span class="money" v-else>
                   {{$t('lesson.coinsPrice')}}:
                   <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}
                 </span>
@@ -58,6 +59,7 @@ export default {
   async mounted() {
     await this.getPackagesList()
     this.loading = false
+    console.log('centersortedPackagesList',this.sortedPackagesList)
   },
   methods: {
     ...mapActions({
@@ -125,6 +127,9 @@ export default {
       .purchase-lesson-package {
         margin: 10px 0;
         border-top: 1px solid #e3e3e3;
+        .hidden{
+          visibility: hidden;
+        }
         .red {
           color: #e4461f;
           display: inline;
@@ -143,6 +148,9 @@ export default {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          .free{
+            color: #67c23a;
+          }
           .money{
             font-size: 14px;
             display: inline-block;
