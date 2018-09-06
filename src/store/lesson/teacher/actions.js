@@ -196,6 +196,11 @@ const actions = {
     await lesson.packages.delete({ packageId })
     await dispatch('getUserPackages', { useCache: false })
   },
+  async deleteLesson(context, { lessonId }) {
+    let { dispatch } = context
+    await lesson.lessons.delete({ lessonId })
+    await dispatch('getUserLessons', { useCache: false })
+  },
   async getLessonList(context, { packageId, useCache = true }) {
     let {
       commit,
