@@ -1,6 +1,6 @@
 <template>
 
-  <el-row class="index-page-lesson">
+  <el-row class="index-page-lesson" wdith="1080px">
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media"><source :src="properties.AnimationOfTheLesson" type="video/mp4"></video>
     </el-dialog>
@@ -10,41 +10,22 @@
         <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()"></el-col>
         <el-col>
           <div class="lessonDesc">
-            <div class="lesson-title">{{$t('card.lesson')}} {{properties.LessonNo}}: {{properties.Title}}</div>
+            <div class="lesson-title">{{$t('card.lesson')}} {{lessonName}}</div>
             <div class="lesson-goals-title">
               {{$t('card.lessonGoals')}}
               <el-scrollbar class="lesson-goals" :native="false">
-                {{properties.LessonGoals}}
+                {{lessonGoals}}
               </el-scrollbar>
             </div>
             <el-row class="lesson-button">
-              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties">{{$t('card.lessonPreview')}}</el-button>
+              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
             </el-row>
           </div>
         </el-col>
       </el-row>
     </div>
 
-    <el-row class="lesson-tab mod-full-width-0-0-65">
-      <el-tabs v-model="activeTab" @tab-click="tabClick">
-        <el-tab-pane :lazy="true" name="first">
-          <span class="tab-fake-label" slot='label'>{{$t('card.overview')}}</span>
-        </el-tab-pane>
-        <el-tab-pane :lazy="true" name="second">
-          <span class="tab-fake-label" slot="label">{{$t('card.references')}}</span>
-          <preview-data :message="references" />
-        </el-tab-pane>
-        <el-tab-pane :lazy="true" name="third">
-          <!-- <span class="tab-fake-label" :class="{isHidden: !properties.vip}" slot="label"> {{$t('card.studentsPerformance')}}</span> -->
-          <span class="tab-fake-label" slot="label"> {{$t('card.studentsPerformance')}}</span>
-          <preview-data :message="student" />
-        </el-tab-pane>
-        <el-tab-pane :lazy="true" name="fourth">
-          <span class="tab-fake-label" slot="label">{{$t('card.summary')}}</span>
-          <preview-data :message="summary" />
-        </el-tab-pane>
-      </el-tabs>
-    </el-row>
+
   </el-row>
 </template>
 
@@ -53,28 +34,51 @@ import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
 import PreviewData from './PreviewData'
 import { mapGetters } from 'vuex'
-import { lessonAPI } from '@/api'
+import { lesson } from '@/api'
 export default {
   name: 'AdiLesson',
   mixins: [compBaseMixin],
   data() {
     return {
-      activeTab: 'first',
       dialogVisible: false,
-      references: 'There are no references.',
-      student:
-        "Teaching is not started yet.There is no record of students' performance.",
-      summary: 'Teaching is not started yet. There is no summary here.'
+      isLinked: false,
+      lessonData: {}
     }
   },
   computed: {
     ...mapGetters({
       username: 'user/username',
       activePageUrl: 'activePageUrl'
-    })
+    }),
+    lessonName() {
+      return this.lessonData.lessonName
+    },
+    lessonGoals() {
+      return this.lessonData.goals
+    },
+    lessonSkills() {
+      return this.lessonData.skills
+    },
+    lessonExtra() {
+      return this.lessonData.extra
+    }
   },
   components: {
     'preview-data': PreviewData
+  },
+  async mounted() {
+    let origin = window.location.origin
+    if (origin === 'http://localhost:8080') {
+      origin = 'https://stage.keepwork.com'
+    }
+    await lesson.lessons
+      .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
+      .then(res => {
+        console.log(res)
+        this.lessonData = res
+        this.isLinked = true
+      })
+      .catch(e => console.error(e))
   },
   methods: {
     loadCover() {
@@ -87,12 +91,6 @@ export default {
         'border-radius': '8px'
       })
     },
-    tabClick(tab, event) {
-      let modQuizs = document.querySelectorAll('div[data-mod="ModQuiz"]')
-      const toggleEles = (eles, flag = false) =>
-        eles.forEach(ele => ele.classList[flag ? 'add' : 'remove']('hide'))
-      modQuizs && toggleEles(modQuizs, tab.name !== 'first')
-    },
     previewClick() {
       window.open(`${this.activePageUrl}?device=pc`, '_blank')
     },
@@ -104,6 +102,20 @@ export default {
 </script>
 
 <style>
+.no-linked {
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  background: #e6a23c;
+  color: white;
+  height: 100%;
+  padding: 30px 0;
+}
+.index-page-lesson {
+  max-width: 1080px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
 .hide {
   display: none;
 }

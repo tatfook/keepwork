@@ -8,96 +8,105 @@
         </el-option>
       </el-select>
       <div class="button-wrap">
-        <el-button type="primary" @click="() => dialogVisible = true">Edit</el-button>
+        <el-button type="primary" @click="showEditorDialog" :loading="isLoading">Edit</el-button>
         <transition name="el-zoom-in-top">
-          <el-button v-show="isLinked">Release</el-button>
+          <el-button v-show="isLinked" @click.stop="handleRelease">Release</el-button>
         </transition>
       </div>
     </div>
     <!-- <el-button plain type='primary' @click.stop="getLessonDetailByUrl">编辑课程</el-button> -->
     <el-dialog :visible.sync="dialogVisible" width="1080px" :append-to-body="true" top="0">
-      <new-lesson></new-lesson>
+      <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
   </div>
 </template>
 
 
 <script>
-import NewLesson from '@/components/lesson/teacher/NewLesson'
+import EditLesson from '@/components/lesson/teacher/EditLesson'
+
 import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
-    NewLesson
+    EditLesson
   },
   async mounted() {
-    const stageUrl = 'https://stage.keepwork.com/wiki/wikieditor/#'
-    const pageUrl = this.$route.path
     await this.getUserLessons({ useCache: false }).catch(e => console.error(e))
-    await lesson.lessons
-      .lessonDetailByUrl({ url: encodeURIComponent(`${stageUrl}${pageUrl}`) })
-      .then(res => {
-        console.log(res)
-        console.log('好像成功了')
-        this.lessonId = res.id
-        this.selectValue = res.id
-        this.isShow = true
-      })
-      .catch(e => {
-        console.error(e)
-      })
+    await this.checkMarkdownIsLinked()
   },
   destroyed() {
-    console.warn('destroyed------>')
+    // console.warn('destroyed------>')
   },
   data() {
     return {
       dialogVisible: false,
+      isLoading: false,
       lessonId: '',
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
-      selectValue: ''
+      selectValue: '',
+      selectLesson: {}
     }
   },
   computed: {
     ...mapGetters({
-      userLessons: 'lesson/teacher/userLessons'
+      userLessons: 'lesson/teacher/userLessons',
+      activePage: 'activePage',
+      activePageUrl: 'activePageUrl'
     }),
     userLessonsFilter() {
-      return this.userLessons.map(({ id, lessonName }) => ({ lessonName, id }))
-    },
-    isShowRelease() {
-      return this.selectValue === '选项5'
+      return this.userLessons
+        .map(({ id, lessonName }) => ({ lessonName, id }))
+        .filter(item => !item.url)
     },
     isLinked() {
-      return this.userLessonsFilter.find(({ id }) => id === this.lessonId)
+      return !!this.userLessonsFilter.find(({ id }) => id === this.lessonId)
     }
   },
   methods: {
     ...mapActions({
       getUserLessons: 'lesson/teacher/getUserLessons'
     }),
+    async checkMarkdownIsLinked() {
+      let origin = window.location.origin
+      if (origin === 'http://localhost:8080') {
+        origin = 'https://stage.keepwork.com'
+      }
+      await lesson.lessons
+        .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
+        .then(res => {
+          this.lessonId = res.id
+          this.selectValue = res.id
+          this.isShow = true
+        })
+        .catch(e => {
+          console.error(e)
+        })
+    },
+    async handleRelease() {
+      const { file: { content } } = this.activePage
+      await lesson.lessons
+        .release({ id: this.selectValue, content })
+        .then(res =>
+          this.$message({
+            type: 'success',
+            message: '发布成功'
+          })
+        )
+        .catch(e => {
+          console.error(e)
+          this.$message.error('发布失败')
+        })
+    },
     showDialog() {
+      this.dialogVisible = true
+    },
+    hideDialog() {
+      this.dialogVisible = false
+    },
+    async showEditorDialog() {
+      if (!this.selectValue) {
+        return this.$message.error('请先选择一门课程进行关联')
+      }
       this.dialogVisible = true
     }
   }
