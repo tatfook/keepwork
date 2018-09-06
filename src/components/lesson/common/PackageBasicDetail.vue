@@ -21,7 +21,7 @@
       <div v-if="packageDetail.rmb==0" class="package-detail-free">Free</div>
       <div v-show="!packageDetail.isSubscribe" v-else class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
       </div>
-      <div v-show="!packageDetail.isSubscribe && packageDetail.rmb!=0" :class="['package-detail-costs',]">
+      <div v-show="!packageDetail.isSubscribe && packageDetail.rmb!=0" class="package-detail-costs">
         <div class="package-detail-costs-item">
           <span class="package-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-detail-costs-value">￥ {{packageDetail.rmb}}</span>
@@ -125,9 +125,6 @@ export default {
 $dangerColor: #e4461f;
 .package-detail {
   display: flex;
-  .hidden{
-    visibility: hidden;
-  }
   &-cover {
     width: 435px;
     height: 288px;
