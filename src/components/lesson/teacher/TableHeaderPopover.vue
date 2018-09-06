@@ -1,6 +1,6 @@
 <template>
-  <el-tooltip popper-class="table-header-pop">
-    <div slot="content">
+  <el-tooltip hide-after="0" popper-class="table-header-pop">
+    <div class="content" slot="content">
       <div>{{$t('lesson.quiz')}}{{index}}</div>
       <div class="pop-title">{{title}}</div>
       <div v-for="(item,index) in options" :class="['pop-answer',{'is-right-answer': item.isRightAnswer}]" :key="index">
@@ -48,7 +48,7 @@ export default {
           })
     },
     desc() {
-      return this.quiz.desc || 'hehehehe'
+      return this.quiz.desc
     },
     answer() {
       return this.quiz.answer
@@ -74,6 +74,7 @@ $green: #27c12f;
   font-size: 14px;
   padding: 20px;
   min-width: 200px;
+  max-width: 500px;
   .pop-title {
     margin-top: 10px;
   }
