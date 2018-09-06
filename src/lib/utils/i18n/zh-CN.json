@@ -1035,6 +1035,7 @@
     "failSend": "发送失败",
     "cancelSend": "取消发送",
     "successSendToEmail": "该总结已成功发送到您的邮箱",
-    "totalStudents": "学生数"
+    "totalStudents": "学生数",
+    "free": "免费"
   }
 }
