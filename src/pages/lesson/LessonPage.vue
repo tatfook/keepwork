@@ -28,6 +28,7 @@ export default {
 html,
 body {
   height: 100%;
+  font-family: 'Microsoft YaHei';
 }
 body {
   margin: 0;
