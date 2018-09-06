@@ -1027,6 +1027,14 @@
     "hours": "小时",
     "mins": "分钟",
     "totalTeachingTime": "总授课时长",
-    "haveEnteredClass": "您已进入该课堂。"
+    "haveEnteredClass": "您已进入该课堂。",
+    "print": "打印",
+    "sendToMailbox": "发送至邮箱",
+    "inputEmail": "请输入邮箱",
+    "wrongEmail": "邮箱格式不正确",
+    "failSend": "发送失败",
+    "cancelSend": "取消发送",
+    "successSendToEmail": "该总结已成功发送到您的邮箱",
+    "totalStudents": "学生数"
   }
 }

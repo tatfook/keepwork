@@ -1022,6 +1022,14 @@
     "hours": "hours",
     "mins": "mins",
     "totalTeachingTime": "Total Teaching Time",
-    "haveEnteredClass": "You have entered the class."
+    "haveEnteredClass": "You have entered the class.",
+    "print": "Print",
+    "sendToMailbox": "Send to Mailbox",
+    "inputEmail": "Please enter email address",
+    "wrongEmail": "Incorrect email format",
+    "failSend": "sending failure",
+    "cancelSend": "Cancel sending",
+    "successSendToEmail": "The summary has been successfully sent to your mailbox",
+    "totalStudents": "Number of students"
   }
 }
