@@ -2,7 +2,7 @@
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
       <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
-      <div class="coin">{{coin}}</div>
+      <div class="coin">+{{coin}}</div>
     </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
