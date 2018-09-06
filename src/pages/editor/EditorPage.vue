@@ -14,6 +14,10 @@
         </div>
       <!-- </el-dialog> -->
     </el-main>
+    <div @click.stop v-if="showLoginDialog">
+      <login-dialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose" />
+    </div>
+
   </el-container>
 </template>
 
@@ -31,7 +35,6 @@ export default {
       presetLoaded: false,
       loading: true,
       previewDialogVisible: false,
-      profileLoaded: false,
       isFullscreen: false,
       showPreviewClose: false
     }
@@ -51,7 +54,10 @@ export default {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
       userIsLogined: 'user/isLogined',
-    })
+    }),
+    showLoginDialog() {
+      return !this.userIsLogined
+    }
   },
   methods: {
     ...mapActions({
