@@ -4,7 +4,7 @@
       <div class="select-title">Link the page to</div>
       <div class="select-desc">Select one lesson from the drop-down box, or creat a new one.</div>
       <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable placeholder="请选择">
-        <el-option v-for="item in userLessonsFilter" :key="item.id" :label="item.lessonName" :value="item.id">
+        <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
         </el-option>
       </el-select>
       <div class="button-wrap">
@@ -34,6 +34,7 @@ export default {
   async mounted() {
     await this.getUserLessons({ useCache: false }).catch(e => console.error(e))
     await this.checkMarkdownIsLinked()
+    console.log(this.userLessonsFilter)
   },
   destroyed() {
     // console.warn('destroyed------>')
@@ -55,11 +56,16 @@ export default {
     }),
     userLessonsFilter() {
       return this.userLessons
-        .map(({ id, lessonName }) => ({ lessonName, id }))
-        .filter(item => !item.url)
+        .filter(({url}) => !url)
+    },
+    userLessonsNoLinked() {
+      return this.userLessonsFilter.filter(({url}))
+    },
+    selectList() {
+      return this.isLinked ? this.userLessons : this.userLessonsFilter
     },
     isLinked() {
-      return !!this.userLessonsFilter.find(({ id }) => id === this.lessonId)
+      return !!this.userLessons.find(({ id }) => id === this.lessonId)
     }
   },
   methods: {

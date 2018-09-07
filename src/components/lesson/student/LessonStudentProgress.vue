@@ -41,9 +41,6 @@ export default {
       isSummaryLight: false
     }
   },
-  mounted() {
-    console.warn(this.lessonQuiz)
-  },
   computed: {
     ...mapGetters({
       lessonQuiz: 'lesson/student/lessonQuiz',

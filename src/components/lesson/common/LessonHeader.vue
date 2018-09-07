@@ -43,7 +43,7 @@
           <div class="intro-title">
             {{$t('lesson.intro')}}:
           </div>
-          <el-scrollbar class="intro-list" native="false">
+          <el-scrollbar class="intro-list" :native="false">
             {{lessonGoals}}
           </el-scrollbar>
         </div>
@@ -358,16 +358,12 @@ export default {
         color: #606266;
         display: flex;
         flex-direction: row;
-        .intro-title {
-          width: 40px;
-        }
         .intro-list {
-          font-family: inherit;
           font-size: 16px;
           height: 80px;
           width: 80%;
-          white-space: pre-line;
-          line-height: 1.5;
+          white-space: normal;
+          line-height: 30px;
           margin-left: 18px;
           .el-scrollbar__wrap {
             overflow-x: hidden;
@@ -377,19 +373,19 @@ export default {
 
       &.duration {
         color: #909399;
+        font-size: 16px;
       }
 
       &.skills {
         color: #909399;
         display: flex;
         flex-direction: row;
-
         .skills-list {
-          font-family: inherit;
           font-size: 16px;
           height: 180px;
+          width: 80%;
           white-space: pre-line;
-          line-height: 1.5;
+          line-height: 30px;
           margin-left: 18px;
           &.reset-height {
             height: 125px;

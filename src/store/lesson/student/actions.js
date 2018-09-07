@@ -72,7 +72,7 @@ const actions = {
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
   async resumeTheClass({ commit, dispatch }) {
-    await dispatch('lesson/getUserDetail', null, { root: true })
+    // await dispatch('lesson/getUserDetail', null, { root: true })
     let classroom = await lesson.classrooms
       .currentClass()
       .catch(e => console.error(e))
