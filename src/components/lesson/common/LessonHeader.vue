@@ -2,7 +2,7 @@
   <el-row class="lesson-header-container">
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media">
-        <source :src="animation" type="video/mp4">
+        <source :src="videoUrl" type="video/mp4">
       </video>
     </el-dialog>
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="600px">
@@ -36,22 +36,26 @@
             <span class="question-mark-icon"></span>
           </el-tooltip>
         </div>
-        <div class="lesson-desc-title">
-          {{$t('card.lesson')}} {{lessonNo}}: {{title}}
+        <div class="lesson-info title">
+          {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
         </div>
-        <div class="lesson-desc-goals">
-          {{$t('card.lessonGoals')}}
-          <el-scrollbar class="lesson-desc-goals-list" :native="false">
-            {{lessonGoals}}
-          </el-scrollbar>
-          <div v-if="isTeacher" class="lesson-button-wrap">
-            <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-            <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-            <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
-            <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+        <div class="lesson-info intro">{{$t('lesson.intro')}}: {{lessonGoals}}</div>
+        <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
+        <div class="lesson-info skills">
+          <div class="skills-title">
+            {{$t('lesson.skillPoints')}}:
           </div>
-
+          <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
+            <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
+          </el-scrollbar>
         </div>
+        <div v-if="isTeacher" class="lesson-button-wrap">
+          <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+          <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+          <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+          <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+        </div>
+
       </el-col>
     </el-row>
     <keep-work-sticky>
@@ -219,7 +223,7 @@ export default {
       userInfo: 'lesson/userinfo'
     }),
     lesson() {
-      return _.get(this.data, 'data.lesson', {})
+      return this.data
     },
     codeReadLine() {
       return _.get(this.lesson, 'CodeReadLine', 0)
@@ -230,17 +234,29 @@ export default {
     codeWriteLine() {
       return _.get(this.lesson, 'CodeWriteLine', 0)
     },
+    lessonName() {
+      return _.get(this.lesson, 'lessonName', '')
+    },
     lessonNo() {
-      return _.get(this.lesson, 'LessonNo', 1)
+      return _.get(this.lesson, 'id', '')
+    },
+    lessonSkills() {
+      return _.map(
+        _.get(this.lesson, 'skills', []),
+        ({ skillName }) => skillName
+      )
     },
     lessonGoals() {
-      return _.get(this.lesson, 'LessonGoals', '')
+      return _.get(this.lesson, 'goals', '')
     },
     title() {
       return _.get(this.lesson, 'Title', '')
     },
-    animation() {
-      return _.get(this.lesson, 'AnimationOfTheLesson', '')
+    coverUrl() {
+      return _.get(this.lesson, 'extra.coverUrl', '')
+    },
+    videoUrl() {
+      return _.get(this.lesson, 'extra.videoUrl', '')
     }
   }
 }
@@ -320,28 +336,45 @@ export default {
           center center;
       }
     }
-    &-title {
-      font-size: 20px;
-      color: black;
-    }
 
-    &-goals {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #4c4c4c;
-      &-list {
-        font-family: inherit;
-        font-size: 16px;
-        white-space: pre-line;
-        line-height: 1.5;
-        height: 210px;
-        .el-scrollbar__wrap {
-          overflow-x: hidden;
+    .lesson-info {
+      margin-top: 10px;
+      &.title {
+        font-size: 20px;
+        color: #4c4c4c;
+      }
+      &.intro {
+        color: #606266;
+      }
+
+      &.duration {
+        color: #909399;
+      }
+
+      &.skills {
+        color: #909399;
+        display: flex;
+        flex-direction: row;
+
+        .skills-list {
+          font-family: inherit;
+          font-size: 16px;
+          height: 240px;
+          white-space: pre-line;
+          line-height: 1.5;
+          margin-left: 18px;
+          &.reset-height {
+            height: 180px;
+          }
+          .el-scrollbar__wrap {
+            overflow-x: hidden;
+          }
         }
       }
     }
   }
   .lesson-button-wrap {
+    margin: 10px 0;
     .lesson-button {
       height: 36px;
       width: 190px;

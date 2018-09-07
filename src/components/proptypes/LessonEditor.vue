@@ -15,7 +15,7 @@
       </div>
     </div>
     <!-- <el-button plain type='primary' @click.stop="getLessonDetailByUrl">编辑课程</el-button> -->
-    <el-dialog :visible.sync="dialogVisible" width="1080px" :append-to-body="true" top="0">
+    <el-dialog :visible.sync="dialogVisible" width="800px" :append-to-body="true" top="0">
       <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
   </div>

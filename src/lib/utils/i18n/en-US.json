@@ -1037,7 +1037,8 @@
     "successSendToEmail": "The summary has been successfully sent to your mailbox",
     "totalStudents": "Number of students",
     "free": "Free",
-    "noData": "No Data",
-    "quiz2": "Quiz"
+    "quiz2": "Quiz",
+    "skillPoints": "SkillPoints"
+    "noData": "No Data"
   }
 }

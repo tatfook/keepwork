@@ -1,6 +1,6 @@
 <template>
   <div v-if="isImg" class="lesson-big-file-container">
-    <img class="big-file" src="https://api-stage.keepwork.com/storage/v0/siteFiles/223/raw#1.jpg" alt="">
+    <img class="big-file" :src="imgSrc" alt="">
   </div>
 </template>
 

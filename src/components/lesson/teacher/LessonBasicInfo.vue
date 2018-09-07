@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-basic-info">
     <div class="lesson-basic-info-row">
-      <div class="lesson-basic-info-link-url">
+      <div class="lesson-basic-info-link-url" v-show="!isEditorMod">
         <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
         <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @blur='setUrl'>
           <template slot="prepend">{{linkPagePrefix}}</template>
