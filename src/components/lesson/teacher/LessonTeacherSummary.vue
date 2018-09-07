@@ -7,13 +7,13 @@
     <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
         <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
-      <p>
+      <p class="package-text">
         <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
-      <p>
+      <p class="package-text">
         <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
-      <div class="skillpoints">
+      <div class="skillpoints package-text">
         <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
@@ -438,6 +438,10 @@ export default {
       .week {
         margin-right: 25px;
       }
+    }
+    .package-text{
+      word-break:break-all;
+      word-wrap:break-word; 
     }
     .brief-title {
       font-size: 16px;

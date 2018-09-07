@@ -46,22 +46,26 @@ export default {
     await lesson.packages
       .getTaughtPackages()
       .then(res => {
-        console.log('teachPackage',res)
         this.teachList = res
         this.loading = false
-        console.log('sortteachPackage',this.sortedTeachList)
       })
       .catch(err => {
         console.log(err)
       })
   },
   computed: {
+    hasTaughtPackages(){
+      return _.filter(this.teachList, i => {return i.lastTeachDate})
+    },
+    notTaughtPackages(){
+      return _.filter(this.teachList, i => {return !i.lastTeachDate})
+    },
     sortedTeachList() {
-      return this.teachList.sort(this.sortByUpdateAt)
+      return _.concat(this.hasTaughtPackages,this.notTaughtPackages)
     }
   },
   methods: {
-    sortByUpdateAt(obj1, obj2) {
+    sortByLastTeachDate(obj1, obj2) {
       return obj1.lastTeachDate >= obj2.lastTeachDate ? -1 : 1
     },
     enterPackage(packageId){
