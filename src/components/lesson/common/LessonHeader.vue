@@ -50,7 +50,7 @@
         <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
         <div class="lesson-info skills">
           <div class="skills-title">
-            {{$t('lesson.skillsPoints')}}:
+            {{$t('lesson.skillPoints')}}:
           </div>
           <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
             <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
