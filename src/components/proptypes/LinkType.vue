@@ -2,7 +2,7 @@
   <el-input :placeholder="$t('editor.pleaseInput')" v-model="linkTypeValue" @change='updateValue' class="input-with-select">
     <el-button v-if="linkTypeValue" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
-    <el-select v-model="linkTypeValue" slot="append" placeholder="Select">
+    <el-select v-model="linkTypeValue" @change='updateValue' slot="append" placeholder="Select">
       <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="locationOrigin + '/' + path">
         {{ path }}
       </el-option>
@@ -23,7 +23,6 @@ export default {
   },
   data() {
     return {
-      linkTypeValue: '',
       locationOrigin: location.origin
     }
   },
@@ -38,7 +37,9 @@ export default {
       get() {
         return this.originValue
       },
-      set() {}
+      set(data) {
+        this.updateValue(data)
+      }
     }
   },
   methods: {
