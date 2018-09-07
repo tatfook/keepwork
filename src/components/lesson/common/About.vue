@@ -77,10 +77,10 @@
       <el-row>
         <el-col :md="12" :xs="24">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/animation.png" alt=""></div>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="18">
               <div class="desc-text">
                 <h2>{{$t('lesson.about.animations')}}</h2>
                 <p>{{$t('lesson.about.animationsTalk')}}</p>
@@ -90,10 +90,10 @@
         </el-col>
         <el-col :md="12" :xs="24">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/solve_problem.png" alt=""></div>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="18">
               <div class="desc-text">
                 <h2>{{$t('lesson.about.usage')}}</h2>
                 <p>{{$t('lesson.about.usageTalk')}}</p>
@@ -103,10 +103,10 @@
         </el-col>
         <el-col :md="12" :xs="24">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/convenient_service.png" alt=""></div>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="18">
               <div class="desc-text">
                 <h2>{{$t('lesson.about.teachProgramming')}}</h2>
                 <p>{{$t('lesson.about.teachProgrammingTalk')}}</p>
@@ -116,10 +116,10 @@
         </el-col>
         <el-col :md="12" :xs="24">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="18">
               <div class="desc-text">
                 <h2>{{$t('lesson.about.expensive')}}</h2>
                 <p>{{$t('lesson.about.expensiveTalk')}}</p>
@@ -322,7 +322,7 @@ export default {
     }
   }
   &-video {
-    width: 80%;
+    max-width: 1200px;
     margin: 0 auto;
     .subject-desc {
       width: 287px;
@@ -441,7 +441,7 @@ export default {
     padding: 50px;
     margin: 40px 0;
     .content {
-      width: 80%;
+      max-width: 1200px;
       margin: 0 auto;
       text-align: center;
       position: relative;
@@ -456,7 +456,7 @@ export default {
       }
       .el-row {
         .el-col {
-          padding: 0 20px;
+          padding: 0 50px;
         }
       }
       .line {
@@ -470,18 +470,26 @@ export default {
     }
   }
   &-lesson {
-    width: 80%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 10px;
     .desc-img {
       width: 100%;
       padding: 20px 0;
       text-align: center;
+      img{
+        width: 100%;
+        max-width: 165px;
+        object-fit: contain;
+      }
     }
     .desc-text {
       flex: 1;
       padding-left: 20px;
       min-height: 256px;
+    }
+    .el-row .el-col .el-row{
+      padding: 0 30px;
     }
   }
   &-letter {
@@ -489,7 +497,7 @@ export default {
     margin: 80px 0;
     padding: 80px;
     &-border {
-      width: 80%;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 46px;
       background: repeating-linear-gradient(
@@ -517,7 +525,7 @@ export default {
   }
   &-badge {
     margin: 0 auto 160px;
-    width: 80%;
+    max-width: 1200px;
     text-align: center;
     .tatfook {
       margin: 20px 0;
@@ -545,7 +553,6 @@ export default {
       }
     }
     &-lesson {
-      width: 80%;
       margin: 0 auto;
       padding: 10px;
       &-desc {
@@ -592,7 +599,6 @@ export default {
       margin: 40px 0;
       padding: 20px;
       &-border {
-        width: 80%;
         margin: 0 auto;
         padding: 26px;
       }
@@ -611,7 +617,6 @@ export default {
     }
     &-badge {
       margin: 0 auto;
-      width: 80%;
       text-align: center;
       font-size: 14px;
       .img-wrap {

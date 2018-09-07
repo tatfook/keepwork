@@ -966,7 +966,7 @@
     "noRecord": "There is no teaching record yet.",
     "sortByTeachingTime": "Click to sort by teaching time",
     "viewSummary": "View Summary",
-    "skillsPoints": "SkillsPoints",
+    "skillsPoints": "Skillpoints",
     "leaveTheClass": "Leave the class",
     "leaveTheClassTips": "Are you sure you want to leave the class? Your learning data will not be saved.",
     "right": "right",
@@ -1035,6 +1035,7 @@
     "cancelSend": "Cancel sending",
     "successSendToEmail": "The summary has been successfully sent to your mailbox",
     "totalStudents": "Number of students",
-    "free": "Free"
+    "free": "Free",
+    "noData": "No Data"
   }
 }
