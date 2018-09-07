@@ -1,6 +1,6 @@
 <template>
   <div class="teacher-column">
-    <activated-teacher-role v-if="userinfo.identify === 2"></activated-teacher-role>
+    <activated-teacher-role class="teacher-column-activated" v-if="userinfo.identify === 2"></activated-teacher-role>
     <not-activated-teacher-role v-else></not-activated-teacher-role>
   </div>
 </template>
@@ -13,8 +13,7 @@ import ActivatedTeacherRole from './ActivatedTeacherRole'
 export default {
   name: 'TeacherColumn',
   data() {
-    return {
-    }
+    return {}
   },
   async created() {
     await this.getUserDetail()
@@ -37,8 +36,13 @@ export default {
 </script>
 
 <style lang="scss">
-.teacher-column{
-  // height: calc(100vh - 61px - 63px -104px);
-  // overflow: auto;
+.teacher-column {
+  height: 100%;
+  &-activated {
+    height: 100%;
+  }
+}
+.lesson-page-main-content {
+  overflow: auto;
 }
 </style>

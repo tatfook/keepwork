@@ -16,13 +16,15 @@
               <i class="iconfont icon-setting"></i>
               <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
             </template>
-            <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">课程管理</el-menu-item>
-            <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">课程包管理</el-menu-item>
+            <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
+            <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+        <div class="activated-teacher-role-container">
+          <router-view></router-view>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -88,9 +90,15 @@ export default {
 
 <style lang="scss">
 .activated-teacher-role {
+  &-container {
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+  }
   .teacher {
     margin: 0 auto;
     max-width: 1150px;
+    height: 100%;
     .el-aside {
       padding: 80px 0;
       background: #fff;
@@ -126,8 +134,7 @@ export default {
     }
     .el-main {
       overflow: hidden;
-      padding: 0;
-      // min-height: calc(100vh - 61px - 63px -104px);
+      padding: 50px 0;
     }
   }
 }
