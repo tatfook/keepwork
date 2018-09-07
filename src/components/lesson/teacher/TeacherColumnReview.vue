@@ -70,7 +70,7 @@ export default {
       noPackages: false,
       teachList: [],
       positiveSequence: true,
-      perPage:12,
+      perPage:8,
       page: 1
     }
   },

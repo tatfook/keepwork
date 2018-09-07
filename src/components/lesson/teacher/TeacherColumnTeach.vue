@@ -52,7 +52,7 @@ export default {
     return {
       loading: true,
       teachList: [],
-      perPage:8,
+      perPage:10,
       page: 1
     }
   },
