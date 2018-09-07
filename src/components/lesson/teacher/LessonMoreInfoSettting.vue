@@ -14,7 +14,7 @@
       </el-select>
     </div>
     <div class="lesson-more-info-setting-skills">
-      <div class="lesson-more-info-setting-label">{{$t('lesson.skillsPoints')}}</div>
+      <div class="lesson-more-info-setting-label">{{$t('lesson.skillPoints')}}</div>
       <el-button type='primary' @click="showAddSkillsDialog">{{$t('common.add')}}</el-button>
       <div class="lesson-more-info-setting-skills-list">
         <div class="lesson-more-info-setting-skills-item" v-for="(skill, index) in moreInfoData.skills" :key="index">
