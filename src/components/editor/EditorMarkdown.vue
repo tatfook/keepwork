@@ -212,9 +212,9 @@ export default {
         return
       return this.$store.dispatch('updateMarkDown', this.parserCache)
     },
-    async updateMarkdown(editor, changes) {
-      let code = editor.getValue()
-      let cursor = editor.getCursor()
+    updateMarkdown() {
+      let code = this.editor.getValue()
+      let cursor = this.editor.getCursor()
       this.parserCache.code = code
       this.parserCache.cursor = cursor
       if (code === undefined) return
@@ -402,8 +402,10 @@ export default {
           this.replaceLine(lineNo, this.$t('editor.uploadingToSkyDriveText'))
         }
       })
-        .then(async ({ file, url }) => {
+        .then(({ file, url }) => {
           this.replaceLine(lineNo, '')
+          this.updateMarkdown()
+          this.flushParserCache()
           this.$emit('insertBigfile', { file, url: `${url}#${file.filename}` })
         })
         .catch(err => {
