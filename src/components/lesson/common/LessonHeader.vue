@@ -43,8 +43,8 @@
           <div class="intro-title">
             {{$t('lesson.intro')}}:
           </div>
-          <el-scrollbar class="intro-list" native="false">
-              {{lessonGoals}}
+          <el-scrollbar class="intro-list" :native="false">
+            {{lessonGoals}}
           </el-scrollbar>
         </div>
         <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
@@ -362,7 +362,7 @@ export default {
           font-size: 16px;
           height: 80px;
           width: 80%;
-          white-space: pre-line;
+          white-space: normal;
           line-height: 30px;
           margin-left: 18px;
           .el-scrollbar__wrap {
