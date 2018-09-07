@@ -47,7 +47,7 @@
             <p class="packages-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
             <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
           </div>
-          <el-row v-else>
+          <el-row v-else class="bottom-line">
             <el-col class="group-line" :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
               <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
             </el-col>
@@ -155,8 +155,20 @@ export default {
       }else if(this.classID == this.enterClassInfo.key){
         this.$message.success(this.$t('lesson.haveEnteredClass'))
         this.backCurrentClass()
-      }else{
-        this.beInClassDialog = true
+      }else if(this.classID !== this.enterClassInfo.key){
+        let key = this.classID
+        await lesson.classrooms.isValidKey(key).then(res=>{
+          if(res){
+            this.beInClassDialog = true
+          }else{
+            this.$message({
+            showClose: true,
+            message: this.$t('lesson.wrongKey'),
+            type: 'error'
+            })
+            this.beInClassDialog = false
+          }
+        }).catch(err=>{console.log(err)})
       }
     },
     async enterNewClass(){
@@ -309,8 +321,12 @@ export default {
         }
         .group-line{
           border-bottom:1px solid #d2d2d2;
-          margin-bottom:20px;
+          padding: 10px 0;
+          margin-bottom: -1px;
         }
+      }
+      .bottom-line{
+        border-bottom:1px solid #d2d2d2;
       }
     }
   }
