@@ -40,49 +40,60 @@ export default {
     }
   },
   mounted() {
-    switch (this.$route.name) {
-      case 'TeacherColumnReview':
-        this.itmeActive = '2'
-        break
-      case '':
-        break
-      default:
-        this.itmeActive = '1'
-    }
+    this.setActiveItem()
   },
   methods: {
+    setActiveItem() {
+      switch (this.$route.name) {
+        case 'TeacherColumnReview':
+          this.itmeActive = '2'
+          break
+        case 'TeacherColumnNewLesson':
+        case 'TeacherColumnLessonManager':
+        case 'TeacherColumnEditLesson':
+          this.itmeActive = '3-1'
+          break
+        case 'TeacherColumnNewPackage':
+        case 'TeacherColumnEditPackage':
+        case 'TeacherColumnPackageManager':
+          this.itmeActive = '3-2'
+          break
+        default:
+          this.itmeActive = '1'
+      }
+    },
     showItem(itemName) {
       switch (itemName) {
         case 'TEACH':
-          this.itmeActive = '1'
           this.$router.push({
             path: `/teacher`
           })
           break
         case 'REVIEW':
-          this.itmeActive = '2'
           this.$router.push({
             path: `/teacher/review`
           })
           break
         case 'LESSON_MANAGER':
-          this.itmeActive = '3-1'
           this.$router.push({
             path: `/teacher/lessonManager`
           })
           break
         case 'PACKAGE_MANAGER':
-          this.itmeActive = '3-2'
           this.$router.push({
             path: `/teacher/packageManager`
           })
           break
         case 'MANAGEMENT':
-          this.itmeActive = '3-2'
           break
         default:
           break
       }
+    }
+  },
+  watch: {
+    $route() {
+      this.setActiveItem()
     }
   }
 }

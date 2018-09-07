@@ -72,7 +72,7 @@ export default new Router({
             },
             {
               path: 'lessonManager',
-              name: 'TeacherLessonManager',
+              name: 'TeacherColumnLessonManager',
               component: LessonManager
             },
             {
@@ -92,7 +92,7 @@ export default new Router({
             },
             {
               path: 'packageManager',
-              name: 'TeacherPackageManager',
+              name: 'TeacherColumnPackageManager',
               component: PackageManager
             }
           ]
