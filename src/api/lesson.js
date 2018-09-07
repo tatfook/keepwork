@@ -20,7 +20,7 @@ export const packages = {
   update: async ({ updatingPackageData }) => put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
-  packagesList: async params => get('packages/search', params || {}),
+  packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}`),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
