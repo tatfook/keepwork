@@ -65,7 +65,6 @@ export default {
   },
   mounted() {
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
-    console.log(this.lessonHeaderData)
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -119,7 +118,7 @@ export default {
       return this.lessonDetail.modList || []
     },
     lessonHeaderData() {
-      return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
+      return this.lessonDetail.lesson
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')

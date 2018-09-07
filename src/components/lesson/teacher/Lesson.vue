@@ -94,7 +94,7 @@ export default {
       return this.lessonDetail.modList || []
     },
     lessonHeader() {
-      return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
+      return this.lessonDetail.lesson
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
