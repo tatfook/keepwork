@@ -1035,6 +1035,7 @@
     "cancelSend": "Cancel sending",
     "successSendToEmail": "The summary has been successfully sent to your mailbox",
     "totalStudents": "Number of students",
-    "free": "Free"
+    "free": "Free",
+    "quiz2": "Quiz"
   }
 }
