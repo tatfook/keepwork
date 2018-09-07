@@ -57,12 +57,13 @@ const USER_PROFILE_PAGES_CONTENTS = [
 ]
 
 const actions = {
-  async login({ commit }, payload) {
+  async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info.data) {
       Cookies.set('token', info.data.token)
       window.localStorage.setItem('satellizer_token', info.data.token)
       commit(LOGIN_SUCCESS, info.data)
+      await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
   },
@@ -107,31 +108,12 @@ const actions = {
     let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
     return thirdRegisterInfo
   },
-  /*doc
-    getProfile
-    dispatch this action first, in any action which depends on username.
-  */
-  getProfile: (() => {
-    let getProfilePromise
-    let clearGetProfilePromise = () => (getProfilePromise = null)
-
-    return async (context, {forceLogin = true, useCache = true} = {}) => {
-      let { commit, getters: { isLogined, authRequestConfig, token } } = context
-      if (isLogined && useCache) return
-
-      getProfilePromise = getProfilePromise || new Promise((resolve, reject) => {
-        keepwork.user.getProfile(null, authRequestConfig).then(profile => {
-          commit(GET_PROFILE_SUCCESS, {...profile, token})
-          resolve()
-        }).catch(async e => {
-          !forceLogin && clearGetProfilePromise()
-          reject(new Error('401'))
-        })
-      }).then(clearGetProfilePromise)
-
-      return getProfilePromise
-    }
-  })(),
+  async getProfile(context, {forceLogin = true, useCache = true} = {}) {
+    let { commit, getters: { token } } = context
+    if (useCache) return
+    const profile = await keepwork.user.getProfile()
+    await commit(GET_PROFILE_SUCCESS, {...profile, token})
+  },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
     let userDetail = usersDetail && usersDetail[username]
@@ -142,20 +124,20 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { authRequestConfig, profile } } = context
-    let newUserInfo = await keepwork.user.update(userInfo, authRequestConfig)
+    let { commit, getters: { profile } } = context
+    let newUserInfo = await keepwork.user.update(userInfo)
     commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
-    let { commit, getters: { authRequestConfig } } = context
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone }, authRequestConfig, true)
+    let { commit } = context
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone })
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },
   async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
-    let { dispatch, commit, getters: { authRequestConfig, sendCodeInfo } } = context
+    let { dispatch, commit, getters: { sendCodeInfo } } = context
     smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind}, authRequestConfig, true)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind})
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
     return verifyInfoTwo
@@ -170,7 +152,6 @@ const actions = {
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
     let { useCache = true } = payload || {}
-    await dispatch('getProfile')
 
     return Promise.all([
       dispatch('getAllPersonalWebsite', { useCache }),
@@ -179,7 +160,6 @@ const actions = {
   },
   async getAllPersonalWebsite({ dispatch }, payload) {
     let { useCache = false } = payload || {}
-    await dispatch('getProfile')
 
     return Promise.all([
       dispatch('getAllWebsite', { useCache }),
@@ -187,12 +167,6 @@ const actions = {
     ])
   },
   async createWebsite({ dispatch }, payload) {
-    // check if the site already exists
-    // don't need any more, we've got the function in NewWebsiteDialog.vue
-    // let { name } = payload
-    // let siteWithTheSameName = await keepwork.website.getByName({username, sitename: name}, authRequestConfig)
-    // if (siteWithTheSameName) throw new Error(`Website ${name} already exists!`)
-
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
     await dispatch('getAllSiteDataSource', { useCache: false })
@@ -256,7 +230,7 @@ const actions = {
     styleName = '默认样式', // level3 template.styles .name, seems useless in new templates solution
     logoUrl = '//keepwork.com/wiki/assets/imgs/wiki_blank_template.png'
   } }) {
-    let { commit, getters: { username, userId, authRequestConfig } } = context
+    let { commit, getters: { username, userId } } = context
     let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }
     let upsertPayload = {
       name,
@@ -267,7 +241,7 @@ const actions = {
       defaultDataSourceName: '内置gitlab',
       ...websiteSetting
     }
-    let site = await keepwork.website.upsert(upsertPayload, authRequestConfig)
+    let site = await keepwork.website.upsert(upsertPayload)
     commit(UPSERT_WEBSITE_SUCCESS, {username, site})
   },
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
@@ -286,35 +260,32 @@ const actions = {
   },
   async getAllWebsite(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
-    let { username, authRequestConfig, personalSiteList } = getters
+    let { username, personalSiteList } = getters
     if (useCache && personalSiteList.length) return
 
-    let list = await keepwork.website.getAllByUsername({username}, authRequestConfig)
+    let list = await keepwork.website.getAllByUsername({username})
     commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
   },
   async getAllSiteDataSource(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
-    let { username, authRequestConfig, siteDataSourcesMap } = getters
+    let { username, siteDataSourcesMap } = getters
     if (useCache && !_.isEmpty(siteDataSourcesMap)) return
 
-    let list = await keepwork.siteDataSource.getByUsername({username}, authRequestConfig)
+    let list = await keepwork.siteDataSource.getByUsername({username})
     commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
   },
   async getAllContributedWebsite(context, payload) {
     let { useCache = false } = payload || {}
-    let { dispatch, commit, getters } = context
-    await dispatch('getProfile')
+    let { commit, getters } = context
 
-    let { username, authRequestConfig, contributedSiteList } = getters
-    if (useCache && !_.isEmpty(contributedSiteList)) return
+    let { username } = getters
+    if (useCache) return
 
-    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username}, authRequestConfig)
+    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username})
     list = _.values(list).filter(({siteinfo, siteuser} = {}) => siteinfo && siteuser)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
@@ -473,9 +444,8 @@ const actions = {
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async saveSiteBasicSetting(context, {newBasicMessage}) {
-    let { commit, getters } = context
-    let { authRequestConfig } = getters
-    await keepwork.website.updateByName(newBasicMessage, authRequestConfig)
+    let { commit } = context
+    await keepwork.website.updateByName(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, {newBasicMessage})
   },
   async createComment(context, { url: path, content }) {
@@ -483,12 +453,12 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
 
     await dispatch('getProfile')
-    let { authRequestConfig, userId } = getters
+    let { userId } = getters
     await dispatch('getWebsiteDetailInfoByPath', { path })
     let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
     let payload = {websiteId, userId, url: fullPath, content}
-    let { commentList } = await keepwork.websiteComment.create(payload, authRequestConfig)
+    let { commentList } = await keepwork.websiteComment.create(payload)
 
     commit(CREATE_COMMENT_SUCCESS, { url: fullPath, commentList })
     await dispatch('getCommentsByPageUrl', {url: fullPath})
@@ -498,8 +468,8 @@ const actions = {
     await dispatch('createComment', {url: activePageUrl, content})
   },
   async deleteCommentById(context, { _id, page }) {
-    let { dispatch, commit, getters: { authRequestConfig } } = context
-    await keepwork.websiteComment.deleteById({_id}, authRequestConfig)
+    let { dispatch, commit } = context
+    await keepwork.websiteComment.deleteById({_id})
 
     commit(DELETE_COMMENT_SUCCESS, { _id })
     await dispatch('getActivePageComments', { page })
@@ -518,8 +488,8 @@ const actions = {
   async starPages(context, { url }) {
     let { commit, dispatch, getters } = context
     await dispatch('getProfile')
-    let { username, authRequestConfig } = getters
-    let pageStarResult = await keepwork.pages.star({url, visitor: username}, authRequestConfig)
+    let { username } = getters
+    let pageStarResult = await keepwork.pages.star({url, visitor: username})
     commit(SET_PAGE_STAR_DETAIL, pageStarResult)
   },
   async initPageDetail(context, { url, visitor }) {
@@ -534,49 +504,43 @@ const actions = {
     ])
   },
   async getInfoFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, dispatch, getters } = context
-    let { username, skyDriveInfo, authRequestConfig } = getters
+    let { commit, getters } = context
+    let { username, skyDriveInfo } = getters
     if (useCache && !_.isEmpty(skyDriveInfo)) return
 
-    await dispatch('getProfile')
-    let info = await skyDrive.info(null, authRequestConfig)
+    let info = await skyDrive.info()
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
   },
   async getFileListFromSkyDrive(context, {useCache = true} = {}) {
-    let { commit, dispatch, getters } = context
-    let { username, skyDriveFileList, authRequestConfig } = getters
+    let { commit, getters } = context
+    let { username, skyDriveFileList } = getters
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
-    await dispatch('getProfile')
-    let filelist = await skyDrive.list({pageSize: 10000000}, authRequestConfig)
+    let filelist = await skyDrive.list({pageSize: 10000000})
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
     return filelist
   },
   async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
-    let { dispatch, getters: { authRequestConfig } } = context
-    await dispatch('getProfile')
-    let { key } = await skyDrive.upload({file, filename, onStart, onProgress}, authRequestConfig)
+    let { key } = await skyDrive.upload({file, filename, onStart, onProgress})
     return { key }
   },
   async removeFileFromSkyDrive(context, {file}) {
-    let { getters: { authRequestConfig } } = context
-    await skyDrive.remove({file}, authRequestConfig)
+    await skyDrive.remove({file})
   },
   async changeFileNameInSkyDrive(context, {key, filename}) {
-    let { getters: { authRequestConfig } } = context
-    await skyDrive.changeFileName({key, filename}, authRequestConfig)
+    await skyDrive.changeFileName({key, filename})
   },
   async useFileInSite(context, {fileId, sitePath, useCache = true}) {
     let { commit, dispatch, getters, rootGetters } = context
 
-    let { authRequestConfig, siteFileBySitePathAndFileId } = getters
+    let { siteFileBySitePathAndFileId } = getters
     let cachedUrl = siteFileBySitePathAndFileId({sitePath, fileId})
     if (useCache && !_.isEmpty(cachedUrl)) return
 
     await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
     let { siteinfo: { userId, _id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
 
-    let url = await skyDrive.useFileInSite({userId, siteId, fileId}, authRequestConfig)
+    let url = await skyDrive.useFileInSite({userId, siteId, fileId})
     commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
     return url
   },
@@ -593,9 +557,8 @@ const actions = {
     return result
   },
   async changePwd(context, { oldpassword, newpassword }) {
-    let { getters } = context
-    let { authRequestConfig } = getters
-    let result = await keepwork.user.changepw({ oldpassword, newpassword }, authRequestConfig, { returnOriginalData: true })
+    // FIXME
+    let result = await keepwork.user.changepw({ oldpassword, newpassword })
     return result.error.message
   },
   async getByEmail(context, { email }) {
@@ -603,15 +566,12 @@ const actions = {
     return result
   },
   async verifyEmailOne(context, { email, bind }) {
-    let { getters } = context
-    let { authRequestConfig } = getters
-    let result = await keepwork.user.verifyEmailOne({ email, bind }, authRequestConfig)
-    return result
+    return keepwork.user.verifyEmailOne({ email, bind })
   },
   async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
-    let { getters, dispatch } = context
-    let { authRequestConfig } = getters
-    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode }, authRequestConfig, { returnOriginalData: true })
+    // FIXME
+    let { dispatch } = context
+    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode })
     let message = result.error.message
     if (message === 'success') {
       await dispatch('getProfile', {
@@ -621,22 +581,19 @@ const actions = {
     return message
   },
   async getUserThreeServiceByUsername(context, { username }) {
-    let { getters, commit } = context
-    let { authRequestConfig } = getters
-    let userThreeServices = await keepwork.userThreeService.getByUsername({ username }, authRequestConfig)
+    let { commit } = context
+    let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
     commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
   },
   async threeServiceDeleteById(context, { id, username }) {
-    let { getters, dispatch } = context
-    let { authRequestConfig } = getters
-    await keepwork.userThreeService.deleteById({ id }, authRequestConfig)
+    let { dispatch } = context
+    await keepwork.userThreeService.deleteById({ id })
     await dispatch('getUserThreeServiceByUsername', { username })
   },
   async threeServiceUnbind(context, { id, password, username }) {
-    let { getters, dispatch } = context
-    let { authRequestConfig } = getters
+    let { dispatch } = context
     let unbindResut = {status: ''}
-    await keepwork.userThreeService.unbind({ id, password }, authRequestConfig).then(async () => {
+    await keepwork.userThreeService.unbind({ id, password }).then(async () => {
       await dispatch('getUserThreeServiceByUsername', { username })
       unbindResut.status = 'success'
     }).catch(() => {
@@ -645,10 +602,9 @@ const actions = {
     return unbindResut
   },
   async unbindCellphone(context, { password }) {
-    let { getters, dispatch } = context
-    let { authRequestConfig } = getters
+    let { dispatch } = context
     let unbindResut = {status: ''}
-    await keepwork.user.unbindCellphone({ password }, authRequestConfig).then(async () => {
+    await keepwork.user.unbindCellphone({ password }).then(async () => {
       await dispatch('getProfile', {
         useCache: false
       })
@@ -659,10 +615,9 @@ const actions = {
     return unbindResut
   },
   async unbindEmail(context, { password }) {
-    let { getters, dispatch } = context
-    let { authRequestConfig } = getters
+    let { dispatch } = context
     let unbindResut = {status: ''}
-    await keepwork.user.unbindEmail({ password }, authRequestConfig).then(async () => {
+    await keepwork.user.unbindEmail({ password }).then(async () => {
       await dispatch('getProfile', {
         useCache: false
       })

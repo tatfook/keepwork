@@ -51,6 +51,9 @@
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="/lesson.html#/student/center">课程中心</a>
+            </el-dropdown-item>
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
             </el-dropdown-item>
@@ -112,17 +115,17 @@
       </el-submenu>
     </el-menu>
     <div @click.stop v-if='isPersonalCenterShow'>
-      <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
+      <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
-      <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+      <sky-drive-manager-dialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin' />
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
-      <el-dialog width="478px"  :visible.sync="isRegisterDialogShow">
-        <RegisterDialog @close="closeRegisterDialog"/>
+      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+        <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
   </div>
@@ -219,7 +222,8 @@ export default {
     }
   },
   filters: {
-    defaultPortrait: (str = '') => str.trim() || require('@/assets/img/default_portrait.png')
+    defaultPortrait: (str = '') =>
+      str.trim() || require('@/assets/img/default_portrait.png')
   },
   components: {
     PersonalCenterDialog,

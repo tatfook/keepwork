@@ -1,10 +1,10 @@
 <template>
   <el-tabs v-model="activeName" class="account-security">
     <el-tab-pane :label="$t('user.modifyPwd')" name="changePwd" class="account-security-pwd-pane">
-      <ChangePwd :isChangePwdPaneActive='isChangePwdPaneActive'></ChangePwd>
+      <change-pwd :isChangePwdPaneActive='isChangePwdPaneActive'></change-pwd>
     </el-tab-pane>
     <el-tab-pane :label="$t('user.accountBinding')" name="accountBinding">
-      <AccountBinding></AccountBinding>
+      <account-binding></account-binding>
     </el-tab-pane>
   </el-tabs>
 </template>

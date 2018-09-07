@@ -33,7 +33,7 @@
         </el-form>
       </el-col>
       <el-col class="user-data-setting-operations-col">
-        <DialogOperations :isSaveBtnDisabled='isSaveBtnDisabled' @save='saveUserData' @close='handleClose'></DialogOperations>
+        <dialog-operations :isSaveBtnDisabled='isSaveBtnDisabled' @save='saveUserData' @close='handleClose'></dialog-operations>
       </el-col>
     </el-row>
   </el-container>

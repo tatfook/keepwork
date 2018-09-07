@@ -5,31 +5,19 @@ name: Storage V0 API
 category: API
 ---
 */
-import axios from 'axios'
 import _ from 'lodash'
+import createEndpoint from './common/endpoint'
 
-const keepworkEndpointV0 = axios.create({
+export const endpoint = createEndpoint({
   baseURL: process.env.STORAGE_GATEWAY_BASE_URL
 })
 
-const httpMethodWrapper = (method, ...args) => {
-  let [url, payload, config, returnOriginalData = false] = args
-
-  if (method === 'post' || method === 'put') {
-    return keepworkEndpointV0[method](url, payload, config).then(
-      res => returnOriginalData ? res.data : res.data.data
-    )
-  }
-
-  return keepworkEndpointV0[method](url, config).then(
-    res => returnOriginalData ? res.data : res.data.data
-  )
-}
-
-const _post = (...args) => httpMethodWrapper('post', ...args)
-const _get = (...args) => httpMethodWrapper('get', ...args)
-// const _put = (...args) => httpMethodWrapper('put', ...args) // unused yet
-const _delete = (...args) => httpMethodWrapper('delete', ...args)
+export const {
+  get,
+  post,
+  put,
+  delete: destroy
+} = endpoint
 
 /*doc
   Files api
@@ -46,13 +34,13 @@ const _delete = (...args) => httpMethodWrapper('delete', ...args)
 */
 
 export const files = _.assign(
-  (payload, ...args) => _get(`/files${payload.id ? '/' + encodeURIComponent(payload.id) : ''}`, payload, ...args),
+  async (payload, ...args) => get(`/files${payload.id ? '/' + encodeURIComponent(payload.id) : ''}`, payload, ...args),
   {
-    list: (payload, ...args) => _post(`/files/list`, payload, ...args),
-    update: (payload, ...args) => _post(`/files`, payload, ...args),
-    delete: (payload, ...args) => _delete(`/files/${encodeURIComponent(payload.id)}`, payload, ...args),
-    token: (payload, ...args) => _get(`/files/${encodeURIComponent(payload.key)}/token`, payload, ...args),
-    statistics: (payload, ...args) => _get('/files/statistics', payload, ...args)
+    list: async (payload, ...args) => post(`/files/list`, payload, ...args),
+    update: async (payload, ...args) => post(`/files`, payload, ...args),
+    delete: async (payload, ...args) => destroy(`/files/${encodeURIComponent(payload.id)}`, payload, ...args),
+    token: async (payload, ...args) => get(`/files/${encodeURIComponent(payload.key)}/token`, payload, ...args),
+    statistics: async (payload, ...args) => get('/files/statistics', payload, ...args)
   }
 )
 
@@ -66,7 +54,7 @@ export const files = _.assign(
 */
 export const siteFiles = {
   url: async (payload, ...args) => {
-    let url = await _post(`/siteFiles/url`, payload, ...args)
+    let url = await post(`/siteFiles/url`, payload, ...args)
     return process.env.GATEWAY_BASE_URL + url
   }
 }

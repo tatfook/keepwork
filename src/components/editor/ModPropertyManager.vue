@@ -2,11 +2,11 @@
   <div class='property-manager-container' v-if='hasActiveMod'>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
-        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>        
-        <PropTypeCard v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></PropTypeCard>
+        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
+        <prop-type-card v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
-        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>                
+        <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
         <div class='styles-container'>
           <style-selector v-if="activePropertyTabType === 'style'" :mod='activeMod' />
         </div>

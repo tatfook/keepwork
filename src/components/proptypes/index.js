@@ -8,6 +8,9 @@ import switchButton from './SwitchButtonType'
 import gallery from './GalleryType'
 import filter from './FilterType'
 import media from './MediaType'
+import animations from './AnimationsType'
+import quiz from './QuizType'
+import lessonEditor from './LessonEditor'
 
 export default {
   input,
@@ -19,5 +22,8 @@ export default {
   switchButton,
   gallery,
   filter,
-  media
+  media,
+  animations,
+  quiz,
+  lessonEditor
 }
