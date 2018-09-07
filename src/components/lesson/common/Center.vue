@@ -86,9 +86,16 @@ export default {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     enterPackageDetailPage(packageId) {
-      this.$router.push({
-        path: `package/${packageId}`
-      })
+      console.log('router',this.$route.name)
+      if(this.$route.name === "Lesson"){
+        this.$router.push({
+          path: `/student/package/${packageId}`
+        })
+      }else{
+        this.$router.push({
+          path: `package/${packageId}`
+        })
+      }
     },
     async targetPage(targetPage){
       this.loading = true
