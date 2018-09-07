@@ -27,7 +27,7 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
-          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">View Summary</el-button>
+          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
         </div>
       </div>
     </div>
@@ -131,8 +131,8 @@ export default {
       })
     },
     continueToLearn() {
-      if(this.isBeInClassroom){
-        return this.$message.error(this.$t('lesson.beInClass'));
+      if (this.isBeInClassroom) {
+        return this.$message.error(this.$t('lesson.beInClass'))
       }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
