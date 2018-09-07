@@ -89,7 +89,7 @@ export default {
         return count
       }, 0)
       let state =
-        finishCount === quiz.length ? 'finish' : `${finishCount}/${quiz.length}`
+        finishCount === quiz.length ? `${this.$t('lesson.finished')}` : `${finishCount}/${quiz.length}`
       return state
     },
     makeQuizzes(quiz) {
