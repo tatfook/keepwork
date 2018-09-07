@@ -760,7 +760,7 @@
     "lessonsCount": " lessons",
     "ages": "Ages",
     "intro": "Intro",
-    "packageIntro": "Intro",
+    "minUnit": "min",
     "add": "ADD",
     "coins": "coins",
     "buyPackageInfo": "To learn lessons of this package, you have to invest ",
@@ -967,6 +967,7 @@
     "sortByTeachingTime": "Click to sort by teaching time",
     "viewSummary": "View Summary",
     "skillsPoints": "Skillpoints",
+    "viewLearnSummary": "View Summary",
     "leaveTheClass": "Leave the class",
     "leaveTheClassTips": "Are you sure you want to leave the class? Your learning data will not be saved.",
     "right": "right",
@@ -1036,6 +1037,7 @@
     "successSendToEmail": "The summary has been successfully sent to your mailbox",
     "totalStudents": "Number of students",
     "free": "Free",
-    "noData": "No Data"
+    "noData": "No Data",
+    "quiz2": "Quiz"
   }
 }

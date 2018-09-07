@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="package-detail-skills">
-        <div class="package-detail-label">{{$t('lesson.packageIntro')}}:</div>
+        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail" :class="{'package-detail-skills-detail-isSubscribe': packageDetail.isSubscribe}">{{packageDetail.intro}}</el-scrollbar>
       </div>
       <div v-show="!packageDetail.isSubscribe" class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">

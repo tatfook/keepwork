@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-container" :class="{'is-preview': isPreview}">
+  <div class="quiz-container" :class="{'is-preview': isPreview}" :id="key">
     <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
       <i class="quiz-icon"></i>

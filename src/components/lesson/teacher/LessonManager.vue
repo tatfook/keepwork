@@ -40,15 +40,15 @@
                 <el-popover popper-class='lesson-manager-table-package-popver' placement="bottom-start" trigger="click">
                   <div class="lesson-manager-table-package-popver-box">
                     <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>课程包名：</label>
+                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.lessonManage.packageLabel')}}:</label>
                       <span>{{packageItem.packageName}}</span>
                     </div>
                     <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>状态：</label>
+                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.statusLabel')}}:</label>
                       <span>{{packageItem.state | transformStateValue(statesArray)}}</span>
                     </div>
                     <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>详情：</label>
+                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.intro')}}:</label>
                       <div>{{packageItem.intro || $t('lesson.lessonManage.noIntro')}}</div>
                     </div>
                   </div>

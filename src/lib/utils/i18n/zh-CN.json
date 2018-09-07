@@ -765,8 +765,8 @@
     "lessonsCount": "个课程",
     "ages": "年龄",
     "intro": "简介",
-    "packageIntro": "课程包简介",
-    "add": "增加",
+    "add": "添加",
+    "minUnit": "分钟",
     "coins": "知识币",
     "buyPackageInfo": "学习本课程包的课程，将花费",
     "infoTitle": "提示",
@@ -971,6 +971,7 @@
     "noRecord": "暂无授课记录！",
     "sortByTeachingTime": "点击按授课时间排序",
     "viewSummary": "查看课堂总结",
+    "viewLearnSummary": "查看学习总结",
     "skillsPoints": "技能点",
     "leaveTheClass": "离开课堂",
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
@@ -1041,6 +1042,7 @@
     "successSendToEmail": "该总结已成功发送到您的邮箱",
     "totalStudents": "学生数",
     "free": "免费",
-    "noData": "暂无数据"
+    "noData": "暂无数据",
+    "quiz2": "测试题"
   }
 }
