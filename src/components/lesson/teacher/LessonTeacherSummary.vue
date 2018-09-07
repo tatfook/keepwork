@@ -14,7 +14,7 @@
       <p>
         <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
       <div class="skillpoints package-text">
-        <div class="brief-title skill">{{$t('lesson.skillsPoints')}}:</div>
+        <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
             <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill.skillName}}</li>

@@ -972,7 +972,7 @@
     "sortByTeachingTime": "点击按授课时间排序",
     "viewSummary": "查看课堂总结",
     "viewLearnSummary": "查看学习总结",
-    "skillsPoints": "技能点",
+    "skillPoints": "技能点",
     "leaveTheClass": "离开课堂",
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
     "right": "对",
@@ -1043,7 +1043,6 @@
     "totalStudents": "学生数",
     "free": "免费",
     "quiz2": "测试题",
-    "skillPoints": "技能点",
     "noData": "暂无数据"
   }
 }
