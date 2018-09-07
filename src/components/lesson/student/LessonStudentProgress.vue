@@ -1,12 +1,12 @@
 <template>
   <div class="lesson-student-progress">
-    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz" :class="{'noStart': lessonQuizDone === 0}">
-      <div class="progress-point-title">{{$t('lesson.lessonPlan')}}</div>
-      <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
+    <span class="progress-point start" @click="showQuiz">
+      <div :class="['progress-point-title', {'light': isQuizLight}]">{{$t('lesson.lessonPlan')}}</div>
+      <div @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
           <div class="quiz-result-list">
             <div class="quiz-result-list-container">
-              <div v-for="(quiz, index) in lessonQuiz" :key="index" class="quiz-status-wrap" :class="{'default': quiz.result === null}">
+              <div v-for="(quiz, index) in lessonQuiz" :key="index" @click.stop="showMeTheQuiz(quiz.key)" :class="['quiz-status-wrap',{'default': quiz.result === null}]">
                 <span class="quiz-number">{{$t('lesson.quiz')}} {{index+1}}</span>
                 <span class="quiz-status" :class="{'right': quiz.result === true, 'wrong':quiz.result === false}"></span>
               </div>
@@ -17,13 +17,14 @@
     </span>
     <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
     <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary">
-      <div class="progress-point-title">{{$t('lesson.summary')}}</div>
+      <div :class="['progress-point-title',{'light': isSummaryLight}]">{{$t('lesson.summary')}}</div>
     </span>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import scrollIntoView from 'scroll-into-view-if-needed'
 export default {
   name: 'LessonProgress',
   props: {
@@ -35,8 +36,13 @@ export default {
   data() {
     return {
       isShowQuizResult: false,
-      quizList: []
+      quizList: [],
+      isQuizLight: true,
+      isSummaryLight: false
     }
+  },
+  mounted() {
+    console.warn(this.lessonQuiz)
   },
   computed: {
     ...mapGetters({
@@ -51,16 +57,35 @@ export default {
     ...mapActions({
       switchSummary: 'lesson/student/switchSummary'
     }),
+    showMeTheQuiz(key) {
+      let theQuiz = document.getElementById(key)
+      console.log(theQuiz)
+      theQuiz &&
+        scrollIntoView(theQuiz, {
+          scrollMod: 'if-needed',
+          behavior: 'smooth'
+        })
+    },
     showProgressList() {
-      this.isShowQuizResult = true
+      if (this.isQuizLight) {
+        this.isShowQuizResult = true
+      }
     },
     hideProgressList() {
-      this.isShowQuizResult = false
+      if (this.isQuizLight) {
+        this.isShowQuizResult = false
+      }
     },
     showSummary() {
-      this.lessonIsDone && this.switchSummary(true)
+      if (this.lessonIsDone) {
+        this.isSummaryLight = true
+        this.isQuizLight = false
+        this.switchSummary(true)
+      }
     },
     showQuiz() {
+      this.isQuizLight = true
+      this.isSummaryLight = false
       this.switchSummary(false)
     }
   }
@@ -118,8 +143,11 @@ export default {
       min-width: 100px;
       position: relative;
       margin-top: -25px;
-      margin-left: -22px;
+      margin-left: -17px;
       color: #686868;
+      &.light {
+        color: $green;
+      }
     }
     &-number {
       display: block;
