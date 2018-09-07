@@ -34,6 +34,7 @@ export default {
   async mounted() {
     await this.getUserLessons({ useCache: false }).catch(e => console.error(e))
     await this.checkMarkdownIsLinked()
+    console.log(this.userLessonsFilter)
   },
   destroyed() {
     // console.warn('destroyed------>')
@@ -55,8 +56,8 @@ export default {
     }),
     userLessonsFilter() {
       return this.userLessons
-        .map(({ id, lessonName }) => ({ lessonName, id }))
-        .filter(item => !item.url)
+        .filter(({ url }) => !url)
+        .map(({ lessonName, id }) => ({ lessonName, id }))
     },
     isLinked() {
       return !!this.userLessonsFilter.find(({ id }) => id === this.lessonId)
