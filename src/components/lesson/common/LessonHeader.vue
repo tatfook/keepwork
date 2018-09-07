@@ -39,7 +39,14 @@
         <div class="lesson-info title">
           {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
         </div>
-        <div class="lesson-info intro">{{$t('lesson.intro')}}: {{lessonGoals}}</div>
+        <div class="lesson-info intro">
+          <div class="intro-title">
+            {{$t('lesson.intro')}}:
+          </div>
+          <el-scrollbar class="intro-list" native="false">
+            {{lessonGoals}}
+          </el-scrollbar>
+        </div>
         <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
         <div class="lesson-info skills">
           <div class="skills-title">
@@ -342,9 +349,30 @@ export default {
       &.title {
         font-size: 20px;
         color: #4c4c4c;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       &.intro {
         color: #606266;
+        display: flex;
+        flex-direction: row;
+        .intro-title {
+          width: 40px;
+        }
+        .intro-list {
+          font-family: inherit;
+          font-size: 16px;
+          height: 80px;
+          width: 80%;
+          white-space: pre-line;
+          line-height: 1.5;
+          margin-left: 18px;
+          .el-scrollbar__wrap {
+            overflow-x: hidden;
+          }
+        }
       }
 
       &.duration {
@@ -359,12 +387,12 @@ export default {
         .skills-list {
           font-family: inherit;
           font-size: 16px;
-          height: 240px;
+          height: 180px;
           white-space: pre-line;
           line-height: 1.5;
           margin-left: 18px;
           &.reset-height {
-            height: 180px;
+            height: 125px;
           }
           .el-scrollbar__wrap {
             overflow-x: hidden;
