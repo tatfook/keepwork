@@ -25,7 +25,7 @@
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-            <span>45min</span>
+            <span>45{{$t('lesson.minUnit')}}</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">View Summary</el-button>
         </div>
