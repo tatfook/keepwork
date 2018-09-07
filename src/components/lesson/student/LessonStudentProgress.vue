@@ -7,7 +7,7 @@
           <div class="quiz-result-list">
             <div class="quiz-result-list-container">
               <div v-for="(quiz, index) in lessonQuiz" :key="index" @click.stop="showMeTheQuiz(quiz.key)" :class="['quiz-status-wrap',{'default': quiz.result === null}]">
-                <span class="quiz-number">{{$t('lesson.quiz')}} {{index+1}}</span>
+                <span class="quiz-number">{{$t('lesson.quiz2')}} {{index+1}}</span>
                 <span class="quiz-status" :class="{'right': quiz.result === true, 'wrong':quiz.result === false}"></span>
               </div>
             </div>
@@ -59,7 +59,6 @@ export default {
     }),
     showMeTheQuiz(key) {
       let theQuiz = document.getElementById(key)
-      console.log(theQuiz)
       theQuiz &&
         scrollIntoView(theQuiz, {
           scrollMod: 'if-needed',
