@@ -5,7 +5,7 @@
         <span>{{sortedTeachList.length}}</span> {{$t('lesson.packagesCount')}}</div>
       <div class="teach-packages-list">
         <el-row>
-          <el-col :sm="12" :xs="22" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
+          <el-col :sm="12" :xs="22" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
             <div class="package">
               <p class="time"><span v-show="lessonPackage.lastTeachDate">{{$t('lesson.teachingTime')}}:
                 <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span></span>
@@ -18,6 +18,18 @@
             </div>
           </el-col>
         </el-row>
+        <div class="teach-packages-list-pages" v-if="lessonCount > perPage">
+          <div class="block">
+            <span class="demonstration"></span>
+            <el-pagination
+              background
+              @current-change="targetPage"
+              layout="prev, pager, next"
+              :page-size="perPage"
+              :total="lessonCount">
+            </el-pagination>
+          </div>
+        </div>
       </div>
     </div>
     <div class="teach-nothing" v-show="!sortedTeachList.length && !loading">
@@ -39,7 +51,9 @@ export default {
   data() {
     return {
       loading: true,
-      teachList: []
+      teachList: [],
+      perPage:8,
+      page: 1
     }
   },
   async beforeCreate() {
@@ -62,7 +76,10 @@ export default {
     },
     sortedTeachList() {
       return _.concat(this.hasTaughtPackages,this.notTaughtPackages)
-    }
+    },
+    lessonCount(){
+      return this.sortedTeachList.length
+    },
   },
   methods: {
     sortByLastTeachDate(obj1, obj2) {
@@ -77,6 +94,9 @@ export default {
       this.$router.push({
         path: `/teacher/center`
       })
+    },
+    targetPage(targetPage){
+      this.page = targetPage
     }
   },
   filters: {
@@ -147,6 +167,10 @@ export default {
             text-overflow: ellipsis;
           }
         }
+      }
+      &-pages{
+        text-align: center;
+        padding-top: 16px;
       }
     }
   }
