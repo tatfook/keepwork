@@ -782,6 +782,7 @@
     "rmbPrice": "人民币价格",
     "coinsPrice": "知识币价格",
     "purchaseSuccess": "课程包购买成功。",
+    "addPackageSuccess": "课程包添加成功。",
     "coinsWillBeBack": "{backCoinCount}知识币已返还至你的账户",
     "viewPackage": "查看课程包",
     "payAfterConfirmation": "购买后不支持退款或转让，请确认后支付。",

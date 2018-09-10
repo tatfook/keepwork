@@ -1,16 +1,18 @@
 <template>
   <div class="review" v-loading="loading">
     <div class="review-list" v-show="sortedTeachList.length && !loading">
-      <div class="review-list-class-hours">
-        <div>{{$t('lesson.attended')}}</div>
-        <div class="time">
-          <span class="red">{{sortedTeachList.length}}</span> {{$t('lesson.classes')}}</div>
-      </div>
-      <div class="review-list-class-hours">
-        <div>{{$t('lesson.totalTeachingTime')}}</div>
-        <div class="time">
-          <span class="red" v-cloak>{{hours}}</span> {{$t('lesson.hours')}}
-          <span class="red">{{mins}}</span> {{$t('lesson.mins')}}</div>
+      <div class="review-list-container">
+        <div class="review-list-class-hours">
+          <div>{{$t('lesson.attended')}}</div>
+          <div class="time">
+            <span class="red">{{sortedTeachList.length}}</span> {{$t('lesson.classes')}}</div>
+        </div>
+        <div class="review-list-class-hours">
+          <div>{{$t('lesson.totalTeachingTime')}}</div>
+          <div class="time">
+            <span class="red" v-cloak>{{hours}}</span> {{$t('lesson.hours')}}
+            <span class="red">{{mins}}</span> {{$t('lesson.mins')}}</div>
+        </div>
       </div>
 
       <p class="review-list-sort"><span class="text" @click="sequence"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</span></p>
@@ -132,6 +134,7 @@ export default {
 
 <style lang="scss">
 .review {
+  height: 100%;
   [v-cloak] {
     display: none;
   }
@@ -151,7 +154,9 @@ export default {
     }
   }
   &-list {
-    padding: 40px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     &-class-hours {
       display: inline-block;
       padding: 0 30px;
@@ -182,6 +187,8 @@ export default {
 
     }
     &-package {
+      flex: 1;
+      overflow: auto;
       .package {
         padding: 18px;
         height: 200px;

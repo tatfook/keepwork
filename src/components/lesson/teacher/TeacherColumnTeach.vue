@@ -2,13 +2,16 @@
   <div class="teach" v-loading="loading">
     <div class="teach-packages" v-show="sortedTeachList.length && !loading">
       <div class="teach-packages-total">{{$t('lesson.include')}}:
-        <span>{{sortedTeachList.length}}</span> {{$t('lesson.packagesCount')}}</div>
+        <span>{{sortedTeachList.length}}</span> {{$t('lesson.packagesCount')}}
+      </div>
       <div class="teach-packages-list">
         <el-row>
           <el-col :sm="12" :xs="22" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
             <div class="package">
-              <p class="time"><span v-show="lessonPackage.lastTeachDate">{{$t('lesson.teachingTime')}}:
-                <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span></span>
+              <p class="time">
+                <span v-show="lessonPackage.lastTeachDate">{{$t('lesson.teachingTime')}}:
+                  <span class="red-text">{{lessonPackage.lastTeachDate | formatTime}}</span>
+                </span>
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
@@ -68,11 +71,15 @@ export default {
       })
   },
   computed: {
-    hasTaughtPackages(){
-      return _.filter(this.teachList, i => {return i.lastTeachDate})
+    hasTaughtPackages() {
+      return _.filter(this.teachList, i => {
+        return i.lastTeachDate
+      })
     },
-    notTaughtPackages(){
-      return _.filter(this.teachList, i => {return !i.lastTeachDate})
+    notTaughtPackages() {
+      return _.filter(this.teachList, i => {
+        return !i.lastTeachDate
+      })
     },
     sortedTeachList() {
       return _.concat(this.hasTaughtPackages,this.notTaughtPackages)
@@ -85,12 +92,12 @@ export default {
     sortByLastTeachDate(obj1, obj2) {
       return obj1.lastTeachDate >= obj2.lastTeachDate ? -1 : 1
     },
-    enterPackage(packageId){
+    enterPackage(packageId) {
       this.$router.push({
         path: `teacher/package/${packageId}`
       })
     },
-    gotoLessonsCenter(){
+    gotoLessonsCenter() {
       this.$router.push({
         path: `/teacher/center`
       })
@@ -109,7 +116,7 @@ export default {
 
 <style lang="scss">
 .teach {
-  margin-top: 60px;
+  height: 100%;
   background: #fff;
   &-nothing {
     width: 100%;
@@ -125,6 +132,9 @@ export default {
     }
   }
   &-packages {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     &-total {
       border-bottom: 1px solid #d2d2d2;
       height: 60px;
@@ -133,6 +143,8 @@ export default {
     }
     &-list {
       padding: 30px 56px;
+      flex: 1;
+      overflow: auto;
       .el-row {
         .package {
           width: 305px;

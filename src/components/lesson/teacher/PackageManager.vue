@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="package-manager-details">
-      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
+      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="100%" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" prop="packageName" :label="$t('lesson.nameLabel')">
@@ -356,7 +356,9 @@ export default {
 </script>
 <style lang="scss">
 .package-manager {
-  padding-top: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   &-overview {
     margin-bottom: 20px;
     display: flex;
@@ -429,6 +431,8 @@ export default {
   &-details {
     padding: 10px 20px;
     background-color: #fff;
+    flex: 1;
+    overflow: auto;
   }
   &-table {
     border: 1px solid #d2d2d2;

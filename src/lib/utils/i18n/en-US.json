@@ -777,6 +777,7 @@
     "rmbPrice": "RMB",
     "coinsPrice": "Coins",
     "purchaseSuccess": "This package is successfully added.",
+    "addPackageSuccess": "The package is successfully added",
     "coinsWillBeBack": "{backCoinCount} coins have been reurned to your account.",
     "viewPackage": "View Package",
     "payAfterConfirmation": "No refund or transfer is supported after purchase. Please pay it after confirmation.",
