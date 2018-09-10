@@ -1,7 +1,7 @@
 <template>
   <div class="package-detail-page" v-loading="isLoading">
-    <package-basic-detail :packageDetail='packageDetail'></package-basic-detail>
-    <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></package-catalogue>
+    <package-basic-detail v-if="!isFirstGetData" :packageDetail='packageDetail'></package-basic-detail>
+    <package-catalogue v-if="!isFirstGetData" class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></package-catalogue>
   </div>
 </template>
 <script>
@@ -11,13 +11,12 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'PackageDetail',
   async mounted() {
+    this.isFirstGetData = true
     await this.getPackageDetail({
       packageId: this.packageId
     })
-    this.packageDetail = this.lessonPackageDetail({
-      packageId: this.packageId
-    })
     this.isLoading = false
+    this.isFirstGetData = false
   },
   props: {
     actorType: String,
@@ -26,12 +25,17 @@ export default {
   computed: {
     ...mapGetters({
       lessonPackageDetail: 'lesson/packageDetail'
-    })
+    }),
+    packageDetail() {
+      return this.lessonPackageDetail({
+        packageId: this.packageId
+      })
+    }
   },
   data() {
     return {
       isLoading: true,
-      packageDetail: {}
+      isFirstGetData: true
     }
   },
   methods: {
