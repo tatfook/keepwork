@@ -35,7 +35,7 @@
           <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
           <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
           <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
-            <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="locationOrigin + '/' + path">
+            <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
               {{ path }}
             </el-option>
           </el-select>
@@ -58,8 +58,7 @@ export default {
   },
   data() {
     return {
-      locationOrigin: location.origin,
-      selectedIndex: NaN,
+      selectedIndex: 0,
       isSkyDriveManagerDialogShow: false,
       autoplay: false,
       playloop: false
@@ -77,7 +76,6 @@ export default {
         return this.originValue
       },
       set() {
-        this.handleChange()
       }
     }
   },
@@ -151,6 +149,9 @@ export default {
       }
 
       this.handleChange()
+    },
+    getLocationUrl(url) {
+      return url ? location.origin + '/' + url : ''
     }
   },
   components: {

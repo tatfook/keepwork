@@ -3,7 +3,7 @@
     <el-button v-if="linkTypeValue" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
     <el-select v-model="linkTypeValue" @change='updateValue' slot="append" placeholder="Select">
-      <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="locationOrigin + '/' + path">
+      <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
         {{ path }}
       </el-option>
     </el-select>
@@ -20,11 +20,6 @@ export default {
   props: {
     editingKey: String,
     originValue: String
-  },
-  data() {
-    return {
-      locationOrigin: location.origin
-    }
   },
   async mounted() {
     await this.getAllPersonalPageList()
@@ -50,6 +45,9 @@ export default {
       var tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
+    },
+    getLocationUrl(url) {
+      return url ? location.origin + '/' + url : ''
     }
   }
 }
