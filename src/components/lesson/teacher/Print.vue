@@ -1,5 +1,5 @@
 <template>
-  <div class="print">
+  <div class="print" ref="print">
     <div class="print-header">
       <div class="profile">
         <img :src='userProfile.portrait' alt="portrait">
@@ -38,7 +38,13 @@ export default {
       lessonId: 1
     })
     this.modList = Parser.buildBlockList(res.content)
-    setTimeout(()=>{window.print()},2000)
+    setTimeout(()=>{
+      let originHtml = document.body.innerHTML
+      let printHtml = this.$refs.print.innerHTML
+      document.body.innerHTML = printHtml
+      window.print()
+      document.body.innerHTML = originHtml
+      },2000)
   },
   computed: {
     ...mapGetters({
