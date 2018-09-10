@@ -52,7 +52,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="/lesson.html#/student/center">课程中心</a>
+              <a :href='lessonCenterUrl'>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
@@ -162,6 +162,14 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    hostname() {
+      return window.location.hostname
+    },
+    lessonCenterUrl() {
+      return this.hostname === 'localhost'
+        ? '/lesson.html#/student/center'
+        : '/l#/student/center'
     }
   },
   mounted() {
