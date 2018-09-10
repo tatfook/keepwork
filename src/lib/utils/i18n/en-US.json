@@ -341,25 +341,8 @@
     },
     "text": {
       "title": "Ljubljana",
-      "titleA": "In the spring",
-      "titleB": "Thoughts and wishes",
-      "titleC": "Country road",
-      "titleD": "The pride of love",
-      "subtitleA": "Spring scenery",
-      "subtitleB": "Time is like water",
-      "subtitleC": "Left my youth",
-      "subtitleD": "A rascal is like a running water",
       "paragraph":
-        "A man travels, and goes to the mountains and rivers of his hometown. Before going out, faced with too many questions and puzzles: why is it a person? There is also a good reminder: why not go far? Kunming, to catch a flower, and to go to a blue sky and sea in Sanya. Just smile stubbornly and persist in persistence without giving any explanation. No one knows, this is a farewell, or a forever farewell, after which I will go to many very busy or desolate, remote or remote places, and will often think of this trip, think of that mountain, that city, those people...",
-      "paragraphA":
-        "Read you, in spring, you are so gentle, like spring rain, light and smart, floating like smoke. You are the spirit of rain, sprinkled spring girl's tears, fine and dense, such as flower needles, such as rain curtain, bit by bit, delicate and affectionate. You are holding oil paper umbrellas and whining and wandering in the rain. In the drizzle of spring, you are wearing purple cheongsam, twisting your waist, and walking towards it. The rain is like shuttle, smoke is like weave, you walk on high heels, gentle steps, accompanied by the wind, accompanied by rain, into the scenery of spring rain.",
-      "paragraphB":
-        "Winter here seems to be little different from home, maybe not noticed by others, sometimes I would leave the crowd to walk alone, silently open my mobile phone and look at the head of the note in Japanese dazed. I know, but I don't know anything. I just don't want to admit that I can only cheat myself again and again every day. Deception is really the best antidote. It anesthetizes me and makes me stand back in the light of hope, unwilling to break the dream.",
-      "paragraphC":
-        "There are tens of thousands of roads in the countryside, all of which affect my homesickness. The country road from my house to the yard, to the persimmon grove, to the apple orchard, and to the fields is the most familiar and most unforgettable. On this country road, I left my irregular footprints, leaving my youth.",
-      "paragraphD":
-        "He left with a beer bottle, the right hand holding the stick, the waist of a dagger, a careless and casual, like a pair of wild and intractable. Don't despise him. He despises Kong Yiji's pedantry. He disdains Du Fu's shabbiness. He laughs at Ah Q's arrogance. He despises the greedy and perverse ways of living in high places. He despises some weakness and can't help but return to his pride.",
-      "button": "More content"
+        "One travels, and it is a trip to the hometown. Before leaving, face too many questions and puzzled: Why is it alone? There are also well-intentioned reminders: Why not go to distant places! Kunming Yeah - catch a flower sea; Sanya Yea - go to a blue sky and blue sea. Just stubbornly insist on their own persistence, without any explanation. Nobody understands that this time is a farewell, or an eternal farewell, and I will go to many places that are very busy or desolate, remote or remote, and will often think of this trip. I think of the mountain, the city, those people……"
     },
     "mixLayer": {
       "title": "University of California",
@@ -434,23 +417,6 @@
     }
   },
   "card": {
-    "titleA": "title A",
-    "titleB": "title B",
-    "titleC": "title C",
-    "titleD": "title D",
-    "subtitleA": "subtitle A",
-    "subtitleB": "subtitle B",
-    "subtitleC": "subtitle C",
-    "subtitleD": "subtitle D",
-    "paragraphA": "paragraph A",
-    "paragraphB": "paragraph B",
-    "paragraphC": "paragraph C",
-    "paragraphD": "paragraph D",
-    "buttonA": "button A",
-    "buttonB": "button B",
-    "buttonC": "button C",
-    "buttonD": "button D",
-
     "imgLoop": "Graphic rotation",
     "img": "picture",
     "media": "picture",
@@ -521,10 +487,7 @@
     "source": "source",
     "ratio": "ratio(eg: 16/9)",
     "autoplay": "auto play",
-    "playloop": "loop playback",
-    "borderWidth": "border width",
-    "borderStyle": "border style",
-    "borderColor": "border color"
+    "playloop": "loop playback"
   },
   "skydrive": {
     "image": "Image",
