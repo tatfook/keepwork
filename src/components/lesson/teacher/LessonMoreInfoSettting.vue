@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-more-info-setting">
-    <cover-media-setter ref="videoUrlComponent" :title='coverSetterTitle' :subTitle='coverSetterSubTitle'></cover-media-setter>
+    <cover-media-setter v-if="!isGetData" ref="videoUrlComponent" :title='coverSetterTitle' :editingCoverUrl='editingCoverUrl' :subTitle='coverSetterSubTitle' :isEditing='isEditing' @urlChange='setVideoUrl'></cover-media-setter>
     <div class="lesson-more-info-setting-intro">
       <div class="lesson-more-info-setting-label">{{$t('lesson.intro')}}</div>
       <el-input type="textarea" :placeholder="$t('lesson.intro')" resize='none' v-model="moreInfoData.goals">
@@ -55,13 +55,16 @@ export default {
     isEditing: Boolean
   },
   async mounted() {
+    this.isGetData = true
     await this.getAllSkills({})
+    this.isGetData = false
     this.skillList = _.cloneDeep(this.lessonSkills)
     if (this.isEditing) {
       let editingLessonDetailProp = this.editingLessonDetailProp
       let { goals, extra, skills } = editingLessonDetailProp
       let { videoUrl } = extra
       let formatedSkills = this.formatSkill(skills)
+      this.editingCoverUrl = videoUrl
       this.moreInfoData = {
         goals,
         videoUrl,
@@ -78,6 +81,8 @@ export default {
       isMounted: false,
       coverSetterTitle: this.$t('lesson.lessonManage.videoLabel'),
       coverSetterSubTitle: this.$t('lesson.lessonManage.optionalLabel'),
+      editingCoverUrl: undefined,
+      isGetData: true,
       moreInfoData: {
         duration: '45min',
         goals: '',
@@ -92,20 +97,15 @@ export default {
     }),
     selectedSkills() {
       return _.filter(this.skillList, { isSelect: true })
-    },
-    videoUrl() {
-      if (!this.isMounted) {
-        return ''
-      }
-      let newVideoUrl = this.$refs.videoUrlComponent.newPackageCoverUrl
-      this.moreInfoData.videoUrl = newVideoUrl
-      return newVideoUrl
     }
   },
   methods: {
     ...mapActions({
       getAllSkills: 'lesson/getAllSkills'
     }),
+    setVideoUrl(newVideoUrl) {
+      this.moreInfoData.videoUrl = newVideoUrl
+    },
     formatSkill(originSkills) {
       let skills = []
       _.forEach(originSkills, skill => {
