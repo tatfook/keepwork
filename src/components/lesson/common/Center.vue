@@ -59,6 +59,9 @@ export default {
       page: 1
     }
   },
+  created(){
+    this.fromTopToShow()
+  },
   computed: {
     ...mapGetters({
       packages: 'lesson/center/packagesList'
@@ -82,6 +85,9 @@ export default {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    fromTopToShow(){
+      window.scrollTo(0, 0)
+    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
