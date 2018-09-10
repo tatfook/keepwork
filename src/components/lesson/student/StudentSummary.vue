@@ -16,9 +16,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import AdvancedFormat from 'dayjs/plugin/AdvancedFormat'
-import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'StudentSummary',
   props: {
