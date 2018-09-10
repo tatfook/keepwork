@@ -36,6 +36,7 @@ const store = new Vuex.Store({
       paths: [
         'lesson.userinfo',
         'lesson.student.enterClassInfo',
+        'lesson.student.subscribesList',
         'lesson.teacher.classroom',
         'user.profile',
         'user.webTemplateConfig',
