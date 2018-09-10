@@ -9,7 +9,7 @@
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
-        <SkyDriveManagerDialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog' />
+        <sky-drive-manager-dialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
@@ -79,13 +79,13 @@
           </el-col>
         </el-scrollbar>
       </el-row>
-      <EditorMarkdown ref='codemirror' @insertBigfile='insertBigfile'/>
+      <editor-markdown ref='codemirror' @insertBigfile='insertBigfile'></editor-markdown>
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <el-row>
         <el-col :span="3">&nbsp;</el-col>
         <el-col :span="21">
-          <editorWelcome />
+          <editor-welcome></editor-welcome>
         </el-col>
       </el-row>
       <div class="guid-help">
@@ -325,17 +325,20 @@ export default {
       if (!url) return
       let ext = file.ext || (file.filename || '').split('.').pop()
       let filename = file.filename || url
-      console.log('insertBigfile: ', JSON.stringify(file), url)
-      this.$refs.codemirror.addNewLine(null, `\`\`\`@BigFile
-styleID: 0
+      const modContent = `
 bigFile:
   src: >-
     ${url}
   ext: ${ext}
   filename: ${filename}
   size: ${file.size}
-\`\`\``)
-    this.$refs.codemirror.foldAllCodes()
+`
+      const payload = {
+        modName: 'ModBigFile',
+        modContent
+      }
+      this.$refs.codemirror.updateActiveCursor()
+      this.$store.dispatch('addModToMarkdown', payload)
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.toggleSkyDrive({ showSkyDrive: false })
@@ -506,6 +509,7 @@ bigFile:
 }
 .guid-col {
   background: url('../../assets/img/background.png') no-repeat top right #fff;
+  background-size: 45%;
   display: flex;
   justify-content: center;
   flex-direction: column;

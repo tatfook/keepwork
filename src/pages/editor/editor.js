@@ -8,7 +8,7 @@ import VueClipboard from 'vue-clipboard2'
 import 'element-ui/lib/theme-chalk/index.css'
 import EditorPage from './EditorPage'
 import router from './editor.router'
-import { editorModule, userModule, gitlabModule, createPersistedState } from '@/store'
+import { editorModule, userModule, gitlabModule, lessonModule, createPersistedState } from '@/store'
 import ElementUI from 'element-ui'
 import { broadcast } from 'vuex-iframe-sync'
 import VueKeepScrollPosition from 'vue-keep-scroll-position'
@@ -39,7 +39,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     gitlab: gitlabModule,
-    editor: editorModule
+    editor: editorModule,
+    lesson: lessonModule
   },
   plugins: [
     createPersistedState({

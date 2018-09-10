@@ -47,7 +47,7 @@ export default {
     },
     validData() {
       let isEmpty = !(this.properties.data && this.properties.data.trim())
-      if (isEmpty && this.editMode) return this.$t(this.options.emptyData)
+      if (isEmpty && this.options.emptyData) return this.$t(this.options.emptyData)
       return this.properties.data
     }
   },
