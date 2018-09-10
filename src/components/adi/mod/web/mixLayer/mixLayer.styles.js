@@ -1,6 +1,6 @@
 let emptyData = {
   media: {
-    emptySrc: require('@/../static/adi/mixLayer/mix-layer.jpg'),
+    emptySrc: require('@/assets/adi/mixLayer/mix-layer.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -99,7 +99,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix1.png'),
+    cover: require('@/assets/adi/mixLayer/mix1.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -187,7 +187,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix2.png'),
+    cover: require('@/assets/adi/mixLayer/mix2.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -275,7 +275,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix3.png'),
+    cover: require('@/assets/adi/mixLayer/mix3.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -361,7 +361,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix4.png'),
+    cover: require('@/assets/adi/mixLayer/mix4.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -448,7 +448,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix5.png'),
+    cover: require('@/assets/adi/mixLayer/mix5.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -535,7 +535,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix6.png'),
+    cover: require('@/assets/adi/mixLayer/mix6.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -621,7 +621,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix7.png'),
+    cover: require('@/assets/adi/mixLayer/mix7.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -708,7 +708,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix8.png'),
+    cover: require('@/assets/adi/mixLayer/mix8.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -795,7 +795,7 @@ export default [
     options: {
       config: { ...emptyData }
     },
-    cover: require('@/../static/adi/mixLayer/mix9.png'),
+    cover: require('@/assets/adi/mixLayer/mix9.png'),
     preview: {
       inner: {
         'margin-top': '-20px'

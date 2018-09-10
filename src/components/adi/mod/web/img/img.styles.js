@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   img: {
-    emptySrc: require('@/../static/adi/img/imgTwo.png'),
+    emptySrc: require('@/assets/adi/img/imgTwo.png'),
     emptyLink: process.env.KEEPWORK,
     emptyTarget: '_blank'
   }
@@ -35,7 +35,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgOne.png')
+    cover: require('@/assets/adi/img/cover/imgOne.png')
   },
 
   // style 1
@@ -65,6 +65,6 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgTwo.png')
+    cover: require('@/assets/adi/img/cover/imgTwo.png')
   }
 ]
