@@ -26,7 +26,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import scrollIntoView from 'scroll-into-view-if-needed'
 export default {
-  name: 'LessonProgress',
+  name: 'LessonStudentProgress',
   props: {
     progressNumer: {
       type: String,
