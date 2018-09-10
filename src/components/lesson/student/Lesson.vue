@@ -2,7 +2,7 @@
   <div class="lesson-wrap">
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
-    <LessonSummary v-show="isShowSummary" />
+    <LessonSummary v-if="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
