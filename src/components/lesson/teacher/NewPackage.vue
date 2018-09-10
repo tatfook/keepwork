@@ -1,9 +1,11 @@
 <template>
   <div class="new-package">
     <package-editor-header :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
-    <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
-    <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
-    <catalogue-manager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></catalogue-manager>
+    <div class="new-package-container">
+      <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
+      <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
+      <catalogue-manager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></catalogue-manager>
+    </div>
   </div>
 </template>
 <script>
@@ -186,6 +188,13 @@ export default {
 </script>
 <style lang="scss">
 .new-package {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  &-container {
+    flex: 1;
+    overflow: auto;
+  }
   &-media-setter {
     padding: 35px;
   }

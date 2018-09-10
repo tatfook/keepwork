@@ -315,9 +315,6 @@ export default {
   bottom: 8px;
   right: -18px;
 }
-.el-menu-item i {
-  color: #2b6da8 !important;
-}
 .profile-submenu,
 .el-popper {
   a {
