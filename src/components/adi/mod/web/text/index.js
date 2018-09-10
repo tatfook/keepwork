@@ -30,23 +30,7 @@ const name = 'ModText'
 
 const components = {
   title: 'AdiTitle',
-  paragraph: 'AdiMarkdown',
-  titleA: 'AdiTitle',
-  titleB: 'AdiTitle',
-  titleC: 'AdiTitle',
-  titleD: 'AdiTitle',
-  subtitleA: 'AdiTitle',
-  subtitleB: 'AdiTitle',
-  subtitleC: 'AdiTitle',
-  subtitleD: 'AdiTitle',
-  paragraphA: 'AdiMarkdown',
-  paragraphB: 'AdiMarkdown',
-  paragraphC: 'AdiMarkdown',
-  paragraphD: 'AdiMarkdown',
-  buttonA: 'AdiButton',
-  buttonB: 'AdiButton',
-  buttonC: 'AdiButton',
-  buttonD: 'AdiButton'
+  paragraph: 'AdiMarkdown'
 }
 
 const properties = generateProperties(name, components)
