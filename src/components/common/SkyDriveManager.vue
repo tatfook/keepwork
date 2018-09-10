@@ -438,12 +438,12 @@ export default {
       this.loading = false
     },
     async handleCopy(file) {
-      if (!file.checkPassed) {
-        return
+      if (!file && !file.checkPassed) {
+        return false
       }
 
       let toCopyPrefix = await this.getSiteFileUrl(file)
-      let toCopyLink = `${toCopyPrefix}#${file.filename}`
+      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
 
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),
