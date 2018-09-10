@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   preview: {
-    emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
+    emptySrc: require('@/assets/adi/paracraft/preview.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -12,7 +12,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   backgroundImage: {
-    emptySrc: require('@/../static/adi/paracraft/backgroundImage.png'),
+    emptySrc: require('@/assets/adi/paracraft/backgroundImage.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -44,7 +44,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   viewTimesImg: {
-    emptySrc: require('@/../static/adi/paracraft/eye.png'),
+    emptySrc: require('@/assets/adi/paracraft/eye.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -273,7 +273,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
+    cover: require('@/assets/adi/paracraft/paracraft1.png'),
     preview: {
       inner: {
         'margin-top': '-5px'
@@ -369,7 +369,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: require('@/../static/adi/paracraft/down.png')
+            src: require('@/assets/adi/paracraft/down.png')
           },
           space: {
             mobileMarginTop: '10px'
@@ -395,7 +395,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft2.png'),
+    cover: require('@/assets/adi/paracraft/paracraft2.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -474,7 +474,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: require('@/../static/adi/paracraft/down.png')
+            src: require('@/assets/adi/paracraft/down.png')
           },
           space: {
             webMarginTop: '40px',
@@ -502,7 +502,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft3.png'),
+    cover: require('@/assets/adi/paracraft/paracraft3.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -709,7 +709,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
+    cover: require('@/assets/adi/paracraft/paracraft1.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -926,7 +926,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
+    cover: require('@/assets/adi/paracraft/paracraft1.png'),
     preview: {
       inner: {
         'margin-top': '-20px'

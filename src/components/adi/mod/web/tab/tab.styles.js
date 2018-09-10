@@ -16,6 +16,6 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/board/wiki_board.png')
+    cover: require('@/assets/adi/board/wiki_board.png')
   }
 ]

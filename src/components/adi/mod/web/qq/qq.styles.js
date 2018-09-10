@@ -1,6 +1,6 @@
 let emptyData = {
   pic: {
-    emptySrc: require('@/../static/adi/qq/qqOne.svg'),
+    emptySrc: require('@/assets/adi/qq/qqOne.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -73,7 +73,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverOne.png')
+    cover: require('@/assets/adi/qq/cover/qqCoverOne.png')
   },
 
   // style 1 左图右文
@@ -148,10 +148,10 @@ export default [
         },
         pic: {
           ...emptyData.pic,
-          emptySrc: require('@/../static/adi/qq/qqTwo.svg')
+          emptySrc: require('@/assets/adi/qq/qqTwo.svg')
         }
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png')
+    cover: require('@/assets/adi/qq/cover/qqCoverTwo.png')
   }
 ]

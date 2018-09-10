@@ -7,11 +7,11 @@ export default [{
       animations: {
         tempAnimations: [{
           title: 'animation title',
-          coverImage: require('@/../static/adi/img/cover/imgOne.png'),
+          coverImage: require('@/assets/adi/img/cover/imgOne.png'),
           animation: ''
         }]
       }
     }
   },
-  cover: require('@/../static/adi/img/cover/imgOne.png')
+  cover: require('@/assets/adi/img/cover/imgOne.png')
 }]

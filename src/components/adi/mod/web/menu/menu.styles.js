@@ -12,7 +12,7 @@ let defaultData = {
     emptyTarget: '_blank'
   },
   logo: {
-    emptySrc: require('@/../static/adi/title/bear.svg'),
+    emptySrc: require('@/assets/adi/title/bear.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
