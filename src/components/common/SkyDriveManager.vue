@@ -830,24 +830,6 @@ export default {
       display: block;
       margin: 0 auto;
     }
-    // .el-message-box__header {
-    //   padding: 30px 30px 10px;
-    // }
-    // .el-message-box__headerbtn {
-    //   top: -5px;
-    //   right: -5px; 
-    //   .el-message-box__close {
-    //     font-size: 3em;
-    //     color: white;
-    //   }
-    // }
-    // .el-message-box__content {
-    //   padding: 0;
-    //   p {
-    //     padding: 0;
-    //     margin: 0;
-    //   }
-    // }
   }
   &-media-uploading{
     padding: 0 15px;
