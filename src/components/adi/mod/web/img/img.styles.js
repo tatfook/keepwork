@@ -30,7 +30,9 @@ export default [
         img: _.merge({}, emptyData.img, {
           img: {
             defaultWebHeight: '600px',
-            defaultMobileHeight: '160px'
+            defaultMobileHeight: '160px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
           }
         })
       }
@@ -60,7 +62,9 @@ export default [
         img: _.merge({}, emptyData.img, {
           img: {
             defaultWebHeight: '800px',
-            defaultMobileHeight: '240px'
+            defaultMobileHeight: '240px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
           }
         })
       }
