@@ -64,7 +64,7 @@
             <el-dropdown-item divided>
               <div class="kp-menu">
                 <button @click.stop="refreshOpenedFile(activeFilePath)" :disabled='currentDisabled'>
-                  <i class="iconfont icon-refresh1"></i>{{$t('editor.reload')}}</button>
+                  <i class="iconfont icon-refresh1"></i>{{$t('editor.refresh')}}</button>
                 <button @click.stop='undo' :disabled='!canUndo'>
                   <i class="iconfont icon-pre-step"></i>{{$t('editor.revoke')}}</button>
                 <button @click.stop='redo' :disabled='!canRedo'>
@@ -133,9 +133,9 @@
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
     </el-menu>
-    <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
+    <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
     <div @click.stop v-if='isWebsiteSettingShow'>
-      <WebsiteSettingDialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
+      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'></website-setting-dialog>
     </div>
     <el-dialog center :visible.sync="dialogVisible" width="300px" closed="handleCloseDialog">
       <center v-if="closeOneFile">{{`"${fileName}" ${this.$t("editor.fileUnSaved")}`}}</center>
@@ -197,6 +197,7 @@ export default {
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
       activeAreaData: 'activeAreaData',
+      activeAreaFile: 'activeAreaFile',
       activePage: 'activePage',
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow'
@@ -257,8 +258,7 @@ export default {
       return (url || '').replace(/\.md$/, '')
     },
     isActivePageSaved() {
-      if (!this.activeAreaData) return true
-      let { saved } = this.activeAreaData.file || this.activeAreaData
+      let { saved } = this.activeAreaFile || {}
       return saved === false ? false : true
     }
   },

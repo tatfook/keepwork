@@ -50,10 +50,7 @@ export default {
         height: this.properties.height && parseInt(this.properties.height) + 'px',
         color: this.properties.color || '',
         'background-image': 'url(' + this.properties.src || '' + ')',
-        'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px',
-        'border-width': this.properties.borderWidth && parseInt(this.properties.borderWidth) + 'px',
-        'border-style': this.properties.borderStyle || '',
-        'border-color': this.properties.borderColor || ''
+        'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px'
       }
       return this.generateStyleString(_.merge({}, style, this.options.buttonStyle))
     },

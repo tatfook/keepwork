@@ -37,10 +37,12 @@ const renderTemplate = (h, m, data, parentIndex) => {
           style={parentIndex == 1 && m.itemStyle}
         >
           <a
-            target={m.menuTarget}
+            target={
+              m.properties.target ? m.properties.target : m.options.emptyTarget
+            }
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
           </a>
         </el-menu-item>
       )
@@ -52,10 +54,14 @@ const renderTemplate = (h, m, data, parentIndex) => {
         >
           <template slot="title">
             <a
-              target={m.menuTarget}
+              target={
+                m.properties.target
+                  ? m.properties.target
+                  : m.options.emptyTarget
+              }
               href={menuData.link}
             >
-              {m.getNameMune(menuData)}
+              {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
             </a>
           </template>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
@@ -69,11 +75,13 @@ const renderTemplate = (h, m, data, parentIndex) => {
           class={getClass()}
         >
           <a
-            target={m.menuTarget}
-            style={m.getItemStyle(parentIndex)}
+            target={
+              m.properties.target ? m.properties.target : m.options.emptyTarget
+            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
           </a>
           {renderTemplate(h, m, menuData.child, getIndexString(index))}
         </div>
@@ -86,11 +94,13 @@ const renderTemplate = (h, m, data, parentIndex) => {
           class={getClass()}
         >
           <a
-            target={m.menuTarget}
-            style={m.getItemStyle(parentIndex)}
+            target={
+              m.properties.target ? m.properties.target : m.options.emptyTarget
+            }
+            style={parentIndex == 1 ? m.getItemTopStyle : m.getItemOtherStyle}
             href={menuData.link}
           >
-            {m.getNameMune(menuData)}
+            {m.isEmptyData ? m.$t(menuData.name) : menuData.name}
           </a>
         </div>
       )
@@ -120,7 +130,14 @@ export default {
         <div class="comp-footer">
           <div
             background-color={this.options.footerBackground}
-            style={this.optionsStyle}
+            style={
+              'display:' +
+              this.options.display +
+              ';' +
+              'justify-content:' +
+              this.options.justifyContent +
+              ';'
+            }
           >
             {renderTemplate(h, this)}
           </div>
@@ -154,22 +171,7 @@ export default {
     },
     isEmptyData() {
       return this.properties.data.length != 0 ? false : true
-    },
-    menuTarget() {
-      return this.properties.target ? this.properties.target : this.options.emptyTarget
-    },
-    optionsStyle() {
-      return 'display:' + this.options.display + ';' + 'justify-content:' + this.options.justifyContent + ';'
     }
-  },
-  methods: {
-    getNameMune(menuData) {
-      return this.isEmptyData ? this.$t(menuData.name) : menuData.name
-    },
-    getItemStyle(parentIndex) {
-      return parentIndex == 1 ? this.getItemTopStyle : this.getItemOtherStyle
-    }
-
   }
 }
 </script>
@@ -187,9 +189,8 @@ a {
         padding: 0;
         a {
           //子菜单文字与超链接
-          display: inline-block;
           height: 100%;
-          width: 100%;
+          width: 200px;
           margin-left: -10px;
           padding-left: 10px;
           padding-right: 10px;
@@ -205,9 +206,7 @@ a {
     .el-menu-item {
       padding: 0;
       a {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
+        width: 200px;
         padding: 0 10px;
         position: relative;
         z-index: 999;
@@ -219,7 +218,7 @@ a {
   a {
     display: inline-block;
     height: 100%;
-    padding-left: 40px;
+    padding-left: 20px;
     padding-right: 40px;
     position: relative;
     z-index: 999;

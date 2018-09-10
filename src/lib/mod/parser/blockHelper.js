@@ -124,7 +124,7 @@ const blockHelper = {
   },
 
   endLine(block) {
-    return block.lineBegin + this.lines(block).length
+    return block.lineBegin + this.lines(block).length - 1
   },
 
   text(block) {

@@ -6,7 +6,7 @@ export default {
         'fontsColor': 'color_2',
         'paragraph': 'color_4',
         'title': 'color_7',
-        'bgEnter': 'bg_color_7',
+        'bgEnter': 'color_8',
         'subtitleA': 'color_3'
       },
       {
@@ -22,7 +22,7 @@ export default {
         'fontsColor': 'color_2',
         'paragraph': 'color_4',
         'title': 'color_7',
-        'bgEnter': 'bg_color_7',
+        'bgEnter': 'color_8',
         'subtitleA': 'color_3'
       },
       {
@@ -30,7 +30,7 @@ export default {
         'fontsColor': 'color_2',
         'paragraph': 'color_4',
         'title': 'color_7',
-        'bgEnter': 'bg_color_7',
+        'bgEnter': 'color_8',
         'subtitleA': 'color_3'
       },
       {
@@ -38,7 +38,7 @@ export default {
         'fontsColor': 'color_2',
         'paragraph': 'color_4',
         'title': 'color_7',
-        'bgEnter': 'bg_color_7',
+        'bgEnter': 'color_8',
         'subtitleA': 'color_3'
       },
       {
@@ -46,7 +46,7 @@ export default {
         'fontsColor': 'color_2',
         'paragraph': 'color_4',
         'title': 'color_7',
-        'bgEnter': 'bg_color_7',
+        'bgEnter': 'color_8',
         'subtitleA': 'color_3'
       }
     ],

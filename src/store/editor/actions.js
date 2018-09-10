@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import ModFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
+import BlockHelper from '@/lib/mod/parser/blockHelper'
 import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 import { gConst } from '@/lib/global'
@@ -74,7 +75,7 @@ const actions = {
       dispatch
     } = context
     // load profile and websites info to get correct projectIds for reading files
-    await dispatch('user/getAllPersonalAndContributedSite', {root: true})
+    // await dispatch('user/getAllPersonalAndContributedSite', {root: true})
     let {
       'user/username': username
     } = context.rootGetters
@@ -97,6 +98,7 @@ const actions = {
 
     commit(SET_ACTIVE_PAGE, { path, username })
     await dispatch('refreshModList')
+    await dispatch('refreshCode')
 
     if (needReload) {
       commit(INIT_UNDO, {
@@ -326,6 +328,7 @@ const actions = {
     if (getters.activePage.addingArea === gConst.ADDING_AREA_ADI) {
       dispatch('addModToAdi', payload)
     } else {
+      payload.modContent = 'styleID: ' + payload.styleID
       dispatch('addModToMarkdown', payload)
     }
   },
@@ -353,19 +356,24 @@ const actions = {
     dispatch('refreshCode')
   },
   async addModToMarkdown({ commit, dispatch, getters }, payload) {
-    const position = getters.activePage.cursorPosition
+    let position = getters.activePage.cursorPosition + 1
+    const block = Parser.getBlockByCursorLine(getters.modList, position)
+    if (block && !BlockHelper.isMarkdownMod(block)) {
+      position = BlockHelper.endLine(block)
+    }
     const newCode = Parser.addBlockToMarkdown(
       getters.code,
       position,
       payload.modName,
-      payload.styleID
+      payload.modContent
     )
     commit(SET_EDITING_AREA, { area: gConst.ADDING_AREA_ADI }) // reset editing area after mod added
     await dispatch('updateMarkDown', { code: newCode })
-    const mod = Parser.getActiveBlock(getters.modList, position + 3)
+    const mod = Parser.getActiveBlock(getters.modList, position + 2)
     commit(SET_ACTIVE_MOD, mod.key)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
+    dispatch('updateCursor', {cursor: {ch: 0, line: position + 2}})
   },
   updateCursor({ commit, dispatch }, payload) {
     commit(UPDATE_CURSOR_POSITION, payload.cursor)
@@ -407,14 +415,14 @@ const actions = {
     dispatch('refreshCode')
   },
   async setActiveArea({ commit, getters, dispatch }, area) {
-    let { activeArea, activeAreaData } = getters
+    let { activeArea, activeAreaData, activeAreaFile } = getters
     if (activeArea === area) return
     // save current area unless it is main area
     if (
       activeArea &&
       activeAreaData &&
       activeArea !== LayoutHelper.Const.MAIN_AREA &&
-      !activeAreaData.saved
+      !activeAreaFile.saved
     ) {
       await dispatch('saveSiteConfigPage', activeAreaData)
     }
