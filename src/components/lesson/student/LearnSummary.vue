@@ -53,8 +53,7 @@ export default {
     }
     this.isLoading = false
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     isEn() {
       return locale === 'en-US'
@@ -84,12 +83,10 @@ export default {
       return arr.pop().createdAt
     },
     lastTimeFormat() {
-      if (this.lastTime) {
-        return this.isEn
-          ? dayjs(this.lastTime).format('YYYY-MM-DD')
-          : dayjs(this.lastTime).format('YYYY年 MM月DD日')
-      }
-      return ''
+      if (!this.lastTime) return ''
+      return this.isEn
+        ? dayjs(this.lastTime).format('YYYY-MM-DD')
+        : dayjs(this.lastTime).format('YYYY年 MM月DD日')
     }
   }
 }
