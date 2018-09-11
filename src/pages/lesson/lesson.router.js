@@ -207,7 +207,7 @@ export default new Router({
           component: LessonStudent
         },
         {
-          path: 'package/:packageId/lesson/:lessonId/learnSummary',
+          path: 'learnSummary/package/:packageId/lesson/:lessonId',
           name: 'LearnSummary',
           component: LearnSummary
         }
