@@ -28,7 +28,9 @@ const actions = {
     commit(GET_LESSON_DETAIL_SUCCESS, { detail })
   },
   async subscribePackage(context, { packageId }) {
+    let { dispatch } = context
     let subscribeResult = await lesson.packages.subscribe({ packageId })
+    await dispatch('getPackageDetail', { packageId })
     return subscribeResult
   },
   async setNickname(context, nickname) {

@@ -292,9 +292,9 @@ export default {
     },
     gotoPrint(){
       this.$router.push({
-        // path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary/print`
-        path: `summary/print`
-      })
+          name:'Print',
+          params: {packageId: this.$route.params.packageId, lessonId:this.$route.params.lessonId, classId: this.$route.params.lessonId }
+        })
     },
     async sendEmail() {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
@@ -417,7 +417,7 @@ export default {
 </script>
 <style lang="scss">
 .teacher-summary {
-  width: 1149px;
+  max-width: 1150px;
   margin: 0 auto;
   padding: 0 40px 40px;
   background: #fff;

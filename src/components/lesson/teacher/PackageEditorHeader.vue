@@ -69,7 +69,6 @@ export default {
 </script>
 <style lang="scss">
 .package-editor-header {
-  padding: 37px 0 0;
   &-header {
     display: flex;
     &-breadcrumb {

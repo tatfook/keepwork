@@ -18,9 +18,9 @@
         <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
         <el-scrollbar class="package-detail-skills-detail" :class="{'package-detail-skills-detail-isSubscribe': packageDetail.isSubscribe}">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div v-show="!packageDetail.isSubscribe" class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
+      <div v-show="isPackageCostAndBackShow" class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
       </div>
-      <div v-show="!packageDetail.isSubscribe" class="package-detail-costs">
+      <div v-show="isPackageCostAndBackShow" class="package-detail-costs">
         <div class="package-detail-costs-item">
           <span class="package-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-detail-costs-value">￥ {{packageDetail.rmb}}</span>
@@ -30,6 +30,7 @@
           <span class="package-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
         </div>
       </div>
+      <div v-show="isFreeLabelShow" class="package-detail-free">{{$t('lesson.free')}}</div>
       <el-button v-show="!isPurchaseButtonHide" type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
@@ -68,13 +69,25 @@ export default {
       },
       set() {}
     },
-    nowPath(){
+    isUserSubscribePackage() {
+      return this.packageDetail.isSubscribe
+    },
+    isPackageFree() {
+      return this.packageDetail.rmb === 0 || this.packageDetail.coin === 0
+    },
+    isPackageCostAndBackShow() {
+      return !this.isPackageFree && !this.isUserSubscribePackage
+    },
+    isFreeLabelShow() {
+      return this.isPackageFree && !this.isUserSubscribePackage
+    },
+    nowPath() {
       return this.$route.path
     },
     nowPageName() {
       return this.$route.name
     },
-    purchasePath(){
+    purchasePath() {
       return this.nowPath + '/purchase'
     },
     packageLessonsCount() {
@@ -90,7 +103,11 @@ export default {
       return `<span>${this.packageDetail.rmb}</span>`
     },
     isPurchaseButtonHide() {
-      return this.packageDetail.isSubscribe || this.nowPageName === 'StudentPurchase' || this.nowPageName === 'TeacherPurchase'
+      return (
+        this.packageDetail.isSubscribe ||
+        this.nowPageName === 'StudentPurchase' ||
+        this.nowPageName === 'TeacherPurchase'
+      )
     }
   },
   data() {
@@ -100,10 +117,19 @@ export default {
   },
   methods: {
     ...mapActions({
+      lessonSubscribePackage: 'lesson/subscribePackage',
       userGetProfile: 'user/getProfile'
     }),
-    addPackage() {
+    async addPackage() {
       if (this.isLogin) {
+        if (this.isPackageFree) {
+          await this.lessonSubscribePackage({ packageId: this.packageId })
+          this.$message({
+            message: this.$t('lesson.addPackageSuccess'),
+            type: 'success'
+          })
+          return
+        }
         this.$router.push({
           path: this.purchasePath
         })
@@ -194,6 +220,11 @@ $dangerColor: #e4461f;
     &-value {
       color: $dangerColor;
     }
+  }
+  &-free {
+    font-size: 24px;
+    color: #7ac558;
+    margin: 24px 0;
   }
   &-operate-item {
     display: inline-block;

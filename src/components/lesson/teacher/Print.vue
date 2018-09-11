@@ -38,7 +38,7 @@ export default {
       lessonId: 1
     })
     this.modList = Parser.buildBlockList(res.content)
-    console.log('modlist',this.modList)
+    setTimeout(()=>{window.print()},2000)
   },
   computed: {
     ...mapGetters({

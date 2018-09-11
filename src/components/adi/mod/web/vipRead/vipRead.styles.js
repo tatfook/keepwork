@@ -23,7 +23,7 @@ export default [
       }
     },
     useImage: true,
-    cover: require('@/../static/adi/vipRead/VIP.png'),
+    cover: require('@/assets/adi/vipRead/VIP.png'),
     preview: {
       outter: {
         height: '40px'

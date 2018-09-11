@@ -1,6 +1,6 @@
 let emptyData = {
   media: {
-    emptySrc: require('@/../static/adi/mixPosition/picture-mod.png'),
+    emptySrc: require('@/assets/adi/mixPosition/picture-mod.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -101,7 +101,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectOne.png'),
+    cover: require('@/assets/adi/mixPosition/cover/projectOne.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -192,7 +192,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectTwo.png'),
+    cover: require('@/assets/adi/mixPosition/cover/projectTwo.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -305,7 +305,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectThree.png'),
+    cover: require('@/assets/adi/mixPosition/cover/projectThree.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -366,7 +366,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectFour.png'),
+    cover: require('@/assets/adi/mixPosition/cover/projectFour.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
@@ -427,7 +427,7 @@ export default [
         ...emptyData
       }
     },
-    cover: require('@/../static/adi/mixPosition/cover/projectFive.png'),
+    cover: require('@/assets/adi/mixPosition/cover/projectFive.png'),
     preview: {
       inner: {
         'margin-top': '-20px'
