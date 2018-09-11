@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap">
-    <lesson-header :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
+    <lesson-header class='lesson-header' :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
     <router-view></router-view>
   </div>
 </template>
@@ -122,5 +122,10 @@ export default {
 .quiz-no::after {
   content: counter(no);
   counter-increment: no;
+}
+@media print{
+  .lesson-header{
+    display:none;
+  }
 }
 </style>

@@ -178,5 +178,10 @@ export default {
     }
   }
 }
+@media print{
+  .lesson-header{
+    display: none;
+  }
+}
 </style>
 

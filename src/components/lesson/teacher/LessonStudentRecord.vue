@@ -10,7 +10,7 @@
       </p>
     </div>
     <div class="lesson-student-record-content">
-      <p class="nameInfo"><span class="nameInfo-name">{{$t('lesson.name')}}: <span class="name">{{name}}</span></span> <span class="nameInfo-username">{{$t('lesson.username')}}: <span class="name">{{username}}</span></span></p>
+      <p class="name-info"><span class="name-info-name">{{$t('lesson.name')}}: <span class="name">{{name}}</span></span> <span class="name-info-username">{{$t('lesson.username')}}: <span class="name">{{username}}</span></span></p>
       <p class="accuracy-rate">{{$t('lesson.accuracyRate')}}: {{accuracyRate}}</p>
       <p class="right-wrong">
         <span class="sign"><i class="i right"></i> {{$t('lesson.right')}}</span> 
@@ -122,16 +122,13 @@ background: rgb(250, 250, 250);
   }
   &-content{
     padding-top: 100px;
-    .nameInfo{
+    .name-info{
       font-size: 16px;
       line-height: 30px;
       color: #414141;
       &-name{
         display: inline-block;
         width: 220px;
-
-      }
-      &-username{
 
       }
       .name{
