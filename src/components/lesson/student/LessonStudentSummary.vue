@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-summary">
-    <student-summary :summary="lessonSummary" @share="showSharePanel" />
+    <student-summary :summary="summary" @share="showSharePanel" />
     <el-dialog :append-to-body="true" class="summary-share-dialog" center :visible.sync="isShowSharePanel" :title="$t('lesson.shareSummary')" @close="hideSharePanel" width="920px">
       <el-row :gutter="20">
         <el-col class="share-icons-wrap" :span="6">
@@ -30,6 +30,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 import StudentSummary from './StudentSummary'
+import { lesson } from '@/api'
+import _ from 'lodash'
 import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
 export default {
@@ -41,8 +43,17 @@ export default {
   data() {
     return {
       isShowSharePanel: false,
-      title: this.$t('lesson.SelfStudyIsCompleted')
+      title: this.$t('lesson.SelfStudyIsCompleted'),
+      learnRecords: []
     }
+  },
+  async mounted() {
+    await lesson.lessons
+      .learnRecords({ lessonId: 2 })
+      .then(res => {
+        this.learnRecords = res
+      })
+      .catch(err => console.error(err))
   },
   computed: {
     ...mapGetters({
@@ -82,14 +93,28 @@ export default {
       )
       return skill ? skill.score : 0
     },
-    day() {
-      // dayjs.extend(AdvancedFormat)
-      // let day = dayjs(this.lessonSbuscribeTime).format('Do')
-      // return this.isEn ? day : day.replace(/[^0-9]/gi, '')
-      return this.lessonSbuscribeTime
+    firstTime() {
+      return _.get(this, 'learnRecords[0].createdAt', '')
+    },
+    lastTime() {
+      let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
+        quiz.every(item => item.result !== null)
+      )
+      if (arr.length === 0) {
+        return ''
+      }
+      return arr.pop().createdAt
     },
     isEn() {
       return locale === 'en-US' ? true : false
+    },
+    summary() {
+      return {
+        firstTime: this.firstTime,
+        lastTime: this.lastTime,
+        name: this.lessonName,
+        skills: this.lessonSkills
+      }
     },
     lessonSummary() {
       return {
