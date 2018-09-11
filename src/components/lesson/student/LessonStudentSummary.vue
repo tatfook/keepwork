@@ -31,7 +31,6 @@ import { mapGetters, mapActions } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 import StudentSummary from './StudentSummary'
 import dayjs from 'dayjs'
-import AdvancedFormat from 'dayjs/plugin/AdvancedFormat'
 import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'LessonStudentSummary',
@@ -84,9 +83,10 @@ export default {
       return skill ? skill.score : 0
     },
     day() {
-      dayjs.extend(AdvancedFormat)
-      let day = dayjs(this.lessonSbuscribeTime).format('Do')
-      return this.isEn ? day : day.replace(/[^0-9]/gi, '')
+      // dayjs.extend(AdvancedFormat)
+      // let day = dayjs(this.lessonSbuscribeTime).format('Do')
+      // return this.isEn ? day : day.replace(/[^0-9]/gi, '')
+      return this.lessonSbuscribeTime
     },
     isEn() {
       return locale === 'en-US' ? true : false
