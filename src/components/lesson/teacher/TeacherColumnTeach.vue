@@ -57,13 +57,16 @@ export default {
       })
   },
   computed: {
+    approvedPackages(){
+      return _.filter(this.teachList, (i) => {return i.state == 2})
+    },
     hasTaughtPackages() {
-      return _.filter(this.teachList, i => {
+      return _.filter(this.approvedPackages, i => {
         return i.lastTeachDate
       })
     },
     notTaughtPackages() {
-      return _.filter(this.teachList, i => {
+      return _.filter(this.approvedPackages, i => {
         return !i.lastTeachDate
       })
     },

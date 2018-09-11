@@ -73,7 +73,8 @@ export default {
       return _.get(this.packages, 'count', 0)
     },
     sortedPackagesList() {
-      return this.packagesList.sort(this.sortByUpdateAt)
+      let approvedPackages = _.filter(this.packagesList, (i) => {return i.state == 2})
+      return approvedPackages.sort(this.sortByUpdateAt)
     }
   },
   async mounted() {
