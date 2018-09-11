@@ -11,7 +11,7 @@
         <div class="lesson-basic-info-subject">
           <label class="lesson-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="editingLessonDetail.subjectId">
-            <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+            <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
         </div>
@@ -42,6 +42,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'LessonBasicInfo',
   props: {
@@ -64,7 +66,9 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = this.isEditorMod ? this.activePageUrl.replace(`/${this.username}/`,'') : url && url.replace(new RegExp(this.linkPagePrefix), '')
+      this.tempUrl = this.isEditorMod
+        ? this.activePageUrl.replace(`/${this.username}/`, '')
+        : url && url.replace(new RegExp(this.linkPagePrefix), '')
       let origin = window.location.origin
       if (origin === 'http://localhost:8080') {
         origin = 'https://stage.keepwork.com'
@@ -72,7 +76,9 @@ export default {
       let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
       this.editingLessonDetail = { url: _url, subjectId, lessonName }
     } else {
-      this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
+      let defaultSubjectId = this.lessonSubjects[0].id
+      this.defaultSubjectId = defaultSubjectId
+      this.editingLessonDetail.subjectId = defaultSubjectId
     }
   },
   data() {
@@ -83,6 +89,7 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      defaultSubjectId: undefined,
       editingLessonDetail: {
         url: undefined,
         subjectId: null,
@@ -122,7 +129,8 @@ export default {
       this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
-          packageName: this.newPackageName
+          packageName: this.newPackageName,
+          subjectId: this.defaultSubjectId
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
@@ -139,6 +147,9 @@ export default {
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   }
 }

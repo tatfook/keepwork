@@ -31,6 +31,9 @@ export default {
       }
     }
   },
+  mounted() {
+
+  },
   data() {
     return {
       currentStyle: 1,

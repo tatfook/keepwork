@@ -1,19 +1,19 @@
 <template>
   <div class="lesson-teacher-progress">
     <span class="progress-point start">
-      <div class="name">{{$t('lesson.lessonPlan')}}</div>
+      <div :class="['name',{'light': isShowPlan}]">{{$t('lesson.lessonPlan')}}</div>
       <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('LessonTeacherPlan')"></div>
     </span>
     <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isBeInClass ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
-      <div class="name">
+      <div :class="['name',{'light': isShowPerformance}]">
         {{$t('lesson.performance')}}
       </div>
       <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClass}]" @click="handleChangeView('LessonTeacherPerformance')"></div>
     </span>
     <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassIsOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
-      <div class="name">
+      <div :class="['name',{'light': isShowSummary}]">
         {{$t('lesson.summary')}}
       </div>
       <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassIsOver}]" @click="handleChangeView('LessonTeacherSummary')"></div>
@@ -51,7 +51,10 @@ export default {
       this.isShowPerformance = false
       this.isShowSummary = false
       this[
-        `isShow${name.toLowerCase().replace(/\b[a-z]/g, s => s.toUpperCase())}`
+        `isShow${name
+          .replace(/LessonTeacher/, '')
+          .toLowerCase()
+          .replace(/\b[a-z]/g, s => s.toUpperCase())}`
       ] = true
     }
   },
@@ -90,6 +93,7 @@ export default {
     color: #818181;
     display: flex;
     height: 44px;
+    white-space: nowrap;
     &.start {
       position: relative;
       z-index: 9;
@@ -107,6 +111,9 @@ export default {
       text-align: center;
       top: -24px;
       left: -27px;
+      &.light {
+        color: $green;
+      }
     }
     .pointer {
       $size: 33px;

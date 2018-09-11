@@ -25,7 +25,7 @@
         <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill.skillName}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}}</li>
           </ul>
         </div>
       </div>
@@ -111,6 +111,7 @@ import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
 import LessonWrap from '@/components/lesson/common/LessonWrap'
 import Parser from '@/lib/mod/parser'
+import colI18n from '@/lib/utils/i18n/column'
 
 export default {
   name: 'LessonTeacherSummary',
@@ -433,6 +434,9 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    skillName(skill) {
+      return colI18n.getLangValue(skill, 'skillName')
     }
   },
   filters: {
@@ -486,7 +490,7 @@ export default {
     }
     .package-text{
       word-break:break-all;
-      word-wrap:break-word; 
+      word-wrap:break-word;
     }
     .brief-title {
       font-size: 16px;

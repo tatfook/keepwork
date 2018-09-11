@@ -89,7 +89,6 @@ export default {
       this.style = Number(this.$route.params.styleId) || 1
       this.$set(this.summary, _.merge(this.summary, this.$route.query))
     }
-    console.warn(this.summary)
   },
   computed: {
     today() {

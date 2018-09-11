@@ -35,6 +35,7 @@ const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
 const LessonPerformance = () =>
   import('@/components/lesson/teacher/LessonStudentPerformance')
 const Print = () => import('@/components/lesson/teacher/Print')
+const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 
 Vue.use(Router)
 
@@ -204,6 +205,11 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
           component: LessonStudent
+        },
+        {
+          path: 'learnSummary/package/:packageId/lesson/:lessonId',
+          name: 'LearnSummary',
+          component: LearnSummary
         }
       ]
     },
