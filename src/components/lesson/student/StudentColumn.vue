@@ -9,7 +9,7 @@
         <div class="skillpoints">{{skillpointsCount}} skillpoints</div>
         <div class="skills" :loading="loadingSkillsPoint">
           <ul class="skills-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{skill.skillName}}：
+            <li v-for="(skill,index) in skillsList" :key="index">{{skillName(skill)}}：
               <span>{{skill.score}}</span>
             </li>
           </ul>
@@ -71,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
+import colI18n from '@/lib/utils/i18n/column'
 import StudentSubscribePackages from './StudentSubscribePackages'
 
 export default {
@@ -199,8 +200,11 @@ export default {
         path: `/student/center`
       })
     },
-    handleClose(){
+    handleClose() {
       this.beInClassDialog = false
+    },
+    skillName(skill) {
+      return colI18n.getLangValue(skill, 'skillName')
     }
   },
   components: {

@@ -18,7 +18,7 @@
       <el-button type='primary' @click="showAddSkillsDialog">{{$t('common.add')}}</el-button>
       <div class="lesson-more-info-setting-skills-list">
         <div class="lesson-more-info-setting-skills-item" v-for="(skill, index) in moreInfoData.skills" :key="index">
-          <span class="lesson-more-info-setting-skills-item-label">{{skill.skillName}}</span>
+          <span class="lesson-more-info-setting-skills-item-label">{{skillName(skill)}}</span>
           <el-input-number size="mini" v-model="skill.score" :controls='false' :min='1'></el-input-number>
           <i class="el-icon-delete" @click="removeSkill(index)"></i>
         </div>
@@ -34,7 +34,7 @@
     <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :modal-append-to-body="false" :visible.sync="isSkillDialogShow" :title="$t('lesson.lessonManage.addSkillPoint')" :before-close="handleClose">
       <div class="lesson-more-info-setting-skills-dialog-list">
         <div class="lesson-more-info-setting-skills-dialog-item" v-for="(skill, index) in skillList" :key="index">
-          <span>{{skill.skillName}}</span>
+          <span>{{skillName(skill)}}</span>
           <el-checkbox v-model="skill.isSelect"></el-checkbox>
         </div>
       </div>
@@ -48,6 +48,8 @@
 <script>
 import CoverMediaSetter from './CoverMediaSetter'
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'LessonMoreInfoSettting',
   props: {
@@ -116,7 +118,7 @@ export default {
         let skillDetail = this.skillList[indexInSkillList]
         skills.push({
           id: skill.skillId,
-          skillName: skillDetail.skillName,
+          skillName: this.skillName(skillDetail),
           score: skill.score
         })
       })
@@ -133,7 +135,7 @@ export default {
       _.forEach(this.selectedSkills, selectSkill => {
         this.moreInfoData.skills.push({
           id: selectSkill.id,
-          skillName: selectSkill.skillName,
+          skillName: this.skillName(selectSkill),
           score: 1
         })
       })
@@ -147,6 +149,9 @@ export default {
     },
     addReferences() {
       this.$message('添加素材功能尚未开发')
+    },
+    skillName(skill) {
+      return colI18n.getLangValue(skill, 'skillName')
     }
   },
   components: {

@@ -5,7 +5,7 @@
         <div class="package-basic-info-subject">
           <label class="package-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="newPackageDetail.subjectId">
-            <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+            <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
         </div>
@@ -46,6 +46,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'PackageBasicInfo',
   props: {
@@ -114,6 +116,9 @@ export default {
     },
     changeMaxAgeValue(maxAge) {
       this.newPackageDetail.maxAge = maxAge
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   }
 }

@@ -11,7 +11,7 @@
         <label for="subjectSelector">{{$t('lesson.subjectLabel')}}</label>
         <el-select id="subjectSelector" v-model="searchParams.subjectId">
           <el-option :key='null' :label='$t("lesson.all")' :value='null'></el-option>
-          <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+          <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
           </el-option>
         </el-select>
       </div>
@@ -60,7 +60,7 @@
         </el-table-column>
         <el-table-column class-name="lesson-manager-table-lessonName" prop="lessonName" :label="$t('lesson.nameLabel')">
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
         <el-table-column label="" width="180" class-name="lesson-manager-table-operations">
           <template slot-scope="scope">
@@ -83,6 +83,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
@@ -273,6 +274,9 @@ export default {
       if (continueFnNameAfterEnsure === 'toDelete') {
         this.toDelete()
       }
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   },
   filters: {

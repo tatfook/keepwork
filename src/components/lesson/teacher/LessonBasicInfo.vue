@@ -11,7 +11,7 @@
         <div class="lesson-basic-info-subject">
           <label class="lesson-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="editingLessonDetail.subjectId">
-            <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+            <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
         </div>
@@ -42,6 +42,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'LessonBasicInfo',
   props: {
@@ -145,6 +147,9 @@ export default {
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   }
 }

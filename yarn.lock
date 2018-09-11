@@ -106,6 +106,12 @@
   version "0.0.30"
   resolved "http://registry.npm.taobao.org/@types/strip-json-comments/download/@types/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
 
+"@vue/test-utils@^1.0.0-beta.24":
+  version "1.0.0-beta.25"
+  resolved "http://registry.npm.taobao.org/@vue/test-utils/download/@vue/test-utils-1.0.0-beta.25.tgz#4703076de3076bac42cdd242cd53e6fb8752ed8c"
+  dependencies:
+    lodash "^4.17.4"
+
 Cortana@leopoldchen/Cortana:
   version "0.1.0"
   resolved "https://codeload.github.com/leopoldchen/Cortana/tar.gz/041fd9ecfaaed0f8486c3184c46e255de5bbc972"
@@ -7396,8 +7402,8 @@ snabbdom-virtualize@leopoldchen/snabbdom-virtualize:
     htmlparser2 "3.9.2"
 
 snabbdom@~0.7.1:
-  version "0.7.1"
-  resolved "http://registry.npm.taobao.org/snabbdom/download/snabbdom-0.7.1.tgz#c1e9eddfad2c02ebc2cf66aaefb040419d059597"
+  version "0.7.2"
+  resolved "http://registry.npm.taobao.org/snabbdom/download/snabbdom-0.7.2.tgz#e9d3930e6374ef8766706ccee4c6ed7b331afa64"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -8320,7 +8326,7 @@ vue-loader@^13.3.0:
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
-    markdown-it-highlightjs "^3.0.0"
+    markdown-it-highlight "^0.2.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
