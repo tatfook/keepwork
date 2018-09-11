@@ -312,21 +312,7 @@ export default {
       return learnRecordsArr
     },
     async gotoPrint(){
-      // let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
-      // let lessonChartHtml = this.$refs.lessonChart.innerHTML
-      // let lessonSummaryHtml = this.$refs.lessonSummary.innerHTML
-      // let _lessonChart = this.$refs.lessonChart
-      // let chart = await html2canvas(_lessonChart)
-      // chart = chart.toDataURL()
-      // let printHtml = lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
-      // let originHtml = document.body.innerHTML
-      // let printHtml = this.$refs.print.innerHTML
-      // document.body.innerHTML = printHtml
-      // setTimeout(()=>{
-        window.print()
-        // document.body.innerHTML = originHtml
-        // window.location.reload()
-      // },2000)
+      window.print()
     },
     async sendEmail() {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
