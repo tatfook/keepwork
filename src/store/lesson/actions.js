@@ -6,7 +6,8 @@ let {
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
-  GET_ALL_SUBJECTS_SUCCESS
+  GET_ALL_SUBJECTS_SUCCESS,
+  LOGOUT
   // TO_BE_TEACHER
 } = props
 
@@ -56,6 +57,9 @@ const actions = {
     }
     let allSubjects = await lesson.subjects.getAllSubjects()
     commit(GET_ALL_SUBJECTS_SUCCESS, { subjects: allSubjects })
+  },
+  async logout({ commit }) {
+    commit(LOGOUT)
   }
 }
 

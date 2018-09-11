@@ -34,10 +34,6 @@ export default {
   async mounted() {
     await this.getUserLessons({ useCache: false }).catch(e => console.error(e))
     await this.checkMarkdownIsLinked()
-    console.log(this.userLessonsFilter)
-  },
-  destroyed() {
-    // console.warn('destroyed------>')
   },
   data() {
     return {

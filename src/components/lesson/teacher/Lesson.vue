@@ -58,21 +58,10 @@ export default {
         delay
       )
     },
-    clearUpdateLearnRecords() {
+    async clearUpdateLearnRecords() {
       clearTimeout(this._interval)
+      await this.updateLearnRecords()
     }
-    // notifyBackRoom() {
-    //   const h = this.$createElement
-    //   this.$notify({
-    //     title: '你还在授课中',
-    //     message: h('span', { style: 'cursor: pointer' }, '点击返回课堂'),
-    //     type: 'warning',
-    //     position: 'top-left',
-    //     duration: 0,
-    //     showClose: false,
-    //     onClick: this.backToClassroom
-    //   })
-    // }
   },
   computed: {
     ...mapGetters({
@@ -123,9 +112,9 @@ export default {
   content: counter(no);
   counter-increment: no;
 }
-@media print{
-  .lesson-header{
-    display:none;
+@media print {
+  .lesson-header {
+    display: none;
   }
 }
 </style>

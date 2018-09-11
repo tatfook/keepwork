@@ -72,11 +72,13 @@ const actions = {
     window.localStorage.setItem('satellizer_token', token)
     commit(LOGIN_SUCCESS, {userinfo, token})
   },
-  logout({ commit }) {
+  async logout({ commit, dispatch }) {
     commit(LOGOUT)
+    await dispatch('lesson/logout', null, { root: true })
     Cookies.remove('token')
     Cookies.remove('token', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
+    window.location.reload()
   },
   async createUserProfilePageToBack(context, { username }) {
     let { getters: { authRequestConfig } } = context
