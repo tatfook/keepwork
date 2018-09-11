@@ -64,7 +64,9 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = this.isEditorMod ? this.activePageUrl.replace(`/${this.username}/`,'') : url && url.replace(new RegExp(this.linkPagePrefix), '')
+      this.tempUrl = this.isEditorMod
+        ? this.activePageUrl.replace(`/${this.username}/`, '')
+        : url && url.replace(new RegExp(this.linkPagePrefix), '')
       let origin = window.location.origin
       if (origin === 'http://localhost:8080') {
         origin = 'https://stage.keepwork.com'
@@ -72,7 +74,9 @@ export default {
       let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
       this.editingLessonDetail = { url: _url, subjectId, lessonName }
     } else {
-      this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
+      let defaultSubjectId = this.lessonSubjects[0].id
+      this.defaultSubjectId = defaultSubjectId
+      this.editingLessonDetail.subjectId = defaultSubjectId
     }
   },
   data() {
@@ -83,6 +87,7 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      defaultSubjectId: undefined,
       editingLessonDetail: {
         url: undefined,
         subjectId: null,
@@ -122,7 +127,8 @@ export default {
       this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
-          packageName: this.newPackageName
+          packageName: this.newPackageName,
+          subjectId: this.defaultSubjectId
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
