@@ -69,8 +69,17 @@ export default {
       },
       set() {}
     },
+    loginUserId(){
+      return _.get(this.userProfile, '_id')
+    },
+    packageOwnerId(){
+      return _.get(this.packageDetail, 'userId')
+    },
+    isOwnPackage(){
+      return this.loginUserId === this.packageOwnerId
+    },
     isUserSubscribePackage() {
-      return this.packageDetail.isSubscribe
+      return this.isOwnPackage || this.packageDetail.isSubscribe
     },
     isPackageFree() {
       return this.packageDetail.rmb === 0 || this.packageDetail.coin === 0
@@ -104,7 +113,7 @@ export default {
     },
     isPurchaseButtonHide() {
       return (
-        this.packageDetail.isSubscribe ||
+        this.isUserSubscribePackage ||
         this.nowPageName === 'StudentPurchase' ||
         this.nowPageName === 'TeacherPurchase'
       )
