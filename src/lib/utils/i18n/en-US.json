@@ -810,6 +810,7 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "urlConflict": "The page has been linked to another lesson. Please re-input.",
       "noIntro": "No Intro",
       "packageLabel": "Package",
       "lessonTitle": "Lessons",

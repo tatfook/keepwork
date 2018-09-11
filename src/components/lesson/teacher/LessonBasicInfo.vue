@@ -68,13 +68,8 @@ export default {
       })
       this.tempUrl = this.isEditorMod
         ? this.activePageUrl.replace(`/${this.username}/`, '')
-        : url && url.replace(new RegExp(this.linkPagePrefix), '')
-      let origin = window.location.origin
-      if (origin === 'http://localhost:8080') {
-        origin = 'https://stage.keepwork.com'
-      }
-      let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
-      this.editingLessonDetail = { url: _url, subjectId, lessonName }
+        : url && this.getTemplateUrl(url)
+      this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
     } else {
       let defaultSubjectId = this.lessonSubjects[0].id
       this.defaultSubjectId = defaultSubjectId
@@ -90,8 +85,9 @@ export default {
       isNewPackageSelected: true,
       tempUrl: '',
       defaultSubjectId: undefined,
+      oldLinkPrefiex: '',
       editingLessonDetail: {
-        url: undefined,
+        url: null,
         subjectId: null,
         lessonName: ''
       }
@@ -107,8 +103,11 @@ export default {
     username() {
       return _.get(this.userProfile, 'username')
     },
+    origin() {
+      return window.location.origin
+    },
     linkPagePrefix() {
-      return `${window.location.origin}/${this.username}/`
+      return `${this.origin}/${this.username}/`
     }
   },
   methods: {
@@ -143,13 +142,19 @@ export default {
     },
     setUrl() {
       if (this.tempUrl == '') {
-        this.editingLessonDetail.url = undefined
+        this.editingLessonDetail.url = null
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
+    },
+    getTemplateUrl(url) {
+      let username = this.username
+      let usernameLen = username.length
+      let templateUrlStartIndex = url.indexOf(username) + usernameLen + 1
+      return url.substring(templateUrlStartIndex)
     }
   }
 }

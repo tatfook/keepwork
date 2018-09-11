@@ -815,6 +815,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "urlConflict": "该页面已关联其他课程，请重新输入。",
       "noIntro": "暂无简介",
       "packageLabel": "课程包",
       "lessonTitle": "课程",
