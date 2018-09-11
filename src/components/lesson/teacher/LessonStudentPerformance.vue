@@ -31,7 +31,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-button @click="testData">疯狂输出</el-button> -->
   </div>
 </template>
 

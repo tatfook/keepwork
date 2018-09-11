@@ -47,7 +47,8 @@ export const lessons = {
   delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
-  getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`)
+  getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
+  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`)
 }
 
 export const users = {
