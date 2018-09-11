@@ -29,7 +29,7 @@ import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
 import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
-const PACKAGE_GOOD_DETAIL = process.env.KEEPWORK_API_PREFIX
+const PACKAGE_GOOD_DETAIL = process.env.PACKAGE_GOOD_DETAIL
 export default {
   name: 'PurchasePackage',
   async mounted() {
