@@ -5,7 +5,7 @@
       {{componentTitle}}
     </label>
     <p v-show="false">{{newPackageCoverUrl}}</p>
-    <el-radio-group class="cover-media-setter-radio-group" v-model="imageSourceType">
+    <el-radio-group :disabled="!isEditable" class="cover-media-setter-radio-group" v-model="imageSourceType">
       <el-radio v-if="isBigfileTypeAvailable" label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio>
       <el-radio label="url">{{$t('lesson.packageManage.inputUrl')}}</el-radio>
     </el-radio-group>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="cover-media-setter-from-url" v-show="imageSourceType === 'url'">
-      <el-input placeholder="https://" v-model="urlTypeUrl">
+      <el-input :disabled="!isEditable" placeholder="https://" v-model="urlTypeUrl">
         <template slot="append">
           <el-popover placement="top" width="250" trigger="hover" popper-class='cover-media-setter-image-preview'>
             <img :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
@@ -38,6 +38,10 @@ export default {
     subTitle: String,
     editingPackageDetail: Object,
     editingCoverUrl: String,
+    isEditable: {
+      type: Boolean,
+      default: true
+    },
     isEditing: Boolean
   },
   async mounted() {
