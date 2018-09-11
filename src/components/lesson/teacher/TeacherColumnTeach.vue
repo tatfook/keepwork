@@ -57,8 +57,10 @@ export default {
       })
   },
   computed: {
-    approvedPackages(){
-      return _.filter(this.teachList, (i) => {return i.state == 2})
+    approvedPackages() {
+      return _.filter(this.teachList, i => {
+        return i.state == 2
+      })
     },
     hasTaughtPackages() {
       return _.filter(this.approvedPackages, i => {
