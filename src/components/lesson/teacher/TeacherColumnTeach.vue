@@ -63,14 +63,10 @@ export default {
       })
     },
     hasTaughtPackages() {
-      return _.filter(this.approvedPackages, i => {
-        return i.lastTeachDate
-      })
+      return _.filter(this.approvedPackages, i => i.lastTeachDate)
     },
     notTaughtPackages() {
-      return _.filter(this.approvedPackages, i => {
-        return !i.lastTeachDate
-      })
+      return _.filter(this.approvedPackages, i => !i.lastTeachDate)
     },
     sortedTeachList() {
       return _.concat(this.hasTaughtPackages, this.notTaughtPackages)
