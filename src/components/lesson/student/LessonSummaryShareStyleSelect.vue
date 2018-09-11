@@ -3,15 +3,12 @@
     <div class="button" :class="{'is-disabled': currentStyle === 1}" @click="prevStyle">
       <img src="../../../assets/lessonImg/summary/left.png" alt="prev">
     </div>
-    <div class="style-preview" @click="previewCurrentStyle">
+    <div class="style-preview">
       <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary"/>
     </div>
     <div class="button" :class="{'is-disabled': currentStyle === styles.length}" @click="nextStyle">
       <img src="../../../assets/lessonImg/summary/right.png" alt="next">
     </div>
-    <el-dialog class="preview-dialog" :title="$t('lesson.stylePreview', {number: currentStyle})" :visible.sync="dialogVisible" :append-to-body="true" width="90%">
-      <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :lessonSummary="lessonSummary" />
-    </el-dialog>
   </div>
 </template>
 
@@ -68,9 +65,6 @@ export default {
   align-items: center;
   .style-preview {
     flex: 1;
-    height: 350px;
-    width: 500px;
-    overflow: hidden;
     cursor: pointer;
     &.style-1 {
       background: url('../../../assets/lessonImg/sharePreviewImg/style1.png')

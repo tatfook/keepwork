@@ -2,26 +2,20 @@
   <div class="lesson-summary">
     <student-summary :summary="lessonSummary" @share="showSharePanel" />
     <el-dialog :append-to-body="true" class="summary-share-dialog" center :visible.sync="isShowSharePanel" :title="$t('lesson.shareSummary')" @close="hideSharePanel" width="920px">
-      <el-row :gutter="20">
-        <el-col class="share-icons-wrap" :span="6">
-          <div class="share-icons">
-            <span class="facebook-icon"></span>
-            <span class="twitter-icon"></span>
-            <span class="google-icon"></span>
-          </div>
-          <div class="share-tips">
-            {{$t('lesson.shareSummaryByNet')}}
-          </div>
-        </el-col>
-        <el-col class="share-style" :span="18">
-          <div class="share-style-title">
-            {{$t('lesson.styles', { number: 3})}}
-          </div>
-          <div class="share-style-select-panel">
-            <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
-          </div>
-        </el-col>
-      </el-row>
+      <div class="share-style-title">
+        {{$t('lesson.styles', { number: 3})}}
+      </div>
+      <div class="share-style-select-panel">
+        <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
+      </div>
+      <div class="share-icons">
+        <span class="facebook-icon"></span>
+        <span class="twitter-icon"></span>
+        <span class="google-icon"></span>
+      </div>
+      <div class="share-tips">
+        {{$t('lesson.shareSummaryByNet')}}
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -120,55 +114,14 @@ export default {
 $blue: #4093fe;
 .lesson-summary {
   margin: 20px auto;
-  width: 1080px;
   box-sizing: border-box;
   border-top: 1px solid #dadada;
   background: white;
 }
 .summary-share-dialog {
-  .share-icons-wrap {
-    .share-icons {
-      padding-left: 10px;
-      span {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        cursor: pointer;
-        &.facebook-icon {
-          background: url('../../../assets/lessonImg/summary/facebook.png')
-            no-repeat center;
-        }
-        &.twitter-icon {
-          background: url('../../../assets/lessonImg/summary/twitter.png')
-            no-repeat center;
-        }
-        &.google-icon {
-          background: url('../../../assets/lessonImg/summary/google.png')
-            no-repeat center;
-        }
-      }
-    }
-    .share-tips {
-      padding: 10px;
-      color: #929292;
-    }
-  }
-
-  .share-style {
-    border-left: 1px dashed grey;
-    padding-left: 22px;
-    &-title {
-      text-align: center;
-      font-size: 18px;
-    }
-    &-select-panel {
-      margin-top: 20px;
-      min-height: 300px;
-    }
-  }
   .el-dialog__header {
     padding: 0;
-    background: $blue;
+    background: #4093fe;
     color: white;
     height: 60px;
     line-height: 60px;
@@ -183,6 +136,44 @@ $blue: #4093fe;
       color: white;
       font-size: 26px;
     }
+  }
+  .share-icons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      display: inline-block;
+      height: 50px;
+      width: 66px;
+      cursor: pointer;
+      &.facebook-icon {
+        background: url('../../../assets/lessonImg/summary/facebook.png')
+          no-repeat center;
+      }
+      &.twitter-icon {
+        background: url('../../../assets/lessonImg/summary/twitter.png')
+          no-repeat center;
+      }
+      &.google-icon {
+        background: url('../../../assets/lessonImg/summary/google.png')
+          no-repeat center;
+      }
+    }
+  }
+  .share-tips {
+    text-align: center;
+    padding: 10px;
+    color: #929292;
+  }
+}
+.share-style {
+  &-title {
+    text-align: center;
+    font-size: 18px;
+  }
+  &-select-panel {
+    margin-top: 20px;
   }
 }
 </style>
