@@ -92,6 +92,10 @@ export default {
     origin() {
       return window.location.origin
     },
+    packageDetailLink() {
+      let nowPageLink = window.location.href
+      return _.replace(nowPageLink, '/purchase', '')
+    },
     packageDetailPath() {
       return _.replace(this.nowPath, '/purchase', '')
     }
@@ -132,6 +136,7 @@ export default {
           app_name: PACKAGE_GOOD_DETAIL.APP_NAME,
           app_goods_id: PACKAGE_GOOD_DETAIL.APP_GOODS_ID,
           price: this.packageDetail.rmb,
+          redirect: this.packageDetailLink,
           additional: {
             packageId: this.packageId
           }
