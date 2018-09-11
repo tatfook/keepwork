@@ -131,7 +131,7 @@ $lineSize: 20px;
 $mainHeight: 430px;
 .lesson-summary-share-wrap {
   display: flex;
-  padding: 10px;
+  padding: 30px;
   justify-content: center;
   align-items: center;
   &.style-1 {
@@ -148,6 +148,8 @@ $mainHeight: 430px;
     justify-content: center;
     align-items: center;
     position: relative;
+    background: white;
+    width: 678px;
     .main {
       height: $mainHeight;
       .movie {
@@ -190,7 +192,7 @@ $mainHeight: 430px;
           font-weight: 600;
         }
         &-link {
-          margin: 20px 0;
+          margin: 10px 0;
         }
         &-line {
           line-height: 30px;
@@ -210,14 +212,13 @@ $mainHeight: 430px;
     &.style-1 {
       $left-width: 340px;
       $padding: 26px;
-      background: #409efe;
       padding: $padding;
       position: relative;
       .left {
         position: absolute;
         z-index: 998;
-        left: ($padding - 1);
-        height: 410px;
+        left: -14px;
+        height: 475px;
         width: 170px;
         filter: drop-shadow(10px 0px 2px rgba(66, 66, 66, 0.5));
         .shadow {
@@ -240,7 +241,7 @@ $mainHeight: 430px;
         .movie {
           background: grey;
           position: relative;
-          left: 188px;
+          left: 88px;
           top: 24px;
           border-radius: 5px;
           border: 8px solid #e8f3ff;
@@ -249,26 +250,24 @@ $mainHeight: 430px;
         }
 
         .summary-word {
-          margin-left: 250px;
-          margin-right: 6px;
+          margin-left: 158px;
+          margin-right: 106px;
         }
       }
     }
 
     &.style-2 {
-      background: #ffb983;
       .left {
         display: none;
       }
       .main {
-        box-sizing: border-box;
         background: white;
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         border-radius: 20px;
-        padding: 0 60px;
         .summary-word {
           &-time {
             color: #409efe;
