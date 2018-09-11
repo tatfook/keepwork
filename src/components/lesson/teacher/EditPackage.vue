@@ -1,9 +1,9 @@
 <template>
   <div class="edit-package" v-loading='isLoading'>
-    <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
-    <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
-    <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
-    <catalogue-manager ref="lessonListComponent" v-if="!isGettingData" v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></catalogue-manager>
+    <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isEditable='isEditable' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
+    <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
+    <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
+    <catalogue-manager ref="lessonListComponent" v-if="!isGettingData" :isEditable='isEditable' v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></catalogue-manager>
   </div>
 </template>
 <script>
@@ -41,6 +41,9 @@ export default {
     ...mapGetters({
       lessonPackageDetail: 'lesson/packageDetail'
     }),
+    isEditable() {
+      return this.editingPackageDetail.state !== 1
+    },
     isSubmitable() {
       return (
         this.editingPackageDetail.state === 0 ||
@@ -240,3 +243,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.edit-package {
+  &-media-setter {
+    padding: 26px 36px;
+  }
+}
+</style>

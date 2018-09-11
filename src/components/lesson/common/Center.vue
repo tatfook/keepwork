@@ -30,6 +30,18 @@
           </div>
         </el-col>
       </el-row>
+      <div class="lesson-packages-pages">
+        <div class="block">
+          <span class="demonstration"></span>
+          <el-pagination
+            background
+            @current-change="targetPage"
+            layout="prev, pager, next"
+            :page-size="perPage"
+            :total="packagesCount">
+          </el-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,8 +54,13 @@ export default {
   name: 'Center',
   data() {
     return {
-      loading: true
+      loading: true,
+      perPage: 12,
+      page: 1
     }
+  },
+  created(){
+    this.fromTopToShow()
   },
   computed: {
     ...mapGetters({
@@ -52,26 +69,45 @@ export default {
     packagesList() {
       return _.get(this.packages, 'rows', [])
     },
+    packagesCount(){
+      return _.get(this.packages, 'count', 0)
+    },
     sortedPackagesList() {
       return this.packagesList.sort(this.sortByUpdateAt)
     }
   },
   async mounted() {
-    await this.getPackagesList()
+    let payload = {perPage: this.perPage,page: this.page}
+    await this.getPackagesList(payload)
     this.loading = false
-    console.log('centersortedPackagesList',this.sortedPackagesList)
   },
   methods: {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    fromTopToShow(){
+      window.scrollTo(0, 0)
+    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     enterPackageDetailPage(packageId) {
-      this.$router.push({
-        path: `package/${packageId}`
-      })
+      if(this.$route.name === "Lesson"){
+        this.$router.push({
+          path: `/student/package/${packageId}`
+        })
+      }else{
+        this.$router.push({
+          path: `package/${packageId}`
+        })
+      }
+    },
+    async targetPage(targetPage){
+      this.loading = true
+      this.page = targetPage
+      let payload = {perPage: this.perPage,page: this.page}
+      await this.getPackagesList(payload)
+      this.loading = false
     }
   }
 }
@@ -86,7 +122,8 @@ export default {
       padding: 60px 0 5px 20px;
       font-size: 17px;
     }
-    .lesson-packages-subject .subject-desc {
+    &-subject {
+    .subject-desc {
       width: 287px;
       height: 415px;
       padding: 34px 34px 6px;
@@ -164,6 +201,11 @@ export default {
           }
         }
       }
+    }
+    }
+    &-pages{
+      text-align: center;
+      padding: 40px 0;
     }
   }
 }

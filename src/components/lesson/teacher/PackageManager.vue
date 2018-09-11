@@ -11,7 +11,7 @@
         <label for="subjectSelector">{{$t('lesson.subjectLabel')}}</label>
         <el-select id="subjectSelector" v-model="searchParams.subjectId">
           <el-option :key='null' :label='$t("lesson.all")' :value='null'></el-option>
-          <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+          <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
           </el-option>
         </el-select>
       </div>
@@ -29,12 +29,15 @@
       </div>
     </div>
     <div class="package-manager-details">
-      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
+      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="100%" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
-        <el-table-column class-name="package-manager-table-packagename" prop="packageName" :label="$t('lesson.nameLabel')">
+        <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
+          <template slot-scope="scope">
+            <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
+          </template>
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
         <el-table-column :label="$t('lesson.statusLabel')" width="125">
           <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
@@ -68,6 +71,8 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'PackageManager',
   async mounted() {
@@ -347,6 +352,9 @@ export default {
       if (continueFnNameAfterEnsure === 'toDelete') {
         this.toDelete()
       }
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   },
   components: {
@@ -356,7 +364,9 @@ export default {
 </script>
 <style lang="scss">
 .package-manager {
-  padding-top: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   &-overview {
     margin-bottom: 20px;
     display: flex;
@@ -429,6 +439,8 @@ export default {
   &-details {
     padding: 10px 20px;
     background-color: #fff;
+    flex: 1;
+    overflow: auto;
   }
   &-table {
     border: 1px solid #d2d2d2;
@@ -457,6 +469,10 @@ export default {
     &-packagename {
       .cell {
         white-space: nowrap;
+        cursor: pointer;
+      }
+      .cell:hover {
+        font-weight: bold;
       }
     }
     &-operations {

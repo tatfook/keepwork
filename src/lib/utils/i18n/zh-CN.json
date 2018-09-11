@@ -779,6 +779,7 @@
     "rmbPrice": "人民币价格",
     "coinsPrice": "知识币价格",
     "purchaseSuccess": "课程包购买成功。",
+    "addPackageSuccess": "课程包添加成功。",
     "coinsWillBeBack": "{backCoinCount}知识币已返还至你的账户",
     "viewPackage": "查看课程包",
     "payAfterConfirmation": "购买后不支持退款或转让，请确认后支付。",
@@ -814,6 +815,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
+      "urlConflict": "该页面已关联其他课程，请重新输入。",
       "noIntro": "暂无简介",
       "packageLabel": "课程包",
       "lessonTitle": "课程",
@@ -972,7 +974,7 @@
     "sortByTeachingTime": "点击按授课时间排序",
     "viewSummary": "查看课堂总结",
     "viewLearnSummary": "查看学习总结",
-    "skillsPoints": "技能点",
+    "skillPoints": "技能点",
     "leaveTheClass": "离开课堂",
     "leaveTheClassTips": "你确定要离开课堂吗？本课堂将不保存你的学习数据",
     "right": "对",
@@ -998,8 +1000,12 @@
     "confirmFullSelected": "你确定给选定的学生满分吗？",
     "viewDetail": "查看详情",
     "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结：",
-    "StudiedForManyDays": "这是我 {howManyDays} 在一网乾坤上学习{lessonTitle}。",
+    "StudiedForManyDays": "这是我第 {howManyDays} 天在一网乾坤上学习{lessonTitle}。",
     "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。",
+    "todayRecords0": "今天，我",
+    "todayRecords1": "读了 {readCodeLinesCount} 行代码",
+    "todayRecords2": "写了 {wroteCodeLinesCount} 行代码",
+    "todayRecords3": "学习了 {commandLines} 个计算机指令",
     "accuracyAnalysis": "答题准确率分析",
     "class": "课堂",
     "fullPage": "点击全屏显示",
@@ -1043,7 +1049,6 @@
     "totalStudents": "学生数",
     "free": "免费",
     "quiz2": "测试题",
-    "skillPoints": "技能点",
     "noData": "暂无数据"
   }
 }

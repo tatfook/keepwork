@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
       <el-menu-item index='0'>
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
@@ -52,7 +52,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="/lesson.html#/student/center">课程中心</a>
+              <a :href='lessonCenterUrl'>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
@@ -162,6 +162,14 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    hostname() {
+      return window.location.hostname
+    },
+    lessonCenterUrl() {
+      return this.hostname === 'localhost'
+        ? '/lesson.html#/student/center'
+        : '/l#/student/center'
     }
   },
   mounted() {
@@ -315,9 +323,6 @@ export default {
   bottom: 8px;
   right: -18px;
 }
-.el-menu-item i {
-  color: #2b6da8 !important;
-}
 .profile-submenu,
 .el-popper {
   a {
@@ -333,6 +338,11 @@ export default {
 @media (max-width: 768px) {
   .el-submenu__title {
     padding: 0 15px;
+  }
+}
+@media print{
+  .common-header{
+    display: none;
   }
 }
 </style>

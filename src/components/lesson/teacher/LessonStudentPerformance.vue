@@ -24,6 +24,7 @@
       </el-table-column>
       <el-table-column fixed v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
       </el-table-column>
+      
       <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :render-header="(h, params) => renderLastHeader(h,params)" sortable min-width="100" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <span v-if="props.row[`quiz${index+1}`]['type'] === TRF" :class="['answer', props.row[`quiz${index + 1}`]['result'] ? 'right': 'wrong'  ]">{{ formatTRF(props.row[`quiz${index+1}`]['answer']) }}</span>
@@ -31,7 +32,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-button @click="testData">疯狂输出</el-button> -->
   </div>
 </template>
 
@@ -89,7 +89,7 @@ export default {
         return count
       }, 0)
       let state =
-        finishCount === quiz.length ? 'finish' : `${finishCount}/${quiz.length}`
+        finishCount === quiz.length ? `${this.$t('lesson.finished')}` : `${finishCount}/${quiz.length}`
       return state
     },
     makeQuizzes(quiz) {

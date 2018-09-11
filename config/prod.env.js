@@ -10,12 +10,15 @@ module.exports = {
   GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com"`,
   ES_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/es"`,
   STORAGE_GATEWAY_BASE_URL: `"https://api${i18nDomainLabel('-')}.keepwork.com/storage/v0"`,
-  LESSON_API_MOCK_PREFIX: `"https://easymock-node.keepwork.com/mock/5b596b61c0a3ad0022b14b12"`,
-  LESSON_API_PREFIX: `"https://api-stage.keepwork.com/lesson/v0"`,
+  LESSON_API_PREFIX: `"https://api${i18nDomainLabel('-')}.keepwork.com/lesson/v0"`,
   ES_INDEX: `"default_kw_pages"`,
   ES_TYPE: `"pages"`,
   IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
-  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`
+  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`,
+  PACKAGE_GOOD_DETAIL: {
+    APP_NAME: `"Lessons"`,
+    APP_GOODS_ID: 1
+  }
 }

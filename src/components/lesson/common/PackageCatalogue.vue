@@ -123,7 +123,7 @@ export default {
       }
     },
     toViewSummary(lesson) {
-      let targetLessonPath = `/${this.actorType}/package/${
+      let targetLessonPath = `/${this.actorType}/learnSummary/package/${
         this.packageDetail.id
       }/lesson/${lesson.id}`
       this.$router.push({

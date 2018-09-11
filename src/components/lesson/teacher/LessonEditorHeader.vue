@@ -46,7 +46,7 @@ export default {
 </script>
 <style lang="scss">
 .lesson-editor-header {
-  padding: 36px 0 26px;
+  padding: 0 0 26px;
   display: flex;
   align-items: center;
   &-breadcrumb {

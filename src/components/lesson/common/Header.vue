@@ -24,7 +24,7 @@ const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
 const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
 const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
-const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)$/
+const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
 export default {
   name: 'Header',
   computed: {
@@ -176,6 +176,11 @@ export default {
         padding: 6px 10px;
       }
     }
+  }
+}
+@media print{
+  .lesson-header{
+    display: none;
   }
 }
 </style>

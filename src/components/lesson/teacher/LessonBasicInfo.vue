@@ -11,7 +11,7 @@
         <div class="lesson-basic-info-subject">
           <label class="lesson-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="editingLessonDetail.subjectId">
-            <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+            <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
         </div>
@@ -42,6 +42,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'LessonBasicInfo',
   props: {
@@ -64,15 +66,14 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = this.isEditorMod ? this.activePageUrl.replace(`/${this.username}/`,'') : url && url.replace(new RegExp(this.linkPagePrefix), '')
-      let origin = window.location.origin
-      if (origin === 'http://localhost:8080') {
-        origin = 'https://stage.keepwork.com'
-      }
-      let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
-      this.editingLessonDetail = { url: _url, subjectId, lessonName }
+      this.tempUrl = this.isEditorMod
+        ? this.activePageUrl.replace(`/${this.username}/`, '')
+        : url && this.getTemplateUrl(url)
+      this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
     } else {
-      this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
+      let defaultSubjectId = this.lessonSubjects[0].id
+      this.defaultSubjectId = defaultSubjectId
+      this.editingLessonDetail.subjectId = defaultSubjectId
     }
   },
   data() {
@@ -83,8 +84,10 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      defaultSubjectId: undefined,
+      oldLinkPrefiex: '',
       editingLessonDetail: {
-        url: undefined,
+        url: null,
         subjectId: null,
         lessonName: ''
       }
@@ -100,8 +103,11 @@ export default {
     username() {
       return _.get(this.userProfile, 'username')
     },
+    origin() {
+      return window.location.origin
+    },
     linkPagePrefix() {
-      return `${window.location.origin}/${this.username}/`
+      return `${this.origin}/${this.username}/`
     }
   },
   methods: {
@@ -122,7 +128,8 @@ export default {
       this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
-          packageName: this.newPackageName
+          packageName: this.newPackageName,
+          subjectId: this.defaultSubjectId
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
@@ -135,10 +142,19 @@ export default {
     },
     setUrl() {
       if (this.tempUrl == '') {
-        this.editingLessonDetail.url = undefined
+        this.editingLessonDetail.url = null
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
+    },
+    getTemplateUrl(url) {
+      let username = this.username
+      let usernameLen = username.length
+      let templateUrlStartIndex = url.indexOf(username) + usernameLen + 1
+      return url.substring(templateUrlStartIndex)
     }
   }
 }

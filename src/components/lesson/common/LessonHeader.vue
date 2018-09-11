@@ -95,6 +95,7 @@ import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import qs from 'qs'
 import _ from 'lodash'
+import colI18n from '@/lib/utils/i18n/column'
 import LessonJewelBox from '../student/LessonJewelBox'
 import LessonStudentProgress from '../student/LessonStudentProgress'
 import LessonTeacherProgress from '../teacher/LessonTeacherProgress'
@@ -250,7 +251,7 @@ export default {
     lessonSkills() {
       return _.map(
         _.get(this.lesson, 'skills', []),
-        ({ skillName }) => skillName
+        (skill) => colI18n.getLangValue(skill, 'skillName')
       )
     },
     lessonGoals() {

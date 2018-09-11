@@ -20,7 +20,7 @@ export const packages = {
   update: async ({ updatingPackageData }) => put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
-  packagesList: async params => get('packages/search', params || {}),
+  packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}`),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
@@ -47,7 +47,8 @@ export const lessons = {
   delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
-  getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`)
+  getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
+  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`)
 }
 
 export const users = {
