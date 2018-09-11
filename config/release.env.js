@@ -18,7 +18,7 @@ module.exports = merge(prodEnv, {
   QQ_URL: `"http://wpa.qq.com"`,
   BOARD: `"https://release.keepwork.com/wiki/wikieditor/board.html?"`,
   PACKAGE_GOOD_DETAIL: {
-    APP_NAME: 'Lessons',
+    APP_NAME: `"Lessons"`,
     APP_GOODS_ID: 1
   }
 })
