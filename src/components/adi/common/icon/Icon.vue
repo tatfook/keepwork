@@ -1,10 +1,11 @@
 <template>
   <div class='comp-media'>
     <a :target='target' :href='link'>
-      <div :class="getImgClass" v-if='isImage'>
+      <!-- <div :class="getImgClass" v-if='isImage'> -->
+      <div v-if='isImage' :style="getStyle" class="img">
         <img :src="src">
       </div>
-      <video v-else-if='isVideo' :src='src'></video>
+      <!-- <video v-else-if='isVideo' :src='src'></video> -->
       <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
   </div>
@@ -33,9 +34,9 @@ export default {
     isImage() {
       return Media.isImage(this.src)
     },
-    isVideo() {
-      return Media.isVideo(this.src)
-    },
+    // isVideo() {
+    //   return Media.isVideo(this.src)
+    // },
     isBase64Svg() {
       return Media.isBase64Svg(this.src)
     },
@@ -52,38 +53,45 @@ export default {
         ? this.properties.link
         : this.options.emptyLink
     },
-    getImgClass() {
-      let imgClassName = 'comp-media-img'
-      let style = {
-        [imgClassName]: {
-          'height': this.getWebHeight(),
-          'width': this.getWebWidth(),
-          'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
-          'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
-          'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
-          'padding-bottom': this.options.space && this.parsePx(this.options.space.webPaddingBottom)
-        },
-        '@media only screen and (max-width: 767px)': {
-          [imgClassName]: {
-            'height': this.getMobileHeight(),
-            'width': this.getMobileWidth(),
-            'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
-            'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
-            'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
-            'padding-bottom': this.options.space && this.parsePx(this.options.space.mobilePaddingBottom)
-          }
-        }
-      }
-
-      if(!this.sheet) {
-        this.sheet = jss.createStyleSheet(style)
-        this.sheet.attach()
-      }
-
-      return 'img ' + this.sheet.classes[imgClassName]
+    getStyle() {
+      return this.generateStyleString({
+        width: this.getWebWidth(),
+        // height: this.getWebHeight(),
+      })
     },
+    // getImgClass() {
+    //   let imgClassName = 'comp-media-img'
+    //   let style = {
+    //     [imgClassName]: {
+    //       'height': this.getWebHeight(),
+    //       'width': this.getWebWidth(),
+    //       'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
+    //       'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
+    //       'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
+    //       'padding-bottom': this.options.space && this.parsePx(this.options.space.webPaddingBottom)
+    //     },
+    //     '@media only screen and (max-width: 767px)': {
+    //       [imgClassName]: {
+    //         'height': this.getMobileHeight(),
+    //         'width': this.getMobileWidth(),
+    //         'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
+    //         'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
+    //         'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
+    //         'padding-bottom': this.options.space && this.parsePx(this.options.space.mobilePaddingBottom)
+    //       }
+    //     }
+    //   }
+
+    //   if(!this.sheet) {
+    //     this.sheet = jss.createStyleSheet(style)
+    //     this.sheet.attach()
+    //   }
+
+    //   return 'img ' + this.sheet.classes[imgClassName]
+    // },
     svgFill() {
       return this.generateStyleString({
+        width: this.getWebWidth(),
         fill: this.options.svgFillColor
       })
     }
@@ -103,15 +111,15 @@ export default {
         return  this.parsePx(optionsValue)
       }
     },
-    getWebHeight() {
-      return this.options.img ? this.getValue(this.properties.webHeight, this.options.img.defaultWebHeight) : '100%!important'
-    },
+    // getWebHeight() {
+    //   return this.options.img ? this.getValue(this.properties.webHeight, this.options.img.defaultWebHeight) : '100%!important'
+    // },
     getWebWidth() {
       return this.options.img ? this.getValue(this.properties.webWidth, this.options.img.defaultWebWidth) : '100%!important'
     },
-    getMobileHeight() {
-      return this.options.img ? this.getValue(this.properties.mobileHeight, this.options.img.defaultMobileHeight) : '100%!important'
-    },
+    // getMobileHeight() {
+    //   return this.options.img ? this.getValue(this.properties.mobileHeight, this.options.img.defaultMobileHeight) : '100%!important'
+    // },
     getMobileWidth() {
       return this.options.img ? this.getValue(this.properties.mobileWidth, this.options.img.defaultMobileWidth) : '100%!important'
     }
@@ -132,22 +140,24 @@ export default {
 
 <style lang="scss" scoped>
 .comp-media {
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
   a {
     .img {
-      width: 100%;
-      height: 100%;
+      // width: 100%;
+      // height: 100%;
       position: relative;
       overflow: hidden;
 
       img {
-        position: absolute;
+        // position: absolute;
+        // display: inline;
+        display: block;
         width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        object-fit: cover;
+        height: auto;
+        // left: 0;
+        // top: 0;
+        // object-fit: contain;
       }
     }
   }
