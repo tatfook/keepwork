@@ -57,7 +57,8 @@
     </el-container>
     <div class="be-in-class" v-show="beInClassDialog">
       <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
-        <div class="hint"><i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+        <div class="hint">
+          <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
           <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
@@ -115,20 +116,23 @@ export default {
       }
       return sum
     },
-    continuingStudyPackages(){
-      let continuingStudyPackagesList = _.filter(this.subscribesList, (i)=>{
-        return i.learnedLessons.length > 0 && i.learnedLessons.length < i.lessons.length
+    continuingStudyPackages() {
+      let continuingStudyPackagesList = _.filter(this.subscribesList, i => {
+        return (
+          i.learnedLessons.length > 0 &&
+          i.learnedLessons.length < i.lessons.length
+        )
       })
       return continuingStudyPackagesList.sort(this.sortByUpdateAt)
     },
-    startStudyPackages(){
-      let startStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+    startStudyPackages() {
+      let startStudyPackagesList = _.filter(this.subscribesList, i => {
         return i.learnedLessons.length == 0 && i.lessons.length != 0
       })
       return startStudyPackagesList.sort(this.sortByUpdateAt)
     },
-    finishedStudyPackages(){
-      let finishedStudyPackagesList = _.filter(this.subscribesList, (i)=>{
+    finishedStudyPackages() {
+      let finishedStudyPackagesList = _.filter(this.subscribesList, i => {
         return i.learnedLessons.length == i.lessons.length
       })
       return finishedStudyPackagesList.sort(this.sortByUpdateAt)
@@ -137,7 +141,11 @@ export default {
       if (this.subscribesList.length === 0) {
         return this.subscribesList
       } else {
-        return _.concat(this.continuingStudyPackages,this.startStudyPackages,this.finishedStudyPackages)
+        return _.concat(
+          this.continuingStudyPackages,
+          this.startStudyPackages,
+          this.finishedStudyPackages
+        )
       }
     }
   },
@@ -151,28 +159,33 @@ export default {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     async enterClass() {
-      if(JSON.stringify(this.enterClassInfo) == "{}"){
+      if (JSON.stringify(this.enterClassInfo) == '{}') {
         this.enterNewClass()
-      }else if(this.classID == this.enterClassInfo.key){
+      } else if (this.classID == this.enterClassInfo.key) {
         this.$message.success(this.$t('lesson.haveEnteredClass'))
         this.backCurrentClass()
-      }else if(this.classID !== this.enterClassInfo.key){
+      } else if (this.classID !== this.enterClassInfo.key) {
         let key = this.classID
-        await lesson.classrooms.isValidKey(key).then(res=>{
-          if(res){
-            this.beInClassDialog = true
-          }else{
-            this.$message({
-            showClose: true,
-            message: this.$t('lesson.wrongKey'),
-            type: 'error'
-            })
-            this.beInClassDialog = false
-          }
-        }).catch(err=>{console.log(err)})
+        await lesson.classrooms
+          .isValidKey(key)
+          .then(res => {
+            if (res) {
+              this.beInClassDialog = true
+            } else {
+              this.$message({
+                showClose: true,
+                message: this.$t('lesson.wrongKey'),
+                type: 'error'
+              })
+              this.beInClassDialog = false
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     },
-    async enterNewClass(){
+    async enterNewClass() {
       let key = this.classID
       await this.enterClassRoom({ key })
         .then(res => {
@@ -191,7 +204,7 @@ export default {
           this.beInClassDialog = false
         })
     },
-    async backCurrentClass(){
+    async backCurrentClass() {
       const { packageId, lessonId } = this.enterClassInfo
       this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
     },
@@ -323,27 +336,27 @@ export default {
             color: #111111;
           }
         }
-        .group-line{
-          border-bottom:1px solid #d2d2d2;
+        .group-line {
+          border-bottom: 1px solid #d2d2d2;
           padding: 10px 0;
           margin-bottom: -1px;
         }
       }
-      .bottom-line{
-        border-bottom:1px solid #d2d2d2;
+      .bottom-line {
+        border-bottom: 1px solid #d2d2d2;
       }
     }
   }
-  .be-in-class{
-    .el-dialog__body{
-      .hint{
+  .be-in-class {
+    .el-dialog__body {
+      .hint {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
         color: rgb(229, 65, 4);
-        .redIcon{
-          margin-right:10px;
+        .redIcon {
+          margin-right: 10px;
           font-size: 30px;
         }
       }
