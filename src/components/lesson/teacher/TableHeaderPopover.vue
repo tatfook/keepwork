@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip hide-after="0" popper-class="table-header-pop">
+  <el-tooltip :hide-after="0" popper-class="table-header-pop">
     <div class="content" slot="content">
       <div>{{$t('lesson.quiz')}}{{index}}</div>
       <div class="pop-title">{{title}}</div>
@@ -22,7 +22,7 @@ export default {
     console.log(this.quiz)
   },
   props: {
-    index: 0,
+    index: Number,
     quiz: {
       type: Object,
       default() {
