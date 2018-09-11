@@ -32,7 +32,10 @@
       <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="100%" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
-        <el-table-column class-name="package-manager-table-packagename" prop="packageName" :label="$t('lesson.nameLabel')">
+        <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
+          <template slot-scope="scope">
+            <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
+          </template>
         </el-table-column>
         <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
@@ -466,6 +469,10 @@ export default {
     &-packagename {
       .cell {
         white-space: nowrap;
+        cursor: pointer;
+      }
+      .cell:hover {
+        font-weight: bold;
       }
     }
     &-operations {
