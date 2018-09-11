@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
       <el-menu-item index='0'>
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
@@ -338,6 +338,11 @@ export default {
 @media (max-width: 768px) {
   .el-submenu__title {
     padding: 0 15px;
+  }
+}
+@media print{
+  .common-header{
+    display: none;
   }
 }
 </style>
