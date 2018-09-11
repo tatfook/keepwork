@@ -29,6 +29,7 @@ import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
 import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
+const PACKAGE_GOOD_DETAIL = process.env.KEEPWORK_API_PREFIX
 export default {
   name: 'PurchasePackage',
   async mounted() {
@@ -128,8 +129,8 @@ export default {
       } else {
         let payParams = {
           username: this.username,
-          app_name: 'lessons',
-          app_goods_id: 1,
+          app_name: PACKAGE_GOOD_DETAIL.APP_NAME,
+          app_goods_id: PACKAGE_GOOD_DETAIL.APP_GOODS_ID,
           price: this.packageDetail.rmb,
           additional: {
             packageId: this.packageId

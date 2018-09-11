@@ -16,5 +16,9 @@ module.exports = {
   IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
-  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`
+  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`,
+  PACKAGE_GOOD_DETAIL: {
+    APP_NAME: 'Lessons',
+    APP_GOODS_ID: 1
+  }
 }
