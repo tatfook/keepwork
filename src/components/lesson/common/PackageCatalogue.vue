@@ -1,6 +1,6 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-progress" v-show="packageDetail.isSubscribe && !isTeacher">
+    <div class="package-catalogue-progress" v-show="isUserSubscribePackage && !isTeacher">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
         <p>{{lessonProgressInfo}}</p>
@@ -9,7 +9,7 @@
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !packageDetail.isSubscribe}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
+      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !isUserSubscribePackage}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
@@ -44,9 +44,22 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       enterClassInfo: 'lesson/student/enterClassInfo',
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
+    loginUserId(){
+      return _.get(this.userProfile, '_id')
+    },
+    packageOwnerId(){
+      return _.get(this.packageDetail, 'userId')
+    },
+    isOwnPackage(){
+      return this.loginUserId === this.packageOwnerId
+    },
+    isUserSubscribePackage() {
+      return this.isOwnPackage || this.packageDetail.isSubscribe
+    },
     isInClassroom() {
       const state = this.enterClassInfo.state
       return state == undefined ? false : state != 2
@@ -105,7 +118,7 @@ export default {
         )
           return this.$message.error('你正在上课中,请返回当前课堂')
       }
-      if (this.packageDetail.isSubscribe) {
+      if (this.isUserSubscribePackage) {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id
         }/lesson/${lesson.id}`
@@ -115,7 +128,7 @@ export default {
       }
     },
     handleUnSubscribe() {
-      if (!this.packageDetail.isSubscribe) {
+      if (!this.isUserSubscribePackage) {
         this.$alert(
           this.$t('lesson.addPackageFirst'),
           this.$t('lesson.infoTitle')
