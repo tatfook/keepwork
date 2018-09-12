@@ -70,7 +70,7 @@
           </el-table-column>
           <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
           </el-table-column>
-          <el-table-column label=" " class-name="web-page-show">
+          <el-table-column>
             <template slot-scope="scope">
               <el-button class="hidden web-page-show" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
             </template>
