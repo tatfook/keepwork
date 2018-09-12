@@ -104,6 +104,9 @@ export default {
       userPackages: 'lesson/teacher/userPackages',
       activePageUrl: 'activePageUrl'
     }),
+    isLinkPageUrlValid() {
+      return this.urlInvalidInfo.length == 0
+    },
     username() {
       return _.get(this.userProfile, 'username')
     },
@@ -146,8 +149,8 @@ export default {
     },
     checkTempUrlValid() {
       let tempUrl = this.tempUrl
-      const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]+$/)
-      if (ValidPageLinkReg.test(tempUrl)) {
+      const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]*$/)
+      if (tempUrl == '' || ValidPageLinkReg.test(tempUrl)) {
         this.urlInvalidInfo = ''
         return true
       } else {
@@ -156,6 +159,9 @@ export default {
       }
     },
     setUrl() {
+      if (!this.checkTempUrlValid()) {
+        return
+      }
       if (this.tempUrl == '') {
         this.editingLessonDetail.url = null
         return
