@@ -12,16 +12,14 @@
           {{columnText}}
         </div>
       </div>
-      <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link>
-    </div>
-    <div @click.stop v-if="isLoginDialogShow">
-      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
+      <!-- <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link> -->
+      <el-button class="lesson-header-toggle-button" @click="switchIdentity" plain>{{toggleButtonText}}</el-button>
     </div>
   </div>
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 
 const StudentPageReg = /^\/student/
@@ -32,9 +30,7 @@ const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
 export default {
   name: 'Header',
   data() {
-    return {
-      isLoginDialogShow: false
-    }
+    return {}
   },
   computed: {
     ...mapGetters({
@@ -89,13 +85,20 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log('fullpath', this.nowFullPath)
-  },
   components: {
     LoginDialog
   },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
+    }),
+    switchIdentity() {
+      if (!this.userIsLogined) {
+        return this.toggleLoginDialog(true)
+      }
+      let _page = this.$router.resolve({ path: this.statusTogglePath })
+      window.open(_page.href, '_blank')
+    },
     goToAboutUs() {
       this.isStudentPage
         ? this.$router.push(`/student/about`)
@@ -110,9 +113,6 @@ export default {
       this.isStudentPage
         ? this.$router.push(`/student`)
         : this.$router.push(`/teacher`)
-    },
-    closeLoginDialog() {
-      this.isLoginDialogShow = false
     }
   }
 }
