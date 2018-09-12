@@ -114,7 +114,7 @@ export default {
         let indexInSkillList = _.findIndex(this.skillList, {
           id: skill.skillId
         })
-        this.$set(this.skillList[indexInSkillList], 'isSelect', true)
+        this.skillList[indexInSkillList].isSelect = true
         let skillDetail = this.skillList[indexInSkillList]
         skills.push({
           id: skill.skillId,
