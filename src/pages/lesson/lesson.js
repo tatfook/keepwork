@@ -7,7 +7,7 @@ import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import LessonPage from './LessonPage'
 import router from './lesson.router'
-import { appModule, userModule, lessonModule, createPersistedState } from '@/store'
+import { appModule, gitlabModule, userModule, lessonModule, createPersistedState } from '@/store'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
@@ -29,6 +29,7 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
+    gitlab: gitlabModule,
     lesson: lessonModule
   },
   plugins: [
