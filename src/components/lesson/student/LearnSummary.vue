@@ -23,6 +23,8 @@ import { lesson } from '@/api'
 import { locale } from '@/lib/utils/i18n'
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import moment,{ months } from 'moment'
+import 'moment/locale/zh-cn'
 export default {
   name: 'LearnSummary',
   components: {
@@ -84,9 +86,8 @@ export default {
     },
     lastTimeFormat() {
       if (!this.lastTime) return ''
-      return this.isEn
-        ? dayjs(this.lastTime).format('YYYY-MM-DD')
-        : dayjs(this.lastTime).format('YYYY年 MM月DD日')
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(this.lastTime).format('dddd') +'  '+ moment(this.lastTime).format('LL')
     }
   }
 }

@@ -149,7 +149,8 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
-      isRegisterDialogShow: false
+      isRegisterDialogShow: false,
+      envIsForDevelopment: process.env.NODE_ENV === 'development'
     }
   },
   computed: {
@@ -189,8 +190,12 @@ export default {
       userLogout: 'user/logout'
     }),
     backEditArea() {
-      this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
-      window.location.reload()
+      let origin = window.location.origin
+      if(this.envIsForDevelopment){
+        window.location.href=origin+'/editor.html#/'
+      }else{
+        window.location.href=origin+'/wiki/wikieditor/#/'
+      }
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
