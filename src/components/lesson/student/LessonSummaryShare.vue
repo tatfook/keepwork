@@ -2,7 +2,7 @@
   <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
     <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
       <div class="left">
-        <div class="shadow"></div>
+        <img src="@/assets/lessonImg/share_shadow.png" alt="">
       </div>
       <div class="main">
         <div class="movie"></div>
@@ -220,17 +220,9 @@ $mainHeight: 430px;
         left: -14px;
         height: 475px;
         width: 170px;
-        filter: drop-shadow(10px 0px 2px rgba(66, 66, 66, 0.5));
-        .shadow {
-          clip-path: polygon(0 0, 100% 0, 45% 100%, 0 100%);
-          background-color: #2e7dc9;
-          color: white;
+        img{
           height: 100%;
-          position: fixed;
-          text-align: center;
-          top: 0;
-          width: 100%;
-          z-index: 100;
+          object-fit: contain;
         }
       }
       .main {
