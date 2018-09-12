@@ -296,8 +296,8 @@ export default {
     },
     confirmGo(url) {
       this.$confirm(this.$t('lesson.lessonManage.urlNotCreatInfo'), '', {
-        confirmButtonText: this.$t('common.Sure'),
-        cancelButtonText: this.$t('common.Cancel'),
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
         center: true,
         customClass: 'lesson-manager-confirm-dialog'
       }).then(() => {
