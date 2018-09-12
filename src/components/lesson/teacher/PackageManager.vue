@@ -37,7 +37,8 @@
             <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column :label="$t('lesson.subjectLabel')" width="190">
+          <template slot-scope='scope'>{{subjectName(scope.row.subjectDetail)}}</template>
         </el-table-column>
         <el-table-column :label="$t('lesson.statusLabel')" width="125">
           <template slot-scope="scope">
