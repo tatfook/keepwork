@@ -161,16 +161,13 @@ export default {
     },
     setUrl() {
       if (!this.checkTempUrlValid()) {
-        console.log(111)
         return
       }
       if (this.tempUrl == '') {
-        console.log(222)
         this.editingLessonDetail.url = null
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
-      console.log(this.editingLessonDetail.url)
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
