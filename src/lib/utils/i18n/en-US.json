@@ -752,8 +752,10 @@
     "pleaseCompleteInfo": "Please complete the package information before submitting it.",
     "successfullySubmitted": "Successfully submitted.",
     "failedSubmit": "Submission failed.",
+    "failedSubmitInfo": "Failed to submit it. Please try again later.",
     "successfullyReleased": "Successfully released.",
     "successfullyRecall": "Successfully recall.",
+    "failedRecallInfo": "Failed to recall it. Please try again later.",
     "successfullySubmittedDetail": "The result will be informed within 5 workdays.",
     "deletePackageConfirm": "Are you sure you want to delete the package?",
     "deletePackageInfo": "(This operation won't delete lessons belonged to this package.)",
@@ -788,6 +790,7 @@
     "havePurchased": "You have added this package!",
     "loginBeforePurchase": "You should login before add this package!",
     "packageManage": {
+      "detailLabel": "Details",
       "package": "Packages",
       "Submit": "Submit",
       "Release": "Release",
