@@ -1,11 +1,11 @@
 <template>
   <div class='comp-media'>
     <a :target='target' :href='link'>
-      <div :class="getImgClass" v-if='isImage'>
+      <div class="img" :class="getImgClass" v-if='isImage'>
         <img :src="src">
       </div>
       <video v-else-if='isVideo' :src='src'></video>
-      <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
+      <div class="svg" :class="getImgClass" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
   </div>
 </template>
@@ -80,7 +80,7 @@ export default {
         this.sheet.attach()
       }
 
-      return 'img ' + this.sheet.classes[imgClassName]
+      return this.sheet.classes[imgClassName]
     },
     svgFill() {
       return this.generateStyleString({
