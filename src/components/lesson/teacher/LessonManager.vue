@@ -187,7 +187,7 @@ export default {
       return window.location.hostname
     },
     editorPagePrefix() {
-      return this.hostname === 'localhost' ? '/editor.html#/' : '/l#/'
+      return this.hostname === 'localhost' ? '/editor.html#/' : '/wiki/wikieditor#/'
     },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
@@ -272,6 +272,7 @@ export default {
       if (url) {
         targetUrl += this.getRemovePrefixUrl(url)
       }
+      console.log(targetUrl)
       window.location.href = targetUrl
     },
     getRemovePrefixUrl(url) {
