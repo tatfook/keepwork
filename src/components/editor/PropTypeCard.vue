@@ -11,8 +11,8 @@
       </el-col>
     </el-row>
     <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-      <component 
-        :is='proptypes[propItem]'
+      <component
+        :is='getPropType(propItem)'
         :prop='prop'
         :editingKey='index'
         :originValue='cardValue[index]'
@@ -61,6 +61,9 @@ export default {
     }
   },
   methods: {
+    getPropType(prop) {
+      return this.proptypes[prop]
+    },
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData',

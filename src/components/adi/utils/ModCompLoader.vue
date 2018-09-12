@@ -8,7 +8,8 @@ import AsyncModLoader from '@/components/adi/mod/index.async'
 export default {
   props: {
     mod: Object,
-    theme: Object
+    theme: Object,
+    modType: String
   },
   data() {
     return {
@@ -21,7 +22,7 @@ export default {
   },
   methods: {
     async loadComponent() {
-      let modType = 'Mod' + this.mod.cmd
+      let modType = this.modType || 'Mod' + this.mod.cmd
       let data = await AsyncModLoader.load(modType)
       this.modConf = data.default
       this.modComponent = this.modConf.mod

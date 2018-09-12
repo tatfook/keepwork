@@ -30,6 +30,7 @@ const {
   SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
+  UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST,
   UPDATE_MODS,
   UPDATE_THEME_NAME,
   UPDATE_THEME_COLOR,
@@ -461,7 +462,10 @@ const actions = {
     commit(UPDATE_ACTIVE_MOD_ATTRIBUTES, payload)
     dispatch('refreshCode')
   },
-
+  updateActiveModAttributeList({ commit, dispatch }, payload) {
+    commit(UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST, payload)
+    dispatch('refreshCode')
+  },
   // themes
   changeTheme({ commit }, themeName) {
     commit(UPDATE_THEME_NAME, themeName)

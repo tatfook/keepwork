@@ -24,6 +24,8 @@ const ModPageSwitching = () => import('./web/pageSwitching')
 const ModLesson = () => import('./web/lesson')
 const ModQuiz = () => import('./web/quiz')
 
+const ModMixLayerList = () => import('./list/mixLayerList')
+
 export const modList = {
   ModMarkdown,
   ModIFrame,
@@ -49,7 +51,9 @@ export const modList = {
   ModCategoryList,
   ModPageSwitching,
   ModLesson,
-  ModQuiz
+  ModQuiz,
+
+  ModMixLayerList
 }
 
 export const load = async modName => {

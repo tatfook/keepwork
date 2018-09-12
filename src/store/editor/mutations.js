@@ -24,6 +24,7 @@ const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
 const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
 
 const UPDATE_ACTIVE_MOD_ATTRIBUTES = 'UPDATE_ACTIVE_MOD_ATTRIBUTES'
+const UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST = 'UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST'
 const UPDATE_MODS = 'UPDATE_MODS'
 const UPDATE_THEME_NAME = 'UPDATE_THEME_NAME'
 const UPDATE_THEME_COLOR = 'UPDATE_THEME_COLOR'
@@ -75,6 +76,7 @@ export const props = {
   SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
+  UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST,
   UPDATE_MODS,
   UPDATE_THEME_NAME,
   UPDATE_THEME_COLOR,
@@ -212,6 +214,22 @@ const mutations = {
       state.activePage.activeMod.key,
       key,
       value
+    )
+  },
+  [UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST](state, {key, action, index}) {
+    const modList = activeModList(state)
+    let list = state.activePage.activeMod.data[key]
+    action = _.upperCase(action)
+    if (action === 'ADD') {
+      list.collection.splice(list.collection.length, 0, {})
+    } else if (action === 'DELETE') {
+      list.collection.splice(index, 1)
+    }
+    Parser.updateBlockAttribute(
+      modList,
+      state.activePage.activeMod.key,
+      key,
+      list
     )
   },
   [UPDATE_MODS](state, blockList) {

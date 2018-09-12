@@ -1,9 +1,10 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
+    <button v-if='hasSubActiveMod'> Back </button>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
-        <prop-type-card v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
+        <prop-type-card v-for="(prop, key) in editingProps" :prop='getPropType(prop)' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
@@ -51,10 +52,13 @@ export default {
       this.activeName = activeName.name
       this.setActivePropertyTabType(activeName)
     },
-    cardValues(key) {
-      let modType = 'Mod' + this.activeMod.cmd
+    getPropType(prop) {
+      return this.BaseCompProptypes[prop] || {data: 'subMod'}
+    },
+    modData(mod, key) {
+      let modType = 'Mod' + mod.cmd
       let activeModDafaultDatas = modLoader.load(modType).properties
-      let activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
+      let activeModDatas = { ...activeModDafaultDatas, ...mod.data }
 
       if (activeModDatas && typeof activeModDatas[key] == 'object') {
         _.forEach(activeModDatas[key], (itemA, keyA) => {
@@ -65,6 +69,45 @@ export default {
 
         return activeModDatas[key] || null
       }
+    },
+    cardValues(key) {
+      return this.modData(this.activeSubMod || this.activeMod, key)
+    },
+    modProps(modType, modStyleID = 0) {
+      let mod = modLoader.load(modType)
+      let modComponents = mod.components
+      let subMods = mod.subMods
+      let currentStyle = mod.styles[modStyleID]
+      let currentTemplate =
+        mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
+
+      let checkKeys = (item, thisProp) => {
+        if (typeof item == 'object') {
+          _.forEach(item, (itemA, keyA) => {
+            checkKeys(itemA, thisProp)
+          })
+        } else if (item == thisProp.key) {
+          thisProp.hasProp = true
+        }
+      }
+
+      let filterModComponents = {}
+
+      _.forEach(modComponents, (item, key) => {
+        let thisProp = { key: key, hasProp: false }
+
+        checkKeys(currentTemplate, thisProp)
+
+        if (thisProp.hasProp) {
+          filterModComponents[key] = item
+        }
+      })
+
+      _.forEach(subMods, (item, key) => {
+        filterModComponents[key] = item
+      })
+
+      return filterModComponents
     }
   },
   watch: {
@@ -95,38 +138,19 @@ export default {
       return this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
       this.activeMod.cmd.substring(2)
     },
-    editingProps() {
+    activeModProps() {
       let modType = 'Mod' + this.activeMod.cmd
       let modStyleID = this.activeMod.data.styleID || 0
-      let mod = modLoader.load(modType)
-      let modComponents = mod.components
-      let currentStyle = mod.styles[modStyleID]
-      let currentTemplate =
-        mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
-
-      let checkKeys = (item, thisProp) => {
-        if (typeof item == 'object') {
-          _.forEach(item, (itemA, keyA) => {
-            checkKeys(itemA, thisProp)
-          })
-        } else if (item == thisProp.key) {
-          thisProp.hasProp = true
-        }
-      }
-
-      let filterModComponents = {}
-
-      _.forEach(modComponents, (item, key) => {
-        let thisProp = { key: key, hasProp: false }
-
-        checkKeys(currentTemplate, thisProp)
-
-        if (thisProp.hasProp) {
-          filterModComponents[key] = item
-        }
-      })
-
-      return filterModComponents
+      return this.modProps(modType, modStyleID)
+    },
+    activeSubModProps() {
+      if (!this.activeSubMod) return
+      let modType = 'Mod' + this.activeSubMod.cmd
+      let modStyleID = this.activeSubMod.data.styleID || 0
+      return this.modProps(modType, modStyleID)
+    },
+    editingProps() {
+      return this.activeSubModProps || this.activeModProps
     },
     activeTab: {
       get() {

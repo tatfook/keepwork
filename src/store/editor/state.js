@@ -5,6 +5,7 @@ export const initPageState = () => {
   return {
     modList: [],
     activeMod: null,
+    activeSubMod: null,
     activeProperty: null,
     activeArea: 'main',
     undoManager: new SimpleUndo(),

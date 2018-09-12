@@ -3,6 +3,7 @@ import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
+import ChildModWrapper from './ChildModWrapper'
 import { gThemeData } from '@/lib/global'
 
 jss.setup(preset())
@@ -14,6 +15,21 @@ const buildCompWrapper = (h, m, property, compType) => {
       modData={m.modData}
       property={property}
       compType={compType}
+      classes={m.compWrapperClass(property)}
+      editMode={m.editMode}
+      theme={m.theme}
+      options={m.compWrapperOptions(property)}
+    />
+  )
+}
+
+const buildChildModWrapper = (h, m, property, modType) => {
+  return (
+    <ChildModWrapper
+      mod={m.mod}
+      modData={m.modData}
+      property={property}
+      modType={modType}
       classes={m.compWrapperClass(property)}
       editMode={m.editMode}
       theme={m.theme}
@@ -37,11 +53,19 @@ const renderTemplate = (h, m, template, root) => {
               </el-col>
             )
           } else if (typeof element === 'string') {
-            return (
-              <el-col {...m.getProps(key)} class={m.getClasses(key)}>
-                {buildCompWrapper(h, m, element, m.compType(element))}
-              </el-col>
-            )
+            if (element.match(/^mod/)) { // child mod must named begin with mod
+              return (
+                <el-col {...m.getProps(key)} class={m.getClasses(key)}>
+                  {buildChildModWrapper(h, m, element, m.childModType(element))}
+                </el-col>
+              )
+            } else {
+              return (
+                <el-col {...m.getProps(key)} class={m.getClasses(key)}>
+                  {buildCompWrapper(h, m, element, m.compType(element))}
+                </el-col>
+              )
+            }
           } else {
             console.log('Invalid element with key: ' + key)
           }
@@ -83,6 +107,12 @@ export default {
     },
     compType(property) {
       return this.conf.components[property]
+    },
+    childModType(property) {
+      return this.conf.subMods && this.conf.subMods[property]
+    },
+    isParent() {
+      return this.conf.parent
     },
     jssClass(name) {
       return this.sheet.classes[name]
@@ -190,6 +220,7 @@ export default {
           })
         }
       }
+
       return options
     },
     compWrapperOptions(name) {

@@ -11,6 +11,8 @@ import media from './MediaType'
 import animations from './AnimationsType'
 import quiz from './QuizType'
 import lessonEditor from './LessonEditor'
+import subMod from './SubModType'
+import list from './ListType'
 
 export default {
   input,
@@ -25,5 +27,7 @@ export default {
   media,
   animations,
   quiz,
-  lessonEditor
+  lessonEditor,
+  subMod,
+  list
 }

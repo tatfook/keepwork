@@ -25,6 +25,8 @@ import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 
+import ModMixLayerList from './list/mixLayerList'
+
 export const modList = {
   ModMarkdown,
   ModIFrame,
@@ -51,7 +53,9 @@ export const modList = {
   ModPageSwitching,
   ModLesson,
   ModQuiz,
-  ModHint
+  ModHint,
+
+  ModMixLayerList
 }
 
 export const load = modName => {

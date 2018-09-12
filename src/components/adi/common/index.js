@@ -25,6 +25,8 @@ import AdiLesson from './lesson/Lesson'
 import AdiQuiz from './quiz/Quiz'
 import AdiHint from './hint/Hint'
 
+import AdiList from './list/List'
+
 export default {
   AdiMarkdown,
   AdiIFrame,
@@ -50,5 +52,7 @@ export default {
   AdiPageSwitching,
   AdiLesson,
   AdiQuiz,
-  AdiHint
+  AdiHint,
+
+  AdiList
 }
