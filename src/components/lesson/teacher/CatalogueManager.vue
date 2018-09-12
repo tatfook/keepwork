@@ -10,7 +10,7 @@
     <div class="catalogue-manager-list" v-show="catalogues.length > 0">
       <vue-draggable v-model="catalogues" :options="{handle:'.icon-drag'}">
         <div class="catalogue-manager-item" v-for="(lesson, index) in catalogues" :key='index'>
-          <div class="catalogue-manager-item-index">{{index}}</div>
+          <div class="catalogue-manager-item-index">{{index + 1}}</div>
           <div class="catalogue-manager-item-cover">
             <img :src='lesson.extra.coverUrl' alt="">
           </div>
