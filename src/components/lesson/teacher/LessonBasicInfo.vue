@@ -73,6 +73,7 @@ export default {
         ? this.activePageUrl.replace(`/${this.username}/`, '')
         : url && this.getTemplateUrl(url)
       this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
+      this.setUrl()
     } else {
       let defaultSubjectId = this.lessonSubjects[0].id
       this.defaultSubjectId = defaultSubjectId
@@ -174,7 +175,9 @@ export default {
     getTemplateUrl(url) {
       let username = this.username
       let usernameLen = username.length
-      let templateUrlStartIndex = url.indexOf(username) + usernameLen + 1
+      let usernameIndex = url.indexOf(username)
+      let templateUrlStartIndex =
+        usernameIndex >= 0 ? usernameIndex + usernameLen + 1 : 0
       return url.substring(templateUrlStartIndex)
     }
   }

@@ -820,7 +820,7 @@
       "formatType": "YYYY-MM-DD HH:mm"
     },
     "lessonManage": {
-      "pageLinkInvalidInfo": "只支持字母、数字、/、- 且不能以 / 开头。",
+      "pageLinkInvalidInfo": "只支持字母、数字、/、_ 且不能以 / 开头。",
       "toKpEditorInfo": "点击在编辑器中查看课程内容",
       "urlNotCreatInfo": "课程网页暂未创建，是否现在去创建？",
       "urlConflict": "该页面已关联其他课程，请重新输入。",
