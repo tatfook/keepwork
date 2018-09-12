@@ -812,6 +812,7 @@
       "formatType": "HH:mm DD/MM/YYYY"
     },
     "lessonManage": {
+      "pageLinkInvalidInfo": "Only support letters, numbers,  / and - . And cannot begin with  / .",
       "toKpEditorInfo": "Click to view the lesson in Keepwork Editor.",
       "urlNotCreatInfo": "The page of this lesson is not created yet. Creat it now?",
       "urlConflict": "The page has been linked to another lesson. Please re-input.",

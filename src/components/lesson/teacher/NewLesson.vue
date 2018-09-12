@@ -1,6 +1,6 @@
 <template>
   <div class="new-lesson" v-loading='isLoading'>
-    <lesson-editor-header :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
+    <lesson-editor-header :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
     <div class="new-lesson-container">
       <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
       <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
@@ -46,6 +46,12 @@ export default {
     },
     newLessonMoreInfo() {
       return this.$refs.moreInfoComponent.moreInfoData
+    },
+    isLinkPageUrlValid() {
+      if (!this.isMounted) {
+        return true
+      }
+      return this.$refs.basicInfoComponent.isLinkPageUrlValid
     },
     isLessonNameEmpty() {
       if (!this.isMounted) {
@@ -106,6 +112,9 @@ export default {
       }
     },
     async saveNewLesson() {
+      if (!this.isLinkPageUrlValid) {
+        return
+      }
       if (this.isLessonNameEmpty) {
         this.$message({
           message: this.$t('lesson.lessonManage.nameIsRequiredInfo'),
