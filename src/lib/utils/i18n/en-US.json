@@ -790,6 +790,7 @@
     "havePurchased": "You have added this package!",
     "loginBeforePurchase": "You should login before add this package!",
     "packageManage": {
+      "detailLabel": "Details",
       "package": "Packages",
       "Submit": "Submit",
       "Release": "Release",

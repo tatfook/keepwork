@@ -795,6 +795,7 @@
     "havePurchased": "您已经购买过此课程包!",
     "loginBeforePurchase": "购买课程包前请先登录！",
     "packageManage": {
+      "detailLabel": "详情",
       "package": "课程包",
       "Submit": "提交",
       "Release": "发布",

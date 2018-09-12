@@ -40,7 +40,26 @@
         <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
         <el-table-column :label="$t('lesson.statusLabel')" width="125">
-          <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
+          <template slot-scope="scope">
+            <el-popover v-show="isDisabledOrReject(scope.row)" popper-class='package-manager-state-popver' placement="bottom-end" trigger="hover">
+              <div class="package-manager-state-popver-box">
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.lessonManage.packageLabel')}}:</label>
+                  <span>{{scope.row.packageName}}</span>
+                </div>
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.statusLabel')}}:</label>
+                  <span class="package-manager-state-popver-danger">{{getStatusText(scope.row)}}</span>
+                </div>
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.packageManage.detailLabel')}}:</label>
+                  <div>{{scope.row.extra.message}}</div>
+                </div>
+              </div>
+              <el-button class="package-manager-table-state" type="text" slot="reference">{{getStatusText(scope.row)}}</el-button>
+            </el-popover>
+            <span v-show="!isDisabledOrReject(scope.row)">{{getStatusText(scope.row)}}</span>
+          </template>
         </el-table-column>
         <el-table-column label="" width="180" class-name="package-manager-table-operations">
           <template slot-scope="scope">
@@ -191,6 +210,9 @@ export default {
           break
       }
       return statusText
+    },
+    isDisabledOrReject(packageDetail) {
+      return packageDetail.state === 3 || packageDetail.state === 4
     },
     isSubmitable(packageDetail) {
       return (
@@ -524,6 +546,26 @@ export default {
       .cell {
         padding: 0 20px;
       }
+    }
+    &-state,
+    &-state:hover {
+      color: #f75858;
+    }
+  }
+  &-state-popver {
+    padding: 40px 40px 36px 36px;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 500px;
+    &-danger {
+      color: #f75858;
+    }
+    &-label {
+      color: #414141;
+      font-weight: bold;
+    }
+    &-item {
+      margin-bottom: 6px;
     }
   }
 }
