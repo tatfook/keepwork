@@ -22,21 +22,21 @@
                   <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege2')}}</p>
                 <p>
                   <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege3')}}</p>
-                <p>
+                <p :class="{'not-student-privilege-text': n === 1}">
                   <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege4')}}</p>
                 <div class="teaching-function">
-                  <p>
+                  <p :class="{'not-student-privilege-text': n === 1}">
                     <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege5')}}</p>
-                  <p>
+                  <p :class="{'not-student-privilege-text': n === 1}">
                     <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege6')}}</p>
-                  <p>
+                  <p :class="{'not-student-privilege-text': n === 1}">
                     <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege7')}}</p>
-                  <p>
+                  <p :class="{'not-student-privilege-text': n === 1}">
                     <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege8')}}</p>
-                  <p>
+                  <p :class="{'not-student-privilege-text': n === 1}">
                     <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege9')}}</p>
                 </div>
-                <p>
+                <p :class="{'not-student-privilege-text': n === 1}">
                   <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege10')}}</p>
               </div>
             </div>
@@ -173,6 +173,7 @@ export default {
         }
         .role-teacher {
           background: #409efe;
+          color: #fff;
         }
         .access {
           padding: 44px 25px;
@@ -189,6 +190,9 @@ export default {
                 visibility: hidden;
               }
             }
+          }
+          .not-student-privilege-text{
+            color:rgb(179, 177, 177);
           }
           .teaching-function {
             margin-left: 20px;
