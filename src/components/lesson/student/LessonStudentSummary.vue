@@ -121,9 +121,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getUserSubscribes: 'lesson/student/getUserSubscribes'
-    }),
     hideSharePanel() {
       this.isShowSharePanel = false
     },

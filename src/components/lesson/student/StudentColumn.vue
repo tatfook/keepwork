@@ -89,8 +89,7 @@ export default {
   async mounted() {
     await this.getProfile()
     let payload = { userId: this.userId }
-    await this.getUserSubscribes(payload)
-    this.loading = false
+    await this.getUserSubscribes()
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -98,6 +97,7 @@ export default {
         this.loadingSkillsPoint = false
       })
       .catch(error => console.log(error))
+    this.loading = false
   },
   computed: {
     ...mapGetters({
