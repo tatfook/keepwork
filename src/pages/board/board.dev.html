@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="https://keepwork.com/board/">
+  <base href="http://localhost:8100/board/">
   <title></title>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -308,7 +308,7 @@
       // ignored
     }
 
-    var boardRoot = 'https://keepwork.com/board'
+    var boardRoot = 'http://localhost:8100/board'
     var t0 = new Date();
 
     mxBasePath = boardRoot + '/mxgraph';
@@ -324,7 +324,7 @@
     if (urlParams['dev'] == '1') {
       // Used to request grapheditor/mxgraph sources in dev mode
       // var mxDevUrl = document.location.protocol + '//devhost.jgraph.com/mxgraph2';
-      var mxDevUrl = 'https://nplfoshan.github.io/mxgraph-js'
+      var mxDevUrl = 'http://localhost:8100/mxgraph-js'
 
       // if (document.location.protocol == 'file:') {
       //   mxDevUrl = '../../mxgraph2';

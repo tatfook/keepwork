@@ -18,5 +18,5 @@ module.exports = merge(prodEnv, {
   ES_TYPE: `"pages"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
-  BOARD: `"/board.html?dev=1"`
+  BOARD: `"/board.dev.html?dev=1"`
 })
