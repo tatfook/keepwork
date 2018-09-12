@@ -59,6 +59,11 @@
           </template>
         </el-table-column>
         <el-table-column class-name="lesson-manager-table-lessonName" prop="lessonName" :label="$t('lesson.nameLabel')">
+          <template slot-scope='scope'>
+            <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
+              <span @click='toEditor(scope.row)'>{{scope.row.lessonName}}</span>
+            </el-tooltip>
+          </template>
         </el-table-column>
         <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
         </el-table-column>
@@ -139,11 +144,15 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonUserLessons: 'lesson/teacher/userLessons',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
       lessonSubjects: 'lesson/subjects'
     }),
+    username() {
+      return _.get(this.userProfile, 'username')
+    },
     filteredLessonList() {
       let subjectfilteredLessonList = this.getSubjectFilteredPackageList(
         this.lessonUserLessons
@@ -174,6 +183,12 @@ export default {
       )
       return containSubjectNamePackageList
     },
+    hostname() {
+      return window.location.hostname
+    },
+    editorPagePrefix() {
+      return this.hostname === 'localhost' ? '/editor.html#/' : '/l#/'
+    },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
         id: this.editingLessonId
@@ -186,7 +201,8 @@ export default {
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
-      lessonDeleteLesson: 'lesson/teacher/deleteLesson'
+      lessonDeleteLesson: 'lesson/teacher/deleteLesson',
+      readFileFromGitlab: 'gitlab/readFile'
     }),
     getRowClass({ row, rowIndex }) {
       let { packages } = row
@@ -250,6 +266,55 @@ export default {
     },
     async toRelease(lessonDetail) {
       console.log(lessonDetail)
+    },
+    toEditorPage(url) {
+      let targetUrl = this.editorPagePrefix
+      if (url) {
+        targetUrl += this.getRemovePrefixUrl(url)
+      }
+      window.location.href = targetUrl
+    },
+    getRemovePrefixUrl(url) {
+      let username = this.username
+      let usernameLen = username.length
+      let templateUrlStartIndex = url.indexOf(username) + usernameLen + 1
+      return url.substring(templateUrlStartIndex)
+    },
+    async toEditor(lessonDetail) {
+      let { url } = lessonDetail
+      if (url) {
+        await this.isUrlExist(url)
+          .then(() => {
+            this.toEditorPage(url)
+          })
+          .catch(() => {
+            this.confirmGo(url)
+          })
+      } else {
+        this.confirmGo(url)
+      }
+    },
+    confirmGo(url) {
+      this.$confirm(this.$t('lesson.lessonManage.urlNotCreatInfo'), '', {
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel')
+      }).then(() => {
+        this.toEditorPage(url)
+      })
+    },
+    async isUrlExist(url) {
+      this.isTableLoading = true
+      let backendTypeUrl = this.username + '/' + this.getRemovePrefixUrl(url)
+      await this.readFileFromGitlab({ path: backendTypeUrl })
+        .then(() => {
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(() => {
+          this.isTableLoading = false
+          return Promise.reject(new Error('File not created!'))
+        })
+      this.isTableLoading = false
     },
     async confirmDelete(lessonDetail) {
       this.editingLessonId = lessonDetail.id
@@ -399,6 +464,12 @@ export default {
     &-lessonName {
       .cell {
         white-space: nowrap;
+      }
+      .el-tooltip {
+        cursor: pointer;
+      }
+      .el-tooltip:hover {
+        font-weight: bold;
       }
     }
     &-operations {
