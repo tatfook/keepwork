@@ -297,7 +297,9 @@ export default {
     confirmGo(url) {
       this.$confirm(this.$t('lesson.lessonManage.urlNotCreatInfo'), '', {
         confirmButtonText: this.$t('common.Sure'),
-        cancelButtonText: this.$t('common.Cancel')
+        cancelButtonText: this.$t('common.Cancel'),
+        center: true,
+        customClass: 'lesson-manager-confirm-dialog'
       }).then(() => {
         this.toEditorPage(url)
       })
@@ -552,6 +554,29 @@ export default {
     .el-table__expanded-cell[class*='cell'] {
       background-color: #f7f7f7 !important;
       padding: 0;
+    }
+  }
+  &-confirm-dialog {
+    width: 560px;
+    padding-bottom: 23px;
+    .el-message-box__close {
+      font-size: 24px;
+      color: #cdcdcd;
+    }
+    .el-message-box__content {
+      font-size: 18px;
+      color: #f75858;
+      padding: 38px 0 70px;
+    }
+    .el-button {
+      width: 148px;
+      height: 60px;
+      line-height: 60px;
+      padding: 0;
+      font-size: 18px;
+    }
+    .el-button + .el-button {
+      margin-left: 46px;
     }
   }
 }
