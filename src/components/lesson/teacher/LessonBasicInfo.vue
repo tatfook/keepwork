@@ -3,9 +3,12 @@
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url" v-show="!isEditorMod">
         <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
-        <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @blur='setUrl'>
-          <template slot="prepend">{{linkPagePrefix}}</template>
-        </el-input>
+        <div class="lesson-basic-info-url-box">
+          <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @input='checkTempUrlValid' @blur='setUrl'>
+            <template slot="prepend">{{linkPagePrefix}}</template>
+          </el-input>
+          <div class="lesson-basic-info-url-box-error">{{urlInvalidInfo}}</div>
+        </div>
       </div>
       <div class="lesson-basic-info-subject-packages">
         <div class="lesson-basic-info-subject">
@@ -84,6 +87,7 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      urlInvalidInfo: '',
       defaultSubjectId: undefined,
       oldLinkPrefiex: '',
       editingLessonDetail: {
@@ -140,6 +144,17 @@ export default {
       })
       this.isPackageZoneLoading = false
     },
+    checkTempUrlValid() {
+      let tempUrl = this.tempUrl
+      const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]+$/)
+      if (ValidPageLinkReg.test(tempUrl)) {
+        this.urlInvalidInfo = ''
+        return true
+      } else {
+        this.urlInvalidInfo = this.$t('lesson.lessonManage.pageLinkInvalidInfo')
+        return false
+      }
+    },
     setUrl() {
       if (this.tempUrl == '') {
         this.editingLessonDetail.url = null
@@ -194,6 +209,16 @@ export default {
       border-width: 0 0 1px;
       border-color: #409efe;
       border-radius: 0;
+    }
+  }
+  &-url-box {
+    position: relative;
+    &-error {
+      position: absolute;
+      left: 10px;
+      bottom: -20px;
+      font-size: 12px;
+      color: #f75858;
     }
   }
   &-subject-packages {
