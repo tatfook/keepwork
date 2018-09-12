@@ -14,11 +14,15 @@
       </div>
       <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link>
     </div>
-
+    <div @click.stop v-if="isLoginDialogShow">
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
+    </div>
   </div>
 </template>
 <script>
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
+import LoginDialog from '@/components/common/LoginDialog'
 
 const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
@@ -27,7 +31,18 @@ const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
 const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
 export default {
   name: 'Header',
+  data() {
+    return {
+      isLoginDialogShow: false
+    }
+  },
   computed: {
+    ...mapGetters({
+      userIsLogined: 'user/isLogined'
+    }),
+    isLogin() {
+      return this.userIsLogined
+    },
     nowFullPath() {
       return this.$route.fullPath
     },
@@ -36,9 +51,9 @@ export default {
     },
     activeNavType() {
       let type
-      if(this.nowPagename === "Lesson"){
+      if (this.nowPagename === 'Lesson') {
         type = 'lessons'
-      }else{
+      } else {
         type = AboutActivePageNameReg.test(this.nowPagename)
           ? 'about'
           : LessonsActivePageNameReg.test(this.nowPagename)
@@ -63,15 +78,7 @@ export default {
       }
     },
     statusTogglePath() {
-      let targetPath = ''
-      if (this.isTeacherPage) {
-        targetPath = _.replace(this.nowFullPath, /^\/teacher/, '/student')
-      } else {
-        targetPath = _.replace(this.nowFullPath, /^\/student/, '/teacher')
-      }
-      return {
-        path: targetPath
-      }
+      return this.isTeacherPage ? '/student' : '/teacher'
     },
     toggleButtonText() {
       if (this.isStudentPage) {
@@ -82,39 +89,30 @@ export default {
       }
     }
   },
+  mounted() {
+    console.log('fullpath', this.nowFullPath)
+  },
+  components: {
+    LoginDialog
+  },
   methods: {
     goToAboutUs() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student/about`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher/about`
-        })
-      }
+      this.isStudentPage
+        ? this.$router.push(`/student/about`)
+        : this.$router.push(`/teacher/about`)
     },
     goToLessonsCenter() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student/center`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher/center`
-        })
-      }
+      this.isStudentPage
+        ? this.$router.push(`/student/center`)
+        : this.$router.push(`/teacher/center`)
     },
     goToSpecialColumn() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher`
-        })
-      }
+      this.isStudentPage
+        ? this.$router.push(`/student`)
+        : this.$router.push(`/teacher`)
+    },
+    closeLoginDialog() {
+      this.isLoginDialogShow = false
     }
   }
 }
@@ -178,8 +176,8 @@ export default {
     }
   }
 }
-@media print{
-  .lesson-header{
+@media print {
+  .lesson-header {
     display: none;
   }
 }
