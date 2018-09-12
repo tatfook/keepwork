@@ -286,15 +286,37 @@ export default {
         packageId: packageDetail.id,
         state: 1
       })
-      this.infoDialogData = {
-        paras: [
-          this.$t('lesson.successfullySubmitted'),
-          this.$t('lesson.successfullySubmittedDetail')
-        ],
-        iconType: 'submit'
-      }
-      this.isInfoDialogVisible = true
-      this.isTableLoading = false
+        .then(result => {
+          this.infoDialogData = {
+            paras: [
+              this.$t('lesson.successfullySubmitted'),
+              this.$t('lesson.successfullySubmittedDetail')
+            ],
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
+              break
+            default:
+              errorMsg = this.$t('lesson.failedSubmitInfo')
+              break
+          }
+          this.infoDialogData = {
+            paras: [errorMsg],
+            type: 'danger',
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.reject(new Error('Submit package to audit failed'))
+        })
     },
     toEdit(packageDetail) {
       this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
@@ -337,12 +359,34 @@ export default {
         packageId: packageDetail.id,
         state: 0
       })
-      this.infoDialogData = {
-        paras: [this.$t('lesson.successfullyRecall')],
-        iconType: 'revoca'
-      }
-      this.isInfoDialogVisible = true
-      this.isTableLoading = false
+        .then(result => {
+          this.infoDialogData = {
+            paras: [this.$t('lesson.successfullyRecall')],
+            iconType: 'revoca'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
+              break
+            default:
+              errorMsg = this.$t('lesson.failedRecallInfo')
+              break
+          }
+          this.infoDialogData = {
+            paras: [errorMsg],
+            type: 'danger',
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.reject(new Error('Revoca package to audit failed'))
+        })
     },
     toNewPackagePage() {
       this.$router.push({ path: '/teacher/newPackage' })
