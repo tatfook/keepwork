@@ -220,6 +220,7 @@ export default {
     },
     logout() {
       this.userLogout()
+      this.$emit('callback')
       // window.location.reload()
     },
     goJoin() {

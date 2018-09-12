@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-page" v-loading="loading">
     <div class="lesson-page-header">
-      <common-header class="container"></common-header>
+      <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" id="lesson-page" />
@@ -55,6 +55,13 @@ export default {
     },
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
+    },
+    resetPage() {
+      const { name } = this.$route
+      const rules = ['TeacherColumn', 'StudentColumn']
+      if (rules.some(i => i === name)) {
+        this.$router.push({ name: 'StudentCenter' })
+      }
     }
   }
 }
