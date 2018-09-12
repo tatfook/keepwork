@@ -78,7 +78,7 @@ export default {
       let oldLessonPackageIds = this.originBelongPackageIds
       return _.difference(oldLessonPackageIds, newLessonPackageIds)
     },
-    isLessonLinkPageValid() {
+    isLinkPageUrlValid() {
       if (!this.isMounted) {
         return true
       }

@@ -52,8 +52,14 @@ export default {
   align-items: center;
   &-breadcrumb {
     flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     .el-breadcrumb__inner {
       color: #b3b3b3;
+    }
+    .el-breadcrumb__item {
+      float: unset;
     }
     .el-breadcrumb__item:last-child .el-breadcrumb__inner {
       color: #333;
