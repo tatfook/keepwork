@@ -65,7 +65,8 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column prop="subjectName(subjectDetail)" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column :label="$t('lesson.subjectLabel')" width="190">
+          <template slot-scope='scope'>{{subjectName(scope.row.subjectDetail)}}</template>
         </el-table-column>
         <el-table-column label="" width="180" class-name="lesson-manager-table-operations">
           <template slot-scope="scope">
