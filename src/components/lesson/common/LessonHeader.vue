@@ -251,7 +251,7 @@ export default {
     lessonSkills() {
       return _.map(
         _.get(this.lesson, 'skills', []),
-        (skill) => colI18n.getLangValue(skill, 'skillName')
+        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
       )
     },
     lessonGoals() {
