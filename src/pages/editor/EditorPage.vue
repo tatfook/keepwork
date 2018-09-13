@@ -70,7 +70,7 @@ export default {
       await this.userGetProfile({useCache: false}).catch(err => {
         console.error(err)
       })
-      await this.getAllPersonalAndContributedSite().catch(err => {
+      await this.getAllPersonalAndContributedSite({useCache: false}).catch(err => {
         console.error(err)
       })
     },

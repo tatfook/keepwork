@@ -56,8 +56,8 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': this.options.img && this.parsePx(this.options.img.defaultWebHeight),
-          'width': this.properties.webWidth || this.options.img && this.parsePx(this.options.img.defaultWebWidth),
+          'height': this.getWebHeight(),
+          'width': this.getWebWidth(),
           'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
           'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
           'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
@@ -65,8 +65,8 @@ export default {
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': this.options.img && this.parsePx(this.options.img.defaultMobileHeight),
-            'width': this.properties.webWidth || this.options.img && this.parsePx(this.options.img.defaultMobileWidth),
+            'height': this.getMobileHeight(),
+            'width': this.getMobileWidth(),
             'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
             'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
             'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
@@ -96,6 +96,25 @@ export default {
         return 'auto!important'
       }
     },
+    getValue(propertiesValue,optionsValue) {
+      if (propertiesValue) {
+        return this.parsePx(propertiesValue)
+      } else {
+        return  this.parsePx(optionsValue)
+      }
+    },
+    getWebHeight() {
+      return this.options.img ? this.getValue(this.properties.webHeight, this.options.img.defaultWebHeight) : '100%!important'
+    },
+    getWebWidth() {
+      return this.options.img ? this.getValue(this.properties.webWidth, this.options.img.defaultWebWidth) : '100%!important'
+    },
+    getMobileHeight() {
+      return this.options.img ? this.getValue(this.properties.mobileHeight, this.options.img.defaultMobileHeight) : '100%!important'
+    },
+    getMobileWidth() {
+      return this.options.img ? this.getValue(this.properties.mobileWidth, this.options.img.defaultMobileWidth) : '100%!important'
+    }
   }
 }
 </script>

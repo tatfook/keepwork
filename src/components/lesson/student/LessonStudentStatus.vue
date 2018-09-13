@@ -6,11 +6,12 @@
       </el-col>
       <el-col :span="5">
         <span class="nickname-wrap" v-if="isEditNickName">
-          <el-input class="name-input" :autofocus="true" v-model="name">
+          <span style="display:inline-block; width: 70px">{{$t('lesson.nickName')}}</span>
+          <el-input class="name-input" :autofocus="true" :value="name" v-model="name">
           </el-input>
           <i v-show="isLoading" class="el-icon-loading edit-loading"></i>
           <i v-show="!isLoading" @click="setNicknameHandle" class="el-icon-circle-check-outline edit-confirm"></i>
-          <i v-show="!isLoading" @click="switchEdit" class="el-icon-circle-close-outline edit-cancel"></i>
+          <!-- <i v-show="!isLoading" @click="switchEdit" class="el-icon-circle-close-outline edit-cancel"></i> -->
         </span>
         <span class="nickname-wrap" v-else>
           <span>{{$t('lesson.nickName')}} {{nickname}}</span>
@@ -24,7 +25,7 @@
     <el-dialog :title="$t('lesson.pleaseInputName')" center custom-class="input-name-dialog" :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
       <el-input v-model="name" :placeholder="$t('lesson.name')" :autofocus="true"></el-input>
       <div slot="footer">
-        <el-button @click="handleSetNickname" :disabled="!name.trim()" style="width: 140px" type="primary">{{$t('common.OK')}}</el-button>
+        <el-button @click="handleSetNickname" :disabled="name && !name.trim()" style="width: 140px" type="primary">{{$t('common.OK')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -65,6 +66,8 @@ export default {
     if (this.isNeedToSetNickname && this.isBeInClassroom) {
       this.isDialogVisible = true
     }
+    console.log(this.nickname)
+    this.name = this.nickname
   },
   methods: {
     ...mapActions({
@@ -72,7 +75,6 @@ export default {
       leaveTheClass: 'lesson/student/leaveTheClass'
     }),
     switchEdit() {
-      this.name = ''
       this.isEditNickName = !this.isEditNickName
     },
     async setNicknameHandle() {
@@ -106,7 +108,7 @@ export default {
         .catch(action => console.log(action))
     },
     async handleSetNickname() {
-      if (this.name.trim() !== '') {
+      if (this.name && this.name.trim() !== '') {
         await this.setNickname(this.name)
           .then(res => {
             this.isDialogVisible = false

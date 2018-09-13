@@ -1,9 +1,6 @@
 <template>
   <div>
     <router-view></router-view>
-    <div @click.stop v-if="isLoginDialogShow">
-      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
-    </div>
   </div>
 </template>
 
@@ -23,10 +20,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      checkClassroom: 'lesson/student/checkClassroom'
+      checkClassroom: 'lesson/student/checkClassroom',
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
     }),
     closeLoginDialog() {
-      this.isLoginDialogShow = false
+      this.toggleLoginDialog(false)
     },
     backToClassroom() {
       const { packageId, lessonId } = this.enterClassInfo
@@ -53,7 +51,7 @@ export default {
     const { name: toName, params: { packageId, lessonId } } = to
     let _route = ['LessonStudent']
     if (toName === 'StudentColumn' && !this.isLogined) {
-      this.isLoginDialogShow = true
+      this.toggleLoginDialog(true)
       return next(false)
     }
     this._notify && this._notify.close()

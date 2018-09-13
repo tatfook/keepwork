@@ -1,7 +1,7 @@
 <template>
   <div class="comp-teachers">
     <span>{{$t('card.teachersColon')}}</span>
-    <pre class="content">{{properties.content ? properties.content : $t(options.content)}}</pre>
+    <pre class="content">{{this.validData}}</pre>
   </div>
 </template>
 
@@ -11,6 +11,13 @@ import compBaseMixin from '../comp.base.mixin'
 export default {
   name: 'AdiTeachers',
   mixins: [compBaseMixin],
+  computed: {
+    validData() {
+      let isEmpty = !(this.properties.data && this.properties.data.trim())
+      if (isEmpty && this.options.content) return this.$t(this.options.content)
+      return this.properties.data
+    }
+  }
 }
 </script>
 

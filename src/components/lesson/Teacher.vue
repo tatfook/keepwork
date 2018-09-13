@@ -1,14 +1,11 @@
 <template>
   <div>
     <router-view></router-view>
-    <div @click.stop v-if="isLoginDialogShow">
-      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
-    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 export default {
   data() {
@@ -21,9 +18,9 @@ export default {
     LoginDialog
   },
   methods: {
-    closeLoginDialog() {
-      this.isLoginDialogShow = false
-    },
+    ...mapActions({
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
+    }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom
       this._notify && this._notify.close()
@@ -38,7 +35,7 @@ export default {
       'LessonTeacherPlan'
     ]
     if (toName === 'TeacherColumn' && !this.isLogined) {
-      this.isLoginDialogShow = true
+      this.toggleLoginDialog(true)
       return next(false)
     }
     if (!this.isBeInClass) return next()
@@ -70,7 +67,7 @@ export default {
       isLogined: 'user/isLogined',
       isBeInClass: 'lesson/teacher/isBeInClass',
       isClassIsOver: 'lesson/teacher/isClassIsOver',
-      classroom: 'lesson/teacher/classroom'
+      classroom: 'lesson/teacher/classroom',
     })
   }
 }

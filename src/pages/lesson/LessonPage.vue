@@ -1,25 +1,68 @@
 <template>
-  <div class="lesson-page">
+  <div class="lesson-page" v-loading="loading">
     <div class="lesson-page-header">
-      <common-header class="container"></common-header>
+      <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" id="lesson-page" />
     <common-footer class="container"></common-footer>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
-import CommonFooter from '../../components/common/CommonFooter'
+import CommonFooter from '@/components/common/CommonFooter'
+import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
   name: 'LessonPage',
   components: {
     LessonHeader,
     CommonHeader,
-    CommonFooter
+    CommonFooter,
+    LoginDialog
+  },
+  data() {
+    return {
+      loading: true
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isShowLoginDialog: 'lesson/isShowLoginDialog'
+    })
+  },
+  async created() {
+    await this.loadLessonPresets()
+  },
+  methods: {
+    ...mapActions({
+      getUserProfile: 'user/getProfile',
+      getUserDetail: 'lesson/getUserDetail',
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
+    }),
+    async loadLessonPresets() {
+      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+        console.error(err)
+      )
+      await this.getUserDetail().catch(err => console.error(err))
+      this.loading = false
+    },
+    handleLoginDialogClose() {
+      this.toggleLoginDialog(false)
+    },
+    resetPage() {
+      const { name } = this.$route
+      const rules = ['TeacherColumn', 'StudentColumn']
+      if (rules.some(i => i === name)) {
+        this.$router.push({ name: 'StudentCenter' })
+      }
+    }
   }
 }
 </script>
@@ -37,7 +80,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  &-header{
+  &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
   }
@@ -47,8 +90,8 @@ body {
     flex: 1;
   }
   .container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
 </style>

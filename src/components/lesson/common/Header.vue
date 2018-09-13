@@ -12,22 +12,33 @@
           {{columnText}}
         </div>
       </div>
-      <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link>
+      <!-- <router-link class="lesson-header-toggle-button" target='_blank' :to="statusTogglePath">{{toggleButtonText}}</router-link> -->
+      <el-button class="lesson-header-toggle-button" @click="switchIdentity" plain>{{toggleButtonText}}</el-button>
     </div>
-
   </div>
 </template>
 <script>
 import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
+import LoginDialog from '@/components/common/LoginDialog'
 
 const StudentPageReg = /^\/student/
 const TeacherPageReg = /^\/teacher/
 const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
 const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
-const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)$/
+const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
 export default {
   name: 'Header',
+  data() {
+    return {}
+  },
   computed: {
+    ...mapGetters({
+      userIsLogined: 'user/isLogined'
+    }),
+    isLogin() {
+      return this.userIsLogined
+    },
     nowFullPath() {
       return this.$route.fullPath
     },
@@ -36,9 +47,9 @@ export default {
     },
     activeNavType() {
       let type
-      if(this.nowPagename === "Lesson"){
+      if (this.nowPagename === 'Lesson') {
         type = 'lessons'
-      }else{
+      } else {
         type = AboutActivePageNameReg.test(this.nowPagename)
           ? 'about'
           : LessonsActivePageNameReg.test(this.nowPagename)
@@ -63,15 +74,7 @@ export default {
       }
     },
     statusTogglePath() {
-      let targetPath = ''
-      if (this.isTeacherPage) {
-        targetPath = _.replace(this.nowFullPath, /^\/teacher/, '/student')
-      } else {
-        targetPath = _.replace(this.nowFullPath, /^\/student/, '/teacher')
-      }
-      return {
-        path: targetPath
-      }
+      return this.isTeacherPage ? '/student' : '/teacher'
     },
     toggleButtonText() {
       if (this.isStudentPage) {
@@ -82,39 +85,34 @@ export default {
       }
     }
   },
+  components: {
+    LoginDialog
+  },
   methods: {
-    goToAboutUs() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student/about`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher/about`
-        })
+    ...mapActions({
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
+    }),
+    switchIdentity() {
+      if (!this.userIsLogined) {
+        return this.toggleLoginDialog(true)
       }
+      let _page = this.$router.resolve({ path: this.statusTogglePath })
+      window.open(_page.href, '_blank')
+    },
+    goToAboutUs() {
+      this.isStudentPage
+        ? this.$router.push(`/student/about`)
+        : this.$router.push(`/teacher/about`)
     },
     goToLessonsCenter() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student/center`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher/center`
-        })
-      }
+      this.isStudentPage
+        ? this.$router.push(`/student/center`)
+        : this.$router.push(`/teacher/center`)
     },
     goToSpecialColumn() {
-      if (this.isStudentPage) {
-        this.$router.push({
-          path: `/student`
-        })
-      } else {
-        this.$router.push({
-          path: `/teacher`
-        })
-      }
+      this.isStudentPage
+        ? this.$router.push(`/student`)
+        : this.$router.push(`/teacher`)
     }
   }
 }
@@ -176,6 +174,11 @@ export default {
         padding: 6px 10px;
       }
     }
+  }
+}
+@media print {
+  .lesson-header {
+    display: none;
   }
 }
 </style>

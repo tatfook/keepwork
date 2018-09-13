@@ -6,6 +6,8 @@ const GET_LESSON_DETAIL_SUCCESS = 'GET_LESSON_DETAIL_SUCCESS'
 const GET_ALL_SKILLS_SUCCESS = 'GET_ALL_SKILLS_SUCCESS'
 const GET_ALL_SUBJECTS_SUCCESS = 'GET_ALL_SUBJECTS_SUCCESS'
 const LOGOUT = 'LOGOUT'
+const SHOW_LOGIN_DIALOG = 'SHOW_LOGIN_DIALOG'
+const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
 
 export const props = {
   GET_USER_INFO_SUCCESS,
@@ -13,7 +15,9 @@ export const props = {
   GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
   GET_ALL_SUBJECTS_SUCCESS,
-  LOGOUT
+  LOGOUT,
+  SHOW_LOGIN_DIALOG,
+  TOGGLE_LOGIN_DIALOG
 }
 
 const mutations = {
@@ -22,6 +26,9 @@ const mutations = {
   },
   [LOGOUT](state) {
     Vue.set(state, 'userinfo', {})
+  },
+  [TOGGLE_LOGIN_DIALOG](state, status) {
+    Vue.set(state, 'isShowLoginDialog', status)
   },
   [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
     Vue.set(state, 'packagesDetail', {

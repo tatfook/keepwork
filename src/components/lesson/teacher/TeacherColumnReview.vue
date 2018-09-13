@@ -1,19 +1,23 @@
 <template>
   <div class="review" v-loading="loading">
     <div class="review-list" v-show="sortedTeachList.length && !loading">
-      <div class="review-list-class-hours">
-        <div>{{$t('lesson.attended')}}</div>
-        <div class="time">
-          <span class="red">{{sortedTeachList.length}}</span> {{$t('lesson.classes')}}</div>
-      </div>
-      <div class="review-list-class-hours">
-        <div>{{$t('lesson.totalTeachingTime')}}</div>
-        <div class="time">
-          <span class="red" v-cloak>{{hours}}</span> {{$t('lesson.hours')}}
-          <span class="red">{{mins}}</span> {{$t('lesson.mins')}}</div>
+      <div class="review-list-container">
+        <div class="review-list-class-hours">
+          <div>{{$t('lesson.attended')}}</div>
+          <div class="time">
+            <span class="red">{{sortedTeachList.length}}</span> {{$t('lesson.classes')}}</div>
+        </div>
+        <div class="review-list-class-hours">
+          <div>{{$t('lesson.totalTeachingTime')}}</div>
+          <div class="time">
+            <span class="red" v-cloak>{{hours}}</span> {{$t('lesson.hours')}}
+            <span class="red">{{mins}}</span> {{$t('lesson.mins')}}</div>
+        </div>
       </div>
 
-      <p class="review-list-sort"><span class="text" @click="sequence"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</span></p>
+      <p class="review-list-sort">
+        <span class="text" @click="sequence"><img class="sort-img" src="@/assets/lessonImg/summary/sort.png" alt="">{{$t('lesson.sortByTeachingTime')}}</span>
+      </p>
 
       <div class="review-list-package">
         <div class="package" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
@@ -24,9 +28,13 @@
           <div class="package-brief">
             <h4 class="name package-intro" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
-              <span class="lesson-name package-intro" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)"><span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</span></p>
+              <span class="lesson-name package-intro" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)">
+                <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</span>
+            </p>
             <p class="package-intro">
-              <span :title="lessonPackage.extra.lessonGoals"><span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</span></p>
+              <span :title="lessonPackage.extra.lessonGoals">
+                <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</span>
+            </p>
             <p>
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
           </div>
@@ -81,7 +89,9 @@ export default {
   },
   computed: {
     sortedTeachList() {
-      let classIsOver = _.filter(this.teachList, (i) => {return i.state == 2})
+      let classIsOver = _.filter(this.teachList, i => {
+        return i.state == 2
+      })
       return classIsOver.sort(this.sortByUpdateAt)
     },
     lessonCount(){
@@ -91,29 +101,33 @@ export default {
       let longTime = this.sortedTeachList.length * 45
       return parseInt(longTime / 60)
     },
-    mins(){
+    mins() {
       let longTime = this.sortedTeachList.length * 45
       return (longTime / 60 - parseInt(longTime / 60)) * 60
     }
   },
   methods: {
     sortByUpdateAt(obj1, obj2) {
-      return this.positiveSequence ? (obj1.createdAt >= obj2.createdAt ? -1 : 1) : (obj1.createdAt <= obj2.createdAt ? -1 : 1)
+      return this.positiveSequence
+        ? obj1.createdAt >= obj2.createdAt ? -1 : 1
+        : obj1.createdAt <= obj2.createdAt ? -1 : 1
     },
-    sequence(){
+    sequence() {
       this.positiveSequence = !this.positiveSequence
     },
-    viewSummary(lessonPackage){
-     this.$router.push({
-        path: `package/${lessonPackage.packageId}/lesson/${lessonPackage.lessonId}/class/${lessonPackage.id}/summary`
+    viewSummary(lessonPackage) {
+      this.$router.push({
+        path: `package/${lessonPackage.packageId}/lesson/${
+          lessonPackage.lessonId
+        }/class/${lessonPackage.id}/summary`
       })
     },
-    enterPackage(packageId){
+    enterPackage(packageId) {
       this.$router.push({
         path: `package/${packageId}`
       })
     },
-    enterLesson(packageId,lessonId){
+    enterLesson(packageId, lessonId) {
       this.$router.push({
         path: `package/${packageId}/lesson/${lessonId}`
       })
@@ -132,6 +146,7 @@ export default {
 
 <style lang="scss">
 .review {
+  height: 100%;
   [v-cloak] {
     display: none;
   }
@@ -151,7 +166,9 @@ export default {
     }
   }
   &-list {
-    padding: 40px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     &-class-hours {
       display: inline-block;
       padding: 0 30px;
@@ -173,7 +190,7 @@ export default {
     }
     &-sort {
       margin-top: 50px;
-      .text{
+      .text {
         cursor: pointer;
         .sort-img {
           margin: 0 10px 0 18px;
@@ -182,6 +199,8 @@ export default {
 
     }
     &-package {
+      flex: 1;
+      overflow: auto;
       .package {
         padding: 18px;
         height: 200px;
@@ -211,11 +230,11 @@ export default {
             margin: 15px 0;
             cursor: pointer;
           }
-          .lesson-name{
+          .lesson-name {
             display: inline-block;
             cursor: pointer;
           }
-          .package-intro{
+          .package-intro {
             width: 376px;
             overflow: hidden;
             text-overflow: ellipsis;
