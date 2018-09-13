@@ -17,10 +17,6 @@ export default [
     },
     options: {},
     useImage: false,
-    cover: '',
-    preview: {
-      outter: {},
-      inner: {}
-    }
+    cover: ''
   }
 ]

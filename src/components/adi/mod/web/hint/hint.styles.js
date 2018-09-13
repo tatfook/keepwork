@@ -18,6 +18,6 @@ export default [
       }
     },
 
-    cover: require('@/assets/adi/img/cover/imgOne.png')
+    cover: ''
   }
 ]
