@@ -1,22 +1,37 @@
 <template>
   <el-row class="index-page-lesson" wdith="1080px">
     <el-dialog :visible.sync="dialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media"><source :src="properties.AnimationOfTheLesson" type="video/mp4"></video>
+      <video controls="" width="100%" autoplay="" name="media"><source :src="lessonVideoUrl" type="video/mp4"></video>
     </el-dialog>
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
-        <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()"></el-col>
+        <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()">
+
+        </el-col>
         <el-col>
           <div class="lessonDesc">
-            <div class="lesson-title">{{$t('card.lesson')}} {{lessonName}}</div>
-            <div class="lesson-goals-title">
-              {{$t('card.lessonGoals')}}
-              <el-scrollbar class="lesson-goals" :native="false">
+            <div class="lesson-info title">
+              {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
+            </div>
+            <div class="lesson-info intro">
+              <div class="intro-title">
+                {{$t('lesson.intro')}}:
+              </div>
+              <el-scrollbar class="intro-list" :native="false">
                 {{lessonGoals}}
               </el-scrollbar>
             </div>
+            <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
+            <div class="lesson-info skills">
+              <div class="skills-title">
+                {{$t('lesson.skillPoints')}}:
+              </div>
+              <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
+                <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
+              </el-scrollbar>
+            </div>
             <el-row class="lesson-button">
-              <el-button @click="previewClick" type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
+              <el-button type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
             </el-row>
           </div>
         </el-col>
@@ -29,6 +44,7 @@
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
 import PreviewData from './PreviewData'
+import colI18n from '@/lib/utils/i18n/column'
 import { mapGetters } from 'vuex'
 import { lesson } from '@/api'
 export default {
@@ -53,10 +69,19 @@ export default {
       return this.lessonData.goals
     },
     lessonSkills() {
-      return this.lessonData.skills
+      return _.map(
+        _.get(this.lessonData, 'skills', []),
+        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
+      )
     },
     lessonExtra() {
-      return this.lessonData.extra
+      return this.lessonData.extra || {}
+    },
+    lessonVideoUrl() {
+      return this.lessonExtra.videoUrl
+    },
+    lessonCoverUrl() {
+      return this.lessonExtra.coverUrl
     }
   },
   components: {
@@ -79,16 +104,13 @@ export default {
   methods: {
     loadCover() {
       return this.generateStyleString({
-        background: 'url(' + this.properties.CoverImageOfTheLesson + ')',
+        background: 'url(' + this.lessonCoverUrl + ')',
         'background-position': 'center',
         'background-size': 'cover',
         'background-color': '#eee',
         opacity: '0.8',
         'border-radius': '8px'
       })
-    },
-    previewClick() {
-      window.open(`${this.activePageUrl}?device=pc`, '_blank')
     },
     openAnimations() {
       this.dialogVisible = true
@@ -97,7 +119,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .no-linked {
   font-size: 30px;
   text-align: center;
@@ -253,6 +275,57 @@ export default {
 
 .el-main [mod-container] > div:not([data-mod='ModLesson']) > div {
   background-color: #fff;
+}
+
+.lesson-info {
+  &.title {
+    font-size: 20px;
+    color: #4c4c4c;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &.intro {
+    margin-top: 20px;
+    color: #606266;
+    display: flex;
+    flex-direction: row;
+    .intro-list {
+      font-size: 16px;
+      max-height: 120px;
+      min-height: 80px;
+      width: 80%;
+      white-space: normal;
+      line-height: 30px;
+      margin-left: 18px;
+      .el-scrollbar__wrap {
+        overflow-x: hidden;
+      }
+    }
+  }
+
+  &.duration {
+    color: #909399;
+    font-size: 16px;
+  }
+
+  &.skills {
+    color: #909399;
+    display: flex;
+    flex-direction: row;
+    .skills-list {
+      font-size: 16px;
+      height: 140px;
+      width: 80%;
+      white-space: pre-line;
+      line-height: 30px;
+      margin-left: 18px;
+      .el-scrollbar__wrap {
+        overflow-x: hidden;
+      }
+    }
+  }
 }
 </style>
 
