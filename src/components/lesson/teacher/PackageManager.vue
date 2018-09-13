@@ -96,7 +96,7 @@ import colI18n from '@/lib/utils/i18n/column'
 export default {
   name: 'PackageManager',
   async mounted() {
-    await this.lessonGetUserPackages({})
+    await this.lessonGetUserPackages({ useCache: false })
     await this.lessonGetAllSubjects({})
   },
   data() {
