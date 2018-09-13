@@ -92,7 +92,8 @@ export default {
       doQuiz: 'lesson/student/doQuiz',
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
       createLearnRecords: 'lesson/student/createLearnRecords',
-      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords'
+      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
+      switchSummary: 'lesson/student/switchSummary'
     }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -140,6 +141,7 @@ export default {
     },
     async submit(result, answer) {
       this.doQuiz({ key: this.key, result, answer })
+      this.lessonIsDone && this.switchSummary(true)
       if (this.isBeInClassroom) {
         return await this.uploadLearnRecords()
       }

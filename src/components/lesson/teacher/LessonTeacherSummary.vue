@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="teacher-summary-print-lesson-plan">
-      <lesson-wrap v-for="(item,index) in modList" :key="index" :data="item" :isPreview="true" :isPrint="true"></lesson-wrap>
+      <lesson-wrap v-for="(item,index) in modList" :key="index" :mod="item" :isPreview="true" :isPrint="true"></lesson-wrap>
     </div>
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
       <div class="tip">

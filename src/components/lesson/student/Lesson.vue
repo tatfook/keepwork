@@ -65,6 +65,7 @@ export default {
   },
   mounted() {
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    this.switchSummary(false)
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -77,7 +78,8 @@ export default {
       resumeQuiz: 'lesson/student/resumeQuiz',
       clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
       clearLessonData: 'lesson/student/clearLessonData',
-      checkClassroom: 'lesson/student/checkClassroom'
+      checkClassroom: 'lesson/student/checkClassroom',
+      switchSummary: 'lesson/student/switchSummary'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       console.warn('检查课堂是否还在')
