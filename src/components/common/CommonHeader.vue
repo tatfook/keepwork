@@ -192,9 +192,11 @@ export default {
     backEditArea() {
       let origin = window.location.origin
       if(window.location.hostname === 'localhost'){
-        window.location.href=origin+'/editor.html#/'
+        // window.location.href=origin+'/editor.html#/'
+        window.open(origin+'/editor.html#/')
       }else{
-        window.location.href=origin+'/wiki/wikieditor/#/'
+        // window.location.href=origin+'/wiki/wikieditor/#/'
+        window.open(origin+'/wiki/wikieditor/#/')
       }
     },
     goPersonalCenter() {
