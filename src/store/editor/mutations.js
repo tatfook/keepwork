@@ -18,6 +18,7 @@ const SET_PRE_MOD_KEY = 'SET_PRE_MOD_KEY'
 const SET_IS_MULTIPLE_TEXT_DIALOG_SHOW = 'SET_IS_MULTIPLE_TEXT_DIALOG_SHOW'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
+const SET_ACTIVE_SUB_MOD = 'SET_ACTIVE_SUB_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
 const SET_ACTIVE_PROPERTY_OPTIONS = 'SET_ACTIVE_PROPERTY_OPTIONS'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
@@ -70,6 +71,7 @@ export const props = {
   SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
+  SET_ACTIVE_SUB_MOD,
   SET_ACTIVE_PROPERTY,
   SET_ACTIVE_PROPERTY_OPTIONS,
   SET_ACTIVE_PROPERTY_DATA,
@@ -177,6 +179,17 @@ const mutations = {
       Vue.set(state.activePage, 'activeMod', modList[index])
     }
   },
+  [SET_ACTIVE_SUB_MOD](state, payload) {
+    let subMod = state.activePage.subMod
+    if (!payload || !payload.modType) {
+      Vue.set(state.activePage, 'activeSubMod', null)
+      if (subMod) {
+        Vue.set(state.activePage, 'activeProperty', subMod.parentProperty)
+      }
+    } else {
+      Vue.set(state.activePage, 'activeSubMod', payload)
+    }
+  },
   [SET_PRE_MOD_KEY](state, key) {
     Vue.set(state.activePage, 'preModKey', key)
   },
@@ -190,13 +203,23 @@ const mutations = {
   [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
     Vue.set(state, 'activePropertyOptions', payload)
   },
-  [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
+  [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data, updateSubMod }) {
     let newData = { ...activePropertyData, ...data }
     const modList = activeModList(state)
+    let activeProperty = state.activePage.activeProperty
+    if (updateSubMod) {
+      let subMod = state.activePage.activeSubMod
+      activeProperty = subMod.parentProperty
+      let propertyData = _.cloneDeep(state.activePage.activeMod.data[activeProperty])
+      if (subMod.childProperty !== undefined) {
+        _.merge(propertyData.collection[subMod.childProperty], { [state.activePage.activeProperty]: newData })
+        newData = propertyData
+      }
+    }
     Parser.updateBlockAttribute(
       modList,
       state.activePage.activeMod.key,
-      state.activePage.activeProperty,
+      activeProperty,
       newData
     )
   },

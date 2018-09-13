@@ -1,8 +1,11 @@
+import listSettings from './mixLayerList.settings'
+
 const emptyData = {
   list: {
     gutter: 5,
     colSize: 2,
-    modType: 'ModMixLayer'
+    modType: listSettings['list'].type,
+    modSettings: listSettings['list'].default
   }
 }
 

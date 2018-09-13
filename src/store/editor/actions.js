@@ -24,6 +24,7 @@ const {
   SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
+  SET_ACTIVE_SUB_MOD,
   SET_ACTIVE_PROPERTY,
   SET_ACTIVE_PROPERTY_OPTIONS,
   SET_ACTIVE_PROPERTY_DATA,
@@ -340,7 +341,7 @@ const actions = {
     commit(SET_IS_MULTIPLE_TEXT_DIALOG_SHOW, isShow)
   },
   addModToAdi({ commit, dispatch }, payload) {
-    let modProperties = ModFactory.generate(payload.modName)
+    let modProperties = ModFactory.generateProperties(payload.modName)
     modProperties.styleID = payload.styleID || modProperties.styleID
     modProperties = _.merge(modProperties, payload.modProperties)
     let newMod = Parser.buildBlock(
@@ -387,13 +388,17 @@ const actions = {
   },
   setActiveMod({ commit }, key) {
     commit(SET_PRE_MOD_KEY, '')
-    commit(SET_ACTIVE_MOD, key)
     commit(SET_ACTIVE_PROPERTY, null)
+    commit(SET_ACTIVE_SUB_MOD, null)
+    commit(SET_ACTIVE_MOD, key)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
+  },
+  setActiveSubMod({ commit }, payload) {
+    commit(SET_ACTIVE_SUB_MOD, payload)
   },
   setActiveProperty({ commit, dispatch }, payload) {
     commit(SET_PRE_MOD_KEY, '')
-    commit(SET_ACTIVE_MOD, payload.key)
+    if (payload.key) commit(SET_ACTIVE_MOD, payload.key)
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')
@@ -408,11 +413,11 @@ const actions = {
     {
       commit,
       dispatch,
-      getters: { activePropertyData }
+      getters: { activePropertyData, activeSubMod }
     },
     { data }
   ) {
-    commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data })
+    commit(SET_ACTIVE_PROPERTY_DATA, { activePropertyData, data, updateSubMod: !!activeSubMod })
     dispatch('refreshCode')
   },
   async setActiveArea({ commit, getters, dispatch }, area) {
@@ -462,9 +467,22 @@ const actions = {
     commit(UPDATE_ACTIVE_MOD_ATTRIBUTES, payload)
     dispatch('refreshCode')
   },
-  updateActiveModAttributeList({ commit, dispatch }, payload) {
-    commit(UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST, payload)
-    dispatch('refreshCode')
+  updateActiveModAttributeList({ commit, dispatch, getters }, payload) {
+    if (payload.action === 'EDIT') {
+      let { activeMod, activeProperty } = getters
+      let activeModConf = ModFactory.load(activeMod.modType)
+      let subModType = activeModConf.listSettings[payload.key].type
+      commit(SET_ACTIVE_PROPERTY, null)
+      dispatch('setActiveSubMod', {
+        modType: subModType,
+        childProperty: payload.index,
+        parentProperty: activeProperty,
+        data: activeMod.data[payload.key].collection[payload.index]
+      })
+    } else {
+      commit(UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST, payload)
+      dispatch('refreshCode')
+    }
   },
   // themes
   changeTheme({ commit }, themeName) {

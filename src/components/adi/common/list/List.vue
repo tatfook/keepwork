@@ -19,8 +19,8 @@ export default {
     ModCompLoader
   },
   methods: {
-    modWithExtraConf(mod) {
-      return _.merge({}, mod, this.options.modSettings)
+    modWithExtraConf(data) {
+      return _.merge({}, { data }, this.options.modSettings)
     }
   },
   computed: {

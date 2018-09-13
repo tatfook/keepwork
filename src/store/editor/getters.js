@@ -50,9 +50,8 @@ const getters = {
   },
   modList: (state, { activeAreaData }) =>
     activeAreaData && activeAreaData.modList,
-  activeMod: state => {
-    if (state.activePage) return state.activePage.activeMod
-  },
+  activeMod: state => state.activePage && state.activePage.activeMod,
+  activeSubMod: state => state.activePage && state.activePage.activeSubMod,
   activeProperty: state => {
     if (state.activePage) return state.activePage.activeProperty
   },
@@ -62,12 +61,14 @@ const getters = {
   activePropertyOptions: state => {
     if (state.activePropertyOptions) return state.activePropertyOptions
   },
-  activePropertyData: (state, { activeProperty }) => {
+  activePropertyData: (state, { activeProperty, activeSubMod }) => {
+    if (activeSubMod) {
+      return _.get(state, ['activePage', 'activeSubMod', 'data', activeProperty], {})
+    }
     return _.get(state, ['activePage', 'activeMod', 'data', activeProperty], {})
   },
   preModKey: state => state.activePage && state.activePage.preModKey,
 
-  hasActiveMod: state => state.activePage && state.activePage.activeMod,
   hasActiveProperty: state =>
     state.activePage && state.activePage.activeProperty,
 

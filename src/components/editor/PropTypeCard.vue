@@ -18,8 +18,8 @@
         :originValue='cardValue[index]'
         :cardValue='cardValue'
         :activePropertyOptions='activePropertyOptions'
-        @onPropertyChange='changeProptyData'
-        @onChangeValue='changeActivePropty'></component>
+        @onPropertyChange='changePropertyData'
+        @onChangeValue='changeActiveProperty'></component>
     </el-row>
   </div>
 </template>
@@ -44,7 +44,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeMod: 'activeMod'
+      activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod'
     }),
     isModShow: {
       get() {
@@ -69,18 +70,18 @@ export default {
       setActivePropertyData: 'setActivePropertyData',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
-    changeActivePropty() {
+    changeActiveProperty() {
       this.setActiveProperty({
         key: this.activeMod.key,
         property: this.cardKey
       })
     },
-    changeProptyData(changedData) {
+    changePropertyData(changedData) {
       let self = this
 
       if (!self.changeProtyDataThrottle) {
         self.changeProtyDataThrottle = _.throttle(changedData => {
-          self.changeActivePropty()
+          self.changeActiveProperty()
           self.setActivePropertyData({
             data: changedData
           })
@@ -90,12 +91,12 @@ export default {
       self.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {
-      this.changeProptyData({
+      this.changePropertyData({
         hidden: !value
       })
     },
     showMultiTextDailog() {
-      this.changeProptyData(this.cardValue)
+      this.changePropertyData(this.cardValue)
       this.setIsMultipleTextDialogShow({
         isShow: true
       })

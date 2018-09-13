@@ -1,12 +1,12 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
-    <button v-if='hasSubActiveMod'> Back </button>
+    <button v-if='hasActiveSubMod' @click='backFromSubMod'> Back </button>
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
         <prop-type-card v-for="(prop, key) in editingProps" :prop='getPropType(prop)' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
-      <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
+      <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="styleTabEnabled">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
         <div class='styles-container'>
           <style-selector v-if="activePropertyTabType === 'style'" :mod='activeMod' />
@@ -56,7 +56,7 @@ export default {
       return this.BaseCompProptypes[prop] || {data: 'subMod'}
     },
     modData(mod, key) {
-      let modType = 'Mod' + mod.cmd
+      let modType = mod.modType
       let activeModDafaultDatas = modLoader.load(modType).properties
       let activeModDatas = { ...activeModDafaultDatas, ...mod.data }
 
@@ -108,6 +108,9 @@ export default {
       })
 
       return filterModComponents
+    },
+    backFromSubMod() {
+      this.$store.dispatch('setActiveSubMod', null)
     }
   },
   watch: {
@@ -127,10 +130,12 @@ export default {
     },
     ...mapGetters({
       activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod',
       activeProperty: 'activeProperty',
       activePropertyOptions: 'activePropertyOptions',
       activePropertyData: 'activePropertyData',
-      hasActiveMod: 'hasActiveMod',
+      hasActiveMod: 'activeMod',
+      hasActiveSubMod: 'activeSubMod',
       hasActiveProperty: 'hasActiveProperty',
       activePropertyTabType: 'activePropertyTabType'
     }),
@@ -145,7 +150,7 @@ export default {
     },
     activeSubModProps() {
       if (!this.activeSubMod) return
-      let modType = 'Mod' + this.activeSubMod.cmd
+      let modType = this.activeSubMod.modType
       let modStyleID = this.activeSubMod.data.styleID || 0
       return this.modProps(modType, modStyleID)
     },
@@ -157,6 +162,9 @@ export default {
         return this.activePropertyTabType || 'attr'
       },
       set() {}
+    },
+    styleTabEnabled() {
+      return !this.hasActiveSubMod && this.activeMod.cmd !== 'Markdown'
     }
   },
   components: {
