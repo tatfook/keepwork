@@ -3,7 +3,8 @@
     <i class="iconfont" :class="iconClass"></i>
     <div class="operate-result-dialog-para" v-for="(para, index) in infoDialogData.paras" :key="index">{{para}}</div>
     <span slot="footer" class="operate-result-dialog-footer">
-      <el-button type="primary" @click="handleEnsure">{{$t('common.Sure')}}</el-button>
+      <el-button @click="handleClose" v-if="cancelButtonText">{{cancelButtonText}}</el-button>
+      <el-button type="primary" @click="handleEnsure">{{continueButtonText || $t('common.Sure')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -15,6 +16,12 @@ export default {
     isInfoDialogVisible: Boolean
   },
   computed: {
+    continueButtonText() {
+      return _.get(this.infoDialogData, 'continueButtonText')
+    },
+    cancelButtonText() {
+      return _.get(this.infoDialogData, 'cancelButtonText')
+    },
     iconClass() {
       let iconClassName = ''
       switch (this.infoDialogData.iconType) {
@@ -76,9 +83,12 @@ export default {
     padding: 30px 0;
     text-align: center;
   }
-  .el-button--primary {
+  .el-button {
     width: 103px;
     font-size: 17px;
+  }
+  .el-button + .el-button {
+    margin-left: 30px;
   }
   &-para {
     margin-bottom: 14px;

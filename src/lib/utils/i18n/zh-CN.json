@@ -734,6 +734,8 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "deleteDialogYes": "确定",
+    "deleteDialogNo": "取消",
     "pleaseInput": "请输入...",
     "include": "包含",
     "all": "全部",

@@ -13,6 +13,9 @@ export default {
     return prefix ? prefix + _.upperFirst(col) : col
   },
   getLangValue(table, col, lang) {
+    if (!table) {
+      return ''
+    }
     return table[this.getLangColumn(col, lang)] || table[col]
   }
 }
