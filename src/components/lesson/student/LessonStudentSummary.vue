@@ -8,10 +8,15 @@
       <div class="share-style-select-panel">
         <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
       </div>
-      <div class="share-icons">
+      <div class="share-icons" v-if="IS_GLOBAL_VERSION">
         <span class="facebook-icon"></span>
         <span class="twitter-icon"></span>
         <span class="google-icon"></span>
+      </div>
+      <div class="share-icons" v-else>
+        <span class="iconfont icon-qq1"></span>
+        <span class="iconfont icon-interspace"></span>
+        <span class="iconfont icon-weibo"></span>
       </div>
       <div class="share-tips">
         {{$t('lesson.shareSummaryByNet')}}
@@ -28,6 +33,8 @@ import { lesson } from '@/api'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
+const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
+
 export default {
   name: 'LessonStudentSummary',
   components: {
@@ -38,7 +45,8 @@ export default {
     return {
       isShowSharePanel: false,
       title: this.$t('lesson.SelfStudyIsCompleted'),
-      learnRecords: []
+      learnRecords: [],
+      IS_GLOBAL_VERSION
     }
   },
   async mounted() {
@@ -48,6 +56,7 @@ export default {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
+      console.log('lessonDetail',this.lessonDetail)
   },
   computed: {
     ...mapGetters({
@@ -70,6 +79,9 @@ export default {
     },
     lessonName() {
       return this.lesson.lessonName
+    },
+    videoUrl(){
+      return this.lesson.extra.videoUrl
     },
     lessonCodeReadLine() {
       let skill = this.lessonSkills.find(item => item.skillName == '代码阅读量')
@@ -116,7 +128,8 @@ export default {
         name: this.lessonName,
         read: this.lessonCodeReadLine,
         write: this.lessonWriteLine,
-        command: this.lessonCommands
+        command: this.lessonCommands,
+        videoUrl: this.videoUrl
       }
     }
   },
@@ -165,6 +178,7 @@ $blue: #4093fe;
     justify-content: center;
     align-items: center;
     span {
+      font-size: 40px;
       display: inline-block;
       height: 50px;
       width: 66px;
@@ -181,6 +195,15 @@ $blue: #4093fe;
         background: url('../../../assets/lessonImg/summary/google.png')
           no-repeat center;
       }
+    }
+    .icon-qq1{
+      color: #358bff;
+    }
+    .icon-interspace{
+      color: #f5c01c;
+    }
+    .icon-weibo{
+      color: #e6162d;
     }
   }
   .share-tips {
