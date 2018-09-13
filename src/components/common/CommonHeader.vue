@@ -150,7 +150,7 @@ export default {
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
       isRegisterDialogShow: false,
-      envIsForDevelopment: process.env.NODE_ENV === 'development'
+      // envIsForDevelopment: process.env.NODE_ENV === 'development'
     }
   },
   computed: {
@@ -191,7 +191,7 @@ export default {
     }),
     backEditArea() {
       let origin = window.location.origin
-      if(this.envIsForDevelopment){
+      if(window.location.hostname === 'localhost'){
         window.location.href=origin+'/editor.html#/'
       }else{
         window.location.href=origin+'/wiki/wikieditor/#/'
