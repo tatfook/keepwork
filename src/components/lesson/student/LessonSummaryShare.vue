@@ -2,7 +2,6 @@
   <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
     <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
       <div class="left">
-        <img src="@/assets/lessonImg/share_shadow.png" alt="">
       </div>
       <div class="main">
         <div class="movie"></div>
@@ -217,9 +216,11 @@ $mainHeight: 430px;
       .left {
         position: absolute;
         z-index: 998;
-        left: -14px;
+        left: -12px;
         height: 475px;
-        width: 170px;
+        width: 180px;
+        background: url('../../../assets/lessonImg/share_shadow.png') no-repeat;
+        background-size: 100% 100%;
         img{
           height: 100%;
           object-fit: contain;
@@ -297,13 +298,12 @@ $mainHeight: 430px;
       }
       .main {
         flex: 2;
-        box-sizing: border-box;
         height: $mainHeight;
         background: white;
         display: flex;
         align-items: center;
         .movie {
-          width: 230px;
+          width: 250px;
           height: 140px;
           margin-left: -200px;
         }
