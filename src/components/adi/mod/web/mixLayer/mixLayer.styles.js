@@ -34,11 +34,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -58,12 +54,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -129,11 +121,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -154,12 +142,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -225,11 +209,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -250,12 +230,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -321,11 +297,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -344,12 +316,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -415,11 +383,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -439,12 +403,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -510,11 +470,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -534,12 +490,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -605,11 +557,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -628,12 +576,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -699,11 +643,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -723,12 +663,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'
@@ -794,11 +730,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      // colMedia: {
-      //   height: '689px'
-      // },
       media: {
-        // height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -818,12 +750,8 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          // height: '344px',
           opacity: '1'
         },
-        // colMedia: {
-        //   height: '344px'
-        // },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
           float: 'none'

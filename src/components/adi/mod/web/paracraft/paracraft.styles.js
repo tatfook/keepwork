@@ -517,7 +517,6 @@ export default [
         position: 'relative'
       },
       preview: {
-        // height: '100%',
         'border-radius': '5px',
         overflow: 'hidden'
       },
@@ -525,18 +524,9 @@ export default [
         width: 'auto'
       },
       colViewTimesImg: {
-        // width: '20px',
-        // height: '14px',
         'margin-right': '5px'
       },
-      // viewTimesImg: {
-      //   width: '100%',
-      //   height: '100%'
-      // },
       '@media only screen and (max-width: 767px)': {
-        // colPreview: {
-        //   'height': '200px'
-        // },
         colGroupBA: {
           'margin-top': '10px'
         },
@@ -586,9 +576,6 @@ export default [
           position: 'relative',
           'margin-top': '-505px'
         },
-        // backgroundImage: {
-        //   height: '510px'
-        // },
         colSubtitle: {
           'margin-top': '20px',
           'margin-left': '10px'
@@ -753,23 +740,12 @@ export default [
         width: 'auto'
       },
       colViewTimesImg: {
-        // width: '20px',
-        // height: '14px',
         'margin-right': '5px'
       },
-      // viewTimesImg: {
-      //   width: '100%',
-      //   height: '100%'
-      // },
       '@media only screen and (max-width: 767px)': {
         preview: {
-          // height: '80px',
-          // width: '80px',
-          // 'border-radius': '5px',
-          // overflow: 'hidden'
         },
         colPreview: {
-          // width: '100px'
         },
         colGroupB: {
           'margin-top': '10px'
@@ -798,10 +774,6 @@ export default [
       },
       '@media only screen and (min-width: 768px)': {
         preview: {
-          // height: '150px',
-          // width: '150px',
-          // 'border-radius': '5px'
-          // overflow: 'hidden'
         },
         colGroupB: {
           height: '300px',
@@ -829,9 +801,6 @@ export default [
           position: 'relative',
           'margin-top': '-505px'
         },
-        // backgroundImage: {
-        //   height: '510px'
-        // },
         colSubtitle: {
           'margin-top': '20px',
           'margin-left': '10px'

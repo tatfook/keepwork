@@ -34,8 +34,6 @@ export default [
         'justify-content': 'center'
       },
       pic: {
-        // width: '70px',
-        // height: '70px',
         'border-radius': '50%'
       },
       colDesc: {
@@ -109,8 +107,6 @@ export default [
         'justify-content': 'flex-end'
       },
       pic: {
-        // width: '70px',
-        // height: '70px',
         'border-radius': '50%'
       },
       colDesc: {

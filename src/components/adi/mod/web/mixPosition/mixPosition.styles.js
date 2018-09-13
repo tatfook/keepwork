@@ -36,9 +36,6 @@ export default [
         display: 'flex',
         'align-items': 'center'
       },
-      // media: {
-      //   height: '611px'
-      // },
       colGroupAA: {
         'word-wrap': 'break-word',
         height: '100%'
@@ -56,9 +53,6 @@ export default [
         'margin-top': '20px'
       },
       '@media only screen and (max-width: 767px)': {
-        // media: {
-        //   height: '300px'
-        // },
         colGroupARow: {
           display: 'block'
         }
@@ -128,17 +122,11 @@ export default [
           display: 'flex',
           'align-items': 'center'
         },
-        // media: {
-        //   height: '611px'
-        // },
         colGroupAA: {
           'word-wrap': 'break-word'
         }
       },
       '@media only screen and (max-width: 767px)': {
-        // media: {
-        //   height: '300px'
-        // },
         colGroupARow: {
           display: 'block'
         },
@@ -223,9 +211,6 @@ export default [
     templateID: 2,
     data: {
       colMedia: { float: 'right' },
-      // media: {
-      //   height: '300px'
-      // },
       colGroupA: {
         'word-wrap': 'break-word'
       },
@@ -247,7 +232,6 @@ export default [
         colSubtitle: { height: '700px' },
         colGroupAA: { height: '700px' },
         colParagraph: { height: '646px' },
-        // media: { height: '700px' },
         colGroupA: {
           'word-wrap': 'normal',
           overflow: 'hidden'
@@ -343,14 +327,6 @@ export default [
   {
     templateID: 0,
     data: {
-      // media: {
-      //   height: '550px'
-      // },
-      // '@media only screen and (max-width: 767px)': {
-      //   media: {
-      //     height: '300px'
-      //   }
-      // },
       colGroupAA: {
         'word-wrap': 'break-word'
       },
@@ -412,14 +388,6 @@ export default [
   {
     templateID: 1,
     data: {
-      // media: {
-      //   height: '550px'
-      // },
-      // '@media only screen and (max-width: 767px)': {
-      //   media: {
-      //     height: '300px'
-      //   }
-      // },
       colGroupAA: {
         'word-wrap': 'break-word'
       },
