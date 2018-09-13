@@ -13,7 +13,7 @@
       <div class="lesson-basic-info-subject-packages">
         <div class="lesson-basic-info-subject">
           <label class="lesson-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
-          <el-select size="mini" v-model="editingLessonDetail.subjectId">
+          <el-select :disabled="!isEditable" size="mini" v-model="editingLessonDetail.subjectId">
             <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
@@ -21,7 +21,7 @@
         <div class="lesson-basic-info-packages" v-loading='isPackageZoneLoading'>
           <label class="lesson-basic-info-label" for="priceInput">{{$t('lesson.packageManage.package')}}</label>
           <div class="lesson-basic-info-packages-list">
-            <el-checkbox-group v-model="belongToPackageIds">
+            <el-checkbox-group v-model="belongToPackageIds" :disabled="!isEditable">
               <el-checkbox v-for='(packageDetail, index) in userPackages' :key="index" :label="packageDetail.id">{{packageDetail.packageName}}</el-checkbox>
             </el-checkbox-group>
           </div>
@@ -31,14 +31,14 @@
             <i class="el-icon-circle-close" :title="$t('common.Cancel')" @click="hideNewPackageEditor"></i>
             <i class="el-icon-circle-check-outline" :title="$t('common.Save')" @click="createNewPackage"></i>
           </div>
-          <div class="lesson-basic-info-packages-new" @click="showNewPackageEditor">
+          <div v-if="isEditable" class="lesson-basic-info-packages-new" @click="showNewPackageEditor">
             <i class="el-icon-circle-plus-outline"></i>{{$t('lesson.newPackage')}}
           </div>
         </div>
       </div>
       <div class="lesson-basic-info-name">
         <label class="lesson-basic-info-label" for="priceInput">{{$t('lesson.nameLabel')}}</label>
-        <el-input v-model="editingLessonDetail.lessonName" :placeholder="$t('lesson.pleaseInput')" :maxlength='255'></el-input>
+        <el-input :disabled="!isEditable" v-model="editingLessonDetail.lessonName" :placeholder="$t('lesson.pleaseInput')" :maxlength='255'></el-input>
       </div>
     </div>
   </div>
@@ -52,6 +52,10 @@ export default {
   props: {
     editingLessonDetailProp: Object,
     isEditing: Boolean,
+    isEditable: {
+      type: Boolean,
+      default: true
+    },
     isEditorMod: {
       type: Boolean,
       default: false

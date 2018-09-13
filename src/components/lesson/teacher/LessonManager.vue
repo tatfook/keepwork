@@ -271,7 +271,7 @@ export default {
     toEditorPage(url) {
       let targetUrl = this.editorPagePrefix
       if (url) {
-        targetUrl += this.getRemovePrefixUrl(url)
+        targetUrl += this.username + '/' + this.getRemovePrefixUrl(url)
       }
       window.location.href = targetUrl
     },
