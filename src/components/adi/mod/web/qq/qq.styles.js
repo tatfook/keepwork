@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 let emptyData = {
   pic: {
     emptySrc: require('@/assets/adi/qq/qqOne.svg'),
@@ -32,8 +34,6 @@ export default [
         'justify-content': 'center'
       },
       pic: {
-        width: '70px',
-        height: '70px',
         'border-radius': '50%'
       },
       colDesc: {
@@ -70,7 +70,15 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        pic: _.merge({}, emptyData.pic, {
+          img: {
+            defaultWebHeight: '70px',
+            defaultMobileHeight: '70px',
+            defaultWebWidth: '70px',
+            defaultMobileWidth: '70px'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/qq/cover/qqCoverOne.png')
@@ -99,8 +107,6 @@ export default [
         'justify-content': 'flex-end'
       },
       pic: {
-        width: '70px',
-        height: '70px',
         'border-radius': '50%'
       },
       colDesc: {
@@ -148,7 +154,13 @@ export default [
         },
         pic: {
           ...emptyData.pic,
-          emptySrc: require('@/assets/adi/qq/qqTwo.svg')
+          emptySrc: require('@/assets/adi/qq/qqTwo.svg'),
+          img: {
+            defaultWebHeight: '70px',
+            defaultMobileHeight: '70px',
+            defaultWebWidth: '70px',
+            defaultMobileWidth: '70px'
+          }
         }
       }
     },

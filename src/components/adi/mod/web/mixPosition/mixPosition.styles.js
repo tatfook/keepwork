@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 let emptyData = {
   media: {
     emptySrc: require('@/assets/adi/mixPosition/picture-mod.png'),
@@ -34,9 +36,6 @@ export default [
         display: 'flex',
         'align-items': 'center'
       },
-      media: {
-        height: '611px'
-      },
       colGroupAA: {
         'word-wrap': 'break-word',
         height: '100%'
@@ -54,9 +53,6 @@ export default [
         'margin-top': '20px'
       },
       '@media only screen and (max-width: 767px)': {
-        media: {
-          height: '300px'
-        },
         colGroupARow: {
           display: 'block'
         }
@@ -98,7 +94,15 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '611px',
+            defaultMobileHeight: '300px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/mixPosition/cover/projectOne.png'),
@@ -118,17 +122,11 @@ export default [
           display: 'flex',
           'align-items': 'center'
         },
-        media: {
-          height: '611px'
-        },
         colGroupAA: {
           'word-wrap': 'break-word'
         }
       },
       '@media only screen and (max-width: 767px)': {
-        media: {
-          height: '300px'
-        },
         colGroupARow: {
           display: 'block'
         },
@@ -189,7 +187,15 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '611px',
+            defaultMobileHeight: '300px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/mixPosition/cover/projectTwo.png'),
@@ -205,9 +211,6 @@ export default [
     templateID: 2,
     data: {
       colMedia: { float: 'right' },
-      media: {
-        height: '300px'
-      },
       colGroupA: {
         'word-wrap': 'break-word'
       },
@@ -229,7 +232,6 @@ export default [
         colSubtitle: { height: '700px' },
         colGroupAA: { height: '700px' },
         colParagraph: { height: '646px' },
-        media: { height: '700px' },
         colGroupA: {
           'word-wrap': 'normal',
           overflow: 'hidden'
@@ -302,7 +304,15 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '700px',
+            defaultMobileHeight: '300px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/mixPosition/cover/projectThree.png'),
@@ -317,14 +327,6 @@ export default [
   {
     templateID: 0,
     data: {
-      media: {
-        height: '550px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        media: {
-          height: '300px'
-        }
-      },
       colGroupAA: {
         'word-wrap': 'break-word'
       },
@@ -363,7 +365,15 @@ export default [
     options: {
       theme: {},
       config: {
-        ...emptyData
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '550px',
+            defaultMobileHeight: '300px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/mixPosition/cover/projectFour.png'),
@@ -378,14 +388,6 @@ export default [
   {
     templateID: 1,
     data: {
-      media: {
-        height: '550px'
-      },
-      '@media only screen and (max-width: 767px)': {
-        media: {
-          height: '300px'
-        }
-      },
       colGroupAA: {
         'word-wrap': 'break-word'
       },
@@ -424,7 +426,15 @@ export default [
     options: {
       theme: {},
       config: {
-        ...emptyData
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '611px',
+            defaultMobileHeight: '300px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        })
       }
     },
     cover: require('@/assets/adi/mixPosition/cover/projectFive.png'),

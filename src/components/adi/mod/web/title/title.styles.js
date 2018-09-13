@@ -36,12 +36,12 @@ export default [
       colGroup: {
         'margin-top': '20px'
       },
-      logo: {
-        height: '87px',
-        width: '87px'
-      },
       colLogo: {
         width: 'auto'
+      },
+      colGroupARow: {
+        display: 'flex',
+        'align-items': 'center'
       },
       colCouple: {
         'min-width': '200px',
@@ -88,6 +88,11 @@ export default [
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
           type: 'menu'
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     },
@@ -101,12 +106,12 @@ export default [
       colGroup: {
         'margin-top': '20px'
       },
-      logo: {
-        height: '87px',
-        width: '87px'
-      },
       colLogo: {
         width: 'auto'
+      },
+      colGroupARow: {
+        display: 'flex',
+        'align-items': 'center'
       },
       colCouple: {
         'min-width': '200px',
@@ -152,6 +157,11 @@ export default [
         menu: _.merge({}, defaultData.menu, {
           type: 'menu',
           itemStyle: { float: 'right' }
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     },
@@ -163,9 +173,8 @@ export default [
     data: {
       // 定义mod根div的样式
       logo: {
-        height: '87px',
-        width: '87px',
-        margin: 'auto'
+        display: 'flex',
+        'justify-content': 'center'
       },
       colLogo: {
         'margin-top': '20px'
@@ -216,6 +225,11 @@ export default [
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
           type: 'menu'
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     },
@@ -227,9 +241,8 @@ export default [
     data: {
       // 定义mod根div的样式
       logo: {
-        height: '87px',
-        width: '87px',
-        margin: 'auto'
+        display: 'flex',
+        'justify-content': 'center'
       },
       colLogo: {
         'margin-top': '20px'
@@ -280,6 +293,11 @@ export default [
         menu: _.merge({}, defaultData.menu, {
           type: 'menu',
           itemStyle: { float: 'right' }
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     },
@@ -299,10 +317,6 @@ export default [
         float: 'left',
         'max-width': '64px',
         'margin-left': '5px'
-      },
-      logo: {
-        height: '64px',
-        width: '64px'
       },
       colBusinessName: {
         float: 'left',
@@ -342,6 +356,11 @@ export default [
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
           type: 'menu'
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     }
@@ -359,10 +378,6 @@ export default [
         display: 'flex',
         'justify-content': 'flex-start',
         'min-width': '180px'
-      },
-      logo: {
-        height: '64px',
-        width: '64px'
       },
       colMenuB: {
         display: 'flex',
@@ -410,6 +425,11 @@ export default [
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
           type: 'menu'
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: ''
+          }
         })
       }
     }

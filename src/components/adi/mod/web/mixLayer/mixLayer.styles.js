@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 let emptyData = {
   media: {
     emptySrc: require('@/assets/adi/mixLayer/mix-layer.jpg'),
@@ -32,11 +34,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -56,11 +54,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -97,7 +91,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix1.png'),
     preview: {
@@ -119,11 +121,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -144,11 +142,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -185,7 +179,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix2.png'),
     preview: {
@@ -207,11 +209,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -232,11 +230,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -273,7 +267,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix3.png'),
     preview: {
@@ -295,11 +297,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -318,11 +316,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -359,7 +353,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix4.png'),
     preview: {
@@ -381,11 +383,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -405,11 +403,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -446,7 +440,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix5.png'),
     preview: {
@@ -468,11 +470,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -492,11 +490,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -533,7 +527,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix6.png'),
     preview: {
@@ -555,11 +557,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -578,11 +576,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -619,7 +613,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix7.png'),
     preview: {
@@ -641,11 +643,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -665,11 +663,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -706,7 +700,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix8.png'),
     preview: {
@@ -728,11 +730,7 @@ export default [
         float: 'none',
         padding: 0
       },
-      colMedia: {
-        height: '689px'
-      },
       media: {
-        height: '689px',
         position: 'relative',
         'z-index': 1,
         opacity: '0.5'
@@ -752,11 +750,7 @@ export default [
       },
       '@media only screen and (max-width: 768px)': {
         media: {
-          height: '344px',
           opacity: '1'
-        },
-        colMedia: {
-          height: '344px'
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
@@ -793,7 +787,15 @@ export default [
       paragraph: ['paragraphType', 'fontsColor']
     },
     options: {
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        media: _.merge({}, emptyData.media, {
+          img: {
+            defaultWebHeight: '689px',
+            defaultMobileHeight: '344px'
+          }
+        })
+      }
     },
     cover: require('@/assets/adi/mixLayer/mix9.png'),
     preview: {

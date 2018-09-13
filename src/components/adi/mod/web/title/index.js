@@ -52,7 +52,7 @@ import themeData from './title.theme'
 const name = 'ModTitle'
 
 const components = {
-  logo: 'AdiMedia',
+  logo: 'AdiIcon',
   businessName: 'AdiTitle',
   tagline: 'AdiTitle',
   menu: 'AdiMenu',
