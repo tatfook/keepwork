@@ -81,7 +81,7 @@ export default [
         })
       }
     },
-    cover: require('@/assets/adi/qq/cover/qqCoverOne.png')
+    cover: ''
   },
 
   // style 1 左图右文
@@ -164,6 +164,6 @@ export default [
         }
       }
     },
-    cover: require('@/assets/adi/qq/cover/qqCoverTwo.png')
+    cover: ''
   }
 ]
