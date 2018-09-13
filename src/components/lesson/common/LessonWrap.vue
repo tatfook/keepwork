@@ -1,13 +1,18 @@
 <template>
-  <div>
-    <Hint v-if="isTeacher && data.cmd === 'Hint' && isShowHint" :data="data" />
-    <Quiz v-else-if="data.cmd === 'Quiz'" :data="data" :isPreview="isPreview" :isPrint="isPrint" />
-    <Markdown v-else-if="data.cmd === 'Markdown'" :data="data" />
-    <BigFile v-else-if="data.cmd === 'BigFile'" :data="data" />
+  <div mod-container>
+    <hint v-if="isTeacher && mod.cmd === 'Hint' && isShowHint" :data="mod" :key="mod.key"></hint>
+    <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :key="mod.key"></quiz>
+    <div v-else class="mod-item-container">
+      <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
+    </div>
   </div>
 </template>
 
 <script>
+import ModLoader from '@/components/viewer/ModLoader'
+import AsyncModLoader from '@/components/adi/mod/index.async'
+import themeFactory from '@/lib/theme/theme.factory'
+import ThemeHelper from '@/lib/theme'
 import Quiz from './Quiz'
 import Hint from './Hint'
 import Markdown from './Markdown'
@@ -18,12 +23,19 @@ export default {
   components: {
     Quiz,
     Hint,
-    Markdown,
-    BigFile
+    ModLoader
+  },
+  data() {
+    return {
+      modConf: null,
+      modComponent: null,
+      themeConf: ThemeHelper.defaultTheme
+    }
   },
   props: {
-    data: Object,
+    mod: Object,
     originData: Array,
+    modList: Array,
     isPreview: {
       type: Boolean,
       default: false
@@ -40,8 +52,24 @@ export default {
   computed: {
     ...mapGetters({
       isShowHint: 'lesson/teacher/isShowHint'
-    })
+    }),
+    theme() {
+      let newTheme = themeFactory.generate(this.themeConf)
+      if (this.storedTheme === newTheme) return this.storedTheme
+      if (this.storedTheme) this.storedTheme.sheet.detach()
+      this.storedTheme = newTheme
+      this.storedTheme.sheet.attach()
+      return this.storedTheme
+    }
   }
 }
 </script>
+
+<style lang="scss">
+.mod-item-container {
+  background: white;
+  max-width: 1229px;
+  margin: 0 auto;
+}
+</style>
 
