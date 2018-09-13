@@ -16,5 +16,6 @@ module.exports = {
   IS_GLOBAL_VERSION: `"${IS_GLOBAL_VERSION ? 'true' : ''}"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
-  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`
+  BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`,
+  PDF: `"https://keepwork.com/pdf"`
 }

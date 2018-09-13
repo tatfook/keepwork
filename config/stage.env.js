@@ -16,5 +16,6 @@ module.exports = merge(prodEnv, {
   ES_TYPE: `"pages"`,
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
-  BOARD: `"https://stage.keepwork.com/wiki/wikieditor/board.stage.html?"`
+  BOARD: `"https://stage.keepwork.com/wiki/wikieditor/board.stage.html?"`,
+  PDF: `"https://keepwork.com/pdf"`
 })

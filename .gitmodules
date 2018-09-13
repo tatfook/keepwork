@@ -1,4 +1,0 @@
-[submodule "static/pdf"]
-	path = static/pdf
-	url = https://github.com/NPLFoshan/pdf.js.git
-	branch = master
