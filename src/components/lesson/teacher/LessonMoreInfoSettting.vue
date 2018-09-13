@@ -135,13 +135,17 @@ export default {
       this.isSkillDialogShow = false
     },
     toAdd() {
+      let oldSelectSkills = this.moreInfoData.skills
       this.moreInfoData.skills = []
       _.forEach(this.selectedSkills, selectSkill => {
-        this.moreInfoData.skills.push({
-          id: selectSkill.id,
-          skillName: this.skillName(selectSkill),
-          score: 1
-        })
+        let oldSkillObj = _.find(oldSelectSkills, { id: selectSkill.id })
+        this.moreInfoData.skills.push(
+          oldSkillObj || {
+            id: selectSkill.id,
+            skillName: this.skillName(selectSkill),
+            score: 1
+          }
+        )
       })
       this.handleClose()
     },
