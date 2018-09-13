@@ -1,5 +1,5 @@
 <template>
-  <div class='comp-media'>
+  <div class='comp-icon'>
     <a :target='target' :href='link'>
       <!-- <div :class="getImgClass" v-if='isImage'> -->
       <div v-if='isImage' :style="getStyle" class="img">
@@ -128,18 +128,17 @@ export default {
 </script>
 
 <style lang="scss">
-.comp-media {
+.comp-icon {
   .svg {
     svg {
-      width: 100%;
+      width: auto;
       height: 100%;
     }
   }
 }
 </style>
-
 <style lang="scss" scoped>
-.comp-media {
+.comp-icon {
   // width: 100%;
   // height: 100%;
   a {
@@ -148,16 +147,27 @@ export default {
       // height: 100%;
       position: relative;
       overflow: hidden;
-
+      height: 87px;
       img {
         // position: absolute;
         // display: inline;
         display: block;
-        width: 100%;
-        height: auto;
+        width: auto;
+        max-width: 185px;
+        height: 100%;
         // left: 0;
         // top: 0;
         // object-fit: contain;
+      }
+    }
+    .svg {
+      position: relative;
+      overflow: hidden;
+      height: 87px;
+      svg {
+        width: 100%;
+        max-width: 185px;
+        height: 100%;
       }
     }
   }

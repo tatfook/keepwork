@@ -97,7 +97,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '87px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
@@ -173,7 +173,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '87px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
@@ -246,7 +246,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '87px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
@@ -319,7 +319,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '87px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
@@ -389,7 +389,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '64px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
@@ -465,7 +465,7 @@ export default [
           img: {
             // defaultWebHeight: '87px',
             // defaultMobileHeight: '30px',
-            defaultWebWidth: '64px'
+            defaultWebWidth: ''
             // defaultMobileWidth: '87px'
           }
         })
