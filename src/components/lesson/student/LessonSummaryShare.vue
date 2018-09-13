@@ -4,7 +4,11 @@
       <div class="left">
       </div>
       <div class="main">
-        <div class="movie"></div>
+        <div class="movie">
+          <video controls="" width="100%" autoplay="" name="media">
+            <source :src="summary.videoUrl" type="video/mp4">
+          </video>
+        </div>
         <div v-if="isEn" class="summary-word">
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
@@ -47,6 +51,11 @@
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="dialogVisible" width="50%">
+      <video controls="" width="100%" autoplay="" name="media">
+        <source :src="summary.videoUrl" type="video/mp4">
+      </video>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,7 +87,8 @@ export default {
   data() {
     return {
       style: 1,
-      summary: {}
+      summary: {},
+      dialogVisible: false
     }
   },
   mounted() {
@@ -88,6 +98,7 @@ export default {
       this.style = Number(this.$route.params.styleId) || 1
       this.$set(this.summary, _.merge(this.summary, this.$route.query))
     }
+    console.log('lessonSummary', this.lessonSummary, this.summary)
   },
   computed: {
     today() {
@@ -119,6 +130,10 @@ export default {
   methods: {
     toAboutPage() {
       this.$router.push({ path: '/student/about' })
+    },
+    playVideo() {
+      console.log(112)
+      this.dialogVisible = true
     }
   }
 }
@@ -221,7 +236,7 @@ $mainHeight: 430px;
         width: 180px;
         background: url('../../../assets/lessonImg/share_shadow.png') no-repeat;
         background-size: 100% 100%;
-        img{
+        img {
           height: 100%;
           object-fit: contain;
         }
