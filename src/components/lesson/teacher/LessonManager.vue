@@ -329,6 +329,8 @@ export default {
         ],
         iconType: 'delete',
         type: 'danger',
+        continueButtonText: this.$t('lesson.deleteDialogYes'),
+        cancelButtonText: this.$t('lesson.deleteDialogNo'),
         continueFnNameAfterEnsure: 'toDelete'
       }
       this.isInfoDialogVisible = true
