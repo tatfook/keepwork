@@ -729,6 +729,8 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "deleteDialogYes": "Yes",
+    "deleteDialogNo": "No",
     "pleaseInput": "please input...",
     "include": "Includes",
     "all": "All",
