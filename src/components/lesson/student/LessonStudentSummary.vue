@@ -56,7 +56,7 @@ export default {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
-      console.log('lessonDetail',this.lessonDetail)
+    console.log('lessonDetail', this.lessonDetail)
   },
   computed: {
     ...mapGetters({
@@ -80,7 +80,7 @@ export default {
     lessonName() {
       return this.lesson.lessonName
     },
-    videoUrl(){
+    videoUrl() {
       return this.lesson.extra.videoUrl
     },
     lessonCodeReadLine() {
@@ -114,6 +114,22 @@ export default {
     isEn() {
       return locale === 'en-US' ? true : false
     },
+    studyTime() {
+      const suffix = ['', 'st', 'nd', 'rd', 'th']
+      if (this.firstTime && this.lastTime) {
+        let firstTime = new Date(this.firstTime).getTime()
+        let lastTime = new Date(this.lastTime).getTime()
+        let day =
+          Math.floor(
+            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
+          ) || 1
+        if (this.isEn) {
+          day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
+        }
+        return day
+      }
+      return this.isEn ? '1st' : 1
+    },
     summary() {
       return {
         firstTime: this.firstTime,
@@ -124,7 +140,7 @@ export default {
     },
     lessonSummary() {
       return {
-        day: this.day,
+        day: this.studyTime,
         name: this.lessonName,
         read: this.lessonCodeReadLine,
         write: this.lessonWriteLine,
@@ -143,7 +159,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss">
 $blue: #4093fe;
@@ -198,13 +213,13 @@ $blue: #4093fe;
           no-repeat center;
       }
     }
-    .icon-qq1{
+    .icon-qq1 {
       color: #358bff;
     }
-    .icon-interspace{
+    .icon-interspace {
       color: #f5c01c;
     }
-    .icon-weibo{
+    .icon-weibo {
       color: #e6162d;
     }
   }
