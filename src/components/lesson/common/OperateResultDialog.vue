@@ -1,7 +1,7 @@
 <template>
   <el-dialog class="operate-result-dialog" :class="{'operate-result-dialog-danger': infoDialogData.type === 'danger'}" :visible.sync="isInfoDialogVisible" width="560px" :before-close="handleClose">
     <i class="iconfont" :class="iconClass"></i>
-    <div class="operate-result-dialog-para" v-for="(para, index) in infoDialogData.paras" :key="index">{{para}}</div>
+    <div class="operate-result-dialog-para" :class="{'operate-result-dialog-danger-text': index === 0}" v-for="(para, index) in infoDialogData.paras" :key="index">{{para}}</div>
     <span slot="footer" class="operate-result-dialog-footer">
       <el-button @click="handleClose" v-if="cancelButtonText">{{cancelButtonText}}</el-button>
       <el-button type="primary" @click="handleEnsure">{{continueButtonText || $t('common.Sure')}}</el-button>
@@ -68,7 +68,7 @@ export default {
     padding: 30px 20px 0;
   }
   &-danger {
-    .el-dialog__body {
+    &-text {
       color: #f75858;
     }
   }

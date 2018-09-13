@@ -273,7 +273,6 @@ export default {
       if (url) {
         targetUrl += this.getRemovePrefixUrl(url)
       }
-      console.log(targetUrl)
       window.location.href = targetUrl
     },
     getRemovePrefixUrl(url) {
