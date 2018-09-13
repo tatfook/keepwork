@@ -6,7 +6,6 @@
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
         <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()">
-
         </el-col>
         <el-col>
           <div class="lessonDesc">
@@ -26,7 +25,7 @@
               <div class="skills-title">
                 {{$t('lesson.skillPoints')}}:
               </div>
-              <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
+              <el-scrollbar :class="['skills-list']" :native="false">
                 <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
               </el-scrollbar>
             </div>
@@ -64,6 +63,9 @@ export default {
     }),
     lessonName() {
       return this.lessonData.lessonName
+    },
+    lessonNo() {
+      return this.lessonData.id
     },
     lessonGoals() {
       return this.lessonData.goals
@@ -120,6 +122,16 @@ export default {
 </script>
 
 <style lang="scss">
+.lesson-button:hover {
+  cursor: not-allowed;
+  #btnPreview {
+    background: #d2d2d2;
+    border: 1px solid #d2d2d2;
+    cursor: not-allowed;
+    color: white;
+    pointer-events: none;
+  }
+}
 .no-linked {
   font-size: 30px;
   text-align: center;
