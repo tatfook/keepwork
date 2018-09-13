@@ -11,7 +11,7 @@
         </div>
         <div class="package-detail-content-item">
           <span class="package-detail-label">{{$t('lesson.ages')}}:</span>
-          <span class="package-detail-info">{{packageDetail.minAge}}-{{packageDetail.maxAge}}</span>
+          <span class="package-detail-info">{{packageSuitableAge}}</span>
         </div>
       </div>
       <div class="package-detail-skills">
@@ -69,13 +69,13 @@ export default {
       },
       set() {}
     },
-    loginUserId(){
+    loginUserId() {
       return _.get(this.userProfile, '_id')
     },
-    packageOwnerId(){
+    packageOwnerId() {
       return _.get(this.packageDetail, 'userId')
     },
-    isOwnPackage(){
+    isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
@@ -117,6 +117,13 @@ export default {
         this.nowPageName === 'StudentPurchase' ||
         this.nowPageName === 'TeacherPurchase'
       )
+    },
+    packageSuitableAge() {
+      let { minAge, maxAge } = this.packageDetail
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
     }
   },
   data() {
