@@ -1,3 +1,3 @@
 export default {
-  content: 'autoSizeInput'
+  data: 'autoSizeInput'
 }

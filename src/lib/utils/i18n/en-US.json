@@ -463,7 +463,10 @@
     "tab": "Tab",
     "categoryList": "Category list",
     "pageSwitching": "Page switching",
-
+    "titleA": "title",
+    "subtitleA": "subtitle",
+    "backgroundImage": "background picture",
+    
     "lesson": "Lesson",
     "lessonGoals": "Lesson Goals:",
     "quiz": "Quiz",
@@ -558,10 +561,6 @@
     "number": "number",
     "width": "width",
     "height": "height",
-    "webHeight": "web height",
-    "webWidth": "web width",
-    "mobileHeight": "mobile height",
-    "mobileWidth": "mobile width",
     "fontSize": "font size",
     "path": "page path",
     "target": "target",

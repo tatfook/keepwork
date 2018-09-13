@@ -88,7 +88,7 @@ export default {
       return this.options.styleId || 0
     },
     getStyleOneId() {
-      return require('@/../static/adi/comment/style-1-title-icon.png')
+      return require('@/assets/adi/comment/style-1-title-icon.png')
     },
     getCommentList() {
       if (

@@ -30,7 +30,7 @@
           </div>
         </el-col>
       </el-row>
-      <div class="lesson-packages-pages">
+      <div class="lesson-packages-pages" v-if="packagesCount > perPage">
         <div class="block">
           <span class="demonstration"></span>
           <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="packagesCount">
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       loading: true,
-      perPage: 12,
+      perPage: 15,
       page: 1
     }
   },

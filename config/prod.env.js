@@ -17,6 +17,7 @@ module.exports = {
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
   BOARD: `"https://keepwork.com/wiki/wikieditor/board.html?"`,
+  PDF: `"https://keepwork.com/pdf"`,
   PACKAGE_GOOD_DETAIL: {
     APP_NAME: `"Lessons"`,
     APP_GOODS_ID: 1

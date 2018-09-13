@@ -1,8 +1,0 @@
-[submodule "static/board"]
-	path = static/board
-	url = https://github.com/NPLFoshan/board.git
-	branch = master
-[submodule "static/pdf"]
-	path = static/pdf
-	url = https://github.com/NPLFoshan/pdf.js.git
-	branch = master

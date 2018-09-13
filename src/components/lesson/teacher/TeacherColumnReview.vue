@@ -20,7 +20,7 @@
       </p>
 
       <div class="review-list-package">
-        <div class="package" v-for="lessonPackage in sortedTeachList" :key="lessonPackage.id">
+        <div class="package" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
           <div class="package-cover">
             <p class="teach-time">{{lessonPackage.createdAt | formatTime}}</p>
             <img :src="lessonPackage.extra.coverUrl" alt="" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)">
@@ -40,6 +40,18 @@
           </div>
           <div class="package-summary">
             <el-button type="primary" @click="viewSummary(lessonPackage)">{{$t('lesson.viewSummary')}}</el-button>
+          </div>
+        </div>
+        <div class="review-list-package-pages" v-if="lessonCount > perPage">
+          <div class="block">
+            <span class="demonstration"></span>
+            <el-pagination
+              background
+              @current-change="targetPage"
+              layout="prev, pager, next"
+              :page-size="perPage"
+              :total="lessonCount">
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -65,7 +77,9 @@ export default {
       loading: true,
       noPackages: false,
       teachList: [],
-      positiveSequence: true
+      positiveSequence: true,
+      perPage:8,
+      page: 1
     }
   },
   async mounted() {
@@ -80,7 +94,10 @@ export default {
       })
       return classIsOver.sort(this.sortByUpdateAt)
     },
-    hours() {
+    lessonCount(){
+      return this.sortedTeachList.length
+    },
+    hours(){
       let longTime = this.sortedTeachList.length * 45
       return parseInt(longTime / 60)
     },
@@ -114,6 +131,9 @@ export default {
       this.$router.push({
         path: `package/${packageId}/lesson/${lessonId}`
       })
+    },
+    targetPage(targetPage){
+      this.page = targetPage
     }
   },
   filters: {
@@ -176,6 +196,7 @@ export default {
           margin: 0 10px 0 18px;
         }
       }
+
     }
     &-package {
       flex: 1;
@@ -228,6 +249,10 @@ export default {
           text-align: center;
           padding-top: 60px;
         }
+      }
+      &-pages{
+        text-align: center;
+        padding-top: 16px;
       }
     }
   }

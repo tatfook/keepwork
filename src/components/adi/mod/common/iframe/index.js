@@ -33,7 +33,7 @@ const styles = [
       rootRow: ['mod-full-width']
     },
     useImage: true,
-    cover: require('@/../static/adi/IFrame.png')
+    cover: require('@/assets/adi/IFrame.png')
   }
 ]
 const templates = [[{ colIframe: 'iframe' }]]
