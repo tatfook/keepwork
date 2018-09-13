@@ -143,7 +143,6 @@ const actions = {
       return Promise.reject(error.response)
     })
     if (isLastOne) {
-      console.log(111)
       await dispatch('getAllTeacherData')
     }
   },
