@@ -74,11 +74,10 @@ export default {
         : url && this.getTemplateUrl(url)
       this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
       this.setUrl()
-    } else {
-      let defaultSubjectId = this.lessonSubjects[0].id
-      this.defaultSubjectId = defaultSubjectId
-      this.editingLessonDetail.subjectId = defaultSubjectId
     }
+    let defaultSubjectId = this.lessonSubjects[0].id
+    this.defaultSubjectId = defaultSubjectId
+    this.editingLessonDetail.subjectId = defaultSubjectId
   },
   data() {
     return {
@@ -90,6 +89,8 @@ export default {
       tempUrl: '',
       urlInvalidInfo: '',
       defaultSubjectId: undefined,
+      defaultMinAge: 0,
+      defaultMaxAge: 0,
       oldLinkPrefiex: '',
       editingLessonDetail: {
         url: null,
@@ -137,7 +138,9 @@ export default {
       await this.teacherCreateNewPackage({
         newPackageData: {
           packageName: this.newPackageName,
-          subjectId: this.defaultSubjectId
+          subjectId: this.defaultSubjectId,
+          minAge: this.defaultMinAge || 0,
+          maxAge: this.defaultMaxAge || 0
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
