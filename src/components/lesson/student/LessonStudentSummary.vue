@@ -148,10 +148,12 @@ export default {
 <style lang="scss">
 $blue: #4093fe;
 .lesson-summary {
-  margin: 20px auto;
+  margin: 0 auto;
   box-sizing: border-box;
   border-top: 1px solid #dadada;
   background: white;
+  max-width: 1229px;
+  padding-bottom: 40px;
 }
 .summary-share-dialog {
   .el-dialog__header {

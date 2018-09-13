@@ -3,7 +3,7 @@
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-if="isShowSummary" />
-    <LessonWrap v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
+    <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
         你正处于上课状态,请点击按钮返回当前所在的课堂
