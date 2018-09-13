@@ -30,7 +30,7 @@
               </el-scrollbar>
             </div>
             <el-row class="lesson-button">
-              <el-button :disabled="false" type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
+              <el-button type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
             </el-row>
           </div>
         </el-col>
