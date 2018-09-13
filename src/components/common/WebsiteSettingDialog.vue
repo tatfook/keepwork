@@ -57,12 +57,12 @@ export default {
         {
           text: this.$t('setting.siteLayouts'),
           comp: WebsiteSettingLayout,
-          isShow: this.isBasicSettingShow
+          isShow: true
         },
         {
           text: this.$t('setting.siteStyle'),
           comp: WebsiteSettingStyle,
-          isShow: this.isBasicSettingShow
+          isShow: true
         }
       ]
     },

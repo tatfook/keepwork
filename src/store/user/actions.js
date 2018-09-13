@@ -469,12 +469,12 @@ const actions = {
     let { dispatch, rootGetters: { activePageUrl } } = context
     await dispatch('createComment', {url: activePageUrl, content})
   },
-  async deleteCommentById(context, { _id }) {
+  async deleteCommentById(context, { _id, page }) {
     let { dispatch, commit } = context
     await keepwork.websiteComment.deleteById({_id})
 
     commit(DELETE_COMMENT_SUCCESS, { _id })
-    await dispatch('getActivePageComments')
+    await dispatch('getActivePageComments', { page })
   },
   async getCommentsByPageUrl({ commit }, { url: path, page }) {
     let fullPath = getFileFullPathByPath(path)

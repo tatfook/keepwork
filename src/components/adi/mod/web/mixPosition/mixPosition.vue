@@ -40,7 +40,7 @@ export default {
   mixins: [baseMixin],
   mounted() {
     if (this.modData.styleID == '3' || this.modData.styleID == '4') {
-      this.modData.media.src = require('@/../static/adi/mixPosition/stitching.png')
+      this.modData.media.src = require('@/assets/adi/mixPosition/stitching.png')
     }
   }
 }

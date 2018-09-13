@@ -146,6 +146,14 @@ export default {
   data() {
     return {}
   },
+  created(){
+    this.fromTopToShow()
+  },
+  methods:{
+    fromTopToShow(){
+      window.scrollTo(0, 0)
+    }
+  }
 }
 </script>
 

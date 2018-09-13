@@ -10,7 +10,8 @@ const state = {
   subjects: [],
   userinfo: {},
   lessonsDetail: {},
-  packagesDetail: {}
+  packagesDetail: {},
+  isShowLoginDialog: false
 }
 export default {
   namespaced: true,

@@ -6,7 +6,7 @@
     </el-breadcrumb>
     <div class="lesson-editor-header-operations">
       <el-button round @click="cancel" class="lesson-editor-header-cancel-button">{{$t('common.Cancel')}}</el-button>
-      <el-button round @click="saveLesson" class="lesson-editor-header-save-button" :class="{'is-disabled': isLessonNameEmpty}">{{$t('common.Save')}}</el-button>
+      <el-button round @click="saveLesson" class="lesson-editor-header-save-button" :class="{'is-disabled': isLessonNameEmpty || !isLinkPageUrlValid}">{{$t('common.Save')}}</el-button>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   props: {
     editingLessonDetailProp: Object,
     isEditing: Boolean,
+    isLinkPageUrlValid: Boolean,
     isLessonNameEmpty: Boolean,
     isEditorMod: {
       type: Boolean,
@@ -46,13 +47,19 @@ export default {
 </script>
 <style lang="scss">
 .lesson-editor-header {
-  padding: 36px 0 26px;
+  padding: 0 0 26px;
   display: flex;
   align-items: center;
   &-breadcrumb {
     flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     .el-breadcrumb__inner {
       color: #b3b3b3;
+    }
+    .el-breadcrumb__item {
+      float: unset;
     }
     .el-breadcrumb__item:last-child .el-breadcrumb__inner {
       color: #333;

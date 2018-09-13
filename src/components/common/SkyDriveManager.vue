@@ -43,8 +43,13 @@
       </el-row>
       <el-row class='skydrive-manager-header-tabs-and-search'>
         <el-col :span="18" class='skydrive-manager-header-tabs'>
-          <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-          <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+          <div v-if ="isImgLoopMod">
+            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+            <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+          </div>
+          <div v-else>
+            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+          </div>
         </el-col>
         <el-col :span="6">
           <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
@@ -308,6 +313,13 @@ export default {
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90 ? 'skydrive-manager-total-used-danger' : (usedPercent >= 70 ? 'skydrive-manager-total-used-warning' : '')
+    },
+    isImgLoopMod() {
+      if (this.$store.getters.activeProperty === 'imgLoop') {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -426,10 +438,12 @@ export default {
       this.loading = false
     },
     async handleCopy(file) {
-      if (!file.checkPassed) {
-        return
+      if (!file && !file.checkPassed) {
+        return false
       }
-      let toCopyLink = await this.getSiteFileUrl(file)
+
+      let toCopyPrefix = await this.getSiteFileUrl(file)
+      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
 
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),
@@ -816,24 +830,6 @@ export default {
       display: block;
       margin: 0 auto;
     }
-    .el-message-box__header {
-      padding: 30px 30px 10px;
-    }
-    .el-message-box__headerbtn {
-      top: -5px;
-      right: -5px; 
-      .el-message-box__close {
-        font-size: 3em;
-        color: white;
-      }
-    }
-    .el-message-box__content {
-      padding: 0;
-      p {
-        padding: 0;
-        margin: 0;
-      }
-    }
   }
   &-media-uploading{
     padding: 0 15px;
@@ -849,6 +845,14 @@ export default {
     .el-progress{
       position: relative;
       top: 45px;
+    }
+  }
+}
+.el-popup-parent--hidden {
+  .el-message-box__content {
+    p {
+      word-wrap:break-word; 
+      word-break:break-all;
     }
   }
 }

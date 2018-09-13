@@ -7,7 +7,8 @@ let {
   GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
   GET_ALL_SUBJECTS_SUCCESS,
-  LOGOUT
+  LOGOUT,
+  TOGGLE_LOGIN_DIALOG
   // TO_BE_TEACHER
 } = props
 
@@ -28,7 +29,9 @@ const actions = {
     commit(GET_LESSON_DETAIL_SUCCESS, { detail })
   },
   async subscribePackage(context, { packageId }) {
+    let { dispatch } = context
     let subscribeResult = await lesson.packages.subscribe({ packageId })
+    await dispatch('getPackageDetail', { packageId })
     return subscribeResult
   },
   async setNickname(context, nickname) {
@@ -36,12 +39,14 @@ const actions = {
       dispatch,
       getters: { userId: id }
     } = context
-    console.log(id)
     await lesson.users.setNickname({ nickname, id })
     await dispatch('getUserDetail')
   },
   async getAllSkills(context, { useCache = true }) {
-    let { commit, getters: { skills } } = context
+    let {
+      commit,
+      getters: { skills }
+    } = context
     if (skills && skills.length && useCache) {
       return
     }
@@ -49,7 +54,10 @@ const actions = {
     commit(GET_ALL_SKILLS_SUCCESS, { skills: allSkills })
   },
   async getAllSubjects(context, { useCache = true }) {
-    let { commit, getters: { subjects } } = context
+    let {
+      commit,
+      getters: { subjects }
+    } = context
     if (subjects && subjects.length && useCache) {
       return
     }
@@ -58,6 +66,9 @@ const actions = {
   },
   async logout({ commit }) {
     commit(LOGOUT)
+  },
+  async toggleLoginDialog({ commit }, status) {
+    commit(TOGGLE_LOGIN_DIALOG, status)
   }
 }
 

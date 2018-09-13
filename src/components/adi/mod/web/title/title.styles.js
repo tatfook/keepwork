@@ -12,7 +12,7 @@ let defaultData = {
     emptyTarget: '_blank'
   },
   logo: {
-    emptySrc: require('@/../static/adi/title/bear.svg'),
+    emptySrc: require('@/assets/adi/title/bear.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -91,7 +91,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/title/title1.png')
+    cover: require('@/assets/adi/title/title1.png')
   },
   // style 1
   {
@@ -155,7 +155,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/title/title1.png')
+    cover: require('@/assets/adi/title/title1.png')
   },
   // style 2
   {
@@ -219,7 +219,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/title/title2.png')
+    cover: require('@/assets/adi/title/title2.png')
   },
   // style 3
   {
@@ -283,7 +283,7 @@ export default [
         })
       }
     },
-    cover: require('@/../static/adi/title/title2.png')
+    cover: require('@/assets/adi/title/title2.png')
   },
   // style 4
   {

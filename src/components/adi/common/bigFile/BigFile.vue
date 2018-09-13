@@ -31,7 +31,7 @@
         </video>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src='"/static/pdf/web/viewer.html?file=" + encodeURIComponent(this.properties.src || "")'></iframe>
+        <iframe :src='getPdfSrc'></iframe>
       </div>
     </div>
   </div>
@@ -153,6 +153,14 @@ export default {
     ...mapGetters({
       token: 'user/token'
     }),
+    getPdfSrc() {
+      let url = encodeURIComponent(this.properties.src || "")
+      let src = process.env.PDF || ''
+
+      src = src + "/web/viewer.html?file=" + url
+
+      return src
+    },
     getIconClass() {
       if (this.properties.ext) {
         if (this.ext[this.properties.ext]) {
@@ -211,6 +219,16 @@ export default {
       } else {
         this.actualUrl = src
       }
+
+      // if(this.getType === this.handleExt['mp4']) {
+      //   let video = this.$el.querySelector('video')
+
+      //   if (video) {
+      //     video.oncanplaythrough = () => {
+      //         video.style.opacity = 1
+      //     }
+      //   }
+      // }
     }
   }
 }
@@ -219,6 +237,7 @@ export default {
 .comp-bigfile {
   video {
     width: 100%;
+    // opacity: 0;
   }
 
   img {

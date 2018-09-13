@@ -11,7 +11,7 @@
         <label for="subjectSelector">{{$t('lesson.subjectLabel')}}</label>
         <el-select id="subjectSelector" v-model="searchParams.subjectId">
           <el-option :key='null' :label='$t("lesson.all")' :value='null'></el-option>
-          <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+          <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
           </el-option>
         </el-select>
       </div>
@@ -29,15 +29,38 @@
       </div>
     </div>
     <div class="package-manager-details">
-      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="450" style="width: 100%">
+      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="100%" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
-        <el-table-column class-name="package-manager-table-packagename" prop="packageName" :label="$t('lesson.nameLabel')">
+        <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
+          <template slot-scope="scope">
+            <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
+          </template>
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column :label="$t('lesson.subjectLabel')" width="190">
+          <template slot-scope='scope'>{{subjectName(scope.row.subjectDetail)}}</template>
         </el-table-column>
         <el-table-column :label="$t('lesson.statusLabel')" width="125">
-          <template slot-scope="scope">{{getStatusText(scope.row)}}</template>
+          <template slot-scope="scope">
+            <el-popover v-show="isDisabledOrReject(scope.row)" popper-class='package-manager-state-popver' placement="bottom-end" trigger="hover">
+              <div class="package-manager-state-popver-box">
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.lessonManage.packageLabel')}}:</label>
+                  <span>{{scope.row.packageName}}</span>
+                </div>
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.statusLabel')}}:</label>
+                  <span class="package-manager-state-popver-danger">{{getStatusText(scope.row)}}</span>
+                </div>
+                <div class="package-manager-state-popver-item">
+                  <label class='package-manager-state-popver-label'>{{$t('lesson.packageManage.detailLabel')}}:</label>
+                  <div>{{scope.row.extra.message}}</div>
+                </div>
+              </div>
+              <el-button class="package-manager-table-state" type="text" slot="reference">{{getStatusText(scope.row)}}</el-button>
+            </el-popover>
+            <span v-show="!isDisabledOrReject(scope.row)">{{getStatusText(scope.row)}}</span>
+          </template>
         </el-table-column>
         <el-table-column label="" width="180" class-name="package-manager-table-operations">
           <template slot-scope="scope">
@@ -68,6 +91,8 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'PackageManager',
   async mounted() {
@@ -187,6 +212,9 @@ export default {
       }
       return statusText
     },
+    isDisabledOrReject(packageDetail) {
+      return packageDetail.state === 3 || packageDetail.state === 4
+    },
     isSubmitable(packageDetail) {
       return (
         packageDetail.state === 0 ||
@@ -281,15 +309,37 @@ export default {
         packageId: packageDetail.id,
         state: 1
       })
-      this.infoDialogData = {
-        paras: [
-          this.$t('lesson.successfullySubmitted'),
-          this.$t('lesson.successfullySubmittedDetail')
-        ],
-        iconType: 'submit'
-      }
-      this.isInfoDialogVisible = true
-      this.isTableLoading = false
+        .then(result => {
+          this.infoDialogData = {
+            paras: [
+              this.$t('lesson.successfullySubmitted'),
+              this.$t('lesson.successfullySubmittedDetail')
+            ],
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
+              break
+            default:
+              errorMsg = this.$t('lesson.failedSubmitInfo')
+              break
+          }
+          this.infoDialogData = {
+            paras: [errorMsg],
+            type: 'danger',
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.reject(new Error('Submit package to audit failed'))
+        })
     },
     toEdit(packageDetail) {
       this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
@@ -303,6 +353,8 @@ export default {
         ],
         iconType: 'delete',
         type: 'danger',
+        continueButtonText: this.$t('lesson.deleteDialogYes'),
+        cancelButtonText: this.$t('lesson.deleteDialogNo'),
         continueFnNameAfterEnsure: 'toDelete'
       }
       this.isInfoDialogVisible = true
@@ -332,12 +384,34 @@ export default {
         packageId: packageDetail.id,
         state: 0
       })
-      this.infoDialogData = {
-        paras: [this.$t('lesson.successfullyRecall')],
-        iconType: 'revoca'
-      }
-      this.isInfoDialogVisible = true
-      this.isTableLoading = false
+        .then(result => {
+          this.infoDialogData = {
+            paras: [this.$t('lesson.successfullyRecall')],
+            iconType: 'revoca'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          let errorMsg = ''
+          switch (error.status) {
+            case 401:
+              errorMsg = this.$t('lesson.packageManage.pleaseLogin')
+              break
+            default:
+              errorMsg = this.$t('lesson.failedRecallInfo')
+              break
+          }
+          this.infoDialogData = {
+            paras: [errorMsg],
+            type: 'danger',
+            iconType: 'submit'
+          }
+          this.isInfoDialogVisible = true
+          this.isTableLoading = false
+          return Promise.reject(new Error('Revoca package to audit failed'))
+        })
     },
     toNewPackagePage() {
       this.$router.push({ path: '/teacher/newPackage' })
@@ -347,6 +421,9 @@ export default {
       if (continueFnNameAfterEnsure === 'toDelete') {
         this.toDelete()
       }
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   },
   components: {
@@ -356,7 +433,9 @@ export default {
 </script>
 <style lang="scss">
 .package-manager {
-  padding-top: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   &-overview {
     margin-bottom: 20px;
     display: flex;
@@ -429,6 +508,8 @@ export default {
   &-details {
     padding: 10px 20px;
     background-color: #fff;
+    flex: 1;
+    overflow: auto;
   }
   &-table {
     border: 1px solid #d2d2d2;
@@ -457,6 +538,10 @@ export default {
     &-packagename {
       .cell {
         white-space: nowrap;
+        cursor: pointer;
+      }
+      .cell:hover {
+        font-weight: bold;
       }
     }
     &-operations {
@@ -464,6 +549,26 @@ export default {
       .cell {
         padding: 0 20px;
       }
+    }
+    &-state,
+    &-state:hover {
+      color: #f75858;
+    }
+  }
+  &-state-popver {
+    padding: 40px 40px 36px 36px;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 500px;
+    &-danger {
+      color: #f75858;
+    }
+    &-label {
+      color: #414141;
+      font-weight: bold;
+    }
+    &-item {
+      margin-bottom: 6px;
     }
   }
 }

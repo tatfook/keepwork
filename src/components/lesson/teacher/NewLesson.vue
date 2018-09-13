@@ -1,14 +1,17 @@
 <template>
   <div class="new-lesson" v-loading='isLoading'>
-    <lesson-editor-header :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
-    <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
-    <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
-    <div class="new-lesson-more-info">
-      <div class="new-lesson-more-info-button" :class="{'is-append': isMoreInfoShow}" @click="toggleMoreSettingInfo">
-        <span v-show="!isMoreInfoShow">{{$t('lesson.lessonManage.moreInfo')}}</span>
-        <i class="el-icon-d-arrow-right"></i>
+    <lesson-editor-header :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
+    <div class="new-lesson-container">
+      <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
+      <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
+      <div class="new-lesson-more-info">
+        <div class="new-lesson-more-info-button" :class="{'is-append': isMoreInfoShow}" @click="toggleMoreSettingInfo">
+          <span v-show="!isMoreInfoShow">{{$t('lesson.lessonManage.moreInfo')}}</span>
+          <i class="el-icon-d-arrow-right"></i>
+        </div>
+        <lesson-more-info-settting v-show="isMoreInfoShow" ref="moreInfoComponent"></lesson-more-info-settting>
       </div>
-      <lesson-more-info-settting v-show="isMoreInfoShow" ref="moreInfoComponent"></lesson-more-info-settting>
+
     </div>
   </div>
 </template>
@@ -43,6 +46,12 @@ export default {
     },
     newLessonMoreInfo() {
       return this.$refs.moreInfoComponent.moreInfoData
+    },
+    isLinkPageUrlValid() {
+      if (!this.isMounted) {
+        return true
+      }
+      return this.$refs.basicInfoComponent.isLinkPageUrlValid
     },
     isLessonNameEmpty() {
       if (!this.isMounted) {
@@ -103,6 +112,9 @@ export default {
       }
     },
     async saveNewLesson() {
+      if (!this.isLinkPageUrlValid) {
+        return
+      }
       if (this.isLessonNameEmpty) {
         this.$message({
           message: this.$t('lesson.lessonManage.nameIsRequiredInfo'),
@@ -160,6 +172,13 @@ export default {
 </script>
 <style lang="scss">
 .new-lesson {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  &-container {
+    flex: 1;
+    overflow: auto;
+  }
   &-cover {
     padding: 35px;
   }

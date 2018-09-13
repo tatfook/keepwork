@@ -11,7 +11,7 @@
         <label for="subjectSelector">{{$t('lesson.subjectLabel')}}</label>
         <el-select id="subjectSelector" v-model="searchParams.subjectId">
           <el-option :key='null' :label='$t("lesson.all")' :value='null'></el-option>
-          <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+          <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
           </el-option>
         </el-select>
       </div>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" height="450" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" height="100%" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
         <el-table-column prop='packages' type='expand' width="40">
@@ -59,8 +59,14 @@
           </template>
         </el-table-column>
         <el-table-column class-name="lesson-manager-table-lessonName" prop="lessonName" :label="$t('lesson.nameLabel')">
+          <template slot-scope='scope'>
+            <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
+              <span @click='toEditor(scope.row)'>{{scope.row.lessonName}}</span>
+            </el-tooltip>
+          </template>
         </el-table-column>
-        <el-table-column prop="subjectDetail.subjectName" :label="$t('lesson.subjectLabel')" width="190">
+        <el-table-column :label="$t('lesson.subjectLabel')" width="190">
+          <template slot-scope='scope'>{{subjectName(scope.row.subjectDetail)}}</template>
         </el-table-column>
         <el-table-column label="" width="180" class-name="lesson-manager-table-operations">
           <template slot-scope="scope">
@@ -83,6 +89,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
@@ -138,11 +145,15 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonUserLessons: 'lesson/teacher/userLessons',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
       lessonSubjects: 'lesson/subjects'
     }),
+    username() {
+      return _.get(this.userProfile, 'username')
+    },
     filteredLessonList() {
       let subjectfilteredLessonList = this.getSubjectFilteredPackageList(
         this.lessonUserLessons
@@ -173,6 +184,12 @@ export default {
       )
       return containSubjectNamePackageList
     },
+    hostname() {
+      return window.location.hostname
+    },
+    editorPagePrefix() {
+      return this.hostname === 'localhost' ? '/editor.html#/' : '/wiki/wikieditor#/'
+    },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
         id: this.editingLessonId
@@ -185,7 +202,8 @@ export default {
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
-      lessonDeleteLesson: 'lesson/teacher/deleteLesson'
+      lessonDeleteLesson: 'lesson/teacher/deleteLesson',
+      readFileFromGitlab: 'gitlab/readFile'
     }),
     getRowClass({ row, rowIndex }) {
       let { packages } = row
@@ -250,6 +268,58 @@ export default {
     async toRelease(lessonDetail) {
       console.log(lessonDetail)
     },
+    toEditorPage(url) {
+      let targetUrl = this.editorPagePrefix
+      if (url) {
+        targetUrl += this.getRemovePrefixUrl(url)
+      }
+      console.log(targetUrl)
+      window.location.href = targetUrl
+    },
+    getRemovePrefixUrl(url) {
+      let username = this.username
+      let usernameLen = username.length
+      let templateUrlStartIndex = url.indexOf(username) + usernameLen + 1
+      return url.substring(templateUrlStartIndex)
+    },
+    async toEditor(lessonDetail) {
+      let { url } = lessonDetail
+      if (url) {
+        await this.isUrlExist(url)
+          .then(() => {
+            this.toEditorPage(url)
+          })
+          .catch(() => {
+            this.confirmGo(url)
+          })
+      } else {
+        this.confirmGo(url)
+      }
+    },
+    confirmGo(url) {
+      this.$confirm(this.$t('lesson.lessonManage.urlNotCreatInfo'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        center: true,
+        customClass: 'lesson-manager-confirm-dialog'
+      }).then(() => {
+        this.toEditorPage(url)
+      })
+    },
+    async isUrlExist(url) {
+      this.isTableLoading = true
+      let backendTypeUrl = this.username + '/' + this.getRemovePrefixUrl(url)
+      await this.readFileFromGitlab({ path: backendTypeUrl })
+        .then(() => {
+          this.isTableLoading = false
+          return Promise.resolve()
+        })
+        .catch(() => {
+          this.isTableLoading = false
+          return Promise.reject(new Error('File not created!'))
+        })
+      this.isTableLoading = false
+    },
     async confirmDelete(lessonDetail) {
       this.editingLessonId = lessonDetail.id
       this.infoDialogData = {
@@ -259,6 +329,8 @@ export default {
         ],
         iconType: 'delete',
         type: 'danger',
+        continueButtonText: this.$t('lesson.deleteDialogYes'),
+        cancelButtonText: this.$t('lesson.deleteDialogNo'),
         continueFnNameAfterEnsure: 'toDelete'
       }
       this.isInfoDialogVisible = true
@@ -273,6 +345,9 @@ export default {
       if (continueFnNameAfterEnsure === 'toDelete') {
         this.toDelete()
       }
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
     }
   },
   filters: {
@@ -287,7 +362,9 @@ export default {
 </script>
 <style lang="scss">
 .lesson-manager {
-  padding-top: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   &-overview {
     margin-bottom: 20px;
     display: flex;
@@ -364,6 +441,8 @@ export default {
   &-details {
     padding: 10px 20px;
     background-color: #fff;
+    flex: 1;
+    overflow: auto;
   }
   &-table {
     border: 1px solid #d2d2d2;
@@ -391,6 +470,12 @@ export default {
     &-lessonName {
       .cell {
         white-space: nowrap;
+      }
+      .el-tooltip {
+        cursor: pointer;
+      }
+      .el-tooltip:hover {
+        font-weight: bold;
       }
     }
     &-operations {
@@ -473,6 +558,29 @@ export default {
     .el-table__expanded-cell[class*='cell'] {
       background-color: #f7f7f7 !important;
       padding: 0;
+    }
+  }
+  &-confirm-dialog {
+    width: 560px;
+    padding-bottom: 23px;
+    .el-message-box__close {
+      font-size: 24px;
+      color: #cdcdcd;
+    }
+    .el-message-box__content {
+      font-size: 18px;
+      color: #f75858;
+      padding: 38px 0 70px;
+    }
+    .el-button {
+      width: 148px;
+      height: 60px;
+      line-height: 60px;
+      padding: 0;
+      font-size: 18px;
+    }
+    .el-button + .el-button {
+      margin-left: 46px;
     }
   }
 }

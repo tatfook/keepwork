@@ -1,6 +1,6 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson'  @resetCancel="resetCancel"></lesson-editor-header>
+    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
     <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
     <cover-media-setter v-if="!isGettingData" class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
     <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
@@ -78,6 +78,12 @@ export default {
       let oldLessonPackageIds = this.originBelongPackageIds
       return _.difference(oldLessonPackageIds, newLessonPackageIds)
     },
+    isLinkPageUrlValid() {
+      if (!this.isMounted) {
+        return true
+      }
+      return this.$refs.basicInfoComponent.isLinkPageUrlValid
+    },
     isLessonNameEmpty() {
       if (!this.isMounted) {
         return true
@@ -126,7 +132,7 @@ export default {
       let isLastOne = false
       for (let i = 0; i < packageIds.length; i++) {
         let packageId = packageIds[i]
-        if (i === packageId.length - 1) {
+        if (i === packageIds.length - 1) {
           isLastOne = true
         }
         await this.teacherAddLessonToPackage({
@@ -181,6 +187,9 @@ export default {
       }
     },
     async updateLesson() {
+      if (!this.isLinkPageUrlValid) {
+        return
+      }
       if (this.isLessonNameEmpty) {
         this.$message({
           message: this.$t('lesson.lessonManage.nameIsRequiredInfo'),
@@ -201,6 +210,7 @@ export default {
           await this.removeLessonFromPackages()
           await this.addLessonToPackages()
           this.isEditorMod ? this.resetCancel() : this.toLessonManagerPage()
+          this.isLoading = false
           return Promise.resolve()
         })
         .catch(error => {
@@ -210,7 +220,7 @@ export default {
               errorMsg = this.$t('lesson.packageManage.pleaseLogin')
               break
             case 409:
-              errorMsg = this.$t('lesson.packageManage.packageNameConflict')
+              errorMsg = this.$t('lesson.lessonManage.urlConflict')
               break
             default:
               errorMsg = this.$t('common.saveFail')
@@ -220,9 +230,9 @@ export default {
             message: errorMsg,
             type: 'error'
           })
+          this.isLoading = false
           return Promise.reject(new Error('Update lesson failed'))
         })
-      this.isLoading = false
     },
     resetCancel() {
       this.$emit('refresh')

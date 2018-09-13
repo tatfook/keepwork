@@ -29,6 +29,7 @@ import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
 import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
+const PACKAGE_GOOD_DETAIL = process.env.PACKAGE_GOOD_DETAIL
 export default {
   name: 'PurchasePackage',
   async mounted() {
@@ -91,6 +92,10 @@ export default {
     origin() {
       return window.location.origin
     },
+    packageDetailLink() {
+      let nowPageLink = window.location.href
+      return _.replace(nowPageLink, '/purchase', '')
+    },
     packageDetailPath() {
       return _.replace(this.nowPath, '/purchase', '')
     }
@@ -128,9 +133,10 @@ export default {
       } else {
         let payParams = {
           username: this.username,
-          app_name: 'lessons',
-          app_goods_id: 1,
+          app_name: PACKAGE_GOOD_DETAIL.APP_NAME,
+          app_goods_id: PACKAGE_GOOD_DETAIL.APP_GOODS_ID,
           price: this.packageDetail.rmb,
+          redirect: this.packageDetailLink,
           additional: {
             packageId: this.packageId
           }

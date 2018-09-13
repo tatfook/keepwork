@@ -7,7 +7,8 @@ const getters = {
   packageDetail: state => ({ packageId }) => _.get(state.packagesDetail, packageId),
   lessonDetail: state => ({ lessonId }) => _.get(state.lessonsDetail, lessonId),
   skills: state => state.skills,
-  subjects: state => state.subjects
+  subjects: state => state.subjects,
+  isShowLoginDialog: state => state.isShowLoginDialog
 }
 
 export default getters
