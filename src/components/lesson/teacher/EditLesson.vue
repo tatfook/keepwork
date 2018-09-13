@@ -1,9 +1,9 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <lesson-editor-header v-if="!isGettingData" :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
-    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
-    <cover-media-setter v-if="!isGettingData" class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
-    <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
+    <lesson-editor-header v-if="!isGettingData" :isEditable='isEditable' :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
+    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
+    <cover-media-setter v-if="!isGettingData" :isEditable='isEditable' class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
+    <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
   </div>
 </template>
 <script>
@@ -53,6 +53,11 @@ export default {
     ...mapGetters({
       lessonDetail: 'lesson/lessonDetail'
     }),
+    isEditable() {
+      let { packages } = this.editingLessonDetail
+      let pendingReviewPackageIndex = _.findIndex(packages, { state: 1 })
+      return pendingReviewPackageIndex === -1
+    },
     editingCoverUrl() {
       return _.get(this.editingLessonDetail, 'extra.coverUrl')
     },
