@@ -167,7 +167,7 @@ export default {
       let isLastOne = false
       for (let i = 0; i < packageIds.length; i++) {
         let packageId = packageIds[i]
-        if (i === packageId.length - 1) {
+        if (i === packageIds.length - 1) {
           isLastOne = true
         }
         await this.teacherRemoveLessonFromPackage({
