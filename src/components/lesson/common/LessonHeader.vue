@@ -207,6 +207,14 @@ export default {
           await this.dismissTheClass()
             .then(res => {
               this.$emit('clearUpdateLearnRecords')
+              const { lessonId, id } = this.classroom
+              this.$router.push({
+                name: 'LessonTeacherSummary',
+                params: {
+                  classId: id,
+                  lessonId: Number(lessonId)
+                }
+              })
               window.removeEventListener(
                 'beforeunload',
                 this.leaveConfirm,
