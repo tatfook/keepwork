@@ -29,6 +29,7 @@ import PurchasePackageResult from './PurchasePackageResult'
 import CoinPurchase from './CoinPurchase'
 import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
+const PACKAGE_GOOD_DETAIL = process.env.PACKAGE_GOOD_DETAIL
 export default {
   name: 'PurchasePackage',
   async mounted() {
@@ -59,9 +60,13 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
       lessonPackageDetail: 'lesson/packageDetail'
     }),
+    username() {
+      return _.get(this.userProfile, 'username')
+    },
     isLogin: {
       get() {
         return this.userIsLogined
@@ -84,6 +89,13 @@ export default {
     nowPath() {
       return this.$route.path
     },
+    origin() {
+      return window.location.origin
+    },
+    packageDetailLink() {
+      let nowPageLink = window.location.href
+      return _.replace(nowPageLink, '/purchase', '')
+    },
     packageDetailPath() {
       return _.replace(this.nowPath, '/purchase', '')
     }
@@ -103,14 +115,35 @@ export default {
       getPackageDetail: 'lesson/getPackageDetail',
       lessonSubscribePackage: 'lesson/subscribePackage'
     }),
+    objectToQueryString(obj) {
+      const results = []
+      _.forOwn(obj, (value, key) => {
+        if (_.isObject(value)) {
+          value = JSON.stringify(value)
+        }
+        results.push(`${key}=${encodeURIComponent(value)}`)
+      })
+      return results.join('&')
+    },
     async subscribePackage() {
       this.isLoading = true
       if (this.isPayByCoin) {
         await this.lessonSubscribePackage({ packageId: this.packageId })
         this.isResultShow = true
       } else {
-        let origin = window.location.origin
-        window.location.href = `${origin}/wiki/pay`
+        let payParams = {
+          username: this.username,
+          app_name: PACKAGE_GOOD_DETAIL.APP_NAME,
+          app_goods_id: PACKAGE_GOOD_DETAIL.APP_GOODS_ID,
+          price: this.packageDetail.rmb,
+          redirect: this.packageDetailLink,
+          additional: {
+            packageId: this.packageId
+          }
+        }
+        let paramsString = this.objectToQueryString(payParams)
+        let payPath = `${this.origin}/wiki/pay?${paramsString}`
+        window.location.href = payPath
       }
       this.isLoading = false
     },

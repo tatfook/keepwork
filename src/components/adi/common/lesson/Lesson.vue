@@ -1,10 +1,8 @@
 <template>
-
   <el-row class="index-page-lesson" wdith="1080px">
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video controls="" width="100%" autoplay="" name="media"><source :src="properties.AnimationOfTheLesson" type="video/mp4"></video>
     </el-dialog>
-
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
         <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()"></el-col>
@@ -24,8 +22,6 @@
         </el-col>
       </el-row>
     </div>
-
-
   </el-row>
 </template>
 

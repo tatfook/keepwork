@@ -5,7 +5,7 @@
     </el-header>
     <el-main class="index-page-main">
       <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
-      <router-view :pageLoading="pageLoading"/>
+      <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
     </el-main>
     <el-aside></el-aside>
     <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
@@ -28,8 +28,14 @@ export default {
   },
   data() {
     return {
-      pageLoading: false
+      pageLoading: false,
+      presetLoaded: false
     }
+  },
+  async created() {
+    await this.loadEditorPresets()
+    this.presetLoaded = true
+    await this.updateActivePage()
   },
   watch: {
     $route: 'updateActivePage',
@@ -41,8 +47,10 @@ export default {
   methods: {
     ...mapActions({
       setActivePage: 'setActivePage',
+      userGetProfile: 'user/getProfile',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
-      userInitPageDetail: 'user/initPageDetail'
+      userInitPageDetail: 'user/initPageDetail',
+      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite'
     }),
     async getPathWithPagename(path){
       let originPath = path
@@ -59,7 +67,16 @@ export default {
       let targetFile = indexChild || firstFileTypeChild
       return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : originPath
     },
+    async loadEditorPresets() {
+      await this.userGetProfile({useCache: false}).catch(err => {
+        console.error(err)
+      })
+      await this.getAllPersonalAndContributedSite({useCache: false}).catch(err => {
+        console.error(err)
+      })
+    },
     async updateActivePage() {
+      if (!this.presetLoaded) return
       this.pageLoading = true
       let path = this.$router.currentRoute.path
       try {

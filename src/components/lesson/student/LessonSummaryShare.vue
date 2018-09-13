@@ -2,10 +2,13 @@
   <div class="lesson-summary-share-wrap" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
     <div class="lesson-summary-share" :class="[isPreview ? `style-${styleIndex}`: `style-${style}`, {'small': isSmall}]">
       <div class="left">
-        <div class="shadow"></div>
       </div>
       <div class="main">
-        <div class="movie"></div>
+        <div class="movie">
+          <video controls="" width="100%" autoplay="" name="media">
+            <source :src="summary.videoUrl" type="video/mp4">
+          </video>
+        </div>
         <div v-if="isEn" class="summary-word">
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
@@ -48,6 +51,11 @@
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="dialogVisible" width="50%">
+      <video controls="" width="100%" autoplay="" name="media">
+        <source :src="summary.videoUrl" type="video/mp4">
+      </video>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,7 +87,8 @@ export default {
   data() {
     return {
       style: 1,
-      summary: {}
+      summary: {},
+      dialogVisible: false
     }
   },
   mounted() {
@@ -89,7 +98,7 @@ export default {
       this.style = Number(this.$route.params.styleId) || 1
       this.$set(this.summary, _.merge(this.summary, this.$route.query))
     }
-    console.warn(this.summary)
+    console.log('lessonSummary', this.lessonSummary, this.summary)
   },
   computed: {
     today() {
@@ -121,6 +130,10 @@ export default {
   methods: {
     toAboutPage() {
       this.$router.push({ path: '/student/about' })
+    },
+    playVideo() {
+      console.log(112)
+      this.dialogVisible = true
     }
   }
 }
@@ -129,9 +142,10 @@ export default {
 <style lang="scss">
 $timeSize: 30px;
 $lineSize: 20px;
-$mainHeight: 630px;
+$mainHeight: 430px;
 .lesson-summary-share-wrap {
   display: flex;
+  padding: 30px;
   justify-content: center;
   align-items: center;
   &.style-1 {
@@ -143,25 +157,20 @@ $mainHeight: 630px;
   &.style-3 {
     background: #5fffff;
   }
-  &.small {
-    height: 350px;
-  }
   .lesson-summary-share {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    &.small {
-      transform: scale(0.4);
-    }
+    background: white;
+    width: 678px;
     .main {
       height: $mainHeight;
-      padding: 26px;
       .movie {
         $scale: 1.64;
-        $width: 430px;
-        height: ($width / $scale);
-        width: $width;
+        $width: 230px;
+        height: 140px;
+        width: 230px;
         background: grey;
         border-radius: 5px;
         border: 8px solid #eeeeee;
@@ -184,7 +193,6 @@ $mainHeight: 630px;
       }
       .summary-word {
         margin-top: 50px;
-        min-width: 660px;
         color: black;
         .highlight {
           color: #409efe;
@@ -198,7 +206,7 @@ $mainHeight: 630px;
           font-weight: 600;
         }
         &-link {
-          margin: 40px 0;
+          margin: 10px 0;
         }
         &-line {
           line-height: 30px;
@@ -218,37 +226,30 @@ $mainHeight: 630px;
     &.style-1 {
       $left-width: 340px;
       $padding: 26px;
-      background: #409efe;
       padding: $padding;
       position: relative;
       .left {
         position: absolute;
         z-index: 998;
-        left: ($padding - 1);
-        height: ($mainHeight + 100);
-        width: $left-width;
-        filter: drop-shadow(10px 0px 2px rgba(66, 66, 66, 0.5));
-        .shadow {
-          clip-path: polygon(0 0, 100% 0, 45% 100%, 0 100%);
-          background-color: #2e7dc9;
-          color: white;
+        left: -12px;
+        height: 475px;
+        width: 180px;
+        background: url('../../../assets/lessonImg/share_shadow.png') no-repeat;
+        background-size: 100% 100%;
+        img {
           height: 100%;
-          position: fixed;
-          text-align: center;
-          top: 0;
-          width: 100%;
-          z-index: 100;
+          object-fit: contain;
         }
       }
       .main {
-        height: $mainHeight;
+        height: 410px;
         width: 100%;
         background: white;
         position: relative;
         .movie {
           background: grey;
           position: relative;
-          left: 200px;
+          left: 88px;
           top: 24px;
           border-radius: 5px;
           border: 8px solid #e8f3ff;
@@ -257,27 +258,24 @@ $mainHeight: 630px;
         }
 
         .summary-word {
-          margin-left: ($left-width - 60);
-          // margin-right: 70px;
+          margin-left: 158px;
+          margin-right: 106px;
         }
       }
     }
 
     &.style-2 {
-      background: #ffb983;
       .left {
         display: none;
       }
       .main {
-        box-sizing: border-box;
         background: white;
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         border-radius: 20px;
-        padding: 0 60px;
-
         .summary-word {
           &-time {
             color: #409efe;
@@ -286,14 +284,13 @@ $mainHeight: 630px;
             font-weight: 600;
           }
           &-link {
-            margin-top: 20px;
+            margin-top: 10px;
           }
         }
       }
     }
 
     &.style-3 {
-      // $mainHeight: 630px;
       display: flex;
       min-width: 100%;
       .left {
@@ -316,17 +313,14 @@ $mainHeight: 630px;
       }
       .main {
         flex: 2;
-        box-sizing: border-box;
         height: $mainHeight;
         background: white;
         display: flex;
         align-items: center;
         .movie {
-          $scale: 1.64;
-          $width: 360px;
-          width: $width;
-          height: ($width / $scale);
-          margin-left: ($width / -2 - 22);
+          width: 250px;
+          height: 140px;
+          margin-left: -200px;
         }
         .summary-word {
           margin: 30px 0 0;

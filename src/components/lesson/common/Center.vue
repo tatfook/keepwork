@@ -33,12 +33,7 @@
       <div class="lesson-packages-pages" v-if="packagesCount > perPage">
         <div class="block">
           <span class="demonstration"></span>
-          <el-pagination
-            background
-            @current-change="targetPage"
-            layout="prev, pager, next"
-            :page-size="perPage"
-            :total="packagesCount">
+          <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="packagesCount">
           </el-pagination>
         </div>
       </div>
@@ -59,6 +54,9 @@ export default {
       page: 1
     }
   },
+  created() {
+    this.fromTopToShow()
+  },
   computed: {
     ...mapGetters({
       packages: 'lesson/center/packagesList'
@@ -66,15 +64,16 @@ export default {
     packagesList() {
       return _.get(this.packages, 'rows', [])
     },
-    packagesCount(){
+    packagesCount() {
       return _.get(this.packages, 'count', 0)
     },
     sortedPackagesList() {
-      return this.packagesList.sort(this.sortByUpdateAt)
+      let approvedPackages = _.filter(this.packagesList, i => i.state == 2)
+      return approvedPackages.sort(this.sortByUpdateAt)
     }
   },
   async mounted() {
-    let payload = {perPage: this.perPage,page: this.page}
+    let payload = { perPage: this.perPage, page: this.page }
     await this.getPackagesList(payload)
     this.loading = false
   },
@@ -82,24 +81,27 @@ export default {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    fromTopToShow() {
+      window.scrollTo(0, 0)
+    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     enterPackageDetailPage(packageId) {
-      if(this.$route.name === "Lesson"){
+      if (this.$route.name === 'Lesson') {
         this.$router.push({
           path: `/student/package/${packageId}`
         })
-      }else{
+      } else {
         this.$router.push({
           path: `package/${packageId}`
         })
       }
     },
-    async targetPage(targetPage){
+    async targetPage(targetPage) {
       this.loading = true
       this.page = targetPage
-      let payload = {perPage: this.perPage,page: this.page}
+      let payload = { perPage: this.perPage, page: this.page }
       await this.getPackagesList(payload)
       this.loading = false
     }
@@ -117,87 +119,87 @@ export default {
       font-size: 17px;
     }
     &-subject {
-    .subject-desc {
-      width: 287px;
-      height: 415px;
-      padding: 34px 34px 6px;
-      margin: 20px auto;
-      border: solid 2px #d2d2d2;
-      border-radius: 1px;
-      background: #fff;
-      .img-wrap {
+      .subject-desc {
         width: 287px;
-        height: 160px;
-        border-radius: 6px;
-        margin: 0 auto;
-        cursor: pointer;
-        .subject-cover {
+        height: 415px;
+        padding: 34px 34px 6px;
+        margin: 20px auto;
+        border: solid 2px #d2d2d2;
+        border-radius: 1px;
+        background: #fff;
+        .img-wrap {
           width: 287px;
           height: 160px;
-          object-fit: cover;
           border-radius: 6px;
+          margin: 0 auto;
+          cursor: pointer;
+          .subject-cover {
+            width: 287px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 6px;
+          }
         }
-      }
-      .subject-title {
-        font-size: 18px;
-        margin-bottom: 10px;
-        height: 24px;
-        cursor: pointer;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      span {
-        display: block;
-        font-size: 14px;
-        line-height: 22px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .purchase-lesson-package {
-        margin: 10px 0;
-        border-top: 1px solid #e3e3e3;
-        .hidden{
-          visibility: hidden;
-        }
-        .red {
-          color: #e4461f;
-          display: inline;
+        .subject-title {
+          font-size: 18px;
+          margin-bottom: 10px;
+          height: 24px;
+          cursor: pointer;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .purchase-tip {
-          color: #3491f0;
-          margin: 14px 0 5px 0;
+        span {
+          display: block;
           font-size: 14px;
-        }
-        .purchase-money {
-          margin: 2px 0;
-          cursor: default;
+          line-height: 22px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          .free{
-            color: #67c23a;
+        }
+        .purchase-lesson-package {
+          margin: 10px 0;
+          border-top: 1px solid #e3e3e3;
+          .hidden {
+            visibility: hidden;
           }
-          .money{
+          .red {
+            color: #e4461f;
+            display: inline;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .purchase-tip {
+            color: #3491f0;
+            margin: 14px 0 5px 0;
             font-size: 14px;
-            display: inline-block;
-            padding: 0 12px;
-            height: 27px;
-            border: solid 2px #f3f3f3;
-            text-align: left;
-            line-height: 27px;
-            border-radius: 15px;
-            max-width: 255px;
+          }
+          .purchase-money {
+            margin: 2px 0;
+            cursor: default;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .free {
+              color: #67c23a;
+            }
+            .money {
+              font-size: 14px;
+              display: inline-block;
+              padding: 0 12px;
+              height: 27px;
+              border: solid 2px #f3f3f3;
+              text-align: left;
+              line-height: 27px;
+              border-radius: 15px;
+              max-width: 255px;
+            }
           }
         }
       }
     }
-    }
-    &-pages{
+    &-pages {
       text-align: center;
       padding: 40px 0;
     }

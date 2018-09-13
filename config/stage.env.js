@@ -17,5 +17,9 @@ module.exports = merge(prodEnv, {
   PARACRAFT: `"https://www.paracraft.cn"`,
   QQ_URL: `"http://wpa.qq.com"`,
   BOARD: `"https://stage.keepwork.com/wiki/wikieditor/board.stage.html?"`,
-  PDF: `"https://keepwork.com/pdf"`
+  PDF: `"https://keepwork.com/pdf"`,
+  PACKAGE_GOOD_DETAIL: {
+    APP_NAME: `"lessons"`,
+    APP_GOODS_ID: 1
+  }
 })

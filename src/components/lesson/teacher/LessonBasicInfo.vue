@@ -3,15 +3,18 @@
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url" v-show="!isEditorMod">
         <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
-        <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @blur='setUrl'>
-          <template slot="prepend">{{linkPagePrefix}}</template>
-        </el-input>
+        <div class="lesson-basic-info-url-box">
+          <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @input='checkTempUrlValid' @blur='setUrl'>
+            <template slot="prepend">{{linkPagePrefix}}</template>
+          </el-input>
+          <div class="lesson-basic-info-url-box-error">{{urlInvalidInfo}}</div>
+        </div>
       </div>
       <div class="lesson-basic-info-subject-packages">
         <div class="lesson-basic-info-subject">
           <label class="lesson-basic-info-label" for="subjectSelector">{{$t('lesson.packageManage.Subject')}}</label>
           <el-select size="mini" v-model="editingLessonDetail.subjectId">
-            <el-option v-for="item in lessonSubjects" :key="item.id" :label="item.subjectName" :value="item.id">
+            <el-option v-for="item in lessonSubjects" :key="item.id" :label="subjectName(item)" :value="item.id">
             </el-option>
           </el-select>
         </div>
@@ -42,6 +45,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import colI18n from '@/lib/utils/i18n/column'
+
 export default {
   name: 'LessonBasicInfo',
   props: {
@@ -64,16 +69,15 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = this.isEditorMod ? this.activePageUrl.replace(`/${this.username}/`,'') : url && url.replace(new RegExp(this.linkPagePrefix), '')
-      let origin = window.location.origin
-      if (origin === 'http://localhost:8080') {
-        origin = 'https://stage.keepwork.com'
-      }
-      let _url = `${origin}/${this.username}/${unescape(this.tempUrl)}`
-      this.editingLessonDetail = { url: _url, subjectId, lessonName }
-    } else {
-      this.editingLessonDetail.subjectId = this.lessonSubjects[0].id
+      this.tempUrl = this.isEditorMod
+        ? this.activePageUrl.replace(`/${this.username}/`, '')
+        : url && this.getTemplateUrl(url)
+      this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
+      this.setUrl()
     }
+    let defaultSubjectId = this.lessonSubjects[0].id
+    this.defaultSubjectId = defaultSubjectId
+    this.editingLessonDetail.subjectId = defaultSubjectId
   },
   data() {
     return {
@@ -83,8 +87,13 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      urlInvalidInfo: '',
+      defaultSubjectId: undefined,
+      defaultMinAge: 0,
+      defaultMaxAge: 0,
+      oldLinkPrefiex: '',
       editingLessonDetail: {
-        url: undefined,
+        url: null,
         subjectId: null,
         lessonName: ''
       }
@@ -97,11 +106,17 @@ export default {
       userPackages: 'lesson/teacher/userPackages',
       activePageUrl: 'activePageUrl'
     }),
+    isLinkPageUrlValid() {
+      return this.urlInvalidInfo.length == 0
+    },
     username() {
       return _.get(this.userProfile, 'username')
     },
+    origin() {
+      return window.location.origin
+    },
     linkPagePrefix() {
-      return `${window.location.origin}/${this.username}/`
+      return `${this.origin}/${this.username}/`
     }
   },
   methods: {
@@ -122,7 +137,10 @@ export default {
       this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
-          packageName: this.newPackageName
+          packageName: this.newPackageName,
+          subjectId: this.defaultSubjectId,
+          minAge: this.defaultMinAge || 0,
+          maxAge: this.defaultMaxAge || 0
         }
       }).then(packageDetail => {
         let id = _.get(packageDetail, 'id')
@@ -133,12 +151,37 @@ export default {
       })
       this.isPackageZoneLoading = false
     },
+    checkTempUrlValid() {
+      let tempUrl = this.tempUrl
+      const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]*$/)
+      if (tempUrl == '' || ValidPageLinkReg.test(tempUrl)) {
+        this.urlInvalidInfo = ''
+        return true
+      } else {
+        this.urlInvalidInfo = this.$t('lesson.lessonManage.pageLinkInvalidInfo')
+        return false
+      }
+    },
     setUrl() {
+      if (!this.checkTempUrlValid()) {
+        return
+      }
       if (this.tempUrl == '') {
-        this.editingLessonDetail.url = undefined
+        this.editingLessonDetail.url = null
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
+    },
+    subjectName(subject) {
+      return colI18n.getLangValue(subject, 'subjectName')
+    },
+    getTemplateUrl(url) {
+      let username = this.username
+      let usernameLen = username.length
+      let usernameIndex = url.indexOf(username)
+      let templateUrlStartIndex =
+        usernameIndex >= 0 ? usernameIndex + usernameLen + 1 : 0
+      return url.substring(templateUrlStartIndex)
     }
   }
 }
@@ -178,6 +221,16 @@ export default {
       border-width: 0 0 1px;
       border-color: #409efe;
       border-radius: 0;
+    }
+  }
+  &-url-box {
+    position: relative;
+    &-error {
+      position: absolute;
+      left: 10px;
+      bottom: -20px;
+      font-size: 12px;
+      color: #f75858;
     }
   }
   &-subject-packages {

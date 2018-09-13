@@ -24,6 +24,11 @@ const actions = {
   toggleHint({ commit }) {
     commit(TOGGLE_HINT)
   },
+  async getAllTeacherData(context) {
+    let { dispatch } = context
+    await dispatch('getUserLessons', { useCache: false })
+    await dispatch('getUserPackages', { useCache: false })
+  },
   async getLessonContent({ commit }, lessonId) {
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
@@ -124,7 +129,7 @@ const actions = {
       .catch(error => {
         return Promise.reject(error.response)
       })
-    await dispatch('getUserPackages', { useCache: false })
+    await dispatch('getAllTeacherData')
     return newPackageDetail
   },
   async addLessonToPackage(context, { packageId, lessonId, isLastOne = true }) {
@@ -138,7 +143,8 @@ const actions = {
       return Promise.reject(error.response)
     })
     if (isLastOne) {
-      await dispatch('getUserPackages', { useCache: false })
+      console.log(111)
+      await dispatch('getAllTeacherData')
     }
   },
   async removeLessonFromPackage(context, { packageId, lessonId, isLastOne = true }) {
@@ -152,7 +158,7 @@ const actions = {
       return Promise.reject(error.response)
     })
     if (isLastOne) {
-      await dispatch('getUserPackages', { useCache: false })
+      await dispatch('getAllTeacherData')
     }
   },
   async createNewLesson(context, { newLessonData }) {
@@ -177,29 +183,33 @@ const actions = {
     await lesson.packages.update({ updatingPackageData }).catch(error => {
       return Promise.reject(error.response)
     })
-    await dispatch('getUserPackages', { useCache: false })
+    await dispatch('getAllTeacherData')
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
-    await lesson.packages.audit({ packageId, state: state })
-    await dispatch('getUserPackages', { useCache: false })
+    await lesson.packages.audit({ packageId, state: state }).then(async () => {
+      await dispatch('getAllTeacherData')
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
   },
   async releasePackage(context, { packageDetail }) {
     let { dispatch } = context
     await lesson.packages.release({ packageDetail }).catch(error => {
       return Promise.reject(error.response)
     })
-    await dispatch('getUserPackages', { useCache: false })
+    await dispatch('getAllTeacherData')
   },
   async deletePackage(context, { packageId }) {
     let { dispatch } = context
     await lesson.packages.delete({ packageId })
-    await dispatch('getUserPackages', { useCache: false })
+    await dispatch('getAllTeacherData')
   },
   async deleteLesson(context, { lessonId }) {
     let { dispatch } = context
     await lesson.lessons.delete({ lessonId })
-    await dispatch('getUserLessons', { useCache: false })
+    await dispatch('getAllTeacherData')
   },
   async getLessonList(context, { packageId, useCache = true }) {
     let {

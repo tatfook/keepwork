@@ -1,12 +1,20 @@
 <template>
-  <div class="teacher-summary" v-loading="loading">
+  <div class="teacher-summary" v-loading="loading" ref="print">
     <div class="teacher-summary-print-and-email">
-      <el-button type="primary" @click="gotoPrint" v-show="!isPrintPage">{{$t('lesson.print')}}</el-button>
-      <el-button type="primary" @click="sendEmail" v-show="!isPrintPage">{{$t('lesson.sendToMailbox')}}</el-button>
+      <div class="teacher-summary-print-and-email-wrap">
+        <el-button type="primary" @click="gotoPrint">{{$t('lesson.print')}}</el-button>
+        <el-button type="primary" @click="sendEmail">{{$t('lesson.sendToMailbox')}}</el-button>
+      </div>
+    </div>
+    <div class="teacher-summary-print-header">
+      <div class="profile">
+        <img :src='userProfile.portrait' alt="portrait">
+      </div>
+      <div class="nickname">{{username}}</div>
     </div>
     <div class="teacher-summary-brief" ref="lessonIntro">
       <p class="date">
-        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span v-show="isPrintPage">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
+        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span class="print-show">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
       <p class="package-text">
         <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
       <p class="package-text">
@@ -17,7 +25,7 @@
         <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skill.skillName}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}}</li>
           </ul>
         </div>
       </div>
@@ -37,7 +45,7 @@
     </div>
     <div class="teacher-summary-detailed" ref="lessonSummary">
       <h4>{{$t('lesson.detailed')}}:</h4>
-      <div class="teacher-summary-detailed-change hidden" v-show="!isPrintPage">
+      <div class="teacher-summary-detailed-change hidden web-page-show">
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
         <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
       </div>
@@ -62,13 +70,16 @@
           </el-table-column>
           <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
           </el-table-column>
-          <el-table-column label=" " v-if="!isPrintPage">
+          <el-table-column>
             <template slot-scope="scope">
-              <el-button class="hidden" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
+              <el-button class="hidden web-page-show" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
+    </div>
+    <div class="teacher-summary-print-lesson-plan">
+      <lesson-wrap v-for="(item,index) in modList" :key="index" :data="item" :isPreview="true" :isPrint="true"></lesson-wrap>
     </div>
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
       <div class="tip">
@@ -98,13 +109,16 @@ import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
+import LessonWrap from '@/components/lesson/common/LessonWrap'
+import Parser from '@/lib/mod/parser'
+import colI18n from '@/lib/utils/i18n/column'
 
 export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      modList: [],
       emailAddress: '',
-      isPrintPage: this.$route.name === 'Print',
       isEn: locale === 'en-US',
       currenClassInfo: { extra: {}},
       classid: this.$route.params.classId,
@@ -143,16 +157,22 @@ export default {
       this.lessonName = res.extra.lessonName
     }).catch(err => console.log(err))
     await this.getClassLearnRecords({ id: this.$route.params.classId })
+    let res = await lesson.lessons.lessonContent({
+      lessonId: this.$route.params.lessonId
+    })
+    this.modList = Parser.buildBlockList(res.content)
     if (this.classroomLearnRecord.length === 0) {
       this.loading = false
       return
     }
     this.totalStudent = this.classroomLearnRecord.length
-    await Promise.all([this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord)])
+    await Promise.all([this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord),this.getProfile()])
     this.loading = false
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/profile',
+      username: 'user/username',
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
     }),
     getWeekDay() {
@@ -240,6 +260,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getProfile: 'user/getProfile',
       getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
       modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
@@ -290,11 +311,8 @@ export default {
       })
       return learnRecordsArr
     },
-    gotoPrint(){
-      this.$router.push({
-          name:'Print',
-          params: {packageId: this.$route.params.packageId, lessonId:this.$route.params.lessonId, classId: this.$route.params.lessonId }
-        })
+    async gotoPrint(){
+      window.print()
     },
     async sendEmail() {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
@@ -402,6 +420,9 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    skillName(skill) {
+      return colI18n.getLangValue(skill, 'skillName')
     }
   },
   filters: {
@@ -410,6 +431,7 @@ export default {
     }
   },
   components: {
+    LessonWrap,
     AccuracyRateChart,
     NumberOfStudentsChart
   }
@@ -421,8 +443,22 @@ export default {
   margin: 0 auto;
   padding: 0 40px 40px;
   background: #fff;
+  .web-page-show{
+    display: block;
+  }
   &-print-and-email {
-    padding: 29px 0 0 816px;
+    overflow: hidden;
+    &-wrap{
+      padding: 40px;
+      width: 300px;
+      float: right;
+    }
+  }
+  &-print-header{
+    display: none;
+  }
+  &-print-lesson-plan{
+    display: none;
   }
   &-brief {
     margin-bottom: 40px;
@@ -434,10 +470,13 @@ export default {
       .week {
         margin-right: 25px;
       }
+      .print-show{
+        display: none;
+      }
     }
     .package-text{
       word-break:break-all;
-      word-wrap:break-word; 
+      word-wrap:break-word;
     }
     .brief-title {
       font-size: 16px;
@@ -519,5 +558,52 @@ export default {
       color: #409eff;
     }
   }
+}
+@media print{
+    .teacher-summary {
+      &-detailed{
+        .web-page-show{
+          display: none;
+        }
+      }
+      &-print-and-email{
+        display: none;
+      }
+       &-print-header{
+        display: block;
+        width: 1150px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #fff;
+        text-align: center;
+        .profile{
+          margin: 0 auto;
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          overflow: hidden;
+          img{
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .nickname{
+          font-size: 24px;
+          line-height: 34px;
+          letter-spacing: 1px;
+          color: #333333;
+        }
+      }
+      &-print-lesson-plan{
+        display: block;
+      }
+      &-brief{
+        .date{
+          .print-show{
+            display: inline-block;
+          }
+        }
+      }
+    }
 }
 </style>

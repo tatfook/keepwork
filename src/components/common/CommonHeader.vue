@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
       <el-menu-item index='0'>
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
@@ -52,7 +52,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="/lesson.html#/student/center">课程中心</a>
+              <a :href='lessonCenterUrl'>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
@@ -149,7 +149,8 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
-      isRegisterDialogShow: false
+      isRegisterDialogShow: false,
+      envIsForDevelopment: process.env.NODE_ENV === 'development'
     }
   },
   computed: {
@@ -162,6 +163,14 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    hostname() {
+      return window.location.hostname
+    },
+    lessonCenterUrl() {
+      return this.hostname === 'localhost'
+        ? '/lesson.html#/student/center'
+        : '/l#/student/center'
     }
   },
   mounted() {
@@ -181,8 +190,12 @@ export default {
       userLogout: 'user/logout'
     }),
     backEditArea() {
-      this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
-      window.location.reload()
+      let origin = window.location.origin
+      if(this.envIsForDevelopment){
+        window.location.href=origin+'/editor.html#/'
+      }else{
+        window.location.href=origin+'/wiki/wikieditor/#/'
+      }
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -212,6 +225,7 @@ export default {
     },
     logout() {
       this.userLogout()
+      this.$emit('callback')
       // window.location.reload()
     },
     goJoin() {
@@ -330,6 +344,11 @@ export default {
 @media (max-width: 768px) {
   .el-submenu__title {
     padding: 0 15px;
+  }
+}
+@media print{
+  .common-header{
+    display: none;
   }
 }
 </style>

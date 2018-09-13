@@ -6,8 +6,8 @@
         <el-breadcrumb-item>{{isEditing ? packageName : $t('lesson.newPackage')}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="package-editor-header-header-operations">
-        <el-button round @click="toPackageManagerPage" class="package-editor-header-header-cancel-button">{{$t('common.Cancel')}}</el-button>
-        <el-button round @click="savePackage" class="package-editor-header-header-save-button" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
+        <el-button round @click="toPackageManagerPage" v-if="isEditable" class="package-editor-header-header-cancel-button">{{$t('common.Cancel')}}</el-button>
+        <el-button round @click="savePackage" v-if="isEditable" class="package-editor-header-header-save-button" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
         <el-button round type="primary" v-if="isSubmitable" class="package-editor-header-header-submit-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
         <el-button round type="primary" v-if="isReleasable" class="package-editor-header-header-release-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="releasePackage">{{$t('lesson.packageManage.Release')}}</el-button>
       </div>
@@ -25,6 +25,10 @@ export default {
     activeTab: String,
     editingPackageDetail: Object,
     isEditing: Boolean,
+    isEditable: {
+      type: Boolean,
+      default: true
+    },
     isSubmitable: {
       type: Boolean,
       default: true
