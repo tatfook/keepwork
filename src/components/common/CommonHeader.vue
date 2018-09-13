@@ -149,8 +149,7 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
-      isRegisterDialogShow: false,
-      // envIsForDevelopment: process.env.NODE_ENV === 'development'
+      isRegisterDialogShow: false
     }
   },
   computed: {
@@ -191,12 +190,10 @@ export default {
     }),
     backEditArea() {
       let origin = window.location.origin
-      if(window.location.hostname === 'localhost'){
-        // window.location.href=origin+'/editor.html#/'
-        window.open(origin+'/editor.html#/')
-      }else{
-        // window.location.href=origin+'/wiki/wikieditor/#/'
-        window.open(origin+'/wiki/wikieditor/#/')
+      if (window.location.hostname === 'localhost') {
+        window.open(`${origin}/editor.html#/`)
+      } else {
+        window.open(`${origin}/wiki/wikieditor/#/`)
       }
     },
     goPersonalCenter() {
@@ -348,12 +345,9 @@ export default {
     padding: 0 15px;
   }
 }
-@media print{
-  .common-header{
+@media print {
+  .common-header {
     display: none;
   }
 }
 </style>
-
-
-
