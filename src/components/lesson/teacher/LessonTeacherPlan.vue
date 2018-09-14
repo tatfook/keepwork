@@ -1,7 +1,9 @@
 <template>
-  <div class="lesson-plan">
+  <div class="lesson-plan" mod-container>
     <lesson-hint-toggle v-if="ishasHint" />
-    <lesson-wrap v-for="mod in lessonMain" :mod="mod" :key="mod.key" :isPreview="true" :isTeacher="true" />
+    <template v-for="mod in lessonMain">
+      <lesson-wrap :mod="mod" :key="mod.key" :isPreview="true" :isTeacher="true" />
+    </template>
   </div>
 </template>
 

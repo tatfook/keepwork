@@ -1,10 +1,11 @@
 <template>
-  <div mod-container>
+  <div>
     <hint v-if="isTeacher && mod.cmd === 'Hint' && isShowHint" :data="mod" :key="mod.key"></hint>
     <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :key="mod.key"></quiz>
     <div v-else class="mod-item-container">
       <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
     </div>
+
   </div>
 </template>
 
@@ -15,8 +16,6 @@ import themeFactory from '@/lib/theme/theme.factory'
 import ThemeHelper from '@/lib/theme'
 import Quiz from './Quiz'
 import Hint from './Hint'
-import Markdown from './Markdown'
-import BigFile from './BigFile'
 import { mapGetters } from 'vuex'
 export default {
   name: 'LessonWrap',
@@ -24,13 +23,6 @@ export default {
     Quiz,
     Hint,
     ModLoader
-  },
-  data() {
-    return {
-      modConf: null,
-      modComponent: null,
-      themeConf: ThemeHelper.defaultTheme
-    }
   },
   props: {
     mod: Object,
@@ -54,7 +46,7 @@ export default {
       isShowHint: 'lesson/teacher/isShowHint'
     }),
     theme() {
-      let newTheme = themeFactory.generate(this.themeConf)
+      let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
       if (this.storedTheme === newTheme) return this.storedTheme
       if (this.storedTheme) this.storedTheme.sheet.detach()
       this.storedTheme = newTheme
