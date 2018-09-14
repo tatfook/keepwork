@@ -161,15 +161,15 @@ export default {
       shareWebUrl = encodeURIComponent(shareWebUrl)
       let shareTitle = 'keepwork'
       let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
-      let content = '我在keepwork上面学习'
+      let content = `我在一网乾坤学习${this.lessonName},快来跟我一起吧！`
       if(socialPlatform=='qq'){
-        window.open('http://connect.qq.com/widget/shareqq/index.html?url='+shareWebUrl+'?sharesource=qzone&title='+shareTitle+'&pics='+imgUrl+'&summary='+content+'&desc=keepwork自学网，一个前端工程师的网站');
+        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在一网乾坤学习${this.lessonName},快来跟我一起吧！`);
       }
       if(socialPlatform=='qzone'){
-        window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+shareWebUrl+'?sharesource=qzone&title='+shareTitle+'&pics='+imgUrl+'&summary='+content);
+        window.open(`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`);
       }
       if(socialPlatform=='sina'){
-        window.open('http://service.weibo.com/share/share.php?url='+shareWebUrl+'?sharesource=weibo&title='+shareTitle+'&pic='+imgUrl+'&appkey=2706825840');
+        window.open(`http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`);
       }
     }
   }
