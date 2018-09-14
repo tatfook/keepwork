@@ -32,11 +32,6 @@ export default [
       config: {
         ...emptyData
       }
-    },
-    preview: {
-      inner: {
-        'margin-top': '-20px'
-      }
     }
   }
 ]
