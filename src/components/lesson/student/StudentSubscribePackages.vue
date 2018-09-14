@@ -82,7 +82,7 @@ export default {
         })
       }else{
         let packageId = this.packageDetail.id
-        let lessonId = this.packageDetail.lessons.length
+        let lessonId = this.packageDetail.learnedLessons.length
         this.$router.push({
           path: `student/package/${packageId}/lesson/${lessonId}`
         })

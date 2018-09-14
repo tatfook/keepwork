@@ -157,7 +157,7 @@ export default {
       let packageId = this.$route.params.packageId
       let lessonId = this.$route.params.lessonId
       let styleId = this.$refs.shareStyle.currentStyle
-      let shareWebUrl = `${origin}/lesson.html#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
       shareWebUrl = encodeURIComponent(shareWebUrl)
       let shareTitle = 'keepwork'
       let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
