@@ -38,7 +38,9 @@
             <a @click.prevent="toAboutPage" href="" class="highlight link">这里</a> 加入，并和我一起学习
           </div>
           <div class="summary-word-line">
-            这是我第<span class="highlight">{{summary.day}}</span> 天在keepwork学习<span class="highlight">{{summary.name}}</span>
+            这是我第
+            <span class="highlight">{{summary.day}}</span> 天在keepwork学习
+            <span class="highlight">{{summary.name}}</span>
           </div>
           <div class="summary-word-line">
             今天，我读了
@@ -62,6 +64,7 @@ import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
+import { lesson } from '@/api'
 export default {
   name: 'LessonSummaryShare',
   props: {
@@ -91,12 +94,18 @@ export default {
       dialogVisible: false
     }
   },
-  beforeMount() {
+  async beforeMount() {
     if (this.isPreview) {
       this.summary = _.merge(this.summary, this.lessonSummary)
     } else {
-      this.style = Number(this.$route.params.styleId) || 1
-      this.$set(this.summary, _.merge(this.summary, this.$route.query))
+      // await lesson.lessons
+      //   .lessonDetail({ lessonId: this.$route.params.lessonId })
+      //   .then(res => {
+      //     console.log('res',res)
+          this.style = Number(this.$route.params.styleId) || 1
+          this.$set(this.summary, _.merge(this.summary, this.$route.query))
+        // })
+        // .catch(err => console.error(err))
     }
   },
   computed: {

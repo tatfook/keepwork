@@ -6,7 +6,7 @@
         {{$t('lesson.styles', { number: 3})}}
       </div>
       <div class="share-style-select-panel">
-        <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
+        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle"/>
       </div>
       <div class="share-icons" v-if="IS_GLOBAL_VERSION">
         <span class="facebook-icon"></span>
@@ -14,9 +14,9 @@
         <span class="google-icon"></span>
       </div>
       <div class="share-icons" v-else>
-        <span class="iconfont icon-qq1"></span>
-        <span class="iconfont icon-interspace"></span>
-        <span class="iconfont icon-weibo"></span>
+        <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
+        <span class="iconfont icon-interspace" @click="shareTo('qzone')"></span>
+        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span>
       </div>
       <div class="share-tips">
         {{$t('lesson.shareSummaryByNet')}}
@@ -56,7 +56,6 @@ export default {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
-    console.log('lessonDetail', this.lessonDetail)
   },
   computed: {
     ...mapGetters({
@@ -152,6 +151,26 @@ export default {
     },
     showSharePanel() {
       this.isShowSharePanel = true
+    },
+    shareTo(socialPlatform){
+      let origin = window.location.origin
+      let packageId = this.$route.params.packageId
+      let lessonId = this.$route.params.lessonId
+      let styleId = this.$refs.shareStyle.currentStyle
+      let shareWebUrl = `${origin}/lesson.html#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+      shareWebUrl = encodeURIComponent(shareWebUrl)
+      let shareTitle = 'keepwork'
+      let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
+      let content = '我在keepwork上面学习'
+      if(socialPlatform=='qq'){
+        window.open('http://connect.qq.com/widget/shareqq/index.html?url='+shareWebUrl+'?sharesource=qzone&title='+shareTitle+'&pics='+imgUrl+'&summary='+content+'&desc=keepwork自学网，一个前端工程师的网站');
+      }
+      if(socialPlatform=='qzone'){
+        window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+shareWebUrl+'?sharesource=qzone&title='+shareTitle+'&pics='+imgUrl+'&summary='+content);
+      }
+      if(socialPlatform=='sina'){
+        window.open('http://service.weibo.com/share/share.php?url='+shareWebUrl+'?sharesource=weibo&title='+shareTitle+'&pic='+imgUrl+'&appkey=2706825840');
+      }
     }
   }
 }
