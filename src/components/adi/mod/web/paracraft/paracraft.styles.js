@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   preview: {
-    emptySrc: require('@/../static/adi/paracraft/preview.jpg'),
+    emptySrc: require('@/assets/adi/paracraft/preview.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -12,7 +12,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   backgroundImage: {
-    emptySrc: require('@/../static/adi/paracraft/backgroundImage.png'),
+    emptySrc: require('@/assets/adi/paracraft/backgroundImage.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -44,7 +44,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   viewTimesImg: {
-    emptySrc: require('@/../static/adi/paracraft/eye.png'),
+    emptySrc: require('@/assets/adi/paracraft/eye.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -273,12 +273,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
-    preview: {
-      inner: {
-        'margin-top': '-5px'
-      }
-    }
+    cover: ''
   },
   // style 1
   {
@@ -369,7 +364,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: require('@/../static/adi/paracraft/down.png')
+            src: require('@/assets/adi/paracraft/down.png')
           },
           space: {
             mobileMarginTop: '10px'
@@ -395,12 +390,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft2.png'),
-    preview: {
-      inner: {
-        'margin-top': '-20px'
-      }
-    }
+    cover: ''
   },
   // style 2
   {
@@ -474,7 +464,7 @@ export default [
           img: {
             width: '20px',
             height: '20px',
-            src: require('@/../static/adi/paracraft/down.png')
+            src: require('@/assets/adi/paracraft/down.png')
           },
           space: {
             webMarginTop: '40px',
@@ -502,12 +492,7 @@ export default [
         }
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft3.png'),
-    preview: {
-      inner: {
-        'margin-top': '-20px'
-      }
-    }
+    cover: ''
   },
   // style 3
   {
@@ -517,7 +502,6 @@ export default [
         position: 'relative'
       },
       preview: {
-        height: '100%',
         'border-radius': '5px',
         overflow: 'hidden'
       },
@@ -525,18 +509,9 @@ export default [
         width: 'auto'
       },
       colViewTimesImg: {
-        width: '20px',
-        height: '14px',
         'margin-right': '5px'
       },
-      viewTimesImg: {
-        width: '100%',
-        height: '100%'
-      },
       '@media only screen and (max-width: 767px)': {
-        colPreview: {
-          'height': '200px'
-        },
         colGroupBA: {
           'margin-top': '10px'
         },
@@ -585,9 +560,6 @@ export default [
         colParacraft: {
           position: 'relative',
           'margin-top': '-505px'
-        },
-        backgroundImage: {
-          height: '510px'
         },
         colSubtitle: {
           'margin-top': '20px',
@@ -706,15 +678,32 @@ export default [
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        }
+        },
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '100%',
+            defaultMobileHeight: '200px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
+          }
+        }),
+        viewTimesImg: _.merge({}, emptyData.viewTimesImg, {
+          img: {
+            defaultWebHeight: '14px',
+            defaultMobileHeight: '14px',
+            defaultWebWidth: '20px',
+            defaultMobileWidth: '20px'
+          }
+        }),
+        backgroundImage: _.merge({}, emptyData.backgroundImage, {
+          img: {
+            defaultWebHeight: '510px',
+            defaultMobileHeight: '314px'
+          }
+        })
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
-    preview: {
-      inner: {
-        'margin-top': '-20px'
-      }
-    }
+    cover: ''
   },
   // style 4
   {
@@ -723,30 +712,26 @@ export default [
       root: {
         position: 'relative'
       },
+      preview: {
+        'border-radius': '5px',
+        overflow: 'hidden'
+      },
       colTitle: {
         width: 'auto'
       },
       colViewTimesImg: {
-        width: '20px',
-        height: '14px',
         'margin-right': '5px'
-      },
-      viewTimesImg: {
-        width: '100%',
-        height: '100%'
       },
       '@media only screen and (max-width: 767px)': {
         preview: {
-          height: '80px',
-          width: '80px',
-          'border-radius': '5px',
-          overflow: 'hidden'
         },
         colPreview: {
-          width: '100px'
         },
         colGroupB: {
           'margin-top': '10px'
+        },
+        colGroupBA: {
+          'padding-left': '15px'
         },
         colAuthor: {
           'margin-top': '10px'
@@ -769,10 +754,6 @@ export default [
       },
       '@media only screen and (min-width: 768px)': {
         preview: {
-          height: '150px',
-          width: '150px',
-          'border-radius': '5px',
-          overflow: 'hidden'
         },
         colGroupB: {
           height: '300px',
@@ -799,9 +780,6 @@ export default [
         colParacraft: {
           position: 'relative',
           'margin-top': '-505px'
-        },
-        backgroundImage: {
-          height: '510px'
         },
         colSubtitle: {
           'margin-top': '20px',
@@ -923,14 +901,31 @@ export default [
           width: '70%',
           height: '80%',
           'background-color': 'white'
-        }
+        },
+        preview: _.merge({}, emptyData.preview, {
+          img: {
+            defaultWebHeight: '150px',
+            defaultMobileHeight: '80px',
+            defaultWebWidth: '150px',
+            defaultMobileWidth: '80px'
+          }
+        }),
+        viewTimesImg: _.merge({}, emptyData.viewTimesImg, {
+          img: {
+            defaultWebHeight: '14px',
+            defaultMobileHeight: '14px',
+            defaultWebWidth: '20px',
+            defaultMobileWidth: '20px'
+          }
+        }),
+        backgroundImage: _.merge({}, emptyData.backgroundImage, {
+          img: {
+            defaultWebHeight: '510px',
+            defaultMobileHeight: '314px'
+          }
+        })
       }
     },
-    cover: require('@/../static/adi/paracraft/paracraft1.png'),
-    preview: {
-      inner: {
-        'margin-top': '-20px'
-      }
-    }
+    cover: ''
   }
 ]

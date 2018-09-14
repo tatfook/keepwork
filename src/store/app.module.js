@@ -90,7 +90,7 @@ const actions = {
 
     if (path === '/') return
     await dispatch('loadLayout', { path })
-    await dispatch('gitlab/readFile', { path }, { root: true })
+    await dispatch('gitlab/readFile', { path, editorMode: false }, { root: true })
     let { content } = rootGetters['gitlab/getFileByPath'](path)
     let payload = { code: content, historyDisabled: true }
     content && dispatch('updateMarkDown', payload)

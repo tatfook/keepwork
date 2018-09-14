@@ -34,15 +34,15 @@
         <el-input :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
           <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
           <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
-          <el-select v-model="item.link" slot="append" placeholder="Select">
-            <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="locationOrigin + '/' + path">
+          <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
+            <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
               {{ path }}
             </el-option>
           </el-select>
         </el-input>
       </div>
     </div>
-    <SkyDriveManagerDialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -58,8 +58,7 @@ export default {
   },
   data() {
     return {
-      locationOrigin: location.origin,
-      selectedIndex: NaN,
+      selectedIndex: 0,
       isSkyDriveManagerDialogShow: false,
       autoplay: false,
       playloop: false
@@ -76,7 +75,8 @@ export default {
       get() {
         return this.originValue
       },
-      set() {}
+      set() {
+      }
     }
   },
   methods: {
@@ -90,7 +90,7 @@ export default {
     },
     handleAdd() {
       this.galleryData.push({
-        img: require('@/../static/adi/imgLoop/imgCarouselOne.jpg'),
+        img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
         link: ''
       })
       this.handleChange()
@@ -149,6 +149,9 @@ export default {
       }
 
       this.handleChange()
+    },
+    getLocationUrl(url) {
+      return url ? location.origin + '/' + url : ''
     }
   },
   components: {

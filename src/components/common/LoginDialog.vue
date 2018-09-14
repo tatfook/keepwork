@@ -17,31 +17,33 @@
           <div class="title">
             <span>{{$t('common.usingFollowingAccount')}}</span>
           </div>
-          <a @click="authorizedToLogin('qq')">
-            <img src="@/assets/img/wiki_qq.png" alt="">
-          </a>
-          <a @click="authorizedToLogin('weixin')">
-            <img src="@/assets/img/wiki_wechat.png" alt="">
-          </a>
-          <a @click="authorizedToLogin('xinlangweibo')">
-            <img src="@/assets/img/wiki_sina_weibo.png" alt="">
-          </a>
-          <a @click="authorizedToLogin('github')">
-            <img src="@/assets/img/wiki_github_logo.png" alt="">
-          </a>
+          <div class="three-login-wrap">
+            <a @click="authorizedToLogin('qq')">
+              <img src="@/assets/img/wiki_qq.png" alt="">
+            </a>
+            <a @click="authorizedToLogin('weixin')">
+              <img src="@/assets/img/wiki_wechat.png" alt="">
+            </a>
+            <a @click="authorizedToLogin('xinlangweibo')">
+              <img src="@/assets/img/wiki_sina_weibo.png" alt="">
+            </a>
+            <a @click="authorizedToLogin('github')">
+              <img src="@/assets/img/wiki_github_logo.png" alt="">
+            </a>
+          </div>
         </div>
       </el-form>
     </div>
     <div v-show="isRegisterForm">
-        <RegisterDialog @close="handleClose"/>
+        <register-dialog @close="handleClose"></register-dialog>
         <div><span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span></div>
         <div><span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span></div>
     </div>
     <div v-show="isPerfectRegisterInfo">
-      <PerfectRegisterInfo @close="handleClose" :userThreeService="userThreeService"/>
+      <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
   </el-dialog>
-  
+
 
 </template>
 <script>
@@ -119,7 +121,6 @@ export default {
           }
           this.loading = true
           let info = await this.userLogin(payload).catch(e => {
-            console.error(e)
             this.loading = false
           })
           this.loading = false
@@ -145,11 +146,9 @@ export default {
       this.$auth
         .authenticate(provider)
         .then(async result => {
-          console.log('1',result)
           this.handleLoginResult(result)
         })
         .catch(async result => {
-          console.log('2',result)
           this.handleLoginResult(result)
         })
     },
@@ -161,7 +160,6 @@ export default {
           this.isRegisterForm = false
           this.isPerfectRegisterInfo = true
           this.userThreeService = result.data.data
-          // this.handleClose()
         } else {
           // 登录成功  进行页面跳转
           let token = result.data.token
@@ -236,12 +234,14 @@ export default {
       }
     }
     &-three-login {
-      a {
-        display: inline-block;
-        width: 24%;
-        text-align: center;
-        img {
-          cursor: pointer;
+      .three-login-wrap{
+        display: flex;
+        a {
+          flex: 1;
+          text-align: center;
+          img {
+            cursor: pointer;
+          }
         }
       }
       .title {

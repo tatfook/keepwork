@@ -1,5 +1,5 @@
 <template>
-  <div class="file-manager" v-loading="loading">
+  <div class="file-manager">
     <div v-show="hasOpenedFiles" class="opened-tree tree-item" :class="{'is-active': trees.isOpenedShow}" v-loading="savePending">
       <div class="opened-files-container">
         <h1 class="toggle-bar" @click='toggleContent("isOpenedShow")'>
@@ -32,14 +32,14 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow && !loading" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
-          <NewWebsiteDialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' />
+          <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </div>
       </el-collapse-transition>
     </div>
@@ -49,7 +49,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow && !loading" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -73,7 +73,6 @@ export default {
   name: 'FileManager',
   data() {
     return {
-      loading: true,
       savePending: false,
       dialogVisible: false,
       dialogCloseAllVisible: false,
@@ -96,10 +95,6 @@ export default {
     }
   },
   async mounted() {
-    await this.getAllPersonalAndContributedSite().catch(err => {
-      console.error(err)
-    })
-    this.loading = false
     this.$route.path !== '/' && await this.checkSitePath()
     await this.initUrlExpandSelect()
     this.$nextTick(() => {
@@ -172,7 +167,6 @@ export default {
     ...mapActions({
       getAllPersonalWebsite: 'user/getAllPersonalWebsite',
       getAllContributedWebsite: 'user/getAllContributedWebsite',
-      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
       updateFilemanagerTreeNodeExpandMapByPath:
         'updateFilemanagerTreeNodeExpandMapByPath',

@@ -20,6 +20,11 @@ import AdiPagePath from './pagePath/pagePath.proptypes'
 import AdiTab from './tab/tab.proptypes'
 import AdiCategoryList from './categoryList/categoryList.proptypes'
 import AdiPageSwitching from './pageSwitching/pageSwitching.proptypes'
+import AdiIcon from './icon/icon.proptypes'
+
+import AdiLesson from './lesson/lesson.proptypes'
+import AdiQuiz from './quiz/quiz.proptypes'
+import AdiHint from './hint/hint.proptypes'
 
 export default {
   AdiMarkdown,
@@ -43,5 +48,9 @@ export default {
   AdiPagePath,
   AdiTab,
   AdiCategoryList,
-  AdiPageSwitching
+  AdiPageSwitching,
+  AdiIcon,
+  AdiLesson,
+  AdiQuiz,
+  AdiHint
 }

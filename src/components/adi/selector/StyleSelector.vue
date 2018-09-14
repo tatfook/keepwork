@@ -3,7 +3,7 @@
     <div v-if='modConf.name == "ModMarkdown" || !style.useImage' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
       <div class="render-mod-container--click-prevent"></div>
       <div class="render-mod-container">
-        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :conf='modConf' :theme='theme'></component>
+        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :editMode='true' :conf='modConf' :theme='theme'></component>
       </div>
     </div>
     <img v-if='style.useImage && modConf.name != "ModMarkdown"' class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in modConf.styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">

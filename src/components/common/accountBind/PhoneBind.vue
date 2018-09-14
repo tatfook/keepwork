@@ -11,8 +11,8 @@
         <el-button size="small" class="phone-bind-form-item-button" :class="{'phone-bind-form-item-button-unbund':isUserBindPhone}" @click="toggleBindPhone">{{isUserBindPhone ? $t('user.unbunding') : $t('user.binding')}}</el-button>
       </el-form-item>
     </el-form>
-    <CodeVerifyDialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='phoneCodeDialogDatas' codeType='cellphone' @close='handleClose'></CodeVerifyDialog>
-    <PasswordVerifyDialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></PasswordVerifyDialog>
+    <code-verify-dialog :isCodeDialogVisible='isCodeDialogVisible' :codeDialogDatas='phoneCodeDialogDatas' codeType='cellphone' @close='handleClose'></code-verify-dialog>
+    <password-verify-dialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></password-verify-dialog>
   </div>
 </template>
 <script>

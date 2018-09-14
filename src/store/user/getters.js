@@ -20,13 +20,11 @@ const getters = {
     if (!token || !profileUserToken || profileUserToken !== token) return {}
     return state.profile
   },
-  isLogined: (state, { profile }) => !_.isEmpty(_.omit(profile, ['token'])),
+  isLogined: (state, { token }) => !!token,
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
   userId: (state, { profile: { _id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
-  authRequestConfig: (state, { token }) =>
-    token ? { headers: { Authorization: `Bearer ${token}` } } : {},
   realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
@@ -212,6 +210,7 @@ const getters = {
     rootState,
     rootGetters
   ) => path => {
+    if (!path) return []
     let fullPath = getFileFullPathByPath(path)
     return comments[fullPath]
   },

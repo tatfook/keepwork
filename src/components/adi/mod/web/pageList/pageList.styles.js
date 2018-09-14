@@ -15,12 +15,7 @@ export default [
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
-    preview: {
-      outter: {
-        height: '30px'
-      }
-    }
+    cover: ''
   },
 
   // style 1
@@ -40,12 +35,7 @@ export default [
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
-    preview: {
-      outter: {
-        height: '30px'
-      }
-    }
+    cover: ''
   },
 
   // style 2
@@ -64,11 +54,6 @@ export default [
       colGroupRow: ['mod-full-width']
     },
     options: {},
-    // cover: require('@/../static/adi/'),
-    preview: {
-      outter: {
-        height: '30px'
-      }
-    }
+    cover: ''
   }
 ]

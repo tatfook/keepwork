@@ -1,6 +1,8 @@
+import _ from 'lodash'
+
 let emptyData = {
   pic: {
-    emptySrc: require('@/../static/adi/qq/qqOne.svg'),
+    emptySrc: require('@/assets/adi/qq/qqOne.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -32,8 +34,6 @@ export default [
         'justify-content': 'center'
       },
       pic: {
-        width: '70px',
-        height: '70px',
         'border-radius': '50%'
       },
       colDesc: {
@@ -70,10 +70,18 @@ export default [
         }
       },
       config: {
-        ...emptyData
+        ...emptyData,
+        pic: _.merge({}, emptyData.pic, {
+          img: {
+            defaultWebHeight: '70px',
+            defaultMobileHeight: '70px',
+            defaultWebWidth: '70px',
+            defaultMobileWidth: '70px'
+          }
+        })
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverOne.png')
+    cover: ''
   },
 
   // style 1 左图右文
@@ -99,8 +107,6 @@ export default [
         'justify-content': 'flex-end'
       },
       pic: {
-        width: '70px',
-        height: '70px',
         'border-radius': '50%'
       },
       colDesc: {
@@ -148,10 +154,16 @@ export default [
         },
         pic: {
           ...emptyData.pic,
-          emptySrc: require('@/../static/adi/qq/qqTwo.svg')
+          emptySrc: require('@/assets/adi/qq/qqTwo.svg'),
+          img: {
+            defaultWebHeight: '70px',
+            defaultMobileHeight: '70px',
+            defaultWebWidth: '70px',
+            defaultMobileWidth: '70px'
+          }
         }
       }
     },
-    cover: require('@/../static/adi/qq/cover/qqCoverTwo.png')
+    cover: ''
   }
 ]

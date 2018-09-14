@@ -20,14 +20,6 @@ export default [
           notice: 'adi.comment.notice'
         }
       }
-    },
-    preview: {
-      outter: {
-        height: '28px'
-      },
-      inner: {
-        'margin-top': '-20px'
-      }
     }
   },
   // style 1
@@ -51,14 +43,6 @@ export default [
           close: 'adi.comment.close',
           notice: 'adi.comment.notice'
         }
-      }
-    },
-    preview: {
-      outter: {
-        height: '28px'
-      },
-      inner: {
-        'margin-top': '-20px'
       }
     }
   }

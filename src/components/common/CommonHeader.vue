@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
       <el-menu-item index='0'>
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
@@ -50,6 +50,9 @@
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a :href='lessonCenterUrl'>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
@@ -112,17 +115,17 @@
       </el-submenu>
     </el-menu>
     <div @click.stop v-if='isPersonalCenterShow'>
-      <PersonalCenterDialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog' />
+      <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
-      <SkyDriveManagerDialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+      <sky-drive-manager-dialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
-      <LoginDialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin' />
+      <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
-      <el-dialog width="478px"  :visible.sync="isRegisterDialogShow">
-        <RegisterDialog @close="closeRegisterDialog"/>
+      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+        <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
   </div>
@@ -159,6 +162,14 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    hostname() {
+      return window.location.hostname
+    },
+    lessonCenterUrl() {
+      return this.hostname === 'localhost'
+        ? '/lesson.html#/student/center'
+        : '/l#/student/center'
     }
   },
   mounted() {
@@ -178,8 +189,12 @@ export default {
       userLogout: 'user/logout'
     }),
     backEditArea() {
-      this.$router.push('/wiki/wikieditor/#/' + this.$route.path)
-      window.location.reload()
+      let origin = window.location.origin
+      if (window.location.hostname === 'localhost') {
+        window.open(`${origin}/editor.html#/`)
+      } else {
+        window.open(`${origin}/wiki/wikieditor/#/`)
+      }
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -209,6 +224,7 @@ export default {
     },
     logout() {
       this.userLogout()
+      this.$emit('callback')
       // window.location.reload()
     },
     goJoin() {
@@ -219,7 +235,8 @@ export default {
     }
   },
   filters: {
-    defaultPortrait: (str = '') => str.trim() || require('@/assets/img/default_portrait.png')
+    defaultPortrait: (str = '') =>
+      str.trim() || require('@/assets/img/default_portrait.png')
   },
   components: {
     PersonalCenterDialog,
@@ -311,9 +328,6 @@ export default {
   bottom: 8px;
   right: -18px;
 }
-.el-menu-item i {
-  color: #2b6da8 !important;
-}
 .profile-submenu,
 .el-popper {
   a {
@@ -331,7 +345,9 @@ export default {
     padding: 0 15px;
   }
 }
+@media print {
+  .common-header {
+    display: none;
+  }
+}
 </style>
-
-
-

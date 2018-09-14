@@ -1,15 +1,8 @@
-import axios from 'axios'
-import Cookies from 'js-cookie'
+import createEndpoint from './common/endpoint'
 
-const client = axios.create({
+const client = createEndpoint({
   baseURL: process.env.ES_GATEWAY_BASE_URL
 })
-
-// TODO
-// FIXME, should pass token through the options parameter
-const tokenConfig = () => {
-  return { headers: { Authorization: 'Bearer ' + Cookies.get('token') } }
-}
 
 /*doc
 ---
@@ -29,8 +22,7 @@ category: elasticsearch gateway
 ```
 */
 export const search = async options => {
-  const result = await client.post('es/search', options, tokenConfig())
-  return result.data
+  return client.post('es/search', options)
 }
 
 /*doc
@@ -48,7 +40,7 @@ category: elasticsearch gateway
 
 */
 export const submitGitData = async (path, action, content, options) => {
-  return client.post('git/commit', {path, action, content, options}, tokenConfig())
+  return client.post('git/commit', {path, action, content, options})
 }
 
 export default {

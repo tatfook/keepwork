@@ -40,9 +40,9 @@ export const getFileKey = file => {
   return `${fileID}.${fileExt}`
 }
 
-export const upload = async ({file, filename, onStart, onProgress}, authRequestConfig) => {
+export const upload = async ({file, filename, onStart, onProgress}) => {
   let key = getFileKey(file)
-  let { token } = await storage.files.token({ key }, authRequestConfig)
+  let { token } = await storage.files.token({ key })
   filename = filename || file.name
   let config = { region: qiniu.region.z2 }
   let putExtra = { params: { 'x:filename': filename } }
@@ -50,27 +50,24 @@ export const upload = async ({file, filename, onStart, onProgress}, authRequestC
   return { key, filename: filename, size: file.size }
 }
 
-export const remove = async ({file: { id }}, authRequestConfig) => {
-  await storage.files.delete({ id }, authRequestConfig)
+export const remove = async ({file: { id }}) => {
+  await storage.files.delete({ id })
 }
 
-export const list = async (payload, authRequestConfig) => {
-  let filelist = await storage.files.list(payload, authRequestConfig)
-  return filelist
+export const list = async (payload) => {
+  return storage.files.list(payload)
 }
 
-export const info = async (payload, authRequestConfig) => {
-  let info = await storage.files.statistics(payload, authRequestConfig)
-  return info
+export const info = async (payload) => {
+  return storage.files.statistics(payload)
 }
 
-export const changeFileName = async ({key, filename}, authRequestConfig) => {
-  await storage.files.update({key, filename}, authRequestConfig)
+export const changeFileName = async ({key, filename}) => {
+  await storage.files.update({key, filename})
 }
 
-export const useFileInSite = async ({userId, siteId, fileId}, authRequestConfig) => {
-  let url = await storage.siteFiles.url({userId, siteId, fileId}, authRequestConfig)
-  return url
+export const useFileInSite = async ({userId, siteId, fileId}) => {
+  return storage.siteFiles.url({userId, siteId, fileId})
 }
 
 export default {

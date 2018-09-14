@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <el-input class="link-type" :placeholder='$t("field."+editingKey)' clearable v-model='inputTypeValue' @input='updateValue' @focus='getFocus'>
-      <i @click="insertImg" slot="suffix" class="el-input__icon el-icon-picture-outline"></i>
-    </el-input>
+  <div class="media-type">
+    <div class="media-type-item-img" :style="{backgroundImage: 'url(' + this.mediaData + ')'}">
+      <div class="media-type-item-img-cover">
+        <span>
+          <el-button class="media-type-change-img-btn" type="info" @click="insertImg()">{{$t('editor.changePic')}}</el-button>
+        </span>
+      </div>
+    </div>
     <SkyDriveManagerDialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
   </div>
 </template>
@@ -13,6 +17,7 @@ import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'MediaType',
   props: {
+    editingKey: String,
     originValue: String
   },
   mixins: [protypesBaseMixin],
@@ -22,7 +27,7 @@ export default {
     }
   },
   computed: {
-    inputTypeValue: {
+    mediaData: {
       get() {
         return this.originValue
       },
@@ -35,17 +40,19 @@ export default {
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
-    getFocus() {
-      this.$emit('onChangeValue')
-    },
     insertImg() {
       this.openSkyDriveManagerDialog()
     },
     openSkyDriveManagerDialog() {
       this.isSkyDriveManagerDialogShow = true
     },
-    closeSkyDriveManagerDialog({ url }) {
+    closeSkyDriveManagerDialog(payload) {
+      if (!payload) return
+      let { file, url } = payload
+
       this.isSkyDriveManagerDialogShow = false
+
+      if (!url) return
       this.updateValue(url)
     }
   },
@@ -54,18 +61,31 @@ export default {
   }
 }
 </script>
-<style>
-.link-type .el-input__inner {
-  border: none;
-  border-bottom: 1px solid #e4e7ed;
-  font-size: 16px;
-  padding: 18px 0 0;
-  border-radius: 0;
-}
-.link-type .el-input__suffix {
-  top: 10px;
-}
-.link-type .el-icon-picture-outline {
-  cursor: pointer;
+
+<style lang="scss">
+.media-type {
+  &-item-img {
+    height: 150px;
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    position: relative;
+    &-cover {
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      position: absolute;
+      top: 0;
+    }
+    &:hover {
+      .media-type-item-img-cover {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
 }
 </style>

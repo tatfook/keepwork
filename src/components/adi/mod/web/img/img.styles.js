@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   img: {
-    emptySrc: require('@/../static/adi/img/imgTwo.png'),
+    emptySrc: require('@/assets/adi/img/imgTwo.png'),
     emptyLink: process.env.KEEPWORK,
     emptyTarget: '_blank'
   }
@@ -30,12 +30,14 @@ export default [
         img: _.merge({}, emptyData.img, {
           img: {
             defaultWebHeight: '600px',
-            defaultMobileHeight: '160px'
+            defaultMobileHeight: '160px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
           }
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgOne.png')
+    cover: ''
   },
 
   // style 1
@@ -60,11 +62,13 @@ export default [
         img: _.merge({}, emptyData.img, {
           img: {
             defaultWebHeight: '800px',
-            defaultMobileHeight: '240px'
+            defaultMobileHeight: '240px',
+            defaultWebWidth: 'auto',
+            defaultMobileWidth: 'auto'
           }
         })
       }
     },
-    cover: require('@/../static/adi/img/cover/imgTwo.png')
+    cover: ''
   }
 ]

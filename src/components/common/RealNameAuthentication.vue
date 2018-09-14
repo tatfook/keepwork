@@ -31,16 +31,16 @@
                               <span v-else>{{$t('user.sendCodes')}}</span>
                             </el-button>
                         </el-col>
-                      </el-row>                      
+                      </el-row>
                     </el-form-item>
-                </el-row>                    
+                </el-row>
               </el-form>
           </el-row>
         </el-col>
         <el-col v-if="!hasVerified" class="real-name-setting-operations-col">
-          <DialogOperations @save="realNamePhoneNumber" @close="handleClose"></DialogOperations>
-        </el-col>        
-      </el-row>      
+          <dialog-operations @save="realNamePhoneNumber" @close="handleClose"></dialog-operations>
+        </el-col>
+      </el-row>
     </el-container>
 </template>
 <script>
