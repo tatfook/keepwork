@@ -33,6 +33,7 @@
     "jss": "^9.8.1",
     "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
+    "markdown-it-prism": "^1.1.2",
     "moment": "^2.22.2",
     "mousetrap": "^1.6.1",
     "qiniu-js": "^2.2.2",
