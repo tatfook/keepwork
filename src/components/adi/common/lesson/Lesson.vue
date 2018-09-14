@@ -121,7 +121,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .adi-lesson-button:hover {
   cursor: not-allowed;
   #btnPreview {
