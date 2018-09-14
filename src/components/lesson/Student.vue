@@ -29,7 +29,7 @@ export default {
     backToClassroom() {
       const { packageId, lessonId } = this.enterClassInfo
       this._notify && this._notify.close()
-      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}?noDialog=true`)
+      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
     },
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
