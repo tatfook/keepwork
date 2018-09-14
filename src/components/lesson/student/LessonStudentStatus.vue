@@ -63,7 +63,10 @@ export default {
     }
   },
   mounted() {
-    if (this.isBeInClassroom && !this.$route.query.noDialog) {
+    if (
+      this.isBeInClassroom &&
+      (this.isNeedToSetNickname || this.$route.query.dialog)
+    ) {
       this.isDialogVisible = true
     }
     this.name = this.nickname

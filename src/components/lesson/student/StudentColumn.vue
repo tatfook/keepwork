@@ -6,7 +6,7 @@
           <img :src='userProfile.portrait' alt="portrait">
         </div>
         <div class="nickname">{{username}}</div>
-        <div class="skillpoints">{{skillpointsCount}} skillpoints</div>
+        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}}</div>
         <div class="skills" :loading="loadingSkillsPoint">
           <ul class="skills-list">
             <li v-for="(skill,index) in skillsList" :key="index">{{skillName(skill)}}：
@@ -192,7 +192,7 @@ export default {
           this.$router.push({
             path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
               this.enterClassInfo.lessonId
-            }`
+            }?dialog=true`
           })
         })
         .catch(err => {
