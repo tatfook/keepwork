@@ -206,7 +206,7 @@ $mainHeight: 430px;
     }
     &.style-1 {
       $left-width: 340px;
-      $padding: 26px;
+      $padding: 10px;
       padding: $padding;
       position: relative;
       .left {
@@ -237,10 +237,8 @@ $mainHeight: 430px;
           box-sizing: border-box;
           z-index: 998;
         }
-
         .summary-word {
-          margin-left: 158px;
-          margin-right: 106px;
+          margin-left: 88px;
         }
       }
     }

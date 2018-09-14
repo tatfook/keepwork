@@ -123,12 +123,9 @@ export default {
           Math.floor(
             Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
           ) || 1
-        if (this.isEn) {
-          day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
-        }
         return day
       }
-      return this.isEn ? '1st' : 1
+      return 1
     },
     summary() {
       return {
