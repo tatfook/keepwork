@@ -146,18 +146,19 @@ export default {
           isLastOne
         })
           .then(() => {
-            this.$notify({
-              title: '成功',
-              message: '这是一条成功的提示消息' + packageId,
-              type: 'success'
-            })
+            // this.$notify({
+            //   title: '成功',
+            //   message: '这是一条成功的提示消息' + packageId,
+            //   type: 'success'
+            // })
           })
-          .catch(() => {
-            this.$notify({
-              title: '失败',
-              message: '这是一条失败的提示消息' + packageId,
-              type: 'error'
-            })
+          .catch(err => {
+            console.error(err)
+            // this.$notify({
+            //   title: '失败',
+            //   message: '这是一条失败的提示消息' + packageId,
+            //   type: 'error'
+            // })
           })
       }
     },
@@ -176,18 +177,19 @@ export default {
           isLastOne
         })
           .then(() => {
-            this.$notify({
-              title: '成功',
-              message: '这是一条成功的提示消息' + packageId,
-              type: 'success'
-            })
+            // this.$notify({
+            //   title: '成功',
+            //   message: '这是一条成功的提示消息' + packageId,
+            //   type: 'success'
+            // })
           })
-          .catch(() => {
-            this.$notify({
-              title: '失败',
-              message: '这是一条失败的提示消息' + packageId,
-              type: 'error'
-            })
+          .catch(err => {
+            console.error(err)
+            // this.$notify({
+            //   title: '失败',
+            //   message: '这是一条失败的提示消息' + packageId,
+            //   type: 'error'
+            // })
           })
       }
     },
