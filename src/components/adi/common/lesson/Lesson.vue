@@ -29,7 +29,7 @@
                 <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
               </el-scrollbar>
             </div>
-            <el-row class="lesson-button-adi">
+            <el-row class="lesson-button adi-lesson-button">
               <el-button type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
             </el-row>
           </div>
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.lesson-button-adi:hover {
+.adi-lesson-button:hover {
   cursor: not-allowed;
   #btnPreview {
     background: #d2d2d2;
