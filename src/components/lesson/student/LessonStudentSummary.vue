@@ -160,7 +160,7 @@ export default {
       let shareWebUrl = `${origin}/lesson.html#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
       shareWebUrl = encodeURIComponent(shareWebUrl)
       let shareTitle = 'keepwork'
-      let imgUrl = `https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png`
+      let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
       let content = '我在keepwork上面学习'
       if(socialPlatform=='qq'){
         window.open('http://connect.qq.com/widget/shareqq/index.html?url='+shareWebUrl+'?sharesource=qzone&title='+shareTitle+'&pics='+imgUrl+'&summary='+content+'&desc=keepwork自学网，一个前端工程师的网站');
