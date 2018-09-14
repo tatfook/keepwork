@@ -18,6 +18,7 @@ import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 
 import ModMixLayerList from './list/mixLayerList'
+import ModTextMixLayerList from './group/textMixLayerList'
 
 var modsList = [
   {
@@ -38,6 +39,11 @@ var modsList = [
         id: '1-3',
         label: 'modList.MixLayerList',
         mods: [ModMixLayerList]
+      },
+      {
+        id: '1-4',
+        label: 'modList.ModTextMixLayerList',
+        mods: [ModTextMixLayerList]
       }
     ]
   },

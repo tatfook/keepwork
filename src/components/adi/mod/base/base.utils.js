@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import BaseCompProperties from '@/components/adi/common/comp.properties'
 
-export const generateProperties = (name, components, subMods = {}) => {
+export const generateProperties = (name, components) => {
   let mod = {
     styleID: 0
   }
@@ -10,8 +10,5 @@ export const generateProperties = (name, components, subMods = {}) => {
     mod[key] = _.cloneDeep(BaseCompProperties[comp])
   })
 
-  _.each(subMods, (subMod, key) => {
-    mod[key] = {data: 'subMod'}
-  })
   return mod
 }

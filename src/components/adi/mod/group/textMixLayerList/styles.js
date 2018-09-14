@@ -1,12 +1,7 @@
-import modSettings from './mixLayerList.settings'
+import modSettings from './settings'
 
 const emptyData = {
-  list: {
-    gutter: 5,
-    colSize: 2,
-    modType: modSettings['list'].modType,
-    modSettings: modSettings['list'].modSettings
-  }
+  ...modSettings
 }
 
 export default [

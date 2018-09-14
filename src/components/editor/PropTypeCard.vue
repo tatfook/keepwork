@@ -17,6 +17,7 @@
         :editingKey='index'
         :originValue='cardValue[index]'
         :cardValue='cardValue'
+        :cardKey='cardKey'
         :activePropertyOptions='activePropertyOptions'
         @onPropertyChange='changePropertyData'
         @onChangeValue='changeActiveProperty'></component>

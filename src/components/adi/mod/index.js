@@ -26,6 +26,7 @@ import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 
 import ModMixLayerList from './list/mixLayerList'
+import ModTextMixLayerList from './group/textMixLayerList'
 
 export const modList = {
   ModMarkdown,
@@ -55,7 +56,8 @@ export const modList = {
   ModQuiz,
   ModHint,
 
-  ModMixLayerList
+  ModMixLayerList,
+  ModTextMixLayerList
 }
 
 export const load = modName => {

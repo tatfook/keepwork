@@ -26,6 +26,7 @@ import AdiQuiz from './quiz/quiz.properties'
 import AdiHint from './hint/hint.properties'
 
 import AdiList from './list/list.properties'
+import AdiSubMod from './subMod/subMod.properties'
 
 export default {
   AdiMarkdown,
@@ -54,5 +55,6 @@ export default {
   AdiQuiz,
   AdiHint,
 
-  AdiList
+  AdiList,
+  AdiSubMod
 }

@@ -1,9 +1,9 @@
-// Should define list settings for list-like mod
-// A list settings include type and default data
+// Should define mod settings for sub mods
+// A mod settings include type and default data
 export default {
   list: {
-    type: 'ModMixLayer',
-    default: {
+    modType: 'ModMixLayer',
+    modSettings: {
       style: 1
     }
   }

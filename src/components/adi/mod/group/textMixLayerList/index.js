@@ -1,14 +1,21 @@
 import { generateProperties } from '@/components/adi/mod/base/base.utils'
 import mod from '@/components/adi/mod/base/Base'
-import styles from './mixLayerList.styles'
-import templates from './mixLayerList.templates'
-import modSettings from './mixLayerList.settings'
+import styles from './styles'
+import templates from './templates'
+import modSettings from './settings'
 
-const name = 'ModMixLayerList'
+const name = 'ModTextMixLayerList'
 
 const components = {
-  list: 'AdiList'
+  text: 'AdiSubMod',
+  list: 'AdiSubMod'
 }
 const properties = generateProperties(name, components)
+
+properties.list = {
+  list: {
+    collection: [{}, {}]
+  }
+}
 
 export default { mod, name, components, properties, styles, templates, modSettings }

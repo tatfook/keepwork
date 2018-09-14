@@ -471,7 +471,7 @@ const actions = {
     if (payload.action === 'EDIT') {
       let { activeMod, activeProperty } = getters
       let activeModConf = ModFactory.load(activeMod.modType)
-      let subModType = activeModConf.listSettings[payload.key].type
+      let subModType = activeModConf.modSettings[payload.key].modType
       commit(SET_ACTIVE_PROPERTY, null)
       dispatch('setActiveSubMod', {
         modType: subModType,

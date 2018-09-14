@@ -34,7 +34,8 @@ export const cmdList = [
   'Quiz',
   'Hint',
 
-  'MixLayerList'
+  'MixLayerList',
+  'TextMixLayerList'
 ]
 
 export const oldCmdMapper = {
