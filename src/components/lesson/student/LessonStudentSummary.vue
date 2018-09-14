@@ -51,7 +51,7 @@ export default {
   },
   async mounted() {
     await lesson.lessons
-      .learnRecords({ lessonId: 2 })
+      .learnRecords({ lessonId: this.lessonId })
       .then(res => {
         this.learnRecords = res
       })
