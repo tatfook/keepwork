@@ -163,7 +163,7 @@ export default {
         this.studyTime
       }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
         this.lessonWriteLine
-      }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+      }&command=${this.lessonCommands}`
       shareWebUrl = encodeURIComponent(shareWebUrl)
       window.socialShare('.summary-share-lesson', {
         url: shareWebUrl,
