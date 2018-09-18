@@ -6,7 +6,7 @@
         {{$t('lesson.styles', { number: 3})}}
       </div>
       <div class="share-style-select-panel">
-        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle"/>
+        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle" />
       </div>
       <div class="share-icons" v-if="IS_GLOBAL_VERSION">
         <span class="facebook-icon"></span>
@@ -33,6 +33,7 @@ import { lesson } from '@/api'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
+import moment from 'moment'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -114,7 +115,7 @@ export default {
       return locale === 'en-US' ? true : false
     },
     studyTime() {
-      const suffix = ['', 'st', 'nd', 'rd', 'th']
+      const suffix = ['th', 'st', 'nd', 'rd', 'th']
       if (this.firstTime && this.lastTime) {
         let firstTime = new Date(this.firstTime).getTime()
         let lastTime = new Date(this.lastTime).getTime()
@@ -122,9 +123,13 @@ export default {
           Math.floor(
             Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
           ) || 1
+        if (this.isEn) {
+          let remainder = day % 10
+          day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
+        }
         return day
       }
-      return 1
+      return this.isEn ? '1st' : 1
     },
     summary() {
       return {
@@ -152,24 +157,36 @@ export default {
     showSharePanel() {
       this.isShowSharePanel = true
     },
-    shareTo(socialPlatform){
+    shareTo(socialPlatform) {
       let origin = window.location.origin
       let packageId = this.$route.params.packageId
       let lessonId = this.$route.params.lessonId
       let styleId = this.$refs.shareStyle.currentStyle
-      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+        this.studyTime
+      }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
+        this.lessonWriteLine
+      }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
       shareWebUrl = encodeURIComponent(shareWebUrl)
       let shareTitle = 'keepwork'
       let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
       let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
-      if(socialPlatform=='qq'){
-        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${this.lessonName},快来跟我一起吧！`);
+      if (socialPlatform == 'qq') {
+        window.open(
+          `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
+            this.lessonName
+          },快来跟我一起吧！`
+        )
       }
-      if(socialPlatform=='qzone'){
-        window.open(`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`);
+      if (socialPlatform == 'qzone') {
+        window.open(
+          `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
+        )
       }
-      if(socialPlatform=='sina'){
-        window.open(`http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`);
+      if (socialPlatform == 'sina') {
+        window.open(
+          `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
+        )
       }
     }
   }
