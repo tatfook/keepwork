@@ -19,7 +19,7 @@
           </div>
           <div class="summary-word-line">
             This is my
-            <span class="highlight">{{summary.day}}st</span> day of learning
+            <span class="highlight">{{summary.day}}</span> day of learning
             <span class="highlight">{{summary.name}}</span> on Keepwork.
           </div>
           <div class="summary-word-line">

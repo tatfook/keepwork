@@ -145,15 +145,8 @@ $blue: #4093fe;
         margin: 50px auto 0;
         max-width: 66%;
         .highlight {
-          display: inline-block;
           color: #ec761a;
           font-weight: 600;
-          display: inline-block;
-          word-break: normal;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          max-width: 200px;
           line-height: 18px;
           font-size: 18px;
           margin-bottom: -3px;
