@@ -1,20 +1,18 @@
 <template>
   <div class="lesson-menu">
     <div width="460px" center="">
-      <div class="select-title">Link the page to</div>
-      <div class="select-desc">Select one lesson from the drop-down box, or creat a new one.</div>
-      <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable placeholder="请选择">
+      <div class="select-title">{{$t('lesson.linkThePage')}}</div>
+      <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
         <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
         </el-option>
       </el-select>
       <div class="button-wrap">
-        <el-button type="primary" @click="showEditorDialog" :loading="isLoading">Edit</el-button>
+        <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
         <transition name="el-zoom-in-top">
-          <el-button v-show="isLinked" @click.stop="handleRelease">Release</el-button>
+          <el-button v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
         </transition>
       </div>
     </div>
-    <!-- <el-button plain type='primary' @click.stop="getLessonDetailByUrl">编辑课程</el-button> -->
     <el-dialog :visible.sync="dialogVisible" width="800px" :append-to-body="true" top="0">
       <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
@@ -51,11 +49,7 @@ export default {
       activePageUrl: 'activePageUrl'
     }),
     userLessonsFilter() {
-      return this.userLessons
-        .filter(({url}) => !url)
-    },
-    userLessonsNoLinked() {
-      return this.userLessonsFilter.filter(({url}))
+      return this.userLessons.filter(({ url }) => !url)
     },
     selectList() {
       return this.isLinked ? this.userLessons : this.userLessonsFilter
@@ -91,12 +85,12 @@ export default {
         .then(res =>
           this.$message({
             type: 'success',
-            message: '发布成功'
+            message: this.$t('common.success')
           })
         )
         .catch(e => {
           console.error(e)
-          this.$message.error('发布失败')
+          this.$message.error(this.$t('common.success'))
         })
     },
     showDialog() {
@@ -107,7 +101,7 @@ export default {
     },
     async showEditorDialog() {
       if (!this.selectValue) {
-        return this.$message.error('请先选择一门课程进行关联')
+        return this.$message.error(this.$t('lesson.pleaseSelect'))
       }
       this.dialogVisible = true
     }
@@ -121,7 +115,7 @@ export default {
   .select-title {
     text-align: center;
     color: #303133;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
   }
   .select-desc {
@@ -134,6 +128,7 @@ export default {
   }
   .button-wrap {
     margin-top: 10px;
+    text-align: center;
   }
 }
 </style>

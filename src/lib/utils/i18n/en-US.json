@@ -1054,6 +1054,8 @@
     "totalStudents": "Number of students",
     "free": "Free",
     "quiz2": "Quiz",
-    "noData": "No Data"
+    "noData": "No Data",
+    "linkThePage": "Link the page to",
+    "pleaseSelect": "Please select"
   }
 }

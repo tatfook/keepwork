@@ -63,16 +63,19 @@ export default {
     }
   },
   mounted() {
-    if (this.isNeedToSetNickname && this.isBeInClassroom) {
+    if (
+      this.isBeInClassroom &&
+      (this.isNeedToSetNickname || this.$route.query.dialog)
+    ) {
       this.isDialogVisible = true
     }
-    console.log(this.nickname)
     this.name = this.nickname
   },
   methods: {
     ...mapActions({
       setNickname: 'lesson/setNickname',
-      leaveTheClass: 'lesson/student/leaveTheClass'
+      leaveTheClass: 'lesson/student/leaveTheClass',
+      switchSummary: 'lesson/student/switchSummary'
     }),
     switchEdit() {
       this.isEditNickName = !this.isEditNickName
@@ -103,6 +106,7 @@ export default {
       )
         .then(async () => {
           await this.leaveTheClass()
+          this.switchSummary(false)
           this.$router.push(`/student`)
         })
         .catch(action => console.log(action))

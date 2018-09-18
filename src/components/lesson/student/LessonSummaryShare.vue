@@ -38,9 +38,9 @@
             <a @click.prevent="toAboutPage" href="" class="highlight link">这里</a> 加入，并和我一起学习
           </div>
           <div class="summary-word-line">
-            这是我第在keepwork学习
-            <span class="highlight">{{summary.name}}</span> 的第
-            <span class="highlight">{{summary.day}}</span> 天
+            这是我第
+            <span class="highlight">{{summary.day}}</span> 天在keepwork学习
+            <span class="highlight">{{summary.name}}</span>
           </div>
           <div class="summary-word-line">
             今天，我读了
@@ -62,6 +62,9 @@
 <script>
 import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { lesson } from '@/api'
 export default {
   name: 'LessonSummaryShare',
   props: {
@@ -91,37 +94,24 @@ export default {
       dialogVisible: false
     }
   },
-  mounted() {
+  async beforeMount() {
     if (this.isPreview) {
       this.summary = _.merge(this.summary, this.lessonSummary)
     } else {
-      this.style = Number(this.$route.params.styleId) || 1
-      this.$set(this.summary, _.merge(this.summary, this.$route.query))
+      // await lesson.lessons
+      //   .lessonDetail({ lessonId: this.$route.params.lessonId })
+      //   .then(res => {
+      //     console.log('res',res)
+          this.style = Number(this.$route.params.styleId) || 1
+          this.$set(this.summary, _.merge(this.summary, this.$route.query))
+        // })
+        // .catch(err => console.error(err))
     }
-    console.log('lessonSummary', this.lessonSummary, this.summary)
   },
   computed: {
     today() {
-      const MONTH = [
-        'Jan',
-        'Feb',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-      ]
-      let time = new Date()
-      let year = time.getFullYear()
-      let month = time.getMonth()
-      let day = time.getDate()
-      return this.isEn
-        ? `${day}th ${MONTH[month]}. ${year}.`
-        : `${year}年 ${month}月 ${day}日`
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment().format('LL')
     },
     isEn() {
       return locale === 'en-US'
@@ -132,7 +122,6 @@ export default {
       this.$router.push({ path: '/student/about' })
     },
     playVideo() {
-      console.log(112)
       this.dialogVisible = true
     }
   }
@@ -194,6 +183,7 @@ $mainHeight: 430px;
       .summary-word {
         margin-top: 50px;
         color: black;
+        padding: 0 15px 0 30px;
         .highlight {
           color: #409efe;
           font-weight: 600;
@@ -225,7 +215,7 @@ $mainHeight: 430px;
     }
     &.style-1 {
       $left-width: 340px;
-      $padding: 26px;
+      $padding: 10px;
       padding: $padding;
       position: relative;
       .left {
@@ -256,10 +246,8 @@ $mainHeight: 430px;
           box-sizing: border-box;
           z-index: 998;
         }
-
         .summary-word {
-          margin-left: 158px;
-          margin-right: 106px;
+          margin-left: 88px;
         }
       }
     }

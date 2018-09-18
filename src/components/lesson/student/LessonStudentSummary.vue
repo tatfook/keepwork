@@ -6,7 +6,7 @@
         {{$t('lesson.styles', { number: 3})}}
       </div>
       <div class="share-style-select-panel">
-        <lesson-summary-share-style-select :lessonSummary="lessonSummary" />
+        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle"/>
       </div>
       <div class="share-icons" v-if="IS_GLOBAL_VERSION">
         <span class="facebook-icon"></span>
@@ -14,9 +14,9 @@
         <span class="google-icon"></span>
       </div>
       <div class="share-icons" v-else>
-        <span class="iconfont icon-qq1"></span>
-        <span class="iconfont icon-interspace"></span>
-        <span class="iconfont icon-weibo"></span>
+        <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
+        <span class="iconfont icon-interspace" @click="shareTo('qzone')"></span>
+        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span>
       </div>
       <div class="share-tips">
         {{$t('lesson.shareSummaryByNet')}}
@@ -51,12 +51,11 @@ export default {
   },
   async mounted() {
     await lesson.lessons
-      .learnRecords({ lessonId: 2 })
+      .learnRecords({ lessonId: this.lessonId })
       .then(res => {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
-      console.log('lessonDetail',this.lessonDetail)
   },
   computed: {
     ...mapGetters({
@@ -80,7 +79,7 @@ export default {
     lessonName() {
       return this.lesson.lessonName
     },
-    videoUrl(){
+    videoUrl() {
       return this.lesson.extra.videoUrl
     },
     lessonCodeReadLine() {
@@ -114,6 +113,19 @@ export default {
     isEn() {
       return locale === 'en-US' ? true : false
     },
+    studyTime() {
+      const suffix = ['', 'st', 'nd', 'rd', 'th']
+      if (this.firstTime && this.lastTime) {
+        let firstTime = new Date(this.firstTime).getTime()
+        let lastTime = new Date(this.lastTime).getTime()
+        let day =
+          Math.floor(
+            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
+          ) || 1
+        return day
+      }
+      return 1
+    },
     summary() {
       return {
         firstTime: this.firstTime,
@@ -124,7 +136,7 @@ export default {
     },
     lessonSummary() {
       return {
-        day: this.day,
+        day: this.studyTime,
         name: this.lessonName,
         read: this.lessonCodeReadLine,
         write: this.lessonWriteLine,
@@ -139,19 +151,40 @@ export default {
     },
     showSharePanel() {
       this.isShowSharePanel = true
+    },
+    shareTo(socialPlatform){
+      let origin = window.location.origin
+      let packageId = this.$route.params.packageId
+      let lessonId = this.$route.params.lessonId
+      let styleId = this.$refs.shareStyle.currentStyle
+      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+      shareWebUrl = encodeURIComponent(shareWebUrl)
+      let shareTitle = 'keepwork'
+      let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
+      let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
+      if(socialPlatform=='qq'){
+        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${this.lessonName},快来跟我一起吧！`);
+      }
+      if(socialPlatform=='qzone'){
+        window.open(`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`);
+      }
+      if(socialPlatform=='sina'){
+        window.open(`http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`);
+      }
     }
   }
 }
 </script>
 
-
 <style lang="scss">
 $blue: #4093fe;
 .lesson-summary {
-  margin: 20px auto;
+  margin: 0 auto;
   box-sizing: border-box;
   border-top: 1px solid #dadada;
   background: white;
+  max-width: 1229px;
+  padding-bottom: 40px;
 }
 .summary-share-dialog {
   .el-dialog__header {
@@ -196,13 +229,13 @@ $blue: #4093fe;
           no-repeat center;
       }
     }
-    .icon-qq1{
+    .icon-qq1 {
       color: #358bff;
     }
-    .icon-interspace{
+    .icon-interspace {
       color: #f5c01c;
     }
-    .icon-weibo{
+    .icon-weibo {
       color: #e6162d;
     }
   }
