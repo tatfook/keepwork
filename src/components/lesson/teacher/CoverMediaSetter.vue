@@ -17,8 +17,10 @@
     <div class="cover-media-setter-from-url" v-show="imageSourceType === 'url'">
       <el-input :disabled="!isEditable" placeholder="https://" v-model="urlTypeUrl">
         <template slot="append">
-          <el-popover placement="top" width="264" trigger="hover" popper-class='cover-media-setter-image-preview'>
-            <img :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
+          <el-popover placement="top" width="264" trigger="click" popper-class='cover-media-setter-image-preview'>
+            <div class="cover-media-setter-image-preview-wrap">
+              <img class="cover-media-setter-image-preview-inner" :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
+            </div>
             <el-button slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
           </el-popover>
         </template>
@@ -47,8 +49,13 @@ export default {
   async mounted() {
     if (this.isEditing) {
       let editingPackageDetail = this.editingPackageDetail
-      let coverUrl = this.editingCoverUrl || _.get(editingPackageDetail, 'extra.coverUrl')
-      if (this.isBigfileTypeAvailable && coverUrl && BigfileUrlReg.test(coverUrl)) {
+      let coverUrl =
+        this.editingCoverUrl || _.get(editingPackageDetail, 'extra.coverUrl')
+      if (
+        this.isBigfileTypeAvailable &&
+        coverUrl &&
+        BigfileUrlReg.test(coverUrl)
+      ) {
         this.imageSourceType = 'bigfile'
         this.bigfileTypeUrl = coverUrl
       } else {
@@ -138,12 +145,18 @@ export default {
   }
   &-image-preview {
     padding: 0;
-    height: 165px;
     border-radius: 0;
-    img {
+    &-wrap {
+      padding-bottom: 56.25%;
+      position: relative;
+    }
+    &-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
       width: 100%;
       height: 100%;
-      object-fit: cover;
     }
   }
 }
