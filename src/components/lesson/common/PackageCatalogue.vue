@@ -75,7 +75,7 @@ export default {
       return lessons
     },
     continueLearnedLesson() {
-      let lastLessonId = this.learnedLessons[this.learnedLessons.length]
+      let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
       if (lastLessonId) {
         let lastLessonIndex = _.findIndex(
           this.lessonsList,
