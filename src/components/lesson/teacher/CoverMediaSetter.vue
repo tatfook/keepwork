@@ -17,7 +17,7 @@
     <div class="cover-media-setter-from-url" v-show="imageSourceType === 'url'">
       <el-input :disabled="!isEditable" placeholder="https://" v-model="urlTypeUrl">
         <template slot="append">
-          <el-popover placement="top" width="250" trigger="hover" popper-class='cover-media-setter-image-preview'>
+          <el-popover placement="top" width="264" trigger="hover" popper-class='cover-media-setter-image-preview'>
             <img :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
             <el-button slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
           </el-popover>
@@ -94,7 +94,6 @@ export default {
 </script>
 <style lang="scss">
 .cover-media-setter {
-  height: 260px;
   background-color: #fff;
   &-title {
     font-size: 14px;
@@ -113,7 +112,7 @@ export default {
     }
   }
   &-add-button {
-    width: 200px;
+    width: 211px;
     height: 132px;
     line-height: 132px;
     font-size: 46px;
