@@ -16,7 +16,7 @@
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
               <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
-              <p>{{$t('lesson.ages')}}: {{lessonPackage.minAge}}~{{lessonPackage.maxAge}}</p>
+              <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(lessonPackage)}}</p>
               <p :title="lessonPackage.intro">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
             </div>
           </el-col>
@@ -105,6 +105,13 @@ export default {
     },
     targetPage(targetPage){
       this.page = targetPage
+    },
+     getCoursePackageSuitableAge(packageDetail) {
+      let { minAge, maxAge } = packageDetail
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
     }
   },
   filters: {
