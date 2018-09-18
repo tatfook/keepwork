@@ -287,7 +287,6 @@ export default {
       return _.get(this.lesson, 'Title', '')
     },
     coverUrl() {
-      return 'https://api-stage.keepwork.com/storage/v0/siteFiles/13/raw#stock-photo-249089429.jpg'
       return _.get(this.lesson, 'extra.coverUrl', '')
     },
     videoUrl() {
