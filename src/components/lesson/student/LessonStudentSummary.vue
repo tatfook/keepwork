@@ -164,7 +164,7 @@ export default {
       }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
         this.lessonWriteLine
       }&command=${this.lessonCommands}`
-      // shareWebUrl = encodeURIComponent(shareWebUrl)
+      shareWebUrl = encodeURI(shareWebUrl)
       window.socialShare('.summary-share-lesson', {
         url: shareWebUrl,
         mode: 'prepend',
