@@ -141,7 +141,6 @@ export default {
     },
     async submit(result, answer) {
       this.doQuiz({ key: this.key, result, answer })
-      this.lessonIsDone && this.switchSummary(true)
       if (this.isBeInClassroom) {
         return await this.uploadLearnRecords()
       }
