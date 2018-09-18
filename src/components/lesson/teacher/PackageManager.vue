@@ -460,17 +460,17 @@ export default {
     }
   }
   &-selector {
-    margin-bottom: 20px;
     background-color: #fff;
     text-align: center;
     font-size: 14px;
     color: #b3b3b3;
-    padding: 22px 0;
+    padding: 30px 20px 40px;
+    display: flex;
+    justify-content: space-between;
     &-item {
       display: inline-block;
-      margin-right: 86px;
       .el-select {
-        width: 120px;
+        width: 190px;
         margin-left: 8px;
         .el-select__caret.is-reverse {
           line-height: 0;
@@ -494,8 +494,9 @@ export default {
     }
     &-search-box {
       .el-input__inner {
-        border-radius: 28px;
-        background-color: #f2f8ff;
+        border-radius: 0;
+        border-width: 0 0 1px 0;
+        padding-left: 0;
       }
       .el-input__suffix {
         top: 0;
