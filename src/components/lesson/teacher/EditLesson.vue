@@ -1,9 +1,11 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
     <lesson-editor-header v-if="!isGettingData" :isEditable='isEditable' :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
-    <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
-    <cover-media-setter v-if="!isGettingData" :isEditable='isEditable' class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
-    <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
+    <div class="edit-lesson-container">
+      <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
+      <cover-media-setter v-if="!isGettingData" :isEditable='isEditable' class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
+      <lesson-more-info-settting class="edit-lesson-more-info" v-if="!isGettingData" ref="moreInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true'></lesson-more-info-settting>
+    </div>
   </div>
 </template>
 <script>
@@ -256,6 +258,13 @@ export default {
 </script>
 <style lang="scss">
 .edit-lesson {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  &-container {
+    flex: 1;
+    overflow: auto;
+  }
   &-cover {
     padding: 35px;
   }
