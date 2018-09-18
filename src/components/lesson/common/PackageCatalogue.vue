@@ -75,13 +75,15 @@ export default {
       return lessons
     },
     continueLearnedLesson() {
-      let lastLesson = _.maxBy(this.lessonsList, lesson => lesson.updatedAt)
-      let lastLessonIndex = _.findIndex(
-        this.lessonsList,
-        lesson => lesson.id === lastLesson.id
-      )
-      if (lastLessonIndex + 1 < this.lessonsList.length) {
-        return this.lessonsList[lastLessonIndex + 1]
+      let lastLessonId = this.learnedLessons[this.learnedLessons.length]
+      if (lastLessonId) {
+        let lastLessonIndex = _.findIndex(
+          this.lessonsList,
+          lesson => lesson.id === lastLessonId
+        )
+        if (lastLessonIndex + 1 < this.lessonsList.length) {
+          return this.lessonsList[lastLessonIndex + 1]
+        }
       }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
     },
