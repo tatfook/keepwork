@@ -48,13 +48,13 @@ export default {
       enterClassInfo: 'lesson/student/enterClassInfo',
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
-    loginUserId(){
+    loginUserId() {
       return _.get(this.userProfile, '_id')
     },
-    packageOwnerId(){
+    packageOwnerId() {
       return _.get(this.packageDetail, 'userId')
     },
-    isOwnPackage(){
+    isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
@@ -75,6 +75,14 @@ export default {
       return lessons
     },
     continueLearnedLesson() {
+      let lastLesson = _.maxBy(this.lessonsList, lesson => lesson.updatedAt)
+      let lastLessonIndex = _.findIndex(
+        this.lessonsList,
+        lesson => lesson.id === lastLesson.id
+      )
+      if (lastLessonIndex + 1 < this.lessonsList.length) {
+        return this.lessonsList[lastLessonIndex + 1]
+      }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
     },
     learnedLessons() {
