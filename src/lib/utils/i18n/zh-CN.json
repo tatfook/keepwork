@@ -1010,7 +1010,7 @@
     "confirmFullSelected": "你确定给选定的学生满分吗？",
     "viewDetail": "查看详情",
     "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结：",
-    "StudiedForManyDays": "这是我第 {howManyDays} 天在一网乾坤上学习{lessonTitle}。",
+    "StudiedForManyDays": "这是我第 {howManyDays} 天在KeepWork上学习{lessonTitle}。",
     "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。",
     "todayRecords0": "今天，我",
     "todayRecords1": "读了 {readCodeLinesCount} 行代码",

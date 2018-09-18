@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     content() {
-      return _.get(this.data, 'data.hint.content', '')
+      return _.get(this.data, 'data.hint.data', '')
     }
   }
 }

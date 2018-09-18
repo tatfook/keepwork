@@ -161,9 +161,9 @@ export default {
       shareWebUrl = encodeURIComponent(shareWebUrl)
       let shareTitle = 'keepwork'
       let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
-      let content = `我在一网乾坤学习${this.lessonName},快来跟我一起吧！`
+      let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
       if(socialPlatform=='qq'){
-        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在一网乾坤学习${this.lessonName},快来跟我一起吧！`);
+        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${this.lessonName},快来跟我一起吧！`);
       }
       if(socialPlatform=='qzone'){
         window.open(`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`);
