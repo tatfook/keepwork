@@ -139,7 +139,7 @@ export default {
     &-cover {
       font-size: 0;
       img {
-        width: 120px;
+        width: 112px;
         height: 70px;
         object-fit: cover;
       }

@@ -213,7 +213,7 @@ export default {
       padding-left: 19px;
     }
     &-cover {
-      width: 250px;
+      width: 234px;
       height: 146px;
       object-fit: cover;
       cursor: pointer;
