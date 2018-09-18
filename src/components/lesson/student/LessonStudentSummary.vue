@@ -14,9 +14,10 @@
         <span class="google-icon"></span>
       </div>
       <div class="share-icons" v-else>
-        <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
+        <div class="summary-share-lesson" @click="showSocialShare"></div>
+        <!-- <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
         <span class="iconfont icon-interspace" @click="shareTo('qzone')"></span>
-        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span>
+        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span> -->
       </div>
       <div class="share-tips">
         {{$t('lesson.shareSummaryByNet')}}
@@ -26,6 +27,8 @@
 </template>
 
 <script>
+import 'social-share.js/dist/js/social-share.min.js'
+import 'social-share.js/dist/css/share.min.css'
 import { mapGetters, mapActions } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 import StudentSummary from './StudentSummary'
@@ -151,13 +154,7 @@ export default {
     }
   },
   methods: {
-    hideSharePanel() {
-      this.isShowSharePanel = false
-    },
-    showSharePanel() {
-      this.isShowSharePanel = true
-    },
-    shareTo(socialPlatform) {
+    showSocialShare() {
       let origin = window.location.origin
       let packageId = this.$route.params.packageId
       let lessonId = this.$route.params.lessonId
@@ -168,27 +165,57 @@ export default {
         this.lessonWriteLine
       }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
       shareWebUrl = encodeURIComponent(shareWebUrl)
-      let shareTitle = 'keepwork'
-      let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
-      let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
-      if (socialPlatform == 'qq') {
-        window.open(
-          `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
-            this.lessonName
-          },快来跟我一起吧！`
-        )
-      }
-      if (socialPlatform == 'qzone') {
-        window.open(
-          `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
-        )
-      }
-      if (socialPlatform == 'sina') {
-        window.open(
-          `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
-        )
-      }
-    }
+      window.socialShare('.summary-share-lesson', {
+        url: shareWebUrl,
+        mode: 'prepend',
+        description: `我在KeepWork学习${this.lessonName},快来跟我一起吧！`,
+        title: 'keepwork',
+        sites: ['qq', 'qzone', 'weibo'],
+        wechatQrcodeTitle: '',
+        wechatQrcodeHelper: this.$t('common.QR')
+      })
+    },
+    hideSharePanel() {
+      this.isShowSharePanel = false
+    },
+    showSharePanel() {
+      this.isShowSharePanel = true
+      this.$nextTick(() => {
+        this.showSocialShare()
+      })
+    },
+    // shareTo(socialPlatform) {
+    //   let origin = window.location.origin
+    //   let packageId = this.$route.params.packageId
+    //   let lessonId = this.$route.params.lessonId
+    //   let styleId = this.$refs.shareStyle.currentStyle
+    //   let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+    //     this.studyTime
+    //   }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
+    //     this.lessonWriteLine
+    //   }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+    //   shareWebUrl = encodeURIComponent(shareWebUrl)
+    //   let shareTitle = 'keepwork'
+    //   let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
+    //   let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
+      // if (socialPlatform == 'qq') {
+      //   window.open(
+      //     `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
+      //       this.lessonName
+      //     },快来跟我一起吧！`
+      //   )
+      // }
+      // if (socialPlatform == 'qzone') {
+      //   window.open(
+      //     `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
+      //   )
+      // }
+      // if (socialPlatform == 'sina') {
+      //   window.open(
+      //     `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
+      //   )
+      // }
+    // }
   }
 }
 </script>
