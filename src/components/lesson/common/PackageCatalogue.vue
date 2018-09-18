@@ -14,7 +14,11 @@
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
           </div>
-          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toLessonDetail(lesson)">
+          <div class="package-catalogue-item-cover" @click="toLessonDetail(lesson)">
+            <div class="package-catalogue-item-cover-wrap">
+              <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+            </div>
+          </div>
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
@@ -216,9 +220,19 @@ export default {
     }
     &-cover {
       width: 234px;
-      height: 146px;
-      object-fit: cover;
       cursor: pointer;
+      &-wrap {
+        padding-bottom: 56.25%;
+        position: relative;
+      }
+      &-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
     &-detail {
       flex: 1;

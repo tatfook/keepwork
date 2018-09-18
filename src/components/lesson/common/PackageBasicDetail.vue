@@ -1,6 +1,10 @@
 <template>
   <div class="package-basic-detail">
-    <img class="package-basic-detail-cover" :src="packageCoverUrl" alt="">
+    <div class="package-basic-detail-cover">
+      <div class="package-basic-detail-cover-wrap">
+        <img class="package-basic-detail-cover-inner" :src="packageCoverUrl" alt="">
+      </div>
+    </div>
     <div class="package-basic-detail-text-desc">
       <h1>{{packageDetail.packageName}}</h1>
       <div class="package-basic-detail-content">
@@ -168,8 +172,18 @@ $dangerColor: #e4461f;
   display: flex;
   &-cover {
     width: 436px;
-    height: 272px;
-    object-fit: cover;
+    &-wrap {
+      padding-bottom: 56.25%;
+      position: relative;
+    }
+    &-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
   }
   &-text-desc {
     flex: 1;
@@ -210,7 +224,7 @@ $dangerColor: #e4461f;
     font-size: 16px;
     line-height: 30px;
     &-isSubscribe {
-      height: 190px;
+      height: 146px;
     }
   }
   &-backcoin {
