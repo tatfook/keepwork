@@ -98,14 +98,18 @@ export default {
     if (this.isPreview) {
       this.summary = _.merge(this.summary, this.lessonSummary)
     } else {
-      // await lesson.lessons
-      //   .lessonDetail({ lessonId: this.$route.params.lessonId })
-      //   .then(res => {
-      //     console.log('res',res)
+      await lesson.lessons
+        .lessonDetail({ lessonId: this.$route.params.lessonId })
+        .then(res => {
+          console.log('res',res)
+          let vedioUrl = {vedioUrl:res.extra.vedioUrl}
+          console.log('vedio',vedioUrl)
           this.style = Number(this.$route.params.styleId) || 1
           this.$set(this.summary, _.merge(this.summary, this.$route.query))
-        // })
-        // .catch(err => console.error(err))
+          this.$set(this.summary, _.merge(this.summary,vedioUrl))
+          console.log('summary',this.summary)
+        })
+        .catch(err => console.error(err))
     }
   },
   computed: {
