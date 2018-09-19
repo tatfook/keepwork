@@ -25,7 +25,7 @@
         <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}} + {{skill.score}}</li>
           </ul>
         </div>
       </div>
