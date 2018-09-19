@@ -4,7 +4,7 @@
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view class="lesson-page-main-content" id="lesson-page" />
+    <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
     <common-footer class="container"></common-footer>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -18,7 +18,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
-
+const TeacherColumnActivePageNameReg = /^TeacherColumn+/
 export default {
   name: 'LessonPage',
   components: {
@@ -35,7 +35,13 @@ export default {
   computed: {
     ...mapGetters({
       isShowLoginDialog: 'lesson/isShowLoginDialog'
-    })
+    }),
+    nowPagename() {
+      return this.$route.name
+    },
+    isHeaderFooterFixed() {
+      return TeacherColumnActivePageNameReg.test(this.nowPagename)
+    }
   },
   async created() {
     await this.loadLessonPresets()
@@ -88,6 +94,9 @@ body {
     background: #f8f8f8;
     min-height: auto;
     flex: 1;
+    &-scroll-only {
+      overflow: auto;
+    }
   }
   .container {
     max-width: 1200px;
