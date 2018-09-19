@@ -23,5 +23,9 @@ module.exports = merge(prodEnv, {
   PACKAGE_GOOD_DETAIL: {
     APP_NAME: `"lessons"`,
     APP_GOODS_ID: 1
+  },
+  LESSON_VIP_DETAIL: {
+    APP_NAME: `"LessonVIP"`,
+    APP_GOODS_ID: 1
   }
 })
