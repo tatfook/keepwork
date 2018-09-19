@@ -1,9 +1,9 @@
 <template>
   <el-input v-model="searchText" class="search-bar-comp" @keyup.enter.native='goSearch'>
-    <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
+    <!-- <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
       <el-option :label="$t('search.searchAll')" value="all"></el-option>
       <el-option :label="$t('search.searchMine')" value="loginUser" v-show="isLogin"></el-option>
-    </el-select>
+    </el-select> -->
     <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
   </el-input>
 </template>
@@ -48,7 +48,8 @@ export default {
 .search-bar-comp {
   .el-input__inner {
     border-right: none;
-    width: 100px;
+    width: 240px;
+    height: 32px;
     padding: 0 0 0 10px;
   }
   .el-input__inner:hover,
@@ -70,7 +71,7 @@ export default {
   }
   .el-input-group__append .el-button {
     margin: 0;
-    padding: 9px 4px;
+    padding: 7px 4px;
   }
   .el-icon-search {
     position: relative;
