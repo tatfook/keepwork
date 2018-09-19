@@ -31,7 +31,7 @@
       </div>
       <el-button type='primary' @click="addReferences" :disabled="!isEditable">{{$t('lesson.lessonManage.addReference')}}</el-button>
     </div>
-    <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :modal-append-to-body="false" :visible.sync="isSkillDialogShow" :title="$t('lesson.lessonManage.addSkillPoint')" :before-close="handleClose">
+    <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :append-to-body="true" :modal-append-to-body="true" :visible.sync="isSkillDialogShow" :title="$t('lesson.lessonManage.addSkillPoint')" :before-close="handleClose">
       <div class="lesson-more-info-setting-skills-dialog-list">
         <div class="lesson-more-info-setting-skills-dialog-item" v-for="(skill, index) in skillList" :key="index">
           <span>{{skillName(skill)}}</span>
