@@ -170,7 +170,7 @@ export default {
       if (!this.checkTempUrlValid()) {
         return
       }
-      if (this.tempUrl == '') {
+      if (this.tempUrl == '' || _.isNull(this.tempUrl)) {
         this.editingLessonDetail.url = null
         return
       }
