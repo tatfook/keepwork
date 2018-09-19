@@ -3,6 +3,7 @@ import userModule from './user'
 import gitlabModule from './gitlab'
 import editorModule from './editor'
 import lessonModule from './lesson'
+import vipModule from './vip'
 import createPersistedState from './createPersistedState'
 
 export {
@@ -11,5 +12,6 @@ export {
   gitlabModule,
   editorModule,
   lessonModule,
+  vipModule,
   createPersistedState
 }
