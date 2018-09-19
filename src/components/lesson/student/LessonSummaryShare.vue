@@ -101,13 +101,13 @@ export default {
       await lesson.lessons
         .lessonDetail({ lessonId: this.$route.params.lessonId })
         .then(res => {
-          console.log('res',res)
-          let vedioUrl = {vedioUrl:res.extra.vedioUrl}
-          console.log('vedio',vedioUrl)
+          console.log('res', res)
+          let vedioUrl = { vedioUrl: res.extra.vedioUrl }
+          console.log('vedio', vedioUrl)
           this.style = Number(this.$route.params.styleId) || 1
           this.$set(this.summary, _.merge(this.summary, this.$route.query))
-          this.$set(this.summary, _.merge(this.summary,vedioUrl))
-          console.log('summary',this.summary)
+          this.$set(this.summary, _.merge(this.summary, vedioUrl))
+          console.log('summary', this.summary)
         })
         .catch(err => console.error(err))
     }
@@ -307,19 +307,66 @@ $mainHeight: 430px;
         flex: 2;
         height: $mainHeight;
         background: white;
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
+        position: relative;
         .movie {
-          width: 250px;
+          width: 230px;
           height: 140px;
-          margin-left: -200px;
+          // margin-left: -200px;
+          position: absolute;
+          top: 100px;
+          left: -185px;
         }
         .summary-word {
-          margin: 30px 0 0;
+          margin: 60px 0 0 40px;
           margin-left: 34px;
           &-time {
             text-align: center;
           }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-summary-share-wrap {
+    .lesson-summary-share {
+      &.style-1, &.style-2, &.style-3{
+        .left {
+          display: none;
+        }
+        .main{
+          .movie{
+            position: static;
+            margin: 0 auto 14px;
+          }
+          .summary-word-time{
+            font-size: 18px;
+          }
+          .summary-word{
+            margin: 0 auto;
+            font-size: 14px;
+          }
+        }
+      }
+      &.style-3{
+        .main{
+          display: block;
+          .movie{
+            margin: 12px auto;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 375px){
+  .lesson-summary-share-wrap {
+    .lesson-summary-share {
+      &.style-1, &.style-2, &.style-3{
+        .main{
+          height: 398px;
         }
       }
     }
