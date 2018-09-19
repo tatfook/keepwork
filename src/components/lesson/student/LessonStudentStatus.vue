@@ -18,8 +18,10 @@
           <i @click="switchEdit" class="el-icon-edit-outline edit-status"></i>
         </span>
       </el-col>
-      <el-col :span="14" :push="10">
-        <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+      <el-col :span="14">
+        <el-row type="flex" justify="end">
+          <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+        </el-row>
       </el-col>
     </el-row>
     <el-dialog :title="$t('lesson.pleaseInputName')" center custom-class="input-name-dialog" :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
