@@ -1,26 +1,26 @@
 <template>
   <div class="lesson-more-info-setting">
-    <cover-media-setter v-if="!isGetData" ref="videoUrlComponent" :title='coverSetterTitle' :editingCoverUrl='editingCoverUrl' :subTitle='coverSetterSubTitle' :isEditing='isEditing' @urlChange='setVideoUrl'></cover-media-setter>
+    <cover-media-setter :isEditable='isEditable' v-if="!isGetData" ref="videoUrlComponent" :title='coverSetterTitle' :editingCoverUrl='editingCoverUrl' :subTitle='coverSetterSubTitle' :isEditing='isEditing' @urlChange='setVideoUrl'></cover-media-setter>
     <div class="lesson-more-info-setting-intro">
       <div class="lesson-more-info-setting-label">{{$t('lesson.intro')}}</div>
-      <el-input type="textarea" :placeholder="$t('lesson.intro')" resize='none' v-model="moreInfoData.goals">
+      <el-input :disabled="!isEditable" type="textarea" :placeholder="$t('lesson.intro')" resize='none' v-model="moreInfoData.goals">
       </el-input>
     </div>
     <div class="lesson-more-info-setting-duration">
       <div class="lesson-more-info-setting-label">{{$t('lesson.duration')}}</div>
-      <el-select v-model="moreInfoData.duration">
+      <el-select v-model="moreInfoData.duration" :disabled="!isEditable">
         <el-option label="45min" value="45min">
         </el-option>
       </el-select>
     </div>
     <div class="lesson-more-info-setting-skills">
       <div class="lesson-more-info-setting-label">{{$t('lesson.skillPoints')}}</div>
-      <el-button type='primary' @click="showAddSkillsDialog">{{$t('common.add')}}</el-button>
+      <el-button type='primary' @click="showAddSkillsDialog" :disabled="!isEditable">{{$t('common.add')}}</el-button>
       <div class="lesson-more-info-setting-skills-list">
         <div class="lesson-more-info-setting-skills-item" v-for="(skill, index) in moreInfoData.skills" :key="index">
           <span class="lesson-more-info-setting-skills-item-label">{{skillName(skill)}}</span>
-          <el-input-number size="mini" v-model="skill.score" :controls='false' :min='1'></el-input-number>
-          <i class="el-icon-delete" @click="removeSkill(index)"></i>
+          <el-input-number :disabled="!isEditable" size="mini" v-model="skill.score" :controls='false' :min='1'></el-input-number>
+          <i class="el-icon-delete" @click="removeSkill(index)" v-if="isEditable"></i>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
         <span class="lesson-more-info-setting-references-label">{{$t('lesson.lessonManage.optionalLabel')}}</span>
         {{$t('lesson.references')}}
       </div>
-      <el-button type='primary' @click="addReferences">{{$t('lesson.lessonManage.addReference')}}</el-button>
+      <el-button type='primary' @click="addReferences" :disabled="!isEditable">{{$t('lesson.lessonManage.addReference')}}</el-button>
     </div>
     <el-dialog class="lesson-more-info-setting-skills-dialog" width='455px' :modal-append-to-body="false" :visible.sync="isSkillDialogShow" :title="$t('lesson.lessonManage.addSkillPoint')" :before-close="handleClose">
       <div class="lesson-more-info-setting-skills-dialog-list">
@@ -54,6 +54,10 @@ export default {
   name: 'LessonMoreInfoSettting',
   props: {
     editingLessonDetailProp: Object,
+    isEditable: {
+      type: Boolean,
+      default: true
+    },
     isEditing: Boolean
   },
   async mounted() {
@@ -131,13 +135,17 @@ export default {
       this.isSkillDialogShow = false
     },
     toAdd() {
+      let oldSelectSkills = this.moreInfoData.skills
       this.moreInfoData.skills = []
       _.forEach(this.selectedSkills, selectSkill => {
-        this.moreInfoData.skills.push({
-          id: selectSkill.id,
-          skillName: this.skillName(selectSkill),
-          score: 1
-        })
+        let oldSkillObj = _.find(oldSelectSkills, { id: selectSkill.id })
+        this.moreInfoData.skills.push(
+          oldSkillObj || {
+            id: selectSkill.id,
+            skillName: this.skillName(selectSkill),
+            score: 1
+          }
+        )
       })
       this.handleClose()
     },

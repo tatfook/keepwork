@@ -12,7 +12,9 @@
         <div class="catalogue-manager-item" v-for="(lesson, index) in catalogues" :key='index'>
           <div class="catalogue-manager-item-index">{{index + 1}}</div>
           <div class="catalogue-manager-item-cover">
-            <img :src='lesson.extra.coverUrl' alt="">
+            <div class="catalogue-manager-item-cover-wrap">
+              <img class="catalogue-manager-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+            </div>
           </div>
           <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>
           <div class="catalogue-manager-item-date">{{lesson.updatedAt | formatDate(formatType)}}</div>
@@ -138,10 +140,18 @@ export default {
     }
     &-cover {
       font-size: 0;
-      img {
-        width: 120px;
-        height: 70px;
+      width: 112px;
+      &-wrap {
+        padding-bottom: 56.25%;
+        position: relative;
+      }
+      &-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
         object-fit: cover;
+        width: 100%;
+        height: 100%;
       }
     }
     &-name {

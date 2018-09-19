@@ -3,7 +3,7 @@
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-if="isShowSummary" />
-    <LessonWrap v-show="!isShowSummary" v-for="(item,index) in lessonMain" :key="index" :data="item" />
+    <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
         你正处于上课状态,请点击按钮返回当前所在的课堂
@@ -65,6 +65,7 @@ export default {
   },
   mounted() {
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    this.switchSummary(false)
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -77,7 +78,8 @@ export default {
       resumeQuiz: 'lesson/student/resumeQuiz',
       clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
       clearLessonData: 'lesson/student/clearLessonData',
-      checkClassroom: 'lesson/student/checkClassroom'
+      checkClassroom: 'lesson/student/checkClassroom',
+      switchSummary: 'lesson/student/switchSummary'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       console.warn('检查课堂是否还在')

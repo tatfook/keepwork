@@ -17,7 +17,7 @@
     </span>
     <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
     <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary">
-      <div :class="['progress-point-title',{'light': isSummaryLight}]">{{$t('lesson.summary')}}</div>
+      <div :class="['progress-point-title',{'light': !this.isQuizLight}]">{{$t('lesson.summary')}}</div>
     </span>
   </div>
 </template>
@@ -37,8 +37,6 @@ export default {
     return {
       isShowQuizResult: false,
       quizList: [],
-      isQuizLight: true,
-      isSummaryLight: false
     }
   },
   computed: {
@@ -47,8 +45,12 @@ export default {
       lessonQuizCount: 'lesson/student/lessonQuizCount',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       lessonQuizProgress: 'lesson/student/lessonQuizProgress',
-      lessonIsDone: 'lesson/student/lessonIsDone'
-    })
+      lessonIsDone: 'lesson/student/lessonIsDone',
+      isShowSummary: 'lesson/student/isShowSummary'
+    }),
+    isQuizLight() {
+      return !this.isShowSummary
+    }
   },
   methods: {
     ...mapActions({
@@ -74,14 +76,10 @@ export default {
     },
     showSummary() {
       if (this.lessonIsDone) {
-        this.isSummaryLight = true
-        this.isQuizLight = false
         this.switchSummary(true)
       }
     },
     showQuiz() {
-      this.isQuizLight = true
-      this.isSummaryLight = false
       this.switchSummary(false)
     }
   }

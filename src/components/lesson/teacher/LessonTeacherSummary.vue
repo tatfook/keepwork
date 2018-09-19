@@ -25,7 +25,7 @@
         <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}} + {{skill.score}}</li>
           </ul>
         </div>
       </div>
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="teacher-summary-print-lesson-plan">
-      <lesson-wrap v-for="(item,index) in modList" :key="index" :data="item" :isPreview="true" :isPrint="true"></lesson-wrap>
+      <lesson-wrap v-for="(item,index) in modList" :key="index" :mod="item" :isPreview="true" :isPrint="true"></lesson-wrap>
     </div>
     <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
       <div class="tip">
@@ -357,11 +357,10 @@ export default {
         })
     },
     singleStudentRecord(index, student) {
-      this.$router.push({
-        path: `/teacher/student/${student.userId}/classId/${
+      let _page = this.$router.resolve({ path: `/teacher/student/${student.userId}/classId/${
           this.classid
-        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
-      })
+        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record` })
+      window.open(_page.href)
     },
     singleStudentRightRate(quiz = []) {
       let rightAnswer = _.filter(quiz, {

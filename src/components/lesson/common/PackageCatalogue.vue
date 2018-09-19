@@ -14,7 +14,11 @@
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
           </div>
-          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toLessonDetail(lesson)">
+          <div class="package-catalogue-item-cover" @click="toLessonDetail(lesson)">
+            <div class="package-catalogue-item-cover-wrap">
+              <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+            </div>
+          </div>
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
@@ -48,13 +52,13 @@ export default {
       enterClassInfo: 'lesson/student/enterClassInfo',
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
-    loginUserId(){
+    loginUserId() {
       return _.get(this.userProfile, '_id')
     },
-    packageOwnerId(){
+    packageOwnerId() {
       return _.get(this.packageDetail, 'userId')
     },
-    isOwnPackage(){
+    isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
@@ -75,6 +79,16 @@ export default {
       return lessons
     },
     continueLearnedLesson() {
+      let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
+      if (lastLessonId) {
+        let lastLessonIndex = _.findIndex(
+          this.lessonsList,
+          lesson => lesson.id === lastLessonId
+        )
+        if (lastLessonIndex + 1 < this.lessonsList.length) {
+          return this.lessonsList[lastLessonIndex + 1]
+        }
+      }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
     },
     learnedLessons() {
@@ -205,10 +219,20 @@ export default {
       padding-left: 19px;
     }
     &-cover {
-      width: 250px;
-      height: 146px;
-      object-fit: cover;
+      width: 234px;
       cursor: pointer;
+      &-wrap {
+        padding-bottom: 56.25%;
+        position: relative;
+      }
+      &-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
     &-detail {
       flex: 1;

@@ -21,7 +21,8 @@
       <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
-      <el-col :span="14" class="lesson-cover" @click.native="openAnimations">
+      <el-col :span="14" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
+        <img src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
       <el-col :span="10" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
@@ -142,6 +143,23 @@ export default {
       dismissTheClass: 'lesson/teacher/dismissTheClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords'
     }),
+    generateStyleString(style) {
+      let string = ''
+      _.forEach(style, (value, key) => {
+        string = string + key + ':' + value + ';'
+      })
+      return string
+    },
+    loadCover() {
+      return this.generateStyleString({
+        background: 'url(' + this.coverUrl + ')',
+        'background-position': 'center',
+        'background-size': 'cover',
+        'background-color': '#eee',
+        opacity: '0.8',
+        'border-radius': '8px'
+      })
+    },
     openAnimations() {
       this.dialogVisible = true
     },
@@ -207,6 +225,14 @@ export default {
           await this.dismissTheClass()
             .then(res => {
               this.$emit('clearUpdateLearnRecords')
+              const { lessonId, id } = this.classroom
+              this.$router.push({
+                name: 'LessonTeacherSummary',
+                params: {
+                  classId: id,
+                  lessonId: Number(lessonId)
+                }
+              })
               window.removeEventListener(
                 'beforeunload',
                 this.leaveConfirm,
@@ -251,7 +277,7 @@ export default {
     lessonSkills() {
       return _.map(
         _.get(this.lesson, 'skills', []),
-        (skill) => colI18n.getLangValue(skill, 'skillName')
+        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
       )
     },
     lessonGoals() {
@@ -307,13 +333,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    &::after {
-      content: '';
-      width: 100px;
-      height: 100px;
-      background: url('/static/adi/lesson/play_btn_action.png') center center
-        no-repeat;
-      background-size: contain;
+    &:hover {
+      opacity: 1 !important;
     }
   }
 
@@ -417,7 +438,7 @@ export default {
   .lesson-progress-wrap {
     box-sizing: border-box;
     background: white;
-    padding: 60px 20px;
+    padding: 26px 20px;
     display: flex;
     align-items: center;
     &.el-row {

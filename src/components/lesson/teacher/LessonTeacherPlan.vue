@@ -1,7 +1,9 @@
 <template>
-  <div class="lesson-plan">
-    <lesson-hint-toggle />
-    <lesson-wrap v-for="(item,index) in lessonMain" :key="index" :data="item" :isPreview="true" :isTeacher="true" />
+  <div class="lesson-plan" mod-container>
+    <lesson-hint-toggle v-if="ishasHint" />
+    <template v-for="mod in lessonMain">
+      <lesson-wrap :mod="mod" :key="mod.key" :isPreview="true" :isTeacher="true" />
+    </template>
   </div>
 </template>
 
@@ -21,6 +23,9 @@ export default {
     }),
     lesson() {
       return this.lessonDetail.modList || []
+    },
+    ishasHint() {
+      return this.lesson.filter(({ cmd }) => cmd === 'Hint').length > 0
     },
     lessonHeader() {
       return this.lesson.filter(({ cmd }) => cmd === 'Lesson')[0]
