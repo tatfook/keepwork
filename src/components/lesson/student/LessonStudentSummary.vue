@@ -60,9 +60,6 @@ export default {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
-    console.warn(this.learnRecords)
-    console.warn(this.learnRecordsTimes)
-    console.log([...new Set(this.learnRecordsTimes)].length)
   },
   computed: {
     ...mapGetters({
