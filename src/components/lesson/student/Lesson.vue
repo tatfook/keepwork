@@ -44,6 +44,9 @@ export default {
     }
     next()
   },
+  created() {
+    this.switchSummary(false)
+  },
   async mounted() {
     const { packageId, lessonId } = this.$route.params
     if (this.isBeInClassroom) {
@@ -68,7 +71,6 @@ export default {
     }
     this.isLoading = false
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
-    this.switchSummary(false)
     window.document.title = this.lessonName
   },
   destroyed() {
