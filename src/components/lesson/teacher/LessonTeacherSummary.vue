@@ -357,11 +357,10 @@ export default {
         })
     },
     singleStudentRecord(index, student) {
-      this.$router.push({
-        path: `/teacher/student/${student.userId}/classId/${
+      let _page = this.$router.resolve({ path: `/teacher/student/${student.userId}/classId/${
           this.classid
-        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
-      })
+        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record` })
+      window.open(_page.href)
     },
     singleStudentRightRate(quiz = []) {
       let rightAnswer = _.filter(quiz, {
