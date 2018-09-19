@@ -21,6 +21,7 @@
 import StudentSummary from './StudentSummary'
 import { lesson } from '@/api'
 import { locale } from '@/lib/utils/i18n'
+import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import moment,{ months } from 'moment'
@@ -49,8 +50,7 @@ export default {
     this.learnRecords = learnRecords || []
     this.summary = {
       name: this.lessonName,
-      firstTime: this.firstTime,
-      lastTime: this.lastTime,
+      day: this.learnDayCount,
       learnRecords: this.learnRecords,
       skills: this.skills
     }
@@ -58,6 +58,9 @@ export default {
   },
   methods: {},
   computed: {
+    ...mapGetters({
+      learnDayCount: 'lesson/learnDayCount'
+    }),
     isEn() {
       return locale === 'en-US'
     },
