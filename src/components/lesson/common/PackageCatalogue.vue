@@ -269,6 +269,7 @@ export default {
       left: 0;
       font-size: 14px;
       color: #67c23a;
+      z-index: 1;
       .el-icon-check {
         font-weight: bold;
         width: 34px;
