@@ -60,6 +60,9 @@ export default {
         this.learnRecords = res
       })
       .catch(err => console.error(err))
+    console.warn(this.learnRecords)
+    console.warn(this.learnRecordsTimes)
+    console.log([...new Set(this.learnRecordsTimes)].length)
   },
   computed: {
     ...mapGetters({
@@ -102,8 +105,20 @@ export default {
       )
       return skill ? skill.score : 0
     },
+    learnRecordsTimes() {
+      return _.map(
+        _.filter(this.learnRecords, ({ state }) => state === 1),
+        ({ createdAt }) => {
+          const time = new Date(createdAt)
+          const year = time.getFullYear()
+          const month = time.getMonth()
+          const date = time.getDate()
+          return `${year}${month}${date}`
+        }
+      )
+    },
     firstTime() {
-      return _.get(this, 'learnRecords[0].createdAt', '')
+      return _.get(this, 'learnRecord[0].createdAt', '')
     },
     lastTime() {
       let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
@@ -119,25 +134,18 @@ export default {
     },
     studyTime() {
       const suffix = ['th', 'st', 'nd', 'rd', 'th']
-      if (this.firstTime && this.lastTime) {
-        let firstTime = new Date(this.firstTime).getTime()
-        let lastTime = new Date(this.lastTime).getTime()
-        let day =
-          Math.floor(
-            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
-          ) || 1
-        if (this.isEn) {
-          let remainder = day % 10
-          day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
-        }
-        return day
+      let day = [...new Set(this.learnRecordsTimes)].length
+      if (this.isEn) {
+        let remainder = day % 10
+        day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
       }
-      return this.isEn ? '1st' : 1
+      return day
     },
     summary() {
       return {
         firstTime: this.firstTime,
         lastTime: this.lastTime,
+        learnRecords: this.learnRecords,
         name: this.lessonName,
         skills: this.lessonSkills
       }
@@ -183,7 +191,7 @@ export default {
       this.$nextTick(() => {
         this.showSocialShare()
       })
-    },
+    }
     // shareTo(socialPlatform) {
     //   let origin = window.location.origin
     //   let packageId = this.$route.params.packageId
@@ -198,23 +206,23 @@ export default {
     //   let shareTitle = 'keepwork'
     //   let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
     //   let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
-      // if (socialPlatform == 'qq') {
-      //   window.open(
-      //     `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
-      //       this.lessonName
-      //     },快来跟我一起吧！`
-      //   )
-      // }
-      // if (socialPlatform == 'qzone') {
-      //   window.open(
-      //     `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
-      //   )
-      // }
-      // if (socialPlatform == 'sina') {
-      //   window.open(
-      //     `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
-      //   )
-      // }
+    // if (socialPlatform == 'qq') {
+    //   window.open(
+    //     `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
+    //       this.lessonName
+    //     },快来跟我一起吧！`
+    //   )
+    // }
+    // if (socialPlatform == 'qzone') {
+    //   window.open(
+    //     `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
+    //   )
+    // }
+    // if (socialPlatform == 'sina') {
+    //   window.open(
+    //     `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
+    //   )
+    // }
     // }
   }
 }
