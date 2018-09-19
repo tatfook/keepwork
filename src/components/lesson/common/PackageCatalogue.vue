@@ -32,6 +32,7 @@
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
