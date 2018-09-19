@@ -1,18 +1,17 @@
 {
   "presets": [
     ["env", {
-      "modules": false,
-      "targets": {
-        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
-      }
+      "modules": false
     }],
     "stage-2"
   ],
-  "plugins": ["transform-vue-jsx", "transform-runtime", "syntax-dynamic-import", "dynamic-import-node"],
-  "env": {
-    "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": ["transform-vue-jsx", "istanbul"]
-    }
-  }
+  "plugins": [
+    "transform-object-rest-spread",
+    "syntax-dynamic-import",
+    "transform-object-assign",
+    "transform-vue-jsx",
+    "transform-runtime",
+    "dynamic-import-node"
+  ],
+  "comments": false
 }

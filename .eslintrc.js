@@ -1,39 +1,69 @@
-// https://eslint.org/docs/user-guide/configuring
-
 module.exports = {
-  root: true,
+  extends: [
+    "eslint-config-egg",
+    'plugin:vue/essential'
+  ],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: "babel-eslint",
+    ecmaVersion: 8,
+    sourceType: "module"
+  },
+  rules: {
+    "prefer-const": "off",
+    "arrow-parens": "off",
+    "valid-jsdoc": "off",
+    "eol-last": "off",
+    "array-bracket-spacing": "off",
+    "no-unused-vars": "off",
+    "no-else-return": "off",
+    "no-alert": "off",
+    "dot-notation": "off",
+    strict: "off",
+    "linebreak-style": "off",
+    "no-irregular-whitespace": [
+      "error",
+      {
+        skipComments: true
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      {
+        arrays: "only-multiline",
+        objects: "only-multiline"
+      }
+    ],
+    "space-before-function-paren": [
+      1,
+      {
+        anonymous: "never",
+        named: "never",
+        asyncArrow: "always"
+      }
+    ],
+    "spaced-comment": [2, "always", {
+      exceptions: ["doc"]
+    }],
+    "brace-style": 2,
+    // allow async-await
+    "generator-star-spacing": "off",
+    semi: ["error", "never"],
+    "quote-props": ["error", "as-needed", { "keywords": false, "unnecessary": false }]
   },
   env: {
     browser: true,
+    node: true,
+    commonjs: true,
+    jquery: true,
+    es6: true
   },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential',
-    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-    'standard'
-  ],
-  // required to lint *.vue files
-  plugins: ['html', 'vue'],
-  // add your custom rules here
-  rules: {
-    'space-before-function-paren': [
-      1,
-      {
-        anonymous: 'never',
-        named: 'never',
-        asyncArrow: 'always'
-      }
-    ],
-    'spaced-comment': [2, 'always', {
-      exceptions: ['doc']
-    }],
-    'brace-style': 2,
-    // allow async-await
-    'generator-star-spacing': 'off',
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-  }
+  globals: {
+    EASY_ENV_IS_PROD: true,
+    EASY_ENV_IS_NODE: true,
+    EASY_ENV_IS_BROWSER: true
+  },
+  plugins: [
+    "html",
+    "vue"
+  ]
 }
