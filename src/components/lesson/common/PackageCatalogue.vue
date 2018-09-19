@@ -86,8 +86,13 @@ export default {
           this.lessonsList,
           lesson => lesson.id === lastLessonId
         )
-        if (lastLessonIndex + 1 < this.lessonsList.length) {
-          return this.lessonsList[lastLessonIndex + 1]
+        // if (lastLessonIndex + 1 < this.lessonsList.length) {
+        //   return this.lessonsList[lastLessonIndex + 1]
+        // }
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
         }
       }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)

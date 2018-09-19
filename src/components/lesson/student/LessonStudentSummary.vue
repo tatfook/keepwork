@@ -65,7 +65,8 @@ export default {
     ...mapGetters({
       userId: 'user/userId',
       lessonDetail: 'lesson/student/lessonDetail',
-      subscribesList: 'lesson/student/subscribesList'
+      subscribesList: 'lesson/student/subscribesList',
+      learnDayCount: 'lesson/learnDayCount'
     }),
     lessonSbuscribeTime() {
       let lesson = this.subscribesList.find(o => o.id === Number(this.lessonId))
@@ -131,7 +132,7 @@ export default {
     },
     studyTime() {
       const suffix = ['th', 'st', 'nd', 'rd', 'th']
-      let day = [...new Set(this.learnRecordsTimes)].length
+      let day = this.learnDayCount
       if (this.isEn) {
         let remainder = day % 10
         day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
@@ -140,9 +141,7 @@ export default {
     },
     summary() {
       return {
-        firstTime: this.firstTime,
-        lastTime: this.lastTime,
-        learnRecords: this.learnRecords,
+        day: this.studyTime,
         name: this.lessonName,
         skills: this.lessonSkills
       }

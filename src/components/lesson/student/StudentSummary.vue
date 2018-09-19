@@ -45,21 +45,9 @@ export default {
     isEn() {
       return locale === 'en-US'
     },
-    learnRecordsTimes() {
-      return _.map(
-        _.filter(this.summary.learnRecords, ({ state }) => state === 1),
-        ({ createdAt }) => {
-          const time = new Date(createdAt)
-          const year = time.getFullYear()
-          const month = time.getMonth()
-          const date = time.getDate()
-          return `${year}${month}${date}`
-        }
-      )
-    },
     day() {
       const suffix = ['', 'st', 'nd', 'rd', 'th']
-      let day = [...new Set(this.learnRecordsTimes)].length
+      let day = this.summary.day
       if (this.isEn) {
         day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
       }
