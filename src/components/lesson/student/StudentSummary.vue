@@ -19,6 +19,7 @@
 
 <script>
 import { locale } from '@/lib/utils/i18n'
+import _ from 'lodash'
 export default {
   name: 'StudentSummary',
   props: {
@@ -44,22 +45,25 @@ export default {
     isEn() {
       return locale === 'en-US'
     },
-    secondWord() {},
+    learnRecordsTimes() {
+      return _.map(
+        _.filter(this.summary.learnRecords, ({ state }) => state === 1),
+        ({ createdAt }) => {
+          const time = new Date(createdAt)
+          const year = time.getFullYear()
+          const month = time.getMonth()
+          const date = time.getDate()
+          return `${year}${month}${date}`
+        }
+      )
+    },
     day() {
       const suffix = ['', 'st', 'nd', 'rd', 'th']
-      if (this.summary.firstTime && this.summary.lastTime) {
-        let firstTime = new Date(this.summary.firstTime).getTime()
-        let lastTime = new Date(this.summary.lastTime).getTime()
-        let day =
-          Math.floor(
-            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
-          ) || 1
-        if (this.isEn) {
-          day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
-        }
-        return day
+      let day = [...new Set(this.learnRecordsTimes)].length
+      if (this.isEn) {
+        day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
       }
-      return this.isEn ? '1st' : 1
+      return day
     },
     skills() {
       const skillName = ['代码阅读量', '代码书写量', '学习指令数']

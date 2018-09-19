@@ -51,6 +51,7 @@ export default {
       name: this.lessonName,
       firstTime: this.firstTime,
       lastTime: this.lastTime,
+      learnRecords: this.learnRecords,
       skills: this.skills
     }
     this.isLoading = false
