@@ -2,7 +2,15 @@
 
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const dotenv = new Dotenv()
+const copyWebpack = new CopyWebpackPlugin([
+  {
+    from: path.resolve(__dirname, 'app/static'),
+    to: 'public',
+    ignore: ['.*']
+  }
+])
 
 module.exports = {
   egg: true,
@@ -35,7 +43,8 @@ module.exports = {
   plugins: {
     imagemini: false,
     serviceworker: true,
-    dotenv
+    dotenv,
+    copyWebpack
   },
   node: {
     console: true

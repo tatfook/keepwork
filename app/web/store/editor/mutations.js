@@ -275,7 +275,7 @@ const mutations = {
   [UPDATE_CURSOR_POSITION](state, cursor) {
     Vue.set(state.activePage, 'cursorPos', cursor)
   },
-  [LOAD_PAGE_DATA](state, {path, pageData}) {
+  [LOAD_PAGE_DATA](state, { path, pageData }) {
     Vue.set(state.openedPages, path, pageData)
   },
   [ADD_OPENED_FILE](state, { username, path, data }) {
@@ -304,7 +304,7 @@ const mutations = {
     })
     _.omit(state.openedPages, path)
   },
-  [CLOSE_ALL_OPENED_FILE](state, {username}) {
+  [CLOSE_ALL_OPENED_FILE](state, { username }) {
     Vue.set(state, 'openedFiles', {
       ...state.openedFiles,
       [username]: {}

@@ -186,7 +186,7 @@ const actions = {
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
-    await lesson.packages.audit({ packageId, state: state }).then(async () => {
+    await lesson.packages.audit({ packageId, state }).then(async () => {
       await dispatch('getAllTeacherData')
       return Promise.resolve()
     }).catch(error => {

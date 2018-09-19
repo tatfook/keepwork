@@ -167,9 +167,7 @@ export default {
       return window.location.hostname
     },
     lessonCenterUrl() {
-      return this.hostname === 'localhost'
-        ? '/lesson.html#/student/center'
-        : '/l#/student/center'
+      return '/l#/student/center'
     }
   },
   mounted() {
@@ -193,7 +191,7 @@ export default {
       if (window.location.hostname === 'localhost') {
         window.open(`${origin}/ed`)
       } else {
-        window.open(`${origin}/wiki/wikieditor/#/`)
+        window.open(`${origin}/ed/#/`)
       }
     },
     goPersonalCenter() {

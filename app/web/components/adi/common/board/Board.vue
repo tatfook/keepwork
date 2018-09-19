@@ -178,7 +178,7 @@ export default {
         let boardScript = document.createElement('script')
         boardScript.setAttribute(
           'src',
-          '/static/adi/board/keepwork-board.min.js'
+          '/public/adi/board/keepwork-board.min.js'
         )
 
         let graphEditorCss = document.createElement('link')
@@ -186,7 +186,7 @@ export default {
         graphEditorCss.setAttribute('type', 'text/css')
         graphEditorCss.setAttribute(
           'href',
-          '/static/adi/board/assets/styles/grapheditor.css'
+          '/public/adi/board/assets/styles/grapheditor.css'
         )
 
         let body = document.querySelector('body')

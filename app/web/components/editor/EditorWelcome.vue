@@ -6,7 +6,7 @@
     </div>
     <div class="resentWeb">
       <ul>
-        <li v-for="(site,index) in recentOpenedList" :key="index"><a :href="'/wiki/wikieditor/#'+site.path">{{site.path}}</a></li>
+        <li v-for="(site,index) in recentOpenedList" :key="index"><a :href="'/ed/#'+site.path">{{site.path}}</a></li>
       </ul>
     </div>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>

@@ -104,7 +104,7 @@ const actions = {
     }
 
     let projectId = siteDetailInfoDataSource.projectId
-    let gitlab = new GitAPI({url: process.env.GITLAB_API_PREFIX, token: ' '})
+    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
 
     let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return
@@ -271,7 +271,7 @@ const actions = {
       username,
       name,
       options
-    } = await getGitlabFileParams(context, {path: paths[0]})
+    } = await getGitlabFileParams(context, { path: paths[0] })
     let payload = { path, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 

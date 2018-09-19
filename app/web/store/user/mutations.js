@@ -66,8 +66,8 @@ const doNothing = state => {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, {token, userinfo: profile}) {
-    Vue.set(state, 'profile', {...profile, token})
+  [LOGIN_SUCCESS](state, { token, userinfo: profile }) {
+    Vue.set(state, 'profile', { ...profile, token })
     Vue.set(state, 'tokenUpdateAt', Date.now())
   },
   [LOGOUT](state) {
@@ -79,20 +79,20 @@ const mutations = {
   [SET_REAL_AUTH_PHONE_NUM](state, payload) {
     Vue.set(state, 'sendCodeInfo', payload)
   },
-  [GET_ALL_WEBSITE_SUCCESS](state, {username, list}) {
+  [GET_ALL_WEBSITE_SUCCESS](state, { username, list }) {
     Vue.set(state, 'website', {
       ...state.website,
       [username]: _.keyBy(list, 'name')
     })
   },
-  [GET_USER_DETAIL_SUCCESS](state, {username, userDetail}) {
+  [GET_USER_DETAIL_SUCCESS](state, { username, userDetail }) {
     Vue.set(state, 'usersDetail', {
       ...state.usersDetail,
       [username]: userDetail
     })
   },
-  [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, {username, list}) {
-    let targetList = list.map(({siteinfo, siteuser}) => ({
+  [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, { username, list }) {
+    let targetList = list.map(({ siteinfo, siteuser }) => ({
       ...siteinfo,
       ...siteuser,
       _id: siteinfo._id,
@@ -104,7 +104,7 @@ const mutations = {
       [username]: _.keyBy(targetList, 'rootPath')
     })
   },
-  [GET_SITE_DATASOURCE_SUCCESS](state, {username, list}) {
+  [GET_SITE_DATASOURCE_SUCCESS](state, { username, list }) {
     Vue.set(state, 'siteDataSource', {
       ...state.siteDataSource,
       [username]: _.keyBy(list, 'sitename')
@@ -113,31 +113,31 @@ const mutations = {
   [CREATE_COMMENT_SUCCESS]: doNothing,
   [DELETE_COMMENT_SUCCESS]: doNothing,
   [UPSERT_WEBSITE_SUCCESS]: doNothing,
-  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, {url, commentList, commentTotal}) {
+  [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, { url, commentList, commentTotal }) {
     Vue.set(state, 'comments', {
       ...state.comments,
-      [url]: {commentList, commentTotal}
+      [url]: { commentList, commentTotal }
     })
   },
-  [GET_SITE_DETAIL_INFO_SUCCESS](state, {username, sitename, detailInfo}) {
+  [GET_SITE_DETAIL_INFO_SUCCESS](state, { username, sitename, detailInfo }) {
     Vue.set(state, 'siteDetailInfo', {
       ...state.siteDetailInfo,
       [`${username}/${sitename}`]: detailInfo
     })
   },
-  [GET_WEB_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
+  [GET_WEB_TEMPLATE_CONFIG_SUCCESS](state, { config }) {
     Vue.set(state, 'webTemplateConfig', config)
   },
-  [GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS](state, {config}) {
+  [GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS](state, { config }) {
     Vue.set(state, 'webPageTemplateConfig', config)
   },
-  [GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS](state, {template, content}) {
+  [GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS](state, { template, content }) {
     Vue.set(template, 'content', content)
   },
-  [GET_WEB_TEMPLATE_FILELIST_SUCCESS](state, {webTemplate, fileList}) {
+  [GET_WEB_TEMPLATE_FILELIST_SUCCESS](state, { webTemplate, fileList }) {
     Vue.set(webTemplate, 'fileList', fileList)
   },
-  [GET_WEB_TEMPLATE_FILE_SUCCESS](state, {file, content}) {
+  [GET_WEB_TEMPLATE_FILE_SUCCESS](state, { file, content }) {
     Vue.set(file, 'content', content)
   },
   [SET_PAGE_STAR_DETAIL](state, { starred, starredCount }) {
@@ -167,7 +167,7 @@ const mutations = {
       [sitePath]: config
     })
   },
-  [UPDATE_SITE_MSG_SUCCESS](state, {newBasicMessage}) {
+  [UPDATE_SITE_MSG_SUCCESS](state, { newBasicMessage }) {
     let { username, name } = newBasicMessage
     Vue.set(state.website, username, {
       ...state.website[username],
@@ -184,7 +184,7 @@ const mutations = {
       }
     })
   },
-  [USE_FILE_IN_SITE_SUCCESS](state, {sitePath, fileId, url}) {
+  [USE_FILE_IN_SITE_SUCCESS](state, { sitePath, fileId, url }) {
     Vue.set(state, 'siteFiles', {
       ...state.siteFiles,
       [sitePath]: {

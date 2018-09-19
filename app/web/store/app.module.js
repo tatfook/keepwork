@@ -36,7 +36,7 @@ const getters = {
   activePageUrl: state => state.activePageUrl,
   activePageInfo: (state, { activePageUrl }) => getPageInfoByPath(activePageUrl),
   modList: state => state.modList,
-  themeConf: (state, {siteSetting}) => _.get(siteSetting, 'theme', {}),
+  themeConf: (state, { siteSetting }) => _.get(siteSetting, 'theme', {}),
 
   allSiteSettings: state => state.siteSettings,
   sitePath: (state, { activePageInfo }) => activePageInfo.sitepath,
@@ -130,7 +130,7 @@ const actions = {
         content,
         modList: Parser.buildBlockList(content),
         path: filePath,
-        fileName: fileName
+        fileName
       })
     }))
 

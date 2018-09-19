@@ -67,10 +67,10 @@ const actions = {
     }
     return info
   },
-  thirdLogin({ commit }, {userinfo, token}) {
+  thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
     window.localStorage.setItem('satellizer_token', token)
-    commit(LOGIN_SUCCESS, {userinfo, token})
+    commit(LOGIN_SUCCESS, { userinfo, token })
   },
   async logout({ commit, dispatch }) {
     commit(LOGOUT)
@@ -110,11 +110,11 @@ const actions = {
     let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
     return thirdRegisterInfo
   },
-  async getProfile(context, {forceLogin = true, useCache = true} = {}) {
+  async getProfile(context, { forceLogin = true, useCache = true } = {}) {
     let { commit, getters: { token } } = context
     if (useCache) return
     const profile = await keepwork.user.getProfile()
-    await commit(GET_PROFILE_SUCCESS, {...profile, token})
+    await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
@@ -122,7 +122,7 @@ const actions = {
     if (userDetail) {
       return
     }
-    userDetail = await keepwork.user.getDetailByName({ username: username })
+    userDetail = await keepwork.user.getDetailByName({ username })
     commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
@@ -139,7 +139,7 @@ const actions = {
   async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
     let { dispatch, commit, getters: { sendCodeInfo } } = context
     smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({setRealNameInfo, smsCode, smsId, bind})
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ setRealNameInfo, smsCode, smsId, bind })
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
     return verifyInfoTwo
@@ -149,7 +149,7 @@ const actions = {
     await dispatch('getAllPersonalWebsite', { useCache })
     let { personalSitePathMap } = getters
     await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
-      await dispatch('gitlab/getRepositoryTree', {path: sitepath, useCache}, { root: true })
+      await dispatch('gitlab/getRepositoryTree', { path: sitepath, useCache }, { root: true })
     })).catch(e => console.error(e))
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
@@ -184,25 +184,25 @@ const actions = {
     let { fileList } = webTemplate
 
     // copy all file in template.folder
-    for (let {path, content} of fileList) {
+    for (let { path, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
       await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
     }
 
     // refresh repositoryTree
-    await dispatch('gitlab/getRepositoryTree', {path: `${username}/${name}`, useCache: false}, { root: true })
+    await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
   },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
     let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
-    commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, {config})
+    commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
     let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath)
-    commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, {config})
+    commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
@@ -213,15 +213,15 @@ const actions = {
       if (!_.isEmpty(content)) return
       content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, path)
       content = _.isString(content) ? content : JSON.stringify(content)
-      commit(GET_WEB_TEMPLATE_FILE_SUCCESS, {file, content})
+      commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
   },
   async getWebTemplateFileList({ commit }, webTemplate) {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = new GitAPI({url: rawBaseUrl, token: ' '})
-    fileList = await gitlabForGuest.getTree({projectId, path: `templates/${folder}`, recursive: true})
+    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    fileList = await gitlabForGuest.getTree({ projectId, path: `templates/${folder}`, recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -244,7 +244,7 @@ const actions = {
       ...websiteSetting
     }
     let site = await keepwork.website.upsert(upsertPayload)
-    commit(UPSERT_WEBSITE_SUCCESS, {username, site})
+    commit(UPSERT_WEBSITE_SUCCESS, { username, site })
   },
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
@@ -252,7 +252,7 @@ const actions = {
 
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
     content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, `${pageTemplateRoot}/${contentPath}`)
-    commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, {template, content})
+    commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
   },
@@ -267,8 +267,8 @@ const actions = {
     let { username, personalSiteList } = getters
     if (useCache && personalSiteList.length) return
 
-    let list = await keepwork.website.getAllByUsername({username})
-    commit(GET_ALL_WEBSITE_SUCCESS, {username, list})
+    let list = await keepwork.website.getAllByUsername({ username })
+    commit(GET_ALL_WEBSITE_SUCCESS, { username, list })
   },
   async getAllSiteDataSource(context, payload) {
     let { useCache = false } = payload || {}
@@ -277,8 +277,8 @@ const actions = {
     let { username, siteDataSourcesMap } = getters
     if (useCache && !_.isEmpty(siteDataSourcesMap)) return
 
-    let list = await keepwork.siteDataSource.getByUsername({username})
-    commit(GET_SITE_DATASOURCE_SUCCESS, {username, list})
+    let list = await keepwork.siteDataSource.getByUsername({ username })
+    commit(GET_SITE_DATASOURCE_SUCCESS, { username, list })
   },
   async getAllContributedWebsite(context, payload) {
     let { useCache = false } = payload || {}
@@ -287,19 +287,19 @@ const actions = {
     let { username } = getters
     if (useCache) return
 
-    let list = await keepwork.siteUser.getSiteListByMemberName({memberName: username})
-    list = _.values(list).filter(({siteinfo, siteuser} = {}) => siteinfo && siteuser)
+    let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
+    list = _.values(list).filter(({ siteinfo, siteuser } = {}) => siteinfo && siteuser)
 
-    commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, {username, list})
+    commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
     let { commit, getters: { getSiteDetailInfoByPath } } = context
     if (getSiteDetailInfoByPath(path)) return
 
     let [username, sitename] = path.split('/').filter(x => x)
-    let detailInfo = await keepwork.website.getDetailInfo({username, sitename})
+    let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
 
-    commit(GET_SITE_DETAIL_INFO_SUCCESS, {username, sitename, detailInfo})
+    commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
   },
   async getSiteLayoutConfig(context, { path, editorMode = true, useCache = true }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath }, rootGetters } = context
@@ -315,7 +315,7 @@ const actions = {
     let { 'gitlab/getFileByPath': gitlabGetFileByPath } = rootGetters
     let { content } = gitlabGetFileByPath(layoutFilePath) || {}
     config = _.isString(content) ? JSON.parse(content) : content
-    commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config})
+    commit(GET_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config })
   },
   async saveSiteLayoutConfig(context, { sitePath, layoutConfig, pages }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath } } = context
@@ -336,8 +336,8 @@ const actions = {
     let content = JSON.stringify(unsavedConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
     await dispatch('gitlab/saveFile', { path: layoutFilePath, content }, { root: true })
-    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, {sitePath, config: unsavedConfig})
-    dispatch('refreshSiteSettings', {sitePath}, {root: true})
+    commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unsavedConfig })
+    dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
   async getSiteThemeConfig(context, { path, editorMode = true, useCache = true }) {
     let { commit, dispatch, rootGetters } = context
@@ -404,7 +404,7 @@ const actions = {
     let unSaveConfig = {
       ...config,
       layoutConfig,
-      pages: pages
+      pages
     }
     let content = JSON.stringify(unSaveConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
@@ -437,7 +437,7 @@ const actions = {
     let unSaveConfig = {
       ...config,
       layoutConfig,
-      pages: pages
+      pages
     }
     let content = JSON.stringify(unSaveConfig, null, 2)
     let layoutFilePath = LayoutHelper.layoutFilePath(sitePath)
@@ -445,10 +445,10 @@ const actions = {
     commit(SAVE_SITE_LAYOUT_CONFIG_SUCCESS, { sitePath, config: unSaveConfig })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
-  async saveSiteBasicSetting(context, {newBasicMessage}) {
+  async saveSiteBasicSetting(context, { newBasicMessage }) {
     let { commit } = context
     await keepwork.website.updateByName(newBasicMessage)
-    commit(UPDATE_SITE_MSG_SUCCESS, {newBasicMessage})
+    commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context
@@ -459,19 +459,19 @@ const actions = {
     await dispatch('getWebsiteDetailInfoByPath', { path })
     let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
-    let payload = {websiteId, userId, url: fullPath, content}
+    let payload = { websiteId, userId, url: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
 
     commit(CREATE_COMMENT_SUCCESS, { url: fullPath, commentList })
-    await dispatch('getCommentsByPageUrl', {url: fullPath})
+    await dispatch('getCommentsByPageUrl', { url: fullPath })
   },
   async createCommentForActivePage(context, { content }) {
     let { dispatch, rootGetters: { activePageUrl } } = context
-    await dispatch('createComment', {url: activePageUrl, content})
+    await dispatch('createComment', { url: activePageUrl, content })
   },
   async deleteCommentById(context, { _id, page }) {
     let { dispatch, commit } = context
-    await keepwork.websiteComment.deleteById({_id})
+    await keepwork.websiteComment.deleteById({ _id })
 
     commit(DELETE_COMMENT_SUCCESS, { _id })
     await dispatch('getActivePageComments', { page })
@@ -479,33 +479,33 @@ const actions = {
   async getCommentsByPageUrl({ commit }, { url: path, page }) {
     let fullPath = getFileFullPathByPath(path)
 
-    let { commentList, total } = await keepwork.websiteComment.getByPageUrl({url: fullPath, page: page})
+    let { commentList, total } = await keepwork.websiteComment.getByPageUrl({ url: fullPath, page })
 
-    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, {url: fullPath, commentList, commentTotal: total})
+    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, { url: fullPath, commentList, commentTotal: total })
   },
   async getActivePageComments(context, { page }) {
     let { dispatch, rootGetters: { activePageUrl } } = context
-    await dispatch('getCommentsByPageUrl', {url: activePageUrl, page: page})
+    await dispatch('getCommentsByPageUrl', { url: activePageUrl, page })
   },
   async starPages(context, { url }) {
     let { commit, dispatch, getters } = context
     await dispatch('getProfile')
     let { username } = getters
-    let pageStarResult = await keepwork.pages.star({url, visitor: username})
+    let pageStarResult = await keepwork.pages.star({ url, visitor: username })
     commit(SET_PAGE_STAR_DETAIL, pageStarResult)
   },
   async initPageDetail(context, { url, visitor }) {
     let { commit } = context
-    let pageDetail = await keepwork.pages.getDetail({url, visitor})
+    let pageDetail = await keepwork.pages.getDetail({ url, visitor })
     commit(SET_PAGE_STAR_DETAIL, pageDetail)
   },
-  async refreshSkyDrive({ dispatch }, {useCache = true} = {}) {
+  async refreshSkyDrive({ dispatch }, { useCache = true } = {}) {
     await Promise.all([
-      dispatch('getInfoFromSkyDrive', {useCache}),
-      dispatch('getFileListFromSkyDrive', {useCache})
+      dispatch('getInfoFromSkyDrive', { useCache }),
+      dispatch('getFileListFromSkyDrive', { useCache })
     ])
   },
-  async getInfoFromSkyDrive(context, {useCache = true} = {}) {
+  async getInfoFromSkyDrive(context, { useCache = true } = {}) {
     let { commit, getters } = context
     let { username, skyDriveInfo } = getters
     if (useCache && !_.isEmpty(skyDriveInfo)) return
@@ -513,48 +513,48 @@ const actions = {
     let info = await skyDrive.info()
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, info })
   },
-  async getFileListFromSkyDrive(context, {useCache = true} = {}) {
+  async getFileListFromSkyDrive(context, { useCache = true } = {}) {
     let { commit, getters } = context
     let { username, skyDriveFileList } = getters
     if (useCache && !_.isEmpty(skyDriveFileList)) return
 
-    let filelist = await skyDrive.list({pageSize: 10000000})
+    let filelist = await skyDrive.list({ pageSize: 10000000 })
     commit(GET_FROM_SKY_DRIVE_SUCCESS, { username, filelist })
     return filelist
   },
-  async uploadFileToSkyDrive(context, {file, filename, onStart, onProgress}) {
-    let { key } = await skyDrive.upload({file, filename, onStart, onProgress})
+  async uploadFileToSkyDrive(context, { file, filename, onStart, onProgress }) {
+    let { key } = await skyDrive.upload({ file, filename, onStart, onProgress })
     return { key }
   },
-  async removeFileFromSkyDrive(context, {file}) {
-    await skyDrive.remove({file})
+  async removeFileFromSkyDrive(context, { file }) {
+    await skyDrive.remove({ file })
   },
-  async changeFileNameInSkyDrive(context, {key, filename}) {
-    await skyDrive.changeFileName({key, filename})
+  async changeFileNameInSkyDrive(context, { key, filename }) {
+    await skyDrive.changeFileName({ key, filename })
   },
-  async useFileInSite(context, {fileId, sitePath, useCache = true}) {
+  async useFileInSite(context, { fileId, sitePath, useCache = true }) {
     let { commit, dispatch, getters, rootGetters } = context
 
     let { siteFileBySitePathAndFileId } = getters
-    let cachedUrl = siteFileBySitePathAndFileId({sitePath, fileId})
+    let cachedUrl = siteFileBySitePathAndFileId({ sitePath, fileId })
     if (useCache && !_.isEmpty(cachedUrl)) return
 
     await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
     let { siteinfo: { userId, _id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
 
-    let url = await skyDrive.useFileInSite({userId, siteId, fileId})
-    commit(USE_FILE_IN_SITE_SUCCESS, {sitePath, fileId, url})
+    let url = await skyDrive.useFileInSite({ userId, siteId, fileId })
+    commit(USE_FILE_IN_SITE_SUCCESS, { sitePath, fileId, url })
     return url
   },
-  async uploadFileAndUseInSite({dispatch}, {file, filename, sitePath, onStart, onProgress}) {
-    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', {file, filename, onStart, onProgress})
-    let filelist = await dispatch('getFileListFromSkyDrive', {useCache: false})
+  async uploadFileAndUseInSite({ dispatch }, { file, filename, sitePath, onStart, onProgress }) {
+    let { key: fileKey } = await dispatch('uploadFileToSkyDrive', { file, filename, onStart, onProgress })
+    let filelist = await dispatch('getFileListFromSkyDrive', { useCache: false })
     let fileUploaded = (filelist || []).filter(({ key }) => fileKey === key)[0]
     let { id: fileId } = fileUploaded
-    let url = await dispatch('useFileInSite', {fileId, sitePath, useCache: false})
-    return {file: fileUploaded, url}
+    let url = await dispatch('useFileInSite', { fileId, sitePath, useCache: false })
+    return { file: fileUploaded, url }
   },
-  async checkSensitive(context, {checkedWords}) {
+  async checkSensitive(context, { checkedWords }) {
     let result = await sensitiveWord.checkSensitiveWords(checkedWords)
     return result
   },
@@ -594,7 +594,7 @@ const actions = {
   },
   async threeServiceUnbind(context, { id, password, username }) {
     let { dispatch } = context
-    let unbindResut = {status: ''}
+    let unbindResut = { status: '' }
     await keepwork.userThreeService.unbind({ id, password }).then(async () => {
       await dispatch('getUserThreeServiceByUsername', { username })
       unbindResut.status = 'success'
@@ -605,7 +605,7 @@ const actions = {
   },
   async unbindCellphone(context, { password }) {
     let { dispatch } = context
-    let unbindResut = {status: ''}
+    let unbindResut = { status: '' }
     await keepwork.user.unbindCellphone({ password }).then(async () => {
       await dispatch('getProfile', {
         useCache: false
@@ -618,7 +618,7 @@ const actions = {
   },
   async unbindEmail(context, { password }) {
     let { dispatch } = context
-    let unbindResut = {status: ''}
+    let unbindResut = { status: '' }
     await keepwork.user.unbindEmail({ password }).then(async () => {
       await dispatch('getProfile', {
         useCache: false

@@ -36,7 +36,7 @@ const getters = {
   sendCodeInfo: (state) => state.sendCodeInfo,
   authCodeInfo: (state) => state.authCodeInfo,
 
-  siteDataSourcesMap: (state, {username}) => _.get(state, ['siteDataSource', username]),
+  siteDataSourcesMap: (state, { username }) => _.get(state, ['siteDataSource', username]),
   getPersonalSiteListByUsername: (
     state,
     { siteDataSourcesMap, defaultSiteDataSource },
@@ -116,7 +116,7 @@ const getters = {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
   },
-  personalWebsiteNames: (state, {personalSiteList = []}) => personalSiteList.map(site => site.name),
+  personalWebsiteNames: (state, { personalSiteList = [] }) => personalSiteList.map(site => site.name),
 
   getContributedSiteListByUsername: (
     state,
@@ -263,7 +263,7 @@ const getters = {
   allLayoutContentFilePathsBySitePath: (state, { siteLayoutsBySitePath }) => sitePath => {
     let allLayouts = siteLayoutsBySitePath(sitePath)
     let allLayoutContentFilePaths = _.flatten(allLayouts.map(
-      ({content}) => _.keys(content).filter(
+      ({ content }) => _.keys(content).filter(
         key => (content[key] || '').trim()
       ).map(
         key => `${key}s/${content[key]}`
@@ -293,7 +293,7 @@ const getters = {
   skyDriveFileList: (state, { skyDrive: { filelist = [] } }) => filelist,
   skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
 
-  siteFileBySitePathAndFileId: (state) => ({sitePath, fileId}) => _.get(state, ['siteFiles', sitePath, fileId]),
+  siteFileBySitePathAndFileId: (state) => ({ sitePath, fileId }) => _.get(state, ['siteFiles', sitePath, fileId]),
   threeServices: (state) => state.threeServices,
   getThreeService: (state, { threeServices }) => type => {
     let result = _.find(threeServices, (o) => {

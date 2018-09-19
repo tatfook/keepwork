@@ -30,8 +30,8 @@ const getters = {
     { 'lesson/userinfo': { nickname, username }, 'user/profile': { portrait } }
   ) => ({
     name: nickname,
-    username: username,
-    portrait: portrait,
+    username,
+    portrait,
     quiz: lessonQuiz
   })
 }

@@ -6,7 +6,7 @@ module.exports = () => {
   return function* (next) {
     const start = new Date().getTime()
 
-    yield * next
+    yield* next
 
     const rs = Math.ceil(new Date().getTime() - start)
 

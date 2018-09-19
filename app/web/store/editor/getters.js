@@ -26,7 +26,7 @@ const getters = {
     let pageInfo = getPageInfoByPath(activePageUrl)
     let { fullPath } = pageInfo
     let { saved } = openedPages[fullPath] || {}
-    return {...pageInfo, saved}
+    return { ...pageInfo, saved }
   },
   activePageUsername: (state, { activePageInfo: { username } }) => username,
   code: (state, { activeAreaFile }) => {
@@ -45,7 +45,7 @@ const getters = {
     }
     return activePage
   },
-  activeAreaFile: (state, {activeAreaData}) => {
+  activeAreaFile: (state, { activeAreaData }) => {
     return activeAreaData && (activeAreaData.file || activeAreaData)
   },
   modList: (state, { activeAreaData }) =>

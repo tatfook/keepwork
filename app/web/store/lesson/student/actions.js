@@ -66,7 +66,7 @@ const actions = {
   },
   async enterClassRoom({ commit, dispatch }, { key }) {
     let enterClassInfo = await lesson.classrooms.join({
-      key: key
+      key
     })
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
@@ -94,7 +94,7 @@ const actions = {
   ) {
     let learnRecords = await lesson.classrooms
       .learnRecordsById(id)
-      .catch(e => console.error(`can't find learnRecords`))
+      .catch(e => console.error('can\'t find learnRecords'))
     if (learnRecords && learnRecords.extra.quiz) {
       let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
       let _lessonDetail = _.clone(lessonDetail)

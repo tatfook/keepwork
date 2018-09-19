@@ -25,7 +25,7 @@ module.exports = app => {
   }
 
   exports.static = {
-    prefix: '/static/',
+    prefix: '/public/',
     dir: path.join(app.baseDir, 'app/static')
   }
 

@@ -119,7 +119,7 @@ const actions = {
       let pageData = initPageState()
       pageData.file = file
       pageData.modList = Parser.buildBlockList(file.content)
-      commit(LOAD_PAGE_DATA, {path: fullPath, pageData})
+      commit(LOAD_PAGE_DATA, { path: fullPath, pageData })
     }
   },
   async saveActivePage({ getters, dispatch }) {
@@ -187,7 +187,7 @@ const actions = {
           content,
           modList: Parser.buildBlockList(content),
           path: filePath,
-          fileName: fileName
+          fileName
         })
       })
     ).catch(e => console.error(e))
@@ -232,14 +232,14 @@ const actions = {
     { dispatch, commit },
     { path, editorMode = true }
   ) {
-    let payload = await dispatch('loadFile', {path, editorMode})
+    let payload = await dispatch('loadFile', { path, editorMode })
     commit(ADD_OPENED_FILE, payload)
   },
   async refreshOpenedFile(
     { commit, dispatch, getters },
     { path, editorMode = true }
   ) {
-    let payload = await dispatch('loadFile', {path, editorMode})
+    let payload = await dispatch('loadFile', { path, editorMode })
     commit(UPDATE_OPENED_FILE, payload)
     let fullPath = getFileFullPathByPath(path)
     if (getFileFullPathByPath(getters.activePageUrl) === fullPath) {
@@ -277,7 +277,7 @@ const actions = {
     let {
       'user/username': username
     } = rootGetters
-    commit(CLOSE_ALL_OPENED_FILE, {username})
+    commit(CLOSE_ALL_OPENED_FILE, { username })
   },
 
   // codes
@@ -349,7 +349,7 @@ const actions = {
     commit(SET_ACTIVE_MOD, null)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(ADD_MOD, {
-      newMod: newMod,
+      newMod,
       key: payload.preModKey
     })
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
@@ -373,7 +373,7 @@ const actions = {
     commit(SET_ACTIVE_MOD, mod.key)
     commit(SET_ACTIVE_PROPERTY, null)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
-    dispatch('updateCursor', {cursor: {ch: 0, line: position + 2}})
+    dispatch('updateCursor', { cursor: { ch: 0, line: position + 2 } })
   },
   updateCursor({ commit, dispatch }, payload) {
     commit(UPDATE_CURSOR_POSITION, payload.cursor)
@@ -504,7 +504,7 @@ const actions = {
     dispatch('updateMarkDown', { code, historyDisabled: true })
     dispatch('updateCursor', { cursor })
   },
-  toggleSkyDrive({commit}, { showSkyDrive }) {
+  toggleSkyDrive({ commit }, { showSkyDrive }) {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
   },
   addRecentOpenedSiteUrl(context, { updateRecentUrlList }) {
