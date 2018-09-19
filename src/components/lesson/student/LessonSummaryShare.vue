@@ -309,13 +309,17 @@ $mainHeight: 430px;
         background: white;
         // display: flex;
         // align-items: center;
+        position: relative;
         .movie {
-          width: 250px;
+          width: 230px;
           height: 140px;
-          margin-left: -200px;
+          // margin-left: -200px;
+          position: absolute;
+          top: 100px;
+          left: -185px;
         }
         .summary-word {
-          margin: 30px 0 0;
+          margin: 60px 0 0 40px;
           margin-left: 34px;
           &-time {
             text-align: center;
@@ -348,6 +352,7 @@ $mainHeight: 430px;
       }
       &.style-3{
         .main{
+          display: block;
           .movie{
             margin: 12px auto;
           }
