@@ -67,7 +67,7 @@ export default {
     },
     lessonsList() {
       let lessons = _.get(this.packageDetail, 'lessons', [])
-      _.map(this.lessonFinishedList, finishedLessonId => {
+      _.map(this.learnedLessons, finishedLessonId => {
         let finishedLessonInLessonListIndex = _.findIndex(lessons, lesson => {
           return lesson.id === finishedLessonId
         })
@@ -82,8 +82,10 @@ export default {
           this.lessonsList,
           lesson => lesson.id === lastLessonId
         )
-        if (lastLessonIndex + 1 < this.lessonsList.length) {
-          return this.lessonsList[lastLessonIndex + 1]
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
         }
       }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
@@ -105,19 +107,6 @@ export default {
           this.continueLearnedLesson.id
         }`
       })
-      // if (this.startToLearn) {
-      //   let packageId = this.packageDetail.id
-      //   let lessonId = this.packageDetail.lessons[0].id
-      //   this.$router.push({
-      //     path: `student/package/${packageId}/lesson/${lessonId}`
-      //   })
-      // } else {
-      //   let packageId = this.packageDetail.id
-      //   let lessonId = this.packageDetail.learnedLessons.length
-      //   this.$router.push({
-      //     path: `student/package/${packageId}/lesson/${lessonId}`
-      //   })
-      // }
     }
   }
 }

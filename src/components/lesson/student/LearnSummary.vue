@@ -76,9 +76,6 @@ export default {
     skills() {
       return this.lessonDetail.skills
     },
-    firstTime() {
-      return _.get(this, 'learnRecords[0].createdAt', '')
-    },
     lastTime() {
       let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
         quiz.every(item => item.result !== null)
