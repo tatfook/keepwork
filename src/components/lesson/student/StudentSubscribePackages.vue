@@ -4,7 +4,7 @@
     <h3 :class="['name']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
-    <p>{{$t('lesson.ages')}}: {{packageDetail.minAge}}-{{packageDetail.maxAge}}</p>
+    <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(coursePackage)}}</p>
     <p class="intro" :title="packageDetail.intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
@@ -102,7 +102,7 @@ export default {
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
-      if(this.packageDetail.subscribeState == 0){
+      if (this.packageDetail.subscribeState == 0) {
         return this.$router.push(`student/package/${this.packageDetail.id}`)
       }
       this.$router.push({
@@ -110,6 +110,13 @@ export default {
           this.continueLearnedLesson.id
         }`
       })
+    },
+    getCoursePackageSuitableAge(packageDetail) {
+      let { minAge, maxAge } = packageDetail
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
     }
   }
 }
