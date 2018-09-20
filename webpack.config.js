@@ -7,8 +7,7 @@ const dotenv = new Dotenv()
 const copyWebpack = new CopyWebpackPlugin([
   {
     from: path.resolve(__dirname, 'app/static'),
-    to: 'public',
-    ignore: ['.*']
+    to: path.resolve(__dirname, 'public')
   }
 ])
 
@@ -44,7 +43,9 @@ module.exports = {
     imagemini: false,
     serviceworker: true,
     dotenv,
-    copyWebpack
+    copyWebpack: {
+      name: copyWebpack
+    }
   },
   node: {
     console: true
