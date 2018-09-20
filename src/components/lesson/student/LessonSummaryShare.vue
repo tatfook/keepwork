@@ -120,13 +120,10 @@ export default {
       await lesson.lessons
         .lessonDetail({ lessonId: this.$route.params.lessonId })
         .then(res => {
-          console.log('res', res)
-          let vedioUrl = { vedioUrl: res.extra.vedioUrl }
-          console.log('vedio', vedioUrl)
+          let videoUrl = { videoUrl: res.extra.videoUrl }
           this.style = Number(this.$route.params.styleId) || 1
           this.$set(this.summary, _.merge(this.summary, this.$route.query))
-          this.$set(this.summary, _.merge(this.summary, vedioUrl))
-          console.log('summary', this.summary)
+          this.$set(this.summary, _.merge(this.summary, videoUrl))
         })
         .catch(err => console.error(err))
     }
