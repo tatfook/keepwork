@@ -22,11 +22,21 @@
             <span class="highlight">{{summary.day}}</span> day of learning
             <span class="highlight">{{summary.name}}</span> on Keepwork.
           </div>
-          <div class="summary-word-line">
-            Today, I read
-            <span class="highlight">{{summary.read}}</span> lines of code, wrote
-            <span class="highlight">{{summary.write}}</span> lines of code, and learned
-            <span class="highlight">{{summary.command}}</span> computer command.
+          <div class="summary-word-line" v-if="hasSkills">
+            Today, I
+            <template v-if="summary.read">
+              read
+              <span class="highlight">{{summary.read}}</span> lines of code,
+            </template>
+            <template v-if="summary.write">
+              wrote
+              <span class="highlight">{{summary.write}}</span> lines of code,
+            </template>
+            <template v-if="summary.command">
+              <template v-if="hasAllSkills">and</template>
+              learned
+              <span class="highlight">{{summary.command}}</span> computer command.
+            </template>
           </div>
         </div>
         <div v-else class="summary-word">
@@ -42,11 +52,20 @@
             <span class="highlight">{{summary.day}}</span> 天在keepwork学习
             <span class="highlight">{{summary.name}}</span>
           </div>
-          <div class="summary-word-line">
-            今天，我读了
-            <span class="highlight">{{summary.read}}</span> 行代码, 写了
-            <span class="highlight">{{summary.write}}</span> 行代码, 学习了
-            <span class="highlight">{{summary.command}}</span> 个电脑命令
+          <div class="summary-word-line" v-if="hasSkills">
+            今天，我
+            <template v-if="summary.read > 0">
+              读了
+              <span class="highlight">{{summary.read}}</span> 行代码,
+            </template>
+            <template v-if="summary.write > 0">
+              写了
+              <span class="highlight">{{summary.write}}</span> 行代码,
+            </template>
+            <template v-if="summary.command > 0">
+              学习了
+              <span class="highlight">{{summary.command}}</span> 个电脑命令
+            </template>
           </div>
         </div>
       </div>
@@ -119,6 +138,20 @@ export default {
     },
     isEn() {
       return locale === 'en-US'
+    },
+    hasAllSkills() {
+      return (
+        this.summary.read > 0 &&
+        this.summary.write > 0 &&
+        this.summary.command > 0
+      )
+    },
+    hasSkills() {
+      return (
+        this.summary.read > 0 ||
+        this.summary.write > 0 ||
+        this.summary.command > 0
+      )
     }
   },
   methods: {
@@ -332,28 +365,30 @@ $mainHeight: 430px;
 @media screen and (max-width: 768px) {
   .lesson-summary-share-wrap {
     .lesson-summary-share {
-      &.style-1, &.style-2, &.style-3{
+      &.style-1,
+      &.style-2,
+      &.style-3 {
         .left {
           display: none;
         }
-        .main{
-          .movie{
+        .main {
+          .movie {
             position: static;
             margin: 0 auto 14px;
           }
-          .summary-word-time{
+          .summary-word-time {
             font-size: 18px;
           }
-          .summary-word{
+          .summary-word {
             margin: 0 auto;
             font-size: 14px;
           }
         }
       }
-      &.style-3{
-        .main{
+      &.style-3 {
+        .main {
           display: block;
-          .movie{
+          .movie {
             margin: 12px auto;
           }
         }
@@ -361,11 +396,13 @@ $mainHeight: 430px;
     }
   }
 }
-@media screen and (max-width: 375px){
+@media screen and (max-width: 375px) {
   .lesson-summary-share-wrap {
     .lesson-summary-share {
-      &.style-1, &.style-2, &.style-3{
-        .main{
+      &.style-1,
+      &.style-2,
+      &.style-3 {
+        .main {
           height: 398px;
         }
       }

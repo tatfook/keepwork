@@ -141,7 +141,7 @@ export default {
     },
     summary() {
       return {
-        day: this.studyTime,
+        day: this.learnDayCount,
         name: this.lessonName,
         skills: this.lessonSkills
       }
