@@ -48,6 +48,7 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    window.document.title = this.lessonName
     const { packageId, lessonId } = this.$route.params
     if (this.isBeInClassroom) {
       await this.resumeTheClass().catch(e => console.error(e))
@@ -71,7 +72,6 @@ export default {
     }
     this.isLoading = false
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
-    window.document.title = this.lessonName
   },
   destroyed() {
     clearTimeout(this._interval)
