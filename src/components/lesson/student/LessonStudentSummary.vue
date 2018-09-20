@@ -86,7 +86,10 @@ export default {
       return this.lesson.lessonName
     },
     videoUrl() {
-      return this.lesson.extra.videoUrl
+      return _.get(this.lesson, 'extra.videoUrl', '')
+    },
+    coverUrl() {
+      return _.get(this.lesson, 'extra.coverUrl', '')
     },
     lessonCodeReadLine() {
       let skill = this.lessonSkills.find(item => item.skillName == '代码阅读量')
@@ -173,6 +176,7 @@ export default {
       window.socialShare('.summary-share-lesson', {
         url: shareWebUrl,
         mode: 'prepend',
+        image: this.coverUrl,
         description: `我在KeepWork学习${this.lessonName},快来跟我一起吧！`,
         title: 'keepwork',
         sites: ['qq', 'qzone', 'weibo'],
