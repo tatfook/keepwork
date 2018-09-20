@@ -5,6 +5,7 @@ npm-debug.log
 .idea/
 dist
 private
+public
 run
 *.iml
 *tmp
