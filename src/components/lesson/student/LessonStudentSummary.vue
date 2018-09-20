@@ -66,7 +66,8 @@ export default {
       userId: 'user/userId',
       lessonDetail: 'lesson/student/lessonDetail',
       subscribesList: 'lesson/student/subscribesList',
-      learnDayCount: 'lesson/learnDayCount'
+      learnDayCount: 'lesson/learnDayCount',
+      howManyDays: 'lesson/howManyDays'
     }),
     lessonSbuscribeTime() {
       let lesson = this.subscribesList.find(o => o.id === Number(this.lessonId))
@@ -132,7 +133,7 @@ export default {
     },
     studyTime() {
       const suffix = ['th', 'st', 'nd', 'rd', 'th']
-      let day = this.learnDayCount
+      let day = this.howManyDays
       if (this.isEn) {
         let remainder = day % 10
         day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
@@ -141,7 +142,7 @@ export default {
     },
     summary() {
       return {
-        day: this.learnDayCount,
+        day: this.howManyDays,
         name: this.lessonName,
         skills: this.lessonSkills
       }
