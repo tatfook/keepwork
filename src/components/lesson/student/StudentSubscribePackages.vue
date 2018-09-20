@@ -102,6 +102,9 @@ export default {
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
+      if(this.packageDetail.subscribeState == 0){
+        return this.$router.push(`student/package/${this.packageDetail.id}`)
+      }
       this.$router.push({
         path: `student/package/${this.packageDetail.id}/lesson/${
           this.continueLearnedLesson.id
