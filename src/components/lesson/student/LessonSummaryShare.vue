@@ -24,15 +24,15 @@
           </div>
           <div class="summary-word-line" v-if="hasSkills">
             Today, I
-            <template v-if="summary.read">
+            <template v-if="summary.read > 0">
               read
               <span class="highlight">{{summary.read}}</span> lines of code,
             </template>
-            <template v-if="summary.write">
+            <template v-if="summary.write > 0">
               wrote
               <span class="highlight">{{summary.write}}</span> lines of code,
             </template>
-            <template v-if="summary.command">
+            <template v-if="summary.command > 0">
               <template v-if="hasAllSkills">and</template>
               learned
               <span class="highlight">{{summary.command}}</span> computer command.
