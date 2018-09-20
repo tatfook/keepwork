@@ -1,7 +1,9 @@
 
 module.exports = app => {
-  app.get('/ed', app.controller.editor.index)
-  app.get('/vp', app.controller.editor.viewport)
-  app.get('/l', app.controller.lesson.index)
-  app.get('/', app.controller.viewer.index)
+  const { router, controller } = app
+  router.get('/', controller.viewer.index)
+  router.get('/ed', controller.editor.index)
+  router.get('/vp', controller.editor.viewport)
+  router.get('/l', controller.lesson.index)
+  router.get(/^\/[a-zA-Z0-9]{4,}\/([\w-.]+\/[\w-.]+)$/, controller.viewer.index)
 }

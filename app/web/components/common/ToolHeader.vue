@@ -10,7 +10,7 @@
         <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
           <el-scrollbar tag='ul' wrap-class="file-list-content" view-class="view-box" :native="false">
             <li v-for='(site,index) in siteList' :key='index'>
-              <a :href="`/${site.username}/${site.name}`" class="clearfix">
+              <a class="clearfix" @click="pushNewUrl(site)">
                 <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
                 <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
               </a>
@@ -82,7 +82,7 @@ export default {
     return {
       IS_GLOBAL_VERSION,
       starPending: false,
-      breadcrumbsLoading: true,
+      breadcrumbsLoading: false,
       siteList: [],
       isLoginDialogShow: false,
     }
@@ -170,6 +170,9 @@ export default {
       getUserDetailByUsername: 'user/getUserDetailByUsername',
       getProfile: 'user/getProfile'
     }),
+    pushNewUrl(site) {
+      this.$router.push(`/${site.username}/${site.name}`)
+    },
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo
       window.socialShare('.kp-social-share', {
@@ -225,7 +228,7 @@ export default {
       let url =
         targetFile && targetFile.path && targetFile.path.replace(/\.md$/, '')
       if (!url) return
-      location.pathname = url
+      this.$router.push('/' + url)
     },
     closeLoginDialog() {
       this.isLoginDialogShow = false
