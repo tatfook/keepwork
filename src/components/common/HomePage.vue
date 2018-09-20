@@ -15,7 +15,20 @@
             <p>程序员为程序员创作的教程</p>
           </div>
         </div>
-        <div class="home-page-simple-show-center-right"></div>
+        <div class="home-page-simple-show-center-right">
+          <div class="home-page-simple-show-center-right-kp">
+            <div class="title">keepwork是做什么的</div>
+            <div class="video"></div>
+          </div>
+          <div class="home-page-simple-show-center-right-board">
+            <div class="title">官方公告</div>
+            <ul class="announce-list">
+              <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！</li>
+              <li>
+                <i class="iconfont icon-book-fill"></i> Lessons系统即将上线，尽情期待！</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,28 +61,53 @@
       right: 20px;
     }
   }
-  &-simple-show{
+  &-simple-show {
+    margin-top: 16px;
     border-bottom: 1px solid #eeeeee;
-    &-center{
+    &-center {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      &-left{
+      &-left {
         flex: 1;
         height: 455px;
-        // border: 1px solid red;
+        border: 1px solid red;
         position: relative;
-        &-desc{
-          // border: 1px solid blue;
+        &-desc {
+          border: 1px solid blue;
           position: absolute;
-          .title{
+          .title {
             color: #2397f3;
           }
         }
       }
-      &-right{
+      &-right {
         width: 384px;
+        margin-left: 30px;
         // border: 1px solid red;
+        .title {
+          height: 42px;
+          background: rgb(245, 245, 245);
+        }
+        &-kp {
+          border-radius: 4px;
+          border: 1px solid #eeeeee;
+        }
+        &-board {
+          margin-top: 16px;
+          border-radius: 4px;
+          border: 1px solid #eeeeee;
+          .announce-list {
+            li {
+              display: flex;
+
+              .iicc {
+                width: 22px;
+                height: 22px;
+              }
+            }
+          }
+        }
       }
     }
   }
