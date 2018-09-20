@@ -6,7 +6,7 @@
         {{$t('lesson.styles', { number: 3})}}
       </div>
       <div class="share-style-select-panel">
-        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle"/>
+        <lesson-summary-share-style-select :lessonSummary="lessonSummary" ref="shareStyle" />
       </div>
       <div class="share-icons" v-if="IS_GLOBAL_VERSION">
         <span class="facebook-icon"></span>
@@ -14,9 +14,10 @@
         <span class="google-icon"></span>
       </div>
       <div class="share-icons" v-else>
-        <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
+        <div class="summary-share-lesson" @click="showSocialShare"></div>
+        <!-- <span class="iconfont icon-qq1" @click="shareTo('qq')"></span>
         <span class="iconfont icon-interspace" @click="shareTo('qzone')"></span>
-        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span>
+        <span class="iconfont icon-weibo" @click="shareTo('sina')"></span> -->
       </div>
       <div class="share-tips">
         {{$t('lesson.shareSummaryByNet')}}
@@ -26,6 +27,8 @@
 </template>
 
 <script>
+import 'social-share.js/dist/js/social-share.min.js'
+import 'social-share.js/dist/css/share.min.css'
 import { mapGetters, mapActions } from 'vuex'
 import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 import StudentSummary from './StudentSummary'
@@ -33,6 +36,7 @@ import { lesson } from '@/api'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
+import moment from 'moment'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -61,7 +65,9 @@ export default {
     ...mapGetters({
       userId: 'user/userId',
       lessonDetail: 'lesson/student/lessonDetail',
-      subscribesList: 'lesson/student/subscribesList'
+      subscribesList: 'lesson/student/subscribesList',
+      learnDayCount: 'lesson/learnDayCount',
+      howManyDays: 'lesson/howManyDays'
     }),
     lessonSbuscribeTime() {
       let lesson = this.subscribesList.find(o => o.id === Number(this.lessonId))
@@ -80,7 +86,10 @@ export default {
       return this.lesson.lessonName
     },
     videoUrl() {
-      return this.lesson.extra.videoUrl
+      return _.get(this.lesson, 'extra.videoUrl', '')
+    },
+    coverUrl() {
+      return _.get(this.lesson, 'extra.coverUrl', '')
     },
     lessonCodeReadLine() {
       let skill = this.lessonSkills.find(item => item.skillName == '代码阅读量')
@@ -98,8 +107,20 @@ export default {
       )
       return skill ? skill.score : 0
     },
+    learnRecordsTimes() {
+      return _.map(
+        _.filter(this.learnRecords, ({ state }) => state === 1),
+        ({ createdAt }) => {
+          const time = new Date(createdAt)
+          const year = time.getFullYear()
+          const month = time.getMonth()
+          const date = time.getDate()
+          return `${year}${month}${date}`
+        }
+      )
+    },
     firstTime() {
-      return _.get(this, 'learnRecords[0].createdAt', '')
+      return _.get(this, 'learnRecord[0].createdAt', '')
     },
     lastTime() {
       let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
@@ -114,22 +135,17 @@ export default {
       return locale === 'en-US' ? true : false
     },
     studyTime() {
-      const suffix = ['', 'st', 'nd', 'rd', 'th']
-      if (this.firstTime && this.lastTime) {
-        let firstTime = new Date(this.firstTime).getTime()
-        let lastTime = new Date(this.lastTime).getTime()
-        let day =
-          Math.floor(
-            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
-          ) || 1
-        return day
+      const suffix = ['th', 'st', 'nd', 'rd', 'th']
+      let day = this.howManyDays
+      if (this.isEn) {
+        let remainder = day % 10
+        day = remainder > 3 ? `${day}th` : `${day}${suffix[remainder]}`
       }
-      return 1
+      return day
     },
     summary() {
       return {
-        firstTime: this.firstTime,
-        lastTime: this.lastTime,
+        day: this.howManyDays,
         name: this.lessonName,
         skills: this.lessonSkills
       }
@@ -146,32 +162,69 @@ export default {
     }
   },
   methods: {
+    showSocialShare() {
+      let origin = window.location.origin
+      let packageId = this.$route.params.packageId
+      let lessonId = this.$route.params.lessonId
+      let styleId = this.$refs.shareStyle.currentStyle
+      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+        this.studyTime
+      }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
+        this.lessonWriteLine
+      }&command=${this.lessonCommands}`
+      shareWebUrl = encodeURI(shareWebUrl)
+      window.socialShare('.summary-share-lesson', {
+        url: shareWebUrl,
+        mode: 'prepend',
+        image: this.coverUrl,
+        description: `我在KeepWork学习${this.lessonName},快来跟我一起吧！`,
+        title: 'keepwork',
+        sites: ['qq', 'qzone', 'weibo'],
+        wechatQrcodeTitle: '',
+        wechatQrcodeHelper: this.$t('common.QR')
+      })
+    },
     hideSharePanel() {
       this.isShowSharePanel = false
     },
     showSharePanel() {
       this.isShowSharePanel = true
-    },
-    shareTo(socialPlatform){
-      let origin = window.location.origin
-      let packageId = this.$route.params.packageId
-      let lessonId = this.$route.params.lessonId
-      let styleId = this.$refs.shareStyle.currentStyle
-      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${this.studyTime}&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${this.lessonWriteLine}&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
-      shareWebUrl = encodeURIComponent(shareWebUrl)
-      let shareTitle = 'keepwork'
-      let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
-      let content = `我在一网乾坤学习${this.lessonName},快来跟我一起吧！`
-      if(socialPlatform=='qq'){
-        window.open(`http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在一网乾坤学习${this.lessonName},快来跟我一起吧！`);
-      }
-      if(socialPlatform=='qzone'){
-        window.open(`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`);
-      }
-      if(socialPlatform=='sina'){
-        window.open(`http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`);
-      }
+      this.$nextTick(() => {
+        this.showSocialShare()
+      })
     }
+    // shareTo(socialPlatform) {
+    //   let origin = window.location.origin
+    //   let packageId = this.$route.params.packageId
+    //   let lessonId = this.$route.params.lessonId
+    //   let styleId = this.$refs.shareStyle.currentStyle
+    //   let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+    //     this.studyTime
+    //   }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
+    //     this.lessonWriteLine
+    //   }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
+    //   shareWebUrl = encodeURIComponent(shareWebUrl)
+    //   let shareTitle = 'keepwork'
+    //   let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
+    //   let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
+    // if (socialPlatform == 'qq') {
+    //   window.open(
+    //     `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
+    //       this.lessonName
+    //     },快来跟我一起吧！`
+    //   )
+    // }
+    // if (socialPlatform == 'qzone') {
+    //   window.open(
+    //     `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
+    //   )
+    // }
+    // if (socialPlatform == 'sina') {
+    //   window.open(
+    //     `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
+    //   )
+    // }
+    // }
   }
 }
 </script>

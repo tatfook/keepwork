@@ -14,7 +14,11 @@
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
           </div>
-          <img class="package-catalogue-item-cover" :src="lesson.extra.coverUrl" alt="" @click="toLessonDetail(lesson)">
+          <div class="package-catalogue-item-cover" @click="toLessonDetail(lesson)">
+            <div class="package-catalogue-item-cover-wrap">
+              <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+            </div>
+          </div>
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
@@ -28,6 +32,7 @@
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
@@ -48,13 +53,13 @@ export default {
       enterClassInfo: 'lesson/student/enterClassInfo',
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
-    loginUserId(){
+    loginUserId() {
       return _.get(this.userProfile, '_id')
     },
-    packageOwnerId(){
+    packageOwnerId() {
       return _.get(this.packageDetail, 'userId')
     },
-    isOwnPackage(){
+    isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
@@ -75,6 +80,21 @@ export default {
       return lessons
     },
     continueLearnedLesson() {
+      let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
+      if (lastLessonId) {
+        let lastLessonIndex = _.findIndex(
+          this.lessonsList,
+          lesson => lesson.id === lastLessonId
+        )
+        // if (lastLessonIndex + 1 < this.lessonsList.length) {
+        //   return this.lessonsList[lastLessonIndex + 1]
+        // }
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
+        }
+      }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
     },
     learnedLessons() {
@@ -205,10 +225,20 @@ export default {
       padding-left: 19px;
     }
     &-cover {
-      width: 250px;
-      height: 146px;
-      object-fit: cover;
+      width: 234px;
       cursor: pointer;
+      &-wrap {
+        padding-bottom: 56.25%;
+        position: relative;
+      }
+      &-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
     &-detail {
       flex: 1;
@@ -244,6 +274,7 @@ export default {
       left: 0;
       font-size: 14px;
       color: #67c23a;
+      z-index: 1;
       .el-icon-check {
         font-weight: bold;
         width: 34px;
@@ -261,6 +292,9 @@ export default {
     }
     &-button {
       margin-bottom: 16px;
+      &.start-button {
+        margin-left: 0;
+      }
     }
     &-goals {
       max-height: 100px;

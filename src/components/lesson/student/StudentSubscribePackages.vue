@@ -61,6 +61,34 @@ export default {
     },
     startToLearn() {
       return this.packageDetail.learnedLessons.length === 0
+    },
+    learnedLessons() {
+      return this.packageDetail.learnedLessons || []
+    },
+    lessonsList() {
+      let lessons = _.get(this.packageDetail, 'lessons', [])
+      _.map(this.learnedLessons, finishedLessonId => {
+        let finishedLessonInLessonListIndex = _.findIndex(lessons, lesson => {
+          return lesson.id === finishedLessonId
+        })
+        lessons[finishedLessonInLessonListIndex].isFinished = true
+      })
+      return lessons
+    },
+    continueLearnedLesson() {
+      let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
+      if (lastLessonId) {
+        let lastLessonIndex = _.findIndex(
+          this.lessonsList,
+          lesson => lesson.id === lastLessonId
+        )
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
+        }
+      }
+      return _.find(this.lessonsList, lesson => !lesson.isFinished)
     }
   },
   methods: {
@@ -70,23 +98,18 @@ export default {
         path: `student/package/${packageId}`
       })
     },
-    attendClass(){
-      if(this.isBeInClassroom){
-        return this.$message.error(this.$t('lesson.beInClass'));
+    attendClass() {
+      if (this.isBeInClassroom) {
+        return this.$message.error(this.$t('lesson.beInClass'))
       }
-      if(this.startToLearn){
-        let packageId = this.packageDetail.id
-        let lessonId = this.packageDetail.lessons[0].id
-        this.$router.push({
-          path: `student/package/${packageId}/lesson/${lessonId}`
-        })
-      }else{
-        let packageId = this.packageDetail.id
-        let lessonId = this.packageDetail.learnedLessons.length
-        this.$router.push({
-          path: `student/package/${packageId}/lesson/${lessonId}`
-        })
+      if(this.packageDetail.subscribeState == 0){
+        return this.$router.push(`student/package/${this.packageDetail.id}`)
       }
+      this.$router.push({
+        path: `student/package/${this.packageDetail.id}/lesson/${
+          this.continueLearnedLesson.id
+        }`
+      })
     }
   }
 }
@@ -101,7 +124,7 @@ export default {
     height: 128px;
     border-radius: 4px;
     margin: 0 auto;
-      cursor: pointer;
+    cursor: pointer;
     .cover {
       width: 230px;
       height: 128px;

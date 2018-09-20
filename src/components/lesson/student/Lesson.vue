@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-wrap">
+  <div class="lesson-wrap" v-loading="isLoading">
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-if="isShowSummary" />
@@ -33,7 +33,8 @@ export default {
     return {
       isCurrentClassroom: true,
       isRefresh: false,
-      _interval: null
+      _interval: null,
+      isLoading: true
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -43,12 +44,18 @@ export default {
     }
     next()
   },
-  async created() {
+  created() {
+    this.switchSummary(false)
+  },
+  async mounted() {
     const { packageId, lessonId } = this.$route.params
-    this.isBeInClassroom && (await this.resumeTheClass())
+    if (this.isBeInClassroom) {
+      await this.resumeTheClass().catch(e => console.error(e))
+    }
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      return await this.getLessonContent({ lessonId })
+      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      return (this.isLoading = false)
     }
     // 判断是否是进入同一个课程包和课程，这种情况只有用户手动输入路由并且刷新页面才会存在
     const {
@@ -58,14 +65,13 @@ export default {
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
     if (this.isCurrentClassroom) {
-      await this.getLessonContent({ lessonId })
-      await this.resumeQuiz({ id })
-      await this.uploadLearnRecords()
+      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      await this.resumeQuiz({ id }).catch(e => console.error(e))
+      await this.uploadLearnRecords().catch(e => console.error(e))
     }
-  },
-  mounted() {
+    this.isLoading = false
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
-    this.switchSummary(false)
+    window.document.title = this.lessonName
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -120,7 +126,10 @@ export default {
       return this.lessonDetail.modList || []
     },
     lessonHeaderData() {
-      return this.lessonDetail.lesson
+      return this.lessonDetail.lesson || {}
+    },
+    lessonName() {
+      return this.lessonHeaderData.lessonName || 'KeepWork'
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')

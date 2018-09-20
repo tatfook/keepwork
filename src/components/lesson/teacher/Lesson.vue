@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-wrap">
+  <div class="lesson-wrap" v-loading="isLoading">
     <lesson-header class='lesson-header' :data="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
     <router-view></router-view>
   </div>
@@ -23,13 +23,15 @@ export default {
   },
   data() {
     return {
-      _interval: null
+      _interval: null,
+      isLoading: true
     }
   },
   async mounted() {
     const { name, params: { packageId, lessonId } } = this.$route
-    await this.getCurrentClass()
-    await this.getLessonContent(lessonId)
+    await this.getCurrentClass().catch(e => console.error(e))
+    await this.getLessonContent(lessonId).catch(e => console.error(e))
+    this.isLoading = false
     if (
       name === 'LessonTeacherSummary' ||
       (name === 'LessonTeacherPerformance' && !this.isBeInClass) ||
@@ -38,6 +40,7 @@ export default {
       this.$router.push({ name: 'LessonTeacherPlan' })
     }
     this.isInCurrentClass && this.intervalUpdateLearnRecords()
+    window.document.title = this.lessonName
   },
   async destroyed() {
     this.clearUpdateLearnRecords()
@@ -84,6 +87,9 @@ export default {
     },
     lessonHeader() {
       return this.lessonDetail.lesson
+    },
+    lessonName() {
+      return this.lessonHeader.lessonName || 'KeepWork'
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')

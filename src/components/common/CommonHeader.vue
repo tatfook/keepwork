@@ -5,19 +5,19 @@
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1'>
-        <a href="/wiki/home">{{$t('common.features')}}</a>
+        <a href="/wiki/home">{{$t('common.creativity')}}</a>
       </el-menu-item>
       <el-menu-item index='2'>
-        <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
+        <a href="/wiki/apps">{{$t('common.explore')}}</a>
       </el-menu-item>
       <el-menu-item index='4'>
-        <a href='/official/help/index'>{{$t('common.help')}}</a>
+        <a href='/official/help/index'>{{$t('common.study')}}</a>
       </el-menu-item>
-      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
+      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='//iicc.keepwork.com' target="_blank">
           <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
@@ -62,13 +62,13 @@
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin"  class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
-      <el-menu-item index='10' class="pull-right">
-        <SearchBar></SearchBar>
+      <el-menu-item index='10'>
+        <search-bar></search-bar>
       </el-menu-item>
     </el-menu>
 
@@ -91,7 +91,7 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin"  class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
@@ -260,16 +260,21 @@ export default {
   text-decoration: none;
   color: inherit;
 }
-
-.el-menu .login-btn {
-  background-color: #3977ad;
+.el-menu .login-btn{
+  background: #f5f5f5;
+  border: solid 1px #dddddd;
+  padding: 7px 11px;
+  border-radius: 3px;
+}
+.el-menu .register-btn {
+  background-color: #409eff;
   color: #fff;
   padding: 8px 12px;
   border-radius: 3px;
 }
 
-.el-menu .login-btn:hover {
-  background-color: #286090;
+.el-menu .register-btn:hover {
+  background-color: #218efc;
   color: #fff;
 }
 

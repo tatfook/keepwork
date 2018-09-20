@@ -29,7 +29,7 @@
             <h4 class="name package-intro" @click="enterPackage(lessonPackage.packageId)">{{$t('modList.package')}}：{{lessonPackage.extra.packageName}}</h4>
             <p>
               <span class="lesson-name package-intro" @click="enterLesson(lessonPackage.packageId,lessonPackage.lessonId)">
-                <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonGoals}}</span>
+                <span class="brief-title">{{$t('modList.lesson')}} {{lessonPackage.extra.lessonNo || 0}}：</span>{{lessonPackage.extra.lessonName}}</span>
             </p>
             <p class="package-intro">
               <span :title="lessonPackage.extra.lessonGoals">

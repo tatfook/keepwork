@@ -8,7 +8,8 @@
             <div class="quiz-result-list-container">
               <div v-for="(quiz, index) in lessonQuiz" :key="index" @click.stop="showMeTheQuiz(quiz.key)" :class="['quiz-status-wrap',{'default': quiz.result === null}]">
                 <span class="quiz-number">{{$t('lesson.quiz2')}} {{index+1}}</span>
-                <span class="quiz-status" :class="{'right': quiz.result === true, 'wrong':quiz.result === false}"></span>
+                <i class="el-icon-circle-check quiz-result right" v-if="quiz.result === true"></i>
+                <i class="el-icon-circle-close quiz-result wrong" v-if="quiz.result === false"></i>
               </div>
             </div>
           </div>
@@ -36,7 +37,7 @@ export default {
   data() {
     return {
       isShowQuizResult: false,
-      quizList: [],
+      quizList: []
     }
   },
   computed: {
@@ -195,39 +196,21 @@ export default {
           color: black;
           background: white;
         }
-        .quiz-status {
+        .quiz-result {
           $size: 30px;
-          width: $size;
+          font-size: $size;
+          box-sizing: border-box;
+          background: white;
           height: $size;
+          width: $size;
+          line-height: $size;
           border-radius: 50%;
-          position: relative;
+          border: none;
           &.right {
-            background: #1d72c9;
-            &::after {
-              box-sizing: content-box;
-              content: '';
-              border: 3px solid #fff;
-              border-left: 0;
-              border-top: 0;
-              height: 16px;
-              width: 8px;
-              left: 10px;
-              transform: rotate(45deg);
-              position: absolute;
-              top: 4px;
-            }
+            color: #1d72c9;
           }
           &.wrong {
-            background: #fa5a7c;
-            &::after {
-              box-sizing: content-box;
-              content: '\D7';
-              font-weight: bold;
-              font-size: 28px;
-              position: absolute;
-              top: -6px;
-              left: 4px;
-            }
+            color: #fa5a7c;
           }
         }
       }

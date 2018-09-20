@@ -25,7 +25,7 @@
         <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
         <div class="points">
           <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}}</li>
+            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}} + {{skill.score}}</li>
           </ul>
         </div>
       </div>
@@ -305,6 +305,8 @@ export default {
     modifiedGrades(record) {
       let learnRecordsArr = _.map(record, student => {
         for (let i = 0; i < student.extra.quiz.length; i++) {
+          let standardAnswer = student.extra.quiz[i].data.answer.toString() || ''
+          Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
           Vue.set(student.extra.quiz[i], `result`, true)
         }
         return student
@@ -357,11 +359,10 @@ export default {
         })
     },
     singleStudentRecord(index, student) {
-      this.$router.push({
-        path: `/teacher/student/${student.userId}/classId/${
+      let _page = this.$router.resolve({ path: `/teacher/student/${student.userId}/classId/${
           this.classid
-        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
-      })
+        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record` })
+      window.open(_page.href)
     },
     singleStudentRightRate(quiz = []) {
       let rightAnswer = _.filter(quiz, {

@@ -1,7 +1,7 @@
 {
   "common": {
-    "login": "登录",
-    "register": "注册",
+    "login": "登 录",
+    "register": "注 册",
     "existAccount": "用户名已存在",
     "accountName": "账户名",
     "registerFailed": "注册失败",
@@ -33,6 +33,9 @@
     "authCode": "验证码",
     "perfectInfo": "完善信息",
 
+    "creativity": "创造",
+    "explore": "探索",
+    "study": "学习",
     "features": "功能",
     "applicationCenter": "应用中心",
     "myHomePage": "我的主页",
@@ -1010,7 +1013,7 @@
     "confirmFullSelected": "你确定给选定的学生满分吗？",
     "viewDetail": "查看详情",
     "SelfStudyIsCompleted": "恭喜你，完成了本课的学习。请查收你的学习总结：",
-    "StudiedForManyDays": "这是我第 {howManyDays} 天在一网乾坤上学习{lessonTitle}。",
+    "StudiedForManyDays": "这是我第 {howManyDays} 天在KeepWork上学习{lessonTitle}。",
     "todayRecords": "今天，我读了 {readCodeLinesCount} 行代码，写了 {wroteCodeLinesCount} 行代码，学习了 {commandLines} 个计算机指令。",
     "todayRecords0": "今天，我",
     "todayRecords1": "读了 {readCodeLinesCount} 行代码",

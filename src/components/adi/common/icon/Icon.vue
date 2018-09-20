@@ -91,7 +91,7 @@ export default {
   .svg {
     svg {
       width: auto;
-      height: 100%;
+      height: auto;
     }
   }
 }
@@ -100,6 +100,8 @@ export default {
 .comp-icon {
   a {
     .img {
+      display: flex;
+      align-items: center;
       position: relative;
       overflow: hidden;
       height: 87px;
@@ -107,17 +109,17 @@ export default {
         display: block;
         width: auto;
         max-width: 185px;
-        height: 100%;
+        height: auto;
       }
     }
     .svg {
+      display: flex;
+      align-items: center;
       position: relative;
       overflow: hidden;
       height: 87px;
       svg {
-        width: 100%;
         max-width: 185px;
-        height: 100%;
       }
     }
   }

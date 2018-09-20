@@ -42,7 +42,4 @@ export default {
     height: 100%;
   }
 }
-.lesson-page-main-content {
-  overflow: auto;
-}
 </style>

@@ -1,14 +1,18 @@
 <template>
   <div class="hint-container">
     <div class="hint-title">{{$t('lesson.teachers')}}</div>
-    <div class="hint-content">{{content}}</div>
+    <vue-markdown :source="content" />
   </div>
 </template>
 
 
 <script>
+import VueMarkdown from 'vue-markdown'
 export default {
   name: 'Hint',
+  components: {
+    VueMarkdown
+  },
   data() {
     return {}
   },
@@ -18,7 +22,7 @@ export default {
   },
   computed: {
     content() {
-      return _.get(this.data, 'data.hint.content', '')
+      return _.get(this.data, 'data.hint.data', '')
     }
   }
 }

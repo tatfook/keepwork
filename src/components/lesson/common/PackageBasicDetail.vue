@@ -1,37 +1,41 @@
 <template>
-  <div class="package-detail">
-    <img class="package-detail-cover" :src="packageCoverUrl" alt="">
-    <div class="package-detail-text-desc">
+  <div class="package-basic-detail">
+    <div class="package-basic-detail-cover">
+      <div class="package-basic-detail-cover-wrap">
+        <img class="package-basic-detail-cover-inner" :src="packageCoverUrl" alt="">
+      </div>
+    </div>
+    <div class="package-basic-detail-text-desc">
       <h1>{{packageDetail.packageName}}</h1>
-      <div class="package-detail-content">
-        <div class="package-detail-content-item">
-          <span class="package-detail-label">{{$t('lesson.include')}}:</span>
-          <span class="package-detail-lessons-count">{{packageLessonsCount}}</span>
-          <span class="package-detail-info">{{$t('lesson.lessonsCount')}}</span>
+      <div class="package-basic-detail-content">
+        <div class="package-basic-detail-content-item">
+          <span class="package-basic-detail-label">{{$t('lesson.include')}}:</span>
+          <span class="package-basic-detail-lessons-count">{{packageLessonsCount}}</span>
+          <span class="package-basic-detail-info">{{$t('lesson.lessonsCount')}}</span>
         </div>
-        <div class="package-detail-content-item">
-          <span class="package-detail-label">{{$t('lesson.ages')}}:</span>
-          <span class="package-detail-info">{{packageSuitableAge}}</span>
-        </div>
-      </div>
-      <div class="package-detail-skills">
-        <div class="package-detail-label">{{$t('lesson.intro')}}:</div>
-        <el-scrollbar class="package-detail-skills-detail" :class="{'package-detail-skills-detail-isSubscribe': packageDetail.isSubscribe}">{{packageDetail.intro}}</el-scrollbar>
-      </div>
-      <div v-show="isPackageCostAndBackShow" class="package-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
-      </div>
-      <div v-show="isPackageCostAndBackShow" class="package-detail-costs">
-        <div class="package-detail-costs-item">
-          <span class="package-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
-          <span class="package-detail-costs-value">￥ {{packageDetail.rmb}}</span>
-        </div>
-        <div class="package-detail-costs-item">
-          <span class="package-detail-costs-label">{{$t('lesson.coinsPrice')}}:</span>
-          <span class="package-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
+        <div class="package-basic-detail-content-item">
+          <span class="package-basic-detail-label">{{$t('lesson.ages')}}:</span>
+          <span class="package-basic-detail-info">{{packageSuitableAge}}</span>
         </div>
       </div>
-      <div v-show="isFreeLabelShow" class="package-detail-free">{{$t('lesson.free')}}</div>
-      <el-button v-show="!isPurchaseButtonHide" type="primary" class="package-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <div class="package-basic-detail-skills">
+        <div class="package-basic-detail-label">{{$t('lesson.intro')}}:</div>
+        <el-scrollbar class="package-basic-detail-skills-detail" :class="{'package-basic-detail-skills-detail-isSubscribe': !isPackageCostAndBackShow && !isFreeLabelShow && isPurchaseButtonHide}">{{packageDetail.intro}}</el-scrollbar>
+      </div>
+      <div v-show="isPackageCostAndBackShow" class="package-basic-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
+      </div>
+      <div v-show="isPackageCostAndBackShow" class="package-basic-detail-costs">
+        <div class="package-basic-detail-costs-item">
+          <span class="package-basic-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
+          <span class="package-basic-detail-costs-value">￥ {{packageDetail.rmb}}</span>
+        </div>
+        <div class="package-basic-detail-costs-item">
+          <span class="package-basic-detail-costs-label">{{$t('lesson.coinsPrice')}}:</span>
+          <span class="package-basic-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
+        </div>
+      </div>
+      <div v-show="isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
+      <el-button v-show="!isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
@@ -164,12 +168,22 @@ export default {
 </script>
 <style lang="scss">
 $dangerColor: #e4461f;
-.package-detail {
+.package-basic-detail {
   display: flex;
   &-cover {
-    width: 435px;
-    height: 288px;
-    object-fit: cover;
+    width: 436px;
+    &-wrap {
+      padding-bottom: 56.25%;
+      position: relative;
+    }
+    &-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
   }
   &-text-desc {
     flex: 1;
@@ -210,7 +224,7 @@ $dangerColor: #e4461f;
     font-size: 16px;
     line-height: 30px;
     &-isSubscribe {
-      height: 190px;
+      height: 146px;
     }
   }
   &-backcoin {

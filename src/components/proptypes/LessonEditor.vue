@@ -128,7 +128,7 @@ export default {
   }
   .button-wrap {
     margin-top: 10px;
-    text-align: center;
+    text-align: right;
   }
 }
 </style>
