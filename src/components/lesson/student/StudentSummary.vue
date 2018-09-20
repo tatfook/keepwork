@@ -38,9 +38,6 @@ export default {
       this.$emit('share')
     }
   },
-  mounted() {
-    console.log(this.summary.skills)
-  },
   computed: {
     isEn() {
       return locale === 'en-US'
@@ -74,6 +71,13 @@ export default {
     isHasSkills() {
       return this.skills.length > 0
     },
+    isAllSkills() {
+      return (
+        this.lessonCodeReadLine > 0 &&
+        this.lessonWriteLine > 0 &&
+        this.lessonCommands
+      )
+    },
     skillsString() {
       let str = ''
       if (this.isHasSkills) {
@@ -93,7 +97,7 @@ export default {
             }) + ', '
           : ''
         str += this.lessonCommands
-          ? `${this.isEn ? 'and ' : ''}${this.$t('lesson.todayRecords3', {
+          ? `${(this.isEn && this.isAllSkills) ? 'and ' : ''}${this.$t('lesson.todayRecords3', {
               commandLines: `<span class='highlight'>${
                 this.lessonCommands
               }</span>`
