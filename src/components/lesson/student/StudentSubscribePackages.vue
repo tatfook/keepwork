@@ -4,7 +4,7 @@
     <h3 :class="['name']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
-    <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(coursePackage)}}</p>
+    <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(packageDetail)}}</p>
     <p class="intro" :title="packageDetail.intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
