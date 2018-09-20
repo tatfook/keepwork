@@ -74,9 +74,7 @@ describe('Header Comp test', () => {
       expect(columnText).toEqual('lesson.studentColumn')
     })
     it('statusTogglePath.path to be "/teacher/package/10"', () => {
-      expect(Cmp.vm.statusTogglePath).toEqual({
-        path: '/teacher/package/10'
-      })
+      expect(Cmp.vm.statusTogglePath).toEqual('/teacher')
     })
     it('toggleButtonText to be "lesson.viewTeacherPage"', () => {
       expect(Cmp.vm.toggleButtonText).toEqual('lesson.viewTeacherPage')
@@ -110,9 +108,7 @@ describe('Header Comp test', () => {
       expect(columnText).toEqual('lesson.teacherColumn')
     })
     it('statusTogglePath.path to be "/student/package/10"', () => {
-      expect(Cmp.vm.statusTogglePath).toEqual({
-        path: '/student/package/10'
-      })
+      expect(Cmp.vm.statusTogglePath).toEqual('/student')
     })
     it('toggleButtonText to be "lesson.viewStudentPage"', () => {
       expect(Cmp.vm.toggleButtonText).toEqual('lesson.viewStudentPage')
