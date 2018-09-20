@@ -50,11 +50,11 @@ export default {
   async mounted() {
     const { packageId, lessonId } = this.$route.params
     if (this.isBeInClassroom) {
-      await this.resumeTheClass()
+      await this.resumeTheClass().catch(e => console.error(e))
     }
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId })
+      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
       return (this.isLoading = false)
     }
     // 判断是否是进入同一个课程包和课程，这种情况只有用户手动输入路由并且刷新页面才会存在
@@ -65,9 +65,9 @@ export default {
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
     if (this.isCurrentClassroom) {
-      await this.getLessonContent({ lessonId })
-      await this.resumeQuiz({ id })
-      await this.uploadLearnRecords()
+      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      await this.resumeQuiz({ id }).catch(e => console.error(e))
+      await this.uploadLearnRecords().catch(e => console.error(e))
     }
     this.isLoading = false
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
