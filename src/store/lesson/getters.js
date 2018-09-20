@@ -8,7 +8,9 @@ const getters = {
     _.get(userinfo, 'extra.learn.lastLearnDate', ''),
   today: state => moment().format('YYYYMMDD'),
   howManyDays: (state, { today, lastLearnDate, learnDayCount }) =>
-    lastLearnDate === today ? learnDayCount : learnDayCount + 1,
+    lastLearnDate.toString() === today.toString()
+      ? learnDayCount
+      : learnDayCount + 1,
   userId: (state, { userinfo }) => _.get(userinfo, 'id', ''),
   lockCoin: (state, { userinfo }) => _.get(userinfo, 'lockCoin', 0),
   packageDetail: state => ({ packageId }) =>
