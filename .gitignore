@@ -18,3 +18,4 @@ app/view/*
 !app/view/.gitkeep
 package-lock.json
 .env
+jenkins-test-results.xml

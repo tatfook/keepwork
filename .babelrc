@@ -13,5 +13,11 @@
     "transform-runtime",
     "dynamic-import-node"
   ],
-  "comments": false
+  "comments": false,
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": ["transform-vue-jsx", "istanbul"]
+    }
+  }
 }

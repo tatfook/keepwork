@@ -48,7 +48,8 @@ module.exports = {
     // allow async-await
     "generator-star-spacing": "off",
     semi: ["error", "never"],
-    "quote-props": ["error", "as-needed", { "keywords": false, "unnecessary": false }]
+    "quote-props": ["error", "as-needed", { "keywords": false, "unnecessary": false }],
+    "one-var-declaration-per-line": ["error", "initializations"]
   },
   env: {
     browser: true,
