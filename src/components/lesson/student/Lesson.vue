@@ -48,7 +48,6 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
-    window.document.title = this.lessonName
     const { packageId, lessonId } = this.$route.params
     if (this.isBeInClassroom) {
       await this.resumeTheClass().catch(e => console.error(e))
@@ -56,6 +55,7 @@ export default {
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
       await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      window.document.title = this.lessonName
       return (this.isLoading = false)
     }
     // 判断是否是进入同一个课程包和课程，这种情况只有用户手动输入路由并且刷新页面才会存在
@@ -71,6 +71,7 @@ export default {
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
     this.isLoading = false
+    window.document.title = this.lessonName
     this.isBeInClassroom && !this._interval && this.intervalCheckClass()
   },
   destroyed() {
