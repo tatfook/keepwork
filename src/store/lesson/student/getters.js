@@ -27,12 +27,17 @@ const getters = {
     state,
     { lessonQuiz },
     rootState,
-    { 'lesson/userinfo': { nickname, username }, 'user/profile': { portrait } }
+    {
+      'lesson/userinfo': { nickname, username },
+      'user/profile': { portrait },
+      'lesson/howManyDays': howManyDays
+    }
   ) => ({
     name: nickname,
     username: username,
     portrait: portrait,
-    quiz: lessonQuiz
+    quiz: lessonQuiz,
+    howManyDays: howManyDays
   })
 }
 export default getters

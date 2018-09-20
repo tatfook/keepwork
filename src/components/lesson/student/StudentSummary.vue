@@ -97,11 +97,14 @@ export default {
             }) + ', '
           : ''
         str += this.lessonCommands
-          ? `${(this.isEn && this.isAllSkills) ? 'and ' : ''}${this.$t('lesson.todayRecords3', {
-              commandLines: `<span class='highlight'>${
-                this.lessonCommands
-              }</span>`
-            })}`
+          ? `${this.isEn && this.isAllSkills ? 'and ' : ''}${this.$t(
+              'lesson.todayRecords3',
+              {
+                commandLines: `<span class='highlight'>${
+                  this.lessonCommands
+                }</span>`
+              }
+            )}`
           : ''
       }
       return str

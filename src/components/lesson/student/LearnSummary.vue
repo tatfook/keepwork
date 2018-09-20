@@ -24,7 +24,7 @@ import { locale } from '@/lib/utils/i18n'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import dayjs from 'dayjs'
-import moment,{ months } from 'moment'
+import moment, { months } from 'moment'
 import 'moment/locale/zh-cn'
 export default {
   name: 'LearnSummary',
@@ -50,19 +50,21 @@ export default {
     this.learnRecords = learnRecords || []
     this.summary = {
       name: this.lessonName,
-      day: this.learnDayCount,
-      learnRecords: this.learnRecords,
+      day: this.day,
       skills: this.skills
     }
     this.isLoading = false
   },
   methods: {},
   computed: {
-    ...mapGetters({
-      learnDayCount: 'lesson/learnDayCount'
-    }),
     isEn() {
       return locale === 'en-US'
+    },
+    day() {
+      return _.get(this.lastLearnRecord, 'extra.howManyDays', 1)
+    },
+    lastLearnRecord() {
+      return this.learnRecords[this.learnRecords.length - 1] || {}
     },
     lessonId() {
       return this.lessonDetail.id || ''
@@ -88,7 +90,11 @@ export default {
     lastTimeFormat() {
       if (!this.lastTime) return ''
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(this.lastTime).format('dddd') +'  '+ moment(this.lastTime).format('LL')
+      return (
+        moment(this.lastTime).format('dddd') +
+        '  ' +
+        moment(this.lastTime).format('LL')
+      )
     }
   }
 }
