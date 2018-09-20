@@ -3,7 +3,7 @@ import moment from 'moment'
 const getters = {
   userinfo: state => state.userinfo,
   learnDayCount: (state, { userinfo }) =>
-    _.get(userinfo, 'extra.learn.learnDayCount', 1),
+    _.get(userinfo, 'extra.learn.learnDayCount', 0),
   lastLearnDate: (state, { userinfo }) =>
     _.get(userinfo, 'extra.learn.lastLearnDate', ''),
   today: state => moment().format('YYYYMMDD'),
