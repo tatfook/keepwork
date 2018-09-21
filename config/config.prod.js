@@ -9,7 +9,7 @@ module.exports = app => {
 
   exports.cluster = {
     listen: {
-      port: 8080,
+      port: 80,
       hostname: '0.0.0.0',
     }
   }
