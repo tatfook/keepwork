@@ -315,11 +315,16 @@ export default {
       return usedPercent >= 90 ? 'skydrive-manager-total-used-danger' : (usedPercent >= 70 ? 'skydrive-manager-total-used-warning' : '')
     },
     isImgLoopMod() {
-      if (this.$store.getters.activeProperty === 'imgLoop') {
-        return true
-      } else {
+      let activeMod = this.$store.getters.activeMod
+
+      if (!activeMod || !activeMod.cmd) {
         return false
       }
+
+      if (activeMod.cmd === 'ImgLoop') {
+        return true
+      }
+
     }
   },
   methods: {
