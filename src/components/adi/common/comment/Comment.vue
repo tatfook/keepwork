@@ -4,7 +4,7 @@
       <div v-if="properties.switch.value">
         <h3>{{$t(options.title)}}</h3>
         <div class="comment-input">
-          <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
+          <textarea v-model="content" :placeholder="$t(options.notice)"></textarea>
           <el-button @click="commit">{{$t(options.commit)}}</el-button>
         </div>
         <div class="comment-box">
@@ -238,6 +238,7 @@ export default {
         margin-right: 15px;
         resize: none;
         width: 100%;
+        height: 68px;
         border: 1px solid #ccc;
         border-radius: 4px;
       }
@@ -260,7 +261,7 @@ export default {
           resize: none;
           box-sizing: border-box;
           width: 100%;
-          height: 50px;
+          height: 74px;
           border: 2px solid #d4d4d4;
           outline: none;
           background-color: #eeeeee;
