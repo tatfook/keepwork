@@ -42,7 +42,6 @@
 <script>
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
-import PreviewData from './PreviewData'
 import colI18n from '@/lib/utils/i18n/column'
 import { mapGetters } from 'vuex'
 import { lesson } from '@/api'
@@ -85,9 +84,6 @@ export default {
     lessonCoverUrl() {
       return this.lessonExtra.coverUrl
     }
-  },
-  components: {
-    'preview-data': PreviewData
   },
   async mounted() {
     let origin = window.location.origin
