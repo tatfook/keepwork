@@ -1,7 +1,7 @@
 <template>
   <div class="compare-view">
     <h1 class="compare-view-title">
-      <span>VIP账号特权</span>
+      <span>Paracraft VIP</span>
     </h1>
     <div class="compare-view-box">
       <div class="compare-view-feature">
@@ -17,17 +17,13 @@
             <span class="el-icon-success compare-view-success"></span>线下导引课
           </li>
           <li class="compare-view-muted">
-            <span class="el-icon-success "></span>一小时的一对一线上或线下指导时间
+            一小时的一对一线上或线下指导时间
           </li>
           <li class="compare-view-muted">
             会员群集体讨论
           </li>
           <li class="compare-view-muted">
             答疑和指导
-          </li>
-          <li class="compare-view-muted">
-            请浏览
-            <a href="//keepwork.com/official/paracraft/vip">会员服务</a>
           </li>
         </ul>
       </div>
