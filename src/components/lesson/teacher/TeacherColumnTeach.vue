@@ -106,7 +106,7 @@ export default {
     targetPage(targetPage){
       this.page = targetPage
     },
-     getCoursePackageSuitableAge(packageDetail) {
+    getCoursePackageSuitableAge(packageDetail) {
       let { minAge, maxAge } = packageDetail
       if (minAge == 0 && maxAge == 0) {
         return this.$t('lesson.packageManage.SuitableForAll')

@@ -32,6 +32,7 @@
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
@@ -85,8 +86,13 @@ export default {
           this.lessonsList,
           lesson => lesson.id === lastLessonId
         )
-        if (lastLessonIndex + 1 < this.lessonsList.length) {
-          return this.lessonsList[lastLessonIndex + 1]
+        // if (lastLessonIndex + 1 < this.lessonsList.length) {
+        //   return this.lessonsList[lastLessonIndex + 1]
+        // }
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
         }
       }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
@@ -268,6 +274,7 @@ export default {
       left: 0;
       font-size: 14px;
       color: #67c23a;
+      z-index: 1;
       .el-icon-check {
         font-weight: bold;
         width: 34px;
@@ -285,6 +292,9 @@ export default {
     }
     &-button {
       margin-bottom: 16px;
+      &.start-button {
+        margin-left: 0;
+      }
     }
     &-goals {
       max-height: 100px;

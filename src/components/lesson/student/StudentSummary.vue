@@ -19,6 +19,7 @@
 
 <script>
 import { locale } from '@/lib/utils/i18n'
+import _ from 'lodash'
 export default {
   name: 'StudentSummary',
   props: {
@@ -37,29 +38,17 @@ export default {
       this.$emit('share')
     }
   },
-  mounted() {
-    console.log(this.summary.skills)
-  },
   computed: {
     isEn() {
       return locale === 'en-US'
     },
-    secondWord() {},
     day() {
       const suffix = ['', 'st', 'nd', 'rd', 'th']
-      if (this.summary.firstTime && this.summary.lastTime) {
-        let firstTime = new Date(this.summary.firstTime).getTime()
-        let lastTime = new Date(this.summary.lastTime).getTime()
-        let day =
-          Math.floor(
-            Math.abs(firstTime - lastTime) / 1000 / 60 / 60 / 24 + 0.5
-          ) || 1
-        if (this.isEn) {
-          day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
-        }
-        return day
+      let day = this.summary.day
+      if (this.isEn) {
+        day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
       }
-      return this.isEn ? '1st' : 1
+      return day
     },
     skills() {
       const skillName = ['代码阅读量', '代码书写量', '学习指令数']
@@ -82,6 +71,13 @@ export default {
     isHasSkills() {
       return this.skills.length > 0
     },
+    isAllSkills() {
+      return (
+        this.lessonCodeReadLine > 0 &&
+        this.lessonWriteLine > 0 &&
+        this.lessonCommands
+      )
+    },
     skillsString() {
       let str = ''
       if (this.isHasSkills) {
@@ -101,11 +97,14 @@ export default {
             }) + ', '
           : ''
         str += this.lessonCommands
-          ? `${this.isEn ? 'and ' : ''}${this.$t('lesson.todayRecords3', {
-              commandLines: `<span class='highlight'>${
-                this.lessonCommands
-              }</span>`
-            })}`
+          ? `${this.isEn && this.isAllSkills ? 'and ' : ''}${this.$t(
+              'lesson.todayRecords3',
+              {
+                commandLines: `<span class='highlight'>${
+                  this.lessonCommands
+                }</span>`
+              }
+            )}`
           : ''
       }
       return str
