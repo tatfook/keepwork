@@ -207,7 +207,12 @@ export default {
         ) {
           boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
         } else {
-          setTimeout(pickFile(boardWindow), 500)
+          setTimeout(
+            function(){
+              pickFile(boardWindow)
+            },
+            500
+          )
         }
       }
 

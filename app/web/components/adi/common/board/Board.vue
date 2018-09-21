@@ -17,7 +17,7 @@ const initPreview = (data, callback) => {
   let bundle =
     window.mxResources.getDefaultBundle(window.RESOURCE_BASE, window.mxLanguage) ||
     window.mxResources.getSpecialBundle(window.RESOURCE_BASE, window.mxLanguage)
-
+  
   window.mxUtils.getAll([bundle, window.STYLE_PATH + '/default.xml'], function(
     xhr
   ) {
