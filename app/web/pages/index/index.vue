@@ -8,8 +8,11 @@
       <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
+    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHomePage">
       <common-footer class="container"></common-footer>
+    </el-footer>
+    <el-footer  class="home-page-footer" v-if='isHomePage'>
+      <perfect-common-footer></perfect-common-footer>
     </el-footer>
   </el-container>
 </template>
@@ -31,6 +34,8 @@ import '@/components/common/thirdAuth'
 import CommonHeader from '../../components/common/CommonHeader'
 import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
+import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
+
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -83,7 +88,8 @@ export default {
   components: {
     CommonHeader,
     CommonFooter,
-    ToolHeader
+    ToolHeader,
+    PerfectCommonFooter
   },
   methods: {
     ...mapActions({
@@ -206,6 +212,9 @@ body {
   display: flex;
   align-items: center;
   background-color: #f9f9f9;
+}
+.home-page-footer{
+  padding: 0;
 }
 .index-page-container {
   min-height: 100%;

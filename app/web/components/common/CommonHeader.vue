@@ -5,19 +5,19 @@
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1'>
-        <a href="/wiki/home">{{$t('common.features')}}</a>
+        <a href="/wiki/home">{{$t('common.creativity')}}</a>
       </el-menu-item>
       <el-menu-item index='2'>
-        <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
+        <a href="/wiki/apps">{{$t('common.explore')}}</a>
       </el-menu-item>
       <el-menu-item index='4'>
-        <a href='/official/help/index'>{{$t('common.help')}}</a>
+        <a href='/official/help/index'>{{$t('common.study')}}</a>
       </el-menu-item>
-      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
+      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='//iicc.keepwork.com' target="_blank">
           <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
@@ -62,13 +62,13 @@
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
-      <el-menu-item index='10' class="pull-right">
-        <SearchBar></SearchBar>
+      <el-menu-item index='10'>
+        <search-bar></search-bar>
       </el-menu-item>
     </el-menu>
 
@@ -91,7 +91,7 @@
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
@@ -140,7 +140,6 @@ import LoginDialog from '@/components/common/LoginDialog'
 import RegisterDialog from '@/components/common/RegisterDialog'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
-
 export default {
   name: 'CommonHeader',
   data() {
@@ -167,7 +166,9 @@ export default {
       return window.location.hostname
     },
     lessonCenterUrl() {
-      return '/l#/student/center'
+      return this.hostname === 'localhost'
+        ? '/lesson.html#/student/center'
+        : '/l#/student/center'
     }
   },
   mounted() {
@@ -189,9 +190,9 @@ export default {
     backEditArea() {
       let origin = window.location.origin
       if (window.location.hostname === 'localhost') {
-        window.open(`${origin}/ed`)
+        window.open(`${origin}/editor.html#/`)
       } else {
-        window.open(`${origin}/ed/#/`)
+        window.open(`${origin}/wiki/wikieditor/#/`)
       }
     },
     goPersonalCenter() {
@@ -208,7 +209,6 @@ export default {
       if (url) {
         let filename = file.filename || url
         let isImage = /^image\/.*/.test(file.type)
-
         isImage
           ? this.$refs.codemirror.insertFile(filename, url)
           : this.$refs.codemirror.insertLink(filename, url)
@@ -253,28 +253,29 @@ export default {
 .el-menu .brand {
   width: 115px;
 }
-
 .el-menu a {
   text-decoration: none;
   color: inherit;
 }
-
 .el-menu .login-btn {
-  background-color: #3977ad;
+  background: #f5f5f5;
+  border: solid 1px #dddddd;
+  padding: 7px 11px;
+  border-radius: 3px;
+}
+.el-menu .register-btn {
+  background-color: #409eff;
   color: #fff;
   padding: 8px 12px;
   border-radius: 3px;
 }
-
-.el-menu .login-btn:hover {
-  background-color: #286090;
+.el-menu .register-btn:hover {
+  background-color: #218efc;
   color: #fff;
 }
-
 .menu-left {
   flex: 1;
 }
-
 .user-profile {
   width: 40px;
   height: 40px;
