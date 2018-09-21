@@ -8,11 +8,15 @@
         <el-form-item prop="password">
           <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
         </el-form-item>
-        <div class="login-dialog-form-operate"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+        <div class="login-dialog-form-operate">
+          <a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a>
+        </div>
         <el-form-item>
           <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
         </el-form-item>
-        <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a></div>
+        <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}
+          <a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a>
+        </div>
         <div class="login-dialog-form-three-login">
           <div class="title">
             <span>{{$t('common.usingFollowingAccount')}}</span>
@@ -35,15 +39,18 @@
       </el-form>
     </div>
     <div v-show="isRegisterForm">
-        <register-dialog @close="handleClose"></register-dialog>
-        <div><span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span></div>
-        <div><span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span></div>
+      <register-dialog @close="handleClose"></register-dialog>
+      <div>
+        <span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span>
+      </div>
+      <div>
+        <span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span>
+      </div>
     </div>
     <div v-show="isPerfectRegisterInfo">
       <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
   </el-dialog>
-
 
 </template>
 <script>
@@ -100,7 +107,7 @@ export default {
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
-    hasAccountToLogin(){
+    hasAccountToLogin() {
       this.isLoginForm = true
       this.isRegisterForm = false
       this.isPerfectRegisterInfo = false
@@ -120,24 +127,23 @@ export default {
             password: this.ruleForm.password
           }
           this.loading = true
+          console.warn(payload)
           let info = await this.userLogin(payload).catch(e => {
             this.loading = false
           })
           this.loading = false
-          if (info.error.id === 0) {
+          if (info) {
+            // return console.warn('dialog info:', info)
             this.$emit('close')
-            window.location.reload()
-          } else if (info.error.message === '用户不存在') {
-            this.showMessage('error', this.$t('common.usernameNotExist'))
-          } else if (info.error.message === '密码错误') {
-            this.showMessage('error', this.$t('common.wrongPassword'))
+            return window.location.reload()
           }
+          this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
         } else {
           return false
         }
       })
     },
-    register(){
+    register() {
       this.isLoginForm = false
       this.isRegisterForm = true
       this.isPerfectRegisterInfo = false
@@ -152,9 +158,9 @@ export default {
           this.handleLoginResult(result)
         })
     },
-    async handleLoginResult(result){
+    async handleLoginResult(result) {
       if (result && result.data && result.data.error == 0) {
-        if (result.data.token == "token"){
+        if (result.data.token == 'token') {
           // 用户未绑定  跳完善注册信息页
           this.isLoginForm = false
           this.isRegisterForm = false
@@ -164,7 +170,7 @@ export default {
           // 登录成功  进行页面跳转
           let token = result.data.token
           let userinfo = result.data.data
-          this.userThirdLogin({token, userinfo})
+          this.userThirdLogin({ token, userinfo })
           this.handleClose()
           this.showMessage('success', this.$t('common.loginSuccess'))
         }
@@ -172,8 +178,8 @@ export default {
         this.showMessage('error', this.$t('common.logonFailed'))
       }
     },
-    backHome(){
-      window.location.href=this.nowOrigin
+    backHome() {
+      window.location.href = this.nowOrigin
     }
   },
   components: {
@@ -185,7 +191,7 @@ export default {
 
 <style lang="scss">
 .login-dialog {
-  .hasAccount{
+  .hasAccount {
     margin-left: 70px;
     border-bottom: 1px solid #409eff;
     cursor: pointer;
@@ -198,7 +204,7 @@ export default {
     }
   }
   .el-dialog {
-    .el-dialog__header{
+    .el-dialog__header {
       padding: 0;
     }
     width: 478px;
@@ -234,7 +240,7 @@ export default {
       }
     }
     &-three-login {
-      .three-login-wrap{
+      .three-login-wrap {
         display: flex;
         a {
           flex: 1;

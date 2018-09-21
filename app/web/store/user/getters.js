@@ -14,6 +14,8 @@ const getters = {
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
   token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
+  getUserId: state => () => Cookies.get('userId'),
+  _userId: (state, { tokenUpdateAt, getUserId }) => getUserId(tokenUpdateAt),
   profile: (state, { getToken }) => {
     let token = getToken()
     let { token: profileUserToken } = state.profile

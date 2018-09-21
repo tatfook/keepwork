@@ -66,8 +66,9 @@ const doNothing = state => {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, { token, userinfo: profile }) {
-    Vue.set(state, 'profile', { ...profile, token })
+  [LOGIN_SUCCESS](state, profile) {
+    // Vue.set(state, 'profile', { ...profile, token })
+    Vue.set(state, 'profile', profile)
     Vue.set(state, 'tokenUpdateAt', Date.now())
   },
   [LOGOUT](state) {

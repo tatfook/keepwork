@@ -14,6 +14,7 @@
     "inputUsername": "Please enter your username",
     "inputPassword": "Please enter your password",
     "wrongPassword": "Wrong password",
+    "IncorrectUsernameOrPassword": "Incorrect username or password",
     "usernameNotExist": "The username does not exist",
     "loginSuccess": "Login successfully",
     "logonFailed": "Logon failed",

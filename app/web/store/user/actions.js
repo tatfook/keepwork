@@ -59,16 +59,18 @@ const USER_PROFILE_PAGES_CONTENTS = [
 const actions = {
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
-    if (info.data) {
-      Cookies.set('token', info.data.token)
-      window.localStorage.setItem('satellizer_token', info.data.token)
-      commit(LOGIN_SUCCESS, info.data)
+    if (info) {
+      Cookies.set('token', info.token)
+      Cookies.set('userId', info.id)
+      window.localStorage.setItem('satellizer_token', info.token)
+      commit(LOGIN_SUCCESS, info)
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
+    Cookies.set('userId', userinfo.id)
     window.localStorage.setItem('satellizer_token', token)
     commit(LOGIN_SUCCESS, { userinfo, token })
   },
@@ -77,6 +79,8 @@ const actions = {
     await dispatch('lesson/logout', null, { root: true })
     Cookies.remove('token')
     Cookies.remove('token', { path: '/' })
+    Cookies.remove('userId')
+    Cookies.remove('userId', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
     window.location.reload()
   },
@@ -111,9 +115,9 @@ const actions = {
     return thirdRegisterInfo
   },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
-    let { commit, getters: { token } } = context
+    let { commit, getters: { token, _userId } } = context
     if (useCache) return
-    const profile = await keepwork.user.getProfile()
+    const profile = await keepwork.user.getProfile(_userId)
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
@@ -267,7 +271,7 @@ const actions = {
     let { username, personalSiteList } = getters
     if (useCache && personalSiteList.length) return
 
-    let list = await keepwork.website.getAllByUsername({ username })
+    let list = await keepwork.website.getAllSites()
     commit(GET_ALL_WEBSITE_SUCCESS, { username, list })
   },
   async getAllSiteDataSource(context, payload) {
@@ -559,9 +563,9 @@ const actions = {
     return result
   },
   async changePwd(context, { oldpassword, newpassword }) {
-    // FIXME
-    let result = await keepwork.user.changepw({ oldpassword, newpassword })
-    return result.error.message
+    // FIXME:
+    let result = await keepwork.user.changePassword({ oldpassword, password: newpassword })
+    return result
   },
   async getByEmail(context, { email }) {
     let result = await keepwork.user.getByEmail({ email })
@@ -571,7 +575,7 @@ const actions = {
     return keepwork.user.verifyEmailOne({ email, bind })
   },
   async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
-    // FIXME
+    // FIXME:
     let { dispatch } = context
     let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode })
     let message = result.error.message
@@ -584,7 +588,8 @@ const actions = {
   },
   async getUserThreeServiceByUsername(context, { username }) {
     let { commit } = context
-    let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
+    // let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
+    let userThreeServices = await keepwork.userThreeService.getOauthUsers()
     commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
   },
   async threeServiceDeleteById(context, { id, username }) {

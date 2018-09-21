@@ -15,19 +15,22 @@ const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
 
-const { post, put } = keepworkEndpoint
+const { post, put, get } = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
-  getProfile: async (...args) => post('/user/getProfile', ...args),
+  login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  // getProfile: async (...args) => get('/user/getProfile', ...args),
+  getProfile: async (id) => get(`/users/${id}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
   changepw: async (...args) => post('/user/changepw', ...args),
+  changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async (...args) => post('/user/getByEmail', ...args),
   verifyEmailOne: async (...args) => post('/user/verifyEmailOne', ...args),
   verifyEmailTwo: async (...args) => post('/user/verifyEmailTwo', ...args),
-  verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
+  // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
+  verifyCellphoneOne: async (args) => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   verifyCellphoneTwo: async (...args) => post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
@@ -79,7 +82,8 @@ payload: {
 export const website = {
   upsert: async (...args) => post('website/upsert', ...args),
   getByName: async (...args) => post('website/getByName', ...args),
-  getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
+  // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
+  getAllSites: async () => get('sites'),
   getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args)
 }
@@ -176,7 +180,8 @@ export const qiniu = {
 }
 
 export const userThreeService = {
-  getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
+  getOauthUsers: async (args) => get('oauth_users'),
+  // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
   unbind: async (...args) => post('user_three_service/unbind', ...args)
 }

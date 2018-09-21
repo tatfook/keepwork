@@ -9,7 +9,7 @@ let repeatStr = (str, count) => {
   return str
 }
 
-let isEmptyObject = (obj) => {
+let isEmptyObject = obj => {
   for (let t in obj) {
     return false
   }
@@ -19,10 +19,10 @@ let isEmptyObject = (obj) => {
 let sensitive = {
   trie: new AhoCorasick.TrieNode(),
   checkTasks: [],
-  init: () => {
+  init() {
     this.getSensitiveWordsList()
   },
-  loadSensitiveWordsListIntoTrieNode: (list) => {
+  loadSensitiveWordsListIntoTrieNode(list) {
     let me = this
     if (isEmptyObject(me.trie.suffix)) {
       list.forEach(function(item) {
@@ -31,7 +31,7 @@ let sensitive = {
     }
   },
   sensitiveWordsList: null,
-  getSensitiveWordsList: (callback) => {
+  getSensitiveWordsList(callback) {
     let me = this
     if (this.sensitiveWordsList) {
       return callback && callback(me.sensitiveWordsList)
@@ -57,7 +57,7 @@ let sensitive = {
         me.isLoadingWordsList = false
       })
   },
-  doCheckSensitiveWord: (word, callback) => {
+  doCheckSensitiveWord(word, callback) {
     let me = this
     let foundWords = []
     if (!word) {
@@ -70,7 +70,7 @@ let sensitive = {
     })
     callback && callback(foundWords, word)
   },
-  checkSensitiveWord: (word, callback) => {
+  checkSensitiveWord(word, callback) {
     // keep callback for Backward compatibility
     if (!word) {
       callback && callback()
@@ -90,7 +90,7 @@ let sensitive = {
       })
     })
   },
-  checkSensitiveWords: (words) => {
+  checkSensitiveWords(words) {
     words = Array.isArray(words) ? words : [words]
 
     let me = this
@@ -104,7 +104,7 @@ let sensitive = {
       })
     })
   },
-  getAllSensitiveWords: (words) => {
+  getAllSensitiveWords(words) {
     return this.checkSensitiveWords(words)
       .then(function(results) {
         return results.reduce(function(prev, result) {
