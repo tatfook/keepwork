@@ -1,7 +1,7 @@
 <template>
   <div class="price-purchase">
     <h1 class="price-purchase-title">
-      <span>购买付费</span>
+      <span>VIP购买付费</span>
     </h1>
     <div class="price-purchase-item price-purchase-item-active">
       <div class="price-purchase-item-price">
