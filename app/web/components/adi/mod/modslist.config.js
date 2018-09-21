@@ -141,22 +141,6 @@ let modsList = [
   },
   {
     id: 7,
-    label: 'modList.other',
-    children: [
-      {
-        id: '7-1',
-        label: 'modList.paracraft',
-        mods: [ModParacraft]
-      },
-      {
-        id: '7-2',
-        label: 'modList.vipRead',
-        mods: [ModVipRead]
-      }
-    ]
-  },
-  {
-    id: '9',
     label: 'modList.lesson',
     children: [
       {
@@ -173,6 +157,22 @@ let modsList = [
         id: '9-3',
         label: 'modList.hint',
         mods: [ModHint]
+      }
+    ]
+  },
+  {
+    id: 8,
+    label: 'modList.other',
+    children: [
+      {
+        id: '7-1',
+        label: 'modList.paracraft',
+        mods: [ModParacraft]
+      },
+      {
+        id: '7-2',
+        label: 'modList.vipRead',
+        mods: [ModVipRead]
       }
     ]
   }

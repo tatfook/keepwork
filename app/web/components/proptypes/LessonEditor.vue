@@ -25,12 +25,13 @@ import EditLesson from '@/components/lesson/teacher/EditLesson'
 
 import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
 export default {
   components: {
     EditLesson
   },
   async mounted() {
-    await this.getUserLessons({ useCache: false }).catch(e => console.error(e))
+    await this.getUserLessons()
     await this.checkMarkdownIsLinked()
   },
   data() {
@@ -39,32 +40,33 @@ export default {
       isLoading: false,
       lessonId: '',
       selectValue: '',
-      selectLesson: {}
+      selectLesson: {},
+      userLessons: []
     }
   },
   computed: {
     ...mapGetters({
-      userLessons: 'lesson/teacher/userLessons',
       activePage: 'activePage',
       activePageUrl: 'activePageUrl'
     }),
     userLessonsFilter() {
-      return this.userLessons.filter(({ url }) => !url)
+      return _.filter(this.userLessons, ({ url }) => !url)
     },
     selectList() {
       return this.isLinked ? this.userLessons : this.userLessonsFilter
     },
     isLinked() {
-      return !!this.userLessons.find(({ id }) => id === this.lessonId)
+      return !!_.find(this.userLessons, ({ id }) => id === this.lessonId)
     }
   },
   methods: {
-    ...mapActions({
-      getUserLessons: 'lesson/teacher/getUserLessons'
-    }),
+    async getUserLessons() {
+      let lessons = await lesson.lessons.getUserLessons()
+      this.userLessons = _.get(lessons, 'rows')
+    },
     async checkMarkdownIsLinked() {
       let origin = window.location.origin
-      if (origin === 'http://localhost:8080') {
+      if (origin === 'http://127.0.0.1:7001') {
         origin = 'https://stage.keepwork.com'
       }
       await lesson.lessons
