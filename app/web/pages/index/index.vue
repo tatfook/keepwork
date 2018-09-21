@@ -4,7 +4,7 @@
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
-      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
+      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHomePage"></tool-header>
       <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
     </el-main>
     <el-aside></el-aside>
@@ -146,6 +146,9 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       activePageInfo: 'activePageInfo'
     }),
+    isHomePage() {
+      return this.$route.name === 'HomePage'
+    },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
       return this.userSiteLayoutConfigBySitePath(sitePath)
@@ -193,7 +196,7 @@ body {
   color: #2c3e50;
 }
 .container {
-  max-width: 1140px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .index-page-header {

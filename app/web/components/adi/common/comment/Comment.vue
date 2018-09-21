@@ -27,7 +27,7 @@
       <div v-if="properties.switch.value">
         <div class="comment-box">
           <div class="comment-input">
-            <textarea rows="3" v-model="content" :placeholder="$t(options.notice)"></textarea>
+            <textarea v-model="content" :placeholder="$t(options.notice)"></textarea>
             <button @click="commit">{{$t(options.commit)}}</button>
           </div>
           <h3><img :src="getStyleOneId">{{$t(options.title)}}</h3>
@@ -258,6 +258,7 @@ export default {
 
         textarea {
           resize: none;
+          box-sizing: border-box;
           width: 100%;
           height: 50px;
           border: 2px solid #d4d4d4;

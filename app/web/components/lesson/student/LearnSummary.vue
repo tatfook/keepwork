@@ -21,9 +21,10 @@
 import StudentSummary from './StudentSummary'
 import { lesson } from '@/api'
 import { locale } from '@/lib/utils/i18n'
+import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import dayjs from 'dayjs'
-import moment,{ months } from 'moment'
+import moment, { months } from 'moment'
 import 'moment/locale/zh-cn'
 export default {
   name: 'LearnSummary',
@@ -49,8 +50,7 @@ export default {
     this.learnRecords = learnRecords || []
     this.summary = {
       name: this.lessonName,
-      firstTime: this.firstTime,
-      lastTime: this.lastTime,
+      day: this.day,
       skills: this.skills
     }
     this.isLoading = false
@@ -59,6 +59,12 @@ export default {
   computed: {
     isEn() {
       return locale === 'en-US'
+    },
+    day() {
+      return _.get(this.lastLearnRecord, 'extra.howManyDays', 1)
+    },
+    lastLearnRecord() {
+      return this.learnRecords[this.learnRecords.length - 1] || {}
     },
     lessonId() {
       return this.lessonDetail.id || ''
@@ -72,9 +78,6 @@ export default {
     skills() {
       return this.lessonDetail.skills
     },
-    firstTime() {
-      return _.get(this, 'learnRecords[0].createdAt', '')
-    },
     lastTime() {
       let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
         quiz.every(item => item.result !== null)
@@ -87,7 +90,11 @@ export default {
     lastTimeFormat() {
       if (!this.lastTime) return ''
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(this.lastTime).format('dddd') +'  '+ moment(this.lastTime).format('LL')
+      return (
+        moment(this.lastTime).format('dddd') +
+        '  ' +
+        moment(this.lastTime).format('LL')
+      )
     }
   }
 }

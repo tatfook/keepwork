@@ -4,7 +4,7 @@
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view class="lesson-page-main-content" id="lesson-page" />
+    <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
     <common-footer class="container"></common-footer>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -61,6 +61,8 @@ const store = new Vuex.Store({
   ]
 })
 
+const TeacherColumnActivePageNameReg = /^TeacherColumn+/
+
 export default {
   name: 'LessonPage',
   router,
@@ -83,7 +85,13 @@ export default {
   computed: {
     ...mapGetters({
       isShowLoginDialog: 'lesson/isShowLoginDialog'
-    })
+    }),
+    nowPagename() {
+      return this.$route.name
+    },
+    isHeaderFooterFixed() {
+      return TeacherColumnActivePageNameReg.test(this.nowPagename)
+    }
   },
   methods: {
     ...mapActions({
@@ -133,6 +141,9 @@ body {
     background: #f8f8f8;
     min-height: auto;
     flex: 1;
+    &-scroll-only {
+      overflow: auto;
+    }
   }
   .container {
     max-width: 1200px;

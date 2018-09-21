@@ -19,7 +19,7 @@
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
             <h4 :title="coursePackage.packageName" :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
-            <span>{{$t('lesson.ages')}}: {{coursePackage.minAge}}~{{coursePackage.maxAge}}</span>
+            <span>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(coursePackage)}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div :class="['purchase-tip',{'hidden': coursePackage.rmb == 0}]" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
@@ -285,6 +285,13 @@ export default {
       this.$router.push({
         path: `package/${packageId}`
       })
+    },
+    getCoursePackageSuitableAge(packageDetail) {
+      let { minAge, maxAge } = packageDetail
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
     }
   }
 }

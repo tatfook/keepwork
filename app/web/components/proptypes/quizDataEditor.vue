@@ -307,7 +307,7 @@ export default {
           this.cloneQuiz.options = this.judgeOptions
         }
         if (type === '3') {
-          this.cloneQuiz.answer = []
+          this.cloneQuiz.answer = this.textOptions[0].item
           this.cloneQuiz.options = this.textOptions
         }
         let _quiz = _.cloneDeep(this.cloneQuiz)

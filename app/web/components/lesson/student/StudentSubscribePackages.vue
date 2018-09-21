@@ -4,7 +4,7 @@
     <h3 :class="['name']" @click="enterPackageDetail" :title="packageName">{{packageName}}</h3>
     <p>{{$t('lesson.include')}}:
       <span>{{lessonsLength}}</span> {{$t('lesson.lessonsCount')}}</p>
-    <p>{{$t('lesson.ages')}}: {{packageDetail.minAge}}-{{packageDetail.maxAge}}</p>
+    <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(packageDetail)}}</p>
     <p class="intro" :title="packageDetail.intro">{{$t('lesson.intro')}}: {{packageDetail.intro}}</p>
     <div class="progress">
       <div v-if="showProgress">
@@ -67,7 +67,7 @@ export default {
     },
     lessonsList() {
       let lessons = _.get(this.packageDetail, 'lessons', [])
-      _.map(this.lessonFinishedList, finishedLessonId => {
+      _.map(this.learnedLessons, finishedLessonId => {
         let finishedLessonInLessonListIndex = _.findIndex(lessons, lesson => {
           return lesson.id === finishedLessonId
         })
@@ -82,8 +82,10 @@ export default {
           this.lessonsList,
           lesson => lesson.id === lastLessonId
         )
-        if (lastLessonIndex + 1 < this.lessonsList.length) {
-          return this.lessonsList[lastLessonIndex + 1]
+        while (++lastLessonIndex < this.lessonsList.length) {
+          if (!this.lessonsList[lastLessonIndex].isFinished) {
+            return this.lessonsList[lastLessonIndex]
+          }
         }
       }
       return _.find(this.lessonsList, lesson => !lesson.isFinished)
@@ -100,24 +102,21 @@ export default {
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
+      if (this.packageDetail.subscribeState == 0) {
+        return this.$router.push(`student/package/${this.packageDetail.id}`)
+      }
       this.$router.push({
         path: `student/package/${this.packageDetail.id}/lesson/${
           this.continueLearnedLesson.id
         }`
       })
-      // if (this.startToLearn) {
-      //   let packageId = this.packageDetail.id
-      //   let lessonId = this.packageDetail.lessons[0].id
-      //   this.$router.push({
-      //     path: `student/package/${packageId}/lesson/${lessonId}`
-      //   })
-      // } else {
-      //   let packageId = this.packageDetail.id
-      //   let lessonId = this.packageDetail.learnedLessons.length
-      //   this.$router.push({
-      //     path: `student/package/${packageId}/lesson/${lessonId}`
-      //   })
-      // }
+    },
+    getCoursePackageSuitableAge(packageDetail) {
+      let { minAge, maxAge } = packageDetail
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
     }
   }
 }
