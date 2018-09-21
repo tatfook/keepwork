@@ -2749,7 +2749,7 @@ commander@~2.13.0:
   version "2.13.0"
   resolved "http://registry.npm.taobao.org/commander/download/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
 
-common-bin@^2.7.3:
+common-bin@^2.7.1, common-bin@^2.7.3:
   version "2.7.3"
   resolved "http://registry.npm.taobao.org/common-bin/download/common-bin-2.7.3.tgz#9841b72d954ad0d62f08b0f530fde56aff0154e2"
   dependencies:
@@ -4178,6 +4178,21 @@ egg-schedule@^3.4.0:
     safe-timers "^1.1.0"
     utility "^1.13.1"
 
+egg-scripts@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/egg-scripts/-/egg-scripts-2.9.1.tgz#117508b4ca5ca2b63e9c0d1cc0c0aba6d02bb388"
+  dependencies:
+    common-bin "^2.7.1"
+    debug "^3.1.0"
+    egg-utils "^2.3.0"
+    moment "^2.19.2"
+    mz "^2.7.0"
+    mz-modules "^2.0.0"
+    node-homedir "^1.1.0"
+    runscript "^1.3.0"
+    source-map-support "^0.5.4"
+    zlogger "^1.1.0"
+
 egg-security@^2.4.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/egg-security/download/egg-security-2.4.0.tgz#8bab9ac82069477b08145744d4ff29d552776df8"
@@ -4214,7 +4229,7 @@ egg-static@^2.1.1:
     mkdirp "^0.5.1"
     ylru "^1.2.0"
 
-egg-utils@^2.4.0:
+egg-utils@^2.3.0, egg-utils@^2.4.0:
   version "2.4.1"
   resolved "http://registry.npm.taobao.org/egg-utils/download/egg-utils-2.4.1.tgz#bc7a330315a100bc45838a54f744fdd5d47c332a"
   dependencies:
@@ -6650,7 +6665,7 @@ is-tar@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/is-tar/download/is-tar-1.0.0.tgz#2f6b2e1792c1f5bb36519acaa9d65c0d26fe853d"
 
-is-type-of@^1.0.0, is-type-of@^1.2.0:
+is-type-of@^1.0.0, is-type-of@^1.1.0, is-type-of@^1.2.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/is-type-of/download/is-type-of-1.2.0.tgz#b553cbb4621adf5b4171e8883f370e7a6ec38995"
   dependencies:
@@ -8624,7 +8639,7 @@ moment-timezone@^0.5.0:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.17.1, moment@^2.19.3:
+"moment@>= 2.9.0", moment@^2.17.1, moment@^2.19.2, moment@^2.19.3:
   version "2.22.2"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
@@ -8693,7 +8708,7 @@ mz-modules@^1.0.0:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
 
-mz-modules@^2.1.0:
+mz-modules@^2.0.0, mz-modules@^2.1.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/mz-modules/download/mz-modules-2.1.0.tgz#7f529877afd0d42f409a7463b96986d61cfbcf96"
   dependencies:
@@ -8824,7 +8839,7 @@ node-gyp@^3.8.0:
     tar "^2.0.0"
     which "1"
 
-node-homedir@^1.1.1:
+node-homedir@^1.1.0, node-homedir@^1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/node-homedir/download/node-homedir-1.1.1.tgz#736db0b60e3bba8aba68df9927de40a7aabe1075"
 
@@ -10382,9 +10397,9 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-pumpify@^1.3.3:
+pumpify@^1.3.3, pumpify@^1.3.5:
   version "1.5.1"
-  resolved "http://registry.npm.taobao.org/pumpify/download/pumpify-1.5.1.tgz#36513be246ab27570b1a374a5ce278bfd74370ce"
+  resolved "https://registry.yarnpkg.com/pumpify/-/pumpify-1.5.1.tgz#36513be246ab27570b1a374a5ce278bfd74370ce"
   dependencies:
     duplexify "^3.6.0"
     inherits "^2.0.3"
@@ -10945,6 +10960,13 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
+runscript@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/runscript/-/runscript-1.3.0.tgz#291e77cbe23580c00ea7c0eb1d208fac86aa1306"
+  dependencies:
+    debug "^2.6.8"
+    is-type-of "^1.1.0"
+
 rx-lite-aggregates@^4.0.8:
   version "4.0.8"
   resolved "http://registry.npm.taobao.org/rx-lite-aggregates/download/rx-lite-aggregates-4.0.8.tgz#753b87a89a11c95467c4ac1626c4efc4e05c67be"
@@ -11380,7 +11402,7 @@ source-map-support@^0.4.0, source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.0, source-map-support@^0.5.6, source-map-support@^0.5.9:
+source-map-support@^0.5.0, source-map-support@^0.5.4, source-map-support@^0.5.6, source-map-support@^0.5.9:
   version "0.5.9"
   resolved "http://registry.npm.taobao.org/source-map-support/download/source-map-support-0.5.9.tgz#41bc953b2534267ea2d605bccfa7bfa3111ced5f"
   dependencies:
@@ -11457,6 +11479,12 @@ split-string@^3.0.1, split-string@^3.0.2:
   resolved "http://registry.npm.taobao.org/split-string/download/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
   dependencies:
     extend-shallow "^3.0.0"
+
+split2@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/split2/-/split2-2.2.0.tgz#186b2575bcf83e85b7d18465756238ee4ee42493"
+  dependencies:
+    through2 "^2.0.2"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
@@ -11958,7 +11986,7 @@ through2@^0.6.0, through2@^0.6.1:
     readable-stream ">=1.0.33-1 <1.1.0-0"
     xtend ">=4.0.0 <4.1.0-0"
 
-through2@^2.0.0, through2@^2.0.3, through2@~2.0.0:
+through2@^2.0.0, through2@^2.0.1, through2@^2.0.2, through2@^2.0.3, through2@~2.0.0:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/through2/download/through2-2.0.3.tgz#0004569b37c7c74ba39c43f3ced78d1ad94140be"
   dependencies:
@@ -12712,7 +12740,7 @@ vue-loader@^14.1.1:
     markdown-it-deflist "^2.0.1"
     markdown-it-emoji "^1.1.1"
     markdown-it-footnote "^2.0.0"
-    markdown-it-highlightjs "^3.0.0"
+    markdown-it-highlight "^0.2.0"
     markdown-it-ins "^2.0.0"
     markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
@@ -13272,6 +13300,14 @@ zip-stream@^1.2.0:
     compress-commons "^1.2.0"
     lodash "^4.8.0"
     readable-stream "^2.0.0"
+
+zlogger@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/zlogger/-/zlogger-1.1.0.tgz#bc0d4a1a50d88b4e027636060c7a23682754744e"
+  dependencies:
+    pumpify "^1.3.5"
+    split2 "^2.1.0"
+    through2 "^2.0.1"
 
 zrender@4.0.4:
   version "4.0.4"
