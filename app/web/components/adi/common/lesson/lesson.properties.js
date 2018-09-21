@@ -9,5 +9,4 @@ export default {
   // CodeReadLine: 0,
   // CodeWriteLine: 0,
   // Commands: 0
-  lessonEditor: ''
 }
