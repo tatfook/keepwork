@@ -781,12 +781,14 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 34px;
-      height: 34px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       border: 3px solid rgba(144,144,139, .8);
       position: relative;
       cursor: pointer;
+      right: 30px;
+      top: 30px;
       &:after {
         content: '';
         display: block;
@@ -796,7 +798,7 @@ export default {
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 8px 0px 8px 12px;
+        border-width: 6px 0px 6px 10px;
         border-color: transparent transparent transparent rgba(144,144,139, 1);
       }
     }
@@ -804,7 +806,7 @@ export default {
       color: white;
       display: none;
       position: absolute;
-      right: 10px;
+      right: 7px;
       bottom: 10px;
     }
     &:hover, &.selected {
@@ -815,8 +817,10 @@ export default {
         display: block;
       }
       .skydrive-manager-media-item-play {
-        border: 3px solid #3BA4FF;
+        border: 1px solid #3BA4FF;
         background: #3BA4FF;
+        width: 25px;
+        height: 25px;
         &:after {
           border-color: transparent transparent transparent white;
         }
