@@ -18,7 +18,6 @@ export default {
   name: 'LinkType',
   mixins: [protypesBaseMixin],
   props: {
-    editingKey: String,
     originValue: String
   },
   async mounted() {
