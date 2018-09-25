@@ -80,7 +80,7 @@ export default {
       toBeCloseFileName: '',
       filesTreeProps: {
         children: 'children',
-        label: 'name'
+        label: 'sitename'
       },
       trees: {
         isOpenedShow: true,
@@ -249,9 +249,8 @@ export default {
       // manipulated the node in <el-tree/>
       node.isLeaf = data.type === 'blob'
       // restore node expand status
-      let path = data.path || `${data.username}/${data.name}`
+      let path = data.path || `${data.username}/${data.sitename}`
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]
-
       // modify store info
       let { fullPath: activePageFullPath } = this.activePageInfo
       activePageFullPath === data.path && store.setCurrentNode(node)

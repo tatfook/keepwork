@@ -83,7 +83,7 @@ const mutations = {
   [GET_ALL_WEBSITE_SUCCESS](state, { username, list }) {
     Vue.set(state, 'website', {
       ...state.website,
-      [username]: _.keyBy(list, 'name')
+      [username]: _.keyBy(list, 'sitename')
     })
   },
   [GET_USER_DETAIL_SUCCESS](state, { username, userDetail }) {

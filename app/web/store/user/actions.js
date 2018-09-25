@@ -61,7 +61,6 @@ const actions = {
     let info = await keepwork.user.login(payload, null, true)
     if (info) {
       Cookies.set('token', info.token)
-      Cookies.set('userId', info.id)
       window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info)
       await dispatch('lesson/getUserDetail', null, { root: true })
@@ -70,7 +69,6 @@ const actions = {
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
-    Cookies.set('userId', userinfo.id)
     window.localStorage.setItem('satellizer_token', token)
     commit(LOGIN_SUCCESS, { userinfo, token })
   },
@@ -115,9 +113,9 @@ const actions = {
     return thirdRegisterInfo
   },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
-    let { commit, getters: { token, _userId } } = context
+    let { commit, getters: { token } } = context
     if (useCache) return
-    const profile = await keepwork.user.getProfile(_userId)
+    const profile = await keepwork.user.getProfile()
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
@@ -167,26 +165,28 @@ const actions = {
   async getAllPersonalWebsite({ dispatch }, payload) {
     let { useCache = false } = payload || {}
 
-    return Promise.all([
-      dispatch('getAllWebsite', { useCache }),
-      dispatch('getAllSiteDataSource', { useCache })
-    ])
+    return dispatch('getAllWebsite', { useCache })
+    // return Promise.all([
+    //   dispatch('getAllWebsite', { useCache }),
+    //   dispatch('getAllSiteDataSource', { useCache })
+    // ])
   },
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
-    await dispatch('getAllSiteDataSource', { useCache: false })
+    // await dispatch('getAllSiteDataSource', { useCache: false })
+    console.log('initWebsite')
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
     let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
     let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
-
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
     await dispatch('getWebTemplateFiles', webTemplate)
+    console.warn('initWebsite--->')
     let { fileList } = webTemplate
-
+    console.warn(webTemplate, fileList)
     // copy all file in template.folder
     for (let { path, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
@@ -194,8 +194,26 @@ const actions = {
     }
 
     // refresh repositoryTree
-    await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+    // await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
   },
+  // async initWebsite({ dispatch, getters }, { name }) {
+  //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
+  //   let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
+
+  //   await dispatch('getWebTemplateConfig')
+  //   let webTemplate = getWebTemplate({ categoryName, templateName })
+  //   await dispatch('getWebTemplateFiles', webTemplate)
+  //   let { fileList } = webTemplate
+
+  //   // copy all file in template.folder
+  //   for (let { path, content } of fileList) {
+  //     let filename = path.split('/').slice(2).join('/')
+  //     await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+  //   }
+
+  //   // refresh repositoryTree
+  //   await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+  // },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
@@ -239,13 +257,11 @@ const actions = {
     let { commit, getters: { username, userId } } = context
     let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }
     let upsertPayload = {
-      name,
-      domain: name,
-      visibility: 'public',
-      userId,
-      username,
-      defaultDataSourceName: '内置gitlab',
-      ...websiteSetting
+      sitename: name,
+      visibility: 0,
+      extra: {
+        websiteSetting
+      }
     }
     let site = await keepwork.website.upsert(upsertPayload)
     commit(UPSERT_WEBSITE_SUCCESS, { username, site })
@@ -290,8 +306,8 @@ const actions = {
 
     let { username } = getters
     if (useCache) return
-
-    let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
+    let list = await keepwork.siteUser.getContributeSites()
+    // let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
     list = _.values(list).filter(({ siteinfo, siteuser } = {}) => siteinfo && siteuser)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
@@ -299,7 +315,6 @@ const actions = {
   async getWebsiteDetailInfoByPath(context, { path }) {
     let { commit, getters: { getSiteDetailInfoByPath } } = context
     if (getSiteDetailInfoByPath(path)) return
-
     let [username, sitename] = path.split('/').filter(x => x)
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
 

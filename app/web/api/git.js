@@ -9,7 +9,8 @@ const defaultConfig = {
 
 const gitLabAPIGenerator = ({ url, token }) => {
   const instance = axios.create({
-    baseURL: url + '/api/v4/',
+    // baseURL: url + '/api/v4/',
+    baseURL: 'http://10.27.2.117:7001',
     timeout: 30 * 1000,
     headers: { 'private-token': token }
   })

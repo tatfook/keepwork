@@ -19,8 +19,7 @@ const { post, put, get } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
-  // getProfile: async (...args) => get('/user/getProfile', ...args),
-  getProfile: async (id) => get(`/users/${id}`),
+  getProfile: async () => get('/users/profile'),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
@@ -80,7 +79,8 @@ payload: {
 ```
 */
 export const website = {
-  upsert: async (...args) => post('website/upsert', ...args),
+  // upsert: async (...args) => post('website/upsert', ...args),
+  upsert: async (...args) => post('sites', ...args),
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
@@ -119,7 +119,8 @@ export const pages = {
 }
 
 export const siteUser = {
-  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args)
+  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args),
+  getContributeSites: async () => get('sites?owned=false&membership=true')
 }
 
 export const siteDataSource = {

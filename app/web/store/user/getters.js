@@ -14,8 +14,6 @@ const getters = {
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
   token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
-  getUserId: state => () => Cookies.get('userId'),
-  _userId: (state, { tokenUpdateAt, getUserId }) => getUserId(tokenUpdateAt),
   profile: (state, { getToken }) => {
     let token = getToken()
     let { token: profileUserToken } = state.profile
@@ -65,12 +63,16 @@ const getters = {
       let children = gitTree2NestedArray(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
       )
-
+      let { extra, ...website } = websitesMap[name]
+      let websiteSetting = _.get(extra, 'websiteSetting', {})
       return {
-        ...websitesMap[name],
+        ...website,
         projectId,
         lastCommitId,
-        children
+        children,
+        username,
+        name,
+        ...websiteSetting
       }
     })
 
