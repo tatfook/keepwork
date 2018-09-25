@@ -6,5 +6,6 @@ module.exports = app => {
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)
   router.get('/pbl', controller.pbl.index)
+  router.get('/vip', controller.vip.index)
   router.get(/^\/[a-zA-Z0-9]{4,}\/([\w-.]+\/[\w-.]+)$/, controller.viewer.index)
 }

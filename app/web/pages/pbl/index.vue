@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserProfile: 'user/getProfile',
+      getUserProfile: 'user/getProfile'
     }),
     async loadPblPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
@@ -95,5 +95,15 @@ body {
 body {
   margin: 0;
   padding: 0;
+}
+.pbl-page {
+  &-header {
+    height: 60px;
+    border-bottom: 1px solid #e6e6e6;
+  }
+  .container {
+    width: 1200px;
+    margin: 0 auto;
+  }
 }
 </style>
