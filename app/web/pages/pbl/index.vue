@@ -97,9 +97,15 @@ body {
   padding: 0;
 }
 .pbl-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
+  }
+  &-main-content {
+    flex: 1;
   }
   .container {
     width: 1200px;
