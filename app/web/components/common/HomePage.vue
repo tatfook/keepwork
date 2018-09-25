@@ -97,7 +97,7 @@
         <el-row>
           <el-col :span="6">
             <div class="item">
-              <img class="item-cover" src="http://img2.imgtn.bdimg.com/it/u=1336319597,2065452027&fm=27&gp=0.jpg" alt="">
+              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
               <h4 class="item-title">告诉果果</h4>
               <div class="item-like">
                 <i class="iconfont icon-browse_fill"></i>
@@ -106,7 +106,7 @@
                 <span>123456</span>
               </div>
               <div class="item-author">
-                <div class="item-author-name"><img src="http://img2.imgtn.bdimg.com/it/u=1336319597,2065452027&fm=27&gp=0.jpg" alt="portrait">鱼丸粗面</div>
+                <div class="item-author-name"><img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="portrait">鱼丸粗面</div>
                 <div class="item-author-time">27天前</div>
               </div>
             </div>
@@ -124,7 +124,7 @@
         <el-row>
           <el-col :span="6">
             <div class="item">
-              <img class="item-cover" src="http://img2.imgtn.bdimg.com/it/u=1336319597,2065452027&fm=27&gp=0.jpg" alt="">
+              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
               <h4 class="item-title">Paracraft动画教学</h4>
               <div class="item-desc">
                 <p>包含：
@@ -140,7 +140,7 @@
       <div class="home-page-cabinet-excellent like">
         <div class="title">
           <div class="title-text">
-            <span class="star like">
+            <span class="star likes">
               <i class="iconfont icon-like-fill"></i>
             </span>大家都觉得赞</div>
           <div class="more">查看更多&gt;</div>
@@ -148,7 +148,7 @@
         <el-row>
           <el-col :span="6">
             <div class="item">
-              <img class="item-cover" src="http://img2.imgtn.bdimg.com/it/u=1336319597,2065452027&fm=27&gp=0.jpg" alt="">
+              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
               <h4 class="item-title">告诉果果</h4>
               <div class="item-like">
                 <i class="iconfont icon-browse_fill"></i>
@@ -157,7 +157,7 @@
                 <span>123456</span>
               </div>
               <div class="item-author">
-                <div class="item-author-name"><img src="http://img2.imgtn.bdimg.com/it/u=1336319597,2065452027&fm=27&gp=0.jpg" alt="portrait">鱼丸粗面</div>
+                <div class="item-author-name"><img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="portrait">鱼丸粗面</div>
                 <div class="item-author-time">27天前</div>
               </div>
             </div>
@@ -182,8 +182,6 @@ export default {
 
 <style lang="scss">
 .home-page {
-  font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC',
-    'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   &-advertising-head {
     max-width: 1200px;
     margin: 0 auto;
@@ -433,7 +431,7 @@ export default {
       padding-bottom: 80px;
       .title {
         &-text {
-          .like {
+          .likes {
             background: #de62f9;
           }
         }

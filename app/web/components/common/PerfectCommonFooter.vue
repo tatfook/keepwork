@@ -90,7 +90,13 @@
 </template>
 <script>
 export default {
-  name: 'PerfectCommonFooter'
+  name: 'PerfectCommonFooter',
+  methods: {
+    swichLanguage(language) {
+      window.localStorage.setItem('keepwork-language-locale', language)
+      window.location.reload()
+    }
+  }
 }
 </script>
 
