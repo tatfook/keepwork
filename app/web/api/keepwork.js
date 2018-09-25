@@ -181,6 +181,10 @@ export const userThreeService = {
   unbind: async (...args) => post('user_three_service/unbind', ...args)
 }
 
+export const projects = {
+  createProject: async (...args) => post('projects', ...args)
+}
+
 export const keepwork = {
   user,
   website,
@@ -191,6 +195,7 @@ export const keepwork = {
   pages,
   qiniu,
   userThreeService,
+  projects,
   bigfile
 }
 

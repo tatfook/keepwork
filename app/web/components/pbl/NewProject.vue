@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'NewProject',
   data() {
@@ -53,11 +54,21 @@ export default {
     }
   },
   methods:{
+    ...mapActions({
+      pblCreateNewProject: 'pbl/createNewProject'
+    }),
     selectProjectType(type){
       this.newProjectData.type = type
     },
-    createNewProject(){
-      console.log(this.newProjectData)
+    async createNewProject(){
+      await this.pblCreateNewProject(this.newProjectData).then(()=>{
+        this.$message({
+          type: 'success',
+          message: '项目创建成功'
+        })
+      }).catch(error=>{
+        console.log(error)
+      })
     }
   }
 }
