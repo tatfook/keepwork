@@ -43,7 +43,7 @@
             </el-dropdown-item>
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
             <el-dropdown-item>
-              <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
+              <a href="ed" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a>
@@ -87,7 +87,7 @@
           <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
         </el-menu-item>
         <el-menu-item index='1-3'>
-          <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
+          <a href="ed">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
@@ -188,12 +188,7 @@ export default {
       userLogout: 'user/logout'
     }),
     backEditArea() {
-      let origin = window.location.origin
-      if (window.location.hostname === 'localhost') {
-        window.open(`${origin}/editor.html#/`)
-      } else {
-        window.open(`${origin}/wiki/wikieditor/#/`)
-      }
+      window.open(`${origin}/ed/#/`)
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true

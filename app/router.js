@@ -1,7 +1,7 @@
 
 module.exports = app => {
   const { router, controller } = app
-  router.get('/', controller.viewer.index)
+  router.get('/', controller.home.index)
   router.get('/ed', controller.editor.index)
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)

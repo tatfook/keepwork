@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const HomePage = () => import('@/components/common/HomePage')
+const PageViewer = () => import('@/components/viewer/MdPageViewer')
 
 Vue.use(Router)
 
@@ -8,9 +8,9 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'HomePage',
-      component: HomePage
+      path: '*',
+      name: 'PageViewer',
+      component: PageViewer
     }
   ]
 })
