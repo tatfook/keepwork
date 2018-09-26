@@ -4,10 +4,17 @@
       <div class="teacher-top-hint">
         <p>{{$t('lesson.notActivatedText.hint')}}</p>
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
-        <div class="teacher-top-hint-input">
-          <el-input class="active-code-input" v-model="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
-          <el-button class="active-code-button" :disabled="!activeCode" type="primary" size="mini" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
-        </div>
+        <el-form class="teacher-top-hint-input" label-width="120px">
+          <el-form-item :label="$t('lesson.notActivatedText.activeCode')" prop=''>
+            <el-input v-model.trim="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('lesson.notActivatedText.belong')" prop=''>
+            <el-input v-model.trim="organization" size="small" :placeholder="$t('lesson.notActivatedText.inputBelong')"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="active-code-button" :disabled="!validCode" type="primary" size="mini" @click="activateTeacherIdentity">{{$t('lesson.notActivatedText.buttonText')}}</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="teacher-acquire">
         <h4>{{$t('lesson.notActivatedText.getPrivilege')}}</h4>
@@ -60,7 +67,8 @@ export default {
   data() {
     return {
       isLoginDialogShow: false,
-      activeCode: ''
+      activeCode: '',
+      organization: ''
     }
   },
   mounted() {
@@ -86,6 +94,9 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    validCode(){
+      return this.activeCode && this.organization
     }
   },
   methods: {
@@ -95,7 +106,7 @@ export default {
     }),
     async activateTeacherIdentity() {
       if (this.isLogin) {
-        let payload = { userId: this.userId, key: this.activeCode }
+        let payload = { userId: this.userId, key: this.activeCode, school: this.organization }
         await lesson.users
           .toBeTeacher(payload)
           .then(res => {
@@ -147,9 +158,15 @@ export default {
         color: #f75858;
       }
       &-input {
-        .active-code-input {
-          width: 384px;
-          height: 35px;
+        .el-form-item{
+          margin-bottom: 14px;
+          .el-input{
+            width: 60%;
+          }
+        }
+        .active-code-button{
+          width: 207px;
+          height: 27px;
         }
       }
     }
@@ -191,8 +208,8 @@ export default {
               }
             }
           }
-          .not-student-privilege-text{
-            color:rgb(179, 177, 177);
+          .not-student-privilege-text {
+            color: rgb(179, 177, 177);
           }
           .teaching-function {
             margin-left: 20px;
