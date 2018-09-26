@@ -15,11 +15,11 @@
       </span>
     </div>
     <audio :src="sound" style="display:none" id="coin-sound"></audio>
-    <el-button @click="showBeanDialog">sound</el-button>
-    <el-dialog :visible.sync="isShowDialog" width="300px" top="45vh">
-      <div class="bean">
-        <img class="bean-icon" :src="bean">
-        <span class="bean-count">+ 10知识豆</span>
+    <!-- <el-button @click="showBeanDialog">sound</el-button> -->
+    <el-dialog :visible.sync="isShowDialog" custom-class="bean-dialog" :before-close="animateBean" width="300px" top="500px">
+      <div class="bean" @click="animateBean">
+        <img class="bean-icon" :src="beanIcon">
+        <span class="bean-count">+{{bean}} {{$t('lesson.beans')}}</span>
       </div>
     </el-dialog>
   </span>
@@ -27,9 +27,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import anime from 'animejs'
 import { lesson } from '@/api'
 import sound from '@/assets/lessonImg/bean.mp3'
-import bean from '@/assets/lessonImg/bean.png'
+import beanIcon from '@/assets/lessonImg/bean.png'
 import _ from 'lodash'
 export default {
   name: 'JewelBox',
@@ -55,25 +56,30 @@ export default {
       _timer: null,
       isReward: true,
       coin: 0,
+      bean: 10,
       sound: sound,
-      bean: bean
+      beanIcon: beanIcon
     }
   },
   watch: {
-    isConditions(value) {
-      if (value && this._learnRecordId) {
+    isConditions(flag) {
+      if (flag) {
         lesson.lessons
           .rewardCoin({ id: this._learnRecordId })
-          .then(coin => (this.coin = coin))
+          .then(({ coin = 0, bean = 10 }) => {
+            this.coin = coin
+            this.bean = bean
+            this.showBeanDialog()
+          })
           .catch(e => console.error(e))
       }
     }
   },
   async mounted() {
     const { packageId, lessonId } = this.$route.params
-    let flag = await lesson.lessons.isReward({ packageId, lessonId })
-    if (!flag) {
-      console.warn('这个课程包的课程没有领取过知识币')
+    let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
+    console.warn(`coin: ${coin}, bean: ${bean}`)
+    if (coin > 0 || bean > 0) {
       this.isReward = false
       this.startTimer()
     }
@@ -97,10 +103,11 @@ export default {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return this.coin > 0
+      return false
+      // return this.coin > 0
     },
     isConditions() {
-      return (
+      return !!(
         this.time >= this.needTime &&
         // this.lockCoin >= this.reward &&
         this.isQuizAllRight &&
@@ -108,7 +115,6 @@ export default {
       )
     },
     isShowJewel() {
-      return true
       return this.lessonUserId !== this.userId && !this.isReward
     }
   },
@@ -116,9 +122,21 @@ export default {
     playSound() {
       document.getElementById('coin-sound').play()
     },
-    showBeanDialog() {
-      this.isShowDialog = true
+    async showBeanDialog() {
       this.playSound()
+      this.isShowDialog = true
+    },
+    animateBean() {
+      let el = document.querySelector('.bean-icon')
+      let domNode = anime({
+        targets: el,
+        opacity: 0,
+        duration: 800,
+        translateX: 250,
+        translateY: -500,
+        easing: 'linear'
+      })
+      setTimeout(() => (this.isShowDialog = false), 800)
     },
     handleClick() {
       this.isClicked = !this.isClicked
@@ -234,18 +252,42 @@ export default {
     }
   }
 }
-.bean {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &-icon {
-    width: 50px;
-    height: 50px;
+.bean-dialog {
+  .el-dialog__header {
+    display: none;
   }
-  &-count {
-    margin-left: 30px;
-    font-weight: bold; 
-    font-size: 20px;
+  .el-dialog__body {
+    // box-shadow: 0 0 200px #ddd;
+    animation: flicker 4000ms ease infinite;
+  }
+  .bean {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-icon {
+      width: 50px;
+      height: 50px;
+    }
+    &-count {
+      margin-left: 30px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+}
+
+
+@keyframes flicker {
+  0%,
+  100% {
+    box-shadow: 0 0 1rem #fefa01;
+  }
+  30%,
+  70% {
+    box-shadow: 0 0 8rem 1rem #fefa01;
+  }
+  50% {
+    box-shadow: 0 0 8rem 1rem rgba(254, 250, 1, 0.8);
   }
 }
 </style>
