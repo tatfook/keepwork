@@ -816,9 +816,9 @@ export default {
       }
       .skydrive-manager-media-item-play {
         border: 1px solid white;
-        width: 13px;
-        height: 13px;
-        top: 31px;
+        width: 11px;
+        height: 11px;
+        top: 31.4px;
         right: 32px;
         &:after {
           content: '';
@@ -836,8 +836,8 @@ export default {
       }
       .skydrive-manager-media-item-play:hover {
         border: 1px solid #3BA4FF;
-        width: 13px;
-        height: 13px;
+        width: 11px;
+        height: 11px;
         &:after {
           border-color: transparent transparent transparent #3BA4FF;
         }
