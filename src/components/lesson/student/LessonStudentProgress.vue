@@ -31,7 +31,7 @@ export default {
   props: {
     progressNumer: {
       type: String,
-      default: '3/6'
+      default: '0'
     }
   },
   data() {

@@ -51,7 +51,7 @@ export default {
       getLessonContent: 'lesson/teacher/getLessonContent',
       getCurrentClass: 'lesson/teacher/getCurrentClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords',
-      leaveTheClassroom: 'lesson/teacher/leaveTheClassroom'
+      leaveTheClassroom: 'lesson/teacher/leaveTheClassroom',
     }),
     async intervalUpdateLearnRecords(delay = 3000) {
       await this.updateLearnRecords()
