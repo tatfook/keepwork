@@ -18,6 +18,11 @@
           <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item>
+      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='7'>
+        <a href='https://keepwork.com/official/paracraft/index' target="_blank">
+          <img class="iicc-logo" src="@/assets/img/paracraft_logo.png" alt="">{{$t('common.iicc')}}
+        </a>
+      </el-menu-item>
 
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
