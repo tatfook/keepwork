@@ -54,7 +54,7 @@
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
               </div>
-            </div>
+              </div>
           </el-col>
           <el-col :span="8">
             <div class="box">
@@ -67,7 +67,7 @@
               <div class="box-img">
                 <img src="@/assets/img/rocket.png" alt="">
               </div>
-            </div>
+              </div>
           </el-col>
           <el-col :span="8">
             <div class="box no-line">
@@ -80,7 +80,7 @@
               <div class="box-img">
                 <img src="@/assets/img/bulb.png" alt="">
               </div>
-            </div>
+              </div>
           </el-col>
         </el-row>
       </div>
@@ -90,43 +90,30 @@
         <div class="title">
           <div class="title-text">
             <span class="star">
-              <i class="iconfont icon-star-fill"></i>
+              <img src="@/assets/img/hp_select_project.png" alt="">
             </span>精选项目</div>
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6">
-            <div class="item">
-              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              <h4 class="item-title">告诉果果</h4>
-              <div class="item-like">
-                <i class="iconfont icon-browse_fill"></i>
-                <span>123456</span>
-                <i class="iconfont icon-like-fill"></i>
-                <span>123456</span>
-              </div>
-              <div class="item-author">
-                <div class="item-author-name"><img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="portrait">鱼丸粗面</div>
-                <div class="item-author-time">27天前</div>
-              </div>
-            </div>
+            <project-cell></project-cell>            
           </el-col>
         </el-row>
       </div>
       <div class="home-page-cabinet-excellent hot">
         <div class="title">
           <div class="title-text">
-            <span class="star book">
-              <i class="iconfont icon-book-fill"></i>
+            <span class="star">
+              <img src="@/assets/img/hp_hot_lesson.png" alt="">
             </span>热门课程</div>
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6">
-            <div class="item">
-              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              <h4 class="item-title">Paracraft动画教学</h4>
-              <div class="item-desc">
+            <div class="lesson">
+              <img class="lesson-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
+              <h4 class="lesson-title">Paracraft动画教学</h4>
+              <div class="lesson-desc">
                 <p>包含：
                   <span>125</span>个课程</p>
                 <p>年龄：
@@ -140,42 +127,29 @@
       <div class="home-page-cabinet-excellent like">
         <div class="title">
           <div class="title-text">
-            <span class="star likes">
-              <i class="iconfont icon-like-fill"></i>
+            <span class="star">
+              <img src="@/assets/img/hp_people_like.png" alt="">
             </span>大家都觉得赞</div>
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6">
-            <div class="item">
-              <img class="item-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              <h4 class="item-title">告诉果果</h4>
-              <div class="item-like">
-                <i class="iconfont icon-browse_fill"></i>
-                <span>123456</span>
-                <i class="iconfont icon-like-fill"></i>
-                <span>123456</span>
-              </div>
-              <div class="item-author">
-                <div class="item-author-name"><img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="portrait">鱼丸粗面</div>
-                <div class="item-author-time">27天前</div>
-              </div>
-            </div>
+            <project-cell></project-cell>
           </el-col>
         </el-row>
       </div>
     </div>
-   
   </div>
 </template>
 <script>
-
+import ProjectCell from './ProjectCell'
 export default {
   name: 'HomePage',
   data() {
     return {}
   },
   components: {
+    ProjectCell
   }
 }
 </script>
@@ -344,15 +318,11 @@ export default {
           font-size: 18px;
           color: #333;
           font-weight: 700;
+          display: flex;
+          align-items: center;
           .star {
-            border-radius: 50%;
-            background: #f6c326;
-            color: #fff;
             width: 32px;
             height: 32px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
             margin-right: 12px;
           }
         }
@@ -360,10 +330,12 @@ export default {
           width: 70px;
           font-size: 12px;
           color: #909399;
+          display: flex;
+          align-items: center;
         }
       }
       .el-row {
-        .item {
+        .lesson {
           width: 290px;
           padding: 16px;
           box-sizing: border-box;
@@ -379,47 +351,6 @@ export default {
             font-size: 14px;
             margin: 10px 0;
           }
-          &-like {
-            font-size: 12px;
-            color: #909399;
-          }
-          &-author {
-            display: flex;
-            align-items: center;
-            height: 50px;
-            line-height: 50px;
-            font-size: 14px;
-            &-name {
-              flex: 1;
-              display: flex;
-              align-items: center;
-              padding-top: 12px;
-              img {
-                width: 30px;
-                height: 30px;
-                object-fit: cover;
-                border-radius: 50%;
-                margin-right: 8px;
-              }
-            }
-            &-time {
-              width: 80px;
-              text-align: right;
-            }
-          }
-        }
-      }
-    }
-    .hot {
-      .title {
-        &-text {
-          .book {
-            background: #f96262;
-          }
-        }
-      }
-      .el-row {
-        .item {
           &-desc {
             font-size: 12px;
             color: #909399;
@@ -429,13 +360,6 @@ export default {
     }
     .like {
       padding-bottom: 80px;
-      .title {
-        &-text {
-          .likes {
-            background: #de62f9;
-          }
-        }
-      }
     }
   }
 }

@@ -7,6 +7,8 @@
       <span>123456</span>
       <i class="iconfont icon-like-fill"></i>
       <span>123456</span>
+      <i class="iconfont icon-message_fill"></i>
+      <span>125365</span>
     </div>
     <div class="item-author">
       <div class="item-author-name"><img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="portrait">鱼丸粗面</div>
@@ -18,6 +20,7 @@
 .item {
   width: 290px;
   padding: 16px;
+  margin-bottom: 16px;
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
   background: #fff;
@@ -41,11 +44,11 @@
     height: 50px;
     line-height: 50px;
     font-size: 14px;
+    padding-top: 12px;
     &-name {
       flex: 1;
       display: flex;
       align-items: center;
-      padding-top: 12px;
       img {
         width: 30px;
         height: 30px;
