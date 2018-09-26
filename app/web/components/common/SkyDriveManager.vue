@@ -630,9 +630,6 @@ export default {
             font-size: 16px;
             line-height: 16px;
           }
-          .active {
-            background: white;
-          }
         }
         .el-input {
           top: -10px;
@@ -781,14 +778,12 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 25px;
-      height: 25px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 3px solid rgba(144,144,139, .8);
+      border: 3px solid #90908b;
       position: relative;
       cursor: pointer;
-      right: 30px;
-      top: 30px;
       &:after {
         content: '';
         display: block;
@@ -798,8 +793,8 @@ export default {
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 6px 0px 6px 10px;
-        border-color: transparent transparent transparent rgba(144,144,139, 1);
+        border-width: 8px 0px 8px 12px;
+        border-color: transparent transparent transparent #90908b;
       }
     }
     .el-icon-delete {
@@ -809,6 +804,9 @@ export default {
       right: 7px;
       bottom: 10px;
     }
+    .el-icon-delete:hover {
+      color: #3BA4FF;
+    }
     &:hover, &.selected {
       .skydrive-manager-media-item-cover {
         background: rgba(0, 0, 0, .4);
@@ -817,12 +815,31 @@ export default {
         display: block;
       }
       .skydrive-manager-media-item-play {
-        border: 1px solid #3BA4FF;
-        background: #3BA4FF;
-        width: 25px;
-        height: 25px;
+        border: 1px solid white;
+        width: 13px;
+        height: 13px;
+        top: 31px;
+        right: 32px;
         &:after {
+          content: '';
+          display: block;
+          position: relative;
+          left: 1.7px;
+          top: 0.4px;
+          box-sizing: border-box;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 4.5px 0px 4.5px 5.5px;
           border-color: transparent transparent transparent white;
+        }
+      }
+      .skydrive-manager-media-item-play:hover {
+        border: 1px solid #3BA4FF;
+        width: 13px;
+        height: 13px;
+        &:after {
+          border-color: transparent transparent transparent #3BA4FF;
         }
       }
     }
