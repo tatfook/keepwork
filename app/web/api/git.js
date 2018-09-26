@@ -9,8 +9,7 @@ const defaultConfig = {
 
 const gitLabAPIGenerator = ({ url, token }) => {
   const instance = axios.create({
-    // baseURL: url + '/api/v4/',
-    baseURL: 'http://10.27.2.117:7001',
+    baseURL: url,
     timeout: 30 * 1000,
     headers: { 'private-token': token }
   })
@@ -21,6 +20,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           const [pId, path] = [projectId, options.path].map(encodeURIComponent)
           let total = []
           let page = 0
+          // let res = await instance.get(`projects/${path}/tree/${path}`)
           let res = await instance.get(
             `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
               true}`
@@ -57,13 +57,14 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
-          async create(projectId, filePath, branch = 'master', options) {
-            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
+          async create(projec, filePath, branch = 'master', options) {
+            console.log(filePath)
+            const [projecName, path] = [projec, filePath].map(encodeURIComponent)
+            const { content } = options
             let res = await instance.post(
-              `projects/${pId}/repository/files/${path}`,
+              `projects/${projecName}/files/${path}`,
               {
-                branch,
-                ...options
+                content
               }
             )
             return res.data
@@ -129,10 +130,13 @@ export class GitAPI {
   }
 
   async createFile(path, options) {
+    console.warn(path)
+    const projectName = path.split('/').splice(0, 2).join('/')
     options = { ...(options || {}), commit_message: 'create' }
     return this.client.projects.repository.files
       .create(
-        options.projectId || this.config.projectId,
+        // options.projectId || this.config.projectId,
+        projectName,
         path,
         options.branch || this.config.branch || 'master',
         options

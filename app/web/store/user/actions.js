@@ -175,7 +175,6 @@ const actions = {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
     // await dispatch('getAllSiteDataSource', { useCache: false })
-    console.log('initWebsite')
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
@@ -183,10 +182,9 @@ const actions = {
     let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
+    console.warn(webTemplate)
     await dispatch('getWebTemplateFiles', webTemplate)
-    console.warn('initWebsite--->')
     let { fileList } = webTemplate
-    console.warn(webTemplate, fileList)
     // copy all file in template.folder
     for (let { path, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
@@ -242,7 +240,7 @@ const actions = {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
     fileList = await gitlabForGuest.getTree({ projectId, path: `templates/${folder}`, recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
