@@ -324,7 +324,7 @@ export default {
 </style>
 <style lang="scss">
 .el-menu-item {
-  padding: 0 15px;
+  padding: 0 12px;
 }
 .el-menu-item [class^='el-icon-'] {
   width: 20px;
