@@ -24,17 +24,7 @@ import Vue from 'vue'
         },
       }
       return {
-        // chartData: {
-        //   columns: ['questionNumber', 'accuracy', ],
-        //   rows: []
-        // }
       }
     },
-    beforeMount(){
-      // _.forEach(this.accuracyRateArr,(i,n) => {
-      //   console.log(i)
-      //   Vue.set(this.chartData.rows, n, { 'questionNumber': `Q${++n}`, 'accuracy': i })
-      // })
-    }
   }
 </script>
