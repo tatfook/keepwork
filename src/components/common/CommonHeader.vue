@@ -20,7 +20,7 @@
       </el-menu-item>
       <el-menu-item v-if="!IS_GLOBAL_VERSION" index='7'>
         <a href='https://keepwork.com/official/paracraft/index' target="_blank">
-          <img class="iicc-logo" src="@/assets/img/paracraft_logo.png" alt="">{{$t('common.iicc')}}
+          <img class="iicc-logo" src="@/assets/img/paracraft_logo.png" alt="">{{$t('common.paracratLearning')}}
         </a>
       </el-menu-item>
 
