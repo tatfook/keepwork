@@ -5,10 +5,10 @@
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1'>
-        <a href="/wiki/home">{{$t('common.creativity')}}</a>
+        <a href="/#/creativity">{{$t('common.creativity')}}</a>
       </el-menu-item>
       <el-menu-item index='2'>
-        <a href="/wiki/apps">{{$t('common.explore')}}</a>
+        <a href="/#/exploration">{{$t('common.explore')}}</a>
       </el-menu-item>
       <el-menu-item index='4'>
         <a href='/official/help/index'>{{$t('common.study')}}</a>
