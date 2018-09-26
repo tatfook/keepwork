@@ -48,6 +48,9 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    if (!this.isLogined) {
+      return this.toggleLoginDialog(true)
+    }
     const { packageId, lessonId } = this.$route.params
     if (this.isBeInClassroom) {
       await this.resumeTheClass().catch(e => console.error(e))
@@ -86,7 +89,8 @@ export default {
       clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
       clearLessonData: 'lesson/student/clearLessonData',
       checkClassroom: 'lesson/student/checkClassroom',
-      switchSummary: 'lesson/student/switchSummary'
+      switchSummary: 'lesson/student/switchSummary',
+      toggleLoginDialog: 'lesson/toggleLoginDialog'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       console.warn('检查课堂是否还在')
@@ -113,6 +117,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLogined: 'user/isLogined',
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',

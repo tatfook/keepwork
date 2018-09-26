@@ -6,20 +6,30 @@
     </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
-        <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
+        <div class="tips-row">{{$t('lesson.jewelTipsTitleBean')}}</div>
         <div class="tips-row">{{$t('lesson.jewelTips1')}}
           <span class="tips-time">{{time | toMinute}}</span>
         </div>
         <div class="tips-row">{{$t('lesson.jewelTips2')}}</div>
-        <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div>
+        <!-- <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div> -->
       </span>
     </div>
+    <audio :src="sound" style="display:none" id="coin-sound"></audio>
+    <el-button @click="showBeanDialog">sound</el-button>
+    <el-dialog :visible.sync="isShowDialog" width="300px" top="45vh">
+      <div class="bean">
+        <img class="bean-icon" :src="bean">
+        <span class="bean-count">+ 10知识豆</span>
+      </div>
+    </el-dialog>
   </span>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
+import sound from '@/assets/lessonImg/bean.mp3'
+import bean from '@/assets/lessonImg/bean.png'
 import _ from 'lodash'
 export default {
   name: 'JewelBox',
@@ -38,12 +48,15 @@ export default {
   data() {
     return {
       isShowTips: false,
+      isShowDialog: false,
       needTime: 300,
       time: 0,
       reward: 10,
       _timer: null,
       isReward: true,
-      coin: 0
+      coin: 0,
+      sound: sound,
+      bean: bean
     }
   },
   watch: {
@@ -57,7 +70,6 @@ export default {
     }
   },
   async mounted() {
-    console.log(this.isShowJewel)
     const { packageId, lessonId } = this.$route.params
     let flag = await lesson.lessons.isReward({ packageId, lessonId })
     if (!flag) {
@@ -90,16 +102,24 @@ export default {
     isConditions() {
       return (
         this.time >= this.needTime &&
-        this.lockCoin >= this.reward &&
+        // this.lockCoin >= this.reward &&
         this.isQuizAllRight &&
         this._learnRecordId
       )
     },
     isShowJewel() {
+      return true
       return this.lessonUserId !== this.userId && !this.isReward
     }
   },
   methods: {
+    playSound() {
+      document.getElementById('coin-sound').play()
+    },
+    showBeanDialog() {
+      this.isShowDialog = true
+      this.playSound()
+    },
     handleClick() {
       this.isClicked = !this.isClicked
     },
@@ -212,6 +232,20 @@ export default {
       background: white;
       box-shadow: $shadow;
     }
+  }
+}
+.bean {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &-icon {
+    width: 50px;
+    height: 50px;
+  }
+  &-count {
+    margin-left: 30px;
+    font-weight: bold; 
+    font-size: 20px;
   }
 }
 </style>
