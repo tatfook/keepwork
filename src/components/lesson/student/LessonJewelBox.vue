@@ -79,7 +79,7 @@ export default {
     const { packageId, lessonId } = this.$route.params
     let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
     console.warn(`coin: ${coin}, bean: ${bean}`)
-    if (coin > 0 || bean > 0) {
+    if (bean > 0) {
       this.isReward = false
       this.startTimer()
     }
