@@ -1,8 +1,8 @@
 <template>
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
-      <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
-      <div class="coin">+{{coin}}</div>
+      <!-- <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
+      <div class="coin">+{{coin}}</div> -->
     </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
@@ -56,7 +56,7 @@ export default {
       _timer: null,
       isReward: true,
       coin: 0,
-      bean: 10,
+      bean: 0,
       sound: sound,
       beanIcon: beanIcon
     }
@@ -66,7 +66,7 @@ export default {
       if (flag) {
         lesson.lessons
           .rewardCoin({ id: this._learnRecordId })
-          .then(({ coin = 0, bean = 10 }) => {
+          .then(({ coin, bean }) => {
             this.coin = coin
             this.bean = bean
             this.showBeanDialog()
@@ -103,8 +103,7 @@ export default {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return false
-      // return this.coin > 0
+      return this.bean > 0
     },
     isConditions() {
       return !!(
