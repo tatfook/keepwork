@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
   isShowLoginDialog: false,
-  projects: []
+  projects: [],
+  projectApplyList: []
 }
 export default {
   namespaced: true,

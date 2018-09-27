@@ -7,7 +7,7 @@
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
         <span slot="label">成员</span>
-        <project-members v-if="!isFirstGettingData" class="edit-project-members"></project-members>
+        <project-members :projectId='projectId' v-if="!isFirstGettingData" class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>
   </div>

@@ -187,6 +187,10 @@ export const projects = {
   createProject: async (...args) => post('projects', ...args)
 }
 
+export const applies = {
+  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -198,6 +202,7 @@ export const keepwork = {
   qiniu,
   userThreeService,
   projects,
+  applies,
   bigfile
 }
 

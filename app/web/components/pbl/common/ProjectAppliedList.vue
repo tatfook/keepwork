@@ -1,6 +1,6 @@
 <template>
   <div class="project-applied-list">
-    <el-table :data="appliedList" border style="width: 100%" class="project-applied-list-table">
+    <el-table :data="appliedList" border style="width: 100%" class="project-applied-list-table" v-loading='isLoading'>
       <el-table-column prop="extra.username" label="成员" width="160">
       </el-table-column>
       <el-table-column label="申请时间" width="160">
@@ -18,31 +18,60 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import dayjs from 'dayjs'
 export default {
   name: 'ProjectAppliedList',
+  props: {
+    projectId: {
+      required: true
+    }
+  },
+  async created() {
+    this.isLoading = true
+    await this.getProjectApplyList({
+      objectId: this.projectId,
+      objectType: 5,
+      applyType: 0
+    })
+    this.isLoading = false
+  },
   data() {
     return {
-      formatType: 'YYYY/MM/DD',
-      appliedList: [
-        {
-          legend: '申请加入项目',
-          createdAt: '2018-09-21T07:33:49.000Z',
-          updatedAt: '2018-09-21T07:33:49.000Z',
-          extra: {
-            username: 'evanna-yl'
-          }
-        },
-        {
-          legend: '我比较擅长场景搭建，希望加入这个项目一起进步，共同成长！',
-          createdAt: '2018-09-21T07:33:49.000Z',
-          updatedAt: '2018-09-21T07:33:49.000Z',
-          extra: {
-            username: 'evanna-yl'
-          }
-        }
-      ]
+      isLoading: false,
+      formatType: 'YYYY/MM/DD'
+      // appliedList: [
+      //   {
+      //     legend: '申请加入项目',
+      //     createdAt: '2018-09-21T07:33:49.000Z',
+      //     updatedAt: '2018-09-21T07:33:49.000Z',
+      //     extra: {
+      //       username: 'evanna-yl'
+      //     }
+      //   },
+      //   {
+      //     legend: '我比较擅长场景搭建，希望加入这个项目一起进步，共同成长！',
+      //     createdAt: '2018-09-21T07:33:49.000Z',
+      //     updatedAt: '2018-09-21T07:33:49.000Z',
+      //     extra: {
+      //       username: 'evanna-yl'
+      //     }
+      //   }
+      // ]
     }
+  },
+  computed: {
+    ...mapGetters({
+      pblProjectApplyList: 'pbl/projectApplyList'
+    }),
+    appliedList() {
+      return this.pblProjectApplyList({ projectId: this.projectId })
+    }
+  },
+  methods: {
+    ...mapActions({
+      getProjectApplyList: 'pbl/getProjectApplyList'
+    })
   },
   filters: {
     formatDate(date, formatType) {

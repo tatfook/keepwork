@@ -3,6 +3,7 @@ import { props } from './mutations'
 
 let {
   TOGGLE_LOGIN_DIALOG,
+  GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS
 } = props
 
@@ -32,7 +33,16 @@ const actions = {
     }).catch(error => {
       return Promise.reject(error)
     })
-  }
+  },
+  async getProjectApplyList(context, { objectId, objectType, applyType }) {
+    let { commit } = context
+    await keepwork.applies.getApplyList({ objectId, objectType, applyType }).then(projectApplyList => {
+      commit(GET_PROJECT_APPLY_LIST_SUCCESS, { projectId: objectId, projectApplyList })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
 }
 
 export default actions

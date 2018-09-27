@@ -9,10 +9,10 @@
     </div>
     <el-tabs class="project-members-tabs" type="card">
       <el-tab-pane label="申请列表">
-        <project-applied-list></project-applied-list>
+        <project-applied-list :projectId='projectId'></project-applied-list>
       </el-tab-pane>
       <el-tab-pane label="项目成员">
-        <project-joined-members-list></project-joined-members-list>
+        <project-joined-members-list :projectId='projectId'></project-joined-members-list>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -22,6 +22,11 @@ import ProjectAppliedList from './ProjectAppliedList'
 import ProjectJoinedMembersList from './ProjectJoinedMembersList'
 export default {
   name: 'ProjectMembers',
+  props: {
+    projectId: {
+      required: true
+    }
+  },
   data() {
     return {
       inviteUsername: ''
