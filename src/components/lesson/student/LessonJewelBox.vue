@@ -141,7 +141,7 @@ export default {
         targets: el,
         opacity: 0,
         duration: 800,
-        translateX: 230,
+        translateX: 200,
         translateY: -500,
         easing: 'linear'
       })
