@@ -7,6 +7,8 @@ const NewProject = () => import('@/components/pbl/NewProject')
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  base: '/pbl',
   routes: [
     {
       path: '*',

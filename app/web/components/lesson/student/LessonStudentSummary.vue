@@ -167,7 +167,7 @@ export default {
       let packageId = this.$route.params.packageId
       let lessonId = this.$route.params.lessonId
       let styleId = this.$refs.shareStyle.currentStyle
-      let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+      let shareWebUrl = `${origin}/l/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
         this.studyTime
       }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
         this.lessonWriteLine
@@ -198,7 +198,7 @@ export default {
     //   let packageId = this.$route.params.packageId
     //   let lessonId = this.$route.params.lessonId
     //   let styleId = this.$refs.shareStyle.currentStyle
-    //   let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
+    //   let shareWebUrl = `${origin}/l/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
     //     this.studyTime
     //   }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
     //     this.lessonWriteLine

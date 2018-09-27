@@ -5,10 +5,10 @@
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1'>
-        <a href="/#/creativity">{{$t('common.creativity')}}</a>
+        <a href="/creativity">{{$t('common.creativity')}}</a>
       </el-menu-item>
       <el-menu-item index='2'>
-        <a href="/#/exploration">{{$t('common.explore')}}</a>
+        <a href="/exploration">{{$t('common.explore')}}</a>
       </el-menu-item>
       <el-menu-item index='4'>
         <a href='/official/help/index'>{{$t('common.study')}}</a>
@@ -166,9 +166,7 @@ export default {
       return window.location.hostname
     },
     lessonCenterUrl() {
-      return this.hostname === 'localhost'
-        ? '/lesson.html#/student/center'
-        : '/l#/student/center'
+      return '/l/student/center'
     }
   },
   mounted() {
@@ -188,7 +186,7 @@ export default {
       userLogout: 'user/logout'
     }),
     backEditArea() {
-      window.open(`${origin}/ed/#/`)
+      window.open(`${origin}/ed`)
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true

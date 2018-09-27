@@ -6,7 +6,7 @@
     </div>
     <div class="resentWeb">
       <ul>
-        <li v-for="(site,index) in recentOpenedList" :key="index"><a :href="'/ed/#'+site.path">{{site.path}}</a></li>
+        <li v-for="(site,index) in recentOpenedList" :key="index"><a @click="gotoPath(site.path)">{{site.path}}</a></li>
       </ul>
     </div>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
@@ -40,6 +40,11 @@ export default {
   },
   components: {
     NewWebsiteDialog
+  },
+  methods: {
+    gotoPath(path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>

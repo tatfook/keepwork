@@ -137,7 +137,7 @@ export default {
       return location.origin
     },
     editorPageUrl() {
-      return `/ed#${this.activePageUrl}`
+      return `/ed/${this.activePageUrl}`
     }
   },
   watch: {

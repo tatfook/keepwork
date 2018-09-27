@@ -5,6 +5,8 @@ const Editor = () => import('@/components/editor/Editor')
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  base: '/ed',
   routes: [
     {
       path: '*',
