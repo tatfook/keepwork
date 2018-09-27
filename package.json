@@ -6,9 +6,9 @@
     "debug": "egg-bin debug",
     "clean": "cross-env easy clean",
     "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 easy build prod",
-    "build:dev": "cross-env easy clean && easy build dev",
-    "build:test": "cross-env easy clean && easy build test",
-    "build:prod": "cross-env easy clean && easy build prod",
+    "build:dev": "cross-env easy build dev",
+    "build:test": "cross-env easy build test",
+    "build:prod": "cross-env easy build prod",
     "start": "egg-scripts start --title=keepwork-frontend",
     "daemon": "egg-scripts start --title=keepwork-frontend",
     "stop": "egg-scripts stop --title=keepwork-frontend",
@@ -123,7 +123,8 @@
     "vue-jest": "^2.6.0",
     "vue-template-compiler": "^2.5.17",
     "vue-test-utils": "^1.0.0-beta.11",
-    "webpack": "^4.19.1"
+    "webpack": "^4.19.1",
+    "webpack-bundle-analyzer": "^3.0.2"
   },
   "engines": {
     "node": ">=6.0.0"

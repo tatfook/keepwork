@@ -18,7 +18,8 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
-import { appModule, userModule, lessonModule, createPersistedState } from '@/store'
+import userModule from '@/store/user'
+import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
@@ -43,22 +44,9 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    app: appModule,
     user: userModule,
     lesson: lessonModule
-  },
-  plugins: [
-    createPersistedState({
-      paths: [
-        'lesson.userinfo',
-        'lesson.student.enterClassInfo',
-        'lesson.teacher.classroom',
-        'user.profile',
-        'user.webTemplateConfig',
-        'user.skyDrive'
-      ]
-    })
-  ]
+  }
 })
 
 const TeacherColumnActivePageNameReg = /^TeacherColumn+/

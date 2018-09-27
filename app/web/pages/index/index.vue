@@ -26,7 +26,7 @@ import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
-import { appModule, userModule, gitlabModule } from '@/store'
+import userModule from '@/store/user'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -54,9 +54,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    app: appModule,
-    user: userModule,
-    gitlab: gitlabModule
+    user: userModule
   }
 })
 

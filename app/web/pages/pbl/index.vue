@@ -14,13 +14,8 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './pbl.router'
-import {
-  appModule,
-  userModule,
-  lessonModule,
-  pblModule,
-  createPersistedState
-} from '@/store'
+import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -41,15 +36,9 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    app: appModule,
     user: userModule,
     pbl: pblModule
-  },
-  plugins: [
-    createPersistedState({
-      paths: ['user.profile']
-    })
-  ]
+  }
 })
 
 export default {
