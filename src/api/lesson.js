@@ -23,6 +23,7 @@ export const packages = {
   packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
+  isSubscribe: async ({ packageId }) => get(`packages/${packageId}/isSubscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
   audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
   release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
