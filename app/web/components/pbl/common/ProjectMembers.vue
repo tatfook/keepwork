@@ -1,8 +1,10 @@
 <template>
   <div class="project-members">
     <div class="project-members-invite">
-      <el-input placeholder="请输入内容">
-        <template slot="append">邀请</template>
+      <el-input placeholder="输入用户名进行邀请" v-model="inviteUsername">
+        <template slot="append">
+          <el-button type="info" @click="invitToProject" :disabled="!inviteUsername">邀请</el-button>
+        </template>
       </el-input>
     </div>
     <el-tabs class="project-members-tabs" type="card">
@@ -20,6 +22,16 @@ import ProjectAppliedList from './ProjectAppliedList'
 import ProjectJoinedMembersList from './ProjectJoinedMembersList'
 export default {
   name: 'ProjectMembers',
+  data() {
+    return {
+      inviteUsername: ''
+    }
+  },
+  methods: {
+    invitToProject() {
+      console.log(this.inviteUsername)
+    }
+  },
   components: {
     ProjectAppliedList,
     ProjectJoinedMembersList
@@ -36,8 +48,23 @@ export default {
     }
     .el-input-group__append {
       color: #303133;
-      padding: 0 22px;
       cursor: pointer;
+      background-color: transparent;
+      padding: 0;
+      width: 75px;
+      .el-button {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        margin-left: 0;
+        background-color: #f5f5f5;
+      }
+      .el-button.is-disabled {
+        opacity: 0.8;
+        background-color: #c8c9cc;
+        color: #303133;
+        border-color: #c8c9cc;
+      }
     }
   }
   &-tabs {
