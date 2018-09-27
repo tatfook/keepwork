@@ -3,7 +3,7 @@
     <el-tabs class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
         <span slot="label">设定</span>
-        <project-editing v-if="!isFirstGettingData" :originPrivilege='originPrivilege' :originVisibility='originVisibility'></project-editing>
+        <project-editing v-if="!isFirstGettingData" :originPrivilege='originPrivilege' :originVisibility='originVisibility' :originalProjectDetail='pblProjectDetail'></project-editing>
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
         <span slot="label">成员</span>

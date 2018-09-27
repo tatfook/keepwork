@@ -25,6 +25,13 @@ const actions = {
     }).catch(error => {
       return Promise.reject(error)
     })
+  },
+  async updateProject(context, { projectId, updatingProjectData }) {
+    await keepwork.projects.updateProject({ projectId, updatingProjectData }).then(() => {
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
   }
 }
 

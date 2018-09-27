@@ -1,5 +1,5 @@
 <template>
-  <div class="project-editing">
+  <div class="project-editing" v-loading='isLoading'>
     <div class='project-editing-item'>
       <label class="project-editing-item-label">项目状态</label>
       <el-radio-group v-model="projectVisibility">
@@ -14,11 +14,12 @@
       </el-radio-group>
     </div>
     <div class="project-editing-operate">
-      <el-button type="primary" size="medium">保存</el-button>
+      <el-button type="primary" size="medium" :disabled="!isModified" @click='updatePrivilege'>保存</el-button>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 const PRIVILEGE = {
   comment: {
     label: '评论权限',
@@ -51,21 +52,22 @@ const PRIVILEGE = {
 export default {
   name: 'ProjectEditing',
   props: {
-    originPrivilege: {
-      type: Number,
-      required: true
-    },
-    originVisibility: {
+    originalProjectDetail: {
+      type: Object,
+      required: true,
       validator: function(value) {
-        return [0, 1].indexOf(value) !== -1
+        let { visibility, privilege } = value
+        return [0, 1].indexOf(visibility) !== -1 && _.isNumber(privilege)
       }
     }
   },
   mounted() {
+    this.projectVisibility = this.originVisibility
     this.initPrivileges()
   },
   data() {
     return {
+      isLoading: false,
       privilegeOptions: PRIVILEGE,
       projectVisibility: 0,
       projectPrivileges: {
@@ -77,14 +79,41 @@ export default {
     }
   },
   computed: {
+    editingProjectId() {
+      return _.get(this.originalProjectDetail, 'id')
+    },
+    originPrivilege() {
+      return _.get(this.originalProjectDetail, 'privilege')
+    },
+    originVisibility() {
+      return _.get(this.originalProjectDetail, 'visibility')
+    },
     newPrivilege() {
-      let privilegeNumber = _.reduce(this.projectPrivileges, (sum, value) => {
-        return sum + value
-      }, 0)
+      let privilegeNumber = _.reduce(
+        this.projectPrivileges,
+        (sum, value) => {
+          return sum + value
+        },
+        0
+      )
       return privilegeNumber
+    },
+    isModified() {
+      let isVisibilityModified = !_.isEqual(
+        this.projectVisibility,
+        this.originVisibility
+      )
+      let isPrivilegeModified = !_.isEqual(
+        this.newPrivilege,
+        this.originPrivilege
+      )
+      return isVisibilityModified || isPrivilegeModified
     }
   },
   methods: {
+    ...mapActions({
+      pblUpdateProject: 'pbl/updateProject'
+    }),
     initPrivileges() {
       const privilegesNumber = this.originPrivilege
       _.forEach(this.privilegeOptions, (value, key) => {
@@ -92,12 +121,38 @@ export default {
         for (let index = 0; index < options.length; index++) {
           const option = options[index]
           let optionValue = option.value
-          if ((privilegesNumber & 1) > 0) {
+          if ((privilegesNumber & optionValue) > 0) {
             this.projectPrivileges[dataKey] = optionValue
             return
           }
         }
       })
+    },
+    async updatePrivilege() {
+      let { name, type, description } = this.originalProjectDetail
+      let updatingProjectData = {
+        name,
+        type,
+        description,
+        visibility: this.projectVisibility,
+        privilege: this.newPrivilege
+      }
+      this.isLoading = true
+      await this.pblUpdateProject({
+        projectId: this.editingProjectId,
+        updatingProjectData
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '更新成功'
+          })
+          this.isLoading = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.isLoading = false
+        })
     }
   }
 }
