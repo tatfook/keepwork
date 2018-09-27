@@ -3,7 +3,8 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  isShowLoginDialog: false
+  isShowLoginDialog: false,
+  projects: []
 }
 export default {
   namespaced: true,

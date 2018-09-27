@@ -15,11 +15,11 @@ const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
 
-const { post, put } = keepworkEndpoint
+const { get, post, put } = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
-  getProfile: async (...args) => post('/user/getProfile', ...args),
+  login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  getProfile: async (...args) => post('/users/getProfile', ...args),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
@@ -182,6 +182,7 @@ export const userThreeService = {
 }
 
 export const projects = {
+  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}`),
   createProject: async (...args) => post('projects', ...args)
 }
 

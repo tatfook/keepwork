@@ -1,13 +1,13 @@
 <template>
   <div class="edit-project">
-    <el-tabs class="edit-project-tabs container" v-model="activeName" type="card">
+    <el-tabs class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
         <span slot="label">设定</span>
-        <project-editing></project-editing>
+        <project-editing v-if="!isFirstGettingData" :originPrivilege='originPrivilege' :originVisibility='originVisibility'></project-editing>
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
         <span slot="label">成员</span>
-        <project-members class="edit-project-members"></project-members>
+        <project-members v-if="!isFirstGettingData" class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -15,12 +15,42 @@
 <script>
 import ProjectEditing from './common/ProjectEditing'
 import ProjectMembers from './common/ProjectMembers'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'EditProject',
+  async created() {
+    await this.pblGetProjectDetail({ projectId: this.projectId })
+    this.isFirstGettingData = false
+    this.isLoading = false
+  },
   data() {
     return {
+      isFirstGettingData: true,
+      isLoading: true,
       activeName: 'editing'
     }
+  },
+  computed: {
+    ...mapGetters({
+      projectDetail: 'pbl/projectDetail'
+    }),
+    pblProjectDetail() {
+      return this.projectDetail({ projectId: this.projectId })
+    },
+    originPrivilege() {
+      return _.get(this.pblProjectDetail, 'privilege')
+    },
+    originVisibility() {
+      return _.get(this.pblProjectDetail, 'visibility')
+    },
+    projectId() {
+      return _.get(this.$route, 'params.id')
+    }
+  },
+  methods: {
+    ...mapActions({
+      pblGetProjectDetail: 'pbl/getProjectDetail'
+    })
   },
   components: {
     ProjectEditing,
