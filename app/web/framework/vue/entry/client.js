@@ -3,7 +3,6 @@ import '../filter'
 import '../component'
 
 export default function render(options) {
-  console.log(options)
   if (options.store) {
     options.store.replaceState(Object.assign({}, window.__INITIAL_STATE__, options.store.state))
   } else if (window.__INITIAL_STATE__) {
