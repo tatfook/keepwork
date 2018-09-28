@@ -1060,6 +1060,7 @@
     "pleaseSelect": "Please select",
     "beans": "beans",
     "noReference": "no references",
-    "urlError": "url error"
+    "urlError": "url error",
+    "toAdd": "Add"
   }
 }

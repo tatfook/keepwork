@@ -1065,6 +1065,7 @@
     "pleaseSelect": "请选择",
     "beans": "知识豆",
     "noReference": "没有素材",
-    "urlError": "地址错误"
+    "urlError": "地址错误",
+    "toAdd": "去添加"
   }
 }

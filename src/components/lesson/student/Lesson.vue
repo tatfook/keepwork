@@ -149,7 +149,9 @@ export default {
           showCancelButton: false,
           closeOnPressEscape: false,
           closeOnClickModal: false,
-          confirmButtonText: this.$t('lesson.add')
+          iconClass: 'iconfont icon-BOOK',
+          center: true,
+          confirmButtonText: this.$t('lesson.toAdd')
         })
           .then(
             () =>
