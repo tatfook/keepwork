@@ -2,7 +2,7 @@
   <div class="bean-wrap">
     <div class="bean" v-loading="beanLoading">
       <div class="bean-header">
-        <div class="bean-header-state"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span>({{$t('lesson.explain')}})</span></div>
+        <div class="bean-header-state"><span class="beans">{{beansCount}}{{$t('lesson.beans')}}</span><span class="explain">({{$t('lesson.explain')}})</span></div>
         <div class="bean-header-button">
           <el-button type="primary" size="small" :disabled="!tableData.length" @click="goConvert">{{$t('lesson.conversion')}}</el-button>
         </div>
@@ -55,7 +55,7 @@ export default {
     },
     tableData() {
       return _.map(this.beanInfo, i => {
-        let createdAt = moment(i.createdAt).format('YYYY[/]MM[/]DD, hh:mm')
+        let createdAt = moment(i.createdAt).format('YYYY[/]MM[/]DD  hh:mm')
         let description = i.description
         let balance = i.amount + '  ' + this.$t('lesson.beans')
         return { createdAt, description, balance }
@@ -83,6 +83,14 @@ export default {
       border-bottom: 1px solid #f3f3f3;
       &-state {
         flex: 1;
+        font-size: 18px;
+        .beans{
+          color: #333;
+          margin-right: 20px;
+        }
+        .explain{
+          color: #808080;
+        }
       }
       &-button {
         max-width: 143px;
