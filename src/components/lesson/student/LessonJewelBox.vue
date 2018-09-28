@@ -79,7 +79,10 @@ export default {
             this.bean = bean
             bean > 0 && this.showBeanDialog()
           })
-          .catch(e => console.error(e))
+          .catch(e => {
+            console.error(e)
+            this.$message.error(this.$t('common.failure'))
+          })
       }
     }
   },
