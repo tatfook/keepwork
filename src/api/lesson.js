@@ -94,6 +94,10 @@ export const skills = {
   getAllSkills: () => get('skills')
 }
 
+export const trades = {
+  getTradesList: () => get('trades')
+}
+
 export const lesson = {
   users,
   packages,
@@ -102,7 +106,8 @@ export const lesson = {
   classrooms,
   emails,
   skills,
-  subjects
+  subjects,
+  trades
 }
 
 export default lesson
