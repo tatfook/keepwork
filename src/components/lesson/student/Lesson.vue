@@ -149,7 +149,9 @@ export default {
           showCancelButton: false,
           closeOnPressEscape: false,
           closeOnClickModal: false,
-          confirmButtonText: this.$t('lesson.add')
+          iconClass: 'iconfont icon-BOOK add-package-confirm',
+          center: true,
+          confirmButtonText: this.$t('lesson.toAdd')
         })
           .then(
             () =>
@@ -221,5 +223,11 @@ export default {
 .quiz-no::after {
   content: counter(no);
   counter-increment: no;
+}
+.add-package-confirm {
+  &.icon-BOOK:before {
+    font-size: 100px;
+    color: #909399;
+  }
 }
 </style>
