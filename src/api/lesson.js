@@ -76,8 +76,8 @@ export const classrooms = {
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
-  uploadLearnRecords: ({ classId, learnRecords }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }),
+  uploadLearnRecords: ({ classId, learnRecords, state }) =>
+    put(`learnRecords/${classId}`, { extra: learnRecords, state }),
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
   modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr),
   isValidKey: key => get(`classrooms/valid?key=${key}`)
