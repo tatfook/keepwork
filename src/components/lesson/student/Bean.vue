@@ -54,15 +54,19 @@ export default {
       return _.get(this.userinfo,'bean',0)
     },
     tableData() {
-      return _.map(this.beanInfo, i => {
+      let data =  _.map(this.beanInfo, i => {
         let createdAt = moment(i.createdAt).format('YYYY[/]MM[/]DD  hh:mm')
         let description = i.description
         let balance = i.amount + '  ' + this.$t('lesson.beans')
         return { createdAt, description, balance }
       })
+      return data.sort(this.sortByUpdateAt)
     }
   },
   methods: {
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
     goConvert() {
       window.open('/wiki/js/mod/knowledgeBean/index')
     }
@@ -87,6 +91,7 @@ export default {
         .beans{
           color: #333;
           margin-right: 20px;
+          font-weight: 700;
         }
         .explain{
           color: #808080;
