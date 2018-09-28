@@ -140,9 +140,10 @@ export default {
       this.submit(result, answer)
     },
     async submit(result, answer) {
-      this.doQuiz({ key: this.key, result, answer })
+      await this.doQuiz({ key: this.key, result, answer })
       if (this.isBeInClassroom) {
-        return await this.uploadLearnRecords()
+        let state = this.lessonIsDone ? 1 : 0
+        return await this.uploadLearnRecords(state).catch(e => console.error(e))
       }
       const { packageId, lessonId } = this.$route.params
       // 首次需要先创建学习记录
@@ -161,7 +162,11 @@ export default {
   watch: {
     quizzes(quizzes) {
       let quiz = quizzes.find(
-        ({ data: { quiz: { data } } }) => data[0].id === this.key
+        ({
+          data: {
+            quiz: { data }
+          }
+        }) => data[0].id === this.key
       )
       if (quiz && quiz.state && quiz.state.answer) {
         this.isDone = true

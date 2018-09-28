@@ -67,11 +67,15 @@ export default {
     async isConditions(flag) {
       if (flag) {
         const { packageId, lessonId } = this.$route.params
-        await this.uploadSelfLearnRecords({
-          packageId: Number(packageId),
-          lessonId: Number(lessonId),
-          state: 1
-        }).catch(e => console.error(e))
+        this.isBeInClassroom
+          ? await this.uploadLearnRecords(1).catch(e =>
+              console.error(e)
+            )
+          : await this.uploadSelfLearnRecords({
+              packageId: Number(packageId),
+              lessonId: Number(lessonId),
+              state: 1
+            }).catch(e => console.error(e))
         await lesson.lessons
           .rewardCoin({ id: this._learnRecordId })
           .then(({ coin, bean }) => {
@@ -129,7 +133,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords'
+      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
     }),
     playSound() {
       document.getElementById('coin-sound').play()
@@ -265,7 +270,7 @@ export default {
   }
 }
 .bean-dialog {
-   border-radius: 20px;
+  border-radius: 20px;
   .el-dialog__header {
     display: none;
   }

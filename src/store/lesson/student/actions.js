@@ -159,13 +159,14 @@ const actions = {
         })
         .catch(e => console.error(e)))
   },
-  async uploadLearnRecords(context) {
+  async uploadLearnRecords(context, state = 0) {
     const {
       getters: { classId, learnRecords }
     } = context
     await lesson.classrooms.uploadLearnRecords({
       classId,
-      learnRecords
+      learnRecords,
+      state
     })
   },
   async clearLearnRecordsId({ commit }) {
