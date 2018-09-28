@@ -1,7 +1,7 @@
 <template>
   <el-row class="lesson-header-container">
     <el-dialog :visible.sync="dialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media">
+      <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
         <source :src="videoUrl" type="video/mp4">
       </video>
     </el-dialog>
@@ -22,7 +22,7 @@
     </el-dialog>
     <el-row>
       <el-col :span="14" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
-        <img src="@/assets/lessonImg/play2.png" alt="">
+        <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
       <el-col :span="10" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
@@ -161,7 +161,7 @@ export default {
       })
     },
     openAnimations() {
-      this.dialogVisible = true
+      this.isHasVideo && (this.dialogVisible = true)
     },
     classIdToFullScreen() {
       this.classIdFullScreen = true
@@ -288,6 +288,9 @@ export default {
     },
     coverUrl() {
       return _.get(this.lesson, 'extra.coverUrl', '')
+    },
+    isHasVideo() {
+      return Boolean(this.videoUrl)
     },
     videoUrl() {
       return _.get(this.lesson, 'extra.videoUrl', '')
