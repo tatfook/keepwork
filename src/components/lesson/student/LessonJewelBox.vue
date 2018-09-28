@@ -1,8 +1,8 @@
 <template>
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
-      <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
-      <div class="coin">+{{coin}}</div>
+      <!-- <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
+      <div class="coin">+{{coin}}</div> -->
     </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
@@ -15,12 +15,14 @@
       </span>
     </div>
     <audio :src="sound" style="display:none" id="coin-sound"></audio>
-    <!-- <el-button @click="showBeanDialog">sound</el-button> -->
-    <el-dialog :visible.sync="isShowDialog" custom-class="bean-dialog" :before-close="animateBean" width="300px" top="500px">
+    <!-- <el-button @click="showBeanDialog">show bean</el-button> -->
+    <el-dialog :visible.sync="isShowDialog" custom-class="bean-dialog" width="300px" :before-close="animateBean" center top="500px">
       <div class="bean" @click="animateBean">
-        <img class="bean-icon" :src="beanIcon">
-        <span class="bean-count">+{{bean}} {{$t('lesson.beans')}}</span>
-      </div>
+        <div class="bean-light">
+          <img class="bean-icon" :src="beanIcon">
+        </div>
+          <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
+        </div>
     </el-dialog>
   </span>
 </template>
@@ -50,35 +52,43 @@ export default {
     return {
       isShowTips: false,
       isShowDialog: false,
-      needTime: 300,
+      needTime: 15,
       time: 0,
       reward: 10,
       _timer: null,
       isReward: true,
       coin: 0,
-      bean: 10,
+      bean: 0,
       sound: sound,
       beanIcon: beanIcon
     }
   },
   watch: {
-    isConditions(flag) {
+    async isConditions(flag) {
       if (flag) {
-        lesson.lessons
+        const { packageId, lessonId } = this.$route.params
+        await this.uploadSelfLearnRecords({
+          packageId: Number(packageId),
+          lessonId: Number(lessonId),
+          state: 1
+        }).catch(e => console.error(e))
+        await lesson.lessons
           .rewardCoin({ id: this._learnRecordId })
-          .then(({ coin = 0, bean = 10 }) => {
+          .then(({ coin, bean }) => {
             this.coin = coin
             this.bean = bean
-            this.showBeanDialog()
+            bean > 0 && this.showBeanDialog()
           })
-          .catch(e => console.error(e))
+          .catch(e => {
+            console.error(e)
+            this.$message.error(this.$t('common.failure'))
+          })
       }
     }
   },
   async mounted() {
     const { packageId, lessonId } = this.$route.params
     let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
-    console.warn(`coin: ${coin}, bean: ${bean}`)
     if (bean === 0) {
       this.isReward = false
       this.startTimer()
@@ -103,8 +113,7 @@ export default {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return false
-      // return this.coin > 0
+      return this.bean > 0
     },
     isConditions() {
       return !!(
@@ -119,6 +128,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords'
+    }),
     playSound() {
       document.getElementById('coin-sound').play()
     },
@@ -132,7 +144,7 @@ export default {
         targets: el,
         opacity: 0,
         duration: 800,
-        translateX: 250,
+        translateX: 200,
         translateY: -500,
         easing: 'linear'
       })
@@ -253,29 +265,46 @@ export default {
   }
 }
 .bean-dialog {
+   border-radius: 20px;
   .el-dialog__header {
     display: none;
   }
   .el-dialog__body {
-    // box-shadow: 0 0 200px #ddd;
+    background: #2c283f;
     animation: flicker 4000ms ease infinite;
+    border-radius: 20px;
   }
   .bean {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    &-light {
+      background: url('../../../assets/lessonImg/light.png') no-repeat center;
+      width: 260px;
+      height: 200px;
+      background-size: 75%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     &-icon {
       width: 50px;
       height: 50px;
     }
     &-count {
-      margin-left: 30px;
+      text-align: center;
+      width: 200px;
+      height: 54px;
+      line-height: 43px;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 18px;
+      color: white;
+      background: url('../../../assets/lessonImg/button.png') no-repeat center;
+      background-size: 100%;
     }
   }
 }
-
 
 @keyframes flicker {
   0%,

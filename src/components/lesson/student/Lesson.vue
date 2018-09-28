@@ -21,6 +21,7 @@ import LessonWrap from '../common/LessonWrap'
 import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
+import { lesson } from '@/api'
 export default {
   name: 'Learn',
   components: {
@@ -48,10 +49,17 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    // logined check
     if (!this.isLogined) {
       return this.toggleLoginDialog(true)
     }
     const { packageId, lessonId } = this.$route.params
+    // purchased check or lesson check
+    let isPurchased = await this.checkPackagePurchased(
+      { packageId },
+      Number(lessonId)
+    )
+    if (!isPurchased) return
     if (this.isBeInClassroom) {
       await this.resumeTheClass().catch(e => console.error(e))
     }
@@ -113,6 +121,63 @@ export default {
       this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
       this.isRefresh = true
       this.$router.go(0)
+    },
+    async checkPackagePurchased(payload, lessonId = null) {
+      const packageDetail = await lesson.packages
+        .packageDetail(payload)
+        .catch(e => {
+          console.error(e)
+        })
+      let { isSubscribe, coin, rmb, userId, lessons } = packageDetail
+      const isHasTheLesson = lessons
+        .map(({ id }) => id)
+        .find(id => id === lessonId)
+      // 判断该课程包是否存在该课程
+      if (!isHasTheLesson) {
+        this.$message({
+          type: 'error',
+          message: this.$t('lesson.urlError')
+        })
+        return false
+      }
+      if (this.userId === userId) return true
+      isSubscribe = Boolean(isSubscribe)
+      const isFree = coin === 0 && rmb === 0
+      if (!isSubscribe) {
+        this.$confirm(this.$t('lesson.addPackageFirst'), '', {
+          showClose: false,
+          showCancelButton: false,
+          closeOnPressEscape: false,
+          closeOnClickModal: false,
+          confirmButtonText: this.$t('lesson.add')
+        })
+          .then(
+            () =>
+              isFree
+                ? this.addThePackage(payload)
+                : this.goToPurchase(payload, lessonId)
+          )
+          .catch(e => console.log(e))
+      }
+      return isSubscribe
+    },
+    async addThePackage(payload) {
+      await lesson.packages
+        .subscribe(payload)
+        .then(res => {
+          console.log(res)
+          this.$message({
+            type: 'success',
+            message: this.$t('lesson.addPackageSuccess')
+          })
+          this.$router.go(0)
+        })
+        .catch(e => console.error(e))
+    },
+    goToPurchase({ packageId }, lessonId) {
+      this.$router.push(
+        `/student/package/${packageId}/purchase?lessonId=${lessonId}`
+      )
     }
   },
   computed: {
@@ -130,6 +195,9 @@ export default {
     },
     lesson() {
       return this.lessonDetail.modList || []
+    },
+    userId() {
+      return _.get(this.userinfo, 'id', '')
     },
     lessonHeaderData() {
       return this.lessonDetail.lesson || {}

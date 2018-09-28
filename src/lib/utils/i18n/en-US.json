@@ -1038,8 +1038,8 @@
     "no": "No",
     "activate": "To activate",
     "jewelTipsTitle": "To get the coins, you must meet the following three conditions:",
-    "jewelTipsTitleBean": "To get the beans, you must meet the following three conditions:",
-    "jewelTips1": "1. The learning time of this lesson should be no less than 5 minutes. Have learned ",
+    "jewelTipsTitleBean": "To get the 10 beans, you must meet the following two conditions:",
+    "jewelTips1": "1. The learning time of this lesson should be no less than 15 minutes. Have learned ",
     "jewelTips2": "2. Answers for all quizzes should be correct.",
     "jewelTips3": "3. Your locked coins should be no less than {reward} coins.  There are {lockCoin} locked coins in your account at present.",
     "receiveSuccess": "Receive Success",
@@ -1065,6 +1065,8 @@
     "beans": "beans",
     "detail": "Detail:",
     "conversion": "conversion",
-    "explain": "Note: After each lesson is finished, you could get a reward of 10 beans, which could be used to exchange Haqi items."
+    "explain": "Note: After each lesson is finished, you could get a reward of 10 beans, which could be used to exchange Haqi items.",
+    "noReference": "no references",
+    "urlError": "url error"
   }
 }
