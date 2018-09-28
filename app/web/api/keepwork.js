@@ -188,7 +188,8 @@ export const projects = {
 }
 
 export const applies = {
-  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`)
+  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
+  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state })
 }
 
 export const keepwork = {

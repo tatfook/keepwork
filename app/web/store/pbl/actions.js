@@ -43,6 +43,15 @@ const actions = {
       return Promise.reject(error)
     })
   },
+  async changeApplyState(context, { id, state, objectId, objectType, applyType }) {
+    let { dispatch } = context
+    await keepwork.applies.updateApplyState({ id, state }).then(async () => {
+      await dispatch('getProjectApplyList', { objectId, objectType, applyType })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  }
 }
 
 export default actions
