@@ -1044,7 +1044,7 @@
     "activate": "去激活",
     "jewelTipsTitle": "同时满足以下3个条件，将获取知识币奖励：",
     "jewelTipsTitleBean": "同时满足以下2个条件，将获取10个知识豆奖励：",
-    "jewelTips1": "1. 本次本课的学习时长不得低于5分钟。你已学了 ",
+    "jewelTips1": "1. 本次本课的学习时长不得低于15分钟。你已学了 ",
     "jewelTips2": "2. 本次本课的测试题须全部作答正确。",
     "jewelTips3": "3. 账户中，待解锁知识币数量不得低于 {reward} 知识币。你的待解锁知识币为 {lockCoin} 知识币。",
     "receiveSuccess": "领取成功",
@@ -1067,6 +1067,8 @@
     "noData": "暂无数据",
     "linkThePage": "关联该页面到课程",
     "pleaseSelect": "请选择",
-    "beans": "知识豆"
+    "beans": "知识豆",
+    "noReference": "没有素材",
+    "urlError": "地址错误"
   }
 }

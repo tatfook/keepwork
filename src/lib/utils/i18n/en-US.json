@@ -1039,7 +1039,7 @@
     "activate": "To activate",
     "jewelTipsTitle": "To get the coins, you must meet the following three conditions:",
     "jewelTipsTitleBean": "To get the 10 beans, you must meet the following two conditions:",
-    "jewelTips1": "1. The learning time of this lesson should be no less than 5 minutes. Have learned ",
+    "jewelTips1": "1. The learning time of this lesson should be no less than 15 minutes. Have learned ",
     "jewelTips2": "2. Answers for all quizzes should be correct.",
     "jewelTips3": "3. Your locked coins should be no less than {reward} coins.  There are {lockCoin} locked coins in your account at present.",
     "receiveSuccess": "Receive Success",
@@ -1062,6 +1062,8 @@
     "noData": "No Data",
     "linkThePage": "Link the page to",
     "pleaseSelect": "Please select",
-    "beans": "beans"
+    "beans": "beans",
+    "noReference": "no references",
+    "urlError": "url error"
   }
 }
