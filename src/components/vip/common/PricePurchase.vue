@@ -50,6 +50,12 @@ export default {
       }
       let paramsString = this.objectToQueryString(payParams)
       let payPath = `${this.origin}/wiki/pay?${paramsString}`
+      _hmt.push([
+        '_trackEvent',
+        'goToPurchasePage',
+        'purchase',
+        'Paracraft VIP'
+      ])
       window.location.href = payPath
     },
     objectToQueryString(obj) {
