@@ -28,8 +28,8 @@ const mutations = {
   [GET_REPOSITORY_TREE_SUCCESS](state, { projectId, path, list }) {
     Vue.set(state, 'repositoryTrees', {
       ...state.repositoryTrees,
-      [projectId]: {
-        ...state.repositoryTrees[projectId],
+      [path]: {
+        ...state.repositoryTrees[path],
         [path]: list
       }
     })

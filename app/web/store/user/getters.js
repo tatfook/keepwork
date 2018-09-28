@@ -58,7 +58,7 @@ const getters = {
 
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
-      let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
+      let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = gitTree2NestedArray(files, rootPath).filter(

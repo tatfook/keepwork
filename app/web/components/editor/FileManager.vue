@@ -273,7 +273,6 @@ export default {
         let path = `${username}/${name}`
         let recursive = true
         node.loading = true
-        console.warn('getRepositoryTree-------->')
         await this.getRepositoryTree({ path })
       }
       // try open file
