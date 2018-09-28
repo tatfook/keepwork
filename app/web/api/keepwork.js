@@ -15,7 +15,7 @@ const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
 
-const { get, post, put } = keepworkEndpoint
+const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
@@ -192,6 +192,11 @@ export const applies = {
   updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state })
 }
 
+export const members = {
+  getProjectMembersList: async ({ objectId, objectType }) => get(`members?objectId=${objectId}&objectType=${objectType}`),
+  deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -204,6 +209,7 @@ export const keepwork = {
   userThreeService,
   projects,
   applies,
+  members,
   bigfile
 }
 

@@ -4,6 +4,7 @@ import { props } from './mutations'
 let {
   TOGGLE_LOGIN_DIALOG,
   GET_PROJECT_APPLY_LIST_SUCCESS,
+  GET_PROJECT_MEMBERS_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS
 } = props
 
@@ -47,6 +48,24 @@ const actions = {
     let { dispatch } = context
     await keepwork.applies.updateApplyState({ id, state }).then(async () => {
       await dispatch('getProjectApplyList', { objectId, objectType, applyType })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async getProjectMember(context, { objectId, objectType }) {
+    let { commit } = context
+    await keepwork.members.getProjectMembersList({ objectId, objectType }).then(memberList => {
+      commit(GET_PROJECT_MEMBERS_SUCCESS, { projectId: objectId, memberList })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async deleteMember(context, { id, objectId, objectType }) {
+    let { dispatch } = context
+    await keepwork.members.deleteMember({ id }).then(async () => {
+      await dispatch('getProjectMember', { objectId, objectType })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)

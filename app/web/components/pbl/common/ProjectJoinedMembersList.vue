@@ -1,42 +1,75 @@
 <template>
   <div class="project-joined-members-list">
-    <el-table :data="appliedList" border style="width: 100%" class="project-joined-members-list-table">
-      <el-table-column prop="extra.username" label="成员" width="292">
+    <el-table :data="memberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
+      <el-table-column prop="username" label="成员" width="292">
       </el-table-column>
       <el-table-column label="加入时间" width="292">
         <template slot-scope="scope">{{scope.row.updatedAt | formatDate(formatType)}}</template>
       </el-table-column>
       <el-table-column label="操作" class-name='project-joined-members-list-table-operate'>
         <template slot-scope="scope">
-          <el-button size="mini">移出</el-button>
+          <el-button size="mini" @click="deleteFromProject(scope.row)">移出</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import dayjs from 'dayjs'
 export default {
   name: 'ProjectJoinedMembersList',
+  props: {
+    projectId: {
+      required: true
+    }
+  },
+  async created() {
+    this.isLoading = true
+    await this.getProjectMember({
+      objectId: this.projectId,
+      objectType: 5
+    })
+    this.isLoading = false
+  },
   data() {
     return {
       formatType: 'YYYY/MM/DD',
-      appliedList: [
-        {
-          createdAt: '2018-09-21T07:33:49.000Z',
-          updatedAt: '2018-09-21T07:33:49.000Z',
-          extra: {
-            username: 'evanna-yl'
-          }
-        },
-        {
-          createdAt: '2018-09-21T07:33:49.000Z',
-          updatedAt: '2018-09-21T07:33:49.000Z',
-          extra: {
-            username: 'kaitlyn'
-          }
-        }
-      ]
+      isLoading: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      pblProjectMemberList: 'pbl/projectMemberList'
+    }),
+    memberList() {
+      return this.pblProjectMemberList({ projectId: this.projectId })
+    }
+  },
+  methods: {
+    ...mapActions({
+      getProjectMember: 'pbl/getProjectMember',
+      deleteMember: 'pbl/deleteMember'
+    }),
+    async deleteFromProject(memberDetail) {
+      let { id } = memberDetail
+      this.isLoading = true
+      await this.deleteMember({
+        id,
+        objectId: this.projectId,
+        objectType: 5
+      })
+        .then(() => {
+          this.isLoading = false
+          this.$message({
+            type: 'success',
+            message: '移除成功'
+          })
+        })
+        .catch(error => {
+          this.isLoading = false
+          console.log(error)
+        })
     }
   },
   filters: {
