@@ -56,8 +56,8 @@ export const users = {
   getUserDetail: () => get('users'),
   userSubscribes: args => get(`users/${args.userId}/subscribes`),
   userSkills: args => get(`users/${args.userId}/skills`),
-  toBeTeacher: ({ userId, key, config }) =>
-    post(`users/${userId}/teacher`, { key }, config),
+  toBeTeacher: ({ userId, key, school, config }) =>
+    post(`users/${userId}/teacher`, { key, school }, config),
   getTeachingRecords: async () => get(`packages`),
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
@@ -95,6 +95,10 @@ export const skills = {
   getAllSkills: () => get('skills')
 }
 
+export const trades = {
+  getTradesList: () => get('trades')
+}
+
 export const lesson = {
   users,
   packages,
@@ -103,7 +107,8 @@ export const lesson = {
   classrooms,
   emails,
   skills,
-  subjects
+  subjects,
+  trades
 }
 
 export default lesson
