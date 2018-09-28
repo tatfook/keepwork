@@ -123,6 +123,7 @@ export default {
       this.$router.go(0)
     },
     async checkPackagePurchased(payload, lessonId = null) {
+      if (this.isBeInClassroom) return true
       const packageDetail = await lesson.packages
         .packageDetail(payload)
         .catch(e => {
