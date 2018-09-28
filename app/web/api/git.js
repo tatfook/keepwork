@@ -11,7 +11,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
   const instance = axios.create({
     baseURL: url,
     timeout: 30 * 1000,
-    headers: { 'private-token': token }
+    headers: { 'Authorization': token }
   })
   return {
     projects: {
