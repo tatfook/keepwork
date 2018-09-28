@@ -52,7 +52,7 @@ export default {
     return {
       isShowTips: false,
       isShowDialog: false,
-      needTime: 15,
+      needTime: 900,
       time: 0,
       reward: 10,
       _timer: null,
