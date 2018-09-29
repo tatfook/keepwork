@@ -72,6 +72,7 @@ export default [
       }
     },
     cover: ''
+<<<<<<< Updated upstream
   },
 
   // style 1
@@ -79,6 +80,17 @@ export default [
     templateID: 0,
     data: {
       img: {
+=======
+<<<<<<< Updated upstream
+=======
+  },
+
+  // style 2
+  {
+    templateID: 1,
+    data: {
+      media: {
+>>>>>>> Stashed changes
         width: '100%'
       }
     },
@@ -92,6 +104,7 @@ export default [
     options: {
       theme: {},
       config: {
+<<<<<<< Updated upstream
         ...emptyData,
         img: {
           styleId: 1
@@ -99,5 +112,12 @@ export default [
       }
     },
     cover: ''
+=======
+        ...emptyData
+      }
+    },
+    cover: ''
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   }
 ]

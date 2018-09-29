@@ -26,7 +26,8 @@ import templates from './img.templates'
 const name = 'ModImg'
 
 const components = {
-  img: 'AdiMedia'
+  img: 'AdiMedia',
+  media: 'AdiImg'
 }
 
 const properties = generateProperties(name, components)
