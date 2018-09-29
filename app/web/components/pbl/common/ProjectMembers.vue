@@ -78,7 +78,8 @@ export default {
       margin-bottom: 0;
       border-bottom: none;
       .el-tabs__nav {
-        background-color: #f5f5f5;
+        border-radius: 8px 8px 0 0;
+        border-width: 0 0 0 1px;
       }
       .el-tabs__item {
         height: 48px;
@@ -86,6 +87,13 @@ export default {
         padding: 0 14px;
         color: #606266;
         border-bottom-color: #e4e7ed;
+        background-color: #f5f5f5;
+        border-radius: 10px 10px 0px 0px;
+        border: 1px solid #e4e7ed;
+        margin-left: -1px;
+      }
+      .el-tabs__item:first-child {
+        margin-left: 0;
       }
       .el-tabs__nav-wrap .el-tabs__item:last-child,
       .el-tabs__nav-wrap .el-tabs__item:nth-child(2) {

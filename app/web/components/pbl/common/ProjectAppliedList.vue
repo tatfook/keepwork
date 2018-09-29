@@ -122,6 +122,7 @@ export default {
     td,
     th {
       padding: 4px 0;
+      font-weight: normal;
     }
     &-operate {
       .cell {

@@ -1,12 +1,12 @@
 <template>
   <div class="project-joined-members-list">
     <el-table :data="memberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
-      <el-table-column prop="username" label="成员" width="292">
+      <el-table-column prop="username" label="成员" width="357">
       </el-table-column>
-      <el-table-column label="加入时间" width="292">
+      <el-table-column label="加入时间" width="357">
         <template slot-scope="scope">{{scope.row.updatedAt | formatDate(formatType)}}</template>
       </el-table-column>
-      <el-table-column label="操作" class-name='project-joined-members-list-table-operate'>
+      <el-table-column label="操作" class-name='project-joined-members-list-table-operate' width="160">
         <template slot-scope="scope">
           <el-button size="mini" @click="deleteFromProject(scope.row)">移出</el-button>
         </template>
@@ -95,6 +95,7 @@ export default {
     td,
     th {
       padding: 4px 0;
+      font-weight: normal;
     }
     &-operate {
       .cell {
