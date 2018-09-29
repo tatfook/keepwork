@@ -29,7 +29,6 @@ export default [
         ...emptyData,
         img: _.merge({}, emptyData.img, {
           img: {
-            styleId: 0,
             defaultWebHeight: '600px',
             defaultMobileHeight: '160px',
             defaultWebWidth: 'auto',
@@ -62,7 +61,6 @@ export default [
         ...emptyData,
         img: _.merge({}, emptyData.img, {
           img: {
-            styleId: 0,
             defaultWebHeight: '800px',
             defaultMobileHeight: '240px',
             defaultWebWidth: 'auto',
@@ -72,17 +70,6 @@ export default [
       }
     },
     cover: ''
-<<<<<<< Updated upstream
-  },
-
-  // style 1
-  {
-    templateID: 0,
-    data: {
-      img: {
-=======
-<<<<<<< Updated upstream
-=======
   },
 
   // style 2
@@ -90,7 +77,6 @@ export default [
     templateID: 1,
     data: {
       media: {
->>>>>>> Stashed changes
         width: '100%'
       }
     },
@@ -104,20 +90,9 @@ export default [
     options: {
       theme: {},
       config: {
-<<<<<<< Updated upstream
-        ...emptyData,
-        img: {
-          styleId: 1
-        }
-      }
-    },
-    cover: ''
-=======
         ...emptyData
       }
     },
     cover: ''
->>>>>>> Stashed changes
->>>>>>> Stashed changes
-  }
+  },
 ]
