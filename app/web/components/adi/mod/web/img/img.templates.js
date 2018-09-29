@@ -1,4 +1,4 @@
 export default [
-  // style 0
+  // template 0
   [{ colImg: 'img' }]
 ]
