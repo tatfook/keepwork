@@ -124,14 +124,14 @@ export default {
             this.loading = false
           })
           this.loading = false
-          if (info.error.id === 0) {
+          // if (info.error.id === 0) {
             this.$emit('close')
             window.location.reload()
-          } else if (info.error.message === '用户不存在') {
-            this.showMessage('error', this.$t('common.usernameNotExist'))
-          } else if (info.error.message === '密码错误') {
-            this.showMessage('error', this.$t('common.wrongPassword'))
-          }
+          // } else if (info.error.message === '用户不存在') {
+          //   this.showMessage('error', this.$t('common.usernameNotExist'))
+          // } else if (info.error.message === '密码错误') {
+          //   this.showMessage('error', this.$t('common.wrongPassword'))
+          // }
         } else {
           return false
         }

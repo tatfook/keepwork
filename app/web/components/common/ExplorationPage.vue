@@ -30,15 +30,15 @@
     </div>
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
-        <div class="options" ref="options" @click="selectTab($event)">
-          <el-button :class="{'selected':1==currIndex}">项目</el-button>
-          <el-button :class="{'selected':2==currIndex}">3D世界</el-button>
-          <el-button :class="{'selected':3==currIndex}">网站</el-button>
-          <el-button :class="{'selected':4==currIndex}">知识</el-button>
-          <el-button :class="{'selected':5==currIndex}">课程</el-button>
-          <el-button :class="{'selected':6==currIndex}">用户</el-button>
-          <el-button :class="{'selected':7==currIndex}">工作室</el-button>
-          <el-button :class="{'selected':8==currIndex}">招募中</el-button>
+        <div class="options" ref="options">
+          <el-button :class="{'selected':1==currIndex}"  @click="selectTab(1)">项目<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':2==currIndex}"  @click="selectTab(2)">3D世界<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':3==currIndex}"  @click="selectTab(3)">网站<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':4==currIndex}"  @click="selectTab(4)">知识<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':5==currIndex}"  @click="selectTab(5)">课程<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':6==currIndex}"  @click="selectTab(6)">用户<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':7==currIndex}"  @click="selectTab(7)">工作室<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':8==currIndex}"  @click="selectTab(8)">招募中<span class="search-num">12345</span></el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
           <el-row>
@@ -113,30 +113,30 @@ export default {
   },
   methods: {
     goSearch() {},
-    selectTab(ev) {
-      switch (ev.target.innerText) {
-        case '项目':
+    selectTab(index) {
+      switch (index) {
+        case 1:
           this.currIndex = 1
           break
-        case '3D世界':
+        case 2:
           this.currIndex = 2
           break
-        case '网站':
+        case 3:
           this.currIndex = 3
           break
-        case '知识':
+        case 4:
           this.currIndex = 4
           break
-        case '课程':
+        case 5:
           this.currIndex = 5
           break
-        case '用户':
+        case 6:
           this.currIndex = 6
           break
-        case '工作室':
+        case 7:
           this.currIndex = 7
           break
-        case '招募中':
+        case 8:
           this.currIndex = 8
           break
         default:
@@ -191,14 +191,17 @@ export default {
       margin: 0 auto;
       padding: 24px 0 56px;
       .options {
-        width: 55%;
         margin: 0 auto 24px;
+        text-align: center;
         .el-button {
           height: 24px;
           padding: 0 15px;
           font-size: 14px;
           border-radius: 12px;
           margin-top: 4px;
+          .search-num{
+            margin-left: 8px;
+          }
         }
         .selected {
           background: #409eff;

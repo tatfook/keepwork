@@ -59,9 +59,9 @@ const USER_PROFILE_PAGES_CONTENTS = [
 const actions = {
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
-    if (info.data) {
-      Cookies.set('token', info.data.token)
-      window.localStorage.setItem('satellizer_token', info.data.token)
+    if (info) {
+      Cookies.set('token', info.token)
+      window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info.data)
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
