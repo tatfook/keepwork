@@ -27,7 +27,7 @@
           <el-button plain size="medium">
             <i class="iconfont icon-star1"></i>收藏
           </el-button>
-          <span class="project-header-operations-item-count">5</span>
+          <span class="project-header-operations-item-count">{{projectDetail.favoriteCount}}</span>
         </div>
         <div class="project-header-operations-item">
           <el-button plain size="medium">

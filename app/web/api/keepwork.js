@@ -183,7 +183,7 @@ export const userThreeService = {
 }
 
 export const projects = {
-  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}`),
+  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
   updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   createProject: async (...args) => post('projects', ...args)
