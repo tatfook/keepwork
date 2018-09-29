@@ -266,7 +266,17 @@ export default {
     }),
     async change(type) {
       this.changeSelected = type
-      this.changeDialogVisible = true
+      if (this.multipleSelection.length == 0) {
+        this.changeDialogVisible = false
+        this.$alert(this.$t('lesson.reviseGrades'), '', {
+          confirmButtonText: this.$t('common.Sure'),
+          center: true,
+          callback: action => {}
+        })
+        return
+      }else{
+        this.changeDialogVisible = true
+      }
     },
     async toChangeStudentMarks() {
       if (this.changeSelected === 'changeAll') {
