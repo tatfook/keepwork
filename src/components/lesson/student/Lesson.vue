@@ -168,12 +168,11 @@ export default {
       await lesson.packages
         .subscribe(payload)
         .then(res => {
-          console.log(res)
           this.$message({
             type: 'success',
             message: this.$t('lesson.addPackageSuccess')
           })
-          this.$router.go(0)
+          setTimeout(() => this.$router.go(0), 1000)
         })
         .catch(e => console.error(e))
     },
