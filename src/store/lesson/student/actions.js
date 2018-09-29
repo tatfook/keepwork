@@ -21,8 +21,8 @@ let {
 } = props
 
 const actions = {
-  async getUserSubscribes({ commit, rootGetters: { 'lesson/userId': userId } }) {
-    let userSubscribes = await lesson.users.userSubscribes({ userId })
+  async getUserSubscribes({ commit, rootGetters: { 'lesson/userId': userId } }, {packageState}) {
+    let userSubscribes = await lesson.users.userSubscribes({ userId, packageState })
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
   async getPackageDetail({ commit }, { packageId }) {

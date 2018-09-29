@@ -82,6 +82,7 @@ export default {
             this.coin = coin
             this.bean = bean
             bean > 0 && this.showBeanDialog()
+            this.getUserDetail().catch(err => console.error(err))
           })
           .catch(e => {
             console.error(e)
@@ -134,7 +135,8 @@ export default {
   methods: {
     ...mapActions({
       uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      getUserDetail: 'lesson/getUserDetail'
     }),
     playSound() {
       document.getElementById('coin-sound').play()

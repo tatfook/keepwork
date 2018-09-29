@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      beanTotal: 'lesson/student/beanTotal',
       userinfo: 'lesson/userinfo'
     }),
     beansCount(){
