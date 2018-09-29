@@ -12,7 +12,7 @@
       </div>
       <div class="bean-table" v-else>
         <el-table :data="tableData" style="width: 90%">
-          <el-table-column prop="createdAt" :label="$t('lesson.detail')" width="280">
+          <el-table-column prop="updatedAt" :label="$t('lesson.detail')" width="280">
           </el-table-column>
           <el-table-column prop="description" label="" width="280">
           </el-table-column>
@@ -54,10 +54,10 @@ export default {
     },
     tableData() {
       let data = _.map(this.beanInfo, i => {
-        let createdAt = moment(i.createdAt).format('YYYY[/]MM[/]DD  HH:mm')
+        let updatedAt = moment(i.updatedAt).format('YYYY[/]MM[/]DD  HH:mm')
         let description = i.description
         let balance = i.amount + '  ' + this.$t('lesson.beans')
-        return { createdAt, description, balance }
+        return { updatedAt, description, balance }
       })
       return data.sort(this.sortByUpdateAt)
     }
