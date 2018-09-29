@@ -48,6 +48,7 @@ const actions = {
     let { dispatch } = context
     await keepwork.applies.updateApplyState({ id, state }).then(async () => {
       await dispatch('getProjectApplyList', { objectId, objectType, applyType })
+      await dispatch('getProjectMember', { objectId, objectType })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)
