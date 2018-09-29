@@ -1,25 +1,38 @@
 <template>
   <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
-      <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
-      <div class="coin">+{{coin}}</div>
+      <!-- <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
+      <div class="coin">+{{coin}}</div> -->
     </div>
     <div v-show="isShowTips" @click.stop class="tips-wrap">
       <span class="tips">
-        <div class="tips-row">{{$t('lesson.jewelTipsTitle')}}</div>
+        <div class="tips-row">{{$t('lesson.jewelTipsTitleBean')}}</div>
         <div class="tips-row">{{$t('lesson.jewelTips1')}}
           <span class="tips-time">{{time | toMinute}}</span>
         </div>
         <div class="tips-row">{{$t('lesson.jewelTips2')}}</div>
-        <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div>
+        <!-- <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div> -->
       </span>
     </div>
+    <audio :src="sound" style="display:none" id="coin-sound"></audio>
+    <!-- <el-button @click="showBeanDialog">show bean</el-button> -->
+    <el-dialog :visible.sync="isShowDialog" custom-class="bean-dialog" width="300px" :before-close="animateBean" center top="500px">
+      <div class="bean" @click="animateBean">
+        <div class="bean-light">
+          <img class="bean-icon" :src="beanIcon">
+        </div>
+          <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
+        </div>
+    </el-dialog>
   </span>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import anime from 'animejs'
 import { lesson } from '@/api'
+import sound from '@/assets/lessonImg/bean.mp3'
+import beanIcon from '@/assets/lessonImg/bean.png'
 import _ from 'lodash'
 export default {
   name: 'JewelBox',
@@ -38,30 +51,50 @@ export default {
   data() {
     return {
       isShowTips: false,
-      needTime: 300,
+      isShowDialog: false,
+      needTime: 900,
       time: 0,
       reward: 10,
       _timer: null,
       isReward: true,
-      coin: 0
+      coin: 0,
+      bean: 0,
+      sound: sound,
+      beanIcon: beanIcon
     }
   },
   watch: {
-    isConditions(value) {
-      if (value && this._learnRecordId) {
-        lesson.lessons
+    async isConditions(flag) {
+      if (flag) {
+        const { packageId, lessonId } = this.$route.params
+        this.isBeInClassroom
+          ? await this.uploadLearnRecords(1).catch(e =>
+              console.error(e)
+            )
+          : await this.uploadSelfLearnRecords({
+              packageId: Number(packageId),
+              lessonId: Number(lessonId),
+              state: 1
+            }).catch(e => console.error(e))
+        await lesson.lessons
           .rewardCoin({ id: this._learnRecordId })
-          .then(coin => (this.coin = coin))
-          .catch(e => console.error(e))
+          .then(({ coin, bean }) => {
+            this.coin = coin
+            this.bean = bean
+            bean > 0 && this.showBeanDialog()
+            this.getUserDetail().catch(err => console.error(err))
+          })
+          .catch(e => {
+            console.error(e)
+            this.$message.error(this.$t('common.failure'))
+          })
       }
     }
   },
   async mounted() {
-    console.log(this.isShowJewel)
     const { packageId, lessonId } = this.$route.params
-    let flag = await lesson.lessons.isReward({ packageId, lessonId })
-    if (!flag) {
-      console.warn('这个课程包的课程没有领取过知识币')
+    let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
+    if (bean === 0) {
       this.isReward = false
       this.startTimer()
     }
@@ -85,12 +118,12 @@ export default {
       return this.userinfo.id
     },
     isJewelOpen() {
-      return this.coin > 0
+      return this.bean > 0
     },
     isConditions() {
-      return (
+      return !!(
         this.time >= this.needTime &&
-        this.lockCoin >= this.reward &&
+        // this.lockCoin >= this.reward &&
         this.isQuizAllRight &&
         this._learnRecordId
       )
@@ -100,6 +133,30 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      getUserDetail: 'lesson/getUserDetail'
+    }),
+    playSound() {
+      document.getElementById('coin-sound').play()
+    },
+    async showBeanDialog() {
+      this.playSound()
+      this.isShowDialog = true
+    },
+    animateBean() {
+      let el = document.querySelector('.bean-icon')
+      let domNode = anime({
+        targets: el,
+        opacity: 0,
+        duration: 800,
+        translateX: 200,
+        translateY: -500,
+        easing: 'linear'
+      })
+      setTimeout(() => (this.isShowDialog = false), 800)
+    },
     handleClick() {
       this.isClicked = !this.isClicked
     },
@@ -212,6 +269,61 @@ export default {
       background: white;
       box-shadow: $shadow;
     }
+  }
+}
+.bean-dialog {
+  border-radius: 20px;
+  .el-dialog__header {
+    display: none;
+  }
+  .el-dialog__body {
+    background: #2c283f;
+    animation: flicker 4000ms ease infinite;
+    border-radius: 20px;
+  }
+  .bean {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &-light {
+      background: url('../../../assets/lessonImg/light.png') no-repeat center;
+      width: 260px;
+      height: 200px;
+      background-size: 75%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &-icon {
+      width: 50px;
+      height: 50px;
+    }
+    &-count {
+      text-align: center;
+      width: 200px;
+      height: 54px;
+      line-height: 43px;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      background: url('../../../assets/lessonImg/button.png') no-repeat center;
+      background-size: 100%;
+    }
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    box-shadow: 0 0 1rem #fefa01;
+  }
+  30%,
+  70% {
+    box-shadow: 0 0 8rem 1rem #fefa01;
+  }
+  50% {
+    box-shadow: 0 0 8rem 1rem rgba(254, 250, 1, 0.8);
   }
 }
 </style>

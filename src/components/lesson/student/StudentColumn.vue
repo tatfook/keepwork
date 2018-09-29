@@ -6,10 +6,11 @@
           <img :src='userProfile.portrait' alt="portrait">
         </div>
         <div class="nickname">{{username}}</div>
-        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}}</div>
+        <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
         <div class="skills" :loading="loadingSkillsPoint">
           <ul class="skills-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{skillName(skill)}}：
+            <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
               <span>{{skill.score}}</span>
             </li>
           </ul>
@@ -89,7 +90,7 @@ export default {
   async mounted() {
     await this.getProfile()
     let payload = { userId: this.userId }
-    await this.getUserSubscribes()
+    await this.getUserSubscribes({packageState:2})
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -105,8 +106,12 @@ export default {
       userId: 'user/userId',
       username: 'user/username',
       enterClassInfo: 'lesson/student/enterClassInfo',
-      subscribesList: 'lesson/student/subscribesList'
+      subscribesList: 'lesson/student/subscribesList',
+      userinfo: 'lesson/userinfo'
     }),
+    beansCount(){
+      return _.get(this.userinfo,'bean',0)
+    },
     skillpointsCount() {
       let sum = 0
       if (this.skillsList.length === 0) {
@@ -155,6 +160,9 @@ export default {
       enterClassRoom: 'lesson/student/enterClassRoom',
       getUserSubscribes: 'lesson/student/getUserSubscribes'
     }),
+    goBeanDetail(){
+      this.$router.push('/student/bean')
+    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
@@ -257,19 +265,31 @@ export default {
         color: #333333;
         font-family: 'ArialMT';
       }
-      .skillpoints {
-        height: 40px;
-        color: #818181;
-        margin: 0 auto;
-        width: 233px;
-        border-bottom: 2px solid #cfd8dc;
+      .beans{
+        border-bottom: 1px solid #909399;
+        margin: 5px 20px 15px;
+        padding-bottom: 20px;
+        color: #181818;
         font-size: 14px;
+        .detail{
+          color: #409eff;
+          padding-left: 20px;
+          cursor: pointer;
+        }
+      }
+      .skillpoints {
+        width: 233px;
+        font-size: 14px;
+        margin: 10px auto;
+        text-align: left;
+        color:#333;
       }
       .skills {
-        margin: 17px auto;
+        margin: 0 auto;
         width: 233px;
         text-align: left;
         &-list {
+          margin:0;
           list-style: none;
           padding: 0;
           li {
@@ -280,6 +300,9 @@ export default {
             padding: 0 4px;
             font-size: 14px;
             color: #333333;
+            .skill-name{
+              color: #707174;
+            }
           }
         }
       }

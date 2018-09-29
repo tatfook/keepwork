@@ -23,6 +23,7 @@ export const packages = {
   packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
+  isSubscribe: async ({ packageId }) => get(`packages/${packageId}/isSubscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
   audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
   release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
@@ -43,7 +44,7 @@ export const lessons = {
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
   lessonDetailByUrl: async ({ url }) => get(`lessons/detail?url=${url}`),
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
-  isReward: async ({ packageId, lessonId }) => get(`learnRecords/isReward?packageId=${packageId}&lessonId=${lessonId}`),
+  isReward: async ({ packageId, lessonId }) => get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),
   delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
@@ -53,10 +54,10 @@ export const lessons = {
 
 export const users = {
   getUserDetail: () => get('users'),
-  userSubscribes: args => get(`users/${args.userId}/subscribes`),
+  userSubscribes: args => get(`users/${args.userId}/subscribes?packageState=${args.packageState}`),
   userSkills: args => get(`users/${args.userId}/skills`),
-  toBeTeacher: ({ userId, key, config }) =>
-    post(`users/${userId}/teacher`, { key }, config),
+  toBeTeacher: ({ userId, key, school, config }) =>
+    post(`users/${userId}/teacher`, { key, school }, config),
   getTeachingRecords: async () => get(`packages`),
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
@@ -75,8 +76,8 @@ export const classrooms = {
     put(`classrooms/${classId}/dismiss`, null, config),
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
-  uploadLearnRecords: ({ classId, learnRecords }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }),
+  uploadLearnRecords: ({ classId, learnRecords, state }) =>
+    put(`learnRecords/${classId}`, { extra: learnRecords, state }),
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
   modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr),
   isValidKey: key => get(`classrooms/valid?key=${key}`)
@@ -94,6 +95,10 @@ export const skills = {
   getAllSkills: () => get('skills')
 }
 
+export const trades = {
+  getTradesList: () => get('trades')
+}
+
 export const lesson = {
   users,
   packages,
@@ -102,7 +107,8 @@ export const lesson = {
   classrooms,
   emails,
   skills,
-  subjects
+  subjects,
+  trades
 }
 
 export default lesson

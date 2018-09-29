@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "aho-corasick.js": "0.0.1",
+    "animejs": "^2.2.0",
     "axios": "^0.18.0",
     "axios-retry": "^3.1.1",
     "babel-polyfill": "^6.26.0",

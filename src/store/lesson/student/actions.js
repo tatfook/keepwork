@@ -21,8 +21,8 @@ let {
 } = props
 
 const actions = {
-  async getUserSubscribes({ commit, rootGetters: { 'lesson/userId': userId } }) {
-    let userSubscribes = await lesson.users.userSubscribes({ userId })
+  async getUserSubscribes({ commit, rootGetters: { 'lesson/userId': userId } }, {packageState}) {
+    let userSubscribes = await lesson.users.userSubscribes({ userId, packageState })
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
   async getPackageDetail({ commit }, { packageId }) {
@@ -159,13 +159,14 @@ const actions = {
         })
         .catch(e => console.error(e)))
   },
-  async uploadLearnRecords(context) {
+  async uploadLearnRecords(context, state = 0) {
     const {
       getters: { classId, learnRecords }
     } = context
     await lesson.classrooms.uploadLearnRecords({
       classId,
-      learnRecords
+      learnRecords,
+      state
     })
   },
   async clearLearnRecordsId({ commit }) {
