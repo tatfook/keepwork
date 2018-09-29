@@ -2,7 +2,8 @@
   <div class='comp-media'>
     <a :target='target' :href='link'>
       <div class="img" :class="getImgClass" v-if='isImage'>
-        <img :src="src">
+        <img v-if="getStyleId === 0" :src="src">
+        <img v-if="getStyleId === 1" class="style-1-img" :src="src">
       </div>
       <video v-else-if='isVideo' :src='src'></video>
       <div class="svg" :class="getImgClass" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
@@ -29,6 +30,9 @@ export default {
 
         return Base64.decode(base64Svg)
       }
+    },
+    getStyleId() {
+      return this.options.styleId || 0
     },
     isImage() {
       return Media.isImage(this.src)
@@ -143,6 +147,15 @@ export default {
 
       img {
         position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        object-fit: cover;
+      }
+
+      .style-1-img {
+        position: relative;
         width: 100%;
         height: 100%;
         left: 0;
