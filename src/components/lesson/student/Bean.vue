@@ -54,7 +54,7 @@ export default {
       return _.get(this.userinfo,'bean',0)
     },
     tableData() {
-      return _.map(this.beanInfo, i => {
+      let data = _.map(this.beanInfo, i => {
         let createdAt = moment(i.createdAt).format('YYYY[/]MM[/]DD  HH:mm')
         let description = i.description
         let balance = i.amount + '  ' + this.$t('lesson.beans')
