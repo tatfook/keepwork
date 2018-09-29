@@ -4,7 +4,7 @@
       <div class="bean-header">
         <div class="bean-header-state"><span class="beans">{{beansCount}}{{$t('lesson.beans')}}</span><span class="explain">({{$t('lesson.explain')}})</span></div>
         <div class="bean-header-button">
-          <el-button type="primary" size="small" :disabled="!tableData.length" @click="goConvert">{{$t('lesson.conversion')}}</el-button>
+          <el-button type="primary" size="small" :disabled="!beansCount" @click="goConvert">{{$t('lesson.conversion')}}</el-button>
         </div>
       </div>
       <div class="bean-nothing" v-if='!tableData.length && !beanLoading'>
