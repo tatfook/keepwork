@@ -13,7 +13,7 @@
       <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
     </div>
   </div>
-  <QuickToTop/>  
+  <QuickToTop/>
 </div>
 </template>
 
@@ -149,13 +149,13 @@ export default {
   }
 }
 .mod-active {
-  border:2px dashed #f7a935;  
+  border:2px dashed #f7a935;
   position: relative;
   .add-mod-btn{
     background-color: #f7a935;
   }
   &:hover{
-    border:2px dashed #f7a935;      
+    border:2px dashed #f7a935;
   }
 }
 .kp-mod-selector .comp {
@@ -184,18 +184,11 @@ export default {
     }
   }
 }
-.kp-mod-selector .comp:hover::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
+.kp-mod-selector .comp:hover {
   background-color: rgba(127, 195, 255, 0.4);
   cursor: pointer;
 }
-.kp-mod-selector.no-mask .comp:hover::before {
+.kp-mod-selector.no-mask .comp:hover {
   background-color: transparent;
   cursor: pointer;
 }

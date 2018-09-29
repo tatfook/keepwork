@@ -198,7 +198,11 @@ const mutations = {
   },
   [SET_ACTIVE_PROPERTY](state, property) {
     if (!state.activePage.activeMod) return
-    Vue.set(state.activePage, 'activeProperty', property)
+    if (state.activePage.activeSubMod) {
+      Vue.set(state.activePage.activeSubMod, 'activeProperty', property)
+    } else {
+      Vue.set(state.activePage, 'activeProperty', property)
+    }
   },
   [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
     Vue.set(state, 'activePropertyOptions', payload)
@@ -239,7 +243,7 @@ const mutations = {
       value
     )
   },
-  [UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST](state, {key, action, index}) {
+  [UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST](state, { key, action, index }) {
     const modList = activeModList(state)
     let list = state.activePage.activeMod.data[key]
     action = _.upperCase(action)

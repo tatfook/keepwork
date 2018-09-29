@@ -396,9 +396,12 @@ const actions = {
   setActiveSubMod({ commit }, payload) {
     commit(SET_ACTIVE_SUB_MOD, payload)
   },
-  setActiveProperty({ commit, dispatch }, payload) {
+  setActiveProperty({ commit, dispatch, getters }, payload) {
+    const { activeMod } = getters
     commit(SET_PRE_MOD_KEY, '')
-    if (payload.key) commit(SET_ACTIVE_MOD, payload.key)
+    if (payload.key && (!activeMod || payload.key !== activeMod.key)) {
+      commit(SET_ACTIVE_MOD, payload.key)
+    }
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
     dispatch('setActivePropertyTabType', 'attr')

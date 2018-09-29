@@ -22,6 +22,10 @@ export default {
     editMode: Boolean,
     options: Object
   },
+  data() {
+    return {
+    }
+  },
   methods: {
     ...mapActions({
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
