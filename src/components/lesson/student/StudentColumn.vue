@@ -40,7 +40,7 @@
           </el-row>
         </div>
         <div class="total-packages">{{$t('lesson.include')}}:
-          <span>{{subscribesList.length}}</span> {{$t('lesson.packagesCount')}}
+          <span>{{sortedSubscribesList.length}}</span> {{$t('lesson.packagesCount')}}
         </div>
         <div class="packages" v-loading='loading'>
           <div class="packages-nothing" v-if="!sortedSubscribesList.length && !loading">
@@ -121,8 +121,13 @@ export default {
       }
       return sum
     },
+    filterSubscribesList(){
+      return _.filter(this.subscribesList, i => {
+        return i.state === 2
+      })
+    },
     continuingStudyPackages() {
-      let continuingStudyPackagesList = _.filter(this.subscribesList, i => {
+      let continuingStudyPackagesList = _.filter(this.filterSubscribesList, i => {
         return (
           i.learnedLessons.length > 0 &&
           i.learnedLessons.length < i.lessons.length
@@ -131,20 +136,20 @@ export default {
       return continuingStudyPackagesList.sort(this.sortByUpdateAt)
     },
     startStudyPackages() {
-      let startStudyPackagesList = _.filter(this.subscribesList, i => {
+      let startStudyPackagesList = _.filter(this.filterSubscribesList, i => {
         return i.learnedLessons.length == 0 && i.lessons.length != 0
       })
       return startStudyPackagesList.sort(this.sortByUpdateAt)
     },
     finishedStudyPackages() {
-      let finishedStudyPackagesList = _.filter(this.subscribesList, i => {
+      let finishedStudyPackagesList = _.filter(this.filterSubscribesList, i => {
         return i.learnedLessons.length == i.lessons.length
       })
       return finishedStudyPackagesList.sort(this.sortByUpdateAt)
     },
     sortedSubscribesList() {
-      if (this.subscribesList.length === 0) {
-        return this.subscribesList
+      if (this.filterSubscribesList.length === 0) {
+        return this.filterSubscribesList
       } else {
         return _.concat(
           this.continuingStudyPackages,
