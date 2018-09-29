@@ -1,5 +1,6 @@
 <template>
   <div class="edit-project">
+    <project-header class="edit-project-header" :projectDetail="pblProjectDetail" v-if="!isFirstGettingData"></project-header>
     <el-tabs class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
         <span slot="label">设定</span>
@@ -13,15 +14,14 @@
   </div>
 </template>
 <script>
+import ProjectHeader from './common/ProjectHeader'
 import ProjectEditing from './common/ProjectEditing'
 import ProjectMembers from './common/ProjectMembers'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'EditProject',
   async created() {
-    await this.pblGetProjectDetail({ projectId: this.projectId })
-    this.isFirstGettingData = false
-    this.isLoading = false
+    this.initProjectDetail()
   },
   data() {
     return {
@@ -50,17 +50,33 @@ export default {
   methods: {
     ...mapActions({
       pblGetProjectDetail: 'pbl/getProjectDetail'
-    })
+    }),
+    async initProjectDetail() {
+      this.isFirstGettingData = true
+      this.isLoading = true
+      await this.pblGetProjectDetail({ projectId: this.projectId })
+      this.isFirstGettingData = false
+      this.isLoading = false
+    }
   },
   components: {
+    ProjectHeader,
     ProjectEditing,
     ProjectMembers
+  },
+  watch: {
+    $route: function(val) {
+      this.initProjectDetail()
+    }
   }
 }
 </script>
 <style lang="scss">
 .edit-project {
   background-color: #f5f5f5;
+  &-header {
+    margin-bottom: 24px;
+  }
   &-tabs {
     background-color: #fff;
     border: 1px solid #e8e8e8;

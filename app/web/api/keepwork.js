@@ -18,8 +18,9 @@ const withoutParseEndpoint = createEndpoint({
 const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
-  getProfile: async (...args) => post('/user/getProfile', ...args),
+  login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  getProfile: async (...args) => post('/users/getProfile', ...args),
+  getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
@@ -184,6 +185,7 @@ export const userThreeService = {
 export const projects = {
   getProjectDetail: async ({ projectId }) => get(`projects/${projectId}`),
   updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
+  getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   createProject: async (...args) => post('projects', ...args)
 }
 

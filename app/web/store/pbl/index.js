@@ -6,6 +6,7 @@ const state = {
   isShowLoginDialog: false,
   projects: [],
   projectApplyList: [],
+  usersProjects: [],
   memberList: []
 }
 export default {
