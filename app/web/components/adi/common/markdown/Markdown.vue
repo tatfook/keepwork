@@ -3,15 +3,16 @@
     <vue-markdown
       :toc="true"
       :source="validData"
+      :postrender="postrender"
       toc-anchor-link-symbol=""
-      toc-anchor-class="iconfont icon-link_"/>
+      toc-anchor-class="iconfont icon-link_"
+      />
   </div>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
-import { Base64 } from 'js-base64'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 
@@ -49,6 +50,22 @@ export default {
       let isEmpty = !(this.properties.data && this.properties.data.trim())
       if (isEmpty && this.options.emptyData) return this.$t(this.options.emptyData)
       return this.properties.data
+    }
+  },
+  methods: {
+    stripScripts(htmlData) {
+      var div = document.createElement('div');
+      div.innerHTML = htmlData;
+      var scripts = div.getElementsByTagName('script');
+      var i = scripts.length;
+      while (i--) {
+        scripts[i].parentNode.removeChild(scripts[i]);
+      }
+      return div.innerHTML;
+    },
+    postrender(htmlData) {
+      if (!this.options.enableScript) htmlData = this.stripScripts(htmlData)
+      return htmlData
     }
   },
   components: {
