@@ -5,50 +5,53 @@
         <div class="list-box">
           <h4 class="title">致社区</h4>
           <ul class="list">
-            <li>- 致教育者</li>
-            <li>- 给父母的话</li>
-            <li>- 致开发者</li>
-            <li>- 对爱好编程的你说</li>
+            <li><a href="https://keepwork.com/official/paracraft/to-educators">- 致教育者</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/to-parents">- 给父母的话</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/to-developers">- 致开发者</a></li>
+            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki">- 对爱好编程的你说</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">用来做什么？</h4>
           <ul class="list">
-            <li>- 创建自己的项目</li>
-            <li>- 与老师一起完成项目</li>
-            <li>- 制作个人网站</li>
-            <li>- 拥有个人知识体系</li>
-            <li>- 学习在线课程</li>
+            <li><a href="">- 创建自己的项目</a></li>
+            <li><a href="">- 与老师一起完成项目</a></li>
+            <li><a href="">- 制作个人网站</a></li>
+            <li><a href="">- 拥有个人知识体系</a></li>
+            <li><a href="">- 学习在线课程</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">学习法</h4>
           <ul class="list">
-            <li>- 在项目中学习</li>
-            <li>- 在传授中学习</li>
-            <li>- 费曼学习法</li>
-            <li>- 碎片化学习法</li>
+            <li><a href="">- 在项目中学习</a></li>
+            <li><a href="">- 在传授中学习</a></li>
+            <li><a href="">- 费曼学习法</a></li>
+            <li><a href="">- 碎片化学习法</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">keepwork家族</h4>
           <ul class="list">
-            <li>- keepwork</li>
-            <li>- Paracraft</li>
-            <li>- NPL语言</li>
-            <li>- NPL CAD</li>
-            <li>- 开放平台</li>
+            <li><a href="https://keepwork.com">- keepwork</a></li>
+            <li><a href="https://iicc.keepwork.com/#/">- Paracraft</a></li>
+            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki">- NPL语言</a></li>
+            <li><a href="https://keepwork.com/intro/keepwork/NPLCAD">- NPL CAD</a></li>
+            <li><a href="https://keepwork.com/official/open/index">- 开放平台</a></li>
+            <li><a href="https://keepwork.com/official/haqi/index">- 魔法哈奇</a></li>
+            <li><a href="http://cc.paraengine.com/twiki/bin/view/HaqiTeen/WebHome">- 魔法哈奇2</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/index">- Paracraft网络课程</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/offline-courses">- Paracraft线下培训班</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">支持</h4>
           <ul class="list">
-            <li>- 联系我们</li>
-            <li>- 加入我们</li>
-            <li>- 网站统计</li>
-            <li>- 更新信息</li>
-            <li>- 问题反馈</li>
-            <li>- 投诉本页</li>
+            <li><a href="http://keepwork.com/official/company/index">- 联系我们</a></li>
+            <li><a href="https://keepwork.com/official/company/joinus">- 加入我们</a></li>
+            <li><a href="https://keepwork.com/wiki/statics">- 网站统计</a></li>
+            <li><a href="https://keepwork.com/intro/keepwork/changelog">- 更新信息</a></li>
+            <li><a href="https://github.com/tatfook/wikicraft/issues">- 问题反馈</a></li>
           </ul>
         </div>
       </div>
@@ -73,7 +76,7 @@
         </li>
         <li>
           <span>
-            <el-dropdown @command='swichLanguage' trigger="click" placement="top">
+            <el-dropdown @command='switchLanguage' trigger="click" placement="top">
               <span class="el-dropdown-link">
                 {{$t('common.simplifiedChinese')}}
               </span>
@@ -92,7 +95,7 @@
 export default {
   name: 'PerfectCommonFooter',
   methods: {
-    swichLanguage(language) {
+    switchLanguage(language) {
       window.localStorage.setItem('keepwork-language-locale', language)
       window.location.reload()
     }
@@ -104,6 +107,7 @@ export default {
 .perfect-common-footer {
   &-detail-list {
     background: #282828;
+    padding-bottom: 20px;
     .list-box-wrap {
       margin: 0 auto;
       max-width: 1200px;
@@ -120,6 +124,12 @@ export default {
           list-style: none;
           color: #666;
           line-height: 28px;
+          li{
+            a{
+              color: #666;
+              text-decoration: none;
+            }
+          }
         }
       }
     }
@@ -138,6 +148,9 @@ export default {
           display: inline-block;
           height: 60px;
           line-height: 60px;
+          .el-dropdown-link{
+            cursor: pointer;
+          }
           .logo {
             display: inline-block;
             position: relative;

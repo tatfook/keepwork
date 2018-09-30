@@ -1,14 +1,14 @@
 <template>
   <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
-      <el-menu-item index='0'>
+      <el-menu-item index='0' @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
-      <el-menu-item index='1'>
-        <a href="/creativity">{{$t('common.creativity')}}</a>
+      <el-menu-item index='1' @click="goCreativityPage">
+        {{$t('common.creativity')}}
       </el-menu-item>
-      <el-menu-item index='2'>
-        <a href="/exploration">{{$t('common.explore')}}</a>
+      <el-menu-item index='2' @click="goExplorationPage">
+        {{$t('common.explore')}}
       </el-menu-item>
       <el-menu-item index='4'>
         <a href='/official/help/index'>{{$t('common.study')}}</a>
@@ -185,6 +185,15 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
+    goCreativityPage(){
+      this.$router.push('creativity')
+    },
+    goExplorationPage(){
+      this.$router.push('exploration')
+    },
+    goHomePage(){
+      this.$router.push('/')
+    },
     backEditArea() {
       window.open(`${origin}/ed`)
     },
@@ -216,7 +225,6 @@ export default {
     logout() {
       this.userLogout()
       this.$emit('callback')
-      // window.location.reload()
     },
     goJoin() {
       this.isRegisterDialogShow = true

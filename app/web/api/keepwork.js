@@ -183,7 +183,9 @@ export const userThreeService = {
 
 export const projects = {
   createProject: async (...args) => post('projects', ...args),
-  getProjects: async () => post('projects/search')
+  getProjects: async () => post('projects/search'),
+  getPersonalProjects: async () => get('projects'),
+  getContributeProjects: async () => get('projects/join')
 }
 
 export const keepwork = {

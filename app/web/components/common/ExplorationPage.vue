@@ -31,19 +31,19 @@
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
         <div class="options" ref="options">
-          <el-button :class="{'selected':1==currIndex}"  @click="selectTab(1)">项目<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':2==currIndex}"  @click="selectTab(2)">3D世界<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':3==currIndex}"  @click="selectTab(3)">网站<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':4==currIndex}"  @click="selectTab(4)">知识<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':5==currIndex}"  @click="selectTab(5)">课程<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':6==currIndex}"  @click="selectTab(6)">用户<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':7==currIndex}"  @click="selectTab(7)">工作室<span class="search-num">12345</span></el-button>
-          <el-button :class="{'selected':8==currIndex}"  @click="selectTab(8)">招募中<span class="search-num">12345</span></el-button>
+          <el-button :class="{'selected':1==currIndex}"  @click="selectTab(1)">项目<span class="search-num">({{allProjects.length}})</span></el-button>
+          <el-button :class="{'selected':2==currIndex}"  @click="selectTab(2)">3D世界<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':3==currIndex}"  @click="selectTab(3)">网站<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':4==currIndex}"  @click="selectTab(4)">知识<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':5==currIndex}"  @click="selectTab(5)">课程<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':6==currIndex}"  @click="selectTab(6)">用户<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':7==currIndex}"  @click="selectTab(7)">工作室<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':8==currIndex}"  @click="selectTab(8)">招募中<span class="search-num">(12345)</span></el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
           <el-row>
-            <el-col :span="6">
-              <project-cell></project-cell>
+            <el-col :span="6" v-for="(project,index) in allProjects" :key="index">
+              <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
         </div>
@@ -103,6 +103,8 @@
 </template>
 <script>
 import ProjectCell from './ProjectCell'
+import _ from 'lodash'
+import { mapActions,mapGetters } from 'vuex'
 
 export default {
   name: 'ExplorationPage',
@@ -111,7 +113,18 @@ export default {
       currIndex: 1
     }
   },
+  mounted(){
+    this.setAllProjects()
+  },
+  computed: {
+    ...mapGetters({
+      allProjects: 'pbl/allProjects'
+    })
+  },
   methods: {
+    ...mapActions({
+      setAllProjects: 'pbl/setAllProjects'
+    }),
     goSearch() {},
     selectTab(index) {
       switch (index) {
