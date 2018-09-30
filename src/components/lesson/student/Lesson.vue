@@ -212,7 +212,7 @@ export default {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     },
     lessonMainUid() {
-      this.lessonMain.map(item => item.key = uuid())
+      this.lessonMain.map(item => item).forEach(item => item.key = uuid())
     }
   }
 }
