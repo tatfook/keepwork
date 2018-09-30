@@ -18,25 +18,26 @@
             <div class="package-catalogue-item-cover-wrap">
               <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
             </div>
+            </div>
           </div>
-        </div>
-        <div class="package-catalogue-item-detail">
-          <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-            <span>{{lesson.lessonName}}</span>
+          <div class="package-catalogue-item-detail">
+            <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
+              <span>{{lesson.lessonName}}</span>
+            </div>
+            <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
+            <div class="package-catalogue-item-goals">
+              <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
+            </div>
+            <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
+              <span>45{{$t('lesson.minUnit')}}</span>
+            </div>
+            <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+            <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
+            <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
           </div>
-          <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
-          <div class="package-catalogue-item-goals">
-            <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
-          </div>
-          <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-            <span>45{{$t('lesson.minUnit')}}</span>
-          </div>
-          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -109,7 +110,9 @@ export default {
         : this.learnedLessons
     },
     lessonProgressPercent() {
-      return this.lessonFinishedList.length / this.lessonsList.length * 100 || 0
+      return (
+        (this.lessonFinishedList.length / this.lessonsList.length) * 100 || 0
+      )
     },
     lessonProgressInfo() {
       return (
@@ -130,7 +133,10 @@ export default {
   methods: {
     toLessonDetail(lesson) {
       if (this.isInClassroom) {
-        const { name, params: { id: _packageId } } = this.$route
+        const {
+          name,
+          params: { id: _packageId }
+        } = this.$route
         const { packageId, lessonId } = this.enterClassInfo
         if (
           name === 'StudentPackage' &&
@@ -170,6 +176,14 @@ export default {
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
       }/lesson/${this.continueLearnedLesson.id}`
+      this.$router.push({
+        path: targetLessonPath
+      })
+    },
+    toLearnAgain(lesson) {
+      let targetLessonPath = `/${this.actorType}/package/${
+        this.packageDetail.id
+      }/lesson/${lesson.id}`
       this.$router.push({
         path: targetLessonPath
       })
@@ -294,6 +308,9 @@ export default {
       margin-bottom: 16px;
       &.start-button {
         margin-left: 0;
+      }
+      &.learn-again {
+
       }
     }
     &-goals {
