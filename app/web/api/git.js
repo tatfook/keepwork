@@ -50,19 +50,19 @@ const gitLabAPIGenerator = ({ url, token }) => {
           return total
         },
         files: {
-          remove: async (projectId, filePath, branch, options) => {
-            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-            await instance.delete(
-              `projects/${pId}/repository/files/${path}?branch=master&content=%0A&commit_message=keepwork%20commit%3A%20${path}`
+          remove: async (projectName, filePath) => {
+            const [projectPath, path] = [projectName, filePath].map(
+              encodeURIComponent
             )
+            await instance.delete(`projects/${projectPath}/files/${path}`)
             return true
           },
-          async show(_projectName, filePath, ref) {
-            const [projectName, path] = [_projectName, filePath].map(
+          async show(projectName, filePath) {
+            const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
             )
             let res = await instance.get(
-              `projects/${projectName}/files/${path}`
+              `projects/${projectPath}/files/${path}`
             )
             return res.data
           },
@@ -73,40 +73,79 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
-          async create(_projectName, filePath, branch = 'master', options) {
-            console.log(options)
-            const [projecName, path] = [_projectName, filePath].map(
+          async create(projectName, filePath, content) {
+            const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
             )
             let res = await instance.post(
-              `projects/${projecName}/files/${path}`,
+              `projects/${projectPath}/files/${path}`,
               {
-                content: options.content || ''
+                content: content || ''
               }
             )
             return res.data
           },
-          async edit(_projectName, filePath, branch = 'master', options) {
+          async edit(_projectName, filePath, content) {
             const [projectName, path] = [_projectName, filePath].map(
               encodeURIComponent
             )
             let res = await instance.put(
-              `projects/${projectName}/repository/files/${path}`,
+              `projects/${projectName}/files/${path}`,
               {
-                branch,
-                ...options
+                content
               }
             )
             return res.data
           },
-          async rename(_projectName, _currentFilePath, _newFilePath, content = '') {
-            const [projectName, currentFilePath, newFilePath] = [_projectName, _currentFilePath, _newFilePath].map(encodeURIComponent)
-            let res = await instance.post(
-              `projects/${projectName}/files/${currentFilePath}/move`,
+          async rename(
+            projectName,
+            _currentFilePath,
+            newFilePath,
+            content = ''
+          ) {
+            const [projectPath, currentFilePath] = [
+              projectName,
+              _currentFilePath
+            ].map(encodeURIComponent)
+            let res = await instance.put(
+              `projects/${projectPath}/files/${currentFilePath}/move`,
               {
                 new_path: newFilePath,
                 content
               }
+            )
+            return res.data
+          }
+        },
+        folders: {
+          async create(projectName, folderPath) {
+            const [projectPath, path] = [projectName, folderPath].map(
+              encodeURIComponent
+            )
+            let res = await instance.post(
+              `projects/${projectPath}/folders/${path}`
+            )
+            return res.data
+          },
+          async rename(projectName, folderPath, newFolderPath) {
+            const [projectPath, path] = [projectName, folderPath].map(
+              encodeURIComponent
+            )
+            console.warn(projectPath)
+            let res = await instance.put(
+              `projects/${projectPath}/folders/${path}/move`,
+              {
+                new_path: newFolderPath
+              }
+            )
+            return res.data
+          },
+          async remove(projectName, folderPath) {
+            const [projectPath, path] = [projectName, folderPath].map(
+              encodeURIComponent
+            )
+            let res = await instance.delete(
+              `projects/${projectPath}/folders/${path}`
             )
             return res.data
           }
@@ -147,9 +186,12 @@ export class GitAPI {
       .split('/')
       .splice(0, 2)
       .join('/')
-    return this.client.projects.repository.files
-      .show(projectName, path)
-      .then(file => file.content)
+    return (
+      this.client.projects.repository.files
+        .show(projectName, path)
+        // .then(file => Base64.decode(file.content))
+        .then(file => file.content)
+    )
   }
 
   async createFile(path, options) {
@@ -157,39 +199,37 @@ export class GitAPI {
       .split('/')
       .splice(0, 2)
       .join('/')
-    options = { ...(options || {}), commit_message: 'create' }
+    let content = options.content || ''
     return this.client.projects.repository.files
-      .create(projectName, path, options)
+      .create(projectName, path, content)
       .then(data => {
-        this.commitToES(path, 'create', options.content, {})
+        // this.commitToES(path, 'create', options.content, {})
         return data
       })
   }
 
   async editFile(path, options) {
-    options = { ...(options || {}), commit_message: 'edit' }
+    const projectName = path
+      .split('/')
+      .splice(0, 2)
+      .join('/')
+    const content = options.content || ''
     return this.client.projects.repository.files
-      .edit(
-        options.projectId || this.config.projectId,
-        path,
-        options.branch || this.config.branch || 'master',
-        options
-      )
+      .edit(projectName, path, content)
       .then(data => {
-        this.commitToES(path, 'edit', options.content, {})
+        // this.commitToES(path, 'edit', options.content, {})
         return data
       })
   }
 
   async deleteFile(path, options) {
-    options = { ...(options || {}), commit_message: 'delete' }
+    const projectName = path
+      .split('/')
+      .splice(0, 2)
+      .join('/')
+    // options = { ...(options || {}), commit_message: 'delete' }
     return this.client.projects.repository.files
-      .remove(
-        options.projectId || this.config.projectId,
-        path,
-        options.branch || this.config.branch || 'master',
-        options
-      )
+      .remove(projectName, path)
       .then(data => {
         this.commitToES(path, 'delete', '', {})
         return data
@@ -197,7 +237,7 @@ export class GitAPI {
   }
 
   async renameFile(currentFilePath, newFilePath, options) {
-    let content = await this.getContent(currentFilePath, options)
+    let content = (await this.getContent(currentFilePath, options)) || ''
     const projectName = currentFilePath
       .split('/')
       .splice(0, 2)
@@ -227,25 +267,49 @@ export class GitAPI {
     return actions
   }
 
-  async renameFolder(currentFolderPath, newFolderPath, childrenFiles, options) {
-    let actions = await this.genActions(
-      currentFolderPath,
-      newFolderPath,
-      childrenFiles,
-      options
-    )
-    let payload = {
-      branch: options.branch || this.config.branch || 'master',
-      commit_message: 'rename folder',
-      actions
-    }
-    await this.client.projects.repository.files
-      .rename(options.projectId, payload)
+  async createFolder(path) {
+    const projectName = path
+      .split('/')
+      .splice(0, 2)
+      .join('/')
+    return this.client.projects.repository.folders
+      .create(projectName, path)
       .then(data => {
-        this.commitToESByArray(actions, options)
         return data
       })
-      .catch(e => {})
+  }
+
+  async renameFolder(currentFolderPath, newFolderPath, childrenFiles, options) {
+    console.warn('renameFolder--->')
+    const projectName = currentFolderPath
+      .split('/')
+      .splice(0, 2)
+      .join('/')
+    await this.client.projects.repository.folders.rename(
+      projectName,
+      currentFolderPath,
+      newFolderPath
+    )
+    // console.log(childrenFiles)
+    // await this.client.projects.repository.folders.renameFolder()
+    // let actions = await this.genActions(
+    //   currentFolderPath,
+    //   newFolderPath,
+    //   childrenFiles,
+    //   options
+    // )
+    // let payload = {
+    //   branch: options.branch || this.config.branch || 'master',
+    //   commit_message: 'rename folder',
+    //   actions
+    // }
+    // await this.client.projects.repository.files
+    //   .rename(options.projectId, payload)
+    //   .then(data => {
+    //     // this.commitToESByArray(actions, options)
+    //     return data
+    //   })
+    //   .catch(e => {})
   }
 
   async upsertFile(path, options) {
@@ -266,8 +330,8 @@ export class GitAPI {
 
   async commitToESByArray(actions, options) {
     actions.map(action => {
-      this.commitToES(action.file_path, 'create', action.content, {})
-      this.commitToES(action.previous_path, 'delete', '', {})
+      // this.commitToES(action.file_path, 'create', action.content, {})
+      // this.commitToES(action.previous_path, 'delete', '', {})
       return null
     })
   }

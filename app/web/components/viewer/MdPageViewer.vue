@@ -51,6 +51,14 @@ export default {
     }).catch(e => console.error(e))
 
     this.isLoginDialogShow = !this.userIsLogined && this.isSitePrivate
+    console.warn('private: ', this.isSitePrivate)
+    console.log('layout', this.layout)
+    console.log(this.pageLoading)
+    console.log(this.isLoginDialogShow)
+    console.log(this.headerModList)
+    console.log(this.footerModList)
+    console.log(this.sidebarModList)
+    console.log(this.code)
   },
   computed: {
     ...mapGetters({
@@ -71,10 +79,10 @@ export default {
       return this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
     },
     siteVisibility() {
-      return _.get(this.siteDetailInfo, ['siteinfo', 'visibility'], 'public')
+      return _.get(this.siteDetailInfo, ['site', 'visibility'], 1)
     },
     isSitePrivate() {
-      return this.siteVisibility === 'private'
+      return this.siteVisibility === 1
     },
     show404() {
       return !this.pageLoading && !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined

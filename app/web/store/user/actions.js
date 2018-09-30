@@ -77,8 +77,6 @@ const actions = {
     await dispatch('lesson/logout', null, { root: true })
     Cookies.remove('token')
     Cookies.remove('token', { path: '/' })
-    Cookies.remove('userId')
-    Cookies.remove('userId', { path: '/' })
     window.localStorage.removeItem('satellizer_token')
     window.location.reload()
   },
@@ -175,6 +173,7 @@ const actions = {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
     // await dispatch('getAllSiteDataSource', { useCache: false })
+    console.warn('payload', payload)
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
@@ -182,7 +181,6 @@ const actions = {
     let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
-    console.warn(webTemplate)
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
@@ -311,11 +309,11 @@ const actions = {
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
-    let { commit, getters: { getSiteDetailInfoByPath } } = context
+    let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
-
+    detailInfo.site.username = username
     commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
   },
   async getSiteLayoutConfig(context, { path, editorMode = true, useCache = true }) {

@@ -43,7 +43,8 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
-    this.basicMessage = _.clone(this.getSiteDetailInfoByPath(this.sitePath).siteinfo)
+    this.basicMessage = _.clone(this.getSiteDetailInfoByPath(this.sitePath).site)
+    console.warn('basicMessege', this.basicMessage)
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },
@@ -52,7 +53,7 @@ export default {
       basicMessage: {},
       loading: true,
       basicInfoRules: {
-        displayName: [
+        name: [
           {
             max: 30,
             message: this.$t('setting.siteNameMaxLen'),
@@ -65,12 +66,13 @@ export default {
   computed: {
     ...mapGetters({
       getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
+      // getSiteDetailInfoById: 'user/getSiteDetailInfoById',
       getSiteDetailInfoDataSourceByPath:
         'user/getSiteDetailInfoDataSourceByPath'
     }),
     siteUrl() {
       let origin = location.origin
-      return `${origin}/${this.basicMessage.username}/${this.basicMessage.name}`
+      return `${origin}/${this.basicMessage.username}/${this.basicMessage.sitename}`
     }
   },
   methods: {
@@ -113,7 +115,7 @@ export default {
       })
     },
     async checkSensitive() {
-      let checkedWords = [this.basicMessage.displayName, this.basicMessage.desc]
+      let checkedWords = [this.basicMessage.name, this.basicMessage.desc]
       let result = await this.userCheckSensitive({ checkedWords })
       return result && result.length > 0
     },

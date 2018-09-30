@@ -84,7 +84,8 @@ export const website = {
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
-  getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
+  getDetailInfo: async (args) => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
+  // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args)
 }
 

@@ -134,7 +134,8 @@ const actions = {
     let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
       path,
-      file: { ...file, content: Base64.decode(file.content) + markdownExtraLineToCheck404 }
+      // file: { ...file, content: Base64.decode(file.content) + markdownExtraLineToCheck404 }
+      file: { ...file, content: file.content + markdownExtraLineToCheck404 }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
@@ -193,6 +194,26 @@ const actions = {
     let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
   },
+  async createFolder(
+    context,
+    { path, refreshRepositoryTree = true }
+  ) {
+    const { commit, dispatch } = context
+    const {
+      username,
+      name,
+      gitlab,
+      options
+    } = await getGitlabFileParams(context, { path })
+    await gitlab.createFolder(path)
+
+    if (refreshRepositoryTree) {
+      await dispatch('getRepositoryTree', {
+        path: `${username}/${name}`,
+        useCache: false
+      })
+    }
+  },
   async createFile(
     context,
     { path, content = '', refreshRepositoryTree = true, userOptions }
@@ -247,9 +268,25 @@ const actions = {
       useCache: false
     })
   },
-  async addFolder({ dispatch }, { path }) {
-    let newEmptyFilePath = `${path}/${EMPTY_GIT_FOLDER_KEEPER}`
-    await dispatch('createFile', { path: newEmptyFilePath })
+  async addFolder(
+    context,
+    { path, refreshRepositoryTree = true }
+  ) {
+    const { commit, dispatch } = context
+    const {
+      username,
+      name,
+      gitlab,
+      options
+    } = await getGitlabFileParams(context, { path })
+    await gitlab.createFolder(path)
+
+    if (refreshRepositoryTree) {
+      await dispatch('getRepositoryTree', {
+        path: `${username}/${name}`,
+        useCache: false
+      })
+    }
   },
   async removeFolder(context, { paths }) {
     let { commit, dispatch } = context
