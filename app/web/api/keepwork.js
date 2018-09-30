@@ -182,12 +182,21 @@ export const userThreeService = {
   unbind: async (...args) => post('user_three_service/unbind', ...args)
 }
 
+export const favorites = {
+  existFavorite: async ({ objectId, objectType }) => get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
+  favoriteProject: async ({ objectId, objectType }) => post('favorites', { objectId, objectType }),
+  unFavoriteProject: async ({ objectId, objectType }) => deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
+}
+
 export const projects = {
   getProjects: async () => post('projects/search'),
   getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
   updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
-  createProject: async (...args) => post('projects', ...args)
+  createProject: async (...args) => post('projects', ...args),
+  getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
+  starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
+  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`)
 }
 
 export const applies = {
@@ -210,6 +219,7 @@ export const keepwork = {
   pages,
   qiniu,
   userThreeService,
+  favorites,
   projects,
   applies,
   members,
