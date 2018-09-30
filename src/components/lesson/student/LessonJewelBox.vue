@@ -1,5 +1,5 @@
 <template>
-  <span v-if="isShowJewel" @mouseover="showTips" @mouseout="closeTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
+  <span v-if="isShowJewel" @mouseover="showTips" @click="handleClick" class="jewel-box" :class="{ opened: isJewelOpen  }">
     <div v-if="isJewelOpen" class="jewel-box-coin-wrap">
       <!-- <div class="tips">{{$t('lesson.receiveSuccess')}}</div>
       <div class="coin">+{{coin}}</div> -->
@@ -11,6 +11,9 @@
           <span class="tips-time">{{time | toMinute}}</span>
         </div>
         <div class="tips-row">{{$t('lesson.jewelTips2')}}</div>
+        <div class="tips-button">
+          <el-button type="primary" @click="hideTips">{{$t('lesson.jewelButton')}}</el-button>
+        </div>
         <!-- <div class="tips-row" v-html="$t('lesson.jewelTips3', {reward: `<sapn class='tips-coin'>${reward}</sapn>`, lockCoin: `<span class='tips-coin'>${lockCoin}</span>`})"></div> -->
       </span>
     </div>
@@ -68,9 +71,7 @@ export default {
       if (flag) {
         const { packageId, lessonId } = this.$route.params
         this.isBeInClassroom
-          ? await this.uploadLearnRecords(1).catch(e =>
-              console.error(e)
-            )
+          ? await this.uploadLearnRecords(1).catch(e => console.error(e))
           : await this.uploadSelfLearnRecords({
               packageId: Number(packageId),
               lessonId: Number(lessonId),
@@ -89,6 +90,9 @@ export default {
             this.$message.error(this.$t('common.failure'))
           })
       }
+    },
+    isQuizAllRight(value) {
+      value && this.showTips()
     }
   },
   async mounted() {
@@ -170,7 +174,7 @@ export default {
     showTips() {
       this.isShowTips = true
     },
-    closeTips() {
+    hideTips() {
       this.isShowTips = false
     }
   }
@@ -232,7 +236,7 @@ export default {
     position: absolute;
     animation: fade-in;
     animation-duration: 0.5s;
-    top: 110px;
+    top: 70px;
     left: -26px;
     z-index: 998;
     min-height: 60px;
@@ -242,7 +246,7 @@ export default {
     box-shadow: $shadow;
     .tips {
       z-index: 34;
-      padding: 40px;
+      padding: 20px 40px;
       font-size: 16px;
       display: inline-block;
       background-color: #fff;
@@ -255,13 +259,16 @@ export default {
       .tips-row {
         line-height: 30px;
       }
+      .tips-button {
+        margin-top: 20px;
+      }
     }
     &::before {
       content: '';
       display: inline-block;
       position: absolute;
       top: -14px;
-      left: 60px;
+      left: 39px;
       z-index: -1;
       transform: rotate(45deg);
       height: 40px;
