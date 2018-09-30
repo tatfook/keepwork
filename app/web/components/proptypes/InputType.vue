@@ -9,8 +9,7 @@ export default {
   name: 'InputType',
   mixins: [protypesBaseMixin],
   props: {
-    originValue: String,
-    optionsData: Object
+    originValue: String
   },
   computed: {
     inputTypeValue: {

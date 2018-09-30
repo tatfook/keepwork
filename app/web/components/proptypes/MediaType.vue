@@ -18,8 +18,7 @@ let EMPTY = 'emptyMedia'
 export default {
   name: 'MediaType',
   props: {
-    originValue: String,
-    optionsData: Object
+    originValue: String
   },
   mixins: [protypesBaseMixin],
   data() {
