@@ -5,13 +5,18 @@ const GET_PROJECT_DETAIL_SUCCESS = 'GET_PROJECT_DETAIL_SUCCESS'
 const GET_PROJECT_APPLY_LIST_SUCCESS = 'GET_PROJECT_APPLY_LIST_SUCCESS'
 const GET_PROJECT_MEMBERS_SUCCESS = 'GET_PROJECT_MEMBERS_SUCCESS'
 const GET_USER_PROJECTS_SUCCESS = 'GET_USER_PROJECTS_SUCCESS'
+const GET_PROJECT_FAVORITE_STATE_SUCCESS = 'GET_PROJECT_FAVORITE_STATE_SUCCESS'
+const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
+
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS,
   GET_USER_PROJECTS_SUCCESS,
-  GET_PROJECT_MEMBERS_SUCCESS
+  GET_PROJECT_MEMBERS_SUCCESS,
+  GET_PROJECT_FAVORITE_STATE_SUCCESS,
+  GET_PROJECT_STAR_STATE_SUCCESS
 }
 
 const mutations = {
@@ -40,6 +45,18 @@ const mutations = {
     Vue.set(state, 'memberList', {
       ...state.memberList,
       [projectId]: memberList
+    })
+  },
+  [GET_PROJECT_FAVORITE_STATE_SUCCESS](state, { projectId, isFavorite }) {
+    Vue.set(state, 'projectsFavoriteState', {
+      ...state.projectsFavoriteState,
+      [projectId]: isFavorite
+    })
+  },
+  [GET_PROJECT_STAR_STATE_SUCCESS](state, { projectId, isStared }) {
+    Vue.set(state, 'projectsStarState', {
+      ...state.projectsStarState,
+      [projectId]: isStared
     })
   }
 }
