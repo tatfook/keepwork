@@ -15,11 +15,12 @@ const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
 
-const { post, put } = keepworkEndpoint
+const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
+  login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
   getProfile: async (...args) => post('/user/getProfile', ...args),
+  getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
@@ -182,7 +183,21 @@ export const userThreeService = {
 }
 
 export const projects = {
+  getProjects: async () => post('projects/search'),
+  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
+  updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
+  getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   createProject: async (...args) => post('projects', ...args)
+}
+
+export const applies = {
+  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
+  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state })
+}
+
+export const members = {
+  getProjectMembersList: async ({ objectId, objectType }) => get(`members?objectId=${objectId}&objectType=${objectType}`),
+  deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
 }
 
 export const keepwork = {
@@ -196,6 +211,8 @@ export const keepwork = {
   qiniu,
   userThreeService,
   projects,
+  applies,
+  members,
   bigfile
 }
 

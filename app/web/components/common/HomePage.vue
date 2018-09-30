@@ -1,18 +1,23 @@
 <template>
   <div class="home-page">
-    <div class="home-page-advertising-head">
+    <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
       <i class="iconfont icon-sound-fill"></i>3D创作工具：Paracraft 永久免费！
-      <span class="close">&times;</span>
+      <span class="close" @click="closeAd">&times;</span>
     </div>
     <div class="home-page-simple-show">
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
           <div class="home-page-simple-show-center-left-desc">
             <h2 class="title">创作自己的游戏与动画</h2>
-            <p>拥有自己的自己体系</p>
-            <p>拥有自己的个人网站</p>
-            <p>通过项目来学习编程</p>
-            <p>程序员为程序员创作的教程</p>
+            <p class="intro">拥有自己的自己体系</p>
+            <p class="intro">拥有自己的个人网站</p>
+            <p class="intro">通过项目来学习编程</p>
+            <p class="intro">程序员为程序员创作的教程</p>
+            <el-button type="primary" round class="join-button">马上免费加入</el-button>
+            <div class="remainder">
+              <a href="/official/paracraft/to-parents" target="_blank" class="pedagogue">给教育者的话</a>
+              <a href="/official/paracraft/to-educators" target="_blank">告家长</a>
+            </div>
           </div>
           <div class="flexible-info-board"></div>
         </div>
@@ -95,8 +100,8 @@
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6">
-            <project-cell></project-cell>            
+          <el-col :span="6" v-for="(project,index) in handpickProjects" :key="index" v-if="index < 4">
+            <project-cell :project='project'></project-cell>
           </el-col>
         </el-row>
       </div>
@@ -109,16 +114,15 @@
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6">
+          <el-col :span="6" v-for="(lessonPackage,index) in hotsPackages" :key="index">
             <div class="lesson">
-              <img class="lesson-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              <h4 class="lesson-title">Paracraft动画教学</h4>
+              <img class="lesson-cover" :src="lessonPackage.extra.coverUrl" alt="">
+              <h4 class="lesson-title">{{lessonPackage.packageName}}</h4>
               <div class="lesson-desc">
                 <p>包含：
                   <span>125</span>个课程</p>
-                <p>年龄：
-                  <span>125-456</span>周岁</p>
-                <p>简介：动画、动作、编辑模式</p>
+                <p>年龄：{{lessonPackage.minAge}}-{{lessonPackage.maxAge}}</p>
+                <p>简介：{{lessonPackage.intro}}</p>
               </div>
             </div>
           </el-col>
@@ -133,8 +137,8 @@
           <div class="more">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6">
-            <project-cell></project-cell>
+          <el-col :span="6" v-for="(project,index) in likesProjects" :key="index" v-if="index < 4">
+            <project-cell1 :project="project"></project-cell1>
           </el-col>
         </el-row>
       </div>
@@ -143,13 +147,197 @@
 </template>
 <script>
 import ProjectCell from './ProjectCell'
+import { keepwork,lesson } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'HomePage',
   data() {
-    return {}
+    return {
+      projects: [],
+      hotsPackages: [],
+      hiddenAd: false
+    }
   },
   components: {
-    ProjectCell
+    ProjectCell,
+    ProjectCell1:ProjectCell
+  },
+  async mounted() {
+    lesson.packages.getHotsPackages().then(res => {
+      this.hotsPackages = res
+    }).catch(err => console.error(err))
+    await keepwork.projects
+      .getProjects()
+      .then(res => {
+        console.log('res', res)
+        this.projects = _.get(res, 'rows', [])
+        //test data,after remove
+        this.projects = [
+          {
+            choicenessNo: 62,
+            createdAt: '2018-09-26T06:03:17.000Z',
+            description: '',
+            commentCount: 1252,
+            extra: {
+              coverUrl:
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538218843433&di=57c0eb1ae527dd3d2ca5a456d7ac01f5&imgtype=0&src=http%3A%2F%2Fwww.xingzuoba.cn%2Ffile%2Fupload%2F2000%2F20170430%2F201704301494854563122.jpg'
+            },
+            hotNo: 0,
+            id: 1,
+            name: '笑傲江湖',
+            privilege: 197,
+            siteId: null,
+            star: 58,
+            type: 0,
+            updatedAt: '2018-09-27T09:20:47.000Z',
+            userId: 37,
+            visibility: 1,
+            visit: 32,
+            user: {
+              description: null,
+              nickname: '哈哈哈',
+              portrait:
+                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
+              userId: 37,
+              username: 'kevinxft'
+            }
+          },
+          {
+            choicenessNo: 70,
+            createdAt: '2018-09-26T06:03:17.000Z',
+            description: '',
+            commentCount: 125258,
+            extra: {
+              coverUrl:
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538227073141&di=c5dd3c7604513aefe125b0c1401b129c&imgtype=0&src=http%3A%2F%2Fimg1.sc115.com%2Fuploads%2Fsc%2Fjpg%2F144%2F18383.jpg'
+            },
+            hotNo: 0,
+            id: 2,
+            name: '神雕侠侣',
+            privilege: 197,
+            siteId: null,
+            star: 189,
+            type: 0,
+            updatedAt: '2018-09-27T09:20:47.000Z',
+            userId: 37,
+            visibility: 1,
+            visit: 10,
+            user: {
+              description: null,
+              nickname: '香香',
+              portrait:
+                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
+              userId: 37,
+              username: '香香'
+            }
+          },
+          {
+            choicenessNo: 58,
+            createdAt: '2018-09-26T06:03:17.000Z',
+            description: '',
+            commentCount: 12,
+            extra: {
+              coverUrl:
+                'http://dik.img.lgdsy.com/pic/5/3255/6c792afdc6db20bb.jpg'
+            },
+            hotNo: 0,
+            id: 3,
+            name: '锦绣未央',
+            privilege: 197,
+            siteId: null,
+            star: 269,
+            type: 0,
+            updatedAt: '2018-09-27T09:20:47.000Z',
+            userId: 37,
+            visibility: 1,
+            visit: 40,
+            user: {
+              description: null,
+              nickname: '3号牛肚',
+              portrait:
+                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
+              userId: 37,
+              username: 'kevinxft'
+            }
+          },
+          {
+            choicenessNo: 12,
+            createdAt: '2018-09-26T06:03:17.000Z',
+            description: '',
+            commentCount: 122,
+            extra: {
+              coverUrl:
+                'http://b.zol-img.com.cn/desk/bizhi/image/2/960x600/1362383591876.jpg'
+            },
+            hotNo: 0,
+            id: 4,
+            name: '大富科技',
+            privilege: 197,
+            siteId: null,
+            star: 255,
+            type: 0,
+            updatedAt: '2018-09-27T09:20:47.000Z',
+            userId: 37,
+            visibility: 1,
+            visit: 0,
+            user: {
+              description: null,
+              nickname: '大天亮',
+              portrait:
+                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
+              userId: 37,
+              username: '大天亮'
+            }
+          },
+          {
+            choicenessNo: 12,
+            createdAt: '2018-09-26T06:03:17.000Z',
+            description: '',
+            commentCount: 252,
+            extra: {
+              coverUrl:
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538219058252&di=22546ecd50dc263271f0ffe44074c38a&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F20170514%2F0G4ae4NwY5443.jpeg'
+            },
+            hotNo: 0,
+            id: 7,
+            name: '嘿嘿哈哈',
+            privilege: 197,
+            siteId: null,
+            star: 255,
+            type: 0,
+            updatedAt: '2018-09-27T09:20:47.000Z',
+            userId: 37,
+            visibility: 1,
+            visit: 0,
+            user: {
+              description: null,
+              nickname: '田螺一号',
+              portrait:
+                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
+              userId: 37,
+              username: 'kevinxft'
+            }
+          }
+        ]
+      })
+      .catch(err => console.log(err))
+  },
+  methods: {
+    closeAd(){
+      this.hiddenAd = true
+    }
+  },
+  computed: {
+    handpickProjects() {
+      return this.projects.map(i => i).sort(
+        (obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo
+      )
+    },
+    likesProjects(){
+      return this.projects.map(i => i).sort(
+        (obj1, obj2) => obj1.star < obj2.star
+      )
+    }
   }
 }
 </script>
@@ -180,7 +368,15 @@ export default {
       font-size: 28px;
       position: absolute;
       right: 20px;
+      cursor: pointer;
     }
+  }
+  .hidden-ad{
+    // display: none;
+    height: 0;
+    overflow: hidden;
+    border: none;
+    transition: all 1s ease-out;
   }
   &-simple-show {
     margin-top: 16px;
@@ -200,6 +396,30 @@ export default {
           position: absolute;
           .title {
             color: #2397f3;
+            font-size: 30px;
+            margin: 12px 0;
+          }
+          .intro {
+            font-size: 14px;
+            color: #c0c4cc;
+            margin: 11px 0;
+          }
+          .join-button {
+            padding: 0 28px;
+            height: 36px;
+            margin: 24px 0 12px;
+          }
+          .remainder {
+            a {
+              text-decoration: none;
+              color: #71747a;
+              font-size: 12px;
+              padding-left: 6px;
+              &.pedagogue {
+                padding-right: 10px;
+                border-right: 1px solid #ccc;
+              }
+            }
           }
         }
         .flexible-info-board {

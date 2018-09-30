@@ -31,6 +31,9 @@ export default {
     },
     closeNewWebsiteDialog() {
       this.isNewWebsiteDialogShow = false
+    },
+    gotoPath(path) {
+      this.$router.push(path)
     }
   },
   computed:{
@@ -40,11 +43,6 @@ export default {
   },
   components: {
     NewWebsiteDialog
-  },
-  methods: {
-    gotoPath(path) {
-      this.$router.push(path)
-    }
   }
 }
 </script>

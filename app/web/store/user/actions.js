@@ -59,9 +59,9 @@ const USER_PROFILE_PAGES_CONTENTS = [
 const actions = {
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
-    if (info.data) {
-      Cookies.set('token', info.data.token)
-      window.localStorage.setItem('satellizer_token', info.data.token)
+    if (info) {
+      Cookies.set('token', info.token)
+      window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info.data)
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
@@ -123,7 +123,18 @@ const actions = {
       return
     }
     userDetail = await keepwork.user.getDetailByName({ username })
-    commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+    let userId = _.get(userDetail, 'id')
+    commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
+  },
+  async getUserDetailByUserId(context, { userId }) {
+    let { commit, getters: { usersDetail } } = context
+    let userDetail = usersDetail && usersDetail[userId]
+    if (userDetail) {
+      return
+    }
+    userDetail = await keepwork.user.getDetailById({ userId })
+    let { username } = userDetail
+    commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
     let { commit, getters: { profile } } = context

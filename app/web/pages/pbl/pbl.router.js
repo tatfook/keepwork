@@ -3,6 +3,7 @@ import Router from 'vue-router'
 const PblIndex = () => import('@/components/pbl/PblIndex')
 const ProjectPage = () => import('@/components/pbl/ProjectPage')
 const NewProject = () => import('@/components/pbl/NewProject')
+const EditProject = () => import('@/components/pbl/EditProject')
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/project/new',
       name: 'NewProject',
       component: NewProject
+    },
+    {
+      path: '/project/:id/edit',
+      name: 'EditProject',
+      component: EditProject
     }
   ]
 })
