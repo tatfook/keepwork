@@ -25,7 +25,7 @@
 
     <el-radio-group class="quiz" v-if="isTFNG" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
-        <el-radio :disabled="isDone" :label="alphabet[index]">{{item.item}}</el-radio>
+        <el-radio :disabled="isDone" :label="alphabet[index]">{{$t(`card.${item.item}`)}}</el-radio>
       </div>
     </el-radio-group>
 
