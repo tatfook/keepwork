@@ -19,7 +19,7 @@ export default {
   name: 'MediaType',
   props: {
     originValue: String,
-    componentOptionsData: Object
+    optionsData: Object
   },
   mixins: [protypesBaseMixin],
   data() {
@@ -30,7 +30,7 @@ export default {
   computed: {
     mediaData: {
       get() {
-        return this.originValue ? this.originValue : (this.componentOptionsData && this.componentOptionsData[EMPTY] || '')
+        return this.originValue ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
       },
       set() {}
     }

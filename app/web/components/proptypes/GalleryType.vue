@@ -55,7 +55,7 @@ export default {
   props: {
     editingKey: String,
     originValue: Array,
-    componentOptionsData: Object
+    optionsData: Object
   },
   data() {
     return {
@@ -74,7 +74,7 @@ export default {
     }),
     galleryData: {
       get() {
-        return this.originValue.length ? this.originValue : (this.componentOptionsData && this.componentOptionsData[EMPTY] || '')
+        return this.originValue.length ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
       },
       set() {
       }

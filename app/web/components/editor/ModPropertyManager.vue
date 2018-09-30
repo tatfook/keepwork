@@ -3,7 +3,7 @@
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
-        <prop-type-card v-for="(prop, key) in editingProps" :componentOptionsData='componentOptionsData' :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
+        <prop-type-card v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
@@ -91,18 +91,6 @@ export default {
       hasActiveProperty: 'hasActiveProperty',
       activePropertyTabType: 'activePropertyTabType'
     }),
-    componentOptionsData() {
-        let activeMod = this.$store.getters.activeMod
-        let modConf = modLoader.load(activeMod.modType)
-        let currentStyle = modConf.styles[activeMod.data.styleID]
-
-        if (!currentStyle.options || !currentStyle.options.config) {
-          return false
-        }
-
-        let activeProperty = this.$store.getters.activeProperty
-        return currentStyle.options.config[activeProperty]
-    },
     currentModLabel() {
       return this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
       this.activeMod.cmd.substring(2)
