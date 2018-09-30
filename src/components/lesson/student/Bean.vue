@@ -38,6 +38,7 @@ export default {
     }
   },
   async mounted() {
+    this.getProfile()
     await lesson.trades
       .getTradesList()
       .then(res => {
@@ -64,6 +65,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getProfile:'user/getProfile'
+    }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
