@@ -257,10 +257,10 @@ export default {
         .catch(e => console.error(e))
     },
     handleExplanHaqiCode() {
-      this.$message({
-        type: 'warning',
-        message: 'haqi code'
-      })
+      // this.$message({
+      //   type: 'warning',
+      //   message: 'haqi code'
+      // })
     }
   },
   computed: {
