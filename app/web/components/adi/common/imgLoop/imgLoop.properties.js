@@ -1,9 +1,4 @@
 export default {
-  data: [
-    {
-      img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
-      link: ''
-    }
-  ],
+  data: [],
   target: '_self'
 }

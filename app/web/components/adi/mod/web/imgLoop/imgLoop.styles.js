@@ -1,6 +1,13 @@
+import _ from 'lodash'
+
 let emptyData = {
   imgLoop: {
-    data: []
+    emptyGallery: [
+      {
+        img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
+        link: ''
+      }
+    ]
   }
 }
 
@@ -21,7 +28,10 @@ export default [
     options: {
       theme: {},
       config: {
-        imgLoop: { height: '150px' }
+        ...emptyData,
+        imgLoop: _.merge({}, emptyData.imgLoop, {
+          height: '150px'
+        })
       }
     },
     cover: ''

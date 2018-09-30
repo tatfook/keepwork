@@ -31,7 +31,7 @@ export default {
   computed: {
     forImgs() {
       return this.properties.data.length == 0
-        ? this.options.data
+        ? this.options.emptyGallery
         : this.properties.data
     }
   }
