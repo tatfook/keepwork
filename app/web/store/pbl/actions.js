@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { keepwork } from '@/api'
 import { props } from './mutations'
-import _ from 'lodash'
 
 let {
   TOGGLE_LOGIN_DIALOG,
