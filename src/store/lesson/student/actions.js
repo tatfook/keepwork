@@ -2,6 +2,7 @@ import { lesson } from '@/api'
 import { props } from './mutations'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
+import uuid from 'uuid/v1'
 
 let {
   SET_USER_SUBSCRIBES,
@@ -39,6 +40,14 @@ const actions = {
       lesson.lessons.lessonDetail({ lessonId })
     ])
     let modList = Parser.buildBlockList(res.content)
+    modList.forEach(mod => {
+      if (mod.type === 'Quiz') {
+        let _id = uuid()
+        mod.data.quiz.data[0].id = _id
+        mod.uuid = _id
+      }
+    })
+    console.warn(modList)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
       .map(({ data: { quiz: { data } } }) => ({
