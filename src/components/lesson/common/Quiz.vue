@@ -140,7 +140,7 @@ export default {
       this.submit(result, answer)
     },
     async submit(result, answer) {
-      await this.doQuiz({ key: this.key, result, answer })
+      this.doQuiz({ key: this.key, result, answer })
       if (this.isBeInClassroom) {
         let state = this.lessonIsDone ? 1 : 0
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
