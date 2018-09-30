@@ -14,7 +14,7 @@
       <component 
         :is='proptypes[propItem]'
         :prop='prop'
-        :optionsData='optionsData(propItem)'
+        :optionsData='optionsData'
         :editingKey='index'
         :originValue='cardValue[index]'
         :cardValue='cardValue'
@@ -37,6 +37,7 @@ export default {
     cardKey: String,
     cardValue: Object,
     prop: Object,
+    componentName: String,
     activePropertyOptions: Object,
     isCardActive: Boolean
   },
@@ -56,6 +57,22 @@ export default {
       },
       set() {}
     },
+    optionsData() {
+      if (!this.activeMod || !this.activeMod.modType || !this.activeMod.data || !this.activeMod.data.styleID === '') {
+        return {}
+      }
+      let modConf = modLoader.load(this.activeMod.modType)
+
+      if ( !modConf || !modConf.styles) {
+        return {}
+      }
+      let currentStyle = modConf.styles[this.activeMod.data.styleID]
+
+      if (!currentStyle.options || !currentStyle.options.config) {
+        return {}
+      }
+      return currentStyle.options.config[this.componentName]
+    },
     isMultiLineProp() {
       let propKeys = _.keys(this.prop)
       let multipleLineProps = _.filter(propKeys, propItem => {
@@ -70,33 +87,6 @@ export default {
       setActivePropertyData: 'setActivePropertyData',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
-    optionsData(propItemValue) {
-      if (!this.activeMod || !this.activeMod.modType || !this.activeMod.data || !this.activeMod.data.styleID === '') {
-        return {}
-      }
-      let modConf = modLoader.load(this.activeMod.modType)
-
-      if ( !modConf || !modConf.styles) {
-        return {}
-      }
-      let currentStyle = modConf.styles[this.activeMod.data.styleID]
-
-      if (!currentStyle.options || !currentStyle.options.config) {
-        return {}
-      }
-      let componentAlias
-      _.forEach(modConf.components, (item, name) => {
-        _.forEach(this.BaseCompProptypes[item], (value, index) => {
-          if (value === propItemValue) {
-            componentAlias = name
-          } else {
-            return false
-          }
-        })
-      })
-
-      return currentStyle.options.config[componentAlias]
-    },
     changeActivePropty() {
       this.setActiveProperty({
         key: this.activeMod.key,
