@@ -1072,6 +1072,7 @@
     "noReference": "no references",
     "urlError": "url error",
     "toAdd": "Add",
-    "learnAgain": "Learn Again"
+    "learnAgain": "Learn Again",
+    "noRecord": "No record"
   }
 }
