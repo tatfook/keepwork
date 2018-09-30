@@ -5,53 +5,53 @@
         <div class="list-box">
           <h4 class="title">致社区</h4>
           <ul class="list">
-            <li><a href="https://keepwork.com/official/paracraft/to-educators">- 致教育者</a></li>
-            <li><a href="https://keepwork.com/official/paracraft/to-parents">- 给父母的话</a></li>
-            <li><a href="https://keepwork.com/official/paracraft/to-developers">- 致开发者</a></li>
-            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki">- 对爱好编程的你说</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/to-educators" target="_blank">- 致教育者</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">- 给父母的话</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/to-developers" target="_blank">- 致开发者</a></li>
+            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">- 对爱好编程的你说</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">用来做什么？</h4>
           <ul class="list">
-            <li><a href="">- 创建自己的项目</a></li>
-            <li><a href="">- 与老师一起完成项目</a></li>
-            <li><a href="">- 制作个人网站</a></li>
-            <li><a href="">- 拥有个人知识体系</a></li>
-            <li><a href="">- 学习在线课程</a></li>
+            <li><a href="" target="_blank">- 创建自己的项目</a></li>
+            <li><a href="" target="_blank">- 与老师一起完成项目</a></li>
+            <li><a href="" target="_blank">- 制作个人网站</a></li>
+            <li><a href="" target="_blank">- 拥有个人知识体系</a></li>
+            <li><a href="" target="_blank">- 学习在线课程</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">学习法</h4>
           <ul class="list">
-            <li><a href="">- 在项目中学习</a></li>
-            <li><a href="">- 在传授中学习</a></li>
-            <li><a href="">- 费曼学习法</a></li>
-            <li><a href="">- 碎片化学习法</a></li>
+            <li><a href="" target="_blank">- 在项目中学习</a></li>
+            <li><a href="" target="_blank">- 在传授中学习</a></li>
+            <li><a href="" target="_blank">- 费曼学习法</a></li>
+            <li><a href="" target="_blank">- 碎片化学习法</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">keepwork家族</h4>
           <ul class="list">
-            <li><a href="https://keepwork.com">- keepwork</a></li>
-            <li><a href="https://iicc.keepwork.com/#/">- Paracraft</a></li>
-            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki">- NPL语言</a></li>
-            <li><a href="https://keepwork.com/intro/keepwork/NPLCAD">- NPL CAD</a></li>
-            <li><a href="https://keepwork.com/official/open/index">- 开放平台</a></li>
-            <li><a href="https://keepwork.com/official/haqi/index">- 魔法哈奇</a></li>
-            <li><a href="http://cc.paraengine.com/twiki/bin/view/HaqiTeen/WebHome">- 魔法哈奇2</a></li>
-            <li><a href="https://keepwork.com/official/paracraft/index">- Paracraft网络课程</a></li>
-            <li><a href="https://keepwork.com/official/paracraft/offline-courses">- Paracraft线下培训班</a></li>
+            <li><a href="https://keepwork.com" target="_blank">- keepwork</a></li>
+            <li><a href="https://iicc.keepwork.com/#/" target="_blank">- Paracraft</a></li>
+            <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">- NPL语言</a></li>
+            <li><a href="https://keepwork.com/intro/keepwork/NPLCAD" target="_blank">- NPL CAD</a></li>
+            <li><a href="https://keepwork.com/official/open/index" target="_blank">- 开放平台</a></li>
+            <li><a href="https://keepwork.com/official/haqi/index" target="_blank">- 魔法哈奇</a></li>
+            <li><a href="http://cc.paraengine.com/twiki/bin/view/HaqiTeen/WebHome" target="_blank">- 魔法哈奇2</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/index" target="_blank">- Paracraft网络课程</a></li>
+            <li><a href="https://keepwork.com/official/paracraft/offline-courses" target="_blank">- Paracraft线下培训班</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">支持</h4>
           <ul class="list">
-            <li><a href="http://keepwork.com/official/company/index">- 联系我们</a></li>
-            <li><a href="https://keepwork.com/official/company/joinus">- 加入我们</a></li>
-            <li><a href="https://keepwork.com/wiki/statics">- 网站统计</a></li>
-            <li><a href="https://keepwork.com/intro/keepwork/changelog">- 更新信息</a></li>
-            <li><a href="https://github.com/tatfook/wikicraft/issues">- 问题反馈</a></li>
+            <li><a href="http://keepwork.com/official/company/index" target="_blank">- 联系我们</a></li>
+            <li><a href="https://keepwork.com/official/company/joinus" target="_blank">- 加入我们</a></li>
+            <li><a href="https://keepwork.com/wiki/statics" target="_blank">- 网站统计</a></li>
+            <li><a href="https://keepwork.com/intro/keepwork/changelog" target="_blank">- 更新信息</a></li>
+            <li><a href="https://github.com/tatfook/wikicraft/issues" target="_blank">- 问题反馈</a></li>
           </ul>
         </div>
       </div>
