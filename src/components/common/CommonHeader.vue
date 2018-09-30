@@ -14,8 +14,8 @@
         <a href='/official/help/index'>{{$t('common.help')}}</a>
       </el-menu-item>
       <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
-        <a href='//iicc.keepwork.com' target="_blank">
-          <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
+        <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">
+          <img class="iicc-logo" src="@/assets/img/times_logo.png" alt="">{{$t('common.creatTimes')}}
         </a>
       </el-menu-item>
       <el-menu-item v-if="!IS_GLOBAL_VERSION" index='7'>
@@ -115,7 +115,7 @@
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
         <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-6'>
-          <a href='//iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
+          <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a>
         </el-menu-item>
       </el-submenu>
     </el-menu>
@@ -324,7 +324,7 @@ export default {
 </style>
 <style lang="scss">
 .el-menu-item {
-  padding: 0 12px;
+  padding: 0 10px;
 }
 .el-menu-item [class^='el-icon-'] {
   width: 20px;
