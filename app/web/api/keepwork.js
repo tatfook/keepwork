@@ -196,6 +196,8 @@ export const projects = {
   createProject: async (...args) => post('projects', ...args),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
+  getPersonalProjects: async () => get('projects'),
+  getContributeProjects: async () => get('projects/join'),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`)
 }
 

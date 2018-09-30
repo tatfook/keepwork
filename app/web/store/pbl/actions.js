@@ -1,9 +1,11 @@
 import _ from 'lodash'
 import { keepwork } from '@/api'
 import { props } from './mutations'
+import _ from 'lodash'
 
 let {
   TOGGLE_LOGIN_DIALOG,
+  GET_ALL_PROJECTS,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_MEMBERS_SUCCESS,
   GET_USER_PROJECTS_SUCCESS,
@@ -22,6 +24,16 @@ const actions = {
     }).catch((error) => {
       return Promise.reject(error)
     })
+  },
+  async setAllProjects({ commit }) {
+    await keepwork.projects
+      .getProjects()
+      .then(res => {
+        console.log('res', res)
+        let allProjects = _.get(res, 'rows', [])
+        console.log('all', allProjects)
+        commit(GET_ALL_PROJECTS, allProjects)
+      }).catch(err => console.error(err))
   },
   async getUserProjects(context, { userId, useCache = true }) {
     let { commit, getters: { userProjects } } = context

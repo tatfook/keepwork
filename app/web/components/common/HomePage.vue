@@ -13,10 +13,10 @@
             <p class="intro">拥有自己的个人网站</p>
             <p class="intro">通过项目来学习编程</p>
             <p class="intro">程序员为程序员创作的教程</p>
-            <el-button type="primary" round class="join-button">马上免费加入</el-button>
+            <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
-              <a href="/official/paracraft/to-parents" target="_blank" class="pedagogue">给教育者的话</a>
-              <a href="/official/paracraft/to-educators" target="_blank">告家长</a>
+              <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">给教育者的话</a>
+              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">告家长</a>
             </div>
           </div>
           <div class="flexible-info-board"></div>
@@ -32,13 +32,13 @@
             <div class="title">官方公告</div>
             <ul class="announce-list">
               <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
-                <a href="">进入</a>
+                <a href="//iicc.keepwork.com" target="_blank">进入</a>
               </li>
               <li>
                 <span class="icon-book">
                   <i class="iconfont icon-book-fill"></i>
                 </span> Lessons系统即将上线，尽情期待！
-                <a href="">进入</a>
+                <a href="/l/student/center" target="_blank">进入</a>
               </li>
             </ul>
           </div>
@@ -49,7 +49,7 @@
       <div class="home-page-brief-center">
         <el-row>
           <el-col :span="8">
-            <div class="box">
+            <div class="box" @click="goCreativityPage">
               <div class="box-text">
                 <h2>创造</h2>
                 <p>创造属于你自己的项目</p>
@@ -62,7 +62,7 @@
               </div>
           </el-col>
           <el-col :span="8">
-            <div class="box">
+            <div class="box" @click="goExplorationPage">
               <div class="box-text">
                 <h2>探索</h2>
                 <p>发现更多有趣的作品</p>
@@ -75,7 +75,7 @@
               </div>
           </el-col>
           <el-col :span="8">
-            <div class="box no-line">
+            <div class="box no-line" @click="goStudyPage">
               <div class="box-text">
                 <h2>学习</h2>
                 <p>好好学习，天天向上</p>
@@ -97,7 +97,7 @@
             <span class="star">
               <img src="@/assets/img/hp_select_project.png" alt="">
             </span>精选项目</div>
-          <div class="more">查看更多&gt;</div>
+          <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6" v-for="(project,index) in handpickProjects" :key="index" v-if="index < 4">
@@ -111,13 +111,13 @@
             <span class="star">
               <img src="@/assets/img/hp_hot_lesson.png" alt="">
             </span>热门课程</div>
-          <div class="more">查看更多&gt;</div>
+          <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6" v-for="(lessonPackage,index) in hotsPackages" :key="index">
             <div class="lesson">
-              <img class="lesson-cover" :src="lessonPackage.extra.coverUrl" alt="">
-              <h4 class="lesson-title">{{lessonPackage.packageName}}</h4>
+              <img class="lesson-cover" :src="lessonPackage.extra.coverUrl" alt="" @click="goLessonPackage(lessonPackage)">
+              <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)">{{lessonPackage.packageName}}</h4>
               <div class="lesson-desc">
                 <p>包含：
                   <span>125</span>个课程</p>
@@ -134,209 +134,91 @@
             <span class="star">
               <img src="@/assets/img/hp_people_like.png" alt="">
             </span>大家都觉得赞</div>
-          <div class="more">查看更多&gt;</div>
+          <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
           <el-col :span="6" v-for="(project,index) in likesProjects" :key="index" v-if="index < 4">
-            <project-cell1 :project="project"></project-cell1>
+            <project-cell :project="project"></project-cell>
           </el-col>
         </el-row>
       </div>
+    </div>
+    <div @click.stop v-if="isRegisterDialogShow">
+      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+        <register-dialog @close="closeRegisterDialog"></register-dialog>
+      </el-dialog>
     </div>
   </div>
 </template>
 <script>
 import ProjectCell from './ProjectCell'
 import { keepwork,lesson } from '@/api'
+import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
+import { mapActions,mapGetters } from 'vuex'
+
 export default {
   name: 'HomePage',
   data() {
     return {
       projects: [],
       hotsPackages: [],
-      hiddenAd: false
+      hiddenAd: false,
+      isRegisterDialogShow: false
     }
   },
   components: {
     ProjectCell,
-    ProjectCell1:ProjectCell
+    RegisterDialog
   },
   async mounted() {
     lesson.packages.getHotsPackages().then(res => {
       this.hotsPackages = res
     }).catch(err => console.error(err))
-    await keepwork.projects
-      .getProjects()
-      .then(res => {
-        console.log('res', res)
-        this.projects = _.get(res, 'rows', [])
-        //test data,after remove
-        this.projects = [
-          {
-            choicenessNo: 62,
-            createdAt: '2018-09-26T06:03:17.000Z',
-            description: '',
-            commentCount: 1252,
-            extra: {
-              coverUrl:
-                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538218843433&di=57c0eb1ae527dd3d2ca5a456d7ac01f5&imgtype=0&src=http%3A%2F%2Fwww.xingzuoba.cn%2Ffile%2Fupload%2F2000%2F20170430%2F201704301494854563122.jpg'
-            },
-            hotNo: 0,
-            id: 1,
-            name: '笑傲江湖',
-            privilege: 197,
-            siteId: null,
-            star: 58,
-            type: 0,
-            updatedAt: '2018-09-27T09:20:47.000Z',
-            userId: 37,
-            visibility: 1,
-            visit: 32,
-            user: {
-              description: null,
-              nickname: '哈哈哈',
-              portrait:
-                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
-              userId: 37,
-              username: 'kevinxft'
-            }
-          },
-          {
-            choicenessNo: 70,
-            createdAt: '2018-09-26T06:03:17.000Z',
-            description: '',
-            commentCount: 125258,
-            extra: {
-              coverUrl:
-                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538227073141&di=c5dd3c7604513aefe125b0c1401b129c&imgtype=0&src=http%3A%2F%2Fimg1.sc115.com%2Fuploads%2Fsc%2Fjpg%2F144%2F18383.jpg'
-            },
-            hotNo: 0,
-            id: 2,
-            name: '神雕侠侣',
-            privilege: 197,
-            siteId: null,
-            star: 189,
-            type: 0,
-            updatedAt: '2018-09-27T09:20:47.000Z',
-            userId: 37,
-            visibility: 1,
-            visit: 10,
-            user: {
-              description: null,
-              nickname: '香香',
-              portrait:
-                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
-              userId: 37,
-              username: '香香'
-            }
-          },
-          {
-            choicenessNo: 58,
-            createdAt: '2018-09-26T06:03:17.000Z',
-            description: '',
-            commentCount: 12,
-            extra: {
-              coverUrl:
-                'http://dik.img.lgdsy.com/pic/5/3255/6c792afdc6db20bb.jpg'
-            },
-            hotNo: 0,
-            id: 3,
-            name: '锦绣未央',
-            privilege: 197,
-            siteId: null,
-            star: 269,
-            type: 0,
-            updatedAt: '2018-09-27T09:20:47.000Z',
-            userId: 37,
-            visibility: 1,
-            visit: 40,
-            user: {
-              description: null,
-              nickname: '3号牛肚',
-              portrait:
-                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
-              userId: 37,
-              username: 'kevinxft'
-            }
-          },
-          {
-            choicenessNo: 12,
-            createdAt: '2018-09-26T06:03:17.000Z',
-            description: '',
-            commentCount: 122,
-            extra: {
-              coverUrl:
-                'http://b.zol-img.com.cn/desk/bizhi/image/2/960x600/1362383591876.jpg'
-            },
-            hotNo: 0,
-            id: 4,
-            name: '大富科技',
-            privilege: 197,
-            siteId: null,
-            star: 255,
-            type: 0,
-            updatedAt: '2018-09-27T09:20:47.000Z',
-            userId: 37,
-            visibility: 1,
-            visit: 0,
-            user: {
-              description: null,
-              nickname: '大天亮',
-              portrait:
-                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
-              userId: 37,
-              username: '大天亮'
-            }
-          },
-          {
-            choicenessNo: 12,
-            createdAt: '2018-09-26T06:03:17.000Z',
-            description: '',
-            commentCount: 252,
-            extra: {
-              coverUrl:
-                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538219058252&di=22546ecd50dc263271f0ffe44074c38a&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F20170514%2F0G4ae4NwY5443.jpeg'
-            },
-            hotNo: 0,
-            id: 7,
-            name: '嘿嘿哈哈',
-            privilege: 197,
-            siteId: null,
-            star: 255,
-            type: 0,
-            updatedAt: '2018-09-27T09:20:47.000Z',
-            userId: 37,
-            visibility: 1,
-            visit: 0,
-            user: {
-              description: null,
-              nickname: '田螺一号',
-              portrait:
-                'http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg',
-              userId: 37,
-              username: 'kevinxft'
-            }
-          }
-        ]
-      })
-      .catch(err => console.log(err))
-  },
-  methods: {
-    closeAd(){
-      this.hiddenAd = true
-    }
+    await this.setAllProjects()
   },
   computed: {
+    ...mapGetters({
+      allProjects: 'pbl/allProjects'
+    }),
     handpickProjects() {
-      return this.projects.map(i => i).sort(
+      return this.allProjects.map(i => i).sort(
         (obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo
       )
     },
     likesProjects(){
-      return this.projects.map(i => i).sort(
+      return this.allProjects.map(i => i).sort(
         (obj1, obj2) => obj1.star < obj2.star
       )
+    }
+  },
+  methods: {
+    ...mapActions({
+      setAllProjects: 'pbl/setAllProjects'
+    }),
+    closeAd(){
+      this.hiddenAd = true
+    },
+    viewMore(){
+      this.$router.push('/exploration')
+    },
+    goJoin() {
+      this.isRegisterDialogShow = true
+    },
+    closeRegisterDialog() {
+      this.isRegisterDialogShow = false
+    },
+    goCreativityPage(){
+      this.$router.push('/creativity')
+    },
+    goExplorationPage(){
+      this.$router.push('/exploration')
+    },
+    goStudyPage(){
+      alert('开发之中')
+    },
+    goLessonPackage(lessonPackage){
+      this.$router.push(`/l/student/package/${lessonPackage.id}`)
     }
   }
 }
@@ -506,6 +388,7 @@ export default {
         padding: 20px 36px 20px 24px;
         display: flex;
         border-right: 1px solid #eee;
+        cursor: pointer;
         &-text {
           flex: 1;
         }
@@ -552,6 +435,7 @@ export default {
           color: #909399;
           display: flex;
           align-items: center;
+          cursor: pointer;
         }
       }
       .el-row {
@@ -566,10 +450,12 @@ export default {
             height: 143px;
             object-fit: cover;
             border-radius: 4px;
+            cursor:pointer;
           }
           &-title {
             font-size: 14px;
             margin: 10px 0;
+            cursor:pointer;
           }
           &-desc {
             font-size: 12px;

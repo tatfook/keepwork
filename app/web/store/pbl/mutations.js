@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
+const GET_ALL_PROJECTS = 'GET_ALL_PROJECTS'
 const GET_PROJECT_DETAIL_SUCCESS = 'GET_PROJECT_DETAIL_SUCCESS'
 const GET_PROJECT_APPLY_LIST_SUCCESS = 'GET_PROJECT_APPLY_LIST_SUCCESS'
 const GET_PROJECT_MEMBERS_SUCCESS = 'GET_PROJECT_MEMBERS_SUCCESS'
@@ -11,6 +12,7 @@ const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
+  GET_ALL_PROJECTS,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS,
   GET_USER_PROJECTS_SUCCESS,
@@ -22,6 +24,9 @@ export const props = {
 const mutations = {
   [TOGGLE_LOGIN_DIALOG](state, status) {
     Vue.set(state, 'isShowLoginDialog', status)
+  },
+  [GET_ALL_PROJECTS](state, allProjects) {
+    Vue.set(state, 'allProjects', allProjects)
   },
   [GET_USER_PROJECTS_SUCCESS](state, { userId, projects }) {
     Vue.set(state, 'usersProjects', {
