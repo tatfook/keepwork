@@ -3,17 +3,19 @@
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
+let EMPTY = 'emptyInput'
 
 export default {
   name: 'InputType',
   mixins: [protypesBaseMixin],
   props: {
-    originValue: String
+    originValue: String,
+    optionsData: Object
   },
   computed: {
     inputTypeValue: {
       get() {
-        return this.originValue
+        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData[EMPTY]) || '')
       },
       set() {}
     }

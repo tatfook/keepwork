@@ -30,7 +30,7 @@ export default {
     getButtonName() {
       let properties = this.properties
       let options = this.options
-      return properties.name ? properties.name : this.$t(options.emptyName)
+      return properties.name ? properties.name : this.$t(options.emptyInput)
     },
     getLink() {
       let properties = this.properties

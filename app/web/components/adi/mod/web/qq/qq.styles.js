@@ -7,7 +7,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   desc: {
-    emptyName: 'adi.qq.desc',
+    emptyInput: 'adi.qq.desc',
     emptyLink: '#',
     emptyTarget: '_blank'
   }

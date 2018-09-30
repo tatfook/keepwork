@@ -7,12 +7,12 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   title: {
-    emptyName: 'adi.mixPosition.title',
+    emptyInput: 'adi.mixPosition.title',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitle: {
-    emptyName: 'adi.mixPosition.subtitle',
+    emptyInput: 'adi.mixPosition.subtitle',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -20,7 +20,7 @@ let emptyData = {
     emptyData: 'adi.mixPosition.paragraph'
   },
   button: {
-    emptyName: 'adi.mixPosition.button',
+    emptyInput: 'adi.mixPosition.button',
     emptyLink: '#',
     emptyTarget: '_blank'
   }

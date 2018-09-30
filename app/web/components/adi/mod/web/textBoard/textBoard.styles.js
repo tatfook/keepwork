@@ -1,11 +1,11 @@
 let emptyData = {
   subtitle: {
-    emptyName: 'adi.mixPosition.subtitle',
+    emptyInput: 'adi.mixPosition.subtitle',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
   title: {
-    emptyName: 'adi.text.title',
+    emptyInput: 'adi.text.title',
     emptyLink: '#',
     emptyTarget: '_blank'
   },

@@ -7,7 +7,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   worldName: {
-    emptyName: 'adi.paracraft.worldName',
+    emptyInput: 'adi.paracraft.worldName',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -17,12 +17,12 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   titleA: {
-    emptyName: 'adi.paracraft.paracraftTitle.titleA',
+    emptyInput: 'adi.paracraft.paracraftTitle.titleA',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitleA: {
-    emptyName: 'adi.paracraft.paracraftSubTitle.subtitle',
+    emptyInput: 'adi.paracraft.paracraftSubTitle.subtitle',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -61,12 +61,12 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   download: {
-    emptyName: 'adi.paracraft.download.name',
+    emptyInput: 'adi.paracraft.download.name',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
   enter: {
-    emptyName: 'adi.paracraft.enter.name',
+    emptyInput: 'adi.paracraft.enter.name',
     emptyLink: '#',
     emptyTarget: '_blank'
   },

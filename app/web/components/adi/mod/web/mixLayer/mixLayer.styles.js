@@ -7,12 +7,12 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   title: {
-    emptyName: 'adi.mixLayer.title',
+    emptyInput: 'adi.mixLayer.title',
     emptyLink: '#',
     emptyTarget: '_blank'
   },
   subtitle: {
-    emptyName: 'adi.mixLayer.subtitle',
+    emptyInput: 'adi.mixLayer.subtitle',
     emptyLink: '#',
     emptyTarget: '_blank'
   },

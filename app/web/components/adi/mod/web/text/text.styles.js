@@ -1,6 +1,6 @@
 let emptyData = {
   title: {
-    emptyName: 'adi.text.title',
+    emptyInput: 'adi.text.title',
     emptyLink: '#',
     emptyTarget: '_blank'
   },

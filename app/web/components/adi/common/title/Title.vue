@@ -1,7 +1,7 @@
 <template>
   <div class="comp-title">
     <a :target='getTarget' :href="getLink">
-      <h1 :class="getClass">{{ properties.name ? properties.name : $t(options.emptyName) }}</h1>
+      <h1 :class="getClass">{{ properties.name ? properties.name : $t(options.emptyInput) }}</h1>
     </a>
   </div>
 </template>
