@@ -257,10 +257,8 @@ export default {
         .catch(e => console.error(e))
     },
     handleExplanHaqiCode() {
-      // this.$message({
-      //   type: 'warning',
-      //   message: 'haqi code'
-      // })
+      let helpUrl = 'https://keepwork.com/lesson9527/lessons/help_lessonID '
+      window.open(helpUrl)
     }
   },
   computed: {
