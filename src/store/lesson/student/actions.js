@@ -41,13 +41,12 @@ const actions = {
     ])
     let modList = Parser.buildBlockList(res.content)
     modList.forEach(mod => {
-      if (mod.type === 'Quiz') {
+      if (mod.cmd === 'Quiz') {
         let _id = uuid()
         mod.data.quiz.data[0].id = _id
         mod.uuid = _id
       }
     })
-    console.warn(modList)
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
       .map(({ data: { quiz: { data } } }) => ({
