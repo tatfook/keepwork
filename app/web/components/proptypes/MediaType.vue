@@ -13,58 +13,24 @@
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
-import modLoader from '@/components/adi/mod'
-import BaseCompProptypes from '@/components/adi/common/comp.proptypes'
-import _ from 'lodash'
+let EMPTY = 'emptyMedia'
 
 export default {
   name: 'MediaType',
   props: {
-    originValue: String
+    originValue: String,
+    componentOptionsData: Object
   },
   mixins: [protypesBaseMixin],
   data() {
     return {
       isSkyDriveManagerDialogShow: false,
-      BaseCompProptypes
     }
   },
   computed: {
-    defaultValue() {
-        let activeMod = this.$store.getters.activeMod
-        let modConf = modLoader.load(activeMod.modType)
-        let currentStyle = modConf.styles[activeMod.data.styleID]
-
-        if (!currentStyle.options || !currentStyle.options.config) {
-          return false
-        }
-
-        let componentAlias
-        _.forEach(modConf.components, (item, name) => {
-          _.forEach(this.BaseCompProptypes[item], (value, index) => {
-            if (value === 'media') {
-              componentAlias = name
-            } else {
-              return false
-            }
-          })
-        })
-
-        let componentAliasData = currentStyle.options.config[componentAlias]
-        let defaultKey
-        _.forEach(componentAliasData, (val, key) => {
-          if (val.indexOf('/public/img') !== -1) {
-            defaultKey = key
-          } else {
-            return false
-          }
-        })
-
-        return componentAliasData[defaultKey]
-    },
     mediaData: {
       get() {
-        return this.originValue ? this.originValue : this.defaultValue
+        return this.originValue ? this.originValue : (this.componentOptionsData && this.componentOptionsData[EMPTY] || '')
       },
       set() {}
     }

@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   pic: {
-    emptySrc: require('@/assets/adi/qq/qqOne.svg'),
+    emptyMedia: require('@/assets/adi/qq/qqOne.svg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -154,7 +154,7 @@ export default [
         },
         pic: {
           ...emptyData.pic,
-          emptySrc: require('@/assets/adi/qq/qqTwo.svg'),
+          emptyMedia: require('@/assets/adi/qq/qqTwo.svg'),
           img: {
             defaultWebHeight: '70px',
             defaultMobileHeight: '70px',

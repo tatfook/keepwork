@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   preview: {
-    emptySrc: require('@/assets/adi/paracraft/preview.jpg'),
+    emptyMedia: require('@/assets/adi/paracraft/preview.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -12,7 +12,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   backgroundImage: {
-    emptySrc: require('@/assets/adi/paracraft/backgroundImage.png'),
+    emptyMedia: require('@/assets/adi/paracraft/backgroundImage.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
@@ -44,7 +44,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   viewTimesImg: {
-    emptySrc: require('@/assets/adi/paracraft/eye.png'),
+    emptyMedia: require('@/assets/adi/paracraft/eye.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },

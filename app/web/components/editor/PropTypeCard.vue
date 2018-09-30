@@ -14,6 +14,7 @@
       <component 
         :is='proptypes[propItem]'
         :prop='prop'
+        :componentOptionsData='componentOptionsData'
         :editingKey='index'
         :originValue='cardValue[index]'
         :cardValue='cardValue'
@@ -34,6 +35,7 @@ export default {
     cardKey: String,
     cardValue: Object,
     prop: Object,
+    componentOptionsData: Object,
     activePropertyOptions: Object,
     isCardActive: Boolean
   },

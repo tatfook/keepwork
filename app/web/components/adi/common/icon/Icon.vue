@@ -40,7 +40,7 @@ export default {
       return Media.isBase64Svg(this.src)
     },
     src() {
-      return this.properties.src ? this.properties.src : this.options.emptySrc
+      return this.properties.src ? this.properties.src : this.options.emptyMedia
     },
     target() {
       return this.properties.target

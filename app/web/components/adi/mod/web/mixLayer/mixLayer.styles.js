@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   media: {
-    emptySrc: require('@/assets/adi/mixLayer/mix-layer.jpg'),
+    emptyMedia: require('@/assets/adi/mixLayer/mix-layer.jpg'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },

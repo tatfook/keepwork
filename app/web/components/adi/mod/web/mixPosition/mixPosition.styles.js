@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 let emptyData = {
   media: {
-    emptySrc: require('@/assets/adi/mixPosition/picture-mod.png'),
+    emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
     emptyLink: '#',
     emptyTarget: '_blank'
   },
