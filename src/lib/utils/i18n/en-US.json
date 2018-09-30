@@ -1071,6 +1071,7 @@
     "explain": "Note: After each lesson is finished, you could get a reward of 10 beans, which could be used to exchange Haqi items.",
     "noReference": "no references",
     "urlError": "url error",
-    "toAdd": "Add"
+    "toAdd": "Add",
+    "noRecord": "No record"
   }
 }
