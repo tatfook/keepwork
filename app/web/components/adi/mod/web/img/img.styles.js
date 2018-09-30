@@ -70,5 +70,29 @@ export default [
       }
     },
     cover: ''
-  }
+  },
+
+  // style 2
+  {
+    templateID: 1,
+    data: {
+      media: {
+        width: '100%'
+      }
+    },
+    props: {
+      root: {},
+      colImg: { span: 24 }
+    },
+    theme: {
+      root: ['mod-full-width', 'mod-space']
+    },
+    options: {
+      theme: {},
+      config: {
+        ...emptyData
+      }
+    },
+    cover: ''
+  },
 ]

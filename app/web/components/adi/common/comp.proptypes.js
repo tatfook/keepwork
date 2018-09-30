@@ -21,6 +21,7 @@ import AdiTab from './tab/tab.proptypes'
 import AdiCategoryList from './categoryList/categoryList.proptypes'
 import AdiPageSwitching from './pageSwitching/pageSwitching.proptypes'
 import AdiIcon from './icon/icon.proptypes'
+import AdiImg from './img/img.proptypes'
 
 import AdiLesson from './lesson/lesson.proptypes'
 import AdiQuiz from './quiz/quiz.proptypes'
@@ -50,6 +51,7 @@ export default {
   AdiCategoryList,
   AdiPageSwitching,
   AdiIcon,
+  AdiImg,
   AdiLesson,
   AdiQuiz,
   AdiHint

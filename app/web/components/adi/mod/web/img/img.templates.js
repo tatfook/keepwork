@@ -1,4 +1,6 @@
 export default [
   // style 0
-  [{ colImg: 'img' }]
+  [{ colImg: 'img' }],
+  // style 1
+  [{ colImg: 'media' }]
 ]
