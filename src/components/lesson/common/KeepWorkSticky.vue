@@ -58,7 +58,10 @@ export default {
 
 <style lang="scss">
 .keep-work-sticky {
+  padding: 30px 0;
+  background: white;
   &.fixed {
+    padding: 0;
     box-sizing: border-box;
     background: white;
     position: fixed;

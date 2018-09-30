@@ -22,6 +22,7 @@ import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
 import { lesson } from '@/api'
+import uuid from 'uuid/v1'
 export default {
   name: 'Learn',
   components: {
@@ -209,6 +210,9 @@ export default {
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
+    },
+    lessonMainUid() {
+      this.lessonMain.map(item => item).forEach(item => item.key = uuid())
     }
   }
 }

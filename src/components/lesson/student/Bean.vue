@@ -4,11 +4,12 @@
       <div class="bean-header">
         <div class="bean-header-state"><span class="beans">{{beansCount}}{{$t('lesson.beans')}}</span><span class="explain">({{$t('lesson.explain')}})</span></div>
         <div class="bean-header-button">
-          <el-button type="primary" size="small" :disabled="!beansCount" @click="goConvert">{{$t('lesson.conversion')}}</el-button>
+          <el-button type="primary" size="small"  @click="goConvert">{{$t('lesson.conversion')}}</el-button>
         </div>
       </div>
       <div class="bean-nothing" v-if='!tableData.length && !beanLoading'>
         <img src="@/assets/lessonImg/no_packages.png" alt="">
+        <p>{{$t('lesson.noRecord')}}</p>
       </div>
       <div class="bean-table" v-else>
         <el-table :data="tableData" style="width: 90%">
@@ -37,6 +38,7 @@ export default {
     }
   },
   async mounted() {
+    this.getProfile()
     await lesson.trades
       .getTradesList()
       .then(res => {
@@ -63,6 +65,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getProfile:'user/getProfile'
+    }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },

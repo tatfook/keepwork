@@ -25,7 +25,7 @@
 
     <el-radio-group class="quiz" v-if="isTFNG" v-model="quizAnswer">
       <div class="quiz-option" v-for="(item, index) in options" :key="index">
-        <el-radio :disabled="isDone" :label="alphabet[index]">{{item.item}}</el-radio>
+        <el-radio :disabled="isDone" :label="alphabet[index]">{{$t(`card.${item.item}`)}}</el-radio>
       </div>
     </el-radio-group>
 
@@ -140,7 +140,7 @@ export default {
       this.submit(result, answer)
     },
     async submit(result, answer) {
-      await this.doQuiz({ key: this.key, result, answer })
+      this.doQuiz({ key: this.key, result, answer })
       if (this.isBeInClassroom) {
         let state = this.lessonIsDone ? 1 : 0
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
