@@ -18,7 +18,7 @@ const withoutParseEndpoint = createEndpoint({
 const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
   getProfile: async (...args) => post('/user/getProfile', ...args),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
