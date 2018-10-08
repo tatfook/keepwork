@@ -71,7 +71,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   desc: {
-    emptyData: 'adi.paracraft.desc.data'
+    emptyAutoSizeInput: 'adi.paracraft.desc.data'
   }
 }
 

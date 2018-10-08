@@ -5,7 +5,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   paragraph: {
-    emptyData: 'adi.text.paragraph'
+    emptyAutoSizeInput: 'adi.text.paragraph'
   }
 }
 

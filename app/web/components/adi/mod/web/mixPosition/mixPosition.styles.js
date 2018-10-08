@@ -17,7 +17,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   paragraph: {
-    emptyData: 'adi.mixPosition.paragraph'
+    emptyAutoSizeInput: 'adi.mixPosition.paragraph'
   },
   button: {
     emptyInput: 'adi.mixPosition.button',

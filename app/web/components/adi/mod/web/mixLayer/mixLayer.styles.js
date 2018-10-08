@@ -17,7 +17,7 @@ let emptyData = {
     emptyTarget: '_blank'
   },
   paragraph: {
-    emptyData: 'adi.mixLayer.paragraph'
+    emptyAutoSizeInput: 'adi.mixLayer.paragraph'
   }
 }
 export default [
