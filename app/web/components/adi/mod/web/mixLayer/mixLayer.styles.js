@@ -3,17 +3,17 @@ import _ from 'lodash'
 let emptyData = {
   media: {
     emptyMedia: require('@/assets/adi/mixLayer/mix-layer.jpg'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   title: {
     emptyInput: 'adi.mixLayer.title',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   subtitle: {
     emptyInput: 'adi.mixLayer.subtitle',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   paragraph: {

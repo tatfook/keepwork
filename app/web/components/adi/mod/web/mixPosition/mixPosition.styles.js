@@ -3,17 +3,17 @@ import _ from 'lodash'
 let emptyData = {
   media: {
     emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   title: {
     emptyInput: 'adi.mixPosition.title',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   subtitle: {
     emptyInput: 'adi.mixPosition.subtitle',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   paragraph: {
@@ -21,7 +21,7 @@ let emptyData = {
   },
   button: {
     emptyInput: 'adi.mixPosition.button',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   }
 }

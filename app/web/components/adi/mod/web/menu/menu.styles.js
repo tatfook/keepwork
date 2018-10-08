@@ -6,24 +6,24 @@ let defaultData = {
     emptyData: [
       {
         name: 'adi.title.menu',
-        link: '#'
+        link: ''
       }
     ],
     emptyLinkTarget: '_blank'
   },
   logo: {
     emptyMedia: require('@/assets/adi/title/bear.svg'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   businessName: {
     emptyInput: 'adi.title.businessName',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   tagline: {
     emptyInput: 'adi.title.tagLine',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   }
 }

@@ -3,71 +3,71 @@ import _ from 'lodash'
 let emptyData = {
   preview: {
     emptyMedia: require('@/assets/adi/paracraft/preview.jpg'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   worldName: {
     emptyInput: 'adi.paracraft.worldName',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   backgroundImage: {
     emptyMedia: require('@/assets/adi/paracraft/backgroundImage.png'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   titleA: {
     emptyInput: 'adi.paracraft.paracraftTitle.titleA',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   subtitleA: {
     emptyInput: 'adi.paracraft.paracraftSubTitle.subtitle',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   author: {
     emptyDesc: 'adi.paracraft.author.desc',
     emptyText: 'adi.paracraft.author.text',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   version: {
     emptyDesc: 'adi.paracraft.version.desc',
     emptyText: '0.0.0',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   updateTime: {
     emptyText: '2018-1-10-14-30',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   viewTimesImg: {
     emptyMedia: require('@/assets/adi/paracraft/eye.png'),
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
     emptyDesc: 'adi.paracraft.viewTimes.desc',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
     emptySize: 'adi.paracraft.size.size',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   download: {
     emptyInput: 'adi.paracraft.download.name',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   enter: {
     emptyInput: 'adi.paracraft.enter.name',
-    emptyLink: '#',
+    emptyLink: '',
     emptyLinkTarget: '_blank'
   },
   desc: {
