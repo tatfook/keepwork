@@ -356,7 +356,6 @@ const actions = {
     } else {
       return // invalid file
     }
-
     sitePath = sitePath || activePageUrl
     await dispatch(
       'user/getWebsiteDetailInfoByPath',

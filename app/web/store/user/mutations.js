@@ -169,10 +169,10 @@ const mutations = {
     })
   },
   [UPDATE_SITE_MSG_SUCCESS](state, { newBasicMessage }) {
-    let { username, name } = newBasicMessage
+    let { username, sitename } = newBasicMessage
     Vue.set(state.website, username, {
       ...state.website[username],
-      [name]: newBasicMessage
+      [sitename]: newBasicMessage
     })
   },
   [GET_FROM_SKY_DRIVE_SUCCESS](state, payload) {

@@ -11,9 +11,12 @@ export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 })
 
-const withoutParseEndpoint = createEndpoint({
-  baseURL: process.env.KEEPWORK_API_PREFIX
-}, false)
+const withoutParseEndpoint = createEndpoint(
+  {
+    baseURL: process.env.KEEPWORK_API_PREFIX
+  },
+  false
+)
 
 const { post, put, get } = keepworkEndpoint
 
@@ -29,8 +32,10 @@ export const user = {
   verifyEmailOne: async (...args) => post('/user/verifyEmailOne', ...args),
   verifyEmailTwo: async (...args) => post('/user/verifyEmailTwo', ...args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneOne: async (args) => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
-  verifyCellphoneTwo: async (...args) => post('/user/verifyCellphoneTwo', ...args),
+  verifyCellphoneOne: async args =>
+    get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  verifyCellphoneTwo: async (...args) =>
+    post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
   register: async (...args) => post('/user/register', ...args),
@@ -80,13 +85,15 @@ payload: {
 */
 export const website = {
   // upsert: async (...args) => post('website/upsert', ...args),
-  upsert: async (...args) => post('sites', ...args),
+  upsert: async (args) => post('sites', args),
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
-  getDetailInfo: async (args) => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
+  getDetailInfo: async args =>
+    get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
-  updateByName: async (...args) => post('website/updateByName', ...args)
+  updateByName: async (...args) => post('website/updateByName', ...args),
+  updateById: async args => put(`sites/${args.id}`, args)
 }
 
 /*doc
@@ -120,12 +127,14 @@ export const pages = {
 }
 
 export const siteUser = {
-  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args),
+  getSiteListByMemberName: async (...args) =>
+    post('site_user/getSiteListByMemberName', ...args),
   getContributeSites: async () => get('sites?owned=false&membership=true')
 }
 
 export const siteDataSource = {
-  getByUsername: async (...args) => post('site_data_source/getByUsername', ...args)
+  getByUsername: async (...args) =>
+    post('site_data_source/getByUsername', ...args)
 }
 
 /*doc
@@ -155,7 +164,8 @@ payload: {
 */
 export const websiteComment = {
   create: async (...args) => post('website_comment/create', ...args),
-  getByPageUrl: async (...args) => post('website_comment/getByPageUrl', ...args),
+  getByPageUrl: async (...args) =>
+    post('website_comment/getByPageUrl', ...args),
   deleteById: async (...args) => post('website_comment/deleteById', ...args)
 }
 
@@ -166,13 +176,16 @@ export const sensitiveWords = {
 export const bigfile = {
   upload: async (...args) => post('bigfile/upload', ...args),
   getByUsername: async (...args) => post('bigfile/getByUsername', ...args),
-  getUserStoreInfo: async (...args) => post('bigfile/getUserStoreInfo', ...args),
+  getUserStoreInfo: async (...args) =>
+    post('bigfile/getUserStoreInfo', ...args),
   deleteById: async (...args) => post('bigfile/deleteById', ...args),
   updateById: async (...args) => post('bigfile/updateById', ...args),
   getByFilenameList: async (...args) => post('bigfile/getByFilenameList', args),
   changeFilename: async (...args) => post('bigfile/changeFilename', ...args),
-  getDownloadUrlById: async (...args) => post('bigfile/getDownloadUrlById', ...args),
-  getDownloadUrlByKey: async (...args) => post('bigfile/getDownloadUrlByKey', ...args)
+  getDownloadUrlById: async (...args) =>
+    post('bigfile/getDownloadUrlById', ...args),
+  getDownloadUrlByKey: async (...args) =>
+    post('bigfile/getDownloadUrlByKey', ...args)
 }
 
 export const qiniu = {
@@ -182,7 +195,7 @@ export const qiniu = {
 }
 
 export const userThreeService = {
-  getOauthUsers: async (args) => get('oauth_users'),
+  getOauthUsers: async args => get('oauth_users'),
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
   unbind: async (...args) => post('user_three_service/unbind', ...args)

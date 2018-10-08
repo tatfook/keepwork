@@ -23,7 +23,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           let res = {}
           if (!projectId) {
             // FIXME: 暂时这么去兼容老的api
-            res = await instance.get(`projects/${path}/tree/${path}`)
+            res = await instance.get(`projects/${path}/tree/${path}?recursive=true`)
             total = [...total, ...res.data]
             while (res.data.length >= 100) {
               res = await instance.get(

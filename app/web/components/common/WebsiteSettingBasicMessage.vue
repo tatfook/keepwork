@@ -10,7 +10,7 @@
         </el-form-item>
         <el-form-item :label="$t('setting.siteLogo') + ':'">
           <div class="before-cropper-zone">
-            <img class="profile" :src='basicMessage.logoUrl' alt="">
+            <img class="profile" :src='basicMessage.extra.websiteSetting.logoUrl' alt="">
             <div class="operate-masker">
               <span class="to-change-btn">
                 {{ $t('setting.change') }}
@@ -20,7 +20,7 @@
           </div>
         </el-form-item>
         <el-form-item :label="$t('setting.siteIntro') + ':'">
-          <el-input type='textarea' v-model="basicMessage.desc"></el-input>
+          <el-input type='textarea' v-model="basicMessage.description"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -43,14 +43,18 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
-    this.basicMessage = _.clone(this.getSiteDetailInfoByPath(this.sitePath).site)
-    console.warn('basicMessege', this.basicMessage)
+    this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).site)
+    console.warn(this.basicMessage)
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },
   data() {
     return {
-      basicMessage: {},
+      basicMessage: {
+        extra: {
+          websiteSetting: {}
+        }
+      },
       loading: true,
       basicInfoRules: {
         name: [
@@ -120,14 +124,15 @@ export default {
       return result && result.length > 0
     },
     async submitChange() {
-      this.loading = true
+      // this.loading = true
       this.$refs.basicMessageForm.validate(async valid => {
         if (valid) {
-          let isSensitive = await this.checkSensitive()
-          if (isSensitive) {
-            this.showErrorMsg(this.$t('common.inputIsSensitive'))
-            return
-          }
+          // let isSensitive = await this.checkSensitive()
+          // if (isSensitive) {
+          //   this.showErrorMsg(this.$t('common.inputIsSensitive'))
+          //   return
+          // }
+          // return console.dir(this.basicMessage)
           await this.userSaveSiteBasicSetting({
             newBasicMessage: this.basicMessage
           })

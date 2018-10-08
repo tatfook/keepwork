@@ -117,6 +117,7 @@ const actions = {
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
+    console.warn('getUserDetailByUsername---->')
     let { commit, getters: { usersDetail } } = context
     let userDetail = usersDetail && usersDetail[username]
     if (userDetail) {
@@ -313,6 +314,7 @@ const actions = {
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
+    console.warn(detailInfo)
     detailInfo.site.username = username
     commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
   },
@@ -462,7 +464,8 @@ const actions = {
   },
   async saveSiteBasicSetting(context, { newBasicMessage }) {
     let { commit } = context
-    await keepwork.website.updateByName(newBasicMessage)
+    // await keepwork.website.updateByName(newBasicMessage)
+    await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
   },
   async createComment(context, { url: path, content }) {

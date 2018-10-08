@@ -51,18 +51,16 @@ export default {
     }).catch(e => console.error(e))
 
     this.isLoginDialogShow = !this.userIsLogined && this.isSitePrivate
-    console.warn('private: ', this.isSitePrivate)
-    console.log('layout', this.layout)
-    console.log(this.pageLoading)
-    console.log(this.isLoginDialogShow)
-    console.log(this.headerModList)
-    console.log(this.footerModList)
-    console.log(this.sidebarModList)
-    console.log(this.code)
+    console.warn('siteDetailInfo-->',this.siteDetailInfo)
+    console.warn('mainModList-->',this.mainModList)
+    console.warn('isSitePrivate', this.isSitePrivate)
+    console.warn('show404', this.show404)
+    console.warn('activePage', this.activePage)
   },
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
+      activePage: 'activePage',
       code: 'code',
       layout: 'layout',
       modList: 'modList',

@@ -80,6 +80,7 @@ export default {
       this.dialogVisible = false
     },
     handleCloseOpenedFile({ path }) {
+      console.warn(path)
       this.closeAndReset(path)
       this.handleCloseDialog()
     },

@@ -254,7 +254,6 @@ export default {
       // modify store info
       let { fullPath: activePageFullPath } = this.activePageInfo
       activePageFullPath === data.path && store.setCurrentNode(node)
-
       return <FileManagerCustomTreeNode data={data} node={node} />
     },
     async handleNodeClick(data, node, component) {
