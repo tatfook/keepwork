@@ -4,12 +4,12 @@ let emptyData = {
   pic: {
     emptyMedia: require('@/assets/adi/qq/qqOne.svg'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   desc: {
     emptyInput: 'adi.qq.desc',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   }
 }
 

@@ -6,7 +6,7 @@ export const transfer = (md, cmd) => {
     author: {
       desc: '',
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     desc: {
@@ -15,56 +15,56 @@ export const transfer = (md, cmd) => {
     download: {
       link: '',
       name: '',
-      target: '_self'
+      target: ''
     },
     enter: {
       link: '',
       name: '',
-      target: '_self'
+      target: ''
     },
     innerModal: {},
     paracraftInfo: {
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     preview: {
       link: '',
       src: '',
-      target: '_self'
+      target: ''
     },
     size: {
       desc: '',
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     updateTime: {
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     version: {
       desc: '',
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     viewTimes: {
       desc: '',
       link: '',
-      target: '_self',
+      target: '',
       text: ''
     },
     viewTimesImg: {
       link: '',
       src: '',
-      target: '_self'
+      target: ''
     },
     worldName: {
       link: '',
       name: '',
-      target: '_self'
+      target: ''
     }
   }
 

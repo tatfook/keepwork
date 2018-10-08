@@ -4,17 +4,17 @@ let emptyData = {
   media: {
     emptyMedia: require('@/assets/adi/mixLayer/mix-layer.jpg'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   title: {
     emptyInput: 'adi.mixLayer.title',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   subtitle: {
     emptyInput: 'adi.mixLayer.subtitle',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   paragraph: {
     emptyAutoSizeInput: 'adi.mixLayer.paragraph'

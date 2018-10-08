@@ -4,17 +4,17 @@ let emptyData = {
   media: {
     emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   title: {
     emptyInput: 'adi.mixPosition.title',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   subtitle: {
     emptyInput: 'adi.mixPosition.subtitle',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   paragraph: {
     emptyAutoSizeInput: 'adi.mixPosition.paragraph'
@@ -22,7 +22,7 @@ let emptyData = {
   button: {
     emptyInput: 'adi.mixPosition.button',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   }
 }
 

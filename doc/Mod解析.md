@@ -148,7 +148,7 @@ options: {
   config: {
     menu: {
       mode: 'horizontal',
-      emptyTarget: '_blank'
+      emptyLinkTarget: '_blank'
     }
   }
 }

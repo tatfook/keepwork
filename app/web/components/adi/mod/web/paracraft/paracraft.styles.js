@@ -4,71 +4,71 @@ let emptyData = {
   preview: {
     emptyMedia: require('@/assets/adi/paracraft/preview.jpg'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   worldName: {
     emptyInput: 'adi.paracraft.worldName',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   backgroundImage: {
     emptyMedia: require('@/assets/adi/paracraft/backgroundImage.png'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   titleA: {
     emptyInput: 'adi.paracraft.paracraftTitle.titleA',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   subtitleA: {
     emptyInput: 'adi.paracraft.paracraftSubTitle.subtitle',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   author: {
     emptyDesc: 'adi.paracraft.author.desc',
     emptyText: 'adi.paracraft.author.text',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   version: {
     emptyDesc: 'adi.paracraft.version.desc',
     emptyText: '0.0.0',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   updateTime: {
     emptyText: '2018-1-10-14-30',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   viewTimesImg: {
     emptyMedia: require('@/assets/adi/paracraft/eye.png'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   viewTimes: {
     emptyText: '0',
     emptyDesc: 'adi.paracraft.viewTimes.desc',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   size: {
     emptyText: '31KB',
     emptySize: 'adi.paracraft.size.size',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   download: {
     emptyInput: 'adi.paracraft.download.name',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   enter: {
     emptyInput: 'adi.paracraft.enter.name',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   desc: {
     emptyAutoSizeInput: 'adi.paracraft.desc.data'

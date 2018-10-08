@@ -45,7 +45,7 @@ export default {
     target() {
       return this.properties.target
         ? this.properties.target
-        : this.options.emptyTarget
+        : this.options.emptyLinkTarget
     },
     link() {
       return this.properties.link

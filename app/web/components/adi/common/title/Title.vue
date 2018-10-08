@@ -20,7 +20,7 @@ export default {
     getTarget() {
       let properties = this.properties
       let options = this.options
-      return properties.target ? properties.target : options.emptyTarget
+      return properties.target ? properties.target : options.emptyLinkTarget
     },
     getLink() {
       let properties = this.properties

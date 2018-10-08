@@ -9,22 +9,22 @@ let defaultData = {
         link: '#'
       }
     ],
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   logo: {
     emptyMedia: require('@/assets/adi/title/bear.svg'),
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   businessName: {
     emptyInput: 'adi.title.businessName',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   tagline: {
     emptyInput: 'adi.title.tagLine',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   }
 }
 export default [
@@ -55,7 +55,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank'
+          emptyLinkTarget: '_blank'
         }
       }
     }
@@ -87,7 +87,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
             'justify-content': 'center'
@@ -123,7 +123,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           itemStyle: {
             'float': 'right'
           }
@@ -158,7 +158,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank'
+          emptyLinkTarget: '_blank'
         }
       }
     }
@@ -190,7 +190,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
             justifyContent: 'center'
@@ -226,7 +226,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           itemStyle: {
             'float': 'right'
           }
@@ -261,7 +261,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank'
+          emptyLinkTarget: '_blank'
         }
       }
     }
@@ -293,7 +293,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
             justifyContent: 'center'
@@ -329,7 +329,7 @@ export default [
         menu: {
           type: 'menu',
           mode: 'horizontal',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           itemStyle: {
             'float': 'right'
           }
@@ -365,7 +365,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
         }
@@ -399,7 +399,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
         }
@@ -433,7 +433,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
         }
@@ -467,7 +467,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-start'
         }
@@ -501,7 +501,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'center'
         }
@@ -535,7 +535,7 @@ export default [
       config: {
         menu: {
           type: 'footer',
-          emptyTarget: '_blank',
+          emptyLinkTarget: '_blank',
           display: 'flex',
           justifyContent: 'flex-end'
         }

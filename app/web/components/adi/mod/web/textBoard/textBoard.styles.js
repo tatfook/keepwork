@@ -2,12 +2,12 @@ let emptyData = {
   subtitle: {
     emptyInput: 'adi.mixPosition.subtitle',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   title: {
     emptyInput: 'adi.text.title',
     emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   },
   paragraph: {
     emptyAutoSizeInput: 'adi.text.paragraph'

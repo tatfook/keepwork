@@ -4,7 +4,7 @@ let emptyData = {
   img: {
     emptyMedia: require('@/assets/adi/img/imgTwo.png'),
     emptyLink: process.env.KEEPWORK,
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   }
 }
 export default [
