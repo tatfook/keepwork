@@ -129,6 +129,8 @@ export default {
     line-height: unset;
     color: unset;
     background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     .img {
       margin-right: 10px;
       background-position: center;
