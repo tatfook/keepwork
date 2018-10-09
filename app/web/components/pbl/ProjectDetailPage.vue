@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-page">
-    <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" v-if="!isFirstGettingData"></project-header>
-    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail'></router-view>
+    <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData"></project-header>
+    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername'></router-view>
   </div>
 </template>
 <script>
@@ -14,7 +14,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectDetail: 'pbl/projectDetail'
+      projectDetail: 'pbl/projectDetail',
+      getDetailByUserId: 'user/getDetailByUserId'
     }),
     pblProjectDetail() {
       return this.projectDetail({ projectId: this.projectId })
@@ -24,11 +25,22 @@ export default {
     },
     editingProjectId() {
       return _.get(this.pblProjectDetail, 'id')
+    },
+    editingUserId() {
+      return _.get(this.pblProjectDetail, 'userId')
+    },
+    editingProjectUser() {
+      let userId = this.editingUserId
+      return this.getDetailByUserId({ userId })
+    },
+    editingProjectUsername() {
+      return _.get(this.editingProjectUser, 'username')
     }
   },
   data() {
     return {
       isLoading: true,
+      editingUserId: undefined,
       isFirstGettingData: true
     }
   },

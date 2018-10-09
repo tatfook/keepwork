@@ -2,7 +2,7 @@
   <div class="project-index">
     <div class="container">
       <div class="project-index-sidebar">
-        <project-website class="project-index-sidebar-item"></project-website>
+        <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername'></project-website>
         <project-tags class="project-index-sidebar-item"></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId'></project-joined-members-list>
       </div>
@@ -21,10 +21,23 @@ import ProjectBasicInfo from './common/ProjectBasicInfo'
 import ProjectComments from './common/ProjectComments'
 export default {
   name: 'ProjectIndex',
+  props: {
+    pblProjectDetail: {
+      type: Object,
+      required: true
+    },
+    originProjectUsername: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
     projectId() {
       return _.get(this.$route, 'params.id')
-    }
+    },
+    originProjectName() {
+      return _.get(this.pblProjectDetail, 'name')
+    },
   },
   components: {
     ProjectWebsite,

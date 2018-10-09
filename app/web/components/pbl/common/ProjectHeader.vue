@@ -58,15 +58,13 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProjectHeader',
   props: {
-    projectDetail: Object
-  },
-  async mounted() {
-    this.editingUserId = _.get(this.projectDetail, 'userId')
+    projectDetail: Object,
+    editingProjectUsername: String,
+    editingUserId: Number
   },
   data() {
     return {
       isDropdownLoading: false,
-      editingUserId: undefined,
       isFavoriteButtonLoading: false,
       isStarButtonLoading: false,
       activePageName: this.$route.name
@@ -77,20 +75,12 @@ export default {
       userProjects: 'pbl/userProjects',
       projectFavoriteState: 'pbl/projectFavoriteState',
       projectStarState: 'pbl/projectStarState',
-      getDetailByUserId: 'user/getDetailByUserId'
     }),
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
     },
     editingProjectId() {
       return _.get(this.projectDetail, 'id')
-    },
-    editingProjectUser() {
-      let userId = this.editingUserId
-      return this.getDetailByUserId({ userId })
-    },
-    editingProjectUsername() {
-      return _.get(this.editingProjectUser, 'username')
     },
     userProjectList() {
       let userId = this.editingUserId

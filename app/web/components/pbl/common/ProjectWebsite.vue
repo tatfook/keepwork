@@ -6,13 +6,34 @@
         <el-button class="project-website-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
       </div>
       <p class="project-website-title">这个项目的网站</p>
-      <p class="project-website-info">www.github.com/tatfook/KeepWorkDesign</p>
+      <p class="project-website-info">{{projectUrl}}</p>
     </el-card>
   </div>
 </template>
 <script>
 export default {
-  name: 'ProjectWebsite'
+  name: 'ProjectWebsite',
+  props: {
+    originProjectName: {
+      type: String,
+      required: true
+    },
+    originProjectUsername: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    origin() {
+      return window.location.origin
+    },
+    projectUrl(){
+      let origin = this.origin
+      let originProjectName = this.originProjectName
+      let originProjectUsername = this.originProjectUsername
+      return origin + '/' + originProjectUsername + '/' + originProjectName
+    }
+  }
 }
 </script>
 <style lang="scss">
