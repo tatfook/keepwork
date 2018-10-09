@@ -21,6 +21,9 @@ export default {
     },
     projectId() {
       return _.get(this.$route, 'params.id')
+    },
+    editingProjectId() {
+      return _.get(this.pblProjectDetail, 'id')
     }
   },
   data() {
@@ -31,14 +34,29 @@ export default {
   },
   methods: {
     ...mapActions({
-      pblGetProjectDetail: 'pbl/getProjectDetail'
+      pblGetProjectDetail: 'pbl/getProjectDetail',
+      getUserDetailByUserId: 'user/getUserDetailByUserId',
+      getFavoriteState: 'pbl/getFavoriteState',
+      getStarState: 'pbl/getStarState'
     }),
     async initProjectDetail() {
       this.isFirstGettingData = true
       this.isLoading = true
       await this.pblGetProjectDetail({ projectId: this.projectId })
+      await this.initProjectHeaderDetail()
       this.isFirstGettingData = false
       this.isLoading = false
+    },
+    async initProjectHeaderDetail() {
+      this.editingUserId = _.get(this.pblProjectDetail, 'userId')
+      let userId = this.editingUserId
+      let objectId = this.editingProjectId
+      let objectType = 5
+      await Promise.all([
+        this.getUserDetailByUserId({ userId }),
+        this.getFavoriteState({ objectId, objectType }),
+        this.getStarState({ projectId: objectId })
+      ])
     }
   },
   components: {

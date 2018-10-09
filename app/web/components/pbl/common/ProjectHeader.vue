@@ -62,13 +62,6 @@ export default {
   },
   async mounted() {
     this.editingUserId = _.get(this.projectDetail, 'userId')
-
-    let userId = this.editingUserId
-    let objectId = this.editingProjectId
-    let objectType = 5
-    this.getUserDetailByUserId({ userId })
-    this.getFavoriteState({ objectId, objectType })
-    this.getStarState({ projectId: objectId })
   },
   data() {
     return {
@@ -120,14 +113,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserDetailByUserId: 'user/getUserDetailByUserId',
       pblGetUserProjects: 'pbl/getUserProjects',
       favoriteProject: 'pbl/favoriteProject',
       unFavoriteProject: 'pbl/unFavoriteProject',
       starProject: 'pbl/starProject',
-      unStarProject: 'pbl/unStarProject',
-      getFavoriteState: 'pbl/getFavoriteState',
-      getStarState: 'pbl/getStarState'
+      unStarProject: 'pbl/unStarProject'
     }),
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
