@@ -2,7 +2,10 @@ export default [
   {
     templateID: 0,
     data: {
-      root: {}
+      root: {
+        'padding-top': '20px',
+        'padding-bottom': '20px'
+      }
     },
     props: {},
     theme: {
