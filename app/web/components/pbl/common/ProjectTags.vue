@@ -5,12 +5,12 @@
         <span class="project-tags-card-label">项目标签</span>
         <el-button class="project-tags-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
       </div>
-      <el-tag size="small" :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
+      <el-tag size="small" :key="tag" v-for="tag in dynamicTags" :disable-transitions="false" @close="handleClose(tag)">
         {{tag}}
       </el-tag>
       <el-input class="project-tags-new-input" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
-      <el-button v-else class="project-tags-new-button" size="small" @click="showInput">+ New Tag</el-button>
+      <!-- <el-button v-else class="project-tags-new-button" size="small" @click="showInput">+ 新标签</el-button> -->
     </el-card>
   </div>
 </template>

@@ -4,7 +4,7 @@
       <div class="project-index-sidebar">
         <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername'></project-website>
         <project-tags class="project-index-sidebar-item"></project-tags>
-        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId'></project-joined-members-list>
+        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'></project-joined-members-list>
       </div>
       <div class="project-index-main">
         <project-basic-info class="project-index-basic"></project-basic-info>
@@ -29,7 +29,8 @@ export default {
     originProjectUsername: {
       type: String,
       required: true
-    }
+    },
+    projectOwnerPortrait: String
   },
   computed: {
     projectId() {

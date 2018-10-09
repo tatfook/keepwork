@@ -15,15 +15,14 @@
     <el-card v-if="type === 'card'" class="project-joined-members-list-card" shadow="never">
       <div slot="header" class="clearfix">
         <span class="project-joined-members-list-card-title">项目成员</span>
-        <el-button class="project-joined-members-list-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
       </div>
       <div class="project-joined-members-list-card-created">
-        <img class="project-joined-members-list-card-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || projectOwnerPortrait" alt="">
         <span class="project-joined-members-list-card-username">迟语</span>
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
       <div class="project-joined-members-list-card-profiles">
-        <img class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+        <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
     </el-card>
   </div>
@@ -43,7 +42,8 @@ export default {
       validator: function(value) {
         return ['table', 'card'].indexOf(value) !== -1
       }
-    }
+    },
+    projectOwnerPortrait: String
   },
   async created() {
     this.isLoading = true
@@ -56,7 +56,8 @@ export default {
   data() {
     return {
       formatType: 'YYYY/MM/DD',
-      isLoading: false
+      isLoading: false,
+      defaultPortrait: require('@/assets/img/default_portrait.png')
     }
   },
   computed: {
@@ -131,11 +132,6 @@ export default {
   &-card {
     &-title {
       font-weight: bold;
-    }
-    &-button {
-      float: right;
-      padding: 3px 0;
-      color: #909399;
     }
     &-profile {
       width: 48px;

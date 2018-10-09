@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-page">
     <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData"></project-header>
-    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername'></router-view>
+    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait'></router-view>
   </div>
 </template>
 <script>
@@ -35,6 +35,9 @@ export default {
     },
     editingProjectUsername() {
       return _.get(this.editingProjectUser, 'username')
+    },
+    projectOwnerPortrait() {
+      return _.get(this.editingProjectUser, 'portrait')
     }
   },
   data() {
