@@ -25,7 +25,9 @@ const createEndpoint = (config, parseResponse = true) => {
   endpoint.interceptors.request.use(
     config => {
       if (Cookies.get('token')) {
-        _.merge(config, { headers: { Authorization: 'Bearer ' + Cookies.get('token') } })
+        _.merge(config, {
+          headers: { Authorization: 'Bearer ' + Cookies.get('token') }
+        })
       }
       return config
     },
@@ -40,6 +42,12 @@ const createEndpoint = (config, parseResponse = true) => {
       return parseResponse ? response.data.data || response.data : response.data
     },
     error => {
+      if (error.response.status === 401 && Cookies.get('token')) {
+        Cookies.remove('token')
+        Cookies.remove('token', { path: '/' })
+        window.localStorage.removeItem('satellizer_token')
+        window.location.reload()
+      }
       console.error(error.message)
       return Promise.reject(error)
     }
