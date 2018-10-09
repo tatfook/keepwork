@@ -14,7 +14,7 @@
     </el-table>
     <el-card v-if="type === 'card'" class="project-joined-members-list-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span class="project-joined-members-list-card-label">项目成员</span>
+        <span class="project-joined-members-list-card-title">项目成员</span>
         <el-button class="project-joined-members-list-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
       </div>
       <div class="project-joined-members-list-card-created">
@@ -129,7 +129,7 @@ export default {
     }
   }
   &-card {
-    &-label {
+    &-title {
       font-weight: bold;
     }
     &-button {

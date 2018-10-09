@@ -7,8 +7,8 @@
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId'></project-joined-members-list>
       </div>
       <div class="project-index-main">
-        <project-basic-info></project-basic-info>
-        <project-comments></project-comments>
+        <project-basic-info class="project-index-basic"></project-basic-info>
+        <project-comments class="project-index-comments"></project-comments>
       </div>
     </div>
   </div>
@@ -51,6 +51,15 @@ export default {
   }
   & > .container {
     display: flex;
+  }
+  &-basic {
+    margin-bottom: 24px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+  &-comments {
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
   }
 }
 </style>
