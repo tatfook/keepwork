@@ -10,8 +10,8 @@
       <el-menu-item index='2' @click="goExplorationPage">
         {{$t('common.explore')}}
       </el-menu-item>
-      <el-menu-item index='4'>
-        <a href='/official/help/index'>{{$t('common.study')}}</a>
+      <el-menu-item index='4' @click="goStudyPage">
+        {{$t('common.study')}}
       </el-menu-item>
       <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='//iicc.keepwork.com' target="_blank">
@@ -190,6 +190,9 @@ export default {
     },
     goExplorationPage(){
       this.$router.push('exploration')
+    },
+    goStudyPage(){
+      this.$router.push('study')
     },
     goHomePage(){
       this.$router.push('/')

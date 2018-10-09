@@ -153,7 +153,7 @@ export default {
       activePageInfo: 'activePageInfo'
     }),
     isHome() {
-      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage'
+      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage' || this.$route.name === 'StudyPage'
     },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
