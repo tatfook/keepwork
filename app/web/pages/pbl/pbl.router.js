@@ -3,6 +3,7 @@ import Router from 'vue-router'
 const PblIndex = () => import('@/components/pbl/PblIndex')
 const ProjectPage = () => import('@/components/pbl/ProjectPage')
 const NewProject = () => import('@/components/pbl/NewProject')
+const ProjectDetailPage = () => import('@/components/pbl/ProjectDetailPage')
 const ProjectIndex = () => import('@/components/pbl/ProjectIndex')
 const EditProject = () => import('@/components/pbl/EditProject')
 
@@ -29,13 +30,16 @@ export default new Router({
     },
     {
       path: '/project/:id',
-      name: 'ProjectIndexPage',
-      component: ProjectIndex
-    },
-    {
-      path: '/project/:id/edit',
-      name: 'EditProject',
-      component: EditProject
+      component: ProjectDetailPage,
+      children: [{
+        path: '/',
+        name: 'ProjectIndexPage',
+        component: ProjectIndex
+      }, {
+        path: '/project/:id/edit',
+        name: 'EditProject',
+        component: EditProject
+      }]
     }
   ]
 })

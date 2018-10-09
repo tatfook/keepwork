@@ -49,7 +49,7 @@ export default {
   &-main {
     flex: 1;
   }
-  .container {
+  & > .container {
     display: flex;
   }
 }
