@@ -41,7 +41,7 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   let gitlab = getGitlabAPI()
   let options = { projectId, ref, branch, content, commit_message: `keepwork commit: ${path}` }
 
-  return { username, name, gitlab, options, projectId }
+  return { username, name, gitlab, options, projectId, path }
 }
 
 /*doc
@@ -288,29 +288,36 @@ const actions = {
       })
     }
   },
-  async removeFolder(context, { paths }) {
-    let { commit, dispatch } = context
-
-    for (let i = 0; i < paths.length; i++) {
-      let {
-        gitlab,
-        options
-      } = await getGitlabFileParams(context, { path: paths[i] })
-      try {
-        await gitlab.deleteFile(paths[i], options)
-        dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
-      } catch (error) {
-        console.error(error)
-      }
+  async removeFolder(context, { folder, paths }) {
+    const { commit, dispatch } = context
+    const { username, name, options, gitlab } = await getGitlabFileParams(context, { path: folder })
+    console.warn('gitlab', gitlab)
+    paths.forEach(path => dispatch('closeOpenedFile', { path }, { root: true }))
+    try {
+      await gitlab.removeFolder(folder)
+    } catch (error) {
+      console.error(error)
     }
-    let path = paths[0]
-    let {
-      username,
-      name,
-      options
-    } = await getGitlabFileParams(context, { path: paths[0] })
-    let payload = { path, branch: options.branch }
-    commit(REMOVE_FILE_SUCCESS, payload)
+    // for (let i = 0; i < paths.length; i++) {
+    //   let {
+    //     gitlab,
+    //     options
+    //   } = await getGitlabFileParams(context, { path: paths[i] })
+    //   try {
+    //     await gitlab.deleteFile(paths[i], options)
+    //     dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }
+    // let path = paths[0]
+    // let {
+    //   username,
+    //   name,
+    //   options
+    // } = await getGitlabFileParams(context, { path: paths[0] })
+    // let payload = { path: folder, branch: options.branch }
+    // commit(REMOVE_FILE_SUCCESS, payload)
 
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
@@ -379,6 +386,8 @@ const actions = {
     let gitlab = getGitlabAPI()
     try {
       await gitlab.createFile(path, options)
+      // let projectName = path.split('/').splice(0, 2).join('/')
+      // return `${projectName}/raw/master/${path}}`
       return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
     } catch (e) {
       console.error(e)

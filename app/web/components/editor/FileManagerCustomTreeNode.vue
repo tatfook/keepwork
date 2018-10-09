@@ -141,8 +141,9 @@ export default {
       })
     },
     removeFolder(data) {
-      let pathArr = data.path.split('/')
-      let folderName = pathArr[pathArr.length - 1]
+      // let pathArr = data.path.split('/')
+      // let folderName = pathArr[pathArr.length - 1]
+      let folder = data.path
       let toRemoveFiles = this.recursion(data)
 
       const h = this.$createElement
@@ -159,13 +160,13 @@ export default {
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFolder({ paths: toRemoveFiles })
+          await this.gitlabRemoveFolder({ folder, paths: toRemoveFiles })
           await this.deletePagesFromLayout({ paths: toRemoveFiles })
           this.removeRecentOpenFolder(toRemoveFiles)
           this.resetPage({ toRemoveFiles })
           this.removePending = false
         })
-        .catch(() => {})
+        .catch(e => console.error(e))
     },
     removeRecentOpenFolder(toRemoveFiles){
       let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
@@ -175,9 +176,12 @@ export default {
     recursion(data) {
       let childrenFiles = []
       const recursionFile = data => {
-        if (!/.md$/.test(data.path)) {
-          childrenFiles.push(`${data.path}/.gitignore.md`)
-        } else {
+        // if (!/.md$/.test(data.path)) {
+        //   childrenFiles.push(`${data.path}/.gitignore.md`)
+        // } else {
+        //   childrenFiles.push(data.path)
+        // }
+        if (/.md$/.test(data.path)) {
           childrenFiles.push(data.path)
         }
         data.children && data.children.forEach(item => recursionFile(item))

@@ -23,7 +23,9 @@ const gitLabAPIGenerator = ({ url, token }) => {
           let res = {}
           if (!projectId) {
             // FIXME: 暂时这么去兼容老的api
-            res = await instance.get(`projects/${path}/tree/${path}?recursive=true`)
+            res = await instance.get(
+              `projects/${path}/tree/${path}?recursive=true`
+            )
             total = [...total, ...res.data]
             while (res.data.length >= 100) {
               res = await instance.get(
@@ -280,7 +282,6 @@ export class GitAPI {
   }
 
   async renameFolder(currentFolderPath, newFolderPath, childrenFiles, options) {
-    console.warn('renameFolder--->')
     const projectName = currentFolderPath
       .split('/')
       .splice(0, 2)
@@ -290,26 +291,17 @@ export class GitAPI {
       currentFolderPath,
       newFolderPath
     )
-    // console.log(childrenFiles)
-    // await this.client.projects.repository.folders.renameFolder()
-    // let actions = await this.genActions(
-    //   currentFolderPath,
-    //   newFolderPath,
-    //   childrenFiles,
-    //   options
-    // )
-    // let payload = {
-    //   branch: options.branch || this.config.branch || 'master',
-    //   commit_message: 'rename folder',
-    //   actions
-    // }
-    // await this.client.projects.repository.files
-    //   .rename(options.projectId, payload)
-    //   .then(data => {
-    //     // this.commitToESByArray(actions, options)
-    //     return data
-    //   })
-    //   .catch(e => {})
+  }
+
+  async removeFolder(folderPath) {
+    const projectName = folderPath
+      .split('/')
+      .splice(0, 2)
+      .join('/')
+    await this.client.projects.repository.folders.remove(
+      projectName,
+      folderPath
+    )
   }
 
   async upsertFile(path, options) {
