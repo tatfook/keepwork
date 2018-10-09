@@ -26,7 +26,7 @@
                             <el-input size="small" v-model="authCode"></el-input>
                         </el-col>
                         <el-col class="send-auth-send-code">
-                            <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleFormDatas.cellphoneNumber" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
+                            <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !cellphoneValidate" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
                               <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
                               <span v-else>{{$t('user.sendCodes')}}</span>
                             </el-button>
@@ -55,13 +55,16 @@ export default {
     let validatePhoneNumber = (rule, value, callback) => {
       if (!/^1\d{10}$/.test(value)) {
         callback(new Error(this.$t('user.wrongNumberFormat')))
+        this.cellphoneValidate = false
       } else {
-        callback()
+        // callback()
+        this.cellphoneValidate = true
       }
     }
     return {
       sendCodeLoading: false,
       sendCodeDisabled: false,
+      cellphoneValidate: false,
       count: 60,
       timer: null,
       authCode: '',
@@ -69,14 +72,7 @@ export default {
         cellphoneNumber: ''
       },
       phoneNumberRules: {
-        cellphoneNumber: [
-          {
-            required: true,
-            message: this.$t('user.inputPhoneNumber'),
-            trigger: 'blur'
-          },
-          { validator: validatePhoneNumber, trigger: 'change' }
-        ]
+        cellphoneNumber: [{ validator: validatePhoneNumber, trigger: 'change' }]
       }
     }
   },
