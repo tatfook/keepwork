@@ -45,6 +45,14 @@ export default {
     hasImg() {
       return this.options.img && this.options.img.src
     },
+    backgroundConcealment(){
+      if(this.properties.src){
+        let style = {
+          'background-color': 'transparent!important'
+        }
+        return style
+      }
+    },
     buttonStyle() {
       let style = {
         width: this.properties.width && parseInt(this.properties.width) + 'px',
@@ -53,7 +61,7 @@ export default {
         'background-image': 'url(' + (this.properties.src || '') + ')',
         'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px'
       }
-      return this.generateStyleString(_.merge({}, style, this.options.buttonStyle))
+      return this.generateStyleString(_.merge({}, this.options.buttonStyle, style, this.backgroundConcealment))
     },
     buttonImgStyle() {
       return this.generateStyleString({
