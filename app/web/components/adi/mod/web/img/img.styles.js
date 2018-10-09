@@ -2,9 +2,9 @@ import _ from 'lodash'
 
 let emptyData = {
   img: {
-    emptySrc: require('@/assets/adi/img/imgTwo.png'),
+    emptyMedia: require('@/assets/adi/img/imgTwo.png'),
     emptyLink: process.env.KEEPWORK,
-    emptyTarget: '_blank'
+    emptyLinkTarget: '_blank'
   }
 }
 export default [

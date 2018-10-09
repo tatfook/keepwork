@@ -156,7 +156,7 @@ export default {
       return this.properties.data.length != 0 ? false : true
     },
     menuTarget() {
-      return this.properties.target ? this.properties.target : this.options.emptyTarget
+      return this.properties.target ? this.properties.target : this.options.emptyLinkTarget
     },
     optionsStyle() {
       return 'display:' + this.options.display + ';' + 'justify-content:' + this.options.justifyContent + ';'

@@ -2,27 +2,27 @@ import _ from 'lodash'
 
 let emptyData = {
   media: {
-    emptySrc: require('@/assets/adi/mixPosition/picture-mod.png'),
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   title: {
-    emptyName: 'adi.mixPosition.title',
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyInput: 'adi.mixPosition.title',
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   subtitle: {
-    emptyName: 'adi.mixPosition.subtitle',
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyInput: 'adi.mixPosition.subtitle',
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   paragraph: {
-    emptyData: 'adi.mixPosition.paragraph'
+    emptyAutoSizeInput: 'adi.mixPosition.paragraph'
   },
   button: {
-    emptyName: 'adi.mixPosition.button',
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyInput: 'adi.mixPosition.button',
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   }
 }
 
