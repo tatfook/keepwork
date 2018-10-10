@@ -1,5 +1,8 @@
 <template>
-  <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
+  <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :visible.sync="show" :before-close="handleClose">
+    <div class="website-setting-sidebar-header">
+      <span class="webSetting">网站设置&nbsp;&nbsp;&nbsp;</span><span class="url">//{{title}}/{{sitePath || ''}}设置</span>
+    </div>
     <div class="website-setting-sidebar">
       <ul>
         <li @click='doActiveNavItem(index)' v-for="(navItem, index) in filteredWebsiteSettingNavs" :key="index" v-show="navItem.isShow">
@@ -29,7 +32,6 @@ export default {
   },
   data() {
     return {
-      title: `//${location.host}/${this.sitePath}`,
       activeSettingIndex: 0
     }
   },
@@ -43,6 +45,9 @@ export default {
     },
     siteOwnsUsername() {
       return this.sitePath.split('/')[0]
+    },
+    title() {
+      return location.host
     },
     isBasicSettingShow() {
       return this.siteOwnsUsername === this.loginUsername
@@ -97,15 +102,35 @@ export default {
       max-width: 1200px;
     }
     .el-dialog__header {
-      box-shadow: 0 2px 2px #b5b5b5;
-      z-index: 10;
-      position: relative;
+      padding: 0
+    }
+    .el-dialog__headerbtn {
+      top: 16px;
+      z-index: 1;
     }
     .el-dialog__body {
-      padding: 0;
-      border-top: 15px solid #cdd4dc;
+      padding: 50px 0 0 0;
       display: flex;
       height: 652px;
+      .website-setting-sidebar-header {
+        position: absolute;
+        bottom: 637px;
+        width: 100%;
+        height: 50px;
+        border-bottom: 15px solid #cdd4dc;
+        .webSetting {
+          display: inline-block;
+          padding-top: 13px;
+          margin-left: 30px;
+          font-size: 18px;
+          color: #333;
+        }
+        .url {
+          display: inline-block;
+          font-size: 14px;
+          color: #9f9f9f;
+        }
+      }
     }
   }
   &-sidebar {
