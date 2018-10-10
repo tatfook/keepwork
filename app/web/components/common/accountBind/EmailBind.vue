@@ -97,6 +97,7 @@ export default {
       emailForm.validate(async valid => {
         if (valid) {
           let isEmailBinded = await this.isEmailBinded()
+          console.warn(isEmailBinded)
           if (isEmailBinded) {
             emailForm.clearValidate()
             this.emailError = this.$t('user.emailHasBeenBoundToOtherAccounts')

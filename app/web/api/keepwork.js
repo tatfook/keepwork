@@ -27,21 +27,21 @@ export const user = {
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
-  updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
+  updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
-  getByEmail: async (...args) => post('/user/getByEmail', ...args),
+  getByEmail: async (args) => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailOne: async (...args) => post('/user/verifyEmailOne', ...args),
   verifyEmailTwo: async (...args) => post('/user/verifyEmailTwo', ...args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
   verifyCellphoneOne: async args =>
     get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   verifyCellphoneTwo: async (...args) =>
-    post('/user/verifyCellphoneTwo', ...args),
+    post('/users/cellphone_captcha', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
-  register: async (...args) => post('/user/register', ...args),
+  register: async (...args) => post('/users/register', ...args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 

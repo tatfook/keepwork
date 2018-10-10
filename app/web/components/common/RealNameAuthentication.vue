@@ -80,13 +80,13 @@ export default {
     ...mapGetters({
       sendCodeInfo: 'user/sendCodeInfo',
       authCodeInfo: 'user/authCodeInfo',
-      realNameInfo: 'user/realNameInfo'
+      cellphone: 'user/cellphone'
     }),
     hasVerified() {
-      return this.realNameInfo && this.realNameInfo.verified
+      return Boolean(this.cellphone)
     },
     verifiedPhoneNumber() {
-      return this.realNameInfo && this.realNameInfo.cellphone
+      return this.cellphone
     },
     localeLableWidth() {
       return locale === 'en-US' ? '190px' : '110px'
@@ -111,9 +111,10 @@ export default {
         cellphone: this.ruleFormDatas.cellphoneNumber
       }
       await this.verifyCellphoneOne(payload)
+        .catch(e => this.$message.error(this.$t('user.sendingFrequent')))
       this.sendCodeLoading = false
-      let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
-      if (message === 'success') {
+      // let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
+      if (this.sendCodeInfo === 'OK') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
         this.sendCodeDisabled = true
         this.timer = setInterval(() => {
@@ -128,33 +129,34 @@ export default {
         }, 1000)
         return
       }
-      if (message === '号码格式有误') {
-        this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-        return
-      }
-      if (message === '短信验证码发送过频繁') {
-        this.showMessage('error', this.$t('user.sendingFrequent'))
-        return
-      }
-      if (message === '验证码超出同模板同号码天发送上限') {
-        this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
-        return
-      }
-      let message2 =
-        this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0, 6)
-      if (message2 === '手机号已绑定') {
-        this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
-        return
-      }
+      // if (message === '号码格式有误') {
+      //   this.showMessage('error', this.$t('user.smsCodeSentFailed'))
+      //   return
+      // }
+      // if (message === '短信验证码发送过频繁') {
+      //   this.showMessage('error', this.$t('user.sendingFrequent'))
+      //   return
+      // }
+      // if (message === '验证码超出同模板同号码天发送上限') {
+      //   this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
+      //   return
+      // }
+      // let message2 =
+      //   this.sendCodeInfo.message && this.sendCodeInfo.message.slice(0, 6)
+      // if (message2 === '手机号已绑定') {
+      //   this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
+      //   return
+      // }
     },
     async realNamePhoneNumber() {
       let payload = {
-        setRealNameInfo: true,
+        // setRealNameInfo: true,
         cellphone: this.ruleFormDatas.cellphoneNumber,
-        smsCode: this.authCode
+        captcha: this.authCode
       }
+      console.warn(payload)
       await this.verifyCellphoneTwo(payload)
-      let messageId = this.authCodeInfo.error.id
+      let messageId = this.authCodeInfo
       if (messageId === -1) {
         this.showMessage('error', this.$t('user.verificationCodeError'))
       } else if (messageId === 0) {

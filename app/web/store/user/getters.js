@@ -33,8 +33,8 @@ const getters = {
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
   userId: (state, { profile: { id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
-  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
-
+  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo', {}),
+  cellphone: (state, { profile }) => _.get(profile, 'cellphone', ''),
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { token }) => ({
