@@ -144,7 +144,7 @@
       </div>
     </div>
     <div @click.stop v-if="isRegisterDialogShow">
-      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+      <el-dialog class="home-page-register-dialog" :visible.sync="isRegisterDialogShow">
         <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
@@ -226,6 +226,11 @@ export default {
 
 <style lang="scss">
 .home-page {
+  &-register-dialog{
+    .el-dialog{
+      max-width: 352px;
+    }
+  }
   &-advertising-head {
     max-width: 1200px;
     margin: 0 auto;

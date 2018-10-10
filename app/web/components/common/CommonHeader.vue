@@ -124,7 +124,7 @@
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
     <div @click.stop v-if="isRegisterDialogShow" class="register-dialog">
-      <el-dialog width="440px" :visible.sync="isRegisterDialogShow">
+      <el-dialog :visible.sync="isRegisterDialogShow">
         <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
@@ -344,6 +344,7 @@ export default {
   margin-right: 5px;
 }
 .register-dialog{
+  max-width: 352px;
   .el-dialog__body{
     padding: 0;
   }
