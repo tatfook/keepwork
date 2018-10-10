@@ -148,7 +148,8 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
-      isRegisterDialogShow: false
+      isRegisterDialogShow: false,
+      locationOrigin: window.location.origin,    
     }
   },
   computed: {
@@ -186,13 +187,16 @@ export default {
       userLogout: 'user/logout'
     }),
     goCreativityPage(){
-      this.$router.push('creativity')
+      // this.$router.push('creativity')
+      window.location.href=`${this.locationOrigin}/creativity`
     },
     goExplorationPage(){
-      this.$router.push('exploration')
+      // this.$router.push('exploration')
+      window.location.href=`${this.locationOrigin}/exploration`
     },
     goStudyPage(){
-      this.$router.push('study')
+      // this.$router.push('study')
+      window.location.href=`${this.locationOrigin}/study`
     },
     goHomePage(){
       this.$router.push('/')
