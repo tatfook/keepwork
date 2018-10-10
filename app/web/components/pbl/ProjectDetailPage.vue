@@ -26,9 +26,6 @@ export default {
     editingProjectId() {
       return _.get(this.pblProjectDetail, 'id')
     },
-    editingUserId() {
-      return _.get(this.pblProjectDetail, 'userId')
-    },
     editingProjectUser() {
       let userId = this.editingUserId
       return this.getDetailByUserId({ userId })
