@@ -176,7 +176,7 @@ export default {
     lesson.packages.getHotsPackages().then(res => {
       this.hotsPackages = res
     }).catch(err => console.error(err))
-    await this.setAllProjects()
+    await this.getAllProjects()
   },
   computed: {
     ...mapGetters({
@@ -195,7 +195,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setAllProjects: 'pbl/setAllProjects'
+      getAllProjects: 'pbl/getAllProjects'
     }),
     closeAd(){
       this.hiddenAd = true

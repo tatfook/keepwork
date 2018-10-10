@@ -24,6 +24,7 @@ const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  getUser: async (username) => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
@@ -41,7 +42,7 @@ export const user = {
     post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
-  register: async (...args) => post('/user/register', ...args),
+  register: async (...args) => post('/users/register', ...args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 
