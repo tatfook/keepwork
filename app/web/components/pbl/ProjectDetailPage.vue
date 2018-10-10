@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-page">
     <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData"></project-header>
-    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait'></router-view>
+    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait'></router-view>
   </div>
 </template>
 <script>
@@ -21,10 +21,7 @@ export default {
       return this.projectDetail({ projectId: this.projectId })
     },
     projectId() {
-      return _.get(this.$route, 'params.id')
-    },
-    editingProjectId() {
-      return _.get(this.pblProjectDetail, 'id')
+      return _.toNumber(_.get(this.$route, 'params.id'))
     },
     editingProjectUser() {
       let userId = this.editingUserId
@@ -62,7 +59,7 @@ export default {
     async initProjectHeaderDetail() {
       this.editingUserId = _.get(this.pblProjectDetail, 'userId')
       let userId = this.editingUserId
-      let objectId = this.editingProjectId
+      let objectId = this.projectId
       let objectType = 5
       await Promise.all([
         this.getUserDetailByUserId({ userId }),

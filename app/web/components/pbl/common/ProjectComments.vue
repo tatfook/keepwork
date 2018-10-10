@@ -1,27 +1,25 @@
 <template>
   <div class="project-comments">
     <div class="project-comments-header">
-      评论<span class="project-comments-header-count">(已有304条评论)</span>
+      评论<span class="project-comments-header-count">(已有{{projectCommentList.length}}条评论)</span>
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
         <img class="project-comments-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
-        <el-input placeholder="发表你的看法吧..."></el-input>
+        <el-input placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
       </div>
       <div class="project-comments-sends-operations">
-        <el-button type="primary" size="medium">评论</el-button>
+        <el-button type="primary" size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
       </div>
     </div>
     <div class="project-comments-list">
-      <div class="project-comments-item">
-        <img class="project-comments-profile project-comments-item-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+      <div class="project-comments-item" v-for="(comment, index) in projectCommentList" :key='index'>
+        <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait" alt="">
         <div class="project-comments-item-detail">
-          <p class="project-comments-item-username-time">kaitlyn
-            <span class="project-comments-item-time">今天16:53</span>
+          <p class="project-comments-item-username-time">{{comment.extra.nickname}}
+            <span class="project-comments-item-time">{{comment.createdAt | formatDate}}</span>
           </p>
-          <p class="project-comments-item-comment">
-            挺棒的，呵呵
-          </p>
+          <p class="project-comments-item-comment">{{comment.content}}</p>
         </div>
       </div>
     </div>
@@ -29,8 +27,66 @@
   </div>
 </template>
 <script>
+import dayjs from 'dayjs'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'ProjectComments'
+  name: 'ProjectComments',
+  props: {
+    projectId: {
+      required: true
+    }
+  },
+  async created() {
+    await this.pblGetComments({
+      objectType: 5,
+      objectId: this.projectId
+    })
+  },
+  data() {
+    return {
+      newCommenContent: ''
+    }
+  },
+  computed: {
+    ...mapGetters({
+      pblProjectCommentList: 'pbl/projectCommentList'
+    }),
+    projectCommentList() {
+      return this.pblProjectCommentList({ projectId: this.projectId }) || []
+    }
+  },
+  methods: {
+    ...mapActions({
+      pblGetComments: 'pbl/getComments',
+      pblCreateComment: 'pbl/createComment'
+    }),
+    async sendComment() {
+      console.log(this.newCommenContent)
+      await this.pblCreateComment({
+        objectType: 5,
+        objectId: this.projectId,
+        content: this.newCommenContent
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '评论成功'
+          })
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '评论失败'
+          })
+          console.error(error)
+        })
+    }
+  },
+  filters: {
+    formatDate(date, formatType) {
+      return dayjs(date).format('YYYY年MM月DD日 HH:mm:ss')
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -97,6 +153,13 @@ export default {
     &-comment {
       font-size: 13px;
       color: #606266;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    &-detail {
+      flex: 1;
+      min-width: 0;
     }
   }
   &-more {

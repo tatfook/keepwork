@@ -10,7 +10,8 @@ const state = {
   usersProjects: [],
   memberList: [],
   projectsFavoriteState: [],
-  projectsStarState: []
+  projectsStarState: [],
+  commentList: []
 }
 export default {
   namespaced: true,

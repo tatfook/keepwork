@@ -43,7 +43,7 @@
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>保存</span>
         </el-button>
       </div>
-      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing">{{originProjectDetail.description}}</div>
+      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing">{{originProjectDetail.description || '暂无描述'}}</div>
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
   </div>

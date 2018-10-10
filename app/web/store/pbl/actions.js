@@ -10,7 +10,8 @@ let {
   GET_USER_PROJECTS_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
-  GET_PROJECT_STAR_STATE_SUCCESS
+  GET_PROJECT_STAR_STATE_SUCCESS,
+  GET_COMMENTS_SUCCESS
 } = props
 
 const actions = {
@@ -165,6 +166,24 @@ const actions = {
     await keepwork.projects.unStarProject({ projectId }).then(async () => {
       await dispatch('getStarState', { projectId, useCache: false })
       await dispatch('getProjectDetail', { projectId, useCache: false })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async getComments(context, { objectType = 5, objectId }) {
+    let { commit } = context
+    await keepwork.comments.getComments({ objectType, objectId }).then(async commentList => {
+      await commit('GET_COMMENTS_SUCCESS', { commentList, projectId: objectId })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async createComment(context, { objectType = 5, objectId, content }) {
+    let { dispatch } = context
+    await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
+      await dispatch('getComments', { objectType, objectId })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)

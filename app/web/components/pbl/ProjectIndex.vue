@@ -8,7 +8,7 @@
       </div>
       <div class="project-index-main">
         <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername'></project-basic-info>
-        <project-comments class="project-index-comments"></project-comments>
+        <project-comments class="project-index-comments" :projectId='projectId'></project-comments>
       </div>
     </div>
   </div>
@@ -30,15 +30,16 @@ export default {
       type: String,
       required: true
     },
-    projectOwnerPortrait: String
+    projectOwnerPortrait: String,
+    projectId: {
+      type: Number,
+      required: true
+    }
   },
   computed: {
-    projectId() {
-      return _.get(this.$route, 'params.id')
-    },
     originProjectName() {
       return _.get(this.pblProjectDetail, 'name')
-    },
+    }
   },
   components: {
     ProjectWebsite,
@@ -62,6 +63,7 @@ export default {
   }
   &-main {
     flex: 1;
+    min-width: 0;
   }
   & > .container {
     display: flex;
