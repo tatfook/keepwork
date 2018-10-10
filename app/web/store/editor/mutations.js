@@ -302,7 +302,8 @@ const mutations = {
       ...state.openedFiles,
       [username]: _.omit(_.get(state, ['openedFiles', username], {}), path)
     })
-    _.omit(state.openedPages, path)
+    Vue.set(state, 'openedPages', _.omit(state.openedPages, path))
+    // _.omit(state.openedPages, path)
   },
   [CLOSE_ALL_OPENED_FILE](state, { username }) {
     Vue.set(state, 'openedFiles', {

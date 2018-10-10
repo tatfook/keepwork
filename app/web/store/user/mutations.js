@@ -66,8 +66,9 @@ const doNothing = state => {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, { token, userinfo: profile }) {
-    Vue.set(state, 'profile', { ...profile, token })
+  [LOGIN_SUCCESS](state, profile) {
+    // Vue.set(state, 'profile', { ...profile, token })
+    Vue.set(state, 'profile', profile)
     Vue.set(state, 'tokenUpdateAt', Date.now())
   },
   [LOGOUT](state) {
@@ -82,7 +83,7 @@ const mutations = {
   [GET_ALL_WEBSITE_SUCCESS](state, { username, list }) {
     Vue.set(state, 'website', {
       ...state.website,
-      [username]: _.keyBy(list, 'name')
+      [username]: _.keyBy(list, 'sitename')
     })
   },
   [GET_USER_DETAIL_SUCCESS](state, { userId, username, userDetail }) {
@@ -169,10 +170,10 @@ const mutations = {
     })
   },
   [UPDATE_SITE_MSG_SUCCESS](state, { newBasicMessage }) {
-    let { username, name } = newBasicMessage
+    let { username, sitename } = newBasicMessage
     Vue.set(state.website, username, {
       ...state.website[username],
-      [name]: newBasicMessage
+      [sitename]: newBasicMessage
     })
   },
   [GET_FROM_SKY_DRIVE_SUCCESS](state, payload) {

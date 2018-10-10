@@ -16,6 +16,7 @@
     "inputUsername": "请输入用户名",
     "inputPassword": "请输入密码",
     "wrongPassword": "密码错误",
+    "IncorrectUsernameOrPassword": "用户名或密码错误",
     "usernameNotExist": "用户名不存在",
     "loginSuccess": "登录成功",
     "logonFailed": "登录失败",
@@ -657,6 +658,7 @@
   },
   "user": {
     "displayName": "昵称:",
+    "nickname": "昵:",
     "sex": "性别:",
     "location": "位置:",
     "introduce": "个人简介:",

@@ -55,6 +55,7 @@ export default {
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
+      activePage: 'activePage',
       code: 'code',
       layout: 'layout',
       modList: 'modList',
@@ -71,10 +72,10 @@ export default {
       return this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
     },
     siteVisibility() {
-      return _.get(this.siteDetailInfo, ['siteinfo', 'visibility'], 'public')
+      return _.get(this.siteDetailInfo, ['site', 'visibility'], 1)
     },
     isSitePrivate() {
-      return this.siteVisibility === 'private'
+      return this.siteVisibility === 1
     },
     show404() {
       return !this.pageLoading && !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined

@@ -124,18 +124,17 @@ export default {
             password: this.ruleForm.password
           }
           this.loading = true
+          console.warn(payload)
           let info = await this.userLogin(payload).catch(e => {
             this.loading = false
           })
           this.loading = false
-          // if (info.error.id === 0) {
-          this.$emit('close')
-          window.location.reload()
-          // } else if (info.error.message === '用户不存在') {
-          //   this.showMessage('error', this.$t('common.usernameNotExist'))
-          // } else if (info.error.message === '密码错误') {
-          //   this.showMessage('error', this.$t('common.wrongPassword'))
-          // }
+          if (info) {
+            // return console.warn('dialog info:', info)
+            this.$emit('close')
+            return window.location.reload()
+          }
+          this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
         } else {
           return false
         }
