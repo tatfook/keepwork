@@ -4,12 +4,15 @@
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
-      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHomePage"></tool-header>
+      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHome"></tool-header>
       <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
+    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHome">
       <common-footer class="container"></common-footer>
+    </el-footer>
+    <el-footer  class="home-page-footer" v-if='isHome'>
+      <perfect-common-footer></perfect-common-footer>
     </el-footer>
   </el-container>
 </template>
@@ -23,7 +26,8 @@ import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
-import { appModule, userModule, gitlabModule } from '@/store'
+import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -31,6 +35,8 @@ import '@/components/common/thirdAuth'
 import CommonHeader from '../../components/common/CommonHeader'
 import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
+import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
+
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -49,9 +55,8 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    app: appModule,
     user: userModule,
-    gitlab: gitlabModule
+    pbl: pblModule
   }
 })
 
@@ -83,7 +88,8 @@ export default {
   components: {
     CommonHeader,
     CommonFooter,
-    ToolHeader
+    ToolHeader,
+    PerfectCommonFooter
   },
   methods: {
     ...mapActions({
@@ -146,8 +152,8 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       activePageInfo: 'activePageInfo'
     }),
-    isHomePage() {
-      return this.$route.name === 'HomePage'
+    isHome() {
+      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage' || this.$route.name === 'StudyPage'
     },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
@@ -207,10 +213,14 @@ body {
   align-items: center;
   background-color: #f9f9f9;
 }
+.home-page-footer{
+  padding: 0;
+}
 .index-page-container {
   min-height: 100%;
 }
 .index-page-main {
+  font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 0;
 }
 [mod-container] {

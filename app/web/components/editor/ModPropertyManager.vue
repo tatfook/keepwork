@@ -3,7 +3,7 @@
     <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
-        <prop-type-card v-for="(prop, key) in editingProps" :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
+        <prop-type-card v-for="(prop, key) in editingProps" :componentName='key' :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
       <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>

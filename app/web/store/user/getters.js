@@ -93,6 +93,7 @@ const getters = {
     let { usersDetail } = state
     return usersDetail[username]
   },
+  getDetailByUserId: state => ({ userId }) => _.get(state.usersDetail, userId),
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList

@@ -1,6 +1,7 @@
 <template>
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
     <div v-show="isLoginForm">
+    <h3 class="login-title">{{$t('common.login')}}</h3>
       <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
@@ -8,14 +9,12 @@
         <el-form-item prop="password">
           <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="login('ruleForm')"></el-input>
         </el-form-item>
-        <div class="login-dialog-form-operate">
-          <a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a>
-        </div>
         <el-form-item>
           <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
         </el-form-item>
-        <div class="login-dialog-form-operate_signIn">{{$t('common.noAccount')}}
-          <a href="#" @click.stop.prevent="register">{{$t('common.register')}}</a>
+        <div class="login-dialog-form-operate">
+          <div class="forget-pwd"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+          <div class="signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.clickRegister')}}</a></div>
         </div>
         <div class="login-dialog-form-three-login">
           <div class="title">
@@ -40,11 +39,9 @@
     </div>
     <div v-show="isRegisterForm">
       <register-dialog @close="handleClose"></register-dialog>
-      <div>
-        <span @click="hasAccountToLogin" class="hasAccount">{{$t('common.alreadyOwnAccount')}}</span>
-      </div>
-      <div>
-        <span @click="backHome" class="hasAccount">{{$t('editor.backHomePage')}}</span>
+      <div class="register-oprate">
+        <div @click="backHome" class="back-home-page">{{$t('editor.backHomePage')}}</div>
+        <div @click="hasAccountToLogin" class="has-account">{{$t('common.alreadyOwnAccount')}}<span class="login-now">{{$t('common.fastLogin')}}</span></div>
       </div>
     </div>
     <div v-show="isPerfectRegisterInfo">
@@ -191,10 +188,31 @@ export default {
 
 <style lang="scss">
 .login-dialog {
-  .hasAccount {
-    margin-left: 70px;
-    border-bottom: 1px solid #409eff;
-    cursor: pointer;
+  .login-title {
+    width: 78%;
+    margin: 0 auto 30px;
+    font-size: 18px;
+    color: #303133;
+  }
+  .register-oprate{
+    width: 78%;
+    margin: 0 auto;
+    display: flex;
+    .back-home-page{
+      font-size: 14px;
+      flex: 1;
+      color: #1272cc;
+      cursor: pointer;
+    }
+    .has-account {
+      flex: 1;
+      text-align: right;
+      .login-now{
+        font-size: 14px;
+        color: #1272cc;
+        cursor: pointer;
+      }
+    }
   }
   &.force-login {
     .el-dialog__header {
@@ -207,11 +225,14 @@ export default {
     .el-dialog__header {
       padding: 0;
     }
-    width: 478px;
+    .el-dialog__body {
+      padding: 0;
+    }
+    width: 440px;
     padding: 40px 0;
   }
   &-form {
-    width: 68%;
+    width: 78%;
     margin: 0 auto;
     .el-form-item__content {
       .el-input__inner {
@@ -221,22 +242,19 @@ export default {
       }
     }
     &-operate {
-      text-align: right;
-      cursor: pointer;
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-    }
-    &-operate_signIn {
-      text-align: right;
-      a {
-        display: inline-block;
-        text-decoration: none;
-        height: 20px;
-        border-bottom: 1px solid #3977ad;
-        color: #286090;
+      display: flex;
+      .forget-pwd {
+        flex: 1;
         cursor: pointer;
+        text-align: left;
+      }
+      a {
+        text-decoration: none;
+        color: #1272cc;
+      }
+      .signIn {
+        flex: 1;
+        text-align: right;
       }
     }
     &-three-login {
@@ -251,8 +269,8 @@ export default {
         }
       }
       .title {
-        margin: 35px 0;
-        padding: 20px 0 35px;
+        margin: 15px 0;
+        padding: 20px 0 15px;
         text-align: center;
         position: relative;
         span {
@@ -267,14 +285,14 @@ export default {
           width: 100%;
           position: absolute;
           right: 0;
-          top: 40%;
+          top: 54%;
           background: #d6e6f4;
         }
       }
     }
     .login-btn {
       width: 100%;
-      margin: 20px 0;
+      margin: 10px 0;
       height: 44px;
       padding: 10px 16px;
       font-size: 18px;

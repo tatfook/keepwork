@@ -1,6 +1,6 @@
 <template>
   <div v-if='editMode' @click.stop.prevent='onEditProperty' @dblclick='onDblclickProperty' :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :editMode='editMode' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :editMode='editMode' :options='compOptions' />
   </div>
   <div v-else :class='classes'>
     <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :options='options' />
@@ -9,7 +9,7 @@
 
 <script>
 import BasicComponents from '@/components/adi/common/'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -46,6 +46,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      activePageUrl: 'activePageUrl'
+    }),
     basicComp() {
       return BasicComponents[this.compType]
     },
@@ -61,6 +64,16 @@ export default {
       } else {
         return {}
       }
+    },
+    compOptions() {
+      let ops = _.cloneDeep(this.options)
+      if (this.compType === 'AdiMarkdown') {
+        // check whitelist
+        const whitelist = process.env.MARKDOWN_SCRIPT_WHITELIST || []
+        const siteAccount = this.activePageUrl.split('/')[1]
+        if (whitelist.indexOf(siteAccount) > -1) ops.enableScript = true
+      }
+      return ops
     }
   }
 }

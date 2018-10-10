@@ -39,6 +39,8 @@ const Print = () => import('@/components/lesson/teacher/Print')
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  base: '/l',
   routes: [
     {
       path: '*',

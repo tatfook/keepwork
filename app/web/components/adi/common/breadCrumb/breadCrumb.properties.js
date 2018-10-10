@@ -5,5 +5,5 @@ export default {
       link: ''
     }
   ],
-  target: '_self'
+  target: ''
 }

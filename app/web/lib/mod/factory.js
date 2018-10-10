@@ -1,4 +1,4 @@
-import modLoader from '@/components/adi/mod'
+import modLoader from '@/components/adi/mod/index'
 import _ from 'lodash'
 
 export const generate = modName => {

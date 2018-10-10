@@ -1,23 +1,23 @@
 <template>
   <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
-      <el-menu-item index='0'>
+      <el-menu-item index='0' @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
-      <el-menu-item index='1'>
-        <a href="/wiki/home">{{$t('common.features')}}</a>
+      <el-menu-item index='1' @click="goCreativityPage">
+        {{$t('common.creativity')}}
       </el-menu-item>
-      <el-menu-item index='2'>
-        <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
+      <el-menu-item index='2' @click="goExplorationPage">
+        {{$t('common.explore')}}
       </el-menu-item>
-      <el-menu-item index='4'>
-        <a href='/official/help/index'>{{$t('common.help')}}</a>
+      <el-menu-item index='4' @click="goStudyPage">
+        {{$t('common.study')}}
       </el-menu-item>
-      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
+      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='//iicc.keepwork.com' target="_blank">
           <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
@@ -43,7 +43,7 @@
             </el-dropdown-item>
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
             <el-dropdown-item>
-              <a href="/wiki/wikieditor" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
+              <a href="ed" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a>
@@ -62,13 +62,13 @@
       </el-menu-item>
 
       <el-menu-item index='8' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
-      <el-menu-item index='10' class="pull-right">
-        <SearchBar></SearchBar>
+      <el-menu-item index='10'>
+        <search-bar></search-bar>
       </el-menu-item>
     </el-menu>
 
@@ -87,11 +87,11 @@
           <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
         </el-menu-item>
         <el-menu-item index='1-3'>
-          <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
+          <a href="ed">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
+        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
@@ -123,8 +123,8 @@
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
-    <div @click.stop v-if="isRegisterDialogShow">
-      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+    <div @click.stop v-if="isRegisterDialogShow" class="register-dialog">
+      <el-dialog width="440px" :visible.sync="isRegisterDialogShow">
         <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
@@ -140,7 +140,6 @@ import LoginDialog from '@/components/common/LoginDialog'
 import RegisterDialog from '@/components/common/RegisterDialog'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
-
 export default {
   name: 'CommonHeader',
   data() {
@@ -167,7 +166,7 @@ export default {
       return window.location.hostname
     },
     lessonCenterUrl() {
-      return '/l#/student/center'
+      return '/l/student/center'
     }
   },
   mounted() {
@@ -186,13 +185,20 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
+    goCreativityPage(){
+      this.$router.push('creativity')
+    },
+    goExplorationPage(){
+      this.$router.push('exploration')
+    },
+    goStudyPage(){
+      this.$router.push('study')
+    },
+    goHomePage(){
+      this.$router.push('/')
+    },
     backEditArea() {
-      let origin = window.location.origin
-      if (window.location.hostname === 'localhost') {
-        window.open(`${origin}/ed`)
-      } else {
-        window.open(`${origin}/ed/#/`)
-      }
+      window.open(`${origin}/ed`)
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -208,7 +214,6 @@ export default {
       if (url) {
         let filename = file.filename || url
         let isImage = /^image\/.*/.test(file.type)
-
         isImage
           ? this.$refs.codemirror.insertFile(filename, url)
           : this.$refs.codemirror.insertLink(filename, url)
@@ -223,7 +228,6 @@ export default {
     logout() {
       this.userLogout()
       this.$emit('callback')
-      // window.location.reload()
     },
     goJoin() {
       this.isRegisterDialogShow = true
@@ -253,28 +257,29 @@ export default {
 .el-menu .brand {
   width: 115px;
 }
-
 .el-menu a {
   text-decoration: none;
   color: inherit;
 }
-
 .el-menu .login-btn {
-  background-color: #3977ad;
+  background: #f5f5f5;
+  border: solid 1px #dddddd;
+  padding: 7px 11px;
+  border-radius: 3px;
+}
+.el-menu .register-btn {
+  background-color: #409eff;
   color: #fff;
   padding: 8px 12px;
   border-radius: 3px;
 }
-
-.el-menu .login-btn:hover {
-  background-color: #286090;
+.el-menu .register-btn:hover {
+  background-color: #218efc;
   color: #fff;
 }
-
 .menu-left {
   flex: 1;
 }
-
 .user-profile {
   width: 40px;
   height: 40px;
@@ -337,6 +342,11 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+.register-dialog{
+  .el-dialog__body{
+    padding: 0;
+  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {

@@ -2,6 +2,7 @@ export default {
   props: {
     cardValue: Object,
     editingKey: String,
+    optionsData: Object,
     activePropertyOptions: Object
   },
   data() {

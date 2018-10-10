@@ -30,7 +30,28 @@ module.exports = {
     component: 'app/web/components',
     framework: 'app/web/framework'
   },
-  dll: ['vue', 'axios', 'vue-router', 'vuex', 'vuex-router-sync'],
+  dll: [
+    {
+      name: 'common',
+      lib: [
+        'vue', 'axios', 'vue-router', 'vuex', 'vuex-router-sync',
+        'vue-i18n', 'lodash', 'js-cookie', 'babel-polyfill',
+        'moment', 'dayjs', 'qiniu-js', 'blueimp-md5', 'filesize', 'html2canvas', 'js-base64'
+      ]
+    },
+    {
+      name: 'charts',
+      lib: ['echarts', 'v-charts']
+    },
+    {
+      name: 'elementUI',
+      lib: ['element-ui']
+    },
+    {
+      name: 'markdown',
+      lib: ['vue-markdown']
+    }
+  ],
   devtool: 'cheap-module-eval-source-map',
   loaders: {
     scss: true,
@@ -42,6 +63,7 @@ module.exports = {
   plugins: {
     imagemini: false,
     serviceworker: true,
+    // analyzer: true,
     dotenv,
     copyWebpack: {
       name: copyWebpack

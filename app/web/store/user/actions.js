@@ -124,7 +124,18 @@ const actions = {
       return
     }
     userDetail = await keepwork.user.getDetailByName({ username })
-    commit(GET_USER_DETAIL_SUCCESS, { username, userDetail })
+    let userId = _.get(userDetail, 'id')
+    commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
+  },
+  async getUserDetailByUserId(context, { userId }) {
+    let { commit, getters: { usersDetail } } = context
+    let userDetail = usersDetail && usersDetail[userId]
+    if (userDetail) {
+      return
+    }
+    userDetail = await keepwork.user.getDetailById({ userId })
+    let { username } = userDetail
+    commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
     let { commit, getters: { profile } } = context

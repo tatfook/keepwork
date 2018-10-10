@@ -46,15 +46,16 @@
   </div>
 </template>
 <script>
-import _ from 'lodash'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
+let EMPTY = 'emptyGallery'
 
 export default {
   name: 'GalleryType',
   props: {
     editingKey: String,
-    originValue: Array
+    originValue: Array,
+    optionsData: Object
   },
   data() {
     return {
@@ -73,7 +74,7 @@ export default {
     }),
     galleryData: {
       get() {
-        return this.originValue
+        return this.originValue.length ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
       },
       set() {
       }

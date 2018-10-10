@@ -2,22 +2,22 @@ import _ from 'lodash'
 
 let emptyData = {
   media: {
-    emptySrc: require('@/assets/adi/mixLayer/mix-layer.jpg'),
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyMedia: require('@/assets/adi/mixLayer/mix-layer.jpg'),
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   title: {
-    emptyName: 'adi.mixLayer.title',
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyInput: 'adi.mixLayer.title',
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   subtitle: {
-    emptyName: 'adi.mixLayer.subtitle',
-    emptyLink: '#',
-    emptyTarget: '_blank'
+    emptyInput: 'adi.mixLayer.subtitle',
+    emptyLink: '',
+    emptyLinkTarget: '_blank'
   },
   paragraph: {
-    emptyData: 'adi.mixLayer.paragraph'
+    emptyAutoSizeInput: 'adi.mixLayer.paragraph'
   }
 }
 export default [

@@ -7,5 +7,12 @@
 module.exports = app => {
   const exports = {}
 
+  exports.cluster = {
+    listen: {
+      port: 80,
+      hostname: '0.0.0.0',
+    }
+  }
+
   return exports
 }

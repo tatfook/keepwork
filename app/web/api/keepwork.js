@@ -18,11 +18,14 @@ const withoutParseEndpoint = createEndpoint(
   false
 )
 
-const { post, put, get } = keepworkEndpoint
+
+const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
+
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
   getProfile: async () => get('/users/profile'),
+  getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
@@ -201,6 +204,35 @@ export const userThreeService = {
   unbind: async (...args) => post('user_three_service/unbind', ...args)
 }
 
+export const favorites = {
+  existFavorite: async ({ objectId, objectType }) => get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
+  favoriteProject: async ({ objectId, objectType }) => post('favorites', { objectId, objectType }),
+  unFavoriteProject: async ({ objectId, objectType }) => deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
+}
+
+export const projects = {
+  getProjects: async () => post('projects/search'),
+  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
+  updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
+  getUserProjects: async ({ userId }) => post('projects/search', { userId }),
+  createProject: async (...args) => post('projects', ...args),
+  getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
+  starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
+  getPersonalProjects: async () => get('projects'),
+  getContributeProjects: async () => get('projects/join'),
+  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`)
+}
+
+export const applies = {
+  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
+  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state })
+}
+
+export const members = {
+  getProjectMembersList: async ({ objectId, objectType }) => get(`members?objectId=${objectId}&objectType=${objectType}`),
+  deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -211,6 +243,10 @@ export const keepwork = {
   pages,
   qiniu,
   userThreeService,
+  favorites,
+  projects,
+  applies,
+  members,
   bigfile
 }
 
