@@ -78,10 +78,10 @@ export default {
   name: 'CreativityPage',
   data() {
     return {
-      hasProjects: false,
+      hasProjects: true,
       myProjects: [],
       myContributeProjects: [],
-      visitOthersProjects: []
+      // visitOthersProjects: []
     }
   },
   components: {
@@ -256,7 +256,7 @@ export default {
       setAllProjects: 'pbl/setAllProjects'
     }),
     createMyProject(){
-      this.$router.push('/pbl/project/new')
+      window.location.href='/pbl/project/new'
     }
   }
 }

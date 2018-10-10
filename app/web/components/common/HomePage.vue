@@ -52,9 +52,9 @@
             <div class="box" @click="goCreativityPage">
               <div class="box-text">
                 <h2>创造</h2>
-                <p>创造属于你自己的项目</p>
-                <p>已创建项目
-                  <span>123456</span>个</p>
+                <p class="box-text-intro">创造属于你自己的项目</p>
+                <p class="box-text-own">已创建项目
+                  <span class="total">123456</span>个</p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
@@ -65,9 +65,9 @@
             <div class="box" @click="goExplorationPage">
               <div class="box-text">
                 <h2>探索</h2>
-                <p>发现更多有趣的作品</p>
-                <p>已共享内容
-                  <span>123456</span>条</p>
+                <p class="box-text-intro">发现更多有趣的作品</p>
+                <p class="box-text-own">已共享内容
+                  <span class="total">123456</span>条</p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/rocket.png" alt="">
@@ -78,9 +78,9 @@
             <div class="box no-line" @click="goStudyPage">
               <div class="box-text">
                 <h2>学习</h2>
-                <p>好好学习，天天向上</p>
-                <p>已记录知识
-                  <span>22543</span>条</p>
+                <p class="box-text-intro">好好学习，天天向上</p>
+                <p class="box-text-own">已记录知识
+                  <span class="total">22543</span>条</p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/bulb.png" alt="">
@@ -164,7 +164,8 @@ export default {
       projects: [],
       hotsPackages: [],
       hiddenAd: false,
-      isRegisterDialogShow: false
+      isRegisterDialogShow: false,
+      locationOrigin: window.location.origin,    
     }
   },
   components: {
@@ -209,13 +210,16 @@ export default {
       this.isRegisterDialogShow = false
     },
     goCreativityPage(){
-      this.$router.push('/creativity')
+      this.$router.push(`/creativity`)
+      // window.location.href=`${this.locationOrigin}/creativity`
     },
     goExplorationPage(){
-      this.$router.push('/exploration')
+      this.$router.push(`/exploration`)
+      // window.location.href=`${this.locationOrigin}/exploration`
     },
     goStudyPage(){
-      alert('开发之中')
+      this.$router.push(`/study`)
+      // window.location.href=`${this.locationOrigin}/study`
     },
     goLessonPackage(lessonPackage){
       this.$router.push(`/l/student/package/${lessonPackage.id}`)
@@ -254,7 +258,6 @@ export default {
     }
   }
   .hidden-ad{
-    // display: none;
     height: 0;
     overflow: hidden;
     border: none;
@@ -391,6 +394,18 @@ export default {
         cursor: pointer;
         &-text {
           flex: 1;
+          &-intro{
+            color: #a0a4aa;
+            font-size: 16px;
+          }
+          &-own{
+            color: #606266;
+            font-size: 13px;
+            font-weight: bold;
+            .total{
+              color: #409eff;
+            }
+          }
         }
         &-img {
           max-width: 100px;
