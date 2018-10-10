@@ -30,7 +30,7 @@ export default {
     getButtonName() {
       let properties = this.properties
       let options = this.options
-      return properties.name ? properties.name : this.$t(options.emptyName)
+      return properties.name ? properties.name : this.$t(options.emptyInput)
     },
     getLink() {
       let properties = this.properties
@@ -40,10 +40,18 @@ export default {
     getTarget() {
       let properties = this.properties
       let options = this.options
-      return properties.target ? properties.target : options.emptyTarget
+      return properties.target ? properties.target : options.emptyLinkTarget
     },
     hasImg() {
       return this.options.img && this.options.img.src
+    },
+    backgroundConcealment(){
+      if(this.properties.src){
+        let style = {
+          'background-color': 'transparent!important'
+        }
+        return style
+      }
     },
     buttonStyle() {
       let style = {
@@ -53,7 +61,7 @@ export default {
         'background-image': 'url(' + (this.properties.src || '') + ')',
         'font-size': this.properties.fontSize && parseInt(this.properties.fontSize) + 'px'
       }
-      return this.generateStyleString(_.merge({}, style, this.options.buttonStyle))
+      return this.generateStyleString(_.merge({}, this.options.buttonStyle, style, this.backgroundConcealment))
     },
     buttonImgStyle() {
       return this.generateStyleString({
@@ -129,6 +137,8 @@ export default {
     line-height: unset;
     color: unset;
     background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     .img {
       margin-right: 10px;
       background-position: center;

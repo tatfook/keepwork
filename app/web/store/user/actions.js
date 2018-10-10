@@ -62,7 +62,7 @@ const actions = {
     if (info) {
       Cookies.set('token', info.token)
       window.localStorage.setItem('satellizer_token', info.token)
-      commit(LOGIN_SUCCESS, info.data)
+      commit(LOGIN_SUCCESS, info)
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
@@ -117,6 +117,7 @@ const actions = {
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
+    console.warn('getUserDetailByUsername---->')
     let { commit, getters: { usersDetail } } = context
     let userDetail = usersDetail && usersDetail[username]
     if (userDetail) {
@@ -174,26 +175,26 @@ const actions = {
   async getAllPersonalWebsite({ dispatch }, payload) {
     let { useCache = false } = payload || {}
 
-    return Promise.all([
-      dispatch('getAllWebsite', { useCache }),
-      dispatch('getAllSiteDataSource', { useCache })
-    ])
+    return dispatch('getAllWebsite', { useCache })
+    // return Promise.all([
+    //   dispatch('getAllWebsite', { useCache }),
+    //   dispatch('getAllSiteDataSource', { useCache })
+    // ])
   },
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
-    await dispatch('getAllSiteDataSource', { useCache: false })
+    // await dispatch('getAllSiteDataSource', { useCache: false })
+    console.warn('payload', payload)
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
     let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
     let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
-
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
-
     // copy all file in template.folder
     for (let { path, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
@@ -201,8 +202,26 @@ const actions = {
     }
 
     // refresh repositoryTree
-    await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+    // await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
   },
+  // async initWebsite({ dispatch, getters }, { name }) {
+  //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
+  //   let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
+
+  //   await dispatch('getWebTemplateConfig')
+  //   let webTemplate = getWebTemplate({ categoryName, templateName })
+  //   await dispatch('getWebTemplateFiles', webTemplate)
+  //   let { fileList } = webTemplate
+
+  //   // copy all file in template.folder
+  //   for (let { path, content } of fileList) {
+  //     let filename = path.split('/').slice(2).join('/')
+  //     await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+  //   }
+
+  //   // refresh repositoryTree
+  //   await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+  // },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
@@ -231,7 +250,7 @@ const actions = {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
     fileList = await gitlabForGuest.getTree({ projectId, path: `templates/${folder}`, recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
@@ -246,13 +265,11 @@ const actions = {
     let { commit, getters: { username, userId } } = context
     let websiteSetting = { categoryName, type, templateName, styleName, logoUrl }
     let upsertPayload = {
-      name,
-      domain: name,
-      visibility: 'public',
-      userId,
-      username,
-      defaultDataSourceName: '内置gitlab',
-      ...websiteSetting
+      sitename: name,
+      visibility: 0,
+      extra: {
+        websiteSetting
+      }
     }
     let site = await keepwork.website.upsert(upsertPayload)
     commit(UPSERT_WEBSITE_SUCCESS, { username, site })
@@ -278,7 +295,7 @@ const actions = {
     let { username, personalSiteList } = getters
     if (useCache && personalSiteList.length) return
 
-    let list = await keepwork.website.getAllByUsername({ username })
+    let list = await keepwork.website.getAllSites()
     commit(GET_ALL_WEBSITE_SUCCESS, { username, list })
   },
   async getAllSiteDataSource(context, payload) {
@@ -297,19 +314,18 @@ const actions = {
 
     let { username } = getters
     if (useCache) return
-
-    let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
+    let list = await keepwork.siteUser.getContributeSites()
+    // let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
     list = _.values(list).filter(({ siteinfo, siteuser } = {}) => siteinfo && siteuser)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
-    let { commit, getters: { getSiteDetailInfoByPath } } = context
+    let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
     if (getSiteDetailInfoByPath(path)) return
-
     let [username, sitename] = path.split('/').filter(x => x)
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
-
+    detailInfo.site.username = username
     commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
   },
   async getSiteLayoutConfig(context, { path, editorMode = true, useCache = true }) {
@@ -458,7 +474,8 @@ const actions = {
   },
   async saveSiteBasicSetting(context, { newBasicMessage }) {
     let { commit } = context
-    await keepwork.website.updateByName(newBasicMessage)
+    // await keepwork.website.updateByName(newBasicMessage)
+    await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
   },
   async createComment(context, { url: path, content }) {
@@ -570,9 +587,9 @@ const actions = {
     return result
   },
   async changePwd(context, { oldpassword, newpassword }) {
-    // FIXME
-    let result = await keepwork.user.changepw({ oldpassword, newpassword })
-    return result.error.message
+    // FIXME:
+    let result = await keepwork.user.changePassword({ oldpassword, password: newpassword })
+    return result
   },
   async getByEmail(context, { email }) {
     let result = await keepwork.user.getByEmail({ email })
@@ -582,7 +599,7 @@ const actions = {
     return keepwork.user.verifyEmailOne({ email, bind })
   },
   async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
-    // FIXME
+    // FIXME:
     let { dispatch } = context
     let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode })
     let message = result.error.message
@@ -595,7 +612,8 @@ const actions = {
   },
   async getUserThreeServiceByUsername(context, { username }) {
     let { commit } = context
-    let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
+    // let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
+    let userThreeServices = await keepwork.userThreeService.getOauthUsers()
     commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
   },
   async threeServiceDeleteById(context, { id, username }) {

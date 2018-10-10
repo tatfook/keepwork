@@ -4,6 +4,7 @@ module.exports = app => {
   router.get('/', controller.home.index)
   router.get('/creativity', controller.home.index)
   router.get('/exploration', controller.home.index)
+  router.get('/study', controller.home.index)
   router.get('/ed', controller.editor.index)
   router.get(/\/ed\//, controller.editor.index)
   router.get('/vp', controller.editor.viewport)

@@ -14,6 +14,7 @@
       <component
         :is='getPropType(propItem)'
         :prop='prop'
+        :optionsData='optionsData'
         :editingKey='index'
         :originValue='cardValue[index]'
         :cardValue='cardValue'
@@ -27,6 +28,8 @@
 <script>
 import proptypes from '@/components/proptypes'
 import { mapGetters, mapActions } from 'vuex'
+import modLoader from '@/components/adi/mod'
+import BaseCompProptypes from '@/components/adi/common/comp.proptypes'
 import _ from 'lodash'
 
 export default {
@@ -35,12 +38,14 @@ export default {
     cardKey: String,
     cardValue: Object,
     prop: Object,
+    componentName: String,
     activePropertyOptions: Object,
     isCardActive: Boolean
   },
   data() {
     return {
-      proptypes
+      proptypes,
+      BaseCompProptypes
     }
   },
   computed: {
@@ -53,6 +58,22 @@ export default {
         return this.cardValue && !this.cardValue.hidden
       },
       set() {}
+    },
+    optionsData() {
+      if (!this.activeMod || !this.activeMod.modType || !this.activeMod.data || !this.activeMod.data.styleID === '') {
+        return {}
+      }
+      let modConf = modLoader.load(this.activeMod.modType)
+
+      if ( !modConf || !modConf.styles) {
+        return {}
+      }
+      let currentStyle = modConf.styles[this.activeMod.data.styleID]
+
+      if (!currentStyle.options || !currentStyle.options.config) {
+        return {}
+      }
+      return currentStyle.options.config[this.componentName]
     },
     isMultiLineProp() {
       let propKeys = _.keys(this.prop)

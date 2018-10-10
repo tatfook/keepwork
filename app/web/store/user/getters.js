@@ -18,20 +18,29 @@ const getters = {
     let token = getToken()
     let { token: profileUserToken } = state.profile
     if (!token || !profileUserToken || profileUserToken !== token) return {}
-    return state.profile
+    let faker_vip = {
+      _id: 999,
+      endDate: '',
+      isValid: false,
+      startDate: '2018-05-03',
+      username: 'faker',
+      vipLevel: 0
+    }
+    return { ...state.profile, vipInfo: faker_vip }
   },
   isLogined: (state, { token }) => !!token,
   username: (state, { profile: { username } }) => username,
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
-  userId: (state, { profile: { _id: userId } }) => userId,
+  userId: (state, { profile: { id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo') || {},
 
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
-  gitlabConfig: (state, { defaultSiteDataSource }) => ({
+  gitlabConfig: (state, { token }) => ({
     url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
-    token: _.get(defaultSiteDataSource, 'dataSourceToken')
+    token: `Bearer ${token}`
+    // token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
   sendCodeInfo: (state) => state.sendCodeInfo,
   authCodeInfo: (state) => state.authCodeInfo,
@@ -57,18 +66,22 @@ const getters = {
 
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
-      let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
+      let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = gitTree2NestedArray(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
       )
-
+      let { extra, ...website } = websitesMap[name]
+      let websiteSetting = _.get(extra, 'websiteSetting', {})
       return {
-        ...websitesMap[name],
+        ...website,
         projectId,
         lastCommitId,
-        children
+        children,
+        username,
+        name,
+        ...websiteSetting
       }
     })
 
@@ -175,6 +188,9 @@ const getters = {
   getSiteDetailInfoByPath: (state, { siteDetailInfo }) => path => {
     let [username, name] = path.split('/').filter(x => x)
     return siteDetailInfo[`${username}/${name}`]
+  },
+  getSiteDetailInfoById: (state, { siteDetailInfo }) => siteId => {
+    return siteDetailInfo[siteId]
   },
   getSiteDetailInfoDataSourceByPath: (
     state,

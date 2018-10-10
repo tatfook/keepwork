@@ -1,17 +1,17 @@
 <template>
   <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only">
-      <el-menu-item index='0'>
+      <el-menu-item index='0' @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
-      <el-menu-item index='1'>
-        <a href="/creativity">{{$t('common.creativity')}}</a>
+      <el-menu-item index='1' @click="goCreativityPage">
+        {{$t('common.creativity')}}
       </el-menu-item>
-      <el-menu-item index='2'>
-        <a href="/exploration">{{$t('common.explore')}}</a>
+      <el-menu-item index='2' @click="goExplorationPage">
+        {{$t('common.explore')}}
       </el-menu-item>
-      <el-menu-item index='4'>
-        <a href='/official/help/index'>{{$t('common.study')}}</a>
+      <el-menu-item index='4' @click="goStudyPage">
+        {{$t('common.study')}}
       </el-menu-item>
       <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
         <a href='//iicc.keepwork.com' target="_blank">
@@ -123,8 +123,8 @@
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>
     </div>
-    <div @click.stop v-if="isRegisterDialogShow">
-      <el-dialog width="478px" :visible.sync="isRegisterDialogShow">
+    <div @click.stop v-if="isRegisterDialogShow" class="register-dialog">
+      <el-dialog :visible.sync="isRegisterDialogShow">
         <register-dialog @close="closeRegisterDialog"></register-dialog>
       </el-dialog>
     </div>
@@ -148,7 +148,8 @@ export default {
       isPersonalCenterShow: false,
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
-      isRegisterDialogShow: false
+      isRegisterDialogShow: false,
+      locationOrigin: window.location.origin,    
     }
   },
   computed: {
@@ -185,6 +186,21 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
+    goCreativityPage(){
+      // this.$router.push('creativity')
+      window.location.href=`${this.locationOrigin}/creativity`
+    },
+    goExplorationPage(){
+      // this.$router.push('exploration')
+      window.location.href=`${this.locationOrigin}/exploration`
+    },
+    goStudyPage(){
+      // this.$router.push('study')
+      window.location.href=`${this.locationOrigin}/study`
+    },
+    goHomePage(){
+      this.$router.push('/')
+    },
     backEditArea() {
       window.open(`${origin}/ed`)
     },
@@ -216,7 +232,6 @@ export default {
     logout() {
       this.userLogout()
       this.$emit('callback')
-      // window.location.reload()
     },
     goJoin() {
       this.isRegisterDialogShow = true
@@ -331,6 +346,12 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+.register-dialog{
+  max-width: 352px;
+  .el-dialog__body{
+    padding: 0;
+  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {

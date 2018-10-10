@@ -6,7 +6,7 @@ export const videoTypes = ['.mp4', '.mpg', '.mpeg', '.wmv', '.mov', '.avi']
 const trimAndLowerCaseSrc = (src = '') => src.split(/\?|#/)[0].toLowerCase()
 const isStorageV0UrlRegex = /\/storage\/v0\/siteFiles\/[0-9]+\/raw#/
 const getNakedSrc = (src = '') => {
-  isStorageV0UrlRegex.test(src) ? src : trimAndLowerCaseSrc(src)
+  return isStorageV0UrlRegex.test(src) ? src : trimAndLowerCaseSrc(src)
 }
 
 export const isVideo = src => {

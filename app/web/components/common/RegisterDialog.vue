@@ -1,40 +1,40 @@
 <template>
-  <!-- <el-dialog v-loading="loading" title="" v-if='show' :visible.sync="show" class="register-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose"> -->
-    <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-      <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
-      </el-form-item>
-      <div class="register-dialog-form-tip">
-        {{$t('common.accountNoChange')}}<br>
-        {{$t('common.useLettersOrNumber')}}<br>
-        {{$t('common.defaultAddress')}}<br>
-        <span class="defaultAddress">{{nowOrigin}}/{{ruleForm.username}}</span>
-      </div>
-      <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
-      </el-form-item>
-      <el-form-item prop="phoneNumber">
-        <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <!-- <el-input v-model="ruleForm.phoneNumber" placeholder="验证码"></el-input> -->
-        <el-row class="send-auth">
-          <el-col class="send-auth-code">
-              <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
-          </el-col>
-          <el-col class="send-auth-send-code">
-              <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleForm.phoneNumber" type="primary" class="send-code-button" @click.stop="sendAuthCode">
-                <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
-                <span v-else>{{$t('user.sendCodes')}}</span>
-              </el-button>
-          </el-col>
-        </el-row> 
-      </el-form-item>
-      <el-form-item>
-        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
-      </el-form-item>
-    </el-form>
-  <!-- </el-dialog> -->
+  <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+    <h3 class="register-title">{{$t('common.register')}}</h3>
+    <el-form-item prop="username">
+      <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
+        <el-input slot="reference" @focus="visible = true" @blur="visible = false" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+        <div class="register-dialog-form-tip">
+          {{$t('common.accountNoChange')}}<br>
+          {{$t('common.useLettersOrNumber')}}<br>
+          {{$t('common.defaultAddress')}}<br>
+          <span class="defaultAddress">{{nowOrigin}}/{{ruleForm.username}}</span>
+        </div>
+      </el-popover>
+    </el-form-item>
+    <el-form-item prop="password">
+      <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
+    </el-form-item>
+    <el-form-item prop="phoneNumber">
+      <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-row class="send-auth">
+        <el-col class="send-auth-code">
+          <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
+        </el-col>
+        <el-col class="send-auth-send-code">
+          <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleForm.phoneNumber" type="primary" class="send-code-button" @click.stop="sendAuthCode">
+            <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
+            <span v-else>{{$t('user.sendCodes')}}</span>
+          </el-button>
+        </el-col>
+      </el-row>
+    </el-form-item>
+    <el-form-item>
+      <el-button class="login-btn" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -42,7 +42,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'RegisterDialog',
   props: {
-    show: Boolean,
+    show: Boolean
   },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
@@ -53,6 +53,7 @@ export default {
       }
     }
     return {
+      visible: false,
       envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
       registerLoading: false,
@@ -102,7 +103,7 @@ export default {
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
     handleClose() {
-     this.$emit('close')
+      this.$emit('close')
     },
     showMessage(type, message) {
       this.$message({
@@ -197,7 +198,7 @@ export default {
         this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
       }
-    },
+    }
   }
 }
 </script>
@@ -215,13 +216,21 @@ export default {
     .el-dialog__header {
       padding: 0;
     }
-    width: 30%;
-    min-width: 478px;
+    max-width: 352px;
     padding: 40px 0 40px 0;
   }
   &-form {
-    width: 68%;
+    padding: 0 32px;
     margin: 0 auto;
+    position: relative;
+    .register-title {
+      margin: 0 auto 30px;
+      font-size: 18px;
+      color: #303133;
+    }
+    .el-form-item {
+      margin-bottom: 18px;
+    }
     .el-form-item__content {
       .el-input__inner {
         &:focus {
@@ -232,8 +241,9 @@ export default {
     &-tip {
       line-height: 18px;
       margin-bottom: 18px;
+      font-size: 12px;
       .defaultAddress {
-        color: #ff0000;
+        color: #409eff;
         font-weight: 700;
       }
     }

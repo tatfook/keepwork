@@ -60,7 +60,7 @@ export default {
     getTarget() {
       return this.properties.target
         ? this.properties.target
-        : this.options.emptyTarget
+        : this.options.emptyLinkTarget
     },
     getStyle() {
       return this.generateStyleString({

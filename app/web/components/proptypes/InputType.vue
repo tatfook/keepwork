@@ -3,6 +3,7 @@
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
+let EMPTY = 'emptyInput'
 
 export default {
   name: 'InputType',
@@ -13,7 +14,7 @@ export default {
   computed: {
     inputTypeValue: {
       get() {
-        return this.originValue
+        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData[EMPTY]) || '')
       },
       set() {}
     }

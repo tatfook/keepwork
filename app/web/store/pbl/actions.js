@@ -4,10 +4,13 @@ import { props } from './mutations'
 
 let {
   TOGGLE_LOGIN_DIALOG,
+  GET_ALL_PROJECTS,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_MEMBERS_SUCCESS,
   GET_USER_PROJECTS_SUCCESS,
-  GET_PROJECT_DETAIL_SUCCESS
+  GET_PROJECT_DETAIL_SUCCESS,
+  GET_PROJECT_FAVORITE_STATE_SUCCESS,
+  GET_PROJECT_STAR_STATE_SUCCESS
 } = props
 
 const actions = {
@@ -20,6 +23,16 @@ const actions = {
     }).catch((error) => {
       return Promise.reject(error)
     })
+  },
+  async setAllProjects({ commit }) {
+    await keepwork.projects
+      .getProjects()
+      .then(res => {
+        console.log('res', res)
+        let allProjects = _.get(res, 'rows', [])
+        console.log('all', allProjects)
+        commit(GET_ALL_PROJECTS, allProjects)
+      }).catch(err => console.error(err))
   },
   async getUserProjects(context, { userId, useCache = true }) {
     let { commit, getters: { userProjects } } = context
@@ -82,6 +95,64 @@ const actions = {
     let { dispatch } = context
     await keepwork.members.deleteMember({ id }).then(async () => {
       await dispatch('getProjectMember', { objectId, objectType })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async getFavoriteState(context, { objectId, objectType }) {
+    let { commit } = context
+    await keepwork.favorites.existFavorite({ objectId, objectType }).then(async isFavorite => {
+      commit(GET_PROJECT_FAVORITE_STATE_SUCCESS, { projectId: objectId, isFavorite })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async favoriteProject(context, { objectId, objectType }) {
+    let { dispatch } = context
+    await keepwork.favorites.favoriteProject({ objectId, objectType }).then(async () => {
+      await dispatch('getFavoriteState', { objectId, objectType })
+      await dispatch('getProjectDetail', { projectId: objectId })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async unFavoriteProject(context, { objectId, objectType }) {
+    let { dispatch } = context
+    await keepwork.favorites.unFavoriteProject({ objectId, objectType }).then(async () => {
+      await dispatch('getFavoriteState', { objectId, objectType })
+      await dispatch('getProjectDetail', { projectId: objectId })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async getStarState(context, { projectId }) {
+    let { commit } = context
+    await keepwork.projects.getStarState({ projectId }).then(async isStared => {
+      commit(GET_PROJECT_STAR_STATE_SUCCESS, { projectId, isStared })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async starProject(context, { projectId }) {
+    let { dispatch } = context
+    await keepwork.projects.starProject({ projectId }).then(async () => {
+      await dispatch('getStarState', { projectId })
+      await dispatch('getProjectDetail', { projectId })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async unStarProject(context, { projectId }) {
+    let { dispatch } = context
+    await keepwork.projects.unStarProject({ projectId }).then(async () => {
+      await dispatch('getStarState', { projectId })
+      await dispatch('getProjectDetail', { projectId })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)

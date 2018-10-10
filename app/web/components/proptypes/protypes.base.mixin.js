@@ -3,6 +3,7 @@ export default {
     cardValue: Object,
     cardKey: String,
     editingKey: String,
+    optionsData: Object,
     activePropertyOptions: Object
   },
   data() {

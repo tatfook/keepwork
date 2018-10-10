@@ -13,23 +13,23 @@
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+let EMPTY = 'emptyMedia'
 
 export default {
   name: 'MediaType',
   props: {
-    editingKey: String,
     originValue: String
   },
   mixins: [protypesBaseMixin],
   data() {
     return {
-      isSkyDriveManagerDialogShow: false
+      isSkyDriveManagerDialogShow: false,
     }
   },
   computed: {
     mediaData: {
       get() {
-        return this.originValue
+        return this.originValue ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
       },
       set() {}
     }

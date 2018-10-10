@@ -14,7 +14,7 @@
       <el-col class="user-data-setting-form-col">
         <el-form ref="form" :model="userInfo" label-width="80px">
           <el-form-item :label='$t("user.displayName")'>
-            <el-input v-model="userInfo.displayName" size="small"></el-input>
+            <el-input v-model="userInfo.nickname" size="small"></el-input>
           </el-form-item>
           <el-form-item :label='$t("user.sex")'>
             <el-radio-group v-model="userInfo.sex">
@@ -142,9 +142,9 @@ export default {
       let isModified = !_.isEqual(this.loginUserProfile, userInfo)
       if (isModified) {
         this.loading = true
-        let { _id, displayName, sex, portrait, location, introduce } = userInfo
+        let { _id, nickname, sex, portrait, location, introduce } = userInfo
         let isSensitive = await this.checkSensitive([
-          displayName,
+          nickname,
           location,
           introduce
         ])
@@ -155,7 +155,7 @@ export default {
         }
         await this.userUpdateUserInfo({
           _id,
-          displayName,
+          nickname,
           sex,
           portrait,
           location,

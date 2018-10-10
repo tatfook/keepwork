@@ -24,14 +24,14 @@
           </el-button>
         </div>
         <div class="project-header-operations-item">
-          <el-button plain size="medium">
-            <i class="iconfont icon-star1"></i>收藏
+          <el-button plain size="medium" @click="toggleFavoriteProject" :loading="isFavoriteButtonLoading">
+            <i class="iconfont" :class="favoriteIconClass"></i>{{isUserFavoriteProject ? '取消收藏': '收藏'}}
           </el-button>
           <span class="project-header-operations-item-count">{{projectDetail.favoriteCount}}</span>
         </div>
         <div class="project-header-operations-item">
-          <el-button plain size="medium">
-            <i class="iconfont icon-like1"></i>点赞
+          <el-button plain size="medium" @click='toggleStarProject' :loading="isStarButtonLoading">
+            <i class="iconfont" :class="starIconClass"></i>{{isUserStaredProject ? '取消点赞': '点赞'}}
           </el-button>
           <span class="project-header-operations-item-count">{{projectDetail.star}}</span>
         </div>
@@ -64,17 +64,25 @@ export default {
     this.editingUserId = _.get(this.projectDetail, 'userId')
 
     let userId = this.editingUserId
-    await this.getUserDetailByUserId({ userId })
+    let objectId = this.editingProjectId
+    let objectType = 5
+    this.getUserDetailByUserId({ userId })
+    this.getFavoriteState({ objectId, objectType })
+    this.getStarState({ projectId: objectId })
   },
   data() {
     return {
       isDropdownLoading: false,
-      editingUserId: undefined
+      editingUserId: undefined,
+      isFavoriteButtonLoading: false,
+      isStarButtonLoading: false
     }
   },
   computed: {
     ...mapGetters({
       userProjects: 'pbl/userProjects',
+      projectFavoriteState: 'pbl/projectFavoriteState',
+      projectStarState: 'pbl/projectStarState',
       getDetailByUserId: 'user/getDetailByUserId'
     }),
     activePageName() {
@@ -82,6 +90,9 @@ export default {
     },
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
+    },
+    editingProjectId() {
+      return _.get(this.projectDetail, 'id')
     },
     editingProjectUser() {
       let userId = this.editingUserId
@@ -93,13 +104,36 @@ export default {
     userProjectList() {
       let userId = this.editingUserId
       return _.get(this.userProjects({ userId }), 'rows', [])
+    },
+    isUserFavoriteProject() {
+      return this.projectFavoriteState({
+        projectId: this.editingProjectId
+      })
+    },
+    isUserStaredProject() {
+      return this.projectStarState({ projectId: this.editingProjectId })
+    },
+    favoriteIconClass() {
+      return this.isUserFavoriteProject ? 'icon-star-fill' : 'icon-star1'
+    },
+    starIconClass() {
+      return this.isUserStaredProject ? 'icon-like-fill' : 'icon-like1'
     }
   },
   methods: {
     ...mapActions({
       getUserDetailByUserId: 'user/getUserDetailByUserId',
-      pblGetUserProjects: 'pbl/getUserProjects'
+      pblGetUserProjects: 'pbl/getUserProjects',
+      favoriteProject: 'pbl/favoriteProject',
+      unFavoriteProject: 'pbl/unFavoriteProject',
+      starProject: 'pbl/starProject',
+      unStarProject: 'pbl/unStarProject',
+      getFavoriteState: 'pbl/getFavoriteState',
+      getStarState: 'pbl/getStarState'
     }),
+    showMessage({ type = 'success', message = '操作成功' }) {
+      this.$message({ type, message })
+    },
     async dropdownVisibleChange(visible) {
       if (visible) {
         let userId = this.editingUserId
@@ -111,6 +145,79 @@ export default {
     toProjectIndexPage(project) {
       let projectId = project.id
       this.$router.push({ path: `/project/${projectId}/edit` })
+    },
+    async toggleStarProject() {
+      let projectId = this.editingProjectId
+      this.isStarButtonLoading = true
+      if (!this.isUserStaredProject) {
+        await this.starProject({ projectId })
+          .then(() => {
+            this.showMessage({
+              message: '点赞成功'
+            })
+            this.isStarButtonLoading = false
+          })
+          .catch(error => {
+            this.showMessage({
+              type: 'error',
+              message: '点赞失败'
+            })
+            this.isStarButtonLoading = false
+          })
+      } else {
+        await this.unStarProject({ projectId })
+          .then(() => {
+            this.showMessage({
+              message: '取消点赞成功'
+            })
+            this.isStarButtonLoading = false
+          })
+          .catch(error => {
+            this.showMessage({
+              type: 'error',
+              message: '取消点赞失败'
+            })
+            this.isStarButtonLoading = false
+          })
+        this.isStarButtonLoading = false
+      }
+    },
+    async toggleFavoriteProject() {
+      let objectId = this.editingProjectId
+      let objectType = 5
+      this.isFavoriteButtonLoading = true
+      if (!this.isUserFavoriteProject) {
+        await this.favoriteProject({ objectId, objectType })
+          .then(() => {
+            this.showMessage({
+              message: '收藏成功'
+            })
+            this.isFavoriteButtonLoading = false
+          })
+          .catch(error => {
+            this.showMessage({
+              type: 'error',
+              message: '收藏失败'
+            })
+            this.isFavoriteButtonLoading = false
+          })
+      } else {
+        await this.unFavoriteProject({ objectId, objectType })
+          .then(() => {
+            this.showMessage({
+              message: '取消收藏成功'
+            })
+            this.isFavoriteButtonLoading = false
+          })
+          .catch(error => {
+            this.showMessage({
+              type: 'error',
+              message: '取消收藏失败'
+            })
+            this.isFavoriteButtonLoading = false
+          })
+        this.isFavoriteButtonLoading = false
+      }
     }
   }
 }

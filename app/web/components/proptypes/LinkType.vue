@@ -13,12 +13,12 @@
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
+let EMPTY = 'emptyLink'
 
 export default {
   name: 'LinkType',
   mixins: [protypesBaseMixin],
   props: {
-    editingKey: String,
     originValue: String
   },
   async mounted() {
@@ -30,7 +30,7 @@ export default {
     }),
     linkTypeValue: {
       get() {
-        return this.originValue
+        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData[EMPTY]) || '')
       },
       set(data) {
         this.updateValue(data)

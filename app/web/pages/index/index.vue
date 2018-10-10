@@ -27,6 +27,7 @@ import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -54,7 +55,8 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    user: userModule
+    user: userModule,
+    pbl: pblModule
   }
 })
 
@@ -151,7 +153,7 @@ export default {
       activePageInfo: 'activePageInfo'
     }),
     isHome() {
-      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage'
+      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage' || this.$route.name === 'StudyPage'
     },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
