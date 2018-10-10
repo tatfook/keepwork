@@ -2,7 +2,7 @@
   <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
     <h3 class="register-title">{{$t('common.register')}}</h3>
     <el-form-item prop="username">
-      <el-popover placement="top" width="320" trigger="manual" content="" v-model="visible">
+      <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
         <el-input slot="reference" @focus="visible = true" @blur="visible = false" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
         <div class="register-dialog-form-tip">
           {{$t('common.accountNoChange')}}<br>
@@ -216,18 +216,20 @@ export default {
     .el-dialog__header {
       padding: 0;
     }
-    width: 30%;
-    min-width: 440px;
+    max-width: 352px;
     padding: 40px 0 40px 0;
   }
   &-form {
-    width: 78%;
+    padding: 0 32px;
     margin: 0 auto;
     position: relative;
     .register-title {
       margin: 0 auto 30px;
       font-size: 18px;
       color: #303133;
+    }
+    .el-form-item {
+      margin-bottom: 18px;
     }
     .el-form-item__content {
       .el-input__inner {
