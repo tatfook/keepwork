@@ -1,5 +1,5 @@
 <template>
-  <el-container v-if="presetLoaded" v-loading="loading" id="editor">
+  <el-container class="editor-index-page" v-if="presetLoaded" v-loading="loading" id="editor">
     <el-header>
       <EditorHeader></EditorHeader>
     </el-header>
@@ -177,7 +177,7 @@ export default {
 }
 </script>
 
-<style >
+<style lang="scss">
 html,
 body,
 .el-container {
@@ -188,10 +188,13 @@ body {
   margin: 0;
   padding: 0;
 }
-.el-main {
-  height: 100%;
-  padding: 0;
+.editor-index-page {
+  .el-main {
+    height: 100%;
+    padding: 0;
+  }
 }
+
 #editor {
   background: white;
 }
