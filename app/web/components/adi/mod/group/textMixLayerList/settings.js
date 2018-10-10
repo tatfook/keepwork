@@ -8,9 +8,5 @@ export default {
         name: 'title'
       }
     }
-  },
-  list: {
-    modType: 'ModMixLayerList',
-    modSettings: {}
   }
 }

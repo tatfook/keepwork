@@ -1,5 +1,5 @@
 <template>
-  <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme'> </component>
+  <component :is='modComponent' :rootMod='rootMod' :mod='mod' :conf='modConf' :theme='theme' :editMode='editMode'> </component>
 </template>
 
 <script>
@@ -7,9 +7,11 @@ import AsyncModLoader from '@/components/adi/mod/index.async'
 
 export default {
   props: {
+    rootMod: Object,
     mod: Object,
     theme: Object,
-    modType: String
+    modType: String,
+    editMode: Boolean
   },
   data() {
     return {

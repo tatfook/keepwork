@@ -3,9 +3,11 @@ import compDefaultProperties from './comp.properties'
 
 export default {
   props: {
+    rootMod: Object,
     source: Object,
     options: Object,
     theme: Object,
+    property: String,
     editMode: {
       type: Boolean,
       'default': false

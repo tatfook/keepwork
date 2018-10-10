@@ -7,8 +7,7 @@ import modSettings from './settings'
 const name = 'ModTextMixLayerList'
 
 const components = {
-  text: 'AdiSubMod',
-  list: 'AdiSubMod'
+  text: 'AdiSubMod'
 }
 const properties = generateProperties(name, components)
 

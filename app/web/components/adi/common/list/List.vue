@@ -2,7 +2,7 @@
   <div class='comp-list'>
     <el-row :gutter='options.gutter'>
       <el-col :span="colWidth" v-for='(item, index) in properties.collection' :key='index'>
-        <mod-comp-loader :mod='modWithExtraConf(item)' :theme='theme' :modType='options.modType' :editMode='editMode'/>
+        <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, index)' :theme='theme' :modType='options.modType' :editMode='editMode'/>
       </el-col>
     </el-row>
   </div>
@@ -19,9 +19,12 @@ export default {
     ModCompLoader
   },
   methods: {
-    modWithExtraConf(source) {
+    modWithExtraConf(source, index) {
       return {
-        data:  _.merge({}, source, this.options.modSettings)
+        data:  _.merge({}, this.options.modSettings, source),
+        isSub: true,
+        property: this.property,
+        index
       }
     }
   },

@@ -57,7 +57,8 @@ const getters = {
       if (state.activePage.activeSubMod) {
         return state.activePage.activeSubMod.activeProperty
       }
-    } return state.activePage.activeProperty
+      return state.activePage.activeProperty
+    }
   },
   isMultipleTextDialogShow: state => {
     return state.isMultipleTextDialogShow

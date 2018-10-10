@@ -471,14 +471,14 @@ const actions = {
   },
   updateActiveModAttributeList({ commit, dispatch, getters }, payload) {
     if (payload.action === 'EDIT') {
-      let { activeMod, activeProperty } = getters
+      let { activeMod } = getters
       let activeModConf = ModFactory.load(activeMod.modType)
       let subModType = activeModConf.modSettings[payload.key].modType
       commit(SET_ACTIVE_PROPERTY, null)
       dispatch('setActiveSubMod', {
         modType: subModType,
         childProperty: payload.index,
-        parentProperty: activeProperty,
+        parentProperty: payload.key,
         data: activeMod.data[payload.key].collection[payload.index]
       })
     } else {

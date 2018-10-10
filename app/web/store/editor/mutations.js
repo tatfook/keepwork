@@ -216,9 +216,11 @@ const mutations = {
       activeProperty = subMod.parentProperty
       let propertyData = _.cloneDeep(state.activePage.activeMod.data[activeProperty])
       if (subMod.childProperty !== undefined) {
-        _.merge(propertyData.collection[subMod.childProperty], { [state.activePage.activeProperty]: newData })
-        newData = propertyData
+        _.merge(propertyData.collection[subMod.childProperty], { [subMod.activeProperty]: newData })
+      } else {
+        _.merge(propertyData, { [subMod.activeProperty]: newData })
       }
+      newData = propertyData
     }
     Parser.updateBlockAttribute(
       modList,

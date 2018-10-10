@@ -5,7 +5,7 @@
       <i class="iconfont icon-delete icon-del"></i>
     </div>
     <div class='mod'>
-      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
+      <component :is='modComponent' :rootMod='mod' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
       <span v-if='invalid'> 错误的Mod指令 </span>
     </div>
     <div class='operator' v-if='isActive'>

@@ -1,6 +1,6 @@
 <template>
   <div class='comp-sub-mod'>
-    <mod-comp-loader :mod='modWithExtraConf(source)' :theme='theme' :modType='options.modType' :editMode='editMode'/>
+    <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(source)' :theme='theme' :modType='options.modType' :editMode='editMode'/>
   </div>
 </template>
 
@@ -17,7 +17,10 @@ export default {
   methods: {
     modWithExtraConf(source) {
       return {
-        data:  _.merge({}, source, this.options.modSettings)
+        data:  _.merge({}, this.options.modSettings, source),
+        isSub: true,
+        modType: this.options.modType,
+        property: this.property
       }
     }
   }

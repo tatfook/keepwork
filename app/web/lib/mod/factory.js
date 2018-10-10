@@ -6,6 +6,11 @@ export const generateProperties = modName => {
   return modProperties
 }
 
+export const load = modName => {
+  return modLoader.load(modName)
+}
+
 export default {
-  generateProperties
+  generateProperties,
+  load
 }
