@@ -1,48 +1,107 @@
 <template>
   <div class="project-tags">
-    <el-card class="project-tags-card" shadow="never">
+    <el-card class="project-tags-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
         <span class="project-tags-card-label">项目标签</span>
-        <el-button class="project-tags-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
+        <el-button class="project-tags-card-button" type="text" @click="toggleIsTagEditing">
+          <i class="el-icon-edit-outline" v-show="!isTagEditing"></i>
+          <span v-show="isTagEditing"><i class="iconfont icon-save3"></i>保存</span>
+        </el-button>
       </div>
-      <el-tag size="small" :key="tag" v-for="tag in dynamicTags" :disable-transitions="false" @close="handleClose(tag)">
+      <div v-show="tempTags.length <= 0 && !isTagEditing">暂无标签</div>
+      <el-tag v-show="tempTags.length > 0 || isTagEditing" :closable="isTagEditing" size="small" :key="tag" v-for="tag in tempTags" :disable-transitions="false" @close="handleClose(tag)">
         {{tag}}
       </el-tag>
       <el-input class="project-tags-new-input" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
-      <!-- <el-button v-else class="project-tags-new-button" size="small" @click="showInput">+ 新标签</el-button> -->
+      <el-button v-show="isTagEditing" v-else class="project-tags-new-button" size="small" @click="showInput">+ 新标签</el-button>
     </el-card>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'ProjectTags',
+  props: {
+    originProjectDetail: {
+      type: Object,
+      required: true
+    },
+    projectId: {
+      required: true
+    }
+  },
+  mounted() {
+    let { tags } = this.originProjectDetail
+    tags = tags.slice(1, tags.length - 1)
+    this.tempTags = tags.split('|')
+  },
   data() {
     return {
-      dynamicTags: ['需求', '你好，黑客节', '项目'],
+      tempTags: [],
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      isTagEditing: false,
+      isLoading: false
+    }
+  },
+  computed: {
+    formatTagsToBackEndStyle() {
+      return '|' + _.join(this.tempTags, '|') + '|'
+    },
+    updatingProjectData() {
+      return _.merge(this.originProjectDetail, {
+        tags: this.formatTagsToBackEndStyle
+      })
     }
   },
   methods: {
+    ...mapActions({
+      pblUpdateProject: 'pbl/updateProject'
+    }),
     handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+      this.tempTags.splice(this.tempTags.indexOf(tag), 1)
     },
-
     showInput() {
       this.inputVisible = true
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-
     handleInputConfirm() {
       let inputValue = this.inputValue
       if (inputValue) {
-        this.dynamicTags.push(inputValue)
+        this.tempTags.push(inputValue)
       }
       this.inputVisible = false
       this.inputValue = ''
+    },
+    async toggleIsTagEditing() {
+      if (this.isTagEditing) {
+        this.isLoading = true
+        await this.pblUpdateProject({
+          projectId: this.projectId,
+          updatingProjectData: this.updatingProjectData
+        })
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '标签更新成功'
+            })
+            this.isTagEditing = !this.isTagEditing
+            this.isLoading = false
+          })
+          .catch(error => {
+            this.$message({
+              type: 'error',
+              message: '标签更新失败,请重试'
+            })
+            this.isLoading = false
+            console.error(error)
+          })
+      } else {
+        this.isTagEditing = !this.isTagEditing
+      }
     }
   }
 }

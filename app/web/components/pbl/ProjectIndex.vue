@@ -3,7 +3,7 @@
     <div class="container">
       <div class="project-index-sidebar">
         <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername'></project-website>
-        <project-tags class="project-index-sidebar-item"></project-tags>
+        <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId'></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'></project-joined-members-list>
       </div>
       <div class="project-index-main">

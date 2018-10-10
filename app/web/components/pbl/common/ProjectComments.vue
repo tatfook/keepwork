@@ -72,6 +72,7 @@ export default {
             type: 'success',
             message: '评论成功'
           })
+          this.newCommenContent = ''
         })
         .catch(error => {
           this.$message({
