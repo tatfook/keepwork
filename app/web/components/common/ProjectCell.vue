@@ -8,7 +8,7 @@
       <i class="iconfont icon-like-fill"></i>
       <span>{{project.star}}</span>
       <i class="iconfont icon-message_fill"></i>
-      <span>{{project.commentCount}}</span>
+      <span>{{project.comment}}</span>
     </div>
     <div class="item-author">
       <div class="item-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.nickname}}</div>

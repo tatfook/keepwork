@@ -24,13 +24,11 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async setAllProjects({ commit }) {
+  async getAllProjects({ commit }) {
     await keepwork.projects
       .getProjects()
       .then(res => {
-        console.log('res', res)
         let allProjects = _.get(res, 'rows', [])
-        console.log('all', allProjects)
         commit(GET_ALL_PROJECTS, allProjects)
       }).catch(err => console.error(err))
   },

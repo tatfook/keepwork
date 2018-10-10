@@ -671,7 +671,6 @@
     "resend": "resend",
     "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
-    "codeExceedsTheSendingLimit": "The verification code exceeds the sending limit",
     "verificationCodeError": "Verification code error",
     "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts",
     "modifyPwd": "Modify Password:",

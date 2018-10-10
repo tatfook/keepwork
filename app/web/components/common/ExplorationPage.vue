@@ -114,7 +114,7 @@ export default {
     }
   },
   mounted(){
-    this.setAllProjects()
+    this.getAllProjects()
   },
   computed: {
     ...mapGetters({
@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setAllProjects: 'pbl/setAllProjects'
+      getAllProjects: 'pbl/getAllProjects'
     }),
     goSearch() {},
     selectTab(index) {
