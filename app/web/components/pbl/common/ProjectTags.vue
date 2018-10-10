@@ -32,7 +32,8 @@ export default {
     }
   },
   mounted() {
-    let { tags } = this.originProjectDetail
+    this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
+    let tags = this.copiedProjectDetail.tags
     tags = tags.slice(1, tags.length - 1)
     this.tempTags = tags.split('|')
   },
@@ -42,15 +43,22 @@ export default {
       inputVisible: false,
       inputValue: '',
       isTagEditing: false,
-      isLoading: false
+      isLoading: false,
+      copiedProjectDetail: {}
     }
   },
   computed: {
+    isModified() {
+      return this.formatTagsToBackEndStyle !== this.originTagsToBackageEndStyl
+    },
     formatTagsToBackEndStyle() {
       return '|' + _.join(this.tempTags, '|') + '|'
     },
+    originTagsToBackageEndStyl() {
+      return this.copiedProjectDetail.tags
+    },
     updatingProjectData() {
-      return _.merge(this.originProjectDetail, {
+      return _.merge(this.copiedProjectDetail, {
         tags: this.formatTagsToBackEndStyle
       })
     }
@@ -78,6 +86,10 @@ export default {
     },
     async toggleIsTagEditing() {
       if (this.isTagEditing) {
+        if (!this.isModified) {
+          this.isTagEditing = !this.isTagEditing
+          return
+        }
         this.isLoading = true
         await this.pblUpdateProject({
           projectId: this.projectId,
