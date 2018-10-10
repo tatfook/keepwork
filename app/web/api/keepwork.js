@@ -31,9 +31,10 @@ export const user = {
   update: async (...args) => put('/user/update', ...args),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
-  getByEmail: async (args) => get(`/users/email_captcha?email=${args.email}`),
-  verifyEmailOne: async (...args) => post('/user/verifyEmailOne', ...args),
-  verifyEmailTwo: async (...args) => post('/user/verifyEmailTwo', ...args),
+  getByEmail: async (args) => get(`/users?email=${args.email}`),
+  // getUserByEmail: async args => get(`/users/?email=${args.email}`),
+  verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
+  verifyEmailTwo: async args => post('/users/email_captcha', args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
   verifyCellphoneOne: async args =>
     get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),

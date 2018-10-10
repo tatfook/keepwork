@@ -113,17 +113,17 @@ export default {
         default:
           break
       }
-      if (result === 'success') {
+      if (result == true) {
         this.handleClose()
       }
     },
     async verifyEmailCode() {
       let message = await this.userVerifyEmailTwo({
-        bind: this.codeDialogDatas.bind,
-        isApi: true,
-        verifyCode: this.code
+        captcha: this.code,
+        email: this.codeDialogDatas.value,
+        isBind: this.codeDialogDatas.bind
       })
-      if (message === 'success') {
+      if (message == true) {
         this.showMessage(
           'success',
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
@@ -163,8 +163,7 @@ export default {
         case 'email':
           this.isSendingCode = true
           let result = await this.userVerifyEmailOne({
-            email: this.codeDialogDatas.value,
-            bind: this.codeDialogDatas.bind
+            email: this.codeDialogDatas.value
           })
           this.isSendingCode = false
           this.isCodeSent = true

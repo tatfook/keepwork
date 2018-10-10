@@ -592,23 +592,20 @@ const actions = {
     return result
   },
   async getByEmail(context, { email }) {
-    let result = await keepwork.user.getByEmail({ email })
-    return result
+    let users = await keepwork.user.getByEmail({ email })
+    return users.length > 0
   },
   async verifyEmailOne(context, { email, bind }) {
     return keepwork.user.verifyEmailOne({ email, bind })
   },
-  async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
-    // FIXME:
-    let { dispatch } = context
-    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode })
-    let message = result.error.message
-    if (message === 'success') {
+  async verifyEmailTwo({ dispatch }, payload) {
+    let result = await keepwork.user.verifyEmailTwo(payload)
+    if (result === true) {
       await dispatch('getProfile', {
         useCache: false
       })
     }
-    return message
+    return result
   },
   async getUserThreeServiceByUsername(context, { username }) {
     let { commit } = context
