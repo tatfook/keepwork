@@ -10,7 +10,8 @@ let {
   GET_USER_PROJECTS_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
-  GET_PROJECT_STAR_STATE_SUCCESS
+  GET_PROJECT_STAR_STATE_SUCCESS,
+  GET_COMMENTS_SUCCESS
 } = props
 
 const actions = {
@@ -47,8 +48,12 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getProjectDetail(context, { projectId }) {
-    let { commit } = context
+  async getProjectDetail(context, { projectId, useCache = true }) {
+    let { commit, getters: { projectDetail } } = context
+    let project = projectDetail({ projectId })
+    if (project && useCache) {
+      return
+    }
     await keepwork.projects.getProjectDetail({ projectId }).then(projectDetail => {
       commit(GET_PROJECT_DETAIL_SUCCESS, { projectId, projectDetail })
       return Promise.resolve()
@@ -100,8 +105,12 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getFavoriteState(context, { objectId, objectType }) {
-    let { commit } = context
+  async getFavoriteState(context, { objectId, objectType, useCache = true }) {
+    let { commit, getters: { projectFavoriteState } } = context
+    let favoriteState = projectFavoriteState({ projectId: objectId })
+    if (favoriteState && useCache) {
+      return
+    }
     await keepwork.favorites.existFavorite({ objectId, objectType }).then(async isFavorite => {
       commit(GET_PROJECT_FAVORITE_STATE_SUCCESS, { projectId: objectId, isFavorite })
       return Promise.resolve()
@@ -112,8 +121,8 @@ const actions = {
   async favoriteProject(context, { objectId, objectType }) {
     let { dispatch } = context
     await keepwork.favorites.favoriteProject({ objectId, objectType }).then(async () => {
-      await dispatch('getFavoriteState', { objectId, objectType })
-      await dispatch('getProjectDetail', { projectId: objectId })
+      await dispatch('getFavoriteState', { objectId, objectType, useCache: false })
+      await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)
@@ -122,15 +131,19 @@ const actions = {
   async unFavoriteProject(context, { objectId, objectType }) {
     let { dispatch } = context
     await keepwork.favorites.unFavoriteProject({ objectId, objectType }).then(async () => {
-      await dispatch('getFavoriteState', { objectId, objectType })
-      await dispatch('getProjectDetail', { projectId: objectId })
+      await dispatch('getFavoriteState', { objectId, objectType, useCache: false })
+      await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)
     })
   },
-  async getStarState(context, { projectId }) {
-    let { commit } = context
+  async getStarState(context, { projectId, useCache = true }) {
+    let { commit, getters: { projectStarState } } = context
+    let starState = projectStarState({ projectId })
+    if (starState && useCache) {
+      return
+    }
     await keepwork.projects.getStarState({ projectId }).then(async isStared => {
       commit(GET_PROJECT_STAR_STATE_SUCCESS, { projectId, isStared })
       return Promise.resolve()
@@ -141,8 +154,8 @@ const actions = {
   async starProject(context, { projectId }) {
     let { dispatch } = context
     await keepwork.projects.starProject({ projectId }).then(async () => {
-      await dispatch('getStarState', { projectId })
-      await dispatch('getProjectDetail', { projectId })
+      await dispatch('getStarState', { projectId, useCache: false })
+      await dispatch('getProjectDetail', { projectId, useCache: false })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)
@@ -151,8 +164,26 @@ const actions = {
   async unStarProject(context, { projectId }) {
     let { dispatch } = context
     await keepwork.projects.unStarProject({ projectId }).then(async () => {
-      await dispatch('getStarState', { projectId })
-      await dispatch('getProjectDetail', { projectId })
+      await dispatch('getStarState', { projectId, useCache: false })
+      await dispatch('getProjectDetail', { projectId, useCache: false })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async getComments(context, { objectType = 5, objectId }) {
+    let { commit } = context
+    await keepwork.comments.getComments({ objectType, objectId }).then(async commentList => {
+      await commit('GET_COMMENTS_SUCCESS', { commentList, projectId: objectId })
+      return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async createComment(context, { objectType = 5, objectId, content }) {
+    let { dispatch } = context
+    await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
+      await dispatch('getComments', { objectType, objectId })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)

@@ -233,6 +233,11 @@ export const members = {
   deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
 }
 
+export const comments = {
+  getComments: async ({ objectType, objectId }) => get(`comments?objectType=${objectType}&objectId=${objectId}`),
+  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content })
+}
+
 export const keepwork = {
   user,
   website,
@@ -247,6 +252,7 @@ export const keepwork = {
   projects,
   applies,
   members,
+  comments,
   bigfile
 }
 
