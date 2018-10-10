@@ -7,6 +7,7 @@ let emptyData = {
     emptyLinkTarget: '_blank'
   }
 }
+
 export default [
   // style 0
   {
@@ -36,10 +37,8 @@ export default [
           }
         })
       }
-    },
-    cover: ''
+    }
   },
-
   // style 1
   {
     templateID: 0,
@@ -68,7 +67,20 @@ export default [
           }
         })
       }
-    },
-    cover: ''
+    }
+  },
+  // style 2
+  {
+    templateID: 0,
+    componentID: 1,
+    data: {},
+    props: {},
+    theme: {},
+    options: {
+      theme: {},
+      config: {
+        ...emptyData
+      }
+    }
   }
 ]

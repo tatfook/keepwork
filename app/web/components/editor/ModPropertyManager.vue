@@ -122,7 +122,17 @@ export default {
         checkKeys(currentTemplate, thisProp)
 
         if (thisProp.hasProp) {
-          filterModComponents[key] = item
+          if (Array.isArray(item)) {
+            let componentID = 0
+
+            if (currentStyle && currentStyle.componentID) {
+              componentID = currentStyle.componentID
+            }
+
+            filterModComponents[key] = item[componentID] || ''
+          } else {
+            filterModComponents[key] = item
+          }
         }
       })
 

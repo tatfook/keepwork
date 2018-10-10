@@ -13,11 +13,7 @@ export default {
   },
   computed: {
     properties() {
-      return _.merge(
-        {},
-        compDefaultProperties[this.options.name] || {},
-        this.source || {}
-      )
+      return this.source || {}
     }
   },
   methods: {
