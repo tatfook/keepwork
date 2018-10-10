@@ -314,7 +314,6 @@ const actions = {
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
-    console.warn(detailInfo)
     detailInfo.site.username = username
     commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
   },

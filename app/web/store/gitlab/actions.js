@@ -316,8 +316,8 @@ const actions = {
     //   name,
     //   options
     // } = await getGitlabFileParams(context, { path: paths[0] })
-    // let payload = { path: folder, branch: options.branch }
-    // commit(REMOVE_FILE_SUCCESS, payload)
+    let payload = { path: folder, branch: options.branch }
+    commit(REMOVE_FILE_SUCCESS, payload)
 
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
