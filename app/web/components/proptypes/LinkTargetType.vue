@@ -34,7 +34,7 @@ export default {
   computed: {
     linkTargetValue: {
       get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData[EMPTY]) || '')
+        return this.originValue ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
       },
       set() {}
     }

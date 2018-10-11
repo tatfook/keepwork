@@ -4,9 +4,7 @@
       <el-button @click='handleAdd' class="gallery-type-add-btn" icon="el-icon-plus">{{$t('common.add')}}</el-button>
       <div v-for='(item, index) in galleryData' class="gallery-type-item" :key='index' :item="item" @change="handleChange()">
 
-        <div v-if="!item.type || item.type === 'images'" class="gallery-type-item-img" :style="{
-            backgroundImage: 'url(' + item.img + ')'
-          }">
+        <div v-if="!item.type || item.type === 'images'" class="gallery-type-item-img" :style="getImage(item)">
           <div class="gallery-type-item-img-cover">
             <span>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
@@ -48,7 +46,6 @@
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
-let EMPTY = 'emptyGallery'
 
 export default {
   name: 'GalleryType',
@@ -74,7 +71,20 @@ export default {
     }),
     galleryData: {
       get() {
-        return this.originValue.length ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
+        if (Array.isArray(this.originValue) && this.originValue.length) {
+          return this.originValue
+        } else {
+          if (this.optionsData && this.optionsData.emptyGallery) {
+            return [
+              {
+                img: this.optionsData.emptyGallery.img || '',
+                link: this.optionsData.emptyGallery.link || ''
+              }
+            ]
+          } else {
+            []
+          }
+        }
       },
       set() {
       }
@@ -91,9 +101,10 @@ export default {
     },
     handleAdd() {
       this.galleryData.push({
-        img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
+        img: '',
         link: ''
       })
+
       this.handleChange()
     },
     handlePlay() {
@@ -102,6 +113,18 @@ export default {
       if (video) {
         video.play()
       }
+    },
+    getImage(item) {
+      let img = ''
+
+      if (item && item.img) {
+        img = item.img
+      } else {
+        if (this.optionsData && this.optionsData.emptyGallery)
+        img = this.optionsData.emptyGallery.img || ''
+      }
+
+      return { backgroundImage: 'url(' + img + ')' }
     },
     async handleImgRemove(index) {
       await this.$confirm(this.$t('editor.removeImgConfirmMsg'), '', {

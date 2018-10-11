@@ -56,31 +56,54 @@ export default {
       let imgClassName = 'comp-media-img'
       let style = {
         [imgClassName]: {
-          'height': this.getWebHeight(),
-          'width': this.getWebWidth(),
-          'margin-top': this.options.space && this.parsePx(this.options.space.webMarginTop),
-          'margin-bottom': this.options.space && this.parsePx(this.options.space.webMarginBottom),
-          'padding-top': this.options.space && this.parsePx(this.options.space.webPaddingTop),
-          'padding-bottom': this.options.space && this.parsePx(this.options.space.webPaddingBottom)
+          height: this.getWebHeight(),
+          width: this.getWebWidth(),
+          'margin-top':
+            this.options.space && this.parsePx(this.options.space.webMarginTop),
+          'margin-bottom':
+            this.options.space &&
+            this.parsePx(this.options.space.webMarginBottom),
+          'padding-top':
+            this.options.space &&
+            this.parsePx(this.options.space.webPaddingTop),
+          'padding-bottom':
+            this.options.space &&
+            this.parsePx(this.options.space.webPaddingBottom)
         },
         '@media only screen and (max-width: 767px)': {
           [imgClassName]: {
-            'height': this.getMobileHeight(),
-            'width': this.getMobileWidth(),
-            'margin-top': this.options.space && this.parsePx(this.options.space.mobileMarginTop),
-            'margin-bottom': this.options.space && this.parsePx(this.options.space.mobileMarginBottom),
-            'padding-top': this.options.space && this.parsePx(this.options.space.mobilePaddingTop),
-            'padding-bottom': this.options.space && this.parsePx(this.options.space.mobilePaddingBottom)
+            height: this.getMobileHeight(),
+            width: this.getMobileWidth(),
+            'margin-top':
+              this.options.space &&
+              this.parsePx(this.options.space.mobileMarginTop),
+            'margin-bottom':
+              this.options.space &&
+              this.parsePx(this.options.space.mobileMarginBottom),
+            'padding-top':
+              this.options.space &&
+              this.parsePx(this.options.space.mobilePaddingTop),
+            'padding-bottom':
+              this.options.space &&
+              this.parsePx(this.options.space.mobilePaddingBottom)
           }
         }
       }
 
-      if(!this.sheet) {
-        this.sheet = jss.createStyleSheet(style)
-        this.sheet.attach()
+      if (this.sheet) {
+        this.sheet.detach()
       }
 
+      this.sheet = jss.createStyleSheet(style)
+      this.sheet.attach()
+
       return this.sheet.classes[imgClassName]
+    },
+    auto() {
+      return [['auto'], '!important']
+    },
+    fullWidth() {
+      return [['100%'], '!important']
     },
     svgFill() {
       return this.generateStyleString({
@@ -90,30 +113,62 @@ export default {
   },
   methods: {
     parsePx(value) {
-      if(value) {
-        return parseInt(value) + 'px!important'
-      } else {
-        return 'auto!important'
+      let returnValue = 'auto'
+  
+      if (typeof value == 'number' || typeof value == 'string') {
+        if (!isNaN(parseInt(value))) {
+          returnValue = parseInt(value) + 'px'
+        }
       }
+
+      return [[returnValue], '!important']
     },
-    getValue(propertiesValue,optionsValue) {
+    getValue(propertiesValue, optionsValue) {
       if (propertiesValue) {
         return this.parsePx(propertiesValue)
       } else {
-        return  this.parsePx(optionsValue)
+        return this.parsePx(optionsValue)
       }
     },
     getWebHeight() {
-      return this.options.img ? this.getValue(this.properties.webHeight, this.options.img.defaultWebHeight) : '100%!important'
+      if (typeof this.options.img != 'object') {
+        return this.auto
+      }
+
+      return this.getValue(
+        this.properties.webHeight,
+        this.options.img.defaultWebHeight
+      )
     },
     getWebWidth() {
-      return this.options.img ? this.getValue(this.properties.webWidth, this.options.img.defaultWebWidth) : '100%!important'
+      if (typeof this.options.img != 'object') {
+        return this.fullWidth
+      }
+
+      return this.getValue(
+        this.properties.webWidth,
+        this.options.img.defaultWebWidth
+      )
     },
     getMobileHeight() {
-      return this.options.img ? this.getValue(this.properties.mobileHeight, this.options.img.defaultMobileHeight) : '100%!important'
+      if (typeof this.options.img != 'object') {
+        return this.auto
+      }
+
+      return this.getValue(
+        this.properties.mobileHeight,
+        this.options.img.defaultMobileHeight
+      )
     },
     getMobileWidth() {
-      return this.options.img ? this.getValue(this.properties.mobileWidth, this.options.img.defaultMobileWidth) : '100%!important'
+      if (typeof this.options.img != 'object') {
+        return this.fullWidth
+      }
+
+      return this.getValue(
+        this.properties.mobileWidth,
+        this.options.img.defaultMobileWidth
+      )
     }
   }
 }

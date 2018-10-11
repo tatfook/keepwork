@@ -21,6 +21,7 @@ import AdiTab from './tab/Tab'
 import AdiCategoryList from './categoryList/CategoryList'
 import AdiPageSwitching from './pageSwitching/PageSwitching'
 import AdiIcon from './icon/Icon'
+import AdiImg from './img/Img'
 
 import AdiLesson from './lesson/Lesson'
 import AdiQuiz from './quiz/Quiz'
@@ -50,6 +51,7 @@ export default {
   AdiCategoryList,
   AdiPageSwitching,
   AdiIcon,
+  AdiImg,
   AdiLesson,
   AdiQuiz,
   AdiHint

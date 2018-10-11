@@ -2,12 +2,10 @@ import _ from 'lodash'
 
 let emptyData = {
   imgLoop: {
-    emptyGallery: [
-      {
-        img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
-        link: ''
-      }
-    ]
+    emptyGallery: {
+      img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
+      link: ''
+    }
   }
 }
 
