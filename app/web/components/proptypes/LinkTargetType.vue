@@ -7,7 +7,6 @@
 
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
-let EMPTY = 'emptyLinkTarget'
 
 export default {
   name: 'LinkTargetType',
@@ -34,7 +33,7 @@ export default {
   computed: {
     linkTargetValue: {
       get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
+        return this.originValue ? this.originValue : (this.optionsData && this.optionsData.emptyLinkTarget || '')
       },
       set() {}
     }
