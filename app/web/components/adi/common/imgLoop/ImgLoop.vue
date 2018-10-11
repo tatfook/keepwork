@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <el-carousel :height="options.height">
-      <el-carousel-item v-for="(item, index) in forImgs" :key="index" v-if="item.img && item.img.length != 0">
+      <el-carousel-item v-for="(item, index) in forImgs" :key="index">
         <a v-if="!item.type || item.type === 'images'" :target="properties.target" :href="item.link">
           <div class="imgs" :style="loadImg(item)"></div>
         </a>
@@ -23,16 +23,33 @@ export default {
   mixins: [compBaseMixin],
   methods: {
     loadImg(item) {
-      return this.generateStyleString({
-        'background-image': 'url(' + item.img + ')'
-      })
+      if (item && item.img) {
+        return this.generateStyleString({
+          'background-image': 'url(' + item.img + ')'
+        })
+      } else {
+        if (this.options.emptyGallery && this.options.emptyGallery.img) {
+          return this.generateStyleString({
+            'background-image': 'url(' + this.options.emptyGallery.img + ')'
+          })
+        } else {
+          return {}
+        }
+      }
     }
   },
   computed: {
     forImgs() {
-      return this.properties.data.length == 0
-        ? this.options.emptyGallery
-        : this.properties.data
+      if (!this.properties.data || this.properties.data && this.properties.data.length === 0) {
+        return [
+          {
+            img: this.options.emptyGallery.img,
+            link: ''
+          }
+        ]
+      } else {
+        return this.properties.data
+      }
     }
   }
 }

@@ -99,6 +99,12 @@ export default {
 
       return this.sheet.classes[imgClassName]
     },
+    auto() {
+      return [['auto'], '!important']
+    },
+    fullWidth() {
+      return [['100%'], '!important']
+    },
     svgFill() {
       return this.generateStyleString({
         fill: this.options.svgFillColor
@@ -110,9 +116,7 @@ export default {
       let returnValue = 'auto'
   
       if (typeof value == 'number' || typeof value == 'string') {
-        if (isNaN(parseInt(value))) {
-          returnValue = 'auto'
-        } else {
+        if (!isNaN(parseInt(value))) {
           returnValue = parseInt(value) + 'px'
         }
       }
@@ -127,12 +131,8 @@ export default {
       }
     },
     getWebHeight() {
-      if (!this.isOptionsAndPropertiesExist()) {
-        return 'auto'
-      }
-
       if (typeof this.options.img != 'object') {
-        return '100%'
+        return this.fullWidth
       }
 
       return this.getValue(
@@ -141,12 +141,8 @@ export default {
       )
     },
     getWebWidth() {
-      if (!this.isOptionsAndPropertiesExist()) {
-        return 'auto'
-      }
-
       if (typeof this.options.img != 'object') {
-        return '100%'
+        return this.fullWidth
       }
 
       return this.getValue(
@@ -155,12 +151,8 @@ export default {
       )
     },
     getMobileHeight() {
-      if (!this.isOptionsAndPropertiesExist()) {
-        return 'auto'
-      }
-
       if (typeof this.options.img != 'object') {
-        return '100%'
+        return this.fullWidth
       }
 
       return this.getValue(
@@ -169,25 +161,14 @@ export default {
       )
     },
     getMobileWidth() {
-      if (!this.isOptionsAndPropertiesExist()) {
-        return 'auto'
-      }
-
       if (typeof this.options.img != 'object') {
-        return '100%'
+        return this.fullWidth
       }
 
       return this.getValue(
         this.properties.mobileWidth,
         this.options.img.defaultMobileWidth
       )
-    },
-    isOptionsAndPropertiesExist() {
-      if (typeof this.options != 'object' || typeof this.properties != 'object') {
-        return false
-      } else {
-        return true
-      }
     }
   }
 }

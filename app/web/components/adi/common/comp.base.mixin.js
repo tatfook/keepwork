@@ -13,6 +13,10 @@ export default {
   },
   computed: {
     properties() {
+      if (typeof this.source !== 'object') {
+        return {}
+      }
+
       return this.source || {}
     }
   },
