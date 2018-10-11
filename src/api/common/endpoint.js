@@ -43,9 +43,12 @@ const createEndpoint = (config, parseResponse = true) => {
       return parseResponse ? response.data.data || response.data : response.data
     },
     async error => {
-      if (error.response.status === 401 && Cookies.get('token')) {
+      const CODES = [401]
+      if (CODES.some(code => code === error.response.status) && Cookies.get('token')) {
         _instance.defaults.headers.common['Authorization'] = `Bearer  + ${Cookies.get('token')}`
+        console.log('to fetch')
         _instance.post('/user/getProfile').catch(e => {
+          console.log('to reload')
           Cookies.remove('token')
           Cookies.remove('token', { path: '/' })
           window.localStorage.removeItem('satellizer_token')

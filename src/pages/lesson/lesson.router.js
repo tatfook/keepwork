@@ -130,12 +130,14 @@ export default new Router({
         {
           path: 'package/:id/purchase',
           name: 'TeacherPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonTeacher',
           component: LessonTeacher,
+          meta: { requireAuth: true },
           children: [
             {
               path: '/',
@@ -209,22 +211,26 @@ export default new Router({
         {
           path: 'package/:id/purchase',
           name: 'StudentPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
-          component: LessonStudent
+          component: LessonStudent,
+          meta: { requireAuth: true }
         },
         {
           path: 'learnSummary/package/:packageId/lesson/:lessonId',
           name: 'LearnSummary',
-          component: LearnSummary
+          component: LearnSummary,
+          meta: { requireAuth: true }
         },
         {
           path: 'bean',
           name: 'Bean',
-          component: Bean
+          component: Bean,
+          meta: { requireAuth: true }
         }
       ]
     },
