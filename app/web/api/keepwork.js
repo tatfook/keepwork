@@ -42,7 +42,7 @@ export const user = {
     post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
-  register: async (...args) => post('/users/register', ...args),
+  register: async (args) => post('/users/register', args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 

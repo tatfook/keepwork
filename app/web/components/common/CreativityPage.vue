@@ -166,12 +166,12 @@ export default {
     &-center {
       max-width: 1200px;
       margin: 0 auto;
-      .my-projects {
-      }
-      .my-contribute-projects {
-      }
-      .others-projects {
-      }
+      // .my-projects {
+      // }
+      // .my-contribute-projects {
+      // }
+      // .others-projects {
+      // }
       .browse-title {
         font-size: 16px;
         color: #303133;

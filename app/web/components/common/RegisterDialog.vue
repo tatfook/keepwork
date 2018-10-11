@@ -133,31 +133,13 @@ export default {
             captcha: this.authCode
           }
           this.registerLoading = true
-          //进行注册
           await this.userRegister(payload).then(res => {
-            console.log('register001',res)
+            this.registerLoading = false
             this.handleClose()
-            this.registerLoading = false
           }).catch(e => {
-            console.error(e)
             this.registerLoading = false
+            this.showMessage('error', this.$t('common.registerFailed'))
           })
-          //注册成功进行登录
-          // if (registerInfo.error.id === 0) {
-          //   this.registerLoading = false
-          //   this.handleClose()
-          // } else {
-          //   switch (registerInfo.error.message) {
-          //     case '验证码错误':
-          //       this.showMessage('error', this.$t('user.verificationCodeError'))
-          //       this.registerLoading = false
-          //       break
-          //     default:
-          //       this.showMessage('error', this.$t('common.registerFailed'))
-          //       this.registerLoading = false
-          //       break
-          //   }
-          // }
         } else {
           return false
         }
