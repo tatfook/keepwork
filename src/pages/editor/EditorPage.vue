@@ -141,6 +141,7 @@ body {
 }
 #editor {
   background: white;
+  min-width: 1180px;
 }
 .preview-dialog .el-dialog__body {
   padding: 30px 0;
