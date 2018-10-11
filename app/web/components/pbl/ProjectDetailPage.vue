@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-page">
     <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData"></project-header>
-    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait'></router-view>
+    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner'></router-view>
   </div>
 </template>
 <script>
@@ -15,7 +15,8 @@ export default {
   computed: {
     ...mapGetters({
       projectDetail: 'pbl/projectDetail',
-      getDetailByUserId: 'user/getDetailByUserId'
+      getDetailByUserId: 'user/getDetailByUserId',
+      loginUsername: 'user/username'
     }),
     pblProjectDetail() {
       return this.projectDetail({ projectId: this.projectId })
@@ -32,6 +33,9 @@ export default {
     },
     projectOwnerPortrait() {
       return _.get(this.editingProjectUser, 'portrait')
+    },
+    loginUserIsProjectOwner() {
+      return this.loginUsername === this.editingProjectUsername
     }
   },
   data() {

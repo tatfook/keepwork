@@ -3,7 +3,7 @@
     <el-card class="project-tags-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
         <span class="project-tags-card-label">项目标签</span>
-        <el-button class="project-tags-card-button" type="text" @click="toggleIsTagEditing">
+        <el-button v-if="isLoginUserEditable" class="project-tags-card-button" type="text" @click="toggleIsTagEditing">
           <i class="el-icon-edit-outline" v-show="!isTagEditing"></i>
           <span v-show="isTagEditing"><i class="iconfont icon-save3"></i>保存</span>
         </el-button>
@@ -29,6 +29,10 @@ export default {
     },
     projectId: {
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {

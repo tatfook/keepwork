@@ -38,7 +38,7 @@
     <div class="project-basic-info-description">
       <div class="project-basic-info-description-title">
         项目描述:
-        <el-button class="project-website-card-button" type="text" @click="toggleIsDescEditing">
+        <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
           <i class="el-icon-edit-outline" v-show="!isDescriptionEditing"></i>
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>保存</span>
         </el-button>
@@ -61,6 +61,10 @@ export default {
     projectOwnerUsername: {
       type: String,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {

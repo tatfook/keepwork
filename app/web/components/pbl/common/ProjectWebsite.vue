@@ -3,7 +3,7 @@
     <el-card class="project-website-card" shadow="never">
       <div slot="header" class="clearfix">
         <span class="project-website-card-label">项目网站</span>
-        <el-button class="project-website-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
+        <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text"><i class="el-icon-edit-outline"></i></el-button>
       </div>
       <p class="project-website-title">这个项目的网站</p>
       <p class="project-website-info">{{projectUrl}}</p>
@@ -21,6 +21,10 @@ export default {
     originProjectUsername: {
       type: String,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
