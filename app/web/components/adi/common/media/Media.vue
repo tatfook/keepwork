@@ -132,7 +132,7 @@ export default {
     },
     getWebHeight() {
       if (typeof this.options.img != 'object') {
-        return this.fullWidth
+        return this.auto
       }
 
       return this.getValue(
@@ -152,7 +152,7 @@ export default {
     },
     getMobileHeight() {
       if (typeof this.options.img != 'object') {
-        return this.fullWidth
+        return this.auto
       }
 
       return this.getValue(
