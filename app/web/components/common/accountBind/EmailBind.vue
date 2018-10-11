@@ -114,7 +114,7 @@ export default {
     async isEmailBinded() {
       let email = this.emailFormData.email
       let result = await this.userGetByEmail({ email })
-      return result ? true : false
+      return result
     },
     handleClose() {
       this.isCodeDialogVisible = false

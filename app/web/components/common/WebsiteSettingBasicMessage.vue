@@ -44,7 +44,6 @@ export default {
       path: this.sitePath
     })
     this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).site)
-    console.warn(this.basicMessage)
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },

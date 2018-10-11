@@ -113,17 +113,17 @@ export default {
         default:
           break
       }
-      if (result === 'success') {
+      if (result == true) {
         this.handleClose()
       }
     },
     async verifyEmailCode() {
       let message = await this.userVerifyEmailTwo({
-        bind: this.codeDialogDatas.bind,
-        isApi: true,
-        verifyCode: this.code
+        captcha: this.code,
+        email: this.codeDialogDatas.value,
+        isBind: this.codeDialogDatas.bind
       })
-      if (message === 'success') {
+      if (message == true) {
         this.showMessage(
           'success',
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
@@ -139,11 +139,11 @@ export default {
     },
     async verifyPhoneCode() {
       let result = await this.userVerifyCellphoneTwo({
-        bind: this.codeDialogDatas.bind,
-        smsCode: this.code,
-        smsId: this.smsId
+        isBind: this.codeDialogDatas.bind,
+        captcha: this.code,
+        cellphone: this.codeDialogDatas.value
       })
-      if (result.data) {
+      if (result == true) {
         this.showMessage(
           'success',
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
@@ -163,8 +163,7 @@ export default {
         case 'email':
           this.isSendingCode = true
           let result = await this.userVerifyEmailOne({
-            email: this.codeDialogDatas.value,
-            bind: this.codeDialogDatas.bind
+            email: this.codeDialogDatas.value
           })
           this.isSendingCode = false
           this.isCodeSent = true
@@ -178,14 +177,14 @@ export default {
             cellphone: this.codeDialogDatas.value
           })
           this.isSendingCode = false
-          let smsId = _.get(phoneResult, 'data.smsId')
-          if (smsId) {
-            this.smsId = smsId
+          // let smsId = _.get(phoneResult, 'data.smsId')
+          if (phoneResult === 'OK') {
+            // this.smsId = smsId
             this.isCodeSent = true
             this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
             this.startTimer()
           } else {
-            this.codeError = phoneResult.message
+            this.codeError = phoneResult
             this.showMessage('error', this.$t('user.smsCodeSentFailed'))
           }
           break

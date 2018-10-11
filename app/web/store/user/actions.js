@@ -118,7 +118,6 @@ const actions = {
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
-    console.warn('getUserDetailByUsername---->')
     let { commit, getters: { usersDetail } } = context
     let userDetail = usersDetail && usersDetail[username]
     if (userDetail) {
@@ -145,14 +144,14 @@ const actions = {
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone })
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone }).catch(e => console.error(e))
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },
-  async verifyCellphoneTwo(context, { setRealNameInfo, cellphone, smsCode, smsId, bind }) {
+  async verifyCellphoneTwo(context, { cellphone, captcha, isBind }) {
     let { dispatch, commit, getters: { sendCodeInfo } } = context
-    smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ setRealNameInfo, smsCode, smsId, bind })
+    // smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ cellphone, captcha, isBind })
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
     return verifyInfoTwo
@@ -186,7 +185,6 @@ const actions = {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
     // await dispatch('getAllSiteDataSource', { useCache: false })
-    console.warn('payload', payload)
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
@@ -593,23 +591,24 @@ const actions = {
     return result
   },
   async getByEmail(context, { email }) {
-    let result = await keepwork.user.getByEmail({ email })
-    return result
+    let users = await keepwork.user.getByEmail({ email })
+    return users.length > 0
+  },
+  async getByCellphone(context, { cellphone }) {
+    let users = await keepwork.user.getByCellphone({ cellphone })
+    return users.length > 0
   },
   async verifyEmailOne(context, { email, bind }) {
     return keepwork.user.verifyEmailOne({ email, bind })
   },
-  async verifyEmailTwo(context, { email, bind, isApi, verifyCode }) {
-    // FIXME:
-    let { dispatch } = context
-    let result = await keepwork.user.verifyEmailTwo({ email, bind, isApi, verifyCode })
-    let message = result.error.message
-    if (message === 'success') {
+  async verifyEmailTwo({ dispatch }, payload) {
+    let result = await keepwork.user.verifyEmailTwo(payload)
+    if (result === true) {
       await dispatch('getProfile', {
         useCache: false
       })
     }
-    return message
+    return result
   },
   async getUserThreeServiceByUsername(context, { username }) {
     let { commit } = context
@@ -633,10 +632,10 @@ const actions = {
     })
     return unbindResut
   },
-  async unbindCellphone(context, { password }) {
+  async unbindCellphone(context, payload) {
     let { dispatch } = context
     let unbindResut = { status: '' }
-    await keepwork.user.unbindCellphone({ password }).then(async () => {
+    await keepwork.user.unbindCellphone(payload).then(async () => {
       await dispatch('getProfile', {
         useCache: false
       })
@@ -646,10 +645,10 @@ const actions = {
     })
     return unbindResut
   },
-  async unbindEmail(context, { password }) {
+  async unbindEmail(context, payload) {
     let { dispatch } = context
     let unbindResut = { status: '' }
-    await keepwork.user.unbindEmail({ password }).then(async () => {
+    await keepwork.user.unbindEmail(payload).then(async () => {
       await dispatch('getProfile', {
         useCache: false
       })
