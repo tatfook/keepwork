@@ -29,50 +29,83 @@
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
       </el-menu-item> -->
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
-        <el-dropdown placement="bottom-start">
+        <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
             <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
             <i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <el-dropdown-item>
-              <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
+              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goPersonalCenter">{{$t('common.personalCenter')}}</a>
+              <a href="#" @click.stop.prevent=""><i class="iconfont icon-folder-open"></i>我的项目</a>
             </el-dropdown-item>
+            <el-dropdown-item>
+              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item>
+              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
+            </el-dropdown-item> -->
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
+            <!-- <el-dropdown-item>
+              <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
+            </el-dropdown-item> -->
             <el-dropdown-item>
-              <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend">{{$t('common.invitationToRegister')}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <a :href='lessonCenterUrl'>{{$t('lesson.lessonsCenter')}}</a>
+              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
-              <a @click.stop="logout">{{$t('common.logout')}}</a>
+              <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item>
+              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="12" class="pull-right">
-        <span>消息</span>
+      <el-menu-item index="12" class="pull-right message-dropdown" v-if="isLogin">
+        <el-dropdown placement="bottom" trigger="click">
+          <span class="el-dropdown-link message">
+            <i class="iconfont icon-bell-fill "></i>消息
+            <i class="news"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="message-dropdown-list">
+            <el-dropdown-item>
+              <div class="message-desc">[通知] <span>《一个新项目》</span>审核通过</div>
+              <div class="detail-time">17:50</div>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div class="message-desc">[个人] <span>一只小可爱</span>关注了你</div>
+              <div class="detail-time">12:50</div>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div class="message-desc">[项目] <span>一只大可爱</span>在项目中提到了你</div><span class="detail-time">17:50</span>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div class="message-desc">[课程] 你获得了<span>200</span>知识币</div>
+              <div class="detail-time">17:50</div>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
-        <el-dropdown>
+        <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link">
-            工具<i class="el-icon-caret-bottom right-icon"></i>
+            <i class="iconfont icon-wrench-fill"></i>工具<i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>知识管理</el-dropdown-item>
-            <el-dropdown-item>网站编辑器</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-            <el-dropdown-item>Paracraft</el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item>
+            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>网站编辑器</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -183,7 +216,7 @@ export default {
       return window.location.hostname
     },
     lessonCenterUrl() {
-      return '/l/student/center'
+      return '/l/student'
     }
   },
   mounted() {
@@ -202,6 +235,11 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
+    goKnowledgeManagement(){
+      this.$alert('开发中~~~~~~', '', {
+        confirmButtonText: '确定',
+      });
+    },
     goCreativityPage() {
       // this.$router.push('creativity')
       window.location.href = `${this.locationOrigin}/creativity`
@@ -307,16 +345,25 @@ export default {
   padding: 0;
 }
 .user-menu-dropdown a {
-  display: block;
-  padding: 0 20px;
+  padding: 0 50px 0 20px;
 }
 .el-dropdown-menu__item--divided:before {
   margin: 0px;
 }
-.el-menu-item .right-icon{
+.el-menu-item .right-icon {
   right: -25px;
   top: 25px;
   font-size: 13px;
+}
+.el-dropdown-menu {
+  font-size: 14px;
+}
+.el-dropdown-menu__item {
+  display: flex;
+}
+.el-dropdown-menu .iconfont {
+  margin-right: 14px;
+  font-size: 20px;
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {
@@ -343,6 +390,37 @@ export default {
 }
 </style>
 <style lang="scss">
+.message-dropdown {
+  .message {
+    position: relative;
+    .news {
+      width: 10px;
+      height: 10px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+      top: -4px;
+      right: -12px;
+    }
+  }
+  &-list {
+    .el-dropdown-menu__item {
+      display: flex;
+      .message-desc{
+        flex: 1;
+      }
+      .detail-time {
+        text-align: right;
+        width: 38px;
+        margin-left: 18px;
+      }
+    }
+  }
+}
+.el-dropdown{
+  height: 60px;
+  line-height: 60px;
+}
 .el-menu-item {
   padding: 0 15px;
 }
@@ -358,6 +436,8 @@ export default {
   a {
     color: inherit;
     text-decoration: none;
+    display: flex;
+    align-items: center;
   }
 }
 .iicc-logo {
