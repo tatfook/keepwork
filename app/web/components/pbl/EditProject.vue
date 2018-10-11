@@ -1,42 +1,36 @@
 <template>
   <div class="edit-project">
-    <project-header class="edit-project-header" :projectDetail="pblProjectDetail" v-if="!isFirstGettingData"></project-header>
     <el-tabs class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
         <span slot="label">设定</span>
-        <project-editing v-if="!isFirstGettingData" :originPrivilege='originPrivilege' :originVisibility='originVisibility' :originalProjectDetail='pblProjectDetail'></project-editing>
+        <project-editing :originPrivilege='originPrivilege' :originVisibility='originVisibility' :originalProjectDetail='pblProjectDetail'></project-editing>
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
         <span slot="label">成员</span>
-        <project-members :projectId='projectId' v-if="!isFirstGettingData" class="edit-project-members"></project-members>
+        <project-members :projectId='projectId' class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import ProjectHeader from './common/ProjectHeader'
 import ProjectEditing from './common/ProjectEditing'
 import ProjectMembers from './common/ProjectMembers'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'EditProject',
-  async created() {
-    this.initProjectDetail()
+  props: {
+    pblProjectDetail: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
-      isFirstGettingData: true,
-      isLoading: true,
+      isLoading: false,
       activeName: 'editing'
     }
   },
   computed: {
-    ...mapGetters({
-      projectDetail: 'pbl/projectDetail'
-    }),
-    pblProjectDetail() {
-      return this.projectDetail({ projectId: this.projectId })
-    },
     originPrivilege() {
       return _.get(this.pblProjectDetail, 'privilege')
     },
@@ -47,33 +41,16 @@ export default {
       return _.get(this.$route, 'params.id')
     }
   },
-  methods: {
-    ...mapActions({
-      pblGetProjectDetail: 'pbl/getProjectDetail'
-    }),
-    async initProjectDetail() {
-      this.isFirstGettingData = true
-      this.isLoading = true
-      await this.pblGetProjectDetail({ projectId: this.projectId })
-      this.isFirstGettingData = false
-      this.isLoading = false
-    }
-  },
   components: {
-    ProjectHeader,
     ProjectEditing,
     ProjectMembers
-  },
-  watch: {
-    $route: function(val) {
-      this.initProjectDetail()
-    }
   }
 }
 </script>
 <style lang="scss">
 .edit-project {
   background-color: #f5f5f5;
+  padding: 24px 0;
   &-header {
     margin-bottom: 24px;
   }

@@ -24,6 +24,7 @@ const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
+  getUser: async (username) => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
@@ -43,7 +44,7 @@ export const user = {
     post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
-  register: async (...args) => post('/users/register', ...args),
+  register: async (args) => post('/users/register', args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 
@@ -235,6 +236,11 @@ export const members = {
   deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
 }
 
+export const comments = {
+  getComments: async ({ objectType, objectId }) => get(`comments?objectType=${objectType}&objectId=${objectId}`),
+  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content })
+}
+
 export const keepwork = {
   user,
   website,
@@ -249,6 +255,7 @@ export const keepwork = {
   projects,
   applies,
   members,
+  comments,
   bigfile
 }
 

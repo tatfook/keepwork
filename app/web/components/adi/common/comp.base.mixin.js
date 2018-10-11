@@ -13,11 +13,11 @@ export default {
   },
   computed: {
     properties() {
-      return _.merge(
-        {},
-        compDefaultProperties[this.options.name] || {},
-        this.source || {}
-      )
+      if (typeof this.source !== 'object') {
+        return {}
+      }
+
+      return this.source || {}
     }
   },
   methods: {

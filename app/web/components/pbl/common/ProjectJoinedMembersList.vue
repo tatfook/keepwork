@@ -1,6 +1,6 @@
 <template>
   <div class="project-joined-members-list">
-    <el-table :data="memberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
+    <el-table v-if="type === 'table'" :data="memberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
       <el-table-column prop="username" label="成员" width="357">
       </el-table-column>
       <el-table-column label="加入时间" width="357">
@@ -12,6 +12,19 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-card v-if="type === 'card'" class="project-joined-members-list-card" shadow="never">
+      <div slot="header" class="clearfix">
+        <span class="project-joined-members-list-card-title">项目成员</span>
+      </div>
+      <div class="project-joined-members-list-card-created">
+        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || projectOwnerPortrait" alt="">
+        <span class="project-joined-members-list-card-username">迟语</span>
+        <span class="project-joined-members-list-card-label">创建者</span>
+      </div>
+      <div class="project-joined-members-list-card-profiles">
+        <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
+      </div>
+    </el-card>
   </div>
 </template>
 <script>
@@ -22,7 +35,15 @@ export default {
   props: {
     projectId: {
       required: true
-    }
+    },
+    type: {
+      type: String,
+      default: 'table',
+      validator: function(value) {
+        return ['table', 'card'].indexOf(value) !== -1
+      }
+    },
+    projectOwnerPortrait: String
   },
   async created() {
     this.isLoading = true
@@ -35,7 +56,8 @@ export default {
   data() {
     return {
       formatType: 'YYYY/MM/DD',
-      isLoading: false
+      isLoading: false,
+      defaultPortrait: require('@/assets/img/default_portrait.png')
     }
   },
   computed: {
@@ -105,6 +127,48 @@ export default {
       .el-button--mini {
         padding: 3px 19px;
       }
+    }
+  }
+  &-card {
+    &-title {
+      font-weight: bold;
+    }
+    &-profile {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    &-created {
+      height: 96px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: #303133;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 0 16px;
+    }
+    &-label {
+      font-size: 12px;
+      height: 20px;
+      line-height: 20px;
+      color: #909399;
+      border: 1px solid #e8e8e8;
+      padding: 0 8px;
+      border-radius: 4px;
+    }
+    &-username {
+      margin: 0 16px;
+      flex: 1;
+    }
+    &-profiles {
+      padding: 16px 8px;
+      &-item {
+        padding: 8px;
+      }
+    }
+    .el-card__body {
+      padding: 0;
     }
   }
 }

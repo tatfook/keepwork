@@ -1,18 +1,18 @@
 <template>
-  <div class="item">
-    <img class="item-cover" :src="project.extra.coverUrl" alt="">
-    <h4 class="item-title">{{project.name}}</h4>
-    <div class="item-like">
+  <div class="project-cell">
+    <img class="project-cell-cover" :src="project.extra.coverUrl" alt="">
+    <h4 class="project-cell-title">{{project.name}}</h4>
+    <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
       <i class="iconfont icon-like-fill"></i>
       <span>{{project.star}}</span>
       <i class="iconfont icon-message_fill"></i>
-      <span>{{project.commentCount}}</span>
+      <span>{{project.comment}}</span>
     </div>
-    <div class="item-author">
-      <div class="item-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.nickname}}</div>
-        <div class="item-author-time">{{relativeTime(project.updatedAt)}}</div>
+    <div class="project-cell-author">
+      <div class="project-cell-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.nickname}}</div>
+        <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
       </div>
     </div>
 </template>
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.item {
+.project-cell {
   width: 290px;
   padding: 16px;
   margin-bottom: 16px;

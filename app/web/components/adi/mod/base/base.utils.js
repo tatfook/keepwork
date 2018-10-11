@@ -7,7 +7,19 @@ export const generateProperties = (name, components) => {
   }
 
   _.each(components, (comp, key) => {
-    mod[key] = _.cloneDeep(BaseCompProperties[comp])
+    if (Array.isArray(comp)) {
+      let properties = {}
+
+      _.forEach(comp, (cKey, cIndex) => {
+        let curProperties = BaseCompProperties[cKey]
+        _.merge(properties, curProperties)
+      })
+
+      mod[key] = properties
+    } else {
+      mod[key] = _.cloneDeep(BaseCompProperties[comp])
+    }
   })
+
   return mod
 }

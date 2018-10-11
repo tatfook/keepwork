@@ -4,18 +4,18 @@
       <el-breadcrumb separator="/" class="project-header-breadcrumb">
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="">
-      </el-breadcrumb-item>
-          <el-breadcrumb-item><a :href="'/' + editingProjectUsername" target="_blank">{{editingProjectUsername}}</a></el-breadcrumb-item>
-          <el-breadcrumb-item>
-            <el-dropdown @visible-change='dropdownVisibleChange' placement='bottom' trigger="click">
-              <span class="el-dropdown-link">
-                {{editingProjectName}}<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown" v-loading='isDropdownLoading'>
-                <el-dropdown-item @click.native="toProjectIndexPage(project)" :disabled='editingProjectName == project.name' v-for="(project, index) in userProjectList" :key="index">{{project.name}}</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-breadcrumb-item>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item><a :href="'/' + editingProjectUsername" target="_blank">{{editingProjectUsername}}</a></el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <el-dropdown @visible-change='dropdownVisibleChange' placement='bottom' trigger="click">
+            <span class="el-dropdown-link">
+              {{editingProjectName}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown" v-loading='isDropdownLoading'>
+              <el-dropdown-item @click.native="toProjectIndexPage(project)" :disabled='editingProjectName == project.name' v-for="(project, index) in userProjectList" :key="index">{{project.name}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-breadcrumb-item>
       </el-breadcrumb>
       <div class="project-header-operations">
         <div class="project-header-operations-item">
@@ -36,11 +36,11 @@
           <span class="project-header-operations-item-count">{{projectDetail.star}}</span>
         </div>
       </div>
-      <el-tabs v-model="activePageName" class="project-header-tabs">
-        <!-- <el-tab-pane name="first">
+      <el-tabs v-model="activePageName" class="project-header-tabs" @tab-click="handleTabClick">
+        <el-tab-pane name="ProjectIndexPage">
           <span slot="label" class="project-header-tabs-label">主页</span>
         </el-tab-pane>
-        <el-tab-pane name="second">
+        <!-- <el-tab-pane name="second">
           <span slot="label" class="project-header-tabs-label">白板</span>
         </el-tab-pane> -->
         <el-tab-pane name="EditProject">
@@ -58,24 +58,16 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProjectHeader',
   props: {
-    projectDetail: Object
-  },
-  async mounted() {
-    this.editingUserId = _.get(this.projectDetail, 'userId')
-
-    let userId = this.editingUserId
-    let objectId = this.editingProjectId
-    let objectType = 5
-    this.getUserDetailByUserId({ userId })
-    this.getFavoriteState({ objectId, objectType })
-    this.getStarState({ projectId: objectId })
+    projectDetail: Object,
+    editingProjectUsername: String,
+    editingUserId: Number
   },
   data() {
     return {
       isDropdownLoading: false,
-      editingUserId: undefined,
       isFavoriteButtonLoading: false,
-      isStarButtonLoading: false
+      isStarButtonLoading: false,
+      activePageName: this.$route.name
     }
   },
   computed: {
@@ -83,23 +75,12 @@ export default {
       userProjects: 'pbl/userProjects',
       projectFavoriteState: 'pbl/projectFavoriteState',
       projectStarState: 'pbl/projectStarState',
-      getDetailByUserId: 'user/getDetailByUserId'
     }),
-    activePageName() {
-      return this.$route.name
-    },
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
     },
     editingProjectId() {
       return _.get(this.projectDetail, 'id')
-    },
-    editingProjectUser() {
-      let userId = this.editingUserId
-      return this.getDetailByUserId({ userId })
-    },
-    editingProjectUsername() {
-      return _.get(this.editingProjectUser, 'username')
     },
     userProjectList() {
       let userId = this.editingUserId
@@ -122,14 +103,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserDetailByUserId: 'user/getUserDetailByUserId',
       pblGetUserProjects: 'pbl/getUserProjects',
       favoriteProject: 'pbl/favoriteProject',
       unFavoriteProject: 'pbl/unFavoriteProject',
       starProject: 'pbl/starProject',
-      unStarProject: 'pbl/unStarProject',
-      getFavoriteState: 'pbl/getFavoriteState',
-      getStarState: 'pbl/getStarState'
+      unStarProject: 'pbl/unStarProject'
     }),
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
@@ -218,6 +196,10 @@ export default {
           })
         this.isFavoriteButtonLoading = false
       }
+    },
+    handleTabClick(tabItem) {
+      let { paneName } = tabItem
+      this.$router.push({ name: paneName })
     }
   }
 }

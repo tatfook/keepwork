@@ -185,24 +185,24 @@ export default {
         }, 1000)
         return
       }
-      if (message === '号码格式有误') {
-        this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-        return
-      }
-      if (message === '短信验证码发送过频繁') {
-        this.showMessage('error', this.$t('user.sendingFrequent'))
-        return
-      }
-      if (message === '验证码超出同模板同号码天发送上限') {
-        this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
-        return
-      }
-      let message2 =
-        info.message && info.message.slice(0, 6)
-      if (message2 === '手机号已绑定') {
-        this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
-        return
-      }
+      // if (message === '号码格式有误') {
+      //   this.showMessage('error', this.$t('user.smsCodeSentFailed'))
+      //   return
+      // }
+      // if (message === '短信验证码发送过频繁') {
+      //   this.showMessage('error', this.$t('user.sendingFrequent'))
+      //   return
+      // }
+      // if (message === '验证码超出同模板同号码天发送上限') {
+      //   this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
+      //   return
+      // }
+      // let message2 =
+      //   info.message && info.message.slice(0, 6)
+      // if (message2 === '手机号已绑定') {
+      //   this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
+      //   return
+      // }
     },
   }
 }

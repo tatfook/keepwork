@@ -8,6 +8,7 @@ const GET_PROJECT_MEMBERS_SUCCESS = 'GET_PROJECT_MEMBERS_SUCCESS'
 const GET_USER_PROJECTS_SUCCESS = 'GET_USER_PROJECTS_SUCCESS'
 const GET_PROJECT_FAVORITE_STATE_SUCCESS = 'GET_PROJECT_FAVORITE_STATE_SUCCESS'
 const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
+const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
 
 
 export const props = {
@@ -18,7 +19,8 @@ export const props = {
   GET_USER_PROJECTS_SUCCESS,
   GET_PROJECT_MEMBERS_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
-  GET_PROJECT_STAR_STATE_SUCCESS
+  GET_PROJECT_STAR_STATE_SUCCESS,
+  GET_COMMENTS_SUCCESS
 }
 
 const mutations = {
@@ -62,6 +64,12 @@ const mutations = {
     Vue.set(state, 'projectsStarState', {
       ...state.projectsStarState,
       [projectId]: isStared
+    })
+  },
+  [GET_COMMENTS_SUCCESS](state, { projectId, commentList }) {
+    Vue.set(state, 'commentList', {
+      ...state.commentList,
+      [projectId]: commentList
     })
   }
 }

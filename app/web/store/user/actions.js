@@ -95,14 +95,15 @@ const actions = {
     }
   },
   async register({ dispatch }, payload) {
-    let registerInfo = await keepwork.user.register(payload, null, true)
+    let registerInfo = await keepwork.user.register(payload)
     let { username, password } = payload
-    if (registerInfo.error.id === 0) {
+    console.log('registerInfo', registerInfo)
+    if (registerInfo) {
       await dispatch('login', { username, password })
-      let userinfo = _.get(registerInfo, 'data.userinfo')
-      let { defaultSiteDataSource } = userinfo
-      await dispatch('createUserProfilePageToBack', { username })
-      await dispatch('createUserProfilePagesToGit', { defaultSiteDataSource })
+      // let userinfo = _.get(registerInfo, 'data.userinfo')
+      // let { defaultSiteDataSource } = userinfo
+      // await dispatch('createUserProfilePageToBack', { username })
+      // await dispatch('createUserProfilePagesToGit', { defaultSiteDataSource })
     }
     return registerInfo
   },

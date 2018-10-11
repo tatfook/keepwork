@@ -3,7 +3,7 @@
     <h3 class="register-title">{{$t('common.register')}}</h3>
     <el-form-item prop="username">
       <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
-        <el-input slot="reference" @focus="visible = true" @blur="visible = false" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+        <el-input slot="reference" @focus="visible = true" @blur="isExist" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
         <div class="register-dialog-form-tip">
           {{$t('common.accountNoChange')}}<br>
           {{$t('common.useLettersOrNumber')}}<br>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
 
 export default {
   name: 'RegisterDialog',
@@ -112,44 +113,33 @@ export default {
         showClose: true
       })
     },
+    isExist() {
+      this.visible = false
+      keepwork.user
+        .getUser(this.ruleForm.username)
+        .then(res => {
+          if(res){
+            this.showMessage('error', this.$t('common.existAccount'))
+          }
+        })
+    },
     async register(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let payload = {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
-            bind: true,
-            setRealNameInfo: true,
             cellphone: this.ruleForm.phoneNumber,
-            smsCode: this.authCode,
-            smsId: this.smsId
+            captcha: this.authCode
           }
           this.registerLoading = true
-          //进行注册
-          let registerInfo = await this.userRegister(payload).catch(e => {
-            console.log('e', e)
-            this.registerLoading = false
-          })
-          //注册成功进行登录
-          if (registerInfo.error.id === 0) {
+          await this.userRegister(payload).then(res => {
             this.registerLoading = false
             this.handleClose()
-          } else {
-            switch (registerInfo.error.message) {
-              case '用户名已存在':
-                this.showMessage('error', this.$t('common.existAccount'))
-                this.registerLoading = false
-                break
-              case '验证码错误':
-                this.showMessage('error', this.$t('user.verificationCodeError'))
-                this.registerLoading = false
-                break
-              default:
-                this.showMessage('error', this.$t('common.registerFailed'))
-                this.registerLoading = false
-                break
-            }
-          }
+          }).catch(e => {
+            this.registerLoading = false
+            this.showMessage('error', this.$t('common.registerFailed'))
+          })
         } else {
           return false
         }
@@ -164,9 +154,7 @@ export default {
         console.error(e)
       })
       this.sendCodeLoading = false
-      this.smsId = _.get(info, 'data.smsId')
-      let message = info.error && info.error.message
-      if (message === 'success') {
+      if (info === 'OK') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
         this.sendCodeDisabled = true
         this.timer = setInterval(() => {
@@ -179,23 +167,6 @@ export default {
             this.count = 60
           }
         }, 1000)
-        return
-      }
-      if (message === '号码格式有误') {
-        this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-        return
-      }
-      if (message === '短信验证码发送过频繁') {
-        this.showMessage('error', this.$t('user.sendingFrequent'))
-        return
-      }
-      if (message === '验证码超出同模板同号码天发送上限') {
-        this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
-        return
-      }
-      let message2 = info.message && info.message.slice(0, 6)
-      if (message2 === '手机号已绑定') {
-        this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
         return
       }
     }

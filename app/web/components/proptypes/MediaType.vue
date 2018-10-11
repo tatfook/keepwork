@@ -13,7 +13,6 @@
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
-let EMPTY = 'emptyMedia'
 
 export default {
   name: 'MediaType',
@@ -29,7 +28,7 @@ export default {
   computed: {
     mediaData: {
       get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.optionsData[EMPTY] || '')
+        return this.originValue ? this.originValue : (this.optionsData && this.optionsData.emptyMedia || '')
       },
       set() {}
     }

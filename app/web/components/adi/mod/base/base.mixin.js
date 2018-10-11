@@ -82,7 +82,21 @@ export default {
       return this.editMode && this.active && property === this.activeProperty
     },
     compType(property) {
-      return this.conf.components[property]
+      if (!property) {
+        return ''
+      }
+
+      if (!this.conf || !this.conf.components || !this.conf.components[property]) {
+        return ''
+      }
+
+      if (Array.isArray(this.conf.components[property])) {
+        let componentID = this.style && this.style.componentID && this.style.componentID || 0
+
+        return this.conf.components[property][componentID]
+      } else {
+        return this.conf.components[property]
+      }
     },
     jssClass(name) {
       return this.sheet.classes[name]
