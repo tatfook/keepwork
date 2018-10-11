@@ -4,7 +4,6 @@
 <script>
 const blurMinRows = 7
 const focusMinRows = 20
-let EMPTY = 'emptyAutoSizeInput'
 
 export default {
   name: 'AutoSizeInputType',
@@ -22,7 +21,7 @@ export default {
   computed: {
     inputTypeValue: {
       get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData[EMPTY]) || '')
+        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData.emptyAutoSizeInput) || '')
       },
       set() {}
     }
