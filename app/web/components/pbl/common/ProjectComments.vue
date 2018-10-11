@@ -14,12 +14,13 @@
     </div>
     <div class="project-comments-list">
       <div class="project-comments-item" v-for="(comment, index) in projectCommentList" :key='index'>
-        <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait" alt="">
+        <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
         <div class="project-comments-item-detail">
-          <p class="project-comments-item-username-time">{{comment.extra.nickname}}
+          <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
             <span class="project-comments-item-time">{{comment.createdAt | formatDate}}</span>
           </p>
           <p class="project-comments-item-comment">{{comment.content}}</p>
+          <el-button type="text" class="project-comments-item-delete" @click="deleteComment(comment)">删除</el-button>
         </div>
       </div>
     </div>
@@ -44,7 +45,8 @@ export default {
   },
   data() {
     return {
-      newCommenContent: ''
+      newCommenContent: '',
+      defaultPortrait: require('@/assets/img/default_portrait.png')
     }
   },
   computed: {
@@ -161,6 +163,18 @@ export default {
     &-detail {
       flex: 1;
       min-width: 0;
+      position: relative;
+    }
+    &-delete {
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 14px;
+      color: #909399;
+      display: none;
+    }
+    &-detail:hover .el-button--text {
+      display: inline-block;
     }
   }
   &-more {

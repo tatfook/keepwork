@@ -31,7 +31,7 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary">访问项目</el-button>
-          <el-button plain>申请加入</el-button>
+          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
     </div>
@@ -49,6 +49,7 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
 export default {
@@ -65,20 +66,78 @@ export default {
     isLoginUserEditable: {
       type: Boolean,
       default: false
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
-  mounted() {
+  async mounted() {
+    if (this.isLogined) {
+      await this.pblGetApplyState({
+        objectId: this.projectId,
+        objectType: 5,
+        applyType: 0,
+        applyId: this.loginUserId
+      })
+    }
     let descriptionEditor = new E('#projectDescriptoinEditor')
     descriptionEditor.create()
   },
   data() {
     return {
+      isApplyButtonLoading: false,
       isDescriptionEditing: false
     }
   },
+  computed: {
+    ...mapGetters({
+      pblProjectApplyState: 'pbl/projectApplyState',
+      loginUserId: 'user/userId',
+      loginUserDetail: 'user/profile',
+      isLogined: 'user/isLogined'
+    }),
+    projectApplyState() {
+      return this.pblProjectApplyState({
+        projectId: this.projectId,
+        userId: this.loginUserId
+      })
+    },
+    isApplied() {
+      return this.projectApplyState === 0
+    },
+    isLoginUserBeProjectMember() {
+      return this.projectApplyState === 1
+    }
+  },
   methods: {
+    ...mapActions({
+      pblGetApplyState: 'pbl/getApplyState',
+      pblApplyJoinProject: 'pbl/applyJoinProject'
+    }),
     toggleIsDescEditing() {
       this.isDescriptionEditing = !this.isDescriptionEditing
+    },
+    async applyJoinProject() {
+      this.isApplyButtonLoading = true
+      await this.pblApplyJoinProject({
+        objectType: 5,
+        objectId: this.projectId,
+        applyType: 0,
+        applyId: this.loginUserId,
+        extra: this.loginUserDetail
+      })
+        .then(() => {
+          this.isApplyButtonLoading = false
+          this.$message({
+            type: 'success',
+            message: '申请成功，等待项目创建者处理'
+          })
+        })
+        .catch(error => {
+          this.isApplyButtonLoading = false
+          console.error(error)
+        })
     }
   },
   filters: {
@@ -98,6 +157,26 @@ export default {
     },
     formatDate(date, formatType) {
       return dayjs(date).format('YYYY年MM月DD日')
+    },
+    applyStateFilter(applyState) {
+      let stateText = ''
+      switch (applyState) {
+        case -1:
+          stateText = '申请加入'
+          break
+        case 0:
+          stateText = '申请中'
+          break
+        case 1:
+          stateText = '已加入'
+          break
+        case 2:
+          stateText = '重新申请'
+          break
+        default:
+          break
+      }
+      return stateText
     }
   }
 }

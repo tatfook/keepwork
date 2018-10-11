@@ -7,7 +7,7 @@
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'></project-joined-members-list>
       </div>
       <div class="project-index-main">
-        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
+        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
         <project-comments class="project-index-comments" :projectId='projectId'></project-comments>
       </div>
     </div>

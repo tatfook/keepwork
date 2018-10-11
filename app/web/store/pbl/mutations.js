@@ -8,6 +8,7 @@ const GET_PROJECT_MEMBERS_SUCCESS = 'GET_PROJECT_MEMBERS_SUCCESS'
 const GET_USER_PROJECTS_SUCCESS = 'GET_USER_PROJECTS_SUCCESS'
 const GET_PROJECT_FAVORITE_STATE_SUCCESS = 'GET_PROJECT_FAVORITE_STATE_SUCCESS'
 const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
+const GET_PROJECT_APPLY_STATE_SUCCESS = 'GET_PROJECT_APPLY_STATE_SUCCESS'
 const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
 const GET_MY_ALL_PROJECTS_SUCCESS = 'GET_MY_ALL_PROJECTS_SUCCESS'
 
@@ -21,8 +22,9 @@ export const props = {
   GET_PROJECT_MEMBERS_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
   GET_PROJECT_STAR_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS,
-  GET_MY_ALL_PROJECTS_SUCCESS
+  GET_MY_ALL_PROJECTS_SUCCESS,
+  GET_PROJECT_APPLY_STATE_SUCCESS,
+  GET_COMMENTS_SUCCESS
 }
 
 const mutations = {
@@ -58,6 +60,12 @@ const mutations = {
     Vue.set(state, 'memberList', {
       ...state.memberList,
       [projectId]: memberList
+    })
+  },
+  [GET_PROJECT_APPLY_STATE_SUCCESS](state, { objectId, applyId, applyState }) {
+    Vue.set(state.projectApplyState, applyId, {
+      ...state.projectApplyState[applyId],
+      [objectId]: applyState
     })
   },
   [GET_PROJECT_FAVORITE_STATE_SUCCESS](state, { projectId, isFavorite }) {

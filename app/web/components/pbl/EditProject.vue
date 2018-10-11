@@ -1,6 +1,6 @@
 <template>
   <div class="edit-project">
-    <el-tabs class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
+    <el-tabs v-if="isLoginUserEditable" class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
         <span slot="label">设定</span>
         <project-editing :originPrivilege='originPrivilege' :originVisibility='originVisibility' :originalProjectDetail='pblProjectDetail'></project-editing>
@@ -10,6 +10,7 @@
         <project-members :projectId='projectId' class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>
+    <p v-else>不好意思，没有编辑权限。。。</p>
   </div>
 </template>
 <script>
@@ -22,6 +23,10 @@ export default {
     pblProjectDetail: {
       type: Object,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

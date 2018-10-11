@@ -228,12 +228,15 @@ export const projects = {
 
 export const applies = {
   getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
-  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state })
+  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state }),
+  getApplyState: async ({ objectType, objectId, applyType, applyId }) => get(`applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`),
+  applyProjectMember: async ({ objectType, objectId, applyType, applyId, extra }) => post('applies', { objectType, objectId, applyType, applyId, extra })
 }
 
 export const members = {
   getProjectMembersList: async ({ objectId, objectType }) => get(`members?objectId=${objectId}&objectType=${objectType}`),
-  deleteMember: async ({ id }) => deleteMethod(`members/${id}`)
+  deleteMember: async ({ id }) => deleteMethod(`members/${id}`),
+  isMemberExist: async ({ objectId, objectType, memberId }) => get(`members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`)
 }
 
 export const comments = {
