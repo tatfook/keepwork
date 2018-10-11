@@ -50,10 +50,10 @@ export default {
   beforeRouteUpdate(to, from, next) {
     const { name: toName, params: { packageId, lessonId } } = to
     let _route = ['LessonStudent']
-    if (toName === 'StudentColumn' && !this.isLogined) {
-      this.toggleLoginDialog(true)
-      return next(false)
-    }
+    // if (toName === 'StudentColumn' && !this.isLogined) {
+    //   this.toggleLoginDialog(true)
+    //   return next(false)
+    // }
     this._notify && this._notify.close()
     if (!this.isBeInClassroom) {
       return next()

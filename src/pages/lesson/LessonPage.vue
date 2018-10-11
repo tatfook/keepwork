@@ -7,7 +7,7 @@
     <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
     <common-footer class="container"></common-footer>
     <div @click.stop v-if="isShowLoginDialog">
-      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
     </div>
   </div>
 </template>

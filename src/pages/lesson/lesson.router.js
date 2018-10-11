@@ -60,7 +60,8 @@ export default new Router({
             {
               path: '/',
               name: 'TeacherColumn',
-              component: Teach
+              component: Teach,
+              meta: { requireAuth: true }
             },
             {
               path: 'review',
@@ -175,7 +176,8 @@ export default new Router({
         {
           path: '/',
           name: 'StudentColumn',
-          component: StudentColumn
+          component: StudentColumn,
+          meta: { requireAuth: true }
         },
         {
           path: 'about',

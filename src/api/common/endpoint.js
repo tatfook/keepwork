@@ -2,6 +2,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import axiosRetry from 'axios-retry'
+import { keepwork } from '@/api'
 
 axiosRetry(axios, { retries: 3 })
 
@@ -41,12 +42,14 @@ const createEndpoint = (config, parseResponse = true) => {
     response => {
       return parseResponse ? response.data.data || response.data : response.data
     },
-    error => {
+    async error => {
       if (error.response.status === 401 && Cookies.get('token')) {
-        Cookies.remove('token')
-        Cookies.remove('token', { path: '/' })
-        window.localStorage.removeItem('satellizer_token')
-        window.location.reload()
+        await keepwork.user.getProfile().catch(e => {
+          Cookies.remove('token')
+          Cookies.remove('token', { path: '/' })
+          window.localStorage.removeItem('satellizer_token')
+          window.location.reload()
+        })
       }
       console.error(error.message)
       return Promise.reject(error)
