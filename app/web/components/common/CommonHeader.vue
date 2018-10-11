@@ -149,7 +149,7 @@ export default {
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin,    
+      locationOrigin: window.location.origin
     }
   },
   computed: {
@@ -186,19 +186,19 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
-    goCreativityPage(){
+    goCreativityPage() {
       // this.$router.push('creativity')
-      window.location.href=`${this.locationOrigin}/creativity`
+      window.location.href = `${this.locationOrigin}/creativity`
     },
-    goExplorationPage(){
+    goExplorationPage() {
       // this.$router.push('exploration')
-      window.location.href=`${this.locationOrigin}/exploration`
+      window.location.href = `${this.locationOrigin}/exploration`
     },
-    goStudyPage(){
+    goStudyPage() {
       // this.$router.push('study')
-      window.location.href=`${this.locationOrigin}/study`
+      window.location.href = `${this.locationOrigin}/study`
     },
-    goHomePage(){
+    goHomePage() {
       this.$router.push('/')
     },
     backEditArea() {
@@ -242,7 +242,7 @@ export default {
   },
   filters: {
     defaultPortrait: (str = '') =>
-      str.trim() || require('@/assets/img/default_portrait.png')
+      str && str.trim() || require('@/assets/img/default_portrait.png')
   },
   components: {
     PersonalCenterDialog,
@@ -347,9 +347,9 @@ export default {
   height: 30px;
   margin-right: 5px;
 }
-.register-dialog{
+.register-dialog {
   max-width: 352px;
-  .el-dialog__body{
+  .el-dialog__body {
     padding: 0;
   }
 }
