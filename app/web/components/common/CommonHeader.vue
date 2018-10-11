@@ -19,20 +19,20 @@
         </a>
       </el-menu-item> -->
 
-      <el-menu-item index="10" class="pull-right" v-if="isLogin">
+      <!-- <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
-      </el-menu-item>
-      <el-menu-item index="11" class="pull-right" v-if="isLogin">
+      </el-menu-item> -->
+      <!-- <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
-      </el-menu-item>
-      <el-menu-item index="12" class="pull-right" v-if="isLogin">
+      </el-menu-item> -->
+      <!-- <el-menu-item index="12" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
-      </el-menu-item>
+      </el-menu-item> -->
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-start">
           <span class="el-dropdown-link">
             <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
-            <i class="el-icon-caret-bottom"></i>
+            <i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <el-dropdown-item>
@@ -43,7 +43,7 @@
             </el-dropdown-item>
             <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
             <el-dropdown-item>
-              <a href="ed" @click.stop.prevent="backEditArea">{{$t('common.pageEditor')}}</a>
+              <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog">{{$t('common.myWebDisk')}}</a>
@@ -57,6 +57,22 @@
             <el-dropdown-item divided>
               <a @click.stop="logout">{{$t('common.logout')}}</a>
             </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+      <el-menu-item index="12" class="pull-right">
+        <span>消息</span>
+      </el-menu-item>
+      <el-menu-item index="11" class="pull-right" v-if="isLogin">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            工具<i class="el-icon-caret-bottom right-icon"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>知识管理</el-dropdown-item>
+            <el-dropdown-item>网站编辑器</el-dropdown-item>
+            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            <el-dropdown-item>Paracraft</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -87,7 +103,7 @@
           <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
         </el-menu-item>
         <el-menu-item index='1-3'>
-          <a href="ed">{{$t('common.pageEditor')}}</a>
+          <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
@@ -201,9 +217,6 @@ export default {
     goHomePage() {
       this.$router.push('/')
     },
-    backEditArea() {
-      window.open(`${origin}/ed`)
-    },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
     },
@@ -242,7 +255,7 @@ export default {
   },
   filters: {
     defaultPortrait: (str = '') =>
-      str && str.trim() || require('@/assets/img/default_portrait.png')
+      (str && str.trim()) || require('@/assets/img/default_portrait.png')
   },
   components: {
     PersonalCenterDialog,
@@ -299,6 +312,11 @@ export default {
 }
 .el-dropdown-menu__item--divided:before {
   margin: 0px;
+}
+.el-menu-item .right-icon{
+  right: -25px;
+  top: 25px;
+  font-size: 13px;
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {

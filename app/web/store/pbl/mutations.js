@@ -9,6 +9,7 @@ const GET_USER_PROJECTS_SUCCESS = 'GET_USER_PROJECTS_SUCCESS'
 const GET_PROJECT_FAVORITE_STATE_SUCCESS = 'GET_PROJECT_FAVORITE_STATE_SUCCESS'
 const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
 const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
+const GET_MY_ALL_PROJECTS_SUCCESS = 'GET_MY_ALL_PROJECTS_SUCCESS'
 
 
 export const props = {
@@ -20,7 +21,8 @@ export const props = {
   GET_PROJECT_MEMBERS_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
   GET_PROJECT_STAR_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS
+  GET_COMMENTS_SUCCESS,
+  GET_MY_ALL_PROJECTS_SUCCESS
 }
 
 const mutations = {
@@ -29,6 +31,10 @@ const mutations = {
   },
   [GET_ALL_PROJECTS](state, allProjects) {
     Vue.set(state, 'allProjects', allProjects)
+  },
+  [GET_MY_ALL_PROJECTS_SUCCESS](state, projectsGroup) {
+    Vue.set(state, 'myProjects', projectsGroup[0])
+    Vue.set(state, 'myContributeProjects', projectsGroup[1])
   },
   [GET_USER_PROJECTS_SUCCESS](state, { userId, projects }) {
     Vue.set(state, 'usersProjects', {

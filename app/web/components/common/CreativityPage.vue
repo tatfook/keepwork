@@ -62,7 +62,7 @@
           </el-row>
         </div>
         <div class="explore-more">
-          <el-button class="more" type="primary">去探索更多好玩的项目 →</el-button>
+          <el-button class="more" type="primary" @click="goExplorationPage">去探索更多好玩的项目 →</el-button>
         </div>
       </div>
     </div>
@@ -79,8 +79,6 @@ export default {
   data() {
     return {
       projects: [],
-      myProjects: [],
-      myContributeProjects: [],
     }
   },
   components: {
@@ -88,17 +86,13 @@ export default {
   },
   async mounted(){
     this.getAllProjects()
-    await Promise.all([
-      keepwork.projects.getPersonalProjects(),
-      keepwork.projects.getContributeProjects(),
-    ]).then(res => {
-      this.myProjects = res[0]
-      this.myContributeProjects = res[1]
-    }).catch(err => console.error(err))
+    this.getMyAllProjects()
   },
   computed:{
     ...mapGetters({
-      allProjects: 'pbl/allProjects'
+      allProjects: 'pbl/allProjects',
+      myProjects: 'pbl/myProjects',
+      myContributeProjects: 'pbl/myContributeProjects'
     }),
     hasProjects(){
       return this.myProjects.length > 0
@@ -106,11 +100,15 @@ export default {
   },
   methods:{
     ...mapActions({
-      getAllProjects: 'pbl/getAllProjects'
+      getAllProjects: 'pbl/getAllProjects',
+      getMyAllProjects: 'pbl/getMyAllProjects'
     }),
     createMyProject(){
       window.location.href='/pbl/project/new'
-    }
+    },
+    goExplorationPage() {
+      this.$router.push('exploration')
+    },
   }
 }
 </script>
@@ -135,7 +133,6 @@ export default {
       .project-type {
         &-item {
           img {
-            // width: 218px;
             height: 144px;
             object-fit: cover;
           }
