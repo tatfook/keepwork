@@ -2,7 +2,6 @@ import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import axiosRetry from 'axios-retry'
-import { keepwork } from '@/api'
 
 axiosRetry(axios, { retries: 3 })
 
@@ -15,6 +14,7 @@ const DEFAULT_CONFIG = {
   }
 }
 
+const _instance = axios.create(DEFAULT_CONFIG)
 /*
 return a wrapped endpoint.
 
@@ -44,7 +44,8 @@ const createEndpoint = (config, parseResponse = true) => {
     },
     async error => {
       if (error.response.status === 401 && Cookies.get('token')) {
-        await keepwork.user.getProfile().catch(e => {
+        _instance.defaults.headers.common['Authorization'] = `Bearer  + ${Cookies.get('token')}`
+        _instance.post('/user/getProfile').catch(e => {
           Cookies.remove('token')
           Cookies.remove('token', { path: '/' })
           window.localStorage.removeItem('satellizer_token')
