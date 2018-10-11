@@ -66,37 +66,44 @@ export default new Router({
             {
               path: 'review',
               name: 'TeacherColumnReview',
-              component: Review
+              component: Review,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/new',
               name: 'TeacherColumnNewLesson',
-              component: NewLesson
+              component: NewLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'lessonManager',
               name: 'TeacherColumnLessonManager',
-              component: LessonManager
+              component: LessonManager,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/:id/edit',
               name: 'TeacherColumnEditLesson',
-              component: EditLesson
+              component: EditLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'newPackage',
               name: 'TeacherColumnNewPackage',
-              component: NewPackage
+              component: NewPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'package/:id/edit',
               name: 'TeacherColumnEditPackage',
-              component: EditPackage
+              component: EditPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'packageManager',
               name: 'TeacherColumnPackageManager',
-              component: PackageManager
+              component: PackageManager,
+              meta: { requireAuth: true }
             }
           ]
         },
