@@ -11,7 +11,8 @@ let {
   GET_PROJECT_DETAIL_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
   GET_PROJECT_STAR_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS
+  GET_COMMENTS_SUCCESS,
+  GET_MY_ALL_PROJECTS_SUCCESS
 } = props
 
 const actions = {
@@ -32,6 +33,14 @@ const actions = {
         let allProjects = _.get(res, 'rows', [])
         commit(GET_ALL_PROJECTS, allProjects)
       }).catch(err => console.error(err))
+  },
+  async getMyAllProjects({ commit }) {
+    await Promise.all([
+      keepwork.projects.getPersonalProjects(),
+      keepwork.projects.getContributeProjects(),
+    ]).then(res => {
+      commit(GET_MY_ALL_PROJECTS_SUCCESS, res)
+    }).catch(err => console.error(err))
   },
   async getUserProjects(context, { userId, useCache = true }) {
     let { commit, getters: { userProjects } } = context

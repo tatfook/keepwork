@@ -43,8 +43,9 @@ export default {
   },
   methods:{
     relativeTime(time){
+      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time,"YYYYMMDD").fromNow();
+      return moment(time,"YYYYMMDDHH").fromNow();
     }
   }
 }
