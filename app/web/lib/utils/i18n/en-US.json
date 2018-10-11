@@ -696,6 +696,7 @@
     "unBound": "unBound",
     "wrongEmailFormat": "E-mail format is incorrect",
     "emailHasBeenBoundToOtherAccounts": "The mailbox has been bound!",
+    "cellphoneHasBeenBoundToOtherAccounts": "The cellphone has been bound!",
     "mailSentSuccess": "Mail sent successfully",
     "smsCodeSentSuccess": "SMS sent successfully!",
     "smsCodeSentFailed": "Message failed to send",

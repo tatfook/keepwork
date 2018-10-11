@@ -702,6 +702,7 @@
     "unBundingFailure": "解绑失败",
     "wrongEmailFormat": "请输入正确的邮箱",
     "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
+    "cellphoneHasBeenBoundToOtherAccounts": "该手机号已被绑定！",
     "mailSentSuccess": "邮件发送成功！",
     "smsCodeSentSuccess": "短信发送成功",
     "smsCodeSentFailed": "短信发送失败",

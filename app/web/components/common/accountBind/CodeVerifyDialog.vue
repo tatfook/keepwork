@@ -139,11 +139,11 @@ export default {
     },
     async verifyPhoneCode() {
       let result = await this.userVerifyCellphoneTwo({
-        bind: this.codeDialogDatas.bind,
-        smsCode: this.code,
-        smsId: this.smsId
+        isBind: this.codeDialogDatas.bind,
+        captcha: this.code,
+        cellphone: this.codeDialogDatas.value
       })
-      if (result.data) {
+      if (result == true) {
         this.showMessage(
           'success',
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
@@ -177,14 +177,14 @@ export default {
             cellphone: this.codeDialogDatas.value
           })
           this.isSendingCode = false
-          let smsId = _.get(phoneResult, 'data.smsId')
-          if (smsId) {
-            this.smsId = smsId
+          // let smsId = _.get(phoneResult, 'data.smsId')
+          if (phoneResult === 'OK') {
+            // this.smsId = smsId
             this.isCodeSent = true
             this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
             this.startTimer()
           } else {
-            this.codeError = phoneResult.message
+            this.codeError = phoneResult
             this.showMessage('error', this.$t('user.smsCodeSentFailed'))
           }
           break

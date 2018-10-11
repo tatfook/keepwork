@@ -97,7 +97,6 @@ export default {
       emailForm.validate(async valid => {
         if (valid) {
           let isEmailBinded = await this.isEmailBinded()
-          console.warn(isEmailBinded)
           if (isEmailBinded) {
             emailForm.clearValidate()
             this.emailError = this.$t('user.emailHasBeenBoundToOtherAccounts')
@@ -115,7 +114,7 @@ export default {
     async isEmailBinded() {
       let email = this.emailFormData.email
       let result = await this.userGetByEmail({ email })
-      return result ? true : false
+      return result
     },
     handleClose() {
       this.isCodeDialogVisible = false

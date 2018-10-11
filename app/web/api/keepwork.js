@@ -32,6 +32,7 @@ export const user = {
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async (args) => get(`/users?email=${args.email}`),
+  getByCellphone: async (args) => get(`/users?cellphone=${args.cellphone}`),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
   verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailTwo: async args => post('/users/email_captcha', args),
@@ -40,8 +41,8 @@ export const user = {
     get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   verifyCellphoneTwo: async (...args) =>
     post('/users/cellphone_captcha', ...args),
-  unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
-  unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
+  unbindCellphone: async args => post('/users/cellphone_captcha', args),
+  unbindEmail: async args => post('/users/email_captcha', args),
   register: async (...args) => post('/users/register', ...args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }

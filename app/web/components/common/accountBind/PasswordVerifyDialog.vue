@@ -68,12 +68,16 @@ export default {
       switch (this.pwdDialogData.type) {
         case 'email':
           result = await this.userUnbindEmail({
-            password: this.password
+            password: this.password,
+            email: this.pwdDialogData.value,
+            isBind: false
           })
           break
         case 'cellphone':
           result = await this.userUnbindCellphone({
-            password: this.password
+            password: this.password,
+            cellphone: this.pwdDialogData.value,
+            isBind: false
           })
           break
         case 'threeService':
