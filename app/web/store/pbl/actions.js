@@ -211,6 +211,14 @@ const actions = {
     }).catch(error => {
       return Promise.reject(error)
     })
+  },
+  async deleteComment(context, { objectType = 5, objectId, commentId }) {
+    let { dispatch } = context
+    await keepwork.comments.deleteComment({ commentId }).then(async () => {
+      await dispatch('getComments', { objectType, objectId })
+    }).catch(error => {
+      return Promise.reject(error)
+    })
   }
 }
 

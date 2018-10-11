@@ -241,7 +241,8 @@ export const members = {
 
 export const comments = {
   getComments: async ({ objectType, objectId }) => get(`comments?objectType=${objectType}&objectId=${objectId}`),
-  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content })
+  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content }),
+  deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)
 }
 
 export const keepwork = {

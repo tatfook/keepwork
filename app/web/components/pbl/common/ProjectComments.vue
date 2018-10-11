@@ -9,10 +9,10 @@
         <el-input placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
       </div>
       <div class="project-comments-sends-operations">
-        <el-button type="primary" size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
+        <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
       </div>
     </div>
-    <div class="project-comments-list">
+    <div class="project-comments-list" v-loading='isLoading'>
       <div class="project-comments-item" v-for="(comment, index) in projectCommentList" :key='index'>
         <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
         <div class="project-comments-item-detail">
@@ -45,6 +45,8 @@ export default {
   },
   data() {
     return {
+      isAddingComment: false,
+      isLoading: false,
       newCommenContent: '',
       defaultPortrait: require('@/assets/img/default_portrait.png')
     }
@@ -60,10 +62,11 @@ export default {
   methods: {
     ...mapActions({
       pblGetComments: 'pbl/getComments',
-      pblCreateComment: 'pbl/createComment'
+      pblCreateComment: 'pbl/createComment',
+      pblDeleteComment: 'pbl/deleteComment'
     }),
     async sendComment() {
-      console.log(this.newCommenContent)
+      this.isAddingComment = true
       await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,
@@ -74,12 +77,37 @@ export default {
             type: 'success',
             message: '评论成功'
           })
+          this.isAddingComment = false
           this.newCommenContent = ''
         })
         .catch(error => {
           this.$message({
             type: 'error',
             message: '评论失败'
+          })
+          this.isAddingComment = false
+          console.error(error)
+        })
+    },
+    async deleteComment(commentDetail) {
+      this.isLoading = true
+      await this.pblDeleteComment({
+        objectType: 5,
+        objectId: this.projectId,
+        commentId: commentDetail.id
+      })
+        .then(() => {
+          this.isLoading = false
+          this.$message({
+            type: 'success',
+            message: '评论删除成功'
+          })
+        })
+        .catch(error => {
+          this.isLoading = false
+          this.$message({
+            type: 'error',
+            message: '评论删除失败'
           })
           console.error(error)
         })
