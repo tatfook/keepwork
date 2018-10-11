@@ -565,7 +565,7 @@ const actions = {
   },
   async getByEmail(context, { email }) {
     let result = await keepwork.user.getByEmail({ email })
-    return result
+    return result.data
   },
   async verifyEmailOne(context, { email, bind }) {
     return keepwork.user.verifyEmailOne({ email, bind })

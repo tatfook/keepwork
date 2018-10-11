@@ -14,6 +14,7 @@ const DEFAULT_CONFIG = {
   }
 }
 
+const _instance = axios.create(DEFAULT_CONFIG)
 /*
 return a wrapped endpoint.
 
@@ -25,7 +26,9 @@ const createEndpoint = (config, parseResponse = true) => {
   endpoint.interceptors.request.use(
     config => {
       if (Cookies.get('token')) {
-        _.merge(config, { headers: { Authorization: 'Bearer ' + Cookies.get('token') } })
+        _.merge(config, {
+          headers: { Authorization: 'Bearer ' + Cookies.get('token') }
+        })
       }
       return config
     },
@@ -39,7 +42,19 @@ const createEndpoint = (config, parseResponse = true) => {
     response => {
       return parseResponse ? response.data.data || response.data : response.data
     },
-    error => {
+    async error => {
+      const CODES = [401]
+      if (CODES.some(code => code === error.response.status) && Cookies.get('token')) {
+        _instance.defaults.headers.common['Authorization'] = `Bearer  + ${Cookies.get('token')}`
+        console.log('to fetch')
+        _instance.post('/user/getProfile').catch(e => {
+          console.log('to reload')
+          Cookies.remove('token')
+          Cookies.remove('token', { path: '/' })
+          window.localStorage.removeItem('satellizer_token')
+          window.location.reload()
+        })
+      }
       console.error(error.message)
       return Promise.reject(error)
     }

@@ -60,42 +60,50 @@ export default new Router({
             {
               path: '/',
               name: 'TeacherColumn',
-              component: Teach
+              component: Teach,
+              meta: { requireAuth: true }
             },
             {
               path: 'review',
               name: 'TeacherColumnReview',
-              component: Review
+              component: Review,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/new',
               name: 'TeacherColumnNewLesson',
-              component: NewLesson
+              component: NewLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'lessonManager',
               name: 'TeacherColumnLessonManager',
-              component: LessonManager
+              component: LessonManager,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/:id/edit',
               name: 'TeacherColumnEditLesson',
-              component: EditLesson
+              component: EditLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'newPackage',
               name: 'TeacherColumnNewPackage',
-              component: NewPackage
+              component: NewPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'package/:id/edit',
               name: 'TeacherColumnEditPackage',
-              component: EditPackage
+              component: EditPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'packageManager',
               name: 'TeacherColumnPackageManager',
-              component: PackageManager
+              component: PackageManager,
+              meta: { requireAuth: true }
             }
           ]
         },
@@ -122,12 +130,14 @@ export default new Router({
         {
           path: 'package/:id/purchase',
           name: 'TeacherPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonTeacher',
           component: LessonTeacher,
+          meta: { requireAuth: true },
           children: [
             {
               path: '/',
@@ -175,7 +185,8 @@ export default new Router({
         {
           path: '/',
           name: 'StudentColumn',
-          component: StudentColumn
+          component: StudentColumn,
+          meta: { requireAuth: true }
         },
         {
           path: 'about',
@@ -200,22 +211,26 @@ export default new Router({
         {
           path: 'package/:id/purchase',
           name: 'StudentPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
-          component: LessonStudent
+          component: LessonStudent,
+          meta: { requireAuth: true }
         },
         {
           path: 'learnSummary/package/:packageId/lesson/:lessonId',
           name: 'LearnSummary',
-          component: LearnSummary
+          component: LearnSummary,
+          meta: { requireAuth: true }
         },
         {
           path: 'bean',
           name: 'Bean',
-          component: Bean
+          component: Bean,
+          meta: { requireAuth: true }
         }
       ]
     },
