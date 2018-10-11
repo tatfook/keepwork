@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win">
+    <el-col id="managerWin" class="manager-win" :style='getDisplay'>     
       <el-row class="toolbar">
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
@@ -17,7 +17,7 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between"></div>
+    <div class="col-between" :style='getDisplay'></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
@@ -53,28 +53,30 @@
     <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col class="toolbar-content">
-            <el-button-group>
-              <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-              <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-              <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-              <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-              <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
-            </el-button-group>
-            <el-button-group>
-              <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
-            <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
-            <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
-              <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
-              <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-              <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
-              <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
-            </el-button-group>
-            <el-button-group>
-              <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
-            </el-button-group>
+          <el-col class="toolbar-content" :style="getStyle">
+            <div class="toolbar-content_left">
+              <el-button-group>
+                <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
+                <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
+                <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
+                <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
+                <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+              </el-button-group>
+              <el-button-group>
+                <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
+              <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
+              <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
+                <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
+                <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
+                <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
+                <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
+              </el-button-group>
+              <el-button-group :style='getButtonDisplay'>
+                <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
+              </el-button-group>
+            </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.exitFullScreen") : $t("editor.fullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button :title='this.isPreviewShow ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -98,7 +100,6 @@
 <script>
 import _ from 'lodash'
 import { gConst } from '@/lib/global'
-import fullscreen from 'vue-fullscreen'
 import EditorMarkdown from './EditorMarkdown'
 import EditorWelcome from './EditorWelcome'
 import ModPropertyManager from './ModPropertyManager'
@@ -123,7 +124,6 @@ export default {
         leftColWidthParam: '',
         rightColWidthParam: ''
       },
-      isFullscreen: false,
       gConst,
       editingMarkdownModDatas: {
         key: 'data',
@@ -168,15 +168,49 @@ export default {
       activePropertyData: 'activePropertyData',
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
-      isCodeShow: 'isCodeShow'
+      isCodeShow: 'isCodeShow',
+      isPreviewShow: 'isPreviewShow'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
+    getDisplay() {
+      if (this.isPreviewShow) {
+        return this.generateStyleString({
+          'display': 'block'
+        })
+      } else {
+        return this.generateStyleString({
+          'display': 'none'
+        })
+      }
+    },
+    getButtonDisplay() {
+      if (this.isPreviewShow) {
+        return this.generateStyleString({
+          'display': 'inline-block'
+        })
+      } else {
+        return this.generateStyleString({
+          'display': 'none'
+        })
+      }
+    },
+    getStyle() {
+      if (this.isPreviewShow) {
+        return this.generateStyleString({
+          'text-align': 'left'
+        })
+      } else {
+        return this.generateStyleString({
+          'text-align': 'center'
+        })
+      }
+    },
     fullscreenIcon() {
-      return this.isFullscreen
-        ? 'iconfont icon-full_screen_exit'
-        : 'iconfont icon-full-screen_'
+      return this.isPreviewShow
+        ? 'iconfont icon-full-screen_'
+        : 'iconfont icon-full_screen_exit'
     }
   },
   watch: {
@@ -255,14 +289,18 @@ export default {
         })
     },
     toggleFullscreen() {
-      this.$fullscreen.toggle(this.$el.querySelector('#codeWin'), {
-        wrap: false,
-        fullscreenClass: 'code-win-fullscreen',
-        callback: this.fullscreenChange
+      this.resetShowingCol({
+        isCodeShow: true,
+        isPreviewShow: !this.isPreviewShow
       })
     },
-    fullscreenChange(fullscreen) {
-      this.isFullscreen = fullscreen
+    generateStyleString(style) {
+      let string = ''
+      _.forEach(style, (value, key) => {
+        string = string + key + ':' + value + ';'
+      })
+
+      return string
     },
     resizeCol(event, leftColWidthParam, rightColWidthParam) {
       if (!(event && event.clientX)) {
@@ -474,6 +512,11 @@ bigFile:
 }
 .toolbar-content {
   min-width: 500px;
+  margin: 0 auto; 
+}
+.toolbar-content_left {
+  display: inline-block;
+  vertical-align: middle
 }
 .toolbar::-webkit-scrollbar {
   width: 8px;
