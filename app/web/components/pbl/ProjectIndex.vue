@@ -2,7 +2,7 @@
   <div class="project-index">
     <div class="container">
       <div class="project-index-sidebar">
-        <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername' :isLoginUserEditable='isLoginUserEditable'></project-website>
+        <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'></project-joined-members-list>
       </div>
@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import ProjectWebsite from './common/ProjectWebsite'
+import ProjectIntro from './common/ProjectIntro'
 import ProjectTags from './common/ProjectTags'
 import ProjectJoinedMembersList from './common/ProjectJoinedMembersList'
 import ProjectBasicInfo from './common/ProjectBasicInfo'
@@ -46,7 +46,7 @@ export default {
     }
   },
   components: {
-    ProjectWebsite,
+    ProjectIntro,
     ProjectTags,
     ProjectJoinedMembersList,
     ProjectBasicInfo,

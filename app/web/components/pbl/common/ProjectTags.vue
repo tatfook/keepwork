@@ -62,7 +62,7 @@ export default {
       return this.copiedProjectDetail.tags
     },
     updatingProjectData() {
-      return _.merge(this.copiedProjectDetail, {
+      return _.merge(this.originProjectDetail, {
         tags: this.formatTagsToBackEndStyle
       })
     }
