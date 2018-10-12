@@ -124,8 +124,9 @@ const actions = {
     let { dispatch } = context
     await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, extra }).then(async () => {
       await dispatch('getApplyState', { objectId, objectType, applyType, applyId })
+      return Promise.resolve()
     }).catch(error => {
-      console.error(error)
+      return Promise.reject(error)
     })
   },
   async getFavoriteState(context, { objectId, objectType, useCache = true }) {

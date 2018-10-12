@@ -5,6 +5,9 @@
     </div>
     <router-view class="pbl-page-main-content" id="pbl-page" />
     <common-footer class="container"></common-footer>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    </div>
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
+import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import CommonFooter from '@/components/common/CommonFooter'
 
@@ -54,18 +58,26 @@ export default {
     await this.loadPblPresets()
   },
   components: {
+    LoginDialog,
     CommonHeader,
     CommonFooter
   },
   computed: {
+    ...mapGetters({
+      isShowLoginDialog: 'pbl/isShowLoginDialog'
+    }),
     nowPagename() {
       return this.$route.name
     }
   },
   methods: {
     ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
       getUserProfile: 'user/getProfile'
     }),
+    handleLoginDialogClose() {
+      this.toggleLoginDialog(false)
+    },
     async loadPblPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)

@@ -126,7 +126,8 @@ export default {
     ...mapActions({
       pblGetApplyState: 'pbl/getApplyState',
       pblApplyJoinProject: 'pbl/applyJoinProject',
-      pblUpdateProject: 'pbl/updateProject'
+      pblUpdateProject: 'pbl/updateProject',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -186,6 +187,14 @@ export default {
           })
         })
         .catch(error => {
+          let httpCode = _.get(error, 'response.status')
+          switch (httpCode) {
+            case 401:
+              this.toggleLoginDialog(true)
+              break
+            default:
+              break
+          }
           this.isApplyButtonLoading = false
           console.error(error)
         })
@@ -225,6 +234,7 @@ export default {
           stateText = '重新申请'
           break
         default:
+          stateText = '申请加入'
           break
       }
       return stateText
