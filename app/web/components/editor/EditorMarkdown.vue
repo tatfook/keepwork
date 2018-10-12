@@ -441,12 +441,15 @@ export default {
   overflow: auto;
 }
 .vue-codemirror {
+  background-color: #ffffff;
   height: 100%;
 }
 </style>
 <style lang="css">
 .kp-md-editor .CodeMirror {
+  margin:0 auto;
   height: 100%;
+  max-width: 1080px;
 }
 .kp-md-editor .CodeMirror-gutters {
   background-color: transparent;
