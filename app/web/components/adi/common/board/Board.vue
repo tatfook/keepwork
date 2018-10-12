@@ -102,7 +102,7 @@ export default {
     return (
       <div class="comp-board">
         {(() => {
-          if (self.isNew()) {
+          if (!self.isOld()) {
             self.getSvgData()
 
             if (self.properties.svg) {
@@ -166,8 +166,8 @@ export default {
     }
   },
   methods: {
-    isNew() {
-      if (this.properties.xml && this.properties.svg) {
+    isOld() {
+      if (this.properties.data && !this.properties.svg) {
         return true
       } else {
         return false
@@ -195,14 +195,20 @@ export default {
       }
     },
     async getSvgData() {
-      let response = await axios.get(this.properties.svg + '?bust' + Date.now())
-      this.svgData = (response && response.data) || ''
+      let svg = this.properties.svg || ''
+      let response = await axios.get(svg + '?bust' + Date.now())
+
+      if (svg.match('api-stage')) {
+        this.svgData = (response && response.data.content) || ''
+      } else {
+        this.svgData = (response && response.data) || '' 
+      }
     }
   },
   mixins: [compBaseMixin],
   computed: {},
   created() {
-    if (!this.isNew()) {
+    if (this.isOld()) {
       this.initold()
     }
   }
