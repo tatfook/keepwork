@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="tree-data-dialog" :title="$t('editor.menuEditor')" :visible.sync="isDialogShow" width="1200px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" :title="$t('editor.menuEditor')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
     <div v-if="treeData.length > 0" class="tree-head">
       <span class="node-label">
         {{$t('editor.name')}}
@@ -20,9 +20,9 @@
           <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-add-later' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'>添加后项</el-button>
-          <el-button icon='iconfont icon-add-before' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'>添加前项</el-button>
-          <el-button icon='iconfont icon-add_subitem' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'>添加子项</el-button>
+          <el-button icon='iconfont icon-add-later1' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'>添加后项</el-button>
+          <el-button icon='iconfont icon-add-before1' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'>添加前项</el-button>
+          <el-button icon='iconfont icon-add_subitem1-copy-copy' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'>添加子项</el-button>
           <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'>删除</el-button>
         </span>
       </span>
@@ -200,7 +200,7 @@ export default {
     position: relative;
   }
   .node-link {
-    flex-basis: 590px;
+    flex-basis: 290px;
     flex-shrink: 0;
     flex-grow: 0;
     margin: 0 10px;
@@ -229,13 +229,16 @@ export default {
         display: inline-block;
       }
     }
+    .el-button:hover {
+      color: #1989fa
+    }
   }
   .el-tree-node__content {
     height: 34px;
     line-height: 32px;
   }
   .el-button.is-circle {
-    padding: 1px;
+    padding: 3px;
     border-radius: 0;
     vertical-align: middle;
   }
