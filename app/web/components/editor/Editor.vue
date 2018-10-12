@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win" :style='getDisplay'>     
+    <el-col id="managerWin" class="manager-win" :style='isDisplay'>     
       <el-row class="toolbar">
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
@@ -17,7 +17,7 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between" :style='getDisplay'></div>
+    <div class="col-between" :style='isDisplay'></div>
     <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
@@ -71,12 +71,12 @@
                 <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
                 <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
               </el-button-group>
-              <el-button-group :style='getButtonDisplay'>
+              <el-button-group :style='isDisplayButton'>
                 <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='this.isPreviewShow ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button :title='isFullscreen ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -169,13 +169,13 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
       isCodeShow: 'isCodeShow',
-      isPreviewShow: 'isPreviewShow'
+      isFullscreen: 'isPreviewShow'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
-    getDisplay() {
-      if (this.isPreviewShow) {
+    isDisplay() {
+      if (this.isFullscreen) {
         return this.generateStyleString({
           'display': 'block'
         })
@@ -185,8 +185,8 @@ export default {
         })
       }
     },
-    getButtonDisplay() {
-      if (this.isPreviewShow) {
+    isDisplayButton() {
+      if (this.isFullscreen) {
         return this.generateStyleString({
           'display': 'inline-block'
         })
@@ -197,7 +197,7 @@ export default {
       }
     },
     getStyle() {
-      if (this.isPreviewShow) {
+      if (this.isFullscreen) {
         return this.generateStyleString({
           'text-align': 'left'
         })
@@ -208,7 +208,7 @@ export default {
       }
     },
     fullscreenIcon() {
-      return this.isPreviewShow
+      return this.isFullscreen
         ? 'iconfont icon-full-screen_'
         : 'iconfont icon-full_screen_exit'
     }
@@ -291,7 +291,7 @@ export default {
     toggleFullscreen() {
       this.resetShowingCol({
         isCodeShow: true,
-        isPreviewShow: !this.isPreviewShow
+        isPreviewShow: !this.isFullscreen
       })
     },
     generateStyleString(style) {
