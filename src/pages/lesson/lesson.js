@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
       store.dispatch('lesson/toggleLoginDialog', { show: true, to: to }, { root: true })
-      return next(false)
+      return next('Lesson')
     }
   }
   next()
