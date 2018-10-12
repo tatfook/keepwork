@@ -1,6 +1,6 @@
 <template>
   <div class="common-header">
-    <el-menu mode='horizontal' class="hidden-xs-only">
+    <el-menu mode='horizontal' class="hidden-xs-only common-header-menu">
       <el-menu-item index='0' @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
@@ -31,11 +31,11 @@
       <el-menu-item index="13" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
-            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
-            <i class="el-icon-caret-bottom right-icon"></i>
+            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
-            <el-dropdown-item>
+            <div class="greeting">你好，{{username}}</div>
+            <el-dropdown-item divided>
               <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
@@ -204,7 +204,8 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
+      username: 'user/username'
     }),
     isLogin: {
       get() {
@@ -235,10 +236,10 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout'
     }),
-    goKnowledgeManagement(){
+    goKnowledgeManagement() {
       this.$alert('开发中~~~~~~', '', {
-        confirmButtonText: '确定',
-      });
+        confirmButtonText: '确定'
+      })
     },
     goCreativityPage() {
       // this.$router.push('creativity')
@@ -341,19 +342,12 @@ export default {
   border-radius: 50%;
   object-fit: cover;
 }
-.user-menu-dropdown li {
-  padding: 0;
-}
-.user-menu-dropdown a {
-  padding: 0 50px 0 20px;
-}
 .el-dropdown-menu__item--divided:before {
   margin: 0px;
 }
 .el-menu-item .right-icon {
-  right: -25px;
-  top: 25px;
   font-size: 13px;
+  width: 0;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -406,7 +400,7 @@ export default {
   &-list {
     .el-dropdown-menu__item {
       display: flex;
-      .message-desc{
+      .message-desc {
         flex: 1;
       }
       .detail-time {
@@ -417,19 +411,27 @@ export default {
     }
   }
 }
-.el-dropdown{
-  height: 60px;
-  line-height: 60px;
+.user-menu-dropdown {
+  .greeting {
+    padding: 0 20px;
+    height: 36px;
+    line-height: 36px;
+  }
+  li {
+    padding: 0;
+  }
+  a {
+    padding: 0 50px 0 20px;
+  }
 }
-.el-menu-item {
-  padding: 0 15px;
-}
-.el-menu-item [class^='el-icon-'] {
-  width: 20px;
-  font-size: 18px;
-  position: absolute;
-  bottom: 8px;
-  right: -18px;
+.common-header-menu {
+  .el-dropdown {
+    height: 60px;
+    line-height: 60px;
+  }
+  .el-menu-item {
+    padding: 0 15px;
+  }
 }
 .profile-submenu,
 .el-popper {
