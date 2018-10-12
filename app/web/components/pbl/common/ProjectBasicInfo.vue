@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="project-basic-info-description">
+    <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
         项目描述:
         <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
@@ -43,7 +43,7 @@
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>保存</span>
         </el-button>
       </div>
-      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing">{{originProjectDetail.description || '暂无描述'}}</div>
+      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
   </div>
@@ -81,13 +81,17 @@ export default {
         applyId: this.loginUserId
       })
     }
-    let descriptionEditor = new E('#projectDescriptoinEditor')
-    descriptionEditor.create()
+    this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
+    this.tempDesc = this.copiedProjectDetail.description
   },
   data() {
     return {
       isApplyButtonLoading: false,
-      isDescriptionEditing: false
+      isDescriptionEditing: false,
+      descriptionEditor: undefined,
+      copiedProjectDetail: {},
+      tempDesc: '',
+      isLoading: false
     }
   },
   computed: {
@@ -108,15 +112,62 @@ export default {
     },
     isLoginUserBeProjectMember() {
       return this.projectApplyState === 1
+    },
+    originDesc() {
+      return this.copiedProjectDetail.description
+    },
+    updatingProjectData() {
+      return _.merge(this.originProjectDetail, {
+        description: this.tempDesc
+      })
     }
   },
   methods: {
     ...mapActions({
       pblGetApplyState: 'pbl/getApplyState',
-      pblApplyJoinProject: 'pbl/applyJoinProject'
+      pblApplyJoinProject: 'pbl/applyJoinProject',
+      pblUpdateProject: 'pbl/updateProject'
     }),
-    toggleIsDescEditing() {
-      this.isDescriptionEditing = !this.isDescriptionEditing
+    async toggleIsDescEditing() {
+      if (!this.isDescriptionEditing) {
+        this.isDescriptionEditing = true
+        this.$nextTick(() => {
+          if (!this.descriptionEditor) {
+            this.descriptionEditor = new E('#projectDescriptoinEditor')
+            this.descriptionEditor.create()
+          }
+          this.descriptionEditor.txt.html(this.tempDesc)
+        })
+      } else {
+        this.tempDesc = this.descriptionEditor.txt.html()
+        await this.updateDescToBackend()
+      }
+    },
+    async updateDescToBackend() {
+      this.isLoading = true
+      await this.pblUpdateProject({
+        projectId: this.projectId,
+        updatingProjectData: this.updatingProjectData
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '项目描述更新成功'
+          })
+          this.isLoading = false
+          this.isDescriptionEditing = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '项目描述更新失败,请重试'
+          })
+          this.isLoading = false
+          this.isDescriptionEditing = false
+          console.error(error)
+          return Promise.reject()
+        })
     },
     async applyJoinProject() {
       this.isApplyButtonLoading = true
