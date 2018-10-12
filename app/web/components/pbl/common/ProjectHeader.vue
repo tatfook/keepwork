@@ -40,9 +40,9 @@
         <el-tab-pane name="ProjectIndexPage">
           <span slot="label" class="project-header-tabs-label">主页</span>
         </el-tab-pane>
-        <!-- <el-tab-pane name="second">
+        <el-tab-pane name="ProjectWhiteBoard">
           <span slot="label" class="project-header-tabs-label">白板</span>
-        </el-tab-pane> -->
+        </el-tab-pane>
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
           <span slot="label" class="project-header-tabs-label">设定</span>
         </el-tab-pane>
