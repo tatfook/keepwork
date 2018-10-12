@@ -6,8 +6,8 @@
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
     <common-footer class="container"></common-footer>
-    <div @click.stop v-if="isShowLoginDialog">
-      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    <div @click.stop v-if="isShowLoginDialog.show">
+      <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
   </div>
 </template>

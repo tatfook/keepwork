@@ -12,6 +12,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import Cookies from 'js-cookie'
+import '@/components/common/thirdAuth'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -51,7 +52,7 @@ const store = new Vuex.Store({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
-      store.dispatch('lesson/toggleLoginDialog', true, { root: true })
+      store.dispatch('lesson/toggleLoginDialog', { show: true, to: to }, { root: true })
       return next(false)
     }
   }

@@ -67,8 +67,8 @@ const actions = {
   async logout({ commit }) {
     commit(LOGOUT)
   },
-  async toggleLoginDialog({ commit }, status) {
-    commit(TOGGLE_LOGIN_DIALOG, status)
+  async toggleLoginDialog({ commit }, payload) {
+    commit(TOGGLE_LOGIN_DIALOG, payload)
   }
 }
 
