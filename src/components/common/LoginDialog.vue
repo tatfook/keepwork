@@ -59,6 +59,12 @@ export default {
       required: false,
       default: false,
       type: Boolean
+    },
+    to: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
@@ -125,8 +131,12 @@ export default {
           })
           this.loading = false
           if (info.error.id === 0) {
-            this.$emit('close')
-            window.location.reload()
+              const { path } = this.to
+              if (path) {
+                window.location.href = this.$router.resolve({ path }).href
+              }
+              this.$emit('close')
+              window.location.reload()
           } else if (info.error.message === '用户不存在') {
             this.showMessage('error', this.$t('common.usernameNotExist'))
           } else if (info.error.message === '密码错误') {

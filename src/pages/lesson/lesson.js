@@ -51,7 +51,7 @@ const store = new Vuex.Store({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
-      store.dispatch('lesson/toggleLoginDialog', true, { root: true })
+      store.dispatch('lesson/toggleLoginDialog', { show: true, to: to }, { root: true })
       return next(false)
     }
   }
