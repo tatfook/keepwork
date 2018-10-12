@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="tree-data-dialog" :title="$t('editor.menuEditor')" :visible.sync="isDialogShow" width="900px" :before-close="handleClose">
+  <el-dialog class="tree-data-dialog" :title="$t('editor.menuEditor')" :visible.sync="isDialogShow" width="1200px" :before-close="handleClose">
     <div v-if="treeData.length > 0" class="tree-head">
       <span class="node-label">
         {{$t('editor.name')}}
@@ -14,18 +14,16 @@
     <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false" :draggable='true'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
-          <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>
           <el-input :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
-          <span class="text" @click.stop='showInput(node.id, data, "link")'>{{data.link}}</span>
           <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-add-later' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
-          <el-button icon='iconfont icon-add-before' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
-          <el-button icon='iconfont icon-add_subitem' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
-          <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
+          <el-button icon='iconfont icon-add-later' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'>添加后项</el-button>
+          <el-button icon='iconfont icon-add-before' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'>添加前项</el-button>
+          <el-button icon='iconfont icon-add_subitem' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'>添加子项</el-button>
+          <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'>删除</el-button>
         </span>
       </span>
     </el-tree>
@@ -202,7 +200,7 @@ export default {
     position: relative;
   }
   .node-link {
-    flex-basis: 450px;
+    flex-basis: 590px;
     flex-shrink: 0;
     flex-grow: 0;
     margin: 0 10px;
@@ -213,15 +211,27 @@ export default {
     cursor: text;
   }
   .node-operate {
-    flex-basis: 200px;
+    flex-basis: 356px;
     flex-shrink: 0;
     flex-grow: 0;
     margin-left: 10px;
     box-sizing: border-box;
     min-width: 0;
+    .el-button {
+      i {
+        float: left;
+        display: inline-block;
+      }
+      span {
+        position: relative;
+        top:3px;
+        float: left;
+        display: inline-block;
+      }
+    }
   }
   .el-tree-node__content {
-    height: 32px;
+    height: 34px;
     line-height: 32px;
   }
   .el-button.is-circle {
@@ -235,10 +245,10 @@ export default {
   .el-input {
     position: absolute;
     left: 0;
-    z-index: -1;
+    z-index: 2;
   }
   .el-input.is-focus {
-    z-index: 1;
+    z-index: 2;
   }
   .el-input__inner {
     font-size: 14px;
