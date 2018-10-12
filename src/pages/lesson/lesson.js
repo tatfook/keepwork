@@ -12,6 +12,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import Cookies from 'js-cookie'
+import '@/components/common/thirdAuth'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
