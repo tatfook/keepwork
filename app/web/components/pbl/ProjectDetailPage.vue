@@ -65,11 +65,18 @@ export default {
       let userId = this.editingUserId
       let objectId = this.projectId
       let objectType = 5
-      await Promise.all([
+      let promiseArray = [
         this.getUserDetailByUserId({ userId }),
         this.getFavoriteState({ objectId, objectType }),
         this.getStarState({ projectId: objectId })
-      ])
+      ]
+      await Promise.all(
+        _.map(promiseArray, promiseItem => {
+          return promiseItem.catch(error => {
+            return error
+          })
+        })
+      )
     }
   },
   components: {
