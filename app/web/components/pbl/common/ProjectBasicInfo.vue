@@ -31,24 +31,25 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary">访问项目</el-button>
-          <el-button plain>申请加入</el-button>
+          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
     </div>
-    <div class="project-basic-info-description">
+    <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
         项目描述:
-        <el-button class="project-website-card-button" type="text" @click="toggleIsDescEditing">
+        <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
           <i class="el-icon-edit-outline" v-show="!isDescriptionEditing"></i>
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>保存</span>
         </el-button>
       </div>
-      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing">{{originProjectDetail.description || '暂无描述'}}</div>
+      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
 export default {
@@ -61,20 +62,133 @@ export default {
     projectOwnerUsername: {
       type: String,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
-  mounted() {
-    let descriptionEditor = new E('#projectDescriptoinEditor')
-    descriptionEditor.create()
+  async mounted() {
+    if (this.isLogined) {
+      await this.pblGetApplyState({
+        objectId: this.projectId,
+        objectType: 5,
+        applyType: 0,
+        applyId: this.loginUserId
+      })
+    }
+    this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
+    this.tempDesc = this.copiedProjectDetail.description
   },
   data() {
     return {
-      isDescriptionEditing: false
+      isApplyButtonLoading: false,
+      isDescriptionEditing: false,
+      descriptionEditor: undefined,
+      copiedProjectDetail: {},
+      tempDesc: '',
+      isLoading: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      pblProjectApplyState: 'pbl/projectApplyState',
+      loginUserId: 'user/userId',
+      loginUserDetail: 'user/profile',
+      isLogined: 'user/isLogined'
+    }),
+    projectApplyState() {
+      return this.pblProjectApplyState({
+        projectId: this.projectId,
+        userId: this.loginUserId
+      })
+    },
+    isApplied() {
+      return this.projectApplyState === 0
+    },
+    isLoginUserBeProjectMember() {
+      return this.projectApplyState === 1
+    },
+    originDesc() {
+      return this.copiedProjectDetail.description
+    },
+    updatingProjectData() {
+      return _.merge(this.originProjectDetail, {
+        description: this.tempDesc
+      })
     }
   },
   methods: {
-    toggleIsDescEditing() {
-      this.isDescriptionEditing = !this.isDescriptionEditing
+    ...mapActions({
+      pblGetApplyState: 'pbl/getApplyState',
+      pblApplyJoinProject: 'pbl/applyJoinProject',
+      pblUpdateProject: 'pbl/updateProject'
+    }),
+    async toggleIsDescEditing() {
+      if (!this.isDescriptionEditing) {
+        this.isDescriptionEditing = true
+        this.$nextTick(() => {
+          if (!this.descriptionEditor) {
+            this.descriptionEditor = new E('#projectDescriptoinEditor')
+            this.descriptionEditor.create()
+          }
+          this.descriptionEditor.txt.html(this.tempDesc)
+        })
+      } else {
+        this.tempDesc = this.descriptionEditor.txt.html()
+        await this.updateDescToBackend()
+      }
+    },
+    async updateDescToBackend() {
+      this.isLoading = true
+      await this.pblUpdateProject({
+        projectId: this.projectId,
+        updatingProjectData: this.updatingProjectData
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '项目描述更新成功'
+          })
+          this.isLoading = false
+          this.isDescriptionEditing = false
+          return Promise.resolve()
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '项目描述更新失败,请重试'
+          })
+          this.isLoading = false
+          this.isDescriptionEditing = false
+          console.error(error)
+          return Promise.reject()
+        })
+    },
+    async applyJoinProject() {
+      this.isApplyButtonLoading = true
+      await this.pblApplyJoinProject({
+        objectType: 5,
+        objectId: this.projectId,
+        applyType: 0,
+        applyId: this.loginUserId,
+        extra: this.loginUserDetail
+      })
+        .then(() => {
+          this.isApplyButtonLoading = false
+          this.$message({
+            type: 'success',
+            message: '申请成功，等待项目创建者处理'
+          })
+        })
+        .catch(error => {
+          this.isApplyButtonLoading = false
+          console.error(error)
+        })
     }
   },
   filters: {
@@ -94,6 +208,26 @@ export default {
     },
     formatDate(date, formatType) {
       return dayjs(date).format('YYYY年MM月DD日')
+    },
+    applyStateFilter(applyState) {
+      let stateText = ''
+      switch (applyState) {
+        case -1:
+          stateText = '申请加入'
+          break
+        case 0:
+          stateText = '申请中'
+          break
+        case 1:
+          stateText = '已加入'
+          break
+        case 2:
+          stateText = '重新申请'
+          break
+        default:
+          break
+      }
+      return stateText
     }
   }
 }

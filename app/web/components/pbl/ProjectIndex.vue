@@ -2,12 +2,12 @@
   <div class="project-index">
     <div class="container">
       <div class="project-index-sidebar">
-        <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername'></project-website>
-        <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId'></project-tags>
+        <project-website class="project-index-sidebar-item" :originProjectName='originProjectName' :originProjectUsername='originProjectUsername' :isLoginUserEditable='isLoginUserEditable'></project-website>
+        <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'></project-joined-members-list>
       </div>
       <div class="project-index-main">
-        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername'></project-basic-info>
+        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
         <project-comments class="project-index-comments" :projectId='projectId'></project-comments>
       </div>
     </div>
@@ -34,6 +34,10 @@ export default {
     projectId: {
       type: Number,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

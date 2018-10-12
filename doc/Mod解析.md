@@ -154,18 +154,6 @@ options: {
 }
 ```
 
-5.  preview
-
-另外，为使得 style 在选取时有较好的显示样式，可以在此处做一些简单配置，如：
-
-```
-preview: {
-  outter: {
-    height: '14px'
-  }
-}
-```
-
 ### 开发新 mod
 
 1.  查看设计，是否可以通过已有的 component 构建

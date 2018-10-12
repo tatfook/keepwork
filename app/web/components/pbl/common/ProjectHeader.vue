@@ -43,7 +43,7 @@
         <el-tab-pane name="ProjectWhiteBoard">
           <span slot="label" class="project-header-tabs-label">白板</span>
         </el-tab-pane>
-        <el-tab-pane name="EditProject">
+        <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
           <span slot="label" class="project-header-tabs-label">设定</span>
         </el-tab-pane>
         <!-- <el-tab-pane name="fourth">
@@ -60,7 +60,11 @@ export default {
   props: {
     projectDetail: Object,
     editingProjectUsername: String,
-    editingUserId: Number
+    editingUserId: Number,
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
