@@ -68,9 +68,10 @@ export default {
       }
       let currentStyle = modConf.styles[this.activeMod.data.styleID]
 
-      if (!currentStyle.options || !currentStyle.options.config) {
+      if (!currentStyle || !currentStyle.options || !currentStyle.options.config) {
         return {}
       }
+
       return currentStyle.options.config[this.componentName]
     },
     isMultiLineProp() {

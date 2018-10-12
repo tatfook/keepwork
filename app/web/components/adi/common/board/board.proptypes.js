@@ -1,3 +1,3 @@
 export default {
-  data: 'board'
+  xml: 'board'
 }

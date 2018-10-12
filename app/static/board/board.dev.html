@@ -343,22 +343,22 @@
       //   drawDevUrl = document.location.protocol + '//drawhost.jgraph.com/';
       // }
 
-      mxscript(drawDevUrl + '/js/diagramly/Init.js')
+      mxscript(drawDevUrl + 'js/diagramly/Init.js')
       mxscript(geBasePath + '/Init.js')
       mxscript(mxDevUrl + '/javascript/src/js/mxClient.js')
 
       // Adds all JS code that depends on mxClient. This indirection via Devel.js is
       // required in some browsers to make sure mxClient.js (and the files that it
       // loads asynchronously) are available when the code loaded in Devel.js runs.
-      mxscript(drawDevUrl + '/js/diagramly/Devel.js')
+      mxscript(drawDevUrl + 'js/diagramly/Devel.js')
     } else {
       mxscript(boardRoot + '/js/app.min.js')
     }
 
     // Electron
-    if (window && window.process && window.process.type) {
-      mxscript(boardRoot + '/js/diagramly/ElectronApp.js');
-    }
+    // if (window && window.process && window.process.type) {
+    //   mxscript(boardRoot + '/js/diagramly/ElectronApp.js');
+    // }
 
     // Adds basic error handling
     window.onerror = function () {
