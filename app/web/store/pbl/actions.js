@@ -11,8 +11,9 @@ let {
   GET_PROJECT_DETAIL_SUCCESS,
   GET_PROJECT_FAVORITE_STATE_SUCCESS,
   GET_PROJECT_STAR_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS,
-  GET_MY_ALL_PROJECTS_SUCCESS
+  GET_MY_ALL_PROJECTS_SUCCESS,
+  GET_PROJECT_APPLY_STATE_SUCCESS,
+  GET_COMMENTS_SUCCESS
 } = props
 
 const actions = {
@@ -112,6 +113,21 @@ const actions = {
       return Promise.reject(error)
     })
   },
+  async getApplyState(context, { objectType = 5, objectId, applyType, applyId }) {
+    let { commit } = context
+    await keepwork.applies.getApplyState({ objectType, objectId, applyType, applyId }).then(applyState => {
+      commit(GET_PROJECT_APPLY_STATE_SUCCESS, { objectId, applyId, applyState })
+      return Promise.resolve()
+    })
+  },
+  async applyJoinProject(context, { objectType = 5, objectId, applyType, applyId, extra }) {
+    let { dispatch } = context
+    await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, extra }).then(async () => {
+      await dispatch('getApplyState', { objectId, objectType, applyType, applyId })
+    }).catch(error => {
+      console.error(error)
+    })
+  },
   async getFavoriteState(context, { objectId, objectType, useCache = true }) {
     let { commit, getters: { projectFavoriteState } } = context
     let favoriteState = projectFavoriteState({ projectId: objectId })
@@ -192,6 +208,14 @@ const actions = {
     await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
       await dispatch('getComments', { objectType, objectId })
       return Promise.resolve()
+    }).catch(error => {
+      return Promise.reject(error)
+    })
+  },
+  async deleteComment(context, { objectType = 5, objectId, commentId }) {
+    let { dispatch } = context
+    await keepwork.comments.deleteComment({ commentId }).then(async () => {
+      await dispatch('getComments', { objectType, objectId })
     }).catch(error => {
       return Promise.reject(error)
     })

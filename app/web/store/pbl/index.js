@@ -11,9 +11,10 @@ const state = {
   memberList: [],
   projectsFavoriteState: [],
   projectsStarState: [],
-  commentList: [],
   myProjects: [],
-  myContributeProjects: []
+  myContributeProjects: [],
+  projectApplyState: {},
+  commentList: []
 }
 export default {
   namespaced: true,
