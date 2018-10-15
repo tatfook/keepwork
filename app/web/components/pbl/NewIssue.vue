@@ -6,7 +6,7 @@
         <div class="sketch-box">
           <div class="sketch-box-tag">标题</div>
           <div class="sketch-box-content">
-            <el-input size="medium"></el-input>
+            <el-input size="medium" v-model="issueTitle"></el-input>
           </div>
         </div>
         <div class="sketch-box">
@@ -24,6 +24,14 @@
           <div class="sketch-box-tag">指派</div>
           <div class="sketch-box-content">
             <!-- 指派头像显示 -->
+            <div class="player">
+              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <span class="assigns-btn"></span>
+            </div>
           </div>
         </div>
         <div class="sketch-box">
@@ -34,12 +42,14 @@
         </div>
       </div>
       <div class="finish">
-        <el-button size="medium" type="primary">完成创建</el-button>
+        <el-button size="medium" type="primary" @click="finishedCreateIssue">完成创建</el-button>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
+import { keepwork } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'NewIssue',
   props: {
@@ -47,10 +57,16 @@ export default {
   },
   data() {
     return {
-      dynamicTags: ['需求', '设计', '标签三'],
+      issueTitle: '创建的新issue',
+      dynamicTags: ['需求', '设计', '产品'],
       inputVisible: false,
       inputValue: '',
-      descriptionText: ''
+      descriptionText: '这里是issue的描述文字'
+    }
+  },
+  computed: {
+    projectId() {
+      return _.get(this.$route, 'params.id')
     }
   },
   methods: {
@@ -73,6 +89,24 @@ export default {
     },
     handleClose() {
       this.$emit('close')
+    },
+    finishedCreateIssue() {
+      console.log('tags', this.dynamicTags)
+      let payload = {
+        objectType: 5,
+        objectId: this.projectId,
+        title: this.issueTitle,
+        content: this.descriptionText,
+        tags: this.dynamicTags.toString().split(',').join('|'),
+        assigns: '60'
+      }
+      keepwork.issues
+        .createIssue(payload)
+        .then(res => {
+          console.log(res)
+          this.handleClose()
+          })
+        .catch(err => console.error(err))
     }
   }
 }
@@ -81,7 +115,7 @@ export default {
 .new-issue-dialog {
   .el-dialog {
     max-width: 600px;
-    .el-dialog__header{
+    .el-dialog__header {
       padding: 0;
     }
     .el-dialog__body {
@@ -117,6 +151,43 @@ export default {
           flex: 1;
           .el-tag + .el-tag {
             margin-left: 10px;
+          }
+          .player{
+            line-height: 38px;
+            margin-bottom: 8px;
+            &-portrait {
+              width: 36px;
+              height: 36px;
+              margin:8px 6px 0 0;
+              border-radius: 50%;
+              border: 1px solid #e8e8e8;
+            }
+            .assigns-btn{
+              width: 36px;
+              height: 36px;
+              border-radius: 50%;
+              border: 1px solid #e8e8e8;
+              display: inline-block;
+              position: relative;
+              &::after{
+                content: '';
+                height: 16px;
+                width: 1px;
+                background: #6e6d6d;
+                position: absolute;
+                left: 17px;
+                top: 10px;
+              }
+              &::before{
+                content: '';
+                height: 1px;
+                width: 16px;
+                background: #6e6d6d;
+                position: absolute;
+                left: 10px;
+                top: 17px;
+              }
+            }
           }
         }
       }

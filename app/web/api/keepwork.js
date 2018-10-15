@@ -245,6 +245,11 @@ export const comments = {
   deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)
 }
 
+export const issues = {
+  createIssue: async (...args) => post('issues', ...args),
+  getSingleProjectIssues: async ({ objectId, objectType }) => get(`issues?objectId=${objectId}&objectType=${objectType}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -260,7 +265,8 @@ export const keepwork = {
   applies,
   members,
   comments,
-  bigfile
+  bigfile,
+  issues
 }
 
 export default keepwork

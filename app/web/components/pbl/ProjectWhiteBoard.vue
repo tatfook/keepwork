@@ -76,6 +76,8 @@
 <script>
 import NewIssue from './NewIssue'
 import IssueDetail from './IssueDetail'
+import _ from 'lodash'
+import { keepwork } from '@/api'
 export default {
   name: 'ProjectWhiteBoard',
   data() {
@@ -89,6 +91,18 @@ export default {
   components: {
     NewIssue,
     IssueDetail
+  },
+  computed: {
+    projectId() {
+      return _.get(this.$route, 'params.id')
+    }
+  },
+  mounted(){
+    let objectId = this.projectId
+    let objectType = 5
+    keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(res => {
+      console.log('singleprojectissue',res)
+    })
   },
   methods: {
     goNewIssue() {

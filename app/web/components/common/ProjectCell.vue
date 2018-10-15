@@ -72,6 +72,7 @@ export default {
   &-title {
     font-size: 14px;
     margin: 10px 0;
+    line-height: 20px;
   }
   &-like {
     font-size: 12px;
