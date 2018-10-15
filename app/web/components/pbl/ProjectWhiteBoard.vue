@@ -14,7 +14,7 @@
         </div>
         <div class="filter">
           筛选：
-          <span class="rank"><span class="rank-tip">全部(1555)</span></span>
+          <span class="rank"><span class="rank-tip">全部({{issuesList.length}})</span></span>
           <span class="rank"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 (55)</span></span>
           <span class="rank"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 (99)</span></span>
         </div>
@@ -23,48 +23,22 @@
         </div>
       </div>
       <div class="project-white-board-content-list">
-        <div class="single-issue">
+        <div class="single-issue" v-for="(issue,index) in issuesList" :key="index">
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail">
               <i class="title-icon iconfont icon-check-circle-fill"></i>
-              <span>代码节比赛项目的场景搭建</span><span class="title-number">#8998</span>
+              <span>{{issue.title}}</span><span class="title-number">#8998</span>
             </div>
             <div class="single-issue-brief-intro">
-              <span class="created-time">3小时前</span>
-              <span class="created-by">由<span class="name">果果</span>创建</span>
+              <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
+              <span class="created-by">由<span class="name">{{issue.user.username}}</span>创建</span>
               <span class="created-tag">
-                <span class="tag">需求</span>
-                <span class="tag">开发</span>
-                <span class="tag">设计</span>
-                <span class="tag">流程</span>
+                <span class="tag" v-for="(tag,i) in issueTagArr[index]" :key="i">{{tag}}</span>
               </span>
             </div>
           </div>
           <div class="single-issue-join">
-            <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-            <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-            <img class="player-portrait" src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
-          </div>
-        </div>
-        <div class="single-issue">
-          <div class="single-issue-brief">
-            <div class="single-issue-brief-title">
-              <i class="title-icon iconfont icon-warning-circle-fill"></i>
-              <span>代码节比赛项目的场景搭建</span><span class="title-number">#8998</span>
-            </div>
-            <div class="single-issue-brief-intro">
-              <span class="created-time">3小时前</span>
-              <span class="created-by">由<span class="name">果果</span>创建</span>
-              <span class="created-tag">
-                <span class="tag">需求</span>
-                <span class="tag">开发</span>
-                <span class="tag">设计</span>
-                <span class="tag">流程</span>
-              </span>
-            </div>
-          </div>
-          <div class="single-issue-join">
-            <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+            <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait" alt="">
           </div>
         </div>
       </div>
@@ -78,6 +52,9 @@ import NewIssue from './NewIssue'
 import IssueDetail from './IssueDetail'
 import _ from 'lodash'
 import { keepwork } from '@/api'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'ProjectWhiteBoard',
   data() {
@@ -85,7 +62,8 @@ export default {
       showNewIssue: false,
       showIssueDetail: false,
       searchKeyWord: '',
-      select: ''
+      select: '',
+      issuesList: []
     }
   },
   components: {
@@ -93,16 +71,24 @@ export default {
     IssueDetail
   },
   computed: {
+    isEn() {
+      return locale === 'en-US'
+    },
     projectId() {
       return _.get(this.$route, 'params.id')
+    },
+    issueTagArr(){
+      return _.map(this.issuesList, issue => {
+        return issue.tags.split('|')
+      })
     }
   },
   mounted(){
     let objectId = this.projectId
     let objectType = 5
     keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(res => {
-      console.log('singleprojectissue',res)
-    })
+      this.issuesList = res.sort(this.sortByUpdateAt)
+    }).catch(err => console.error(err))
   },
   methods: {
     goNewIssue() {
@@ -116,7 +102,15 @@ export default {
     },
     closeIssueDetail() {
       this.showIssueDetail = false
-    }
+    },
+    relativeTime(time){
+      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(time,"YYYYMMDDHH").fromNow();
+    },
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
   }
 }
 </script>

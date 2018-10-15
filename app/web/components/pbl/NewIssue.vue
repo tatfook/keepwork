@@ -98,7 +98,7 @@ export default {
         title: this.issueTitle,
         content: this.descriptionText,
         tags: this.dynamicTags.toString().split(',').join('|'),
-        assigns: '60'
+        assigns: '60|37'
       }
       keepwork.issues
         .createIssue(payload)
