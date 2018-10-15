@@ -33,7 +33,7 @@
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
               <span class="created-by">由<span class="name">{{issue.user.username}}</span>创建</span>
               <span class="created-tag">
-                <span class="tag" v-for="(tag,i) in issueTagArr[index]" :key="i">{{tag}}</span>
+                <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
               </span>
             </div>
           </div>
@@ -76,11 +76,6 @@ export default {
     },
     projectId() {
       return _.get(this.$route, 'params.id')
-    },
-    issueTagArr(){
-      return _.map(this.issuesList, issue => {
-        return issue.tags.split('|')
-      })
     }
   },
   mounted(){
@@ -111,6 +106,9 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
+    issueTagArr(issue){
+      return _.get(issue, 'tags', '').split('|')
+    }
   }
 }
 </script>
