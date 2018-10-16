@@ -1,5 +1,5 @@
 <template>
-  <el-row class="lesson-header-container" id="shit">
+  <el-row class="lesson-header-container">
     <el-dialog :visible.sync="dialogVisible" width="50%">
       <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
         <source :src="videoUrl" type="video/mp4">
@@ -490,20 +490,6 @@ export default {
       font-size: 15vw;
       font-weight: bold;
     }
-  }
-}
-@media print {
-  #shit {
-    display: none;
-  }
-  .lesson-header-container {
-    display: none !important;
-  }
-  .lesson-cover {
-    display: none;
-  }
-  .lesson-desc {
-    display: none !important;
   }
 }
 </style>
