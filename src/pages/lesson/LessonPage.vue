@@ -114,3 +114,14 @@ body {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-page {
+    &-main-content {
+      &-scroll-only {
+        overflow: unset;
+      }
+    }
+  }
+}
+</style>
