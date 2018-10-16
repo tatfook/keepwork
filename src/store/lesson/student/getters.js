@@ -20,16 +20,7 @@ const getters = {
   enterClassInfo: state => state.enterClassInfo,
   classroomId: (state, { enterClassInfo }) => enterClassInfo.id || '',
   classId: (state, { enterClassInfo }) => enterClassInfo.id || '',
-  isBeInClassroom: (
-    state,
-    { classroomId },
-    rootState,
-    {
-      'lesson/userinfo': {
-        extra
-      }
-    }
-  ) => (classroomId ? Boolean(classroomId) : Boolean(_.get(extra, 'classroomId', ''))),
+  isBeInClassroom: (state, { classroomId }) => Boolean(classroomId),
   enterClassId: state => state.enterClassId,
   learnRecordsId: state => state.learnRecordsId,
   status: state => state.status,
