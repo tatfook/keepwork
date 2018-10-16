@@ -286,7 +286,7 @@ export default {
       return _.get(this.lesson, 'lessonName', '')
     },
     lessonNo() {
-      return _.get(this.lesson, 'id', '')
+      return _.get(this.lesson, 'packageIndex', '')
     },
     lessonSkills() {
       return _.map(

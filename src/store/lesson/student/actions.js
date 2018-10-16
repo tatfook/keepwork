@@ -38,18 +38,18 @@ const actions = {
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
   async getPackageDetail({ commit }, { packageId }) {
-    let detail = await lesson.packages.packageDetail({
-      id: packageId
-    })
-    commit(GET_PACKAGE_DETAIL_SUCCESS, {
-      detail
-    })
+    let detail = await lesson.packages.packageDetail({ packageId })
+    commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   },
-  async getLessonContent({ commit }, { lessonId }) {
+  async getLessonContent({ commit, dispatch, getters }, { lessonId, packageId }) {
+    await dispatch('getPackageDetail', { packageId })
+    const { studentPackageDetail } = getters
+    const packageIndex = studentPackageDetail({ packageId }).lessons.map(l => l.id).indexOf(Number(lessonId))
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
     // modList.forEach(mod => {
     //   if (mod.cmd === 'Quiz') {

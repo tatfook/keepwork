@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 const PUBLISH_LESSON = 'PUBLISH_LESSON'
 const TOGGLE_HINT = 'TOGGLE_HINT'
+const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const BEGIN_THE_CLASS_SUCCESS = 'BEGIN_THE_CLASS_SUCCESS'
@@ -17,6 +18,7 @@ const LEAVE_THE_CLASSROOM = 'LEAVE_THE_CLASSROOM'
 export const props = {
   PUBLISH_LESSON,
   TOGGLE_HINT,
+  GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
@@ -33,6 +35,12 @@ export const props = {
 const mutations = {
   [TOGGLE_HINT](state) {
     Vue.set(state, 'isShowHint', !state.isShowHint)
+  },
+  [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
+    Vue.set(state, 'packagesDetail', {
+      ...state.packagesDetail,
+      [detail.id]: detail
+    })
   },
   [GET_LESSON_CONTENT_SUCCESS](state, payload) {
     Vue.set(state, 'lessonData', payload)

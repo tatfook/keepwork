@@ -11,7 +11,6 @@
 
 <script>
 import ModLoader from '@/components/viewer/ModLoader'
-import AsyncModLoader from '@/components/adi/mod/index.async'
 import themeFactory from '@/lib/theme/theme.factory'
 import ThemeHelper from '@/lib/theme'
 import Quiz from './Quiz'

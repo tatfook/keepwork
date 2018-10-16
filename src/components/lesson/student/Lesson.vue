@@ -66,7 +66,7 @@ export default {
     }
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
       window.document.title = this.lessonName
       return (this.isLoading = false)
     }
@@ -79,7 +79,7 @@ export default {
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
     if (this.isCurrentClassroom) {
       this.changeStatus(1)
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }

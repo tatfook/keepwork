@@ -1,4 +1,8 @@
+import _ from 'lodash'
+
 const getters = {
+  teacherPackageDetail: state => ({ packageId }) =>
+    _.get(state.packagesDetail, packageId),
   isShowHint: state => state.isShowHint,
   lessonData: state => state.lessonData,
   lessonDetail: state => state.lessonDetail,
