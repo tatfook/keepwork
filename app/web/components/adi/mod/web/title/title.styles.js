@@ -78,9 +78,6 @@ export default [
         menu: {
           menuBackground: 'bgColors',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -147,9 +144,6 @@ export default [
         menu: {
           menuBackground: 'bgColors',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -215,9 +209,6 @@ export default [
         menu: {
           menuBackground: 'bgColors',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -283,9 +274,6 @@ export default [
         menu: {
           menuBackground: 'bgColors',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'svgFillColor'
         }
       },
       config: {
@@ -315,7 +303,7 @@ export default [
       },
       colLogo: {
         'float': 'left',
-        'max-width': '64px',
+        'max-width': '87px',
         'margin-left': '5px'
       },
       colBusinessName: {
@@ -347,9 +335,6 @@ export default [
         menu: {
           menuBackground: 'styleFourBackground',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'fontsColor'
         }
       },
       config: {
@@ -416,9 +401,6 @@ export default [
           color: 'svgFillColor',
           backgroundColor: 'color_5',
           borderBottomColor: 'svgFillColor'
-        },
-        logo: {
-          svgFillColor: 'svgFillColor'
         }
       },
       config: {

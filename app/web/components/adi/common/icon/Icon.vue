@@ -1,19 +1,15 @@
 <template>
   <div class='comp-icon'>
     <a :target='target' :href='link'>
-      <div v-if='isImage' :style="getStyle" class="img">
+      <div :style="getStyle" class="img">
         <img :src="src">
       </div>
-      <!-- <video v-else-if='isVideo' :src='src'></video> -->
-      <div class="svg" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
   </div>
 </template>
 
 <script>
-import Media from './icon.types'
 import compBaseMixin from '../comp.base.mixin'
-import { Base64 } from 'js-base64'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 
@@ -23,22 +19,6 @@ export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
   computed: {
-    svg() {
-      if (this.isBase64Svg) {
-        let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : ''
-
-        return Base64.decode(base64Svg)
-      }
-    },
-    isImage() {
-      return Media.isImage(this.src)
-    },
-    // isVideo() {
-    //   return Media.isVideo(this.src)
-    // },
-    isBase64Svg() {
-      return Media.isBase64Svg(this.src)
-    },
     src() {
       return this.properties.src ? this.properties.src : this.options.emptyMedia
     },
@@ -55,12 +35,6 @@ export default {
     getStyle() {
       return this.generateStyleString({
         width: this.getWebWidth(),
-      })
-    },
-    svgFill() {
-      return this.generateStyleString({
-        width: this.getWebWidth(),
-        fill: this.options.svgFillColor
       })
     }
   },
@@ -86,16 +60,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.comp-icon {
-  .svg {
-    svg {
-      width: auto;
-      height: auto;
-    }
-  }
-}
-</style>
 <style lang="scss" scoped>
 .comp-icon {
   a {
@@ -110,16 +74,6 @@ export default {
         width: auto;
         max-width: 185px;
         height: auto;
-      }
-    }
-    .svg {
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      height: 87px;
-      svg {
-        max-width: 185px;
       }
     }
   }

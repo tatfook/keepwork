@@ -12,7 +12,7 @@ let defaultData = {
     emptyLinkTarget: '_blank'
   },
   logo: {
-    emptyMedia: require('@/assets/adi/title/bear.svg'),
+    emptyMedia: require('@/assets/adi/menu/whiteBear.svg'),
     emptyLink: '',
     emptyLinkTarget: '_blank'
   },
@@ -590,9 +590,6 @@ export default [
         menu: {
           menuBackground: 'styleFourBackground',
           fontColor: 'fontsColor'
-        },
-        logo: {
-          svgFillColor: 'fontsColor'
         }
       },
       config: {
