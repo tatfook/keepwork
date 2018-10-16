@@ -94,6 +94,9 @@
         <el-menu-item index='1-3'>
           <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
+        <el-menu-item index='1-4'>
+          <a @click.stop="logout">{{$t('common.logout')}}</a>
+        </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
