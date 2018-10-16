@@ -274,7 +274,7 @@ $dangerColor: #e4461f;
   .package-basic-detail {
     display: block;
     &-cover{
-      width: 100%;
+      width: 90%;
     }
   }
 }
