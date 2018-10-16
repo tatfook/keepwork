@@ -143,12 +143,7 @@ export default {
     async addPackage() {
       if (this.isLogin) {
         if (this.isPackageFree) {
-          _hmt.push([
-            '_trackEvent',
-            'package',
-            'purchase',
-            'Free Package'
-          ])
+          _hmt.push(['_trackEvent', 'package', 'purchase', 'Free Package'])
           await this.lessonSubscribePackage({ packageId: this.packageId })
           this.$message({
             message: this.$t('lesson.addPackageSuccess'),
@@ -273,6 +268,14 @@ $dangerColor: #e4461f;
     font-size: 14px;
     margin-left: 0;
     width: 266px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .package-basic-detail {
+    display: block;
+    &-cover{
+      width: 100%;
+    }
   }
 }
 </style>

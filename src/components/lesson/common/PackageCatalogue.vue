@@ -18,23 +18,23 @@
             <div class="package-catalogue-item-cover-wrap">
               <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
             </div>
-            </div>
           </div>
-          <div class="package-catalogue-item-detail">
-            <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-              <span>{{lesson.lessonName}}</span>
-            </div>
-            <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
-            <div class="package-catalogue-item-goals">
-              <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
-            </div>
-            <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-              <span>45{{$t('lesson.minUnit')}}</span>
-            </div>
-            <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-            <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
-            <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+        </div>
+        <div class="package-catalogue-item-detail">
+          <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
+            <span>{{lesson.lessonName}}</span>
           </div>
+          <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
+          <div class="package-catalogue-item-goals">
+            <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
+          </div>
+          <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
+            <span>45{{$t('lesson.minUnit')}}</span>
+          </div>
+          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
+          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+        </div>
         </div>
       </div>
     </div>
@@ -332,6 +332,13 @@ export default {
         left: 0;
         top: 10px;
       }
+    }
+  }
+}
+@media screen and (max-width: 768px){
+  .package-catalogue {
+    &-item{
+      display: block;
     }
   }
 }
