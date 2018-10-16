@@ -64,11 +64,7 @@ export default [
       desc: ['auxiliaryText', 'desc']
     },
     options: {
-      theme: {
-        pic: {
-          svgFillColor: 'svgFillColor'
-        }
-      },
+      theme: {},
       config: {
         ...emptyData,
         pic: _.merge({}, emptyData.pic, {
@@ -137,11 +133,7 @@ export default [
       desc: ['auxiliaryText', 'desc']
     },
     options: {
-      theme: {
-        pic: {
-          svgFillColor: 'desc'
-        }
-      },
+      theme: {},
       config: {
         ...emptyData,
         desc: {

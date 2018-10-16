@@ -29,7 +29,7 @@ export const isImage = src => {
       // base64 image
       let type = src.split(',')[0] ? src.split(',')[0] : ''
 
-      if (type === 'data:image/png;base64' || type === 'data:image/jpeg;base64' || type === 'data:image/gif;base64') {
+      if (type === 'data:image/png;base64' || type === 'data:image/jpeg;base64' || type === 'data:image/gif;base64' || type === 'data:image/svg+xml;base64') {
         return true
       } else {
         return false
@@ -38,22 +38,9 @@ export const isImage = src => {
   }
 }
 
-export const isBase64Svg = src => {
-  if (typeof (src) === 'string') {
-    let type = src.split(',')[0] ? src.split(',')[0] : ''
-
-    if (type === 'data:image/svg+xml;base64') {
-      return true
-    } else {
-      return false
-    }
-  }
-}
-
 export default {
   imageTypes,
   videoTypes,
   isImage,
-  isVideo,
-  isBase64Svg
+  isVideo
 }

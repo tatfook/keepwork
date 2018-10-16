@@ -5,7 +5,6 @@
         <img :src="src">
       </div>
       <video v-else-if='isVideo' :src='src'></video>
-      <div class="svg" :class="getImgClass" v-if="isBase64Svg" v-html="svg" :style="svgFill"></div>
     </a>
   </div>
 </template>
@@ -13,7 +12,6 @@
 <script>
 import Media from './media.types'
 import compBaseMixin from '../comp.base.mixin'
-import { Base64 } from 'js-base64'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 
@@ -23,21 +21,11 @@ export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
   computed: {
-    svg() {
-      if (this.isBase64Svg) {
-        let base64Svg = this.src.split(',')[1] ? this.src.split(',')[1] : ''
-
-        return Base64.decode(base64Svg)
-      }
-    },
     isImage() {
       return Media.isImage(this.src)
     },
     isVideo() {
       return Media.isVideo(this.src)
-    },
-    isBase64Svg() {
-      return Media.isBase64Svg(this.src)
     },
     src() {
       return this.properties.src ? this.properties.src : this.options.emptyMedia
@@ -104,17 +92,12 @@ export default {
     },
     fullWidth() {
       return [['100%'], '!important']
-    },
-    svgFill() {
-      return this.generateStyleString({
-        fill: this.options.svgFillColor
-      })
     }
   },
   methods: {
     parsePx(value) {
       let returnValue = 'auto'
-  
+
       if (typeof value == 'number' || typeof value == 'string') {
         if (!isNaN(parseInt(value))) {
           returnValue = parseInt(value) + 'px'
@@ -173,17 +156,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.comp-media {
-  .svg {
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
-</style>
 
 <style lang="scss" scoped>
 .comp-media {
