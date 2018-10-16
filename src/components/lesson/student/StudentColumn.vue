@@ -1,7 +1,8 @@
 <template>
   <div class="student-wrap">
-    <el-container class="student">
-      <el-aside width="274px">
+    <el-row class="student">
+      <el-col :md="6" class="aside">
+        <div class="aside-content">
         <div class="profile">
           <img :src='userProfile.portrait' alt="portrait">
         </div>
@@ -15,22 +16,23 @@
             </li>
           </ul>
         </div>
-      </el-aside>
-      <el-main>
+        </div>
+      </el-col>
+      <el-col :md="18" class="main">
         <div class="search">
           <el-row>
-            <el-col :md="2">
+            <el-col :md="2" :sm="2">
               <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
             </el-col>
-            <el-col :md="5">
+            <el-col :md="5" :sm="5">
               <span class="tip">{{$t('lesson.enterClass')}}</span>
             </el-col>
-            <el-col :md="11">
+            <el-col :md="11" :sm="11">
               <span class="search-input">
                 <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
               </span>
             </el-col>
-            <el-col :md="6">
+            <el-col :md="6" :sm="6" :xs="6">
               <span class="search-btn">
                 <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
                   <label for="searchClass">{{$t('lesson.enter')}}</label>
@@ -54,8 +56,8 @@
             </el-col>
           </el-row>
         </div>
-      </el-main>
-    </el-container>
+      </el-col>
+    </el-row>
     <div class="be-in-class" v-show="beInClassDialog">
       <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
         <div class="hint">
@@ -244,11 +246,16 @@ export default {
   .student {
     margin: 0 auto;
     max-width: 1150px;
-    .el-aside {
-      background: #ffffff;
-      margin-right: 29px;
+    .aside {
+      background: #f8f8f8;
+      padding:0 16px;
       overflow: hidden;
       text-align: center;
+      &-content{
+        background: #fff;
+        padding: 30px 0 50px;
+        margin: 0 auto;
+      }
       .profile {
         width: 99px;
         height: 99px;
@@ -272,7 +279,7 @@ export default {
       }
       .beans{
         border-bottom: 1px solid #909399;
-        margin: 5px 20px 15px;
+        margin: 5px 8px 15px;
         padding-bottom: 20px;
         color: #181818;
         font-size: 14px;
@@ -312,7 +319,7 @@ export default {
         }
       }
     }
-    .el-main {
+    .main {
       padding: 0;
       background: #fff;
       overflow: hidden;
@@ -326,7 +333,7 @@ export default {
           display: block;
           padding-top: 20px;
           font-size: 14px;
-          text-align: center;
+          text-align: left;
         }
         &-input {
           display: inline-block;
