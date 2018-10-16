@@ -188,7 +188,9 @@ export default {
       return window.location.hostname
     },
     editorPagePrefix() {
-      return this.hostname === 'localhost' ? '/editor.html#/' : '/wiki/wikieditor#/'
+      return this.hostname === 'localhost'
+        ? '/editor.html#/'
+        : '/wiki/wikieditor#/'
     },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
@@ -580,6 +582,36 @@ export default {
     }
     .el-button + .el-button {
       margin-left: 46px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-manager {
+    &-overview {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    &-total {
+      font-size: 18px;
+    }
+    &-new-button {
+      width: auto;
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+    &-selector {
+      padding: 8px;
+      align-items: flex-end;
+      &-item {
+        flex: 1;
+        padding: 0 8px;
+        .el-select{
+          width: 100%;
+        }
+      }
     }
   }
 }

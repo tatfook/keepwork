@@ -200,3 +200,10 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.new-package {
+  &-media-setter {
+    padding: 16px;
+  }
+}
+</style>

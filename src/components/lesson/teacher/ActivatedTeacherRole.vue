@@ -1,8 +1,8 @@
 <template>
   <div class="activated-teacher-role">
-    <el-container class="teacher">
-      <el-aside width="260px">
-        <el-menu :default-active="itmeActive" class="el-menu-vertical-demo" text-color='#b3b3b3' active-text-color='#fff'>
+    <el-container class="teacher activated-teacher-role-teacher">
+      <el-aside width="auto" class="activated-teacher-role-aside">
+        <el-menu :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" text-color='#b3b3b3' active-text-color='#fff'>
           <el-menu-item index="1" @click="showItem('TEACH')">
             <i class="iconfont icon-teach"></i>
             <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
@@ -11,7 +11,7 @@
             <i class="iconfont icon-review"></i>
             <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
           </el-menu-item>
-          <el-submenu index="3">
+          <el-submenu index="3" popper-class='activated-teacher-role-popver-menu'>
             <template slot="title">
               <i class="iconfont icon-setting"></i>
               <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
@@ -36,11 +36,18 @@ export default {
   name: 'ActivatedTeacherRole',
   data() {
     return {
+      windowWidth: window.innerWidth,
       itmeActive: '1'
     }
   },
   mounted() {
     this.setActiveItem()
+    window.addEventListener('resize', this.handleWindowResize)
+  },
+  computed: {
+    menuMode() {
+      return this.windowWidth > 678 ? 'vertical' : 'horizontal'
+    }
   },
   methods: {
     setActiveItem() {
@@ -89,7 +96,13 @@ export default {
         default:
           break
       }
+    },
+    handleWindowResize(event) {
+      this.windowWidth = event.currentTarget.innerWidth
     }
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.handleWindowResize)
   },
   watch: {
     $route() {
@@ -105,6 +118,9 @@ export default {
     height: 100%;
     margin: 0;
     overflow: auto;
+  }
+  &-aside {
+    width: 260px;
   }
   .teacher {
     margin: 0 auto;
@@ -162,6 +178,35 @@ export default {
     .el-main {
       overflow: hidden;
       padding: 50px 0;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .activated-teacher-role {
+    &-popver-menu {
+      background-color: transparent;
+      .el-menu {
+        background-color: #2f3541;
+        .el-menu-item {
+          background-color: #2f3541;
+        }
+      }
+    }
+    & .teacher {
+      flex-direction: column;
+      .el-aside {
+        margin: 0;
+        width: 100%;
+        padding: 0;
+        overflow: visible;
+        border-right: none;
+      }
+      .el-main {
+        padding: 16px 0;
+        overflow: auto;
+      }
     }
   }
 }

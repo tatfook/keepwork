@@ -310,9 +310,6 @@ export default {
   .hidden-sm-and-up .el-icon-menu {
     font-size: 30px;
   }
-  .hidden-sm-and-up .el-submenu {
-    margin: 0 -10px;
-  }
   .el-menu-item {
     padding: 0 10px;
   }

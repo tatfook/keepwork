@@ -574,3 +574,33 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .package-manager {
+    &-overview {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    &-total {
+      font-size: 18px;
+    }
+    &-new-button {
+      width: auto;
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+    &-selector {
+      padding: 8px;
+      align-items: flex-end;
+      &-item {
+        flex: 1;
+        padding: 0 8px;
+        .el-select{
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+</style>
