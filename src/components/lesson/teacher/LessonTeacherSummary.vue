@@ -338,7 +338,8 @@ export default {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: this.$t('lesson.wrongEmail')
+        inputErrorMessage: this.$t('lesson.wrongEmail'),
+        customClass: 'email-style'
       })
         .then(async ({ value }) => {
           this.emailAddress = value
@@ -461,7 +462,7 @@ export default {
     overflow: hidden;
     &-wrap{
       padding: 40px;
-      width: 300px;
+      width: 245px;
       float: right;
     }
   }
@@ -568,6 +569,11 @@ export default {
     .email-address{
       color: #409eff;
     }
+  }
+}
+@media screen and (max-width: 768px){
+  .email-style{
+    width: 70%;
   }
 }
 @media print{
