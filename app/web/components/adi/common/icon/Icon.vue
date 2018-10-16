@@ -1,8 +1,8 @@
 <template>
   <div class='comp-icon'>
     <a :target='target' :href='link'>
-      <div :style="getStyle" class="img">
-        <img :src="src">
+      <div class="img">
+        <img :src="src" :style="getStyle">
       </div>
     </a>
   </div>
@@ -68,7 +68,8 @@ export default {
       align-items: center;
       position: relative;
       overflow: hidden;
-      height: 87px;
+      max-height: 87px;
+      min-width: 87px;
       img {
         display: block;
         width: auto;
