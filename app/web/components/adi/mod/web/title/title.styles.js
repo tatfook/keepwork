@@ -354,6 +354,7 @@ export default [
   // style 5
   {
     templateID: 2,
+    componentID: 1,
     data: {
       root: {},
       colGroupRow: {
@@ -365,7 +366,7 @@ export default [
         'justify-content': 'flex-start',
         'min-width': '180px'
       },
-      colMenuB: {
+      colMenu: {
         display: 'flex',
         'justify-content': 'flex-end',
         'align-items': 'center'
@@ -385,7 +386,7 @@ export default [
         xs: { span: 12 },
         sm: { span: 9 }
       },
-      colMenuB: {
+      colMenu: {
         xs: { span: 12 },
         sm: { span: 15 }
       }
