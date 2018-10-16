@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-page" v-loading="loading">
     <div class="lesson-page-header">
-      <common-header class="container" @callback="resetPage"></common-header>
+      <common-header class="container" @callback="resetPage" @preCallback="preChangeStatus"></common-header>
     </div>
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
@@ -34,7 +34,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isShowLoginDialog: 'lesson/isShowLoginDialog'
+      isShowLoginDialog: 'lesson/isShowLoginDialog',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     nowPagename() {
       return this.$route.name
@@ -50,7 +51,9 @@ export default {
     ...mapActions({
       getUserProfile: 'user/getProfile',
       getUserDetail: 'lesson/getUserDetail',
-      toggleLoginDialog: 'lesson/toggleLoginDialog'
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
     }),
     async loadLessonPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
@@ -62,11 +65,18 @@ export default {
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
     },
-    resetPage() {
+    async resetPage() {
       const { name } = this.$route
       const rules = ['TeacherColumn', 'StudentColumn']
       if (rules.some(i => i === name)) {
         this.$router.push({ name: 'StudentCenter' })
+      }
+    },
+    async preChangeStatus() {
+      if (this.isBeInClassroom) {
+        this.changeStatus(0)
+        await this.uploadLearnRecords().catch(e => console.error(e))
+        console.warn('preChangeStatus finish --->')
       }
     }
   }

@@ -10,7 +10,9 @@ const state = () => ({
   isShowStudentSummary: false,
   enterClassInfo: {},
   enterClassId: '',
-  learnRecordsId: ''
+  learnRecordsId: '',
+  status: 2,
+  device: 'k'
 })
 
 export default {

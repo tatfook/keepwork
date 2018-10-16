@@ -17,14 +17,16 @@
       <el-table-column v-if="isHasData" fixed prop="name" :label="$t('lesson.name')" sortable min-width="140" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <div class="userinfo">
-            <img class="portrait" :src="formatAvatar(props.row.portrait)" alt="portrait">
+            <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
+              <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'outline': checkOutline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
+            </div>
             <span class="name">{{props.row.name}}</span>
           </div>
         </template>
       </el-table-column>
       <el-table-column fixed v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
       </el-table-column>
-      
+
       <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :render-header="(h, params) => renderLastHeader(h,params)" sortable min-width="100" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <span v-if="props.row[`quiz${index+1}`]['type'] === TRF" :class="['answer', props.row[`quiz${index + 1}`]['result'] ? 'right': 'wrong'  ]">{{ formatTRF(props.row[`quiz${index+1}`]['answer']) }}</span>
@@ -45,7 +47,9 @@ export default {
   data() {
     return {
       TRF: '2',
-      defaultAvatar: avatar
+      defaultAvatar: avatar,
+      KEEPWORK_SIGN: 'k',
+      PARACRAFT_SIGN: 'p'
     }
   },
   components: {
@@ -59,6 +63,15 @@ export default {
   methods: {
     handleRefreshLearnRecords() {
       this.$emit('intervalUpdateLearnRecords')
+    },
+    checkOnline(value) {
+      return value ? ['k1', 'p1'].some(i => i === value) : false
+    },
+    checkOutline(value) {
+      return value ? ['k0', 'p0'].some(i => i === value) : false
+    },
+    checkLeave(value) {
+      return value ? ['k2', 'p2'].some(i => i === value) : false
     },
     formatAvatar(value = '') {
       return value.substr(0, 4).toLowerCase() === 'http'
@@ -75,7 +88,7 @@ export default {
       return ''
     },
     renderLastHeader(h, { column, $index }) {
-      let tableHeaderIndex = $index - 2
+      let tableHeaderIndex = $index - 3
       let quizIndex = tableHeaderIndex - 1
       let quiz = this.tableHeaderQuizzesPopover[quizIndex]
       return <TableHeaderPopover index={tableHeaderIndex} quiz={quiz} />
@@ -89,15 +102,30 @@ export default {
         return count
       }, 0)
       let state =
-        finishCount === quiz.length ? `${this.$t('lesson.finished')}` : `${finishCount}/${quiz.length}`
+        finishCount === quiz.length
+          ? `${this.$t('lesson.finished')}`
+          : `${finishCount}/${quiz.length}`
       return state
     },
     makeQuizzes(quiz) {
       return quiz.reduce((obj, cur, index) => {
-        let { result, answer, data: { options, type, score } } = cur
+        let {
+          result,
+          answer,
+          data: { options, type, score }
+        } = cur
         obj[`quiz${index + 1}`] = { answer, result, options, type, score }
         return obj
       }, {})
+    },
+    getFirstLetter(chart) {
+      return chart ? chart[0] : 'k'
+    },
+    isOutline(value) {
+      return ['k0', 'p0'].some(i => i === value)
+    },
+    isLeave(value) {
+      return ['k2', 'p2'].some(i => i === value)
     }
   },
   computed: {
@@ -119,10 +147,12 @@ export default {
             ({
               userId,
               state,
-              extra: { name, portrait, quiz = [], username }
+              extra: { name, portrait, quiz = [], username, status, world = '' }
             }) => ({
               userId,
               state,
+              status,
+              world,
               name,
               portrait,
               quiz,
@@ -154,15 +184,23 @@ export default {
     tableData() {
       return this.isHasData
         ? this.learnRecordsFilter.map(item => {
-            const { portrait, name, username, quiz } = item
+            const { portrait, name, username, quiz, status, world = '' } = item
             let state = this.countState(quiz)
             let quizzes = this.makeQuizzes(quiz)
-            return { portrait, name, username, state, ...quizzes }
+            return {
+              portrait,
+              status,
+              name,
+              username,
+              world,
+              state,
+              ...quizzes
+            }
           })
         : []
     },
     tableUserInfo() {
-      return this.isHasData ? ['username', 'state'] : []
+      return this.isHasData ? ['username', 'state', 'world'] : []
     },
     tableQuizzes() {
       return this.isHasData
@@ -227,13 +265,52 @@ $red: #f53838;
     .userinfo {
       display: flex;
       align-items: center;
-      .portrait {
-        $size: 50px;
-        display: inline-block;
-        height: $size;
+      .portrait-wrap::after {
+        $size: 20px;
+        display: block;
+        
         width: $size;
+        height: $size;
+        line-height: $size;
+        font-size: 14px;
+        color: #ffffff;
         border-radius: 50%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+      .portrait-wrap {
+        position: relative;
         margin-right: 20px;
+        .portrait {
+          $size: 50px;
+          display: inline-block;
+          height: $size;
+          width: $size;
+          border-radius: 50%;
+        }
+        &.keepwork::after {
+          content: 'K';
+          background: #409efe;
+        }
+        &.leave.keepwork::after {
+          content: 'K';
+          background: #e6a23c;
+        }
+        &.paracraft::after {
+          content: 'P';
+          background: #409efe;
+        }
+        &.leave.paracraft::after {
+          content: 'P';
+          background: #e6a23c;
+        }
+        .leave {
+          opacity: 0.3;
+        }
+        .outline {
+          filter: grayscale(100%);
+        }
       }
       .name {
         display: inline-block;

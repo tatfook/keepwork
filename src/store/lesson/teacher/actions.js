@@ -8,9 +8,6 @@ const {
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
   DISMISS_THE_CLASS_SUCCESS,
-  TOGGLE_LESSON,
-  TOGGLE_PERFORMANCE,
-  TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
@@ -86,17 +83,11 @@ const actions = {
         commit(LEAVE_THE_CLASSROOM)
       })
   },
+  async resumeClassData({ commit }, payload) {
+    commit(GET_CURRENT_CLASSROOM_SUCCESS, payload)
+  },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
-  },
-  toggleLesson({ commit }, flag) {
-    commit(TOGGLE_LESSON, flag)
-  },
-  togglePerformance({ commit }, flag) {
-    commit(TOGGLE_PERFORMANCE, flag)
-  },
-  toggleSummary({ commit }, flag) {
-    commit(TOGGLE_SUMMARY, flag)
   },
   async getUserPackages(context, { useCache = true }) {
     let {

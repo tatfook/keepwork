@@ -64,6 +64,16 @@ const actions = {
     let allSubjects = await lesson.subjects.getAllSubjects()
     commit(GET_ALL_SUBJECTS_SUCCESS, { subjects: allSubjects })
   },
+  async resumeClassData({ dispatch }) {
+    await lesson.classrooms
+      .currentClass()
+      .then(res => {
+        console.warn('resume all data', res)
+        dispatch('lesson/student/resumeClassData', res, { root: true })
+        dispatch('lesson/teacher/resumeClassData', res, { root: true })
+      })
+      .catch(e => console.error(e))
+  },
   async logout({ commit }) {
     commit(LOGOUT)
   },

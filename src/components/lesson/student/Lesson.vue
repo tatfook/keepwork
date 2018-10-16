@@ -78,13 +78,17 @@ export default {
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
     if (this.isCurrentClassroom) {
+      this.changeStatus(1)
       await this.getLessonContent({ lessonId }).catch(e => console.error(e))
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
     this.isLoading = false
     window.document.title = this.lessonName
-    this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    if (this.isBeInClassroom) {
+      this.handleCheckVisible()
+      !this._interval && this.intervalCheckClass()
+    }
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -99,22 +103,42 @@ export default {
       clearLessonData: 'lesson/student/clearLessonData',
       checkClassroom: 'lesson/student/checkClassroom',
       switchSummary: 'lesson/student/switchSummary',
-      toggleLoginDialog: 'lesson/toggleLoginDialog'
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
-      console.warn('检查课堂是否还在')
       await this.checkClassroom()
       clearTimeout(this._interval)
-      this._interval = setTimeout(
-        async () =>
-          await this.intervalCheckClass().catch(
-            e =>
-              this.$message({
-                message: this.$t('lesson.classIsOver'),
-                type: 'warning'
-              }) && this._notify.close()
-          ),
-        delay
+      this._interval = setTimeout(async () => {
+        await this.intervalCheckClass().catch(
+          e =>
+            this.$message({
+              message: this.$t('lesson.classIsOver'),
+              type: 'warning'
+            }) && this._notify.close()
+        )
+      }, delay)
+    },
+    handleCheckVisible() {
+      let hidden = false
+      let visibilityChange = 'visibilitychange'
+      if (typeof document.hidden !== 'undefined') {
+        hidden = 'hidden'
+        visibilityChange = 'visibilitychange'
+      } else if (typeof document.msHidden !== 'undefined') {
+        hidden = 'msHidden'
+        visibilityChange = 'msvisibilitychange'
+      } else if (typeof document.webkitHidden !== 'undefined') {
+        hidden = 'webkitHidden'
+        visibilityChange = 'webkitvisibilitychange'
+      }
+      document.addEventListener(
+        visibilityChange,
+        async () => {
+          document[hidden] ? this.changeStatus(2) : this.changeStatus(1)
+          await this.uploadLearnRecords().catch(e => console.error(e))
+        },
+        false
       )
     },
     backToClassroom() {
@@ -212,7 +236,7 @@ export default {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     },
     lessonMainUid() {
-      this.lessonMain.map(item => item).forEach(item => item.key = uuid())
+      this.lessonMain.map(item => item).forEach(item => (item.key = uuid()))
     }
   }
 }

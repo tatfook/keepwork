@@ -15,6 +15,8 @@ const RESUME_QUIZ = 'RESUME_QUIZ'
 const CREATE_LEARN_RECORDS_SUCCESS = 'CREATE_LEARN_RECORDS_SUCCESS'
 const CLEAR_LEARN_RECORDS_ID = 'CLEAR_LEARN_RECORDS_ID'
 const CLEAR_LESSON_DATA = 'CLEAR_LESSON_DATA'
+const CHANGE_STATUS = 'CHANGE_STATUS'
+const SWITCH_DEVICE = 'SWITCH_DEVICE'
 
 export const props = {
   SET_USER_SUBSCRIBES,
@@ -31,7 +33,9 @@ export const props = {
   RESUME_QUIZ,
   CREATE_LEARN_RECORDS_SUCCESS,
   CLEAR_LEARN_RECORDS_ID,
-  CLEAR_LESSON_DATA
+  CLEAR_LESSON_DATA,
+  CHANGE_STATUS,
+  SWITCH_DEVICE
 }
 
 const mutations = {
@@ -82,6 +86,12 @@ const mutations = {
   },
   [CLEAR_LESSON_DATA](state) {
     Vue.set(state, 'lessonDetail', '')
+  },
+  [CHANGE_STATUS](state, payload) {
+    Vue.set(state, 'status', payload)
+  },
+  [SWITCH_DEVICE](state, payload) {
+    Vue.set(state, 'device', payload)
   }
 }
 

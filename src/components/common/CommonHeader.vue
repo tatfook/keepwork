@@ -228,6 +228,7 @@ export default {
       this.isLoginDialogShow = false
     },
     logout() {
+      this.$emit('preCallback')
       this.userLogout()
       this.$emit('callback')
       // window.location.reload()
