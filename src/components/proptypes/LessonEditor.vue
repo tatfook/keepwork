@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-menu">
+  <div class="lesson-menu" v-if="canEdit">
     <div width="460px" center="">
       <div class="select-title">{{$t('lesson.linkThePage')}}</div>
       <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
@@ -16,6 +16,11 @@
     <el-dialog :visible.sync="dialogVisible" width="800px" :append-to-body="true" top="0">
       <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
+  </div>
+  <div class="lesson-menu" v-else>
+    <div width="460px" center="">
+      <div class="select-title">{{$t('lesson.notAllowed')}}</div>
+    </div>
   </div>
 </template>
 
@@ -56,6 +61,9 @@ export default {
     },
     isLinked() {
       return !!this.userLessons.find(({ id }) => id === this.lessonId)
+    },
+    canEdit() {
+      return !this.lessonId || this.isLinked
     }
   },
   methods: {
