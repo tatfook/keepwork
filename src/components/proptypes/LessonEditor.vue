@@ -27,7 +27,9 @@
 
 <script>
 import EditLesson from '@/components/lesson/teacher/EditLesson'
-
+import Parser from '@/lib/mod/parser'
+import BlockHelper from '@/lib/mod/parser/blockHelper'
+import uuid from 'uuid/v1'
 import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -87,9 +89,21 @@ export default {
         })
     },
     async handleRelease() {
-      const { file: { content } } = this.activePage
+      const {
+        file: { content }
+      } = this.activePage
+
+      let modList = Parser.buildBlockList(content)
+      let newModList = [...modList]
+      newModList.forEach(item => {
+        if (item.cmd === 'Quiz') {
+          item.data.quiz.data[0].id = uuid()
+          BlockHelper.buildMarkdown(item)
+        }
+      })
+      let md = Parser.buildMarkdown(newModList)
       await lesson.lessons
-        .release({ id: this.selectValue, content })
+        .release({ id: this.selectValue, content: md })
         .then(res =>
           this.$message({
             type: 'success',
