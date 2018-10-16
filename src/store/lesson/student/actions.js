@@ -107,7 +107,7 @@ const actions = {
     _classroom['id'] = learnRecordId
     _classroom['classroomId'] = id
     commit(RESUME_CLASSROOM, _classroom)
-    await dispatch('resumeQuiz', { id })
+    await dispatch('resumeQuiz', { id: learnRecordId })
     await dispatch('uploadLearnRecords')
   },
   async resumeQuiz(
