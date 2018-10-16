@@ -343,8 +343,9 @@ export default [
           type: 'menu'
         }),
         logo: _.merge({}, defaultData.logo, {
+          emptyMedia: require('@/assets/adi/title/whiteBear.svg'),
           img: {
-            defaultWebWidth: ''
+            defaultWebWidth: '64px'
           }
         })
       }
@@ -410,7 +411,7 @@ export default [
         }),
         logo: _.merge({}, defaultData.logo, {
           img: {
-            defaultWebWidth: ''
+            defaultWebWidth: '64px'
           }
         })
       }
