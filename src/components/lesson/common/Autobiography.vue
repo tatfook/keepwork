@@ -26,7 +26,7 @@
       </div>
 
       <div class="here-page-content-img">
-        <img width="820" src="@/assets/lessonImg/aboutPageImg/here_page_img1.png" alt="">
+        <img class="pic" src="@/assets/lessonImg/aboutPageImg/here_page_img1.png" alt="">
       </div>
 
       <div class="here-page-content-key-point point2">
@@ -63,7 +63,7 @@
       </div>
 
       <div class="here-page-content-img">
-        <img width="820" src="@/assets/lessonImg/aboutPageImg/here_page_img2.png" alt="">
+        <img class="pic" src="@/assets/lessonImg/aboutPageImg/here_page_img2.png" alt="">
       </div>
 
       <div class="here-page-content-key-point point5">
@@ -100,7 +100,7 @@
       </div>
 
       <div class="here-page-content-img">
-        <img width="820" src="@/assets/lessonImg/aboutPageImg/here_page_img3.png" alt="">
+        <img class="pic" src="@/assets/lessonImg/aboutPageImg/here_page_img3.png" alt="">
       </div>
 
       <div class="here-page-content-conclusions">
@@ -160,11 +160,15 @@ export default {
 <style lang="scss">
 .here-page {
   &-content {
-    width: 860px;
+    max-width: 860px;
     margin: 0 auto 26px;
     padding: 50px 20px;
     background: #fff;
     line-height: 26px;
+    .pic{
+      width: 100%;
+      object-fit: contain;
+    }
     &-title {
       margin: 0 auto;
       text-align: center;

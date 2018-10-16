@@ -462,12 +462,9 @@ export default {
     display: block;
   }
   &-print-and-email {
-    overflow: hidden;
-    &-wrap{
-      padding: 40px;
-      width: 245px;
-      float: right;
-    }
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 22px 10px 10px;
   }
   &-print-header{
     display: none;
