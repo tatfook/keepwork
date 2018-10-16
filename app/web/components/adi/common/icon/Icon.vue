@@ -68,7 +68,7 @@ export default {
       align-items: center;
       position: relative;
       overflow: hidden;
-      height: 87px;
+      max-height: 87px;
       img {
         display: block;
         width: auto;
