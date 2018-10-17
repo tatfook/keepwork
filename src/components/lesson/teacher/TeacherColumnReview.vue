@@ -33,7 +33,7 @@
             </p>
             <p class="package-intro">
               <span :title="lessonPackage.extra.lessonGoals">
-                <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</span>
+                <span class="brief-title">{{$t('lesson.intro')}}:</span><br class="package-intro-break-tag">{{lessonPackage.extra.lessonGoals}}</span>
             </p>
             <p>
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
@@ -261,8 +261,13 @@ export default {
 @media (max-width: 768px) {
   .review {
     &-list {
+      &-container {
+        display: flex;
+        justify-content: space-evenly;
+      }
       &-class-hours {
-        margin-top: 16px;
+        margin: 0;
+        padding: 0 16px;
         &:first-child {
           margin-top: 0;
         }
@@ -277,6 +282,24 @@ export default {
           &-summary {
             width: auto;
             padding-top: 16px;
+            text-align: left;
+          }
+          &-brief {
+            padding-left: 0;
+            .name {
+              margin-bottom: 12px;
+            }
+            p {
+              margin: 0;
+            }
+            p.package-intro {
+              margin-bottom: 6px;
+            }
+            .package-intro {
+              &-break-tag {
+                display: none;
+              }
+            }
           }
         }
       }
