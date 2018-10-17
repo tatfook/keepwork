@@ -292,7 +292,7 @@ export default {
         .reduce((arr, cur) => [...arr, ...cur], [])
     },
     modListFilter() {
-      return this.modList.filter(item => item.cmd !== 'Lesson')
+      return this.modList.filter(item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile')
     }
   },
   methods: {

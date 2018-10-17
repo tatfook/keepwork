@@ -275,6 +275,7 @@ $dangerColor: #e4461f;
     display: block;
     &-cover{
       width: 90%;
+      margin: 20px;
     }
   }
 }
