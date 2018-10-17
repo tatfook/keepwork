@@ -208,6 +208,7 @@ export default {
     }
   }
   .el-dialog {
+    max-width: 100%;
     .el-dialog__header{
       padding: 0;
     }
