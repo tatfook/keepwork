@@ -46,6 +46,8 @@
       return result;
     })();
 
+    urlParams['dev'] = '1';
+
     // Forces CDN caches by passing URL parameters via URL hash
     if (window.location.hash != null && window.location.hash.substring(0, 2) == '#P') {
       try {
@@ -137,6 +139,9 @@
       addMeta('apple-mobile-web-app-title', name);
       addMeta('application-name', name);
     })();
+
+    urlParams['keepworkdev'] = '1';
+    urlParams['p'] = 'trees';
   </script>
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -394,11 +399,9 @@
      */
     App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
 
-    setTimeout(function() {
-      App.main(function(ui) {
-        window.board = ui;
-      });
-    }, 300)
+    App.main(function(ui) {
+      window.board = ui;
+    });
   </script>
 </body>
 
