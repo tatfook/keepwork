@@ -1,11 +1,11 @@
 <template>
-  <div class="lesson-page" v-loading="loading">
+  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE}" v-loading="loading">
     <div class="lesson-page-header">
       <common-header class="container" @callback="resetPage" @preCallback="preChangeStatus"></common-header>
     </div>
     <lesson-header></lesson-header>
     <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
-    <common-footer class="container"></common-footer>
+    <common-footer class="lesson-page-footer container"></common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      isIE: !!window.ActiveXObject || 'ActiveXObject' in window,
       loading: true
     }
   },
@@ -53,7 +54,7 @@ export default {
       getUserDetail: 'lesson/getUserDetail',
       toggleLoginDialog: 'lesson/toggleLoginDialog',
       changeStatus: 'lesson/student/changeStatus',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
     }),
     async loadLessonPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
@@ -96,6 +97,9 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  &-scroll-all {
+    display: block;
+  }
   &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
@@ -107,6 +111,10 @@ body {
     &-scroll-only {
       overflow: auto;
     }
+  }
+  &-footer {
+    width: 100%;
+    text-align: center;
   }
   .container {
     max-width: 1200px;
