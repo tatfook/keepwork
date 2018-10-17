@@ -1,7 +1,7 @@
 <template>
   <div class="activated-teacher-role">
     <el-container class="teacher activated-teacher-role-teacher">
-      <el-aside width="auto" class="activated-teacher-role-aside">
+      <el-aside width="260px" class="activated-teacher-role-aside">
         <el-menu :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" text-color='#b3b3b3' active-text-color='#fff'>
           <el-menu-item index="1" @click="showItem('TEACH')">
             <i class="iconfont icon-teach"></i>
@@ -198,7 +198,7 @@ export default {
       flex-direction: column;
       .el-aside {
         margin: 0;
-        width: 100%;
+        width: 100% !important;
         padding: 0;
         overflow: visible;
         border-right: none;
