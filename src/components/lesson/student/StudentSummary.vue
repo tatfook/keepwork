@@ -206,9 +206,29 @@ $blue: #4093fe;
 @media screen and (max-width: 768px) {
   .student-summary {
     &-wrap {
+      border: 1px solid #66cd2e;
+      border-radius: 5px;
+      margin: 10px;
+      box-shadow: 0px 3px 7px 0px rgba(112, 112, 112, 0.41);
       .summary {
         &-boy {
-          display: none;
+          // display: none;
+          width: 40px;
+        }
+        &-body{
+          .word{
+            font-size: 12px;
+          }
+        }
+        &-share{
+          width: 95px;
+          font-size: 14px;
+          height: 30px;
+          bottom: 25px;
+          line-height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
     }
