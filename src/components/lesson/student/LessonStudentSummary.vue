@@ -157,7 +157,8 @@ export default {
         read: this.lessonCodeReadLine,
         write: this.lessonWriteLine,
         command: this.lessonCommands,
-        videoUrl: this.videoUrl
+        videoUrl: this.videoUrl,
+        coverUrl: this.coverUrl
       }
     }
   },
@@ -171,7 +172,7 @@ export default {
         this.studyTime
       }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
         this.lessonWriteLine
-      }&command=${this.lessonCommands}`
+      }&command=${this.lessonCommands}&videoUrl=${encodeURIComponent(this.videoUrl)}&coverUrl=${encodeURIComponent(this.coverUrl)}`
       shareWebUrl = encodeURI(shareWebUrl)
       window.socialShare('.summary-share-lesson', {
         url: shareWebUrl,

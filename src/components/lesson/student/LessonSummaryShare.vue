@@ -5,11 +5,12 @@
       </div>
       <div class="main">
         <div class="movie">
-          <video controls="" width="100%" autoplay="" name="media">
-            <source :src="summary.videoUrl" type="video/mp4">
+          <video v-if="summary.videoUrl" controls="" width="100%" autoplay="" name="media">
+            <source :src="decodeURIComponent(summary.videoUrl)" type="video/mp4">
           </video>
+          <img v-else :src="decodeURIComponent(summary.coverUrl)" />
         </div>
-        <div v-if="isEn" class="summary-word">
+        <div v-if="isEn" class="summary-word" >
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
@@ -213,6 +214,11 @@ $mainHeight: 430px;
           background: url('../../../assets/lessonImg/play2.png') no-repeat
             center;
           background-size: $icon-size $icon-size;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
       .summary-word {
