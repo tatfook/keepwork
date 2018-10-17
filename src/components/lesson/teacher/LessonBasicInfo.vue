@@ -325,6 +325,9 @@ export default {
       .el-input-group {
         margin: 0;
       }
+      .el-input-group__prepend {
+        font-size: 12px;
+      }
     }
   }
 }

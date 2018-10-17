@@ -202,6 +202,26 @@ export default {
         padding: 0;
         overflow: visible;
         border-right: none;
+        .el-menu {
+          text-align: center;
+          .el-menu-item,
+          .el-submenu {
+            border: none;
+            display: inline-block;
+            float: none;
+          }
+          .el-menu-item i,
+          .el-submenu__title i {
+            font-size: 18px;
+            margin-right: 3px;
+          }
+          .el-submenu.is-active {
+            .el-submenu__title {
+              background-color: #409eff;
+              border: none;
+            }
+          }
+        }
       }
       .el-main {
         padding: 16px 0;
