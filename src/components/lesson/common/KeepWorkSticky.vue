@@ -1,5 +1,5 @@
 <template>
-  <div ref="sticky" class="keep-work-sticky" :style="{width: `${width}px`}" :class="{'fixed': isFixed}">
+  <div ref="sticky" class="keep-work-sticky" :style="{'max-width': `${width}px`}" :class="{'fixed': isFixed}">
     <slot></slot>
   </div>
 </template>
