@@ -203,5 +203,16 @@ $blue: #4093fe;
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .student-summary {
+    &-wrap {
+      .summary {
+        &-boy {
+          display: none;
+        }
+      }
+    }
+  }
+}
 </style>
 
