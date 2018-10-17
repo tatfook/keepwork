@@ -57,6 +57,9 @@ export default {
 <style lang="scss">
 .operate-result-dialog {
   text-align: center;
+  .el-dialog {
+    max-width: 100%;
+  }
   .el-icon-close {
     font-size: 20px;
     color: #cecece;
