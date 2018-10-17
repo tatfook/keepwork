@@ -554,7 +554,7 @@ export default [
       },
       colLogo: {
         'float': 'left',
-        'max-width': '64px',
+        width: 'auto',
         'margin-left': '5px'
       },
       logo: {
@@ -596,6 +596,11 @@ export default [
         ...defaultData,
         menu: _.merge({}, defaultData.menu, {
           type: 'menu'
+        }),
+        logo: _.merge({}, defaultData.logo, {
+          img: {
+            defaultWebWidth: '64px'
+          }
         })
       }
     }

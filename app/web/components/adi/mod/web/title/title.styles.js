@@ -343,8 +343,9 @@ export default [
           type: 'menu'
         }),
         logo: _.merge({}, defaultData.logo, {
+          emptyMedia: require('@/assets/adi/title/whiteBear.svg'),
           img: {
-            defaultWebWidth: ''
+            defaultWebWidth: '64px'
           }
         })
       }
@@ -353,6 +354,7 @@ export default [
   // style 5
   {
     templateID: 2,
+    componentID: 1,
     data: {
       root: {},
       colGroupRow: {
@@ -364,7 +366,7 @@ export default [
         'justify-content': 'flex-start',
         'min-width': '180px'
       },
-      colMenuB: {
+      colMenu: {
         display: 'flex',
         'justify-content': 'flex-end',
         'align-items': 'center'
@@ -384,7 +386,7 @@ export default [
         xs: { span: 12 },
         sm: { span: 9 }
       },
-      colMenuB: {
+      colMenu: {
         xs: { span: 12 },
         sm: { span: 15 }
       }
@@ -410,7 +412,7 @@ export default [
         }),
         logo: _.merge({}, defaultData.logo, {
           img: {
-            defaultWebWidth: ''
+            defaultWebWidth: '64px'
           }
         })
       }

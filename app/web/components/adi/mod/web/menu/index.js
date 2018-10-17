@@ -41,7 +41,7 @@ const name = 'ModMenu'
 
 const components = {
   menu: 'AdiMenu',
-  logo: 'AdiMedia',
+  logo: 'AdiIcon',
   businessName: 'AdiTitle'
 }
 
