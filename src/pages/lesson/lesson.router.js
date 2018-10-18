@@ -38,8 +38,8 @@ const LessonPerformance = () =>
 const Print = () => import('@/components/lesson/teacher/Print')
 const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
-const Visitor = () => import('@/components/lesson/visitor')
-const VisitorLesson = () => import('@/components/lesson/visitor/lesson')
+const Visitor = () => import('@/components/lesson/Visitor')
+const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
 
 Vue.use(Router)
 
