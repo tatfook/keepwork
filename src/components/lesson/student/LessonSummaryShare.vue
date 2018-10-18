@@ -205,16 +205,6 @@ $mainHeight: 430px;
         align-items: center;
         cursor: pointer;
         box-shadow: 0 0 30px 5px rgba(66, 66, 66, 0.5);
-        &::after {
-          $icon-size: 100px;
-          content: '';
-          display: block;
-          height: $icon-size;
-          width: $icon-size;
-          background: url('../../../assets/lessonImg/play2.png') no-repeat
-            center;
-          background-size: $icon-size $icon-size;
-        }
         img {
           width: 100%;
           height: 100%;
