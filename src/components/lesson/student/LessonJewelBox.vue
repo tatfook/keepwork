@@ -24,8 +24,8 @@
         <div class="bean-light">
           <img class="bean-icon" :src="beanIcon">
         </div>
-          <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
-        </div>
+        <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
+      </div>
     </el-dialog>
   </span>
 </template>
@@ -331,6 +331,21 @@ export default {
   }
   50% {
     box-shadow: 0 0 8rem 1rem rgba(254, 250, 1, 0.8);
+  }
+}
+@media screen and (max-width: 768px) {
+  .jewel-box {
+    .tips-wrap {
+      width: 350px;
+      .tips {
+        font-size: 12px;
+        &-button {
+          .el-button {
+            padding: 7px;
+          }
+        }
+      }
+    }
   }
 }
 </style>
