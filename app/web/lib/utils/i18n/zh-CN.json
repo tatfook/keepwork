@@ -292,7 +292,9 @@
     "enlargeMdEditing": "大窗口编辑",
 
     "pleaseInput": "请输入",
-    "changePic": "更换图片"
+    "changePic": "更换图片",
+
+    "addModHere": "在此处添加新模块"
   },
   "modList": {
     "recent": "常用",
