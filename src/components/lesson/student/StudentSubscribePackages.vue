@@ -148,7 +148,8 @@ export default {
       this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
         confirmButtonText: this.$t('common.Yes'),
         cancelButtonText: this.$t('common.No'),
-        type: 'warning'
+        type: 'warning',
+        customClass: 'leave-current-class'
       })
         .then(() => this.$router.push({ path }))
         .catch(e => console.error(e))
@@ -214,6 +215,11 @@ export default {
       left: 30px;
       top: 2px;
     }
+  }
+}
+@media screen and (max-width: 768px){
+  .leave-current-class{
+    width: 90% !important;
   }
 }
 </style>
