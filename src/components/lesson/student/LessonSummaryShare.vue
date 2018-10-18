@@ -190,7 +190,7 @@ $mainHeight: 430px;
     background: white;
     width: 678px;
     .main {
-      height: $mainHeight;
+      min-height: $mainHeight;
       .movie {
         $scale: 1.64;
         $width: 230px;
@@ -273,7 +273,7 @@ $mainHeight: 430px;
         }
       }
       .main {
-        height: 410px;
+        min-height: 410px;
         width: 100%;
         background: white;
         position: relative;
