@@ -290,6 +290,9 @@
 
     "pleaseInput": "Please input",
     "changePic": "Change picture",
+
+    "addModHere": "Add new mod here",
+
     "canNotUseIE": "This function cannot be used under IE."
   },
   "modList": {

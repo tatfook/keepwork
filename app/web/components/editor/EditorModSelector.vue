@@ -1,20 +1,24 @@
 <template>
-<div :class="{'mod-wrap':true,'mod-active': isActive, }">
-  <div :class="['kp-mod-selector',mod.cmd === 'Markdown' ? 'no-mask' : '']" @click='setActive'>
-    <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
-      <i class="iconfont icon-delete icon-del"></i>
+  <div :class="{'mod-wrap':true,'mod-active': isActive, }">
+    <div :class="['kp-mod-selector',mod.cmd === 'Markdown' ? 'no-mask' : '']" @click='setActive'>
+      <div class="delete-mod" @click.stop.prevent='toDeleteMod'>
+        <i class="iconfont icon-delete icon-del"></i>
+      </div>
+      <div class='mod'>
+        <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
+        <span v-if='invalid'> 错误的Mod指令 </span>
+      </div>
+      <div class='operator' v-if='isActive'>
+        <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
+          <el-button slot="reference" class="add-mod-btn add-before" @click.stop.prevent='newMod(gConst.POSITION_BEFORE)'> + </el-button>
+        </el-popover>
+        <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
+          <el-button slot="reference" class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
+        </el-popover>
+      </div>
     </div>
-    <div class='mod'>
-      <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
-      <span v-if='invalid'> 错误的Mod指令 </span>
-    </div>
-    <div class='operator' v-if='isActive'>
-      <el-button class="add-mod-btn add-before" @click.stop.prevent='newMod(gConst.POSITION_BEFORE)'> + </el-button>
-      <el-button class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
-    </div>
+    <QuickToTop/>
   </div>
-  <QuickToTop/>  
-</div>
 </template>
 
 <script>
@@ -115,7 +119,6 @@ export default {
 .add-mod-btn {
   width: 38px;
   height: 38px;
-  background-color: #7fc3ff;
   border-radius: 50%;
   color: #fff;
   text-align: center;
@@ -134,7 +137,6 @@ export default {
   bottom: -19px;
 }
 .add-mod-btn:hover {
-  background-color: #f7a935;
   color: #fff;
   font-size: 38px;
   transition: all 0.2s;
@@ -149,13 +151,13 @@ export default {
   }
 }
 .mod-active {
-  border:2px dashed #f7a935;  
+  border:2px dashed #f7a935;
   position: relative;
   .add-mod-btn{
     background-color: #f7a935;
   }
   &:hover{
-    border:2px dashed #f7a935;      
+    border:2px dashed #f7a935;
   }
 }
 .kp-mod-selector .comp {
@@ -177,6 +179,10 @@ export default {
     z-index: 99;
     display: none;
     cursor: pointer;
+    .icon-delete:hover {
+      font-size: 20px;
+      transition: all 0.1s;
+    }
   }
   &:hover {
     .delete-mod {
@@ -198,6 +204,24 @@ export default {
 .kp-mod-selector.no-mask .comp:hover::before {
   background-color: transparent;
   cursor: pointer;
+}
+.el-popover--plain {
+  padding: 10px;
+}
+.el-popover {
+  position: absolute;
+  background-color: #303133;
+  min-width: 86px;
+  font-size: 12px;
+  color: #fff;
+  border: unset;
+  border-radius: 4px;
+}
+.popper__arrow {
+  border-color: #303133 transparent #303133 transparent !important;
+}
+.popper__arrow:after {
+  border-color: #303133 transparent #303133 transparent !important;
 }
 </style>
 
