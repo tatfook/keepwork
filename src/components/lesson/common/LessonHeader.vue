@@ -193,7 +193,8 @@ export default {
           {
             confirmButtonText: this.$t('lesson.activate'),
             cancelButtonText: this.$t('lesson.no'),
-            type: 'warning'
+            type: 'warning',
+            customClass: 'teach-function-style'
           }
         )
           .then(() => {
@@ -492,14 +493,17 @@ export default {
     }
   }
 }
-@media screen and (max-width: 768px){
-.lesson-header-container {
-  .lesson-cover{
-    height: 200px;
-    width: 80%;
-    margin: 0 10px;
+@media screen and (max-width: 768px) {
+  .lesson-header-container {
+    .lesson-cover {
+      height: 200px;
+      width: 80%;
+      margin: 0 10px;
+    }
   }
-}  
+  .teach-function-style {
+    max-width: 86%;
+  }
 }
 </style>
 

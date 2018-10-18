@@ -115,6 +115,7 @@ body {
   &-footer {
     width: 100%;
     text-align: center;
+    box-sizing: border-box;
   }
   .container {
     max-width: 1200px;
