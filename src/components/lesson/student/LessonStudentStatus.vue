@@ -4,7 +4,12 @@
       <el-col :span="5" :sm="5">
         <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
       </el-col>
-      <el-col :span="5" :sm="5">
+      <el-col :span="5" :sm="5" v-if="isVisitor">
+        <span class="nickname-wrap">
+          <span>{{$t('lesson.nickName')}} visitor</span>
+        </span>
+      </el-col>
+      <el-col :span="5" v-else>
         <span class="nickname-wrap" v-if="isEditNickName">
           <span style="display:inline-block; width: 70px">{{$t('lesson.nickName')}}</span>
           <el-input class="name-input" :autofocus="true" :value="name" v-model="name">
@@ -20,7 +25,7 @@
       </el-col>
       <el-col :span="14" :sm="14">
         <el-row type="flex" justify="end">
-          <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+          <el-button v-if="!isVisitor" class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
         </el-row>
       </el-col>
     </el-row>
@@ -37,6 +42,16 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonStudentStatus',
+  props: {
+    classKey: {
+      type: String,
+      default: ''
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       isDialogVisible: false,
@@ -55,10 +70,15 @@ export default {
       userinfo: 'lesson/userinfo'
     }),
     enterClassId() {
-      return _.get(this.enterClassInfo, 'key', '')
+      return this.isVisitor
+        ? this.classKey
+        : _.get(this.enterClassInfo, 'key', '')
     },
     nickname() {
       return _.get(this.userinfo, 'nickname', '')
+    },
+    username() {
+      return _.get(this.userinfo, 'username', '')
     },
     isNeedToSetNickname() {
       return !this.nickname
@@ -71,7 +91,7 @@ export default {
     ) {
       this.isDialogVisible = true
     }
-    this.name = this.nickname
+    this.name = this.nickname || this.username
   },
   methods: {
     ...mapActions({

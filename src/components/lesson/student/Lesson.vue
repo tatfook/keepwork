@@ -22,7 +22,6 @@ import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
 import { lesson } from '@/api'
-import uuid from 'uuid/v1'
 export default {
   name: 'Learn',
   components: {
@@ -54,19 +53,24 @@ export default {
     if (!this.isLogined) {
       return this.toggleLoginDialog(true)
     }
-    const { packageId, lessonId } = this.$route.params
+    let { packageId, lessonId } = this.$route.params
+    packageId = Number(packageId)
+    lessonId = Number(lessonId)
     // purchased check or lesson check
-    let isPurchased = await this.checkPackagePurchased(
-      { packageId },
-      Number(lessonId)
-    )
+    let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
     if (this.isBeInClassroom) {
       await this.resumeTheClass().catch(e => console.error(e))
     }
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
+      await this.getLessonContent({ lessonId, packageId }).catch(e =>
+        console.error(e)
+      )
+      await this.createLearnRecords({
+        packageId,
+        lessonId
+      }).catch(e => console.error(e))
       window.document.title = this.lessonName
       return (this.isLoading = false)
     }
@@ -79,7 +83,9 @@ export default {
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
     if (this.isCurrentClassroom) {
       this.changeStatus(1)
-      await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
+      await this.getLessonContent({ lessonId, packageId }).catch(e =>
+        console.error(e)
+      )
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
@@ -104,7 +110,8 @@ export default {
       checkClassroom: 'lesson/student/checkClassroom',
       switchSummary: 'lesson/student/switchSummary',
       toggleLoginDialog: 'lesson/toggleLoginDialog',
-      changeStatus: 'lesson/student/changeStatus'
+      changeStatus: 'lesson/student/changeStatus',
+      createLearnRecords: 'lesson/student/createLearnRecords'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
@@ -234,9 +241,6 @@ export default {
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
-    },
-    lessonMainUid() {
-      this.lessonMain.map(item => item).forEach(item => (item.key = uuid()))
     }
   }
 }

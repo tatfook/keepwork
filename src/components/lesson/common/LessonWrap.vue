@@ -1,7 +1,7 @@
 <template>
   <div>
     <hint v-if="isTeacher && mod.cmd === 'Hint' && isShowHint" :data="mod" :key="mod.key"></hint>
-    <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :key="mod.key"></quiz>
+    <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :isVisitor="isVisitor" :key="mod.key"></quiz>
     <div v-else class="mod-item-container">
       <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
     </div>
@@ -36,6 +36,10 @@ export default {
       default: false
     },
     isTeacher: {
+      type: Boolean,
+      default: false
+    },
+    isVisitor: {
       type: Boolean,
       default: false
     }

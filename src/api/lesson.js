@@ -6,8 +6,13 @@ category: API
 ---
 */
 import createEndpoint from './common/endpoint'
+import axios from 'axios'
 
 export const endpoint = createEndpoint({
+  baseURL: process.env.LESSON_API_PREFIX
+})
+
+export const endpointWithoutToken = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
@@ -17,18 +22,26 @@ export const admin = {}
 
 export const packages = {
   create: async ({ newPackageData }) => post('packages', newPackageData),
-  update: async ({ updatingPackageData }) => put(`packages/${updatingPackageData.id}`, updatingPackageData),
+  update: async ({ updatingPackageData }) =>
+    put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get(`packages/hots`),
-  packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`),
+  packagesList: async ({ perPage, page }) =>
+    get(
+      `packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`
+    ),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
   subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
-  isSubscribe: async ({ packageId }) => get(`packages/${packageId}/isSubscribe`),
+  isSubscribe: async ({ packageId }) =>
+    get(`packages/${packageId}/isSubscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
-  audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
-  release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
+  audit: async ({ packageId, state }) =>
+    post(`packages/${packageId}/audit`, { state }),
+  release: async ({ packageDetail }) =>
+    put(`packages/${packageDetail.id}`, packageDetail),
   delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
-  addLesson: async ({ packageId, lessonId }) => post(`packages/${packageId}/lessons`, { lessonId }),
+  addLesson: async ({ packageId, lessonId }) =>
+    post(`packages/${packageId}/lessons`, { lessonId }),
   removeLesson: async ({ packageId, lessonId }) => {
     return deleteMethod(`packages/${packageId}/lessons?lessonId=${lessonId}`)
   },
@@ -37,31 +50,37 @@ export const packages = {
 
 export const lessons = {
   create: async ({ newLessonData }) => post('lessons', newLessonData),
-  update: async ({ updatingData }) => put(`lessons/${updatingData.id}`, updatingData),
-  release: async ({ id, content }) => post(`lessons/${id}/contents`, { content }),
+  update: async ({ updatingData }) =>
+    put(`lessons/${updatingData.id}`, updatingData),
+  release: async ({ id, content }) =>
+    post(`lessons/${id}/contents`, { content }),
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
   lessonDetailByUrl: async ({ url }) => get(`lessons/detail?url=${url}`),
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
-  isReward: async ({ packageId, lessonId }) => get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),
+  isReward: async ({ packageId, lessonId }) =>
+    get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),
   delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
-  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`)
+  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
+  getLastLearnRecords: async () => get(`learnRecords?x-per-page=1&x-order=createdAt-desc`)
 }
 
 export const users = {
   getUserDetail: () => get('users'),
-  userSubscribes: args => get(`users/${args.userId}/subscribes?packageState=${args.packageState}`),
+  userSubscribes: args =>
+    get(`users/${args.userId}/subscribes?packageState=${args.packageState}`),
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, school, config }) =>
     post(`users/${userId}/teacher`, { key, school }, config),
   getTeachingRecords: async () => get(`packages`),
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
-  createLearnRecords: payload => post(`learnRecords`, payload)
+  createLearnRecords: payload => post(`learnRecords`, payload),
+  learnRecords: () => get(`learnRecords`)
 }
 
 export const classrooms = {
@@ -79,8 +98,20 @@ export const classrooms = {
   uploadLearnRecords: ({ classId, learnRecords, state }) =>
     put(`learnRecords/${classId}`, { extra: learnRecords, state }),
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
-  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr),
+  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) =>
+    put(`classrooms/${id}/learnRecords`, learnRecordsArr),
   isValidKey: key => get(`classrooms/valid?key=${key}`)
+}
+
+export const visitor = {
+  uploadLearnRecords: ({ token, classId, learnRecords, state }) => {
+    axios.interceptors.request.eject(endpointWithoutToken)
+    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return endpointWithoutToken.put(`learnRecords/${classId}`, {
+      extra: learnRecords,
+      state
+    })
+  }
 }
 
 export const subjects = {
@@ -103,6 +134,7 @@ export const lesson = {
   users,
   packages,
   lessons,
+  visitor,
   admin,
   classrooms,
   emails,

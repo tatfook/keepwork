@@ -1076,6 +1076,7 @@
     "toAdd": "Add",
     "learnAgain": "Learn Again",
     "noRecord": "No record",
-    "world": "world"
+    "world": "world",
+    "learnLessonConfirm": "To learn a new lesson will make the old one closed. Continue ?"
   }
 }
