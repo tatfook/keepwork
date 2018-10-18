@@ -87,10 +87,10 @@
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
         <el-col :span="2" class="lesson-award">
-          <lesson-jewel-box />
+          <lesson-jewel-box v-if="!isVisitor" />
         </el-col>
         <el-col :span="18">
-          <lesson-student-progress />
+          <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
         <el-col :span="4" class="lesson-references">
           <lesson-referencse />
@@ -137,6 +137,10 @@ export default {
     isInCurrentClass: {
       type: Boolean,
       default: true
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
