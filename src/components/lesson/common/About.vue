@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="about-carousel">
-      <el-carousel indicator-position="outside" @change="getImgIndex" @click.native="downloadTool">
+      <el-carousel @change="getImgIndex" @click.native="downloadTool">
         <el-carousel-item v-for="(img,index) in imgUrls" :key="index">
           <img class="about-carousel-img" :src="img.url" alt="">
         </el-carousel-item>
@@ -117,7 +117,7 @@
         <el-col :md="12" :xs="24">
           <el-row>
             <el-col :span="6">
-              <div class="desc-img"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
+              <div class="desc-img price-pic"><img src="@/assets/lessonImg/aboutPageImg/friendly_prices.png" alt=""></div>
             </el-col>
             <el-col :span="18">
               <div class="desc-text">
@@ -311,7 +311,7 @@ export default {
     }
   }
   &-title {
-    margin: 100px auto;
+    margin: 40px auto;
     text-align: center;
     display: flex;
     align-items: center;
@@ -414,7 +414,7 @@ export default {
   &-view-more {
     &-btn {
       width: 322px;
-      margin: 0 auto;
+      margin: 30px auto;
       position: relative;
       cursor: pointer;
       height: 77px;
@@ -489,6 +489,9 @@ export default {
         max-width: 165px;
         object-fit: contain;
       }
+    }
+    .price-pic{
+      width: 80%;
     }
     .desc-text {
       flex: 1;

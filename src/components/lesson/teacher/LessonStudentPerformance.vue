@@ -20,7 +20,7 @@
             <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
               <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'outline': checkOutline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
             </div>
-            <span class="name">{{props.row.name}}</span>
+            <span class="name">{{props.row.name || props.row.username}}</span>
           </div>
         </template>
       </el-table-column>
@@ -200,7 +200,7 @@ export default {
         : []
     },
     tableUserInfo() {
-      return this.isHasData ? ['username', 'state', 'world'] : []
+      return this.isHasData ? ['username', 'world', 'state'] : []
     },
     tableQuizzes() {
       return this.isHasData

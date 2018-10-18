@@ -138,6 +138,11 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px){
+.learn-summary-container {
+  margin: 10px;
+}  
+}
 </style>
 
 

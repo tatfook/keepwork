@@ -226,3 +226,27 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .package-basic-info {
+    padding: 16px;
+    &-subject-and-ages {
+      display: block;
+      margin-bottom: 8px;
+    }
+    &-name-intro-price {
+      display: block;
+    }
+    &-name-intro {
+      width: 100%;
+      border-right: none;
+    }
+    &-intro {
+      margin-top: 16px;
+    }
+    &-price {
+      margin: 16px 0 0;
+    }
+  }
+}
+</style>

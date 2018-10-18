@@ -76,6 +76,10 @@ export default {
     isPrint: {
       type: Boolean,
       default: false
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -93,6 +97,7 @@ export default {
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
       createLearnRecords: 'lesson/student/createLearnRecords',
       uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
       switchSummary: 'lesson/student/switchSummary'
     }),
     checkAnswer() {
@@ -145,18 +150,26 @@ export default {
         let state = this.lessonIsDone ? 1 : 0
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
       }
+      // FIXME: 这里应该改成从store里面去课程包和课程的id
       const { packageId, lessonId } = this.$route.params
       // 首次需要先创建学习记录
-      !this.learnRecordsId &&
-        (await this.createLearnRecords({
+      if (!this.learnRecordsId && !this.isVisitor) {
+        await this.createLearnRecords({
           packageId: Number(packageId),
           lessonId: Number(lessonId)
-        }))
-      await this.uploadSelfLearnRecords({
-        packageId: Number(packageId),
-        lessonId: Number(lessonId),
-        state: this.lessonIsDone ? 1 : 0
-      })
+        })
+      }
+      this.isVisitor
+        ? await this.uploadVisitorLearnRecords({
+            packageId: Number(packageId),
+            lessonId: Number(lessonId),
+            state: this.lessonIsDone ? 1 : 0
+          })
+        : await this.uploadSelfLearnRecords({
+            packageId: Number(packageId),
+            lessonId: Number(lessonId),
+            state: this.lessonIsDone ? 1 : 0
+          })
     }
   },
   watch: {

@@ -2,7 +2,7 @@
   <div class="lesson-student-progress">
     <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz">
       <div :class="['progress-point-title', {'light': isQuizLight}]">{{$t('lesson.lessonPlan')}}</div>
-      <div  class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
+      <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
           <!-- <div class="quiz-result-list-wrap"> -->
           <div class="quiz-result-list">
@@ -35,6 +35,10 @@ export default {
     progressNumer: {
       type: String,
       default: '0'
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -60,13 +64,16 @@ export default {
     },
     isShowRedo() {
       return (
-        !this.isBeInClassroom && this.lessonQuizDone && !this.isQuizAllRight
+        !this.isVisitor &&
+        !this.isBeInClassroom &&
+        this.lessonQuizDone &&
+        !this.isQuizAllRight
       )
     }
   },
   watch: {
     lessonIsDone(value) {
-      if(value && !this.isQuizAllRight) {
+      if (value && !this.isQuizAllRight) {
         this.isShowQuizResult = true
       }
     }

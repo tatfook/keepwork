@@ -21,10 +21,10 @@
       <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
-      <el-col :span="14" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
+      <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
-      <el-col :span="10" class="lesson-desc">
+      <el-col :sm="10" :xm="24" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
@@ -78,21 +78,21 @@
     </el-row>
     <keep-work-sticky>
       <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="20">
+        <el-col :span="20" :sm="20">
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
+        <el-col :span="4" :sm="4" class="lesson-references">
           <lesson-referencse />
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="2" class="lesson-award">
-          <lesson-jewel-box />
+        <el-col :span="2" :sm="2" class="lesson-award">
+          <lesson-jewel-box v-if="!isVisitor" />
         </el-col>
-        <el-col :span="18">
-          <lesson-student-progress />
+        <el-col :span="18" :sm="18">
+          <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
+        <el-col :span="4" :sm="4" class="lesson-references">
           <lesson-referencse />
         </el-col>
       </el-row>
@@ -137,6 +137,10 @@ export default {
     isInCurrentClass: {
       type: Boolean,
       default: true
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -193,7 +197,8 @@ export default {
           {
             confirmButtonText: this.$t('lesson.activate'),
             cancelButtonText: this.$t('lesson.no'),
-            type: 'warning'
+            type: 'warning',
+            customClass: 'teach-function-style'
           }
         )
           .then(() => {
@@ -348,7 +353,7 @@ export default {
 
   .lesson-cover {
     height: 340px;
-    min-width: 400px;
+    // min-width: 400px;
     max-width: 600px;
     cursor: pointer;
     background: #eee;
@@ -490,6 +495,18 @@ export default {
       font-size: 15vw;
       font-weight: bold;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-header-container {
+    .lesson-cover {
+      height: 200px;
+      width: 80%;
+      margin: 0 10px;
+    }
+  }
+  .teach-function-style {
+    max-width: 86%;
   }
 }
 </style>
