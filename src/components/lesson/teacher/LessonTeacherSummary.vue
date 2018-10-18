@@ -308,6 +308,7 @@ export default {
         this.$alert(this.$t('lesson.reviseGrades'), '', {
           confirmButtonText: this.$t('common.Sure'),
           center: true,
+          customClass: 'change-mark',
           callback: action => {}
         })
         return
@@ -626,11 +627,19 @@ export default {
     width: 70%;
   }
   .teacher-summary {
+    &-change{
+      .el-dialog {
+        width: 90% !important;
+      }
+    }
     &-success-send-email {
       .el-dialog {
         width: 75% !important;
       }
     }
+  }
+  .change-mark{
+    max-width: 90%;
   }
 }
 @media print {
