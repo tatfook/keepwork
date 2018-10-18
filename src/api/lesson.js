@@ -49,7 +49,8 @@ export const lessons = {
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
-  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`)
+  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
+  getLastLearnRecords: async () => get(`learnRecords?x-per-page=3&x-order=createdAt-desc`)
 }
 
 export const users = {

@@ -60,6 +60,9 @@ export default {
     nickname() {
       return _.get(this.userinfo, 'nickname', '')
     },
+    username() {
+      return _.get(this.userinfo, 'username', '')
+    },
     isNeedToSetNickname() {
       return !this.nickname
     }
@@ -71,7 +74,7 @@ export default {
     ) {
       this.isDialogVisible = true
     }
-    this.name = this.nickname
+    this.name = this.nickname || this.username
   },
   methods: {
     ...mapActions({
