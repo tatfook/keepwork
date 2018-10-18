@@ -504,19 +504,24 @@ export default {
       width: 80%;
       margin: 0 10px;
     }
-    &-video{
-      .el-dialog{
+    &-video {
+      .el-dialog {
         width: 90% !important;
+      }
+    }
+    .lesson-progress-wrap {
+      &.el-row {
+        padding: 16px;
       }
     }
   }
   .teach-function-style {
     max-width: 86%;
   }
-  .class-id-dialog{
+  .class-id-dialog {
     max-width: 90%;
   }
-  .dismiss-class{
+  .dismiss-class {
     max-width: 90%;
   }
 }
