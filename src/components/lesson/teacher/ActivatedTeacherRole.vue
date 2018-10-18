@@ -23,7 +23,7 @@
       </el-aside>
       <el-main>
         <div class="activated-teacher-role-container">
-          <router-view></router-view>
+          <router-view :windowWidth='windowWidth'></router-view>
         </div>
       </el-main>
     </el-container>

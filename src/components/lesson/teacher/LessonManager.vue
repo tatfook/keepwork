@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" height="100%" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" :height="tableHeight" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
         <el-table-column prop='packages' type='expand' width="40">
@@ -93,6 +93,9 @@ import colI18n from '@/lib/utils/i18n/column'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
+  props: {
+    windowWidth: Number
+  },
   async mounted() {
     this.isTableLoading = true
     await Promise.all([
@@ -197,6 +200,12 @@ export default {
         id: this.editingLessonId
       })
       return lessonDetail
+    },
+    isPhoneSize() {
+      return this.windowWidth < 768
+    },
+    tableHeight() {
+      return this.isPhoneSize ? undefined : '100%'
     }
   },
   methods: {
@@ -447,6 +456,7 @@ export default {
   }
   &-table {
     border: 1px solid #d2d2d2;
+    height: 100%;
     tr,
     th {
       color: #414141;
@@ -608,7 +618,7 @@ export default {
       &-item {
         flex: 1;
         padding: 0 8px;
-        .el-select{
+        .el-select {
           width: 100%;
         }
       }
