@@ -217,3 +217,18 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .new-lesson {
+    &-cover {
+      padding: 16px;
+    }
+    &-more-info {
+      padding: 0 16px;
+      &-button {
+        padding-bottom: 16px;
+      }
+    }
+  }
+}
+</style>

@@ -151,6 +151,7 @@ body {
   overflow: hidden;
 }
 .preview-site-wrap{
+  background-color: #fff;
   height: 0;
   overflow: hidden;
 }

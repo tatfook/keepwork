@@ -46,8 +46,12 @@
     <div class="teacher-summary-detailed" ref="lessonSummary">
       <h4>{{$t('lesson.detailed')}}:</h4>
       <div class="teacher-summary-detailed-change hidden web-page-show">
-        <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})</span>
-        <span class="chang-button"><el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})</span>
+        <span class="chang-button">
+          <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})
+        </span>
+        <span class="chang-button">
+          <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})
+        </span>
       </div>
       <div class="teacher-summary-detailed-table">
         <el-table :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
@@ -120,7 +124,7 @@ export default {
       modList: [],
       emailAddress: '',
       isEn: locale === 'en-US',
-      currenClassInfo: { extra: {}},
+      currenClassInfo: { extra: {} },
       classid: this.$route.params.classId,
       loading: true,
       lessonName: null,
@@ -136,26 +140,33 @@ export default {
       quizChartData: {
         columns: ['questionNumber', `${this.$t('lesson.accuracy')}`],
         rows: [
-            {questionNumber: this.$t('lesson.noData'),
-            [`${this.$t('lesson.accuracy')}`]: 0},
+          {
+            questionNumber: this.$t('lesson.noData'),
+            [`${this.$t('lesson.accuracy')}`]: 0
+          }
         ]
       },
       studentChartData: {
         columns: ['accuracyRate', `${this.$t('lesson.student')}`],
         rows: [
-          {accuracyRate: this.$t('lesson.noData'),
-          [`${this.$t('lesson.student')}`]: 0},
+          {
+            accuracyRate: this.$t('lesson.noData'),
+            [`${this.$t('lesson.student')}`]: 0
+          }
         ]
       },
       totalStudent: 0
     }
   },
   async mounted() {
-    await lesson.classrooms.getClassroomById( this.$route.params.classId ).then(res => {
-      this.currenClassInfo = res
-      this.lessonNo = res.extra.lessonNo || 0
-      this.lessonName = res.extra.lessonName
-    }).catch(err => console.log(err))
+    await lesson.classrooms
+      .getClassroomById(this.$route.params.classId)
+      .then(res => {
+        this.currenClassInfo = res
+        this.lessonNo = res.extra.lessonNo || 0
+        this.lessonName = res.extra.lessonName
+      })
+      .catch(err => console.log(err))
     await this.getClassLearnRecords({ id: this.$route.params.classId })
     let res = await lesson.lessons.lessonContent({
       lessonId: this.$route.params.lessonId
@@ -166,7 +177,12 @@ export default {
       return
     }
     this.totalStudent = this.classroomLearnRecord.length
-    await Promise.all([this.getLessonSkill(this.$route.params.lessonId),this.getQuizChartData(this.newCurrentRecord),this.getStudentChartData(this.newCurrentRecord),this.getProfile()])
+    await Promise.all([
+      this.getLessonSkill(this.$route.params.lessonId),
+      this.getQuizChartData(this.newCurrentRecord),
+      this.getStudentChartData(this.newCurrentRecord),
+      this.getProfile()
+    ])
     this.loading = false
   },
   computed: {
@@ -181,24 +197,42 @@ export default {
       let Day = new Date(day[0], parseInt(day[1] - 1), day[2])
       return String(Day.getDay())
     },
-    creationDate(){
+    creationDate() {
       let year = dayjs(this.currenClassInfo.createdAt).year()
       let monthNum = dayjs(this.currenClassInfo.createdAt).month()
-      let monthArr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','','Nov','Dec']
+      let monthArr = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        '',
+        'Nov',
+        'Dec'
+      ]
       let month = monthArr[monthNum]
       let todayDate = dayjs(this.currenClassInfo.createdAt).date()
-      let hours = dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD HH:mm:ss').split(' ')[1]
-      let suffix = ['st','nd','rd','th']
-      if(todayDate % 10 < 1 || todayDate % 10 > 3){
+      let hours = dayjs(this.currenClassInfo.createdAt)
+        .format('YYYY-MM-DD HH:mm:ss')
+        .split(' ')[1]
+      let suffix = ['st', 'nd', 'rd', 'th']
+      if (todayDate % 10 < 1 || todayDate % 10 > 3) {
         todayDate = todayDate + suffix[3]
-      }else if(todayDate % 10 == 1){
+      } else if (todayDate % 10 == 1) {
         todayDate = todayDate + suffix[0]
-      }else if(todayDate % 10 == 2){
+      } else if (todayDate % 10 == 2) {
         todayDate = todayDate + suffix[1]
-      }else{
+      } else {
         todayDate = todayDate + suffix[2]
       }
-      return this.isEn ? (todayDate + ' ' + month + ' ' + year) : dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
+      return this.isEn
+        ? todayDate + ' ' + month + ' ' + year
+        : dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
     },
     newCurrentRecord() {
       let currentRecord = _.map(
@@ -258,7 +292,7 @@ export default {
         .reduce((arr, cur) => [...arr, ...cur], [])
     },
     modListFilter() {
-      return this.modList.filter(item => item.cmd !== 'Lesson')
+      return this.modList.filter(item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile')
     }
   },
   methods: {
@@ -277,7 +311,7 @@ export default {
           callback: action => {}
         })
         return
-      }else{
+      } else {
         this.changeDialogVisible = true
       }
     },
@@ -318,7 +352,8 @@ export default {
     modifiedGrades(record) {
       let learnRecordsArr = _.map(record, student => {
         for (let i = 0; i < student.extra.quiz.length; i++) {
-          let standardAnswer = student.extra.quiz[i].data.answer.toString() || ''
+          let standardAnswer =
+            student.extra.quiz[i].data.answer.toString() || ''
           Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
           Vue.set(student.extra.quiz[i], `result`, true)
         }
@@ -326,14 +361,16 @@ export default {
       })
       return learnRecordsArr
     },
-    async gotoPrint(){
+    async gotoPrint() {
       window.print()
     },
     async sendEmail() {
       let lessonIntroHtml = this.$refs.lessonIntro.innerHTML
       let lessonChartHtml = this.$refs.lessonChart.innerHTML
       let lessonSummaryHtml = this.$refs.lessonSummary.innerHTML
-      lessonSummaryHtml = `<style>.hidden{display:none}.el-checkbox__input{display:none}.portrait{width: 34px;height: 34px;border-radius: 50%;overflow: hidden;margin:5px auto;}.email-text-center{text-align:center;}</style>` + lessonSummaryHtml
+      lessonSummaryHtml =
+        `<style>.hidden{display:none}.el-checkbox__input{display:none}.portrait{width: 34px;height: 34px;border-radius: 50%;overflow: hidden;margin:5px auto;}.email-text-center{text-align:center;}</style>` +
+        lessonSummaryHtml
       let _lessonChart = this.$refs.lessonChart
       let chart = await html2canvas(_lessonChart)
       chart = chart.toDataURL()
@@ -347,13 +384,21 @@ export default {
         .then(async ({ value }) => {
           this.emailAddress = value
           let to = value
-          let subject = this.$t('modList.lesson') + (this.currenClassInfo.extra.lessonNo || 0) + ':' +  this.currenClassInfo.extra.lessonName
-          let html = lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
-          await lesson.emails.sendEmails({to, subject, html}).then(res => {
-            this.successSendEmailDialogVisible = true
-          }).catch(err => {
-            this.$message.error(this.$t('lesson.failSend'))
-          })
+          let subject =
+            this.$t('modList.lesson') +
+            (this.currenClassInfo.extra.lessonNo || 0) +
+            ':' +
+            this.currenClassInfo.extra.lessonName
+          let html =
+            lessonIntroHtml + `<img src="${chart}" />` + lessonSummaryHtml
+          await lesson.emails
+            .sendEmails({ to, subject, html })
+            .then(res => {
+              this.successSendEmailDialogVisible = true
+            })
+            .catch(err => {
+              this.$message.error(this.$t('lesson.failSend'))
+            })
         })
         .catch(() => {
           this.$message({
@@ -373,9 +418,11 @@ export default {
         })
     },
     singleStudentRecord(index, student) {
-      let _page = this.$router.resolve({ path: `/teacher/student/${student.userId}/classId/${
+      let _page = this.$router.resolve({
+        path: `/teacher/student/${student.userId}/classId/${
           this.classid
-        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record` })
+        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
+      })
       window.open(_page.href)
     },
     singleStudentRightRate(quiz = []) {
@@ -383,26 +430,29 @@ export default {
         result: true
       }).length
       let allQuiz = quiz.length
-      return allQuiz == 0 ? 0 + '%' :  rightAnswer / allQuiz * 100 + '%'
+      return allQuiz == 0 ? 0 + '%' : (rightAnswer / allQuiz) * 100 + '%'
     },
     getQuizChartData(newCurrentRecord) {
-        let accuracyRateArr = Array.apply(null, Array(newCurrentRecord[0].quiz.length)).map(() => 0)
-        for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
-          for (let i = 0; i < newCurrentRecord.length; i++) {
-            if (
-              newCurrentRecord[i].quiz[j] &&
-              newCurrentRecord[i].quiz[j].result
-            ) {
-              accuracyRateArr[j] += 1
-            }
+      let accuracyRateArr = Array.apply(
+        null,
+        Array(newCurrentRecord[0].quiz.length)
+      ).map(() => 0)
+      for (let j = 0; j < newCurrentRecord[0].quiz.length; j++) {
+        for (let i = 0; i < newCurrentRecord.length; i++) {
+          if (
+            newCurrentRecord[i].quiz[j] &&
+            newCurrentRecord[i].quiz[j].result
+          ) {
+            accuracyRateArr[j] += 1
           }
         }
-        _.forEach(accuracyRateArr, (i, n) => {
-          Vue.set(this.quizChartData.rows, n, {
-            questionNumber: `Q${++n}`,
-            [`${this.$t('lesson.accuracy')}`]: (i / newCurrentRecord.length)
-          })
+      }
+      _.forEach(accuracyRateArr, (i, n) => {
+        Vue.set(this.quizChartData.rows, n, {
+          questionNumber: `Q${++n}`,
+          [`${this.$t('lesson.accuracy')}`]: i / newCurrentRecord.length
         })
+      })
     },
     getStudentChartData(newCurrentRecord) {
       let PassRateArr = Array.apply(null, Array(3)).map(() => 0)
@@ -458,7 +508,7 @@ export default {
   margin: 0 auto;
   padding: 0 40px 40px;
   background: #fff;
-  .web-page-show{
+  .web-page-show {
     display: block;
   }
   &-print-and-email {
@@ -466,10 +516,10 @@ export default {
     flex-direction: row-reverse;
     padding: 22px 10px 10px;
   }
-  &-print-header{
+  &-print-header {
     display: none;
   }
-  &-print-lesson-plan{
+  &-print-lesson-plan {
     display: none;
   }
   &-brief {
@@ -482,13 +532,13 @@ export default {
       .week {
         margin-right: 25px;
       }
-      .print-show{
+      .print-show {
         display: none;
       }
     }
-    .package-text{
-      word-break:break-all;
-      word-wrap:break-word;
+    .package-text {
+      word-break: break-all;
+      word-wrap: break-word;
     }
     .brief-title {
       font-size: 16px;
@@ -530,7 +580,7 @@ export default {
     margin-top: 59px;
     &-change {
       margin-bottom: 22px;
-      .chang-button{
+      .chang-button {
         margin-right: 40px;
       }
     }
@@ -566,61 +616,68 @@ export default {
       text-align: center;
       margin: 0 auto;
     }
-    .email-address{
+    .email-address {
       color: #409eff;
     }
   }
 }
-@media screen and (max-width: 768px){
-  .email-style{
+@media screen and (max-width: 768px) {
+  .email-style {
     width: 70%;
   }
-}
-@media print{
-    .teacher-summary {
-      &-detailed{
-        .web-page-show{
-          display: none;
-        }
+  .teacher-summary {
+    &-success-send-email {
+      .el-dialog {
+        width: 75% !important;
       }
-      &-print-and-email{
+    }
+  }
+}
+@media print {
+  .teacher-summary {
+    &-detailed {
+      .web-page-show {
         display: none;
       }
-       &-print-header{
-        display: block;
-        width: 1150px;
+    }
+    &-print-and-email {
+      display: none;
+    }
+    &-print-header {
+      display: block;
+      width: 1150px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fff;
+      text-align: center;
+      .profile {
         margin: 0 auto;
-        padding: 40px;
-        background: #fff;
-        text-align: center;
-        .profile{
-          margin: 0 auto;
-          height: 100px;
-          width: 100px;
-          border-radius: 50%;
-          overflow: hidden;
-          img{
-            width: 100%;
-            object-fit: cover;
-          }
-        }
-        .nickname{
-          font-size: 24px;
-          line-height: 34px;
-          letter-spacing: 1px;
-          color: #333333;
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          object-fit: cover;
         }
       }
-      &-print-lesson-plan{
-        display: block;
+      .nickname {
+        font-size: 24px;
+        line-height: 34px;
+        letter-spacing: 1px;
+        color: #333333;
       }
-      &-brief{
-        .date{
-          .print-show{
-            display: inline-block;
-          }
+    }
+    &-print-lesson-plan {
+      display: block;
+    }
+    &-brief {
+      .date {
+        .print-show {
+          display: inline-block;
         }
       }
     }
+  }
 }
 </style>
