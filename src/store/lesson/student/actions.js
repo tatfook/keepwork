@@ -20,7 +20,9 @@ let {
   CLEAR_LEARN_RECORDS_ID,
   CLEAR_LESSON_DATA,
   CHANGE_STATUS,
-  SWITCH_DEVICE
+  SWITCH_DEVICE,
+  SAVE_VISITOR_INFO,
+  CLEAR_VISITOR_INFO
 } = props
 
 const actions = {
@@ -41,23 +43,21 @@ const actions = {
     let detail = await lesson.packages.packageDetail({ packageId })
     commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   },
-  async getLessonContent({ commit, dispatch, getters }, { lessonId, packageId }) {
+  async getLessonContent(
+    { commit, dispatch, getters },
+    { lessonId, packageId }
+  ) {
     await dispatch('getPackageDetail', { packageId })
     const { studentPackageDetail } = getters
-    const packageIndex = studentPackageDetail({ packageId }).lessons.map(l => l.id).indexOf(Number(lessonId))
+    const packageIndex = studentPackageDetail({ packageId })
+      .lessons.map(l => l.id)
+      .indexOf(Number(lessonId))
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
-    // modList.forEach(mod => {
-    //   if (mod.cmd === 'Quiz') {
-    //     let _id = uuid()
-    //     mod.data.quiz.data[0].id = _id
-    //     mod.uuid = _id
-    //   }
-    // })
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
       .map(({ data: { quiz: { data } } }) => ({
@@ -197,6 +197,18 @@ const actions = {
       })
     }
   },
+  async uploadVisitorLearnRecords(
+    {
+      getters: { visitorInfo, learnRecords }
+    },
+    { state = 0 }
+  ) {
+    const { token, classId } = visitorInfo
+    learnRecords.username = 'visitor'
+    learnRecords.name = 'visitor'
+    learnRecords.status = 'k1'
+    await lesson.visitor.uploadLearnRecords({ token, classId, learnRecords, state })
+  },
   async clearLearnRecordsId({ commit }) {
     commit(CLEAR_LEARN_RECORDS_ID)
   },
@@ -227,6 +239,27 @@ const actions = {
   },
   async switchDevice({ commit }, payload) {
     commit(SWITCH_DEVICE, payload)
+  },
+  async saveVisitorInfo({ commit }, payload) {
+    commit(SAVE_VISITOR_INFO, payload)
+  },
+  async clearVisitorInfo({ commit }) {
+    commit(CLEAR_VISITOR_INFO)
+  },
+  async checkLessonWithRecord({ commit }, { packageId, lessonId }) {
+    let learnRecords = await lesson.users
+      .learnRecords()
+      .catch(e => console.error(e))
+    let lastRecord = learnRecords.rows[learnRecords.rows.length - 1]
+    if (Number(lastRecord.state) === 0) {
+      const { packageId: _packageId, lessonId: _lessonId } = lastRecord
+      if (packageId === _packageId && lessonId === _lessonId) {
+        console.log(lastRecord)
+        commit(CREATE_LEARN_RECORDS_SUCCESS, lastRecord)
+        return true
+      }
+    }
+    return false
   }
 }
 export default actions

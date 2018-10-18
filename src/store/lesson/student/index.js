@@ -11,8 +11,9 @@ const state = () => ({
   enterClassInfo: {},
   enterClassId: '',
   learnRecordsId: '',
-  status: 2,
-  device: 'k'
+  status: 1,
+  device: 'k',
+  visitorInfo: {}
 })
 
 export default {
