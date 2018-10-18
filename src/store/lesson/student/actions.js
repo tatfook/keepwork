@@ -261,5 +261,9 @@ const actions = {
     }
     return false
   }
+  // async checkLessonWithLastLearnRecords(context, { packageId, lessonId }) {
+  //   let res = await lesson.lessons.getLastLearnRecords().catch(e => console.error(e))
+  //   return Promise.resolve(res)
+  // }
 }
 export default actions
