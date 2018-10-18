@@ -23,6 +23,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import { lesson } from '@/api'
 
 export default {
   name: 'StudentSubscribePackages',
@@ -54,8 +55,8 @@ export default {
     },
     learnedRatio() {
       return Math.ceil(
-        this.packageDetail.learnedLessons.length /
-          this.packageDetail.lessons.length *
+        (this.packageDetail.learnedLessons.length /
+          this.packageDetail.lessons.length) *
           100
       )
     },
@@ -105,11 +106,15 @@ export default {
       if (this.packageDetail.subscribeState == 0) {
         return this.$router.push(`student/package/${this.packageDetail.id}`)
       }
-      this.$router.push({
-        path: `student/package/${this.packageDetail.id}/lesson/${
-          this.continueLearnedLesson.id
-        }`
-      })
+      const path = `student/package/${this.packageDetail.id}/lesson/${
+        this.continueLearnedLesson.id
+      }`
+      this.toLearnConfirm(this.packageDetail, this.continueLearnedLesson.id, path)
+      // this.$router.push({
+      //   path: `student/package/${this.packageDetail.id}/lesson/${
+      //     this.continueLearnedLesson.id
+      //   }`
+      // })
     },
     getCoursePackageSuitableAge(packageDetail) {
       let { minAge, maxAge } = packageDetail
@@ -117,6 +122,36 @@ export default {
         return this.$t('lesson.packageManage.SuitableForAll')
       }
       return `${minAge}-${maxAge}`
+    },
+    async toLearnConfirm(_packageId, _lessonId, path) {
+      let res = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      let lastLearnRecods = _.get(res, 'rows', [])
+      if (lastLearnRecods.length === 0) {
+        return this.$router.push({
+          path
+        })
+      }
+      if (lastLearnRecods[0].state === 1) {
+        return this.$router.push({
+          path
+        })
+      }
+
+      const { packageId, lessonId } = lastLearnRecods[0]
+      if (_packageId === packageId && _lessonId === lessonId) {
+        return this.$router.push({
+          path
+        })
+      }
+      this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        type: 'warning'
+      })
+        .then(() => this.$router.push({ path }))
+        .catch(e => console.error(e))
     }
   }
 }

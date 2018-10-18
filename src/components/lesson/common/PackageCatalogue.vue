@@ -213,13 +213,25 @@ export default {
           path
         })
       }
-      const { packageId, lessonId } = lastLearnRecods
-      if (_packageId === packageId && _lessonId === lessonId) {
+      if (lastLearnRecods[0].state === 1) {
         return this.$router.push({
           path
         })
       }
 
+      const { packageId, lessonId } = lastLearnRecods[0]
+      if (_packageId === packageId && _lessonId === lessonId) {
+        return this.$router.push({
+          path
+        })
+      }
+      this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        type: 'warning'
+      })
+        .then(() => this.$router.push({ path }))
+        .catch(e => console.error(e))
     }
   }
 }
