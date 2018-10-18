@@ -228,7 +228,8 @@ export default {
       this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
         confirmButtonText: this.$t('common.Yes'),
         cancelButtonText: this.$t('common.No'),
-        type: 'warning'
+        type: 'warning',
+        customClass: 'leave-current-class'
       })
         .then(() => this.$router.push({ path }))
         .catch(e => console.error(e))
@@ -396,6 +397,11 @@ export default {
     .el-progress-bar__inner {
       background-color: #66cd2e;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .leave-current-class {
+    max-width: 90%;
   }
 }
 </style>
