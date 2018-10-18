@@ -14,7 +14,7 @@ import LessonHeader from '../common/LessonHeader'
 import LessonSummary from '@/components/lesson/student/LessonStudentSummary'
 import LessonStudentStatus from '@/components/lesson/student/LessonStudentStatus'
 export default {
-  name: 'Learn',
+  name: 'VisitorLearn',
   components: {
     LessonWrap,
     LessonHeader,
