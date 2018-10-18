@@ -54,6 +54,7 @@ export default {
       return this.toggleLoginDialog(true)
     }
     let { packageId, lessonId } = this.$route.params
+
     packageId = Number(packageId)
     lessonId = Number(lessonId)
     // purchased check or lesson check
@@ -81,6 +82,12 @@ export default {
       id
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+
+    let { device } = this.$route.query
+    device && device.toLowerCase() === 'paracraft'
+      ? this.switchDevice('p')
+      : this.switchDevice('k')
+
     if (this.isCurrentClassroom) {
       this.changeStatus(1)
       await this.getLessonContent({ lessonId, packageId }).catch(e =>
@@ -111,7 +118,8 @@ export default {
       switchSummary: 'lesson/student/switchSummary',
       toggleLoginDialog: 'lesson/toggleLoginDialog',
       changeStatus: 'lesson/student/changeStatus',
-      createLearnRecords: 'lesson/student/createLearnRecords'
+      createLearnRecords: 'lesson/student/createLearnRecords',
+      switchDevice: 'lesson/student/switchDevice'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
