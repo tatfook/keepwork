@@ -349,5 +349,15 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .jewel-box {
+    width: 33px;
+    height: 19px;
+    background-size: contain;
+    left: -16px;
+  }
+}
+</style>
 
 

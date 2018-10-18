@@ -270,4 +270,18 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-student-progress {
+    .progress-point {
+      width: 16px;
+      height: 16px;
+      &.grey {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+</style>
 

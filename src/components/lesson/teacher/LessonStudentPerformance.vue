@@ -24,7 +24,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column fixed v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
+      <el-table-column :fixed='!isPhoneSize' v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
       </el-table-column>
 
       <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :render-header="(h, params) => renderLastHeader(h,params)" sortable min-width="100" align="center" :show-overflow-tooltip="true">
@@ -46,11 +46,15 @@ export default {
   name: 'LessonStudentPerformance',
   data() {
     return {
+      windowWidth: window.innerWidth,
       TRF: '2',
       defaultAvatar: avatar,
       KEEPWORK_SIGN: 'k',
       PARACRAFT_SIGN: 'p'
     }
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleWindowResize)
   },
   components: {
     TableHeaderPopover
@@ -61,6 +65,9 @@ export default {
     }
   },
   methods: {
+    handleWindowResize(event) {
+      this.windowWidth = event.currentTarget.innerWidth
+    },
     handleRefreshLearnRecords() {
       this.$emit('intervalUpdateLearnRecords')
     },
@@ -134,6 +141,9 @@ export default {
       isBeInClass: 'lesson/teacher/isBeInClass',
       learnRecords: 'lesson/teacher/learnRecords'
     }),
+    isPhoneSize() {
+      return this.windowWidth < 768
+    },
     isHasData() {
       return (
         this.learnRecords &&
@@ -268,7 +278,7 @@ $red: #f53838;
       .portrait-wrap::after {
         $size: 20px;
         display: block;
-        
+
         width: $size;
         height: $size;
         line-height: $size;
@@ -314,6 +324,7 @@ $red: #f53838;
       }
       .name {
         display: inline-block;
+        white-space: initial;
       }
     }
     .answer {
