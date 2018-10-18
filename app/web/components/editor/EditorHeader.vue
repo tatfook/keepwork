@@ -87,8 +87,10 @@
                   <i class="iconfont icon-help"></i>
                   <a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
                 </button>
-                <button @click="toggleLanguage">
-                  <i :class="['iconfont', isEnglish ? 'icon--zhongyingwenqiehuan-xianshizhongwen' : 'icon--zhongyingwenqiehuan-xianshiyingwen']"></i>{{$t('common.chinese-englishSwitch')}}</button>
+                <button :class=" isEnglish ? 'btn-language' : '' " @click="toggleLanguage">
+                  <i :class="['iconfont', 'icon-Chinese-english', isEnglish ? 'icon-language' : '']"></i>
+                  {{$t('common.chinese-englishSwitch')}}
+                </button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -781,6 +783,14 @@ export default {
   cursor: default;
   .iconfont {
     color: #ccc;
+  }
+}
+.kp-menu {
+  .btn-language {
+    height: 48px;
+    .icon-language {
+      line-height: 48px;
+    }
   }
 }
 </style>
