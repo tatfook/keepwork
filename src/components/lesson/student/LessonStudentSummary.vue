@@ -308,4 +308,11 @@ $blue: #4093fe;
     margin-top: 20px;
   }
 }
+@media screen and (max-width: 768px){
+.summary-share-dialog {
+  .el-dialog{
+    max-width: 94%;
+  }
+}  
+}
 </style>
