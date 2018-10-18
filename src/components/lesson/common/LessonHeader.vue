@@ -1,6 +1,6 @@
 <template>
   <el-row class="lesson-header-container">
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog class="lesson-header-container-video" :visible.sync="dialogVisible" width="50%">
       <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
         <source :src="videoUrl" type="video/mp4">
       </video>
@@ -233,7 +233,8 @@ export default {
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel')
+          cancelButtonText: this.$t('common.Cancel'),
+          customClass: 'dismiss-class'
         }
       )
         .then(async () => {
@@ -353,7 +354,6 @@ export default {
 
   .lesson-cover {
     height: 340px;
-    // min-width: 400px;
     max-width: 600px;
     cursor: pointer;
     background: #eee;
@@ -504,9 +504,20 @@ export default {
       width: 80%;
       margin: 0 10px;
     }
+    &-video{
+      .el-dialog{
+        width: 90% !important;
+      }
+    }
   }
   .teach-function-style {
     max-width: 86%;
+  }
+  .class-id-dialog{
+    max-width: 90%;
+  }
+  .dismiss-class{
+    max-width: 90%;
   }
 }
 </style>
