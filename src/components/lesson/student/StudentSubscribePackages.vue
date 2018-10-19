@@ -109,12 +109,18 @@ export default {
       const path = `student/package/${this.packageDetail.id}/lesson/${
         this.continueLearnedLesson.id
       }`
-      this.toLearnConfirm(this.packageDetail, this.continueLearnedLesson.id, path)
-      // this.$router.push({
-      //   path: `student/package/${this.packageDetail.id}/lesson/${
-      //     this.continueLearnedLesson.id
-      //   }`
-      // })
+      if (this.$route.name === 'StudentColumn') {
+        return this.toLearnConfirm(
+          this.packageDetail,
+          this.continueLearnedLesson.id,
+          path
+        )
+      }
+      this.$router.push({
+        path: `student/package/${this.packageDetail.id}/lesson/${
+          this.continueLearnedLesson.id
+        }`
+      })
     },
     getCoursePackageSuitableAge(packageDetail) {
       let { minAge, maxAge } = packageDetail
@@ -217,8 +223,8 @@ export default {
     }
   }
 }
-@media screen and (max-width: 768px){
-  .leave-current-class{
+@media screen and (max-width: 768px) {
+  .leave-current-class {
     width: 90% !important;
   }
 }
