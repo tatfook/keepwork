@@ -223,7 +223,7 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
           component: LessonStudent,
-          meta: { requireAuth: true, visitor: true }
+          meta: { requireAuth: true, visitor: true, autoJoin: true }
         },
         {
           path: 'learnSummary/package/:packageId/lesson/:lessonId',
