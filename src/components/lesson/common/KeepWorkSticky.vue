@@ -72,5 +72,14 @@ export default {
   }
 }
 </style>
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .keep-work-sticky {
+    &.fixed {
+      width: 100% !important;
+    }
+  }
+}
+</style>
 
 
