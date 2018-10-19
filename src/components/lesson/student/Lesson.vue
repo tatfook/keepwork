@@ -60,18 +60,36 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
-    if (this.isBeInClassroom) {
-      await this.resumeTheClass().catch(e => console.error(e))
-    }
+    await this.getLessonContent({ lessonId, packageId })
+    await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId, packageId }).catch(e =>
-        console.error(e)
-      )
-      await this.createLearnRecords({
-        packageId,
-        lessonId
-      }).catch(e => console.error(e))
+      // FIXME: 可以加个回复答题记录
+      let lastLearnRecords = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      lastLearnRecords = lastLearnRecords && lastLearnRecords.rows
+      if (
+        lastLearnRecords.length > 0 &&
+        lastLearnRecords[0].state === 0 &&
+        lastLearnRecords[0].packageId === packageId &&
+        lastLearnRecords[0].lessonId === lessonId
+      ) {
+        this.resumeLearnRecordsId(lastLearnRecords[0].id)
+        if (
+          _.some(
+            _.get(lastLearnRecords[0], 'extra.quiz[0]', []),
+            ({ answer = false }) => answer
+          )
+        ) {
+          this.resumeQuiz({ learnRecords: lastLearnRecords[0] })
+        }
+      } else {
+        await this.createLearnRecords({
+          packageId,
+          lessonId
+        }).catch(e => console.error(e))
+      }
       window.document.title = this.lessonName
       return (this.isLoading = false)
     }
@@ -90,9 +108,6 @@ export default {
 
     if (this.isCurrentClassroom) {
       this.changeStatus(1)
-      await this.getLessonContent({ lessonId, packageId }).catch(e =>
-        console.error(e)
-      )
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
@@ -119,7 +134,8 @@ export default {
       toggleLoginDialog: 'lesson/toggleLoginDialog',
       changeStatus: 'lesson/student/changeStatus',
       createLearnRecords: 'lesson/student/createLearnRecords',
-      switchDevice: 'lesson/student/switchDevice'
+      switchDevice: 'lesson/student/switchDevice',
+      resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()

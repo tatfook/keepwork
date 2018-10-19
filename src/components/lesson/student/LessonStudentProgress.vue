@@ -62,11 +62,16 @@ export default {
     isQuizLight() {
       return !this.isShowSummary
     },
+    isQuizAllDone() {
+      return (
+        this.lessonQuizDone > 0 && this.lessonQuizDone === this.lessonQuizCount
+      )
+    },
     isShowRedo() {
       return (
         !this.isVisitor &&
         !this.isBeInClassroom &&
-        this.lessonQuizDone &&
+        this.isQuizAllDone &&
         !this.isQuizAllRight
       )
     }

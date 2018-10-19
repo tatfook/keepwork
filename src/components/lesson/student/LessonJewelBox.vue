@@ -165,35 +165,34 @@ export default {
       this.isClicked = !this.isClicked
     },
     async startTimer() {
-      // FIXME: 校对
       this.time++
-      if (this.time % 30 === 0) {
-        if (!this.isBeInClassroom) {
-          let lastLearnRecords = await lesson.lessons
-            .getLastLearnRecords()
-            .catch(e => console.error(e))
-          lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
-          if (
-            lastLearnRecords.length > 0 &&
-            this.learnRecordsId !== lastLearnRecords[0].id
-          ) {
-            return this.$router.push({ name: 'StudentCenter' })
-          }
-        }
-        let learnRecords = await lesson.classrooms
-          .learnRecordsById(this._learnRecordId)
+      if (this.time % 30 === 0 && !this.isBeInClassroom) {
+        let lastLearnRecords = await lesson.lessons
+          .getLastLearnRecords()
           .catch(e => console.error(e))
-        if (learnRecords && learnRecords.createdAt) {
-          let _time = Math.floor(
-            (new Date() - new Date(learnRecords.createdAt)) / 1000
-          )
-          this.time = _time || this.time
+        lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
+        if (
+          lastLearnRecords.length > 0 &&
+          this.learnRecordsId !== lastLearnRecords[0].id
+        ) {
+          return this.$router.push({ name: 'StudentCenter' })
         }
+        // let learnRecords = await lesson.classrooms
+        //   .learnRecordsById(this._learnRecordId)
+        //   .catch(e => console.error(e))
+        // if (learnRecords && learnRecords.createdAt) {
+        //   let _time = Math.floor(
+        //     (new Date() - new Date(learnRecords.createdAt)) / 1000
+        //   )
+        //   this.time = _time || this.time
+        // }
       }
       clearTimeout(this._timer)
-      this._timer = setTimeout(() => {
-        this.startTimer()
-      }, 1000)
+      if (this.isShowJewel) {
+        this._timer = setTimeout(() => {
+          this.startTimer()
+        }, 1000)
+      }
     },
     showTips() {
       this.isShowTips = true
