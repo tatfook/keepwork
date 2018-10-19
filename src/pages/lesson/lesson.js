@@ -57,7 +57,6 @@ const store = new Vuex.Store({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.visitor)) {
-    console.log(to)
     const { query, params } = to
     if (query.id && query.token) {
       return next({ name: 'VisitorLesson', params, query })

@@ -115,11 +115,13 @@ const actions = {
       commit,
       getters: { lessonQuiz, lessonDetail }
     },
-    { id }
+    { id, learnRecords = null }
   ) {
-    let learnRecords = await lesson.classrooms
-      .learnRecordsById(id)
-      .catch(e => console.error(`can't find learnRecords`))
+    if (!learnRecords && id) {
+      learnRecords = await lesson.classrooms
+        .learnRecordsById(id)
+        .catch(e => console.error(`can't find learnRecords`))
+    }
     if (learnRecords && learnRecords.extra.quiz) {
       let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
       let _lessonDetail = _.clone(lessonDetail)
@@ -135,6 +137,9 @@ const actions = {
       })
       commit(RESUME_QUIZ, _lessonDetail)
     }
+  },
+  async resumeLearnRecordsId({ commit }, id) {
+    commit(CREATE_LEARN_RECORDS_SUCCESS, id)
   },
   async doQuiz(
     {

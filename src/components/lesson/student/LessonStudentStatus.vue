@@ -139,6 +139,7 @@ export default {
         await this.setNickname(this.name)
           .then(res => {
             this.isDialogVisible = false
+            window.location.href = this.$router.resolve(this.$route.path).href
           })
           .catch(e => {
             console.error(e)
