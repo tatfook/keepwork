@@ -68,7 +68,6 @@ const actions = {
     await lesson.classrooms
       .currentClass()
       .then(res => {
-        console.warn('resume all data', res)
         dispatch('lesson/student/resumeClassData', res, { root: true })
         dispatch('lesson/teacher/resumeClassData', res, { root: true })
       })
