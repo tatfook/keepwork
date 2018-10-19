@@ -149,7 +149,7 @@ export default {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id
         }/lesson/${lesson.id}`
-        if (name === 'StudentPackage') {
+        if (this.$route.name === 'StudentPackage') {
           return this.toLearnConfirm(this.packageDetail.id, lesson.id, targetLessonPath)
         }
         this.$router.push({
