@@ -47,8 +47,10 @@ const createEndpoint = (config, parseResponse = true) => {
       if (CODES.some(code => code === error.response.status) && Cookies.get('token')) {
         _instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('token')}`
         _instance.post('/user/getProfile').catch(e => {
+          document.cookie.replace(/\./g, '')
           Cookies.remove('token')
           Cookies.remove('token', { path: '/' })
+          Cookies.remove('token', { path: '/l' })
           window.localStorage.removeItem('satellizer_token')
           window.location.reload()
         })
