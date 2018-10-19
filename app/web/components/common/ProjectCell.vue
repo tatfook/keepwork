@@ -12,9 +12,9 @@
     </div>
     <div class="project-cell-author">
       <div class="project-cell-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.nickname}}</div>
-        <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
-      </div>
+      <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
+  </div>
 </template>
 <script>
 import moment from 'moment'
@@ -36,16 +36,16 @@ export default {
   data() {
     return {}
   },
-  computed:{
+  computed: {
     isEn() {
       return locale === 'en-US'
     }
   },
-  methods:{
-    relativeTime(time){
+  methods: {
+    relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time,"YYYYMMDDHH").fromNow();
+      return moment(time, 'YYYYMMDDHH').fromNow()
     }
   }
 }
@@ -101,6 +101,11 @@ export default {
       width: 80px;
       text-align: right;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .project-cell {
+    margin: 0 auto 15px;
   }
 }
 </style>
