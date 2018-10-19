@@ -207,7 +207,12 @@ const actions = {
     learnRecords.username = 'visitor'
     learnRecords.name = 'visitor'
     learnRecords.status = 'k1'
-    await lesson.visitor.uploadLearnRecords({ token, classId, learnRecords, state })
+    await lesson.visitor.uploadLearnRecords({
+      token,
+      classId,
+      learnRecords,
+      state
+    })
   },
   async clearLearnRecordsId({ commit }) {
     commit(CLEAR_LEARN_RECORDS_ID)

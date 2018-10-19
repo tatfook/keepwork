@@ -11,7 +11,7 @@ const state = () => ({
   enterClassInfo: {},
   enterClassId: '',
   learnRecordsId: '',
-  status: 1,
+  status: 2,
   device: 'k',
   visitorInfo: {}
 })

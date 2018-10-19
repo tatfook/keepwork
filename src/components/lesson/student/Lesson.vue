@@ -22,6 +22,7 @@ import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
 import { lesson } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'Learn',
   components: {
@@ -119,7 +120,8 @@ export default {
       toggleLoginDialog: 'lesson/toggleLoginDialog',
       changeStatus: 'lesson/student/changeStatus',
       createLearnRecords: 'lesson/student/createLearnRecords',
-      switchDevice: 'lesson/student/switchDevice'
+      switchDevice: 'lesson/student/switchDevice',
+      resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
