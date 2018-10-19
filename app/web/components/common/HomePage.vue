@@ -25,7 +25,7 @@
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">keepwork是做什么的</div>
             <div class="video">
-              <video src="http://flv.aoao365.com/2018/0905/198faae647a4ddc1a52e7d4c096ab307.flv.mp4" controls autoplay loop></video>
+              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/1049/raw#2018-10-11_17_00_04-800-双马尾.mp4" poster="https://api.keepwork.com/storage/v0/siteFiles/1048/raw#2018-10-11_16_59_35-392-双马尾.jpg" controls autoplay="autoplay" loop></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
@@ -48,20 +48,20 @@
     <div class="home-page-brief">
       <div class="home-page-brief-center">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="8" :xs="24">
             <div class="box" @click="goCreativityPage">
               <div class="box-text">
                 <h2>创造</h2>
                 <p class="box-text-intro">创造属于你自己的项目</p>
                 <p class="box-text-own">已创建项目
-                  <span class="total">123456</span>个</p>
+                  <span class="total">{{allProjects.length}}</span>个</p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
               </div>
-              </div>
+            </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" :xs="24">
             <div class="box" @click="goExplorationPage">
               <div class="box-text">
                 <h2>探索</h2>
@@ -72,9 +72,9 @@
               <div class="box-img">
                 <img src="@/assets/img/rocket.png" alt="">
               </div>
-              </div>
+            </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" :xs="24">
             <div class="box no-line" @click="goStudyPage">
               <div class="box-text">
                 <h2>学习</h2>
@@ -85,7 +85,7 @@
               <div class="box-img">
                 <img src="@/assets/img/bulb.png" alt="">
               </div>
-              </div>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -100,7 +100,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6" v-for="(project,index) in handpickProjects" :key="index" v-if="index < 4">
+          <el-col :sm="12" :md="6" v-for="(project,index) in handpickProjects" :key="index" v-if="index < 4">
             <project-cell :project='project'></project-cell>
           </el-col>
         </el-row>
@@ -114,7 +114,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6" v-for="(lessonPackage,index) in hotsPackages" :key="index">
+          <el-col class="hot-lesson" :sm="12" :md="6" v-for="(lessonPackage,index) in hotsPackages" :key="index">
             <div class="lesson">
               <img class="lesson-cover" :src="lessonPackage.extra.coverUrl" alt="" @click="goLessonPackage(lessonPackage)">
               <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)">{{lessonPackage.packageName}}</h4>
@@ -137,7 +137,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :span="6" v-for="(project,index) in likesProjects" :key="index" v-if="index < 4">
+          <el-col :sm="12" :md="6" v-for="(project,index) in likesProjects" :key="index" v-if="index < 4">
             <project-cell :project="project"></project-cell>
           </el-col>
         </el-row>
@@ -152,10 +152,10 @@
 </template>
 <script>
 import ProjectCell from './ProjectCell'
-import { keepwork,lesson } from '@/api'
+import { keepwork, lesson } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'HomePage',
@@ -165,7 +165,7 @@ export default {
       hotsPackages: [],
       hiddenAd: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin,    
+      locationOrigin: window.location.origin
     }
   },
   components: {
@@ -173,9 +173,12 @@ export default {
     RegisterDialog
   },
   async mounted() {
-    lesson.packages.getHotsPackages().then(res => {
-      this.hotsPackages = res
-    }).catch(err => console.error(err))
+    lesson.packages
+      .getHotsPackages()
+      .then(res => {
+        this.hotsPackages = res
+      })
+      .catch(err => console.error(err))
     await this.getAllProjects()
   },
   computed: {
@@ -183,24 +186,24 @@ export default {
       allProjects: 'pbl/allProjects'
     }),
     handpickProjects() {
-      return this.allProjects.map(i => i).sort(
-        (obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo
-      )
+      return this.allProjects
+        .map(i => i)
+        .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
     },
-    likesProjects(){
-      return this.allProjects.map(i => i).sort(
-        (obj1, obj2) => obj1.star < obj2.star
-      )
+    likesProjects() {
+      return this.allProjects
+        .map(i => i)
+        .sort((obj1, obj2) => obj1.star < obj2.star)
     }
   },
   methods: {
     ...mapActions({
       getAllProjects: 'pbl/getAllProjects'
     }),
-    closeAd(){
+    closeAd() {
       this.hiddenAd = true
     },
-    viewMore(){
+    viewMore() {
       this.$router.push('/exploration')
     },
     goJoin() {
@@ -209,19 +212,19 @@ export default {
     closeRegisterDialog() {
       this.isRegisterDialogShow = false
     },
-    goCreativityPage(){
+    goCreativityPage() {
       this.$router.push(`/creativity`)
       // window.location.href=`${this.locationOrigin}/creativity`
     },
-    goExplorationPage(){
+    goExplorationPage() {
       this.$router.push(`/exploration`)
       // window.location.href=`${this.locationOrigin}/exploration`
     },
-    goStudyPage(){
+    goStudyPage() {
       this.$router.push(`/study`)
       // window.location.href=`${this.locationOrigin}/study`
     },
-    goLessonPackage(lessonPackage){
+    goLessonPackage(lessonPackage) {
       this.$router.push(`/l/student/package/${lessonPackage.id}`)
     }
   }
@@ -230,8 +233,8 @@ export default {
 
 <style lang="scss">
 .home-page {
-  &-register-dialog{
-    .el-dialog{
+  &-register-dialog {
+    .el-dialog {
       max-width: 352px;
     }
   }
@@ -262,7 +265,7 @@ export default {
       cursor: pointer;
     }
   }
-  .hidden-ad{
+  .hidden-ad {
     height: 0;
     overflow: hidden;
     border: none;
@@ -399,15 +402,15 @@ export default {
         cursor: pointer;
         &-text {
           flex: 1;
-          &-intro{
+          &-intro {
             color: #a0a4aa;
             font-size: 16px;
           }
-          &-own{
+          &-own {
             color: #606266;
             font-size: 13px;
             font-weight: bold;
-            .total{
+            .total {
               color: #409eff;
             }
           }
@@ -458,7 +461,7 @@ export default {
           cursor: pointer;
         }
       }
-      .el-row {
+      .hot-lesson {
         .lesson {
           width: 290px;
           padding: 16px;
@@ -470,12 +473,12 @@ export default {
             height: 143px;
             object-fit: cover;
             border-radius: 4px;
-            cursor:pointer;
+            cursor: pointer;
           }
           &-title {
             font-size: 14px;
             margin: 10px 0;
-            cursor:pointer;
+            cursor: pointer;
           }
           &-desc {
             font-size: 12px;
@@ -486,6 +489,19 @@ export default {
     }
     .like {
       padding-bottom: 80px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .home-page {
+    &-cabinet {
+      &-excellent {
+        .hot-lesson {
+          .lesson {
+            margin: 0 auto 15px;
+          }
+        }
+      }
     }
   }
 }

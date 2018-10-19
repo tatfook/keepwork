@@ -8,21 +8,21 @@
         <el-button class="create" type="primary" @click="createMyProject">＋创建我的项目</el-button>
         <div class="project-type" v-if="!hasProjects">
           <el-row>
-            <el-col :span="8">
+            <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_paracraft.png" alt="">
                 <div class="project-type-item-title">Paracraft</div>
                 <div class="project-type-item-brief">创造3D交互动画和游戏</div>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_web.png" alt="">
                 <div class="project-type-item-title">网站</div>
                 <div class="project-type-item-brief">创造属于你的网站</div>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_knowledge.png" alt="">
                 <div class="project-type-item-title">个人知识</div>
@@ -40,7 +40,7 @@
         <div class="my-projects" v-if="hasProjects">
           <h4 class="browse-title">我的项目</h4>
           <el-row>
-            <el-col :span="6" v-for="(project,index) in myProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in myProjects" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -48,7 +48,7 @@
         <div class="my-contribute-projects" v-if="myContributeProjects.length > 0">
           <h4 class="browse-title">我参与的项目</h4>
           <el-row>
-            <el-col :span="6" v-for="(project,index) in myContributeProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in myContributeProjects" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -56,7 +56,7 @@
         <div class="others-projects">
           <h4 class="browse-title">看看其他人的项目</h4>
           <el-row>
-            <el-col :span="6" v-for="(project,index) in allProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in allProjects" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -131,6 +131,7 @@ export default {
       }
       .project-type {
         &-item {
+          margin-bottom: 40px;
           img {
             height: 144px;
             object-fit: cover;
@@ -152,7 +153,7 @@ export default {
         background: #f5f5f5;
         border: 1px solid #e8e8e8;
         font-size: 14px;
-        margin: 40px 0;
+        margin-bottom: 40px;
         color: #909399;
       }
     }
