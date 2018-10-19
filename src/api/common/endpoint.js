@@ -49,6 +49,9 @@ const createEndpoint = (config, parseResponse = true) => {
         _instance.post('/user/getProfile').catch(e => {
           Cookies.remove('token')
           Cookies.remove('token', { path: '/' })
+          if (window.navigator.userAgent.indexOf('Edge') > -1) {
+            document.cookie.replace(/token=\w*;/g, '')
+          }
           window.localStorage.removeItem('satellizer_token')
           window.location.reload()
         })

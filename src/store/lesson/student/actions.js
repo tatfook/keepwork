@@ -2,7 +2,7 @@ import { lesson } from '@/api'
 import { props } from './mutations'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
-import uuid from 'uuid/v1'
+// import uuid from 'uuid/v1'
 
 let {
   SET_USER_SUBSCRIBES,
@@ -18,41 +18,53 @@ let {
   LEAVE_THE_CLASS,
   CREATE_LEARN_RECORDS_SUCCESS,
   CLEAR_LEARN_RECORDS_ID,
-  CLEAR_LESSON_DATA
+  CLEAR_LESSON_DATA,
+  CHANGE_STATUS,
+  SWITCH_DEVICE,
+  SAVE_VISITOR_INFO,
+  CLEAR_VISITOR_INFO
 } = props
 
 const actions = {
-  async getUserSubscribes({ commit, rootGetters: { 'lesson/userId': userId } }, {packageState}) {
-    let userSubscribes = await lesson.users.userSubscribes({ userId, packageState })
+  async getUserSubscribes(
+    {
+      commit,
+      rootGetters: { 'lesson/userId': userId }
+    },
+    { packageState }
+  ) {
+    let userSubscribes = await lesson.users.userSubscribes({
+      userId,
+      packageState
+    })
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
   async getPackageDetail({ commit }, { packageId }) {
-    let detail = await lesson.packages.packageDetail({
-      id: packageId
-    })
-    commit(GET_PACKAGE_DETAIL_SUCCESS, {
-      detail
-    })
+    let detail = await lesson.packages.packageDetail({ packageId })
+    commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
   },
-  async getLessonContent({ commit }, { lessonId }) {
+  async getLessonContent(
+    { commit, dispatch, getters },
+    { lessonId, packageId }
+  ) {
+    await dispatch('getPackageDetail', { packageId })
+    const { studentPackageDetail } = getters
+    const packageIndex = studentPackageDetail({ packageId })
+      .lessons.map(l => l.id)
+      .indexOf(Number(lessonId))
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
-    modList.forEach(mod => {
-      if (mod.cmd === 'Quiz') {
-        let _id = uuid()
-        mod.data.quiz.data[0].id = _id
-        mod.uuid = _id
-      }
-    })
     let quiz = modList
       .filter(({ cmd }) => cmd === 'Quiz')
       .map(({ data: { quiz: { data } } }) => ({
         key: data[0].id,
         data: data[0],
-        result: null
+        result: null,
+        answer: null
       }))
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
@@ -85,24 +97,31 @@ const actions = {
       .currentClass()
       .catch(e => console.error(e))
     if (!classroom) {
-      return console.error('当前没有上课')
+      return
     }
-    const { learnRecordId, id } = classroom
-    let _classroom = _.clone(classroom)
+    dispatch('resumeClassData', classroom)
+  },
+  async resumeClassData({ commit, dispatch }, payload) {
+    const { learnRecordId, id } = payload
+    let _classroom = _.clone(payload)
     _classroom['id'] = learnRecordId
     _classroom['classroomId'] = id
     commit(RESUME_CLASSROOM, _classroom)
+    await dispatch('resumeQuiz', { id: learnRecordId })
+    await dispatch('uploadLearnRecords')
   },
   async resumeQuiz(
     {
       commit,
       getters: { lessonQuiz, lessonDetail }
     },
-    { id }
+    { id, learnRecords = null }
   ) {
-    let learnRecords = await lesson.classrooms
-      .learnRecordsById(id)
-      .catch(e => console.error(`can't find learnRecords`))
+    if (!learnRecords && id) {
+      learnRecords = await lesson.classrooms
+        .learnRecordsById(id)
+        .catch(e => console.error(`can't find learnRecords`))
+    }
     if (learnRecords && learnRecords.extra.quiz) {
       let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
       let _lessonDetail = _.clone(lessonDetail)
@@ -118,6 +137,9 @@ const actions = {
       })
       commit(RESUME_QUIZ, _lessonDetail)
     }
+  },
+  async resumeLearnRecordsId({ commit }, id) {
+    commit(CREATE_LEARN_RECORDS_SUCCESS, id)
   },
   async doQuiz(
     {
@@ -171,7 +193,27 @@ const actions = {
     const {
       getters: { classId, learnRecords }
     } = context
-    await lesson.classrooms.uploadLearnRecords({
+    const { username, name } = learnRecords
+    if (username && name) {
+      await lesson.classrooms.uploadLearnRecords({
+        classId,
+        learnRecords,
+        state
+      })
+    }
+  },
+  async uploadVisitorLearnRecords(
+    {
+      getters: { visitorInfo, learnRecords }
+    },
+    { state = 0 }
+  ) {
+    const { token, classId } = visitorInfo
+    learnRecords.username = 'visitor'
+    learnRecords.name = 'visitor'
+    learnRecords.status = 'k1'
+    await lesson.visitor.uploadLearnRecords({
+      token,
       classId,
       learnRecords,
       state
@@ -198,10 +240,36 @@ const actions = {
   },
   async checkClassroom({ commit, dispatch }) {
     await lesson.classrooms.currentClass().catch(e => {
-      console.warn('课堂已经不在了')
       commit(LEAVE_THE_CLASS)
       return Promise.reject(e)
     })
+  },
+  async changeStatus({ commit }, payload) {
+    commit(CHANGE_STATUS, payload)
+  },
+  async switchDevice({ commit }, payload) {
+    commit(SWITCH_DEVICE, payload)
+  },
+  async saveVisitorInfo({ commit }, payload) {
+    commit(SAVE_VISITOR_INFO, payload)
+  },
+  async clearVisitorInfo({ commit }) {
+    commit(CLEAR_VISITOR_INFO)
+  },
+  async checkLessonWithRecord({ commit }, { packageId, lessonId }) {
+    let learnRecords = await lesson.users
+      .learnRecords()
+      .catch(e => console.error(e))
+    let lastRecord = learnRecords.rows[learnRecords.rows.length - 1]
+    if (Number(lastRecord.state) === 0) {
+      const { packageId: _packageId, lessonId: _lessonId } = lastRecord
+      if (packageId === _packageId && lessonId === _lessonId) {
+        console.log(lastRecord)
+        commit(CREATE_LEARN_RECORDS_SUCCESS, lastRecord)
+        return true
+      }
+    }
+    return false
   }
 }
 export default actions

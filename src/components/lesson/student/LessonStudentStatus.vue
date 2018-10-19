@@ -1,10 +1,15 @@
 <template>
   <div class="lesson-student-status">
     <el-row class="student-info" type="flex" align="middle">
-      <el-col :span="5">
+      <el-col :span="5" :sm="5">
         <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="5" :sm="5" v-if="isVisitor">
+        <span class="nickname-wrap">
+          <span>{{$t('lesson.nickName')}} visitor</span>
+        </span>
+      </el-col>
+      <el-col :span="5" v-else>
         <span class="nickname-wrap" v-if="isEditNickName">
           <span style="display:inline-block; width: 70px">{{$t('lesson.nickName')}}</span>
           <el-input class="name-input" :autofocus="true" :value="name" v-model="name">
@@ -18,9 +23,9 @@
           <i @click="switchEdit" class="el-icon-edit-outline edit-status"></i>
         </span>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="14" :sm="14">
         <el-row type="flex" justify="end">
-          <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+          <el-button v-if="!isVisitor" class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
         </el-row>
       </el-col>
     </el-row>
@@ -37,6 +42,16 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LessonStudentStatus',
+  props: {
+    classKey: {
+      type: String,
+      default: ''
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       isDialogVisible: false,
@@ -55,10 +70,15 @@ export default {
       userinfo: 'lesson/userinfo'
     }),
     enterClassId() {
-      return _.get(this.enterClassInfo, 'key', '')
+      return this.isVisitor
+        ? this.classKey
+        : _.get(this.enterClassInfo, 'key', '')
     },
     nickname() {
       return _.get(this.userinfo, 'nickname', '')
+    },
+    username() {
+      return _.get(this.userinfo, 'username', '')
     },
     isNeedToSetNickname() {
       return !this.nickname
@@ -71,7 +91,7 @@ export default {
     ) {
       this.isDialogVisible = true
     }
-    this.name = this.nickname
+    this.name = this.nickname || this.username
   },
   methods: {
     ...mapActions({
@@ -103,7 +123,8 @@ export default {
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel')
+          cancelButtonText: this.$t('common.Cancel'),
+          customClass: 'leave-class'
         }
       )
         .then(async () => {
@@ -118,6 +139,7 @@ export default {
         await this.setNickname(this.name)
           .then(res => {
             this.isDialogVisible = false
+            window.location.href = this.$router.resolve(this.$route.path).href
           })
           .catch(e => {
             console.error(e)
@@ -136,7 +158,7 @@ export default {
   width: 100%;
   color: white;
   .student-info {
-    width: 1080px;
+    max-width: 1080px;
     margin: 0 auto;
     height: inherit;
   }
@@ -192,6 +214,16 @@ export default {
       background: #abadb1;
       border: none;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-student-status {
+    .input-name-dialog {
+      width: 90%;
+    }
+  }
+  .leave-class {
+    width: 90%;
   }
 }
 </style>

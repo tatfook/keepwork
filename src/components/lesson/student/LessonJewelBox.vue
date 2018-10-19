@@ -24,8 +24,8 @@
         <div class="bean-light">
           <img class="bean-icon" :src="beanIcon">
         </div>
-          <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
-        </div>
+        <div class="bean-count">+{{bean}} {{$t('lesson.beans')}}</div>
+      </div>
     </el-dialog>
   </span>
 </template>
@@ -100,7 +100,7 @@ export default {
     let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
     if (bean === 0) {
       this.isReward = false
-      this.startTimer()
+      this.isShowJewel && this.startTimer()
     }
   },
   computed: {
@@ -164,12 +164,35 @@ export default {
     handleClick() {
       this.isClicked = !this.isClicked
     },
-    startTimer() {
+    async startTimer() {
       this.time++
+      if (this.time % 30 === 0 && !this.isBeInClassroom) {
+        let lastLearnRecords = await lesson.lessons
+          .getLastLearnRecords()
+          .catch(e => console.error(e))
+        lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
+        if (
+          lastLearnRecords.length > 0 &&
+          this.learnRecordsId !== lastLearnRecords[0].id
+        ) {
+          return this.$router.push({ name: 'StudentCenter' })
+        }
+        // let learnRecords = await lesson.classrooms
+        //   .learnRecordsById(this._learnRecordId)
+        //   .catch(e => console.error(e))
+        // if (learnRecords && learnRecords.createdAt) {
+        //   let _time = Math.floor(
+        //     (new Date() - new Date(learnRecords.createdAt)) / 1000
+        //   )
+        //   this.time = _time || this.time
+        // }
+      }
       clearTimeout(this._timer)
-      this._timer = setTimeout(() => {
-        this.startTimer()
-      }, 1000)
+      if (this.isShowJewel) {
+        this._timer = setTimeout(() => {
+          this.startTimer()
+        }, 1000)
+      }
     },
     showTips() {
       this.isShowTips = true
@@ -331,6 +354,31 @@ export default {
   }
   50% {
     box-shadow: 0 0 8rem 1rem rgba(254, 250, 1, 0.8);
+  }
+}
+@media screen and (max-width: 768px) {
+  .jewel-box {
+    .tips-wrap {
+      width: 350px;
+      .tips {
+        font-size: 12px;
+        &-button {
+          .el-button {
+            padding: 7px;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .jewel-box {
+    width: 33px;
+    height: 19px;
+    background-size: contain;
+    left: -16px;
   }
 }
 </style>

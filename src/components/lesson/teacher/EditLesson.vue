@@ -274,3 +274,12 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .edit-lesson {
+    &-cover, &-more-info {
+      padding: 16px;
+    }
+  }
+}
+</style>

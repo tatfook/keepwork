@@ -18,29 +18,30 @@
             <div class="package-catalogue-item-cover-wrap">
               <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
             </div>
-            </div>
           </div>
-          <div class="package-catalogue-item-detail">
-            <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-              <span>{{lesson.lessonName}}</span>
-            </div>
-            <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
-            <div class="package-catalogue-item-goals">
-              <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
-            </div>
-            <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-              <span>45{{$t('lesson.minUnit')}}</span>
-            </div>
-            <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-            <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
-            <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+        </div>
+        <div class="package-catalogue-item-detail">
+          <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
+            <span>{{lesson.lessonName}}</span>
           </div>
+          <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
+          <div class="package-catalogue-item-goals">
+            <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
+          </div>
+          <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
+            <span>45{{$t('lesson.minUnit')}}</span>
+          </div>
+          <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
+          <el-button v-show="!lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
   name: 'PackageCatalogue',
@@ -142,12 +143,15 @@ export default {
           name === 'StudentPackage' &&
           (_packageId != packageId || lesson.id != lessonId)
         )
-          return this.$message.error('你正在上课中,请返回当前课堂')
+          return this.$message.error(this.$t('lesson.beInClass'))
       }
       if (this.isUserSubscribePackage) {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id
         }/lesson/${lesson.id}`
+        if (this.$route.name === 'StudentPackage') {
+          return this.toLearnConfirm(this.packageDetail.id, lesson.id, targetLessonPath)
+        }
         this.$router.push({
           path: targetLessonPath
         })
@@ -176,17 +180,61 @@ export default {
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
       }/lesson/${this.continueLearnedLesson.id}`
-      this.$router.push({
-        path: targetLessonPath
-      })
+      this.toLearnConfirm(
+        this.packageDetail.id,
+        this.continueLearnedLesson.id,
+        targetLessonPath
+      )
+      // this.$router.push({
+      //   path: targetLessonPath
+      // })
     },
     toLearnAgain(lesson) {
+      if (this.isBeInClassroom) {
+        return this.$message.error(this.$t('lesson.beInClass'))
+      }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
       }/lesson/${lesson.id}`
-      this.$router.push({
-        path: targetLessonPath
+      return this.toLearnConfirm(
+        this.packageDetail.id,
+        lesson.id,
+        targetLessonPath
+      )
+      // this.$router.push({
+      //   path: targetLessonPath
+      // })
+    },
+    async toLearnConfirm(_packageId, _lessonId, path) {
+      let res = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      let lastLearnRecods = _.get(res, 'rows', [])
+      if (lastLearnRecods.length === 0) {
+        return this.$router.push({
+          path
+        })
+      }
+      if (lastLearnRecods[0].state === 1) {
+        return this.$router.push({
+          path
+        })
+      }
+
+      const { packageId, lessonId } = lastLearnRecods[0]
+      if (_packageId === packageId && _lessonId === lessonId) {
+        return this.$router.push({
+          path
+        })
+      }
+      this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        type: 'warning',
+        customClass: 'leave-current-class'
       })
+        .then(() => this.$router.push({ path }))
+        .catch(e => console.error(e))
     }
   }
 }
@@ -310,7 +358,6 @@ export default {
         margin-left: 0;
       }
       &.learn-again {
-
       }
     }
     &-goals {
@@ -335,6 +382,13 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .package-catalogue {
+    &-item {
+      display: block;
+    }
+  }
+}
 </style>
 <style lang="scss">
 .package-catalogue {
@@ -345,6 +399,11 @@ export default {
     .el-progress-bar__inner {
       background-color: #66cd2e;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .leave-current-class {
+    max-width: 90%;
   }
 }
 </style>

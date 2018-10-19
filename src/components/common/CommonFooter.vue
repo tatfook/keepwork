@@ -95,6 +95,11 @@ export default {
     }
   }
 }
+@media print {
+  .footer-container {
+    display: none;
+  }
+}
 </style>
 
 

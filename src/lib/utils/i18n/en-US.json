@@ -1065,6 +1065,7 @@
     "quiz2": "Quiz",
     "noData": "No Data",
     "linkThePage": "Link the page to",
+    "notAllowed": "Not allowed",
     "pleaseSelect": "Please select",
     "beans": "beans",
     "detail": "Detail:",
@@ -1074,6 +1075,8 @@
     "urlError": "url error",
     "toAdd": "Add",
     "learnAgain": "Learn Again",
-    "noRecord": "No record"
+    "noRecord": "No record",
+    "world": "world",
+    "learnLessonConfirm": "To learn a new lesson will make the old one closed. Continue ?"
   }
 }

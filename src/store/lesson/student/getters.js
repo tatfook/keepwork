@@ -20,12 +20,16 @@ const getters = {
   enterClassInfo: state => state.enterClassInfo,
   classroomId: (state, { enterClassInfo }) => enterClassInfo.id || '',
   classId: (state, { enterClassInfo }) => enterClassInfo.id || '',
-  isBeInClassroom: (state, { classroomId }) => !!classroomId,
+  visitorInfo: state => state.visitorInfo,
+  visitorClassId: (state, { visitorInfo }) => visitorInfo.learnRecordId || '',
+  isBeInClassroom: (state, { classroomId }) => Boolean(classroomId),
   enterClassId: state => state.enterClassId,
   learnRecordsId: state => state.learnRecordsId,
+  status: state => state.status,
+  device: state => state.device,
   learnRecords: (
     state,
-    { lessonQuiz },
+    { lessonQuiz, status, device },
     rootState,
     {
       'lesson/userinfo': { nickname, username },
@@ -35,6 +39,7 @@ const getters = {
   ) => ({
     name: nickname,
     username: username,
+    status: `${device}${status}`,
     portrait: portrait,
     quiz: lessonQuiz,
     howManyDays: howManyDays

@@ -1070,6 +1070,7 @@
     "quiz2": "测试题",
     "noData": "暂无数据",
     "linkThePage": "关联该页面到课程",
+    "notAllowed": "没有编辑权限",
     "pleaseSelect": "请选择",
     "beans": "知识豆",
     "detail": "详情：",
@@ -1079,6 +1080,8 @@
     "urlError": "地址错误",
     "toAdd": "去添加",
     "learnAgain": "重新学习",
-    "noRecord": "暂无记录"
+    "noRecord": "暂无记录",
+    "world": "世界",
+    "learnLessonConfirm": "学习新课程，将结束旧课程的学习。是否继续？"
   }
 }

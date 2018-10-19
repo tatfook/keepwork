@@ -60,6 +60,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import { lesson } from '@/api'
 export default {
   name: 'Quiz',
   props: {
@@ -74,6 +75,10 @@ export default {
       default: false
     },
     isPrint: {
+      type: Boolean,
+      default: false
+    },
+    isVisitor: {
       type: Boolean,
       default: false
     }
@@ -93,6 +98,7 @@ export default {
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
       createLearnRecords: 'lesson/student/createLearnRecords',
       uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
       switchSummary: 'lesson/student/switchSummary'
     }),
     checkAnswer() {
@@ -145,18 +151,40 @@ export default {
         let state = this.lessonIsDone ? 1 : 0
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
       }
+      // 一次只能自学一个页面
+      if (!this.isVisitor) {
+        let lastLearnRecords = await lesson.lessons
+          .getLastLearnRecords()
+          .catch(e => console.error(e))
+        lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
+        if (
+          lastLearnRecords.length > 0 &&
+          this.learnRecordsId !== lastLearnRecords[0].id
+        ) {
+          return this.$router.push({ name: 'StudentCenter' })
+        }
+      }
+
+      // FIXME: 这里应该改成从store里面去课程包和课程的id
       const { packageId, lessonId } = this.$route.params
       // 首次需要先创建学习记录
-      !this.learnRecordsId &&
-        (await this.createLearnRecords({
-          packageId: Number(packageId),
-          lessonId: Number(lessonId)
-        }))
-      await this.uploadSelfLearnRecords({
-        packageId: Number(packageId),
-        lessonId: Number(lessonId),
-        state: this.lessonIsDone ? 1 : 0
-      })
+      // if (!this.learnRecordsId && !this.isVisitor) {
+      //   await this.createLearnRecords({
+      //     packageId: Number(packageId),
+      //     lessonId: Number(lessonId)
+      //   })
+      // }
+      this.isVisitor
+        ? await this.uploadVisitorLearnRecords({
+            packageId: Number(packageId),
+            lessonId: Number(lessonId),
+            state: this.lessonIsDone ? 1 : 0
+          })
+        : await this.uploadSelfLearnRecords({
+            packageId: Number(packageId),
+            lessonId: Number(lessonId),
+            state: this.lessonIsDone ? 1 : 0
+          })
     }
   },
   watch: {

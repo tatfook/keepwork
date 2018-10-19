@@ -157,7 +157,8 @@ export default {
         read: this.lessonCodeReadLine,
         write: this.lessonWriteLine,
         command: this.lessonCommands,
-        videoUrl: this.videoUrl
+        videoUrl: this.videoUrl,
+        coverUrl: this.coverUrl
       }
     }
   },
@@ -171,7 +172,7 @@ export default {
         this.studyTime
       }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
         this.lessonWriteLine
-      }&command=${this.lessonCommands}`
+      }&command=${this.lessonCommands}&videoUrl=${encodeURIComponent(this.videoUrl)}&coverUrl=${encodeURIComponent(this.coverUrl)}`
       shareWebUrl = encodeURI(shareWebUrl)
       window.socialShare('.summary-share-lesson', {
         url: shareWebUrl,
@@ -193,38 +194,6 @@ export default {
         this.showSocialShare()
       })
     }
-    // shareTo(socialPlatform) {
-    //   let origin = window.location.origin
-    //   let packageId = this.$route.params.packageId
-    //   let lessonId = this.$route.params.lessonId
-    //   let styleId = this.$refs.shareStyle.currentStyle
-    //   let shareWebUrl = `${origin}/l/#/share/package/${packageId}/lesson/${lessonId}/style/${styleId}?day=${
-    //     this.studyTime
-    //   }&name=${this.lessonName}&read=${this.lessonCodeReadLine}&write=${
-    //     this.lessonWriteLine
-    //   }&command=${this.lessonCommands}&videoUrl=${this.videoUrl}`
-    //   shareWebUrl = encodeURIComponent(shareWebUrl)
-    //   let shareTitle = 'keepwork'
-    //   let imgUrl = `https://keepwork.com/wiki/assets/imgs/icon/logo.svg`
-    //   let content = `我在KeepWork学习${this.lessonName},快来跟我一起吧！`
-    // if (socialPlatform == 'qq') {
-    //   window.open(
-    //     `http://connect.qq.com/widget/shareqq/index.html?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}&desc=我在KeepWork学习${
-    //       this.lessonName
-    //     },快来跟我一起吧！`
-    //   )
-    // }
-    // if (socialPlatform == 'qzone') {
-    //   window.open(
-    //     `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${shareWebUrl}?sharesource=qzone&title=${shareTitle}&pics=${imgUrl}&summary=${content}`
-    //   )
-    // }
-    // if (socialPlatform == 'sina') {
-    //   window.open(
-    //     `http://service.weibo.com/share/share.php?url=${shareWebUrl}?sharesource=weibo&title=${shareTitle}&pic=${imgUrl}&appkey=2706825840`
-    //   )
-    // }
-    // }
   }
 }
 </script>
@@ -306,5 +275,12 @@ $blue: #4093fe;
   &-select-panel {
     margin-top: 20px;
   }
+}
+@media screen and (max-width: 768px){
+.summary-share-dialog {
+  .el-dialog{
+    max-width: 94%;
+  }
+}  
 }
 </style>

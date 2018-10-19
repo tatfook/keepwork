@@ -2,12 +2,10 @@ import Vue from 'vue'
 
 const PUBLISH_LESSON = 'PUBLISH_LESSON'
 const TOGGLE_HINT = 'TOGGLE_HINT'
+const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const BEGIN_THE_CLASS_SUCCESS = 'BEGIN_THE_CLASS_SUCCESS'
-const TOGGLE_LESSON = 'TOGGLE_LESSON'
-const TOGGLE_PERFORMANCE = 'TOGGLE_PERFORMANCE'
-const TOGGLE_SUMMARY = 'TOGGLE_SUMMARY'
 const DISMISS_THE_CLASS_SUCCESS = 'DISMISS_THE_CLASS_SUCCESS'
 const UPDATE_LEARN_RECORDS_SUCCESS = 'UPDATE_LEARN_RECORDS_SUCCESS'
 const GET_CURRENT_CLASSROOM_SUCCESS = 'GET_CURRENT_CLASSROOM_SUCCESS'
@@ -20,13 +18,11 @@ const LEAVE_THE_CLASSROOM = 'LEAVE_THE_CLASSROOM'
 export const props = {
   PUBLISH_LESSON,
   TOGGLE_HINT,
+  GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
   DISMISS_THE_CLASS_SUCCESS,
-  TOGGLE_LESSON,
-  TOGGLE_PERFORMANCE,
-  TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
@@ -39,6 +35,12 @@ export const props = {
 const mutations = {
   [TOGGLE_HINT](state) {
     Vue.set(state, 'isShowHint', !state.isShowHint)
+  },
+  [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
+    Vue.set(state, 'packagesDetail', {
+      ...state.packagesDetail,
+      [detail.id]: detail
+    })
   },
   [GET_LESSON_CONTENT_SUCCESS](state, payload) {
     Vue.set(state, 'lessonData', payload)
@@ -58,12 +60,6 @@ const mutations = {
   [UPDATE_LEARN_RECORDS_SUCCESS](state, payload) {
     Vue.set(state, 'learnRecords', payload)
   },
-  [TOGGLE_LESSON](state, payload) {
-    Vue.set(state, 'isShowLesson', payload)
-  },
-  [TOGGLE_PERFORMANCE](state, payload) {
-    Vue.set(state, 'isShowPerformance', payload)
-  },
   [GET_USER_PACKAGES_SUCCESS](state, { userPackages }) {
     Vue.set(state, 'userPackages', userPackages)
   },
@@ -75,9 +71,6 @@ const mutations = {
       ...state.packageLessons,
       [packageId]: lessons
     })
-  },
-  [TOGGLE_SUMMARY](state, payload) {
-    Vue.set(state, 'isShowSummary', payload)
   },
   [GET_CLASSROOM_LEARN_RECORDS](state, classroomLearnRecord) {
     Vue.set(state, 'classroomLearnRecord', classroomLearnRecord)

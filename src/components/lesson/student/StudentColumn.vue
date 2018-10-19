@@ -1,36 +1,38 @@
 <template>
   <div class="student-wrap">
-    <el-container class="student">
-      <el-aside width="274px">
-        <div class="profile">
-          <img :src='userProfile.portrait' alt="portrait">
+    <el-row class="student">
+      <el-col :md="6" class="aside">
+        <div class="aside-content">
+          <div class="profile">
+            <img :src='userProfile.portrait' alt="portrait">
+          </div>
+          <div class="nickname">{{username}}</div>
+          <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+          <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
+          <div class="skills" :loading="loadingSkillsPoint">
+            <ul class="skills-list">
+              <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
+                <span>{{skill.score}}</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="nickname">{{username}}</div>
-        <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
-        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-        <div class="skills" :loading="loadingSkillsPoint">
-          <ul class="skills-list">
-            <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
-              <span>{{skill.score}}</span>
-            </li>
-          </ul>
-        </div>
-      </el-aside>
-      <el-main>
+      </el-col>
+      <el-col :md="18" class="main">
         <div class="search">
           <el-row>
-            <el-col :md="2">
+            <el-col :md="2" :sm="2">
               <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
             </el-col>
-            <el-col :md="5">
+            <el-col :md="5" :sm="5">
               <span class="tip">{{$t('lesson.enterClass')}}</span>
             </el-col>
-            <el-col :md="11">
+            <el-col :md="11" :sm="11">
               <span class="search-input">
                 <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
               </span>
             </el-col>
-            <el-col :md="6">
+            <el-col :md="6" :sm="6" :xs="6">
               <span class="search-btn">
                 <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
                   <label for="searchClass">{{$t('lesson.enter')}}</label>
@@ -54,8 +56,8 @@
             </el-col>
           </el-row>
         </div>
-      </el-main>
-    </el-container>
+      </el-col>
+    </el-row>
     <div class="be-in-class" v-show="beInClassDialog">
       <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
         <div class="hint">
@@ -90,7 +92,7 @@ export default {
   async mounted() {
     await this.getProfile()
     let payload = { userId: this.userId }
-    await this.getUserSubscribes({packageState:2})
+    await this.getUserSubscribes({ packageState: 2 })
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -109,8 +111,8 @@ export default {
       subscribesList: 'lesson/student/subscribesList',
       userinfo: 'lesson/userinfo'
     }),
-    beansCount(){
-      return _.get(this.userinfo,'bean',0)
+    beansCount() {
+      return _.get(this.userinfo, 'bean', 0)
     },
     skillpointsCount() {
       let sum = 0
@@ -121,18 +123,21 @@ export default {
       }
       return sum
     },
-    filterSubscribesList(){
+    filterSubscribesList() {
       return _.filter(this.subscribesList, i => {
         return i.state === 2
       })
     },
     continuingStudyPackages() {
-      let continuingStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return (
-          i.learnedLessons.length > 0 &&
-          i.learnedLessons.length < i.lessons.length
-        )
-      })
+      let continuingStudyPackagesList = _.filter(
+        this.filterSubscribesList,
+        i => {
+          return (
+            i.learnedLessons.length > 0 &&
+            i.learnedLessons.length < i.lessons.length
+          )
+        }
+      )
       return continuingStudyPackagesList.sort(this.sortByUpdateAt)
     },
     startStudyPackages() {
@@ -165,7 +170,7 @@ export default {
       enterClassRoom: 'lesson/student/enterClassRoom',
       getUserSubscribes: 'lesson/student/getUserSubscribes'
     }),
-    goBeanDetail(){
+    goBeanDetail() {
       this.$router.push('/student/bean')
     },
     sortByUpdateAt(obj1, obj2) {
@@ -244,11 +249,16 @@ export default {
   .student {
     margin: 0 auto;
     max-width: 1150px;
-    .el-aside {
-      background: #ffffff;
-      margin-right: 29px;
+    .aside {
+      background: #f8f8f8;
+      padding: 0 16px;
       overflow: hidden;
       text-align: center;
+      &-content {
+        background: #fff;
+        padding: 30px 0 50px;
+        margin: 0 auto;
+      }
       .profile {
         width: 99px;
         height: 99px;
@@ -270,13 +280,13 @@ export default {
         color: #333333;
         font-family: 'ArialMT';
       }
-      .beans{
+      .beans {
         border-bottom: 1px solid #909399;
-        margin: 5px 20px 15px;
+        margin: 5px 8px 15px;
         padding-bottom: 20px;
         color: #181818;
         font-size: 14px;
-        .detail{
+        .detail {
           color: #409eff;
           padding-left: 20px;
           cursor: pointer;
@@ -287,14 +297,14 @@ export default {
         font-size: 14px;
         margin: 10px auto;
         text-align: left;
-        color:#333;
+        color: #333;
       }
       .skills {
         margin: 0 auto;
         width: 233px;
         text-align: left;
         &-list {
-          margin:0;
+          margin: 0;
           list-style: none;
           padding: 0;
           li {
@@ -305,14 +315,14 @@ export default {
             padding: 0 4px;
             font-size: 14px;
             color: #333333;
-            .skill-name{
+            .skill-name {
               color: #707174;
             }
           }
         }
       }
     }
-    .el-main {
+    .main {
       padding: 0;
       background: #fff;
       overflow: hidden;
@@ -326,7 +336,7 @@ export default {
           display: block;
           padding-top: 20px;
           font-size: 14px;
-          text-align: center;
+          text-align: left;
         }
         &-input {
           display: inline-block;
@@ -387,6 +397,15 @@ export default {
           margin-right: 10px;
           font-size: 30px;
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .student-wrap {
+    .be-in-class {
+      .el-dialog {
+        width: 90% !important;
       }
     }
   }

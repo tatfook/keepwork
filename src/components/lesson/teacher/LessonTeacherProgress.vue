@@ -153,4 +153,20 @@ export default {
   }
 }
 </style>
-
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-teacher-progress {
+    padding-top: 16px;
+    .progress-point {
+      height: auto;
+      .pointer {
+        &,
+        &.selected {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+</style>

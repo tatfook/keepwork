@@ -4,13 +4,11 @@ import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 const {
   TOGGLE_HINT,
+  GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
   DISMISS_THE_CLASS_SUCCESS,
-  TOGGLE_LESSON,
-  TOGGLE_PERFORMANCE,
-  TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
@@ -29,11 +27,19 @@ const actions = {
     await dispatch('getUserLessons', { useCache: false })
     await dispatch('getUserPackages', { useCache: false })
   },
-  async getLessonContent({ commit }, lessonId) {
+  async getPackageDetail({ commit }, { packageId }) {
+    let detail = await lesson.packages.packageDetail({ packageId })
+    commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
+  },
+  async getLessonContent({ commit, dispatch, getters }, { lessonId, packageId }) {
+    await dispatch('getPackageDetail', { packageId })
+    const { teacherPackageDetail } = getters
+    const packageIndex = teacherPackageDetail({ packageId }).lessons.map(l => l.id).indexOf(Number(lessonId))
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
 
     commit(GET_LESSON_CONTENT_SUCCESS, {
@@ -86,17 +92,11 @@ const actions = {
         commit(LEAVE_THE_CLASSROOM)
       })
   },
+  async resumeClassData({ commit }, payload) {
+    commit(GET_CURRENT_CLASSROOM_SUCCESS, payload)
+  },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
-  },
-  toggleLesson({ commit }, flag) {
-    commit(TOGGLE_LESSON, flag)
-  },
-  togglePerformance({ commit }, flag) {
-    commit(TOGGLE_PERFORMANCE, flag)
-  },
-  toggleSummary({ commit }, flag) {
-    commit(TOGGLE_SUMMARY, flag)
   },
   async getUserPackages(context, { useCache = true }) {
     let {

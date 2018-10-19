@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-menu">
+  <div class="lesson-menu" v-if="canEdit">
     <div width="460px" center="">
       <div class="select-title">{{$t('lesson.linkThePage')}}</div>
       <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
@@ -17,12 +17,19 @@
       <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
   </div>
+  <div class="lesson-menu" v-else>
+    <div width="460px" center="">
+      <div class="select-title">{{$t('lesson.notAllowed')}}</div>
+    </div>
+  </div>
 </template>
 
 
 <script>
 import EditLesson from '@/components/lesson/teacher/EditLesson'
-
+import Parser from '@/lib/mod/parser'
+import BlockHelper from '@/lib/mod/parser/blockHelper'
+import uuid from 'uuid/v1'
 import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -56,6 +63,9 @@ export default {
     },
     isLinked() {
       return !!this.userLessons.find(({ id }) => id === this.lessonId)
+    },
+    canEdit() {
+      return !this.lessonId || this.isLinked
     }
   },
   methods: {
@@ -65,7 +75,7 @@ export default {
     async checkMarkdownIsLinked() {
       let origin = window.location.origin
       if (origin === 'http://localhost:8080') {
-        origin = 'https://stage.keepwork.com'
+        origin = 'https://release.keepwork.com'
       }
       await lesson.lessons
         .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
@@ -79,9 +89,21 @@ export default {
         })
     },
     async handleRelease() {
-      const { file: { content } } = this.activePage
+      const {
+        file: { content }
+      } = this.activePage
+
+      let modList = Parser.buildBlockList(content)
+      let newModList = [...modList]
+      newModList.forEach(item => {
+        if (item.cmd === 'Quiz') {
+          item.data.quiz.data[0].id = uuid()
+          BlockHelper.buildMarkdown(item)
+        }
+      })
+      let md = Parser.buildMarkdown(newModList)
       await lesson.lessons
-        .release({ id: this.selectValue, content })
+        .release({ id: this.selectValue, content: md })
         .then(res =>
           this.$message({
             type: 'success',

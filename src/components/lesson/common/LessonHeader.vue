@@ -1,6 +1,6 @@
 <template>
   <el-row class="lesson-header-container">
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog class="lesson-header-container-video" :visible.sync="dialogVisible" width="50%">
       <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
         <source :src="videoUrl" type="video/mp4">
       </video>
@@ -21,78 +21,78 @@
       <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
-      <el-col :span="14" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
+      <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
-        <el-col :span="10" class="lesson-desc">
-          <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
-            <el-tooltip placement="bottom">
-              <div slot="content">{{$t('lesson.fullPage')}}</div>
-              <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: {{classroomId}}</div>
-            </el-tooltip>
-            <el-tooltip placement="bottom">
-              <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
-                <div v-html="$t('lesson.classIdExplain',{ classId: `<span style='color:red'> ${$t('lesson.class')} ID</span>` })"></div>
-              </div>
-              <span class="question-mark-icon"></span>
-            </el-tooltip>
-          </div>
-          <div v-if="isSelfLearning" class="class-id-sign-wrap">
-            <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
-            <el-tooltip placement="bottom">
-              <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
-                <div v-html="$t('lesson.haqiIdExplain')"></div>
-              </div>
-              <span @click="handleExplanHaqiCode" class="question-mark-icon"></span>
-            </el-tooltip>
-          </div>
-
-          <div class="lesson-info title">
-            {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
-          </div>
-          <div class="lesson-info intro">
-            <div class="intro-title">
-              {{$t('lesson.intro')}}:
+      <el-col :sm="10" :xm="24" class="lesson-desc">
+        <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
+          <el-tooltip placement="bottom">
+            <div slot="content">{{$t('lesson.fullPage')}}</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: {{classroomId}}</div>
+          </el-tooltip>
+          <el-tooltip placement="bottom">
+            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
+              <div v-html="$t('lesson.classIdExplain',{ classId: `<span style='color:red'> ${$t('lesson.class')} ID</span>` })"></div>
             </div>
-            <el-scrollbar class="intro-list" :native="false">
-              {{lessonGoals}}
-            </el-scrollbar>
-          </div>
-          <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
-          <div class="lesson-info skills">
-            <div class="skills-title">
-              {{$t('lesson.skillPoints')}}:
+            <span class="question-mark-icon"></span>
+          </el-tooltip>
+        </div>
+        <div v-if="isSelfLearning" class="class-id-sign-wrap">
+          <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
+          <el-tooltip placement="bottom">
+            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
+              <div v-html="$t('lesson.haqiIdExplain')"></div>
             </div>
-            <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
-              <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
-            </el-scrollbar>
-          </div>
-          <div v-if="isTeacher" class="lesson-button-wrap">
-            <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-            <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-            <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
-            <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
-          </div>
+            <span @click="handleExplanHaqiCode" class="question-mark-icon"></span>
+          </el-tooltip>
+        </div>
 
-        </el-col>
+        <div class="lesson-info title">
+          {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
+        </div>
+        <div class="lesson-info intro">
+          <div class="intro-title">
+            {{$t('lesson.intro')}}:
+          </div>
+          <el-scrollbar class="intro-list" :native="false">
+            {{lessonGoals}}
+          </el-scrollbar>
+        </div>
+        <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
+        <div class="lesson-info skills">
+          <div class="skills-title">
+            {{$t('lesson.skillPoints')}}:
+          </div>
+          <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
+            <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
+          </el-scrollbar>
+        </div>
+        <div v-if="isTeacher" class="lesson-button-wrap">
+          <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+          <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+          <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+          <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+        </div>
+
+      </el-col>
     </el-row>
     <keep-work-sticky>
       <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="20">
+        <el-col :span="20" :sm="20">
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
+        <el-col :span="4" :sm="4" class="lesson-references">
           <lesson-referencse />
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="2" class="lesson-award">
-          <lesson-jewel-box />
+        <el-col :span="2" :sm="2" class="lesson-award">
+          <lesson-jewel-box v-if="!isVisitor" />
         </el-col>
-        <el-col :span="18">
-          <lesson-student-progress />
+        <el-col :span="18" :sm="18">
+          <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
+        <el-col :span="4" :sm="4" class="lesson-references">
           <lesson-referencse />
         </el-col>
       </el-row>
@@ -137,6 +137,10 @@ export default {
     isInCurrentClass: {
       type: Boolean,
       default: true
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -193,7 +197,8 @@ export default {
           {
             confirmButtonText: this.$t('lesson.activate'),
             cancelButtonText: this.$t('lesson.no'),
-            type: 'warning'
+            type: 'warning',
+            customClass: 'teach-function-style'
           }
         )
           .then(() => {
@@ -228,7 +233,8 @@ export default {
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel')
+          cancelButtonText: this.$t('common.Cancel'),
+          customClass: 'dismiss-class'
         }
       )
         .then(async () => {
@@ -286,7 +292,7 @@ export default {
       return _.get(this.lesson, 'lessonName', '')
     },
     lessonNo() {
-      return _.get(this.lesson, 'id', '')
+      return _.get(this.lesson, 'packageIndex', '')
     },
     lessonSkills() {
       return _.map(
@@ -348,7 +354,6 @@ export default {
 
   .lesson-cover {
     height: 340px;
-    min-width: 400px;
     max-width: 600px;
     cursor: pointer;
     background: #eee;
@@ -490,6 +495,34 @@ export default {
       font-size: 15vw;
       font-weight: bold;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-header-container {
+    .lesson-cover {
+      height: 200px;
+      width: 80%;
+      margin: 0 10px;
+    }
+    &-video {
+      .el-dialog {
+        width: 90% !important;
+      }
+    }
+    .lesson-progress-wrap {
+      &.el-row {
+        padding: 16px;
+      }
+    }
+  }
+  .teach-function-style {
+    max-width: 86%;
+  }
+  .class-id-dialog {
+    max-width: 90%;
+  }
+  .dismiss-class {
+    max-width: 90%;
   }
 }
 </style>

@@ -22,7 +22,7 @@ import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
 import { lesson } from '@/api'
-import uuid from 'uuid/v1'
+import _ from 'lodash'
 export default {
   name: 'Learn',
   components: {
@@ -54,19 +54,43 @@ export default {
     if (!this.isLogined) {
       return this.toggleLoginDialog(true)
     }
-    const { packageId, lessonId } = this.$route.params
+    let { packageId, lessonId } = this.$route.params
+
+    packageId = Number(packageId)
+    lessonId = Number(lessonId)
     // purchased check or lesson check
-    let isPurchased = await this.checkPackagePurchased(
-      { packageId },
-      Number(lessonId)
-    )
+    let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
-    if (this.isBeInClassroom) {
-      await this.resumeTheClass().catch(e => console.error(e))
-    }
+    await this.getLessonContent({ lessonId, packageId })
+    await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      // FIXME: 可以加个回复答题记录
+      let lastLearnRecords = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      lastLearnRecords = lastLearnRecords && lastLearnRecords.rows
+      if (
+        lastLearnRecords.length > 0 &&
+        lastLearnRecords[0].state === 0 &&
+        lastLearnRecords[0].packageId === packageId &&
+        lastLearnRecords[0].lessonId === lessonId
+      ) {
+        this.resumeLearnRecordsId(lastLearnRecords[0].id)
+        if (
+          _.some(
+            _.get(lastLearnRecords[0], 'extra.quiz[0]', []),
+            ({ answer = false }) => answer
+          )
+        ) {
+          this.resumeQuiz({ learnRecords: lastLearnRecords[0] })
+        }
+      } else {
+        await this.createLearnRecords({
+          packageId,
+          lessonId
+        }).catch(e => console.error(e))
+      }
       window.document.title = this.lessonName
       return (this.isLoading = false)
     }
@@ -77,14 +101,23 @@ export default {
       id
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+
+    let { device } = this.$route.query
+    device && device.toLowerCase() === 'paracraft'
+      ? this.switchDevice('p')
+      : this.switchDevice('k')
+
     if (this.isCurrentClassroom) {
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      this.changeStatus(1)
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
     this.isLoading = false
     window.document.title = this.lessonName
-    this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    if (this.isBeInClassroom) {
+      this.handleCheckVisible()
+      !this._interval && this.intervalCheckClass()
+    }
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -99,22 +132,45 @@ export default {
       clearLessonData: 'lesson/student/clearLessonData',
       checkClassroom: 'lesson/student/checkClassroom',
       switchSummary: 'lesson/student/switchSummary',
-      toggleLoginDialog: 'lesson/toggleLoginDialog'
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus',
+      createLearnRecords: 'lesson/student/createLearnRecords',
+      switchDevice: 'lesson/student/switchDevice',
+      resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
     async intervalCheckClass(delay = 8 * 1000) {
-      console.warn('检查课堂是否还在')
       await this.checkClassroom()
       clearTimeout(this._interval)
-      this._interval = setTimeout(
-        async () =>
-          await this.intervalCheckClass().catch(
-            e =>
-              this.$message({
-                message: this.$t('lesson.classIsOver'),
-                type: 'warning'
-              }) && this._notify.close()
-          ),
-        delay
+      this._interval = setTimeout(async () => {
+        await this.intervalCheckClass().catch(
+          e =>
+            this.$message({
+              message: this.$t('lesson.classIsOver'),
+              type: 'warning'
+            }) && this._notify.close()
+        )
+      }, delay)
+    },
+    handleCheckVisible() {
+      let hidden = false
+      let visibilityChange = 'visibilitychange'
+      if (typeof document.hidden !== 'undefined') {
+        hidden = 'hidden'
+        visibilityChange = 'visibilitychange'
+      } else if (typeof document.msHidden !== 'undefined') {
+        hidden = 'msHidden'
+        visibilityChange = 'msvisibilitychange'
+      } else if (typeof document.webkitHidden !== 'undefined') {
+        hidden = 'webkitHidden'
+        visibilityChange = 'webkitvisibilitychange'
+      }
+      document.addEventListener(
+        visibilityChange,
+        async () => {
+          document[hidden] ? this.changeStatus(2) : this.changeStatus(1)
+          await this.uploadLearnRecords().catch(e => console.error(e))
+        },
+        false
       )
     },
     backToClassroom() {
@@ -210,9 +266,6 @@ export default {
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
-    },
-    lessonMainUid() {
-      this.lessonMain.map(item => item).forEach(item => item.key = uuid())
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div ref="sticky" class="keep-work-sticky" :style="{width: `${width}px`}" :class="{'fixed': isFixed}">
+  <div ref="sticky" class="keep-work-sticky" :style="{'width': `${width}px`}" :class="{'fixed': isFixed}">
     <slot></slot>
   </div>
 </template>
@@ -58,6 +58,7 @@ export default {
 
 <style lang="scss">
 .keep-work-sticky {
+  max-width: 100%;
   padding: 30px 0;
   background: white;
   &.fixed {
@@ -68,6 +69,15 @@ export default {
     z-index: 200;
     top: 0;
     box-shadow: 1px 1px 5px #dadada;
+  }
+}
+</style>
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .keep-work-sticky {
+    &.fixed {
+      width: 100% !important;
+    }
   }
 }
 </style>

@@ -94,6 +94,9 @@
         <el-menu-item index='1-3'>
           <a href="/wiki/wikieditor">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
+        <el-menu-item index='1-4'>
+          <a @click.stop="logout">{{$t('common.logout')}}</a>
+        </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goJoin">{{$t('common.register')}}</a>
@@ -228,6 +231,7 @@ export default {
       this.isLoginDialogShow = false
     },
     logout() {
+      this.$emit('preCallback')
       this.userLogout()
       this.$emit('callback')
       // window.location.reload()
@@ -305,9 +309,6 @@ export default {
   }
   .hidden-sm-and-up .el-icon-menu {
     font-size: 30px;
-  }
-  .hidden-sm-and-up .el-submenu {
-    margin: 0 -10px;
   }
   .el-menu-item {
     padding: 0 10px;
