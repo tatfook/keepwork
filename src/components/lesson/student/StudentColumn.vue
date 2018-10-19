@@ -3,19 +3,19 @@
     <el-row class="student">
       <el-col :md="6" class="aside">
         <div class="aside-content">
-        <div class="profile">
-          <img :src='userProfile.portrait' alt="portrait">
-        </div>
-        <div class="nickname">{{username}}</div>
-        <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
-        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-        <div class="skills" :loading="loadingSkillsPoint">
-          <ul class="skills-list">
-            <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
-              <span>{{skill.score}}</span>
-            </li>
-          </ul>
-        </div>
+          <div class="profile">
+            <img :src='userProfile.portrait' alt="portrait">
+          </div>
+          <div class="nickname">{{username}}</div>
+          <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+          <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
+          <div class="skills" :loading="loadingSkillsPoint">
+            <ul class="skills-list">
+              <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
+                <span>{{skill.score}}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </el-col>
       <el-col :md="18" class="main">
@@ -92,7 +92,7 @@ export default {
   async mounted() {
     await this.getProfile()
     let payload = { userId: this.userId }
-    await this.getUserSubscribes({packageState:2})
+    await this.getUserSubscribes({ packageState: 2 })
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -111,8 +111,8 @@ export default {
       subscribesList: 'lesson/student/subscribesList',
       userinfo: 'lesson/userinfo'
     }),
-    beansCount(){
-      return _.get(this.userinfo,'bean',0)
+    beansCount() {
+      return _.get(this.userinfo, 'bean', 0)
     },
     skillpointsCount() {
       let sum = 0
@@ -123,18 +123,21 @@ export default {
       }
       return sum
     },
-    filterSubscribesList(){
+    filterSubscribesList() {
       return _.filter(this.subscribesList, i => {
         return i.state === 2
       })
     },
     continuingStudyPackages() {
-      let continuingStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return (
-          i.learnedLessons.length > 0 &&
-          i.learnedLessons.length < i.lessons.length
-        )
-      })
+      let continuingStudyPackagesList = _.filter(
+        this.filterSubscribesList,
+        i => {
+          return (
+            i.learnedLessons.length > 0 &&
+            i.learnedLessons.length < i.lessons.length
+          )
+        }
+      )
       return continuingStudyPackagesList.sort(this.sortByUpdateAt)
     },
     startStudyPackages() {
@@ -167,7 +170,7 @@ export default {
       enterClassRoom: 'lesson/student/enterClassRoom',
       getUserSubscribes: 'lesson/student/getUserSubscribes'
     }),
-    goBeanDetail(){
+    goBeanDetail() {
       this.$router.push('/student/bean')
     },
     sortByUpdateAt(obj1, obj2) {
@@ -248,10 +251,10 @@ export default {
     max-width: 1150px;
     .aside {
       background: #f8f8f8;
-      padding:0 16px;
+      padding: 0 16px;
       overflow: hidden;
       text-align: center;
-      &-content{
+      &-content {
         background: #fff;
         padding: 30px 0 50px;
         margin: 0 auto;
@@ -277,13 +280,13 @@ export default {
         color: #333333;
         font-family: 'ArialMT';
       }
-      .beans{
+      .beans {
         border-bottom: 1px solid #909399;
         margin: 5px 8px 15px;
         padding-bottom: 20px;
         color: #181818;
         font-size: 14px;
-        .detail{
+        .detail {
           color: #409eff;
           padding-left: 20px;
           cursor: pointer;
@@ -294,14 +297,14 @@ export default {
         font-size: 14px;
         margin: 10px auto;
         text-align: left;
-        color:#333;
+        color: #333;
       }
       .skills {
         margin: 0 auto;
         width: 233px;
         text-align: left;
         &-list {
-          margin:0;
+          margin: 0;
           list-style: none;
           padding: 0;
           li {
@@ -312,7 +315,7 @@ export default {
             padding: 0 4px;
             font-size: 14px;
             color: #333333;
-            .skill-name{
+            .skill-name {
               color: #707174;
             }
           }
@@ -394,6 +397,15 @@ export default {
           margin-right: 10px;
           font-size: 30px;
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .student-wrap {
+    .be-in-class {
+      .el-dialog {
+        width: 90% !important;
       }
     }
   }
