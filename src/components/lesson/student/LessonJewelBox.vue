@@ -100,7 +100,7 @@ export default {
     let { coin, bean } = await lesson.lessons.isReward({ packageId, lessonId })
     if (bean === 0) {
       this.isReward = false
-      this.startTimer()
+      this.isShowJewel && this.startTimer()
     }
   },
   computed: {

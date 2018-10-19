@@ -1,10 +1,10 @@
 <template>
-    <div class="lesson-wrap" v-loading="isLoading">
-        <LessonStudentStatus :isVisitor="true" :classKey="classKey" />
-        <LessonHeader :data="lessonHeaderData" :isVisitor="true" />
-        <LessonSummary v-if="isShowSummary" />
-        <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" :isVisitor="true" />
-    </div>
+  <div class="lesson-wrap" v-loading="isLoading">
+    <LessonStudentStatus :isVisitor="true" :classKey="classKey" />
+    <LessonHeader :data="lessonHeaderData" :isVisitor="true" />
+    <LessonSummary v-if="isShowSummary" />
+    <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" :isVisitor="true" />
+  </div>
 </template>
 
 <script>
@@ -35,12 +35,19 @@ export default {
   async mounted() {
     const { key, token, id } = this.$route.query
     this.classKey = key || ''
-    this.saveVisitorInfo({ classId:id, key, token})
-    const { packageId, lessonId } = this.$route.params
+    this.saveVisitorInfo({ classId: id, key, token })
+    let { packageId, lessonId } = this.$route.params
+    packageId = Number(packageId)
+    lessonId = Number(lessonId)
     await this.getLessonContent({ lessonId, packageId }).catch(e =>
       console.error(e)
     )
     window.document.title = this.lessonName
+    await this.uploadVisitorLearnRecords({
+      packageId,
+      lessonId,
+      state: 0
+    })
     this.resetUrl()
     this.isLoading = false
   },
@@ -57,7 +64,8 @@ export default {
       switchSummary: 'lesson/student/switchSummary',
       changeStatus: 'lesson/student/changeStatus',
       saveVisitorInfo: 'lesson/student/saveVisitorInfo',
-      clearVisitorInfo: 'lesson/student/clearVisitorInfo'
+      clearVisitorInfo: 'lesson/student/clearVisitorInfo',
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords'
     }),
     resetUrl() {
       const { path } = this.$route
@@ -92,7 +100,7 @@ export default {
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
-    },
+    }
   }
 }
 </script>
