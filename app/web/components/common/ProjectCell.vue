@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
-    <img class="project-cell-cover" :src="project.extra.coverUrl" alt="">
-    <h4 class="project-cell-title">{{project.name}}</h4>
+    <img class="project-cell-cover" :src="project.extra.coverUrl" alt="" @click="goProjectDetail(project)">
+    <h4 class="project-cell-title" @click="goProjectDetail(project)">{{project.name}}</h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -42,6 +42,9 @@ export default {
     }
   },
   methods: {
+    goProjectDetail(project){
+      window.open(`/pbl/project/${project.id}/`)
+    },
     relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
@@ -68,11 +71,16 @@ export default {
     height: 143px;
     object-fit: cover;
     border-radius: 4px;
+    cursor: pointer;
   }
   &-title {
     font-size: 14px;
     margin: 10px 0;
     line-height: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   &-like {
     font-size: 12px;

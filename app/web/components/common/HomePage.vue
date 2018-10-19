@@ -225,7 +225,7 @@ export default {
       // window.location.href=`${this.locationOrigin}/study`
     },
     goLessonPackage(lessonPackage) {
-      this.$router.push(`/l/student/package/${lessonPackage.id}`)
+      window.open(`/l/student/package/${lessonPackage.id}`)
     }
   }
 }
