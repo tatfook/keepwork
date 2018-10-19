@@ -63,6 +63,28 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
+  if (to.matched.some(record => record.meta.autoJoin)) {
+    const { query } = to
+    if (query.key) {
+      store
+        .dispatch('lesson/student/enterClassRoom', { key: query.key })
+        .then(res => {
+          this.$router.push({
+            path: `/student/package/${res.packageId}/lesson/${
+              res.lessonId
+            }?dialog=true`
+          })
+        })
+        .catch(e => {
+          this.$message({
+            showClose: true,
+            message: this.$t('lesson.wrongKey'),
+            type: 'error'
+          })
+        })
+    }
+  }
+
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
       store.dispatch(

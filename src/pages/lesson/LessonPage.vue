@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE}" v-loading="loading">
+  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
     <div class="lesson-page-header">
       <common-header class="container" @callback="resetPage" @preCallback="preChangeStatus"></common-header>
     </div>
