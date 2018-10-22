@@ -18,22 +18,20 @@ const withoutParseEndpoint = createEndpoint(
   false
 )
 
-
-const { get, post, put, 'delete': deleteMethod } = keepworkEndpoint
-
+const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
-  getUser: async (username) => get(`users/${username}`),
+  getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
-  getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
+  getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async (...args) => put('/user/update', ...args),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
-  getByEmail: async (args) => get(`/users?email=${args.email}`),
-  getByCellphone: async (args) => get(`/users?cellphone=${args.cellphone}`),
+  getByEmail: async args => get(`/users?email=${args.email}`),
+  getByCellphone: async args => get(`/users?cellphone=${args.cellphone}`),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
   verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailTwo: async args => post('/users/email_captcha', args),
@@ -44,7 +42,7 @@ export const user = {
     post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
-  register: async (args) => post('/users/register', args),
+  register: async args => post('/users/register', args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 
@@ -91,7 +89,7 @@ payload: {
 */
 export const website = {
   // upsert: async (...args) => post('website/upsert', ...args),
-  upsert: async (args) => post('sites', args),
+  upsert: async args => post('sites', args),
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
@@ -208,15 +206,20 @@ export const userThreeService = {
 }
 
 export const favorites = {
-  existFavorite: async ({ objectId, objectType }) => get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
-  favoriteProject: async ({ objectId, objectType }) => post('favorites', { objectId, objectType }),
-  unFavoriteProject: async ({ objectId, objectType }) => deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
+  existFavorite: async ({ objectId, objectType }) =>
+    get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
+  favoriteProject: async ({ objectId, objectType }) =>
+    post('favorites', { objectId, objectType }),
+  unFavoriteProject: async ({ objectId, objectType }) =>
+    deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
 }
 
 export const projects = {
   getProjects: async () => post('projects/search'),
-  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
-  updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
+  getProjectDetail: async ({ projectId }) =>
+    get(`projects/${projectId}/detail`),
+  updateProject: async ({ projectId, updatingProjectData }) =>
+    put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   createProject: async (...args) => post('projects', ...args),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
@@ -227,27 +230,47 @@ export const projects = {
 }
 
 export const applies = {
-  getApplyList: async ({ objectId, objectType, applyType }) => get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
-  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state }),
-  getApplyState: async ({ objectType, objectId, applyType, applyId }) => get(`applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`),
-  applyProjectMember: async ({ objectType, objectId, applyType, applyId, extra }) => post('applies', { objectType, objectId, applyType, applyId, extra })
+  getApplyList: async ({ objectId, objectType, applyType }) =>
+    get(
+      `applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`
+    ),
+  updateApplyState: async ({ id, state }) =>
+    put(`applies/${id}`, { id, state }),
+  getApplyState: async ({ objectType, objectId, applyType, applyId }) =>
+    get(
+      `applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`
+    ),
+  applyProjectMember: async ({
+    objectType,
+    objectId,
+    applyType,
+    applyId,
+    extra
+  }) => post('applies', { objectType, objectId, applyType, applyId, extra })
 }
 
 export const members = {
-  getProjectMembersList: async ({ objectId, objectType }) => get(`members?objectId=${objectId}&objectType=${objectType}`),
+  getProjectMembersList: async ({ objectId, objectType }) =>
+    get(`members?objectId=${objectId}&objectType=${objectType}`),
   deleteMember: async ({ id }) => deleteMethod(`members/${id}`),
-  isMemberExist: async ({ objectId, objectType, memberId }) => get(`members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`)
+  isMemberExist: async ({ objectId, objectType, memberId }) =>
+    get(
+      `members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`
+    )
 }
 
 export const comments = {
-  getComments: async ({ objectType, objectId }) => get(`comments?objectType=${objectType}&objectId=${objectId}`),
-  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content }),
+  getComments: async ({ objectType, objectId }) =>
+    get(`comments?objectType=${objectType}&objectId=${objectId}`),
+  createComment: async ({ objectType, objectId, content }) =>
+    post('comments', { objectType, objectId, content }),
   deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)
 }
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
-  getSingleProjectIssues: async ({ objectId, objectType }) => get(`issues?objectId=${objectId}&objectType=${objectType}`)
+  getSingleProjectIssues: async ({ objectId, objectType }) =>
+    get(`issues?objectId=${objectId}&objectType=${objectType}`)
 }
 
 export const keepwork = {
