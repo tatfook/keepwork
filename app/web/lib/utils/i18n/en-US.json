@@ -293,7 +293,12 @@
 
     "addModHere": "Add new mod here",
 
-    "canNotUseIE": "This function cannot be used under IE."
+    "canNotUseIE": "This function cannot be used under IE.",
+
+    "toEdit": "Edit",
+    "checkCode": "Check code",
+    "share": "Share",
+    "praise": "Praise"
   },
   "modList": {
     "recent": "Commonly used",

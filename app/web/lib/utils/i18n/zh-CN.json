@@ -294,7 +294,12 @@
     "pleaseInput": "请输入",
     "changePic": "更换图片",
 
-    "addModHere": "在此处添加新模块"
+    "addModHere": "在此处添加新模块",
+
+    "toEdit": "编辑",
+    "checkCode": "查看代码",
+    "share": "分享",
+    "praise": "赞"
   },
   "modList": {
     "recent": "常用",
