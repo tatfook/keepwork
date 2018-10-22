@@ -20,9 +20,9 @@ const actions = {
   async toggleLoginDialog({ commit }, status) {
     commit(TOGGLE_LOGIN_DIALOG, status)
   },
-  async createNewProject(context, { description, name, privilege, type, visibility }) {
-    await keepwork.projects.createProject({ description, name, privilege, type, visibility }).then(() => {
-      return Promise.resolve()
+  async createNewProject(context, { description, name, privilege, type, visibility, siteId }) {
+    await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId }).then(projectDetail => {
+      return Promise.resolve(projectDetail)
     }).catch((error) => {
       return Promise.reject(error)
     })

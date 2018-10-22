@@ -31,8 +31,8 @@
         </el-form-item>
       </el-form>
       <p class="info">
-        {{$t('editor.lowerCaseLetters')}}<br/> {{$t('editor.unchangeable')}}
-        <br/>
+        {{$t('editor.lowerCaseLetters')}}<br /> {{$t('editor.unchangeable')}}
+        <br />
         <span v-if="!IS_GLOBAL_VERSION">{{$t('editor.vipForwarding')}}</span>
       </p>
     </div>
@@ -43,8 +43,8 @@
       </h1>
       <p>{{$t('editor.URL')}}
         <a :href="newSiteUrl + '/index'" target="_blank">{{newSiteUrl}}</a>
-        <br/> {{$t('editor.setWebsiteName')}}
-        <br/>
+        <br /> {{$t('editor.setWebsiteName')}}
+        <br />
         <span v-if="!IS_GLOBAL_VERSION">
           {{$t('editor.privatePermissions')}}
         </span>
@@ -72,7 +72,11 @@ const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 export default {
   name: 'NewWebsiteDialog',
   props: {
-    show: Boolean
+    show: Boolean,
+    isContinueAfterCreate: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     let websiteNameValidator = (rule, value, callback) => {
@@ -228,6 +232,9 @@ export default {
       let valid = await this.$refs.websiteNameForm.validate()
       if (!valid) return
       await this.createWebsite()
+      if (this.isContinueAfterCreate) {
+        return
+      }
       this.handleNextStep()
     },
     async createWebsite() {
@@ -235,6 +242,10 @@ export default {
       let name = this.websiteNameForm.value
       let websiteSetting = this.websiteSetting
       await this.userCreateWebsite({ name, websiteSetting })
+      if (this.isContinueAfterCreate) {
+        this.$emit('finish')
+        return
+      }
       this.loading = false
     }
   }

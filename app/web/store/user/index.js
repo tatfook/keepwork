@@ -19,7 +19,8 @@ const state = () => ({
   sendCodeInfo: {},
   authCodeInfo: {},
   threeServices: [],
-  tokenUpdateAt: null
+  tokenUpdateAt: null,
+  newSiteInfo: {}
 })
 
 export default {
