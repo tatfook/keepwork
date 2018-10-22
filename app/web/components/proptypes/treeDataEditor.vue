@@ -11,19 +11,19 @@
         {{$t('editor.setting')}}
       </span>
     </div>
-    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='true'>
+    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='false'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
-          <el-input :style="fixPadding(node, data)" :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
+          <el-input :style="fixPadding(node, data)" :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
-          <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+          <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-add-later1' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
-          <el-button icon='iconfont icon-add-before1' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
-          <el-button icon='iconfont icon-add_subitem1-copy-copy' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
-          <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
+          <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
+          <el-button v-tooltip='$t("editor.insertBefore")' icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
+          <el-button v-tooltip='$t("editor.insertChild")' icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
+          <el-button v-tooltip='$t("editor.delete")' icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
         </span>
       </span>
     </el-tree>
@@ -39,7 +39,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
+
 let newMenuId = 1
 
 export default {
@@ -61,6 +62,7 @@ export default {
       activePageInfo: 'activePageInfo'
     }),
     treeData() {
+      console.log(this.originalTreeData)
       return this.originalTreeData
     },
     isDialogShow() {
@@ -101,7 +103,7 @@ export default {
     },
     finishEditingMenu() {
       this.handleClose()
-
+      console.log(this.treeData)
       function deleteLevel(data){
          _.forEach(data, (item, key) => {
            if(item.level) {
@@ -264,6 +266,9 @@ export default {
     .el-button:hover {
       color: #1989fa
     }
+  }
+  .el-tree-node {
+    min-height: 40px;
   }
   .el-tree-node__content {
     height: 34px;
