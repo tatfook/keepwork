@@ -42,6 +42,7 @@ import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
+Vue.use(ElementUI.Popover)
 
 Vue.use(VueI18n)
 
