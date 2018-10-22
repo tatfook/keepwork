@@ -31,38 +31,39 @@
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
         <div class="options" ref="options">
-          <el-button :class="{'selected':1==currIndex}"  @click="selectTab(1)">项目<span class="search-num">({{allProjects.length}})</span></el-button>
-          <el-button :class="{'selected':2==currIndex}"  @click="selectTab(2)">3D世界<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':3==currIndex}"  @click="selectTab(3)">网站<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':4==currIndex}"  @click="selectTab(4)">知识<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':5==currIndex}"  @click="selectTab(5)">课程<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':6==currIndex}"  @click="selectTab(6)">用户<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':7==currIndex}"  @click="selectTab(7)">工作室<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':8==currIndex}"  @click="selectTab(8)">招募中<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目<span class="search-num">({{projectsCount}})</span></el-button>
+          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界<span class="search-num">({{paracraftCount}})</span></el-button>
+          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站<span class="search-num">({{websiteCount}})</span></el-button>
+          <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室<span class="search-num">(12345)</span></el-button>
+          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中<span class="search-num">(1)</span></el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
-          <el-row>
-            <el-col :span="6" v-for="(project,index) in allProjects" :key="index">
-              <project-cell :project="project"></project-cell>
-            </el-col>
-          </el-row>
+          <all-projects></all-projects>
         </div>
-        <div class="selected-lessons" v-if='currIndex == 5'>
-
+        <div class="selected-projects" v-if='currIndex == 2'>
+          <paracraft></paracraft>
         </div>
+        <div class="selected-projects" v-if='currIndex == 3'>
+          <website></website>
+        </div>
+        <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
+        <div class="selected-lessons" v-if='currIndex == 5'></div>
         <div class="selected-user" v-if='currIndex == 6'>
           <ul class="selected-user-list">
             <li class="user">
               <div class="portrait">
                 <img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
               </div>
-                <div class="nickname">
-                  <h5 class="name">告诉果果</h5>
-                  <p class="desc">项目：<span class="total">1234</span> 粉丝：<span class="total">123456</span></p>
-                  <el-button type="primary" class="follow">关注</el-button>
-                </div>
-                <div class="cover">
-                  <img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
+              <div class="nickname">
+                <h5 class="name">告诉果果</h5>
+                <p class="desc">项目：<span class="total">1234</span> 粉丝：<span class="total">123456</span></p>
+                <el-button type="primary" class="follow">关注</el-button>
+              </div>
+              <div class="cover">
+                <img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
               </div>
             </li>
           </ul>
@@ -96,15 +97,21 @@
             </el-col>
           </el-row>
         </div>
-        <div class="selected-recruitment" v-if='currIndex == 8'></div>
+        <div class="selected-projects" v-if='currIndex == 8'>
+          <!-- <recruiting></recruiting> -->
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import ProjectCell from './ProjectCell'
+import AllProjects from './explorationPageTab/AllProjects'
+import Paracraft from './explorationPageTab/Paracraft'
+import Website from './explorationPageTab/Website'
+import Recruiting from './explorationPageTab/Recruiting'
 import _ from 'lodash'
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+
 
 export default {
   name: 'ExplorationPage',
@@ -113,18 +120,25 @@ export default {
       currIndex: 1
     }
   },
-  mounted(){
-    this.getAllProjects()
+  mounted() {
   },
   computed: {
     ...mapGetters({
-      allProjects: 'pbl/allProjects'
-    })
+      allProjects: 'pbl/allProjects',
+      paracraft: 'pbl/paracraft',
+      website: 'pbl/website'
+    }),
+    projectsCount() {
+      return _.get(this.allProjects, 'total', 0)
+    },
+    paracraftCount(){
+      return _.get(this.paracraft, 'total', 0)
+    },
+    websiteCount(){
+      return _.get(this.website, 'total', 0)
+    },
   },
   methods: {
-    ...mapActions({
-      getAllProjects: 'pbl/getAllProjects'
-    }),
     goSearch() {},
     selectTab(index) {
       switch (index) {
@@ -159,7 +173,10 @@ export default {
     }
   },
   components: {
-    ProjectCell
+    AllProjects,
+    Paracraft,
+    Website,
+    Recruiting,
   }
 }
 </script>
@@ -212,7 +229,7 @@ export default {
           font-size: 14px;
           border-radius: 12px;
           margin-top: 4px;
-          .search-num{
+          .search-num {
             margin-left: 8px;
           }
         }

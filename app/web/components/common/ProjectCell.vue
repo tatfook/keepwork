@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
     <img class="project-cell-cover" :src="project.extra.coverUrl" alt="" @click="goProjectDetail(project)">
-    <h4 class="project-cell-title" @click="goProjectDetail(project)">{{project.name}}</h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)"><span class="text">{{project.name}}</span><span class="recruitment" v-if="project.recruiting">招募中</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -77,10 +77,26 @@ export default {
     font-size: 14px;
     margin: 10px 0;
     line-height: 20px;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    height: 20px;
+    display: flex;
+    .text{
+      display: inline-block;
+      max-width: 190px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      height: 20px;
+    }
+    .recruitment{
+      display: inline-block;
+      background:#ef5936;
+      border-radius: 10px;
+      color: #fff;
+      margin-left: 4px;
+      padding: 0 8px;
+      font-size: 11px;
+      height: 20px;
+    }
   }
   &-like {
     font-size: 12px;
