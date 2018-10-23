@@ -304,6 +304,11 @@
     "share": "分享",
     "praise": "赞"
   },
+  "tips": {
+    "clickToShow": "点击显示",
+    "clickToHide": "点击隐藏",
+    "clickToAdd": "点击添加"
+  },
   "modList": {
     "recent": "常用",
     "markdown": "文本(Markdown)",

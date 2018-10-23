@@ -5,7 +5,7 @@
       <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' :default-expanded-keys='defaultExpandedKeys' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
     </el-col>
     <el-col class="preview-box">
-      <div v-for='mod in activeModsList' :key='mod.name'>
+      <div v-for='mod in activeModsList' :key='mod.name' class="box-items">
         <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
           <div class="render-mod-container--click-prevent"></div>
           <div class="render-mod-container">
@@ -13,6 +13,9 @@
           </div>
         </div>
         <img v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+        <div class="style-mask">
+          <span>{{$t('tips.clickToAdd')}}</span>
+        </div>
       </div>
     </el-col>
   </el-row>
@@ -147,6 +150,12 @@ export default {
 .full-height {
   height: 100%;
 }
+.box-items {
+  position: relative;
+  img {
+    display: block;
+  }
+}
 .style-cover {
   width: 275px;
   cursor: pointer;
@@ -156,6 +165,26 @@ export default {
   border: 2px solid transparent;
   padding: 10px;
   background-color: white;
+}
+.style-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 24px;
+  width: 275px;
+  margin-left: 2px;
+  padding: 6px 10px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  background: rgba(144, 167, 191, 0.5);
+  opacity: 0;
+}
+.box-items:hover .style-mask {
+  opacity: 1;
+}
+.style-mask:hover + .style-cover {
+  border: 2px solid #bcbcbc;
 }
 .style-cover:hover {
   border: 2px solid #bcbcbc;
@@ -211,6 +240,10 @@ export default {
         transform: scale(0.1245);
       }
     }
+  }
+
+  .style-mask {
+    width: 135px
   }
 }
 </style>

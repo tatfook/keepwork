@@ -6,7 +6,7 @@
       </el-col>
       <el-col class="card-info">
         <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" :title="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
-        <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
+        <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible' v-tooltip='isToolTip'>
         </el-switch>
       </el-col>
     </el-row>
@@ -56,6 +56,13 @@ export default {
         return this.cardValue && !this.cardValue.hidden
       },
       set() {}
+    },
+    isToolTip () {
+      if (this.isModShow){
+        return this.$t("tips.clickToHide")
+      } else {
+        return this.$t("tips.clickToShow")
+      }
     },
     optionsData() {
       if (!this.activeMod || !this.activeMod.modType || !this.activeMod.data || !this.activeMod.data.styleID === '') {

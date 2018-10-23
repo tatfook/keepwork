@@ -5,7 +5,7 @@
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" :title="$t('editor.modules')"></el-button>
+          <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" v-tooltip.bottom="$t('editor.modules')"></el-button>
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>

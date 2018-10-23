@@ -1,7 +1,7 @@
 <template>
   <div>
     {{$t(originValue.desc)}}
-    <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @input='updateValue' @focus='getFocus'></el-switch>
+    <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @input='updateValue' @focus='getFocus' v-tooltip='isToolTip'></el-switch>
   </div>
 </template>
 <script>
@@ -19,7 +19,14 @@ export default {
         return this.originValue
       },
       set() {}
-    }
+    },
+    isToolTip () {
+      if (this.inputTypeValue.value){
+        return this.$t("tips.clickToHide")
+      } else {
+        return this.$t("tips.clickToShow")
+      }
+    },
   },
   methods: {
     updateValue(newVal) {

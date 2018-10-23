@@ -303,6 +303,11 @@
     "share": "Share",
     "praise": "Praise"
   },
+  "tips": {
+    "clickToShow": "Click to show",
+    "clickToHide": "Click to hide",
+    "clickToAdd": "Click to add"
+  },
   "modList": {
     "recent": "Commonly used",
     "markdown": "Markdown",
