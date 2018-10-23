@@ -88,9 +88,6 @@ export default {
           this.lessonsList,
           lesson => lesson.id === lastLessonId
         )
-        // if (lastLessonIndex + 1 < this.lessonsList.length) {
-        //   return this.lessonsList[lastLessonIndex + 1]
-        // }
         while (++lastLessonIndex < this.lessonsList.length) {
           if (!this.lessonsList[lastLessonIndex].isFinished) {
             return this.lessonsList[lastLessonIndex]
@@ -133,7 +130,7 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
-      if (this.isInClassroom) {
+      if (this.isBeInClassroom) {
         const {
           name,
           params: { id: _packageId }
@@ -185,9 +182,6 @@ export default {
         this.continueLearnedLesson.id,
         targetLessonPath
       )
-      // this.$router.push({
-      //   path: targetLessonPath
-      // })
     },
     toLearnAgain(lesson) {
       if (this.isBeInClassroom) {
@@ -201,9 +195,6 @@ export default {
         lesson.id,
         targetLessonPath
       )
-      // this.$router.push({
-      //   path: targetLessonPath
-      // })
     },
     async toLearnConfirm(_packageId, _lessonId, path) {
       let res = await lesson.lessons

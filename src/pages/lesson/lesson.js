@@ -19,6 +19,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import Cookies from 'js-cookie'
 import '@/components/common/thirdAuth'
+import { keepwork } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -44,9 +45,7 @@ const store = new Vuex.Store({
     createPersistedState({
       paths: [
         'lesson.userinfo',
-        // 'lesson.student.enterClassInfo',
         'lesson.student.subscribesList',
-        // 'lesson.teacher.classroom',
         'user.profile',
         'user.webTemplateConfig',
         'user.skyDrive'
@@ -56,17 +55,43 @@ const store = new Vuex.Store({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.autoLogin)) {
+    const {
+      query: { token, key },
+      name,
+      params
+    } = to
+    if (token && token !== 0) {
+      let userInfo = await keepwork.user
+        .verifyToken({ token })
+        .catch(e => console.error('verify token failure'))
+      if (userInfo) {
+        Cookies.set('token', token)
+        if (key && key !== 0) {
+          await store.dispatch('lesson/student/enterClassRoom', {
+            key
+          })
+          return next({ name, params, query: { reload: true, dialog: true } })
+        }
+        return next({ name, params, query: { reload: true } })
+      }
+    }
+  }
+
   if (to.matched.some(record => record.meta.visitor)) {
     const { query, params } = to
     if (query.id && query.token) {
+      if (Number(query.id) === 0 && Number(query.token) === 0) {
+        return next({ name: 'VisitorLesson', params })
+      }
       return next({ name: 'VisitorLesson', params, query })
     }
   }
 
   if (to.matched.some(record => record.meta.autoJoin)) {
     const { query } = to
-    if (query.key) {
-      store
+    if (query.key && query.key !== 0) {
+      await store
         .dispatch('lesson/student/enterClassRoom', { key: query.key })
         .then(res => {
           this.$router.push({

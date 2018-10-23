@@ -188,7 +188,7 @@ export default {
         // }
       }
       clearTimeout(this._timer)
-      if (this.isShowJewel) {
+      if (this.isShowJewel && !this.isBeInClassroom) {
         this._timer = setTimeout(() => {
           this.startTimer()
         }, 1000)
