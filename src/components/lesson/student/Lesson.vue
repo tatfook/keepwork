@@ -50,6 +50,13 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    const {
+      query: { reload }
+    } = this.$route
+    if (Boolean(reload)) {
+      this.resetUrl()
+      return window.location.reload()
+    }
     // logined check
     if (!this.isLogined) {
       return this.toggleLoginDialog(true)
@@ -65,7 +72,6 @@ export default {
     await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      // FIXME: 可以加个回复答题记录
       let lastLearnRecords = await lesson.lessons
         .getLastLearnRecords()
         .catch(e => console.error(e))
@@ -138,6 +144,10 @@ export default {
       switchDevice: 'lesson/student/switchDevice',
       resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
+    resetUrl() {
+      const { path } = this.$route
+      window.location.href = this.$router.resolve({ path }).href
+    },
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
       clearTimeout(this._interval)

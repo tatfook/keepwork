@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap" v-loading="isLoading">
-    <LessonStudentStatus :isVisitor="true" :classKey="classKey" />
+    <LessonStudentStatus v-if="isBeInClassroom" :isVisitor="true" :classKey="classKey" />
     <LessonHeader :data="lessonHeaderData" :isVisitor="true" />
     <LessonSummary v-if="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" :isVisitor="true" />
@@ -26,7 +26,8 @@ export default {
       isRefresh: false,
       _interval: null,
       isLoading: false,
-      classKey: ''
+      classKey: '',
+      isBeInClassroom: false
     }
   },
   created() {
@@ -35,6 +36,9 @@ export default {
   async mounted() {
     const { key, token, id } = this.$route.query
     this.classKey = key || ''
+    if (id && key && id !== 0 && token !== 0) {
+      this.isBeInClassroom = true
+    }
     this.saveVisitorInfo({ classId: id, key, token })
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
@@ -75,11 +79,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLogined: 'user/isLogined',
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',
-      isBeInClassroom: 'lesson/student/isBeInClassroom',
       userinfo: 'lesson/userinfo',
       enterClassInfo: 'lesson/student/enterClassInfo'
     }),
