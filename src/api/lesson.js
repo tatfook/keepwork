@@ -80,7 +80,12 @@ export const users = {
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
   createLearnRecords: payload => post(`learnRecords`, payload),
-  learnRecords: () => get(`learnRecords`)
+  learnRecords: () => get(`learnRecords`),
+  verifyToken: ({ token }) => {
+    axios.interceptors.request.eject(endpointWithoutToken)
+    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return endpointWithoutToken.get('users')
+  }
 }
 
 export const classrooms = {

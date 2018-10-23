@@ -6,6 +6,7 @@ category: API
 ---
 */
 import createEndpoint from './common/endpoint'
+import axios from 'axios'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -14,6 +15,10 @@ export const keepworkEndpoint = createEndpoint({
 const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
+
+const endpointWithoutToken = createEndpoint({
+  baseURL: process.env.KEEPWORK_API_PREFIX
+})
 
 const {post, put} = keepworkEndpoint
 
@@ -32,7 +37,12 @@ export const user = {
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
   register: async (...args) => post('/user/register', ...args),
-  bindThreeService: async (...args) => post('user/bindThreeService', ...args)
+  bindThreeService: async (...args) => post('user/bindThreeService', ...args),
+  verifyToken: async ({ token }) => {
+    axios.interceptors.request.eject(endpointWithoutToken)
+    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return endpointWithoutToken.post('user/getProfile')
+  }
 }
 
 /*doc
