@@ -35,7 +35,7 @@
     <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">下一步</el-button>
     <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">上一步</el-button>
     <new-website-dialog :isContinueAfterCreate='true' :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' @finish='createNewProjectByNewSite'></new-website-dialog>
-    <el-dialog width="760px" title="选择已有网站" :visible.sync="isUserSitesDialogShow">
+    <el-dialog v-loading='isCreating' width="760px" title="选择已有网站" :visible.sync="isUserSitesDialogShow">
       <user-sites-selector ref='userSitesRef'></user-sites-selector>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeUserSitesDialog">取消</el-button>
@@ -52,6 +52,7 @@ export default {
   name: 'NewProject',
   data() {
     return {
+      isCreating: false,
       nowStep: 0,
       webFinishStepCount: 1,
       isNewWebsiteDialogShow: false,
@@ -119,17 +120,19 @@ export default {
       this.createNewProject()
     },
     async createNewProject() {
+      this.isCreating = true
       await this.pblCreateNewProject(this.newProjectData)
         .then(projectDetail => {
+          this.isCreating = false
           this.$message({
             type: 'success',
             message: '项目创建成功'
           })
           let projectId = projectDetail.id
-          this.$router.push(`pbl/project/${projectId}`)
+          projectId && this.$router.push(`/project/${projectId}`)
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
         })
     },
     goPrevStep() {

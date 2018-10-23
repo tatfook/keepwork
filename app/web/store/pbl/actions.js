@@ -21,11 +21,8 @@ const actions = {
     commit(TOGGLE_LOGIN_DIALOG, status)
   },
   async createNewProject(context, { description, name, privilege, type, visibility, siteId }) {
-    await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId }).then(projectDetail => {
-      return Promise.resolve(projectDetail)
-    }).catch((error) => {
-      return Promise.reject(error)
-    })
+    let projectDetail = await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId })
+    return projectDetail
   },
   async getAllProjects({ commit }) {
     await keepwork.projects
