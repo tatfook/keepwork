@@ -115,6 +115,9 @@
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
     "paracraftDownload": "点击下载",
 
+    "menuName": "菜单名",
+    "inputConnection": "输入链接",
+
     "hint": "提示",
     "pullServerData": "你是否放弃本地修改，重新读取服务器版本？",
     "files": "文件",

@@ -11,13 +11,13 @@
         {{$t('editor.setting')}}
       </span>
     </div>
-    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='false'>
+    <el-tree v-if="treeData.length > 0" :style="fixMaxHeight()" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='false'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
-          <el-input :style="fixPadding(node, data)" :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
+          <el-input :style="fixPadding(node, data)" :placeholder='$t("editor.menuName")' :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
-          <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+          <el-input :ref='"link"+node.id' :placeholder='$t("editor.inputConnection")' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
           <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
@@ -62,7 +62,6 @@ export default {
       activePageInfo: 'activePageInfo'
     }),
     treeData() {
-      console.log(this.originalTreeData)
       return this.originalTreeData
     },
     isDialogShow() {
@@ -103,7 +102,6 @@ export default {
     },
     finishEditingMenu() {
       this.handleClose()
-      console.log(this.treeData)
       function deleteLevel(data){
          _.forEach(data, (item, key) => {
            if(item.level) {
@@ -150,6 +148,11 @@ export default {
       inputRefId = type + inputRefId
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.blur()
+    },
+    fixMaxHeight(){
+      if(this.treeData.length > 10){
+        return 'max-height: 350px;overflow-y: auto;'
+      }
     },
     insert(node, data, position) {
       let self = this
@@ -267,9 +270,6 @@ export default {
       color: #1989fa
     }
   }
-  .el-tree-node {
-    min-height: 40px;
-  }
   .el-tree-node__content {
     height: 34px;
     line-height: 32px;
@@ -304,10 +304,6 @@ export default {
     display: inline-block;
     width: 100%;
     height: 100%;
-  }
-  .el-tree {
-    max-height: 350px;
-    overflow-y: auto;
   }
   .el-tree-node__content > .el-tree-node__expand-icon {
     padding: 6px;
