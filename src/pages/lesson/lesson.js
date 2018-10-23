@@ -71,6 +71,7 @@ router.beforeEach(async (to, from, next) => {
           await store.dispatch('lesson/student/enterClassRoom', {
             key
           })
+          return next({ name, params, query: { reload: true, dialog: true } })
         }
         return next({ name, params, query: { reload: true } })
       }
