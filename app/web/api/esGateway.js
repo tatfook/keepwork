@@ -4,6 +4,8 @@ const client = createEndpoint({
   baseURL: process.env.ES_GATEWAY_BASE_URL
 })
 
+const { post, get } = client
+
 /*doc
 ---
 title: search
@@ -22,7 +24,7 @@ category: elasticsearch gateway
 ```
 */
 export const search = async options => {
-  return client.post('es/search', options)
+  return post('es/search', options)
 }
 
 /*doc
@@ -40,10 +42,15 @@ category: elasticsearch gateway
 
 */
 export const submitGitData = async (path, action, content, options) => {
-  return client.post('git/commit', { path, action, content, options })
+  return post('git/commit', { path, action, content, options })
+}
+
+export const projects = {
+  getProjects: async ({ page, perPage, type }) => get(`projects?page=${page}&per_page=${perPage}&type=${type}`)
 }
 
 export default {
   search,
-  submitGitData
+  submitGitData,
+  projects
 }

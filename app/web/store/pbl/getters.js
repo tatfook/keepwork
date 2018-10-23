@@ -11,7 +11,9 @@ const getters = {
   myProjects: state => state.myProjects,
   myContributeProjects: state => state.myContributeProjects,
   projectApplyState: state => ({ projectId, userId }) => _.get(state.projectApplyState, `${userId}.${projectId}`),
-  projectCommentList: state => ({ projectId }) => _.get(state.commentList, projectId)
+  projectCommentList: state => ({ projectId }) => _.get(state.commentList, projectId),
+  paracraft: state => state.projectsType.paracraft,
+  website: state => state.projectsType.website
 }
 
 export default getters

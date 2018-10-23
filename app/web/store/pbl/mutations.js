@@ -11,6 +11,7 @@ const GET_PROJECT_STAR_STATE_SUCCESS = 'GET_PROJECT_STAR_STATE_SUCCESS'
 const GET_PROJECT_APPLY_STATE_SUCCESS = 'GET_PROJECT_APPLY_STATE_SUCCESS'
 const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
 const GET_MY_ALL_PROJECTS_SUCCESS = 'GET_MY_ALL_PROJECTS_SUCCESS'
+const GET_TYPE_PROJECTS = 'GET_TYPE_PROJECTS'
 
 
 export const props = {
@@ -24,7 +25,8 @@ export const props = {
   GET_PROJECT_STAR_STATE_SUCCESS,
   GET_MY_ALL_PROJECTS_SUCCESS,
   GET_PROJECT_APPLY_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS
+  GET_COMMENTS_SUCCESS,
+  GET_TYPE_PROJECTS
 }
 
 const mutations = {
@@ -33,6 +35,12 @@ const mutations = {
   },
   [GET_ALL_PROJECTS](state, allProjects) {
     Vue.set(state, 'allProjects', allProjects)
+  },
+  [GET_TYPE_PROJECTS](state, { type, projects }) {
+    Vue.set(state, 'projectsType', {
+      ...state.projectsType,
+      [type]: projects
+    })
   },
   [GET_MY_ALL_PROJECTS_SUCCESS](state, projectsGroup) {
     Vue.set(state, 'myProjects', projectsGroup[0])

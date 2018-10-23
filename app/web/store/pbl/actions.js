@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork } from '@/api'
+import { keepwork, EsAPI } from '@/api'
 import { props } from './mutations'
 
 let {
@@ -13,7 +13,8 @@ let {
   GET_PROJECT_STAR_STATE_SUCCESS,
   GET_MY_ALL_PROJECTS_SUCCESS,
   GET_PROJECT_APPLY_STATE_SUCCESS,
-  GET_COMMENTS_SUCCESS
+  GET_COMMENTS_SUCCESS,
+  GET_TYPE_PROJECTS
 } = props
 
 const actions = {
@@ -27,12 +28,19 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getAllProjects({ commit }) {
-    await keepwork.projects
-      .getProjects()
+  async getAllProjects({ commit }, { page, perPage, type }) {
+    await EsAPI.projects
+      .getProjects({ page, perPage, type })
       .then(res => {
-        let allProjects = _.get(res, 'rows', [])
-        commit(GET_ALL_PROJECTS, allProjects)
+        commit(GET_ALL_PROJECTS, res)
+      }).catch(err => console.error(err))
+  },
+  async getTypeProjects({ commit }, { page, perPage, type }) {
+    await EsAPI.projects
+      .getProjects({ page, perPage, type })
+      .then(res => {
+        let projects = res
+        commit(GET_TYPE_PROJECTS, { type, projects })
       }).catch(err => console.error(err))
   },
   async getMyAllProjects({ commit }) {

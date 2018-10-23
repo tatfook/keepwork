@@ -254,7 +254,8 @@ export default {
       window.location.href = `${this.locationOrigin}/study`
     },
     goHomePage() {
-      this.$router.push('/')
+      // this.$router.push('/')
+      window.location.href = `/`
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
