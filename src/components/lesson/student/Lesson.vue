@@ -150,7 +150,6 @@ export default {
           path: this.$route.path
         }).href)
       }
-      // const { reload, ...query } = this.$route.query
       const {
         name,
         params,
