@@ -69,7 +69,6 @@ export default {
   computed: {
     ...mapGetters({
       getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
-      // getSiteDetailInfoById: 'user/getSiteDetailInfoById',
       getSiteDetailInfoDataSourceByPath:
         'user/getSiteDetailInfoDataSourceByPath'
     }),

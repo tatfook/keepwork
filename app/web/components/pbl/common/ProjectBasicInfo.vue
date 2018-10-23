@@ -25,12 +25,12 @@
         <p><i class="iconfont icon-uploading"></i>点击更换图片或视频</p>
       </div>
       <div class="project-basic-info-detail-message">
-        <p class="project-basic-info-detail-message-item"><label>项目类型:</label>{{originProjectDetail.type | projectTypeFilter }}</p>
+        <p class="project-basic-info-detail-message-item"><label>项目类型:</label>{{ projectType | projectTypeFilter }}</p>
         <p class="project-basic-info-detail-message-item"><label>项目ID:</label>{{originProjectDetail.id}}</p>
         <p class="project-basic-info-detail-message-item"><label>创建时间:</label>{{originProjectDetail.createdAt | formatDate}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary">访问项目</el-button>
+          <el-button type="primary" @click="toProjectPage">访问项目</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
@@ -52,6 +52,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
+import paracraftUtil from '@/lib/utils/paracraft'
 export default {
   name: 'ProjectBasicInfo',
   props: {
@@ -99,7 +100,9 @@ export default {
       pblProjectApplyState: 'pbl/projectApplyState',
       loginUserId: 'user/userId',
       loginUserDetail: 'user/profile',
-      isLogined: 'user/isLogined'
+      isLogined: 'user/isLogined',
+      userToken: 'user/token',
+      getSiteDetailInfoById: 'user/getSiteDetailInfoById'
     }),
     projectApplyState() {
       return this.pblProjectApplyState({
@@ -120,6 +123,38 @@ export default {
       return _.merge(this.originProjectDetail, {
         description: this.tempDesc
       })
+    },
+    projectType() {
+      return this.originProjectDetail.type
+    },
+    isWebType() {
+      return this.projectType === 0
+    },
+    projectSiteId() {
+      return this.originProjectDetail.siteId
+    },
+    siteDetailInfo() {
+      if (!this.isWebType) {
+        return
+      }
+      return this.getSiteDetailInfoById({ siteId: this.projectSiteId })
+    },
+    siteUrl() {
+      if (!this.isWebType) {
+        return
+      }
+      let { sitename, username } = this.siteDetailInfo
+      return `/${username}/${sitename}/index`
+    },
+    paracraftUrl() {
+      if (this.isWebType) {
+        return
+      }
+      let { archiveUrl, commitId } = this.originProjectDetail.world
+      return paracraftUtil.getUrl({
+        link: `${archiveUrl}?ref=${commitId}`,
+        usertoken: this.userToken
+      })
     }
   },
   methods: {
@@ -127,7 +162,8 @@ export default {
       pblGetApplyState: 'pbl/getApplyState',
       pblApplyJoinProject: 'pbl/applyJoinProject',
       pblUpdateProject: 'pbl/updateProject',
-      toggleLoginDialog: 'pbl/toggleLoginDialog'
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
+      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -198,6 +234,33 @@ export default {
           this.isApplyButtonLoading = false
           console.error(error)
         })
+    },
+    toProjectPage() {
+      switch (this.projectType) {
+        case 0:
+          this.toSitePage()
+          break
+        case 1:
+          this.toParacraftPage()
+          break
+        default:
+          break
+      }
+    },
+    async toSitePage() {
+      if (this.projectSiteId) {
+        await this.getWebsiteDetailBySiteId({ siteId: this.projectSiteId })
+        if (this.siteUrl) {
+          let tempWin = window.open('_blank')
+          tempWin.location = this.siteUrl
+        }
+      }
+    },
+    toParacraftPage() {
+      if (this.paracraftUrl) {
+        let tempWin = window.open('_blank')
+        tempWin.location = this.paracraftUrl
+      }
     }
   },
   filters: {

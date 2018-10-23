@@ -189,8 +189,9 @@ const getters = {
     let [username, name] = path.split('/').filter(x => x)
     return siteDetailInfo[`${username}/${name}`]
   },
-  getSiteDetailInfoById: (state, { siteDetailInfo }) => siteId => {
-    return siteDetailInfo[siteId]
+  siteDetailInfoById: state => state.siteDetailInfoById,
+  getSiteDetailInfoById: (state, { siteDetailInfoById }) => ({ siteId }) => {
+    return siteDetailInfoById[siteId]
   },
   getSiteDetailInfoDataSourceByPath: (
     state,

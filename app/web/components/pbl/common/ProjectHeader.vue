@@ -126,7 +126,7 @@ export default {
     },
     toProjectIndexPage(project) {
       let projectId = project.id
-      this.$router.push({ path: `/project/${projectId}/edit` })
+      this.$router.push({ path: `/project/${projectId}` })
     },
     async toggleStarProject() {
       let projectId = this.editingProjectId
