@@ -81,6 +81,9 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.visitor)) {
     const { query, params } = to
     if (query.id && query.token) {
+      if (Number(query.id) === 0 && Number(query.token) === 0) {
+        return next({ name: 'VisitorLesson', params })
+      }
       return next({ name: 'VisitorLesson', params, query })
     }
   }

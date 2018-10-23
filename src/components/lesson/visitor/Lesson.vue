@@ -34,9 +34,10 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
-    const { key, token, id } = this.$route.query
-    this.classKey = key || ''
-    if (id && key && id !== 0 && token !== 0) {
+    const { key = '', token, id } = this.$route.query
+    this.classKey = key
+    this.resetUrl()
+    if (id && token && _.isNumber(id) && !_.isNumber(token)) {
       this.isBeInClassroom = true
     }
     this.saveVisitorInfo({ classId: id, key, token })
@@ -47,12 +48,14 @@ export default {
       console.error(e)
     )
     window.document.title = this.lessonName
-    await this.uploadVisitorLearnRecords({
-      packageId,
-      lessonId,
-      state: 0
-    })
-    this.resetUrl()
+    if (id && token && _.isNumber(id) && !_.isNumber(token)) {
+      await this.uploadVisitorLearnRecords({
+        packageId,
+        lessonId,
+        state: 0
+      })
+    }
+
     this.isLoading = false
   },
   destroyed() {
@@ -72,9 +75,9 @@ export default {
       uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords'
     }),
     resetUrl() {
-      const { path } = this.$route
-      let href = this.$router.resolve({ path }).href
-      window.location.href = href
+      window.location.href = this.$router.resolve({
+        path: this.$route.path
+      }).href
     }
   },
   computed: {
