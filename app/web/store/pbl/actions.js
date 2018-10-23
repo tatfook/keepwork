@@ -75,7 +75,9 @@ const actions = {
     })
   },
   async updateProject(context, { projectId, updatingProjectData }) {
-    await keepwork.projects.updateProject({ projectId, updatingProjectData }).then(() => {
+    let { dispatch } = context
+    await keepwork.projects.updateProject({ projectId, updatingProjectData }).then(async () => {
+      await dispatch('getProjectDetail', { projectId, useCache: false })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)

@@ -21,6 +21,7 @@ const {
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
   GET_SITE_DETAIL_INFO_SUCCESS,
+  GET_SITE_DETAIL_INFO_BY_ID_SUCCESS,
   GET_CONTRIBUTED_WEBSITE_SUCCESS,
   UPSERT_WEBSITE_SUCCESS,
   GET_WEB_TEMPLATE_CONFIG_SUCCESS,
@@ -326,6 +327,14 @@ const actions = {
     let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
     detailInfo.site.username = username
     commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
+  },
+  async getWebsiteDetailBySiteId(context, { siteId, useCache = true }) {
+    let { commit, getters: { getSiteDetailInfoById } } = context
+    if (useCache && getSiteDetailInfoById({ siteId })) {
+      return
+    }
+    let detailInfo = await keepwork.website.getSiteDetail({ siteId })
+    commit(GET_SITE_DETAIL_INFO_BY_ID_SUCCESS, { siteId, detailInfo })
   },
   async getSiteLayoutConfig(context, { path, editorMode = true, useCache = true }) {
     let { commit, dispatch, getters: { siteLayoutConfigBySitePath }, rootGetters } = context
