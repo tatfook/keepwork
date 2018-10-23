@@ -54,7 +54,7 @@ export default {
       query: { reload }
     } = this.$route
     if (Boolean(reload)) {
-      this.resetUrl()
+      this.resetUrl(false)
       return window.location.reload()
     }
     // logined check
@@ -144,9 +144,22 @@ export default {
       switchDevice: 'lesson/student/switchDevice',
       resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
-    resetUrl() {
-      const { path } = this.$route
-      window.location.href = this.$router.resolve({ path }).href
+    resetUrl(resetAll = true) {
+      if (resetAll) {
+        return (window.location.href = this.$router.resolve({
+          path: this.$route.path
+        }).href)
+      }
+      const {
+        name,
+        params,
+        query: { reload, ...filterQuery }
+      } = this.$route
+      window.location.href = this.$router.resolve({
+        name,
+        params,
+        query: filterQuery
+      }).href
     },
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()
