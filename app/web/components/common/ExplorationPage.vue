@@ -7,7 +7,7 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-input class="search-input">
+              <el-input class="search-input" v-model="searchKey">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-input>
             </el-col>
@@ -31,23 +31,23 @@
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
         <div class="options" ref="options">
-          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目<span class="search-num">({{projectsCount}})</span></el-button>
-          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界<span class="search-num">({{paracraftCount}})</span></el-button>
-          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站<span class="search-num">({{websiteCount}})</span></el-button>
-          <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中<span class="search-num">(1)</span></el-button>
+          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目</el-button>
+          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界</el-button>
+          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button>
+          <!-- <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识</el-button> -->
+          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button>
+          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button>
+          <!-- <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室</el-button> -->
+          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
-          <all-projects></all-projects>
+          <all-projects ref="allProjects" :searchKey="searchKey"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft></paracraft>
+          <paracraft ref="paracraft" :searchKey="searchKey"></paracraft>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website></website>
+          <website ref="website" :searchKey="searchKey"></website>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
         <div class="selected-lessons" v-if='currIndex == 5'></div>
@@ -98,7 +98,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <!-- <recruiting></recruiting> -->
+          <recruiting ref="recruiting" :searchKey="searchKey"></recruiting>
         </div>
       </div>
     </div>
@@ -112,16 +112,15 @@ import Recruiting from './explorationPageTab/Recruiting'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
-
 export default {
   name: 'ExplorationPage',
   data() {
     return {
-      currIndex: 1
+      currIndex: 1,
+      searchKey: ''
     }
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     ...mapGetters({
       allProjects: 'pbl/allProjects',
@@ -131,15 +130,42 @@ export default {
     projectsCount() {
       return _.get(this.allProjects, 'total', 0)
     },
-    paracraftCount(){
+    paracraftCount() {
       return _.get(this.paracraft, 'total', 0)
     },
-    websiteCount(){
+    websiteCount() {
       return _.get(this.website, 'total', 0)
-    },
+    }
   },
   methods: {
-    goSearch() {},
+    goSearch() {
+      switch (this.currIndex) {
+        case 1:
+          this.$refs.allProjects.targetPage(1)
+          this.$refs.allProjects.searchSuccess(1)
+          break
+        case 2:
+          this.$refs.paracraft.targetPage(1)
+          break
+        case 3:
+          this.$refs.website.targetPage(1)
+          break
+        case 4:
+          break
+        case 5:
+          break
+        case 6:
+          break
+        case 7:
+          break
+        case 8:
+          this.$refs.recruiting.targetPage(1)
+          break
+        default:
+          this.currIndex = 1
+          break
+      }
+    },
     selectTab(index) {
       switch (index) {
         case 1:
@@ -176,7 +202,7 @@ export default {
     AllProjects,
     Paracraft,
     Website,
-    Recruiting,
+    Recruiting
   }
 }
 </script>
@@ -365,6 +391,10 @@ export default {
         }
       }
     }
+  }
+  .search-result-total {
+    padding: 15px 0;
+    font-size: 18px;
   }
 }
 </style>

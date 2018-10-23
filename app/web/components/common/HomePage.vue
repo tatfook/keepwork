@@ -54,7 +54,7 @@
                 <h2>创造</h2>
                 <p class="box-text-intro">创造属于你自己的项目</p>
                 <p class="box-text-own">已创建项目
-                  <span class="total">{{allProjects.length}}</span>个</p>
+                  <span class="total">{{excellentProjects.length}}</span>个</p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
@@ -100,7 +100,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :sm="12" :md="6" v-for="(project,index) in handpickProjects" :key="index" v-if="index < 4">
+          <el-col :sm="12" :md="6" v-for="(project,index) in handpickProjects" :key="index">
             <project-cell :project='project'></project-cell>
           </el-col>
         </el-row>
@@ -137,7 +137,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :sm="12" :md="6" v-for="(project,index) in likesProjects" :key="index" v-if="index < 4">
+          <el-col :sm="12" :md="6" v-for="(project,index) in likesProjects" :key="index">
             <project-cell :project="project"></project-cell>
           </el-col>
         </el-row>
@@ -179,26 +179,28 @@ export default {
         this.hotsPackages = res
       })
       .catch(err => console.error(err))
-    await this.getAllProjects()
+    await this.getExcellentProjects()
   },
   computed: {
     ...mapGetters({
-      allProjects: 'pbl/allProjects'
+      excellentProjects: 'pbl/excellentProjects'
     }),
     handpickProjects() {
-      return this.allProjects
+      let tempArr = this.excellentProjects.rows
         .map(i => i)
         .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
+        return tempArr.slice(0,4)
     },
     likesProjects() {
-      return this.allProjects
+      let tempArr = this.excellentProjects.rows
         .map(i => i)
         .sort((obj1, obj2) => obj1.star < obj2.star)
+        return tempArr.slice(0,4)
     }
   },
   methods: {
     ...mapActions({
-      getAllProjects: 'pbl/getAllProjects'
+      getExcellentProjects: 'pbl/getExcellentProjects'
     }),
     closeAd() {
       this.hiddenAd = true

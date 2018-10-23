@@ -4,6 +4,7 @@ import mutations from './mutations'
 
 const state = {
   isShowLoginDialog: false,
+  excellentProjects: [],
   allProjects: [],
   projects: [],
   projectApplyList: [],

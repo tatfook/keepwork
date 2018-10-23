@@ -12,10 +12,11 @@ const GET_PROJECT_APPLY_STATE_SUCCESS = 'GET_PROJECT_APPLY_STATE_SUCCESS'
 const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
 const GET_MY_ALL_PROJECTS_SUCCESS = 'GET_MY_ALL_PROJECTS_SUCCESS'
 const GET_TYPE_PROJECTS = 'GET_TYPE_PROJECTS'
-
+const GET_EXCELLENT_PROJECTS = ' GET_EXCELLENT_PROJECTS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
+  GET_EXCELLENT_PROJECTS,
   GET_ALL_PROJECTS,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_DETAIL_SUCCESS,
@@ -26,12 +27,15 @@ export const props = {
   GET_MY_ALL_PROJECTS_SUCCESS,
   GET_PROJECT_APPLY_STATE_SUCCESS,
   GET_COMMENTS_SUCCESS,
-  GET_TYPE_PROJECTS
+  GET_TYPE_PROJECTS,
 }
 
 const mutations = {
   [TOGGLE_LOGIN_DIALOG](state, status) {
     Vue.set(state, 'isShowLoginDialog', status)
+  },
+  [GET_EXCELLENT_PROJECTS](state, projects) {
+    Vue.set(state, 'excellentProjects', projects)
   },
   [GET_ALL_PROJECTS](state, allProjects) {
     Vue.set(state, 'allProjects', allProjects)
