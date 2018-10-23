@@ -39,16 +39,17 @@
 
     <div class="icons">
       <a :href="editorPageUrl" class="icon-item">
-        <i class="iconfont icon-edit"></i>
+        <i v-if="true" class="iconfont icon-edit" v-tooltip="$t('editor.toEdit')"></i>
+        <i v-else class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
       </a>
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
-        <i class="iconfont icon-Share"></i>
+        <i class="iconfont icon-Share" v-tooltip="$t('editor.share')"></i>
       </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
       <span class="icon-item" v-loading='starPending'>
-        <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
+        <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar' v-tooltip="$t('editor.praise')"></i>
         <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
       </span>
     </div>
