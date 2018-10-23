@@ -11,21 +11,19 @@
         {{$t('editor.setting')}}
       </span>
     </div>
-    <el-tree v-if="treeData.length > 0" ref='menuTree' :data="treeData" :props='defaultProps' :expand-on-click-node="false" :draggable='true'>
+    <el-tree v-if="treeData.length > 0" :style="fixMaxHeight()" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='false'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
-          <span class="text" @click.stop='showInput(node.id, data, "name")'>{{data.name}}</span>
-          <el-input :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
+          <el-input :style="fixPadding(node, data)" :placeholder='$t("editor.menuName")' :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
-          <span class="text" @click.stop='showInput(node.id, data, "link")'>{{data.link}}</span>
-          <el-input :ref='"link"+node.id' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+          <el-input :ref='"link"+node.id' :placeholder='$t("editor.inputConnection")' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
         </span>
         <span class="node-operate">
-          <el-button icon='iconfont icon-add-later' circle :title='$t("editor.insertAfter")' @click='insert(node, data, "after")'></el-button>
-          <el-button icon='iconfont icon-add-before' circle :title='$t("editor.insertBefore")' @click='insert(node, data, "before")'></el-button>
-          <el-button icon='iconfont icon-add_subitem' circle :title='$t("editor.insertChild")' @click='insert(node, data, "child")'></el-button>
-          <el-button icon='iconfont icon-delete' circle :title='$t("editor.delete")' @click='remove(node, data)'></el-button>
+          <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
+          <el-button v-tooltip='$t("editor.insertBefore")' icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
+          <el-button v-tooltip='$t("editor.insertChild")' icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
+          <el-button v-tooltip='$t("editor.delete")' icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
         </span>
       </span>
     </el-tree>
@@ -41,6 +39,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { setTimeout } from 'timers'
+
 let newMenuId = 1
 
 export default {
@@ -72,8 +72,45 @@ export default {
     handleClose() {
       this.$emit('cancel', null)
     },
+    formatLevelList(data) {
+      function addLevel(data, subIndex){
+        let index = subIndex || 1
+
+         _.forEach(data, (item, key) => {
+           item.level = index
+           if(item.child) {
+             let nextIndex = index + 1
+             addLevel(item.child,nextIndex)
+           }
+        })
+      }
+      addLevel(data)
+      return data
+    },
+    fixPadding(node,data){
+      let name = "name" + node.id
+      setTimeout(() => {
+        if(this.$refs[name]){
+          let inputStyle = this.$refs[name].$refs["input"]
+          if(inputStyle){
+            if(data.level){
+              inputStyle.style.paddingLeft = data.level * 20 + "px"
+            }
+          }
+        }
+        }, 0)
+    },
     finishEditingMenu() {
       this.handleClose()
+      function deleteLevel(data){
+         _.forEach(data, (item, key) => {
+           if(item.level) {
+             delete(item["level"])
+             deleteLevel(item.child)
+           }
+        })
+      }
+      deleteLevel(this.treeData)
       let fixLink = link => {
         if ( !/http(s?):\/\//.test(link) && !/^\//.test(link) ) {
           return ''
@@ -112,6 +149,11 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.blur()
     },
+    fixMaxHeight(){
+      if(this.treeData.length > 10){
+        return 'max-height: 350px;overflow-y: auto;'
+      }
+    },
     insert(node, data, position) {
       let self = this
 
@@ -128,6 +170,7 @@ export default {
         })
         return
       }
+
       let menuTree = this.$refs.menuTree
       let parent = node.parent
       let children = parent.data.child || parent.data
@@ -138,6 +181,7 @@ export default {
       let newNodeId
       let that = this
       let inputFocus = function() {
+        that.formatLevelList(that.treeData)
         that.$nextTick(() => {
           let newNodeId = newNode.$treeNodeId
           that.showInput(newNodeId, newNode, 'name')
@@ -165,6 +209,7 @@ export default {
           })
       }
       newMenuId++
+
     },
     remove(node, data) {
       let self = this
@@ -185,10 +230,12 @@ export default {
   .custom-tree-node {
     display: flex;
     width: 100%;
-    overflow: hidden;
   }
   .tree-head {
     display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: #f0efed 1px solid;
   }
   .node-label {
     flex: 1;
@@ -202,7 +249,7 @@ export default {
     position: relative;
   }
   .node-link {
-    flex-basis: 450px;
+    flex-basis: 395px;
     flex-shrink: 0;
     flex-grow: 0;
     margin: 0 10px;
@@ -213,21 +260,25 @@ export default {
     cursor: text;
   }
   .node-operate {
-    flex-basis: 200px;
+    flex-basis: 135px;
     flex-shrink: 0;
     flex-grow: 0;
     margin-left: 10px;
     box-sizing: border-box;
     min-width: 0;
+    .el-button:hover {
+      color: #1989fa
+    }
   }
   .el-tree-node__content {
-    height: 32px;
+    height: 34px;
     line-height: 32px;
+    padding: 0!important;
   }
   .el-button.is-circle {
-    padding: 1px;
-    border-radius: 0;
+    border: none;
     vertical-align: middle;
+    padding: 0;
   }
   .el-button .iconfont {
     font-size: 20px;
@@ -235,15 +286,16 @@ export default {
   .el-input {
     position: absolute;
     left: 0;
-    z-index: -1;
+    z-index: 2;
   }
   .el-input.is-focus {
-    z-index: 1;
+    z-index: 2;
   }
   .el-input__inner {
     font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0 20px;
   }
   .tree-head {
     font-weight: bold;
@@ -253,9 +305,10 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .el-tree {
-    max-height: 350px;
-    overflow-y: auto;
+  .el-tree-node__content > .el-tree-node__expand-icon {
+    padding: 6px;
+    position: absolute;
+    z-index: 999;
   }
   .empty {
     text-align: center;
