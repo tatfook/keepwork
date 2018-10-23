@@ -1,17 +1,26 @@
 <template>
   <div class="project-website">
-    <el-card class="project-intro-card" shadow="never" v-loading='isLoading'>
-      <div slot="header" class="clearfix">
-        <span class="project-intro-card-label">项目网站</span>
-        <el-button v-if="isLoginUserEditable" class="project-intro-card-button" type="text" @click="toggleIsIntroEditing">
-          <i class="el-icon-edit-outline" v-show="!isIntroEditing"></i>
-          <span v-show="isIntroEditing"><i class="iconfont icon-save3"></i>保存</span>
-        </el-button>
+    <el-card class="project-website-card" shadow="never">
+      <p class="project-website-info">欢迎来到{{originProjectDetail.name}}</p>
+      <div class="project-website-operations" v-show="isLoginUserEditable || originInfoSiteData.displayName">
+        <el-button @click="handleFakeButtonClick" size='small' type="primary">{{originInfoSiteData.displayName || '设定项目资料网站'}}</el-button>
+        <i v-show="isLoginUserEditable && isHaveOriginInfoSiteData" class="el-icon-edit-outline" @click='showEditInfoSiteDataDialog'></i>
       </div>
-      <p v-show="!isIntroEditing" class="project-intro-info">{{tempIntro || "暂无简介"}}</p>
-      <el-input v-show="isIntroEditing" type="textarea" resize='none' :rows="2" placeholder="请输入网站简介" v-model="tempIntro">
-      </el-input>
     </el-card>
+    <el-dialog title="请设定项目对应的资料网站" :visible.sync="isEditInfoSiteDialogShow" width="420px" :before-close="handleClose" v-loading='isLoading'>
+      <el-form label-position="top" :model="tempInfoSiteData">
+        <el-form-item label="名称">
+          <el-input v-model="tempInfoSiteData.displayName"></el-input>
+        </el-form-item>
+        <el-form-item label="网址">
+          <el-input v-model="tempInfoSiteData.url"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="saveInfoSiteData" :disabled="isSaveButtonDisabled">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -33,32 +42,52 @@ export default {
   },
   mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
-    let intro = _.get(this.copiedProjectDetail, 'extra.intro', '')
-    this.tempIntro = intro
+    let originInfoSiteData = _.get(this.copiedProjectDetail, 'extra.infoSite', {
+      displayName: '',
+      url: ''
+    })
+    this.tempInfoSiteData = originInfoSiteData
   },
   data() {
     return {
+      isEditInfoSiteDialogShow: false,
       isLoading: false,
-      tempIntro: '',
-      isIntroEditing: false
+      tempInfoSiteData: {
+        displayName: '',
+        url: ''
+      }
     }
   },
   computed: {
-    origin() {
-      return window.location.origin
+    originInfoSiteData() {
+      return _.get(this.originProjectDetail, 'extra.infoSite', {
+        displayName: '',
+        url: ''
+      })
     },
-    originIntro() {
-      return _.get(this.originProjectDetail, 'extra.intro', '')
+    isHaveOriginInfoSiteData() {
+      let { displayName, url } = this.originInfoSiteData
+      return displayName && url
+    },
+    isSaveButtonDisabled() {
+      let isModified = this.isModified
+      return !isModified || (isModified && this.isHalfFilled)
     },
     isModified() {
-      return this.originIntro !== this.tempIntro
+      return !_.isEqual(this.originInfoSiteData, this.tempInfoSiteData)
+    },
+    isHalfFilled() {
+      let { displayName, url } = this.tempInfoSiteData
+      return (displayName && !url) || (!displayName && url) ? true : false
+    },
+    originExtra() {
+      return this.originProjectDetail.extra
     },
     mergedExtra() {
-      let originExtra = this.originProjectDetail.extra
-      let newExtra = {
-        intro: this.tempIntro
-      }
-      return _.merge(originExtra, newExtra)
+      let originExtra = _.cloneDeep(this.originExtra)
+      return _.merge(originExtra, {
+        infoSite: this.tempInfoSiteData
+      })
     },
     updatingProjectData() {
       return _.merge(this.copiedProjectDetail, {
@@ -70,65 +99,73 @@ export default {
     ...mapActions({
       pblUpdateProject: 'pbl/updateProject'
     }),
-    async toggleIsIntroEditing() {
-      if (this.isIntroEditing) {
-        if (!this.isModified) {
-          this.isIntroEditing = !this.isIntroEditing
-          return
-        }
-        this.isLoading = true
-        await this.pblUpdateProject({
-          projectId: this.projectId,
-          updatingProjectData: this.updatingProjectData
+    showEditInfoSiteDataDialog() {
+      this.isEditInfoSiteDialogShow = true
+    },
+    async saveInfoSiteData() {
+      this.isLoading = true
+      await this.pblUpdateProject({
+        projectId: this.projectId,
+        updatingProjectData: this.updatingProjectData
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '资料网站更新成功'
+          })
+          this.isLoading = false
+          this.handleClose()
         })
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: '简介更新成功'
-            })
-            this.isIntroEditing = !this.isIntroEditing
-            this.isLoading = false
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '资料网站更新失败,请重试'
           })
-          .catch(error => {
-            this.$message({
-              type: 'error',
-              message: '简介更新失败,请重试'
-            })
-            this.isLoading = false
-            console.error(error)
-          })
+          this.isLoading = false
+          this.handleClose()
+          console.error(error)
+        })
+    },
+    handleFakeButtonClick() {
+      if (this.isHaveOriginInfoSiteData) {
+        let tempWin = window.open('_blank')
+        tempWin.location = this.tempInfoSiteData.url
       } else {
-        this.isIntroEditing = !this.isIntroEditing
+        this.showEditInfoSiteDataDialog()
       }
+    },
+    handleClose() {
+      this.tempInfoSiteData = _.cloneDeep(this.originInfoSiteData)
+      this.isEditInfoSiteDialogShow = false
     }
   }
 }
 </script>
 <style lang="scss">
-.project-intro {
+.project-website {
   &-card {
-    &-label {
-      font-weight: bold;
-    }
-    &-button {
-      float: right;
-      padding: 3px 0;
-      color: #909399;
-    }
     .el-card__body {
       padding: 24px 16px;
     }
   }
-  &-title {
-    margin: 0;
-    font-size: 14px;
-    color: #303133;
-  }
   &-info {
-    font-size: 12px;
-    color: #909399;
+    font-size: 16px;
+    color: #303133;
+    font-weight: bold;
     word-break: break-word;
     margin: 4px 0 0;
+  }
+  &-operations {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    .el-button {
+      flex: 1;
+    }
+    .el-icon-edit-outline {
+      margin-left: 16px;
+      cursor: pointer;
+    }
   }
 }
 </style>
