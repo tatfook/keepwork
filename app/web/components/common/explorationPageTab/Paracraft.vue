@@ -1,5 +1,6 @@
 <template>
   <div class="paracraft">
+    <div class="search-result-total">搜索到：<span>{{paracraftCount}}</span>个结果</div>
     <el-row>
       <el-col :span="6" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
@@ -21,6 +22,9 @@ import _ from 'lodash'
 
 export default {
   name: 'Paracraft',
+  props: {
+    searchKey: String
+  },
   data() {
     return {
       perPage: 4,
@@ -28,28 +32,34 @@ export default {
     }
   },
   async mounted() {
-    await this.getTypeProjects({ page: this.page, perPage: this.perPage, type: 'paracraft' })
+    await this.getTypeProjects({
+      page: this.page,
+      per_page: this.perPage,
+      type: 'paracraft',
+      q: this.searchKey
+    })
   },
   computed: {
     ...mapGetters({
       paracraft: 'pbl/paracraft'
     }),
-    paracraftCount(){
+    paracraftCount() {
       return _.get(this.paracraft, 'total', 0)
     },
     pracraftData() {
       let hits = _.get(this.paracraft, 'hits', [])
       return _.map(hits, i => {
         return {
+          id: i.id,
           extra: { coverUrl: i.cover },
-          name: i.name,
+          name: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
-          user: { nickname: i.username },
-          updatedAt: i.total_comment || '0000:00:00',
+          user: { username: i.username, portrait: i.user_portrait || '' },
+          updatedAt: i.updated_time,
           type: i.type,
-          recruiting: i.recruiting
+          privilege: i.recruiting ? 1 : 2
         }
       })
     }
@@ -58,8 +68,21 @@ export default {
     ...mapActions({
       getTypeProjects: 'pbl/getTypeProjects'
     }),
-    async targetPage(targetPage){
-      await this.getTypeProjects({ page: targetPage, perPage: this.perPage, type: 'paracraft' })      
+    async targetPage(targetPage) {
+      await this.getTypeProjects({
+        page: targetPage,
+        per_page: this.perPage,
+        type: 'paracraft',
+        q: this.searchKey
+      })
+    },
+    searchKeyResult(i) {
+      if (this.searchKey) {
+        let name = _.get(i.highlight, 'name', [])
+        return name.join().replace(/<span>/g, `<span class="red">`)
+      } else {
+        return i.name
+      }
     }
   },
   components: {

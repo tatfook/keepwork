@@ -4,6 +4,7 @@ import { props } from './mutations'
 
 let {
   TOGGLE_LOGIN_DIALOG,
+  GET_EXCELLENT_PROJECTS,
   GET_ALL_PROJECTS,
   GET_PROJECT_APPLY_LIST_SUCCESS,
   GET_PROJECT_MEMBERS_SUCCESS,
@@ -28,19 +29,27 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getAllProjects({ commit }, { page, perPage, type }) {
+  async getExcellentProjects({ commit }) {
+    await keepwork.projects
+      .getProjects()
+      .then(res => {
+        console.log('excellent', res)
+        commit(GET_EXCELLENT_PROJECTS, res)
+      }).catch(err => console.error(err))
+  },
+  async getAllProjects({ commit }, payload) {
     await EsAPI.projects
-      .getProjects({ page, perPage, type })
+      .getProjects(payload)
       .then(res => {
         commit(GET_ALL_PROJECTS, res)
       }).catch(err => console.error(err))
   },
-  async getTypeProjects({ commit }, { page, perPage, type }) {
+  async getTypeProjects({ commit }, payload) {
     await EsAPI.projects
-      .getProjects({ page, perPage, type })
+      .getProjects(payload)
       .then(res => {
         let projects = res
-        commit(GET_TYPE_PROJECTS, { type, projects })
+        commit(GET_TYPE_PROJECTS, { type: payload.type, projects })
       }).catch(err => console.error(err))
   },
   async getMyAllProjects({ commit }) {
@@ -206,7 +215,7 @@ const actions = {
   async getComments(context, { objectType = 5, objectId }) {
     let { commit } = context
     await keepwork.comments.getComments({ objectType, objectId }).then(async commentList => {
-      await commit('GET_COMMENTS_SUCCESS', { commentList, projectId: objectId })
+      await commit(GET_COMMENTS_SUCCESS, { commentList, projectId: objectId })
       return Promise.resolve()
     }).catch(error => {
       return Promise.reject(error)
