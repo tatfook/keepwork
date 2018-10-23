@@ -114,7 +114,9 @@ const mutations = {
   },
   [CREATE_COMMENT_SUCCESS]: doNothing,
   [DELETE_COMMENT_SUCCESS]: doNothing,
-  [UPSERT_WEBSITE_SUCCESS]: doNothing,
+  [UPSERT_WEBSITE_SUCCESS](state, { site }) {
+    Vue.set(state, 'newSiteInfo', site)
+  },
   [GET_COMMENTS_BY_PAGE_URL_SUCCESS](state, { url, commentList, commentTotal }) {
     Vue.set(state, 'comments', {
       ...state.comments,

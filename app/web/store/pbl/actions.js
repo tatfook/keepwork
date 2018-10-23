@@ -21,12 +21,9 @@ const actions = {
   async toggleLoginDialog({ commit }, status) {
     commit(TOGGLE_LOGIN_DIALOG, status)
   },
-  async createNewProject(context, { description, name, privilege, type, visibility }) {
-    await keepwork.projects.createProject({ description, name, privilege, type, visibility }).then(() => {
-      return Promise.resolve()
-    }).catch((error) => {
-      return Promise.reject(error)
-    })
+  async createNewProject(context, { description, name, privilege, type, visibility, siteId }) {
+    let projectDetail = await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId })
+    return projectDetail
   },
   async getAllProjects({ commit }, { page, perPage, type }) {
     await EsAPI.projects

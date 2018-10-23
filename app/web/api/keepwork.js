@@ -221,7 +221,7 @@ export const projects = {
   updateProject: async ({ projectId, updatingProjectData }) =>
     put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
-  createProject: async (...args) => post('projects', ...args),
+  createProject: async ({ description, name, privilege, type, visibility, siteId }) => post('projects', { description, name, privilege, type, visibility, siteId }),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),

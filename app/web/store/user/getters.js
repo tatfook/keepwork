@@ -317,7 +317,8 @@ const getters = {
       return o.serviceName === type
     })
     return result
-  }
+  },
+  newSiteInfo: state => state.newSiteInfo
 }
 
 export default getters
