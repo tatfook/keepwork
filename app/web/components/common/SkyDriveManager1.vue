@@ -31,8 +31,7 @@ export default {
       loading: false,
       isMounted: false,
       uploadingFiles: [],
-      qiniuUploadSubscriptions: {},
-      mediaFilterType: 'image'
+      qiniuUploadSubscriptions: {}
     }
   },
   computed: {
@@ -95,6 +94,12 @@ export default {
     },
     skyDriveTableReference() {
       return _.get(this.$refs, 'tableTypeComp.$refs.skyDriveTable')
+    },
+    mediaFilterType() {
+      if (!this.isMounted) {
+        return 'image'
+      }
+      return this.$refs.mediaTypeComp.mediaFilterType
     }
   },
   methods: {

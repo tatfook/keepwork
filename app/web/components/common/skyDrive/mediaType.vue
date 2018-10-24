@@ -21,12 +21,9 @@
       </el-row>
       <el-row class='media-type-header-tabs-and-search'>
         <el-col :span="18" class='media-type-header-tabs'>
-          <div v-if="isImgLoopMod">
+          <div>
             <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-            <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
-          </div>
-          <div v-else>
-            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+            <span v-if="isImgLoopMod" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
           </div>
         </el-col>
         <el-col :span="6">
@@ -160,6 +157,32 @@ export default {
       this.loading = false
       let url = this.userSiteFileBySitePathAndFileId(payload)
       return url
+    },
+    changeMediaFilterType(type) {
+      this.mediaFilterType = type
+    },
+    handlePlay(mediaItem) {
+      let mediaItemVideoPreviewId = `mediaItemVideoPreview_${Date.now()}`
+      this.$alert(
+        `<div>
+          <style>.el-message-box__wrapper{background: black;}</style>
+          <video id="${mediaItemVideoPreviewId}" src="${
+          mediaItem.downloadUrl
+        }" controls></video>
+        </div>`,
+        {
+          customClass: 'media-type-video-preview-dialog',
+          showConfirmButton: false,
+          dangerouslyUseHTMLString: true,
+          beforeClose: (action, instance, done) => {
+            let mediaItemVideoPreviewDom = document.querySelector(
+              `#${mediaItemVideoPreviewId}`
+            )
+            mediaItemVideoPreviewDom && mediaItemVideoPreviewDom.pause()
+            done()
+          }
+        }
+      )
     }
   },
   filters: {
@@ -365,6 +388,19 @@ export default {
           border-color: transparent transparent transparent #3ba4ff;
         }
       }
+    }
+  }
+  &-video-preview-dialog {
+    width: 900px;
+    min-height: 500px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    video {
+      max-width: 100%;
+      max-height: 600px;
+      display: block;
+      margin: 0 auto;
     }
   }
   &-footer {
