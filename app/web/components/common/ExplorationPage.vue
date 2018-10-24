@@ -142,7 +142,6 @@ export default {
       switch (this.currIndex) {
         case 1:
           this.$refs.allProjects.targetPage(1)
-          this.$refs.allProjects.searchSuccess(1)
           break
         case 2:
           this.$refs.paracraft.targetPage(1)

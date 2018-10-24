@@ -35,11 +35,12 @@ const actions = {
       }).catch(err => console.error(err))
   },
   async getAllProjects({ commit }, payload) {
-    await EsAPI.projects
-      .getProjects(payload)
-      .then(res => {
-        commit(GET_ALL_PROJECTS, res)
-      }).catch(err => console.error(err))
+    try {
+      const res = await EsAPI.projects.getProjects(payload)
+      commit(GET_ALL_PROJECTS, res)
+    } catch (err) {
+      console.error(err)
+    }
   },
   async getTypeProjects({ commit }, payload) {
     await EsAPI.projects
