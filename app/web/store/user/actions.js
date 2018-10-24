@@ -563,10 +563,14 @@ const actions = {
     return { key }
   },
   async removeFileFromSkyDrive(context, { file }) {
+    let { dispatch } = context
     await skyDrive.remove({ file })
+    await dispatch('refreshSkyDrive', { useCache: false })
   },
   async changeFileNameInSkyDrive(context, { key, filename }) {
+    let { dispatch } = context
     await skyDrive.changeFileName({ key, filename })
+    await dispatch('refreshSkyDrive', { useCache: false })
   },
   async useFileInSite(context, { fileId, sitePath, useCache = true }) {
     let { commit, dispatch, getters, rootGetters } = context

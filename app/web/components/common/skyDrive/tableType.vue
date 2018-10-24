@@ -16,7 +16,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort = "{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" sortable width="40">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" sortable width="300">
@@ -302,3 +302,80 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.table-type {
+  &-header {
+    margin-bottom: 20px;
+  }
+  &-total {
+    display: inline-block;
+    margin: 0 15px 0 5px;
+    width: 190px;
+    height: 10px;
+    border-radius: 5px;
+    background: #f5f5f5;
+    &-used {
+      display: block;
+      height: 100%;
+      border-radius: 5px;
+      background: #3ba4ff;
+      &-danger {
+        background-color: #ff1e02;
+      }
+      &-warning {
+        background-color: #f97b00;
+      }
+    }
+  }
+  &-footer {
+    margin-top: 20px;
+  }
+  &-upload {
+    text-align: right;
+    &-btn {
+      margin-left: 15px;
+    }
+  }
+  &-cell-filename {
+    .cell {
+      white-space: nowrap;
+    }
+  }
+  &-cell-danger-text {
+    color: #f56c6c;
+  }
+  &-cell-actions,
+  &-cell-actions-menu {
+    [class*='icon'] {
+      display: inline-block;
+      margin-right: 10px;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      &.disabled {
+        color: #bbb;
+        cursor: not-allowed;
+      }
+      &::before {
+        font-size: 16px;
+      }
+      &.el-icon-refresh::before {
+        margin-right: 10px;
+      }
+      &.el-icon-download:before {
+        font-size: 18px;
+      }
+    }
+    [class*='iconfont']::before {
+      font-size: 16px;
+    }
+    .el-dropdown {
+      float: right;
+    }
+    .el-icon-more {
+      color: #858585;
+      transform: rotate(90deg);
+    }
+  }
+}
+</style>

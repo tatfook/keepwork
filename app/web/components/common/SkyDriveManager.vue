@@ -521,7 +521,7 @@ export default {
       this.multipleSelectionResults = selectionResults
     },
     async downloadAllSelected() {
-      this.approvedMultipleSelectionResults.map(({ file }) => this.download(file))
+      this.approvedMultipleSelectionResults.map(file => this.download(file))
     },
     async download(file) {
       let downloadUrl = file.downloadUrl
@@ -532,6 +532,7 @@ export default {
         a.target = '_blank'
         a.style.display = 'none'
         a.href = `${downloadUrl};attname=${filename}`
+        console.log(a.href)
         a.download = filename || ""
         document.body.appendChild(a)
         a.click()

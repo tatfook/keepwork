@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
-    <table-type ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <!-- <media-type></media-type> -->
+    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
+    <media-type v-if="mediaLibraryMode"></media-type>
   </div>
 </template>
 <script>
@@ -13,12 +13,20 @@ import tableType from './skyDrive/tableType'
 import mediaType from './skyDrive/mediaType'
 export default {
   name: 'SkyDriveManager1',
+  props: {
+    mediaLibrary: {
+      type: Boolean,
+      default: false
+    }
+  },
   async mounted() {
     await this.userRefreshSkyDrive({ useCache: false })
     this.loading = false
   },
   data() {
     return {
+      defaultMode: !this.mediaLibrary,
+      mediaLibraryMode: this.mediaLibrary,
       loading: false,
       uploadingFiles: [],
       qiniuUploadSubscriptions: {}

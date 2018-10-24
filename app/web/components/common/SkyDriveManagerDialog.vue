@@ -8,12 +8,14 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
-    <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager>
+    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-drive>
+    <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
   </el-dialog>
 </template>
 
 <script>
 import SkyDriveManager from './SkyDriveManager'
+import SkyDriveManager1 from './SkyDriveManager1'
 
 export default {
   name: 'SkyDriveManagerDialog',
@@ -49,6 +51,7 @@ export default {
     }
   },
   components: {
+    'sky-drive': SkyDriveManager1,
     SkyDriveManager
   }
 }
