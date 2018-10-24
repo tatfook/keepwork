@@ -1,0 +1,304 @@
+<template>
+  <div class="table-type" v-loading='loading' droppable="true">
+    <el-row class="table-type-header">
+      <el-col :span="18">
+        <div>
+          {{ $t('skydrive.usage') }}
+          <span class="table-type-total">
+            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
+          </span>
+          {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
+          <i slot="suffix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+      </el-col>
+    </el-row>
+    <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort = "{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
+      <el-table-column type="selection" sortable width="40">
+      </el-table-column>
+      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" sortable width="300">
+      </el-table-column>
+      <el-table-column prop="ext" sortable :label="$t('skydrive.filetype')" width="80">
+      </el-table-column>
+      <el-table-column prop="size" sortable :label="$t('skydrive.filesize')" width="85" show-overflow-tooltip>
+        <template slot-scope="scope">{{ scope.row.displaySize }}</template>
+      </el-table-column>
+      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="155">
+        <template slot-scope="scope">
+          <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
+            <el-progress :stroke-width="10" :color="scope.row.state === 'doing' ? '#13ce67' : '#f56c6c'" :show-text=false :percentage="scope.row.percent"></el-progress>
+          </span>
+          <span v-else>{{scope.row.updatedAt | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column sortable :label="$t('skydrive.checkedState')" width="100" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span class="table-type-cell-danger-text" v-if="scope.row.state === 'error'" :title="scope.row.errorMsg">{{$t('skydrive.uploadFailed')}}</span>
+          <span v-else>{{scope.row.checkedState}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="table-type-cell-actions" :label="$t('common.action')" width="140">
+        <template slot-scope="scope">
+          <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
+            <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
+          </span>
+          <span v-else>
+            <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copyURI')" @click='handleCopy(scope.row)'></span>
+            <span class='iconfont icon-insert' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
+            <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
+
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <i class="el-icon-more el-icon--right"></i>
+              </span>
+              <el-dropdown-menu class='table-type-cell-actions-menu' slot="dropdown">
+                <el-dropdown-item @click.native='handleRename(scope.row)'>
+                  <span class='el-icon-edit'></span>
+                  {{ $t('common.rename') }}
+                </el-dropdown-item>
+                <el-dropdown-item @click.native='handleRemove(scope.row)'>
+                  <span class='el-icon-delete'></span>
+                  {{ $t('common.remove') }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </span>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-row class="table-type-footer">
+      <el-col :span="6">
+        <el-button size="small" :disabled="!approvedMultipleSelectionResults.length" round @click="downloadAllSelected">{{ $t('skydrive.downloadSelected') }}</el-button>
+        <el-button size="small" :disabled="!multipleSelectionResults.length" round @click="removeAllSelected">{{ $t('skydrive.removeSelected') }}</el-button>
+      </el-col>
+      <el-col :span="10" :offset="8" class="table-type-upload">
+        {{ $t('skydrive.dragAndDrop') }}
+        <label class="el-button table-type-upload-btn el-button--primary el-button--small is-round">
+          <span>{{ $t('skydrive.uploadFile') }}</span>
+          <input ref="fileInput" type="file" style="display:none;" multiple @change="handleUploadFile">
+        </label>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+<script>
+import dayjs from 'dayjs'
+import { mapActions, mapGetters } from 'vuex'
+import { getFilenameWithExt } from '@/lib/utils/gitlab'
+import { getBareFilename } from '@/lib/utils/filename'
+const ErrFilenamePatt = new RegExp('^[^\\\\/*?|<>:"]+$')
+export default {
+  name: 'tableType',
+  props: {
+    info: {
+      type: Object,
+      required: true
+    },
+    userSkyDriveFileList: {
+      type: Array,
+      required: true
+    },
+    skyDriveTableDataWithUploading: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      searchWord: '',
+      multipleSelectionResults: []
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId',
+      activePageInfo: 'activePageInfo'
+    }),
+    approvedMultipleSelectionResults() {
+      return this.multipleSelectionResults.filter(
+        ({ checked }) => Number(checked) === 1
+      )
+    },
+    usedProcessBarClass() {
+      let { usedPercent } = this.info
+      return usedPercent >= 90
+        ? 'table-type-total-used-danger'
+        : usedPercent >= 70
+          ? 'table-type-total-used-warning'
+          : ''
+    }
+  },
+  methods: {
+    ...mapActions({
+      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
+      userUseFileInSite: 'user/useFileInSite'
+    }),
+    handleSelectionChange(selectionResults) {
+      this.multipleSelectionResults = selectionResults
+    },
+    async downloadAllSelected() {
+      this.approvedMultipleSelectionResults.map(file => this.download(file))
+    },
+    async download(file) {
+      let downloadUrl = file.downloadUrl
+      if (!downloadUrl) return
+      let { filename } = file
+      await new Promise((resolve, reject) => {
+        let a = document.createElement('a')
+        a.target = '_blank'
+        a.style.display = 'none'
+        a.href = `${downloadUrl};attname=${filename}`
+        console.log(a.href)
+        a.download = filename || ''
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          a.remove()
+          resolve()
+        }, 300)
+      }).catch(e => console.error(e))
+    },
+    async removeAllSelected() {
+      await this.$confirm(
+        this.$t('skydrive.removeFileConfirmMsg'),
+        this.$t('editor.delNotice'),
+        {
+          confirmButtonText: this.$t('common.OK'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      )
+
+      this.loading = true
+      await Promise.all(
+        this.multipleSelectionResults.map(file =>
+          this.userRemoveFileFromSkyDrive({ file }).catch(err =>
+            console.error(err)
+          )
+        )
+      )
+      this.loading = false
+    },
+    async getSiteFileUrl(file) {
+      let { sitepath: sitePath } = this.activePageInfo
+      let payload = { fileId: file.id, sitePath }
+      this.loading = true
+      await this.userUseFileInSite(payload).catch(e => console.error(e))
+      this.loading = false
+      let url = this.userSiteFileBySitePathAndFileId(payload)
+      return url
+    },
+    async handleCopy(file) {
+      if (!file && !file.checkPassed) {
+        return false
+      }
+
+      let toCopyPrefix = await this.getSiteFileUrl(file)
+      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
+
+      await this.$confirm(toCopyLink, {
+        confirmButtonText: this.$t('common.copy'),
+        cancelButtonText: this.$t('common.Cancel')
+      })
+
+      this.$copyText(toCopyLink)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: this.$t('editor.copySuccess'),
+            type: 'success'
+          })
+        })
+        .catch(e => {
+          console.error(e)
+          this.$message({
+            showClose: true,
+            message: this.$t('editor.copyFail'),
+            type: 'error'
+          })
+        })
+    },
+    async handleRename(item) {
+      let { _id, ext, filename, key } = item
+      let bareFilename = getBareFilename(filename)
+      let { value: newname } = await this.$prompt(
+        this.$t('skydrive.newFilenamePromptMsg'),
+        this.$t('common.rename'),
+        {
+          inputValue: bareFilename,
+          confirmButtonText: this.$t('common.OK'),
+          cancelButtonText: this.$t('common.Cancel'),
+          inputValidator: str => {
+            if (str === bareFilename || str === filename) return true
+            if (!str) return this.$t('skydrive.nameEmptyError')
+
+            let isFilenameValid = this.testFilenameIsValid(str)
+            if (typeof isFilenameValid === 'string') return isFilenameValid
+
+            return this.filenameValidator(getFilenameWithExt(str, ext))
+          }
+        }
+      )
+
+      newname = (newname || '').trim()
+      if (!newname) return
+
+      let newnameExt = /.+\./.test(newname) ? newname.split('.').pop() : ''
+      newnameExt = newnameExt.toLowerCase()
+      newname = newnameExt !== ext ? `${newname}.${ext}` : newname
+      let newFilename = newname
+      if (newFilename === filename) return
+
+      this.loading = true
+      await this.userChangeFileNameInSkyDrive({
+        key,
+        filename: newFilename
+      }).catch(err => console.error(err))
+      this.loading = false
+    },
+    testFilenameIsValid(newFilename) {
+      let errMsg = this.$t('skydrive.nameContainSpecialCharacterError')
+      return !ErrFilenamePatt.test(newFilename) ? errMsg : true
+    },
+    filenameValidator(newFilename) {
+      let errMsg = this.$t('skydrive.nameConflictError')
+      return this.userSkyDriveFileList.filter(
+        ({ filename }) => filename === newFilename
+      ).length
+        ? errMsg
+        : true
+    },
+    async handleInsert(file) {
+      if (!file.checkPassed) {
+        return
+      }
+      let url = await this.getSiteFileUrl(file)
+      this.$emit('insert', { file, url: `${url}#${file.filename}` })
+    },
+    handleRemove(file) {
+      this.$emit('remove', file)
+    },
+    handleUploadFile(e) {
+      this.$emit('uploadFile', e)
+      this.$refs.fileInput && (this.$refs.fileInput.value = '')
+    },
+    removeFromUploadQue(file) {
+      this.$emit('removeFromUploadQue', file)
+    }
+  },
+  filters: {
+    formatDate(date) {
+      return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+    },
+    biteToG: (bite = 0) =>
+      (bite / (1024 * 1024 * 1024))
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+  }
+}
+</script>
