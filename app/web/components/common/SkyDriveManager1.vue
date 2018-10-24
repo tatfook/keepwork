@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <media-type v-if="mediaLibraryMode"></media-type>
+    <media-type v-if="mediaLibraryMode" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -29,7 +29,8 @@ export default {
       mediaLibraryMode: this.mediaLibrary,
       loading: false,
       uploadingFiles: [],
-      qiniuUploadSubscriptions: {}
+      qiniuUploadSubscriptions: {},
+      mediaFilterType: 'image'
     }
   },
   computed: {
@@ -74,6 +75,12 @@ export default {
         'updateAt'
       )
     },
+    skyDriveMediaLibraryData() {
+      let mediaDatas = this.skyDriveTableData.filter(({ type }) => {
+        return new RegExp(`^${this.mediaFilterType}`).test(type)
+      })
+      return _.sortBy(mediaDatas, 'updateAt')
+    },
     skyDriveTableReference() {
       return _.get(this.$refs, 'tableTypeComp.$refs.skyDriveTable')
     }
@@ -93,8 +100,10 @@ export default {
       this.filesQueueToUpload(files)
     },
     async filesQueueToUpload(files) {
-      this.skyDriveTableReference.clearSort()
-      this.skyDriveTableReference.sort('updatedAt', 'descending')
+      if (this.defaultMode) {
+        this.skyDriveTableReference.clearSort()
+        this.skyDriveTableReference.sort('updatedAt', 'descending')
+      }
       await Promise.all(
         _.map(files, async file => {
           let fileIndex = this.uploadingFiles.length
@@ -178,8 +187,8 @@ export default {
       let filenameLowerCase = (filename || '').toLowerCase()
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
-    async handleInsert(file) {
-      this.$emit('close', file)
+    async handleInsert({ file, url }) {
+      this.$emit('close', { file, url })
     },
     async handleRemove(file) {
       await this.$confirm(
