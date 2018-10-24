@@ -78,9 +78,8 @@ export default {
       if (i.highlight) {
         let name = _.get(i.highlight,'name', i.name)
         return name.join().replace(/<span>/g, `<span class="red">`)
-      } else {
-        return i.name
       }
+      return i.name
     }
   },
   components: {
