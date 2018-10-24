@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import _ from 'lodash'
 
 const SET_USER_SUBSCRIBES = 'SET_USER_SUBSCRIBES'
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
@@ -19,6 +20,7 @@ const CHANGE_STATUS = 'CHANGE_STATUS'
 const SWITCH_DEVICE = 'SWITCH_DEVICE'
 const SAVE_VISITOR_INFO = 'SAVE_VISITOR_INFO'
 const CLEAR_VISITOR_INFO = 'CLEAR_VISITOR_INFO'
+const SET_VISITOR_NICKNAME = 'SET_VISITOR_NICKNAME'
 
 export const props = {
   SET_USER_SUBSCRIBES,
@@ -39,7 +41,8 @@ export const props = {
   CHANGE_STATUS,
   SWITCH_DEVICE,
   SAVE_VISITOR_INFO,
-  CLEAR_VISITOR_INFO
+  CLEAR_VISITOR_INFO,
+  SET_VISITOR_NICKNAME
 }
 
 const mutations = {
@@ -102,6 +105,11 @@ const mutations = {
   },
   [CLEAR_VISITOR_INFO](state) {
     Vue.set(state, 'visitorInfo', {})
+  },
+  [SET_VISITOR_NICKNAME](state, nickname) {
+    let _visitorInfo = _.clone(state.visitorInfo)
+    _visitorInfo.nickname = nickname
+    Vue.set(state, 'visitorInfo', _visitorInfo)
   }
 }
 

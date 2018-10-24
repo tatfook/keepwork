@@ -39,7 +39,10 @@ export default {
     ) {
       this.$router.push({ name: 'LessonTeacherPlan' })
     }
-    this.isInCurrentClass && this.intervalUpdateLearnRecords()
+    if (this.isInCurrentClass) {
+      this.copyClassroomQuiz()
+      this.intervalUpdateLearnRecords()
+    }
     window.document.title = this.lessonName
   },
   async destroyed() {
@@ -52,6 +55,7 @@ export default {
       getCurrentClass: 'lesson/teacher/getCurrentClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords',
       leaveTheClassroom: 'lesson/teacher/leaveTheClassroom',
+      copyClassroomQuiz: 'lesson/teacher/copyClassroomQuiz'
     }),
     async intervalUpdateLearnRecords(delay = 3000) {
       await this.updateLearnRecords()

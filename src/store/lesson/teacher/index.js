@@ -11,7 +11,8 @@ const state = () => ({
   userLessons: [],
   packageLessons: {},
   lessonContent: {},
-  classroomLearnRecord: []
+  classroomLearnRecord: [],
+  classroomQuiz: []
 })
 
 export default {

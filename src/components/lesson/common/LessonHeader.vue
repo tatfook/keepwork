@@ -154,6 +154,7 @@ export default {
   methods: {
     ...mapActions({
       beginTheClass: 'lesson/teacher/beginTheClass',
+      copyClassroomQuiz: 'lesson/teacher/copyClassroomQuiz',
       dismissTheClass: 'lesson/teacher/dismissTheClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords'
     }),
@@ -216,6 +217,7 @@ export default {
       })
         .then(res => {
           this.classIdDialogVisible = true
+          this.copyClassroomQuiz()
           this.$emit('intervalUpdateLearnRecords')
           window.addEventListener('beforeunload', this.leaveConfirm, true)
         })

@@ -16,6 +16,7 @@ const getters = {
   isClassIsOver: (state, { classroom }) => classroom.state === 2,
   classroomId: (state, { classroom }) => classroom.key || '',
   learnRecords: state => state.learnRecords || null,
+  classroomQuiz: state => state.classroomQuiz,
   userPackages: state => state.userPackages,
   userLessons: state => state.userLessons,
   packageLessons: state => state.packageLessons,

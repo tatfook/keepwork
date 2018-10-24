@@ -22,7 +22,8 @@ let {
   CHANGE_STATUS,
   SWITCH_DEVICE,
   SAVE_VISITOR_INFO,
-  CLEAR_VISITOR_INFO
+  CLEAR_VISITOR_INFO,
+  SET_VISITOR_NICKNAME
 } = props
 
 const actions = {
@@ -87,7 +88,7 @@ const actions = {
   async enterClassRoom({ commit, dispatch }, { key }) {
     let enterClassInfo = await lesson.classrooms.join({
       key: key
-    })
+    }).catch(e => console.error(e))
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
@@ -103,12 +104,14 @@ const actions = {
   },
   async resumeClassData({ commit, dispatch }, payload) {
     const { learnRecordId, id } = payload
-    let _classroom = _.clone(payload)
-    _classroom['id'] = learnRecordId
-    _classroom['classroomId'] = id
-    commit(RESUME_CLASSROOM, _classroom)
-    await dispatch('resumeQuiz', { id: learnRecordId })
-    await dispatch('uploadLearnRecords')
+    if (learnRecordId) {
+      let _classroom = _.clone(payload)
+      _classroom['id'] = learnRecordId
+      _classroom['classroomId'] = id
+      commit(RESUME_CLASSROOM, _classroom)
+      await dispatch('resumeQuiz', { id: learnRecordId })
+      await dispatch('uploadLearnRecords')
+    }
   },
   async resumeQuiz(
     {
@@ -208,9 +211,9 @@ const actions = {
     },
     { state = 0 }
   ) {
-    const { token, classId } = visitorInfo
-    learnRecords.username = 'visitor'
-    learnRecords.name = 'visitor'
+    const { token, classId, nickname } = visitorInfo
+    learnRecords.username = nickname || 'visitor'
+    learnRecords.name = nickname || 'visitor'
     learnRecords.status = 'k1'
     if (token && classId && !_.isNumber(token)) {
       await lesson.visitor.uploadLearnRecords({
@@ -254,6 +257,9 @@ const actions = {
   },
   async saveVisitorInfo({ commit }, payload) {
     commit(SAVE_VISITOR_INFO, payload)
+  },
+  async setVisitorNickname({ commit }, nickname) {
+    commit(SET_VISITOR_NICKNAME, nickname)
   },
   async clearVisitorInfo({ commit }) {
     commit(CLEAR_VISITOR_INFO)

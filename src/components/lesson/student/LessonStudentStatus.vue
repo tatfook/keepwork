@@ -4,12 +4,12 @@
       <el-col :span="5" :sm="5">
         <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
       </el-col>
-      <el-col :span="5" :sm="5" v-if="isVisitor">
+      <!-- <el-col :span="5" :sm="5" v-if="isVisitor">
         <span class="nickname-wrap">
           <span>{{$t('lesson.nickName')}} visitor</span>
         </span>
-      </el-col>
-      <el-col :span="5" v-else>
+      </el-col> -->
+      <el-col :span="5">
         <span class="nickname-wrap" v-if="isEditNickName">
           <span style="display:inline-block; width: 70px">{{$t('lesson.nickName')}}</span>
           <el-input class="name-input" :autofocus="true" :value="name" v-model="name">
@@ -67,7 +67,8 @@ export default {
       studentName: 'lesson/student/studentName',
       isBeInClassroom: 'lesson/student/isBeInClassroom',
       enterClassInfo: 'lesson/student/enterClassInfo',
-      userinfo: 'lesson/userinfo'
+      userinfo: 'lesson/userinfo',
+      visitorInfo: 'lesson/student/visitorInfo'
     }),
     enterClassId() {
       return this.isVisitor
@@ -75,7 +76,9 @@ export default {
         : _.get(this.enterClassInfo, 'key', '')
     },
     nickname() {
-      return _.get(this.userinfo, 'nickname', '')
+      return this.isVisitor
+        ? _.get(this.visitorInfo, 'nickname', 'visitor')
+        : _.get(this.userinfo, 'nickname', '')
     },
     username() {
       return _.get(this.userinfo, 'username', '')
@@ -97,13 +100,19 @@ export default {
     ...mapActions({
       setNickname: 'lesson/setNickname',
       leaveTheClass: 'lesson/student/leaveTheClass',
-      switchSummary: 'lesson/student/switchSummary'
+      switchSummary: 'lesson/student/switchSummary',
+      setVisitorNickname: 'lesson/student/setVisitorNickname',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
     }),
     switchEdit() {
       this.isEditNickName = !this.isEditNickName
     },
     async setNicknameHandle() {
       if (this.name.trim() === '') return
+      if (this.isVisitor) {
+        this.setVisitorNickname(this.name)
+        return this.switchEdit()
+      }
       this.isLoading = true
       await this.setNickname(this.name)
         .then(() => {
@@ -140,6 +149,7 @@ export default {
           .then(res => {
             this.isDialogVisible = false
             window.location.href = this.$router.resolve(this.$route.path).href
+            this.uploadLearnRecords().catch(e => console.error(e))
           })
           .catch(e => {
             console.error(e)
