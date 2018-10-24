@@ -48,7 +48,9 @@
           <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects"></website>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
-        <div class="selected-lessons" v-if='currIndex == 5'></div>
+        <div class="selected-lessons" v-if='currIndex == 5'>
+          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects"></course>
+        </div>
         <div class="selected-user" v-if='currIndex == 6'>
           <ul class="selected-user-list">
             <li class="user">
@@ -106,6 +108,7 @@
 import AllProjects from './explorationPageTab/AllProjects'
 import Paracraft from './explorationPageTab/Paracraft'
 import Website from './explorationPageTab/Website'
+import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
@@ -127,15 +130,6 @@ export default {
       paracraft: 'pbl/paracraft',
       website: 'pbl/website'
     }),
-    projectsCount() {
-      return _.get(this.allProjects, 'total', 0)
-    },
-    paracraftCount() {
-      return _.get(this.paracraft, 'total', 0)
-    },
-    websiteCount() {
-      return _.get(this.website, 'total', 0)
-    },
     currSortColumn() {
       switch (this.currIndex) {
         case 1:
@@ -174,6 +168,7 @@ export default {
         case 4:
           break
         case 5:
+          this.$refs.course.targetPage(1)
           break
         case 6:
           break
@@ -197,6 +192,7 @@ export default {
     AllProjects,
     Paracraft,
     Website,
+    Course,
     Recruiting
   }
 }

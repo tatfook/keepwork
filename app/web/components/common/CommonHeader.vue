@@ -72,7 +72,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="12" class="pull-right message-dropdown" v-if="isLogin">
+      <!-- <el-menu-item index="12" class="pull-right message-dropdown" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link message">
             <i class="iconfont icon-bell-fill "></i>消息
@@ -96,14 +96,14 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-menu-item>
+      </el-menu-item> -->
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link">
             <i class="iconfont icon-wrench-fill"></i>工具<i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item>
+            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>网站编辑器</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft</a></el-dropdown-item>
           </el-dropdown-menu>
