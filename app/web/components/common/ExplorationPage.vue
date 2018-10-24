@@ -12,15 +12,13 @@
               </el-input>
             </el-col>
             <el-col :span="2">
-              <el-dropdown>
+              <el-dropdown @command="handleSort">
                 <span class="el-dropdown-link">
-                  最新
+                  {{currSortMode}}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>综合</el-dropdown-item>
-                  <el-dropdown-item>最新</el-dropdown-item>
-                  <el-dropdown-item>最流行</el-dropdown-item>
+                  <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i.command">{{i.mode}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -41,13 +39,13 @@
           <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
-          <all-projects ref="allProjects" :searchKey="searchKey"></all-projects>
+          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft ref="paracraft" :searchKey="searchKey"></paracraft>
+          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects"></paracraft>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website ref="website" :searchKey="searchKey"></website>
+          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects"></website>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
         <div class="selected-lessons" v-if='currIndex == 5'></div>
@@ -98,7 +96,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <recruiting ref="recruiting" :searchKey="searchKey"></recruiting>
+          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects"></recruiting>
         </div>
       </div>
     </div>
@@ -117,7 +115,9 @@ export default {
   data() {
     return {
       currIndex: 1,
-      searchKey: ''
+      searchKey: '',
+      sortProjects: '',
+      currSortMode: '综合'
     }
   },
   mounted() {},
@@ -135,9 +135,31 @@ export default {
     },
     websiteCount() {
       return _.get(this.website, 'total', 0)
+    },
+    currSortColumn() {
+      switch (this.currIndex) {
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+        case 8:
+          return [{ mode: '综合', command: '/综合' },{ mode: '最新', command: 'updated_time/最新' },{ mode: '热门', command: 'recent_view/热门' }]
+          break
+        case 6:
+          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: '/项目' },{ mode: '名气', command: '/名气' },]
+          break
+        default:
+          return [{ mode: '综合', command: '/综合' }]
+          break
+      }
     }
   },
   methods: {
+    handleSort(sortType) {
+      this.currSortMode = sortType.split('/')[1]
+      this.sortProjects = sortType.split('/')[0]
+      this.goSearch()
+    },
     goSearch() {
       switch (this.currIndex) {
         case 1:
@@ -166,35 +188,9 @@ export default {
       }
     },
     selectTab(index) {
-      switch (index) {
-        case 1:
-          this.currIndex = 1
-          break
-        case 2:
-          this.currIndex = 2
-          break
-        case 3:
-          this.currIndex = 3
-          break
-        case 4:
-          this.currIndex = 4
-          break
-        case 5:
-          this.currIndex = 5
-          break
-        case 6:
-          this.currIndex = 6
-          break
-        case 7:
-          this.currIndex = 7
-          break
-        case 8:
-          this.currIndex = 8
-          break
-        default:
-          this.currIndex = 1
-          break
-      }
+      this.currIndex = index
+      this.currSortMode = '综合'
+      this.sortProjects = ''
     }
   },
   components: {

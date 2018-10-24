@@ -24,7 +24,7 @@
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
-                <img src="@/assets/img/create_knowledge.png" alt="">
+                <img src="@/assets/img/crate_knowledge_no.png" alt="">
                 <div class="project-type-item-title">个人知识</div>
                 <div class="project-type-item-brief">敬请期待！</div>
               </div>

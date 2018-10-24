@@ -23,20 +23,17 @@ import _ from 'lodash'
 export default {
   name: 'AllProjects',
   props: {
-    searchKey: String
+    searchKey: String,
+    sortProjects: String
   },
   data() {
     return {
       perPage: 6,
-      page: 1,
+      page: 1
     }
   },
   async mounted() {
-    await this.getAllProjects({
-      page: this.page,
-      per_page: this.perPage,
-      q: this.searchKey
-    })
+    await this.targetPage(this.page)
   },
   computed: {
     ...mapGetters({
@@ -61,22 +58,25 @@ export default {
           privilege: i.recruiting ? 1 : 2
         }
       })
-    },
+    }
   },
   methods: {
     ...mapActions({
       getAllProjects: 'pbl/getAllProjects'
     }),
     async targetPage(targetPage) {
-      await this.getAllProjects({
-        page: targetPage,
-        per_page: this.perPage,
-        q: this.searchKey
+      this.$nextTick(async () => {
+        await this.getAllProjects({
+          page: targetPage,
+          per_page: this.perPage,
+          q: this.searchKey,
+          sort: this.sortProjects
+        })
       })
     },
     searchKeyResult(i) {
       if (i.highlight) {
-        let name = _.get(i.highlight,'name', i.name)
+        let name = _.get(i.highlight, 'name', i.name)
         return name.join().replace(/<span>/g, `<span class="red">`)
       }
       return i.name
