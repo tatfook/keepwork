@@ -188,41 +188,9 @@ export default {
       }
     },
     selectTab(index) {
-      switch (index) {
-        case 1:
-          this.currSortMode = '综合'
-          this.currIndex = 1
-          break
-        case 2:
-          this.currSortMode = '综合'
-          this.currIndex = 2
-          break
-        case 3:
-          this.currSortMode = '综合'
-          this.currIndex = 3
-          break
-        case 4:
-          this.currIndex = 4
-          break
-        case 5:
-          this.currSortMode = '综合'
-          this.currIndex = 5
-          break
-        case 6:
-          this.currSortMode = '综合'
-          this.currIndex = 6
-          break
-        case 7:
-          this.currIndex = 7
-          break
-        case 8:
-          this.currSortMode = '综合'
-          this.currIndex = 8
-          break
-        default:
-          this.currIndex = 1
-          break
-      }
+      this.currIndex = index
+      this.currSortMode = '综合'
+      this.sortProjects = ''
     }
   },
   components: {
