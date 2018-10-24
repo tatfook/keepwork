@@ -23,23 +23,24 @@ import { EsAPI } from '@/api'
 export default {
   name: 'Recruiting',
   props: {
-    searchKey: String
+    searchKey: String,
+    sortProjects: String
   },
-  data(){
-    return{
+  data() {
+    return {
       perPage: 4,
       page: 1,
       recruitongProjects: []
     }
   },
-  async mounted(){
-    await this.getRecruitingProjects(this.page)
+  async mounted() {
+    await this.targetPage(this.page)
   },
   computed: {
-    recruitingCount(){
+    recruitingCount() {
       return _.get(this.recruitongProjects, 'total', 0)
     },
-    recruitmentData(){
+    recruitmentData() {
       let hits = _.get(this.recruitongProjects, 'hits', [])
       return _.map(hits, i => {
         return {
@@ -49,7 +50,7 @@ export default {
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
-          user: { username: i.username, portrait: i.user_portrait || ''},
+          user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
           type: i.type,
           privilege: i.recruiting ? 1 : 2
@@ -58,30 +59,33 @@ export default {
     }
   },
   methods: {
-    async getRecruitingProjects(page){
-      let payload = { page, per_page: this.perPage, recruiting: true, q: this.searchKey }
-      await EsAPI.projects
-      .getProjects(payload)
-      .then(res => {
-        this.recruitongProjects = res
-      }).catch(err => console.error(err))
-    },
-    async targetPage(targetPage){
-      this.getRecruitingProjects(targetPage)
+    async targetPage(targetPage) {
+      this.$nextTick(async () => {
+        await EsAPI.projects
+          .getProjects({
+            page: targetPage,
+            per_page: this.perPage,
+            recruiting: true,
+            q: this.searchKey,
+            sort: this.sortProjects
+          })
+          .then(res => {
+            this.recruitongProjects = res
+          })
+          .catch(err => console.error(err))
+      })
     },
     searchKeyResult(i) {
-      if (this.searchKey) {
-        let name = _.get(i.highlight,'name',[])
+      if (i.highlight) {
+        let name = _.get(i.highlight, 'name', i.name)
         return name.join().replace(/<span>/g, `<span class="red">`)
-      }else{
-        return i.name
       }
+      return i.name
     }
   },
   components: {
     ProjectCell
-  },
-
+  }
 }
 </script>
 

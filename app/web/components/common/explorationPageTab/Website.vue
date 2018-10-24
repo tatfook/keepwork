@@ -23,7 +23,8 @@ import _ from 'lodash'
 export default {
   name: 'Website',
   props: {
-    searchKey: String
+    searchKey: String,
+    sortProjects: String
   },
   data() {
     return {
@@ -32,12 +33,7 @@ export default {
     }
   },
   async mounted() {
-    await this.getTypeProjects({
-      page: this.page,
-      per_page: this.perPage,
-      type: 'website',
-      q: this.searchKey
-    })
+    await this.targetPage(this.page)
   },
   computed: {
     ...mapGetters({
@@ -69,20 +65,22 @@ export default {
       getTypeProjects: 'pbl/getTypeProjects'
     }),
     async targetPage(targetPage) {
-      await this.getTypeProjects({
-        page: targetPage,
-        per_age: this.perPage,
-        type: 'website',
-        q: this.searchKey
+      this.$nextTick(async () => {
+        await this.getTypeProjects({
+          page: targetPage,
+          per_age: this.perPage,
+          type: 'website',
+          q: this.searchKey,
+          sort: this.sortProjects
+        })
       })
     },
     searchKeyResult(i) {
-      if (this.searchKey) {
-        let name = _.get(i.highlight, 'name', [])
+      if (i.highlight) {
+        let name = _.get(i.highlight, 'name', i.name)
         return name.join().replace(/<span>/g, `<span class="red">`)
-      } else {
-        return i.name
       }
+      return i.name
     }
   },
   components: {

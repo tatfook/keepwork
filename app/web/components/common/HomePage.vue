@@ -53,8 +53,8 @@
               <div class="box-text">
                 <h2>创造</h2>
                 <p class="box-text-intro">创造属于你自己的项目</p>
-                <p class="box-text-own">已创建项目
-                  <span class="total">{{excellentProjects.length}}</span>个</p>
+                <p class="box-text-own">已创建项目:
+                  <span class="total">{{excellentProjects.rows.length}}</span></p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
@@ -66,8 +66,8 @@
               <div class="box-text">
                 <h2>探索</h2>
                 <p class="box-text-intro">发现更多有趣的作品</p>
-                <p class="box-text-own">已共享内容
-                  <span class="total">123456</span>条</p>
+                <p class="box-text-own">已共享内容:
+                  <span class="total">123456</span></p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/rocket.png" alt="">
@@ -79,8 +79,8 @@
               <div class="box-text">
                 <h2>学习</h2>
                 <p class="box-text-intro">好好学习，天天向上</p>
-                <p class="box-text-own">已记录知识
-                  <span class="total">22543</span>条</p>
+                <p class="box-text-own">拥有在线课程：
+                  <span class="total">22543</span></p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/bulb.png" alt="">
