@@ -26,21 +26,17 @@ export default {
       isRefresh: false,
       _interval: null,
       isLoading: false,
-      classKey: '',
-      isBeInClassroom: false
+      classKey: ''
     }
   },
   created() {
     this.switchSummary(false)
   },
   async mounted() {
-    const { key = '', token, id } = this.$route.query
+    const { key = '', token, id, nickname = 'visitor' } = this.$route.query
     this.classKey = key
     this.resetUrl()
-    if (id && token && _.isNumber(id) && !_.isNumber(token)) {
-      this.isBeInClassroom = true
-    }
-    this.saveVisitorInfo({ classId: id, key, token })
+    this.saveVisitorInfo({ classId: id, key, token, nickname })
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
     lessonId = Number(lessonId)
@@ -85,9 +81,11 @@ export default {
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',
-      userinfo: 'lesson/userinfo',
-      enterClassInfo: 'lesson/student/enterClassInfo'
+      visitorInfo: 'lesson/student/visitorInfo'
     }),
+    isBeInClassroom() {
+      return this.visitorInfo.classId && this.visitorInfo.token
+    },
     currentClassroomId() {
       return _.get(this.userinfo, 'extra.classroomId', '')
     },

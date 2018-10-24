@@ -1082,6 +1082,9 @@
     "learnAgain": "重新学习",
     "noRecord": "暂无记录",
     "world": "世界",
-    "learnLessonConfirm": "学习新课程，将结束旧课程的学习。是否继续？"
+    "learnLessonConfirm": "学习新课程，将结束旧课程的学习。是否继续？",
+    "online": "在线",
+    "offline": "离线",
+    "leave": "离开"
   }
 }

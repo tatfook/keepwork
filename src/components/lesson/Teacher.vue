@@ -58,7 +58,6 @@ export default {
         position: 'top-left',
         onClick: this.backToClassroom
       })
-      console.warn('正在上课呢，瞎搞')
     }
     next()
   },
