@@ -75,10 +75,10 @@ export default {
       })
     },
     searchKeyResult(i) {
-      if (this.searchKey) {
-        let name = _.get(i.highlight,'name',[])
+      if (i.highlight) {
+        let name = _.get(i.highlight,'name', i.name)
         return name.join().replace(/<span>/g, `<span class="red">`)
-      }else{
+      } else {
         return i.name
       }
     }
