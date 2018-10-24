@@ -51,7 +51,6 @@ export default {
         state: 0
       })
     }
-
     this.isLoading = false
   },
   destroyed() {

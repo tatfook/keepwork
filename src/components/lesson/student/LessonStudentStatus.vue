@@ -68,7 +68,8 @@ export default {
       isBeInClassroom: 'lesson/student/isBeInClassroom',
       enterClassInfo: 'lesson/student/enterClassInfo',
       userinfo: 'lesson/userinfo',
-      visitorInfo: 'lesson/student/visitorInfo'
+      visitorInfo: 'lesson/student/visitorInfo',
+      lessonIsDone: 'lesson/student/lessonIsDone'
     }),
     enterClassId() {
       return this.isVisitor
@@ -103,6 +104,7 @@ export default {
       switchSummary: 'lesson/student/switchSummary',
       setVisitorNickname: 'lesson/student/setVisitorNickname',
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords'
     }),
     switchEdit() {
       this.isEditNickName = !this.isEditNickName
@@ -111,6 +113,12 @@ export default {
       if (this.name.trim() === '') return
       if (this.isVisitor) {
         this.setVisitorNickname(this.name)
+        let { packageId, lessonId } = this.$route.params
+        await this.uploadVisitorLearnRecords({
+          packageId: Number(packageId),
+          lessonId: Number(lessonId),
+          state: this.lessonIsDone ? 1 : 0
+        }).catch(e => console.error(e))
         return this.switchEdit()
       }
       this.isLoading = true
