@@ -6,10 +6,10 @@
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="paracraftCount > perPage">
+    <div class="all-projects-pages" v-if="websiteCount > perPage">
       <div class="block">
         <span class="demonstration"></span>
-        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="paracraftCount">
+        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="websiteCount">
         </el-pagination>
       </div>
     </div>
