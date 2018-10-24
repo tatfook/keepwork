@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <media-type v-if="mediaLibraryMode" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -22,12 +22,14 @@ export default {
   async mounted() {
     await this.userRefreshSkyDrive({ useCache: false })
     this.loading = false
+    this.isMounted = true
   },
   data() {
     return {
       defaultMode: !this.mediaLibrary,
       mediaLibraryMode: this.mediaLibrary,
       loading: false,
+      isMounted: false,
       uploadingFiles: [],
       qiniuUploadSubscriptions: {},
       mediaFilterType: 'image'
@@ -38,6 +40,14 @@ export default {
       userSkyDriveInfo: 'user/skyDriveInfo',
       userSkyDriveFileList: 'user/skyDriveFileList'
     }),
+    searchWord() {
+      if (!this.isMounted) {
+        return ''
+      }
+      return this.defaultMode
+        ? this.$refs.tableTypeComp.searchWord
+        : this.$refs.mediaTypeComp.searchWord
+    },
     info() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
       let unused = total - used
@@ -45,24 +55,26 @@ export default {
       return { total, used, unused, usedPercent }
     },
     skyDriveTableData() {
-      return this.userSkyDriveFileList.map(item => {
-        // checked: 0 未审核, 1 通过, 2 未通过
-        let { checked, size, filename, type, updatedAt } = item
-        checked = Number(checked)
-        return {
-          ...item,
-          file: { size, filename, type, downloadUrl: '' },
-          displaySize: this.biteToM(size) + 'MB',
-          ext: getFileExt(item),
-          checkPassed: checked === 1,
-          checkedState:
-            checked === 1
-              ? this.$t('skydrive.checkPassed')
-              : checked === 2
-                ? this.$t('skydrive.checkUnpassed')
-                : this.$t('skydrive.checking')
-        }
-      })
+      return this.userSkyDriveFileList
+        .map(item => {
+          // checked: 0 未审核, 1 通过, 2 未通过
+          let { checked, size, filename, type, updatedAt } = item
+          checked = Number(checked)
+          return {
+            ...item,
+            file: { size, filename, type, downloadUrl: '' },
+            displaySize: this.biteToM(size) + 'MB',
+            ext: getFileExt(item),
+            checkPassed: checked === 1,
+            checkedState:
+              checked === 1
+                ? this.$t('skydrive.checkPassed')
+                : checked === 2
+                  ? this.$t('skydrive.checkUnpassed')
+                  : this.$t('skydrive.checking')
+          }
+        })
+        .filter(this.itemFilterBySearchWord)
     },
     filterFinishedUploadingFile() {
       return _.filter(this.uploadingFiles, file => {
