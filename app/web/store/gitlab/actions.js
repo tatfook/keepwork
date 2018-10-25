@@ -155,7 +155,7 @@ const actions = {
     } = getSiteDetailInfoDataSourceByPath(path)
 
     // this is special for private website
-    let isPrivateWebsite = visibility === 'private'
+    let isPrivateWebsite = visibility === 1
     if (isPrivateWebsite) {
       if (forceAsGuest) throw new Error('Cannot read private sites without permission!')
 
@@ -166,8 +166,6 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let content = await gitlabShowRawForGuest(
       rawBaseUrl,
-      dataSourceUsername,
-      projectName,
       fullPath
     )
     let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''

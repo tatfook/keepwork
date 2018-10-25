@@ -128,7 +128,10 @@ const mutations = {
   [GET_SITE_DETAIL_INFO_SUCCESS](state, { username, sitename, detailInfo }) {
     Vue.set(state, 'siteDetailInfo', {
       ...state.siteDetailInfo,
-      [`${username}/${sitename}`]: detailInfo
+      [`${username}/${sitename}`]: {
+        siteinfo: _.get(detailInfo, 'site', {}),
+        userinfo: _.get(detailInfo, 'user', {})
+      }
     })
   },
   [GET_SITE_DETAIL_INFO_BY_ID_SUCCESS](state, { siteId, detailInfo }) {
