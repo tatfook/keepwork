@@ -20,6 +20,7 @@ export default {
     }
   },
   async mounted() {
+    this.loading = true
     await this.userRefreshSkyDrive({ useCache: false })
     this.loading = false
     this.isMounted = true

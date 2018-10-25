@@ -21,8 +21,9 @@
       </p>
     </div>
     <div class="project-basic-info-detail">
-      <div class="project-basic-info-detail-cover">
-        <p><i class="iconfont icon-uploading"></i>点击更换图片或视频</p>
+      <div class="project-basic-info-detail-cover" v-loading='isCoverZoneLoading'>
+        <img class="project-basic-info-detail-cover-image" :src='tempCoverUrl || defaultCoverUrl' alt="" @load="coverImageLoaded">
+        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="iconfont icon-uploading"></i>点击更换图片或视频</p>
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>项目类型:</label>{{ projectType | projectTypeFilter }}</p>
@@ -46,6 +47,7 @@
       <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -53,6 +55,7 @@ import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
 import paracraftUtil from '@/lib/utils/paracraft'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'ProjectBasicInfo',
   props: {
@@ -84,6 +87,7 @@ export default {
     }
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     this.tempDesc = this.copiedProjectDetail.description
+    this.tempCoverUrl = _.get(this.copiedProjectDetail, 'extra.imageUrl', '')
   },
   data() {
     return {
@@ -92,7 +96,11 @@ export default {
       descriptionEditor: undefined,
       copiedProjectDetail: {},
       tempDesc: '',
-      isLoading: false
+      tempCoverUrl: '',
+      isLoading: false,
+      isCoverZoneLoading: false,
+      isMediaSkyDriveDialogShow: false,
+      defaultCoverUrl: require('@/assets/img/pbl_default_cover.png')
     }
   },
   computed: {
@@ -119,9 +127,19 @@ export default {
     originDesc() {
       return this.copiedProjectDetail.description
     },
+    originExtra() {
+      return this.originProjectDetail.extra
+    },
+    mergedExtra() {
+      let originExtra = _.cloneDeep(this.originExtra)
+      return _.merge(originExtra, {
+        imageUrl: this.tempCoverUrl
+      })
+    },
     updatingProjectData() {
       return _.merge(this.originProjectDetail, {
-        description: this.tempDesc
+        description: this.tempDesc,
+        extra: this.mergedExtra
       })
     },
     projectType() {
@@ -261,6 +279,19 @@ export default {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
       }
+    },
+    showMediaSkyDriveDialog() {
+      this.isMediaSkyDriveDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      if (url) {
+        this.isCoverZoneLoading = true
+        this.tempCoverUrl = url
+      }
+      this.isMediaSkyDriveDialogShow = false
+    },
+    coverImageLoaded() {
+      this.isCoverZoneLoading = false
     }
   },
   filters: {
@@ -302,6 +333,9 @@ export default {
       }
       return stateText
     }
+  },
+  components: {
+    SkyDriveManagerDialog
   }
 }
 </script>
@@ -378,11 +412,38 @@ export default {
       background-color: #303133;
       color: #fff;
       text-align: center;
-      line-height: 230px;
+      line-height: 270px;
       border-radius: 4px;
       margin-right: 16px;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      &-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      &-cursor {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        bottom: 0;
+        margin: 0;
+        cursor: pointer;
+        display: none;
+      }
       .iconfont {
         margin-right: 6px;
+      }
+      .el-loading-spinner {
+        line-height: 1;
+      }
+    }
+    &-cover:hover {
+      .show-on-hover {
+        display: inline-block;
       }
     }
     &-message {

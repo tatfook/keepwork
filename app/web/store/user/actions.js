@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import contactContent from '@/assets/source/contact.md'
 import profileContent from '@/assets/source/profile.md'
 import siteContent from '@/assets/source/site.md'
+import storage from '../../api/storage'
 
 const {
   LOGIN_SUCCESS,
@@ -38,6 +39,7 @@ const {
   GET_SITE_THEME_CONFIG_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   USE_FILE_IN_SITE_SUCCESS,
+  GET_FILE_RAW_URL_SUCCESS,
   GET_USER_THREE_SERVICES_SUCCESS,
   SET_AUTH_CODE_INFO
 } = props
@@ -571,6 +573,16 @@ const actions = {
     let { dispatch } = context
     await skyDrive.changeFileName({ key, filename })
     await dispatch('refreshSkyDrive', { useCache: false })
+  },
+  async getFileRawUrl(context, { fileId, useCache = true }) {
+    let { commit, getters: { rawUrlByFileId } } = context
+    let rawUrl = rawUrlByFileId({ fileId })
+    if (useCache && rawUrl) {
+      return rawUrl
+    }
+    let url = await skyDrive.getFileRawUrl({ fileId })
+    commit(GET_FILE_RAW_URL_SUCCESS, { fileId, url })
+    return url
   },
   async useFileInSite(context, { fileId, sitePath, useCache = true }) {
     let { commit, dispatch, getters, rootGetters } = context

@@ -40,7 +40,8 @@ export const files = _.assign(
     update: async (payload, ...args) => post('/files', payload, ...args),
     'delete': async (payload, ...args) => destroy(`/files/${encodeURIComponent(payload.id)}`, payload, ...args),
     token: async (payload, ...args) => get(`/files/${encodeURIComponent(payload.key)}/token`, payload, ...args),
-    statistics: async (payload, ...args) => get('/files/statistics', payload, ...args)
+    statistics: async (payload, ...args) => get('/files/statistics', payload, ...args),
+    getRawUrl: async ({ fileId }) => get(`/files/${fileId}/rawurl`)
   }
 )
 

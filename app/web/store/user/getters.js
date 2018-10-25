@@ -312,6 +312,7 @@ const getters = {
   skyDriveInfo: (state, { skyDrive: { info = {} } }) => info,
 
   siteFileBySitePathAndFileId: (state) => ({ sitePath, fileId }) => _.get(state, ['siteFiles', sitePath, fileId]),
+  rawUrlByFileId: (state) => ({ fileId }) => _.get(state.filesRawUrl, fileId),
   threeServices: (state) => state.threeServices,
   getThreeService: (state, { threeServices }) => type => {
     let result = _.find(threeServices, (o) => {
