@@ -90,7 +90,6 @@ export default {
     }
   },
   async mounted() {
-    await this.getProfile()
     let payload = { userId: this.userId }
     await this.getUserSubscribes({ packageState: 2 })
     await lesson.users
@@ -168,7 +167,8 @@ export default {
     ...mapActions({
       getProfile: 'user/getProfile',
       enterClassRoom: 'lesson/student/enterClassRoom',
-      getUserSubscribes: 'lesson/student/getUserSubscribes'
+      getUserSubscribes: 'lesson/student/getUserSubscribes',
+      switchDevice: 'lesson/student/switchDevice'
     }),
     goBeanDetail() {
       this.$router.push('/student/bean')
@@ -207,6 +207,7 @@ export default {
       let key = this.classID
       await this.enterClassRoom({ key })
         .then(res => {
+          this.switchDevice('k')
           this.$router.push({
             path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
               this.enterClassInfo.lessonId

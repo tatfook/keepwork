@@ -68,10 +68,11 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
-    await this.getLessonContent({ lessonId, packageId })
+
     await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
+      await this.getLessonContent({ lessonId, packageId })
       let lastLearnRecords = await lesson.lessons
         .getLastLearnRecords()
         .catch(e => console.error(e))
@@ -109,11 +110,12 @@ export default {
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
 
     let { device } = this.$route.query
-    device && device.toLowerCase() === 'paracraft'
-      ? this.switchDevice('p')
-      : this.switchDevice('k')
+    if (device && device.toLowerCase() === 'paracraft') {
+      this.switchDevice('p')
+    }
 
     if (this.isCurrentClassroom) {
+      await this.getLessonContent({ lessonId, packageId })
       this.changeStatus(1)
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))

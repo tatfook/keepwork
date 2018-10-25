@@ -1,10 +1,10 @@
 <template>
   <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
     <div class="lesson-page-header">
-      <common-header class="container" @callback="resetPage" @preCallback="preChangeStatus"></common-header>
+      <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
+    <router-view v-if="!loading" class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
     <common-footer class="lesson-page-footer container"></common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
@@ -71,13 +71,6 @@ export default {
       const rules = ['TeacherColumn', 'StudentColumn']
       if (rules.some(i => i === name)) {
         this.$router.push({ name: 'StudentCenter' })
-      }
-    },
-    async preChangeStatus() {
-      if (this.isBeInClassroom) {
-        this.changeStatus(0)
-        await this.uploadLearnRecords().catch(e => console.error(e))
-        console.warn('preChangeStatus finish --->')
       }
     }
   }

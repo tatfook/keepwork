@@ -30,7 +30,7 @@ const actions = {
   async getUserSubscribes(
     {
       commit,
-      rootGetters: { 'lesson/userId': userId }
+      rootGetters: { 'user/userId': userId }
     },
     { packageState }
   ) {
@@ -93,7 +93,6 @@ const actions = {
     commit(ENTER_CLASSROOM, enterClassInfo)
   },
   async resumeTheClass({ commit, dispatch }) {
-    // await dispatch('lesson/getUserDetail', null, { root: true })
     let classroom = await lesson.classrooms
       .currentClass()
       .catch(e => console.error(e))
@@ -139,6 +138,10 @@ const actions = {
         }
       })
       commit(RESUME_QUIZ, _lessonDetail)
+    }
+    if (learnRecords && learnRecords.extra.status) {
+      let status = learnRecords.extra.status.split('')[0]
+      commit(SWITCH_DEVICE, status)
     }
   },
   async resumeLearnRecordsId({ commit }, id) {
@@ -214,7 +217,7 @@ const actions = {
     const { token, classId, nickname } = visitorInfo
     learnRecords.username = nickname || 'visitor'
     learnRecords.name = nickname || 'visitor'
-    learnRecords.status = 'k1'
+    learnRecords.status = 'p1'
     if (token && classId && !_.isNumber(token)) {
       await lesson.visitor.uploadLearnRecords({
         token,

@@ -44,9 +44,6 @@ const store = new Vuex.Store({
   plugins: [
     createPersistedState({
       paths: [
-        'lesson.userinfo',
-        'lesson.student.subscribesList',
-        'user.profile',
         'user.webTemplateConfig',
         'user.skyDrive'
       ]
@@ -70,8 +67,8 @@ router.beforeEach(async (to, from, next) => {
         if (key && key !== 0) {
           await store.dispatch('lesson/student/enterClassRoom', {
             key
-          })
-          return next({ name, params, query: { reload: true, dialog: true } })
+          }).catch(e => console.error(e))
+          return next({ name, params, query: { reload: true, dialog: true, device: 'paracraft' } })
         }
         return next({ name, params, query: { reload: true } })
       }
