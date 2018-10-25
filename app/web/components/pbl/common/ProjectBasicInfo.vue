@@ -22,8 +22,9 @@
     </div>
     <div class="project-basic-info-detail">
       <div class="project-basic-info-detail-cover" v-loading='isCoverZoneLoading'>
-        <img class="project-basic-info-detail-cover-image" :src='tempCoverUrl || defaultCoverUrl' alt="" @load="coverImageLoaded">
-        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="iconfont icon-uploading"></i>点击更换图片或视频</p>
+        <img v-show="!isVideoShow" class="project-basic-info-detail-cover-image" :src='tempCoverUrl || defaultCoverUrl' alt="" @load="coverImageLoaded">
+        <video v-show="isVideoShow" class="project-basic-info-detail-cover-video" :src="tempVideoUrl" controls></video>
+        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="el-icon-edit-outline"></i>更换图片或视频</p>
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>项目类型:</label>{{ projectType | projectTypeFilter }}</p>
@@ -47,7 +48,7 @@
       <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
-    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -87,7 +88,16 @@ export default {
     }
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     this.tempDesc = this.copiedProjectDetail.description
-    this.tempCoverUrl = _.get(this.copiedProjectDetail, 'extra.imageUrl', '')
+    this.tempCoverUrl = _.get(
+      this.copiedProjectDetail,
+      'extra.imageUrl',
+      undefined
+    )
+    this.tempVideoUrl = _.get(
+      this.copiedProjectDetail,
+      'extra.videoUrl',
+      undefined
+    )
   },
   data() {
     return {
@@ -97,6 +107,7 @@ export default {
       copiedProjectDetail: {},
       tempDesc: '',
       tempCoverUrl: '',
+      tempVideoUrl: '',
       isLoading: false,
       isCoverZoneLoading: false,
       isMediaSkyDriveDialogShow: false,
@@ -134,7 +145,8 @@ export default {
     mergedExtra() {
       let originExtra = _.cloneDeep(this.originExtra)
       return _.merge(originExtra, {
-        imageUrl: this.tempCoverUrl
+        imageUrl: this.tempCoverUrl,
+        videoUrl: this.tempVideoUrl
       })
     },
     updatingProjectData() {
@@ -174,6 +186,9 @@ export default {
         link: `${archiveUrl}?ref=${commitId}`,
         usertoken: this.userToken
       })
+    },
+    isVideoShow() {
+      return this.tempVideoUrl
     }
   },
   methods: {
@@ -287,9 +302,19 @@ export default {
     async closeSkyDriveManagerDialog({ file, url }) {
       this.isMediaSkyDriveDialogShow = false
       if (url) {
-        this.isCoverZoneLoading = true
-        this.tempCoverUrl = url
-        this.waitUpdateCover = true
+        let fileType = file && file.type
+        if (fileType === 'videos') {
+          this.tempCoverUrl = undefined
+          this.tempVideoUrl = url
+          this.isCoverZoneLoading = true
+          await this.updateDescToBackend()
+          this.isCoverZoneLoading = false
+        } else {
+          this.isCoverZoneLoading = true
+          this.tempVideoUrl = undefined
+          this.tempCoverUrl = url
+          this.waitUpdateCover = true
+        }
       }
     },
     async coverImageLoaded() {
@@ -428,19 +453,29 @@ export default {
         height: 100%;
         object-fit: cover;
       }
+      &-video {
+        width: 100%;
+        height: 100%;
+      }
       &-cursor {
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        background-color: rgba(0, 0, 0, 0.7);
-        bottom: 0;
         margin: 0;
         cursor: pointer;
         display: none;
-      }
-      .iconfont {
-        margin-right: 6px;
+        z-index: 3000;
+        height: 36px;
+        line-height: 36px;
+        right: 24px;
+        top: 18px;
+        font-size: 14px;
+        background-color: #212121;
+        color: #fff;
+        border-radius: 36px;
+        padding: 0 18px;
+        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.16);
+        .el-icon-edit-outline {
+          margin-right: 6px;
+        }
       }
       .el-loading-spinner {
         line-height: 1;

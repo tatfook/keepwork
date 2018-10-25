@@ -23,7 +23,7 @@
         <el-col :span="18" class='media-type-header-tabs'>
           <div>
             <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-            <span v-if="isImgLoopMod" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+            <span v-if="isVideoAvailable" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
           </div>
         </el-col>
         <el-col :span="6">
@@ -79,7 +79,11 @@ export default {
       required: true
     },
     uploadingFiles: Array,
-    skyDriveMediaLibraryData: Array
+    skyDriveMediaLibraryData: Array,
+    isVideoTabShow: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -119,6 +123,9 @@ export default {
       if (activeMod.cmd === 'ImgLoop') {
         return true
       }
+    },
+    isVideoAvailable() {
+      return this.isVideoTabShow || this.isImgLoopMod
     },
     availableSelectedMediaItem() {
       let item = this.itemFilterBySearchWord(this.selectedMediaItem)

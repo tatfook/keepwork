@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -17,7 +17,8 @@ export default {
     mediaLibrary: {
       type: Boolean,
       default: false
-    }
+    },
+    isVideoTabShow: Boolean
   },
   async mounted() {
     this.loading = true

@@ -8,7 +8,7 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
-    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-drive>
+    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' @close='handleClose'></sky-drive>
     <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
   </el-dialog>
 </template>
@@ -21,7 +21,8 @@ export default {
   name: 'SkyDriveManagerDialog',
   props: {
     show: Boolean,
-    mediaLibrary: Boolean
+    mediaLibrary: Boolean,
+    isVideoTabShow: Boolean
   },
   data() {
     return {
