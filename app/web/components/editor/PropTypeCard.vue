@@ -4,7 +4,15 @@
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
-      <i v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq' || cardKey == 'md'" v-tooltip='{content: tipTool, classes: "prop-type-card-tool-tip-class"}' class="iconfont icon-help"></i>
+      <i v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq' || cardKey == 'md'"
+      v-tooltip='{
+        content: tipTool,
+        classes: "prop-type-card-tool-tip-class",
+        delay: { show: 100, hide: 1000 },
+        autoHide: false,
+        hideOnTargetClick: false
+      }'
+      class="iconfont icon-help"></i>
       <el-col class="card-info">
         <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" :title="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
         <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'>
@@ -161,6 +169,8 @@ export default {
   line-height: 23px;
   margin-right: 10px;
   color: #4d90fe;
+  height: 16px;
+  width: 16px;
 }
 </style>
 <style>
