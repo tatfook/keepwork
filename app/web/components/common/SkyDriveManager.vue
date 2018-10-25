@@ -43,12 +43,9 @@
       </el-row>
       <el-row class='skydrive-manager-header-tabs-and-search'>
         <el-col :span="18" class='skydrive-manager-header-tabs'>
-          <div v-if ="isImgLoopMod">
+          <div>
             <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
             <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
-          </div>
-          <div v-else>
-            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
           </div>
         </el-col>
         <el-col :span="6">
@@ -313,18 +310,6 @@ export default {
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90 ? 'skydrive-manager-total-used-danger' : (usedPercent >= 70 ? 'skydrive-manager-total-used-warning' : '')
-    },
-    isImgLoopMod() {
-      let activeMod = this.$store.getters.activeMod
-
-      if (!activeMod || !activeMod.cmd) {
-        return false
-      }
-
-      if (activeMod.cmd === 'ImgLoop') {
-        return true
-      }
-
     }
   },
   methods: {
