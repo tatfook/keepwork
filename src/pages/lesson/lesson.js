@@ -68,7 +68,7 @@ router.beforeEach(async (to, from, next) => {
       if (userInfo) {
         Cookies.set('token', token)
         if (key && key !== 0) {
-          store.dispatch('lesson/student/enterClassRoom', {
+          await store.dispatch('lesson/student/enterClassRoom', {
             key
           })
           return next({ name, params, query: { reload: true, dialog: true, device: 'paracraft' } })
