@@ -28,6 +28,7 @@ import router from './viewer.router'
 import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
+import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -56,7 +57,8 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
-    pbl: pblModule
+    pbl: pblModule,
+    lesson: lessonModule
   }
 })
 
