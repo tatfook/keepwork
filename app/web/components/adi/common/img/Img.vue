@@ -1,6 +1,8 @@
 <template>
   <div class="comp-img">
-    <img :src="getSrc" />
+    <a :target='target' :href='link'>
+      <img :src="getSrc" />
+    </a>
   </div>
 </template>
 
@@ -11,6 +13,16 @@ export default {
   name: 'AdiImg',
   mixins: [compBaseMixin],
   computed: {
+    target() {
+      return this.properties.target
+        ? this.properties.target
+        : this.options.emptyLinkTarget
+    },
+    link() {
+      return this.properties.link
+        ? this.properties.link
+        : this.options.emptyLink
+    },
     getSrc() {
       if (!this.properties.src && !this.options.emptyMedia) {
         return ''
