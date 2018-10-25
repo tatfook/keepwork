@@ -15,7 +15,6 @@
 
 <script>
 import SkyDriveManager from './SkyDriveManager'
-import SkyDriveManager1 from './SkyDriveManager1'
 
 export default {
   name: 'SkyDriveManagerDialog',
@@ -52,8 +51,7 @@ export default {
     }
   },
   components: {
-    'sky-drive': SkyDriveManager1,
-    SkyDriveManager
+    'sky-drive': SkyDriveManager,
   }
 }
 </script>
