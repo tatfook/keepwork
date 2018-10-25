@@ -1,5 +1,6 @@
 <template>
   <div class="all-projects">
+    <div class="search-result-total">搜索到：<span>{{projectsCount}}</span>个结果</div>
     <el-row>
       <el-col :span="6" v-for="(project,index) in allProjectsDataOptimize" :key="index">
         <project-cell :project="project"></project-cell>
@@ -21,6 +22,10 @@ import _ from 'lodash'
 
 export default {
   name: 'AllProjects',
+  props: {
+    searchKey: String,
+    sortProjects: String
+  },
   data() {
     return {
       perPage: 6,
@@ -28,7 +33,7 @@ export default {
     }
   },
   async mounted() {
-    await this.getAllProjects({ page: this.page, perPage: this.perPage, type: '' })
+    await this.targetPage(this.page)
   },
   computed: {
     ...mapGetters({
@@ -41,15 +46,16 @@ export default {
       let hits = _.get(this.allProjects, 'hits', [])
       return _.map(hits, i => {
         return {
+          id: i.id,
           extra: { coverUrl: i.cover },
-          name: i.name,
+          name: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
-          user: { nickname: i.username },
+          user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
           type: i.type,
-          recruiting: i.recruiting
+          privilege: i.recruiting ? 1 : 2
         }
       })
     }
@@ -59,7 +65,21 @@ export default {
       getAllProjects: 'pbl/getAllProjects'
     }),
     async targetPage(targetPage) {
-      await this.getAllProjects({ page: targetPage, perPage: this.perPage })
+      this.$nextTick(async () => {
+        await this.getAllProjects({
+          page: targetPage,
+          per_page: this.perPage,
+          q: this.searchKey,
+          sort: this.sortProjects
+        })
+      })
+    },
+    searchKeyResult(i) {
+      if (i.highlight) {
+        let name = _.get(i.highlight, 'name', i.name)
+        return name.join().replace(/<span>/g, `<span class="red">`)
+      }
+      return i.name
     }
   },
   components: {
@@ -68,8 +88,8 @@ export default {
 }
 </script>
 <style lang="scss">
-.all-projects{
-  &-pages{
+.all-projects {
+  &-pages {
     text-align: center;
   }
 }

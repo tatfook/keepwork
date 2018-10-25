@@ -7,20 +7,18 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-input class="search-input">
+              <el-input class="search-input" v-model="searchKey">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-input>
             </el-col>
             <el-col :span="2">
-              <el-dropdown>
+              <el-dropdown @command="handleSort">
                 <span class="el-dropdown-link">
-                  最新
+                  {{currSortMode}}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>综合</el-dropdown-item>
-                  <el-dropdown-item>最新</el-dropdown-item>
-                  <el-dropdown-item>最流行</el-dropdown-item>
+                  <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i.command">{{i.mode}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -31,26 +29,28 @@
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
         <div class="options" ref="options">
-          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目<span class="search-num">({{projectsCount}})</span></el-button>
-          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界<span class="search-num">({{paracraftCount}})</span></el-button>
-          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站<span class="search-num">({{websiteCount}})</span></el-button>
-          <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室<span class="search-num">(12345)</span></el-button>
-          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中<span class="search-num">(1)</span></el-button>
+          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目</el-button>
+          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界</el-button>
+          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button>
+          <!-- <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识</el-button> -->
+          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button>
+          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button>
+          <!-- <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室</el-button> -->
+          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button>
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
-          <all-projects></all-projects>
+          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft></paracraft>
+          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects"></paracraft>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website></website>
+          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects"></website>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
-        <div class="selected-lessons" v-if='currIndex == 5'></div>
+        <div class="selected-lessons" v-if='currIndex == 5'>
+          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects"></course>
+        </div>
         <div class="selected-user" v-if='currIndex == 6'>
           <ul class="selected-user-list">
             <li class="user">
@@ -98,7 +98,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <!-- <recruiting></recruiting> -->
+          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects"></recruiting>
         </div>
       </div>
     </div>
@@ -108,75 +108,92 @@
 import AllProjects from './explorationPageTab/AllProjects'
 import Paracraft from './explorationPageTab/Paracraft'
 import Website from './explorationPageTab/Website'
+import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
-
 
 export default {
   name: 'ExplorationPage',
   data() {
     return {
-      currIndex: 1
+      currIndex: 1,
+      searchKey: '',
+      sortProjects: '',
+      currSortMode: '综合'
     }
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     ...mapGetters({
       allProjects: 'pbl/allProjects',
       paracraft: 'pbl/paracraft',
       website: 'pbl/website'
     }),
-    projectsCount() {
-      return _.get(this.allProjects, 'total', 0)
-    },
-    paracraftCount(){
-      return _.get(this.paracraft, 'total', 0)
-    },
-    websiteCount(){
-      return _.get(this.website, 'total', 0)
-    },
-  },
-  methods: {
-    goSearch() {},
-    selectTab(index) {
-      switch (index) {
+    currSortColumn() {
+      switch (this.currIndex) {
         case 1:
-          this.currIndex = 1
-          break
         case 2:
-          this.currIndex = 2
-          break
         case 3:
-          this.currIndex = 3
-          break
-        case 4:
-          this.currIndex = 4
-          break
         case 5:
-          this.currIndex = 5
+        case 8:
+          return [{ mode: '综合', command: '/综合' },{ mode: '最新', command: 'updated_time/最新' },{ mode: '热门', command: 'recent_view/热门' }]
           break
         case 6:
-          this.currIndex = 6
+          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: '/项目' },{ mode: '名气', command: '/名气' },]
+          break
+        default:
+          return [{ mode: '综合', command: '/综合' }]
+          break
+      }
+    }
+  },
+  methods: {
+    handleSort(sortType) {
+      this.currSortMode = sortType.split('/')[1]
+      this.sortProjects = sortType.split('/')[0]
+      this.goSearch()
+    },
+    goSearch() {
+      switch (this.currIndex) {
+        case 1:
+          this.$refs.allProjects.targetPage(1)
+          break
+        case 2:
+          this.$refs.paracraft.targetPage(1)
+          break
+        case 3:
+          this.$refs.website.targetPage(1)
+          break
+        case 4:
+          break
+        case 5:
+          this.$refs.course.targetPage(1)
+          break
+        case 6:
           break
         case 7:
-          this.currIndex = 7
           break
         case 8:
-          this.currIndex = 8
+          this.$refs.recruiting.targetPage(1)
           break
         default:
           this.currIndex = 1
           break
       }
+    },
+    selectTab(index) {
+      this.currIndex = index
+      this.currSortMode = '综合'
+      this.sortProjects = ''
     }
   },
   components: {
     AllProjects,
     Paracraft,
     Website,
-    Recruiting,
+    Course,
+    Recruiting
   }
 }
 </script>
@@ -365,6 +382,10 @@ export default {
         }
       }
     }
+  }
+  .search-result-total {
+    padding: 15px 0;
+    font-size: 18px;
   }
 }
 </style>

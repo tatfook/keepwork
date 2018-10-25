@@ -11,7 +11,7 @@
             <span class="el-dropdown-link">
               {{editingProjectName}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
-            <el-dropdown-menu slot="dropdown" v-loading='isDropdownLoading'>
+            <el-dropdown-menu class="project-header-dropdown" slot="dropdown" v-loading='isDropdownLoading'>
               <el-dropdown-item @click.native="toProjectIndexPage(project)" :disabled='editingProjectName == project.name' v-for="(project, index) in userProjectList" :key="index">{{project.name}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -40,7 +40,7 @@
         <el-tab-pane name="ProjectIndexPage">
           <span slot="label" class="project-header-tabs-label">主页</span>
         </el-tab-pane>
-        <el-tab-pane name="ProjectWhiteBoard"  v-if="isLoginUserEditable">
+        <el-tab-pane name="ProjectWhiteBoard" v-if="isLoginUserEditable">
           <span slot="label" class="project-header-tabs-label">白板</span>
         </el-tab-pane>
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
@@ -78,7 +78,7 @@ export default {
     ...mapGetters({
       userProjects: 'pbl/userProjects',
       projectFavoriteState: 'pbl/projectFavoriteState',
-      projectStarState: 'pbl/projectStarState',
+      projectStarState: 'pbl/projectStarState'
     }),
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
@@ -126,7 +126,7 @@ export default {
     },
     toProjectIndexPage(project) {
       let projectId = project.id
-      this.$router.push({ path: `/project/${projectId}/edit` })
+      this.$router.push({ path: `/project/${projectId}` })
     },
     async toggleStarProject() {
       let projectId = this.editingProjectId
@@ -236,6 +236,10 @@ export default {
       color: #303133;
       cursor: pointer;
     }
+  }
+  &-dropdown {
+    max-height: 200px;
+    overflow: auto;
   }
   &-operations {
     text-align: right;

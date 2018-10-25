@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
     <img class="project-cell-cover" :src="project.extra.coverUrl" alt="" @click="goProjectDetail(project)">
-    <h4 class="project-cell-title" @click="goProjectDetail(project)"><span class="text">{{project.name}}</span><span class="recruitment" v-if="project.recruiting">招募中</span></h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -11,7 +11,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.nickname}}</div>
+      <div class="project-cell-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.username}}</div>
       <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
   </div>
@@ -42,7 +42,7 @@ export default {
     }
   },
   methods: {
-    goProjectDetail(project){
+    goProjectDetail(project) {
       window.open(`/pbl/project/${project.id}/`)
     },
     relativeTime(time) {
@@ -79,7 +79,10 @@ export default {
     line-height: 20px;
     height: 20px;
     display: flex;
-    .text{
+    .red {
+      color: red;
+    }
+    .text {
       display: inline-block;
       max-width: 190px;
       overflow: hidden;
@@ -87,9 +90,9 @@ export default {
       text-overflow: ellipsis;
       height: 20px;
     }
-    .recruitment{
+    .recruitment {
       display: inline-block;
-      background:#ef5936;
+      background: #ef5936;
       border-radius: 10px;
       color: #fff;
       margin-left: 4px;

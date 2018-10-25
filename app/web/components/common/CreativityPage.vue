@@ -24,7 +24,7 @@
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
-                <img src="@/assets/img/create_knowledge.png" alt="">
+                <img src="@/assets/img/crate_knowledge_no.png" alt="">
                 <div class="project-type-item-title">个人知识</div>
                 <div class="project-type-item-brief">敬请期待！</div>
               </div>
@@ -56,7 +56,7 @@
         <div class="others-projects">
           <h4 class="browse-title">看看其他人的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in allProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in otherProjects" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -71,43 +71,47 @@
 <script>
 import ProjectCell from './ProjectCell'
 import _ from 'lodash'
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'CreativityPage',
   data() {
     return {
-      projects: [],
+      projects: []
     }
   },
   components: {
     ProjectCell
   },
-  async mounted(){
-    this.getAllProjects()
+  async mounted() {
+    this.getExcellentProjects()
     this.getMyAllProjects()
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      allProjects: 'pbl/allProjects',
+      excellentProjects: 'pbl/excellentProjects',
       myProjects: 'pbl/myProjects',
       myContributeProjects: 'pbl/myContributeProjects'
     }),
-    hasProjects(){
+    hasProjects() {
       return this.myProjects.length > 0
+    },
+    otherProjects() {
+      let tempArr = _.get(this.excellentProjects, 'rows', [])
+      return tempArr.slice(0,4)
     }
   },
-  methods:{
+  methods: {
     ...mapActions({
-      getAllProjects: 'pbl/getAllProjects',
+      getExcellentProjects: 'pbl/getExcellentProjects',
       getMyAllProjects: 'pbl/getMyAllProjects'
     }),
-    createMyProject(){
-      window.location.href='/pbl/project/new'
+    createMyProject() {
+      window.location.href = '/pbl/project/new'
     },
     goExplorationPage() {
       this.$router.push('exploration')
-    },
+    }
   }
 }
 </script>
@@ -175,9 +179,9 @@ export default {
         margin: 0;
         padding: 24px 0;
       }
-      .explore-more{
+      .explore-more {
         text-align: center;
-        .more{
+        .more {
           margin: 60px 0 80px 0;
           height: 36px;
           line-height: 36px;

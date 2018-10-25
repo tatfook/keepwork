@@ -46,11 +46,16 @@ export const submitGitData = async (path, action, content, options) => {
 }
 
 export const projects = {
-  getProjects: async ({ page, perPage, type }) => get(`projects?page=${page}&per_page=${perPage}&type=${type}`)
+  getProjects: async args => get('projects', { params: args })
+}
+
+export const packages = {
+  getPackages: async args => get('packages', { params: args })
 }
 
 export default {
   search,
   submitGitData,
-  projects
+  projects,
+  packages
 }

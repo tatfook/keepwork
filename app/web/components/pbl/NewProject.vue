@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <el-button v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">完成创建</el-button>
+    <el-button :loading="isCreating" v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">完成创建</el-button>
     <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">下一步</el-button>
     <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">上一步</el-button>
     <new-website-dialog :isContinueAfterCreate='true' :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog' @finish='createNewProjectByNewSite'></new-website-dialog>

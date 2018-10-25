@@ -9,6 +9,7 @@ const state = () => ({
   siteDataSource: {},
   comments: {},
   siteDetailInfo: {},
+  siteDetailInfoById: {},
   webTemplateConfig: [],
   webPageTemplateConfig: [],
   siteLayoutConfigs: {},
