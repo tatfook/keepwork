@@ -80,7 +80,7 @@
                 <h2>学习</h2>
                 <p class="box-text-intro">好好学习，天天向上</p>
                 <p class="box-text-own">拥有在线课程：
-                  <span class="total">22543</span></p>
+                  <span class="total">{{allPackagesCount}}</span></p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/bulb.png" alt="">
@@ -152,7 +152,7 @@
 </template>
 <script>
 import ProjectCell from './ProjectCell'
-import { keepwork, lesson } from '@/api'
+import { lesson } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
@@ -179,31 +179,37 @@ export default {
         this.hotsPackages = res
       })
       .catch(err => console.error(err))
-    await this.getExcellentProjects()
+    let payload = { perPage: 1, page: 1 }
+    await Promise.all([this.getExcellentProjects(),this.getPackagesList(payload)])
   },
   computed: {
     ...mapGetters({
-      excellentProjects: 'pbl/excellentProjects'
+      excellentProjects: 'pbl/excellentProjects',
+      allPackages: 'lesson/center/packagesList'
     }),
-    excellentProjectsCount(){
+    allPackagesCount(){
+      return _.get(this.allPackages, 'count', 0)
+    },
+    excellentProjectsCount() {
       return _.get(this.excellentProjects, 'count', 0)
     },
     handpickProjects() {
       let tempArr = _.get(this.excellentProjects, 'rows', [])
         .map(i => i)
         .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
-        return tempArr.slice(0,4)
+      return tempArr.slice(0, 4)
     },
     likesProjects() {
       let tempArr = _.get(this.excellentProjects, 'rows', [])
         .map(i => i)
         .sort((obj1, obj2) => obj1.star < obj2.star)
-        return tempArr.slice(0,4)
+      return tempArr.slice(0, 4)
     }
   },
   methods: {
     ...mapActions({
-      getExcellentProjects: 'pbl/getExcellentProjects'
+      getExcellentProjects: 'pbl/getExcellentProjects',
+      getPackagesList: 'lesson/center/getPackagesList'
     }),
     closeAd() {
       this.hiddenAd = true
