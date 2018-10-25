@@ -195,7 +195,7 @@ export default {
   }
 
   & > .style-mask {
-    margin-left: 10px;
+    margin-left: 2px;
   }
 }
 
