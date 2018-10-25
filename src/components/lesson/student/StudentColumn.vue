@@ -90,7 +90,6 @@ export default {
     }
   },
   async mounted() {
-    await this.getProfile()
     let payload = { userId: this.userId }
     await this.getUserSubscribes({ packageState: 2 })
     await lesson.users

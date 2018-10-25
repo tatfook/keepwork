@@ -30,7 +30,7 @@ const actions = {
   async getUserSubscribes(
     {
       commit,
-      rootGetters: { 'lesson/userId': userId }
+      rootGetters: { 'user/userId': userId }
     },
     { packageState }
   ) {
