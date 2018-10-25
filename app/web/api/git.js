@@ -205,7 +205,6 @@ export class GitAPI {
     return this.client.projects.repository.files
       .create(projectName, path, content)
       .then(data => {
-        // this.commitToES(path, 'create', options.content, {})
         return data
       })
   }
@@ -219,7 +218,6 @@ export class GitAPI {
     return this.client.projects.repository.files
       .edit(projectName, path, content)
       .then(data => {
-        // this.commitToES(path, 'edit', options.content, {})
         return data
       })
   }
@@ -229,11 +227,9 @@ export class GitAPI {
       .split('/')
       .splice(0, 2)
       .join('/')
-    // options = { ...(options || {}), commit_message: 'delete' }
     return this.client.projects.repository.files
       .remove(projectName, path)
       .then(data => {
-        this.commitToES(path, 'delete', '', {})
         return data
       })
   }
@@ -247,8 +243,6 @@ export class GitAPI {
     await this.client.projects.repository.files
       .rename(projectName, currentFilePath, newFilePath, content)
       .then(data => {
-        // this.commitToES(newFilePath, 'create', content, {})
-        // this.commitToES(currentFilePath, 'delete', '', {})
         return data
       })
   }
@@ -322,8 +316,6 @@ export class GitAPI {
 
   async commitToESByArray(actions, options) {
     actions.map(action => {
-      // this.commitToES(action.file_path, 'create', action.content, {})
-      // this.commitToES(action.previous_path, 'delete', '', {})
       return null
     })
   }

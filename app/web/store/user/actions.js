@@ -225,13 +225,13 @@ const actions = {
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
+    let config = await gitlabShowRawForGuest(rawBaseUrl, configFullPath)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath)
+    let config = await gitlabShowRawForGuest(rawBaseUrl, pageTemplateConfigFullPath)
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
@@ -241,7 +241,7 @@ const actions = {
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
-      content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, path)
+      content = await gitlabShowRawForGuest(rawBaseUrl, path)
       content = _.isString(content) ? content : JSON.stringify(content)
       commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
@@ -279,7 +279,7 @@ const actions = {
     if (typeof content === 'string') return content
 
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, `${pageTemplateRoot}/${contentPath}`)
+    content = await gitlabShowRawForGuest(rawBaseUrl, `${pageTemplateRoot}/${contentPath}`)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
