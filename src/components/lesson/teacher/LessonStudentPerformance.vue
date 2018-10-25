@@ -16,12 +16,14 @@
     <el-table class="performance-table" :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" height="500" tooltip-effect="dark" :default-expand-all="false">
       <el-table-column v-if="isHasData" fixed prop="name" :label="$t('lesson.name')" sortable min-width="140" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
-          <div class="userinfo">
-            <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
-              <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'outline': checkOutline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
+          <el-tooltip :content="statusTips(props.row.status)" placement="top">
+            <div class="userinfo">
+              <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
+                <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'offline': checkOffline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
+              </div>
+              <span class="name">{{props.row.name}}</span>
             </div>
-            <span class="name">{{props.row.name || props.row.username}}</span>
-          </div>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column :fixed='!isPhoneSize' v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
@@ -74,11 +76,23 @@ export default {
     checkOnline(value) {
       return value ? ['k1', 'p1'].some(i => i === value) : false
     },
-    checkOutline(value) {
+    checkOffline(value) {
       return value ? ['k0', 'p0'].some(i => i === value) : false
     },
     checkLeave(value) {
       return value ? ['k2', 'p2'].some(i => i === value) : false
+    },
+    statusTips(value) {
+      if (this.checkOnline(value)) {
+        return this.$t('lesson.online')
+      }
+      if (this.checkOffline(value)) {
+        return this.$t('lesson.offline')
+      }
+      if (this.checkLeave(value)) {
+        return this.$t('lesson.leave')
+      }
+     return this.$t('lesson.online')
     },
     formatAvatar(value = '') {
       return value.substr(0, 4).toLowerCase() === 'http'
@@ -99,9 +113,6 @@ export default {
       let quizIndex = tableHeaderIndex - 1
       let quiz = this.tableHeaderQuizzesPopover[quizIndex]
       return <TableHeaderPopover index={tableHeaderIndex} quiz={quiz} />
-    },
-    testData() {
-      console.log(this.tableHeaderQuizzesPopover[0])
     },
     countState(quiz) {
       let finishCount = quiz.reduce((count, cur) => {
@@ -133,42 +144,63 @@ export default {
     },
     isLeave(value) {
       return ['k2', 'p2'].some(i => i === value)
+    },
+    verifyQuiz(quiz) {
+      if (this.classroomQuiz.length > 0 && quiz.length === 0) {
+        return [...this.classroomQuiz]
+      }
+      return quiz
     }
   },
   computed: {
     ...mapGetters({
       classroomId: 'lesson/teacher/classroomId',
       isBeInClass: 'lesson/teacher/isBeInClass',
-      learnRecords: 'lesson/teacher/learnRecords'
+      learnRecords: 'lesson/teacher/learnRecords',
+      classroomQuiz: 'lesson/teacher/classroomQuiz',
+      classroom: 'lesson/teacher/classroom'
     }),
     isPhoneSize() {
       return this.windowWidth < 768
     },
     isHasData() {
-      return (
-        this.learnRecords &&
-        this.learnRecords.length > 0 &&
-        this.learnRecords[0].extra['name']
-      )
+      return this.learnRecords && this.learnRecords.length > 0
     },
     learnRecordsFilter() {
       return this.isHasData
-        ? this.learnRecords.map(
-            ({
-              userId,
-              state,
-              extra: { name, portrait, quiz = [], username, status, world = '' }
-            }) => ({
-              userId,
-              state,
-              status,
-              world,
-              name,
-              portrait,
-              quiz,
-              username
+        ? this.learnRecords
+            .filter(i => {
+              return (
+                i.packageId === this.classroom.packageId &&
+                i.lessonId === this.classroom.lessonId
+              )
             })
-          )
+            .map(
+              ({
+                userId,
+                state,
+                extra: {
+                  name = 'visitor',
+                  portrait,
+                  quiz = [],
+                  username = 'visitor',
+                  status = 'k1',
+                  world = ''
+                }
+              }) => {
+                quiz = this.verifyQuiz(quiz)
+                return {
+                  userId,
+                  state,
+                  status,
+                  world,
+                  name,
+                  portrait,
+                  quiz,
+                  username
+                }
+              }
+            )
         : []
     },
     tableHeaderQuizzesPopover() {
@@ -318,7 +350,7 @@ $red: #f53838;
         .leave {
           opacity: 0.3;
         }
-        .outline {
+        .offline {
           filter: grayscale(100%);
         }
       }

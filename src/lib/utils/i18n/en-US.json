@@ -1077,6 +1077,9 @@
     "learnAgain": "Learn Again",
     "noRecord": "No record",
     "world": "world",
-    "learnLessonConfirm": "To learn a new lesson will make the old one closed. Continue ?"
+    "learnLessonConfirm": "To learn a new lesson will make the old one closed. Continue ?",
+    "online": "on line",
+    "offline": "off line",
+    "leave": "leave"
   }
 }

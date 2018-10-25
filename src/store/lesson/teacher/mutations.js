@@ -14,6 +14,7 @@ const GET_USER_PACKAGES_SUCCESS = 'GET_USER_PACKAGES_SUCCESS'
 const GET_USER_LESSONS_SUCCESS = 'GET_USER_LESSONS_SUCCESS'
 const GET_CLASSROOM_LEARN_RECORDS = 'GET_CLASSROOM_LEARN_RECORDS'
 const LEAVE_THE_CLASSROOM = 'LEAVE_THE_CLASSROOM'
+const COPY_CLASSROOM_QUIZ = 'COPY_CLASSROOM_QUIZ'
 
 export const props = {
   PUBLISH_LESSON,
@@ -29,7 +30,8 @@ export const props = {
   GET_USER_LESSONS_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
   GET_CLASSROOM_LEARN_RECORDS,
-  LEAVE_THE_CLASSROOM
+  LEAVE_THE_CLASSROOM,
+  COPY_CLASSROOM_QUIZ
 }
 
 const mutations = {
@@ -77,6 +79,9 @@ const mutations = {
   },
   [LEAVE_THE_CLASSROOM](state) {
     Vue.set(state, 'classroom', {})
+  },
+  [COPY_CLASSROOM_QUIZ](state, payload) {
+    Vue.set(state, 'classroomQuiz', payload)
   }
 }
 
