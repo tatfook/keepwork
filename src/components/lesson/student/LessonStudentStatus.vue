@@ -104,7 +104,8 @@ export default {
       switchSummary: 'lesson/student/switchSummary',
       setVisitorNickname: 'lesson/student/setVisitorNickname',
       uploadLearnRecords: 'lesson/student/uploadLearnRecords',
-      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords'
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
+      switchDevice: 'lesson/student/switchDevice'
     }),
     switchEdit() {
       this.isEditNickName = !this.isEditNickName
@@ -156,6 +157,10 @@ export default {
         await this.setNickname(this.name)
           .then(res => {
             this.isDialogVisible = false
+            let { device } = this.$route.query
+            if (device && device.toLowerCase() === 'paracraft') {
+              this.switchDevice('p')
+            }
             window.location.href = this.$router.resolve(this.$route.path).href
             this.uploadLearnRecords().catch(e => console.error(e))
           })

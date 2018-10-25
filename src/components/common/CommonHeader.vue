@@ -163,7 +163,8 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     isLogin: {
       get() {
@@ -194,7 +195,9 @@ export default {
   methods: {
     ...mapActions({
       userGetProfile: 'user/getProfile',
-      userLogout: 'user/logout'
+      userLogout: 'user/logout',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      changeStatus: 'lesson/student/changeStatus'
     }),
     backEditArea() {
       let origin = window.location.origin
@@ -230,8 +233,11 @@ export default {
     closeLoginDialog() {
       this.isLoginDialogShow = false
     },
-    logout() {
-      this.$emit('preCallback')
+    async logout() {
+      if (this.isBeInClassroom) {
+        this.changeStatus(0)
+        await this.uploadLearnRecords().catch(e => console.error(e))
+      }
       this.userLogout()
       this.$emit('callback')
       // window.location.reload()
