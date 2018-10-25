@@ -32,7 +32,7 @@
           </el-row>
         </div>
         <div :class="['learn-to-build',{'hidden-learn': hiddenLearn}]" v-if="!hasProjects">
-          <span @click="showLearnStep"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
+          <span @click="showLearnStep" class="learn"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
       </div>
     </div>
     <div class="creativity-page-projects">
@@ -66,23 +66,27 @@
         </div>
       </div>
     </div>
+    <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
   </div>
 </template>
 <script>
 import ProjectCell from './ProjectCell'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import CreateProjectGuide from './CreateProjectGuide'
 
 export default {
   name: 'CreativityPage',
   data() {
     return {
       projects: [],
-      hiddenLearn: false
+      hiddenLearn: false,
+      showGuideDialog: false
     }
   },
   components: {
-    ProjectCell
+    ProjectCell,
+    CreateProjectGuide
   },
   async mounted() {
     this.getExcellentProjects()
@@ -117,7 +121,10 @@ export default {
       this.hiddenLearn = true
     },
     showLearnStep(){
-      
+      this.showGuideDialog =true
+    },
+    closeLearnGuide(){
+      this.showGuideDialog = false
     }
   }
 }
@@ -167,6 +174,9 @@ export default {
         margin-bottom: 40px;
         color: #909399;
         position: relative;
+        .learn{
+          cursor: pointer;
+        }
         .close {
           display: inline-block;
           width: 40px;
