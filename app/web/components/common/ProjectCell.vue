@@ -11,7 +11,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="project.user.portrait" alt="portrait">{{project.user.username}}</div>
+      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || 'http://127.0.0.1:7001/public/img/default_portrait.png'" alt="portrait">{{project.user && project.user.username}}</div>
       <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
   </div>

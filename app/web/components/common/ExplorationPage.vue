@@ -34,7 +34,7 @@
           <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button>
           <!-- <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识</el-button> -->
           <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button>
-          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button>
+          <!-- <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button> -->
           <!-- <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室</el-button> -->
           <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button>
         </div>

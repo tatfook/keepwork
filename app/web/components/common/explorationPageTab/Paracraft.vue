@@ -2,7 +2,7 @@
   <div class="paracraft">
     <div class="search-result-total">搜索到：<span>{{paracraftCount}}</span>个结果</div>
     <el-row>
-      <el-col :span="6" v-for="(project,index) in pracraftData" :key="index">
+      <el-col :sm="12" :md="6" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>

@@ -31,8 +31,8 @@
             </el-col>
           </el-row>
         </div>
-        <div class="learn-to-build" v-if="!hasProjects">
-          <i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</div>
+        <div :class="['learn-to-build',{'hidden-learn': hiddenLearn}]" v-if="!hasProjects">
+          <span @click="showLearnStep"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
       </div>
     </div>
     <div class="creativity-page-projects">
@@ -77,7 +77,8 @@ export default {
   name: 'CreativityPage',
   data() {
     return {
-      projects: []
+      projects: [],
+      hiddenLearn: false
     }
   },
   components: {
@@ -98,7 +99,7 @@ export default {
     },
     otherProjects() {
       let tempArr = _.get(this.excellentProjects, 'rows', [])
-      return tempArr.slice(0,4)
+      return tempArr.slice(0, 4)
     }
   },
   methods: {
@@ -111,6 +112,12 @@ export default {
     },
     goExplorationPage() {
       this.$router.push('exploration')
+    },
+    closeLearn() {
+      this.hiddenLearn = true
+    },
+    showLearnStep(){
+      
     }
   }
 }
@@ -159,6 +166,23 @@ export default {
         font-size: 14px;
         margin-bottom: 40px;
         color: #909399;
+        position: relative;
+        .close {
+          display: inline-block;
+          width: 40px;
+          height: 38px;
+          line-height: 42px;
+          font-size: 28px;
+          position: absolute;
+          right: 20px;
+          cursor: pointer;
+        }
+      }
+      .hidden-learn {
+        height: 0;
+        overflow: hidden;
+        border: none;
+        transition: all 1s ease-out;
       }
     }
   }

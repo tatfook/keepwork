@@ -2,7 +2,7 @@
   <div class="recruiting">
     <div class="search-result-total">搜索到：<span>{{recruitingCount}}</span>个结果</div>
     <el-row>
-      <el-col :span="6" v-for="(project,index) in recruitmentData" :key="index">
+      <el-col :sm="12" :md="6" v-for="(project,index) in recruitmentData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
