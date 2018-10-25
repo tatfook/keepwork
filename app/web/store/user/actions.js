@@ -495,7 +495,7 @@ const actions = {
     await dispatch('getProfile')
     let { userId } = getters
     await dispatch('getWebsiteDetailInfoByPath', { path })
-    let { site: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
+    let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
     let payload = { websiteId, userId, url: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
@@ -592,7 +592,7 @@ const actions = {
     if (useCache && !_.isEmpty(cachedUrl)) return
 
     await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
-    let { site: { userId, id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
+    let { siteinfo: { userId, id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
 
     let url = await skyDrive.useFileInSite({ userId, siteId, fileId })
     commit(USE_FILE_IN_SITE_SUCCESS, { sitePath, fileId, url })
