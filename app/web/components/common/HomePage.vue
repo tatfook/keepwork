@@ -54,7 +54,7 @@
                 <h2>创造</h2>
                 <p class="box-text-intro">创造属于你自己的项目</p>
                 <p class="box-text-own">已创建项目:
-                  <span class="total">{{excellentProjects.rows.length}}</span></p>
+                  <span class="total">{{excellentProjectsCount}}</span></p>
               </div>
               <div class="box-img">
                 <img src="@/assets/img/puzzle.png" alt="">
@@ -185,14 +185,17 @@ export default {
     ...mapGetters({
       excellentProjects: 'pbl/excellentProjects'
     }),
+    excellentProjectsCount(){
+      return _.get(this.excellentProjects, 'count', 0)
+    },
     handpickProjects() {
-      let tempArr = this.excellentProjects.rows
+      let tempArr = _.get(this.excellentProjects, 'rows', [])
         .map(i => i)
         .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
         return tempArr.slice(0,4)
     },
     likesProjects() {
-      let tempArr = this.excellentProjects.rows
+      let tempArr = _.get(this.excellentProjects, 'rows', [])
         .map(i => i)
         .sort((obj1, obj2) => obj1.star < obj2.star)
         return tempArr.slice(0,4)

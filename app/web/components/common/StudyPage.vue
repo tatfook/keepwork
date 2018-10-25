@@ -3,28 +3,28 @@
     <div class="study-page-title"><span class="study">学习</span>·不停超越</div>
     <div class="study-page-intro">
       <el-row>
-        <el-col :span="6">
+        <el-col :sm="12" :md="6">
           <div class="plate" @click="enterLessonCenter">
             <img class="plate-cover" src="@/assets/pblImg/lesson_online.png" alt="">
             <h4 class="plate-title">在线课程</h4>
             <p class="plate-desc">随时随地、轻松愉快的在线学习</p>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :sm="12" :md="6">
           <div class="plate" @click="enterParacraftLesson">
             <img class="plate-cover" src="@/assets/pblImg/lesson_paracraft.png" alt="">
             <h4 class="plate-title">动画教学</h4>
             <p class="plate-desc">学习三维世界的动画创作，参加iicc大赛</p>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :sm="12" :md="6">
           <div class="plate" @click="enterCodeLesson">
             <img class="plate-cover" src="@/assets/pblImg/learn_codeblock.png" alt="">
             <h4 class="plate-title">编程方块</h4>
             <p class="plate-desc">图形化的方式学编程，创造自己的游戏</p>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :sm="12" :md="6">
           <div class="plate" @click="enterNPLLesson">
             <img class="plate-cover" src="@/assets/pblImg/NPL_CAD.png" alt="">
             <h4 class="plate-title">NPL CAD</h4>

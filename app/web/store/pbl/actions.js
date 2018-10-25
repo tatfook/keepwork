@@ -30,7 +30,6 @@ const actions = {
     await keepwork.projects
       .getProjects()
       .then(res => {
-        console.log('excellent', res)
         commit(GET_EXCELLENT_PROJECTS, res)
       }).catch(err => console.error(err))
   },
