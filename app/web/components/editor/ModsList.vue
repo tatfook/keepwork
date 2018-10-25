@@ -5,14 +5,22 @@
       <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' :default-expanded-keys='defaultExpandedKeys' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
     </el-col>
     <el-col class="preview-box">
-      <div v-for='mod in activeModsList' :key='mod.name'>
-        <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render" @click='newMod(mod.name, index)'>
-          <div class="render-mod-container--click-prevent"></div>
-          <div class="render-mod-container">
-            <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+      <div v-for='mod in activeModsList' :key='mod.name' class="box-items">
+          <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render box-items-item" @click='newMod(mod.name, index)'>
+            <div class="render-mod-container--click-prevent"></div>
+            <div class="render-mod-container">
+              <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+              <div class="style-mask">
+                <span>{{$t('tips.clickToAdd')}}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <img v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+          <div class="style-cover box-items-item" v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name'>
+            <img class="style-cover-image" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+            <div class="style-mask">
+              <span>{{$t('tips.clickToAdd')}}</span>
+            </div>
+          </div>
       </div>
     </el-col>
   </el-row>
@@ -147,6 +155,12 @@ export default {
 .full-height {
   height: 100%;
 }
+.box-items {
+  position: relative;
+  img {
+    display: block;
+  }
+}
 .style-cover {
   width: 275px;
   cursor: pointer;
@@ -156,7 +170,37 @@ export default {
   border: 2px solid transparent;
   padding: 10px;
   background-color: white;
+
+  &-image{
+    width: 100%;
+  }
 }
+.style-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 14px;
+  width: 275px;
+  padding: 6px 10px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  background: rgba(144, 167, 191, 0.5);
+  opacity: 0;
+}
+
+.box-items-item:hover {
+  .style-mask {
+    opacity: 1;
+  }
+
+  & > .style-mask {
+    margin-left: 10px;
+  }
+}
+
+
+
 .style-cover:hover {
   border: 2px solid #bcbcbc;
 }
@@ -211,6 +255,10 @@ export default {
         transform: scale(0.1245);
       }
     }
+  }
+
+  .style-mask {
+    width: 135px
   }
 }
 </style>

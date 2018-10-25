@@ -303,6 +303,11 @@
     "share": "Share",
     "praise": "Praise"
   },
+  "tips": {
+    "clickToShow": "Click to show",
+    "clickToHide": "Click to hide",
+    "clickToAdd": "Click to add"
+  },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",
     "board": "Adding graphics to the page, supporting basic graphics, various charts, engineering diagrams, flowcharts, network topologies, UML, Venn, etc.",
