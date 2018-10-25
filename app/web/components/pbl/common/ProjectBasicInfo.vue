@@ -100,7 +100,8 @@ export default {
       isLoading: false,
       isCoverZoneLoading: false,
       isMediaSkyDriveDialogShow: false,
-      defaultCoverUrl: require('@/assets/img/pbl_default_cover.png')
+      defaultCoverUrl: require('@/assets/img/pbl_default_cover.png'),
+      waitUpdateCover: false
     }
   },
   computed: {
@@ -195,11 +196,11 @@ export default {
         })
       } else {
         this.tempDesc = this.descriptionEditor.txt.html()
+        this.isLoading = true
         await this.updateDescToBackend()
       }
     },
     async updateDescToBackend() {
-      this.isLoading = true
       await this.pblUpdateProject({
         projectId: this.projectId,
         updatingProjectData: this.updatingProjectData
@@ -207,7 +208,7 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '项目描述更新成功'
+            message: '项目信息更新成功'
           })
           this.isLoading = false
           this.isDescriptionEditing = false
@@ -216,7 +217,7 @@ export default {
         .catch(error => {
           this.$message({
             type: 'error',
-            message: '项目描述更新失败,请重试'
+            message: '项目信息更新失败,请重试'
           })
           this.isLoading = false
           this.isDescriptionEditing = false
@@ -283,14 +284,18 @@ export default {
     showMediaSkyDriveDialog() {
       this.isMediaSkyDriveDialogShow = true
     },
-    closeSkyDriveManagerDialog({ file, url }) {
+    async closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
       if (url) {
         this.isCoverZoneLoading = true
         this.tempCoverUrl = url
+        this.waitUpdateCover = true
       }
-      this.isMediaSkyDriveDialogShow = false
     },
-    coverImageLoaded() {
+    async coverImageLoaded() {
+      this.waitUpdateCover &&
+        (await this.updateDescToBackend()) &&
+        (this.waitUpdateCover = false)
       this.isCoverZoneLoading = false
     }
   },
