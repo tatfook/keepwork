@@ -65,7 +65,6 @@ export default {
             sort: this.sortProjects
           })
           .then(res => {
-            console.log('res', res)
             this.lessonPackages = res
           })
           .catch(err => console.error(err))
