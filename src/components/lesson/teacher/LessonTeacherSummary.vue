@@ -116,6 +116,7 @@ import Vue from 'vue'
 import LessonWrap from '@/components/lesson/common/LessonWrap'
 import Parser from '@/lib/mod/parser'
 import colI18n from '@/lib/utils/i18n/column'
+import avatar from '@/assets/lessonImg/default_avatar.png'
 
 export default {
   name: 'LessonTeacherSummary',
@@ -238,7 +239,7 @@ export default {
       let currentRecord = _.map(
         this.classroomLearnRecord,
         ({
-          extra: { portrait, name, username, quiz },
+          extra: { portrait=avatar, name='visitor', username='visitor', quiz=[] },
           createdAt,
           lessonId,
           userId
