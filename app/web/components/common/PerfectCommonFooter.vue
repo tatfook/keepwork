@@ -59,7 +59,7 @@
     <div class="perfect-common-footer-simple-list">
       <ul class="footer-container-list">
         <li>
-          <span class="logo"><img src="@/assets/img/logo_old.svg" alt=""></span>
+          <span class="logo"><img src="@/assets/img/logo.svg" alt=""></span>
           <span class="line">|</span>
         </li>
         <li>

@@ -25,12 +25,15 @@
           <div class="sketch-box-content">
             <!-- 指派头像显示 -->
             <div class="player">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <span class="assigns-btn"></span>
+              <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
+              <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
+                <span class="el-dropdown-link">
+                  <span class="assigns-btn"></span>
+                </span>
+                <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+                  <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
           </div>
         </div>
@@ -50,10 +53,17 @@
 <script>
 import { keepwork } from '@/api'
 import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
+import default_portrait from '@/assets/img/default_portrait.png'
+import Vue from 'vue'
+
 export default {
   name: 'NewIssue',
   props: {
-    show: Boolean
+    show: Boolean,
+    projectId: {
+      required: true
+    }
   },
   data() {
     return {
@@ -61,15 +71,33 @@ export default {
       dynamicTags: ['需求', '设计', '产品'],
       inputVisible: false,
       inputValue: '',
-      descriptionText: '这里是issue的描述文字'
+      descriptionText: '这里是issue的描述文字',
+      default_portrait: default_portrait,
+      assignedMembers: []
     }
   },
+  async mounted() {
+    await this.getProjectMember({
+      objectId: this.projectId,
+      objectType: 5
+    })
+  },
   computed: {
-    projectId() {
-      return _.get(this.$route, 'params.id')
+    ...mapGetters({
+      pblProjectMemberList: 'pbl/projectMemberList'
+    }),
+    memberList() {
+      return this.pblProjectMemberList({ projectId: this.projectId })
+    },
+    assignMembersId(){
+    // 
     }
   },
   methods: {
+    ...mapActions({
+      getProjectIssues: 'pbl/getProjectIssues',
+      getProjectMember: 'pbl/getProjectMember'
+    }),
     handleCloseTag(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
     },
@@ -90,23 +118,42 @@ export default {
     handleClose() {
       this.$emit('close')
     },
-    finishedCreateIssue() {
-      console.log('tags', this.dynamicTags)
-      let payload = {
-        objectType: 5,
-        objectId: this.projectId,
-        title: this.issueTitle,
-        content: this.descriptionText,
-        tags: this.dynamicTags.toString().split(',').join('|'),
-        assigns: '60|37'
-      }
-      keepwork.issues
-        .createIssue(payload)
-        .then(res => {
-          console.log(res)
-          this.handleClose()
+    handleCommand(userId){
+      _.forEach(this.memberList, member => {
+        if(member.userId === userId) { 
+          if(this.assignedMembers.length == 0){
+            return this.assignedMembers.push(member)
+          }
+          for(let i=0; i < this.assignedMembers.length; i++){
+            if(this.assignedMembers[i].userId === userId){
+              return
+            }
+          }
+          this.assignedMembers.push(member)
+        }
+      })
+    },
+    async finishedCreateIssue() {
+      this.$nextTick(async () => {
+        let payload = {
+          objectType: 5,
+          objectId: this.projectId,
+          title: this.issueTitle,
+          content: this.descriptionText,
+          tags: this.dynamicTags
+            .toString()
+            .split(',')
+            .join('|'),
+          assigns: this.assignMembersId
+        }
+        await keepwork.issues
+          .createIssue(payload)
+          .then(res => {
+            this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+            this.handleClose()
           })
-        .catch(err => console.error(err))
+          .catch(err => console.error(err))
+      })
     }
   }
 }
@@ -152,24 +199,25 @@ export default {
           .el-tag + .el-tag {
             margin-left: 10px;
           }
-          .player{
+          .player {
             line-height: 38px;
             margin-bottom: 8px;
             &-portrait {
               width: 36px;
               height: 36px;
-              margin:8px 6px 0 0;
+              margin: 8px 6px 0 0;
               border-radius: 50%;
               border: 1px solid #e8e8e8;
             }
-            .assigns-btn{
+            .assigns-btn {
               width: 36px;
               height: 36px;
               border-radius: 50%;
               border: 1px solid #e8e8e8;
               display: inline-block;
               position: relative;
-              &::after{
+              margin-top: 8px;
+              &::after {
                 content: '';
                 height: 16px;
                 width: 1px;
@@ -178,7 +226,7 @@ export default {
                 left: 17px;
                 top: 10px;
               }
-              &::before{
+              &::before {
                 content: '';
                 height: 1px;
                 width: 16px;
@@ -195,6 +243,18 @@ export default {
     .finish {
       padding: 24px 68px;
     }
+  }
+}
+.new-issue-assign{
+  .member-portrait{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .el-dropdown-menu__item{
+    display: flex;
+    align-items: center;
   }
 }
 </style>

@@ -35,10 +35,10 @@
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <div class="greeting">你好，{{username}}</div>
+            <!-- <el-dropdown-item divided>
+              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
+            <!-- </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-folder-open"></i>我的项目</a>
             </el-dropdown-item>
             <el-dropdown-item>
@@ -54,15 +54,15 @@
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
             </el-dropdown-item>
-            <el-dropdown-item divided>
+            <!-- <el-dropdown-item divided>
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <!-- <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <!-- <el-dropdown-item>
               <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item> -->
