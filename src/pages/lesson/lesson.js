@@ -75,7 +75,6 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (id && token) {
-      console.warn('visitor')
       if (Number(id) === 0 && Number(token) === 0) {
         return next({ name: 'Anonymous', params })
       }

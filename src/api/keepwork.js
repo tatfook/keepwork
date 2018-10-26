@@ -16,10 +16,6 @@ const withoutParseEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 }, false)
 
-const endpointWithoutToken = createEndpoint({
-  baseURL: process.env.KEEPWORK_API_PREFIX
-})
-
 const {post, put} = keepworkEndpoint
 
 export const user = {
@@ -39,9 +35,11 @@ export const user = {
   register: async (...args) => post('/user/register', ...args),
   bindThreeService: async (...args) => post('user/bindThreeService', ...args),
   verifyToken: async ({ token }) => {
-    axios.interceptors.request.eject(endpointWithoutToken)
-    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    return endpointWithoutToken.post('user/getProfile')
+    let instance = axios.create({
+      baseURL: process.env.KEEPWORK_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.post('user/getProfile')
   }
 }
 
