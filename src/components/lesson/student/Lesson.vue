@@ -2,7 +2,7 @@
   <div class="lesson-wrap" v-loading="isLoading">
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
-    <LessonSummary v-if="isShowSummary" />
+    <LessonSummary v-if="isShowSummary && !isLoading" />
     <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
@@ -68,11 +68,10 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
-
+    await this.getLessonContent({ lessonId, packageId })
     await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId, packageId })
       let lastLearnRecords = await lesson.lessons
         .getLastLearnRecords()
         .catch(e => console.error(e))
@@ -115,7 +114,6 @@ export default {
     }
 
     if (this.isCurrentClassroom) {
-      await this.getLessonContent({ lessonId, packageId })
       this.changeStatus(1)
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))

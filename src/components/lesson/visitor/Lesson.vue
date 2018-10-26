@@ -33,6 +33,7 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    this.isLoading = true
     const { key = '', token, id, nickname = 'visitor' } = this.$route.query
     this.classKey = key
     this.resetUrl()
