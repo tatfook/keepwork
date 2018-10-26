@@ -266,6 +266,19 @@ const actions = {
   async clearVisitorInfo({ commit }) {
     commit(CLEAR_VISITOR_INFO)
   },
+  async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
+    let res = await lesson.classrooms.learnRecordsById(id).catch(e => console.error(e))
+    let _visitorInfo = _.clone(visitorInfo)
+    let username = _.get(res, 'extra.username', '')
+    if (username) {
+      _visitorInfo.username = username
+      commit(SAVE_VISITOR_INFO, _visitorInfo)
+    }
+    let quiz = _.get(res, 'extra.quiz', '')
+    if (quiz) {
+      dispatch('resumeQuiz', { learnRecords: res })
+    }
+  },
   async checkLessonWithRecord({ commit }, { packageId, lessonId }) {
     let learnRecords = await lesson.users
       .learnRecords()

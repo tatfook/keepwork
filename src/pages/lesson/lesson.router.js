@@ -246,9 +246,20 @@ export default new Router({
       children: [
         {
           path: 'package/:packageId/lesson/:lessonId',
-          name: 'VisitorLesson',
-          component: VisitorLesson,
+          name: 'Visitor',
           meta: { auto: true }
+        }
+      ]
+    },
+    {
+      path: '/anonymous',
+      name: 'Anonymous',
+      component: Visitor,
+      children: [
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'Anonymous',
+          component: VisitorLesson
         }
       ]
     },
