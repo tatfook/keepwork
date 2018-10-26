@@ -26,7 +26,7 @@
         <div class="single-issue" v-for="(issue,index) in projectIssueList" :key="index">
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail">
-              <i class="title-icon iconfont icon-check-circle-fill"></i>
+              <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
               <span>{{issue.title}}</span><span class="title-number">#8998</span>
             </div>
             <div class="single-issue-brief-intro">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <new-issue :show="showNewIssue" @close="closeNewIssue"></new-issue>
+    <new-issue :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
     <issue-detail :show="showIssueDetail" @close="closeIssueDetail"></issue-detail>
   </div>
 </template>

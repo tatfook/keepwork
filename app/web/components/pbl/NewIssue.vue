@@ -25,11 +25,7 @@
           <div class="sketch-box-content">
             <!-- 指派头像显示 -->
             <div class="player">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-              <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
+              <!-- <img class="player-portrait" src="http://127.0.0.1:7001/public/img/default_portrait.png" alt=""> -->
               <span class="assigns-btn"></span>
             </div>
           </div>
@@ -50,12 +46,15 @@
 <script>
 import { keepwork } from '@/api'
 import _ from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'NewIssue',
   props: {
-    show: Boolean
+    show: Boolean,
+    projectId: {
+      required: true
+    },
   },
   data() {
     return {
@@ -66,14 +65,27 @@ export default {
       descriptionText: '这里是issue的描述文字'
     }
   },
+  async created(){
+    await this.getProjectMember({
+      objectId: this.projectId,
+      objectType: 5
+    })
+  },
+  mounted(){
+    console.log('assign',this.memberList)
+  },
   computed: {
-    projectId() {
-      return _.get(this.$route, 'params.id')
-    }
+    ...mapGetters({
+      pblProjectMemberList: 'pbl/projectMemberList'
+    }),
+    memberList() {
+      return this.pblProjectMemberList({ projectId: this.projectId })
+    },
   },
   methods: {
      ...mapActions({
-      getProjectIssues: 'pbl/getProjectIssues'
+      getProjectIssues: 'pbl/getProjectIssues',
+      getProjectMember: 'pbl/getProjectMember',      
     }),
     handleCloseTag(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
@@ -96,21 +108,23 @@ export default {
       this.$emit('close')
     },
     async finishedCreateIssue() {
-      let payload = {
-        objectType: 5,
-        objectId: this.projectId,
-        title: this.issueTitle,
-        content: this.descriptionText,
-        tags: this.dynamicTags.toString().split(',').join('|'),
-        assigns: '60|37'
-      }
-      await keepwork.issues
-        .createIssue(payload)
-        .then(res => {
-          this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
-          this.handleClose()
-          })
-        .catch(err => console.error(err))
+      this.$nextTick(async () => {
+        let payload = {
+          objectType: 5,
+          objectId: this.projectId,
+          title: this.issueTitle,
+          content: this.descriptionText,
+          tags: this.dynamicTags.toString().split(',').join('|'),
+          assigns: ''
+        }
+        await keepwork.issues
+          .createIssue(payload)
+          .then(res => {
+            this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+            this.handleClose()
+            })
+          .catch(err => console.error(err))
+      })
     }
   }
 }
@@ -173,6 +187,7 @@ export default {
               border: 1px solid #e8e8e8;
               display: inline-block;
               position: relative;
+              margin-top: 8px;
               &::after{
                 content: '';
                 height: 16px;
