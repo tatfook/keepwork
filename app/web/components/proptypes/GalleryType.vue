@@ -29,7 +29,7 @@
           <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
         </div>
 
-        <el-input :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
+        <el-input v-if="!item.type || item.type === 'images'" :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
           <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
           <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
           <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
@@ -38,6 +38,11 @@
             </el-option>
           </el-select>
         </el-input>
+
+        <el-select v-if="!item.type || item.type === 'images'" v-model="value" class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
+          <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
+        </el-select>
+
       </div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
@@ -55,11 +60,23 @@ export default {
     optionsData: Object
   },
   data() {
+    let self = this
     return {
       selectedIndex: 0,
       isSkyDriveManagerDialogShow: false,
       autoplay: false,
-      playloop: false
+      playloop: false,
+      linkTargets: [
+        {
+          label: self.$t('editor.selfWindowOpen'),
+          value: '_self'
+        },
+        {
+          label: self.$t('editor.newWindowOpen'),
+          value: '_blank'
+        }
+      ],
+      value: ''
     }
   },
   async mounted() {
@@ -254,6 +271,14 @@ export default {
       label {
         display: block;
         margin-left: 0px;
+      }
+    }
+    .select-targetType {
+      margin-top: 11px;
+      width: auto;
+
+      .el-input__inner {
+        color: #909399;
       }
     }
   }
