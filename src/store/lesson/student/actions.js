@@ -2,7 +2,6 @@ import { lesson } from '@/api'
 import { props } from './mutations'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
-// import uuid from 'uuid/v1'
 
 let {
   SET_USER_SUBSCRIBES,
@@ -213,10 +212,11 @@ const actions = {
     },
     { state = 0 }
   ) {
-    const { token, classId, nickname } = visitorInfo
-    learnRecords.username = nickname || 'visitor'
-    learnRecords.name = nickname || 'visitor'
+    const { token, classId, nickname, username } = visitorInfo
+    learnRecords.username = username
+    learnRecords.name = nickname || ''
     learnRecords.status = 'p1'
+    learnRecords.portrait = ''
     if (token && classId && !_.isNumber(token)) {
       await lesson.visitor.uploadLearnRecords({
         token,
@@ -267,32 +267,18 @@ const actions = {
     commit(CLEAR_VISITOR_INFO)
   },
   async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
-    let res = await lesson.classrooms.learnRecordsById(id).catch(e => console.error(e))
+    const { token } = visitorInfo
+    let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
     let _visitorInfo = _.clone(visitorInfo)
-    let username = _.get(res, 'extra.username', '')
+    let username = _.get(res, 'data.extra.username', '')
     if (username) {
       _visitorInfo.username = username
       commit(SAVE_VISITOR_INFO, _visitorInfo)
     }
-    let quiz = _.get(res, 'extra.quiz', '')
+    let quiz = _.get(res.data, 'extra.quiz', '')
     if (quiz) {
-      dispatch('resumeQuiz', { learnRecords: res })
+      dispatch('resumeQuiz', { learnRecords: res.data })
     }
-  },
-  async checkLessonWithRecord({ commit }, { packageId, lessonId }) {
-    let learnRecords = await lesson.users
-      .learnRecords()
-      .catch(e => console.error(e))
-    let lastRecord = learnRecords.rows[learnRecords.rows.length - 1]
-    if (Number(lastRecord.state) === 0) {
-      const { packageId: _packageId, lessonId: _lessonId } = lastRecord
-      if (packageId === _packageId && lessonId === _lessonId) {
-        console.log(lastRecord)
-        commit(CREATE_LEARN_RECORDS_SUCCESS, lastRecord)
-        return true
-      }
-    }
-    return false
   }
 }
 export default actions

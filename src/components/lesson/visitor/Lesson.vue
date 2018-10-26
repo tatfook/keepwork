@@ -36,7 +36,6 @@ export default {
     this.isLoading = true
     const { key = '', token, id, nickname = '' } = this.$route.query
     this.classKey = key
-    this.resetUrl()
     this.saveVisitorInfo({ classId: id, key, token, nickname })
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
@@ -45,9 +44,10 @@ export default {
       console.error(e)
     )
     window.document.title = this.lessonName
-    if (id && token && _.isNumber(id) && !_.isNumber(token)) {
+    if (id && token) {
       await this.resumeVisitorLearnRecords(id)
     }
+    this.resetUrl()
     this.isLoading = false
   },
   destroyed() {
