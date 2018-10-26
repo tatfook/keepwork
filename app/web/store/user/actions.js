@@ -561,7 +561,9 @@ const actions = {
     return filelist
   },
   async uploadFileToSkyDrive(context, { file, filename, onStart, onProgress }) {
+    let { dispatch } = context
     let { key } = await skyDrive.upload({ file, filename, onStart, onProgress })
+    await dispatch('refreshSkyDrive', { useCache: false })
     return { key }
   },
   async removeFileFromSkyDrive(context, { file }) {

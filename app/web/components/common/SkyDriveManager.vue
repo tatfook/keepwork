@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
-    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :isEditorPage='isEditorPage' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' :isEditorPage='isEditorPage' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -17,6 +17,10 @@ export default {
     mediaLibrary: {
       type: Boolean,
       default: false
+    },
+    insertable: {
+      type: Boolean,
+      default: true
     },
     isVideoTabShow: Boolean
   },
@@ -39,15 +43,24 @@ export default {
   computed: {
     ...mapGetters({
       userSkyDriveInfo: 'user/skyDriveInfo',
-      userSkyDriveFileList: 'user/skyDriveFileList'
+      userRawUrlByFileId: 'user/rawUrlByFileId',
+      userSkyDriveFileList: 'user/skyDriveFileList',
+      activePageInfo: 'activePageInfo',
+      userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId'
     }),
+    isEditorPage() {
+      return _.get(this.$route, 'name') === 'Editor'
+    },
+    tableTypeComp() {
+      return this.isMounted ? this.$refs.tableTypeComp : ''
+    },
+    mediaTypeComp() {
+      return this.isMounted ? this.$refs.mediaTypeComp : ''
+    },
     searchWord() {
-      if (!this.isMounted) {
-        return ''
-      }
       return this.defaultMode
-        ? this.$refs.tableTypeComp.searchWord
-        : this.$refs.mediaTypeComp.searchWord
+        ? this.tableTypeComp.searchWord
+        : this.mediaTypeComp.searchWord
     },
     info() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
@@ -94,21 +107,20 @@ export default {
       })
       return _.sortBy(mediaDatas, 'updateAt')
     },
+    mediaFilterType() {
+      return this.isMounted ? this.mediaTypeComp.mediaFilterType : 'image'
+    },
     skyDriveTableReference() {
       return _.get(this.$refs, 'tableTypeComp.$refs.skyDriveTable')
-    },
-    mediaFilterType() {
-      if (!this.isMounted) {
-        return 'image'
-      }
-      return this.$refs.mediaTypeComp.mediaFilterType
     }
   },
   methods: {
     ...mapActions({
       userRefreshSkyDrive: 'user/refreshSkyDrive',
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
-      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
+      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
+      userGetFileRawUrl: 'user/getFileRawUrl',
+      userUseFileInSite: 'user/useFileInSite'
     }),
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
@@ -155,14 +167,7 @@ export default {
       if (!file) return
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
-        this.uploadingFiles[fileIndex].state = 'error'
-        this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
-        await waitForMilliSeconds(Math.random() * 1000)
-        this.$notify({
-          title: this.$t('common.failure'),
-          message: file.name + ' ' + filenameValidateResult,
-          type: 'error'
-        })
+        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
         return
       }
       let that = this
@@ -175,20 +180,13 @@ export default {
           fileIndex = _.findIndex(that.uploadingFiles, ['filename', file.name])
           that.uploadingFiles[fileIndex].percent = progress.percent
         }
+      }).catch(err => {
+        fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
+        this.uploadingFiles[fileIndex].state = 'error'
+        console.error(err)
       })
-        .then(async () => {
-          fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
-          this.uploadingFiles[fileIndex].state = 'success'
-          this.uploadingFiles[fileIndex].updatedAt = new Date()
-          await this.userRefreshSkyDrive({ useCache: false }).catch(err =>
-            console.error(err)
-          )
-        })
-        .catch(err => {
-          fileIndex = _.findIndex(this.uploadingFiles, ['filename', file.name])
-          this.uploadingFiles[fileIndex].state = 'error'
-          console.error(err)
-        })
+      this.uploadingFiles[fileIndex].state = 'success'
+      this.uploadingFiles[fileIndex].updatedAt = new Date()
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
@@ -198,6 +196,16 @@ export default {
         ? errMsg
         : true
     },
+    async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
+      this.uploadingFiles[fileIndex].state = 'error'
+      this.uploadingFiles[fileIndex].errorMsg = filenameValidateResult
+      await waitForMilliSeconds(Math.random() * 1000)
+      this.$notify({
+        title: this.$t('common.failure'),
+        message: file.name + ' ' + filenameValidateResult,
+        type: 'error'
+      })
+    },
     itemFilterBySearchWord(item) {
       if (!item) return false
       let { filename } = item
@@ -206,10 +214,52 @@ export default {
       let filenameLowerCase = (filename || '').toLowerCase()
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
-    async handleInsert({ file, url }) {
-      this.$emit('close', { file, url })
+    async handleGetUrl({ file }) {
+      return this.isEditorPage
+        ? await this.getSiteFileUrl(file)
+        : await this.getFileRawUrl(file)
     },
-    async handleRemove(file) {
+    async handleInsert({ file }) {
+      this.$emit('close', { file, url: this.handleGetUrl({ file }) })
+    },
+    async handleCopy(file) {
+      this.$emit('copy', file)
+      let toCopyPrefix = this.handleGetUrl({ file })
+      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
+      await this.$confirm(toCopyLink, {
+        confirmButtonText: this.$t('common.copy'),
+        cancelButtonText: this.$t('common.Cancel')
+      })
+      this.$copyText(toCopyLink).catch(e => {
+        console.error(e)
+        this.$message({
+          showClose: true,
+          message: this.$t('editor.copyFail'),
+          type: 'error'
+        })
+      })
+      this.$message({
+        showClose: true,
+        message: this.$t('editor.copySuccess'),
+        type: 'success'
+      })
+    },
+    async getSiteFileUrl(file) {
+      let { sitepath: sitePath } = this.activePageInfo
+      let fileId = file.id
+      this.loading = true
+      await this.userUseFileInSite({ fileId, sitePath }).catch()
+      this.loading = false
+      return this.userSiteFileBySitePathAndFileId({ fileId, sitePath })
+    },
+    async getFileRawUrl(file) {
+      this.loading = true
+      let fileId = file.id
+      await this.userGetFileRawUrl({ fileId })
+      this.loading = false
+      return this.userRawUrlByFileId({ fileId })
+    },
+    async handleRemove(files) {
       await this.$confirm(
         this.$t('skydrive.removeFileConfirmMsg'),
         this.$t('editor.delNotice'),
@@ -219,10 +269,10 @@ export default {
           type: 'warning'
         }
       )
-
       this.loading = true
-      await this.userRemoveFileFromSkyDrive({ file }).catch(err =>
-        console.error(err)
+      files = files.length ? files : [files]
+      await Promise.all(
+        files.map(file => this.userRemoveFileFromSkyDrive({ file }).catch())
       )
       this.selectedMediaItem = null
       this.loading = false
@@ -234,9 +284,7 @@ export default {
           this.qiniuUploadSubscriptions,
           filename
         )
-        if (removingFileSubscribtion) {
-          removingFileSubscribtion.unsubscribe()
-        }
+        removingFileSubscribtion && removingFileSubscribtion.unsubscribe()
       }
       this.uploadingFiles = _.remove(this.uploadingFiles, file => {
         return file.filename !== filename
@@ -249,4 +297,3 @@ export default {
   }
 }
 </script>
-

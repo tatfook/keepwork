@@ -7,6 +7,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueClipboard from 'vue-clipboard2'
 import editorModule from '@/store/editor'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
@@ -18,6 +19,7 @@ import EditorViewport from '@/components/editor/EditorViewport'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueClipboard)
 
 const i18n = new VueI18n({
   locale,

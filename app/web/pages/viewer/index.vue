@@ -26,6 +26,7 @@ import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
+import VueClipboard from 'vue-clipboard2'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
@@ -48,6 +49,7 @@ Vue.use(ElementUI.Popover)
 Vue.use(VTooltip)
 
 Vue.use(VueI18n)
+Vue.use(VueClipboard)
 
 const i18n = new VueI18n({
   locale,

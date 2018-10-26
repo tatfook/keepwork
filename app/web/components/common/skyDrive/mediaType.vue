@@ -94,17 +94,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      userRawUrlByFileId: 'user/rawUrlByFileId',
-      activePageInfo: 'activePageInfo',
-      userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId'
-    }),
-    nowPageName() {
-      return this.$route.name
-    },
-    isEditorPage() {
-      return this.nowPageName === 'Editor'
-    },
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90
@@ -135,10 +124,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      userGetFileRawUrl: 'user/getFileRawUrl',
-      userUseFileInSite: 'user/useFileInSite'
-    }),
     handleUploadFile(e) {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
@@ -161,31 +146,7 @@ export default {
       if (!file.checkPassed) {
         return
       }
-      let url = ''
-
-      if (this.isEditorPage) {
-        url = await this.getSiteFileUrl(file)
-      } else {
-        url = await this.getFileRawUrl(file)
-      }
-      this.$emit('insert', { file, url: `${url}#${file.filename}` })
-    },
-    async getSiteFileUrl(file) {
-      let { sitepath: sitePath } = this.activePageInfo
-      let payload = { fileId: file.id, sitePath }
-      this.loading = true
-      await this.userUseFileInSite(payload).catch(e => console.error(e))
-      this.loading = false
-      let url = this.userSiteFileBySitePathAndFileId(payload)
-      return url
-    },
-    async getFileRawUrl(file) {
-      this.loading = true
-      let fileId = file.id
-      await this.userGetFileRawUrl({ fileId })
-      let url = this.userRawUrlByFileId({ fileId })
-      this.loading = false
-      return url
+      this.$emit('insert', { file })
     },
     changeMediaFilterType(type) {
       this.mediaFilterType = type
