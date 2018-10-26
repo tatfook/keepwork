@@ -8,7 +8,7 @@
           <div class="gallery-type-item-img-cover">
             <span>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)"></el-button>
+              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)" :disabled="isDisabled"></el-button>
             </span>
           </div>
         </div>
@@ -19,7 +19,7 @@
             <span>
               <el-button class="gallery-type-play-img-btn iconfont icon-video" size="mini" round @click="handlePlay(index)"></el-button>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)"></el-button>
+              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)" :disabled="isDisabled"></el-button>
             </span>
           </div>
         </div>
@@ -104,6 +104,13 @@ export default {
         }
       },
       set() {
+      }
+    },
+    isDisabled() {
+      if(this.galleryData.length <= 1) {
+        return true
+      }else {
+        return false
       }
     }
   },
