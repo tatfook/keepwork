@@ -82,9 +82,11 @@ export const users = {
   createLearnRecords: payload => post(`learnRecords`, payload),
   learnRecords: () => get(`learnRecords`),
   verifyToken: ({ token }) => {
-    axios.interceptors.request.eject(endpointWithoutToken)
-    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    return endpointWithoutToken.get('users')
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.post('users')
   }
 }
 
@@ -110,12 +112,21 @@ export const classrooms = {
 
 export const visitor = {
   uploadLearnRecords: ({ token, classId, learnRecords, state }) => {
-    axios.interceptors.request.eject(endpointWithoutToken)
-    endpointWithoutToken.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    return endpointWithoutToken.put(`learnRecords/${classId}`, {
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.put(`learnRecords/${classId}`, {
       extra: learnRecords,
       state
     })
+  },
+  learnRecordsById: (id, token) => {
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.get(`learnRecords/${id}`)
   }
 }
 
