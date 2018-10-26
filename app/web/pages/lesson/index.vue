@@ -23,6 +23,7 @@ import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
+import VueClipboard from 'vue-clipboard2'
 import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
@@ -31,6 +32,7 @@ import LoginDialog from '@/components/common/LoginDialog'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueClipboard)
 Vue.component(Vhistogram.name, Vhistogram)
 
 const i18n = new VueI18n({

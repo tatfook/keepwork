@@ -1,7 +1,7 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
-    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :isEditorPage='isEditorPage' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' :isEditorPage='isEditorPage' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -17,6 +17,10 @@ export default {
     mediaLibrary: {
       type: Boolean,
       default: false
+    },
+    insertable: {
+      type: Boolean,
+      default: true
     },
     isVideoTabShow: Boolean
   },
@@ -39,8 +43,17 @@ export default {
   computed: {
     ...mapGetters({
       userSkyDriveInfo: 'user/skyDriveInfo',
-      userSkyDriveFileList: 'user/skyDriveFileList'
+      userRawUrlByFileId: 'user/rawUrlByFileId',
+      userSkyDriveFileList: 'user/skyDriveFileList',
+      activePageInfo: 'activePageInfo',
+      userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId'
     }),
+    nowPageName() {
+      return this.$route.name
+    },
+    isEditorPage() {
+      return this.nowPageName === 'Editor'
+    },
     searchWord() {
       if (!this.isMounted) {
         return ''
@@ -108,7 +121,9 @@ export default {
     ...mapActions({
       userRefreshSkyDrive: 'user/refreshSkyDrive',
       userRemoveFileFromSkyDrive: 'user/removeFileFromSkyDrive',
-      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
+      userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive',
+      userGetFileRawUrl: 'user/getFileRawUrl',
+      userUseFileInSite: 'user/useFileInSite'
     }),
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
@@ -206,8 +221,64 @@ export default {
       let filenameLowerCase = (filename || '').toLowerCase()
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
-    async handleInsert({ file, url }) {
+    async handleInsert({ file }) {
+      let url = ''
+
+      if (this.isEditorPage) {
+        url = await this.getSiteFileUrl(file)
+      } else {
+        url = await this.getFileRawUrl(file)
+      }
       this.$emit('close', { file, url })
+    },
+     async handleCopy(file) {
+      this.$emit('copy', file)
+      let toCopyPrefix=''
+      if (this.isEditorPage) {
+        toCopyPrefix = await this.getSiteFileUrl(file)
+      } else {
+        toCopyPrefix = await this.getFileRawUrl(file)
+      }
+      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
+
+      await this.$confirm(toCopyLink, {
+        confirmButtonText: this.$t('common.copy'),
+        cancelButtonText: this.$t('common.Cancel')
+      })
+
+      this.$copyText(toCopyLink)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: this.$t('editor.copySuccess'),
+            type: 'success'
+          })
+        })
+        .catch(e => {
+          console.error(e)
+          this.$message({
+            showClose: true,
+            message: this.$t('editor.copyFail'),
+            type: 'error'
+          })
+        })
+    },
+    async getSiteFileUrl(file) {
+      let { sitepath: sitePath } = this.activePageInfo
+      let payload = { fileId: file.id, sitePath }
+      this.loading = true
+      await this.userUseFileInSite(payload).catch(e => console.error(e))
+      this.loading = false
+      let url = this.userSiteFileBySitePathAndFileId(payload)
+      return url
+    },
+    async getFileRawUrl(file) {
+      this.loading = true
+      let fileId = file.id
+      await this.userGetFileRawUrl({ fileId })
+      let url = this.userRawUrlByFileId({ fileId })
+      this.loading = false
+      return url
     },
     async handleRemove(file) {
       await this.$confirm(

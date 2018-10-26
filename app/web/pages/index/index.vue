@@ -29,6 +29,7 @@ import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import lessonModule from '@/store/lesson'
+import VueClipboard from 'vue-clipboard2'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -42,6 +43,7 @@ import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
+Vue.use(VueClipboard)
 
 Vue.use(VueI18n)
 

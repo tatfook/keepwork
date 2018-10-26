@@ -47,7 +47,7 @@
           </span>
           <span v-else>
             <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copyURI')" @click='handleCopy(scope.row)'></span>
-            <span class='iconfont icon-insert' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
+            <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
             <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
 
             <el-dropdown>
@@ -104,6 +104,10 @@ export default {
     skyDriveTableDataWithUploading: {
       type: Array,
       required: true
+    },
+    insertable: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -183,44 +187,11 @@ export default {
       )
       this.loading = false
     },
-    async getSiteFileUrl(file) {
-      let { sitepath: sitePath } = this.activePageInfo
-      let payload = { fileId: file.id, sitePath }
-      this.loading = true
-      await this.userUseFileInSite(payload).catch(e => console.error(e))
-      this.loading = false
-      let url = this.userSiteFileBySitePathAndFileId(payload)
-      return url
-    },
     async handleCopy(file) {
       if (!file && !file.checkPassed) {
         return false
       }
-
-      let toCopyPrefix = await this.getSiteFileUrl(file)
-      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
-
-      await this.$confirm(toCopyLink, {
-        confirmButtonText: this.$t('common.copy'),
-        cancelButtonText: this.$t('common.Cancel')
-      })
-
-      this.$copyText(toCopyLink)
-        .then(res => {
-          this.$message({
-            showClose: true,
-            message: this.$t('editor.copySuccess'),
-            type: 'success'
-          })
-        })
-        .catch(e => {
-          console.error(e)
-          this.$message({
-            showClose: true,
-            message: this.$t('editor.copyFail'),
-            type: 'error'
-          })
-        })
+      this.$emit('copy', file)
     },
     async handleRename(item) {
       let { _id, ext, filename, key } = item
@@ -276,8 +247,7 @@ export default {
       if (!file.checkPassed) {
         return
       }
-      let url = await this.getSiteFileUrl(file)
-      this.$emit('insert', { file, url: `${url}#${file.filename}` })
+      this.$emit('insert', { file })
     },
     handleRemove(file) {
       this.$emit('remove', file)
@@ -344,6 +314,9 @@ export default {
   &-cell-danger-text {
     color: #f56c6c;
   }
+  &-cell-actions {
+    text-align: right;
+  }
   &-cell-actions,
   &-cell-actions-menu {
     [class*='icon'] {
@@ -368,9 +341,6 @@ export default {
     }
     [class*='iconfont']::before {
       font-size: 16px;
-    }
-    .el-dropdown {
-      float: right;
     }
     .el-icon-more {
       color: #858585;
