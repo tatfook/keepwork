@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column sortable :label="$t('skydrive.checkedState')" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span class="table-type-cell-danger-text" v-if="scope.row.state === 'error'" :title="scope.row.errorMsg">{{$t('skydrive.uploadFailed')}}</span>
+          <span v-if="scope.row.state === 'error'" class="table-type-cell-danger-text" :title="scope.row.errorMsg">{{$t('skydrive.uploadFailed')}}</span>
           <span v-else>{{scope.row.checkedState}}</span>
         </template>
       </el-table-column>
@@ -49,19 +49,16 @@
             <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copyURI')" @click='handleCopy(scope.row)'></span>
             <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
             <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
-
             <el-dropdown>
               <span class="el-dropdown-link">
                 <i class="el-icon-more el-icon--right"></i>
               </span>
               <el-dropdown-menu class='table-type-cell-actions-menu' slot="dropdown">
                 <el-dropdown-item @click.native='handleRename(scope.row)'>
-                  <span class='el-icon-edit'></span>
-                  {{ $t('common.rename') }}
+                  <span class='el-icon-edit'></span>{{ $t('common.rename') }}
                 </el-dropdown-item>
                 <el-dropdown-item @click.native='handleRemove(scope.row)'>
-                  <span class='el-icon-delete'></span>
-                  {{ $t('common.remove') }}
+                  <span class='el-icon-delete'></span>{{ $t('common.remove') }}
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -167,25 +164,7 @@ export default {
       }).catch(e => console.error(e))
     },
     async removeAllSelected() {
-      await this.$confirm(
-        this.$t('skydrive.removeFileConfirmMsg'),
-        this.$t('editor.delNotice'),
-        {
-          confirmButtonText: this.$t('common.OK'),
-          cancelButtonText: this.$t('common.Cancel'),
-          type: 'warning'
-        }
-      )
-
-      this.loading = true
-      await Promise.all(
-        this.multipleSelectionResults.map(file =>
-          this.userRemoveFileFromSkyDrive({ file }).catch(err =>
-            console.error(err)
-          )
-        )
-      )
-      this.loading = false
+      this.$emit('remove', this.multipleSelectionResults)
     },
     async handleCopy(file) {
       if (!file && !file.checkPassed) {
@@ -193,10 +172,8 @@ export default {
       }
       this.$emit('copy', file)
     },
-    async handleRename(item) {
-      let { _id, ext, filename, key } = item
-      let bareFilename = getBareFilename(filename)
-      let { value: newname } = await this.$prompt(
+    async showRenamePrompt({ bareFilename, filename, ext }) {
+      return await this.$prompt(
         this.$t('skydrive.newFilenamePromptMsg'),
         this.$t('common.rename'),
         {
@@ -206,24 +183,28 @@ export default {
           inputValidator: str => {
             if (str === bareFilename || str === filename) return true
             if (!str) return this.$t('skydrive.nameEmptyError')
-
             let isFilenameValid = this.testFilenameIsValid(str)
             if (typeof isFilenameValid === 'string') return isFilenameValid
-
             return this.filenameValidator(getFilenameWithExt(str, ext))
           }
         }
       )
-
+    },
+    async handleRename(item) {
+      let { _id, ext, filename, key } = item
+      let bareFilename = getBareFilename(filename)
+      let { value: newname } = await this.showRenamePrompt({
+        bareFilename,
+        filename,
+        ext
+      })
       newname = (newname || '').trim()
       if (!newname) return
-
       let newnameExt = /.+\./.test(newname) ? newname.split('.').pop() : ''
       newnameExt = newnameExt.toLowerCase()
       newname = newnameExt !== ext ? `${newname}.${ext}` : newname
       let newFilename = newname
       if (newFilename === filename) return
-
       this.loading = true
       await this.userChangeFileNameInSkyDrive({
         key,
@@ -316,6 +297,9 @@ export default {
   }
   &-cell-actions {
     text-align: right;
+    .cell {
+      white-space: nowrap;
+    }
   }
   &-cell-actions,
   &-cell-actions-menu {
