@@ -406,10 +406,11 @@ export default {
       margin: 0 auto;
       max-width: 1200px;
       .box {
-        margin-top: 24px;
+        margin: 24px 0;
         padding: 20px 36px 20px 24px;
         display: flex;
         border-right: 1px solid #eee;
+        // border: 1px solid red;
         cursor: pointer;
         &-text {
           flex: 1;
@@ -434,6 +435,9 @@ export default {
           img {
             width: 100%;
           }
+        }
+        &:hover{
+          background: rgb(222, 229, 248);
         }
       }
       .no-line {
