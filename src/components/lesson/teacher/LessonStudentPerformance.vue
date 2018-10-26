@@ -92,7 +92,7 @@ export default {
       if (this.checkLeave(value)) {
         return this.$t('lesson.leave')
       }
-     return this.$t('lesson.online')
+      return this.$t('lesson.online')
     },
     formatAvatar(value = '') {
       return value.substr(0, 4).toLowerCase() === 'http'
@@ -206,7 +206,10 @@ export default {
     },
     tableHeaderQuizzesPopover() {
       if (!this.isHasData) return []
-      let quiz = this.learnRecordsFilter[0].quiz
+      // let quiz =
+      //   this.classroomQuiz ||
+      //   this.learnRecordsFilter.filter(i => i.extra.quiz)[0].quiz
+      let quiz = this.classroomQuiz
       return (
         quiz &&
         quiz.map(({ data: { answer, type, title, options, desc } }) => ({
@@ -247,10 +250,13 @@ export default {
     },
     tableQuizzes() {
       return this.isHasData
-        ? this.learnRecordsFilter[0].quiz.map(
-            (item, index) => `quiz${index + 1}`
-          )
+        ? this.classroomQuiz.map((item, index) => `quiz${index + 1}`)
         : []
+      // ? (
+      //     this.classroomQuiz ||
+      //     this.learnRecordsFilter.filter(i => i.extra.quiz)[0].quiz
+      //   ).map((item, index) => `quiz${index + 1}`)
+      // : []
     },
     alphabet() {
       return Array.from({ length: 26 }, (i, index) =>

@@ -77,9 +77,9 @@ router.beforeEach(async (to, from, next) => {
     if (id && token) {
       console.warn('visitor')
       if (Number(id) === 0 && Number(token) === 0) {
-        return next({ name: 'VisitorLesson', params })
+        return next({ name: 'Anonymous', params })
       }
-      return next({ name: 'VisitorLesson', params, query })
+      return next({ name: 'Anonymous', params, query })
     }
 
     if (query.key && query.key !== 0 && Cookies.get('token')) {
@@ -97,6 +97,7 @@ router.beforeEach(async (to, from, next) => {
       }
       return next({ name: 'StudentCenter' })
     }
+    return next({ name: 'Anonymous', params })
   }
 
   if (to.matched.some(record => record.meta.requireAuth)) {

@@ -34,7 +34,7 @@ export default {
   },
   async mounted() {
     this.isLoading = true
-    const { key = '', token, id, nickname = 'visitor' } = this.$route.query
+    const { key = '', token, id, nickname = '' } = this.$route.query
     this.classKey = key
     this.resetUrl()
     this.saveVisitorInfo({ classId: id, key, token, nickname })
@@ -46,11 +46,7 @@ export default {
     )
     window.document.title = this.lessonName
     if (id && token && _.isNumber(id) && !_.isNumber(token)) {
-      await this.uploadVisitorLearnRecords({
-        packageId,
-        lessonId,
-        state: 0
-      })
+      await this.resumeVisitorLearnRecords(id)
     }
     this.isLoading = false
   },
@@ -68,7 +64,8 @@ export default {
       changeStatus: 'lesson/student/changeStatus',
       saveVisitorInfo: 'lesson/student/saveVisitorInfo',
       clearVisitorInfo: 'lesson/student/clearVisitorInfo',
-      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords'
+      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
+      resumeVisitorLearnRecords: 'lesson/student/resumeVisitorLearnRecords'
     }),
     resetUrl() {
       window.location.href = this.$router.resolve({
