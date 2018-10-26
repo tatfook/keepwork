@@ -172,7 +172,8 @@ export default {
             .filter(i => {
               return (
                 i.packageId === this.classroom.packageId &&
-                i.lessonId === this.classroom.lessonId
+                i.lessonId === this.classroom.lessonId &&
+                i.extra.username
               )
             })
             .map(
@@ -180,10 +181,10 @@ export default {
                 userId,
                 state,
                 extra: {
-                  name = 'visitor',
+                  name = '',
                   portrait,
                   quiz = [],
-                  username = 'visitor',
+                  username = '',
                   status = 'k1',
                   world = ''
                 }

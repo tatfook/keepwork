@@ -43,21 +43,15 @@ const store = new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      paths: [
-        'user.webTemplateConfig',
-        'user.skyDrive'
-      ]
+      paths: ['user.webTemplateConfig', 'user.skyDrive']
     })
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some(record => record.meta.autoLogin)) {
-    const {
-      query: { token, key },
-      name,
-      params
-    } = to
+  if (to.matched.some(record => record.meta.auto)) {
+    const { query, params } = to
+    const { token, key, id } = query
     if (token && token !== 0) {
       let userInfo = await keepwork.user
         .verifyToken({ token })
@@ -65,45 +59,43 @@ router.beforeEach(async (to, from, next) => {
       if (userInfo) {
         Cookies.set('token', token)
         if (key && key !== 0) {
-          await store.dispatch('lesson/student/enterClassRoom', {
-            key
-          }).catch(e => console.error(e))
-          return next({ name, params, query: { reload: true, dialog: true, device: 'paracraft' } })
+          await store
+            .dispatch('lesson/student/enterClassRoom', {
+              key
+            })
+            .catch(e => console.error(e))
+          return next({
+            name: 'LessonStudent',
+            params,
+            query: { reload: true, dialog: true, device: 'paracraft' }
+          })
         }
-        return next({ name, params, query: { reload: true } })
+        return next({ name: 'LessonStudent', params, query: { reload: true } })
       }
     }
-  }
 
-  if (to.matched.some(record => record.meta.visitor)) {
-    const { query, params } = to
-    if (query.id && query.token) {
-      if (Number(query.id) === 0 && Number(query.token) === 0) {
+    if (id && token) {
+      console.warn('visitor')
+      if (Number(id) === 0 && Number(token) === 0) {
         return next({ name: 'VisitorLesson', params })
       }
       return next({ name: 'VisitorLesson', params, query })
     }
-  }
 
-  if (to.matched.some(record => record.meta.autoJoin)) {
-    const { query } = to
-    if (query.key && query.key !== 0) {
-      await store
-        .dispatch('lesson/student/enterClassRoom', { key: query.key })
-        .then(res => {
-          this.$router.push({
-            path: `/student/package/${res.packageId}/lesson/${
-              res.lessonId
-            }?dialog=true`
-          })
+    if (query.key && query.key !== 0 && Cookies.get('token')) {
+      let res = await store
+        .dispatch('lesson/student/enterClassRoom', {
+          key: query.key
         })
-        .catch(e => {
-          this.$message({
-            showClose: true,
-            message: this.$t('lesson.wrongKey'),
-            type: 'error'
-          })
+        .catch(e => console.error('join failure'))
+      if (res) {
+        return next({
+          name: 'LessonStudent',
+          params: { packageId: res.packageId, lessonId: res.lessonId },
+          query: { dialog: true, device: 'paracraft' }
         })
+      }
+      return next({ name: 'StudentCenter' })
     }
   }
 

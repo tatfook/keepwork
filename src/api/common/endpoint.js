@@ -44,7 +44,7 @@ const createEndpoint = (config, parseResponse = true) => {
     },
     async error => {
       const CODES = [401]
-      if (CODES.some(code => code === error.response.status) && Cookies.get('token')) {
+      if (CODES.some(code => code === _.get(error, 'response.status', '')) && Cookies.get('token')) {
         _instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('token')}`
         _instance.post('/user/getProfile').catch(e => {
           if (window.navigator.userAgent.indexOf('Edge') > -1) {
