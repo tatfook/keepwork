@@ -223,7 +223,7 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
           component: LessonStudent,
-          meta: { requireAuth: true, visitor: true, autoJoin: true, autoLogin: true }
+          meta: { requireAuth: true }
         },
         {
           path: 'learnSummary/package/:packageId/lesson/:lessonId',
@@ -246,7 +246,19 @@ export default new Router({
       children: [
         {
           path: 'package/:packageId/lesson/:lessonId',
-          name: 'VisitorLesson',
+          name: 'Visitor',
+          meta: { auto: true }
+        }
+      ]
+    },
+    {
+      path: '/anonymous',
+      name: 'Anonymous',
+      component: Visitor,
+      children: [
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'Anonymous',
           component: VisitorLesson
         }
       ]

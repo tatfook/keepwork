@@ -37,17 +37,17 @@ export default {
       this._notify && this._notify.close()
       this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
     },
-    async intervalCheckClass(delay = 8 * 1000) {
+    async intervalCheckClass(delay = 10 * 1000) {
       await this.checkClassroom()
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
-        await this.intervalCheckClass().catch(
-          e =>
-            this.$message({
-              message: this.$t('lesson.classIsOver'),
-              type: 'warning'
-            }) && this._notify.close()
-        )
+        await this.intervalCheckClass().catch(e => {
+          this.$message({
+            message: this.$t('lesson.classIsOver'),
+            type: 'warning'
+          })
+          this._notify.close()
+        })
       }, delay)
     }
   },
@@ -57,9 +57,7 @@ export default {
       params: { packageId, lessonId }
     } = to
 
-    const {
-      name: fromName
-    } = from
+    const { name: fromName } = from
     let _route = ['LessonStudent']
 
     this._notify && this._notify.close()

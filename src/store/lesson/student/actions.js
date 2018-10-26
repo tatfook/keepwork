@@ -2,7 +2,6 @@ import { lesson } from '@/api'
 import { props } from './mutations'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
-// import uuid from 'uuid/v1'
 
 let {
   SET_USER_SUBSCRIBES,
@@ -91,6 +90,7 @@ const actions = {
     }).catch(e => console.error(e))
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
+    return Promise.resolve(enterClassInfo)
   },
   async resumeTheClass({ commit, dispatch }) {
     let classroom = await lesson.classrooms
@@ -108,8 +108,6 @@ const actions = {
       _classroom['id'] = learnRecordId
       _classroom['classroomId'] = id
       commit(RESUME_CLASSROOM, _classroom)
-      await dispatch('resumeQuiz', { id: learnRecordId })
-      await dispatch('uploadLearnRecords')
     }
   },
   async resumeQuiz(
@@ -214,10 +212,11 @@ const actions = {
     },
     { state = 0 }
   ) {
-    const { token, classId, nickname } = visitorInfo
-    learnRecords.username = nickname || 'visitor'
-    learnRecords.name = nickname || 'visitor'
+    const { token, classId, nickname, username } = visitorInfo
+    learnRecords.username = username
+    learnRecords.name = nickname || ''
     learnRecords.status = 'p1'
+    learnRecords.portrait = ''
     if (token && classId && !_.isNumber(token)) {
       await lesson.visitor.uploadLearnRecords({
         token,
@@ -267,20 +266,19 @@ const actions = {
   async clearVisitorInfo({ commit }) {
     commit(CLEAR_VISITOR_INFO)
   },
-  async checkLessonWithRecord({ commit }, { packageId, lessonId }) {
-    let learnRecords = await lesson.users
-      .learnRecords()
-      .catch(e => console.error(e))
-    let lastRecord = learnRecords.rows[learnRecords.rows.length - 1]
-    if (Number(lastRecord.state) === 0) {
-      const { packageId: _packageId, lessonId: _lessonId } = lastRecord
-      if (packageId === _packageId && lessonId === _lessonId) {
-        console.log(lastRecord)
-        commit(CREATE_LEARN_RECORDS_SUCCESS, lastRecord)
-        return true
-      }
+  async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
+    const { token } = visitorInfo
+    let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
+    let _visitorInfo = _.clone(visitorInfo)
+    let username = _.get(res, 'data.extra.username', '')
+    if (username) {
+      _visitorInfo.username = username
+      commit(SAVE_VISITOR_INFO, _visitorInfo)
     }
-    return false
+    let quiz = _.get(res.data, 'extra.quiz', '')
+    if (quiz) {
+      dispatch('resumeQuiz', { learnRecords: res.data })
+    }
   }
 }
 export default actions

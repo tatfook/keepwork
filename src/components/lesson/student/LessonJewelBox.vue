@@ -103,6 +103,10 @@ export default {
       this.isShowJewel && this.startTimer()
     }
   },
+  destroyed() {
+    console.log('jewelbox destroyed')
+    clearTimeout(this._timer)
+  },
   computed: {
     ...mapGetters({
       lockCoin: 'lesson/lockCoin',
@@ -166,29 +170,29 @@ export default {
     },
     async startTimer() {
       this.time++
-      if (this.time % 30 === 0 && !this.isBeInClassroom) {
+      if (this.time > 29 && this.time % 30 === 0) {
         let lastLearnRecords = await lesson.lessons
           .getLastLearnRecords()
           .catch(e => console.error(e))
         lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
-        if (
-          lastLearnRecords.length > 0 &&
-          this.learnRecordsId !== lastLearnRecords[0].id
-        ) {
-          return this.$router.push({ name: 'StudentCenter' })
+        if (lastLearnRecords.length > 0 && lastLearnRecords[0].state === 0) {
+          console.warn('check learnRecords', lastLearnRecords[0])
+          if (
+            this.isBeInClassroom &&
+            this.enterClassInfo.id !== lastLearnRecords[0].id
+          ) {
+            return this.$router.push({ name: 'StudentCenter' })
+          }
+          if (
+            !this.isBeInClassroom &&
+            this.learnRecordsId !== lastLearnRecords[0].id
+          ) {
+            return this.$router.push({ name: 'StudentCenter' })
+          }
         }
-        // let learnRecords = await lesson.classrooms
-        //   .learnRecordsById(this._learnRecordId)
-        //   .catch(e => console.error(e))
-        // if (learnRecords && learnRecords.createdAt) {
-        //   let _time = Math.floor(
-        //     (new Date() - new Date(learnRecords.createdAt)) / 1000
-        //   )
-        //   this.time = _time || this.time
-        // }
       }
       clearTimeout(this._timer)
-      if (this.isShowJewel && !this.isBeInClassroom) {
+      if (this.isShowJewel) {
         this._timer = setTimeout(() => {
           this.startTimer()
         }, 1000)
