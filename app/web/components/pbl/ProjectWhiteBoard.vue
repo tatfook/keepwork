@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="project-white-board-content-list">
-        <div class="single-issue" v-for="(issue,index) in issuesList" :key="index">
+        <div class="single-issue" v-for="(issue,index) in projectIssueList" :key="index">
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail">
               <i class="title-icon iconfont icon-check-circle-fill"></i>
@@ -37,8 +37,8 @@
               </span>
             </div>
           </div>
-          <div class="single-issue-join">
-            <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait" alt="">
+          <div class="single-issue-join" v-if="issue.assigns">
+            <!-- <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait" alt=""> -->
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@
 import NewIssue from './NewIssue'
 import IssueDetail from './IssueDetail'
 import _ from 'lodash'
-import { keepwork } from '@/api'
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
@@ -63,7 +63,6 @@ export default {
       showIssueDetail: false,
       searchKeyWord: '',
       select: '',
-      issuesList: []
     }
   },
   components: {
@@ -71,6 +70,13 @@ export default {
     IssueDetail
   },
   computed: {
+    ...mapGetters({
+      issuesList: 'pbl/issuesList'
+    }),
+    projectIssueList(){
+      let tempArr = this.issuesList({ projectId: this.projectId }) || []
+      return tempArr.sort(this.sortByUpdateAt)
+    },
     isEn() {
       return locale === 'en-US'
     },
@@ -81,11 +87,12 @@ export default {
   mounted(){
     let objectId = this.projectId
     let objectType = 5
-    keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(res => {
-      this.issuesList = res.sort(this.sortByUpdateAt)
-    }).catch(err => console.error(err))
+    this.getProjectIssues({ objectId, objectType })
   },
   methods: {
+    ...mapActions({
+      getProjectIssues: 'pbl/getProjectIssues'
+    }),
     goNewIssue() {
       this.showNewIssue = true
     },

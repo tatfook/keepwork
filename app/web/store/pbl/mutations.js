@@ -13,6 +13,7 @@ const GET_COMMENTS_SUCCESS = 'GET_COMMENTS_SUCCESS'
 const GET_MY_ALL_PROJECTS_SUCCESS = 'GET_MY_ALL_PROJECTS_SUCCESS'
 const GET_TYPE_PROJECTS = 'GET_TYPE_PROJECTS'
 const GET_EXCELLENT_PROJECTS = ' GET_EXCELLENT_PROJECTS'
+const GET_PROJECT_ISSUES_SUCCESS = 'GET_PROJECT_ISSUES_SUCCESS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
@@ -28,6 +29,7 @@ export const props = {
   GET_PROJECT_APPLY_STATE_SUCCESS,
   GET_COMMENTS_SUCCESS,
   GET_TYPE_PROJECTS,
+  GET_PROJECT_ISSUES_SUCCESS
 }
 
 const mutations = {
@@ -96,6 +98,12 @@ const mutations = {
     Vue.set(state, 'commentList', {
       ...state.commentList,
       [projectId]: commentList
+    })
+  },
+  [GET_PROJECT_ISSUES_SUCCESS](state, { projectIssues, projectId }) {
+    Vue.set(state, 'issuesList', {
+      ...state.issuesList,
+      [projectId]: projectIssues
     })
   }
 }

@@ -50,6 +50,8 @@
 <script>
 import { keepwork } from '@/api'
 import _ from 'lodash'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'NewIssue',
   props: {
@@ -70,6 +72,9 @@ export default {
     }
   },
   methods: {
+     ...mapActions({
+      getProjectIssues: 'pbl/getProjectIssues'
+    }),
     handleCloseTag(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
     },
@@ -90,8 +95,7 @@ export default {
     handleClose() {
       this.$emit('close')
     },
-    finishedCreateIssue() {
-      console.log('tags', this.dynamicTags)
+    async finishedCreateIssue() {
       let payload = {
         objectType: 5,
         objectId: this.projectId,
@@ -100,10 +104,10 @@ export default {
         tags: this.dynamicTags.toString().split(',').join('|'),
         assigns: '60|37'
       }
-      keepwork.issues
+      await keepwork.issues
         .createIssue(payload)
         .then(res => {
-          console.log(res)
+          this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
           this.handleClose()
           })
         .catch(err => console.error(err))

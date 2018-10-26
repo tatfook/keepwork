@@ -16,7 +16,8 @@ const state = {
   myContributeProjects: [],
   projectApplyState: {},
   commentList: [],
-  projectsType: {}
+  projectsType: {},
+  issuesList: []
 }
 export default {
   namespaced: true,

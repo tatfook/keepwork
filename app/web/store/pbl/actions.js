@@ -15,7 +15,8 @@ let {
   GET_MY_ALL_PROJECTS_SUCCESS,
   GET_PROJECT_APPLY_STATE_SUCCESS,
   GET_COMMENTS_SUCCESS,
-  GET_TYPE_PROJECTS
+  GET_TYPE_PROJECTS,
+  GET_PROJECT_ISSUES_SUCCESS
 } = props
 
 const actions = {
@@ -236,6 +237,12 @@ const actions = {
     }).catch(error => {
       return Promise.reject(error)
     })
+  },
+  async getProjectIssues({ commit }, { objectId, objectType }) {
+    await keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(projectIssues => {
+      console.log('res', projectIssues)
+      commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: objectId })
+    }).catch(err => console.error(err))
   }
 }
 
