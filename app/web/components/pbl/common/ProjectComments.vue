@@ -1,7 +1,7 @@
 <template>
   <div class="project-comments">
     <div class="project-comments-header">
-      评论<span class="project-comments-header-count">(已有{{projectCommentList.length}}条评论)</span>
+      评论<span class="project-comments-header-count">(已有{{totalCommentCount}}条评论)</span>
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
@@ -51,7 +51,8 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       commentList: [],
       isGetAllComment: false,
-      isGetCommentBtnLoading: false
+      isGetCommentBtnLoading: false,
+      totalCommentCount: 0
     }
   },
   computed: {
@@ -81,6 +82,7 @@ export default {
         xOrder: this.xOrder,
         xPerPage: this.xPerPage
       }).catch()
+      this.totalCommentCount = newCommentResult.count
       let newCommentList = newCommentResult.rows
       if (newCommentList.length > 0) {
         this.commentList = _.concat(this.commentList, newCommentList)
@@ -99,27 +101,27 @@ export default {
     },
     async sendComment() {
       this.isAddingComment = true
-      await this.pblCreateComment({
+      let newCommentDetail = await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,
         content: this.newCommenContent
+      }).catch(error => {
+        this.$message({
+          type: 'error',
+          message: '评论失败'
+        })
+        this.isAddingComment = false
+        console.error(error)
       })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '评论成功'
-          })
-          this.isAddingComment = false
-          this.newCommenContent = ''
-        })
-        .catch(error => {
-          this.$message({
-            type: 'error',
-            message: '评论失败'
-          })
-          this.isAddingComment = false
-          console.error(error)
-        })
+      this.xPage = 1
+      this.commentList = []
+      this.getCommentFromBackEnd()
+      this.$message({
+        type: 'success',
+        message: '评论成功'
+      })
+      this.isAddingComment = false
+      this.newCommenContent = ''
     },
     async deleteComment(commentDetail) {
       this.isLoading = true

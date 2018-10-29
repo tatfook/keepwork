@@ -222,12 +222,12 @@ const actions = {
   },
   async createComment(context, { objectType = 5, objectId, content }) {
     let { dispatch } = context
-    await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
-      await dispatch('getComments', { objectType, objectId })
-      return Promise.resolve()
-    }).catch(error => {
+    let newComment = await keepwork.comments.createComment({ objectType, objectId, content }).catch(error => {
       return Promise.reject(error)
-    })
+    }).catch(error => Promise.reject(error))
+    await dispatch('getComments', { objectType, objectId })
+    console.log(newComment)
+    return newComment
   },
   async deleteComment(context, { objectType = 5, objectId, commentId }) {
     let { dispatch } = context
