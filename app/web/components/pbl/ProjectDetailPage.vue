@@ -1,7 +1,13 @@
 <template>
   <div class="project-detail-page">
-    <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner'></project-header>
-    <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner'></router-view>
+    <div v-if="isProjectExist">
+      <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner'></project-header>
+      <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner'></router-view>
+    </div>
+    <div class="project-detail-page-not-found" v-if="!isProjectExist">
+      <img src='@/assets/img/404.png' alt="">
+      <p class="project-detail-page-not-found-info">404</p>
+    </div>
   </div>
 </template>
 <script>
@@ -42,7 +48,8 @@ export default {
     return {
       isLoading: true,
       editingUserId: undefined,
-      isFirstGettingData: true
+      isFirstGettingData: true,
+      isProjectExist: true
     }
   },
   methods: {
@@ -55,7 +62,14 @@ export default {
     async initProjectDetail() {
       this.isFirstGettingData = true
       this.isLoading = true
-      await this.pblGetProjectDetail({ projectId: this.projectId })
+      await this.pblGetProjectDetail({ projectId: this.projectId }).catch(
+        error => {
+          let statusCode = _.get(error, 'response.status', 404)
+          if (statusCode === 404) {
+            this.isProjectExist = false
+          }
+        }
+      )
       await this.initProjectHeaderDetail()
       this.isFirstGettingData = false
       this.isLoading = false
@@ -89,3 +103,13 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.project-detail-page {
+  &-not-found {
+    text-align: center;
+    padding-top: 40px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+}
+</style>

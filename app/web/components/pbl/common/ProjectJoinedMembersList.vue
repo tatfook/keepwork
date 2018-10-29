@@ -17,13 +17,14 @@
         <span class="project-joined-members-list-card-title">项目成员</span>
       </div>
       <div class="project-joined-members-list-card-created">
-        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || projectOwnerPortrait" alt="">
+        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
         <span class="project-joined-members-list-card-username">迟语</span>
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
-      <div class="project-joined-members-list-card-profiles">
+      <div class="project-joined-members-list-card-profiles" v-if="memberList.length">
         <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
+      <div class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
     </el-card>
   </div>
 </template>
@@ -166,6 +167,10 @@ export default {
       &-item {
         padding: 8px;
       }
+    }
+    &-profiles-empty {
+      padding: 16px 8px;
+      text-align: center;
     }
     .el-card__body {
       padding: 0;
