@@ -44,7 +44,7 @@
       </div>
     </div>
     <new-issue :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue"></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail"></issue-detail>
   </div>
 </template>
 <script>
@@ -75,7 +75,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      issuesList: 'pbl/issuesList'
+      issuesList: 'pbl/issuesList',
+      projectDetail: 'pbl/projectDetail'
     }),
     projectIssueList(){
       let tempArr = this.issuesList({ projectId: this.projectId }) || []
@@ -92,7 +93,10 @@ export default {
     },
     projectId() {
       return _.get(this.$route, 'params.id')
-    }
+    },
+    pblProjectDetail() {
+      return this.projectDetail({ projectId: this.projectId })
+    },
   },
   mounted(){
     let objectId = this.projectId
