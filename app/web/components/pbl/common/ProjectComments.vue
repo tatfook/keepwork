@@ -5,7 +5,7 @@
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
-        <img class="project-comments-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+        <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
         <el-input placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
       </div>
       <div class="project-comments-sends-operations">
@@ -53,10 +53,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      pblProjectCommentList: 'pbl/projectCommentList'
+      pblProjectCommentList: 'pbl/projectCommentList',
+      userProfile: 'user/profile'
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
+    },
+    userPortrait() {
+      return _.get(this.userProfile, 'portrait')
     }
   },
   methods: {

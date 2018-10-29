@@ -18,13 +18,13 @@
       </div>
       <div class="project-joined-members-list-card-created">
         <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
-        <span class="project-joined-members-list-card-username">迟语</span>
+        <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
-      <div class="project-joined-members-list-card-profiles" v-if="memberList.length">
+      <div v-if="memberList && memberList.length" class="project-joined-members-list-card-profiles">
         <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
-      <div class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
+      <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
     </el-card>
   </div>
 </template>
@@ -44,7 +44,8 @@ export default {
         return ['table', 'card'].indexOf(value) !== -1
       }
     },
-    projectOwnerPortrait: String
+    projectOwnerPortrait: String,
+    originProjectUsername: String
   },
   async created() {
     this.isLoading = true
