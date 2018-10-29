@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
-      <div class="project-comments-item" v-for="(comment, index) in projectCommentList" :key='index'>
+      <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
         <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
         <div class="project-comments-item-detail">
           <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="project-comments-more">下滑加载更多</div>
+    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'下滑加载更多'}}</div>
   </div>
 </template>
 <script>
@@ -38,17 +38,20 @@ export default {
     }
   },
   async created() {
-    await this.pblGetComments({
-      objectType: 5,
-      objectId: this.projectId
-    })
+    this.getCommentFromBackEnd()
   },
   data() {
     return {
+      xPerPage: 2,
+      xPage: 1,
+      xOrder: 'updatedAt-desc',
       isAddingComment: false,
       isLoading: false,
       newCommenContent: '',
-      defaultPortrait: require('@/assets/img/default_portrait.png')
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
+      commentList: [],
+      isGetAllComment: false,
+      isGetCommentBtnLoading: false
     }
   },
   computed: {
@@ -69,6 +72,31 @@ export default {
       pblCreateComment: 'pbl/createComment',
       pblDeleteComment: 'pbl/deleteComment'
     }),
+    async getCommentFromBackEnd() {
+      this.isGetCommentBtnLoading = true
+      let newCommentResult = await this.pblGetComments({
+        objectType: 5,
+        objectId: this.projectId,
+        xPage: this.xPage,
+        xOrder: this.xOrder,
+        xPerPage: this.xPerPage
+      }).catch()
+      let newCommentList = newCommentResult.rows
+      if (newCommentList.length > 0) {
+        this.commentList = _.concat(this.commentList, newCommentList)
+      } else {
+        this.isGetAllComment = true
+        this.xPage--
+      }
+      this.isGetCommentBtnLoading = false
+    },
+    getMoreComment() {
+      if (this.isGetAllComment) {
+        return
+      }
+      this.xPage++
+      this.getCommentFromBackEnd()
+    },
     async sendComment() {
       this.isAddingComment = true
       await this.pblCreateComment({
@@ -216,6 +244,7 @@ export default {
     color: #909399;
     text-align: center;
     border-top: 1px solid #e8e8e8;
+    cursor: pointer;
   }
 }
 </style>
