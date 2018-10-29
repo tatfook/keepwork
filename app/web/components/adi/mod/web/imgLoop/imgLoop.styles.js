@@ -4,7 +4,8 @@ let emptyData = {
   imgLoop: {
     emptyGallery: {
       img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
-      link: ''
+      link: '',
+      target: '_blank'
     }
   }
 }

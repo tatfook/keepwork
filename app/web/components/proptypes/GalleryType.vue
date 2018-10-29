@@ -39,7 +39,7 @@
           </el-select>
         </el-input>
 
-        <el-select v-if="!item.type || item.type === 'images'" v-model="value" class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
+        <el-select v-if="!item.type || item.type === 'images'" v-model="item.target" @change='handleChange' class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
           <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
         </el-select>
 
@@ -92,14 +92,18 @@ export default {
           return this.originValue
         } else {
           if (this.optionsData && this.optionsData.emptyGallery) {
+
+            this.handleAdd()
+
             return [
               {
                 img: this.optionsData.emptyGallery.img || '',
-                link: this.optionsData.emptyGallery.link || ''
+                link: this.optionsData.emptyGallery.link || '',
+                target: this.optionsData.emptyGallery.target || ''
               }
             ]
           } else {
-            []
+            return []
           }
         }
       },
@@ -120,13 +124,14 @@ export default {
     }),
     handleChange() {
       let tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = this.galleryData
+      tempChangedDataObj[this.editingKey] = this.originValue
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     handleAdd() {
-      this.galleryData.push({
+      this.originValue.push({
         img: '',
-        link: ''
+        link: '',
+        target: ''
       })
 
       this.handleChange()
