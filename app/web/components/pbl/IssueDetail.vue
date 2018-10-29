@@ -2,11 +2,11 @@
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
     <h4 slot="title" class="issue-detail-title">一个新项目/白板/问题详情</h4>
     <div class="issue-detail-header">
-      <div class="issue-title">代码节比赛项目的场景搭建 #8989</div>
+      <div class="issue-title">{{issue.title}} #{{issue.id}}</div>
       <div class="issue-edit"><i class="iconfont icon-edit-square"></i>编辑</div>
     </div>
     <div class="issue-detail-intro">
-      <span class="created-time">3小时前</span>
+      <span class="created-time">{{relativeTime(issue.createdAt)}}</span>
       <span class="created-by">由<span class="name">果果</span>创建</span>
       <span class="created-tag">
         <span class="tag">需求</span>
@@ -63,7 +63,7 @@
         <img src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
       </div>
       <div class="issue-detail-my-idea-content">
-        <div class="username">告诉果果</div>
+        <div class="username">asjdflasd</div>
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
@@ -79,14 +79,29 @@
   </el-dialog>
 </template>
 <script>
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
+
 export default {
   name: 'IssueDetail',
   props: {
-    show: Boolean
+    show: Boolean,
+    issue: {
+      type: Object,
+      default(){
+        return {}
+      }
+    }
   },
   methods: {
     handleClose() {
       this.$emit('close')
+    },
+    relativeTime(time) {
+      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(time, 'YYYYMMDDHH').fromNow()
     }
   }
 }

@@ -48,7 +48,8 @@ export default {
         return {
           id: i.id,
           extra: { coverUrl: i.cover },
-          name: this.searchKeyResult(i),
+          name: i.name,
+          name_title: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
