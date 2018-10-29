@@ -25,5 +25,6 @@ module.exports = {
   LESSON_VIP_DETAIL: {
     APP_NAME: `"LessonVIP"`,
     APP_GOODS_ID: 1
-  }
+  },
+  GOOGLE_ANALYTICS_UA: '"UA-128282448-1"'
 }

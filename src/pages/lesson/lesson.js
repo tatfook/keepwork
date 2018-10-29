@@ -20,10 +20,21 @@ import Vhistogram from 'v-charts/lib/histogram.common'
 import Cookies from 'js-cookie'
 import '@/components/common/thirdAuth'
 import { keepwork } from '@/api'
+import VueAnalytics from 'vue-analytics'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.component(Vhistogram.name, Vhistogram)
+
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
 
 const i18n = new VueI18n({
   locale,

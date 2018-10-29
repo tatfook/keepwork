@@ -12,6 +12,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import handleMessage from '@/lib/iframe'
 import '@/components/common/thirdAuth'
+import VueAnalytics from 'vue-analytics'
 
 window.addEventListener('message', handleMessage)
 
@@ -20,6 +21,15 @@ Vue.use(Vuex)
 Vue.use(ElementUI)
 
 Vue.use(VueI18n)
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
 
 const i18n = new VueI18n({
   locale,
