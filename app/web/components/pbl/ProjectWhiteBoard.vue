@@ -14,9 +14,9 @@
         </div>
         <div class="filter">
           筛选：
-          <span class="rank"><span class="rank-tip">全部({{issuesList.length}})</span></span>
-          <span class="rank"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 (55)</span></span>
-          <span class="rank"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 (99)</span></span>
+          <span class="rank"><span class="rank-tip">全部({{projectIssueList.length}})</span></span>
+          <span class="rank"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{finishedProjectIssueList.length}})</span></span>
+          <span class="rank"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
         </div>
         <div class="new-issue-btn">
           <el-button type="primary" size="medium" @click="goNewIssue">+ 新建问题</el-button>
@@ -25,9 +25,9 @@
       <div class="project-white-board-content-list">
         <div class="single-issue" v-for="(issue,index) in projectIssueList" :key="index">
           <div class="single-issue-brief">
-            <div class="single-issue-brief-title" @click="goIssueDetail">
+            <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
               <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
-              <span>{{issue.title}}</span><span class="title-number">#8998</span>
+              <span>{{issue.title}}</span><span class="title-number">#{{issue.id}}</span>
             </div>
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
@@ -37,14 +37,14 @@
               </span>
             </div>
           </div>
-          <div class="single-issue-join" v-if="issue.assigns">
-            <!-- <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait" alt=""> -->
+          <div class="single-issue-join" v-if="issue.assigns.length > 0">
+            <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
           </div>
         </div>
       </div>
     </div>
     <new-issue :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail :show="showIssueDetail" @close="closeIssueDetail"></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail"></issue-detail>
   </div>
 </template>
 <script>
@@ -55,6 +55,8 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
+import default_portrait from '@/assets/img/default_portrait.png'
+
 export default {
   name: 'ProjectWhiteBoard',
   data() {
@@ -63,6 +65,8 @@ export default {
       showIssueDetail: false,
       searchKeyWord: '',
       select: '',
+      default_portrait,
+      selectedIssue: {}
     }
   },
   components: {
@@ -71,18 +75,28 @@ export default {
   },
   computed: {
     ...mapGetters({
-      issuesList: 'pbl/issuesList'
+      issuesList: 'pbl/issuesList',
+      projectDetail: 'pbl/projectDetail'
     }),
     projectIssueList(){
       let tempArr = this.issuesList({ projectId: this.projectId }) || []
       return tempArr.sort(this.sortByUpdateAt)
+    },
+    unfinishedProjectIssueList(){
+      return _.filter(this.projectIssueList, i => i.state === 0)
+    },
+    finishedProjectIssueList(){
+      return _.filter(this.projectIssueList, i => i.state === 1)
     },
     isEn() {
       return locale === 'en-US'
     },
     projectId() {
       return _.get(this.$route, 'params.id')
-    }
+    },
+    pblProjectDetail() {
+      return this.projectDetail({ projectId: this.projectId })
+    },
   },
   mounted(){
     let objectId = this.projectId
@@ -99,7 +113,9 @@ export default {
     closeNewIssue() {
       this.showNewIssue = false
     },
-    goIssueDetail() {
+    goIssueDetail(issue) {
+      console.log('issue',issue)
+      this.selectedIssue = issue
       this.showIssueDetail = true
     },
     closeIssueDetail() {

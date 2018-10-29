@@ -7,7 +7,7 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-input class="search-input" v-model="searchKey">
+              <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-input>
             </el-col>

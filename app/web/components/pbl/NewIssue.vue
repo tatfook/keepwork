@@ -6,7 +6,7 @@
         <div class="sketch-box">
           <div class="sketch-box-tag">标题</div>
           <div class="sketch-box-content">
-            <el-input size="medium" v-model="issueTitle"></el-input>
+            <el-input size="medium" v-model="issueTitle" placeholder="请输入标题···"></el-input>
           </div>
         </div>
         <div class="sketch-box">
@@ -31,7 +31,7 @@
                   <span class="assigns-btn"></span>
                 </span>
                 <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-                  <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+                  <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -40,7 +40,7 @@
         <div class="sketch-box">
           <div class="sketch-box-tag">描述</div>
           <div class="sketch-box-content">
-            <el-input type="textarea" :rows="4" placeholder="互联网改变世界" v-model="descriptionText"></el-input>
+            <el-input type="textarea" :rows="4" v-model="descriptionText" placeholder="请输入描述···"></el-input>
           </div>
         </div>
       </div>
@@ -67,11 +67,11 @@ export default {
   },
   data() {
     return {
-      issueTitle: '创建的新issue',
+      issueTitle: '',
       dynamicTags: ['需求', '设计', '产品'],
       inputVisible: false,
       inputValue: '',
-      descriptionText: '这里是issue的描述文字',
+      descriptionText: '',
       default_portrait: default_portrait,
       assignedMembers: []
     }
@@ -89,8 +89,12 @@ export default {
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectId })
     },
-    assignMembersId(){
-    // 
+    assignMembersId() {
+      let arrId = []
+      _.map(this.assignedMembers, ({userId}) => {
+        arrId.push(userId)
+      })
+      return arrId.join('|')
     }
   },
   methods: {
@@ -124,12 +128,16 @@ export default {
           if(this.assignedMembers.length == 0){
             return this.assignedMembers.push(member)
           }
-          for(let i=0; i < this.assignedMembers.length; i++){
+          let i
+          for(i=0; i < this.assignedMembers.length; ++i){
             if(this.assignedMembers[i].userId === userId){
-              return
+              break
             }
           }
-          this.assignedMembers.push(member)
+          if(i === this.assignedMembers.length){
+            return this.assignedMembers.push(member)
+          }
+          this.assignedMembers.splice(i,1)
         }
       })
     },
@@ -140,10 +148,7 @@ export default {
           objectId: this.projectId,
           title: this.issueTitle,
           content: this.descriptionText,
-          tags: this.dynamicTags
-            .toString()
-            .split(',')
-            .join('|'),
+          tags: this.dynamicTags.join('|'),
           assigns: this.assignMembersId
         }
         await keepwork.issues
@@ -154,6 +159,9 @@ export default {
           })
           .catch(err => console.error(err))
       })
+    },
+    isAssigned(member){
+      return this.assignedMembers.indexOf(member) !== -1 ? true : false
     }
   }
 }

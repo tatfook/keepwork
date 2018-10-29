@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
     <img class="project-cell-cover" :src="project.extra.coverUrl || project_default_cover" alt="" @click="goProjectDetail(project)">
-    <h4 class="project-cell-title" @click="goProjectDetail(project)"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -83,6 +83,7 @@ export default {
     margin: 10px 0;
     line-height: 20px;
     height: 20px;
+    cursor: pointer;
     display: flex;
     .red {
       color: red;

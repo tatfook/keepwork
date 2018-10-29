@@ -50,7 +50,9 @@ export default {
         if (i.highlight) {
           let name = _.get(i.highlight, 'title', i.title)
           name = name.join().replace(/<span>/g, `<span class="red">`)
-          Vue.set(i, 'title', name)
+          Vue.set(i, 'name_title', name)
+        }else{
+          Vue.set(i, 'name_title', i.title)
         }
       })
       return Arr

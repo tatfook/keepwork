@@ -2,7 +2,7 @@
   <div class="lesson-package-cell">
     <div class="lesson">
       <img class="lesson-cover" :src="lessonPackage.coverUrl" alt="" @click="goLessonPackage(lessonPackage)">
-      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" v-html="lessonPackage.title"></h4>
+      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.name_title"></h4>
       <div class="lesson-desc">
         <p>包含：
           <span>{{lessonPackage.total_lessons}}</span>个课程</p>
