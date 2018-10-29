@@ -38,8 +38,8 @@ export default {
   mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     let tags = this.copiedProjectDetail.tags
-    tags = tags.slice(1, tags.length - 1)
-    this.tempTags = tags.split('|')
+    tags = _.trim(tags, '|')
+    this.tempTags = _.filter(tags.split('|'), obj => obj)
   },
   data() {
     return {
@@ -157,6 +157,7 @@ export default {
     vertical-align: bottom;
     height: 24px;
     line-height: 24px;
+    margin-bottom: 16px;
   }
   &-new-button {
     margin-left: 10px;
