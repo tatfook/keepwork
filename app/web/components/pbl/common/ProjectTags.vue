@@ -38,8 +38,8 @@ export default {
   mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     let tags = this.copiedProjectDetail.tags
-    tags = tags.slice(1, tags.length - 1)
-    this.tempTags = tags.split('|')
+    tags = _.trim(tags, '|')
+    this.tempTags = _.filter(tags.split('|'), obj => obj) || []
   },
   data() {
     return {
@@ -81,10 +81,17 @@ export default {
       })
     },
     handleInputConfirm() {
+      this.inputValue = _.trim(this.inputValue, ' ')
       let inputValue = this.inputValue
-      if (inputValue) {
-        this.tempTags.push(inputValue)
+      if (inputValue.indexOf('|') !== -1) {
+        this.$message({
+          showClose: true,
+          message: '标签里不能包含|',
+          type: 'error'
+        })
+        return
       }
+      inputValue && this.tempTags.push(inputValue)
       this.inputVisible = false
       this.inputValue = ''
     },
@@ -157,6 +164,7 @@ export default {
     vertical-align: bottom;
     height: 24px;
     line-height: 24px;
+    margin-bottom: 16px;
   }
   &-new-button {
     margin-left: 10px;

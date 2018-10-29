@@ -210,7 +210,8 @@ export default {
           this.descriptionEditor.txt.html(this.tempDesc)
         })
       } else {
-        this.tempDesc = this.descriptionEditor.txt.html()
+        let editorText = this.descriptionEditor.txt
+        this.tempDesc = editorText.text() && this.descriptionEditor.txt.html()
         this.isLoading = true
         await this.updateDescToBackend()
       }
@@ -515,6 +516,12 @@ export default {
       margin: 8px 0 16px;
       font-size: 16px;
       font-weight: bold;
+      position: relative;
+      .el-button {
+        position: absolute;
+        top: -8px;
+        right: 0;
+      }
     }
     .w-e-toolbar {
       border-color: #e8e8e8 !important;

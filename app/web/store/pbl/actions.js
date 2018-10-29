@@ -212,23 +212,22 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getComments(context, { objectType = 5, objectId }) {
+  async getComments(context, { objectType = 5, objectId, xPage, xPerPage, xOrder }) {
     let { commit } = context
-    await keepwork.comments.getComments({ objectType, objectId }).then(async commentList => {
-      await commit(GET_COMMENTS_SUCCESS, { commentList, projectId: objectId })
-      return Promise.resolve()
-    }).catch(error => {
+    let commentList = await keepwork.comments.getComments({ objectType, objectId, xPage, xPerPage, xOrder }).catch(error => {
       return Promise.reject(error)
     })
+    await commit(GET_COMMENTS_SUCCESS, { commentList, projectId: objectId })
+    return commentList
   },
   async createComment(context, { objectType = 5, objectId, content }) {
     let { dispatch } = context
-    await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
-      await dispatch('getComments', { objectType, objectId })
-      return Promise.resolve()
-    }).catch(error => {
+    let newComment = await keepwork.comments.createComment({ objectType, objectId, content }).catch(error => {
       return Promise.reject(error)
-    })
+    }).catch(error => Promise.reject(error))
+    await dispatch('getComments', { objectType, objectId })
+    console.log(newComment)
+    return newComment
   },
   async deleteComment(context, { objectType = 5, objectId, commentId }) {
     let { dispatch } = context

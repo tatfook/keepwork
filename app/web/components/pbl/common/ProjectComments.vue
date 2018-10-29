@@ -1,11 +1,11 @@
 <template>
   <div class="project-comments">
     <div class="project-comments-header">
-      评论<span class="project-comments-header-count">(已有{{projectCommentList.length}}条评论)</span>
+      评论<span class="project-comments-header-count">(已有{{totalCommentCount}}条评论)</span>
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
-        <img class="project-comments-profile" src="http://git.keepwork.com/gitlab_rls_kaitlyn/keepworkdatasource/raw/master/kaitlyn_images/img_1518086126317.png" alt="">
+        <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
         <el-input placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
       </div>
       <div class="project-comments-sends-operations">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
-      <div class="project-comments-item" v-for="(comment, index) in projectCommentList" :key='index'>
+      <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
         <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
         <div class="project-comments-item-detail">
           <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="project-comments-more">下滑加载更多</div>
+    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'下滑加载更多'}}</div>
   </div>
 </template>
 <script>
@@ -38,25 +38,33 @@ export default {
     }
   },
   async created() {
-    await this.pblGetComments({
-      objectType: 5,
-      objectId: this.projectId
-    })
+    this.getCommentFromBackEnd()
   },
   data() {
     return {
+      xPerPage: 2,
+      xPage: 1,
+      xOrder: 'updatedAt-desc',
       isAddingComment: false,
       isLoading: false,
       newCommenContent: '',
-      defaultPortrait: require('@/assets/img/default_portrait.png')
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
+      commentList: [],
+      isGetAllComment: false,
+      isGetCommentBtnLoading: false,
+      totalCommentCount: 0
     }
   },
   computed: {
     ...mapGetters({
-      pblProjectCommentList: 'pbl/projectCommentList'
+      pblProjectCommentList: 'pbl/projectCommentList',
+      userProfile: 'user/profile'
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
+    },
+    userPortrait() {
+      return _.get(this.userProfile, 'portrait')
     }
   },
   methods: {
@@ -65,29 +73,55 @@ export default {
       pblCreateComment: 'pbl/createComment',
       pblDeleteComment: 'pbl/deleteComment'
     }),
+    async getCommentFromBackEnd() {
+      this.isGetCommentBtnLoading = true
+      let newCommentResult = await this.pblGetComments({
+        objectType: 5,
+        objectId: this.projectId,
+        xPage: this.xPage,
+        xOrder: this.xOrder,
+        xPerPage: this.xPerPage
+      }).catch()
+      this.totalCommentCount = newCommentResult.count
+      let newCommentList = newCommentResult.rows
+      if (newCommentList.length > 0) {
+        this.commentList = _.concat(this.commentList, newCommentList)
+      } else {
+        this.isGetAllComment = true
+        this.xPage--
+      }
+      this.isGetCommentBtnLoading = false
+    },
+    getMoreComment() {
+      if (this.isGetAllComment) {
+        return
+      }
+      this.xPage++
+      this.getCommentFromBackEnd()
+    },
     async sendComment() {
       this.isAddingComment = true
-      await this.pblCreateComment({
+      let newCommentDetail = await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,
         content: this.newCommenContent
+      }).catch(error => {
+        this.$message({
+          type: 'error',
+          message: '评论失败'
+        })
+        this.isAddingComment = false
+        console.error(error)
       })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '评论成功'
-          })
-          this.isAddingComment = false
-          this.newCommenContent = ''
-        })
-        .catch(error => {
-          this.$message({
-            type: 'error',
-            message: '评论失败'
-          })
-          this.isAddingComment = false
-          console.error(error)
-        })
+      this.xPage = 1
+      this.commentList = []
+      this.getCommentFromBackEnd()
+      this.$message({
+        type: 'success',
+        message: '评论成功'
+      })
+      this.isAddingComment = false
+      this.newCommenContent = ''
     },
     async deleteComment(commentDetail) {
       this.isLoading = true
@@ -212,6 +246,7 @@ export default {
     color: #909399;
     text-align: center;
     border-top: 1px solid #e8e8e8;
+    cursor: pointer;
   }
 }
 </style>
