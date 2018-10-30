@@ -167,7 +167,7 @@ const actions = {
     let content = await gitlabShowRawForGuest(
       rawBaseUrl,
       projectName,
-      path
+      fullPath
     )
     let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
     content = typeof content === 'string' ? (content + markdownExtraLineToCheck404) : content
