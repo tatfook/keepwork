@@ -126,6 +126,8 @@ const actions = {
       return
     }
     userDetail = await keepwork.user.getDetailByName({ username })
+    let userSites = await keepwork.website.getAllSitesByName(username)
+    userDetail.allSiteList = userSites.map(i => ({ ...i, name: i.sitename }))
     let userId = _.get(userDetail, 'id')
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
