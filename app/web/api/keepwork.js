@@ -273,7 +273,8 @@ export const issues = {
   createIssue: async (...args) => post('issues', ...args),
   getSingleProjectIssues: async ({ objectId, objectType }) =>
     get(`issues?objectId=${objectId}&objectType=${objectType}`),
-  closeIssue: async ({ objectId, state }) => put(`issues/${objectId}`, { state })
+  updateIssue: async ({ objectId, params }) => put(`issues/${objectId}`, { ...params }),
+  getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`),
 }
 
 export const keepwork = {

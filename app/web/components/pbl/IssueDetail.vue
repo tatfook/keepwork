@@ -2,14 +2,34 @@
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
     <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/白板/问题详情</h4>
     <div class="issue-detail-header">
-      <div class="issue-title">{{issue.title}} #{{issue.id}}</div>
-      <!-- <div class="issue-edit"><i class="iconfont icon-edit-square"></i>编辑</div> -->
+      <div class="issue-title">
+        <div v-if="currIssue.titleIsEdit" class="issue-title-edit-box">
+          <input class="issue-title-edit-box-input" type="text" v-model="currIssue.title">
+          <el-button class="issue-title-button" size="mini" type="primary" @click="updateTitle">确定</el-button>
+          <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
+        </div>
+        <div v-else class="issue-title-title-box">
+          {{currIssue.title}} #{{currIssue.id}}
+          <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
+        </div>
+      </div>
     </div>
     <div class="issue-detail-intro">
-      <span class="created-time">{{relativeTime(issue.createdAt)}}</span>
+      <span class="created-time">{{relativeTime(currIssue.createdAt)}}</span>
       <span class="created-by">由<span class="name">{{issue.user.nickname}}</span>创建</span>
-      <span class="created-tag">
-        <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
+      <span v-if="currIssue.tagEdit" class="issue-detail-intro-tag">
+        <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
+          {{tag}}
+        </el-tag>
+        <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+        <el-button size="mini" type="primary" @click="updateTag">确定</el-button>
+        <el-button size="mini" @click="cancelUpdateTag">取消</el-button>
+      </span>
+      <span v-else class="created-tag">
+        <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
+        <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>修改标签</span>
       </span>
     </div>
     <div class="issue-detail-status">
@@ -17,6 +37,14 @@
       <div class="issue-detail-status-right">
         负责人
         <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
+        <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
+          <span class="el-dropdown-link">
+            <span class="assigns-btn"></span>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+            <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </div>
     <div class="issue-detail-idea">
@@ -81,7 +109,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import default_portrait from '@/assets/img/default_portrait.png'
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
 import Vue from 'vue'
 import _ from 'lodash'
@@ -106,24 +134,107 @@ export default {
   data() {
     return {
       default_portrait,
+      issueData: {},
+      // dynamicTags: ['需求', '设计', '产品'],
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+      currIssue: {},
       comments: [],
       myComment: '',
-      isEdit: false
+      isEdit: false,
+      assignedMembers: []
     }
   },
   async mounted() {
-    await this.getCommentsList()
+    await Promise.all([
+      this.getIssueData(),
+      this.getCommentsList(),
+      this.getProjectMember({
+        objectId: this.projectDetail.id,
+        objectType: 5
+      })
+    ]).catch(err => console.error(err))
   },
   computed: {
     ...mapGetters({
       username: 'user/username',
-      userProfile: 'user/profile'
-    })
+      userProfile: 'user/profile',
+      pblProjectMemberList: 'pbl/projectMemberList'
+    }),
+    memberList() {
+      return this.pblProjectMemberList({ projectId: this.projectDetail.id })
+    },
+    currIssueId() {
+      return _.get(this.issue, 'id', '')
+    }
   },
   methods: {
     ...mapActions({
-      getProjectIssues: 'pbl/getProjectIssues'
+      getProjectIssues: 'pbl/getProjectIssues',
+      getProjectMember: 'pbl/getProjectMember'
     }),
+    async getIssueData() {
+      await keepwork.issues
+        .getSingleIssue({ issueId: this.currIssueId })
+        .then(issue => {
+          console.log('currissue', issue)
+          this.issueData = Object.assign(issue, {
+            titleIsEdit: false,
+            tagEdit: false
+          })
+          this.currIssue = _.clone(this.issueData)
+          this.dynamicTags = this.currIssue.tags.split('|')
+        })
+        .catch(err => console.error(err))
+    },
+    editIssueTitle() {
+      Vue.set(this.currIssue, 'titleIsEdit', true)
+    },
+    alterTag() {
+      Vue.set(this.currIssue, 'tagEdit', true)
+    },
+    async updateTitle() {
+      await keepwork.issues
+        .updateIssue({
+          objectId: this.issue.id,
+          params: { title: this.currIssue.title }
+        })
+        .catch(err => console.error(err))
+      this.getIssueData()
+      this.getProjectIssues({
+        objectId: this.projectDetail.id,
+        objectType: 5
+      })
+    },
+    updateTag(){
+
+    },
+    handleCloseTag(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    },
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue
+      if (inputValue) {
+        this.dynamicTags.push(inputValue)
+      }
+      this.inputVisible = false
+      this.inputValue = ''
+    },
+    cancelUpdateTitle() {
+      this.currIssue = _.clone(this.issueData)
+    },
+    cancelUpdateTag(){
+      this.currIssue = _.clone(this.issueData)
+      this.dynamicTags = this.currIssue.tags.split('|')
+    },
     handleClose() {
       this.$emit('close')
     },
@@ -166,20 +277,51 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    async submitModifiedComment(comment){
+    async submitModifiedComment(comment) {
       let copyComment = Object.assign({}, comment)
-      await keepwork.comments.updateComment({ commentId: copyComment.id, content: copyComment.content})
+      await keepwork.comments.updateComment({
+        commentId: copyComment.id,
+        content: copyComment.content
+      })
       this.getCommentsList()
     },
-    cancelModifiedComment(comment,index){
+    cancelModifiedComment(comment, index) {
       Vue.set(comment, 'isEdit', false)
       Vue.set(this.comments, index, comment)
       this.getCommentsList()
     },
-    async closeIssue(){
-      await keepwork.issues.closeIssue({ objectId: this.issue.id, state: 1 })
-      await this.getProjectIssues({ objectId: this.projectDetail.id, objectType: 5 })
+    async closeIssue() {
+      await keepwork.issues.updateIssue({
+        objectId: this.issue.id,
+        params: { state: 1 }
+      })
+      await this.getProjectIssues({
+        objectId: this.projectDetail.id,
+        objectType: 5
+      })
       this.handleClose()
+    },
+    isAssigned(member) {
+      return this.assignedMembers.indexOf(member) !== -1 ? true : false
+    },
+    handleCommand(userId) {
+      _.forEach(this.memberList, member => {
+        if (member.userId === userId) {
+          if (this.assignedMembers.length == 0) {
+            return this.assignedMembers.push(member)
+          }
+          let i
+          for (i = 0; i < this.assignedMembers.length; ++i) {
+            if (this.assignedMembers[i].userId === userId) {
+              break
+            }
+          }
+          if (i === this.assignedMembers.length) {
+            return this.assignedMembers.push(member)
+          }
+          this.assignedMembers.splice(i, 1)
+        }
+      })
     },
     relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
@@ -220,7 +362,26 @@ export default {
       padding: 0 20px;
       .issue-title {
         flex: 1;
-        font-size: 20px;
+        &-edit-box {
+          display: flex;
+          align-items: center;
+          height: 56px;
+          margin-right: 10px;
+        }
+        &-title-box {
+          font-size: 20px;
+          height: 56px;
+        }
+        &-edit {
+          font-size: 12px;
+          cursor: pointer;
+          color: #409eff;
+          padding-left: 8px;
+        }
+        &-button {
+          padding: 4px 10px;
+          margin-left: 10px;
+        }
       }
       .issue-edit {
         width: 60px;
@@ -240,6 +401,21 @@ export default {
           color: #409eff;
         }
       }
+      &-tag {
+        .el-tag {
+          height: 22px;
+          line-height: 20px;
+        }
+        .el-tag + .el-tag {
+          margin-left: 4px;
+        }
+        .button-new-tag {
+          padding: 4px 8px;
+        }
+        .el-button {
+          padding: 4px 10px;
+        }
+      }
       .created-tag {
         .tag {
           background: #eee;
@@ -248,6 +424,10 @@ export default {
           padding: 2px 4px;
           border-radius: 2px;
           margin-right: 5px;
+        }
+        .edit-tag {
+          color: #409eff;
+          cursor: pointer;
         }
       }
     }
@@ -274,12 +454,12 @@ export default {
             font-size: 20px;
             margin-right: 4px;
           }
-          &-tip {
-            cursor: pointer;
-            &:hover {
-              color: #409eff;
-            }
-          }
+          // &-tip {
+          //   cursor: pointer;
+          //   &:hover {
+          //     color: #409eff;
+          //   }
+          // }
         }
       }
       &-right {
@@ -294,6 +474,33 @@ export default {
           border: 1px solid #eee;
           border-radius: 50%;
           margin-right: 5px;
+        }
+        .assigns-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: 1px solid #e8e8e8;
+          display: inline-block;
+          position: relative;
+          margin-top: 8px;
+          &::after {
+            content: '';
+            height: 16px;
+            width: 1px;
+            background: #6e6d6d;
+            position: absolute;
+            left: 17px;
+            top: 10px;
+          }
+          &::before {
+            content: '';
+            height: 1px;
+            width: 16px;
+            background: #6e6d6d;
+            position: absolute;
+            left: 10px;
+            top: 17px;
+          }
         }
       }
     }
@@ -359,7 +566,7 @@ export default {
                 width: 100%;
                 padding: 10px 2px;
               }
-              &-button{
+              &-button {
                 padding-top: 20px;
                 display: flex;
                 justify-content: flex-end;

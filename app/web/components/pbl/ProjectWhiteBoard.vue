@@ -74,6 +74,11 @@ export default {
     NewIssue,
     IssueDetail
   },
+  watch:{
+    projectIssueList(newIssueList){
+      this.projectIssues = _.concat(newIssueList)
+    }
+  },
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
