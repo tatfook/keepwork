@@ -20,6 +20,7 @@ import VueClipboard from 'vue-clipboard2'
 import router from './pbl.router'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
+import gitlabModule from '@/store/gitlab'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -43,7 +44,8 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
-    pbl: pblModule
+    pbl: pblModule,
+    gitlab: gitlabModule
   }
 })
 

@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import WebsiteBinder from './common/WebsiteBinder'
 export default {
   name: 'NewProject',
@@ -60,9 +60,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      newSiteInfo: 'user/newSiteInfo'
-    }),
     isNameEmpty() {
       let { name } = this.newProjectData
       return !name || name.length == 0

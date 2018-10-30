@@ -12,7 +12,7 @@
         <span class="website-binder-cards-item-badge badge">新建</span>创建新网站
       </div>
     </div>
-    <el-dialog v-loading='isCreating' width="760px" title="选择已有网站" :visible.sync="isUserSitesDialogShow">
+    <el-dialog v-loading='isCreating' width="760px" title="选择已有网站" :visible.sync="isUserSitesDialogShow" :append-to-body='true'>
       <user-sites-selector ref='userSitesRef'></user-sites-selector>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeUserSitesDialog">取消</el-button>
@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import UserSitesSelector from '@/components/common/UserSitesSelector'
 export default {
@@ -33,6 +34,11 @@ export default {
       isNewWebsiteDialogShow: false,
       isUserSitesDialogShow: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      newSiteInfo: 'user/newSiteInfo'
+    })
   },
   methods: {
     openNewSiteDialog() {
@@ -50,10 +56,12 @@ export default {
     createNewProjectByBind() {
       let siteId = _.get(this.$refs.userSitesRef, 'selectSiteId')
       this.$emit('confirmSiteId', { siteId })
+      this.closeUserSitesDialog()
     },
     createNewProjectByNewSite() {
       let siteId = _.get(this.newSiteInfo, 'id')
       this.$emit('confirmSiteId', { siteId })
+      this.closeNewWebsiteDialog()
     }
   },
   components: {
@@ -74,13 +82,16 @@ export default {
     font-size: 14px;
     color: #de992d;
   }
-  &-warnging {
+  &-warning {
     display: inline-block;
     width: 16px;
     height: 16px;
-    border-radius: 50%;
     background-color: #de992d;
-    margin: 8px 0 0;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 16px;
+    margin-right: 4px;
   }
   &-cards {
     display: flex;

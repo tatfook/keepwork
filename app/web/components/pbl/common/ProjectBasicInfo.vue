@@ -49,6 +49,12 @@
       <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
+      <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleBinderDialogClose">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -57,6 +63,7 @@ import E from 'wangeditor'
 import dayjs from 'dayjs'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import WebsiteBinder from './WebsiteBinder'
 export default {
   name: 'ProjectBasicInfo',
   props: {
@@ -88,6 +95,7 @@ export default {
     }
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     this.tempDesc = this.copiedProjectDetail.description
+    this.tempSiteId = this.copiedProjectDetail.siteId
     this.tempCoverUrl = _.get(
       this.copiedProjectDetail,
       'extra.imageUrl',
@@ -101,10 +109,13 @@ export default {
   },
   data() {
     return {
+      binderDialogVisible: false,
       isApplyButtonLoading: false,
+      isBinderDialogLoading: false,
       isDescriptionEditing: false,
       descriptionEditor: undefined,
       copiedProjectDetail: {},
+      tempSiteId: null,
       tempDesc: '',
       tempCoverUrl: '',
       tempVideoUrl: '',
@@ -151,6 +162,7 @@ export default {
     },
     updatingProjectData() {
       return _.merge(this.originProjectDetail, {
+        siteId: this.tempSiteId,
         description: this.tempDesc,
         extra: this.mergedExtra
       })
@@ -289,6 +301,8 @@ export default {
           let tempWin = window.open('_blank')
           tempWin.location = this.siteUrl
         }
+      } else {
+        this.binderDialogVisible = true
       }
     },
     toParacraftPage() {
@@ -323,6 +337,18 @@ export default {
         (await this.updateDescToBackend()) &&
         (this.waitUpdateCover = false)
       this.isCoverZoneLoading = false
+    },
+    async handleConfirmSiteId({ siteId }) {
+      if (siteId) {
+        this.tempSiteId = siteId
+        this.isBinderDialogLoading = true
+        await this.updateDescToBackend()
+        this.isBinderDialogLoading = false
+        this.handleBinderDialogClose()
+      }
+    },
+    handleBinderDialogClose() {
+      this.binderDialogVisible = false
     }
   },
   filters: {
@@ -366,7 +392,8 @@ export default {
     }
   },
   components: {
-    SkyDriveManagerDialog
+    SkyDriveManagerDialog,
+    WebsiteBinder
   }
 }
 </script>
