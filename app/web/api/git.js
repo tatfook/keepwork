@@ -17,7 +17,12 @@ const gitLabAPIGenerator = ({ url, token }) => {
     projects: {
       repository: {
         async tree(_projectName, _path, recursive = true) {
-          _projectName = _projectName || _path.split('/').splice(0, 2).join('/')
+          _projectName =
+            _projectName ||
+            _path
+              .split('/')
+              .splice(0, 2)
+              .join('/')
           const [projectName, path] = [_projectName, _path].map(
             encodeURIComponent
           )
@@ -179,6 +184,12 @@ export class GitAPI {
   }
 
   async createFile({ projectName, path, options }) {
+    projectName =
+      projectName ||
+      path
+        .split('/')
+        .splice(0, 2)
+        .join('/')
     let content = options.content || ''
     return this.client.projects.repository.files
       .create(projectName, path, content)

@@ -20,10 +20,11 @@ export const webTemplateProject = {
   dataSourceUsername: 'official',
   projectName: 'official/keepwork-template-v2',
   projectId: 36332,
-  configFullPath: 'official/keepwork-template-v2/config.json',
+  configFullPath: 'config.json',
   configName: 'config.json',
   pageTemplateRoot: 'webpage',
-  pageTemplateConfigFullPath: 'official/keepwork-template-v2/config.json/webpage/config.json'
+  // pageTemplateConfigFullPath: 'official/keepwork-template-v2/config.json/webpage/config.json'
+  pageTemplateConfigFullPath: 'webpage/config.json'
 }
 
 /*doc
