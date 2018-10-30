@@ -20,7 +20,7 @@
             <span class="project-comments-item-time">{{comment.createdAt | formatDate}}</span>
           </p>
           <p class="project-comments-item-comment">{{comment.content}}</p>
-          <el-button type="text" class="project-comments-item-delete" @click="deleteComment(comment)">删除</el-button>
+          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)">删除</el-button>
         </div>
       </div>
     </div>
@@ -58,7 +58,8 @@ export default {
   computed: {
     ...mapGetters({
       pblProjectCommentList: 'pbl/projectCommentList',
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      loginUserId: 'user/userId'
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
@@ -85,6 +86,7 @@ export default {
       this.totalCommentCount = newCommentResult.count
       let newCommentList = newCommentResult.rows
       if (newCommentList.length > 0) {
+        this.isGetAllComment = false
         this.commentList = _.concat(this.commentList, newCommentList)
       } else {
         this.isGetAllComment = true
@@ -101,27 +103,33 @@ export default {
     },
     async sendComment() {
       this.isAddingComment = true
-      let newCommentDetail = await this.pblCreateComment({
+      await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,
         content: this.newCommenContent
-      }).catch(error => {
-        this.$message({
-          type: 'error',
-          message: '评论失败'
-        })
-        this.isAddingComment = false
-        console.error(error)
       })
+        .then(newCommentDetail => {
+          this.$message({
+            type: 'success',
+            message: '评论成功'
+          })
+          this.isAddingComment = false
+          this.newCommenContent = ''
+          this.resetCommentList()
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '评论失败'
+          })
+          this.isAddingComment = false
+          return
+        })
+    },
+    resetCommentList() {
       this.xPage = 1
       this.commentList = []
       this.getCommentFromBackEnd()
-      this.$message({
-        type: 'success',
-        message: '评论成功'
-      })
-      this.isAddingComment = false
-      this.newCommenContent = ''
     },
     async deleteComment(commentDetail) {
       this.isLoading = true
@@ -136,6 +144,7 @@ export default {
             type: 'success',
             message: '评论删除成功'
           })
+          this.resetCommentList()
         })
         .catch(error => {
           this.isLoading = false
@@ -218,9 +227,6 @@ export default {
     &-comment {
       font-size: 13px;
       color: #606266;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     &-detail {
       flex: 1;
@@ -230,7 +236,8 @@ export default {
     &-delete {
       position: absolute;
       right: 0;
-      top: 0;
+      top: 6px;
+      padding: 0;
       font-size: 14px;
       color: #909399;
       display: none;
