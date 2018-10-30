@@ -97,7 +97,7 @@ const actions = {
     let { visibility } = siteDetailInfoDataSource
 
     // this is special for private website
-    let isPrivateWebsite = visibility === 'private'
+    let isPrivateWebsite = visibility === 1
     if (isPrivateWebsite) {
       await dispatch('getRepositoryTreeForOwner', payload)
       return
@@ -166,7 +166,8 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let content = await gitlabShowRawForGuest(
       rawBaseUrl,
-      fullPath
+      projectName,
+      path
     )
     let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
     content = typeof content === 'string' ? (content + markdownExtraLineToCheck404) : content
@@ -214,7 +215,7 @@ const actions = {
   },
   async createFile(
     context,
-    { path, content = '', refreshRepositoryTree = true, userOptions }
+    { projectName, path, content = '', refreshRepositoryTree = true, userOptions }
   ) {
     let { commit, dispatch } = context
     let {
@@ -224,10 +225,11 @@ const actions = {
       options
     } = await getGitlabParams(context, { path, content })
     options = _.merge(userOptions, options)
-    await gitlab.createFile(
+    await gitlab.createFile({
+      projectName,
       path,
       options
-    )
+    })
 
     let payload = { path, branch: options.branch }
     commit(CREATE_FILE_CONTENT_SUCCESS, payload)

@@ -16,38 +16,23 @@ const gitLabAPIGenerator = ({ url, token }) => {
   return {
     projects: {
       repository: {
-        async tree(projectId, options) {
-          const [pId, path] = [projectId, options.path].map(encodeURIComponent)
+        async tree(_projectName, _path, recursive = true) {
+          _projectName = _projectName || _path.split('/').splice(0, 2).join('/')
+          const [projectName, path] = [_projectName, _path].map(
+            encodeURIComponent
+          )
           let total = []
           let page = 0
           let res = {}
-          if (!projectId) {
-            // FIXME: 暂时这么去兼容老的api
+          res = await instance.get(
+            `projects/${projectName}/tree/${path}?recursive=true`
+          )
+          total = [...total, ...res.data]
+          while (res.data.length >= 100) {
             res = await instance.get(
-              `projects/${path}/tree/${path}?recursive=true`
+              `projects/${projectName}/tree/${path}?page=${page++}&per_page=100&recursive=${recursive}`
             )
             total = [...total, ...res.data]
-            while (res.data.length >= 100) {
-              res = await instance.get(
-                `projects/${path}/tree/${path}?page=${page++}&per_page=100&recursive=${options.recursive ||
-                  true}`
-              )
-              total = [...total, ...res.data]
-            }
-          } else {
-            // 老方法
-            res = await instance.get(
-              `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
-                true}`
-            )
-            total = [...total, ...res.data]
-            while (res.data.length >= 100) {
-              res = await instance.get(
-                `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
-                  true}`
-              )
-              total = [...total, ...res.data]
-            }
           }
           return total
         },
@@ -166,11 +151,8 @@ export class GitAPI {
     })
   }
 
-  async getTree(options) {
-    return this.client.projects.repository.tree(
-      options.projectId || this.config.projectId,
-      options
-    )
+  async getTree({ projectName, path, recursive = true }) {
+    return this.client.projects.repository.tree(projectName, path, recursive)
   }
 
   async getFile(path, options) {
@@ -196,11 +178,7 @@ export class GitAPI {
     )
   }
 
-  async createFile(path, options) {
-    const projectName = path
-      .split('/')
-      .splice(0, 2)
-      .join('/')
+  async createFile({ projectName, path, options }) {
     let content = options.content || ''
     return this.client.projects.repository.files
       .create(projectName, path, content)
