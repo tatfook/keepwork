@@ -196,7 +196,7 @@ const actions = {
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
-    let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json']
+    let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
     const projectName = `${username}/${sitename}`
     for (let { path, name, content } of fileList) {

@@ -43,7 +43,7 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
-    this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).site)
+    this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).siteinfo)
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
   },

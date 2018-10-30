@@ -117,7 +117,6 @@ const gitLabAPIGenerator = ({ url, token }) => {
             const [projectPath, path] = [projectName, folderPath].map(
               encodeURIComponent
             )
-            console.warn(projectPath)
             let res = await instance.put(
               `projects/${projectPath}/folders/${path}/move`,
               {

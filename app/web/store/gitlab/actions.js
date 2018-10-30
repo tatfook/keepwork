@@ -167,7 +167,7 @@ const actions = {
     let content = await gitlabShowRawForGuest(
       rawBaseUrl,
       projectName,
-      path
+      fullPath
     )
     let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
     content = typeof content === 'string' ? (content + markdownExtraLineToCheck404) : content
@@ -291,31 +291,12 @@ const actions = {
   async removeFolder(context, { folder, paths }) {
     const { commit, dispatch } = context
     const { username, name, options, gitlab } = await getGitlabFileParams(context, { path: folder })
-    console.warn('gitlab', gitlab)
     paths.forEach(path => dispatch('closeOpenedFile', { path }, { root: true }))
     try {
       await gitlab.removeFolder(folder)
     } catch (error) {
       console.error(error)
     }
-    // for (let i = 0; i < paths.length; i++) {
-    //   let {
-    //     gitlab,
-    //     options
-    //   } = await getGitlabFileParams(context, { path: paths[i] })
-    //   try {
-    //     await gitlab.deleteFile(paths[i], options)
-    //     dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
-    // let path = paths[0]
-    // let {
-    //   username,
-    //   name,
-    //   options
-    // } = await getGitlabFileParams(context, { path: paths[0] })
     let payload = { path: folder, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
