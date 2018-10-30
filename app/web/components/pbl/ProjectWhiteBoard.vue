@@ -6,24 +6,24 @@
           <el-input size="medium" placeholder="请输入内容" v-model="searchKeyWord" class="input-with-select">
             <el-select v-model="select" slot="prepend" placeholder="请选择">
               <el-option label="全部" value="1"></el-option>
-              <el-option label="果果" value="2"></el-option>
-              <el-option label="用户电话" value="3"></el-option>
+              <el-option label="进行中" value="2"></el-option>
+              <el-option label="已完成" value="3"></el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
         <div class="filter">
           筛选：
-          <span class="rank"><span class="rank-tip">全部({{projectIssueList.length}})</span></span>
-          <span class="rank"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{finishedProjectIssueList.length}})</span></span>
-          <span class="rank"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
+          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{projectIssueList.length}})</span></span>
+          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{finishedProjectIssueList.length}})</span></span>
+          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
         </div>
         <div class="new-issue-btn">
           <el-button type="primary" size="medium" @click="goNewIssue">+ 新建问题</el-button>
         </div>
       </div>
       <div class="project-white-board-content-list">
-        <div class="single-issue" v-for="(issue,index) in projectIssueList" :key="index">
+        <div class="single-issue" v-for="(issue,index) in projectIssues" :key="index">
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
               <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
@@ -61,6 +61,7 @@ export default {
   name: 'ProjectWhiteBoard',
   data() {
     return {
+      projectIssues: [],
       showNewIssue: false,
       showIssueDetail: false,
       searchKeyWord: '',
@@ -98,15 +99,19 @@ export default {
       return this.projectDetail({ projectId: this.projectId })
     },
   },
-  mounted(){
+  async mounted(){
     let objectId = this.projectId
     let objectType = 5
-    this.getProjectIssues({ objectId, objectType })
+    await this.getProjectIssues({ objectId, objectType })
+    this.projectIssues = this.projectIssueList
   },
   methods: {
     ...mapActions({
       getProjectIssues: 'pbl/getProjectIssues'
     }),
+    searchIssue(){
+
+    },
     goNewIssue() {
       this.showNewIssue = true
     },
@@ -114,12 +119,20 @@ export default {
       this.showNewIssue = false
     },
     goIssueDetail(issue) {
-      console.log('issue',issue)
       this.selectedIssue = issue
       this.showIssueDetail = true
     },
     closeIssueDetail() {
       this.showIssueDetail = false
+    },
+    showAllIssues(){
+      this.projectIssues = this.projectIssueList
+    },
+    showFinishedIssues(){
+      this.projectIssues = this.finishedProjectIssueList
+    },
+    showUnfinishedIssues(){
+      this.projectIssues = this.unfinishedProjectIssueList
     },
     relativeTime(time){
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))

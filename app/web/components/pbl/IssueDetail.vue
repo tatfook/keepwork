@@ -30,7 +30,7 @@
               <span class="username">{{comment.extra.username}}</span>
               <span class="time">{{relativeTime(comment.createdAt)}}</span>
             </div>
-            <div class="username-created-time-right">
+            <div class="username-created-time-right" v-if="comment.extra.username == username">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   · · ·
@@ -44,7 +44,13 @@
           </div>
           <div class="idea-area">
             <div class="arrows"></div>
-            <div v-if="comment.isEdit" class="text"><textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" @blur="notEdit(comment,index)" v-model="comment.content"></textarea></div>
+            <div v-if="comment.isEdit" class="text">
+              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model="comment.content"></textarea>
+              <div class="text-button">
+                <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
+                <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+              </div>
+            </div>
             <div v-else class="text">{{comment.content}}</div>
           </div>
         </div>
@@ -59,11 +65,11 @@
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" id="idea" placeholder="说点什么呢......" v-model="myComment"></textarea>
+            <textarea name="myIdea" rows="8" placeholder="说点什么呢......" v-model="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
-          <el-button size="medium">关闭问题</el-button>
+          <el-button size="medium" @click="closeIssue">关闭问题</el-button>
           <el-button type="primary" size="medium" @click="createComment">评论</el-button>
         </div>
       </div>
@@ -75,7 +81,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import default_portrait from '@/assets/img/default_portrait.png'
-import { mapGetters } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 import { keepwork } from '@/api'
 import Vue from 'vue'
 import _ from 'lodash'
@@ -115,6 +121,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      getProjectIssues: 'pbl/getProjectIssues'
+    }),
     handleClose() {
       this.$emit('close')
     },
@@ -154,12 +163,23 @@ export default {
         this.getCommentsList()
       }
     },
-    notEdit(comment, index) {
-      Vue.set(comment, 'isEdit', false)
-      Vue.set(this.comments, index, comment)
-    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
+    async submitModifiedComment(comment){
+      let copyComment = Object.assign({}, comment)
+      await keepwork.comments.updateComment({ commentId: copyComment.id, content: copyComment.content})
+      this.getCommentsList()
+    },
+    cancelModifiedComment(comment,index){
+      Vue.set(comment, 'isEdit', false)
+      Vue.set(this.comments, index, comment)
+      this.getCommentsList()
+    },
+    async closeIssue(){
+      await keepwork.issues.closeIssue({ objectId: this.issue.id, state: 1 })
+      await this.getProjectIssues({ objectId: this.projectDetail.id, objectType: 5 })
+      this.handleClose()
     },
     relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
@@ -335,9 +355,14 @@ export default {
               margin: 12px 0;
               textarea {
                 border: none;
-                background: #f9f9f9;
                 resize: none;
                 width: 100%;
+                padding: 10px 2px;
+              }
+              &-button{
+                padding-top: 20px;
+                display: flex;
+                justify-content: flex-end;
               }
             }
           }
@@ -382,9 +407,9 @@ export default {
           }
           textarea {
             border: none;
-            background: #f9f9f9;
             resize: none;
             width: 100%;
+            padding: 10px 2px;
           }
         }
         .finish {

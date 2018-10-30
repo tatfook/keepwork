@@ -239,7 +239,6 @@ const actions = {
   },
   async getProjectIssues({ commit }, { objectId, objectType }) {
     await keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(projectIssues => {
-      console.log('res', projectIssues)
       commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: objectId })
     }).catch(err => console.error(err))
   }
