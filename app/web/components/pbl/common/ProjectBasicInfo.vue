@@ -523,6 +523,10 @@ export default {
         right: 0;
       }
     }
+    &-content {
+      max-height: 280px;
+      overflow: auto;
+    }
     .w-e-toolbar {
       border-color: #e8e8e8 !important;
       border-bottom: none !important;
