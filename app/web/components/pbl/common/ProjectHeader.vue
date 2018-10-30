@@ -19,9 +19,12 @@
       </el-breadcrumb>
       <div class="project-header-operations">
         <div class="project-header-operations-item">
-          <el-button plain size="medium">
-            <i class="iconfont icon-share1"></i>分享
-          </el-button>
+          <el-popover placement="top" width="160" @show='showSocialShare'>
+            <div class="kp-social-share"></div>
+            <el-button slot="reference" plain size="medium">
+              <i class="iconfont icon-share1"></i>分享
+            </el-button>
+          </el-popover>
         </div>
         <div class="project-header-operations-item">
           <el-button plain size="medium" @click="toggleFavoriteProject" :loading="isFavoriteButtonLoading">
@@ -55,6 +58,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import 'social-share.js/dist/js/social-share.min.js'
+import 'social-share.js/dist/css/share.min.css'
 export default {
   name: 'ProjectHeader',
   props: {
@@ -103,6 +108,10 @@ export default {
     },
     starIconClass() {
       return this.isUserStaredProject ? 'icon-like-fill' : 'icon-like1'
+    },
+    shareUrl() {
+      let origin = window.location.origin
+      return `${origin}/pbl/project/${this.editingProjectId}`
     }
   },
   methods: {
@@ -200,6 +209,23 @@ export default {
           })
         this.isFavoriteButtonLoading = false
       }
+    },
+    showSocialShare() {
+      let projectImageUrl = _.get(this.projectDetail, 'extra.imageUrl')
+      window.socialShare('.kp-social-share', {
+        mode: 'prepend',
+        url: this.shareUrl,
+        description: `我将${this.editingProjectUsername}的项目${
+          this.editingProjectName
+        }分享给你`,
+        title: `我将${this.editingProjectUsername}的项目${
+          this.editingProjectName
+        }分享给你`,
+        sites: ['qq', 'qzone', 'weibo', 'wechat'],
+        wechatQrcodeTitle: '', // 微信二维码提示文字
+        wechatQrcodeHelper: this.$t('common.QR'),
+        image: this.coverUrl
+      })
     },
     handleTabClick(tabItem) {
       let { paneName } = tabItem
@@ -300,6 +326,30 @@ export default {
       transition: all ease-in-out 0.2s;
     }
     .el-tabs__active-bar {
+      display: none;
+    }
+  }
+}
+.kp-social-share.social-share {
+  text-align: center;
+  .icon-wechat {
+    visibility: hidden;
+    height: 150px;
+    .wechat-qrcode {
+      top: 0;
+      left: -40px;
+      width: 110px;
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      visibility: visible;
+      display: block;
+      height: 165px;
+    }
+    .wechat-qrcode::after {
+      content: none;
+    }
+    h4 {
       display: none;
     }
   }
