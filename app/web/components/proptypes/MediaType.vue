@@ -3,7 +3,7 @@
     <div class="media-type-item-img" :style="{backgroundImage: 'url(' + this.mediaData + ')'}">
       <div class="media-type-item-img-cover">
         <span>
-          <el-button class="media-type-change-img-btn" type="info" @click="insertImg()">{{$t('editor.changePic')}}</el-button>
+          <el-button class="media-type-change-img-btn" type="info" @click="insertImg()">{{$t('common.change')}}</el-button>
         </span>
       </div>
     </div>
