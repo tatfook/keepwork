@@ -7,6 +7,7 @@ category: API
 */
 import createEndpoint from './common/endpoint'
 import axios from 'axios'
+import { event } from 'vue-analytics'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -19,7 +20,11 @@ const withoutParseEndpoint = createEndpoint({
 const {post, put} = keepworkEndpoint
 
 export const user = {
-  login: async (...args) => withoutParseEndpoint.post('/user/login', ...args),
+  login: async (...args) => {
+    const res = await withoutParseEndpoint.post('/user/login', ...args)
+    event('account', 'sign_in', 'keepwork', res.data.userinfo._id)
+    return res
+  },
   getProfile: async (...args) => post('/user/getProfile', ...args),
   getDetailByName: async (...args) => post('/user/getDetailByName', ...args),
   updateUserInfo: async (...args) => put('/user/updateUserInfo', ...args),
@@ -32,7 +37,11 @@ export const user = {
   verifyCellphoneTwo: async (...args) => withoutParseEndpoint.post('/user/verifyCellphoneTwo', ...args),
   unbindCellphone: async (...args) => post('/user/unbindCellphone', ...args),
   unbindEmail: async (...args) => post('/user/unbindEmail', ...args),
-  register: async (...args) => post('/user/register', ...args),
+  register: async (...args) => {
+    const res = await post('/user/register', ...args)
+    event('account', 'sign_up', 'keepwork', 0)
+    return res
+  },
   bindThreeService: async (...args) => post('user/bindThreeService', ...args),
   verifyToken: async ({ token }) => {
     let instance = axios.create({

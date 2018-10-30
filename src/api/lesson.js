@@ -7,6 +7,7 @@ category: API
 */
 import createEndpoint from './common/endpoint'
 import axios from 'axios'
+import { event } from 'vue-analytics'
 
 export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
@@ -21,7 +22,11 @@ export const { get, post, put, delete: deleteMethod } = endpoint
 export const admin = {}
 
 export const packages = {
-  create: async ({ newPackageData }) => post('packages', newPackageData),
+  create: async ({ newPackageData }) => {
+    const res = await post('packages', newPackageData)
+    event('lesson', 'create_package', 'keepwork', res.id)
+    return res
+  },
   update: async ({ updatingPackageData }) =>
     put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
@@ -31,7 +36,11 @@ export const packages = {
       `packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`
     ),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
-  subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
+  subscribe: async ({ packageId }) => {
+    const res = await post(`packages/${packageId}/subscribe`)
+    event('lesson', 'subscribe_package', 'keepwork', packageId)
+    return res
+  },
   isSubscribe: async ({ packageId }) =>
     get(`packages/${packageId}/isSubscribe`),
   getTaughtPackages: async () => get(`packages/teach`),
@@ -49,11 +58,18 @@ export const packages = {
 }
 
 export const lessons = {
-  create: async ({ newLessonData }) => post('lessons', newLessonData),
+  create: async ({ newLessonData }) => {
+    const res = await post('lessons', newLessonData)
+    event('lesson', 'create_lesson', 'keepwork', res.id)
+    return res
+  },
   update: async ({ updatingData }) =>
     put(`lessons/${updatingData.id}`, updatingData),
-  release: async ({ id, content }) =>
-    post(`lessons/${id}/contents`, { content }),
+  release: async ({ id, content }) => {
+    const res = await post(`lessons/${id}/contents`, { content })
+    event('lesson', 'release_lesson', 'keepwork', id)
+    return res
+  },
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
@@ -79,7 +95,11 @@ export const users = {
   getTeachingRecords: async () => get(`packages`),
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
-  createLearnRecords: payload => post(`learnRecords`, payload),
+  createLearnRecords: async payload => {
+    const res = await post(`learnRecords`, payload)
+    event('lesson', 'start_lesson', 'keepwork', payload.lessonId)
+    return res
+  },
   learnRecords: () => get(`learnRecords`),
   verifyToken: ({ token }) => {
     let instance = axios.create({
@@ -91,15 +111,30 @@ export const users = {
 }
 
 export const classrooms = {
-  join: payload => post('classrooms/join', payload),
-  begin: ({ payload, config }) => post(`classrooms`, payload, config),
-  leave: () => post(`classrooms/quit`),
+  join: async payload => {
+    const res = await post('classrooms/join', payload)
+    event('lesson', 'join_class', 'keepwork', payload.classId)
+    return res
+  },
+  begin: async ({ payload, config }) => {
+    const res = await post(`classrooms`, payload, config)
+    event('lesson', 'begin_class', 'keepwork', res.id)
+    return res
+  },
+  leave: async () => {
+    const res = await post(`classrooms/quit`)
+    event('lesson', 'quit_class', 'keepwork', 0)
+    return res
+  },
   getTeachingListing: async () => get(`classrooms`),
   currentClass: () => get(`classrooms/current`),
   learnRecordsById: id => get(`learnRecords/${id}`),
   getClassroomById: id => get(`classrooms/${id}`),
-  dismiss: ({ classId, config }) =>
-    put(`classrooms/${classId}/dismiss`, null, config),
+  dismiss: async ({ classId, config }) => {
+    const res = await put(`classrooms/${classId}/dismiss`, null, config)
+    event('lesson', 'dismiss_class', 'keepwork', classId)
+    return res
+  },
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
   uploadLearnRecords: ({ classId, learnRecords, state }) =>
