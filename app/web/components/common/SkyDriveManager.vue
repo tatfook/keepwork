@@ -220,7 +220,7 @@ export default {
         : await this.getFileRawUrl(file)
     },
     async handleInsert({ file }) {
-      this.$emit('close', { file, url: this.handleGetUrl({ file }) })
+      this.$emit('close', { file, url: await this.handleGetUrl({ file }) })
     },
     async handleCopy(file) {
       this.$emit('copy', file)
