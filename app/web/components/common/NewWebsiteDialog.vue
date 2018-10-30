@@ -179,8 +179,8 @@ export default {
     }
   },
   async mounted() {
-    await this.userGetWebTemplateConfig()
-    await this.userGetAllWebsite({ useCache: true })
+    await this.userGetWebTemplateConfig().catch()
+    await this.userGetAllWebsite({ useCache: true }).catch()
     this.loading = false
   },
   methods: {
