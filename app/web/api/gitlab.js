@@ -4,18 +4,18 @@ import _ from 'lodash'
 export const showRawForGuest = async (
   rawBaseUrl,
   // dataSourceUsername,
-  // projectName,
-  fullPath
+  _projectName,
+  _path
 ) => {
-  // let url = `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master/${fullPath}?_random=${Math.random()}`
-  const _projectName = fullPath
-    .split('/')
-    .splice(0, 2)
-    .join('/')
-  const [ projectName, path ] = [_projectName, fullPath].map(encodeURIComponent)
+  const [projectName, path] = [_projectName, _path].map(encodeURIComponent)
   let url = `${rawBaseUrl}/projects/${projectName}/files/${path}`
   let res = await axios.get(url)
-  return _.get(res, 'data.content', '')
+  let content = _.get(res, 'data.content', '')
+  try {
+    return JSON.parse(content)
+  } catch (error) {
+    return content
+  }
 }
 
 export default {

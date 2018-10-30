@@ -98,7 +98,6 @@ const actions = {
   async register({ dispatch }, payload) {
     let registerInfo = await keepwork.user.register(payload)
     let { username, password } = payload
-    console.log('registerInfo', registerInfo)
     if (registerInfo) {
       await dispatch('login', { username, password })
       // let userinfo = _.get(registerInfo, 'data.userinfo')
@@ -161,8 +160,9 @@ const actions = {
     let { useCache = true } = payload || {}
     await dispatch('getAllPersonalWebsite', { useCache })
     let { personalSitePathMap } = getters
+    console.warn('getAllPersonalPageList: ', personalSitePathMap)
     await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
-      await dispatch('gitlab/getRepositoryTree', { path: sitepath, useCache }, { root: true })
+      await dispatch('gitlab/getRepositoryTree', { projectName: sitepath, path: sitepath, useCache }, { root: true })
     })).catch(e => console.error(e))
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
@@ -185,24 +185,33 @@ const actions = {
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
-    // await dispatch('getAllSiteDataSource', { useCache: false })
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
+    console.group('initWebsite')
     let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
-    let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
+    console.warn('siteInfo', getPersonalSiteInfoByPath(`${username}/${name}`))
+    let { type: categoryName, templateName, sitename } = getPersonalSiteInfoByPath(`${username}/${name}`)
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
-    for (let { path, content } of fileList) {
+    let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json']
+    fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
+    console.warn('webTemplate', webTemplate)
+    console.log('filterFiles', fileList)
+    console.groupEnd()
+    const projectName = `${username}/${sitename}`
+    console.warn('projectName: ', projectName)
+    for (let { path, name, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
-      await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+      // await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+      await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
     }
 
     // refresh repositoryTree
-    // await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+    await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
   // async initWebsite({ dispatch, getters }, { name }) {
   //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
@@ -224,14 +233,17 @@ const actions = {
   // },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, configFullPath)
+    let { rawBaseUrl, dataSourceUsername, projectName, configName } = webTemplateProject
+    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configName)
+    console.warn('configFullPath: ', configName, config)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, pageTemplateConfigFullPath)
+    let { rawBaseUrl, dataSourceUsername, projectName, configName, pageTemplateConfigFullPath } = webTemplateProject
+    console.warn('pageTemplateConfigFullPath: ', pageTemplateConfigFullPath)
+    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configName)
+    console.warn('getWebPageTemplateConfig: ', config)
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
@@ -241,17 +253,23 @@ const actions = {
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
-      content = await gitlabShowRawForGuest(rawBaseUrl, path)
+      console.group('getWebTemplateFiles')
+      console.info('path:', path)
+      console.groupEnd()
+      content = await gitlabShowRawForGuest(rawBaseUrl, projectName, path)
       content = _.isString(content) ? content : JSON.stringify(content)
       commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
   },
   async getWebTemplateFileList({ commit }, webTemplate) {
+    console.warn('webTemplate: ', webTemplate)
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
-    let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectId, path: `templates/${folder}`, recursive: true })
+    let { rawBaseUrl, projectName } = webTemplateProject
+    // let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
+    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    // fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
+    fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -279,7 +297,7 @@ const actions = {
     if (typeof content === 'string') return content
 
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, `${pageTemplateRoot}/${contentPath}`)
+    content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
@@ -324,9 +342,11 @@ const actions = {
     let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
-    let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
-    detailInfo.site.username = username
-    commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
+    if (username && sitename) {
+      let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
+      detailInfo.site.username = username
+      commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
+    }
   },
   async getWebsiteDetailBySiteId(context, { siteId, useCache = true }) {
     let { commit, getters: { getSiteDetailInfoById } } = context
