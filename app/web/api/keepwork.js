@@ -266,13 +266,16 @@ export const comments = {
     get(`comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`),
   createComment: async ({ objectType, objectId, content }) =>
     post('comments', { objectType, objectId, content }),
-  deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)
+  deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`),
+  updateComment: async ({ commentId, content }) => put(`comments/${commentId}`, { content })
 }
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
   getSingleProjectIssues: async ({ objectId, objectType }) =>
-    get(`issues?objectId=${objectId}&objectType=${objectType}`)
+    get(`issues?objectId=${objectId}&objectType=${objectType}`),
+  updateIssue: async ({ objectId, params }) => put(`issues/${objectId}`, { ...params }),
+  getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`),
 }
 
 export const keepwork = {

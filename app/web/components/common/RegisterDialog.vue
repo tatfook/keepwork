@@ -188,7 +188,7 @@ export default {
       padding: 0;
     }
     max-width: 352px;
-    padding: 40px 0 40px 0;
+    padding: 40px 0 10px 0;
   }
   &-form {
     padding: 0 32px;
