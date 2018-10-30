@@ -1,92 +1,170 @@
 <template>
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
-    <h4 slot="title" class="issue-detail-title">一个新项目/白板/问题详情</h4>
+    <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/白板/问题详情</h4>
     <div class="issue-detail-header">
-      <div class="issue-title">代码节比赛项目的场景搭建 #8989</div>
-      <div class="issue-edit"><i class="iconfont icon-edit-square"></i>编辑</div>
+      <div class="issue-title">{{issue.title}} #{{issue.id}}</div>
+      <!-- <div class="issue-edit"><i class="iconfont icon-edit-square"></i>编辑</div> -->
     </div>
     <div class="issue-detail-intro">
-      <span class="created-time">3小时前</span>
-      <span class="created-by">由<span class="name">果果</span>创建</span>
+      <span class="created-time">{{relativeTime(issue.createdAt)}}</span>
+      <span class="created-by">由<span class="name">{{issue.user.nickname}}</span>创建</span>
       <span class="created-tag">
-        <span class="tag">需求</span>
-        <span class="tag">开发</span>
-        <span class="tag">设计</span>
-        <span class="tag">流程</span>
+        <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
       </span>
     </div>
     <div class="issue-detail-status">
-      <div class="issue-detail-status-left">状态：<span class="rank"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 (99)</span></span></div>
+      <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
       <div class="issue-detail-status-right">
         负责人
-        <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-        <img class="player-portrait" src="https://git-stage.keepwork.com/gitlab_www_keepgo1230/keepworkdatasource/raw/master/keepgo1230_images/img_1530177473927.png" alt="">
-        <img class="player-portrait" src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
-        <img class="player-portrait" src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
-        <img class="player-portrait" src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
+        <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
       </div>
     </div>
     <div class="issue-detail-idea">
-      <div class="issue-detail-idea-box">
+      <div class="issue-detail-idea-box" v-for="(comment,index) in comments" :key="index">
         <div class="issue-detail-idea-box-portrait">
-          <img src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
+          <img :src="comment.extra.portrait || default_portrait" alt="">
         </div>
         <div class="issue-detail-idea-box-content">
           <div class="username-created-time">
-            <span class="username">告诉果果</span>
-            <span class="time">2018-9-12</span>
+            <div class="username-created-time-left">
+              <span class="username">{{comment.extra.username}}</span>
+              <span class="time">{{relativeTime(comment.createdAt)}}</span>
+            </div>
+            <div class="username-created-time-right">
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  · · ·
+                </span>
+                <el-dropdown-menu slot="dropdown" class="operate-comment">
+                  <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
+                  <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
           </div>
           <div class="idea-area">
             <div class="arrows"></div>
-            <div class="text"><textarea name="" id="idea" placeholder="说点什么呢......"></textarea></div>
-          </div>
-        </div>
-      </div>
-      <div class="issue-detail-idea-box">
-        <div class="issue-detail-idea-box-portrait">
-          <img src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
-        </div>
-        <div class="issue-detail-idea-box-content">
-          <div class="username-created-time">
-            <span class="username">告诉果果</span>
-            <span class="time">2018-9-12</span>
-          </div>
-          <div class="idea-area">
-            <div class="arrows"></div>
-            <div class="text"><textarea name="" id="idea" placeholder="说点什么呢......"></textarea></div>
+            <div v-if="comment.isEdit" class="text"><textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" @blur="notEdit(comment,index)" v-model="comment.content"></textarea></div>
+            <div v-else class="text">{{comment.content}}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="issue-detail-my-idea">
       <div class="issue-detail-my-idea-portrait">
-        <img src="http://git-stage.keepwork.com/gitlab_www_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1533803582075.jpeg" alt="">
+        <img :src="userProfile.portrait || default_portrait" alt="">
       </div>
       <div class="issue-detail-my-idea-content">
-        <div class="username">告诉果果</div>
+        <div class="username">{{username}}</div>
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" id="idea" placeholder="说点什么呢......"></textarea>
+            <textarea name="myIdea" id="idea" placeholder="说点什么呢......" v-model="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
           <el-button size="medium">关闭问题</el-button>
-          <el-button type="primary" size="medium">评论</el-button>
+          <el-button type="primary" size="medium" @click="createComment">评论</el-button>
         </div>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
+import default_portrait from '@/assets/img/default_portrait.png'
+import { mapGetters } from 'vuex'
+import { keepwork } from '@/api'
+import Vue from 'vue'
+import _ from 'lodash'
+
 export default {
   name: 'IssueDetail',
   props: {
-    show: Boolean
+    show: Boolean,
+    projectDetail: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    issue: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  data() {
+    return {
+      default_portrait,
+      comments: [],
+      myComment: '',
+      isEdit: false
+    }
+  },
+  async mounted() {
+    await this.getCommentsList()
+  },
+  computed: {
+    ...mapGetters({
+      username: 'user/username',
+      userProfile: 'user/profile'
+    })
   },
   methods: {
     handleClose() {
       this.$emit('close')
+    },
+    issueTagArr(issue) {
+      return _.get(issue, 'tags', '').split('|')
+    },
+    async getCommentsList() {
+      await keepwork.comments
+        .getComments({ objectType: 4, objectId: this.issue.id })
+        .then(comments => {
+          let commentsArr = _.get(comments, 'rows', [])
+          let arr = _.map(commentsArr, item => ({ ...item, isEdit: false }))
+          arr.sort(this.sortByUpdateAt)
+          this.comments = arr
+        })
+        .catch(err => console.error(err))
+    },
+    async createComment() {
+      await keepwork.comments.createComment({
+        objectType: 4,
+        objectId: this.issue.id,
+        content: this.myComment
+      })
+      this.myComment = ''
+      this.getCommentsList()
+    },
+    async handleComment(comment, action, index) {
+      if (action == 1) {
+        Vue.set(comment, 'isEdit', true)
+        Vue.set(this.comments, index, comment)
+        this.$nextTick(() => {
+          let dom = this.$refs[`edit${index}`]
+          dom[0].focus()
+        })
+      } else {
+        await keepwork.comments.deleteComment({ commentId: comment.id })
+        this.getCommentsList()
+      }
+    },
+    notEdit(comment, index) {
+      Vue.set(comment, 'isEdit', false)
+      Vue.set(this.comments, index, comment)
+    },
+    sortByUpdateAt(obj1, obj2) {
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    },
+    relativeTime(time) {
+      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(time, 'YYYYMMDDHH').fromNow()
     }
   }
 }
@@ -216,14 +294,22 @@ export default {
           flex: 1;
           margin-right: 90px;
           .username-created-time {
+            display: flex;
             margin-bottom: 10px;
-            .username {
-              font-size: 14px;
+            &-left {
+              flex: 1;
+              .username {
+                font-size: 14px;
+              }
+              .time {
+                font-size: 12px;
+                color: #909399;
+                padding-left: 15px;
+              }
             }
-            .time {
-              font-size: 12px;
-              color: #909399;
-              padding-left: 15px;
+            &-right {
+              width: 30px;
+              cursor: pointer;
             }
           }
           .idea-area {
@@ -244,6 +330,9 @@ export default {
               top: 9px;
             }
             .text {
+              word-break: break-all;
+              word-wrap: break-word;
+              margin: 12px 0;
               textarea {
                 border: none;
                 background: #f9f9f9;
@@ -304,6 +393,11 @@ export default {
         }
       }
     }
+  }
+}
+.operate-comment {
+  .action {
+    padding: 0 20px;
   }
 }
 </style>

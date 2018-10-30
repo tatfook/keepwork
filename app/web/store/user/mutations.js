@@ -28,6 +28,7 @@ const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
 const SAVE_SITE_THEME_CONFIG_SUCCESS = 'SAVE_SITE_THEME_CONFIG_SUCCESS'
 const USE_FILE_IN_SITE_SUCCESS = 'USE_FILE_IN_SITE_SUCCESS'
+const GET_FILE_RAW_URL_SUCCESS = 'GET_FILE_RAW_URL_SUCCESS'
 const GET_USER_THREE_SERVICES_SUCCESS = 'GET_USER_THREE_SERVICES_SUCCESS'
 const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 
@@ -59,6 +60,7 @@ export const props = {
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
   USE_FILE_IN_SITE_SUCCESS,
+  GET_FILE_RAW_URL_SUCCESS,
   GET_USER_THREE_SERVICES_SUCCESS,
   SET_AUTH_CODE_INFO
 }
@@ -206,6 +208,12 @@ const mutations = {
         ..._.get(state, ['siteFiles', sitePath]),
         [fileId]: url
       }
+    })
+  },
+  [GET_FILE_RAW_URL_SUCCESS](state, { fileId, url }) {
+    Vue.set(state, 'filesRawUrl', {
+      ...state.filesRawUrl,
+      [fileId]: url
     })
   },
   [SET_AUTH_CODE_INFO](state, payload) {

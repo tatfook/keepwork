@@ -1,5 +1,5 @@
 <template>
-  <div class="recruiting">
+  <div class="recruiting" v-loading="loading">
     <div class="search-result-total">搜索到：<span>{{recruitingCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in recruitmentData" :key="index">
@@ -30,11 +30,13 @@ export default {
     return {
       perPage: 4,
       page: 1,
-      recruitongProjects: []
+      recruitongProjects: [],
+      loading: true
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    this.loading = false
   },
   computed: {
     recruitingCount() {
@@ -46,7 +48,8 @@ export default {
         return {
           id: i.id,
           extra: { coverUrl: i.cover },
-          name: this.searchKeyResult(i),
+          name: i.name,
+          name_title: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -60,6 +63,7 @@ export default {
   },
   methods: {
     async targetPage(targetPage) {
+      this.loading = true
       this.$nextTick(async () => {
         await EsAPI.projects
           .getProjects({
@@ -73,6 +77,7 @@ export default {
             this.recruitongProjects = res
           })
           .catch(err => console.error(err))
+          this.loading = false
       })
     },
     searchKeyResult(i) {

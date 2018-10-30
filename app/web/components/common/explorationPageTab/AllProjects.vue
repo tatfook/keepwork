@@ -1,5 +1,5 @@
 <template>
-  <div class="all-projects">
+  <div class="all-projects" v-loading="loading">
     <div class="search-result-total">搜索到：<span>{{projectsCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in allProjectsDataOptimize" :key="index">
@@ -29,11 +29,13 @@ export default {
   data() {
     return {
       perPage: 6,
-      page: 1
+      page: 1,
+      loading: true
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -48,7 +50,8 @@ export default {
         return {
           id: i.id,
           extra: { coverUrl: i.cover },
-          name: this.searchKeyResult(i),
+          name: i.name,
+          name_title: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -65,6 +68,7 @@ export default {
       getAllProjects: 'pbl/getAllProjects'
     }),
     async targetPage(targetPage) {
+      this.loading = true
       this.$nextTick(async () => {
         await this.getAllProjects({
           page: targetPage,
@@ -72,6 +76,7 @@ export default {
           q: this.searchKey,
           sort: this.sortProjects
         })
+        this.loading = false
       })
     },
     searchKeyResult(i) {

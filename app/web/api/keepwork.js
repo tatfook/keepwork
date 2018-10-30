@@ -261,8 +261,8 @@ export const members = {
 }
 
 export const comments = {
-  getComments: async ({ objectType, objectId }) =>
-    get(`comments?objectType=${objectType}&objectId=${objectId}`),
+  getComments: async ({ objectType, objectId, xPage = 1, xPerPage = 200, xOrder = 'updatedAt-desc' }) =>
+    get(`comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`),
   createComment: async ({ objectType, objectId, content }) =>
     post('comments', { objectType, objectId, content }),
   deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)

@@ -17,6 +17,7 @@ const state = () => ({
   usersDetail: [],
   siteThemeConfigs: {},
   siteFiles: {},
+  filesRawUrl: {},
   sendCodeInfo: {},
   authCodeInfo: {},
   threeServices: [],

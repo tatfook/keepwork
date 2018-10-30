@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
-    <img class="project-cell-cover" :src="project.extra.coverUrl" alt="" @click="goProjectDetail(project)">
-    <h4 class="project-cell-title" @click="goProjectDetail(project)"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
+    <img class="project-cell-cover" :src="project.extra.coverUrl || project_default_cover" alt="" @click="goProjectDetail(project)">
+    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -11,7 +11,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || 'http://127.0.0.1:7001/public/img/default_portrait.png'" alt="portrait">{{project.user && project.user.username}}</div>
+      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">{{project.user && project.user.username}}</div>
       <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
   </div>
@@ -20,6 +20,8 @@
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
+import project_default_cover from '@/assets/pblImg/project_default_cover.png'
+import default_portrait from '@/assets/img/default_portrait.png'
 
 export default {
   name: 'ProjectCell',
@@ -34,7 +36,10 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      project_default_cover: project_default_cover,
+      default_portrait: default_portrait
+    }
   },
   computed: {
     isEn() {
@@ -63,7 +68,7 @@ export default {
   border: 1px solid #e8e8e8;
   background: #fff;
   &:hover {
-    box-shadow: 2px 2px 8px rgb(228, 226, 226), -2px -2px 8px rgb(228, 226, 226);
+    box-shadow: 0 0 25px 3px #ccc;
     transition: all 0.5s ease-in;
   }
   &-cover {
@@ -78,6 +83,7 @@ export default {
     margin: 10px 0;
     line-height: 20px;
     height: 20px;
+    cursor: pointer;
     display: flex;
     .red {
       color: red;
