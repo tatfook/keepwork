@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="finish">
-        <el-button size="medium" type="primary" @click="finishedCreateIssue">完成创建</el-button>
+        <el-button size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">完成创建</el-button>
       </div>
     </div>
   </el-dialog>
@@ -73,7 +73,8 @@ export default {
       inputValue: '',
       descriptionText: '',
       default_portrait: default_portrait,
-      assignedMembers: []
+      assignedMembers: [],
+      cretateIssueLoading: false
     }
   },
   async mounted() {
@@ -142,6 +143,7 @@ export default {
       })
     },
     async finishedCreateIssue() {
+      this.cretateIssueLoading = true
       this.$nextTick(async () => {
         let payload = {
           objectType: 5,
@@ -156,6 +158,7 @@ export default {
           .then(res => {
             this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
             this.handleClose()
+            this.cretateIssueLoading = false
           })
           .catch(err => console.error(err))
       })
