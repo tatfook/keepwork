@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap" v-loading="isLoading">
-    <LessonStudentStatus v-if="isBeInClassroom" :isVisitor="true" :classKey="classKey" />
+    <LessonStudentStatus v-if="isBeInClassroom && !isLoading" :isVisitor="true" :classKey="classKey" />
     <LessonHeader :data="lessonHeaderData" :isVisitor="true" />
     <LessonSummary v-if="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" :isVisitor="true" />

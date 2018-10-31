@@ -78,7 +78,7 @@ export default {
     },
     nickname() {
       return this.isVisitor
-        ? this.visitorInfo.name || this.visitorInfo.nickname || this.visitorInfo.username
+        ? this.visitorInfo.name || this.visitorInfo.username
         : _.get(this.userinfo, 'nickname', '')
     },
     username() {
@@ -112,6 +112,7 @@ export default {
     },
     async setNicknameHandle() {
       if (this.name.trim() === '') return
+      this.isLoading = true
       if (this.isVisitor) {
         this.setVisitorNickname(this.name)
         let { packageId, lessonId } = this.$route.params
@@ -120,9 +121,9 @@ export default {
           lessonId: Number(lessonId),
           state: this.lessonIsDone ? 1 : 0
         }).catch(e => console.error(e))
+        this.isLoading = false
         return this.switchEdit()
       }
-      this.isLoading = true
       await this.setNickname(this.name)
         .then(() => {
           this.isLoading = false

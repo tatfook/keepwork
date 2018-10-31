@@ -87,7 +87,6 @@ router.beforeEach(async (to, from, next) => {
               key
             })
             .catch(e => console.error(e))
-          console.warn('enterClassroom after and redirect --->')
           return next({
             name: 'LessonStudent',
             params,
