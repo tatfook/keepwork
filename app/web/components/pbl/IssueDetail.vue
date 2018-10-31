@@ -36,13 +36,13 @@
       <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
       <div class="issue-detail-status-right">
         负责人
-        <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
+        <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="">
         <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
           <span class="el-dropdown-link">
             <span class="assigns-btn"></span>
           </span>
           <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-            <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+            <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -135,7 +135,6 @@ export default {
     return {
       default_portrait,
       issueData: {},
-      // dynamicTags: ['需求', '设计', '产品'],
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
@@ -165,6 +164,20 @@ export default {
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectDetail.id })
     },
+    memberList_2() {
+      let memberArr1 = _.concat(this.memberList)
+      let memberArr2 = _.forEach(memberArr1, member => {
+        Object.assign(member, { haveAssigned: this.isAssigned(member) })
+      })
+      return memberArr2
+    },
+    assignMembersId() {
+      let arrId = []
+      _.map(this.assignedMembers, ({userId}) => {
+        arrId.push(userId)
+      })
+      return arrId.join('|')
+    },
     currIssueId() {
       return _.get(this.issue, 'id', '')
     }
@@ -178,13 +191,13 @@ export default {
       await keepwork.issues
         .getSingleIssue({ issueId: this.currIssueId })
         .then(issue => {
-          console.log('currissue', issue)
           this.issueData = Object.assign(issue, {
             titleIsEdit: false,
             tagEdit: false
           })
           this.currIssue = _.clone(this.issueData)
           this.dynamicTags = this.currIssue.tags.split('|')
+          this.assignedMembers = _.clone(this.currIssue.assigns)
         })
         .catch(err => console.error(err))
     },
@@ -194,21 +207,32 @@ export default {
     alterTag() {
       Vue.set(this.currIssue, 'tagEdit', true)
     },
-    async updateTitle() {
+    async updateIssueItem(item) {
       await keepwork.issues
         .updateIssue({
           objectId: this.issue.id,
-          params: { title: this.currIssue.title }
+          params: item
         })
         .catch(err => console.error(err))
-      this.getIssueData()
-      this.getProjectIssues({
+      await this.getProjectIssues({
         objectId: this.projectDetail.id,
         objectType: 5
       })
     },
-    updateTag(){
-
+    async updateTitle() {
+      await this.updateIssueItem({ title: this.currIssue.title })
+      this.getIssueData()
+    },
+    async updateTag() {
+      let tags = this.dynamicTags.join('|')
+      if (tags != this.currIssue.tags) {
+        await this.updateIssueItem({ tags })
+        await this.getIssueData()
+        this.currIssue = _.clone(this.issueData)
+        this.dynamicTags = this.currIssue.tags.split('|')
+      } else {
+        this.cancelUpdateTag()
+      }
     },
     handleCloseTag(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
@@ -231,7 +255,7 @@ export default {
     cancelUpdateTitle() {
       this.currIssue = _.clone(this.issueData)
     },
-    cancelUpdateTag(){
+    cancelUpdateTag() {
       this.currIssue = _.clone(this.issueData)
       this.dynamicTags = this.currIssue.tags.split('|')
     },
@@ -291,20 +315,19 @@ export default {
       this.getCommentsList()
     },
     async closeIssue() {
-      await keepwork.issues.updateIssue({
-        objectId: this.issue.id,
-        params: { state: 1 }
-      })
-      await this.getProjectIssues({
-        objectId: this.projectDetail.id,
-        objectType: 5
-      })
+      await this.updateIssueItem({ state: 1 })
       this.handleClose()
     },
     isAssigned(member) {
-      return this.assignedMembers.indexOf(member) !== -1 ? true : false
+      let temp = false
+      _.forEach(this.assignedMembers, assign => {
+        if (member.userId == assign.userId) {
+          temp = true
+        }
+      })
+      return temp
     },
-    handleCommand(userId) {
+    async handleCommand(userId) {
       _.forEach(this.memberList, member => {
         if (member.userId === userId) {
           if (this.assignedMembers.length == 0) {
@@ -322,6 +345,8 @@ export default {
           this.assignedMembers.splice(i, 1)
         }
       })
+      await this.updateIssueItem({assigns: this.assignMembersId})
+      this.getIssueData()
     },
     relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
@@ -405,12 +430,16 @@ export default {
         .el-tag {
           height: 22px;
           line-height: 20px;
+          margin-bottom: 4px;
         }
         .el-tag + .el-tag {
           margin-left: 4px;
         }
         .button-new-tag {
           padding: 4px 8px;
+        }
+        .input-new-tag {
+          margin-bottom: 4px;
         }
         .el-button {
           padding: 4px 10px;
@@ -423,7 +452,7 @@ export default {
           display: inline-block;
           padding: 2px 4px;
           border-radius: 2px;
-          margin-right: 5px;
+          margin: 0 5px 4px 0;
         }
         .edit-tag {
           color: #409eff;
@@ -454,12 +483,6 @@ export default {
             font-size: 20px;
             margin-right: 4px;
           }
-          // &-tip {
-          //   cursor: pointer;
-          //   &:hover {
-          //     color: #409eff;
-          //   }
-          // }
         }
       }
       &-right {
@@ -476,8 +499,8 @@ export default {
           margin-right: 5px;
         }
         .assigns-btn {
-          width: 36px;
-          height: 36px;
+          width: 26px;
+          height: 26px;
           border-radius: 50%;
           border: 1px solid #e8e8e8;
           display: inline-block;
@@ -489,8 +512,8 @@ export default {
             width: 1px;
             background: #6e6d6d;
             position: absolute;
-            left: 17px;
-            top: 10px;
+            left: 12px;
+            top: 5px;
           }
           &::before {
             content: '';
@@ -498,8 +521,8 @@ export default {
             width: 16px;
             background: #6e6d6d;
             position: absolute;
-            left: 10px;
-            top: 17px;
+            left: 5px;
+            top: 12px;
           }
         }
       }
