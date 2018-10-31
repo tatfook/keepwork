@@ -35,12 +35,16 @@ export default {
   },
   async mounted() {
     await this.targetPage(this.page)
+    console.log('website',this.website)
     this.loading = false
   },
   computed: {
     ...mapGetters({
-      website: 'pbl/website'
+      pblWebsite: 'pbl/diffTypeProject'
     }),
+    website(){
+      return this.pblWebsite({ type: 'site'})
+    },
     websiteCount() {
       return _.get(this.website, 'total', 0)
     },
@@ -73,7 +77,7 @@ export default {
         await this.getTypeProjects({
           page: targetPage,
           per_age: this.perPage,
-          type: 'website',
+          type: 'site',
           q: this.searchKey,
           sort: this.sortProjects
         })

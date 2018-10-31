@@ -13,8 +13,7 @@ const getters = {
   myContributeProjects: state => state.myContributeProjects,
   projectApplyState: state => ({ projectId, userId }) => _.get(state.projectApplyState, `${userId}.${projectId}`),
   projectCommentList: state => ({ projectId }) => _.get(state.commentList, projectId),
-  paracraft: state => state.projectsType.paracraft,
-  website: state => state.projectsType.website,
+  diffTypeProject: state => ({ type }) => _.get(state.projectsType, type),
   issuesList: state => ({ projectId }) => _.get(state.issuesList, projectId)
 }
 
