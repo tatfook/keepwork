@@ -143,7 +143,6 @@ export default {
     async addPackage() {
       if (this.isLogin) {
         if (this.isPackageFree) {
-          _hmt.push(['_trackEvent', 'package', 'purchase', 'Free Package'])
           await this.lessonSubscribePackage({ packageId: this.packageId })
           this.$message({
             message: this.$t('lesson.addPackageSuccess'),
