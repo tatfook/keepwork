@@ -39,8 +39,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      paracraft: 'pbl/paracraft'
+      pblParacraft: 'pbl/diffTypeProject'
     }),
+    paracraft(){
+      return this.pblParacraft({ type: 'paracraft'})
+    },
     paracraftCount() {
       return _.get(this.paracraft, 'total', 0)
     },
