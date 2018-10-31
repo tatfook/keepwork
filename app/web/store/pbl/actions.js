@@ -237,9 +237,9 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getProjectIssues({ commit }, { objectId, objectType }) {
-    await keepwork.issues.getSingleProjectIssues({ objectId, objectType }).then(projectIssues => {
-      commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: objectId })
+  async getProjectIssues({ commit }, payload) {
+    await keepwork.issues.getSingleProjectIssues(payload).then(projectIssues => {
+      commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: payload.objectId })
     }).catch(err => console.error(err))
   }
 }
