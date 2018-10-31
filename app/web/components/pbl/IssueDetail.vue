@@ -42,7 +42,7 @@
             <span class="assigns-btn"></span>
           </span>
           <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-            <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+            <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -163,6 +163,21 @@ export default {
     }),
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectDetail.id })
+    },
+    memberList_2() {
+      let memberArr1 = _.concat(this.memberList)
+      let memberArr2 = _.forEach(memberArr1, member => {
+        Object.assign(member, { haveAssigned: this.isAssigned(member) })
+      })
+      console.log('memberArr2', memberArr2)
+      return memberArr2
+    },
+    assignMembersId() {
+      let arrId = []
+      _.map(this.assignedMembers, ({userId}) => {
+        arrId.push(userId)
+      })
+      return arrId.join('|')
     },
     currIssueId() {
       return _.get(this.issue, 'id', '')
@@ -309,9 +324,15 @@ export default {
       this.handleClose()
     },
     isAssigned(member) {
-      return this.assignedMembers.indexOf(member) !== -1 ? true : false
+      let temp = false
+      _.forEach(this.assignedMembers, assign => {
+        if (member.userId == assign.userId) {
+          temp = true
+        }
+      })
+      return temp
     },
-    handleCommand(userId) {
+    async handleCommand(userId) {
       _.forEach(this.memberList, member => {
         if (member.userId === userId) {
           if (this.assignedMembers.length == 0) {
@@ -329,6 +350,8 @@ export default {
           this.assignedMembers.splice(i, 1)
         }
       })
+      await this.updateIssueItem({assigns: this.assignMembersId})
+      this.getIssueData()
     },
     relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
@@ -420,7 +443,7 @@ export default {
         .button-new-tag {
           padding: 4px 8px;
         }
-        .input-new-tag{
+        .input-new-tag {
           margin-bottom: 4px;
         }
         .el-button {
@@ -487,8 +510,8 @@ export default {
           margin-right: 5px;
         }
         .assigns-btn {
-          width: 36px;
-          height: 36px;
+          width: 26px;
+          height: 26px;
           border-radius: 50%;
           border: 1px solid #e8e8e8;
           display: inline-block;
@@ -500,8 +523,8 @@ export default {
             width: 1px;
             background: #6e6d6d;
             position: absolute;
-            left: 17px;
-            top: 10px;
+            left: 12px;
+            top: 5px;
           }
           &::before {
             content: '';
@@ -509,8 +532,8 @@ export default {
             width: 16px;
             background: #6e6d6d;
             position: absolute;
-            left: 10px;
-            top: 17px;
+            left: 5px;
+            top: 12px;
           }
         }
       }
