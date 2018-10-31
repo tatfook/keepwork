@@ -273,7 +273,6 @@ const actions = {
     commit(CLEAR_VISITOR_INFO)
   },
   async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
-    console.warn('resumeVisitorLearnRecords')
     const { token } = visitorInfo
     let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
     let _visitorInfo = _.clone(visitorInfo)
@@ -281,7 +280,7 @@ const actions = {
     let name = _.get(res, 'data.extra.name', '')
     if (username) {
       _visitorInfo.username = username
-      _visitorInfo.name = name || username
+      _visitorInfo.name = _visitorInfo.name || name || username
       commit(SAVE_VISITOR_INFO, _visitorInfo)
     }
     let quiz = _.get(res.data, 'extra.quiz', '')
