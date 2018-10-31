@@ -49,11 +49,7 @@ export default {
   mounted() {
     this.userInfo = _.cloneDeep(this.loginUserProfile)
     this.copiedLoginUserProfile = _.cloneDeep(this.loginUserProfile)
-    this.tempLocation = _.get(
-      this.copiedLoginUserProfile,
-      'extra.location',
-      null
-    )
+    this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
   },
   data() {
     return {
@@ -101,7 +97,7 @@ export default {
       })
     },
     isModified() {
-      return !_.isEqual(this.copiedLoginUserProfile, this.updatingUserInfo)
+      return !_.isEqual(this.loginUserProfile, this.updatingUserInfo)
     }
   },
   methods: {
@@ -165,8 +161,8 @@ export default {
       let userInfo = this.userInfo
       if (this.isModified) {
         this.loading = true
-        let { _id, nickname, sex, portrait, extra, description } = userInfo
-        let { location } = extra
+        let { id, nickname, sex, portrait, description } = userInfo
+        let location = this.tempLocation
         let isSensitive = await this.checkSensitive([
           nickname,
           location,
@@ -177,14 +173,7 @@ export default {
           this.loading = false
           return
         }
-        await this.userUpdateUserInfo({
-          _id,
-          nickname,
-          sex,
-          portrait,
-          location,
-          description
-        })
+        await this.userUpdateUserInfo(this.updatingUserInfo)
         this.loading = false
       }
       this.showMessage('success', this.$t('common.saveSuccess'))
