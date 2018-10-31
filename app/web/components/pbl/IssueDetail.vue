@@ -169,7 +169,6 @@ export default {
       let memberArr2 = _.forEach(memberArr1, member => {
         Object.assign(member, { haveAssigned: this.isAssigned(member) })
       })
-      console.log('memberArr2', memberArr2)
       return memberArr2
     },
     assignMembersId() {
@@ -192,7 +191,6 @@ export default {
       await keepwork.issues
         .getSingleIssue({ issueId: this.currIssueId })
         .then(issue => {
-          console.log('currissue', issue)
           this.issueData = Object.assign(issue, {
             titleIsEdit: false,
             tagEdit: false
@@ -228,14 +226,11 @@ export default {
     async updateTag() {
       let tags = this.dynamicTags.join('|')
       if (tags != this.currIssue.tags) {
-        console.log('1212', tags)
-        console.log('3434', this.currIssue.tags)
         await this.updateIssueItem({ tags })
         await this.getIssueData()
         this.currIssue = _.clone(this.issueData)
         this.dynamicTags = this.currIssue.tags.split('|')
       } else {
-        console.log('tag没有改变')
         this.cancelUpdateTag()
       }
     },
@@ -488,12 +483,6 @@ export default {
             font-size: 20px;
             margin-right: 4px;
           }
-          // &-tip {
-          //   cursor: pointer;
-          //   &:hover {
-          //     color: #409eff;
-          //   }
-          // }
         }
       }
       &-right {
