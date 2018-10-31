@@ -33,10 +33,13 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    if (this.visitorInfo.token !== 0 && !this.visitorInfo.token) {
+      return this.$router.push({ name: 'StudentCenter'})
+    }
     this.isLoading = true
     const { key = '', token, id, nickname = '' } = this.$route.query
     this.classKey = key
-    this.saveVisitorInfo({ classId: id, key, token, nickname })
+    this.saveVisitorInfo({ classId: id, key, token, nickname, name: nickname })
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
     lessonId = Number(lessonId)

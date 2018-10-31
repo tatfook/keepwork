@@ -191,7 +191,7 @@ export default {
         visibilityChange,
         async () => {
           document[hidden] ? this.changeStatus(2) : this.changeStatus(1)
-          await this.uploadLearnRecords().catch(e => console.error(e))
+          // await this.uploadLearnRecords().catch(e => console.error(e))
         },
         false
       )
