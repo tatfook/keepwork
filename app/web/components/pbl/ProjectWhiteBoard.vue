@@ -4,11 +4,11 @@
       <div class="project-white-board-content-header">
         <div class="search">
           <el-input size="medium" placeholder="请输入内容" v-model="searchKeyWord" class="input-with-select">
-            <el-select v-model="select" slot="prepend" placeholder="请选择">
+            <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
               <el-option label="全部" value="1"></el-option>
               <el-option label="进行中" value="2"></el-option>
               <el-option label="已完成" value="3"></el-option>
-            </el-select>
+            </el-select> -->
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
@@ -115,7 +115,9 @@ export default {
       getProjectIssues: 'pbl/getProjectIssues'
     }),
     searchIssue(){
-
+      console.warn('😬searchIssue-------->', this.searchKeyWord)
+      this.getProjectIssues({objectId: this.projectId, objectType: 5, 'title-like': `%${this.searchKeyWord}%`})
+      this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
       this.showNewIssue = true
