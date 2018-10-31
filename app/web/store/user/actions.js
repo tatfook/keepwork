@@ -70,6 +70,12 @@ const actions = {
     }
     return info
   },
+  async loginByInfo({ commit, dispatch }, payload) {
+    Cookies.set('token', payload)
+    window.localStorage.setItem('satellizer_token', payload)
+    commit(LOGIN_SUCCESS, payload)
+    await dispatch('lesson/getUserDetail', null, { root: true })
+  },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
     window.localStorage.setItem('satellizer_token', token)
@@ -114,10 +120,11 @@ const actions = {
     return thirdRegisterInfo
   },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
-    let { commit, getters: { token } } = context
+    let { commit, dispatch, getters: { token } } = context
     if (useCache) return
     const profile = await keepwork.user.getProfile()
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
+    await dispatch('lesson/resumeClassData', null, { root: true })
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context

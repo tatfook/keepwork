@@ -18,6 +18,16 @@
           <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
         </a>
       </el-menu-item> -->
+      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
+        <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">
+          <img class="iicc-logo" src="@/assets/img/times_logo.png" alt="">{{$t('common.creatTimes')}}
+        </a>
+      </el-menu-item>
+      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='7'>
+        <a href='https://keepwork.com/official/paracraft/index' target="_blank">
+          <img class="iicc-logo" src="@/assets/img/paracraft_logo.png" alt="">{{$t('common.paracratLearning')}}
+        </a>
+      </el-menu-item> -->
 
       <!-- <el-menu-item index="10" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
@@ -138,6 +148,9 @@
         <el-menu-item index='1-3'>
           <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
         </el-menu-item>
+        <el-menu-item index='1-4'>
+          <a @click.stop="logout">{{$t('common.logout')}}</a>
+        </el-menu-item>
       </el-submenu>
       <el-menu-item index='3' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
@@ -159,7 +172,7 @@
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
         <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-6'>
-          <a href='//iicc.keepwork.com' target="_blank">{{$t('common.iicc')}}</a>
+          <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a>
         </el-menu-item>
       </el-submenu>
     </el-menu>
@@ -205,7 +218,8 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
-      username: 'user/username'
+      username: 'user/username',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     isLogin: {
       get() {
@@ -234,7 +248,9 @@ export default {
   methods: {
     ...mapActions({
       userGetProfile: 'user/getProfile',
-      userLogout: 'user/logout'
+      userLogout: 'user/logout',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      changeStatus: 'lesson/student/changeStatus'
     }),
     goKnowledgeManagement() {
       this.$alert('开发中~~~~~~', '', {
@@ -282,7 +298,11 @@ export default {
     closeLoginDialog() {
       this.isLoginDialogShow = false
     },
-    logout() {
+    async logout() {
+      if (this.isBeInClassroom) {
+        this.changeStatus(0)
+        await this.uploadLearnRecords().catch(e => console.error(e))
+      }
       this.userLogout()
       this.$emit('callback')
     },
@@ -368,9 +388,6 @@ export default {
   .hidden-sm-and-up .el-icon-menu {
     font-size: 30px;
   }
-  .hidden-sm-and-up .el-submenu {
-    margin: 0 -10px;
-  }
   .el-menu-item {
     padding: 0 10px;
   }
@@ -411,6 +428,9 @@ export default {
       }
     }
   }
+}
+.el-menu-item {
+  padding: 0 10px;
 }
 .user-menu-dropdown {
   .greeting {

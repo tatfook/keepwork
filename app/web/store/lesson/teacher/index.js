@@ -3,9 +3,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = () => ({
-  isShowLesson: true,
-  isShowPerformance: false,
-  isShowSummary: false,
+
   isShowHint: true,
   classroom: {},
   lessonDetail: {},
@@ -13,7 +11,8 @@ const state = () => ({
   userLessons: [],
   packageLessons: {},
   lessonContent: {},
-  classroomLearnRecord: []
+  classroomLearnRecord: [],
+  classroomQuiz: []
 })
 
 export default {

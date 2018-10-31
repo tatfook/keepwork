@@ -1,9 +1,10 @@
 <template>
   <div class="lesson-student-progress">
-    <span class="progress-point start" @click="showQuiz">
+    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz">
       <div :class="['progress-point-title', {'light': isQuizLight}]">{{$t('lesson.lessonPlan')}}</div>
-      <div @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
+      <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
+          <!-- <div class="quiz-result-list-wrap"> -->
           <div class="quiz-result-list">
             <div class="quiz-result-list-container">
               <div v-for="(quiz, index) in lessonQuiz" :key="index" @click.stop="showMeTheQuiz(quiz.key)" :class="['quiz-status-wrap',{'default': quiz.result === null}]">
@@ -11,6 +12,8 @@
                 <i class="el-icon-circle-check quiz-result right" v-if="quiz.result === true"></i>
                 <i class="el-icon-circle-close quiz-result wrong" v-if="quiz.result === false"></i>
               </div>
+              <el-button v-if="isShowRedo" :loading="redoLoading" @click="handleRedo" class="quiz-redo-button" round type="success">{{$t('lesson.learnAgain')}}</el-button>
+              <!-- <div v-if="isShowRedo" class='quiz-status-wrap quiz-redo-button' @click="handleRedo">{{$t('lesson.learnAgain')}}</div> -->
             </div>
           </div>
         </div>
@@ -31,13 +34,18 @@ export default {
   props: {
     progressNumer: {
       type: String,
-      default: '3/6'
+      default: '0'
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       isShowQuizResult: false,
-      quizList: []
+      quizList: [],
+      redoLoading: false
     }
   },
   computed: {
@@ -47,10 +55,32 @@ export default {
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       lessonQuizProgress: 'lesson/student/lessonQuizProgress',
       lessonIsDone: 'lesson/student/lessonIsDone',
-      isShowSummary: 'lesson/student/isShowSummary'
+      isShowSummary: 'lesson/student/isShowSummary',
+      isQuizAllRight: 'lesson/student/isQuizAllRight',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     isQuizLight() {
       return !this.isShowSummary
+    },
+    isQuizAllDone() {
+      return (
+        this.lessonQuizDone > 0 && this.lessonQuizDone === this.lessonQuizCount
+      )
+    },
+    isShowRedo() {
+      return (
+        !this.isVisitor &&
+        !this.isBeInClassroom &&
+        this.isQuizAllDone &&
+        !this.isQuizAllRight
+      )
+    }
+  },
+  watch: {
+    lessonIsDone(value) {
+      if (value && !this.isQuizAllRight) {
+        this.isShowQuizResult = true
+      }
     }
   },
   methods: {
@@ -82,6 +112,10 @@ export default {
     },
     showQuiz() {
       this.switchSummary(false)
+    },
+    handleRedo() {
+      this.redoLoading = true
+      this.$router.go(0)
     }
   }
 }
@@ -180,6 +214,10 @@ export default {
       z-index: 998;
       padding: 20px;
       position: relative;
+      text-align: center;
+      .quiz-redo-button {
+        margin-top: 16px;
+      }
       .quiz-status-wrap {
         height: 40px;
         border-radius: 30px;
@@ -192,6 +230,11 @@ export default {
         align-items: center;
         justify-content: space-between;
         box-shadow: 1px 1px 9px #e0e0e0;
+        // &.quiz-redo-button {
+        //   text-align: center;
+        //   background: #67c23a;
+        //   display: block;
+        // }
         &.default {
           color: black;
           background: white;
@@ -228,6 +271,20 @@ export default {
       left: 115px;
       top: 60px;
       box-shadow: $shadow;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-student-progress {
+    .progress-point {
+      width: 16px;
+      height: 16px;
+      &.grey {
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 }

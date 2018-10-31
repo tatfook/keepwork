@@ -30,7 +30,7 @@ export default {
   async mounted() {
     const { name, params: { packageId, lessonId } } = this.$route
     await this.getCurrentClass().catch(e => console.error(e))
-    await this.getLessonContent(lessonId).catch(e => console.error(e))
+    await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
     this.isLoading = false
     if (
       name === 'LessonTeacherSummary' ||
@@ -39,7 +39,10 @@ export default {
     ) {
       this.$router.push({ name: 'LessonTeacherPlan' })
     }
-    this.isInCurrentClass && this.intervalUpdateLearnRecords()
+    if (this.isInCurrentClass) {
+      this.copyClassroomQuiz()
+      this.intervalUpdateLearnRecords()
+    }
     window.document.title = this.lessonName
   },
   async destroyed() {
@@ -51,7 +54,8 @@ export default {
       getLessonContent: 'lesson/teacher/getLessonContent',
       getCurrentClass: 'lesson/teacher/getCurrentClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords',
-      leaveTheClassroom: 'lesson/teacher/leaveTheClassroom'
+      leaveTheClassroom: 'lesson/teacher/leaveTheClassroom',
+      copyClassroomQuiz: 'lesson/teacher/copyClassroomQuiz'
     }),
     async intervalUpdateLearnRecords(delay = 3000) {
       await this.updateLearnRecords()

@@ -16,15 +16,19 @@
     <el-table class="performance-table" :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" height="500" tooltip-effect="dark" :default-expand-all="false">
       <el-table-column v-if="isHasData" fixed prop="name" :label="$t('lesson.name')" sortable min-width="140" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
-          <div class="userinfo">
-            <img class="portrait" :src="formatAvatar(props.row.portrait)" alt="portrait">
-            <span class="name">{{props.row.name}}</span>
-          </div>
+          <el-tooltip :content="statusTips(props.row.status)" placement="top">
+            <div class="userinfo">
+              <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
+                <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'offline': checkOffline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
+              </div>
+              <span class="name">{{props.row.name}}</span>
+            </div>
+          </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column fixed v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
+      <el-table-column :fixed='!isPhoneSize' v-for="(item,index) in tableUserInfo" :key="index" :prop="item" :label="$t(`lesson.${item}`)" sortable min-width="120" align="center" :show-overflow-tooltip="true">
       </el-table-column>
-      
+
       <el-table-column v-for="(item, index) in tableQuizzes" :key="item" :render-header="(h, params) => renderLastHeader(h,params)" sortable min-width="100" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <span v-if="props.row[`quiz${index+1}`]['type'] === TRF" :class="['answer', props.row[`quiz${index + 1}`]['result'] ? 'right': 'wrong'  ]">{{ formatTRF(props.row[`quiz${index+1}`]['answer']) }}</span>
@@ -44,9 +48,15 @@ export default {
   name: 'LessonStudentPerformance',
   data() {
     return {
+      windowWidth: window.innerWidth,
       TRF: '2',
-      defaultAvatar: avatar
+      defaultAvatar: avatar,
+      KEEPWORK_SIGN: 'k',
+      PARACRAFT_SIGN: 'p'
     }
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleWindowResize)
   },
   components: {
     TableHeaderPopover
@@ -57,8 +67,32 @@ export default {
     }
   },
   methods: {
+    handleWindowResize(event) {
+      this.windowWidth = event.currentTarget.innerWidth
+    },
     handleRefreshLearnRecords() {
       this.$emit('intervalUpdateLearnRecords')
+    },
+    checkOnline(value) {
+      return value ? ['k1', 'p1'].some(i => i === value) : false
+    },
+    checkOffline(value) {
+      return value ? ['k0', 'p0'].some(i => i === value) : false
+    },
+    checkLeave(value) {
+      return value ? ['k2', 'p2'].some(i => i === value) : false
+    },
+    statusTips(value) {
+      if (this.checkOnline(value)) {
+        return this.$t('lesson.online')
+      }
+      if (this.checkOffline(value)) {
+        return this.$t('lesson.offline')
+      }
+      if (this.checkLeave(value)) {
+        return this.$t('lesson.leave')
+      }
+      return this.$t('lesson.online')
     },
     formatAvatar(value = '') {
       return value.substr(0, 4).toLowerCase() === 'http'
@@ -75,13 +109,10 @@ export default {
       return ''
     },
     renderLastHeader(h, { column, $index }) {
-      let tableHeaderIndex = $index - 2
+      let tableHeaderIndex = $index - 3
       let quizIndex = tableHeaderIndex - 1
       let quiz = this.tableHeaderQuizzesPopover[quizIndex]
       return <TableHeaderPopover index={tableHeaderIndex} quiz={quiz} />
-    },
-    testData() {
-      console.log(this.tableHeaderQuizzesPopover[0])
     },
     countState(quiz) {
       let finishCount = quiz.reduce((count, cur) => {
@@ -89,51 +120,96 @@ export default {
         return count
       }, 0)
       let state =
-        finishCount === quiz.length ? `${this.$t('lesson.finished')}` : `${finishCount}/${quiz.length}`
+        finishCount === quiz.length
+          ? `${this.$t('lesson.finished')}`
+          : `${finishCount}/${quiz.length}`
       return state
     },
     makeQuizzes(quiz) {
       return quiz.reduce((obj, cur, index) => {
-        let { result, answer, data: { options, type, score } } = cur
+        let {
+          result,
+          answer,
+          data: { options, type, score }
+        } = cur
         obj[`quiz${index + 1}`] = { answer, result, options, type, score }
         return obj
       }, {})
+    },
+    getFirstLetter(chart) {
+      return chart ? chart[0] : 'k'
+    },
+    isOutline(value) {
+      return ['k0', 'p0'].some(i => i === value)
+    },
+    isLeave(value) {
+      return ['k2', 'p2'].some(i => i === value)
+    },
+    verifyQuiz(quiz) {
+      if (this.classroomQuiz.length > 0 && quiz.length === 0) {
+        return [...this.classroomQuiz]
+      }
+      return quiz
     }
   },
   computed: {
     ...mapGetters({
       classroomId: 'lesson/teacher/classroomId',
       isBeInClass: 'lesson/teacher/isBeInClass',
-      learnRecords: 'lesson/teacher/learnRecords'
+      learnRecords: 'lesson/teacher/learnRecords',
+      classroomQuiz: 'lesson/teacher/classroomQuiz',
+      classroom: 'lesson/teacher/classroom'
     }),
+    isPhoneSize() {
+      return this.windowWidth < 768
+    },
     isHasData() {
-      return (
-        this.learnRecords &&
-        this.learnRecords.length > 0 &&
-        this.learnRecords[0].extra['name']
-      )
+      return this.learnRecords && this.learnRecords.length > 0
     },
     learnRecordsFilter() {
       return this.isHasData
-        ? this.learnRecords.map(
-            ({
-              userId,
-              state,
-              extra: { name, portrait, quiz = [], username }
-            }) => ({
-              userId,
-              state,
-              name,
-              portrait,
-              quiz,
-              username
+        ? this.learnRecords
+            .filter(i => {
+              return (
+                i.packageId === this.classroom.packageId &&
+                i.lessonId === this.classroom.lessonId &&
+                i.extra.username
+              )
             })
-          )
+            .map(
+              ({
+                userId,
+                state,
+                extra: {
+                  name = '',
+                  portrait,
+                  quiz = [],
+                  username = '',
+                  status = 'k1',
+                  world = ''
+                }
+              }) => {
+                quiz = this.verifyQuiz(quiz)
+                return {
+                  userId,
+                  state,
+                  status,
+                  world,
+                  name,
+                  portrait,
+                  quiz,
+                  username
+                }
+              }
+            )
         : []
     },
     tableHeaderQuizzesPopover() {
       if (!this.isHasData) return []
-      let quiz = this.learnRecordsFilter[0].quiz
+      // let quiz =
+      //   this.classroomQuiz ||
+      //   this.learnRecordsFilter.filter(i => i.extra.quiz)[0].quiz
+      let quiz = this.classroomQuiz
       return (
         quiz &&
         quiz.map(({ data: { answer, type, title, options, desc } }) => ({
@@ -154,22 +230,33 @@ export default {
     tableData() {
       return this.isHasData
         ? this.learnRecordsFilter.map(item => {
-            const { portrait, name, username, quiz } = item
+            const { portrait, name, username, quiz, status, world = '' } = item
             let state = this.countState(quiz)
             let quizzes = this.makeQuizzes(quiz)
-            return { portrait, name, username, state, ...quizzes }
+            return {
+              portrait,
+              status,
+              name,
+              username,
+              world,
+              state,
+              ...quizzes
+            }
           })
         : []
     },
     tableUserInfo() {
-      return this.isHasData ? ['username', 'state'] : []
+      return this.isHasData ? ['username', 'world', 'state'] : []
     },
     tableQuizzes() {
       return this.isHasData
-        ? this.learnRecordsFilter[0].quiz.map(
-            (item, index) => `quiz${index + 1}`
-          )
+        ? this.classroomQuiz.map((item, index) => `quiz${index + 1}`)
         : []
+      // ? (
+      //     this.classroomQuiz ||
+      //     this.learnRecordsFilter.filter(i => i.extra.quiz)[0].quiz
+      //   ).map((item, index) => `quiz${index + 1}`)
+      // : []
     },
     alphabet() {
       return Array.from({ length: 26 }, (i, index) =>
@@ -227,16 +314,56 @@ $red: #f53838;
     .userinfo {
       display: flex;
       align-items: center;
-      .portrait {
-        $size: 50px;
-        display: inline-block;
-        height: $size;
+      .portrait-wrap::after {
+        $size: 20px;
+        display: block;
+
         width: $size;
+        height: $size;
+        line-height: $size;
+        font-size: 14px;
+        color: #ffffff;
         border-radius: 50%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+      .portrait-wrap {
+        position: relative;
         margin-right: 20px;
+        .portrait {
+          $size: 50px;
+          display: inline-block;
+          height: $size;
+          width: $size;
+          border-radius: 50%;
+        }
+        &.keepwork::after {
+          content: 'K';
+          background: #409efe;
+        }
+        &.leave.keepwork::after {
+          content: 'K';
+          background: #e6a23c;
+        }
+        &.paracraft::after {
+          content: 'P';
+          background: #409efe;
+        }
+        &.leave.paracraft::after {
+          content: 'P';
+          background: #e6a23c;
+        }
+        .leave {
+          opacity: 0.3;
+        }
+        .offline {
+          filter: grayscale(100%);
+        }
       }
       .name {
         display: inline-block;
+        white-space: initial;
       }
     }
     .answer {

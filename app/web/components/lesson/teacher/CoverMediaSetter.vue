@@ -132,6 +132,9 @@ export default {
   &-from-url {
     .el-input-group {
       width: 565px;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
       margin-top: 18px;
       .el-input__inner {
         border-radius: 4px;
@@ -157,6 +160,15 @@ export default {
       object-fit: cover;
       width: 100%;
       height: 100%;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .cover-media-setter {
+    .el-popover__reference {
+      padding: 0 0 0 8px;
     }
   }
 }

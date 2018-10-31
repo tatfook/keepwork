@@ -1,13 +1,13 @@
 <template>
-  <div class="lesson-page" v-loading="loading">
+  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
     <div class="lesson-page-header">
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
-    <common-footer class="container"></common-footer>
-    <div @click.stop v-if="isShowLoginDialog">
-      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    <router-view v-if="!loading" class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
+    <common-footer class="lesson-page-footer container"></common-footer>
+    <div @click.stop v-if="isShowLoginDialog.show">
+      <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import userModule from '@/store/user'
@@ -34,6 +35,16 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueClipboard)
 Vue.component(Vhistogram.name, Vhistogram)
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
+
 
 const i18n = new VueI18n({
   locale,
@@ -72,9 +83,16 @@ export default {
     CommonFooter,
     LoginDialog
   },
+  data() {
+    return {
+      isIE: !!window.ActiveXObject || 'ActiveXObject' in window,
+      loading: true
+    }
+  },
   computed: {
     ...mapGetters({
-      isShowLoginDialog: 'lesson/isShowLoginDialog'
+      isShowLoginDialog: 'lesson/isShowLoginDialog',
+      isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     nowPagename() {
       return this.$route.name
@@ -87,7 +105,9 @@ export default {
     ...mapActions({
       getUserProfile: 'user/getProfile',
       getUserDetail: 'lesson/getUserDetail',
-      toggleLoginDialog: 'lesson/toggleLoginDialog'
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
     }),
     async loadLessonPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
@@ -99,7 +119,7 @@ export default {
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
     },
-    resetPage() {
+    async resetPage() {
       const { name } = this.$route
       const rules = ['TeacherColumn', 'StudentColumn']
       if (rules.some(i => i === name)) {
@@ -123,6 +143,9 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  &-scroll-all {
+    display: block;
+  }
   &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
@@ -135,9 +158,25 @@ body {
       overflow: auto;
     }
   }
+  &-footer {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
   .container {
     max-width: 1200px;
     margin: 0 auto;
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-page {
+    &-main-content {
+      &-scroll-only {
+        overflow: unset;
+      }
+    }
   }
 }
 </style>

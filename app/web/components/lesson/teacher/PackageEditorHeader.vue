@@ -133,3 +133,27 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .package-editor-header {
+    &-header {
+      display: block;
+      padding: 0 16px;
+      &-operations {
+        text-align: right;
+        margin-top: 8px;
+        .el-button {
+          padding: 8px 24px;
+          width: auto;
+        }
+      }
+    }
+    &-tabs {
+      margin: 16px;
+      .el-button + .el-button {
+        margin-left: 16px;
+      }
+    }
+  }
+}
+</style>

@@ -52,7 +52,6 @@ export default {
       }
       let paramsString = this.objectToQueryString(payParams)
       let payPath = `${this.origin}/wiki/pay?${paramsString}`
-
       window.location.href = payPath
     },
     objectToQueryString(obj) {

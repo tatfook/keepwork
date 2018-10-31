@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import fullscreen from 'vue-fullscreen'
 import VueClipboard from 'vue-clipboard2'
@@ -53,6 +54,15 @@ Vue.use(VTooltip)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
 
 const i18n = new VueI18n({
   locale,
@@ -200,6 +210,7 @@ body {
 
 #editor {
   background: white;
+  min-width: 1180px;
 }
 .preview-dialog .el-dialog__body {
   padding: 30px 0;
@@ -209,6 +220,7 @@ body {
   overflow: hidden;
 }
 .preview-site-wrap{
+  background-color: #fff;
   height: 0;
   overflow: hidden;
 }

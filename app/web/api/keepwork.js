@@ -6,6 +6,7 @@ category: API
 ---
 */
 import createEndpoint from './common/endpoint'
+import { event } from 'vue-analytics'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -42,7 +43,11 @@ export const user = {
     post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
-  register: async args => post('/users/register', args),
+  register: async args => {
+    const res = await post('/user/register', args)
+    event('account', 'sign_up', 'keepwork', 0)
+    return res
+  },
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 

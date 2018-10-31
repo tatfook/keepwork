@@ -2,7 +2,7 @@
   <div class="lesson-wrap" v-loading="isLoading">
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
-    <LessonSummary v-if="isShowSummary" />
+    <LessonSummary v-if="isShowSummary && !isLoading" />
     <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
@@ -21,6 +21,8 @@ import LessonWrap from '../common/LessonWrap'
 import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
+import { lesson } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'Learn',
   components: {
@@ -48,13 +50,53 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
-    const { packageId, lessonId } = this.$route.params
-    if (this.isBeInClassroom) {
-      await this.resumeTheClass().catch(e => console.error(e))
+    const {
+      query: { reload }
+    } = this.$route
+    if (Boolean(reload)) {
+      this.resetUrl(false)
+      return window.location.reload()
     }
+    // logined check
+    if (!this.isLogined) {
+      return this.toggleLoginDialog(true)
+    }
+    let { packageId, lessonId } = this.$route.params
+
+    packageId = Number(packageId)
+    lessonId = Number(lessonId)
+    // purchased check or lesson check
+    let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
+    if (!isPurchased) return
+    await this.getLessonContent({ lessonId, packageId })
+    await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      let lastLearnRecords = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      lastLearnRecords = lastLearnRecords && lastLearnRecords.rows
+      if (
+        lastLearnRecords.length > 0 &&
+        lastLearnRecords[0].state === 0 &&
+        lastLearnRecords[0].packageId === packageId &&
+        lastLearnRecords[0].lessonId === lessonId
+      ) {
+        this.resumeLearnRecordsId(lastLearnRecords[0].id)
+        if (
+          _.some(
+            _.get(lastLearnRecords[0], 'extra.quiz[0]', []),
+            ({ answer = false }) => answer
+          )
+        ) {
+          this.resumeQuiz({ learnRecords: lastLearnRecords[0] })
+        }
+      } else {
+        await this.createLearnRecords({
+          packageId,
+          lessonId
+        }).catch(e => console.error(e))
+      }
       window.document.title = this.lessonName
       return (this.isLoading = false)
     }
@@ -65,14 +107,23 @@ export default {
       id
     } = this.enterClassInfo
     this.isCurrentClassroom = packageId == _packageId && lessonId == _lessonId
+
+    let { device } = this.$route.query
+    if (device && device.toLowerCase() === 'paracraft') {
+      this.switchDevice('p')
+    }
+
     if (this.isCurrentClassroom) {
-      await this.getLessonContent({ lessonId }).catch(e => console.error(e))
+      this.changeStatus(1)
       await this.resumeQuiz({ id }).catch(e => console.error(e))
       await this.uploadLearnRecords().catch(e => console.error(e))
     }
     this.isLoading = false
     window.document.title = this.lessonName
-    this.isBeInClassroom && !this._interval && this.intervalCheckClass()
+    if (this.isBeInClassroom) {
+      this.handleCheckVisible()
+      !this._interval && this.intervalCheckClass()
+    }
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -86,22 +137,63 @@ export default {
       clearLearnRecordsId: 'lesson/student/clearLearnRecordsId',
       clearLessonData: 'lesson/student/clearLessonData',
       checkClassroom: 'lesson/student/checkClassroom',
-      switchSummary: 'lesson/student/switchSummary'
+      switchSummary: 'lesson/student/switchSummary',
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus',
+      createLearnRecords: 'lesson/student/createLearnRecords',
+      switchDevice: 'lesson/student/switchDevice',
+      resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
+    resetUrl(resetAll = true) {
+      if (resetAll) {
+        return (window.location.href = this.$router.resolve({
+          path: this.$route.path
+        }).href)
+      }
+      const {
+        name,
+        params,
+        query: { reload, ...filterQuery }
+      } = this.$route
+      window.location.href = this.$router.resolve({
+        name,
+        params,
+        query: filterQuery
+      }).href
+    },
     async intervalCheckClass(delay = 8 * 1000) {
-      console.warn('检查课堂是否还在')
       await this.checkClassroom()
       clearTimeout(this._interval)
-      this._interval = setTimeout(
-        async () =>
-          await this.intervalCheckClass().catch(
-            e =>
-              this.$message({
-                message: this.$t('lesson.classIsOver'),
-                type: 'warning'
-              }) && this._notify.close()
-          ),
-        delay
+      this._interval = setTimeout(async () => {
+        await this.intervalCheckClass().catch(
+          e =>
+            this.$message({
+              message: this.$t('lesson.classIsOver'),
+              type: 'warning'
+            }) && this._notify.close()
+        )
+      }, delay)
+    },
+    handleCheckVisible() {
+      let hidden = false
+      let visibilityChange = 'visibilitychange'
+      if (typeof document.hidden !== 'undefined') {
+        hidden = 'hidden'
+        visibilityChange = 'visibilitychange'
+      } else if (typeof document.msHidden !== 'undefined') {
+        hidden = 'msHidden'
+        visibilityChange = 'msvisibilitychange'
+      } else if (typeof document.webkitHidden !== 'undefined') {
+        hidden = 'webkitHidden'
+        visibilityChange = 'webkitvisibilitychange'
+      }
+      document.addEventListener(
+        visibilityChange,
+        async () => {
+          document[hidden] ? this.changeStatus(2) : this.changeStatus(1)
+          await this.uploadLearnRecords().catch(e => console.error(e))
+        },
+        false
       )
     },
     backToClassroom() {
@@ -109,10 +201,70 @@ export default {
       this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
       this.isRefresh = true
       this.$router.go(0)
+    },
+    async checkPackagePurchased(payload, lessonId = null) {
+      if (this.isBeInClassroom) return true
+      const packageDetail = await lesson.packages
+        .packageDetail(payload)
+        .catch(e => {
+          console.error(e)
+        })
+      let { isSubscribe, coin, rmb, userId, lessons } = packageDetail
+      const isHasTheLesson = lessons
+        .map(({ id }) => id)
+        .find(id => id === lessonId)
+      // 判断该课程包是否存在该课程
+      if (!isHasTheLesson) {
+        this.$message({
+          type: 'error',
+          message: this.$t('lesson.urlError')
+        })
+        return false
+      }
+      if (this.userId === userId) return true
+      isSubscribe = Boolean(isSubscribe)
+      const isFree = coin === 0 && rmb === 0
+      if (!isSubscribe) {
+        this.$confirm(this.$t('lesson.addPackageFirst'), '', {
+          showClose: false,
+          showCancelButton: false,
+          closeOnPressEscape: false,
+          closeOnClickModal: false,
+          iconClass: 'iconfont icon-BOOK add-package-confirm',
+          center: true,
+          confirmButtonText: this.$t('lesson.toAdd')
+        })
+          .then(
+            () =>
+              isFree
+                ? this.addThePackage(payload)
+                : this.goToPurchase(payload, lessonId)
+          )
+          .catch(e => console.log(e))
+      }
+      return isSubscribe
+    },
+    async addThePackage(payload) {
+      await lesson.packages
+        .subscribe(payload)
+        .then(res => {
+          this.$message({
+            type: 'success',
+            message: this.$t('lesson.addPackageSuccess')
+          })
+          setTimeout(() => this.$router.go(0), 1000)
+        })
+        .catch(e => console.error(e))
+    },
+    goToPurchase({ packageId }, lessonId) {
+      this.$router.push(
+        `/student/package/${packageId}/purchase?lessonId=${lessonId}`
+      )
     }
   },
   computed: {
     ...mapGetters({
+      isLogined: 'user/isLogined',
       lessonDetail: 'lesson/student/lessonDetail',
       lessonQuizDone: 'lesson/student/lessonQuizDone',
       isShowSummary: 'lesson/student/isShowSummary',
@@ -125,6 +277,9 @@ export default {
     },
     lesson() {
       return this.lessonDetail.modList || []
+    },
+    userId() {
+      return _.get(this.userinfo, 'id', '')
     },
     lessonHeaderData() {
       return this.lessonDetail.lesson || {}
@@ -148,5 +303,11 @@ export default {
 .quiz-no::after {
   content: counter(no);
   counter-increment: no;
+}
+.add-package-confirm {
+  &.icon-BOOK:before {
+    font-size: 100px;
+    color: #909399;
+  }
 }
 </style>

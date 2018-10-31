@@ -310,3 +310,25 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-basic-info {
+    padding: 16px;
+    &-subject-packages {
+      flex-direction: column;
+    }
+    &-subject {
+      max-width: 100%;
+      padding: 0;
+    }
+    &-link-url {
+      .el-input-group {
+        margin: 0;
+      }
+      .el-input-group__prepend {
+        font-size: 12px;
+      }
+    }
+  }
+}
+</style>

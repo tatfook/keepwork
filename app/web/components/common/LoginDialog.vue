@@ -63,6 +63,12 @@ export default {
       required: false,
       default: false,
       type: Boolean
+    },
+    to: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
@@ -124,15 +130,24 @@ export default {
             password: this.ruleForm.password
           }
           this.loading = true
-          console.warn(payload)
           let info = await this.userLogin(payload).catch(e => {
             this.loading = false
           })
           this.loading = false
-          if (info) {
-            // return console.warn('dialog info:', info)
+          if (!info.error) {
             this.$emit('close')
             return window.location.reload()
+          } else if (info.error.id === 0) {
+              const { path } = this.to
+              if (path) {
+                window.location.href = this.$router.resolve({ path }).href
+              }
+              this.$emit('close')
+              window.location.reload()
+          } else if (info.error.message === '用户不存在') {
+            this.showMessage('error', this.$t('common.usernameNotExist'))
+          } else if (info.error.message === '密码错误') {
+            this.showMessage('error', this.$t('common.wrongPassword'))
           }
           this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
         } else {
@@ -221,10 +236,8 @@ export default {
     }
   }
   .el-dialog {
-    .el-dialog__header {
-      padding: 0;
-    }
-    .el-dialog__body {
+    max-width: 100%;
+    .el-dialog__header{
       padding: 0;
     }
     max-width: 352px;

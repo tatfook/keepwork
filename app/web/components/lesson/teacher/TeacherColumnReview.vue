@@ -33,7 +33,7 @@
             </p>
             <p class="package-intro">
               <span :title="lessonPackage.extra.lessonGoals">
-                <span class="brief-title">{{$t('lesson.intro')}}:</span><br>{{lessonPackage.extra.lessonGoals}}</span>
+                <span class="brief-title">{{$t('lesson.intro')}}:</span><br class="package-intro-break-tag">{{lessonPackage.extra.lessonGoals}}</span>
             </p>
             <p>
               <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
@@ -45,12 +45,7 @@
         <div class="review-list-package-pages" v-if="lessonCount > perPage">
           <div class="block">
             <span class="demonstration"></span>
-            <el-pagination
-              background
-              @current-change="targetPage"
-              layout="prev, pager, next"
-              :page-size="perPage"
-              :total="lessonCount">
+            <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonCount">
             </el-pagination>
           </div>
         </div>
@@ -78,7 +73,7 @@ export default {
       noPackages: false,
       teachList: [],
       positiveSequence: true,
-      perPage:8,
+      perPage: 8,
       page: 1
     }
   },
@@ -94,10 +89,10 @@ export default {
       })
       return classIsOver.sort(this.sortByUpdateAt)
     },
-    lessonCount(){
+    lessonCount() {
       return this.sortedTeachList.length
     },
-    hours(){
+    hours() {
       let longTime = this.sortedTeachList.length * 45
       return parseInt(longTime / 60)
     },
@@ -109,8 +104,12 @@ export default {
   methods: {
     sortByUpdateAt(obj1, obj2) {
       return this.positiveSequence
-        ? obj1.createdAt >= obj2.createdAt ? -1 : 1
-        : obj1.createdAt <= obj2.createdAt ? -1 : 1
+        ? obj1.createdAt >= obj2.createdAt
+          ? -1
+          : 1
+        : obj1.createdAt <= obj2.createdAt
+          ? -1
+          : 1
     },
     sequence() {
       this.positiveSequence = !this.positiveSequence
@@ -132,7 +131,7 @@ export default {
         path: `package/${packageId}/lesson/${lessonId}`
       })
     },
-    targetPage(targetPage){
+    targetPage(targetPage) {
       this.page = targetPage
     }
   },
@@ -196,7 +195,6 @@ export default {
           margin: 0 10px 0 18px;
         }
       }
-
     }
     &-package {
       flex: 1;
@@ -236,6 +234,7 @@ export default {
           }
           .package-intro {
             width: 376px;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -250,10 +249,65 @@ export default {
           padding-top: 60px;
         }
       }
-      &-pages{
+      &-pages {
         text-align: center;
         padding-top: 16px;
       }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .review {
+    &-list {
+      &-container {
+        display: flex;
+        justify-content: space-evenly;
+      }
+      &-class-hours {
+        margin: 0;
+        padding: 0 16px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+      &-sort {
+        margin-top: 24px;
+      }
+      &-package {
+        .package {
+          flex-direction: column;
+          height: auto;
+          &-summary {
+            width: auto;
+            padding-top: 16px;
+            text-align: left;
+          }
+          &-brief {
+            padding-left: 0;
+            .name {
+              margin-bottom: 12px;
+            }
+            p {
+              margin: 0;
+            }
+            p.package-intro {
+              margin-bottom: 6px;
+            }
+            .package-intro {
+              &-break-tag {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+    &-nothing {
+      margin: 0;
+      padding: 16px 0;
+      height: auto;
     }
   }
 }

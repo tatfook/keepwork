@@ -1,7 +1,7 @@
 <template>
   <el-row class="lesson-header-container">
-    <el-dialog :visible.sync="dialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media">
+    <el-dialog class="lesson-header-container-video" :visible.sync="dialogVisible" width="50%">
+      <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
         <source :src="videoUrl" type="video/mp4">
       </video>
     </el-dialog>
@@ -9,7 +9,7 @@
       <div>{{$t('lesson.curentClassId')}}
         <span class="class-id">{{classroomId}}</span>
       </div>
-      <div v-html="$t('lesson.studentEnterClassId',{StuentsPerformance:`<span class='performance'>${$t('lesson.StuentsPerformance')}</span>`})">
+      <div v-html="$t('lesson.studentEnterClassId',{studentsPerformance:`<span class='performance'>${$t('lesson.studentsPerformance')}</span>`})">
       </div>
       <div class="tips" v-html="$t('lesson.studentAttention',{Attention:`<span class='attention'>${$t('lesson.attention')}</span>`})">
       </div>
@@ -21,10 +21,10 @@
       <div class="full-font">{{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
-      <el-col :span="14" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
-        <img src="@/assets/lessonImg/play2.png" alt="">
+      <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
+        <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
-      <el-col :span="10" class="lesson-desc">
+      <el-col :sm="10" :xm="24" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
@@ -37,6 +37,16 @@
             <span class="question-mark-icon"></span>
           </el-tooltip>
         </div>
+        <div v-if="isSelfLearning" class="class-id-sign-wrap">
+          <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
+          <el-tooltip placement="bottom">
+            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
+              <div v-html="$t('lesson.haqiIdExplain')"></div>
+            </div>
+            <span @click="handleExplanHaqiCode" class="question-mark-icon"></span>
+          </el-tooltip>
+        </div>
+
         <div class="lesson-info title">
           {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
         </div>
@@ -68,22 +78,22 @@
     </el-row>
     <keep-work-sticky>
       <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="20">
+        <el-col :span="20" :sm="20">
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
-          <lesson-referencse/>
+        <el-col :span="4" :sm="4" class="lesson-references">
+          <lesson-referencse />
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="2" class="lesson-award">
-          <lesson-jewel-box />
+        <el-col :span="2" :sm="2" class="lesson-award">
+          <lesson-jewel-box v-if="!isVisitor" />
         </el-col>
-        <el-col :span="18">
-          <lesson-student-progress/>
+        <el-col :span="18" :sm="18">
+          <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
-        <el-col :span="4" class="lesson-references">
-          <lesson-referencse/>
+        <el-col :span="4" :sm="4" class="lesson-references">
+          <lesson-referencse />
         </el-col>
       </el-row>
     </keep-work-sticky>
@@ -127,6 +137,10 @@ export default {
     isInCurrentClass: {
       type: Boolean,
       default: true
+    },
+    isVisitor: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -140,6 +154,7 @@ export default {
   methods: {
     ...mapActions({
       beginTheClass: 'lesson/teacher/beginTheClass',
+      copyClassroomQuiz: 'lesson/teacher/copyClassroomQuiz',
       dismissTheClass: 'lesson/teacher/dismissTheClass',
       updateLearnRecords: 'lesson/teacher/updateLearnRecords'
     }),
@@ -161,7 +176,7 @@ export default {
       })
     },
     openAnimations() {
-      this.dialogVisible = true
+      this.isHasVideo && (this.dialogVisible = true)
     },
     classIdToFullScreen() {
       this.classIdFullScreen = true
@@ -183,7 +198,8 @@ export default {
           {
             confirmButtonText: this.$t('lesson.activate'),
             cancelButtonText: this.$t('lesson.no'),
-            type: 'warning'
+            type: 'warning',
+            customClass: 'teach-function-style'
           }
         )
           .then(() => {
@@ -201,6 +217,7 @@ export default {
       })
         .then(res => {
           this.classIdDialogVisible = true
+          this.copyClassroomQuiz()
           this.$emit('intervalUpdateLearnRecords')
           window.addEventListener('beforeunload', this.leaveConfirm, true)
         })
@@ -218,7 +235,8 @@ export default {
           type: 'warning',
           distinguishCancelAndClose: true,
           confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel')
+          cancelButtonText: this.$t('common.Cancel'),
+          customClass: 'dismiss-class'
         }
       )
         .then(async () => {
@@ -245,6 +263,10 @@ export default {
             })
         })
         .catch(e => console.error(e))
+    },
+    handleExplanHaqiCode() {
+      let helpUrl = 'https://keepwork.com/lesson9527/lessons/help_lessonID '
+      window.open(helpUrl)
     }
   },
   computed: {
@@ -272,7 +294,7 @@ export default {
       return _.get(this.lesson, 'lessonName', '')
     },
     lessonNo() {
-      return _.get(this.lesson, 'id', '')
+      return _.get(this.lesson, 'packageIndex', '')
     },
     lessonSkills() {
       return _.map(
@@ -289,8 +311,18 @@ export default {
     coverUrl() {
       return _.get(this.lesson, 'extra.coverUrl', '')
     },
+    isHasVideo() {
+      return Boolean(this.videoUrl)
+    },
     videoUrl() {
       return _.get(this.lesson, 'extra.videoUrl', '')
+    },
+    isSelfLearning() {
+      return !this.isTeacher && !this.isBeInClassroom
+    },
+    haqiCode() {
+      const { packageId, lessonId } = this.$route.params
+      return `${packageId}x${lessonId}`
     }
   }
 }
@@ -324,7 +356,6 @@ export default {
 
   .lesson-cover {
     height: 340px;
-    min-width: 400px;
     max-width: 600px;
     cursor: pointer;
     background: #eee;
@@ -466,6 +497,34 @@ export default {
       font-size: 15vw;
       font-weight: bold;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-header-container {
+    .lesson-cover {
+      height: 200px;
+      width: 80%;
+      margin: 0 10px;
+    }
+    &-video {
+      .el-dialog {
+        width: 90% !important;
+      }
+    }
+    .lesson-progress-wrap {
+      &.el-row {
+        padding: 16px;
+      }
+    }
+  }
+  .teach-function-style {
+    max-width: 86%;
+  }
+  .class-id-dialog {
+    max-width: 90%;
+  }
+  .dismiss-class {
+    max-width: 90%;
   }
 }
 </style>

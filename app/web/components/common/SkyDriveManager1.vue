@@ -631,9 +631,6 @@ export default {
             font-size: 16px;
             line-height: 16px;
           }
-          .active {
-            background: white;
-          }
         }
         .el-input {
           top: -10px;

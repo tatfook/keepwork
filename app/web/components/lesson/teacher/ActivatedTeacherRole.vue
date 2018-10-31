@@ -1,8 +1,8 @@
 <template>
   <div class="activated-teacher-role">
-    <el-container class="teacher">
-      <el-aside width="260px">
-        <el-menu :default-active="itmeActive" class="el-menu-vertical-demo" text-color='#b3b3b3' active-text-color='#fff'>
+    <el-container class="teacher activated-teacher-role-teacher">
+      <el-aside width="260px" class="activated-teacher-role-aside">
+        <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='#b3b3b3' active-text-color='#fff'>
           <el-menu-item index="1" @click="showItem('TEACH')">
             <i class="iconfont icon-teach"></i>
             <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
@@ -11,7 +11,7 @@
             <i class="iconfont icon-review"></i>
             <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
           </el-menu-item>
-          <el-submenu index="3">
+          <el-submenu index="3" popper-class='activated-teacher-role-popver-menu'>
             <template slot="title">
               <i class="iconfont icon-setting"></i>
               <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
@@ -23,7 +23,7 @@
       </el-aside>
       <el-main>
         <div class="activated-teacher-role-container">
-          <router-view></router-view>
+          <router-view :windowWidth='windowWidth'></router-view>
         </div>
       </el-main>
     </el-container>
@@ -36,11 +36,18 @@ export default {
   name: 'ActivatedTeacherRole',
   data() {
     return {
+      windowWidth: window.innerWidth,
       itmeActive: '1'
     }
   },
   mounted() {
     this.setActiveItem()
+    window.addEventListener('resize', this.handleWindowResize)
+  },
+  computed: {
+    menuMode() {
+      return this.windowWidth > 678 ? 'vertical' : 'horizontal'
+    }
   },
   methods: {
     setActiveItem() {
@@ -89,7 +96,13 @@ export default {
         default:
           break
       }
+    },
+    handleWindowResize(event) {
+      this.windowWidth = event.currentTarget.innerWidth
     }
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.handleWindowResize)
   },
   watch: {
     $route() {
@@ -105,6 +118,9 @@ export default {
     height: 100%;
     margin: 0;
     overflow: auto;
+  }
+  &-aside {
+    width: 260px;
   }
   .teacher {
     margin: 0 auto;
@@ -162,6 +178,55 @@ export default {
     .el-main {
       overflow: hidden;
       padding: 50px 0;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .activated-teacher-role {
+    &-popver-menu {
+      background-color: transparent;
+      .el-menu {
+        background-color: #2f3541;
+        .el-menu-item {
+          background-color: #2f3541;
+        }
+      }
+    }
+    & .teacher {
+      flex-direction: column;
+      .el-aside {
+        margin: 0;
+        width: 100% !important;
+        padding: 0;
+        overflow: visible;
+        border-right: none;
+        .el-menu {
+          text-align: center;
+          .el-menu-item,
+          .el-submenu {
+            border: none;
+            display: inline-block;
+            float: none;
+          }
+          .el-menu-item i,
+          .el-submenu__title i {
+            font-size: 18px;
+            margin-right: 3px;
+          }
+          .el-submenu.is-active {
+            .el-submenu__title {
+              background-color: #409eff;
+              border: none;
+            }
+          }
+        }
+      }
+      .el-main {
+        padding: 16px 0;
+        overflow: auto;
+      }
     }
   }
 }

@@ -5,7 +5,7 @@
       <span class="references-title">{{$t('lesson.references')}}</span>
     </div>
     <el-dialog :append-to-body="true" class="references-dialog" center :visible.sync="isShowReferences" :title="$t('lesson.references')" @close="closeReferences" width="600px">
-      <el-row style="z-index:999" :gutter="20">
+      <el-row v-if="false" style="z-index:999" :gutter="20">
         <el-scrollbar class="referencs-files-wrap" :native="false">
           <el-col :span="8" v-for="(file, index) in files" :key="index" class="references-file">
             <span class="file-type" :class="checkFileType(file.type)"></span>
@@ -13,6 +13,10 @@
           </el-col>
         </el-scrollbar>
       </el-row>
+      <div v-else class="references-no-files">
+        <img class="references-no-files-icon" src="@/assets/lessonImg/no_packages.png">
+        <div class="references-no-files-title">{{$t('lesson.noReference')}}</div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -127,6 +131,17 @@ export default {
 }
 
 .references-dialog {
+  .references-no-files {
+    text-align: center;
+    padding-top: 60px;
+    &-icon {
+      width: 220px;
+    }
+    &-title {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+  }
   .el-dialog__body {
     padding: 0 10px 0;
   }
