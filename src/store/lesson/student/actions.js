@@ -118,11 +118,14 @@ const actions = {
     { id, learnRecords = null }
   ) {
     if (!learnRecords && id) {
+      console.warn('resumeQuiz by id')
       learnRecords = await lesson.classrooms
         .learnRecordsById(id)
         .catch(e => console.error(`can't find learnRecords`))
+      console.warn(learnRecords)
     }
     if (learnRecords && learnRecords.extra.quiz) {
+      console.warn('resumeQuiz by learRecords')
       let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
       let _lessonDetail = _.clone(lessonDetail)
       _lessonDetail.quiz = quiz
@@ -212,9 +215,9 @@ const actions = {
     },
     { state = 0 }
   ) {
-    const { token, classId, nickname, username } = visitorInfo
+    const { token, classId, name, username } = visitorInfo
     learnRecords.username = username
-    learnRecords.name = nickname || ''
+    learnRecords.name = name || username
     learnRecords.status = 'p1'
     learnRecords.portrait = ''
     if (token && classId && !_.isNumber(token)) {
@@ -258,6 +261,9 @@ const actions = {
     commit(SWITCH_DEVICE, payload)
   },
   async saveVisitorInfo({ commit }, payload) {
+    commit(LEAVE_THE_CLASS)
+    commit(CLEAR_LEARN_RECORDS_ID)
+    commit(CLEAR_LESSON_DATA)
     commit(SAVE_VISITOR_INFO, payload)
   },
   async setVisitorNickname({ commit }, nickname) {
@@ -267,12 +273,15 @@ const actions = {
     commit(CLEAR_VISITOR_INFO)
   },
   async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
+    console.warn('resumeVisitorLearnRecords')
     const { token } = visitorInfo
     let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
     let _visitorInfo = _.clone(visitorInfo)
     let username = _.get(res, 'data.extra.username', '')
+    let name = _.get(res, 'data.extra.name', '')
     if (username) {
       _visitorInfo.username = username
+      _visitorInfo.name = name || username
       commit(SAVE_VISITOR_INFO, _visitorInfo)
     }
     let quiz = _.get(res.data, 'extra.quiz', '')

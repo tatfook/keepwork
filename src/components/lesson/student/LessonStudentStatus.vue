@@ -78,7 +78,7 @@ export default {
     },
     nickname() {
       return this.isVisitor
-        ? _.get(this.visitorInfo, 'nickname', 'visitor')
+        ? this.visitorInfo.name || this.visitorInfo.nickname || this.visitorInfo.username
         : _.get(this.userinfo, 'nickname', '')
     },
     username() {
