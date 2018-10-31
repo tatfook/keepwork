@@ -26,7 +26,7 @@ let sensitive = {
     let me = this
     if (isEmptyObject(me.trie.suffix)) {
       list.forEach(function(item) {
-        me.trie.add(item.name, { word: item.name })
+        me.trie.add(item.word, { word: item.word })
       })
     }
   },
@@ -49,7 +49,7 @@ let sensitive = {
         pageSize: 10000000
       })
       .then(data => {
-        me.sensitiveWordsList = data.data
+        me.sensitiveWordsList = data
         me.loadSensitiveWordsListIntoTrieNode(me.sensitiveWordsList)
         while (me.checkTasks.length >= 1) {
           me.checkTasks.shift()()

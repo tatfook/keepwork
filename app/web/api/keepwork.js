@@ -28,7 +28,7 @@ export const user = {
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
-  update: async (...args) => put('/user/update', ...args),
+  update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async args => get(`/users?email=${args.email}`),
@@ -181,7 +181,7 @@ export const websiteComment = {
 }
 
 export const sensitiveWords = {
-  query: async (...args) => post('sensitive_words/query', ...args)
+  query: async () => get('sensitiveWords')
 }
 
 export const bigfile = {
