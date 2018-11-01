@@ -31,10 +31,11 @@ export default {
   },
   created() {
     this.switchSummary(false)
+    window.addEventListener('storage', this.handleStorageEvent, false)
   },
   async mounted() {
     if (this.visitorInfo.token !== 0 && !this.visitorInfo.token) {
-      return this.$router.push({ name: 'StudentCenter'})
+      return this.$router.push({ name: 'StudentCenter' })
     }
     this.isLoading = true
     const { key = '', token, id, nickname = '' } = this.$route.query
@@ -52,10 +53,12 @@ export default {
     }
     this.resetUrl()
     this.isLoading = false
+    localStorage.setItem('refresh', true)
   },
   destroyed() {
     clearTimeout(this._interval)
     this.clearVisitorInfo()
+    window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -74,6 +77,12 @@ export default {
       window.location.href = this.$router.resolve({
         path: this.$route.path
       }).href
+    },
+    handleStorageEvent() {
+      let refresh = localStorage.getItem('refresh')
+      if (Boolean(refresh)) {
+        this.$router.push({ name: 'StudentCenter' })
+      }
     }
   },
   computed: {
