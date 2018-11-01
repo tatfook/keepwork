@@ -14,7 +14,8 @@ const getters = {
   projectApplyState: state => ({ projectId, userId }) => _.get(state.projectApplyState, `${userId}.${projectId}`),
   projectCommentList: state => ({ projectId }) => _.get(state.commentList, projectId),
   diffTypeProject: state => ({ type }) => _.get(state.projectsType, type),
-  issuesList: state => ({ projectId }) => _.get(state.issuesList, projectId)
+  issuesList: state => ({ projectId }) => _.get(state.issuesList, projectId),
+  allUsers: state => state.allUsers
 }
 
 export default getters

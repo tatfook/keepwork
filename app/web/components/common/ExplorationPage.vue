@@ -52,21 +52,7 @@
           <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects"></course>
         </div>
         <div class="selected-user" v-if='currIndex == 6'>
-          <ul class="selected-user-list">
-            <li class="user">
-              <div class="portrait">
-                <img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              </div>
-              <div class="nickname">
-                <h5 class="name">告诉果果</h5>
-                <p class="desc">项目：<span class="total">1234</span> 粉丝：<span class="total">123456</span></p>
-                <el-button type="primary" class="follow">关注</el-button>
-              </div>
-              <div class="cover">
-                <img src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
-              </div>
-            </li>
-          </ul>
+          <users ref="users" :searchKey="searchKey" :sortUsers="sortProjects"></users>
         </div>
         <div class="selected-studio" v-if='currIndex == 7'>
           <el-row>
@@ -110,6 +96,7 @@ import Paracraft from './explorationPageTab/Paracraft'
 import Website from './explorationPageTab/Website'
 import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
+import Users from './explorationPageTab/Users'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -193,7 +180,8 @@ export default {
     Paracraft,
     Website,
     Course,
-    Recruiting
+    Recruiting,
+    Users
   }
 }
 </script>
@@ -256,59 +244,6 @@ export default {
         }
         .selected:hover {
           background: rgb(24, 138, 252);
-        }
-      }
-      .selected-user {
-        &-list {
-          list-style: none;
-          .user {
-            height: 182px;
-            background: #fff;
-            display: flex;
-            border: 1px solid #e8e8e8;
-            .portrait {
-              width: 144px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              img {
-                width: 96px;
-                height: 96px;
-                border-radius: 50%;
-                object-fit: cover;
-              }
-            }
-            .nickname {
-              flex: 1;
-              padding-top: 50px;
-              .name {
-                margin: 5px 0;
-                font-size: 16px;
-              }
-              .desc {
-                margin: 5px 0;
-                font-size: 14px;
-                color: #909399;
-                .total {
-                  color: #303133;
-                }
-              }
-              .follow {
-                height: 32px;
-                padding: 0 32px;
-                margin-top: 10px;
-              }
-            }
-            .cover {
-              width: 268px;
-              padding: 16px;
-              img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-              }
-            }
-          }
         }
       }
       .selected-studio {
