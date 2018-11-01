@@ -3,7 +3,7 @@
     <div class="project-white-board-content">
       <div class="project-white-board-content-header">
         <div class="search">
-          <el-input size="medium" placeholder="请输入内容" v-model="searchKeyWord" class="input-with-select">
+          <el-input size="medium" placeholder="请输入内容" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
             <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
               <el-option label="全部" value="1"></el-option>
               <el-option label="进行中" value="2"></el-option>
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="single-issue-join" v-if="issue.assigns.length > 0">
-            <img class="player-portrait" v-for ="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
+            <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
           </div>
         </div>
       </div>
@@ -74,24 +74,23 @@ export default {
     NewIssue,
     IssueDetail
   },
-  watch:{
-    projectIssueList(newIssueList){
-      this.projectIssues = _.concat(newIssueList)
-    }
-  },
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
       projectDetail: 'pbl/projectDetail'
     }),
-    projectIssueList(){
-      let tempArr = this.issuesList({ projectId: this.projectId }) || []
+    projectIssueList() {
+      let tempArr = _.get(
+        this.issuesList({ projectId: this.projectId }),
+        'rows',
+        []
+      )
       return tempArr.sort(this.sortByUpdateAt)
     },
-    unfinishedProjectIssueList(){
+    unfinishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 0)
     },
-    finishedProjectIssueList(){
+    finishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 1)
     },
     isEn() {
@@ -102,21 +101,40 @@ export default {
     },
     pblProjectDetail() {
       return this.projectDetail({ projectId: this.projectId })
-    },
+    }
   },
-  async mounted(){
-    let objectId = this.projectId
-    let objectType = 5
-    await this.getProjectIssues({ objectId, objectType })
+  async mounted() {
+    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
     this.projectIssues = this.projectIssueList
+  },
+  watch: {
+    projectIssueList(newIssueList) {
+      this.projectIssues = _.concat(newIssueList)
+    },
+    async searchKeyWord(key, oldKey) {
+      let payload = {
+        objectId: this.projectId,
+        objectType: 5,
+        $or: [{ id: _.toNumber(key) || 0 }, { title: { $like: `%${key}%` } }]
+      }
+      await this.getProjectIssues(payload)
+      this.projectIssues = this.projectIssueList
+    }
   },
   methods: {
     ...mapActions({
       getProjectIssues: 'pbl/getProjectIssues'
     }),
-    searchIssue(){
-      console.warn('😬searchIssue-------->', this.searchKeyWord)
-      this.getProjectIssues({objectId: this.projectId, objectType: 5, 'title-like': `%${this.searchKeyWord}%`})
+    searchIssue() {
+      let payload = {
+        objectId: this.projectId,
+        objectType: 5,
+        $or: [
+          { id: _.toNumber(this.searchKeyWord) || 0 },
+          { title: { $like: `%${this.searchKeyWord}%` } }
+        ]
+      }
+      this.getProjectIssues(payload)
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
@@ -132,24 +150,24 @@ export default {
     closeIssueDetail() {
       this.showIssueDetail = false
     },
-    showAllIssues(){
+    showAllIssues() {
       this.projectIssues = this.projectIssueList
     },
-    showFinishedIssues(){
+    showFinishedIssues() {
       this.projectIssues = this.finishedProjectIssueList
     },
-    showUnfinishedIssues(){
+    showUnfinishedIssues() {
       this.projectIssues = this.unfinishedProjectIssueList
     },
-    relativeTime(time){
+    relativeTime(time) {
       // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time,"YYYYMMDDHH").fromNow();
+      return moment(time, 'YYYYMMDDHH').fromNow()
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    issueTagArr(issue){
+    issueTagArr(issue) {
       return _.get(issue, 'tags', '').split('|')
     }
   }

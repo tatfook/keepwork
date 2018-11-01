@@ -301,7 +301,7 @@ export const comments = {
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
-  getSingleProjectIssues: async params => get('issues', { params }),
+  getSingleProjectIssues: async params => post('issues/search', params),
   updateIssue: async ({ objectId, params }) =>
     put(`issues/${objectId}`, { ...params }),
   getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
