@@ -48,6 +48,7 @@ export default {
   },
   created() {
     this.switchSummary(false)
+    window.addEventListener('storage', this.handleStorageEvent, false)
   },
   async mounted() {
     const {
@@ -127,6 +128,7 @@ export default {
   },
   destroyed() {
     clearTimeout(this._interval)
+    window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -144,6 +146,14 @@ export default {
       switchDevice: 'lesson/student/switchDevice',
       resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
+    handleStorageEvent() {
+      let refresh = localStorage.getItem('refresh')
+      if (this.isBeInClassroom) {
+        if (Boolean(refresh)) {
+          window.location.reload()
+        }
+      }
+    },
     resetUrl(resetAll = true) {
       if (resetAll) {
         return (window.location.href = this.$router.resolve({
