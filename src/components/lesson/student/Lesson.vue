@@ -209,10 +209,15 @@ export default {
         .catch(e => {
           console.error(e)
         })
-      let { isSubscribe, coin, rmb, userId, lessons } = packageDetail
-      const isHasTheLesson = lessons
-        .map(({ id }) => id)
-        .find(id => id === lessonId)
+      let { isSubscribe, coin, rmb, userId, lessons, state } = packageDetail
+      if (state !== 2) {
+        this.$message({
+          type: 'error',
+          message: this.$t('lesson.packagePendingReview')
+        })
+        return false
+      }
+      const isHasTheLesson = lessons.some(({ id }) => id === lessonId)
       // 判断该课程包是否存在该课程
       if (!isHasTheLesson) {
         this.$message({
