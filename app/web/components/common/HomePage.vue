@@ -180,30 +180,38 @@ export default {
       })
       .catch(err => console.error(err))
     let payload = { perPage: 1, page: 1 }
-    await Promise.all([this.getExcellentProjects(),this.getPackagesList(payload)])
+    await Promise.all([
+      this.getExcellentProjects(),
+      this.getPackagesList(payload)
+    ])
   },
   computed: {
     ...mapGetters({
       excellentProjects: 'pbl/excellentProjects',
       allPackages: 'lesson/center/packagesList'
     }),
-    allPackagesCount(){
+    allPackagesCount() {
       return _.get(this.allPackages, 'count', 0)
     },
     excellentProjectsCount() {
       return _.get(this.excellentProjects, 'count', 0)
     },
+    projectsRows() {
+      return _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
+    },
     handpickProjects() {
-      let tempArr = _.get(this.excellentProjects, 'rows', [])
-        .map(i => i)
-        .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
-      return tempArr.slice(0, 4)
+      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
+      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
+      return _.forEach(tempArr2, i => {
+        i.name_title = i.name || '未命名'
+      })
     },
     likesProjects() {
-      let tempArr = _.get(this.excellentProjects, 'rows', [])
-        .map(i => i)
-        .sort((obj1, obj2) => obj1.star < obj2.star)
-      return tempArr.slice(0, 4)
+      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.star < obj2.star)
+      let tempArr2 = _.cloneDeep(tempArr.slice(0,4))
+      return _.forEach(tempArr2, i => {
+        i.name_title = i.name || '未命名'
+      })
     }
   },
   methods: {
@@ -436,7 +444,7 @@ export default {
             width: 100%;
           }
         }
-        &:hover{
+        &:hover {
           background: rgb(222, 229, 248);
         }
       }
