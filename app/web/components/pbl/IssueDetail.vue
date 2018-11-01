@@ -74,7 +74,7 @@
           <div class="idea-area">
             <div class="arrows"></div>
             <div v-if="comment.isEdit" class="text">
-              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model="comment.content"></textarea>
+              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
               <div class="text-button">
                 <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
                 <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
@@ -94,7 +94,7 @@
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" rows="8" placeholder="说点什么呢......" v-model="myComment"></textarea>
+            <textarea name="myIdea" rows="8" placeholder="说点什么呢......" v-model.trim="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
@@ -278,6 +278,7 @@ export default {
         .catch(err => console.error(err))
     },
     async createComment() {
+      if(!this.myComment) return
       await keepwork.comments.createComment({
         objectType: 4,
         objectId: this.issue.id,
@@ -302,8 +303,12 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    async submitModifiedComment(comment) {
+    async submitModifiedComment(comment,index) {
       let copyComment = Object.assign({}, comment)
+      if(!copyComment.content){
+        await this.handleComment(comment, 2, index)
+        return
+      }
       await keepwork.comments.updateComment({
         commentId: copyComment.id,
         content: copyComment.content
