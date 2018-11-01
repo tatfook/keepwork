@@ -31,6 +31,7 @@
                   <span class="assigns-btn"></span>
                 </span>
                 <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+                  <el-dropdown-item v-if="memberList.length == 0">暂无其他成员</el-dropdown-item>
                   <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
