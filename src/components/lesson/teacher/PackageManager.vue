@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
           <template slot-scope="scope">
-            <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
+            <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('lesson.subjectLabel')" width="190">
@@ -342,6 +342,9 @@ export default {
         })
     },
     toEdit(packageDetail) {
+      this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
+    },
+    toPackgeDetail(packageDetail) {
       this.$router.push(`/teacher/package/${packageDetail.id}`)
     },
     async confirmDelete(packageDetail) {
