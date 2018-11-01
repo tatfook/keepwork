@@ -53,9 +53,14 @@ export const packages = {
   getPackages: async args => get('packages', { params: args })
 }
 
+export const users = {
+  getUsers: async args => get('users', { params: args })
+}
+
 export default {
   search,
   submitGitData,
   projects,
-  packages
+  packages,
+  users
 }

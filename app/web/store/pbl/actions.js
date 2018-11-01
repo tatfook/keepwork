@@ -16,7 +16,8 @@ let {
   GET_PROJECT_APPLY_STATE_SUCCESS,
   GET_COMMENTS_SUCCESS,
   GET_TYPE_PROJECTS,
-  GET_PROJECT_ISSUES_SUCCESS
+  GET_PROJECT_ISSUES_SUCCESS,
+  GET_ALL_USERS_SUCCESS
 } = props
 
 const actions = {
@@ -240,6 +241,12 @@ const actions = {
   async getProjectIssues({ commit }, payload) {
     await keepwork.issues.getSingleProjectIssues(payload).then(projectIssues => {
       commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: payload.objectId })
+    }).catch(err => console.error(err))
+  },
+  async getAllUsers({ commit }, payload) {
+    await EsAPI.users.getUsers(payload).then(users => {
+      console.log('users', users)
+      commit(GET_ALL_USERS_SUCCESS, users)
     }).catch(err => console.error(err))
   }
 }
