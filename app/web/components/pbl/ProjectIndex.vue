@@ -7,8 +7,8 @@
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :originProjectUsername='originProjectUsername'></project-joined-members-list>
       </div>
       <div class="project-index-main">
-        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
-        <project-comments class="project-index-comments" :projectId='projectId'></project-comments>
+        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
+        <project-comments v-if='!isCommentClosed' class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
       </div>
     </div>
   </div>
@@ -36,6 +36,18 @@ export default {
       required: true
     },
     isLoginUserEditable: {
+      type: Boolean,
+      default: false
+    },
+    isLoginUsercommentable: {
+      type: Boolean,
+      default: true
+    },
+    isCommentClosed: {
+      type: Boolean,
+      default: false
+    },
+    isProjectStopRecruit: {
       type: Boolean,
       default: false
     }
