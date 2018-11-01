@@ -6,7 +6,7 @@
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
         <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
-        <el-input placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
+        <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
       </div>
       <div class="project-comments-sends-operations">
         <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
@@ -35,7 +35,8 @@ export default {
   props: {
     projectId: {
       required: true
-    }
+    },
+    isLoginUsercommentable: Boolean
   },
   async created() {
     this.getCommentFromBackEnd()
