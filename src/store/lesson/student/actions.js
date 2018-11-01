@@ -26,16 +26,9 @@ let {
 } = props
 
 const actions = {
-  async getUserSubscribes(
-    {
-      commit,
-      rootGetters: { 'user/userId': userId }
-    },
-    { packageState }
-  ) {
+  async getUserSubscribes({ commit, rootGetters: { 'user/userId': userId } }) {
     let userSubscribes = await lesson.users.userSubscribes({
-      userId,
-      packageState
+      userId
     })
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
@@ -85,9 +78,11 @@ const actions = {
     return subscribeResult
   },
   async enterClassRoom({ commit, dispatch }, { key }) {
-    let enterClassInfo = await lesson.classrooms.join({
-      key: key
-    }).catch(e => console.error(e))
+    let enterClassInfo = await lesson.classrooms
+      .join({
+        key: key
+      })
+      .catch(e => console.error(e))
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
     return Promise.resolve(enterClassInfo)
@@ -272,9 +267,18 @@ const actions = {
   async clearVisitorInfo({ commit }) {
     commit(CLEAR_VISITOR_INFO)
   },
-  async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
+  async resumeVisitorLearnRecords(
+    {
+      commit,
+      dispatch,
+      getters: { visitorInfo }
+    },
+    id
+  ) {
     const { token } = visitorInfo
-    let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
+    let res = await lesson.visitor
+      .learnRecordsById(id, token)
+      .catch(e => console.error(e))
     let _visitorInfo = _.clone(visitorInfo)
     let username = _.get(res, 'data.extra.username', '')
     let name = _.get(res, 'data.extra.name', '')

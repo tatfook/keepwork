@@ -342,7 +342,7 @@ export default {
         })
     },
     toEdit(packageDetail) {
-      this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
+      this.$router.push(`/teacher/package/${packageDetail.id}`)
     },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id
