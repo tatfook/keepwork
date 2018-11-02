@@ -148,10 +148,8 @@ export default {
     }),
     handleStorageEvent() {
       let refresh = localStorage.getItem('refresh')
-      if (this.isBeInClassroom) {
-        if (Boolean(refresh)) {
-          window.location.reload()
-        }
+      if (Boolean(refresh)) {
+        window.location.reload()
       }
     },
     resetUrl(resetAll = true) {
