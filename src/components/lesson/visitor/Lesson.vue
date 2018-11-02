@@ -53,7 +53,6 @@ export default {
     }
     this.resetUrl()
     this.isLoading = false
-    localStorage.setItem('refresh', true)
   },
   destroyed() {
     clearTimeout(this._interval)
