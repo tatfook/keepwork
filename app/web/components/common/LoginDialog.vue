@@ -229,7 +229,7 @@ export default {
       padding: 0;
     }
     .el-dialog__body {
-      padding: 0 20px;
+      padding: 0;
     }
     max-width: 352px;
     padding: 40px 0;
@@ -250,7 +250,7 @@ export default {
     &-operate {
       display: flex;
       .forget-pwd {
-        width: 110px;
+        width: 115px;
         cursor: pointer;
         text-align: left;
       }
