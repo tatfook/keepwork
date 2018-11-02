@@ -70,6 +70,10 @@ export default {
       selectedIssue: {}
     }
   },
+  props: {
+    isBoardViewForMember: Boolean,
+    isBoardEditForMember: Boolean
+  },
   components: {
     NewIssue,
     IssueDetail
