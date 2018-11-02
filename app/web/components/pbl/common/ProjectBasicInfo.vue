@@ -2,7 +2,7 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">{{originProjectDetail.name}}
-        <span class="project-basic-info-state">招募中</span>
+        <span class="project-basic-info-state" v-if="!isProjectStopRecruit">招募中</span>
       </p>
       <p class="project-basic-info-more">
         <span class="project-basic-info-more-created">由
@@ -33,7 +33,7 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">访问项目</el-button>
-          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
+          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
     </div>
@@ -82,17 +82,11 @@ export default {
     projectId: {
       type: Number,
       required: true
-    }
+    },
+    projectApplyState: Number,
+    isProjectStopRecruit: Boolean
   },
   async mounted() {
-    if (this.isLogined) {
-      await this.pblGetApplyState({
-        objectId: this.projectId,
-        objectType: 5,
-        applyType: 0,
-        applyId: this.loginUserId
-      })
-    }
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     this.tempDesc = this.copiedProjectDetail.description
     this.tempSiteId = this.copiedProjectDetail.siteId
@@ -128,19 +122,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      pblProjectApplyState: 'pbl/projectApplyState',
       loginUserId: 'user/userId',
       loginUserDetail: 'user/profile',
-      isLogined: 'user/isLogined',
       userToken: 'user/token',
       getSiteDetailInfoById: 'user/getSiteDetailInfoById'
     }),
-    projectApplyState() {
-      return this.pblProjectApplyState({
-        projectId: this.projectId,
-        userId: this.loginUserId
-      })
-    },
     isApplied() {
       return this.projectApplyState === 0
     },
@@ -205,7 +191,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      pblGetApplyState: 'pbl/getApplyState',
       pblApplyJoinProject: 'pbl/applyJoinProject',
       pblUpdateProject: 'pbl/updateProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog',

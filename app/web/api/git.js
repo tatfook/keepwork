@@ -43,12 +43,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
             await instance.delete(`projects/${projectPath}/files/${path}`)
             return true
           },
-          async show(projectName, filePath) {
-            const [projectPath, path] = [projectName, filePath].map(
-              encodeURIComponent
-            )
+          async show({ projectPath, fullPath, useCache }) {
+            projectPath = encodeURIComponent(projectPath)
+            fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
-              `projects/${projectPath}/files/${path}`
+              `projects/${projectPath}/files/${fullPath}?refresh_cache=${useCache}`
             )
             return res.data
           },
@@ -159,13 +158,9 @@ export class GitAPI {
     return this.client.projects.repository.tree(projectName, path, recursive)
   }
 
-  async getFile(path, options) {
-    const projectName = path
-      .split('/')
-      .splice(0, 2)
-      .join('/')
+  async getFile({ projectPath, fullPath, useCache }) {
     return this.client.projects.repository.files
-      .show(projectName, path)
+      .show({ projectPath, fullPath, useCache })
       .then(file => file)
   }
 
@@ -288,14 +283,12 @@ export class GitAPI {
 
   async upsertFile(path, options) {
     options = { ...(options || {}) }
-    const file = await this.getFile(path).catch(e => {})
+    const file = await this.getFile(path).catch(e => { })
     return file ? this.editFile(path, options) : this.createFile(path, options)
   }
 
   getFileGitUrl(path) {
-    return `${this.config.url}/${this.config.externalUsername}/${
-      this.config.projectName
-    }/blob/master/${path}`
+    return `${this.config.url}/${this.config.externalUsername}/${this.config.projectName}/blob/master/${path}`
   }
 
   async commitToES(path, action, content, options) {

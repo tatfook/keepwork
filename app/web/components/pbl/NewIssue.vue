@@ -31,6 +31,7 @@
                   <span class="assigns-btn"></span>
                 </span>
                 <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+                  <el-dropdown-item v-if="memberList.length == 0">暂无其他成员</el-dropdown-item>
                   <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -45,7 +46,7 @@
         </div>
       </div>
       <div class="finish">
-        <el-button size="medium" type="primary" @click="finishedCreateIssue">完成创建</el-button>
+        <el-button size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">完成创建</el-button>
       </div>
     </div>
   </el-dialog>
@@ -73,7 +74,8 @@ export default {
       inputValue: '',
       descriptionText: '',
       default_portrait: default_portrait,
-      assignedMembers: []
+      assignedMembers: [],
+      cretateIssueLoading: false
     }
   },
   async mounted() {
@@ -142,6 +144,7 @@ export default {
       })
     },
     async finishedCreateIssue() {
+      this.cretateIssueLoading = true
       this.$nextTick(async () => {
         let payload = {
           objectType: 5,
@@ -156,6 +159,7 @@ export default {
           .then(res => {
             this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
             this.handleClose()
+            this.cretateIssueLoading = false
           })
           .catch(err => console.error(err))
       })

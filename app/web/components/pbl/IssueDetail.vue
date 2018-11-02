@@ -42,6 +42,7 @@
             <span class="assigns-btn"></span>
           </span>
           <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+            <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
             <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -73,7 +74,7 @@
           <div class="idea-area">
             <div class="arrows"></div>
             <div v-if="comment.isEdit" class="text">
-              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model="comment.content"></textarea>
+              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
               <div class="text-button">
                 <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
                 <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
@@ -93,12 +94,12 @@
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" rows="8" placeholder="说点什么呢......" v-model="myComment"></textarea>
+            <textarea name="myIdea" rows="8" placeholder="说点什么呢...(不超过150个字符哦)" v-model.trim="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
           <el-button size="medium" @click="closeIssue">关闭问题</el-button>
-          <el-button type="primary" size="medium" @click="createComment">评论</el-button>
+          <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment">评论</el-button>
         </div>
       </div>
     </div>
@@ -277,6 +278,7 @@ export default {
         .catch(err => console.error(err))
     },
     async createComment() {
+      if(!this.myComment) return
       await keepwork.comments.createComment({
         objectType: 4,
         objectId: this.issue.id,
@@ -301,8 +303,12 @@ export default {
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    async submitModifiedComment(comment) {
+    async submitModifiedComment(comment,index) {
       let copyComment = Object.assign({}, comment)
+      if(!copyComment.content){
+        await this.handleComment(comment, 2, index)
+        return
+      }
       await keepwork.comments.updateComment({
         commentId: copyComment.id,
         content: copyComment.content

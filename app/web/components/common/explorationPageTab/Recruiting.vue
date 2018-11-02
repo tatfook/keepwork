@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      perPage: 4,
+      perPage: 12,
       page: 1,
       recruitongProjects: [],
       loading: true

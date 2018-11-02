@@ -20,6 +20,7 @@ import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import userModule from '@/store/user'
+import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -58,6 +59,7 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
+    gitlab: gitlabModule,
     lesson: lessonModule
   }
 })

@@ -191,7 +191,7 @@ export default {
       return window.location.hostname
     },
     editorPagePrefix() {
-      return this.hostname === 'ed'
+      return '/ed/'
     },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
@@ -212,7 +212,7 @@ export default {
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
       lessonDeleteLesson: 'lesson/teacher/deleteLesson',
-      readFileFromGitlab: 'gitlab/readFile'
+      gitlabGetFileDetail: 'gitlab/getFileDetail'
     }),
     getRowClass({ row, rowIndex }) {
       let { packages } = row
@@ -314,20 +314,27 @@ export default {
         cancelButtonText: this.$t('common.No'),
         center: true,
         customClass: 'lesson-manager-confirm-dialog'
-      }).then(() => {
-        this.toEditorPage(url)
       })
-    },
-    async isUrlExist(url) {
-      this.isTableLoading = true
-      let backendTypeUrl = this.username + '/' + this.getRemovePrefixUrl(url)
-      await this.readFileFromGitlab({ path: backendTypeUrl })
         .then(() => {
-          this.isTableLoading = false
-          return Promise.resolve()
+          this.toEditorPage(url)
         })
         .catch(() => {
           this.isTableLoading = false
+        })
+    },
+    async isUrlExist(url) {
+      this.isTableLoading = true
+      let username = this.username
+      let removedPrefixUrl = this.getRemovePrefixUrl(url)
+      let sitename = removedPrefixUrl.split('/')[0]
+      let result = await this.gitlabGetFileDetail({
+        projectPath: `${username}/${sitename}`,
+        fullPath: `${username}/${removedPrefixUrl}.md`
+      })
+        .then(() => {
+          return Promise.resolve()
+        })
+        .catch(() => {
           return Promise.reject(new Error('File not created!'))
         })
       this.isTableLoading = false

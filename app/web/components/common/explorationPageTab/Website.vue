@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      perPage: 2,
+      perPage: 12,
       page: 1,
       loading: true
     }
