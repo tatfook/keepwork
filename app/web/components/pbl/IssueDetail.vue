@@ -94,12 +94,12 @@
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" rows="8" placeholder="说点什么呢......" v-model.trim="myComment"></textarea>
+            <textarea name="myIdea" rows="8" placeholder="说点什么呢...(不超过150个字符哦)" v-model.trim="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
           <el-button size="medium" @click="closeIssue">关闭问题</el-button>
-          <el-button type="primary" size="medium" @click="createComment">评论</el-button>
+          <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment">评论</el-button>
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <new-issue :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
+    <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
     <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail"></issue-detail>
   </div>
 </template>
