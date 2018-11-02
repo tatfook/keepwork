@@ -6,7 +6,7 @@
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
         <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
-        <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent'></el-input>
+        <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent' maxlength="1000"></el-input>
       </div>
       <div class="project-comments-sends-operations">
         <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
@@ -17,18 +17,20 @@
         <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
         <div class="project-comments-item-detail">
           <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
-            <span class="project-comments-item-time">{{comment.createdAt | formatDate}}</span>
+            <span class="project-comments-item-time">{{comment.createdAt | relativeTimeFilter(isEn)}}</span>
           </p>
           <p class="project-comments-item-comment">{{comment.content}}</p>
-          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)">删除</el-button>
+          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)"><i class="iconfont icon-delete1"></i> 删除</el-button>
         </div>
       </div>
     </div>
-    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'下滑加载更多'}}</div>
+    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'点击加载更多'}}</div>
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProjectComments',
@@ -43,7 +45,7 @@ export default {
   },
   data() {
     return {
-      xPerPage: 2,
+      xPerPage: 6,
       xPage: 1,
       xOrder: 'updatedAt-desc',
       isAddingComment: false,
@@ -53,7 +55,8 @@ export default {
       commentList: [],
       isGetAllComment: false,
       isGetCommentBtnLoading: false,
-      totalCommentCount: 0
+      totalCommentCount: 0,
+      isEn: locale === 'en-US'
     }
   },
   computed: {
@@ -158,8 +161,9 @@ export default {
     }
   },
   filters: {
-    formatDate(date, formatType) {
-      return dayjs(date).format('YYYY年MM月DD日 HH:mm:ss')
+    relativeTimeFilter(date, isEn) {
+      isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(date, 'YYYYMMDDHH').fromNow()
     }
   }
 }
@@ -209,16 +213,15 @@ export default {
       margin: 0;
     }
     display: flex;
-    align-items: center;
-    padding: 8px 24px;
+    align-items: flex-start;
+    padding: 24px;
     &-profile {
       margin-right: 16px;
-      padding: 16px 0;
     }
     &-username-time {
       font-size: 14px;
       color: #303133;
-      margin-bottom: 8px;
+      margin-bottom: 10px !important;
     }
     &-time {
       font-size: 12px;
@@ -228,6 +231,9 @@ export default {
     &-comment {
       font-size: 13px;
       color: #606266;
+      padding-right: 96px;
+      line-height: 1.5;
+      word-break: break-word;
     }
     &-detail {
       flex: 1;
@@ -236,15 +242,14 @@ export default {
     }
     &-delete {
       position: absolute;
-      right: 0;
-      top: 6px;
+      right: 14px;
+      top: 50%;
       padding: 0;
-      font-size: 14px;
+      font-size: 13px;
       color: #909399;
-      display: none;
-    }
-    &-detail:hover .el-button--text {
-      display: inline-block;
+      .iconfont {
+        font-size: 14px;
+      }
     }
   }
   &-more {
