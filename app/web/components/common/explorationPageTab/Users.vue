@@ -4,21 +4,21 @@
     <el-row>
       <el-col :sm="12" :md="6" v-for="user in allUsersData" :key="user.id">
         <div class="user-tab">
-          <img class="user-tab-cover" src="http://star.rayli.com.cn/public/upload/share/000/001/658/04/bcfec7af1f18a45ddc90ec7f9d40a649OJWppZ.jpeg" alt="">
+          <img class="user-tab-cover" :src="user.portrait || default_portrait" alt="">
           <h5 class="user-tab-name">{{user.username}}</h5>
-          <p class="user-tab-brief">你好，这里是笑傲江湖工作室</p>
+          <p class="user-tab-brief">{{user.desc || '这家伙很懒，没有简介！'}}</p>
           <div class="user-tab-abstract">
             <div>
               <p class="title">项目</p>
-              <p class="amount">123456</p>
+              <p class="amount">{{user.total_projects || 0}}</p>
             </div>
             <div class="member">
               <p class="title">关注</p>
-              <p class="amount">123456</p>
+              <p class="amount">{{user.total_follows || 0}}</p>
             </div>
             <div>
               <p class="title">粉丝</p>
-              <p class="amount">1235689</p>
+              <p class="amount">{{user.total_fans || 0}}</p>
             </div>
           </div>
           <div class="user-tab-jion">
@@ -40,6 +40,7 @@
 <script>
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import default_portrait from '@/assets/img/default_portrait.png'
 
 export default {
   name: 'Users',
@@ -51,13 +52,13 @@ export default {
     return {
       perPage: 12,
       page: 1,
-      loading: true
+      loading: true,
+      default_portrait,
     }
   },
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
-    console.log('users', this.allUsers)
   },
   computed: {
     ...mapGetters({
@@ -99,7 +100,7 @@ export default {
       background: #fff;
       padding: 30px 0;
       text-align: center;
-      margin-bottom: 10px;
+      margin: 0 auto 10px;
       &-cover {
         width: 96px;
         height: 96px;
@@ -128,6 +129,7 @@ export default {
             color: #666;
           }
           .amount {
+            line-height: 18px;
             font-size: 18px;
             color: #333;
           }

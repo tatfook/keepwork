@@ -63,7 +63,7 @@ export default {
 .project-cell {
   width: 290px;
   padding: 16px;
-  margin-bottom: 16px;
+  margin: 0 auto 16px;
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
   background: #fff;
@@ -134,11 +134,6 @@ export default {
       width: 80px;
       text-align: right;
     }
-  }
-}
-@media screen and (max-width: 768px) {
-  .project-cell {
-    margin: 0 auto 15px;
   }
 }
 </style>
