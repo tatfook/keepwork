@@ -51,9 +51,9 @@ export default {
       window.open(`/pbl/project/${project.id}/`)
     },
     relativeTime(time) {
-      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time, 'YYYYMMDDHH').fromNow()
+      return moment(time).utcOffset(offset).fromNow()
     }
   }
 }
