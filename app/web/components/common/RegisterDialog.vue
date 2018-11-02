@@ -3,7 +3,7 @@
     <h3 class="register-title">{{$t('common.register')}}</h3>
     <el-form-item prop="username">
       <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
-        <el-input slot="reference" @focus="visible = true" @blur="isExist" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+        <el-input slot="reference" @focus="visible = true" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
         <div class="register-dialog-form-tip">
           {{$t('common.accountNoChange')}}<br>
           {{$t('common.useLettersOrNumber')}}<br>
@@ -114,6 +114,7 @@ export default {
       })
     },
     isExist() {
+      if(!this.ruleForm.username) return
       this.visible = false
       keepwork.user
         .getUser(this.ruleForm.username)
