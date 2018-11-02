@@ -76,9 +76,6 @@ export default {
     },
     async checkMarkdownIsLinked() {
       let origin = window.location.origin
-      if (origin === 'http://127.0.0.1:7001') {
-        origin = 'https://stage.keepwork.com'
-      }
       await lesson.lessons
         .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
         .then(res => {
@@ -95,17 +92,17 @@ export default {
         file: { content }
       } = this.activePage
 
-      let modList = Parser.buildBlockList(content)
-      let newModList = [...modList]
-      newModList.forEach(item => {
-        if (item.cmd === 'Quiz') {
-          item.data.quiz.data[0].id = uuid()
-          BlockHelper.buildMarkdown(item)
-        }
-      })
-      let md = Parser.buildMarkdown(newModList)
+      // let modList = Parser.buildBlockList(content)
+      // let newModList = [...modList]
+      // newModList.forEach(item => {
+      //   if (item.cmd === 'Quiz') {
+      //     item.data.quiz.data[0].id = uuid()
+      //     BlockHelper.buildMarkdown(item)
+      //   }
+      // })
+      // let md = Parser.buildMarkdown(newModList)
       await lesson.lessons
-        .release({ id: this.selectValue, content: md })
+        .release({ id: this.selectValue, content })
         .then(res =>
           this.$message({
             type: 'success',
