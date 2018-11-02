@@ -214,7 +214,7 @@ export default {
     display: flex;
     .back-home-page{
       font-size: 14px;
-      flex: 1;
+      width: 110px;
       color: #1272cc;
       cursor: pointer;
     }
@@ -240,6 +240,9 @@ export default {
     .el-dialog__header{
       padding: 0;
     }
+    .el-dialog__body{
+      padding: 0 20px;
+    }
     max-width: 352px;
     padding: 40px 0;
   }
@@ -259,7 +262,7 @@ export default {
     &-operate {
       display: flex;
       .forget-pwd {
-        flex: 1;
+        width: 110px;
         cursor: pointer;
         text-align: left;
       }
