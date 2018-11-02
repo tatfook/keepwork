@@ -76,9 +76,6 @@ export default {
     },
     async checkMarkdownIsLinked() {
       let origin = window.location.origin
-      if (origin === 'http://127.0.0.1:7001') {
-        origin = 'https://stage.keepwork.com'
-      }
       await lesson.lessons
         .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
         .then(res => {

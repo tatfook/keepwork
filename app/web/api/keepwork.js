@@ -44,7 +44,7 @@ export const user = {
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
   register: async args => {
-    const res = await post('/user/register', args)
+    const res = await post('/users/register', args)
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
