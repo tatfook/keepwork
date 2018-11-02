@@ -33,7 +33,7 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">访问项目</el-button>
-          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="applyJoinProject">{{projectApplyState | applyStateFilter}}</el-button>
+          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
     </div>
@@ -53,6 +53,14 @@
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleBinderDialogClose">取 消</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog class="project-basic-info-apply-dialog" title="申请加入一个新的项目" :visible.sync="isApplyDialogVisible" width="400px" :before-close="handleApplyDialogClose">
+      <el-input type="textarea" placeholder="请说明你申请加入的理由..." resize='none' v-model="applyText">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleApplyDialogClose">取消</el-button>
+        <el-button type="primary" @click="applyJoinProject">完成创建</el-button>
       </span>
     </el-dialog>
   </div>
@@ -117,7 +125,9 @@ export default {
       isCoverZoneLoading: false,
       isMediaSkyDriveDialogShow: false,
       defaultCoverUrl: require('@/assets/img/pbl_default_cover.png'),
-      waitUpdateCover: false
+      waitUpdateCover: false,
+      applyText: '',
+      isApplyDialogVisible: false
     }
   },
   computed: {
@@ -238,6 +248,12 @@ export default {
           return Promise.reject()
         })
     },
+    handleApplyDialogClose() {
+      this.isApplyDialogVisible = false
+    },
+    showApplyBox() {
+      this.isApplyDialogVisible = true
+    },
     async applyJoinProject() {
       this.isApplyButtonLoading = true
       await this.pblApplyJoinProject({
@@ -245,6 +261,7 @@ export default {
         objectId: this.projectId,
         applyType: 0,
         applyId: this.loginUserId,
+        legend: this.applyText,
         extra: this.loginUserDetail
       })
         .then(() => {
@@ -253,6 +270,7 @@ export default {
             type: 'success',
             message: '申请成功，等待项目创建者处理'
           })
+          this.handleApplyDialogClose()
         })
         .catch(error => {
           let httpCode = _.get(error, 'response.status')
@@ -264,6 +282,7 @@ export default {
               break
           }
           this.isApplyButtonLoading = false
+          this.handleApplyDialogClose()
           console.error(error)
         })
     },
@@ -549,6 +568,30 @@ export default {
     }
     .w-e-text {
       padding: 0 8px;
+    }
+  }
+  &-apply-dialog {
+    .el-dialog__header {
+      font-size: 16px;
+      color: #303133;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 0 24px;
+      height: 60px;
+      line-height: 60px;
+      font-weight: bold;
+    }
+    .el-dialog__body {
+      padding: 24px;
+    }
+    .el-textarea__inner {
+      resize: none;
+      min-height: 33px;
+      height: 160px;
+      font-size: 14px;
+      color: #303133;
+    }
+    .el-dialog__footer {
+      padding: 0 24px 24px;
     }
   }
 }
