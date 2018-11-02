@@ -104,7 +104,6 @@ export default {
     }
   },
   destroyed() {
-    console.log('jewelbox destroyed')
     clearTimeout(this._timer)
   },
   computed: {
@@ -130,6 +129,7 @@ export default {
     },
     isConditions() {
       return !!(
+        this.isShowJewel &&
         this.time >= this.needTime &&
         // this.lockCoin >= this.reward &&
         this.isQuizAllRight &&

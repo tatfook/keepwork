@@ -1080,6 +1080,8 @@
     "learnLessonConfirm": "To learn a new lesson will make the old one closed. Continue ?",
     "online": "on line",
     "offline": "off line",
-    "leave": "leave"
+    "leave": "leave",
+    "packagePendingReview": "The package is not approved. Learning is temporarily unavailable.",
+    "Unapproved": "Unapproved"
   }
 }

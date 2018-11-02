@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap" v-loading="isLoading">
-    <LessonStudentStatus v-if="isBeInClassroom" :isVisitor="true" :classKey="classKey" />
+    <LessonStudentStatus v-if="isBeInClassroom && !isLoading" :isVisitor="true" :classKey="classKey" />
     <LessonHeader :data="lessonHeaderData" :isVisitor="true" />
     <LessonSummary v-if="isShowSummary" />
     <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" :isVisitor="true" />
@@ -33,10 +33,13 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
+    if (this.visitorInfo.token !== 0 && !this.visitorInfo.token) {
+      return this.$router.push({ name: 'StudentCenter' })
+    }
     this.isLoading = true
     const { key = '', token, id, nickname = '' } = this.$route.query
     this.classKey = key
-    this.saveVisitorInfo({ classId: id, key, token, nickname })
+    this.saveVisitorInfo({ classId: id, key, token, nickname, name: nickname })
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
     lessonId = Number(lessonId)
@@ -49,10 +52,12 @@ export default {
     }
     this.resetUrl()
     this.isLoading = false
+    // window.addEventListener('storage', this.handleStorageEvent, false)
   },
   destroyed() {
     clearTimeout(this._interval)
     this.clearVisitorInfo()
+    // window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -71,7 +76,14 @@ export default {
       window.location.href = this.$router.resolve({
         path: this.$route.path
       }).href
-    }
+    },
+    // handleStorageEvent() {
+    //   let refresh = localStorage.getItem('refresh')
+    //   if (Boolean(refresh)) {
+    //     localStorage.setItem('refresh', false)
+    //     this.$router.push({ name: 'StudentCenter' })
+    //   }
+    // }
   },
   computed: {
     ...mapGetters({

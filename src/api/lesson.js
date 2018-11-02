@@ -82,13 +82,14 @@ export const lessons = {
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
   learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
-  getLastLearnRecords: async () => get(`learnRecords?x-per-page=1&x-order=createdAt-desc`)
+  getLastLearnRecords: async () =>
+    get(`learnRecords?x-per-page=1&x-order=createdAt-desc`)
 }
 
 export const users = {
   getUserDetail: () => get('users'),
   userSubscribes: args =>
-    get(`users/${args.userId}/subscribes?packageState=${args.packageState}`),
+    get(`users/${args.userId}/subscribes`, { params: args }),
   userSkills: args => get(`users/${args.userId}/skills`),
   toBeTeacher: ({ userId, key, school, config }) =>
     post(`users/${userId}/teacher`, { key, school }, config),

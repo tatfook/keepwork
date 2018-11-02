@@ -63,13 +63,26 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.auto)) {
     const { query, params } = to
     const { token, key, id } = query
+    if (token !== undefined) {
+      Cookies.remove('token')
+      Cookies.remove('token', { path: '/' })
+      window.localStorage.removeItem('satellizer_token')
+      store.dispatch('lesson/logout')
+      store.dispatch('lesson/student/saveVisitorInfo', {
+        id,
+        token,
+        classId: id,
+        key
+      })
+      // localStorage.setItem('refresh', true)
+    }
     if (token && token !== 0) {
       let userInfo = await keepwork.user
         .verifyToken({ token })
         .catch(e => console.error('verify token failure'))
       if (userInfo) {
         Cookies.set('token', token)
-        if (key && key !== 0) {
+        if (key !== undefined && key !== 0) {
           await store
             .dispatch('lesson/student/enterClassRoom', {
               key

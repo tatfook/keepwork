@@ -68,6 +68,7 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
+    // window.addEventListener('storage', this.handleStorageEvent, false)
     await this.getLessonContent({ lessonId, packageId })
     await this.resumeTheClass()
     // 不在课堂中直接返
@@ -127,6 +128,7 @@ export default {
   },
   destroyed() {
     clearTimeout(this._interval)
+    // window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -144,6 +146,13 @@ export default {
       switchDevice: 'lesson/student/switchDevice',
       resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
+    // handleStorageEvent() {
+    //   let refresh = localStorage.getItem('refresh')
+    //   if (Boolean(refresh)) {
+    //     localStorage.setItem('refresh', false)
+    //     window.location.reload()
+    //   }
+    // },
     resetUrl(resetAll = true) {
       if (resetAll) {
         return (window.location.href = this.$router.resolve({
@@ -191,7 +200,7 @@ export default {
         visibilityChange,
         async () => {
           document[hidden] ? this.changeStatus(2) : this.changeStatus(1)
-          await this.uploadLearnRecords().catch(e => console.error(e))
+          // await this.uploadLearnRecords().catch(e => console.error(e))
         },
         false
       )
@@ -209,10 +218,15 @@ export default {
         .catch(e => {
           console.error(e)
         })
-      let { isSubscribe, coin, rmb, userId, lessons } = packageDetail
-      const isHasTheLesson = lessons
-        .map(({ id }) => id)
-        .find(id => id === lessonId)
+      let { isSubscribe, coin, rmb, userId, lessons, state } = packageDetail
+      if (state !== 2) {
+        this.$message({
+          type: 'error',
+          message: this.$t('lesson.packagePendingReview')
+        })
+        return false
+      }
+      const isHasTheLesson = lessons.some(({ id }) => id === lessonId)
       // 判断该课程包是否存在该课程
       if (!isHasTheLesson) {
         this.$message({
