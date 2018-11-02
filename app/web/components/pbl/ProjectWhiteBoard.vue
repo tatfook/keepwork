@@ -27,7 +27,7 @@
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
               <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
-              <span>{{issue.title}}</span><span class="title-number">#{{issue.id}}</span>
+              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.id}}</span>
             </div>
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="single-issue-join" v-if="issue.assigns.length > 0">
-            <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="">
+            <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
           </div>
         </div>
       </div>
@@ -160,9 +160,11 @@ export default {
       this.projectIssues = this.unfinishedProjectIssueList
     },
     relativeTime(time) {
-      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time, 'YYYYMMDDHH').fromNow()
+      return moment(time)
+        .utcOffset(offset)
+        .fromNow()
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
@@ -235,12 +237,16 @@ export default {
       }
     }
     &-list {
+      width: 100%;
       .single-issue {
         padding: 6px 16px;
         display: flex;
         border-bottom: 1px solid #f5f5f5;
         &-brief {
           flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           &-title {
             display: flex;
             align-items: center;
@@ -258,6 +264,14 @@ export default {
                 color: #62e08f;
                 margin-right: 13px;
               }
+            }
+            .title-text {
+              cursor: pointer;
+              display: inline-block;
+              max-width: 80%;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
             .title-number {
               color: #909399;
@@ -291,10 +305,13 @@ export default {
           }
         }
         &-join {
-          width: 30%;
+          width: 300px;
           display: flex;
           align-items: center;
           flex-direction: row-reverse;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           .player-portrait {
             width: 24px;
             height: 24px;
