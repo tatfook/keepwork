@@ -129,6 +129,7 @@ export default {
     },
     isConditions() {
       return !!(
+        this.isShowJewel &&
         this.time >= this.needTime &&
         // this.lockCoin >= this.reward &&
         this.isQuizAllRight &&
