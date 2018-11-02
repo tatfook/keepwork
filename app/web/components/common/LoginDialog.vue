@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
     <div v-show="isLoginForm">
-    <h3 class="login-title">{{$t('common.login')}}</h3>
+      <h3 class="login-title">{{$t('common.login')}}</h3>
       <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
@@ -133,25 +133,15 @@ export default {
           let info = await this.userLogin(payload).catch(e => {
             this.loading = false
           })
+          console.log('login', info)
           this.loading = false
-          if (!info.error) {
-            this.$emit('close')
-            return window.location.reload()
-          } else if (info.error.id === 0) {
-              const { path } = this.to
-              if (path) {
-                window.location.href = this.$router.resolve({ path }).href
-              }
-              this.$emit('close')
-              window.location.reload()
-          } else if (info.error.message === '用户不存在') {
-            this.showMessage('error', this.$t('common.usernameNotExist'))
-          } else if (info.error.message === '密码错误') {
-            this.showMessage('error', this.$t('common.wrongPassword'))
+          if (!info) {
+            // this.$emit('close')
+            // return window.location.reload()
+            this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
+          } else {
+            return false
           }
-          this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
-        } else {
-          return false
         }
       })
     },
@@ -209,10 +199,10 @@ export default {
     font-size: 18px;
     color: #303133;
   }
-  .register-oprate{
+  .register-oprate {
     margin: 0 32px;
     display: flex;
-    .back-home-page{
+    .back-home-page {
       font-size: 14px;
       width: 110px;
       color: #1272cc;
@@ -221,7 +211,7 @@ export default {
     .has-account {
       flex: 1;
       text-align: right;
-      .login-now{
+      .login-now {
         font-size: 14px;
         color: #1272cc;
         cursor: pointer;
@@ -237,10 +227,10 @@ export default {
   }
   .el-dialog {
     max-width: 100%;
-    .el-dialog__header{
+    .el-dialog__header {
       padding: 0;
     }
-    .el-dialog__body{
+    .el-dialog__body {
       padding: 0 20px;
     }
     max-width: 352px;
@@ -249,7 +239,7 @@ export default {
   &-form {
     padding: 0 32px;
     margin: 0 auto;
-    .el-form-item{
+    .el-form-item {
       margin-bottom: 18px;
     }
     .el-form-item__content {
