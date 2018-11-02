@@ -48,7 +48,6 @@ export default {
   },
   created() {
     this.switchSummary(false)
-    window.addEventListener('storage', this.handleStorageEvent, false)
   },
   async mounted() {
     const {
@@ -69,6 +68,7 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
+    window.addEventListener('storage', this.handleStorageEvent, false)
     await this.getLessonContent({ lessonId, packageId })
     await this.resumeTheClass()
     // 不在课堂中直接返
@@ -149,6 +149,7 @@ export default {
     handleStorageEvent() {
       let refresh = localStorage.getItem('refresh')
       if (Boolean(refresh)) {
+        localStorage.setItem('refresh', false)
         window.location.reload()
       }
     },
