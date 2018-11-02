@@ -74,7 +74,7 @@ router.beforeEach(async (to, from, next) => {
         classId: id,
         key
       })
-      localStorage.setItem('refresh', true)
+      // localStorage.setItem('refresh', true)
     }
     if (token && token !== 0) {
       let userInfo = await keepwork.user

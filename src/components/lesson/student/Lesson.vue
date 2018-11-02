@@ -68,7 +68,7 @@ export default {
     // purchased check or lesson check
     let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
     if (!isPurchased) return
-    window.addEventListener('storage', this.handleStorageEvent, false)
+    // window.addEventListener('storage', this.handleStorageEvent, false)
     await this.getLessonContent({ lessonId, packageId })
     await this.resumeTheClass()
     // 不在课堂中直接返
@@ -128,7 +128,7 @@ export default {
   },
   destroyed() {
     clearTimeout(this._interval)
-    window.removeEventListener('storage', this.handleStorageEvent, false)
+    // window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -146,13 +146,13 @@ export default {
       switchDevice: 'lesson/student/switchDevice',
       resumeLearnRecordsId: 'lesson/student/resumeLearnRecordsId'
     }),
-    handleStorageEvent() {
-      let refresh = localStorage.getItem('refresh')
-      if (Boolean(refresh)) {
-        localStorage.setItem('refresh', false)
-        window.location.reload()
-      }
-    },
+    // handleStorageEvent() {
+    //   let refresh = localStorage.getItem('refresh')
+    //   if (Boolean(refresh)) {
+    //     localStorage.setItem('refresh', false)
+    //     window.location.reload()
+    //   }
+    // },
     resetUrl(resetAll = true) {
       if (resetAll) {
         return (window.location.href = this.$router.resolve({
