@@ -31,7 +31,6 @@ export default {
   },
   created() {
     this.switchSummary(false)
-    window.addEventListener('storage', this.handleStorageEvent, false)
   },
   async mounted() {
     if (this.visitorInfo.token !== 0 && !this.visitorInfo.token) {
@@ -53,6 +52,7 @@ export default {
     }
     this.resetUrl()
     this.isLoading = false
+    window.addEventListener('storage', this.handleStorageEvent, false)
   },
   destroyed() {
     clearTimeout(this._interval)
@@ -80,6 +80,7 @@ export default {
     handleStorageEvent() {
       let refresh = localStorage.getItem('refresh')
       if (Boolean(refresh)) {
+        localStorage.setItem('refresh', false)
         this.$router.push({ name: 'StudentCenter' })
       }
     }
