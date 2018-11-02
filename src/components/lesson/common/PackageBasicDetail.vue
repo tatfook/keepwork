@@ -66,7 +66,7 @@ export default {
     if (
       this.isTeacher &&
       this.isPendingReview &&
-      this.packageDetail.userId !== this.packageOwnerId
+      !this.isOwnPackage
     ) {
       this.$router.push({ name: 'StudentCenter' })
     }
