@@ -37,9 +37,12 @@ export default {
       return this.$router.push({ name: 'StudentCenter' })
     }
     this.isLoading = true
-    const { key = '', token, id, nickname = '' } = this.$route.query
+    const { key = '', token, id, nickname = '', device } = this.$route.query
     this.classKey = key
     this.saveVisitorInfo({ classId: id, key, token, nickname, name: nickname })
+    if (device && device.toLowerCase() === 'paracraft') {
+      this.switchDevice('p')
+    }
     let { packageId, lessonId } = this.$route.params
     packageId = Number(packageId)
     lessonId = Number(lessonId)
@@ -70,13 +73,14 @@ export default {
       saveVisitorInfo: 'lesson/student/saveVisitorInfo',
       clearVisitorInfo: 'lesson/student/clearVisitorInfo',
       uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
-      resumeVisitorLearnRecords: 'lesson/student/resumeVisitorLearnRecords'
+      resumeVisitorLearnRecords: 'lesson/student/resumeVisitorLearnRecords',
+      switchDevice: 'lesson/student/switchDevice'
     }),
     resetUrl() {
       window.location.href = this.$router.resolve({
         path: this.$route.path
       }).href
-    },
+    }
     // handleStorageEvent() {
     //   let refresh = localStorage.getItem('refresh')
     //   if (Boolean(refresh)) {
