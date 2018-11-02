@@ -12,6 +12,7 @@ import LessonHeader from '../common/LessonHeader'
 import LessonTeacherSummary from './LessonTeacherSummary'
 import LessonStudentPerformance from './LessonStudentPerformance'
 import LessonHintToggle from './LessonHintToggle'
+import { lesson } from '@/api'
 export default {
   name: 'Learn',
   components: {
@@ -29,6 +30,10 @@ export default {
   },
   async mounted() {
     const { name, params: { packageId, lessonId } } = this.$route
+    let res = await lesson.packages.packageDetail({ packageId })
+    if (res.state !== 2 && this.userId !== res.userId) {
+      return this.$router.push({ name: 'StudentCenter'})
+    }
     await this.getCurrentClass().catch(e => console.error(e))
     await this.getLessonContent({ lessonId, packageId }).catch(e => console.error(e))
     this.isLoading = false
@@ -78,7 +83,8 @@ export default {
       lessonDetail: 'lesson/teacher/lessonDetail',
       isBeInClass: 'lesson/teacher/isBeInClass',
       isClassIsOver: 'lesson/teacher/isClassIsOver',
-      classroom: 'lesson/teacher/classroom'
+      classroom: 'lesson/teacher/classroom',
+      userinfo: 'lesson/userinfo',
     }),
     isInCurrentClass() {
       const { packageId: pid, lessonId: lid } = this.$route.params
@@ -97,7 +103,10 @@ export default {
     },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
-    }
+    },
+      userId() {
+      return _.get(this.userinfo, 'id', '')
+    },
   },
   beforeRouteUpdate({ name }, from, next) {
     if (name === 'LessonTeacherSummary' && !this.isClassIsOver) {

@@ -128,7 +128,8 @@ export default new Router({
         {
           path: 'package/:id',
           name: 'TeacherPackage',
-          component: TeacherPackageDetailPage
+          component: TeacherPackageDetailPage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:id/purchase',

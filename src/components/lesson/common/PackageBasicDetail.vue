@@ -50,7 +50,8 @@ import LoginDialog from '@/components/common/LoginDialog'
 export default {
   name: 'PackageBasicDetail',
   props: {
-    packageDetail: Object
+    packageDetail: Object,
+    actorType: String
   },
   mounted() {
     if (!this.userIsLogined) {
@@ -61,6 +62,13 @@ export default {
         .catch(() => {
           this.isLogin = false
         })
+    }
+    if (
+      this.isTeacher &&
+      this.isPendingReview &&
+      this.packageDetail.userId !== this.packageOwnerId
+    ) {
+      this.$router.push({ name: 'StudentCenter' })
     }
   },
   computed: {
@@ -73,6 +81,9 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    isTeacher() {
+      return this.actorType === 'teacher'
     },
     loginUserId() {
       return _.get(this.userProfile, '_id')
@@ -131,7 +142,7 @@ export default {
       return `${minAge}-${maxAge}`
     },
     isPendingReview() {
-      return this.packageDetail.state === 0 || this.packageDetail.state === 1
+      return this.packageDetail.state !== 2
     }
   },
   data() {
