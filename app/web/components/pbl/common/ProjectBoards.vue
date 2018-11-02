@@ -6,7 +6,7 @@
         <router-link :to="{path:moreBoardLink}" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
       </div>
       <div class="project-boards-list" v-if="projectIssueList.length >0">
-        <div class="project-boards-item" v-for="(issue, index) in projectIssueList" :key="index">
+        <div class="project-boards-item" v-for="(issue, index) in projectIssueList" :key="index" @click="showIssueDetail(issue)">
           <div class="project-boards-item-icon">
             <i class="el-icon-warning" v-show="issue.state === 0"></i>
             <i class="el-icon-success" v-show="issue.state === 1"></i>
@@ -17,9 +17,11 @@
       </div>
       <div class="project-boards-empty" v-else>项目白板为空</div>
     </el-card>
+    <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' @close="handleIssueDialogClose"></issue-detail>
   </div>
 </template>
 <script>
+import IssueDetail from '@/components/pbl/IssueDetail'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
@@ -28,6 +30,10 @@ export default {
   name: 'ProjectBoards',
   props: {
     projectId: {
+      required: true
+    },
+    projectDetail: {
+      type: Object,
       required: true
     }
   },
@@ -39,7 +45,9 @@ export default {
     return {
       isLoading: false,
       projectIssues: [],
-      isEn: locale === 'en-US'
+      isEn: locale === 'en-US',
+      isIssueDetailDialogShow: false,
+      issueDetail: {}
     }
   },
   computed: {
@@ -60,13 +68,24 @@ export default {
   methods: {
     ...mapActions({
       getProjectIssues: 'pbl/getProjectIssues'
-    })
+    }),
+    showIssueDetail(issue) {
+      this.issueDetail = issue
+      this.isIssueDetailDialogShow = true
+    },
+    handleIssueDialogClose() {
+      this.isIssueDetailDialogShow = false
+      this.issueDetail = {}
+    }
   },
   filters: {
     relativeTimeFilter(date, isEn) {
       isEn ? moment.locale('en') : moment.locale('zh-cn')
       return moment(date, 'YYYYMMDDHH').fromNow()
     }
+  },
+  components: {
+    IssueDetail
   }
 }
 </script>
@@ -86,6 +105,7 @@ export default {
   &-item {
     display: flex;
     padding: 8px 0;
+    cursor: pointer;
     &-icon {
       margin-right: 8px;
       line-height: 1;
