@@ -9,7 +9,7 @@
           <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
         </div>
         <div v-else class="issue-title-title-box">
-          {{currIssue.title}} #{{currIssue.id}}
+          <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.id}}</span>
           <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
         </div>
       </div>
@@ -35,8 +35,8 @@
     <div class="issue-detail-status">
       <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
       <div class="issue-detail-status-right">
-        负责人
-        <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="">
+        <span class="principal">负责人:</span>
+        <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
         <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
           <span class="el-dropdown-link">
             <span class="assigns-btn"></span>
@@ -49,6 +49,44 @@
       </div>
     </div>
     <div class="issue-detail-idea">
+      
+      <div class="issue-detail-idea-box">
+        <div class="issue-detail-idea-box-portrait">
+          <img :src="issue.user.portrait || default_portrait" alt="">
+        </div>
+        <div class="issue-detail-idea-box-content">
+          <div class="username-created-time">
+            <div class="username-created-time-left">
+              <span class="username">{{issue.user.username}}</span>
+              <span class="time">{{relativeTime(issue.createdAt)}}</span>
+            </div>
+            <!-- <div class="username-created-time-right" v-if="comment.extra.username == username">
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  · · ·
+                </span>
+                <el-dropdown-menu slot="dropdown" class="operate-comment">
+                  <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
+                  <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div> -->
+          </div>
+          <div class="idea-area">
+            <div class="arrows"></div>
+            <!-- <div v-if="comment.isEdit" class="text">
+              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
+              <div class="text-button">
+                <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
+                <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+              </div>
+            </div>
+            <div v-else class="text">{{comment.content}}</div> -->
+            <div class="text">{{issue.content}}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="issue-detail-idea-box" v-for="(comment,index) in comments" :key="index">
         <div class="issue-detail-idea-box-portrait">
           <img :src="comment.extra.portrait || default_portrait" alt="">
@@ -94,7 +132,7 @@
         <div class="idea-area">
           <div class="arrows"></div>
           <div class="text">
-            <textarea name="myIdea" rows="8" placeholder="说点什么呢...(不超过150个字符哦)" v-model.trim="myComment"></textarea>
+            <textarea name="myIdea" rows="8" placeholder="说点什么呢...(建议不超过150个字符)" v-model.trim="myComment"></textarea>
           </div>
         </div>
         <div class="finish">
@@ -272,7 +310,7 @@ export default {
         .then(comments => {
           let commentsArr = _.get(comments, 'rows', [])
           let arr = _.map(commentsArr, item => ({ ...item, isEdit: false }))
-          arr.sort(this.sortByUpdateAt)
+          arr.sort(this.sortByCreatedAt)
           this.comments = arr
         })
         .catch(err => console.error(err))
@@ -300,8 +338,8 @@ export default {
         this.getCommentsList()
       }
     },
-    sortByUpdateAt(obj1, obj2) {
-      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
+    sortByCreatedAt(obj1, obj2) {
+      return obj1.createdAt <= obj2.createdAt ? -1 : 1
     },
     async submitModifiedComment(comment,index) {
       let copyComment = Object.assign({}, comment)
@@ -355,9 +393,9 @@ export default {
       this.getIssueData()
     },
     relativeTime(time) {
-      // console.log('time',moment(time).format('MMMM Do YYYY, h:mm:ss a'))
+      const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time, 'YYYYMMDDHH').fromNow()
+      return moment(time).utcOffset(offset).fromNow()
     }
   }
 }
@@ -388,34 +426,42 @@ export default {
   }
   .issue-detail {
     &-header {
-      display: flex;
       line-height: 50px;
       padding: 0 20px;
       .issue-title {
-        flex: 1;
         &-edit-box {
           display: flex;
           align-items: center;
           height: 56px;
           margin-right: 10px;
+          &-input{
+            width: 80%;
+          }
         }
         &-title-box {
           font-size: 20px;
           height: 56px;
         }
+        &-text{
+          display: inline-block;
+          max-width: 80%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
         &-edit {
           font-size: 12px;
           cursor: pointer;
           color: #409eff;
-          padding-left: 8px;
+          display: inline-block;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         &-button {
           padding: 4px 10px;
           margin-left: 10px;
         }
-      }
-      .issue-edit {
-        width: 60px;
       }
     }
     &-intro {
@@ -496,6 +542,12 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        .principal{
+          padding-right: 12px;
+        }
         .player-portrait {
           width: 24px;
           height: 24px;
@@ -659,6 +711,18 @@ export default {
 .operate-comment {
   .action {
     padding: 0 20px;
+  }
+}
+.new-issue-assign{
+  .member-portrait{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .el-dropdown-menu__item{
+    display: flex;
+    align-items: center;
   }
 }
 </style>
