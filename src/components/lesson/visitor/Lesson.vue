@@ -52,12 +52,12 @@ export default {
     }
     this.resetUrl()
     this.isLoading = false
-    window.addEventListener('storage', this.handleStorageEvent, false)
+    // window.addEventListener('storage', this.handleStorageEvent, false)
   },
   destroyed() {
     clearTimeout(this._interval)
     this.clearVisitorInfo()
-    window.removeEventListener('storage', this.handleStorageEvent, false)
+    // window.removeEventListener('storage', this.handleStorageEvent, false)
   },
   methods: {
     ...mapActions({
@@ -77,13 +77,13 @@ export default {
         path: this.$route.path
       }).href
     },
-    handleStorageEvent() {
-      let refresh = localStorage.getItem('refresh')
-      if (Boolean(refresh)) {
-        localStorage.setItem('refresh', false)
-        this.$router.push({ name: 'StudentCenter' })
-      }
-    }
+    // handleStorageEvent() {
+    //   let refresh = localStorage.getItem('refresh')
+    //   if (Boolean(refresh)) {
+    //     localStorage.setItem('refresh', false)
+    //     this.$router.push({ name: 'StudentCenter' })
+    //   }
+    // }
   },
   computed: {
     ...mapGetters({
