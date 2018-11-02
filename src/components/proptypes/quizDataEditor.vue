@@ -26,8 +26,8 @@
             <el-button type="danger" @click.prevent="removeOption(opt, quizType)" icon="el-icon-delete" circle></el-button>
           </el-radio>
           <!-- </div> -->
-        </el-radio-group>
         <el-button type="primary" round size="small" @click="addOption(quizType)">{{this.$t('card.addMoreOptions')}}</el-button>
+        </el-radio-group>
 
       </el-form-item>
 
@@ -431,7 +431,7 @@ export default {
 }
 
 .flex-center-between-single .el-input {
-  margin: 0 20px;
+  margin: 0 18px;
 }
 
 .flex-center-between-single .el-radio__label {
