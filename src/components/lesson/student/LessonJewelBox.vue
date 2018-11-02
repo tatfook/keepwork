@@ -104,7 +104,6 @@ export default {
     }
   },
   destroyed() {
-    console.log('jewelbox destroyed')
     clearTimeout(this._timer)
   },
   computed: {

@@ -64,7 +64,6 @@ router.beforeEach(async (to, from, next) => {
     const { query, params } = to
     const { token, key, id } = query
     if (token !== undefined) {
-      localStorage.setItem('refresh', true)
       Cookies.remove('token')
       Cookies.remove('token', { path: '/' })
       window.localStorage.removeItem('satellizer_token')
@@ -75,6 +74,7 @@ router.beforeEach(async (to, from, next) => {
         classId: id,
         key
       })
+      localStorage.setItem('refresh', true)
     }
     if (token && token !== 0) {
       let userInfo = await keepwork.user
