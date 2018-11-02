@@ -38,6 +38,7 @@ export default {
     box-sizing: border-box;
     border: 1px solid #e8e8e8;
     background: #fff;
+    margin: 0 auto 10px;
     &-cover {
       width: 100%;
       height: 143px;

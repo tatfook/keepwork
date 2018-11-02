@@ -133,13 +133,11 @@ export default {
           let info = await this.userLogin(payload).catch(e => {
             this.loading = false
           })
-          console.log('login', info)
           this.loading = false
           if (!info) {
-            // this.$emit('close')
-            // return window.location.reload()
             this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
           } else {
+            this.$emit('close')
             return false
           }
         }
