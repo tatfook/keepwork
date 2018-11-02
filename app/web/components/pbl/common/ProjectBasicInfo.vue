@@ -238,13 +238,21 @@ export default {
           return Promise.resolve()
         })
         .catch(error => {
+          let httpCode = _.get(error, 'response.status')
+          let errorMsg = ''
+          switch (httpCode) {
+            case 413:
+              errorMsg = '项目描述太长了，更新失败'
+              break
+            default:
+              errorMsg = '项目信息更新失败,请重试'
+              break
+          }
           this.$message({
             type: 'error',
-            message: '项目信息更新失败,请重试'
+            message: errorMsg
           })
           this.isLoading = false
-          this.isDescriptionEditing = false
-          console.error(error)
           return Promise.reject()
         })
     },
