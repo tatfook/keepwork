@@ -138,9 +138,9 @@ const actions = {
       return Promise.resolve()
     })
   },
-  async applyJoinProject(context, { objectType = 5, objectId, applyType, applyId, extra }) {
+  async applyJoinProject(context, { objectType = 5, objectId, applyType, applyId, legend, extra }) {
     let { dispatch } = context
-    await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, extra }).then(async () => {
+    await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, legend, extra }).then(async () => {
       await dispatch('getApplyState', { objectId, objectType, applyType, applyId })
       return Promise.resolve()
     }).catch(error => {

@@ -267,8 +267,9 @@ export const applies = {
     objectId,
     applyType,
     applyId,
+    legend,
     extra
-  }) => post('applies', { objectType, objectId, applyType, applyId, extra })
+  }) => post('applies', { objectType, objectId, applyType, applyId, legend, extra })
 }
 
 export const members = {

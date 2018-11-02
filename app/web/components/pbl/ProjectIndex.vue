@@ -5,6 +5,7 @@
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+        <project-boards :projectId='projectId' :projectDetail='pblProjectDetail'></project-boards>
       </div>
       <div class="project-index-main">
         <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
@@ -19,6 +20,7 @@ import ProjectTags from './common/ProjectTags'
 import ProjectJoinedMembersList from './common/ProjectJoinedMembersList'
 import ProjectBasicInfo from './common/ProjectBasicInfo'
 import ProjectComments from './common/ProjectComments'
+import ProjectBoards from './common/ProjectBoards'
 export default {
   name: 'ProjectIndex',
   props: {
@@ -62,7 +64,8 @@ export default {
     ProjectTags,
     ProjectJoinedMembersList,
     ProjectBasicInfo,
-    ProjectComments
+    ProjectComments,
+    ProjectBoards
   }
 }
 </script>
