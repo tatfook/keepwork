@@ -149,9 +149,9 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { profile, userId } } = context
-    let newUserInfo = await keepwork.user.update({ userId, userInfo })
-    commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
+    let { getters: { userId }, dispatch } = context
+    await keepwork.user.update({ userId, userInfo })
+    await dispatch('getProfile', { useCache: false })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context
