@@ -2,7 +2,7 @@
   <div class="user-tab">
     <div class="search-result-total">搜索到：<span>{{usersCount}}</span>个结果</div>
     <el-row>
-      <el-col :sm="12" :md="6" v-for="user in allUsersData" :key="user.id">
+      <el-col :sm="12" :md="6" v-for="(user,index) in allUsersData" :key="user.id">
         <div class="user-tab">
           <img class="user-tab-cover" :src="user.portrait || default_portrait" alt="">
           <h5 class="user-tab-name">{{user.username}}</h5>
@@ -22,8 +22,8 @@
             </div>
           </div>
           <div class="user-tab-jion">
-            <el-button type="primary" class="user-tab-jion-button">+ 关注</el-button>
-            <el-button class="user-tab-jion-button">主页</el-button>
+            <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': isFollow(user,index)}]" :loading='isFollowLoading[index]' @click="toggleFollow(user,index)">{{isFollow(user,index) ? '已关注' : '+ 关注'}}</el-button>
+            <el-button class="user-tab-jion-button" @click="goUserHomePage(user,index)">主页</el-button>
           </div>
         </div>
       </el-col>
@@ -41,6 +41,7 @@
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import default_portrait from '@/assets/img/default_portrait.png'
+import { keepwork, EsAPI } from '@/api'
 
 export default {
   name: 'Users',
@@ -54,15 +55,22 @@ export default {
       page: 1,
       loading: true,
       default_portrait,
+      isFollowLoading: [],
+      userAllFollows: []
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    this.isFollowLoading = Array.apply(
+      null,
+      Array(this.allUsersData.length)
+    ).map(() => false)
     this.loading = false
   },
   computed: {
     ...mapGetters({
-      allUsers: 'pbl/allUsers'
+      allUsers: 'pbl/allUsers',
+      userProfile: 'user/profile'
     }),
     usersCount() {
       return _.get(this.allUsers, 'total', 0)
@@ -70,12 +78,24 @@ export default {
     allUsersData() {
       let hits = _.get(this.allUsers, 'hits', [])
       return hits
+    },
+    userId() {
+      return _.get(this.userProfile, 'id', '')
+    },
+    isFollow() {
+      return (user, index) => {
+        return this.userAllFollows.map(item => item.objectId).includes(user.id)
+      }
     }
   },
   methods: {
     ...mapActions({
-      getAllUsers: 'pbl/getAllUsers'
+      getAllUsers: 'pbl/getAllUsers',
+      getUserFavorite: 'pbl/getUserFavorite'
     }),
+    showMessage({ type = 'success', message = '操作成功' }) {
+      this.$message({ type, message })
+    },
     async targetPage(targetPage) {
       this.loading = true
       this.$nextTick(async () => {
@@ -83,10 +103,67 @@ export default {
           page: targetPage,
           per_page: this.perPage,
           q: this.searchKey,
-          sort: this.searchKey
+          sort: this.sortUsers
         })
         this.loading = false
+        this.getFollows()
       })
+    },
+    async getFollows() {
+      let searchUserIsMyFavorite = []
+      _.map(this.allUsersData, i => {
+        searchUserIsMyFavorite.push(i.id)
+      })
+      await keepwork.favorites
+        .getUserSearchAllFavorites({
+          userId: this.userId,
+          objectType: 0,
+          objectId: {
+            $in: searchUserIsMyFavorite
+          }
+        })
+        .then(res => {
+          this.userAllFollows = _.get(res, 'rows', [])
+        })
+    },
+    async toggleFollow(user, index) {
+      this.isFollowLoading[index] = true
+      if (!this.isFollow(user,index)) {
+        await keepwork.favorites
+          .favoriteProject({ objectId: user.id, objectType: 0 })
+          .then(res => {
+            this.showMessage({
+              message: '关注成功'
+            })
+            this.getFollows()
+            this.isFollowLoading[index] = false
+          })
+          .catch(err => {
+            this.showMessage({
+              message: '关注失败'
+            })
+            this.isFollowLoading[index] = false
+          })
+      } else {
+        await keepwork.favorites
+          .unFavoriteProject({ objectId: user.id, objectType: 0 })
+          .then(res => {
+            this.showMessage({
+              message: '取消关注成功'
+            })
+            this.getFollows()
+            this.isFollowLoading[index] = false
+          })
+          .catch(err => {
+            this.showMessage({
+              message: '取消关注失败'
+            })
+            this.isFollowLoading[index] = false
+          })
+      }
+    },
+    goUserHomePage(){
+      alert('程序员小姐姐努力开发中')
     }
   }
 }
@@ -119,6 +196,7 @@ export default {
         font-size: 12px;
         color: #999;
         margin: 9px 0;
+        line-height: 16px;
       }
       &-abstract {
         display: flex;
@@ -163,6 +241,10 @@ export default {
           width: 108px;
           padding: 0;
         }
+      }
+      .is-followed {
+        background: #67C23A;
+        border: 1px solid #67C23A
       }
     }
   }

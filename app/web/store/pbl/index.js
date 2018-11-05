@@ -18,7 +18,8 @@ const state = {
   commentList: [],
   projectsType: {},
   issuesList: [],
-  allUsers: []
+  allUsers: [],
+  userFollows: []
 }
 export default {
   namespaced: true,
