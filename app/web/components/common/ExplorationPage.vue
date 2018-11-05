@@ -127,7 +127,7 @@ export default {
           return [{ mode: '综合', command: '/综合' },{ mode: '最新', command: 'updated_time/最新' },{ mode: '热门', command: 'recent_view/热门' }]
           break
         case 6:
-          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: '/项目' },{ mode: '名气', command: '/名气' },]
+          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: 'total_projects/项目' },{ mode: '名气', command: 'total_fans/名气' },]
           break
         default:
           return [{ mode: '综合', command: '/综合' }]
@@ -158,6 +158,7 @@ export default {
           this.$refs.course.targetPage(1)
           break
         case 6:
+          this.$refs.users.targetPage(1)
           break
         case 7:
           break

@@ -372,6 +372,7 @@ export default {
       return temp
     },
     async handleCommand(userId) {
+      if(!userId) return
       _.forEach(this.memberList, member => {
         if (member.userId === userId) {
           if (this.assignedMembers.length == 0) {

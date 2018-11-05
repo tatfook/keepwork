@@ -15,6 +15,7 @@ const GET_TYPE_PROJECTS = 'GET_TYPE_PROJECTS'
 const GET_EXCELLENT_PROJECTS = ' GET_EXCELLENT_PROJECTS'
 const GET_PROJECT_ISSUES_SUCCESS = 'GET_PROJECT_ISSUES_SUCCESS'
 const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS'
+const GET_USER_FOLLOWS = 'GET_USER_FOLLOWS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
@@ -31,7 +32,8 @@ export const props = {
   GET_COMMENTS_SUCCESS,
   GET_TYPE_PROJECTS,
   GET_PROJECT_ISSUES_SUCCESS,
-  GET_ALL_USERS_SUCCESS
+  GET_ALL_USERS_SUCCESS,
+  GET_USER_FOLLOWS
 }
 
 const mutations = {
@@ -110,6 +112,9 @@ const mutations = {
   },
   [GET_ALL_USERS_SUCCESS](state, allUsers) {
     Vue.set(state, 'allUsers', allUsers)
+  },
+  [GET_USER_FOLLOWS](state, follows) {
+    Vue.set(state, 'userFollows', follows)
   }
 }
 
