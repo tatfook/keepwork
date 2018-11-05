@@ -127,7 +127,8 @@ export default {
       defaultCoverUrl: require('@/assets/img/pbl_default_cover.png'),
       waitUpdateCover: false,
       applyText: '',
-      isApplyDialogVisible: false
+      isApplyDialogVisible: false,
+      maxDescWithHtmlLen: 65535
     }
   },
   computed: {
@@ -219,6 +220,14 @@ export default {
       } else {
         let editorText = this.descriptionEditor.txt
         this.tempDesc = editorText.text() && this.descriptionEditor.txt.html()
+        let descLen = this.tempDesc.length
+        if (descLen >= this.maxDescWithHtmlLen) {
+          this.$message({
+            type: 'error',
+            message: '项目描述太长了，请调整'
+          })
+          return
+        }
         this.isLoading = true
         await this.updateDescToBackend()
       }
@@ -238,19 +247,9 @@ export default {
           return Promise.resolve()
         })
         .catch(error => {
-          let httpCode = _.get(error, 'response.status')
-          let errorMsg = ''
-          switch (httpCode) {
-            case 413:
-              errorMsg = '项目描述太长了，更新失败'
-              break
-            default:
-              errorMsg = '项目信息更新失败,请重试'
-              break
-          }
           this.$message({
             type: 'error',
-            message: errorMsg
+            message: '项目信息更新失败,请重试'
           })
           this.isLoading = false
           return Promise.reject()

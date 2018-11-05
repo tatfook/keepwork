@@ -227,13 +227,14 @@ const actions = {
       return Promise.reject(error)
     }).catch(error => Promise.reject(error))
     await dispatch('getComments', { objectType, objectId })
-    console.log(newComment)
+    objectType === 5 && await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
     return newComment
   },
   async deleteComment(context, { objectType = 5, objectId, commentId }) {
     let { dispatch } = context
     await keepwork.comments.deleteComment({ commentId }).then(async () => {
       await dispatch('getComments', { objectType, objectId })
+      objectType === 5 && await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
     }).catch(error => {
       return Promise.reject(error)
     })
