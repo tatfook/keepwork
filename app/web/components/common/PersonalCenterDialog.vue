@@ -59,7 +59,6 @@ export default {
   methods: {
     ...mapActions({
       userUpdateUserInfo: 'user/updateUserInfo',
-      userCheckSensitive: 'user/checkSensitive',
       verifyCellphoneTwo: 'verifyCellphoneTwo'
     }),
     async handleSave() {

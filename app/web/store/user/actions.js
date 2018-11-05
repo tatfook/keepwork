@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, GitAPI, skyDrive, sensitiveWord } from '@/api'
+import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
@@ -622,10 +622,6 @@ const actions = {
     let { id: fileId } = fileUploaded
     let url = await dispatch('useFileInSite', { fileId, sitePath, useCache: false })
     return { file: fileUploaded, url }
-  },
-  async checkSensitive(context, { checkedWords }) {
-    let result = await sensitiveWord.checkSensitiveWords(checkedWords)
-    return result
   },
   async changePwd(context, { oldpassword, newpassword }) {
     // FIXME:

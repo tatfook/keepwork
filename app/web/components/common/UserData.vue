@@ -42,6 +42,7 @@
 <script>
 import _ from 'lodash'
 import vueCropper from 'vue-cropper'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
 export default {
@@ -103,11 +104,10 @@ export default {
   methods: {
     ...mapActions({
       gitlabCreateFile: 'gitlab/createFile',
-      userCheckSensitive: 'user/checkSensitive',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     async checkSensitive(checkedWords) {
-      let result = await this.userCheckSensitive({ checkedWords })
+      let result = await checkSensitiveWords({ checkedWords })
       return result && result.length > 0
     },
     getUserSelectProfile(e) {
