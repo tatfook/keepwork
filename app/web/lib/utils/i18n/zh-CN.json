@@ -690,6 +690,7 @@
     "confidentiality": "保密",
     "modifyAvatar": "修改头像",
     "inputPhoneNumber": "请输入手机号码",
+    "inputVerificationCode": "请输入验证码",
     "wrongNumberFormat": "号码格式不正确",
     "certificationStatus": "认证状态:",
     "certified": "已认证",

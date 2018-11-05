@@ -1,9 +1,9 @@
 <template>
   <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
     <h3 class="register-title">{{$t('common.register')}}</h3>
-    <el-form-item prop="username">
+    <el-form-item prop="username" :error="usernameError">
       <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
-        <el-input slot="reference" @focus="visible = true" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+        <el-input slot="reference" @focus="handleUsernameInputFocus" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
         <div class="register-dialog-form-tip">
           {{$t('common.accountNoChange')}}<br>
           {{$t('common.useLettersOrNumber')}}<br>
@@ -18,13 +18,13 @@
     <el-form-item prop="phoneNumber">
       <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="authCode">
       <el-row class="send-auth">
         <el-col class="send-auth-code">
-          <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
+          <el-input v-model="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
         </el-col>
         <el-col class="send-auth-send-code">
-          <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleForm.phoneNumber" type="primary" class="send-code-button" @click.stop="sendAuthCode">
+          <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
             <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
             <span v-else>{{$t('user.sendCodes')}}</span>
           </el-button>
@@ -54,6 +54,7 @@ export default {
       }
     }
     return {
+      usernameError: '',
       visible: false,
       envIsForDevelopment: process.env.NODE_ENV === 'development',
       loading: false,
@@ -90,9 +91,21 @@ export default {
             message: this.$t('user.inputPhoneNumber'),
             trigger: 'blur'
           },
-          { validator: validatePhoneNumber, trigger: 'change' }
+          { len: 11, message: this.$t('user.wrongNumberFormat') }
+        ],
+        authCode: [
+          {
+            required: true,
+            message: this.$t('user.inputVerificationCode'),
+            trigger: 'blur'
+          }
         ]
       }
+    }
+  },
+  computed: {
+    isCellphoneVerify() {
+      return /^1\d{10}$/.test(this.ruleForm.phoneNumber)
     }
   },
   methods: {
@@ -113,20 +126,28 @@ export default {
         showClose: true
       })
     },
+    handleUsernameInputFocus() {
+      this.visible = true
+      this.usernameError = ''
+    },
     isExist() {
-      if(!this.ruleForm.username) return
+      if (!this.ruleForm.username) return
       this.visible = false
       keepwork.user
         .getUser(this.ruleForm.username)
         .then(res => {
-          if(res){
-            this.showMessage('error', this.$t('common.existAccount'))
+          if (res) {
+            this.usernameError = this.$t('common.existAccount')
           }
+        })
+        .catch(e => {
+          this.usernameError = ''
         })
     },
     async register(formName) {
+      if (this.usernameError) return
       this.$refs[formName].validate(async valid => {
-        if (valid) {
+        if (valid && !this.usernameError) {
           let payload = {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
@@ -134,13 +155,15 @@ export default {
             captcha: this.authCode
           }
           this.registerLoading = true
-          await this.userRegister(payload).then(res => {
-            this.registerLoading = false
-            this.handleClose()
-          }).catch(e => {
-            this.registerLoading = false
-            this.showMessage('error', this.$t('common.registerFailed'))
-          })
+          await this.userRegister(payload)
+            .then(res => {
+              this.registerLoading = false
+              this.handleClose()
+            })
+            .catch(e => {
+              this.registerLoading = false
+              this.showMessage('error', this.$t('common.registerFailed'))
+            })
         } else {
           return false
         }
