@@ -5,7 +5,7 @@
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
         <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :originProjectUsername='originProjectUsername'></project-joined-members-list>
-        <project-boards :projectId='projectId' :projectDetail='pblProjectDetail'></project-boards>
+        <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
       </div>
       <div class="project-index-main">
         <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
@@ -50,6 +50,14 @@ export default {
       default: false
     },
     isProjectStopRecruit: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
       type: Boolean,
       default: false
     }
