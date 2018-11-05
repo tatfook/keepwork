@@ -116,7 +116,6 @@ const actions = {
   async getProjectMember(context, { objectId, objectType }) {
     let { commit } = context
     await keepwork.members.getProjectMembersList({ objectId, objectType }).then(memberList => {
-      console.warn('memberList: ', memberList)
       commit(GET_PROJECT_MEMBERS_SUCCESS, { projectId: objectId, memberList })
       return Promise.resolve()
     }).catch(error => {

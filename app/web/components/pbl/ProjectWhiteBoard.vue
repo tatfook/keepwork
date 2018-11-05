@@ -19,7 +19,7 @@
           <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
         </div>
         <div class="new-issue-btn">
-          <el-button type="primary" size="medium" @click="goNewIssue">+ 新建问题</el-button>
+          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ 新建问题</el-button>
         </div>
       </div>
       <div class="project-white-board-content-list">
@@ -44,7 +44,7 @@
       </div>
     </div>
     <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail"></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit"></issue-detail>
   </div>
 </template>
 <script>
@@ -72,7 +72,15 @@ export default {
   },
   props: {
     isBoardViewForMember: Boolean,
-    isBoardEditForMember: Boolean
+    isBoardEditForMember: Boolean,
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     NewIssue,
@@ -81,12 +89,8 @@ export default {
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
-      projectDetail: 'pbl/projectDetail',
-      projectMemberList: 'pbl/projectMemberList'
+      projectDetail: 'pbl/projectDetail'
     }),
-    projectMembers() {
-      return this.projectMemberList({ projectId: this.projectId})
-    },
     projectIssueList() {
       let tempArr = _.get(
         this.issuesList({ projectId: this.projectId }),
@@ -112,8 +116,10 @@ export default {
     }
   },
   async mounted() {
-    // await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
-    await Promise.all([this.getProjectIssues({ objectId: this.projectId, objectType: 5 }), this.getProjectMember({ objectId: this.projectId, objectType: 5})])
+    if (this.isProhibitView) {
+      return this.$router.push({ name: 'ProjectIndexPage', params: { id: this.projectId }})
+    }
+    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
     this.projectIssues = this.projectIssueList
   },
   watch: {
@@ -148,8 +154,9 @@ export default {
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
-      return console.log(this.projectMembers)
-      this.showNewIssue = true
+      if (!this.isProhibitEdit) {
+        this.showNewIssue = true
+      }
     },
     closeNewIssue() {
       this.showNewIssue = false

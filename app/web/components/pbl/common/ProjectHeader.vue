@@ -43,7 +43,7 @@
         <el-tab-pane name="ProjectIndexPage">
           <span slot="label" class="project-header-tabs-label">主页</span>
         </el-tab-pane>
-        <el-tab-pane name="ProjectWhiteBoard" v-if="isLoginUserEditable">
+        <el-tab-pane name="ProjectWhiteBoard" v-if="!isProhibitView">
           <span slot="label" class="project-header-tabs-label">白板</span>
         </el-tab-pane>
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
@@ -68,6 +68,10 @@ export default {
     editingUserId: Number,
     isLoginUserEditable: {
       type: Boolean,
+      default: false
+    },
+    isProhibitView: {
+      type:Boolean,
       default: false
     }
   },
