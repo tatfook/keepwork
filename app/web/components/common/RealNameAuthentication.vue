@@ -1,47 +1,47 @@
 <template>
-    <el-container class="real-name-setting">
-      <el-row class="real-name-setting-wrap">
-        <el-col :class="['real-name-setting-content',hasVerified?'hasVerified':'']">
-          <el-header class="real-name-setting-header">
-              <h3>{{$t('common.realNameAuthentication')}}</h3>
-          </el-header>
-          <el-row class="real-name-setting-form">
-              <el-form :rules="phoneNumberRules" :model="ruleFormDatas" :label-width="localeLableWidth">
-                <el-form-item :label='$t("user.certificationStatus")' :class="{'real-name-status':hasVerified}">
-                    <span v-if="hasVerified">{{$t('user.certified')}}</span>
-                    <span v-else class="auth-status">{{$t('user.unverified')}}</span>
-                </el-form-item>
-                <el-row v-if="hasVerified">
-                    <el-form-item :label='$t("user.certifiedPhoneNumber")'>
-                        <span>{{verifiedPhoneNumber}}</span>
-                    </el-form-item>
+  <el-container class="real-name-setting">
+    <el-row class="real-name-setting-wrap">
+      <el-col :class="['real-name-setting-content',hasVerified?'hasVerified':'']">
+        <el-header class="real-name-setting-header">
+          <h3>{{$t('common.realNameAuthentication')}}</h3>
+        </el-header>
+        <el-row v-loading='isLoading' class="real-name-setting-form">
+          <el-form :rules="phoneNumberRules" :model="ruleFormDatas" :label-width="localeLableWidth">
+            <el-form-item :label='$t("user.certificationStatus")' :class="{'real-name-status':hasVerified}">
+              <span v-if="hasVerified">{{$t('user.certified')}}</span>
+              <span v-else class="auth-status">{{$t('user.unverified')}}</span>
+            </el-form-item>
+            <el-row v-if="hasVerified">
+              <el-form-item :label='$t("user.certifiedPhoneNumber")'>
+                <span>{{verifiedPhoneNumber}}</span>
+              </el-form-item>
+            </el-row>
+            <el-row v-else>
+              <el-form-item :label='$t("user.certifiedPhoneNumber")' prop="cellphoneNumber">
+                <el-input size="small" v-model="ruleFormDatas.cellphoneNumber"></el-input>
+              </el-form-item>
+              <el-form-item :label='$t("user.verificationCode")'>
+                <el-row class="send-auth">
+                  <el-col class="send-auth-code">
+                    <el-input size="small" v-model="authCode"></el-input>
+                  </el-col>
+                  <el-col class="send-auth-send-code">
+                    <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !cellphoneValidate" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
+                      <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
+                      <span v-else>{{$t('user.sendCodes')}}</span>
+                    </el-button>
+                  </el-col>
                 </el-row>
-                <el-row v-else>
-                    <el-form-item :label='$t("user.certifiedPhoneNumber")' prop="cellphoneNumber">
-                        <el-input size="small" v-model="ruleFormDatas.cellphoneNumber"></el-input>
-                    </el-form-item>
-                    <el-form-item :label='$t("user.verificationCode")'>
-                      <el-row class="send-auth">
-                        <el-col class="send-auth-code">
-                            <el-input size="small" v-model="authCode"></el-input>
-                        </el-col>
-                        <el-col class="send-auth-send-code">
-                            <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !cellphoneValidate" type="primary" class="send-code-button" size="small" @click.stop="sendAuthCode">
-                              <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
-                              <span v-else>{{$t('user.sendCodes')}}</span>
-                            </el-button>
-                        </el-col>
-                      </el-row>
-                    </el-form-item>
-                </el-row>
-              </el-form>
-          </el-row>
-        </el-col>
-        <el-col v-if="!hasVerified" class="real-name-setting-operations-col">
-          <dialog-operations @save="realNamePhoneNumber" @close="handleClose"></dialog-operations>
-        </el-col>
-      </el-row>
-    </el-container>
+              </el-form-item>
+            </el-row>
+          </el-form>
+        </el-row>
+      </el-col>
+      <el-col v-if="!hasVerified" class="real-name-setting-operations-col">
+        <dialog-operations @save="realNamePhoneNumber" @close="handleClose"></dialog-operations>
+      </el-col>
+    </el-row>
+  </el-container>
 </template>
 <script>
 import _ from 'lodash'
@@ -73,20 +73,21 @@ export default {
       },
       phoneNumberRules: {
         cellphoneNumber: [{ validator: validatePhoneNumber, trigger: 'change' }]
-      }
+      },
+      isLoading: false
     }
   },
   computed: {
     ...mapGetters({
       sendCodeInfo: 'user/sendCodeInfo',
       authCodeInfo: 'user/authCodeInfo',
-      cellphone: 'user/cellphone'
+      userRealname: 'user/realname'
     }),
     hasVerified() {
-      return Boolean(this.cellphone)
+      return Boolean(this.userRealname)
     },
     verifiedPhoneNumber() {
-      return this.cellphone
+      return this.userRealname
     },
     localeLableWidth() {
       return locale === 'en-US' ? '190px' : '110px'
@@ -110,8 +111,9 @@ export default {
         setRealNameInfo: true,
         cellphone: this.ruleFormDatas.cellphoneNumber
       }
-      await this.verifyCellphoneOne(payload)
-        .catch(e => this.$message.error(this.$t('user.sendingFrequent')))
+      await this.verifyCellphoneOne(payload).catch(e =>
+        this.$message.error(this.$t('user.sendingFrequent'))
+      )
       this.sendCodeLoading = false
       // let message = this.sendCodeInfo.error && this.sendCodeInfo.error.message
       if (this.sendCodeInfo === 'OK') {
@@ -150,18 +152,19 @@ export default {
     },
     async realNamePhoneNumber() {
       let payload = {
-        // setRealNameInfo: true,
         cellphone: this.ruleFormDatas.cellphoneNumber,
         captcha: this.authCode,
         realname: true
       }
-      await this.verifyCellphoneTwo(payload)
-      let messageId = this.authCodeInfo
-      if (messageId === -1) {
-        this.showMessage('error', this.$t('user.verificationCodeError'))
-      } else if (messageId === 0) {
+      this.isLoading = true
+      await this.verifyCellphoneTwo(payload).catch()
+      let authResultInfo = this.authCodeInfo
+      if (authResultInfo === 'OK') {
         this.showMessage('success', this.$t('common.saveSuccess'))
+      } else {
+        this.showMessage('error', this.$t('user.verificationCodeError'))
       }
+      this.isLoading = false
     },
     handleClose() {
       this.$emit('close')
