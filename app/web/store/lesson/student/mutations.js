@@ -108,6 +108,7 @@ const mutations = {
   },
   [SET_VISITOR_NICKNAME](state, nickname) {
     let _visitorInfo = _.clone(state.visitorInfo)
+    _visitorInfo.name = nickname
     _visitorInfo.nickname = nickname
     Vue.set(state, 'visitorInfo', _visitorInfo)
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="package-detail-page" v-loading="isLoading">
-    <package-basic-detail v-if="!isFirstGetData" :packageDetail='packageDetail'></package-basic-detail>
+    <package-basic-detail v-if="!isFirstGetData" :packageDetail='packageDetail' :actorType='actorType'></package-basic-detail>
     <package-catalogue v-if="!isFirstGetData" class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType'></package-catalogue>
   </div>
 </template>

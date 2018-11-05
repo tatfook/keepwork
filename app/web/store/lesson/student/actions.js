@@ -26,16 +26,9 @@ let {
 } = props
 
 const actions = {
-  async getUserSubscribes(
-    {
-      commit,
-      rootGetters: { 'user/userId': userId }
-    },
-    { packageState }
-  ) {
+  async getUserSubscribes({ commit, rootGetters: { 'user/userId': userId } }) {
     let userSubscribes = await lesson.users.userSubscribes({
-      userId,
-      packageState
+      userId
     })
     commit(SET_USER_SUBSCRIBES, userSubscribes)
   },
@@ -212,9 +205,9 @@ const actions = {
     },
     { state = 0 }
   ) {
-    const { token, classId, nickname, username } = visitorInfo
+    const { token, classId, name, username } = visitorInfo
     learnRecords.username = username
-    learnRecords.name = nickname || ''
+    learnRecords.name = name || username
     learnRecords.status = 'p1'
     learnRecords.portrait = ''
     if (token && classId && !_.isNumber(token)) {
@@ -258,6 +251,9 @@ const actions = {
     commit(SWITCH_DEVICE, payload)
   },
   async saveVisitorInfo({ commit }, payload) {
+    commit(LEAVE_THE_CLASS)
+    commit(CLEAR_LEARN_RECORDS_ID)
+    commit(CLEAR_LESSON_DATA)
     commit(SAVE_VISITOR_INFO, payload)
   },
   async setVisitorNickname({ commit }, nickname) {
@@ -266,13 +262,24 @@ const actions = {
   async clearVisitorInfo({ commit }) {
     commit(CLEAR_VISITOR_INFO)
   },
-  async resumeVisitorLearnRecords({ commit, dispatch, getters: { visitorInfo } }, id) {
+  async resumeVisitorLearnRecords(
+    {
+      commit,
+      dispatch,
+      getters: { visitorInfo }
+    },
+    id
+  ) {
     const { token } = visitorInfo
-    let res = await lesson.visitor.learnRecordsById(id, token).catch(e => console.error(e))
+    let res = await lesson.visitor
+      .learnRecordsById(id, token)
+      .catch(e => console.error(e))
     let _visitorInfo = _.clone(visitorInfo)
     let username = _.get(res, 'data.extra.username', '')
+    let name = _.get(res, 'data.extra.name', '')
     if (username) {
       _visitorInfo.username = username
+      _visitorInfo.name = _visitorInfo.name || name || username
       commit(SAVE_VISITOR_INFO, _visitorInfo)
     }
     let quiz = _.get(res.data, 'extra.quiz', '')

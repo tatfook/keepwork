@@ -33,6 +33,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingBasicMessage',
@@ -81,8 +82,7 @@ export default {
     ...mapActions({
       gitlabUploadFile: 'gitlab/uploadFile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
-      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
-      userCheckSensitive: 'user/checkSensitive'
+      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
     }),
     async siteLogoUpload(e) {
       this.loading = true
@@ -117,20 +117,19 @@ export default {
       })
     },
     async checkSensitive() {
-      let checkedWords = [this.basicMessage.name, this.basicMessage.desc]
-      let result = await this.userCheckSensitive({ checkedWords })
+      let checkedWords = [this.basicMessage.displayName, this.basicMessage.description]
+      let result = await checkSensitiveWords({ checkedWords })
       return result && result.length > 0
     },
     async submitChange() {
-      // this.loading = true
+      this.loading = true
       this.$refs.basicMessageForm.validate(async valid => {
         if (valid) {
-          // let isSensitive = await this.checkSensitive()
-          // if (isSensitive) {
-          //   this.showErrorMsg(this.$t('common.inputIsSensitive'))
-          //   return
-          // }
-          // return console.dir(this.basicMessage)
+          let isSensitive = await this.checkSensitive()
+          if (isSensitive) {
+            this.showErrorMsg(this.$t('common.inputIsSensitive'))
+            return
+          }
           await this.userSaveSiteBasicSetting({
             newBasicMessage: this.basicMessage
           })

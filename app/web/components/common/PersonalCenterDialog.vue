@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-loading="loading" :append-to-body=true v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
+  <el-dialog v-loading="loading" :append-to-body='true' v-if='show' class="personal-center-dialog" :title="title" :visible.sync="show" :before-close="handleClose">
     <div class="personal-center-sidebar">
       <ul>
         <li @click='doActiveNavItem(index)' v-for="(navItem, index) in personalSettingNavs" :key="index">
@@ -59,7 +59,6 @@ export default {
   methods: {
     ...mapActions({
       userUpdateUserInfo: 'user/updateUserInfo',
-      userCheckSensitive: 'user/checkSensitive',
       verifyCellphoneTwo: 'verifyCellphoneTwo'
     }),
     async handleSave() {

@@ -22,9 +22,9 @@
         <div class="package-basic-detail-label">{{$t('lesson.intro')}}:</div>
         <el-scrollbar class="package-basic-detail-skills-detail" :class="{'package-basic-detail-skills-detail-isSubscribe': !isPackageCostAndBackShow && !isFreeLabelShow && isPurchaseButtonHide}">{{packageDetail.intro}}</el-scrollbar>
       </div>
-      <div v-show="isPackageCostAndBackShow" class="package-basic-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
+      <div v-show="!isPendingReview && isPackageCostAndBackShow" class="package-basic-detail-backcoin" v-html="$t('lesson.backInfo', { backCoinCount: backCoinHtml })">
       </div>
-      <div v-show="isPackageCostAndBackShow" class="package-basic-detail-costs">
+      <div v-show="!isPendingReview && isPackageCostAndBackShow" class="package-basic-detail-costs">
         <div class="package-basic-detail-costs-item">
           <span class="package-basic-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-basic-detail-costs-value">￥ {{packageDetail.rmb}}</span>
@@ -34,8 +34,9 @@
           <span class="package-basic-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
         </div>
       </div>
-      <div v-show="isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
-      <el-button v-show="!isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <div v-show="!isPendingReview && isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
+      <div v-if="isPendingReview" class="package-basic-detail-warning">{{$t('lesson.Unapproved')}}</div>
+      <el-button v-show="!isPendingReview && !isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
@@ -49,7 +50,8 @@ import LoginDialog from '@/components/common/LoginDialog'
 export default {
   name: 'PackageBasicDetail',
   props: {
-    packageDetail: Object
+    packageDetail: Object,
+    actorType: String
   },
   mounted() {
     if (!this.userIsLogined) {
@@ -60,6 +62,13 @@ export default {
         .catch(() => {
           this.isLogin = false
         })
+    }
+    if (
+      this.isTeacher &&
+      this.isPendingReview &&
+      !this.isOwnPackage
+    ) {
+      this.$router.push({ name: 'StudentCenter' })
     }
   },
   computed: {
@@ -72,6 +81,9 @@ export default {
         return this.userIsLogined
       },
       set() {}
+    },
+    isTeacher() {
+      return this.actorType === 'teacher'
     },
     loginUserId() {
       return _.get(this.userProfile, '_id')
@@ -128,6 +140,9 @@ export default {
         return this.$t('lesson.packageManage.SuitableForAll')
       }
       return `${minAge}-${maxAge}`
+    },
+    isPendingReview() {
+      return this.packageDetail.state !== 2
     }
   },
   data() {
@@ -256,6 +271,16 @@ $dangerColor: #e4461f;
     color: #7ac558;
     margin: 24px 0;
   }
+  &-warning {
+    border-radius: 4px;
+    background: #e6a23c;
+    color: white;
+    margin: 24px 0;
+    width: 160px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
   &-operate-item {
     display: inline-block;
   }
@@ -272,7 +297,7 @@ $dangerColor: #e4461f;
 @media screen and (max-width: 768px) {
   .package-basic-detail {
     display: block;
-    &-cover{
+    &-cover {
       width: 90%;
       margin: 20px;
     }

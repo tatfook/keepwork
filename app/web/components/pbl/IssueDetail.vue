@@ -97,7 +97,7 @@
               <span class="username">{{comment.extra.username}}</span>
               <span class="time">{{relativeTime(comment.createdAt)}}</span>
             </div>
-            <div class="username-created-time-right" v-if="comment.extra.username == username">
+            <div class="username-created-time-right" v-if="comment.extra.username == username && !isProhibitEdit">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   · · ·
@@ -123,7 +123,7 @@
         </div>
       </div>
     </div>
-    <div class="issue-detail-my-idea">
+    <div v-if="!isProhibitEdit" class="issue-detail-my-idea">
       <div class="issue-detail-my-idea-portrait">
         <img :src="userProfile.portrait || default_portrait" alt="">
       </div>
@@ -168,6 +168,10 @@ export default {
       default() {
         return {}
       }
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -241,9 +245,15 @@ export default {
         .catch(err => console.error(err))
     },
     editIssueTitle() {
+      if (this.isProhibitEdit) {
+        return this.prohibitEditWarning()
+      }
       Vue.set(this.currIssue, 'titleIsEdit', true)
     },
     alterTag() {
+      if (this.isProhibitEdit) {
+        return this.prohibitEditWarning()
+      }
       Vue.set(this.currIssue, 'tagEdit', true)
     },
     async updateIssueItem(item) {
@@ -372,7 +382,9 @@ export default {
       return temp
     },
     async handleCommand(userId) {
-      if(!userId) return
+      if (this.isProhibitEdit) {
+        return this.prohibitEditWarning()
+      }
       _.forEach(this.memberList, member => {
         if (member.userId === userId) {
           if (this.assignedMembers.length == 0) {
@@ -397,6 +409,12 @@ export default {
       const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
       return moment(time).utcOffset(offset).fromNow()
+    },
+    prohibitEditWarning() {
+      this.$message({
+        type: 'warning',
+        message: '你没有编辑权限'
+      })
     }
   }
 }

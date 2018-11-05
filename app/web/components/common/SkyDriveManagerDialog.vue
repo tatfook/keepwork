@@ -7,6 +7,7 @@
     :close-on-click-modal="false"
     :visible.sync="show" width="960px"
     :before-close="handleClose"
+    :append-to-body='true'
   >
     <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
     <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->

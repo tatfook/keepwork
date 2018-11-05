@@ -17,7 +17,7 @@
       </div>
       <div class="project-boards-empty" v-else>项目白板为空</div>
     </el-card>
-    <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' @close="handleIssueDialogClose"></issue-detail>
+    <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' :isProhibitEdit="isProhibitEdit" @close="handleIssueDialogClose"></issue-detail>
   </div>
 </template>
 <script>
@@ -35,6 +35,14 @@ export default {
     projectDetail: {
       type: Object,
       required: true
+    },
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
     }
   },
   async mounted() {

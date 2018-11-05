@@ -9,7 +9,7 @@
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !isUserSubscribePackage}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
+      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !isPendingReview && !isUserSubscribePackage}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
@@ -126,10 +126,19 @@ export default {
     },
     isTeacher() {
       return this.actorType === 'teacher'
+    },
+    isPendingReview() {
+      return this.packageDetail.state === 0 || this.packageDetail.state === 1
     }
   },
   methods: {
     toLessonDetail(lesson) {
+      if (!this.isTeacher && this.isPendingReview) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.packagePendingReview')
+        })
+      }
       if (this.isBeInClassroom) {
         const {
           name,
@@ -147,7 +156,11 @@ export default {
           this.packageDetail.id
         }/lesson/${lesson.id}`
         if (this.$route.name === 'StudentPackage') {
-          return this.toLearnConfirm(this.packageDetail.id, lesson.id, targetLessonPath)
+          return this.toLearnConfirm(
+            this.packageDetail.id,
+            lesson.id,
+            targetLessonPath
+          )
         }
         this.$router.push({
           path: targetLessonPath
@@ -155,7 +168,7 @@ export default {
       }
     },
     handleUnSubscribe() {
-      if (!this.isUserSubscribePackage) {
+      if (!this.isPendingReview && !this.isUserSubscribePackage) {
         this.$alert(
           this.$t('lesson.addPackageFirst'),
           this.$t('lesson.infoTitle')
@@ -171,6 +184,12 @@ export default {
       })
     },
     continueToLearn() {
+      if (!this.isTeacher && this.isPendingReview) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.packagePendingReview')
+        })
+      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
@@ -184,6 +203,12 @@ export default {
       )
     },
     toLearnAgain(lesson) {
+      if (!this.isTeacher && this.isPendingReview) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.packagePendingReview')
+        })
+      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }

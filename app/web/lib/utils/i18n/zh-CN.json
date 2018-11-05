@@ -1113,6 +1113,8 @@
     "learnLessonConfirm": "学习新课程，将结束旧课程的学习。是否继续？",
     "online": "在线",
     "offline": "离线",
-    "leave": "离开"
+    "leave": "离开",
+    "packagePendingReview": "课程包未通过审核，暂不能学习。",
+    "Unapproved": "未审核"
   }
 }
