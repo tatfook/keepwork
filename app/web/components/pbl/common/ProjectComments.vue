@@ -1,0 +1,265 @@
+<template>
+  <div class="project-comments">
+    <div class="project-comments-header">
+      评论<span class="project-comments-header-count">(已有{{totalCommentCount}}条评论)</span>
+    </div>
+    <div class="project-comments-sends">
+      <div class="project-comments-sends-profile-input">
+        <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
+        <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent' maxlength="1000"></el-input>
+      </div>
+      <div class="project-comments-sends-operations">
+        <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
+      </div>
+    </div>
+    <div class="project-comments-list" v-loading='isLoading'>
+      <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
+        <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
+        <div class="project-comments-item-detail">
+          <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
+            <span class="project-comments-item-time">{{comment.createdAt | relativeTimeFilter(isEn)}}</span>
+          </p>
+          <p class="project-comments-item-comment">{{comment.content}}</p>
+          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)"><i class="iconfont icon-delete1"></i> 删除</el-button>
+        </div>
+      </div>
+    </div>
+    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'点击加载更多'}}</div>
+  </div>
+</template>
+<script>
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  name: 'ProjectComments',
+  props: {
+    projectId: {
+      required: true
+    },
+    isLoginUsercommentable: Boolean
+  },
+  async created() {
+    this.getCommentFromBackEnd()
+  },
+  data() {
+    return {
+      xPerPage: 6,
+      xPage: 1,
+      xOrder: 'updatedAt-desc',
+      isAddingComment: false,
+      isLoading: false,
+      newCommenContent: '',
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
+      commentList: [],
+      isGetAllComment: false,
+      isGetCommentBtnLoading: false,
+      totalCommentCount: 0,
+      isEn: locale === 'en-US'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      pblProjectCommentList: 'pbl/projectCommentList',
+      userProfile: 'user/profile',
+      loginUserId: 'user/userId'
+    }),
+    projectCommentList() {
+      return this.pblProjectCommentList({ projectId: this.projectId }) || []
+    },
+    userPortrait() {
+      return _.get(this.userProfile, 'portrait')
+    }
+  },
+  methods: {
+    ...mapActions({
+      pblGetComments: 'pbl/getComments',
+      pblCreateComment: 'pbl/createComment',
+      pblDeleteComment: 'pbl/deleteComment'
+    }),
+    async getCommentFromBackEnd() {
+      this.isGetCommentBtnLoading = true
+      let newCommentResult = await this.pblGetComments({
+        objectType: 5,
+        objectId: this.projectId,
+        xPage: this.xPage,
+        xOrder: this.xOrder,
+        xPerPage: this.xPerPage
+      }).catch()
+      this.totalCommentCount = newCommentResult.count
+      let newCommentList = newCommentResult.rows
+      if (newCommentList.length > 0) {
+        this.isGetAllComment = false
+        this.commentList = _.concat(this.commentList, newCommentList)
+      } else {
+        this.isGetAllComment = true
+        this.xPage--
+      }
+      this.isGetCommentBtnLoading = false
+    },
+    getMoreComment() {
+      if (this.isGetAllComment) {
+        return
+      }
+      this.xPage++
+      this.getCommentFromBackEnd()
+    },
+    async sendComment() {
+      this.isAddingComment = true
+      await this.pblCreateComment({
+        objectType: 5,
+        objectId: this.projectId,
+        content: this.newCommenContent
+      })
+        .then(newCommentDetail => {
+          this.$message({
+            type: 'success',
+            message: '评论成功'
+          })
+          this.isAddingComment = false
+          this.newCommenContent = ''
+          this.resetCommentList()
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: '评论失败'
+          })
+          this.isAddingComment = false
+          return
+        })
+    },
+    resetCommentList() {
+      this.xPage = 1
+      this.commentList = []
+      this.getCommentFromBackEnd()
+    },
+    async deleteComment(commentDetail) {
+      this.isLoading = true
+      await this.pblDeleteComment({
+        objectType: 5,
+        objectId: this.projectId,
+        commentId: commentDetail.id
+      })
+        .then(() => {
+          this.isLoading = false
+          this.$message({
+            type: 'success',
+            message: '评论删除成功'
+          })
+          this.resetCommentList()
+        })
+        .catch(error => {
+          this.isLoading = false
+          this.$message({
+            type: 'error',
+            message: '评论删除失败'
+          })
+          console.error(error)
+        })
+    }
+  },
+  filters: {
+    relativeTimeFilter(date, isEn) {
+      isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(date, 'YYYYMMDDHH').fromNow()
+    }
+  }
+}
+</script>
+<style lang="scss">
+.project-comments {
+  background-color: #fff;
+  &-profile {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &-header {
+    font-size: 16px;
+    color: #303133;
+    font-weight: bold;
+    height: 56px;
+    line-height: 56px;
+    padding: 0 16px;
+    &-count {
+      font-size: 12px;
+      font-weight: normal;
+      color: #909399;
+      margin-left: 8px;
+    }
+  }
+  &-sends {
+    padding: 24px 16px 24px 24px;
+    border: 1px solid #e8e8e8;
+    border-width: 1px 0;
+    &-profile-input {
+      padding-left: 64px;
+      position: relative;
+      img {
+        position: absolute;
+        left: 0;
+      }
+    }
+    &-operations {
+      text-align: right;
+      padding-top: 16px;
+    }
+  }
+  &-item {
+    p {
+      margin: 0;
+    }
+    display: flex;
+    align-items: flex-start;
+    padding: 24px;
+    &-profile {
+      margin-right: 16px;
+    }
+    &-username-time {
+      font-size: 14px;
+      color: #303133;
+      margin-bottom: 10px !important;
+    }
+    &-time {
+      font-size: 12px;
+      color: #909399;
+      margin-left: 10px;
+    }
+    &-comment {
+      font-size: 13px;
+      color: #606266;
+      padding-right: 96px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    &-detail {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+    &-delete {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      padding: 0;
+      font-size: 13px;
+      color: #909399;
+      .iconfont {
+        font-size: 14px;
+      }
+    }
+  }
+  &-more {
+    height: 36px;
+    line-height: 36px;
+    font-size: 12px;
+    color: #909399;
+    text-align: center;
+    border-top: 1px solid #e8e8e8;
+    cursor: pointer;
+  }
+}
+</style>
