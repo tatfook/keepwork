@@ -81,8 +81,12 @@ export default {
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
-      projectDetail: 'pbl/projectDetail'
+      projectDetail: 'pbl/projectDetail',
+      projectMemberList: 'pbl/projectMemberList'
     }),
+    projectMembers() {
+      return this.projectMemberList({ projectId: this.projectId})
+    },
     projectIssueList() {
       let tempArr = _.get(
         this.issuesList({ projectId: this.projectId }),
@@ -108,7 +112,8 @@ export default {
     }
   },
   async mounted() {
-    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    // await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    await Promise.all([this.getProjectIssues({ objectId: this.projectId, objectType: 5 }), this.getProjectMember({ objectId: this.projectId, objectType: 5})])
     this.projectIssues = this.projectIssueList
   },
   watch: {
@@ -127,7 +132,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProjectIssues: 'pbl/getProjectIssues'
+      getProjectIssues: 'pbl/getProjectIssues',
+      getProjectMember: 'pbl/getProjectMember'
     }),
     searchIssue() {
       let payload = {
@@ -142,6 +148,7 @@ export default {
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
+      return console.log(this.projectMembers)
       this.showNewIssue = true
     },
     closeNewIssue() {
