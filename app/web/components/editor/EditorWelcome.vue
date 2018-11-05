@@ -9,6 +9,14 @@
         <li v-for="(site,index) in recentOpenedList" :key="index"><a @click="gotoPath(site.path)">{{site.path}}</a></li>
       </ul>
     </div>
+    <div class="historicalRecords">
+      <div class="historicalRecordsText" v-for="item in openedTreeData" :key="item">{{item}}</div>
+    </div>
+    <div class="tipsText">{{tips[tipsNumber].text}}</div>
+    <div class="tipsImg">
+      <img :src='tips[tipsNumber].img'>
+    </div>
+    <el-button class="changeButton" size='mini' @click="hintTransformation">{{ $t('common.another') }}</el-button>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
     <div style="height: 100px;"></div>
   </div>
@@ -16,13 +24,17 @@
 
 <script>
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import axios from 'axios'
+import { mdToJson, jsonToMd } from '@/lib/mod/parser/mdParser/yaml'
 
 export default {
   name: 'EditorWelcome',
   data() {
     return {
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
+      tips: new Array(),
+      tipsNumber: Number,
     }
   },
   methods: {
@@ -34,12 +46,44 @@ export default {
     },
     gotoPath(path) {
       this.$router.push(path)
+    },
+    hintTransformation(){
+      this.tipsNumber = Math.floor(Math.random()*this.tips.length)
     }
   },
   computed:{
     ...mapGetters({
       recentOpenedList: 'recentOpenedList',
-    })
+      showOpenedFiles: 'showOpenedFiles',
+    }),
+    openedTreeData() {
+      let clonedopenedFiles = _.clone(this.showOpenedFiles)
+      let treeDatas = []
+      let that = this
+      _.forOwn(clonedopenedFiles, function(value, key) {
+        let pathArr = key.split('/')
+        let pathLen = pathArr.length
+        let pageName = pathArr[pathLen - 1].replace(/.md$/, '')
+        let userName = pathArr[0]
+        let siteName = pathArr[1]
+        let nodeData = location.origin + `/${userName}/${siteName}/${pageName}`
+        treeDatas.push(nodeData)
+      })
+      return treeDatas
+    },
+    tipsData(){
+      axios.get(process.env.EDITOR_WELCOME)
+      .then((response) => {
+        this.tips = mdToJson(response.data)
+        this.tipsNumber = Math.floor(Math.random()*mdToJson(response.data).length)
+      })
+      .catch((error) => {
+        this.tips = []
+      });
+    }
+  },
+  created(){
+    this.tipsData
   },
   components: {
     NewWebsiteDialog
@@ -67,6 +111,45 @@ export default {
         color:#535353;
       }
     }
+    }
+  }
+  .tipsText{
+    font-size: 14px;
+  }
+  .tipsImg{
+    width: 300px;
+    height: 150px;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit:cover;
+    }
+  }
+  .changeButton {
+    margin-top: 5px;
+    margin-left: 232px;
+  }
+  .historicalRecords {
+    margin-bottom: 15px;
+    height: 180px;
+    .historicalRecordsText {
+      font-size: 14px;
+    }
+  }
+}
+@media only screen and (max-width: 1366px){
+  .guid-content{
+    .tipsImg{
+      width: 200px;
+      height: 100px;
+      img{
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .changeButton {
+      margin-top: 5px;
+      margin-left: 132px;
     }
   }
 }
