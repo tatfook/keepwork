@@ -58,10 +58,96 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    app: appModule,
     user: userModule,
     gitlab: gitlabModule,
     lesson: lessonModule
+  },
+  plugins: [
+    createPersistedState({
+      paths: ['user.webTemplateConfig', 'user.skyDrive']
+    })
+  ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.auto)) {
+    const { query, params } = to
+    const { token, key, id } = query
+    if (token !== undefined) {
+      Cookies.remove('token')
+      Cookies.remove('token', { path: '/' })
+      window.localStorage.removeItem('satellizer_token')
+      store.dispatch('lesson/logout')
+      store.dispatch('lesson/student/saveVisitorInfo', {
+        id,
+        token,
+        classId: id,
+        key
+      })
+      // localStorage.setItem('refresh', true)
+    }
+    if (token && token !== 0) {
+      let userInfo = await keepwork.user
+        .verifyToken({ token })
+        .catch(e => console.error('verify token failure'))
+      if (userInfo) {
+        Cookies.set('token', token)
+        if (key !== undefined && key !== 0) {
+          await store
+            .dispatch('lesson/student/enterClassRoom', {
+              key
+            })
+            .catch(e => console.error(e))
+          return next({
+            name: 'LessonStudent',
+            params,
+            query: { reload: true, dialog: true, device: 'paracraft' }
+          })
+        }
+        return next({ name: 'LessonStudent', params, query: { reload: true } })
+      }
+    }
+
+    if (id && token) {
+      if (Number(id) === 0 && Number(token) === 0) {
+        return next({ name: 'Anonymous', params })
+      }
+      return next({ name: 'Anonymous', params, query })
+    }
+
+    if (query.key && query.key !== 0 && Cookies.get('token')) {
+      let res = await store
+        .dispatch('lesson/student/enterClassRoom', {
+          key: query.key
+        })
+        .catch(e => console.error('join failure'))
+      if (res) {
+        return next({
+          name: 'LessonStudent',
+          params: { packageId: res.packageId, lessonId: res.lessonId },
+          query: { dialog: true, device: 'paracraft' }
+        })
+      }
+      return next({ name: 'StudentCenter' })
+    }
+    return next({ name: 'Anonymous', params })
   }
+
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (!Cookies.get('token')) {
+      store.dispatch(
+        'lesson/toggleLoginDialog',
+        { show: true, to },
+        { root: true }
+      )
+      if (!from.name) {
+        return next({ name: 'StudentCenter' })
+      }
+      return next(false)
+    }
+  }
+  next()
 })
 
 const TeacherColumnActivePageNameReg = /^TeacherColumn+/

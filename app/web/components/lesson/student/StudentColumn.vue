@@ -91,7 +91,7 @@ export default {
   },
   async mounted() {
     let payload = { userId: this.userId }
-    await this.getUserSubscribes({ packageState: 2 })
+    await this.getUserSubscribes()
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -123,9 +123,7 @@ export default {
       return sum
     },
     filterSubscribesList() {
-      return _.filter(this.subscribesList, i => {
-        return i.state === 2
-      })
+      return this.subscribesList
     },
     continuingStudyPackages() {
       let continuingStudyPackagesList = _.filter(

@@ -100,6 +100,12 @@ export default {
       })
     },
     attendClass() {
+      if (this.packageDetail.state !== 2) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.packagePendingReview')
+        })
+      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }

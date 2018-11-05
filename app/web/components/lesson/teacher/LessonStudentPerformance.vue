@@ -21,7 +21,7 @@
               <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
                 <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'offline': checkOffline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
               </div>
-              <span class="name">{{props.row.name}}</span>
+              <span class="name">{{props.row.name || props.row.username}}</span>
             </div>
           </el-tooltip>
         </template>
@@ -147,6 +147,9 @@ export default {
     },
     verifyQuiz(quiz) {
       if (this.classroomQuiz.length > 0 && quiz.length === 0) {
+        return [...this.classroomQuiz]
+      }
+      if (this.classroomQuiz.length !== quiz.length) {
         return [...this.classroomQuiz]
       }
       return quiz

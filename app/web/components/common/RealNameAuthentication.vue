@@ -155,7 +155,6 @@ export default {
         captcha: this.authCode,
         realname: true
       }
-      console.warn(payload)
       await this.verifyCellphoneTwo(payload)
       let messageId = this.authCodeInfo
       if (messageId === -1) {
