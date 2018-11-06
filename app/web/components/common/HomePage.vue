@@ -211,7 +211,7 @@ export default {
     likesProjects() {
       let tempArr = this.projectsRows
         .map(i => i)
-        .sort(this.sortByKey('star'))
+        .sort(this.sortByKey('lastStar'))
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
