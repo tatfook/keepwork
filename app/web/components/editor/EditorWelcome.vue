@@ -10,7 +10,7 @@
       </ul>
     </div>
     <div class="historicalRecords">
-      <div class="historicalRecordsText" v-for="item in openedTreeData" :key="item">{{item}}</div>
+      <a class="historicalRecordsText" :href="item" v-for="item in openedTreeData" :key="item">{{item}}</a>
     </div>
     <div class="tipsText">{{getText()}}</div>
     <div class="tipsImg">
@@ -153,6 +153,9 @@ export default {
     height: 180px;
     .historicalRecordsText {
       font-size: 14px;
+      display: block;
+      text-decoration : none;
+      color: #48a3ff;
     }
   }
 }
