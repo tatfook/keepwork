@@ -57,6 +57,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {
@@ -81,7 +82,7 @@ export default {
         return callback(new Error(this.$t('editor.nameRule')))
       }
 
-      if (childNames.indexOf(value) > -1){
+      if (childNames.indexOf(value) > -1) {
         this.isNameIllegal = true
         return callback(new Error(this.$t('editor.nameExist')))
       }
@@ -210,6 +211,12 @@ export default {
     async handleSubmit() {
       let valid = await this.$refs.webpageNameForm.validate()
       if (!valid) return
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.webpageNameForm.value
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        return
+      }
       await this.createNewPage()
       this.handleNextStep()
     },

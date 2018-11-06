@@ -121,8 +121,9 @@ const getters = {
         })
       ]
     }, [])
-
-    allPageList = allPageList.map(str => str.replace(/\.[^.]+/, ''))
+    allPageList = allPageList.map(str => {
+      return str && str.replace(/\.[^.]+/, '')
+    })
 
     return allPageList
   },
