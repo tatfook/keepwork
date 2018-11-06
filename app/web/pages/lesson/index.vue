@@ -17,6 +17,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
+import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import appModule from '@/store/app'
@@ -33,6 +34,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
+import { keepwork } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -90,6 +92,7 @@ router.beforeEach(async (to, from, next) => {
       // localStorage.setItem('refresh', true)
     }
     if (token && token !== 0) {
+      debugger
       let userInfo = await keepwork.user
         .verifyToken({ token })
         .catch(e => console.error('verify token failure'))
