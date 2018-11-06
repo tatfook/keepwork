@@ -10,7 +10,7 @@
       </ul>
     </div>
     <div class="historicalRecords">
-      <a class="historicalRecordsText" :href="item" v-for="item in openedTreeData" :key="item">{{item}}</a>
+      <div class="historicalRecordsText" @click="handleOpenedClick(item)" v-for="item in openedTreeData" :key="item">{{dataPrefix + item}}</div>
     </div>
     <div class="tipsText">{{getText()}}</div>
     <div class="tipsImg">
@@ -59,6 +59,12 @@ export default {
       if(this.tips[this.tipsNumber] && this.tips[this.tipsNumber].img){
         return this.tips[this.tipsNumber].img
       }
+    },
+    handleOpenedClick(index){
+      if(!index){
+        return false
+      }
+      this.$router.push(index)
     }
   },
   computed:{
@@ -71,15 +77,21 @@ export default {
       let treeDatas = []
       let that = this
       _.forOwn(clonedopenedFiles, function(value, key) {
+        if(typeof key != 'string'){
+          return false
+        }
         let pathArr = key.split('/')
         let pathLen = pathArr.length
         let pageName = pathArr[pathLen - 1].replace(/.md$/, '')
         let userName = pathArr[0]
         let siteName = pathArr[1]
-        let nodeData = location.origin + `/${userName}/${siteName}/${pageName}`
+        let nodeData = `/${userName}/${siteName}/${pageName}`
         treeDatas.push(nodeData)
       })
       return treeDatas
+    },
+    dataPrefix() {
+      return location.origin
     },
     tipsData(){
       if(!process.env.EDITOR_WELCOME){
@@ -156,6 +168,7 @@ export default {
       display: block;
       text-decoration : none;
       color: #48a3ff;
+      cursor:pointer;
     }
   }
 }
