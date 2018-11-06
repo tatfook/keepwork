@@ -89,7 +89,8 @@ export default {
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
-      projectDetail: 'pbl/projectDetail'
+      projectDetail: 'pbl/projectDetail',
+      isLogined: 'user/isLogined'
     }),
     projectIssueList() {
       let tempArr = _.get(
@@ -139,7 +140,8 @@ export default {
   methods: {
     ...mapActions({
       getProjectIssues: 'pbl/getProjectIssues',
-      getProjectMember: 'pbl/getProjectMember'
+      getProjectMember: 'pbl/getProjectMember',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     searchIssue() {
       let payload = {
@@ -154,6 +156,9 @@ export default {
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       if (!this.isProhibitEdit) {
         this.showNewIssue = true
       }

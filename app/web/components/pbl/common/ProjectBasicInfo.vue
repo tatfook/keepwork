@@ -136,7 +136,8 @@ export default {
       loginUserId: 'user/userId',
       loginUserDetail: 'user/profile',
       userToken: 'user/token',
-      getSiteDetailInfoById: 'user/getSiteDetailInfoById'
+      getSiteDetailInfoById: 'user/getSiteDetailInfoById',
+      isLogined: 'user/isLogined'
     }),
     isApplied() {
       return this.projectApplyState === 0
@@ -205,7 +206,8 @@ export default {
       pblApplyJoinProject: 'pbl/applyJoinProject',
       pblUpdateProject: 'pbl/updateProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog',
-      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
+      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -259,6 +261,9 @@ export default {
       this.isApplyDialogVisible = false
     },
     showApplyBox() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.isApplyDialogVisible = true
     },
     async applyJoinProject() {

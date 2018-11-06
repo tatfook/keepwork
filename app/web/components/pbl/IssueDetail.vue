@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="issue-detail-idea">
-      
+
       <div class="issue-detail-idea-box">
         <div class="issue-detail-idea-box-portrait">
           <img :src="issue.user.portrait || default_portrait" alt="">
@@ -123,7 +123,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!isProhibitEdit" class="issue-detail-my-idea">
+    <div v-if="isLogined && !isProhibitEdit" class="issue-detail-my-idea">
       <div class="issue-detail-my-idea-portrait">
         <img :src="userProfile.portrait || default_portrait" alt="">
       </div>
@@ -202,7 +202,8 @@ export default {
     ...mapGetters({
       username: 'user/username',
       userProfile: 'user/profile',
-      pblProjectMemberList: 'pbl/projectMemberList'
+      pblProjectMemberList: 'pbl/projectMemberList',
+      isLogined: 'user/isLogined'
     }),
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectDetail.id })
@@ -216,7 +217,7 @@ export default {
     },
     assignMembersId() {
       let arrId = []
-      _.map(this.assignedMembers, ({userId}) => {
+      _.map(this.assignedMembers, ({ userId }) => {
         arrId.push(userId)
       })
       return arrId.join('|')
@@ -228,7 +229,8 @@ export default {
   methods: {
     ...mapActions({
       getProjectIssues: 'pbl/getProjectIssues',
-      getProjectMember: 'pbl/getProjectMember'
+      getProjectMember: 'pbl/getProjectMember',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async getIssueData() {
       await keepwork.issues
@@ -245,12 +247,18 @@ export default {
         .catch(err => console.error(err))
     },
     editIssueTitle() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()
       }
       Vue.set(this.currIssue, 'titleIsEdit', true)
     },
     alterTag() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()
       }
@@ -326,7 +334,7 @@ export default {
         .catch(err => console.error(err))
     },
     async createComment() {
-      if(!this.myComment) return
+      if (!this.myComment) return
       await keepwork.comments.createComment({
         objectType: 4,
         objectId: this.issue.id,
@@ -351,9 +359,9 @@ export default {
     sortByCreatedAt(obj1, obj2) {
       return obj1.createdAt <= obj2.createdAt ? -1 : 1
     },
-    async submitModifiedComment(comment,index) {
+    async submitModifiedComment(comment, index) {
       let copyComment = Object.assign({}, comment)
-      if(!copyComment.content){
+      if (!copyComment.content) {
         await this.handleComment(comment, 2, index)
         return
       }
@@ -382,6 +390,9 @@ export default {
       return temp
     },
     async handleCommand(userId) {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()
       }
@@ -402,13 +413,15 @@ export default {
           this.assignedMembers.splice(i, 1)
         }
       })
-      await this.updateIssueItem({assigns: this.assignMembersId})
+      await this.updateIssueItem({ assigns: this.assignMembersId })
       this.getIssueData()
     },
     relativeTime(time) {
       const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time).utcOffset(offset).fromNow()
+      return moment(time)
+        .utcOffset(offset)
+        .fromNow()
     },
     prohibitEditWarning() {
       this.$message({
@@ -453,7 +466,7 @@ export default {
           align-items: center;
           height: 56px;
           margin-right: 10px;
-          &-input{
+          &-input {
             width: 80%;
           }
         }
@@ -461,7 +474,7 @@ export default {
           font-size: 20px;
           height: 56px;
         }
-        &-text{
+        &-text {
           display: inline-block;
           max-width: 80%;
           overflow: hidden;
@@ -564,7 +577,7 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        .principal{
+        .principal {
           padding-right: 12px;
         }
         .player-portrait {
@@ -732,14 +745,14 @@ export default {
     padding: 0 20px;
   }
 }
-.new-issue-assign{
-  .member-portrait{
+.new-issue-assign {
+  .member-portrait {
     width: 26px;
     height: 26px;
     border-radius: 50%;
     margin-right: 10px;
   }
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     display: flex;
     align-items: center;
   }

@@ -71,7 +71,7 @@ export default {
       default: false
     },
     isProhibitView: {
-      type:Boolean,
+      type: Boolean,
       default: false
     }
   },
@@ -87,7 +87,8 @@ export default {
     ...mapGetters({
       userProjects: 'pbl/userProjects',
       projectFavoriteState: 'pbl/projectFavoriteState',
-      projectStarState: 'pbl/projectStarState'
+      projectStarState: 'pbl/projectStarState',
+      isLogined: 'user/isLogined'
     }),
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
@@ -124,7 +125,8 @@ export default {
       favoriteProject: 'pbl/favoriteProject',
       unFavoriteProject: 'pbl/unFavoriteProject',
       starProject: 'pbl/starProject',
-      unStarProject: 'pbl/unStarProject'
+      unStarProject: 'pbl/unStarProject',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
@@ -142,6 +144,9 @@ export default {
       this.$router.push({ path: `/project/${projectId}` })
     },
     async toggleStarProject() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       let projectId = this.editingProjectId
       this.isStarButtonLoading = true
       if (!this.isUserStaredProject) {
@@ -178,6 +183,9 @@ export default {
       }
     },
     async toggleFavoriteProject() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       let objectId = this.editingProjectId
       let objectType = 5
       this.isFavoriteButtonLoading = true
