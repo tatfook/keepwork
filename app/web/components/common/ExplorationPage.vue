@@ -7,9 +7,12 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+              <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
-              </el-input>
+              </el-autocomplete>
+              <!-- <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+                <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
+              </el-input> -->
             </el-col>
             <el-col :span="2">
               <el-dropdown @command="handleSort">
@@ -97,6 +100,7 @@ import Website from './explorationPageTab/Website'
 import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
 import Users from './explorationPageTab/Users'
+import { EsAPI } from '@/api'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -151,6 +155,48 @@ export default {
     }
   },
   methods: {
+    filterSuggetions(res, cb) {
+      if (res.total) {
+        cb(_.map(res.hits, i => (i.name ? { value: i.name } : { value: i.username })))
+      }
+    },
+    async querySearch(queryString, cb) {
+      const projectAPI = [1, 2, 3, 8]
+      const pacakgeAPI = [5]
+      const userAPI = [6]
+      const PER_PAGE = 100
+      let res = {}
+      if (projectAPI.includes(this.currIndex)) {
+        res = await EsAPI.projects.getProjects({
+          page: 1,
+          per_page: PER_PAGE,
+          q: this.searchKey
+        })
+        return this.filterSuggetions(res, cb)
+      }
+
+      if (pacakgeAPI.includes(this.currIndex)) {
+        res = await EsAPI.packages.getPackages({
+          page: 1,
+          per_page: PER_PAGE,
+          q: this.searchKey
+        })
+        return this.filterSuggetions(res, cb)
+      }
+
+      if (userAPI.includes(this.currIndex)) {
+        res = await EsAPI.users.getUsers({
+          page: 1,
+          per_page: PER_PAGE,
+          q: this.searchKey
+        })
+      }
+      return this.filterSuggetions(res, cb)
+    },
+    handleSelect(item) {
+      this.searchKey = item.value
+      this.goSearch()
+    },
     handleSort(sortType) {
       this.currSortMode = sortType.split('/')[1]
       this.sortProjects = sortType.split('/')[0]
@@ -339,7 +385,7 @@ export default {
     font-size: 18px;
   }
 }
-.search-result-total{
+.search-result-total {
   margin: 20px 30px;
 }
 .all-projects {
