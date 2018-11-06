@@ -685,6 +685,7 @@
     "confidentiality": "Private",
     "modifyAvatar": "Modify Avatar",
     "inputPhoneNumber": "Phone number",
+    "inputVerificationCode": "Verification Code",
     "wrongNumberFormat": "The number format is incorrect",
     "certificationStatus": "Certification status:",
     "certified": "certified",
