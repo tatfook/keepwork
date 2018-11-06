@@ -87,10 +87,10 @@ export default {
       }
       axios.get(process.env.EDITOR_WELCOME)
       .then((response) => {
-        if(!response || !response.data || typeof (response.data) != 'string'){
+        if(!response || !response.data || typeof (response.data.content) != 'string'){
           return false
         }
-        this.tips = mdToJson(response.data)
+        this.tips = mdToJson(response.data.content)
         if(!Array.isArray(this.tips)){
           return false
         }
