@@ -152,7 +152,7 @@ export default {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
             cellphone: this.ruleForm.phoneNumber,
-            captcha: this.authCode
+            captcha: this.ruleForm.authCode
           }
           this.registerLoading = true
           await this.userRegister(payload)
