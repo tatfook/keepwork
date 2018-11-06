@@ -91,6 +91,18 @@ export default {
         })
         return
       }
+      let nowTagInTagsIndex = _.findIndex(
+        this.tempTags,
+        tag => tag === inputValue
+      )
+      if (nowTagInTagsIndex !== -1) {
+        this.$message({
+          showClose: true,
+          message: '该标签已存在',
+          type: 'error'
+        })
+        return
+      }
       inputValue && this.tempTags.push(inputValue)
       this.inputVisible = false
       this.inputValue = ''

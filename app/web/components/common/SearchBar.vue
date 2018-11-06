@@ -1,5 +1,5 @@
 <template>
-  <el-input v-model="searchText" class="search-bar-comp" @keyup.enter.native='goSearch'>
+  <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" @keyup.enter.native='goSearch'>
     <!-- <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
       <el-option :label="$t('search.searchAll')" value="all"></el-option>
       <el-option :label="$t('search.searchMine')" value="loginUser" v-show="isLogin"></el-option>
@@ -14,7 +14,8 @@ export default {
   data() {
     return {
       searchText: '',
-      searchScope: 'all'
+      searchScope: 'all',
+      isShowSearchBar: true
     }
   },
   computed: {
@@ -23,6 +24,11 @@ export default {
     }),
     isLogin() {
       return this.loginUsername
+    }
+  },
+  watch: {
+    $route({ name }) {
+      this.isShowSearchBar = !['ExplorationPage'].includes(name)
     }
   },
   methods: {
@@ -38,7 +44,7 @@ export default {
       _.forIn(searchParams, (value, key) => {
         searchParamsArr.push(`${key}=${value}`)
       })
-      let searchUrl = encodeURI(`/wiki/search?${searchParamsArr.join('&')}`)
+      let searchUrl = encodeURI(`/exploration?${searchParamsArr.join('&')}`)
       window.location.href = searchUrl
     }
   }

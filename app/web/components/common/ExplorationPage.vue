@@ -110,7 +110,14 @@ export default {
       currSortMode: '综合'
     }
   },
-  mounted() {},
+  mounted() {
+    const { query } = this.$route
+    if (query && query.keyword) {
+      history.replaceState('', '', this.$route.path)
+      this.searchKey = query.keyword
+      this.goSearch()
+    }
+  },
   computed: {
     ...mapGetters({
       allProjects: 'pbl/allProjects',
@@ -124,10 +131,18 @@ export default {
         case 3:
         case 5:
         case 8:
-          return [{ mode: '综合', command: '/综合' },{ mode: '最新', command: 'updated_time/最新' },{ mode: '热门', command: 'recent_view/热门' }]
+          return [
+            { mode: '综合', command: '/综合' },
+            { mode: '最新', command: 'updated_time/最新' },
+            { mode: '热门', command: 'recent_view/热门' }
+          ]
           break
         case 6:
-          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: 'total_projects/项目' },{ mode: '名气', command: 'total_fans/名气' },]
+          return [
+            { mode: '综合', command: '/综合' },
+            { mode: '项目', command: 'total_projects/项目' },
+            { mode: '名气', command: 'total_fans/名气' }
+          ]
           break
         default:
           return [{ mode: '综合', command: '/综合' }]
