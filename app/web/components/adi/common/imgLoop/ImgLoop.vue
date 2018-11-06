@@ -7,7 +7,7 @@
         </a>
         <a v-if="item.type === 'videos'" :target="item.target" :href="item.link">
           <div class="imgs">
-            <video :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
+            <video :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" :poster="item.poster" controls="controls"></video>
           </div>
         </a>
       </el-carousel-item>
@@ -45,7 +45,10 @@ export default {
           {
             img: this.options.emptyGallery.img,
             link: this.options.emptyGallery.link,
-            target: this.options.emptyGallery.target
+            target: this.options.emptyGallery.target,
+            autoplay: this.options.emptyGallery.autoplay,
+            playloop: this.options.emptyGallery.playloop,
+            poster: this.options.emptyGallery.poster
           }
         ]
       } else {

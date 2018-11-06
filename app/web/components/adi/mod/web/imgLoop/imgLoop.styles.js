@@ -5,7 +5,10 @@ let emptyData = {
     emptyGallery: {
       img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
       link: '',
-      target: '_blank'
+      target: '_blank',
+      autoplay: false,
+      playloop: false,
+      poster: ''
     }
   }
 }

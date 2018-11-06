@@ -301,7 +301,10 @@
     "toEdit": "编辑",
     "checkCode": "查看代码",
     "share": "分享",
-    "praise": "赞"
+    "praise": "赞",
+
+    "addVideoCover": "+ 添加视频封面",
+    "deleteVideoCoverConfirmMsg": "你确定要删除视频封面吗？"
   },
   "tips": {
     "clickToShow": "点击显示",

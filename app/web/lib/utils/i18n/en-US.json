@@ -300,7 +300,10 @@
     "toEdit": "Edit",
     "checkCode": "Check code",
     "share": "Share",
-    "praise": "Praise"
+    "praise": "Praise",
+
+    "addVideoCover": "+ Add video cover",
+    "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?"
   },
   "tips": {
     "clickToShow": "Click to show",

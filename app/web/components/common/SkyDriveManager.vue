@@ -45,7 +45,7 @@
         <el-col :span="18" class='skydrive-manager-header-tabs'>
           <div>
             <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-            <span :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+            <span v-if='hideVideoTab()' :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
           </div>
         </el-col>
         <el-col :span="6">
@@ -234,13 +234,15 @@ const ErrFilenamePatt = new RegExp('^[^\\\\/\*\?\|\<\>\:\"]+$');
 export default {
   name: 'SkyDriveManager',
   props: {
-    mediaLibrary: Boolean
+    mediaLibrary: Boolean,
+    hideTab: Boolean
   },
   data() {
     return {
       defaultMode: !this.mediaLibrary,
       mediaLibraryMode: this.mediaLibrary,
       mediaFilterType: 'image',
+      hideMediaTab: this.hideTab,
       loading: true,
       searchWord: '',
       multipleSelectionResults: [],
@@ -320,6 +322,13 @@ export default {
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       userUseFileInSite: 'user/useFileInSite'
     }),
+    hideVideoTab() {
+      if (this.hideMediaTab) {
+        return false
+      } else {
+        return true
+      }
+    },
     async filesQueueToUpload(files){
       if (this.defaultMode) {
         this.$refs.skyDriveTable.clearSort()
