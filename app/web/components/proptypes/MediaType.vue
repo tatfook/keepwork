@@ -62,7 +62,7 @@
     
     </div>
 
-    <SkyDriveManagerDialog :mediaLibrary='true' :hideTab='isVideoTabHide' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='!isVideoTabHide' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
   </div>
 </template>
 <script>

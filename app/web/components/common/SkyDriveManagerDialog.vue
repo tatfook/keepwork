@@ -8,8 +8,8 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
-
-    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :hideTab='hideTab' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
+  
+    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
     <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
 
   </el-dialog>
@@ -23,7 +23,6 @@ export default {
   props: {
     show: Boolean,
     mediaLibrary: Boolean,
-    hideTab: Boolean
     isVideoTabShow: Boolean,
     insertable: {
       type: Boolean,

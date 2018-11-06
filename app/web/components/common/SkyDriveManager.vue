@@ -15,7 +15,6 @@ import mediaType from './skyDrive/mediaType'
 export default {
   name: 'SkyDriveManager',
   props: {
-    hideTab: Boolean
     mediaLibrary: {
       type: Boolean,
       default: false
@@ -36,7 +35,6 @@ export default {
     return {
       defaultMode: !this.mediaLibrary,
       mediaLibraryMode: this.mediaLibrary,
-      hideMediaTab: this.hideTab,
       loading: false,
       isMounted: false,
       uploadingFiles: [],
@@ -125,13 +123,6 @@ export default {
       userGetFileRawUrl: 'user/getFileRawUrl',
       userUseFileInSite: 'user/useFileInSite'
     }),
-    hideVideoTab() {
-      if (this.hideMediaTab) {
-        return false
-      } else {
-        return true
-      }
-    },
     handleUploadFile(e) {
       let files = _.get(e, ['target', 'files'])
       this.filesQueueToUpload(files)
