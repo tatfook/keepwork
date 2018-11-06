@@ -4,13 +4,13 @@
     <div>
       <el-button type='primary' @click="openNewWebsiteDialog">{{ $t('common.createNewWebsite') }}</el-button>
     </div>
-    <div class="resentWeb">
+    <div class="recordsWeb">
       <ul>
         <li v-for="(site,index) in recentOpenedList" :key="index"><a @click="gotoPath(site.path)">{{site.path}}</a></li>
       </ul>
     </div>
     <div class="historicalRecords">
-      <div class="historicalRecordsText" v-for="item in openedTreeData" :key="item">{{item}}</div>
+      <a class="historicalRecordsText" :href="item" v-for="item in openedTreeData" :key="item">{{item}}</a>
     </div>
     <div class="tipsText">{{getText()}}</div>
     <div class="tipsImg">
@@ -115,7 +115,7 @@ export default {
     color: #000;
     font-size: 46px;
   }
-  .resentWeb{
+  .recordsWeb{
     border-left: 2px solid #dc75cd;
     margin: 40px 0;
     ul
@@ -153,6 +153,9 @@ export default {
     height: 180px;
     .historicalRecordsText {
       font-size: 14px;
+      display: block;
+      text-decoration : none;
+      color: #48a3ff;
     }
   }
 }
