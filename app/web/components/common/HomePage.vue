@@ -122,7 +122,7 @@
                 <p>包含：
                   <span>125</span>个课程</p>
                 <p>年龄：{{lessonPackage.minAge}}-{{lessonPackage.maxAge}}</p>
-                <p>简介：{{lessonPackage.intro}}</p>
+                <p class="lesson-desc-text">简介：{{lessonPackage.intro}}</p>
               </div>
             </div>
           </el-col>
@@ -200,15 +200,19 @@ export default {
       return _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
     },
     handpickProjects() {
-      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
+      let tempArr = this.projectsRows
+        .map(i => i)
+        .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
     },
     likesProjects() {
-      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.star < obj2.star)
-      let tempArr2 = _.cloneDeep(tempArr.slice(0,4))
+      let tempArr = this.projectsRows
+        .map(i => i)
+        .sort((obj1, obj2) => obj1.star < obj2.star)
+      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
@@ -386,6 +390,7 @@ export default {
                 text-decoration: none;
                 position: absolute;
                 right: 2px;
+                top: 0px;
               }
               .iicc {
                 width: 22px;
@@ -418,7 +423,6 @@ export default {
         padding: 20px 36px 20px 24px;
         display: flex;
         border-right: 1px solid #eee;
-        // border: 1px solid red;
         cursor: pointer;
         &-text {
           flex: 1;
@@ -506,6 +510,13 @@ export default {
           &-desc {
             font-size: 12px;
             color: #909399;
+            &-text {
+              height: 80px;
+              display: -webkit-box !important;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 5;
+              overflow: hidden;
+            }
           }
         }
       }

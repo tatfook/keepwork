@@ -33,6 +33,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
+import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -47,7 +48,6 @@ Vue.use(VueAnalytics, {
     delay: 500 // delay in milliseconds
   }
 })
-
 
 const i18n = new VueI18n({
   locale,
