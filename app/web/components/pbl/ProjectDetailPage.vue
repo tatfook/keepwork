@@ -89,15 +89,11 @@ export default {
     projectMembers() {
       return this.projectMemberList({ projectId: this.projectId })
     },
-    isProjectMember() {
-      let projectMemberIds = [this.pblProjectDetail.userId, ..._.map(this.projectMembers, ({ userId }) => userId)]
-      return _.includes(projectMemberIds, this.loginUserId)
-    },
     isProhibitView() {
-      return this.isBoardViewForMember && !this.isProjectMember
+      return this.isBoardViewForMember && !this.isLoginUserBeProjectMember
     },
     isProhibitEdit() {
-      return this.isBoardEditForMember && !this.isProjectMember
+      return this.isBoardEditForMember && !this.isLoginUserBeProjectMember
     }
   },
   data() {
@@ -115,7 +111,6 @@ export default {
       getUserDetailByUserId: 'user/getUserDetailByUserId',
       getFavoriteState: 'pbl/getFavoriteState',
       getStarState: 'pbl/getStarState',
-      getProjectMember: 'pbl/getProjectMember'
     }),
     async initProjectDetail() {
       this.isFirstGettingData = true
@@ -128,10 +123,7 @@ export default {
           }
         }
       )
-      await Promise.all([
-        this.initProjectHeaderDetail(),
-        this.getProjectMember({ objectId: this.projectId, objectType: 5 })
-      ])
+      await this.initProjectHeaderDetail()
       if (this.isLogined) {
         await this.pblGetApplyState({
           objectId: this.projectId,
