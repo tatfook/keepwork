@@ -93,11 +93,6 @@ export default {
 }
 </script>
 <style lang="scss">
-.all-projects {
-  &-pages {
-    text-align: center;
-  }
-}
 </style>
 
 
