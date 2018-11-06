@@ -166,9 +166,9 @@ export default {
     .historicalRecordsText {
       font-size: 14px;
       display: block;
-      text-decoration : none;
       color: #48a3ff;
       cursor:pointer;
+      width: 300px;
     }
   }
 }
