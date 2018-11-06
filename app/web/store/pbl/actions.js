@@ -17,7 +17,8 @@ let {
   GET_COMMENTS_SUCCESS,
   GET_TYPE_PROJECTS,
   GET_PROJECT_ISSUES_SUCCESS,
-  GET_ALL_USERS_SUCCESS
+  GET_ALL_USERS_SUCCESS,
+  GET_USER_FOLLOWS
 } = props
 
 const actions = {
@@ -246,8 +247,13 @@ const actions = {
   },
   async getAllUsers({ commit }, payload) {
     await EsAPI.users.getUsers(payload).then(users => {
-      console.log('users', users)
       commit(GET_ALL_USERS_SUCCESS, users)
+    }).catch(err => console.error(err))
+  },
+  async getUserFavorite({ commit }, { objectType, userId }) {
+    await keepwork.favorites.getUserFavorites({ objectType, userId }).then(res => {
+      console.log('favorite', res)
+      commit(GET_USER_FOLLOWS, res)
     }).catch(err => console.error(err))
   }
 }

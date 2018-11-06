@@ -2,13 +2,11 @@
   <el-container class="user-data-setting" v-loading='loading' @click.stop="handleDialogClick">
     <el-row class="user-data-setting-content">
       <el-col class="user-data-setting-portrait-col">
-        <img :src="portrait" alt="" class="user-data-setting-profile">
+        <img :src="portrait || defaultPortrait" alt="" class="user-data-setting-profile">
         <div>
-          <div class="user-data-setting-change-profile">
+          <div class="user-data-setting-change-profile" @click="showMediaSkyDriveDialog">
             {{$t('user.modifyAvatar')}}
-            <input type="file" accept="image/*" @change="getUserSelectProfile">
           </div>
-          <el-button type="primary" v-show='isCroppering' @click='uploadProfileToGitlab'>{{$t('common.Sure')}}</el-button>
         </div>
       </el-col>
       <el-col class="user-data-setting-form-col">
@@ -29,22 +27,22 @@
           <el-form-item :label='$t("user.introduce")'>
             <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.description"></el-input>
           </el-form-item>
-          <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
         </el-form>
       </el-col>
       <el-col class="user-data-setting-operations-col">
-        <dialog-operations :isSaveBtnDisabled='isSaveBtnDisabled' @save='saveUserData' @close='handleClose'></dialog-operations>
+        <dialog-operations @save='saveUserData' @close='handleClose'></dialog-operations>
       </el-col>
+      <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </el-row>
   </el-container>
 </template>
 
 <script>
 import _ from 'lodash'
-import vueCropper from 'vue-cropper'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'userData',
   mounted() {
@@ -58,31 +56,16 @@ export default {
       userInfo: {},
       tempLocation: null,
       copiedLoginUserProfile: {},
-      isCroppering: false,
-      profilePreviewUrl: '',
-      uploadingProfileFile: {},
-      profileCropper: {
-        img: '',
-        autoCrop: true,
-        autoCropWidth: 200,
-        autoCropHeight: 200,
-        fixedBox: true,
-        canMoveBox: false,
-        canMove: false
-      }
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
+      isMediaSkyDriveDialogShow: false
     }
   },
   computed: {
     ...mapGetters({
       loginUserProfile: 'user/profile'
     }),
-    isSaveBtnDisabled() {
-      return this.isCroppering
-    },
     portrait() {
-      return this.isCroppering
-        ? this.profilePreviewUrl
-        : _.get(this.userInfo, 'portrait')
+      return _.get(this.userInfo, 'portrait')
     },
     originExtra() {
       return this.copiedLoginUserProfile.extra
@@ -103,52 +86,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      gitlabCreateFile: 'gitlab/createFile',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     async checkSensitive(checkedWords) {
       let result = await checkSensitiveWords({ checkedWords })
       return result && result.length > 0
     },
-    getUserSelectProfile(e) {
-      let file = _.get(e, ['target', 'files'])[0]
-      this.uploadingProfileFile = file
-      let previewUrl = URL.createObjectURL(file)
-      this.profileCropper.img = previewUrl
-      this.isCroppering = true
+    showMediaSkyDriveDialog() {
+      this.isMediaSkyDriveDialogShow = true
     },
-    getPreviewUrl(data) {
-      this.$refs.profileCropper.getCropData(data => {
-        this.profilePreviewUrl = data
-      })
-    },
-    async uploadFileToGitlab() {
-      let that = this
-      let imgBase64 = this.profilePreviewUrl
-      let imgMainContent = imgBase64.split(',')[1]
-      let { username, defaultSiteDataSource } = this.loginUserProfile
-      let {
-        rawBaseUrl,
-        dataSourceUsername,
-        projectName
-      } = defaultSiteDataSource
-      let fileExtension = this.uploadingProfileFile.type.split('/')[1]
-      let path = `/${username}_images/profile_${new Date().getTime()}.${fileExtension}`
-      await that
-        .gitlabCreateFile({
-          path,
-          content: imgMainContent,
-          userOptions: {
-            encoding: 'base64'
-          }
-        })
-        .then(() => {
-          let url = `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
-          that.userInfo.portrait = url
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    async closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
+      if (url) {
+        this.userInfo.portrait = url
+      }
     },
     showMessage(type, message) {
       this.$message({
@@ -178,18 +129,12 @@ export default {
       }
       this.showMessage('success', this.$t('common.saveSuccess'))
     },
-    async uploadProfileToGitlab() {
-      this.loading = true
-      await this.uploadFileToGitlab()
-      this.loading = false
-      this.isCroppering = false
-    },
     handleClose() {
       this.$emit('close')
     }
   },
   components: {
-    vueCropper,
+    SkyDriveManagerDialog,
     DialogOperations
   }
 }
@@ -233,16 +178,7 @@ export default {
     position: relative;
     overflow: hidden;
     margin-bottom: 10px;
-    input[type='file'] {
-      position: absolute;
-      opacity: 0;
-      left: 0;
-      top: 0;
-      cursor: pointer;
-      font-size: 0;
-      width: 100%;
-      height: 100%;
-    }
+    cursor: pointer;
   }
   &-profile {
     width: 96px;

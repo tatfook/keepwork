@@ -218,7 +218,9 @@ export const favorites = {
   favoriteProject: async ({ objectId, objectType }) =>
     post('favorites', { objectId, objectType }),
   unFavoriteProject: async ({ objectId, objectType }) =>
-    deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
+    deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
+  getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
+  getUserSearchAllFavorites: async (args) => post('favorites/search', args)
 }
 
 export const projects = {
