@@ -27,7 +27,7 @@
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
               <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
-              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.id}}</span>
+              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.no}}</span>
             </div>
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
@@ -148,7 +148,7 @@ export default {
         objectId: this.projectId,
         objectType: 5,
         $or: [
-          { id: _.toNumber(this.searchKeyWord) || 0 },
+          { no: _.toNumber(this.searchKeyWord) || 0 },
           { title: { $like: `%${this.searchKeyWord}%` } }
         ]
       }
