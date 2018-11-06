@@ -16,38 +16,22 @@ const gitLabAPIGenerator = ({ url, token }) => {
   return {
     projects: {
       repository: {
-        async tree(projectId, options) {
-          const [pId, path] = [projectId, options.path].map(encodeURIComponent)
+        async tree(_projectName, _path, recursive = true) {
+          const [projectName, path] = [_projectName, _path].map(
+            encodeURIComponent
+          )
           let total = []
           let page = 0
           let res = {}
-          if (!projectId) {
-            // FIXME: 暂时这么去兼容老的api
+          res = await instance.get(
+            `projects/${projectName}/tree/${path}?recursive=true`
+          )
+          total = [...total, ...res.data]
+          while (res.data.length >= 100) {
             res = await instance.get(
-              `projects/${path}/tree/${path}?recursive=true`
+              `projects/${projectName}/tree/${path}?page=${page++}&per_page=100&recursive=${recursive}`
             )
             total = [...total, ...res.data]
-            while (res.data.length >= 100) {
-              res = await instance.get(
-                `projects/${path}/tree/${path}?page=${page++}&per_page=100&recursive=${options.recursive ||
-                  true}`
-              )
-              total = [...total, ...res.data]
-            }
-          } else {
-            // 老方法
-            res = await instance.get(
-              `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
-                true}`
-            )
-            total = [...total, ...res.data]
-            while (res.data.length >= 100) {
-              res = await instance.get(
-                `projects/${pId}/repository/tree?id=${pId}&path=${path}&page=${page++}&per_page=100&recursive=${options.recursive ||
-                  true}`
-              )
-              total = [...total, ...res.data]
-            }
           }
           return total
         },
@@ -59,12 +43,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
             await instance.delete(`projects/${projectPath}/files/${path}`)
             return true
           },
-          async show(projectName, filePath) {
-            const [projectPath, path] = [projectName, filePath].map(
-              encodeURIComponent
-            )
+          async show({ projectPath, fullPath, useCache }) {
+            projectPath = encodeURIComponent(projectPath)
+            fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
-              `projects/${projectPath}/files/${path}`
+              `projects/${projectPath}/files/${fullPath}?refresh_cache=${useCache}`
             )
             return res.data
           },
@@ -133,7 +116,6 @@ const gitLabAPIGenerator = ({ url, token }) => {
             const [projectPath, path] = [projectName, folderPath].map(
               encodeURIComponent
             )
-            console.warn(projectPath)
             let res = await instance.put(
               `projects/${projectPath}/folders/${path}/move`,
               {
@@ -166,20 +148,19 @@ export class GitAPI {
     })
   }
 
-  async getTree(options) {
-    return this.client.projects.repository.tree(
-      options.projectId || this.config.projectId,
-      options
-    )
+  async getTree({ projectName, path, recursive = true }) {
+    projectName =
+      projectName ||
+      path
+        .split('/')
+        .splice(0, 2)
+        .join('/')
+    return this.client.projects.repository.tree(projectName, path, recursive)
   }
 
-  async getFile(path, options) {
-    const projectName = path
-      .split('/')
-      .splice(0, 2)
-      .join('/')
+  async getFile({ projectPath, fullPath, useCache }) {
     return this.client.projects.repository.files
-      .show(projectName, path)
+      .show({ projectPath, fullPath, useCache })
       .then(file => file)
   }
 
@@ -196,16 +177,17 @@ export class GitAPI {
     )
   }
 
-  async createFile(path, options) {
-    const projectName = path
-      .split('/')
-      .splice(0, 2)
-      .join('/')
+  async createFile({ projectName, path, options }) {
+    projectName =
+      projectName ||
+      path
+        .split('/')
+        .splice(0, 2)
+        .join('/')
     let content = options.content || ''
     return this.client.projects.repository.files
       .create(projectName, path, content)
       .then(data => {
-        // this.commitToES(path, 'create', options.content, {})
         return data
       })
   }
@@ -219,7 +201,6 @@ export class GitAPI {
     return this.client.projects.repository.files
       .edit(projectName, path, content)
       .then(data => {
-        // this.commitToES(path, 'edit', options.content, {})
         return data
       })
   }
@@ -229,11 +210,9 @@ export class GitAPI {
       .split('/')
       .splice(0, 2)
       .join('/')
-    // options = { ...(options || {}), commit_message: 'delete' }
     return this.client.projects.repository.files
       .remove(projectName, path)
       .then(data => {
-        this.commitToES(path, 'delete', '', {})
         return data
       })
   }
@@ -247,8 +226,6 @@ export class GitAPI {
     await this.client.projects.repository.files
       .rename(projectName, currentFilePath, newFilePath, content)
       .then(data => {
-        // this.commitToES(newFilePath, 'create', content, {})
-        // this.commitToES(currentFilePath, 'delete', '', {})
         return data
       })
   }
@@ -306,14 +283,12 @@ export class GitAPI {
 
   async upsertFile(path, options) {
     options = { ...(options || {}) }
-    const file = await this.getFile(path).catch(e => {})
+    const file = await this.getFile(path).catch(e => { })
     return file ? this.editFile(path, options) : this.createFile(path, options)
   }
 
   getFileGitUrl(path) {
-    return `${this.config.url}/${this.config.externalUsername}/${
-      this.config.projectName
-    }/blob/master/${path}`
+    return `${this.config.url}/${this.config.externalUsername}/${this.config.projectName}/blob/master/${path}`
   }
 
   async commitToES(path, action, content, options) {
@@ -322,8 +297,6 @@ export class GitAPI {
 
   async commitToESByArray(actions, options) {
     actions.map(action => {
-      // this.commitToES(action.file_path, 'create', action.content, {})
-      // this.commitToES(action.previous_path, 'delete', '', {})
       return null
     })
   }

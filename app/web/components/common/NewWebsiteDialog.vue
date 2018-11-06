@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="760px" :before-close="handleClose">
+  <el-dialog v-loading='loading' v-if='show' :title="title" class="new-website-dialog" :visible.sync="show" width="760px" :before-close="handleClose" :append-to-body='true'>
     <div class="full-height first-step" v-if="stepIndex===0">
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
@@ -179,8 +179,8 @@ export default {
     }
   },
   async mounted() {
-    await this.userGetWebTemplateConfig()
-    await this.userGetAllWebsite({ useCache: true })
+    await this.userGetWebTemplateConfig().catch()
+    await this.userGetAllWebsite({ useCache: true }).catch()
     this.loading = false
   },
   methods: {

@@ -21,11 +21,13 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
+import VueClipboard from 'vue-clipboard2'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
@@ -48,6 +50,16 @@ Vue.use(ElementUI.Popover)
 Vue.use(VTooltip)
 
 Vue.use(VueI18n)
+Vue.use(VueClipboard)
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
 
 const i18n = new VueI18n({
   locale,

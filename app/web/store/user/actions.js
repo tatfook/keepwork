@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import contactContent from '@/assets/source/contact.md'
 import profileContent from '@/assets/source/profile.md'
 import siteContent from '@/assets/source/site.md'
+import storage from '../../api/storage'
 
 const {
   LOGIN_SUCCESS,
@@ -38,6 +39,7 @@ const {
   GET_SITE_THEME_CONFIG_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   USE_FILE_IN_SITE_SUCCESS,
+  GET_FILE_RAW_URL_SUCCESS,
   GET_USER_THREE_SERVICES_SUCCESS,
   SET_AUTH_CODE_INFO
 } = props
@@ -67,6 +69,12 @@ const actions = {
       await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
+  },
+  async loginByInfo({ commit, dispatch }, payload) {
+    Cookies.set('token', payload)
+    window.localStorage.setItem('satellizer_token', payload)
+    commit(LOGIN_SUCCESS, payload)
+    await dispatch('lesson/getUserDetail', null, { root: true })
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
@@ -98,7 +106,6 @@ const actions = {
   async register({ dispatch }, payload) {
     let registerInfo = await keepwork.user.register(payload)
     let { username, password } = payload
-    console.log('registerInfo', registerInfo)
     if (registerInfo) {
       await dispatch('login', { username, password })
       // let userinfo = _.get(registerInfo, 'data.userinfo')
@@ -113,10 +120,11 @@ const actions = {
     return thirdRegisterInfo
   },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
-    let { commit, getters: { token } } = context
+    let { commit, dispatch, getters: { token } } = context
     if (useCache) return
     const profile = await keepwork.user.getProfile()
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
+    await dispatch('lesson/resumeClassData', null, { root: true })
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
@@ -125,6 +133,8 @@ const actions = {
       return
     }
     userDetail = await keepwork.user.getDetailByName({ username })
+    let userSites = await keepwork.website.getAllSitesByName(username)
+    userDetail.allSiteList = userSites.map(i => ({ ...i, name: i.sitename }))
     let userId = _.get(userDetail, 'id')
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
@@ -139,8 +149,8 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { profile } } = context
-    let newUserInfo = await keepwork.user.update(userInfo)
+    let { commit, getters: { profile, userId } } = context
+    let newUserInfo = await keepwork.user.update({ userId, userInfo })
     commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
@@ -149,10 +159,10 @@ const actions = {
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },
-  async verifyCellphoneTwo(context, { cellphone, captcha, isBind }) {
+  async verifyCellphoneTwo(context, { cellphone, captcha, isBind, realname }) {
     let { dispatch, commit, getters: { sendCodeInfo } } = context
     // smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
-    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ cellphone, captcha, isBind })
+    let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ cellphone, captcha, isBind, realname })
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
     return verifyInfoTwo
@@ -162,7 +172,7 @@ const actions = {
     await dispatch('getAllPersonalWebsite', { useCache })
     let { personalSitePathMap } = getters
     await Promise.all(_.keys(personalSitePathMap).map(async (sitepath) => {
-      await dispatch('gitlab/getRepositoryTree', { path: sitepath, useCache }, { root: true })
+      await dispatch('gitlab/getRepositoryTree', { projectName: sitepath, path: sitepath, useCache }, { root: true })
     })).catch(e => console.error(e))
   },
   async getAllPersonalAndContributedSite({ dispatch }, payload) {
@@ -185,24 +195,27 @@ const actions = {
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
     await dispatch('getAllWebsite', { useCache: false })
-    // await dispatch('getAllSiteDataSource', { useCache: false })
     await dispatch('initWebsite', payload)
   },
   async initWebsite({ dispatch, getters }, { name }) {
     let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
-    let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
+    let { type: categoryName, templateName, sitename } = getPersonalSiteInfoByPath(`${username}/${name}`)
     await dispatch('getWebTemplateConfig')
     let webTemplate = getWebTemplate({ categoryName, templateName })
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
-    for (let { path, content } of fileList) {
+    let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
+    fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
+    const projectName = `${username}/${sitename}`
+    for (let { path, name, content } of fileList) {
       let filename = path.split('/').slice(2).join('/')
-      await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+      // await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+      await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
     }
 
     // refresh repositoryTree
-    // await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
+    await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
   // async initWebsite({ dispatch, getters }, { name }) {
   //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
@@ -225,13 +238,13 @@ const actions = {
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, configFullPath)
+    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath)
+    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
@@ -241,7 +254,7 @@ const actions = {
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
-      content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, path)
+      content = await gitlabShowRawForGuest(rawBaseUrl, projectName, path)
       content = _.isString(content) ? content : JSON.stringify(content)
       commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
@@ -249,9 +262,11 @@ const actions = {
   async getWebTemplateFileList({ commit }, webTemplate) {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
-    let { rawBaseUrl, projectId } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectId, path: `templates/${folder}`, recursive: true })
+    let { rawBaseUrl, projectName } = webTemplateProject
+    // let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
+    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    // fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
+    fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -279,7 +294,7 @@ const actions = {
     if (typeof content === 'string') return content
 
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, dataSourceUsername, projectName, `${pageTemplateRoot}/${contentPath}`)
+    content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
@@ -324,9 +339,11 @@ const actions = {
     let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
-    let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
-    detailInfo.site.username = username
-    commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
+    if (username && sitename) {
+      let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
+      detailInfo.site.username = username
+      commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })
+    }
   },
   async getWebsiteDetailBySiteId(context, { siteId, useCache = true }) {
     let { commit, getters: { getSiteDetailInfoById } } = context
@@ -559,14 +576,30 @@ const actions = {
     return filelist
   },
   async uploadFileToSkyDrive(context, { file, filename, onStart, onProgress }) {
+    let { dispatch } = context
     let { key } = await skyDrive.upload({ file, filename, onStart, onProgress })
+    await dispatch('refreshSkyDrive', { useCache: false })
     return { key }
   },
   async removeFileFromSkyDrive(context, { file }) {
+    let { dispatch } = context
     await skyDrive.remove({ file })
+    await dispatch('refreshSkyDrive', { useCache: false })
   },
   async changeFileNameInSkyDrive(context, { key, filename }) {
+    let { dispatch } = context
     await skyDrive.changeFileName({ key, filename })
+    await dispatch('refreshSkyDrive', { useCache: false })
+  },
+  async getFileRawUrl(context, { fileId, useCache = true }) {
+    let { commit, getters: { rawUrlByFileId } } = context
+    let rawUrl = rawUrlByFileId({ fileId })
+    if (useCache && rawUrl) {
+      return rawUrl
+    }
+    let url = await skyDrive.getFileRawUrl({ fileId })
+    commit(GET_FILE_RAW_URL_SUCCESS, { fileId, url })
+    return url
   },
   async useFileInSite(context, { fileId, sitePath, useCache = true }) {
     let { commit, dispatch, getters, rootGetters } = context
@@ -576,7 +609,7 @@ const actions = {
     if (useCache && !_.isEmpty(cachedUrl)) return
 
     await dispatch('getWebsiteDetailInfoByPath', { path: sitePath })
-    let { siteinfo: { userId, _id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
+    let { siteinfo: { userId, id: siteId } } = rootGetters['user/getSiteDetailInfoByPath'](sitePath)
 
     let url = await skyDrive.useFileInSite({ userId, siteId, fileId })
     commit(USE_FILE_IN_SITE_SUCCESS, { sitePath, fileId, url })

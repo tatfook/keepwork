@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
           <template slot-scope="scope">
-            <div @click="toEdit(scope.row)">{{scope.row.packageName}}</div>
+            <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('lesson.subjectLabel')" width="190">
@@ -344,6 +344,9 @@ export default {
     toEdit(packageDetail) {
       this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
     },
+    toPackgeDetail(packageDetail) {
+      this.$router.push(`/teacher/package/${packageDetail.id}`)
+    },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id
       this.infoDialogData = {
@@ -570,6 +573,36 @@ export default {
     }
     &-item {
       margin-bottom: 6px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .package-manager {
+    &-overview {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    &-total {
+      font-size: 18px;
+    }
+    &-new-button {
+      width: auto;
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+    &-selector {
+      padding: 8px;
+      align-items: flex-end;
+      &-item {
+        flex: 1;
+        padding: 0 8px;
+        .el-select{
+          width: 100%;
+        }
+      }
     }
   }
 }

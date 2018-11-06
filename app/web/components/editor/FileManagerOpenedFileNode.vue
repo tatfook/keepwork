@@ -80,7 +80,6 @@ export default {
       this.dialogVisible = false
     },
     handleCloseOpenedFile({ path }) {
-      console.warn(path)
       this.closeAndReset(path)
       this.handleCloseDialog()
     },
@@ -192,6 +191,6 @@ export default {
   }
   .edit-hover:hover {
     color: #409eff !important;
-  } 
-} 
+  }
+}
 </style>

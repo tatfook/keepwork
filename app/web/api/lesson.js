@@ -6,28 +6,51 @@ category: API
 ---
 */
 import createEndpoint from './common/endpoint'
+import axios from 'axios'
+import { event } from 'vue-analytics'
 
 export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
-export const { get, post, put, 'delete': deleteMethod } = endpoint
+export const endpointWithoutToken = createEndpoint({
+  baseURL: process.env.LESSON_API_PREFIX
+})
+
+export const { get, post, put, delete: deleteMethod } = endpoint
 
 export const admin = {}
 
 export const packages = {
-  create: async ({ newPackageData }) => post('packages', newPackageData),
-  update: async ({ updatingPackageData }) => put(`packages/${updatingPackageData.id}`, updatingPackageData),
+  create: async ({ newPackageData }) => {
+    const res = await post('packages', newPackageData)
+    event('lesson', 'create_package', 'keepwork', res.id)
+    return res
+  },
+  update: async ({ updatingPackageData }) =>
+    put(`packages/${updatingPackageData.id}`, updatingPackageData),
   getUserPackages: async () => get('packages'),
   getHotsPackages: async () => get('packages/hots'),
-  packagesList: async ({ perPage, page }) => get(`packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`),
+  packagesList: async ({ perPage, page }) =>
+    get(
+      `packages/search?x-per-page=${perPage}&x-page=${page}&x-order=auditAt-desc`
+    ),
   packageDetail: async ({ packageId }) => get(`packages/${packageId}/detail`),
-  subscribe: async ({ packageId }) => post(`packages/${packageId}/subscribe`),
+  subscribe: async ({ packageId }) => {
+    const res = await post(`packages/${packageId}/subscribe`)
+    event('lesson', 'subscribe_package', 'keepwork', packageId)
+    return res
+  },
+  isSubscribe: async ({ packageId }) =>
+    get(`packages/${packageId}/isSubscribe`),
   getTaughtPackages: async () => get('packages/teach'),
-  audit: async ({ packageId, state }) => post(`packages/${packageId}/audit`, { state }),
-  release: async ({ packageDetail }) => put(`packages/${packageDetail.id}`, packageDetail),
-  destroy: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
-  addLesson: async ({ packageId, lessonId }) => post(`packages/${packageId}/lessons`, { lessonId }),
+  audit: async ({ packageId, state }) =>
+    post(`packages/${packageId}/audit`, { state }),
+  release: async ({ packageDetail }) =>
+    put(`packages/${packageDetail.id}`, packageDetail),
+  delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
+  addLesson: async ({ packageId, lessonId }) =>
+    post(`packages/${packageId}/lessons`, { lessonId }),
   removeLesson: async ({ packageId, lessonId }) => {
     return deleteMethod(`packages/${packageId}/lessons?lessonId=${lessonId}`)
   },
@@ -35,51 +58,111 @@ export const packages = {
 }
 
 export const lessons = {
-  create: async ({ newLessonData }) => post('lessons', newLessonData),
-  update: async ({ updatingData }) => put(`lessons/${updatingData.id}`, updatingData),
-  release: async ({ id, content }) => post(`lessons/${id}/contents`, { content }),
+  create: async ({ newLessonData }) => {
+    const res = await post('lessons', newLessonData)
+    event('lesson', 'create_lesson', 'keepwork', res.id)
+    return res
+  },
+  update: async ({ updatingData }) =>
+    put(`lessons/${updatingData.id}`, updatingData),
+  release: async ({ id, content }) => {
+    const res = await post(`lessons/${id}/contents`, { content })
+    event('lesson', 'release_lesson', 'keepwork', id)
+    return res
+  },
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
   lessonDetailByUrl: async ({ url }) => get(`lessons/detail?url=${url}`),
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
-  isReward: async ({ packageId, lessonId }) => get(`learnRecords/isReward?packageId=${packageId}&lessonId=${lessonId}`),
-  destroy: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
+  isReward: async ({ packageId, lessonId }) =>
+    get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),
+  delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
-  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`)
+  learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
+  getLastLearnRecords: async () => get('learnRecords?x-per-page=1&x-order=createdAt-desc')
 }
 
 export const users = {
   getUserDetail: () => get('users'),
-  userSubscribes: args => get(`users/${args.userId}/subscribes`),
+  userSubscribes: args =>
+    get(`users/${args.userId}/subscribes`, { params: args }),
   userSkills: args => get(`users/${args.userId}/skills`),
-  toBeTeacher: ({ userId, key, config }) =>
-    post(`users/${userId}/teacher`, { key }, config),
+  toBeTeacher: ({ userId, key, school, config }) =>
+    post(`users/${userId}/teacher`, { key, school }, config),
   getTeachingRecords: async () => get('packages'),
   setNickname: ({ nickname, id }) => put(`users/${id}`, { nickname }),
   uploadSelfLearnRecords: (id, payload) => put(`learnRecords/${id}`, payload),
-  createLearnRecords: payload => post('learnRecords', payload)
+  createLearnRecords: async payload => {
+    const res = await post('learnRecords', payload)
+    event('lesson', 'start_lesson', 'keepwork', payload.lessonId)
+    return res
+  },
+  learnRecords: () => get('learnRecords'),
+  verifyToken: ({ token }) => {
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.post('users')
+  }
 }
 
 export const classrooms = {
-  join: payload => post('classrooms/join', payload),
-  begin: ({ payload, config }) => post('classrooms', payload, config),
-  leave: () => post('classrooms/quit'),
+  join: async payload => {
+    const res = await post('classrooms/join', payload)
+    event('lesson', 'join_class', 'keepwork', payload.classId)
+    return res
+  },
+  begin: async ({ payload, config }) => {
+    const res = await post('classrooms', payload, config)
+    event('lesson', 'begin_class', 'keepwork', res.id)
+    return res
+  },
+  leave: async () => {
+    const res = await post('classrooms/quit')
+    event('lesson', 'quit_class', 'keepwork', 0)
+    return res
+  },
   getTeachingListing: async () => get('classrooms'),
   currentClass: () => get('classrooms/current'),
   learnRecordsById: id => get(`learnRecords/${id}`),
   getClassroomById: id => get(`classrooms/${id}`),
-  dismiss: ({ classId, config }) =>
-    put(`classrooms/${classId}/dismiss`, null, config),
+  dismiss: async ({ classId, config }) => {
+    const res = await put(`classrooms/${classId}/dismiss`, null, config)
+    event('lesson', 'dismiss_class', 'keepwork', classId)
+    return res
+  },
   learnRecords: ({ classId, config }) =>
     get(`classrooms/${classId}/learnRecords`, null, config),
-  uploadLearnRecords: ({ classId, learnRecords }) =>
-    put(`learnRecords/${classId}`, { extra: learnRecords }),
+  uploadLearnRecords: ({ classId, learnRecords, state }) =>
+    put(`learnRecords/${classId}`, { extra: learnRecords, state }),
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
-  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) => put(`classrooms/${id}/learnRecords`, learnRecordsArr),
+  modifyClassroomLearnRecords: ({ id, learnRecordsArr }) =>
+    put(`classrooms/${id}/learnRecords`, learnRecordsArr),
   isValidKey: key => get(`classrooms/valid?key=${key}`)
+}
+
+export const visitor = {
+  uploadLearnRecords: ({ token, classId, learnRecords, state }) => {
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.put(`learnRecords/${classId}`, {
+      extra: learnRecords,
+      state
+    })
+  },
+  learnRecordsById: (id, token) => {
+    let instance = axios.create({
+      baseURL: process.env.LESSON_API_PREFIX
+    })
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return instance.get(`learnRecords/${id}`)
+  }
 }
 
 export const subjects = {
@@ -94,15 +177,21 @@ export const skills = {
   getAllSkills: () => get('skills')
 }
 
+export const trades = {
+  getTradesList: () => get('trades')
+}
+
 export const lesson = {
   users,
   packages,
   lessons,
+  visitor,
   admin,
   classrooms,
   emails,
   skills,
-  subjects
+  subjects,
+  trades
 }
 
 export default lesson

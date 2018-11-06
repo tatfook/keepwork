@@ -12,7 +12,7 @@
             <li v-for='(site,index) in siteList' :key='index'>
               <a class="clearfix" @click="pushNewUrl(site)">
                 <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
-                <i class="iconfont icon-private" v-if="site.visibility==='private'"></i>
+                <i class="iconfont icon-private" v-if="site.visibility===1"></i>
               </a>
             </li>
           </el-scrollbar>
@@ -113,7 +113,7 @@ export default {
       let siteDetailInfo = this.getSiteDetailInfoByPath(sitepath)
       if (!siteDetailInfo) return
       let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
-      let name = _.get(siteDetailInfo, 'siteinfo.name')
+      let name = _.get(siteDetailInfo, 'siteinfo.sitename')
       if (siteDetailInfo.siteinfo && siteDetailInfo.siteinfo.domain === 'paracraft') {
         siteDisplayName = 'paracraft'
       }

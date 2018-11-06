@@ -15,25 +15,30 @@
       </el-form-item>
       <!-- 单选题 -->
       <el-form-item :label="this.$t('card.answerOptions')" v-if="quizType == 0" :error="errMsg">
-        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag></div>
-        <el-radio-group :style="{width: '100%'}" v-model="singleAnswer">
-          <div class="flex-center-between" v-for="(opt, index) in singleOptions" :key="index">
-            <el-radio :label="serialNo[index]"></el-radio>
+        <div>
+          <el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag>
+        </div>
+        <el-radio-group class="single-wrapper" :style="{width: '100%'}" v-model="singleAnswer">
+          <!-- <div class="flex-center-between" v-for="(opt, index) in singleOptions" :key="index"> -->
+          <el-radio class="flex-center-between-single" v-for="(opt, index) in singleOptions" :key="index" :label="serialNo[index]">
+            <span>{{serialNo[index]}}</span>
             <el-input v-model="opt.item" class="writer-input" :placeholder="$t('card.pleaseInput')"></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, quizType)" icon="el-icon-delete" circle></el-button>
-          </div>
-          <el-button type="primary" round size="small" @click="addOption(quizType)">{{this.$t('card.addMoreOptions')}}</el-button>
+          </el-radio>
+          <!-- </div> -->
+        <el-button type="primary" round size="small" @click="addOption(quizType)">{{this.$t('card.addMoreOptions')}}</el-button>
         </el-radio-group>
 
       </el-form-item>
 
       <!-- 多选题 -->
       <el-form-item :label="this.$t('card.answerOptions')" v-if="quizType == 1" :error="errMsg">
-        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag></div>
+        <div>
+          <el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag>
+        </div>
 
         <el-checkbox-group :style="{width: '100%'}" v-model="multipleAnswer">
-          <div class="flex-center-between"
-            v-for="(opt, index) in multipleOptions" :key="index">
+          <div class="flex-center-between" v-for="(opt, index) in multipleOptions" :key="index">
             <el-checkbox name="option" :label="serialNo[index]"></el-checkbox>
             <el-input v-model="opt.item" class="writer-input" :placeholder="$t('card.pleaseInput')"></el-input>
             <el-button type="danger" @click.prevent="removeOption(opt, quizType)" icon="el-icon-delete" circle></el-button>
@@ -45,7 +50,9 @@
 
       <!-- 判断题 -->
       <el-form-item :label="this.$t('card.answerOptions')" v-if="quizType == 2" :error="errMsg">
-        <div><el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag></div>
+        <div>
+          <el-tag type="warning">{{this.$t('card.rightAnswer')}} {{rightAnswer}}</el-tag>
+        </div>
 
         <el-radio-group v-model="judgeAnswer">
           <span class="el-radio" v-for="(opt, index) in judgeOptions" :key="index">
@@ -84,17 +91,17 @@
 import uuid from 'uuid/v1'
 
 const checkInputEmpty = () => {
-  let opeInput = document.getElementsByClassName("writer-input")
-    for(let i = 0; i < opeInput.length; i++) {
-      let input = opeInput[i].children[0]
-      if(input.value == undefined || input.value == "") {
-          input.style.borderColor = "#f56c6c"
-          return false
-      }else{
-          input.style.borderColor = "#67c23a"
-      }
+  let opeInput = document.getElementsByClassName('writer-input')
+  for (let i = 0; i < opeInput.length; i++) {
+    let input = opeInput[i].children[0]
+    if (input.value == undefined || input.value == '') {
+      input.style.borderColor = '#f56c6c'
+      return false
+    } else {
+      input.style.borderColor = '#67c23a'
     }
-    return true
+  }
+  return true
 }
 
 const clearBorderColor = () => {
@@ -108,7 +115,7 @@ export default {
   name: 'quizDataEditor',
   props: {
     isEditorShow: Boolean,
-    originalQuizData: Array,
+    originalQuizData: Array
   },
   mounted() {
     this.initQuizData(this.quizData)
@@ -127,17 +134,51 @@ export default {
           callback()
         }
       }
-    };
+    }
     return {
-      serialNo: ['A', 'B', 'C', 'D', 'E', "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
-      singleOptions: [{item: 'option 1'}, {item: 'option 2'}],
-      multipleOptions: [{item: 'option 1'}, {item: 'option 2'}, {item: 'option 3'}],
-      judgeOptions: [{
-        item: true
-      },{
-        item: false
-      }],
-      textOptions: [{item:'text match'}],
+      serialNo: [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ],
+      singleOptions: [{ item: 'option 1' }, { item: 'option 2' }],
+      multipleOptions: [
+        { item: 'option 1' },
+        { item: 'option 2' },
+        { item: 'option 3' }
+      ],
+      judgeOptions: [
+        {
+          item: true
+        },
+        {
+          item: false
+        }
+      ],
+      textOptions: [{ item: 'text match' }],
 
       singleAnswer: '',
       multipleAnswer: [],
@@ -150,25 +191,48 @@ export default {
 
       rules: {
         title: [
-          { required: true, message: this.$t('card.pleaseInputTitle'), trigger: 'blur' }
+          {
+            required: true,
+            message: this.$t('card.pleaseInputTitle'),
+            trigger: 'blur'
+          }
         ],
         single: [
-          { required: true, message: this.$t('card.pleaseSelect'), trigger: 'change'}
+          {
+            required: true,
+            message: this.$t('card.pleaseSelect'),
+            trigger: 'change'
+          }
         ],
         singleInput: [
-          { required: true, message: this.$t('card.pleaseInput'), trigger: 'blur' }
+          {
+            required: true,
+            message: this.$t('card.pleaseInput'),
+            trigger: 'blur'
+          }
         ],
         multiple: [
-          { type: 'array', required: true, message: this.$t('card.pleaseSelect'), trigger: 'change'}
+          {
+            type: 'array',
+            required: true,
+            message: this.$t('card.pleaseSelect'),
+            trigger: 'change'
+          }
         ],
         judge: [
-          { required: true, message: this.$t('card.pleaseSelect'), trigger: 'change' }
+          {
+            required: true,
+            message: this.$t('card.pleaseSelect'),
+            trigger: 'change'
+          }
         ],
-        score: [
-          { required: true, validator: checkScore, trigger: 'blur' }
-        ],
+        score: [{ required: true, validator: checkScore, trigger: 'blur' }],
         desc: [
-          { required: true, message: this.$t('card.pleaseInputExplanation'), trigger: 'blur' }
+          {
+            required: true,
+            message: this.$t('card.pleaseInputExplanation'),
+            trigger: 'blur'
+          }
         ]
       }
     }
@@ -179,9 +243,20 @@ export default {
     },
     rightAnswer() {
       switch (this.quizType) {
-        case '0': return this.singleAnswer
-        case '1': return this.multipleAnswer.length > 1 ? this.multipleAnswer.sort((a, b) => a.charCodeAt() - b.charCodeAt()).join(' ') : ''
-        case '2': return this.judgeAnswer ? (this.judgeAnswer === 'A' ? this.$t('card.true') : this.$t('card.false')) : ''
+        case '0':
+          return this.singleAnswer
+        case '1':
+          return this.multipleAnswer.length > 1
+            ? this.multipleAnswer
+                .sort((a, b) => a.charCodeAt() - b.charCodeAt())
+                .join(' ')
+            : ''
+        case '2':
+          return this.judgeAnswer
+            ? this.judgeAnswer === 'A'
+              ? this.$t('card.true')
+              : this.$t('card.false')
+            : ''
       }
     },
     isDialogShow() {
@@ -241,37 +316,46 @@ export default {
         return this.$message.error(this.$t('card.keepOneOption'))
       }
       switch (type) {
-        case '0': return this.singleOptions.splice(this.singleOptions.indexOf(item), 1)
-        case '1': return this.multipleOptions.splice(this.multipleOptions.indexOf(item), 1)
-        case '3': return this.textOptions.splice(this.textOptions.indexOf(item), 1)
+        case '0':
+          return this.singleOptions.splice(this.singleOptions.indexOf(item), 1)
+        case '1':
+          return this.multipleOptions.splice(
+            this.multipleOptions.indexOf(item),
+            1
+          )
+        case '3':
+          return this.textOptions.splice(this.textOptions.indexOf(item), 1)
       }
     },
     addOption(type) {
       switch (type) {
-        case '0': return this.singleOptions.push({item: ''})
-        case '1': return this.multipleOptions.push({ item: ''})
-        case '3': return this.textOptions.push({item: ''})
+        case '0':
+          return this.singleOptions.push({ item: '' })
+        case '1':
+          return this.multipleOptions.push({ item: '' })
+        case '3':
+          return this.textOptions.push({ item: '' })
       }
     },
 
-    validInput () {
+    validInput() {
       checkInputEmpty()
     },
 
     checkAnswer(type) {
       if (type === '0' && !this.singleAnswer) {
-        return {pass: false, msg: this.$t('card.pleaseSelectOne')}
+        return { pass: false, msg: this.$t('card.pleaseSelectOne') }
       }
 
       if (type === '1' && this.multipleAnswer.length < 2) {
-        return { pass: false, msg: this.$t('card.chooseTwoAnswer')}
+        return { pass: false, msg: this.$t('card.chooseTwoAnswer') }
       }
 
       if (type === '2' && !this.judgeAnswer) {
-        return {pass: false, msg: this.$t('card.pleaseSelectOne')}
+        return { pass: false, msg: this.$t('card.pleaseSelectOne') }
       }
 
-      return { pass: true, msg: ''}
+      return { pass: true, msg: '' }
     },
 
     resetData() {
@@ -282,12 +366,12 @@ export default {
     },
 
     submitForm(formName, type) {
-      if(!checkInputEmpty()) {
-        return this.errMsg = this.$t('card.cantBeEmpty')
+      if (!checkInputEmpty()) {
+        return (this.errMsg = this.$t('card.cantBeEmpty'))
       }
       let { pass, msg } = this.checkAnswer(type)
       if (!pass) {
-        return this.errMsg = msg
+        return (this.errMsg = msg)
       }
       this.errMsg = ''
       this.cloneQuiz.type = type
@@ -311,7 +395,7 @@ export default {
           this.cloneQuiz.options = this.textOptions
         }
         let _quiz = _.cloneDeep(this.cloneQuiz)
-        this.handleClose();
+        this.handleClose()
         this.$emit('finishEditing', [_quiz])
       })
     },
@@ -324,20 +408,42 @@ export default {
 </script>
 
 <style scope>
-  .flex-center-between{
-    width: 100%;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.flex-center-between {
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .flex-center-between .el-input {
-      margin: 0 20px;
-  }
+.single-wrapper {
+  display: felx;
+  flex-direction: column;
+  margin-right: 50px;
+}
+.flex-center-between-single {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.flex-center-between-single.el-radio {
+  margin-left: 0;
+}
 
-  .el-form-item .writer-input .el-input__inner {
-    border-color: #dcdfe6;
-  }
+.flex-center-between-single .el-input {
+  margin: 0 18px;
+}
+
+.flex-center-between-single .el-radio__label {
+  width: 80%;
+}
+
+.flex-center-between .el-input {
+  margin: 0 20px;
+}
+
+.el-form-item .writer-input .el-input__inner {
+  border-color: #dcdfe6;
+}
 </style>
 

@@ -4,7 +4,7 @@
       <img src="../../../assets/lessonImg/summary/left.png" alt="prev">
     </div>
     <div class="style-preview">
-      <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary"/>
+      <lesson-summary-share :styleIndex="currentStyle" :isPreview="true" :isSmall="true" :lessonSummary="lessonSummary" />
     </div>
     <div class="button" :class="{'is-disabled': currentStyle === styles.length}" @click="nextStyle">
       <img src="../../../assets/lessonImg/summary/right.png" alt="next">
@@ -28,9 +28,7 @@ export default {
       }
     }
   },
-  mounted() {
-
-  },
+  mounted() {},
   data() {
     return {
       currentStyle: 1,
@@ -99,12 +97,18 @@ export default {
           center;
       }
     }
-
     &.is-disabled {
       cursor: not-allowed;
       background-color: #fff;
       filter: Alpha(Opacity=40);
       opacity: 0.4;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-summary-share-style-select {
+    .style-preview {
+      width: 267px;
     }
   }
 }

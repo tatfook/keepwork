@@ -1,5 +1,5 @@
 <template>
-  <div class="website">
+  <div class="website" v-loading="loading">
     <div class="search-result-total">搜索到：<span>{{websiteCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in websiteData" :key="index">
@@ -28,17 +28,23 @@ export default {
   },
   data() {
     return {
-      perPage: 2,
-      page: 1
+      perPage: 12,
+      page: 1,
+      loading: true
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    console.log('website',this.website)
+    this.loading = false
   },
   computed: {
     ...mapGetters({
-      website: 'pbl/website'
+      pblWebsite: 'pbl/diffTypeProject'
     }),
+    website(){
+      return this.pblWebsite({ type: 'site'})
+    },
     websiteCount() {
       return _.get(this.website, 'total', 0)
     },
@@ -48,7 +54,8 @@ export default {
         return {
           id: i.id,
           extra: { coverUrl: i.cover },
-          name: this.searchKeyResult(i),
+          name: i.name,
+          name_title: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -65,14 +72,16 @@ export default {
       getTypeProjects: 'pbl/getTypeProjects'
     }),
     async targetPage(targetPage) {
+      this.loading = true
       this.$nextTick(async () => {
         await this.getTypeProjects({
           page: targetPage,
           per_age: this.perPage,
-          type: 'website',
+          type: 'site',
           q: this.searchKey,
           sort: this.sortProjects
         })
+        this.loading = false
       })
     },
     searchKeyResult(i) {

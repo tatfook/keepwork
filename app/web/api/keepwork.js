@@ -6,6 +6,7 @@ category: API
 ---
 */
 import createEndpoint from './common/endpoint'
+import { event } from 'vue-analytics'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -27,7 +28,7 @@ export const user = {
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
-  update: async (...args) => put('/user/update', ...args),
+  update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async args => get(`/users?email=${args.email}`),
@@ -42,7 +43,11 @@ export const user = {
     post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
-  register: async args => post('/users/register', args),
+  register: async args => {
+    const res = await post('/users/register', args)
+    event('account', 'sign_up', 'keepwork', 0)
+    return res
+  },
   bindThreeService: async (...args) => post('user/bindThreeService', ...args)
 }
 
@@ -93,6 +98,7 @@ export const website = {
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
+  getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
   getDetailInfo: async args =>
     get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
@@ -175,7 +181,7 @@ export const websiteComment = {
 }
 
 export const sensitiveWords = {
-  query: async (...args) => post('sensitive_words/query', ...args)
+  query: async () => get('sensitiveWords')
 }
 
 export const bigfile = {
@@ -222,7 +228,22 @@ export const projects = {
   updateProject: async ({ projectId, updatingProjectData }) =>
     put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
-  createProject: async ({ description, name, privilege, type, visibility, siteId }) => post('projects', { description, name, privilege, type, visibility, siteId }),
+  createProject: async ({
+    description,
+    name,
+    privilege,
+    type,
+    visibility,
+    siteId
+  }) =>
+    post('projects', {
+      description,
+      name,
+      privilege,
+      type,
+      visibility,
+      siteId
+    }),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
@@ -246,8 +267,9 @@ export const applies = {
     objectId,
     applyType,
     applyId,
+    legend,
     extra
-  }) => post('applies', { objectType, objectId, applyType, applyId, extra })
+  }) => post('applies', { objectType, objectId, applyType, applyId, legend, extra })
 }
 
 export const members = {
@@ -261,17 +283,29 @@ export const members = {
 }
 
 export const comments = {
-  getComments: async ({ objectType, objectId }) =>
-    get(`comments?objectType=${objectType}&objectId=${objectId}`),
+  getComments: async ({
+    objectType,
+    objectId,
+    xPage = 1,
+    xPerPage = 200,
+    xOrder = 'updatedAt-desc'
+  }) =>
+    get(
+      `comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`
+    ),
   createComment: async ({ objectType, objectId, content }) =>
     post('comments', { objectType, objectId, content }),
-  deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`)
+  deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`),
+  updateComment: async ({ commentId, content }) =>
+    put(`comments/${commentId}`, { content })
 }
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
-  getSingleProjectIssues: async ({ objectId, objectType }) =>
-    get(`issues?objectId=${objectId}&objectType=${objectType}`)
+  getSingleProjectIssues: async params => post('issues/search', params),
+  updateIssue: async ({ objectId, params }) =>
+    put(`issues/${objectId}`, { ...params }),
+  getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
 }
 
 export const keepwork = {

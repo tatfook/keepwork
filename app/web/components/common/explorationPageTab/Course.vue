@@ -1,5 +1,5 @@
 <template>
-  <div class="course-tab">
+  <div class="course-tab" v-loading="loading">
     <div class="search-result-total">搜索到：<span>{{lessonPackagesCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(lessonPackage,index) in lessonPackagesData" :key="index">
@@ -30,13 +30,15 @@ export default {
   },
   data() {
     return {
-      perPage: 2,
+      perPage: 12,
       page: 1,
-      lessonPackages: []
+      lessonPackages: [],
+      loading: true
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    this.loading = false
   },
   computed: {
     lessonPackagesCount() {
@@ -48,7 +50,9 @@ export default {
         if (i.highlight) {
           let name = _.get(i.highlight, 'title', i.title)
           name = name.join().replace(/<span>/g, `<span class="red">`)
-          Vue.set(i, 'title', name)
+          Vue.set(i, 'name_title', name)
+        }else{
+          Vue.set(i, 'name_title', i.title)
         }
       })
       return Arr
@@ -56,6 +60,7 @@ export default {
   },
   methods: {
     async targetPage(targetPage) {
+      this.loading = true
       this.$nextTick(async () => {
         await EsAPI.packages
           .getPackages({
@@ -65,10 +70,10 @@ export default {
             sort: this.sortProjects
           })
           .then(res => {
-            console.log('res', res)
             this.lessonPackages = res
           })
           .catch(err => console.error(err))
+          this.loading = false
       })
     }
   },

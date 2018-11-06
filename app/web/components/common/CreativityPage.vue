@@ -32,7 +32,7 @@
           </el-row>
         </div>
         <div :class="['learn-to-build',{'hidden-learn': hiddenLearn}]" v-if="!hasProjects">
-          <span @click="showLearnStep"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
+          <span @click="showLearnStep" class="learn"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
       </div>
     </div>
     <div class="creativity-page-projects">
@@ -40,7 +40,7 @@
         <div class="my-projects" v-if="hasProjects">
           <h4 class="browse-title">我的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in myProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in myProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -48,7 +48,7 @@
         <div class="my-contribute-projects" v-if="myContributeProjects.length > 0">
           <h4 class="browse-title">我参与的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in myContributeProjects" :key="index">
+            <el-col :sm="12" :md="6" v-for="(project,index) in myContributeProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -66,23 +66,27 @@
         </div>
       </div>
     </div>
+    <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
   </div>
 </template>
 <script>
 import ProjectCell from './ProjectCell'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import CreateProjectGuide from './CreateProjectGuide'
 
 export default {
   name: 'CreativityPage',
   data() {
     return {
       projects: [],
-      hiddenLearn: false
+      hiddenLearn: false,
+      showGuideDialog: false
     }
   },
   components: {
-    ProjectCell
+    ProjectCell,
+    CreateProjectGuide
   },
   async mounted() {
     this.getExcellentProjects()
@@ -94,12 +98,27 @@ export default {
       myProjects: 'pbl/myProjects',
       myContributeProjects: 'pbl/myContributeProjects'
     }),
+    myProjectsData(){
+      let arr = _.cloneDeep(this.myProjects)
+      return _.forEach(arr, i => {
+        i.name_title = i.name || '未命名'
+      })
+    },
+    myContributeProjectsData(){
+      let arr = _.cloneDeep(this.myContributeProjects)
+      return _.forEach(arr, i => {
+        i.name_title = i.name || '未命名'
+      })
+    },
     hasProjects() {
       return this.myProjects.length > 0
     },
     otherProjects() {
-      let tempArr = _.get(this.excellentProjects, 'rows', [])
-      return tempArr.slice(0, 4)
+      let tempArr = _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
+      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
+      return _.forEach(tempArr2, i => {
+        i.name_title = i.name || '未命名'
+      })
     }
   },
   methods: {
@@ -117,7 +136,10 @@ export default {
       this.hiddenLearn = true
     },
     showLearnStep(){
-      
+      this.showGuideDialog =true
+    },
+    closeLearnGuide(){
+      this.showGuideDialog = false
     }
   }
 }
@@ -167,6 +189,9 @@ export default {
         margin-bottom: 40px;
         color: #909399;
         position: relative;
+        .learn{
+          cursor: pointer;
+        }
         .close {
           display: inline-block;
           width: 40px;

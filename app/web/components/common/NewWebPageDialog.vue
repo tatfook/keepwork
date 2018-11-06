@@ -70,7 +70,6 @@ export default {
     let webpageNameValidator = async (rule, str, callback) => {
       await this.gitlabGetRepositoryTree({ path: this.sitePath })
       let childNames = this.gitlabChildNamesByPath(this.folderPath)
-
       let value = (str || '').trim()
       if (!value) {
         this.isNameIllegal = true

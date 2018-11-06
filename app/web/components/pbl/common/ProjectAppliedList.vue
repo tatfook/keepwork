@@ -64,7 +64,7 @@ export default {
       this.isLoading = true
       await this.pblChangeApplyState({
         id,
-        state: 1,
+        state: state,
         objectId: this.projectId,
         objectType: 5,
         applyType: 0

@@ -15,7 +15,9 @@ let {
   GET_MY_ALL_PROJECTS_SUCCESS,
   GET_PROJECT_APPLY_STATE_SUCCESS,
   GET_COMMENTS_SUCCESS,
-  GET_TYPE_PROJECTS
+  GET_TYPE_PROJECTS,
+  GET_PROJECT_ISSUES_SUCCESS,
+  GET_ALL_USERS_SUCCESS
 } = props
 
 const actions = {
@@ -136,9 +138,9 @@ const actions = {
       return Promise.resolve()
     })
   },
-  async applyJoinProject(context, { objectType = 5, objectId, applyType, applyId, extra }) {
+  async applyJoinProject(context, { objectType = 5, objectId, applyType, applyId, legend, extra }) {
     let { dispatch } = context
-    await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, extra }).then(async () => {
+    await keepwork.applies.applyProjectMember({ objectType, objectId, applyType, applyId, legend, extra }).then(async () => {
       await dispatch('getApplyState', { objectId, objectType, applyType, applyId })
       return Promise.resolve()
     }).catch(error => {
@@ -211,31 +213,42 @@ const actions = {
       return Promise.reject(error)
     })
   },
-  async getComments(context, { objectType = 5, objectId }) {
+  async getComments(context, { objectType = 5, objectId, xPage, xPerPage, xOrder }) {
     let { commit } = context
-    await keepwork.comments.getComments({ objectType, objectId }).then(async commentList => {
-      await commit(GET_COMMENTS_SUCCESS, { commentList, projectId: objectId })
-      return Promise.resolve()
-    }).catch(error => {
+    let commentList = await keepwork.comments.getComments({ objectType, objectId, xPage, xPerPage, xOrder }).catch(error => {
       return Promise.reject(error)
     })
+    await commit(GET_COMMENTS_SUCCESS, { commentList, projectId: objectId })
+    return commentList
   },
   async createComment(context, { objectType = 5, objectId, content }) {
     let { dispatch } = context
-    await keepwork.comments.createComment({ objectType, objectId, content }).then(async () => {
-      await dispatch('getComments', { objectType, objectId })
-      return Promise.resolve()
-    }).catch(error => {
+    let newComment = await keepwork.comments.createComment({ objectType, objectId, content }).catch(error => {
       return Promise.reject(error)
-    })
+    }).catch(error => Promise.reject(error))
+    await dispatch('getComments', { objectType, objectId })
+    objectType === 5 && await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
+    return newComment
   },
   async deleteComment(context, { objectType = 5, objectId, commentId }) {
     let { dispatch } = context
     await keepwork.comments.deleteComment({ commentId }).then(async () => {
       await dispatch('getComments', { objectType, objectId })
+      objectType === 5 && await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
     }).catch(error => {
       return Promise.reject(error)
     })
+  },
+  async getProjectIssues({ commit }, payload) {
+    await keepwork.issues.getSingleProjectIssues(payload).then(projectIssues => {
+      commit(GET_PROJECT_ISSUES_SUCCESS, { projectIssues, projectId: payload.objectId })
+    }).catch(err => console.error(err))
+  },
+  async getAllUsers({ commit }, payload) {
+    await EsAPI.users.getUsers(payload).then(users => {
+      console.log('users', users)
+      commit(GET_ALL_USERS_SUCCESS, users)
+    }).catch(err => console.error(err))
   }
 }
 

@@ -70,11 +70,16 @@ export const useFileInSite = async ({ userId, siteId, fileId }) => {
   return storage.siteFiles.url({ userId, siteId, fileId })
 }
 
+export const getFileRawUrl = async ({ fileId }) => {
+  return storage.files.getRawUrl({ fileId })
+}
+
 export default {
   upload,
   remove,
   list,
   info,
   changeFileName,
-  useFileInSite
+  useFileInSite,
+  getFileRawUrl
 }

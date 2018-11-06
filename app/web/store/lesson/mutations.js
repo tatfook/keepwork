@@ -27,8 +27,8 @@ const mutations = {
   [LOGOUT](state) {
     Vue.set(state, 'userinfo', {})
   },
-  [TOGGLE_LOGIN_DIALOG](state, status) {
-    Vue.set(state, 'isShowLoginDialog', status)
+  [TOGGLE_LOGIN_DIALOG](state, payload) {
+    Vue.set(state, 'isShowLoginDialog', payload)
   },
   [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
     Vue.set(state, 'packagesDetail', {

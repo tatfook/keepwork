@@ -17,13 +17,14 @@
         <span class="project-joined-members-list-card-title">项目成员</span>
       </div>
       <div class="project-joined-members-list-card-created">
-        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || projectOwnerPortrait" alt="">
-        <span class="project-joined-members-list-card-username">迟语</span>
+        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
+        <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
-      <div class="project-joined-members-list-card-profiles">
+      <div v-if="memberList && memberList.length" class="project-joined-members-list-card-profiles">
         <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
+      <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
     </el-card>
   </div>
 </template>
@@ -43,7 +44,8 @@ export default {
         return ['table', 'card'].indexOf(value) !== -1
       }
     },
-    projectOwnerPortrait: String
+    projectOwnerPortrait: String,
+    originProjectUsername: String
   },
   async created() {
     this.isLoading = true
@@ -166,6 +168,10 @@ export default {
       &-item {
         padding: 8px;
       }
+    }
+    &-profiles-empty {
+      padding: 16px 8px;
+      text-align: center;
     }
     .el-card__body {
       padding: 0;

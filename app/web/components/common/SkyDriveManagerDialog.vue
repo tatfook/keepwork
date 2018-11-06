@@ -8,7 +8,10 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
-    <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' :hideTab='hideTab' @close='handleClose'></sky-driveManager>
+
+    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :hideTab='hideTab' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
+    <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
+
   </el-dialog>
 </template>
 
@@ -21,6 +24,11 @@ export default {
     show: Boolean,
     mediaLibrary: Boolean,
     hideTab: Boolean
+    isVideoTabShow: Boolean,
+    insertable: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -50,7 +58,7 @@ export default {
     }
   },
   components: {
-    SkyDriveManager
+    'sky-drive': SkyDriveManager,
   }
 }
 </script>

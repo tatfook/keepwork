@@ -24,10 +24,10 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item :label='$t("user.location")' size="small">
-            <el-input v-model="userInfo.location"></el-input>
+            <el-input v-model="tempLocation"></el-input>
           </el-form-item>
           <el-form-item :label='$t("user.introduce")'>
-            <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.introduce"></el-input>
+            <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.description"></el-input>
           </el-form-item>
           <vue-cropper v-show="isCroppering" ref="profileCropper" :img="profileCropper.img" :autoCrop="profileCropper.autoCrop" :autoCropWidth="profileCropper.autoCropWidth" :autoCropHeight="profileCropper.autoCropHeight" :fixedBox="profileCropper.fixedBox" :canMoveBox='profileCropper.canMoveBox' @realTime='getPreviewUrl'></vue-cropper>
         </el-form>
@@ -48,11 +48,15 @@ export default {
   name: 'userData',
   mounted() {
     this.userInfo = _.cloneDeep(this.loginUserProfile)
+    this.copiedLoginUserProfile = _.cloneDeep(this.loginUserProfile)
+    this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
   },
   data() {
     return {
       loading: false,
       userInfo: {},
+      tempLocation: null,
+      copiedLoginUserProfile: {},
       isCroppering: false,
       profilePreviewUrl: '',
       uploadingProfileFile: {},
@@ -78,6 +82,22 @@ export default {
       return this.isCroppering
         ? this.profilePreviewUrl
         : _.get(this.userInfo, 'portrait')
+    },
+    originExtra() {
+      return this.copiedLoginUserProfile.extra
+    },
+    mergedExtra() {
+      return _.merge(this.originExtra, {
+        location: this.tempLocation
+      })
+    },
+    updatingUserInfo() {
+      return _.merge(this.userInfo, {
+        extra: this.mergedExtra
+      })
+    },
+    isModified() {
+      return !_.isEqual(this.loginUserProfile, this.updatingUserInfo)
     }
   },
   methods: {
@@ -139,28 +159,21 @@ export default {
     },
     async saveUserData() {
       let userInfo = this.userInfo
-      let isModified = !_.isEqual(this.loginUserProfile, userInfo)
-      if (isModified) {
+      if (this.isModified) {
         this.loading = true
-        let { _id, nickname, sex, portrait, location, introduce } = userInfo
+        let { id, nickname, sex, portrait, description } = userInfo
+        let location = this.tempLocation
         let isSensitive = await this.checkSensitive([
           nickname,
           location,
-          introduce
+          description
         ])
         if (isSensitive) {
           this.showMessage('error', this.$t('common.inputIsSensitive'))
           this.loading = false
           return
         }
-        await this.userUpdateUserInfo({
-          _id,
-          nickname,
-          sex,
-          portrait,
-          location,
-          introduce
-        })
+        await this.userUpdateUserInfo(this.updatingUserInfo)
         this.loading = false
       }
       this.showMessage('success', this.$t('common.saveSuccess'))

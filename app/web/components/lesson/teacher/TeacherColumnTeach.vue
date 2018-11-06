@@ -24,12 +24,7 @@
         <div class="teach-packages-list-pages" v-if="lessonCount > perPage">
           <div class="block">
             <span class="demonstration"></span>
-            <el-pagination
-              background
-              @current-change="targetPage"
-              layout="prev, pager, next"
-              :page-size="perPage"
-              :total="lessonCount">
+            <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonCount">
             </el-pagination>
           </div>
         </div>
@@ -55,7 +50,7 @@ export default {
     return {
       loading: true,
       teachList: [],
-      perPage:10,
+      perPage: 10,
       page: 1
     }
   },
@@ -83,11 +78,11 @@ export default {
       return _.filter(this.approvedPackages, i => !i.lastTeachDate)
     },
     sortedTeachList() {
-      return _.concat(this.hasTaughtPackages,this.notTaughtPackages)
+      return _.concat(this.hasTaughtPackages, this.notTaughtPackages)
     },
-    lessonCount(){
+    lessonCount() {
       return this.sortedTeachList.length
-    },
+    }
   },
   methods: {
     sortByLastTeachDate(obj1, obj2) {
@@ -103,7 +98,7 @@ export default {
         path: `/teacher/center`
       })
     },
-    targetPage(targetPage){
+    targetPage(targetPage) {
       this.page = targetPage
     },
     getCoursePackageSuitableAge(packageDetail) {
@@ -188,9 +183,25 @@ export default {
           }
         }
       }
-      &-pages{
+      &-pages {
         text-align: center;
         padding-top: 16px;
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .teach {
+    &-packages {
+      &-list {
+        padding: 24px 16px;
+        .el-row {
+          .package {
+            margin-bottom: 16px;
+          }
+        }
       }
     }
   }

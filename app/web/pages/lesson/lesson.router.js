@@ -16,7 +16,8 @@ const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
-const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
+const PackageManager = () =>
+  import('@/components/lesson/teacher/PackageManager')
 const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
@@ -35,6 +36,10 @@ const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
 const LessonPerformance = () =>
   import('@/components/lesson/teacher/LessonStudentPerformance')
 const Print = () => import('@/components/lesson/teacher/Print')
+const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
+const Bean = () => import('@/components/lesson/student/Bean')
+const Visitor = () => import('@/components/lesson/Visitor')
+const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
 
 Vue.use(Router)
 
@@ -60,42 +65,50 @@ export default new Router({
             {
               path: '/',
               name: 'TeacherColumn',
-              component: Teach
+              component: Teach,
+              meta: { requireAuth: true }
             },
             {
               path: 'review',
               name: 'TeacherColumnReview',
-              component: Review
+              component: Review,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/new',
               name: 'TeacherColumnNewLesson',
-              component: NewLesson
+              component: NewLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'lessonManager',
-              name: 'TeacherLessonManager',
-              component: LessonManager
+              name: 'TeacherColumnLessonManager',
+              component: LessonManager,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/:id/edit',
               name: 'TeacherColumnEditLesson',
-              component: EditLesson
+              component: EditLesson,
+              meta: { requireAuth: true }
             },
             {
               path: 'newPackage',
               name: 'TeacherColumnNewPackage',
-              component: NewPackage
+              component: NewPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'package/:id/edit',
               name: 'TeacherColumnEditPackage',
-              component: EditPackage
+              component: EditPackage,
+              meta: { requireAuth: true }
             },
             {
               path: 'packageManager',
-              name: 'TeacherPackageManager',
-              component: PackageManager
+              name: 'TeacherColumnPackageManager',
+              component: PackageManager,
+              meta: { requireAuth: true }
             }
           ]
         },
@@ -117,17 +130,20 @@ export default new Router({
         {
           path: 'package/:id',
           name: 'TeacherPackage',
-          component: TeacherPackageDetailPage
+          component: TeacherPackageDetailPage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:id/purchase',
           name: 'TeacherPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonTeacher',
           component: LessonTeacher,
+          meta: { requireAuth: true },
           children: [
             {
               path: '/',
@@ -152,7 +168,8 @@ export default new Router({
           ]
         },
         {
-          path: 'student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
+          path:
+            'student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
           name: 'LessonStudentRecord',
           component: LessonStudentRecord
         },
@@ -162,7 +179,8 @@ export default new Router({
           component: LessonSummary
         },
         {
-          path: 'package/:packageId/lesson/:lessonId/class/:classId/summary/print',
+          path:
+            'package/:packageId/lesson/:lessonId/class/:classId/summary/print',
           name: 'Print',
           component: Print
         }
@@ -175,7 +193,8 @@ export default new Router({
         {
           path: '/',
           name: 'StudentColumn',
-          component: StudentColumn
+          component: StudentColumn,
+          meta: { requireAuth: true }
         },
         {
           path: 'about',
@@ -200,12 +219,50 @@ export default new Router({
         {
           path: 'package/:id/purchase',
           name: 'StudentPurchase',
-          component: PurchasePackage
+          component: PurchasePackage,
+          meta: { requireAuth: true }
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonStudent',
-          component: LessonStudent
+          component: LessonStudent,
+          meta: { requireAuth: true }
+        },
+        {
+          path: 'learnSummary/package/:packageId/lesson/:lessonId',
+          name: 'LearnSummary',
+          component: LearnSummary,
+          meta: { requireAuth: true }
+        },
+        {
+          path: 'bean',
+          name: 'Bean',
+          component: Bean,
+          meta: { requireAuth: true }
+        }
+      ]
+    },
+    {
+      path: '/visitor',
+      name: 'Visitor',
+      component: Visitor,
+      children: [
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'Visitor',
+          meta: { auto: true }
+        }
+      ]
+    },
+    {
+      path: '/anonymous',
+      name: 'Anonymous',
+      component: Visitor,
+      children: [
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'Anonymous',
+          component: VisitorLesson
         }
       ]
     },

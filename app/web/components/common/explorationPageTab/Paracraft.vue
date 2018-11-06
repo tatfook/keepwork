@@ -1,5 +1,5 @@
 <template>
-  <div class="paracraft">
+  <div class="paracraft" v-loading="loading">
     <div class="search-result-total">搜索到：<span>{{paracraftCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in pracraftData" :key="index">
@@ -28,17 +28,22 @@ export default {
   },
   data() {
     return {
-      perPage: 4,
-      page: 1
+      perPage: 12,
+      page: 1,
+      loading: true
     }
   },
   async mounted() {
     await this.targetPage(this.page)
+    this.loading = false
   },
   computed: {
     ...mapGetters({
-      paracraft: 'pbl/paracraft'
+      pblParacraft: 'pbl/diffTypeProject'
     }),
+    paracraft(){
+      return this.pblParacraft({ type: 'paracraft'})
+    },
     paracraftCount() {
       return _.get(this.paracraft, 'total', 0)
     },
@@ -48,7 +53,8 @@ export default {
         return {
           id: i.id,
           extra: { coverUrl: i.cover },
-          name: this.searchKeyResult(i),
+          name: i.name,
+          name_title: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -65,6 +71,7 @@ export default {
       getTypeProjects: 'pbl/getTypeProjects'
     }),
     async targetPage(targetPage) {
+      this.loading = true
       this.$nextTick(async () => {
         await this.getTypeProjects({
           page: targetPage,
@@ -73,6 +80,7 @@ export default {
           q: this.searchKey,
           sort: this.sortProjects
         })
+        this.loading = false
       })
     },
     searchKeyResult(i) {

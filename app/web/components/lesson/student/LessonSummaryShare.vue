@@ -5,11 +5,12 @@
       </div>
       <div class="main">
         <div class="movie">
-          <video controls="" width="100%" autoplay="" name="media">
-            <source :src="summary.videoUrl" type="video/mp4">
+          <video v-if="summary.videoUrl" controls="" width="100%" autoplay="" name="media">
+            <source :src="decodeURIComponent(summary.videoUrl)" type="video/mp4">
           </video>
+          <img v-else :src="decodeURIComponent(summary.coverUrl)" />
         </div>
-        <div v-if="isEn" class="summary-word">
+        <div v-if="isEn" class="summary-word" >
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
@@ -124,7 +125,6 @@ export default {
           this.style = Number(this.$route.params.styleId) || 1
           this.$set(this.summary, _.merge(this.summary, this.$route.query))
           this.$set(this.summary, _.merge(this.summary, videoUrl))
-          console.warn(this.summary)
         })
         .catch(err => console.error(err))
     }
@@ -189,7 +189,7 @@ $mainHeight: 430px;
     background: white;
     width: 678px;
     .main {
-      height: $mainHeight;
+      min-height: $mainHeight;
       .movie {
         $scale: 1.64;
         $width: 230px;
@@ -204,15 +204,10 @@ $mainHeight: 430px;
         align-items: center;
         cursor: pointer;
         box-shadow: 0 0 30px 5px rgba(66, 66, 66, 0.5);
-        &::after {
-          $icon-size: 100px;
-          content: '';
-          display: block;
-          height: $icon-size;
-          width: $icon-size;
-          background: url('../../../assets/lessonImg/play2.png') no-repeat
-            center;
-          background-size: $icon-size $icon-size;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
       .summary-word {
@@ -267,7 +262,7 @@ $mainHeight: 430px;
         }
       }
       .main {
-        height: 410px;
+        min-height: 410px;
         width: 100%;
         background: white;
         position: relative;

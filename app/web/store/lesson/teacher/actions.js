@@ -4,20 +4,19 @@ import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 const {
   TOGGLE_HINT,
+  GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   BEGIN_THE_CLASS_SUCCESS,
   DISMISS_THE_CLASS_SUCCESS,
-  TOGGLE_LESSON,
-  TOGGLE_PERFORMANCE,
-  TOGGLE_SUMMARY,
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_PACKAGE_LESSON_LIST_SUCCESS,
   GET_USER_PACKAGES_SUCCESS,
   GET_USER_LESSONS_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
   GET_CLASSROOM_LEARN_RECORDS,
-  LEAVE_THE_CLASSROOM
+  LEAVE_THE_CLASSROOM,
+  COPY_CLASSROOM_QUIZ
 } = props
 
 const actions = {
@@ -29,13 +28,33 @@ const actions = {
     await dispatch('getUserLessons', { useCache: false })
     await dispatch('getUserPackages', { useCache: false })
   },
-  async getLessonContent({ commit }, lessonId) {
+  async getPackageDetail({ commit }, { packageId }) {
+    let detail = await lesson.packages.packageDetail({ packageId })
+    commit(GET_PACKAGE_DETAIL_SUCCESS, { detail })
+  },
+  async getLessonContent(
+    { commit, dispatch, getters },
+    { lessonId, packageId }
+  ) {
+    await dispatch('getPackageDetail', { packageId })
+    const { teacherPackageDetail } = getters
+    const packageIndex = teacherPackageDetail({ packageId })
+      .lessons.map(l => l.id)
+      .indexOf(Number(lessonId))
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
-
+    let quiz = modList
+      .filter(({ cmd }) => cmd === 'Quiz')
+      .map(({ data: { quiz: { data } } }) => ({
+        key: data[0].id,
+        data: data[0],
+        result: null,
+        answer: null
+      }))
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
       content: res.content
@@ -43,6 +62,7 @@ const actions = {
     commit(SAVE_LESSON_DETAIL, {
       lessonId,
       lesson: detail,
+      quiz,
       modList
     })
   },
@@ -86,17 +106,16 @@ const actions = {
         commit(LEAVE_THE_CLASSROOM)
       })
   },
+  async resumeClassData({ commit }, payload) {
+    commit(GET_CURRENT_CLASSROOM_SUCCESS, payload)
+  },
+  async copyClassroomQuiz({ commit, getters: { isBeInClass, isClassIsOver, lessonDetail } }) {
+    if (isBeInClass && !isClassIsOver) {
+      commit(COPY_CLASSROOM_QUIZ, _.get(lessonDetail, 'quiz', []))
+    }
+  },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
-  },
-  toggleLesson({ commit }, flag) {
-    commit(TOGGLE_LESSON, flag)
-  },
-  togglePerformance({ commit }, flag) {
-    commit(TOGGLE_PERFORMANCE, flag)
-  },
-  toggleSummary({ commit }, flag) {
-    commit(TOGGLE_SUMMARY, flag)
   },
   async getUserPackages(context, { useCache = true }) {
     let {
@@ -134,28 +153,37 @@ const actions = {
   },
   async addLessonToPackage(context, { packageId, lessonId, isLastOne = true }) {
     let { dispatch } = context
-    await lesson.packages.addLesson({
-      packageId,
-      lessonId
-    }).then(() => {
-      return Promise.resolve()
-    }).catch(error => {
-      return Promise.reject(error.response)
-    })
+    await lesson.packages
+      .addLesson({
+        packageId,
+        lessonId
+      })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
     if (isLastOne) {
       await dispatch('getAllTeacherData')
     }
   },
-  async removeLessonFromPackage(context, { packageId, lessonId, isLastOne = true }) {
+  async removeLessonFromPackage(
+    context,
+    { packageId, lessonId, isLastOne = true }
+  ) {
     let { dispatch } = context
-    await lesson.packages.removeLesson({
-      packageId,
-      lessonId
-    }).then(() => {
-      return Promise.resolve()
-    }).catch(error => {
-      return Promise.reject(error.response)
-    })
+    await lesson.packages
+      .removeLesson({
+        packageId,
+        lessonId
+      })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
     if (isLastOne) {
       await dispatch('getAllTeacherData')
     }
@@ -186,12 +214,15 @@ const actions = {
   },
   async auditPackage(context, { packageId, state }) {
     let { dispatch } = context
-    await lesson.packages.audit({ packageId, state }).then(async () => {
-      await dispatch('getAllTeacherData')
-      return Promise.resolve()
-    }).catch(error => {
-      return Promise.reject(error)
-    })
+    await lesson.packages
+      .audit({ packageId, state })
+      .then(async () => {
+        await dispatch('getAllTeacherData')
+        return Promise.resolve()
+      })
+      .catch(error => {
+        return Promise.reject(error)
+      })
   },
   async releasePackage(context, { packageDetail }) {
     let { dispatch } = context

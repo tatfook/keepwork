@@ -21,39 +21,45 @@ export default {
   methods: {
     ...mapActions({
       checkClassroom: 'lesson/student/checkClassroom',
-      toggleLoginDialog: 'lesson/toggleLoginDialog'
+      toggleLoginDialog: 'lesson/toggleLoginDialog',
+      changeStatus: 'lesson/student/changeStatus',
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      resumeTheClass: 'lesson/student/resumeTheClass'
     }),
     closeLoginDialog() {
       this.toggleLoginDialog(false)
     },
-    backToClassroom() {
+    async backToClassroom() {
+      if (!this.enterClassInfo.packageId || !this.enterClassInfo.lessonId) {
+        await this.resumeTheClass()
+      }
       const { packageId, lessonId } = this.enterClassInfo
       this._notify && this._notify.close()
       this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
     },
-    async intervalCheckClass(delay = 8 * 1000) {
+    async intervalCheckClass(delay = 10 * 1000) {
       await this.checkClassroom()
       clearTimeout(this._interval)
-      this._interval = setTimeout(
-        async () =>
-          await this.intervalCheckClass().catch(
-            e =>
-              this.$message({
-                message: this.$t('lesson.classIsOver'),
-                type: 'warning'
-              }) && this._notify.close()
-          ),
-        delay
-      )
+      this._interval = setTimeout(async () => {
+        await this.intervalCheckClass().catch(e => {
+          this.$message({
+            message: this.$t('lesson.classIsOver'),
+            type: 'warning'
+          })
+          this._notify.close()
+        })
+      }, delay)
     }
   },
   beforeRouteUpdate(to, from, next) {
-    const { name: toName, params: { packageId, lessonId } } = to
+    const {
+      name: toName,
+      params: { packageId, lessonId }
+    } = to
+
+    const { name: fromName } = from
     let _route = ['LessonStudent']
-    if (toName === 'StudentColumn' && !this.isLogined) {
-      this.toggleLoginDialog(true)
-      return next(false)
-    }
+
     this._notify && this._notify.close()
     if (!this.isBeInClassroom) {
       return next()
@@ -64,9 +70,11 @@ export default {
       packageId == _packageId &&
       lessonId == _lessonId
     if (!isCurrentClass) {
-      !this._interval &&
-        this.intervalCheckClass() &&
-        console.warn('触发定时校验课堂状态')
+      this.changeStatus(2)
+      if (_route.some(i => i === fromName)) {
+        this.uploadLearnRecords().catch(e => console.error(e))
+      }
+      !this._interval && this.intervalCheckClass()
       // 不在当前课堂里面
       this._notify = this.$notify({
         customClass: 'back-to-classroom-notify',
@@ -81,6 +89,7 @@ export default {
         onClick: this.backToClassroom
       })
     } else {
+      this.changeStatus(1)
       this._interval && clearTimeout(this._interval)
     }
     next()

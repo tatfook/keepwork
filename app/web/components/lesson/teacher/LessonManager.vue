@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" height="100%" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" :height="tableHeight" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
         <el-table-column prop='packages' type='expand' width="40">
@@ -93,6 +93,9 @@ import colI18n from '@/lib/utils/i18n/column'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 export default {
   name: 'LessonManager',
+  props: {
+    windowWidth: Number
+  },
   async mounted() {
     this.isTableLoading = true
     await Promise.all([
@@ -188,13 +191,19 @@ export default {
       return window.location.hostname
     },
     editorPagePrefix() {
-      return this.hostname === 'ed'
+      return '/ed/'
     },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
         id: this.editingLessonId
       })
       return lessonDetail
+    },
+    isPhoneSize() {
+      return this.windowWidth < 768
+    },
+    tableHeight() {
+      return this.isPhoneSize ? undefined : '100%'
     }
   },
   methods: {
@@ -203,7 +212,7 @@ export default {
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
       lessonDeleteLesson: 'lesson/teacher/deleteLesson',
-      readFileFromGitlab: 'gitlab/readFile'
+      gitlabGetFileDetail: 'gitlab/getFileDetail'
     }),
     getRowClass({ row, rowIndex }) {
       let { packages } = row
@@ -305,20 +314,27 @@ export default {
         cancelButtonText: this.$t('common.No'),
         center: true,
         customClass: 'lesson-manager-confirm-dialog'
-      }).then(() => {
-        this.toEditorPage(url)
       })
-    },
-    async isUrlExist(url) {
-      this.isTableLoading = true
-      let backendTypeUrl = this.username + '/' + this.getRemovePrefixUrl(url)
-      await this.readFileFromGitlab({ path: backendTypeUrl })
         .then(() => {
-          this.isTableLoading = false
-          return Promise.resolve()
+          this.toEditorPage(url)
         })
         .catch(() => {
           this.isTableLoading = false
+        })
+    },
+    async isUrlExist(url) {
+      this.isTableLoading = true
+      let username = this.username
+      let removedPrefixUrl = this.getRemovePrefixUrl(url)
+      let sitename = removedPrefixUrl.split('/')[0]
+      let result = await this.gitlabGetFileDetail({
+        projectPath: `${username}/${sitename}`,
+        fullPath: `${username}/${removedPrefixUrl}.md`
+      })
+        .then(() => {
+          return Promise.resolve()
+        })
+        .catch(() => {
           return Promise.reject(new Error('File not created!'))
         })
       this.isTableLoading = false
@@ -449,6 +465,7 @@ export default {
   }
   &-table {
     border: 1px solid #d2d2d2;
+    height: 100%;
     tr,
     th {
       color: #414141;
@@ -584,6 +601,36 @@ export default {
     }
     .el-button + .el-button {
       margin-left: 46px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media (max-width: 768px) {
+  .lesson-manager {
+    &-overview {
+      padding: 0 16px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    &-total {
+      font-size: 18px;
+    }
+    &-new-button {
+      width: auto;
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+    &-selector {
+      padding: 8px;
+      align-items: flex-end;
+      &-item {
+        flex: 1;
+        padding: 0 8px;
+        .el-select {
+          width: 100%;
+        }
+      }
     }
   }
 }

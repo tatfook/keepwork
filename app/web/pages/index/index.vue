@@ -21,6 +21,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
@@ -28,6 +29,8 @@ import router from './viewer.router'
 import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
+import lessonModule from '@/store/lesson'
+import VueClipboard from 'vue-clipboard2'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -41,8 +44,18 @@ import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
+Vue.use(VueClipboard)
 
 Vue.use(VueI18n)
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_UA,
+  router,
+  batch: {
+    enabled: true, // enable/disable
+    amount: 2, // amount of events fired
+    delay: 500 // delay in milliseconds
+  }
+})
 
 const i18n = new VueI18n({
   locale,
@@ -56,7 +69,8 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
-    pbl: pblModule
+    pbl: pblModule,
+    lesson: lessonModule
   }
 })
 

@@ -97,7 +97,7 @@ const actions = {
     let { visibility } = siteDetailInfoDataSource
 
     // this is special for private website
-    let isPrivateWebsite = visibility === 'private'
+    let isPrivateWebsite = visibility === 1
     if (isPrivateWebsite) {
       await dispatch('getRepositoryTreeForOwner', payload)
       return
@@ -115,6 +115,11 @@ const actions = {
       recursive
     })
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
+  },
+  async getFileDetail(context, { projectPath, fullPath, useCache = false }) {
+    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
+    let result = await gitlab.getFile({ projectPath, fullPath, useCache })
+    return result
   },
   async readFile({ dispatch }, { path, editorMode }) {
     if (editorMode) {
@@ -155,7 +160,7 @@ const actions = {
     } = getSiteDetailInfoDataSourceByPath(path)
 
     // this is special for private website
-    let isPrivateWebsite = visibility === 'private'
+    let isPrivateWebsite = visibility === 1
     if (isPrivateWebsite) {
       if (forceAsGuest) throw new Error('Cannot read private sites without permission!')
 
@@ -166,7 +171,6 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let content = await gitlabShowRawForGuest(
       rawBaseUrl,
-      dataSourceUsername,
       projectName,
       fullPath
     )
@@ -216,7 +220,7 @@ const actions = {
   },
   async createFile(
     context,
-    { path, content = '', refreshRepositoryTree = true, userOptions }
+    { projectName, path, content = '', refreshRepositoryTree = true, userOptions }
   ) {
     let { commit, dispatch } = context
     let {
@@ -226,10 +230,11 @@ const actions = {
       options
     } = await getGitlabParams(context, { path, content })
     options = _.merge(userOptions, options)
-    await gitlab.createFile(
+    await gitlab.createFile({
+      projectName,
       path,
       options
-    )
+    })
 
     let payload = { path, branch: options.branch }
     commit(CREATE_FILE_CONTENT_SUCCESS, payload)
@@ -291,31 +296,12 @@ const actions = {
   async removeFolder(context, { folder, paths }) {
     const { commit, dispatch } = context
     const { username, name, options, gitlab } = await getGitlabFileParams(context, { path: folder })
-    console.warn('gitlab', gitlab)
     paths.forEach(path => dispatch('closeOpenedFile', { path }, { root: true }))
     try {
       await gitlab.removeFolder(folder)
     } catch (error) {
       console.error(error)
     }
-    // for (let i = 0; i < paths.length; i++) {
-    //   let {
-    //     gitlab,
-    //     options
-    //   } = await getGitlabFileParams(context, { path: paths[i] })
-    //   try {
-    //     await gitlab.deleteFile(paths[i], options)
-    //     dispatch('closeOpenedFile', { path: paths[i] }, { root: true })
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
-    // let path = paths[0]
-    // let {
-    //   username,
-    //   name,
-    //   options
-    // } = await getGitlabFileParams(context, { path: paths[0] })
     let payload = { path: folder, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 

@@ -34,10 +34,10 @@ export default {
       'LessonTeacherPerformance',
       'LessonTeacherPlan'
     ]
-    if (toName === 'TeacherColumn' && !this.isLogined) {
-      this.toggleLoginDialog(true)
-      return next(false)
-    }
+    // if (toName === 'TeacherColumn' && !this.isLogined) {
+    //   this.toggleLoginDialog(true)
+    //   return next(false)
+    // }
     if (!this.isBeInClass) return next()
     const { packageId: _packageId, lessonId: _lessonId } = this.classroom
     let isCurrentClass =
@@ -58,7 +58,6 @@ export default {
         position: 'top-left',
         onClick: this.backToClassroom
       })
-      console.warn('正在上课呢，瞎搞')
     }
     next()
   },
