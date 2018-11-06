@@ -96,7 +96,8 @@ export default {
     ...mapGetters({
       excellentProjects: 'pbl/excellentProjects',
       myProjects: 'pbl/myProjects',
-      myContributeProjects: 'pbl/myContributeProjects'
+      myContributeProjects: 'pbl/myContributeProjects',
+      isLogined: 'user/isLogined'
     }),
     myProjectsData(){
       let arr = _.cloneDeep(this.myProjects)
@@ -124,9 +125,13 @@ export default {
   methods: {
     ...mapActions({
       getExcellentProjects: 'pbl/getExcellentProjects',
-      getMyAllProjects: 'pbl/getMyAllProjects'
+      getMyAllProjects: 'pbl/getMyAllProjects',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     createMyProject() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       window.location.href = '/pbl/project/new'
     },
     goExplorationPage() {

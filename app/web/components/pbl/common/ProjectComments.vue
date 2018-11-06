@@ -63,7 +63,8 @@ export default {
     ...mapGetters({
       pblProjectCommentList: 'pbl/projectCommentList',
       userProfile: 'user/profile',
-      loginUserId: 'user/userId'
+      loginUserId: 'user/userId',
+      isLogined: 'user/isLogined'
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
@@ -76,7 +77,8 @@ export default {
     ...mapActions({
       pblGetComments: 'pbl/getComments',
       pblCreateComment: 'pbl/createComment',
-      pblDeleteComment: 'pbl/deleteComment'
+      pblDeleteComment: 'pbl/deleteComment',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async getCommentFromBackEnd() {
       this.isGetCommentBtnLoading = true
@@ -106,6 +108,9 @@ export default {
       this.getCommentFromBackEnd()
     },
     async sendComment() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.isAddingComment = true
       await this.pblCreateComment({
         objectType: 5,
