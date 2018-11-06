@@ -12,9 +12,9 @@
     <div class="historicalRecords">
       <div class="historicalRecordsText" v-for="item in openedTreeData" :key="item">{{item}}</div>
     </div>
-    <div class="tipsText">{{tips[tipsNumber].text}}</div>
+    <div class="tipsText">{{getText()}}</div>
     <div class="tipsImg">
-      <img :src='tips[tipsNumber].img'>
+      <img :src='getImg()'>
     </div>
     <el-button class="changeButton" size='mini' @click="hintTransformation">{{ $t('common.another') }}</el-button>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
@@ -49,6 +49,16 @@ export default {
     },
     hintTransformation(){
       this.tipsNumber = Math.floor(Math.random()*this.tips.length)
+    },
+    getText(){
+      if(this.tips[this.tipsNumber] && this.tips[this.tipsNumber].text){
+        return this.tips[this.tipsNumber].text
+      }
+    },
+    getImg(){
+      if(this.tips[this.tipsNumber] && this.tips[this.tipsNumber].img){
+        return this.tips[this.tipsNumber].img
+      }
     }
   },
   computed:{
@@ -72,10 +82,19 @@ export default {
       return treeDatas
     },
     tipsData(){
+      if(!process.env.EDITOR_WELCOME){
+        return false
+      }
       axios.get(process.env.EDITOR_WELCOME)
       .then((response) => {
+        if(!response || !response.data || typeof (response.data) != 'string'){
+          return false
+        }
         this.tips = mdToJson(response.data)
-        this.tipsNumber = Math.floor(Math.random()*mdToJson(response.data).length)
+        if(!Array.isArray(this.tips)){
+          return false
+        }
+        this.tipsNumber = Math.floor(Math.random()*this.tips.length)
       })
       .catch((error) => {
         this.tips = []
