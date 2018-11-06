@@ -94,7 +94,7 @@ export default {
     }),
     switchIdentity() {
       if (!this.userIsLogined) {
-        return this.toggleLoginDialog(true)
+        return this.toggleLoginDialog({ show: true })
       }
       let _page = this.$router.resolve({ path: this.statusTogglePath })
       window.open(_page.href, '_blank')
