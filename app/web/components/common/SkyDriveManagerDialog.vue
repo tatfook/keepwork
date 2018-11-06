@@ -8,8 +8,10 @@
     :visible.sync="show" width="960px"
     :before-close="handleClose"
   >
+  
     <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
     <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
+
   </el-dialog>
 </template>
 

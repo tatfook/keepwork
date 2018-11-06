@@ -8,19 +8,36 @@
           <div class="gallery-type-item-img-cover">
             <span>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)"></el-button>
+              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)" :disabled="isDisabled"></el-button>
             </span>
           </div>
         </div>
 
         <div v-if="item.type === 'videos'" class="gallery-type-item-img">
-          <video :src="item.video" :play="true" :autoplay="item.autoplay" :loop="item.playloop" muted="true"></video>
+          <video :src="item.video" :play="true" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
+          <div class="gallery-type-item-img-play" v-if='!item.autoplay && isPlayIconShow'>
+            <el-button circle size="mini">
+              <i class='gallery-type-item-img-play-icon el-icon-caret-right'></i>
+            </el-button>
+          </div>
           <div class="gallery-type-item-img-cover">
             <span>
-              <el-button class="gallery-type-play-img-btn iconfont icon-video" size="mini" round @click="handlePlay(index)"></el-button>
+              <el-button class="gallery-type-play-img-btn el-icon-caret-right" size="mini" round @click="handlePlay(index)"></el-button>
               <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)"></el-button>
+              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)" :disabled="isDisabled"></el-button>
             </span>
+          </div>
+        </div>
+
+        <div v-if="item.type === 'videos'" class="video-cover">
+          <el-button v-if="!item.poster" @click='handleUpdateImg()' plain>{{$t('editor.addVideoCover')}}</el-button>
+          <div class="gallery-type-item-img" v-if="item.poster" :style="{backgroundImage: 'url(' + item.poster + ')'}">
+            <div class="gallery-type-item-img-cover">
+              <span>
+                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover()">{{$t('common.change')}}</el-button>
+                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(index)"></el-button>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -29,7 +46,7 @@
           <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
         </div>
 
-        <el-input :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
+        <el-input v-if="!item.type || item.type === 'images'" :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
           <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
           <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
           <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
@@ -38,9 +55,14 @@
             </el-option>
           </el-select>
         </el-input>
+
+        <el-select v-if="!item.type || item.type === 'images'" v-model="item.target" @change='handleChange' class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
+          <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
+        </el-select>
+
       </div>
     </div>
-    <sky-drive-manager-dialog :mediaLibrary='true' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :mediaLibrary='true' :isVideoTabShow='!isVideoTabHide' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -55,11 +77,23 @@ export default {
     optionsData: Object
   },
   data() {
+    let self = this
     return {
       selectedIndex: 0,
       isSkyDriveManagerDialogShow: false,
-      autoplay: false,
-      playloop: false
+      isPlayIconShow: true,
+      isVideoTabHide: false,
+      linkTargets: [
+        {
+          label: self.$t('editor.selfWindowOpen'),
+          value: '_self'
+        },
+        {
+          label: self.$t('editor.newWindowOpen'),
+          value: '_blank'
+        }
+      ],
+      value: ''
     }
   },
   async mounted() {
@@ -75,18 +109,32 @@ export default {
           return this.originValue
         } else {
           if (this.optionsData && this.optionsData.emptyGallery) {
+
+            this.handleAdd()
+
             return [
               {
                 img: this.optionsData.emptyGallery.img || '',
-                link: this.optionsData.emptyGallery.link || ''
+                link: this.optionsData.emptyGallery.link || '',
+                target: this.optionsData.emptyGallery.target || '',
+                autoplay: this.optionsData.emptyGallery.autoplay || false,
+                playloop: this.optionsData.emptyGallery.playloop || false,
+                poster: this.optionsData.emptyGallery.poster || ''
               }
             ]
           } else {
-            []
+            return []
           }
         }
       },
       set() {
+      }
+    },
+    isDisabled() {
+      if(this.galleryData.length <= 1) {
+        return true
+      }else {
+        return false
       }
     }
   },
@@ -96,13 +144,17 @@ export default {
     }),
     handleChange() {
       let tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = this.galleryData
+      tempChangedDataObj[this.editingKey] = this.originValue
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     handleAdd() {
-      this.galleryData.push({
+      this.originValue.push({
         img: '',
-        link: ''
+        link: '',
+        target: '',
+        autoplay: false,
+        playloop: false,
+        poster: ''
       })
 
       this.handleChange()
@@ -113,6 +165,7 @@ export default {
       if (video) {
         video.play()
       }
+      this.isPlayIconShow = false
     },
     getImage(item) {
       let img = ''
@@ -146,8 +199,21 @@ export default {
       this.galleryData.splice(index, 1)
       this.handleChange()
     },
+    async removeCover(index) {
+      await this.$confirm(this.$t('editor.deleteVideoCoverConfirmMsg'), '', {
+        confirmButtonText: this.$t('common.OK'),
+        cancelButtonText: this.$t('common.Cancel'),
+        type: 'warning'
+      })
+      this.galleryData[index].poster = ''
+    },
     handleUpdateImg(index) {
       this.selectedIndex = index
+      this.isVideoTabHide = false
+      this.openSkyDriveManagerDialog()
+    },
+    handleChangeCover() {
+      this.isVideoTabHide = true
       this.openSkyDriveManagerDialog()
     },
     openSkyDriveManagerDialog() {
@@ -159,7 +225,7 @@ export default {
       let { file, url } = payload
 
       this.isSkyDriveManagerDialogShow = false
-      let item = this.galleryData[this.selectedIndex]
+      let item = this.originValue[this.selectedIndex]
       if (!file || !url || !item) return
 
       item.type = file.type
@@ -171,7 +237,6 @@ export default {
       if (file.type === 'videos') {
         item.video = url
       }
-
       this.handleChange()
     },
     getLocationUrl(url) {
@@ -207,9 +272,8 @@ export default {
     }
   }
   &-play-img-btn {
-    padding: 6px !important;
-    margin-right: -8px;
-    font-size: 14px !important;
+    padding: 2px !important;
+    font-size: 22px !important;
   }
   &-change-img-btn {
     padding: 6px 12px !important;
@@ -217,7 +281,6 @@ export default {
   }
   &-remove-img-btn {
     padding: 6px !important;
-    margin-left: 2px !important;
     font-size: 14px !important;
   }
   .el-input-group__prepend {
@@ -248,12 +311,37 @@ export default {
       margin-top: 35px;
     }
 
+    .video-cover {
+      margin-top: 15px;
+      .el-button {
+        padding: 0 !important;
+      }
+      .gallery-type-item-img {
+        .gallery-type-change-img-btn {
+          padding: 6px 12px !important;
+          font-size: 14px !important;
+        }
+        .gallery-type-remove-img-btn {
+          padding: 6px !important;
+          font-size: 14px !important;
+        }
+      }
+    }
+
     .video-settings {
       margin-top: 15px;
 
       label {
         display: block;
         margin-left: 0px;
+      }
+    }
+    .select-targetType {
+      margin-top: 11px;
+      width: auto;
+
+      .el-input__inner {
+        color: #909399;
       }
     }
   }
@@ -271,6 +359,29 @@ export default {
       object-fit: cover;
     }
 
+    &-play {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .el-button {
+        padding: 2px !important;
+      }
+      &-icon {
+        font-size: 40px;
+        color:#747474;
+      }
+    }
+    &:hover, &.selected {
+      .gallery-type-item-img-play {
+        display: none;
+      }
+    }
+
     &-cover {
       height: 100%;
       width: 100%;
@@ -278,6 +389,10 @@ export default {
       display: none;
       position: absolute;
       top: 0;
+      span {
+        display: flex;
+        align-items: center;
+      }
     }
 
     &:hover {

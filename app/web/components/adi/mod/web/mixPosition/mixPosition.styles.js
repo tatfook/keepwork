@@ -3,8 +3,11 @@ import _ from 'lodash'
 let emptyData = {
   media: {
     emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   },
   title: {
     emptyInput: 'adi.mixPosition.title',

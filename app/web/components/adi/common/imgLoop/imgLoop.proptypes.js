@@ -1,4 +1,3 @@
 export default {
-  data: 'gallery',
-  target: 'linkTarget'
+  data: 'gallery'
 }

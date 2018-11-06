@@ -2,12 +2,12 @@
   <div class="block">
     <el-carousel :height="options.height">
       <el-carousel-item v-for="(item, index) in forImgs" :key="index">
-        <a v-if="!item.type || item.type === 'images'" :target="properties.target" :href="item.link">
+        <a v-if="!item.type || item.type === 'images'" :target="item.target" :href="item.link">
           <div class="imgs" :style="loadImg(item)"></div>
         </a>
-        <a v-if="item.type === 'videos'" :target="properties.target" :href="item.link">
+        <a v-if="item.type === 'videos'" :target="item.target" :href="item.link">
           <div class="imgs">
-            <video :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
+            <video :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" :poster="item.poster" controls="controls"></video>
           </div>
         </a>
       </el-carousel-item>
@@ -44,7 +44,11 @@ export default {
         return [
           {
             img: this.options.emptyGallery.img,
-            link: ''
+            link: this.options.emptyGallery.link,
+            target: this.options.emptyGallery.target,
+            autoplay: this.options.emptyGallery.autoplay,
+            playloop: this.options.emptyGallery.playloop,
+            poster: this.options.emptyGallery.poster
           }
         ]
       } else {

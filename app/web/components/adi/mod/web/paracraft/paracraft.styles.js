@@ -3,8 +3,11 @@ import _ from 'lodash'
 let emptyData = {
   preview: {
     emptyMedia: require('@/assets/adi/paracraft/preview.jpg'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   },
   worldName: {
     emptyInput: 'adi.paracraft.worldName',
@@ -13,8 +16,11 @@ let emptyData = {
   },
   backgroundImage: {
     emptyMedia: require('@/assets/adi/paracraft/backgroundImage.png'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   },
   titleA: {
     emptyInput: 'adi.paracraft.paracraftTitle.titleA',
@@ -45,8 +51,11 @@ let emptyData = {
   },
   viewTimesImg: {
     emptyMedia: require('@/assets/adi/paracraft/eye.png'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   },
   viewTimes: {
     emptyText: '0',
