@@ -69,6 +69,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import WebsiteBinder from './WebsiteBinder'
@@ -230,6 +231,12 @@ export default {
           })
           return
         }
+        let sensitiveResult = await checkSensitiveWords({
+          checkedWords: editorText.text()
+        }).catch()
+        if (sensitiveResult && sensitiveResult.length > 0) {
+          return
+        }
         this.isLoading = true
         await this.updateDescToBackend()
       }
@@ -268,6 +275,13 @@ export default {
     },
     async applyJoinProject() {
       this.isApplyButtonLoading = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.applyText
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isApplyButtonLoading = false
+        return
+      }
       await this.pblApplyJoinProject({
         objectType: 5,
         objectId: this.projectId,

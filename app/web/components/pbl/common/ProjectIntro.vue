@@ -116,10 +116,6 @@ export default {
         this.tempInfoSiteData.displayName
       ])
       if (isSensitive) {
-        this.$message({
-          type: 'error',
-          message: this.$t('common.inputIsSensitive')
-        })
         this.isLoading = false
         return
       }

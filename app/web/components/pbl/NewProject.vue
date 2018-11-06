@@ -5,7 +5,7 @@
       <p class="new-project-info">在项目里去创造你的作品吧</p>
       <div class="new-project-name">
         <label for="projectName" class="new-project-label">项目名称</label>
-        <el-input id="projectName" v-model="newProjectData.name"></el-input>
+        <el-input id="projectName" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
       </div>
       <div class="new-project-type">
         <label for="projectName" class="new-project-label">项目类型</label>
@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions } from 'vuex'
 import WebsiteBinder from './common/WebsiteBinder'
 export default {
@@ -88,7 +89,20 @@ export default {
       this.isWebType && siteId && (this.newProjectData.siteId = siteId)
       this.createNewProject()
     },
+    async checkProjectName() {
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.newProjectData.name
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        return false
+      } else {
+        return true
+      }
+    },
     async createNewProject() {
+      if (!(await this.checkProjectName())) {
+        return
+      }
       this.isCreating = true
       await this.pblCreateNewProject(this.newProjectData)
         .then(projectDetail => {
@@ -107,7 +121,10 @@ export default {
     goPrevStep() {
       this.nowStep--
     },
-    goNextStep() {
+    async goNextStep() {
+      if (this.nowStep === 0 && !(await this.checkProjectName())) {
+        return
+      }
       this.nowStep++
     }
   },
