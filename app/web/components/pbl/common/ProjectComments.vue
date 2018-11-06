@@ -31,6 +31,7 @@
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProjectComments',
@@ -112,6 +113,13 @@ export default {
         return this.toggleLoginDialog(true)
       }
       this.isAddingComment = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.newCommenContent
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isAddingComment = false
+        return
+      }
       await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,

@@ -120,7 +120,6 @@ export default {
           description
         ])
         if (isSensitive) {
-          this.showMessage('error', this.$t('common.inputIsSensitive'))
           this.loading = false
           return
         }

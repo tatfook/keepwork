@@ -54,6 +54,7 @@
 <script>
 import { keepwork } from '@/api'
 import _ from 'lodash'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions, mapGetters } from 'vuex'
 import default_portrait from '@/assets/img/default_portrait.png'
 import Vue from 'vue'
@@ -93,7 +94,7 @@ export default {
     },
     assignMembersId() {
       let arrId = []
-      _.map(this.assignedMembers, ({userId}) => {
+      _.map(this.assignedMembers, ({ userId }) => {
         arrId.push(userId)
       })
       return arrId.join('|')
@@ -124,28 +125,35 @@ export default {
     handleClose() {
       this.$emit('close')
     },
-    handleCommand(userId){
+    handleCommand(userId) {
       _.forEach(this.memberList, member => {
-        if(member.userId === userId) { 
-          if(this.assignedMembers.length == 0){
+        if (member.userId === userId) {
+          if (this.assignedMembers.length == 0) {
             return this.assignedMembers.push(member)
           }
           let i
-          for(i=0; i < this.assignedMembers.length; ++i){
-            if(this.assignedMembers[i].userId === userId){
+          for (i = 0; i < this.assignedMembers.length; ++i) {
+            if (this.assignedMembers[i].userId === userId) {
               break
             }
           }
-          if(i === this.assignedMembers.length){
+          if (i === this.assignedMembers.length) {
             return this.assignedMembers.push(member)
           }
-          this.assignedMembers.splice(i,1)
+          this.assignedMembers.splice(i, 1)
         }
       })
     },
     async finishedCreateIssue() {
       this.cretateIssueLoading = true
       this.$nextTick(async () => {
+        let sensitiveResult = await checkSensitiveWords({
+          checkedWords: [this.issueTitle, this.descriptionText]
+        }).catch()
+        if (sensitiveResult && sensitiveResult.length > 0) {
+          this.cretateIssueLoading = false
+          return
+        }
         let payload = {
           objectType: 5,
           objectId: this.projectId,
@@ -164,7 +172,7 @@ export default {
           .catch(err => console.error(err))
       })
     },
-    isAssigned(member){
+    isAssigned(member) {
       return this.assignedMembers.indexOf(member) !== -1 ? true : false
     }
   }
@@ -257,14 +265,14 @@ export default {
     }
   }
 }
-.new-issue-assign{
-  .member-portrait{
+.new-issue-assign {
+  .member-portrait {
     width: 26px;
     height: 26px;
     border-radius: 50%;
     margin-right: 10px;
   }
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     display: flex;
     align-items: center;
   }
