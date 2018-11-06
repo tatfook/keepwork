@@ -56,7 +56,8 @@ export default {
       loading: true,
       default_portrait,
       isFollowLoading: [],
-      userAllFollows: []
+      userAllFollows: [],
+      currentPage: 1
     }
   },
   async mounted() {
@@ -97,6 +98,7 @@ export default {
       this.$message({ type, message })
     },
     async targetPage(targetPage) {
+      this.currentPage = targetPage
       this.loading = true
       this.$nextTick(async () => {
         await this.getAllUsers({
@@ -135,6 +137,7 @@ export default {
             this.showMessage({
               message: '关注成功'
             })
+            this.targetPage(this.currentPage)
             this.getFollows()
             this.isFollowLoading[index] = false
           })
@@ -151,6 +154,7 @@ export default {
             this.showMessage({
               message: '取消关注成功'
             })
+            this.targetPage(this.currentPage)
             this.getFollows()
             this.isFollowLoading[index] = false
           })
@@ -243,8 +247,8 @@ export default {
         }
       }
       .is-followed {
-        background: #67C23A;
-        border: 1px solid #67C23A
+        background: #5fe1af;
+        border: 1px solid #5fe1af;
       }
     }
   }

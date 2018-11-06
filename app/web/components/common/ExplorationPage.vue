@@ -339,5 +339,14 @@ export default {
     font-size: 18px;
   }
 }
+.search-result-total{
+  margin: 20px 30px;
+}
+.all-projects {
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+}
 </style>
 
