@@ -70,7 +70,7 @@ export default {
       )
     },
     moreBoardLink() {
-      return `${this.projectId}/whiteboard`
+      return 'whiteboard'
     }
   },
   methods: {
@@ -88,8 +88,9 @@ export default {
   },
   filters: {
     relativeTimeFilter(date, isEn) {
+      const offset = moment().utcOffset()
       isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(date, 'YYYYMMDDHH').fromNow()
+      return moment(date).utcOffset(offset).fromNow()
     }
   },
   components: {
