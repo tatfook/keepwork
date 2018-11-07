@@ -157,7 +157,6 @@ export default {
           this.registerLoading = true
           await this.userRegister(payload)
             .then(res => {
-              console.log('res',res)
               this.registerLoading = false
               this.handleClose()
             })
