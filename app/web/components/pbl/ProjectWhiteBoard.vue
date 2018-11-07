@@ -225,9 +225,6 @@ export default {
   .el-input-group__append {
     background: #fff;
   }
-  // .input-with-select .el-input-group__prepend {
-  //   background-color: #fff;
-  // }
   background: #f5f5f5;
   padding: 24px 0 120px;
   &-content {
@@ -364,6 +361,10 @@ export default {
         }
       }
     }
+  }
+  .all-issue-pages{
+    margin: 50px auto 0;
+    text-align: center;
   }
 }
 </style>
