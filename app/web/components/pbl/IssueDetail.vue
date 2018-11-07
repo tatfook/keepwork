@@ -9,7 +9,7 @@
           <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
         </div>
         <div v-else class="issue-title-title-box">
-          <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.id}}</span>
+          <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.no}}</span>
           <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
         </div>
       </div>
