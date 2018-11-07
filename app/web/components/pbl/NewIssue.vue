@@ -165,7 +165,13 @@ export default {
         await keepwork.issues
           .createIssue(payload)
           .then(res => {
-            this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+            this.getProjectIssues({
+              objectId: this.projectId,
+              objectType: 5,
+              'x-per-page': 25,
+              'x-page': 1,
+              'x-order':'createdAt-desc'
+            })
             this.handleClose()
             this.cretateIssueLoading = false
           })

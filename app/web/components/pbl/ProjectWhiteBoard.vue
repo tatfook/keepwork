@@ -4,11 +4,6 @@
       <div class="project-white-board-content-header">
         <div class="search">
           <el-input size="medium" placeholder="搜索关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
-            <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
-              <el-option label="全部" value="1"></el-option>
-              <el-option label="进行中" value="2"></el-option>
-              <el-option label="已完成" value="3"></el-option>
-            </el-select> -->
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
@@ -45,6 +40,13 @@
     </div>
     <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
     <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit"></issue-detail>
+    <div class="all-issue-pages" v-if="issuesCount > perPage">
+      <div class="block">
+        <span class="demonstration"></span>
+        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
+        </el-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -67,7 +69,9 @@ export default {
       searchKeyWord: '',
       select: '',
       default_portrait,
-      selectedIssue: {}
+      selectedIssue: {},
+      perPage: 25,
+      page: 1
     }
   },
   props: {
@@ -100,6 +104,9 @@ export default {
       )
       return tempArr.sort(this.sortByUpdateAt)
     },
+    issuesCount() {
+      return _.get(this.issuesList({ projectId: this.projectId }), 'count', 0)
+    },
     unfinishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 0)
     },
@@ -118,9 +125,12 @@ export default {
   },
   async mounted() {
     if (this.isProhibitView) {
-      return this.$router.push({ name: 'ProjectIndexPage', params: { id: this.projectId }})
+      return this.$router.push({
+        name: 'ProjectIndexPage',
+        params: { id: this.projectId }
+      })
     }
-    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    await this.targetPage(this.page)
     this.projectIssues = this.projectIssueList
   },
   watch: {
@@ -131,7 +141,10 @@ export default {
       let payload = {
         objectId: this.projectId,
         objectType: 5,
-        $or: [{ id: _.toNumber(key) || 0 }, { title: { $like: `%${key}%` } }]
+        $or: [{ no: _.toNumber(key) || 0 }, { title: { $like: `%${key}%` } }],
+        'x-per-page': this.perPage,
+        'x-page': 1,
+        'x-order': 'createdAt-desc'
       }
       await this.getProjectIssues(payload)
       this.projectIssues = this.projectIssueList
@@ -143,16 +156,21 @@ export default {
       getProjectMember: 'pbl/getProjectMember',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
-    searchIssue() {
-      let payload = {
+    async targetPage(page) {
+      await this.getProjectIssues({
         objectId: this.projectId,
         objectType: 5,
         $or: [
           { no: _.toNumber(this.searchKeyWord) || 0 },
           { title: { $like: `%${this.searchKeyWord}%` } }
-        ]
-      }
-      this.getProjectIssues(payload)
+        ],
+        'x-per-page': this.perPage,
+        'x-page': page,
+        'x-order': 'createdAt-desc'
+      })
+    },
+    searchIssue() {
+      this.targetPage(1)
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
