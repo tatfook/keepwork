@@ -49,7 +49,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { coverUrl: i.cover },
+          extra: { imageUrl: i.cover },
           name: i.name,
           name_title: this.searchKeyResult(i),
           visit: i.total_view,
