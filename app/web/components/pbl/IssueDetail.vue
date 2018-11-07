@@ -234,18 +234,13 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async getIssueData() {
-      await keepwork.issues
-        .getSingleIssue({ issueId: this.currIssueId })
-        .then(issue => {
-          this.issueData = Object.assign(issue, {
-            titleIsEdit: false,
-            tagEdit: false
-          })
-          this.currIssue = _.clone(this.issueData)
-          this.dynamicTags = this.currIssue.tags.split('|')
-          this.assignedMembers = _.clone(this.currIssue.assigns)
-        })
-        .catch(err => console.error(err))
+      this.issueData = Object.assign(this.issue, {
+        titleIsEdit: false,
+        tagEdit: false
+      })
+      this.currIssue = _.clone(this.issueData)
+      this.dynamicTags = this.currIssue.tags.split('|')
+      this.assignedMembers = _.clone(this.currIssue.assigns)
     },
     editIssueTitle() {
       if (!this.isLogined) {
