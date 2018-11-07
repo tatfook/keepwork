@@ -171,8 +171,7 @@ export class GitAPI {
       .join('/')
     return (
       this.client.projects.repository.files
-        .show(projectName, path)
-        // .then(file => Base64.decode(file.content))
+        .show({ projectPath: projectName, fullPath: path, useCache: false })
         .then(file => file.content)
     )
   }

@@ -108,10 +108,6 @@ const actions = {
     let { username, password } = payload
     if (registerInfo) {
       await dispatch('login', { username, password })
-      // let userinfo = _.get(registerInfo, 'data.userinfo')
-      // let { defaultSiteDataSource } = userinfo
-      // await dispatch('createUserProfilePageToBack', { username })
-      // await dispatch('createUserProfilePagesToGit', { defaultSiteDataSource })
     }
     return registerInfo
   },
@@ -263,9 +259,7 @@ const actions = {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectName } = webTemplateProject
-    // let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
     let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    // fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
     fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
@@ -283,7 +277,7 @@ const actions = {
       sitename: name,
       visibility: 0,
       extra: {
-        websiteSetting
+        ...websiteSetting
       }
     }
     let site = await keepwork.website.upsert(upsertPayload)

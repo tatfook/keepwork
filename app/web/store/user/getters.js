@@ -81,7 +81,8 @@ const getters = {
         children,
         username,
         name,
-        ...websiteSetting
+        ...websiteSetting,
+        ...extra
       }
     })
 
