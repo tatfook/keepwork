@@ -701,6 +701,7 @@
     "countDownResend": "second",
     "sendingFrequent": "Sending frequent",
     "verificationCodeError": "Verification code error",
+    "verificationCodeExpiration": "Verification code expiration",
     "hasBeenBoundToOtherAccounts": "The mobile phone number has been bound to other accounts",
     "modifyPwd": "Modify Password:",
     "accountBinding": "Account Binding",

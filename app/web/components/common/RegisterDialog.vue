@@ -157,12 +157,19 @@ export default {
           this.registerLoading = true
           await this.userRegister(payload)
             .then(res => {
+              console.log('res',res)
               this.registerLoading = false
               this.handleClose()
             })
             .catch(e => {
+              if(e.response.data.code == 4){
+                this.showMessage('error', this.$t('user.verificationCodeExpiration'))
+              }else if(e.response.data.code == 5){
+                this.showMessage('error', this.$t('user.verificationCodeError'))
+              }else{
+                this.showMessage('error', this.$t('common.registerFailed'))                
+              }
               this.registerLoading = false
-              this.showMessage('error', this.$t('common.registerFailed'))
             })
         } else {
           return false
