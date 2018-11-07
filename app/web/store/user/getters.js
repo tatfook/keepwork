@@ -187,6 +187,7 @@ const getters = {
   siteDetailInfo: state => state.siteDetailInfo,
   getSiteDetailInfoByPath: (state, { siteDetailInfo }) => path => {
     let [username, name] = path.split('/').filter(x => x)
+    console.log(siteDetailInfo[`${username}/${name}`])
     return siteDetailInfo[`${username}/${name}`]
   },
   siteDetailInfoById: state => state.siteDetailInfoById,

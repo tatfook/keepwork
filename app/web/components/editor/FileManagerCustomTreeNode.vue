@@ -5,7 +5,7 @@
       <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
       <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
     </span>
-    <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || data.name || node.label | hideMDFileExtension}})</span>
+    <!-- <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || data.name || node.label | hideMDFileExtension}})</span> -->
     <span v-else>{{data.displayName || data.name || node.label | hideMDFileExtension}}</span>
     <span class="node-icon">
       <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
@@ -422,6 +422,7 @@ export default {
       )
     },
     isFile() {
+      // console.log(this.data)
       return this.data.type === 'blob'
     },
     isHasOpened() {

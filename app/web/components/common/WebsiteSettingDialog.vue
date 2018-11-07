@@ -1,6 +1,7 @@
 <template>
   <el-dialog :append-to-body=true v-if='show' class="website-setting-dialog" :visible.sync="show" :before-close="handleClose">
     <div class="website-setting-sidebar-header">
+      
       <span class="webSetting">网站设置&nbsp;&nbsp;&nbsp;</span><span class="url">//{{title}}/{{sitePath || ''}}设置</span>
     </div>
     <div class="website-setting-sidebar">

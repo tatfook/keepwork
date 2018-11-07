@@ -337,9 +337,15 @@ const actions = {
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
     let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
+    console.log(666)
+    console.log(path)
     if (getSiteDetailInfoByPath(path)) return
     let [username, sitename] = path.split('/').filter(x => x)
+    console.log(555)
+    console.log(username)
+    console.log(sitename)
     if (username && sitename) {
+      console.log(4444)
       let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })
       detailInfo.site.username = username
       commit(GET_SITE_DETAIL_INFO_SUCCESS, { username, sitename, detailInfo })

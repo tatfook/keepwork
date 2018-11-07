@@ -40,12 +40,22 @@ export default {
     sitePath: String
   },
   async mounted() {
+    console.log(123)
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
     this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).siteinfo)
+    console.log(887)
+    console.log(this.basicMessage)
+    console.log(888)
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
+  },
+  updated() {
+    this.basicMessage2 = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).siteinfo)
+    console.log(997)
+    console.log(this.basicMessage2)
+    console.log(998)
   },
   data() {
     return {
@@ -53,6 +63,8 @@ export default {
         extra: {
           websiteSetting: {}
         }
+      },
+      basicMessage2: {
       },
       loading: true,
       basicInfoRules: {
@@ -75,6 +87,16 @@ export default {
     siteUrl() {
       let origin = location.origin
       return `${origin}/${this.basicMessage.username}/${this.basicMessage.sitename}`
+    },
+    showName: {
+      get() {
+        if(this.basicMessage.displayName) {
+          return this.basicMessage.displayName
+        }else {
+          return this.basicMessage.sitename
+        }
+      },
+      set() {}
     }
   },
   methods: {
@@ -135,6 +157,7 @@ export default {
             newBasicMessage: this.basicMessage
           })
           this.showResultInfo()
+          this.$emit('close')
         } else {
           this.loading = false
           return false
