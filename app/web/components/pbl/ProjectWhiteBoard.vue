@@ -9,9 +9,9 @@
         </div>
         <div class="filter">
           筛选：
-          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{projectIssueList.length}})</span></span>
-          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{finishedProjectIssueList.length}})</span></span>
-          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
+          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesCount}})</span></span>
+          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{issuesOpenCount}})</span></span>
+          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{issuesCloseCount}})</span></span>
         </div>
         <div class="new-issue-btn">
           <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ 新建问题</el-button>
@@ -106,6 +106,12 @@ export default {
     },
     issuesCount() {
       return _.get(this.issuesList({ projectId: this.projectId }), 'count', 0)
+    },
+    issuesOpenCount() {
+      return _.get(this.issuesList({ projectId: this.projectId }), 'openCount', 0)
+    },
+    issuesCloseCount() {
+      return _.get(this.issuesList({ projectId: this.projectId }), 'closeCount', 0)
     },
     unfinishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 0)

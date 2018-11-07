@@ -35,7 +35,6 @@ export default {
   },
   async mounted() {
     await this.targetPage(this.page)
-    console.log('website',this.website)
     this.loading = false
   },
   computed: {
@@ -76,7 +75,7 @@ export default {
       this.$nextTick(async () => {
         await this.getTypeProjects({
           page: targetPage,
-          per_age: this.perPage,
+          per_page: this.perPage,
           type: 'site',
           q: this.searchKey,
           sort: this.sortProjects
