@@ -7,9 +7,12 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+              <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
-              </el-input>
+              </el-autocomplete>
+              <!-- <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+                <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
+              </el-input> -->
             </el-col>
             <el-col :span="2">
               <el-dropdown @command="handleSort">
@@ -97,6 +100,7 @@ import Website from './explorationPageTab/Website'
 import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
 import Users from './explorationPageTab/Users'
+import { EsAPI } from '@/api'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -151,6 +155,22 @@ export default {
     }
   },
   methods: {
+    filterSuggetions(res, cb) {
+      if (res.length) {
+        cb(_.map(res, i => ({ value: i.keyword })))
+      }
+    },
+    async querySearch(queryString, cb) {
+      // FIXME: 还缺个热门和最近
+      let suggestions = await EsAPI.suggestions.getPrefixSuggestions({
+        prefix: queryString
+      })
+      return this.filterSuggetions(suggestions, cb)
+    },
+    handleSelect(item) {
+      this.searchKey = item.value
+      this.goSearch()
+    },
     handleSort(sortType) {
       this.currSortMode = sortType.split('/')[1]
       this.sortProjects = sortType.split('/')[0]
@@ -339,7 +359,7 @@ export default {
     font-size: 18px;
   }
 }
-.search-result-total{
+.search-result-total {
   margin: 20px 30px;
 }
 .all-projects {

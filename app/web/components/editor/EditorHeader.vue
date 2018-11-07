@@ -202,7 +202,9 @@ export default {
       activeAreaFile: 'activeAreaFile',
       activePage: 'activePage',
       hasOpenedFiles: 'hasOpenedFiles',
-      isCodeShow: 'isCodeShow'
+      isCodeShow: 'isCodeShow',
+      getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      updateRecentUrlList: 'updateRecentUrlList'
     }),
     isEnglish() {
       return locale === 'en-US' ? true : false
@@ -275,7 +277,11 @@ export default {
       closeAllOpenedFile: 'closeAllOpenedFile',
       toggleSkyDrive: 'toggleSkyDrive',
       resetShowingCol: 'resetShowingCol',
-      refreshOpenedFile: 'refreshOpenedFile'
+      refreshOpenedFile: 'refreshOpenedFile',
+      gitlabRemoveFile: 'gitlab/removeFile',
+      userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
+      userDeletePagesConfig: 'user/deletePagesConfig',
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     async save() {
       let self = this
@@ -339,17 +345,35 @@ export default {
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
         cancelButtonText: this.$t('el.messagebox.cancel')
-      }).then(async () => {
-        this.deletePending = true
-        await this.gitlabRemoveFile({ path }).catch(e => {
-          this.$message.error(this.$t('editor.deleteFail'))
+      })
+        .then(async () => {
+          this.deletePending = true
+          await this.gitlabRemoveFile({ path: `${path}.md` }).catch(e => {
+            this.$message.error(this.$t('editor.deleteFail'))
+            this.deletePending = false
+          })
+          await this.deletePagesFromLayout({ paths: [path] })
+          this.removeRecentOpenFile(path)
+          this.resetPage(path)
           this.deletePending = false
         })
-        await this.deletePagesFromLayout({ paths: [path] })
-        this.removeRecentOpenFile(path)
-        this.resetPage(path)
-        this.deletePending = false
-      })
+        .catch(e => console.error(e))
+    },
+    async deletePagesFromLayout({ paths = [] }) {
+      const re = /^\w+\/\w+\//
+      let sitePath = paths[0].match(re)
+      if (sitePath) sitePath = sitePath[0].replace(/\/$/, '')
+      let pages = _.map(paths, page => page.replace(re, ''))
+      await this.userGetSiteLayoutConfig({ path: sitePath })
+      let config = this.getSiteLayoutConfigBySitePath(sitePath)
+      await this.userDeletePagesConfig({ sitePath, pages })
+    },
+    removeRecentOpenFile(path) {
+      let delPath = `/${path.replace(/\.md$/, '')}`
+      let updateRecentUrlList = this.updateRecentUrlList.filter(
+        item => item.path !== delPath
+      )
+      this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async saveAllOpenedFiles() {
       if (!this.hasUnSaveOpenedFiles) return
@@ -523,6 +547,14 @@ export default {
     toggleLanguage,
     backHome() {
       window.location.href = this.nowOrigin
+    },
+    resetPage(currentPath = null) {
+      if (
+        currentPath &&
+        currentPath.replace(/\.md$/, '') === this.$route.path.substring(1)
+      ) {
+        return this.$router.push('/')
+      }
     }
   },
   components: {
