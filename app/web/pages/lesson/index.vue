@@ -17,6 +17,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
+import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import appModule from '@/store/app'
@@ -34,7 +35,7 @@ import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
-import Cookies from 'js-cookie'
+import { keepwork } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)

@@ -184,6 +184,7 @@ export default {
   .prop-type-card-tool-tip-class {
     max-width: 250px;
     word-break : normal;
+    margin-top: 3px !important;
   }
 </style>
 

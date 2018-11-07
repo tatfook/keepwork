@@ -4,7 +4,9 @@
       <div class="img" :class="getImgClass" v-if='isImage'>
         <img :src="src">
       </div>
-      <video v-else-if='isVideo' :src='src'></video>
+      <div class="video" :class="getImgClass" v-else-if='isVideo'>
+        <video :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
+      </div>
     </a>
   </div>
 </template>
@@ -33,12 +35,27 @@ export default {
     target() {
       return this.properties.target
         ? this.properties.target
-        : this.options.emptyLinkTarget
+        : this.options.target
     },
     link() {
       return this.properties.link
         ? this.properties.link
-        : this.options.emptyLink
+        : this.options.link
+    },
+    autoplay() {
+      return this.properties.autoplay
+        ? this.properties.autoplay
+        : this.options.autoplay
+    },
+    playloop() {
+      return this.properties.playloop
+        ? this.properties.playloop
+        : this.options.playloop
+    },
+    poster() {
+      return this.properties.poster
+        ? this.properties.poster
+        : this.options.poster
     },
     getImgClass() {
       let imgClassName = 'comp-media-img'
@@ -174,6 +191,15 @@ export default {
         height: 100%;
         left: 0;
         top: 0;
+        object-fit: cover;
+      }
+    }
+    .video {
+      width: 100%;
+      height: 100%;
+      video {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
       }
     }

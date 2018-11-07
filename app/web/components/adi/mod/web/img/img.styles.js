@@ -3,8 +3,11 @@ import _ from 'lodash'
 let emptyData = {
   img: {
     emptyMedia: require('@/assets/adi/img/imgTwo.png'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   }
 }
 

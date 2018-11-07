@@ -13,8 +13,11 @@ let defaultData = {
   },
   logo: {
     emptyMedia: require('@/assets/adi/menu/whiteBear.svg'),
-    emptyLink: '',
-    emptyLinkTarget: '_blank'
+    link: '',
+    target: '_blank',
+    autoplay: false,
+    playloop: false,
+    poster: ''
   },
   businessName: {
     emptyInput: 'adi.title.businessName',

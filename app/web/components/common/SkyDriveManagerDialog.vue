@@ -9,8 +9,10 @@
     :before-close="handleClose"
     :append-to-body='true'
   >
+  
     <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
     <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
+
   </el-dialog>
 </template>
 

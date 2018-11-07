@@ -36,6 +36,8 @@
     "authCode": "验证码",
     "perfectInfo": "完善信息",
 
+    "another": "换一个",
+
     "creativity": "创造",
     "explore": "探索",
     "study": "学习",
@@ -297,14 +299,16 @@
     "enlargeMdEditing": "大窗口编辑",
 
     "pleaseInput": "请输入",
-    "changePic": "更换图片",
 
     "addModHere": "在此处添加新模块",
 
     "toEdit": "编辑",
     "checkCode": "查看代码",
     "share": "分享",
-    "praise": "赞"
+    "praise": "赞",
+
+    "addVideoCover": "+ 添加视频封面",
+    "deleteVideoCoverConfirmMsg": "你确定要删除视频封面吗？"
   },
   "tips": {
     "clickToShow": "点击显示",
@@ -316,7 +320,7 @@
     "board": "为页面添加绘图，支持基本图形、各种图表、工程图、流程图、网络拓扑图、UML、Venn等",
     "comment": "为页面添加评论功能，方便大家参与讨论",
     "qq": "为页面添加QQ聊天功能，方便访问者联系指定QQ",
-    "md": "文本（Markdown）：Markdown是一种简单的、轻量级的标记语言。<br>常用示例：字体<br>**这是加粗的文字**<br>*这是倾斜的文字<br>***这是斜体加粗的文字***<br>~~这是加删除线的文字~~<br>引用<br>>这是引用的内容<br><br>标题<br># 这是一级标题<br>## 这是二级标题<br>注意：#跟标题之间都要有一个空格<br><br>无序列表：在内容前加“- + *”任何一种即可<br>+ 列表内容<br>- 列表内容<br>* 列表内容<br>注意：- + *跟内容之间都要有一个空格<br><a style='text-decoration: none;' target='_blank' href='https://keepwork.com/official/help/yufa'>了解更多></a>"
+    "md": "文本（Markdown）：Markdown是一种简单的、轻量级的标记语言。<br>常用示例：字体<br>**这是加粗的文字**<br>*这是倾斜的文字<br>***这是斜体加粗的文字***<br>~~这是加删除线的文字~~<br>引用<br>>这是引用的内容<br><br>标题<br># 这是一级标题<br>## 这是二级标题<br>注意：#跟标题之间都要有一个空格<br><br>无序列表：在内容前加“- + *”任何一种即可<br>+ 列表内容<br>- 列表内容<br>* 列表内容<br>注意：- + *跟内容之间都要有一个空格<br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>了解更多></a>"
   },
   "modList": {
     "recent": "常用",
@@ -481,7 +485,7 @@
     "desc": "描述",
     "md": "文本（markdown）",
     "board": "绘图板",
-    "comment": "评论",
+    "comment": "评论留言",
     "vipRead": "VIP阅读权限",
     "openBoard": "打开绘图板",
     "switchComment": "允许发表评论",

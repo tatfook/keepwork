@@ -1,4 +1,3 @@
 export default {
-  src: 'media',
-  target: 'linkTarget'
+  src: 'media'
 }

@@ -1,4 +1,8 @@
 export default {
   src: '',
-  target: ''
+  link: '',
+  target: '',
+  autoplay: false,
+  playloop: false,
+  poster: ''
 }

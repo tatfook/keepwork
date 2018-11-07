@@ -102,19 +102,8 @@ export default {
           ? 'table-type-total-used-warning'
           : ''
     },
-    isImgLoopMod() {
-      let activeMod = this.$store.getters.activeMod
-
-      if (!activeMod || !activeMod.cmd) {
-        return false
-      }
-
-      if (activeMod.cmd === 'ImgLoop') {
-        return true
-      }
-    },
     isVideoAvailable() {
-      return this.isVideoTabShow || this.isImgLoopMod
+      return this.isVideoTabShow
     },
     availableSelectedMediaItem() {
       let item = this.itemFilterBySearchWord(this.selectedMediaItem)

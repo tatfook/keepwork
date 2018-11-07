@@ -36,6 +36,8 @@
     "authCode": "Code",
     "perfectInfo": "Perfect information",
 
+    "another": "another",
+
     "creativity": "Creativity",
     "explore": "Explore",
     "study": "Study",
@@ -294,7 +296,6 @@
     "enlargeMdEditing": "Large window editing",
 
     "pleaseInput": "Please input",
-    "changePic": "Change picture",
 
     "addModHere": "Add new mod here",
 
@@ -303,7 +304,10 @@
     "toEdit": "Edit",
     "checkCode": "Check code",
     "share": "Share",
-    "praise": "Praise"
+    "praise": "Praise",
+
+    "addVideoCover": "+ Add video cover",
+    "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?"
   },
   "tips": {
     "clickToShow": "Click to show",
@@ -315,7 +319,7 @@
     "board": "Adding graphics to the page, supporting basic graphics, various charts, engineering diagrams, flowcharts, network topologies, UML, Venn, etc.",
     "comment": "Add comments to the page to facilitate your participation in the discussion.",
     "qq": "Add QQ chat function to the page to facilitate the visitor to contact the specified QQ.",
-    "md": "Text (Markdown): Markdown is a simple and lightweight markup language. Common examples of <br>: Font <br> ** This is the bold text ** <br> * This is the slanted text <br> ** * This is the italic bold text ** <br> ~ This is the deleted text ~ <br> Reference <br> This is the quoted content <br> <br> Title <br> # # This is the first-level Title <br> # # This is the second-level Title <br> Note: There is a space between # and the title <br>. Case <br> <br> Unordered List: Add'- plus *'before the content to <br> + List Content <br> - List Content <br> * List Content <br> * Note: - There must be a space between - plus * and the conten<br><a style='text-decoration: none;' target='_blank' href='https://keepwork.com/official/help/yufa'>Understand more></a>"
+    "md": "Text (Markdown): Markdown is a simple and lightweight markup language. Common examples of <br>: Font <br> ** This is the bold text ** <br> * This is the slanted text <br> ** * This is the italic bold text ** <br> ~ This is the deleted text ~ <br> Reference <br> This is the quoted content <br> <br> Title <br> # # This is the first-level Title <br> # # This is the second-level Title <br> Note: There is a space between # and the title <br>. Case <br> <br> Unordered List: Add'- plus *'before the content to <br> + List Content <br> - List Content <br> * List Content <br> * Note: - There must be a space between - plus * and the conten<br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>Understand more></a>"
   },
   "modList": {
     "recent": "Commonly used",

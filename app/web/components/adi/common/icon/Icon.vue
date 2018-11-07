@@ -1,8 +1,11 @@
 <template>
   <div class='comp-icon'>
     <a :target='target' :href='link'>
-      <div class="img">
+      <div v-if='isImage' class="img">
         <img :src="src" :style="getStyle">
+      </div>
+      <div v-else-if='isVideo' class="video">
+        <video :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
       </div>
     </a>
   </div>
@@ -12,6 +15,7 @@
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
+import Media from '@/components/adi/common/media/media.types'
 
 jss.setup(preset())
 
@@ -22,15 +26,36 @@ export default {
     src() {
       return this.properties.src ? this.properties.src : this.options.emptyMedia
     },
+    isImage() {
+      return Media.isImage(this.src)
+    },
+    isVideo() {
+      return Media.isVideo(this.src)
+    },
     target() {
       return this.properties.target
         ? this.properties.target
-        : this.options.emptyLinkTarget
+        : this.options.target
     },
     link() {
       return this.properties.link
         ? this.properties.link
-        : this.options.emptyLink
+        : this.options.link
+    },
+    autoplay() {
+      return this.properties.autoplay
+        ? this.properties.autoplay
+        : this.options.autoplay
+    },
+    playloop() {
+      return this.properties.playloop
+        ? this.properties.playloop
+        : this.options.playloop
+    },
+    poster() {
+      return this.properties.poster
+        ? this.properties.poster
+        : this.options.poster
     },
     getStyle() {
       return this.generateStyleString({
@@ -68,13 +93,23 @@ export default {
       align-items: center;
       position: relative;
       overflow: hidden;
-      max-height: 87px;
       min-width: 87px;
       img {
         display: block;
         width: auto;
-        max-width: 185px;
         height: auto;
+        max-width: 185px;
+        max-height: 87px;
+      }
+    }
+    .video {
+      min-width: 87px;
+      video {
+        width: auto;
+        height: auto;
+        max-width: 185px;
+        max-height: 87px;
+        object-fit: cover;
       }
     }
   }
