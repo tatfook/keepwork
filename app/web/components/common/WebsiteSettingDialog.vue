@@ -20,6 +20,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
+import WebsiteSettingPermission from './WebsiteSettingPermission'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'
 import WebsiteSettingStyle from './WebsiteSettingStyle'
 import { mapGetters } from 'vuex'
@@ -41,7 +42,10 @@ export default {
     }),
     activeSettingComp() {
       let activeSettingIndex = this.activeSettingIndex
-      return _.get(this.filteredWebsiteSettingNavs, `${activeSettingIndex}.comp`)
+      return _.get(
+        this.filteredWebsiteSettingNavs,
+        `${activeSettingIndex}.comp`
+      )
     },
     siteOwnsUsername() {
       return this.sitePath.split('/')[0]
@@ -68,6 +72,11 @@ export default {
           text: this.$t('setting.siteStyle'),
           comp: WebsiteSettingStyle,
           isShow: true
+        },
+        {
+          text: this.$t('setting.sitePermission'),
+          comp: WebsiteSettingPermission,
+          isShow: true
         }
       ]
     },
@@ -87,6 +96,7 @@ export default {
   },
   components: {
     WebsiteSettingLayout,
+    WebsiteSettingPermission,
     WebsiteSettingBasicMessage,
     WebsiteSettingStyle
   }
@@ -102,7 +112,7 @@ export default {
       max-width: 1200px;
     }
     .el-dialog__header {
-      padding: 0
+      padding: 0;
     }
     .el-dialog__headerbtn {
       top: 16px;

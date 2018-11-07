@@ -24,17 +24,14 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="website-basic-message-buttons">
-      <el-button type='primary' @click="submitChange">{{$t('editor.save')}}</el-button>
-      <el-button @click='handleClose'>{{$t('editor.cancel')}}</el-button>
-    </div>
-
+    <dialog-operations class="website-basic-message-operations" @save="submitChange" @close="handleClose"></dialog-operations>
   </div>
 </template>
 <script>
 import _ from 'lodash'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
+import DialogOperations from './DialogOperations'
 export default {
   name: 'WebsiteSettingBasicMessage',
   props: {
@@ -174,6 +171,9 @@ export default {
     handleClose() {
       this.$emit('close')
     }
+  },
+  components:{
+    DialogOperations
   }
 }
 </script>
@@ -250,22 +250,8 @@ export default {
       height: 220px;
     }
   }
-  &-buttons {
-    text-align: center;
-    width: 175px;
-    align-self: flex-end;
-    padding-bottom: 26px;
-    .el-button {
-      width: 120px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-      padding: 0;
-      margin-bottom: 20px;
-    }
-    .el-button + .el-button {
-      margin-left: 0;
-    }
+  &-operations{
+    width: 120px;
   }
 }
 </style>

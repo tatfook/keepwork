@@ -41,7 +41,7 @@
         </main>
       </el-col>
     </el-row>
-    <DialogOperations class="website-setting-style-operations" @save="handleSave" @close="handleClose"></DialogOperations>
+    <dialog-operations class="website-setting-style-operations" @save="handleSave" @close="handleClose"></dialog-operations>
   </div>
 </template>
 
@@ -199,7 +199,7 @@ export default {
     }
   }
   &-style-operations{
-    width: 175px;
+    width: 120px;
   }
 }
 .website-setting-preview-fontsize {
