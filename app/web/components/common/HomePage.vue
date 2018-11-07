@@ -254,7 +254,7 @@ export default {
       return (obj1, obj2) => {
         return obj1[key] >= obj2[key] ? -1 : 1
       }
-    },
+    }
   }
 }
 </script>
@@ -517,10 +517,12 @@ export default {
             color: #909399;
             &-text {
               height: 80px;
-              display: -webkit-box !important;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 5;
               overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 5;
+              line-height: 16px;
+              -webkit-box-orient: vertical;
             }
           }
         }
