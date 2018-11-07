@@ -156,42 +156,16 @@ export default {
   },
   methods: {
     filterSuggetions(res, cb) {
-      if (res.total) {
-        cb(_.map(res.hits, i => (i.name ? { value: i.name } : { value: i.username })))
+      if (res.length) {
+        cb(_.map(res, i => ({ value: i.keyword })))
       }
     },
     async querySearch(queryString, cb) {
-      const projectAPI = [1, 2, 3, 8]
-      const pacakgeAPI = [5]
-      const userAPI = [6]
-      const PER_PAGE = 100
-      let res = {}
-      if (projectAPI.includes(this.currIndex)) {
-        res = await EsAPI.projects.getProjects({
-          page: 1,
-          per_page: PER_PAGE,
-          q: this.searchKey
-        })
-        return this.filterSuggetions(res, cb)
-      }
-
-      if (pacakgeAPI.includes(this.currIndex)) {
-        res = await EsAPI.packages.getPackages({
-          page: 1,
-          per_page: PER_PAGE,
-          q: this.searchKey
-        })
-        return this.filterSuggetions(res, cb)
-      }
-
-      if (userAPI.includes(this.currIndex)) {
-        res = await EsAPI.users.getUsers({
-          page: 1,
-          per_page: PER_PAGE,
-          q: this.searchKey
-        })
-      }
-      return this.filterSuggetions(res, cb)
+      // FIXME: 还缺个热门和最近
+      let suggestions = await EsAPI.suggestions.getPrefixSuggestions({
+        prefix: queryString
+      })
+      return this.filterSuggetions(suggestions, cb)
     },
     handleSelect(item) {
       this.searchKey = item.value
