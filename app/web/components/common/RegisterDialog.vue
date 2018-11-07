@@ -161,8 +161,14 @@ export default {
               this.handleClose()
             })
             .catch(e => {
+              if(e.response.data.code == 4){
+                this.showMessage('error', this.$t('user.verificationCodeExpiration'))
+              }else if(e.response.data.code == 5){
+                this.showMessage('error', this.$t('user.verificationCodeError'))
+              }else{
+                this.showMessage('error', this.$t('common.registerFailed'))                
+              }
               this.registerLoading = false
-              this.showMessage('error', this.$t('common.registerFailed'))
             })
         } else {
           return false

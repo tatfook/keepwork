@@ -706,6 +706,7 @@
     "countDownResend": "秒后重新发送",
     "sendingFrequent": "短信验证码发送过频繁",
     "verificationCodeError": "验证码错误",
+    "verificationCodeExpiration": "验证码过期",
     "hasBeenBoundToOtherAccounts": "手机号已绑定了其他账号",
     "modifyPwd": "修改密码",
     "accountBinding": "账号绑定",
