@@ -127,7 +127,7 @@ export default {
         if (valid) {
           let isSensitive = await this.checkSensitive()
           if (isSensitive) {
-            this.showErrorMsg(this.$t('common.inputIsSensitive'))
+            this.loading = false
             return
           }
           await this.userSaveSiteBasicSetting({

@@ -9,7 +9,7 @@ let popupOptions = {
   height: 545
 }
 Vue.use(VueAuthenticate, {
-  bindRequestInterceptor: () => {
+  bindRequestInterceptor() {
     this.$http.interceptors.request.use((config) => {
       config.headers.Authorization = [
         'Bearer', Cookies.get('token')

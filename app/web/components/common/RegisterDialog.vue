@@ -192,6 +192,9 @@ export default {
           }
         }, 1000)
         return
+      } else {
+        this.$message.error(this.$t('user.smsCodeSentFailed'))
+        this.sendCodeLoading = false
       }
     }
   }

@@ -202,7 +202,7 @@ export default {
     handpickProjects() {
       let tempArr = this.projectsRows
         .map(i => i)
-        .sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
+        .sort(this.sortByKey('choicenessNo'))
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
@@ -211,7 +211,7 @@ export default {
     likesProjects() {
       let tempArr = this.projectsRows
         .map(i => i)
-        .sort((obj1, obj2) => obj1.star < obj2.star)
+        .sort(this.sortByKey('lastStar'))
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
@@ -249,7 +249,12 @@ export default {
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
-    }
+    },
+    sortByKey(key) {
+      return (obj1, obj2) => {
+        return obj1[key] >= obj2[key] ? -1 : 1
+      }
+    },
   }
 }
 </script>

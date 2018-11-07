@@ -147,6 +147,7 @@
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import default_portrait from '@/assets/img/default_portrait.png'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
@@ -335,6 +336,13 @@ export default {
     },
     async createComment() {
       if (!this.myComment) return
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.myComment
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isAddingComment = false
+        return
+      }
       await keepwork.comments.createComment({
         objectType: 4,
         objectId: this.issue.id,

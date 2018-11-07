@@ -33,6 +33,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
+import '@/components/common/thirdAuth'
 import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
