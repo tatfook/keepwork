@@ -46,7 +46,13 @@ export default {
     }
   },
   async mounted() {
-    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    await this.getProjectIssues({
+      objectId: this.projectId,
+      objectType: 5,
+      'x-per-page': 10,
+      'x-page': 1,
+      'x-order': 'createdAt-desc'
+    })
     this.projectIssues = this.projectIssueList
   },
   data() {
@@ -90,7 +96,9 @@ export default {
     relativeTimeFilter(date, isEn) {
       const offset = moment().utcOffset()
       isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(date).utcOffset(offset).fromNow()
+      return moment(date)
+        .utcOffset(offset)
+        .fromNow()
     }
   },
   components: {
