@@ -4,8 +4,8 @@
     <el-row>
       <el-col :sm="12" :md="6" v-for="(user,index) in allUsersData" :key="user.id">
         <div class="user-tab">
-          <img class="user-tab-cover" :src="user.portrait || default_portrait" alt="">
-          <h5 class="user-tab-name">{{user.username}}</h5>
+          <img class="user-tab-cover" @click="goUserHomePage(user, index)" :src="user.portrait || default_portrait" alt="">
+          <h5 class="user-tab-name" @click="goUserHomePage(user, index)">{{user.username}}</h5>
           <p class="user-tab-brief">{{user.desc || '这家伙很懒，没有简介！'}}</p>
           <div class="user-tab-abstract">
             <div>
@@ -71,7 +71,8 @@ export default {
   computed: {
     ...mapGetters({
       allUsers: 'pbl/allUsers',
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      isLogined: 'user/isLogined'
     }),
     usersCount() {
       return _.get(this.allUsers, 'total', 0)
@@ -92,7 +93,8 @@ export default {
   methods: {
     ...mapActions({
       getAllUsers: 'pbl/getAllUsers',
-      getUserFavorite: 'pbl/getUserFavorite'
+      getUserFavorite: 'pbl/getUserFavorite',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
@@ -129,8 +131,11 @@ export default {
         })
     },
     async toggleFollow(user, index) {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.isFollowLoading[index] = true
-      if (!this.isFollow(user,index)) {
+      if (!this.isFollow(user, index)) {
         await keepwork.favorites
           .favoriteProject({ objectId: user.id, objectType: 0 })
           .then(res => {
@@ -166,8 +171,11 @@ export default {
           })
       }
     },
-    goUserHomePage(){
-      alert('程序员小姐姐努力开发中')
+    goUserHomePage() {
+      this.$message({
+        type: 'warning',
+        message: '程序员小姐姐努力开发中'
+      })
     }
   }
 }
