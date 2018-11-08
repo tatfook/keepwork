@@ -73,7 +73,7 @@ export default {
         this.pblIssuesList({ projectId: this.projectId }),
         'rows',
         []
-      )
+      ).slice(0,10)
     },
     moreBoardLink() {
       return 'whiteboard'
