@@ -3,7 +3,7 @@
     <div class="project-white-board-content">
       <div class="project-white-board-content-header">
         <div class="search">
-          <el-input size="medium" placeholder="搜索关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
+          <el-input size="medium" placeholder="搜索标题关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
