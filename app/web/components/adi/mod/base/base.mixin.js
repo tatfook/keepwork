@@ -3,6 +3,7 @@ import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
+import CompHide from './CompHide'
 import { gThemeData } from '@/lib/global'
 
 jss.setup(preset())
@@ -52,14 +53,39 @@ const renderTemplate = (h, m, template, root) => {
 }
 
 export default {
+  // components: CompHide,
   props: {
     mod: Object,
     conf: Object,
     theme: Object,
     editMode: Boolean,
-    active: Boolean
+    active: Boolean,
+    renderMode: Boolean
   },
   render(h) {
+    // console.log('-----↓↓↓mod↓↓↓------')
+    // console.log(this.mod.data)
+    // console.log('-----↓↓↓editMode↓↓↓------')
+    // console.log(this.editMode)
+    // console.log('-----↓↓↓conf↓↓↓------')
+    // console.log(this.conf)
+    // console.log('-----↓↓↓theme↓↓↓------')
+    // console.log(this.theme)
+    // console.log('-----↓↓↓active↓↓↓------')
+    // console.log(this.active)
+    // console.log(this.compWrapperClass)
+    console.log(this.pop)
+    let isShowMod = false
+    _.forEach(this.mod.data, (item, key) => {
+      // console.log(key)
+      // eslint-disable-next-line eqeqeq
+      if (key == 'styleID') {
+        return true
+      }
+      if (!this.mod.data[key].hidden) {
+        isShowMod = true
+      }
+    })
     if (this.sheet) this.sheet.detach()
     let styleID =
       Number(this.modData.styleID) >= this.conf.styles.length
@@ -71,11 +97,17 @@ export default {
     this.sheet.attach()
     _.merge(this.theme.data, gThemeData)
 
-    return (
-      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
-        {renderTemplate(h, this)}
-      </div>
-    )
+    // eslint-disable-next-line no-constant-condition
+    if (this.renderMode || isShowMod) {
+      return (
+        <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
+          {renderTemplate(h, this)}
+        </div>
+      )
+    } else {
+      return (<CompHide />)
+
+    }
   },
   methods: {
     isChildActive(property) {
