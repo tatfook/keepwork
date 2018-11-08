@@ -135,7 +135,9 @@ const actions = {
     let { gitlab, path, options } = await getGitlabFileParams(context, {
       path: inputPath
     })
-    let file = await gitlab.getFile(path, options)
+    // let file = await gitlab.getFile(path, options)
+    const projectPath = path.split('/').slice(0, 2).join('/')
+    let file = await gitlab.getFile({ projectPath, fullPath: path })
     let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
       path,
@@ -245,6 +247,10 @@ const actions = {
         useCache: false
       })
     }
+  },
+  async createMultipleFile(context, { projectName, files }) {
+    const { gitlab } = await getGitlabFileParams(context, { path: '' })
+    await gitlab.createMultipleFile({ projectName, files })
   },
   async renameFile(context, { currentFilePath, newFilePath }) {
     const { dispatch } = context

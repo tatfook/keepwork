@@ -200,14 +200,26 @@ const actions = {
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
+    // FIXME: add theme.json to gitlab
+    const themeJson = {
+      content: JSON.stringify(ThemeHelper.defaultTheme),
+      name: 'theme.json',
+      path: 'templates/basic/_config/theme.json',
+      type: 'blob'
+    }
+    fileList.push(themeJson)
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
     const projectName = `${username}/${sitename}`
-    for (let { path, name, content } of fileList) {
+    let files = _.map(fileList, ({ path, content }) => {
       let filename = path.split('/').slice(2).join('/')
-      // await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-      await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-    }
+      return { path: `${username}/${sitename}/${filename}`, content }
+    })
+    await dispatch('gitlab/createMultipleFile', { projectName, files }, { root: true })
+    // for (let { path, name, content } of fileList) {
+    //   let filename = path.split('/').slice(2).join('/')
+    //   await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+    // }
     // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
@@ -267,7 +279,6 @@ const actions = {
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
     if (typeof content === 'string') return content
-
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
     content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })

@@ -70,6 +70,13 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
+          async createMultiple(_projectName, filesPayload) {
+            const projectName = encodeURIComponent(_projectName)
+            let res = await instance.post(`projects/${projectName}/files`, {
+              files: filesPayload
+            })
+            return res.data
+          },
           async edit(_projectName, filePath, content) {
             const [projectName, path] = [_projectName, filePath].map(
               encodeURIComponent
@@ -158,7 +165,7 @@ export class GitAPI {
     return this.client.projects.repository.tree(projectName, path, recursive)
   }
 
-  async getFile({ projectPath, fullPath, useCache }) {
+  async getFile({ projectPath, fullPath, useCache = false }) {
     return this.client.projects.repository.files
       .show({ projectPath, fullPath, useCache })
       .then(file => file)
@@ -169,11 +176,9 @@ export class GitAPI {
       .split('/')
       .splice(0, 2)
       .join('/')
-    return (
-      this.client.projects.repository.files
-        .show({ projectPath: projectName, fullPath: path, useCache: false })
-        .then(file => file.content)
-    )
+    return this.client.projects.repository.files
+      .show({ projectPath: projectName, fullPath: path, useCache: false })
+      .then(file => file.content)
   }
 
   async createFile({ projectName, path, options }) {
@@ -186,6 +191,14 @@ export class GitAPI {
     let content = options.content || ''
     return this.client.projects.repository.files
       .create(projectName, path, content)
+      .then(data => {
+        return data
+      })
+  }
+
+  async createMultipleFile({ projectName, files }) {
+    return this.client.projects.repository.files
+      .createMultiple(projectName, files)
       .then(data => {
         return data
       })
@@ -282,12 +295,14 @@ export class GitAPI {
 
   async upsertFile(path, options) {
     options = { ...(options || {}) }
-    const file = await this.getFile(path).catch(e => { })
+    const file = await this.getFile(path).catch(e => {})
     return file ? this.editFile(path, options) : this.createFile(path, options)
   }
 
   getFileGitUrl(path) {
-    return `${this.config.url}/${this.config.externalUsername}/${this.config.projectName}/blob/master/${path}`
+    return `${this.config.url}/${this.config.externalUsername}/${
+      this.config.projectName
+    }/blob/master/${path}`
   }
 
   async commitToES(path, action, content, options) {
