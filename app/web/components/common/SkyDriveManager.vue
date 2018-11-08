@@ -225,7 +225,7 @@ export default {
     },
     async handleCopy(file) {
       this.$emit('copy', file)
-      let toCopyPrefix = this.handleGetUrl({ file })
+      let toCopyPrefix = await this.handleGetUrl({ file })
       let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),

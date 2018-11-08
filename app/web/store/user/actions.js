@@ -157,7 +157,6 @@ const actions = {
   },
   async verifyCellphoneTwo(context, { cellphone, captcha, isBind, realname }) {
     let { dispatch, commit, getters: { sendCodeInfo } } = context
-    // smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
     let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ cellphone, captcha, isBind, realname })
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
@@ -209,28 +208,10 @@ const actions = {
       // await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
       await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
     }
-
     // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
-  // async initWebsite({ dispatch, getters }, { name }) {
-  //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
-  //   let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
 
-  //   await dispatch('getWebTemplateConfig')
-  //   let webTemplate = getWebTemplate({ categoryName, templateName })
-  //   await dispatch('getWebTemplateFiles', webTemplate)
-  //   let { fileList } = webTemplate
-
-  //   // copy all file in template.folder
-  //   for (let { path, content } of fileList) {
-  //     let filename = path.split('/').slice(2).join('/')
-  //     await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-  //   }
-
-  //   // refresh repositoryTree
-  //   await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
-  // },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
