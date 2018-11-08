@@ -24,13 +24,17 @@
         <div class="home-page-simple-show-center-right">
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">keepwork是做什么的</div>
-            <div class="video">
+            <div class="video" v-if="videoHtml" v-html="videoHtml">
+
+            </div>
+            <div v-else class="video">
               <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/1049/raw#2018-10-11_17_00_04-800-双马尾.mp4" poster="https://api.keepwork.com/storage/v0/siteFiles/1048/raw#2018-10-11_16_59_35-392-双马尾.jpg" controls></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
             <div class="title">官方公告</div>
-            <ul class="announce-list">
+            <ul class="announce-list" v-if="newsHtml" v-html="newsHtml"></ul>
+            <ul v-else class="announce-list">
               <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
                 <a href="//iicc.keepwork.com" target="_blank">进入</a>
               </li>
@@ -156,6 +160,7 @@ import { lesson } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'HomePage',
@@ -165,7 +170,9 @@ export default {
       hotsPackages: [],
       hiddenAd: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin
+      locationOrigin: window.location.origin,
+      newsHtml: '',
+      videoHtml: ''
     }
   },
   components: {
@@ -184,6 +191,7 @@ export default {
       this.getExcellentProjects(),
       this.getPackagesList(payload)
     ])
+    // await this.getNewsAndVideo()
   },
   computed: {
     ...mapGetters({
@@ -254,6 +262,14 @@ export default {
       return (obj1, obj2) => {
         return obj1[key] >= obj2[key] ? -1 : 1
       }
+    },
+    async getNewsAndVideo() {
+      // FIXME: 使用api去获取，需要等正式发布后更改
+      const newsUrl = `https://git.keepwork.com/gitlab_rls_official/keepworkkeepwork/raw/master/official/keepwork/news.md?_random=${Math.random()}`
+      const videoUrl = `https://api-release.keepwork.com/git/v0/projects/kevinxft%2F123321/files/kevinxft%2F123321%2Fvideo.md?_random=${Math.random()}`
+      let [ news, video ] = await Promise.all([ axios.get(newsUrl), axios.get(videoUrl)])
+      this.newsHtml = _.get(news, 'data', '')
+      this.videoHtml = _.get(video, 'data.content', '')
     }
   }
 }
@@ -398,6 +414,11 @@ export default {
                 top: 0px;
               }
               .iicc {
+                width: 22px;
+                height: 22px;
+                margin-right: 6px;
+              }
+              .news-badge{
                 width: 22px;
                 height: 22px;
                 margin-right: 6px;
