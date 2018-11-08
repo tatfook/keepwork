@@ -291,7 +291,8 @@ export default {
           objectType: 5,
           'x-per-page': 25,
           'x-page': this.currPage,
-          'x-order': 'createdAt-desc'
+          'x-order': 'createdAt-desc',
+          state: this.state
         }
         if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`
         if (this.state === null) {
