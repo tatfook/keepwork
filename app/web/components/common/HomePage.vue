@@ -8,18 +8,16 @@
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
           <div class="home-page-simple-show-center-left-desc">
-            <h2 class="title">创作自己的游戏与动画</h2>
-            <p class="intro">拥有自己的自己体系</p>
-            <p class="intro">拥有自己的个人网站</p>
-            <p class="intro">通过项目来学习编程</p>
-            <p class="intro">程序员为程序员创作的教程</p>
+            <div class="home-page-simple-show-center-left-desc-box"><p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)">{{item.text}}</p></div>
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">给教育者的话</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">告家长</a>
             </div>
           </div>
-          <div class="flexible-info-board"></div>
+          <div class="flexible-info-board">
+            <img :src="boardImgUrl" alt="">
+          </div>
         </div>
         <div class="home-page-simple-show-center-right">
           <div class="home-page-simple-show-center-right-kp">
@@ -165,7 +163,16 @@ export default {
       hotsPackages: [],
       hiddenAd: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin
+      locationOrigin: window.location.origin,
+      currIndex: 0,
+      briefPic:[
+        {image:require('@/assets/pblImg/game1.png'), text:'创作自己的游戏与动画'},
+        {image:require('@/assets/pblImg/game2.png'), text:'拥有自己的自己体系'},
+        {image:require('@/assets/pblImg/game3.png'), text:'拥有自己的个人网站'},
+        {image:require('@/assets/pblImg/game4.png'), text:'通过项目来学习编程'},
+        {image:require('@/assets/pblImg/game5.png'), text:'程序员为程序员创作的教程'},
+      ],
+      boardImgUrl: require('@/assets/pblImg/game1.png')
     }
   },
   components: {
@@ -223,6 +230,10 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    switchPic(index){
+      this.currIndex = index
+      this.boardImgUrl = this.briefPic[index].image
+    },
     closeAd() {
       this.hiddenAd = true
     },
@@ -297,7 +308,7 @@ export default {
     height: 0;
     overflow: hidden;
     border: none;
-    transition: all 1s ease-out;
+    transition: all .5s ease-out;
   }
   &-simple-show {
     margin-top: 16px;
@@ -320,10 +331,22 @@ export default {
             font-size: 30px;
             margin: 12px 0;
           }
-          .intro {
-            font-size: 14px;
-            color: #c0c4cc;
-            margin: 11px 0;
+          &-box{
+            height: 180px;
+            .intro {
+              font-size: 14px;
+              color: #c0c4cc;
+              margin: 0;
+              line-height: 30px;
+              cursor: pointer;
+              transition: all .5s ease-out;
+              &-hover {
+                color: #2397f3;
+                font-size: 30px;
+                margin: 12px 0;
+                transition: all .5s ease-out;
+              }
+            }
           }
           .join-button {
             padding: 0 28px;
@@ -345,13 +368,10 @@ export default {
         }
         .flexible-info-board {
           position: absolute;
-          right: 104px;
-          top: 68px;
+          right: 145px;
+          top: 52px;
           width: 223px;
           height: 146px;
-          border: 1px solid #ccc;
-          background: #fff;
-          border-radius: 4px;
         }
       }
       &-right {
