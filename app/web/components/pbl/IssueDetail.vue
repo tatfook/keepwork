@@ -1,66 +1,67 @@
 <template>
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
     <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/白板/问题详情</h4>
-    <div class="issue-detail-header">
-      <div class="issue-title">
-        <div v-if="currIssue.titleIsEdit" class="issue-title-edit-box">
-          <input class="issue-title-edit-box-input" type="text" v-model="currIssue.title">
-          <el-button class="issue-title-button" size="mini" type="primary" @click="updateTitle">确定</el-button>
-          <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
-        </div>
-        <div v-else class="issue-title-title-box">
-          <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.no}}</span>
-          <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
+    <div v-loading="updateLoading">
+      <div class="issue-detail-header">
+        <div class="issue-title">
+          <div v-if="currIssue.titleIsEdit" class="issue-title-edit-box">
+            <input class="issue-title-edit-box-input" type="text" v-model="currIssue.title">
+            <el-button class="issue-title-button" size="mini" type="primary" @click="updateTitle">确定</el-button>
+            <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
+          </div>
+          <div v-else class="issue-title-title-box">
+            <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.no}}</span>
+            <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="issue-detail-intro">
-      <span class="created-time">{{relativeTime(currIssue.createdAt)}}</span>
-      <span class="created-by">由<span class="name">{{issue.user.nickname}}</span>创建</span>
-      <span v-if="currIssue.tagEdit" class="issue-detail-intro-tag">
-        <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
-          {{tag}}
-        </el-tag>
-        <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
-        </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-        <el-button size="mini" type="primary" @click="updateTag">确定</el-button>
-        <el-button size="mini" @click="cancelUpdateTag">取消</el-button>
-      </span>
-      <span v-else class="created-tag">
-        <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
-        <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>修改标签</span>
-      </span>
-    </div>
-    <div class="issue-detail-status">
-      <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
-      <div class="issue-detail-status-right">
-        <span class="principal">负责人:</span>
-        <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
-        <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
-          <span class="el-dropdown-link">
-            <span class="assigns-btn"></span>
-          </span>
-          <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-            <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
-            <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+      <div class="issue-detail-intro">
+        <span class="created-time">{{relativeTime(currIssue.createdAt)}}</span>
+        <span class="created-by">由<span class="name">{{issue.user.nickname}}</span>创建</span>
+        <span v-if="currIssue.tagEdit" class="issue-detail-intro-tag">
+          <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+          <el-button size="mini" type="primary" @click="updateTag">确定</el-button>
+          <el-button size="mini" @click="cancelUpdateTag">取消</el-button>
+        </span>
+        <span v-else class="created-tag">
+          <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
+          <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>修改标签</span>
+        </span>
       </div>
-    </div>
-    <div class="issue-detail-idea">
+      <div class="issue-detail-status">
+        <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
+        <div class="issue-detail-status-right">
+          <span class="principal">负责人:</span>
+          <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
+          <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
+            <span class="el-dropdown-link">
+              <span class="assigns-btn"></span>
+            </span>
+            <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+              <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
+              <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+      <div class="issue-detail-idea">
 
-      <div class="issue-detail-idea-box">
-        <div class="issue-detail-idea-box-portrait">
-          <img :src="issue.user.portrait || default_portrait" alt="">
-        </div>
-        <div class="issue-detail-idea-box-content">
-          <div class="username-created-time">
-            <div class="username-created-time-left">
-              <span class="username">{{issue.user.username}}</span>
-              <span class="time">{{relativeTime(issue.createdAt)}}</span>
-            </div>
-            <!-- <div class="username-created-time-right" v-if="comment.extra.username == username">
+        <div class="issue-detail-idea-box">
+          <div class="issue-detail-idea-box-portrait">
+            <img :src="issue.user.portrait || default_portrait" alt="">
+          </div>
+          <div class="issue-detail-idea-box-content">
+            <div class="username-created-time">
+              <div class="username-created-time-left">
+                <span class="username">{{issue.user.username}}</span>
+                <span class="time">{{relativeTime(issue.createdAt)}}</span>
+              </div>
+              <!-- <div class="username-created-time-right" v-if="comment.extra.username == username">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   · · ·
@@ -71,10 +72,10 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div> -->
-          </div>
-          <div class="idea-area">
-            <div class="arrows"></div>
-            <!-- <div v-if="comment.isEdit" class="text">
+            </div>
+            <div class="idea-area">
+              <div class="arrows"></div>
+              <!-- <div v-if="comment.isEdit" class="text">
               <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
               <div class="text-button">
                 <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
@@ -82,62 +83,63 @@
               </div>
             </div>
             <div v-else class="text">{{comment.content}}</div> -->
-            <div class="text">{{issue.content}}</div>
+              <div class="text">{{issue.content}}</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="issue-detail-idea-box" v-for="(comment,index) in comments" :key="index">
-        <div class="issue-detail-idea-box-portrait">
-          <img :src="comment.extra.portrait || default_portrait" alt="">
-        </div>
-        <div class="issue-detail-idea-box-content">
-          <div class="username-created-time">
-            <div class="username-created-time-left">
-              <span class="username">{{comment.extra.username}}</span>
-              <span class="time">{{relativeTime(comment.createdAt)}}</span>
-            </div>
-            <div class="username-created-time-right" v-if="comment.extra.username == username && !isProhibitEdit">
-              <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                  · · ·
-                </span>
-                <el-dropdown-menu slot="dropdown" class="operate-comment">
-                  <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
-                  <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
+        <div class="issue-detail-idea-box" v-for="(comment,index) in comments" :key="index">
+          <div class="issue-detail-idea-box-portrait">
+            <img :src="comment.extra.portrait || default_portrait" alt="">
           </div>
-          <div class="idea-area">
-            <div class="arrows"></div>
-            <div v-if="comment.isEdit" class="text">
-              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
-              <div class="text-button">
-                <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
-                <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+          <div class="issue-detail-idea-box-content">
+            <div class="username-created-time">
+              <div class="username-created-time-left">
+                <span class="username">{{comment.extra.username}}</span>
+                <span class="time">{{relativeTime(comment.createdAt)}}</span>
+              </div>
+              <div class="username-created-time-right" v-if="comment.extra.username == username && !isProhibitEdit">
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    · · ·
+                  </span>
+                  <el-dropdown-menu slot="dropdown" class="operate-comment">
+                    <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
+                    <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
-            <div v-else class="text">{{comment.content}}</div>
+            <div class="idea-area">
+              <div class="arrows"></div>
+              <div v-if="comment.isEdit" class="text">
+                <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
+                <div class="text-button">
+                  <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
+                  <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+                </div>
+              </div>
+              <div v-else class="text">{{comment.content}}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-if="isLogined && !isProhibitEdit" class="issue-detail-my-idea">
-      <div class="issue-detail-my-idea-portrait">
-        <img :src="userProfile.portrait || default_portrait" alt="">
-      </div>
-      <div class="issue-detail-my-idea-content">
-        <div class="username">{{username}}</div>
-        <div class="idea-area">
-          <div class="arrows"></div>
-          <div class="text">
-            <textarea name="myIdea" rows="8" placeholder="说点什么呢...(建议不超过150个字符)" v-model.trim="myComment"></textarea>
-          </div>
+      <div v-if="isLogined && !isProhibitEdit" class="issue-detail-my-idea">
+        <div class="issue-detail-my-idea-portrait">
+          <img :src="userProfile.portrait || default_portrait" alt="">
         </div>
-        <div class="finish">
-          <el-button size="medium" @click="closeIssue">关闭问题</el-button>
-          <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment">评论</el-button>
+        <div class="issue-detail-my-idea-content">
+          <div class="username">{{username}}</div>
+          <div class="idea-area">
+            <div class="arrows"></div>
+            <div class="text">
+              <textarea name="myIdea" rows="8" placeholder="说点什么呢...(建议不超过150个字符)" v-model.trim="myComment"></textarea>
+            </div>
+          </div>
+          <div class="finish">
+            <el-button size="medium" @click="closeIssue">关闭问题</el-button>
+            <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment">评论</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -170,10 +172,16 @@ export default {
         return {}
       }
     },
+    currPage: {
+      type: Number,
+      default: 1
+    },
     isProhibitEdit: {
       type: Boolean,
       default: false
-    }
+    },
+    searchKeyWord: String,
+    state: null
   },
   data() {
     return {
@@ -186,10 +194,12 @@ export default {
       comments: [],
       myComment: '',
       isEdit: false,
-      assignedMembers: []
+      assignedMembers: [],
+      updateLoading: false
     }
   },
   async mounted() {
+    this.updateLoading = true
     await Promise.all([
       this.getIssueData(),
       this.getCommentsList(),
@@ -198,6 +208,7 @@ export default {
         objectType: 5
       })
     ]).catch(err => console.error(err))
+    this.updateLoading = false
   },
   computed: {
     ...mapGetters({
@@ -234,13 +245,19 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async getIssueData() {
-      this.issueData = Object.assign(this.issue, {
-        titleIsEdit: false,
-        tagEdit: false
-      })
-      this.currIssue = _.clone(this.issueData)
-      this.dynamicTags = this.currIssue.tags.split('|')
-      this.assignedMembers = _.clone(this.currIssue.assigns)
+      await keepwork.issues
+        .getSingleIssue({ issueId: this.issue.id })
+        .then(res => {
+          console.log('res1', res)
+          this.issueData = Object.assign(res, {
+            titleIsEdit: false,
+            tagEdit: false
+          })
+          this.currIssue = _.clone(this.issueData)
+          this.dynamicTags = this.currIssue.tags.split('|')
+          this.assignedMembers = _.clone(this.currIssue.assigns)
+        })
+        .catch(err => console.error(err))
     },
     editIssueTitle() {
       if (!this.isLogined) {
@@ -261,15 +278,30 @@ export default {
       Vue.set(this.currIssue, 'tagEdit', true)
     },
     async updateIssueItem(item) {
-      await keepwork.issues
-        .updateIssue({
-          objectId: this.issue.id,
-          params: item
-        })
-        .catch(err => console.error(err))
-      await this.getProjectIssues({
-        objectId: this.projectDetail.id,
-        objectType: 5
+      this.updateLoading = true
+      this.$nextTick(async () => {
+        await keepwork.issues
+          .updateIssue({
+            objectId: this.issue.id,
+            params: item
+          })
+          .catch(err => console.error(err))
+        let payload = {
+          objectId: this.projectDetail.id,
+          objectType: 5,
+          'x-per-page': 25,
+          'x-page': this.currPage,
+          'x-order': 'createdAt-desc'
+        }
+        if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`
+        if (this.state === null) {
+          let { state, ..._payload } = payload
+          await this.getProjectIssues(_payload)
+        }else{
+          await this.getProjectIssues(payload)
+        }
+        await this.getIssueData()
+        this.updateLoading = false
       })
     },
     async updateTitle() {
@@ -296,7 +328,6 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-
     handleInputConfirm() {
       let inputValue = this.inputValue
       if (inputValue) {

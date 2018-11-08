@@ -9,7 +9,7 @@
         </div>
         <div class="filter">
           筛选：
-          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesCount}})</span></span>
+          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesOpenCount + issuesCloseCount}})</span></span>
           <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{issuesOpenCount}})</span></span>
           <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{issuesCloseCount}})</span></span>
         </div>
@@ -39,7 +39,7 @@
       </div>
     </div>
     <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit"></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
     <div class="all-issue-pages" v-if="issuesCount > perPage">
       <div class="block">
         <span class="demonstration"></span>
@@ -71,7 +71,8 @@ export default {
       default_portrait,
       selectedIssue: {},
       perPage: 25,
-      page: 1
+      page: 1,
+      state: null
     }
   },
   props: {
@@ -97,21 +98,24 @@ export default {
       isLogined: 'user/isLogined'
     }),
     projectIssueList() {
-      let tempArr = _.get(
-        this.issuesList({ projectId: this.projectId }),
-        'rows',
-        []
-      )
-      return tempArr.sort(this.sortByUpdateAt)
+      return _.get(this.issuesList({ projectId: this.projectId }), 'rows', [])
     },
     issuesCount() {
       return _.get(this.issuesList({ projectId: this.projectId }), 'count', 0)
     },
     issuesOpenCount() {
-      return _.get(this.issuesList({ projectId: this.projectId }), 'openCount', 0)
+      return _.get(
+        this.issuesList({ projectId: this.projectId }),
+        'openCount',
+        0
+      )
     },
     issuesCloseCount() {
-      return _.get(this.issuesList({ projectId: this.projectId }), 'closeCount', 0)
+      return _.get(
+        this.issuesList({ projectId: this.projectId }),
+        'closeCount',
+        0
+      )
     },
     unfinishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 0)
@@ -143,15 +147,15 @@ export default {
     projectIssueList(newIssueList) {
       this.projectIssues = _.concat(newIssueList)
     },
-    async searchKeyWord(key, oldKey) {
+    async searchKeyWord(key, oldKey) { 
       let payload = {
         objectId: this.projectId,
         objectType: 5,
-        $or: [{ no: _.toNumber(key) || 0 }, { title: { $like: `%${key}%` } }],
         'x-per-page': this.perPage,
         'x-page': 1,
-        'x-order': 'createdAt-desc'
+        'x-order': 'createdAt-desc',
       }
+      if (key) payload['text-like'] = `%${key}%`;
       await this.getProjectIssues(payload)
       this.projectIssues = this.projectIssueList
     }
@@ -163,17 +167,21 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async targetPage(page) {
-      await this.getProjectIssues({
+      this.page = page
+      let payload = {
         objectId: this.projectId,
         objectType: 5,
-        $or: [
-          { no: _.toNumber(this.searchKeyWord) || 0 },
-          { title: { $like: `%${this.searchKeyWord}%` } }
-        ],
         'x-per-page': this.perPage,
         'x-page': page,
-        'x-order': 'createdAt-desc'
-      })
+        'x-order': 'createdAt-desc',
+        state: this.state
+      }
+      if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`;
+      if(this.state === null) {
+        let { state, ..._payload } = payload
+        return await this.getProjectIssues(_payload)
+      }
+      await this.getProjectIssues(payload)
     },
     searchIssue() {
       this.targetPage(1)
@@ -198,13 +206,16 @@ export default {
       this.showIssueDetail = false
     },
     showAllIssues() {
-      this.projectIssues = this.projectIssueList
+      this.state = null
+      this.targetPage(1)
     },
-    showFinishedIssues() {
-      this.projectIssues = this.finishedProjectIssueList
+    async showFinishedIssues() {
+      this.state = 1
+      this.targetPage(1)
     },
-    showUnfinishedIssues() {
-      this.projectIssues = this.unfinishedProjectIssueList
+    async showUnfinishedIssues() {
+      this.state = 0
+      this.targetPage(1)
     },
     relativeTime(time) {
       const offset = moment().utcOffset()
@@ -368,7 +379,7 @@ export default {
       }
     }
   }
-  .all-issue-pages{
+  .all-issue-pages {
     margin: 50px auto 0;
     text-align: center;
   }
