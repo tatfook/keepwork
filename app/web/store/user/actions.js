@@ -337,7 +337,7 @@ const actions = {
   },
   async getWebsiteDetailInfoByPath(context, { path }) {
     let { commit, getters: { getSiteDetailInfoByPath, userId } } = context
-    if (getSiteDetailInfoByPath(path)) return
+    // if (getSiteDetailInfoByPath(path)) return    // this code causes the name of the website to fail, so it is commented out
     let [username, sitename] = path.split('/').filter(x => x)
     if (username && sitename) {
       let detailInfo = await keepwork.website.getDetailInfo({ username, sitename })

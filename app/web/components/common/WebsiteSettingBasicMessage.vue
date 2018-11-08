@@ -135,6 +135,7 @@ export default {
             newBasicMessage: this.basicMessage
           })
           this.showResultInfo()
+          this.$emit('close')
         } else {
           this.loading = false
           return false
