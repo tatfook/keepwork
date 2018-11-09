@@ -17,7 +17,7 @@
             </el-tag>
             <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
             </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
           </div>
         </div>
         <div class="sketch-box">
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       issueTitle: '',
-      dynamicTags: ['需求', '设计', '产品'],
+      dynamicTags: [],
       inputVisible: false,
       inputValue: '',
       descriptionText: '',
