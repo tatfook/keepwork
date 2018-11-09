@@ -212,7 +212,7 @@ export default {
         height: 0;
         overflow: hidden;
         border: none;
-        transition: all 1s ease-out;
+        transition: all .2s ease-out;
       }
     }
   }
