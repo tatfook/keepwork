@@ -3,6 +3,7 @@
     "login": "Login",
     "register": "Register",
     "existAccount": "The username already exists",
+    "notValidAccount": "Account is not valid",
     "accountName": "Account name",
     "registerFailed": "Register Failed",
     "password": "Password",

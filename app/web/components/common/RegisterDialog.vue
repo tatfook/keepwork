@@ -165,6 +165,8 @@ export default {
                 this.showMessage('error', this.$t('user.verificationCodeExpiration'))
               }else if(e.response.data.code == 5){
                 this.showMessage('error', this.$t('user.verificationCodeError'))
+              }else if(e.response.data.code == 2){
+                this.showMessage('error', this.$t('common.notValidAccount'))
               }else{
                 this.showMessage('error', this.$t('common.registerFailed'))                
               }
