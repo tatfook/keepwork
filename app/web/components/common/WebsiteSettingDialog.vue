@@ -11,7 +11,7 @@
       </ul>
     </div>
     <div class="website-setting-content">
-      <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
+      <component :is='activeSettingComp' @close='handleClose' :siteDetail='siteDetail' :sitePath='sitePath'></component>
     </div>
   </el-dialog>
 </template>
@@ -28,6 +28,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'WebsiteSettingDialog',
   props: {
+    siteDetail: {
+      type: Object,
+      required: true
+    },
     show: Boolean,
     sitePath: String
   },

@@ -34,6 +34,8 @@ const {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
+  GET_SITE_GROUP_SUCCESS,
+  GET_USER_GROUPS_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
@@ -488,6 +490,29 @@ const actions = {
     // await keepwork.website.updateByName(newBasicMessage)
     await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
+  },
+  async getSiteGroupsBySiteId(context, { siteId }) {
+    let { commit } = context
+    let groups = await keepwork.website.getSiteGroups({ siteId })
+    commit(GET_SITE_GROUP_SUCCESS, { siteId, groups })
+  },
+  async createSiteGroup(context, { siteId, groupId, level }) {
+    let { dispatch } = context
+    await keepwork.website.createSiteGroup({ siteId, groupId, level })
+    await dispatch('getSiteGroupsBySiteId', { siteId })
+  },
+  async getUserGroups(context) {
+    let { commit } = context
+    let groups = await keepwork.groups.getAllGroups()
+    commit(GET_USER_GROUPS_SUCCESS, { groups })
+  },
+  async createNewGroup(context, { groupname, description = '' }) {
+    let newGroupData = await keepwork.groups.createGroup({ groupname, description }).catch(err => Promise.resolve(err))
+    return newGroupData
+  },
+  async addMemberToGroup(context, { groupId, memberName }) {
+    await keepwork.groups.addMemberToGroup({ groupId, memberName }).catch(err => Promise.resolve(err))
+    return Promise.resolve()
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context

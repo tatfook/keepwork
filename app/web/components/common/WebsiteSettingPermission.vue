@@ -4,11 +4,11 @@
       <h1><span class="website-setting-permission-index-label">1</span>网站类型</h1>
       <div class="website-setting-permission-type-main">
         <div class="website-setting-permission-type-item">
-          <el-radio v-model="siteVisibility" label="public">共有网站</el-radio>
+          <el-radio v-model="siteVisibility" :label="0">共有网站</el-radio>
           <p>默认允许大多数人访问，即使他们没有登录。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；还可以为部分人设定拒绝权限，则将他们加入黑名单（如果他们登录的话）。</p>
         </div>
         <div class="website-setting-permission-type-item">
-          <el-radio v-model="siteVisibility" label="private">私有网站</el-radio>
+          <el-radio v-model="siteVisibility" :label="1">私有网站</el-radio>
           <p>默认不允许未登录用户浏览。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；可以为部分人设定浏览权限，则他们可以浏览您创建的内容，其他未授权用户均无法浏览。</p>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <h1><span class="website-setting-permission-index-label">2</span>分组管理</h1>
       <div class="website-setting-permission-group-main">
         <div class="website-setting-permission-group-button-row">
-          <el-button round size="small">新建组</el-button>
+          <el-button round size="small" @click="showNewGroupDialog">新建组</el-button>
         </div>
         <el-table :data="siteGroups" border style="width: 100%">
           <el-table-column prop="name" label="分组名" width="96" fixed>
@@ -41,20 +41,19 @@
         <p>*网站拥有者不受分组配置影响</p>
         <el-form ref="form" :model="tempAuth" label-width="80px">
           <el-form-item label="选择分组">
-            <el-select v-model="tempAuth.group">
-              <el-option label="分组一" value="shanghai"></el-option>
-              <el-option label="分组二" value="beijing"></el-option>
+            <el-select v-model="tempAuth.groupId">
+              <el-option v-for="(group, index) in userGroups" :key="index" :label='group.groupname' :value="group.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="选择分组">
-            <el-select v-model="tempAuth.auth">
-              <el-option label="浏览" value="shanghai"></el-option>
-              <el-option label="拒绝" value="beijing"></el-option>
-              <el-option label="编辑" value="edit"></el-option>
+          <el-form-item label="设定权限">
+            <el-select v-model="tempAuth.level">
+              <el-option label="拒绝" :value="0"></el-option>
+              <el-option label="浏览" :value="32"></el-option>
+              <el-option label="编辑" :value="64"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item class="website-setting-permission-auth-operations">
-            <el-button @click="addAuth">添加授权</el-button>
+            <el-button @click="addAuth" :disabled="isNewAuthButtonDisabled">添加授权</el-button>
           </el-form-item>
         </el-form>
         <el-table :data="siteGroups" border style="width: 100%">
@@ -73,16 +72,31 @@
     <div class="website-setting-permission-operations-col">
       <dialog-operations @close='handleClose'></dialog-operations>
     </div>
+    <el-dialog class="website-setting-permission-create-group" :visible.sync="isNewGroupDialogShow" width="768px" :before-close="handleNewGroupDialogClose" append-to-body>
+      <site-new-group @close='handleNewGroupDialogClose'></site-new-group>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import DialogOperations from './DialogOperations'
+import SiteNewGroup from './SiteNewGroup'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingPermission',
   props: {
+    siteDetail: {
+      type: Object,
+      required: true
+    },
     sitePath: String
+  },
+  async mounted() {
+    await this.userGetUserGroups()
+    let siteId = this.siteId
+    await this.userGetSiteGroupsBySiteId({ siteId })
+    this.originSiteGroups = _.cloneDeep(this.getSiteGroupsById({ siteId }))
+    this.tempGroups = _.cloneDeep(this.originSiteGroups)
   },
   data() {
     return {
@@ -96,23 +110,69 @@ export default {
           members: ''
         }
       ],
-      tempAuth: {},
-      siteVisibility: 'public'
+      tempAuth: {
+        groupId: undefined,
+        level: undefined
+      },
+      originSiteGroups: [],
+      tempGroups: [],
+      siteVisibility: this.siteDetail.visibility,
+      isNewGroupDialogShow: false
     }
   },
   computed: {
-    ...mapGetters({})
+    ...mapGetters({
+      getSiteGroupsById: 'user/getSiteGroupsById',
+      userGroups: 'user/userGroups'
+    }),
+    siteId() {
+      return _.get(this.siteDetail, 'id')
+    },
+    isNewAuthButtonDisabled() {
+      return (
+        _.isUndefined(this.tempAuth.groupId) ||
+        _.isUndefined(this.tempAuth.level)
+      )
+    }
   },
-  async mounted() {},
   methods: {
-    ...mapActions({}),
-    addAuth() {},
+    ...mapActions({
+      userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
+      userGetUserGroups: 'user/getUserGroups',
+      userCreateSiteGroup: 'user/createSiteGroup'
+    }),
+    async addAuth() {
+      let { groupId, level } = this.tempAuth
+      await this.userCreateSiteGroup({
+        siteId: this.siteId,
+        groupId,
+        level
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '添加授权成功'
+        })
+        this.tempAuth = {
+          groupId: undefined,
+          level: undefined
+        }
+      })
+    },
     handleClose() {
       this.$emit('close')
+    },
+    showNewGroupDialog() {
+      this.isNewGroupDialogShow = true
+    },
+    async handleNewGroupDialogClose() {
+      let siteId = this.siteId
+      await this.userGetUserGroups()
+      this.isNewGroupDialogShow = false
     }
   },
   components: {
-    DialogOperations
+    DialogOperations,
+    SiteNewGroup
   }
 }
 </script>
@@ -210,6 +270,8 @@ export default {
       font-size: 14px;
       padding: 8px 21px;
       border-radius: 32px;
+    }
+    .el-button:not(.is-disabled) {
       color: #1989fa;
       border-color: #1989fa;
     }
@@ -245,6 +307,15 @@ export default {
     width: 120px;
     text-align: center;
     align-self: flex-end;
+  }
+  &-create-group {
+    .el-dialog__headerbtn {
+      top: 14px;
+      right: 18px;
+    }
+    .el-dialog__body {
+      padding: 0;
+    }
   }
 }
 </style>

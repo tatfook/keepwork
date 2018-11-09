@@ -98,6 +98,8 @@ export const website = {
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
+  getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
+  createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
   getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
   getDetailInfo: async args =>
@@ -310,6 +312,12 @@ export const issues = {
   getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
 }
 
+export const groups = {
+  getAllGroups: async () => get('groups'),
+  createGroup: async ({ groupname, description }) => post('groups', { groupname, description }),
+  addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
+}
+
 export const keepwork = {
   user,
   website,
@@ -326,7 +334,8 @@ export const keepwork = {
   members,
   comments,
   bigfile,
-  issues
+  issues,
+  groups
 }
 
 export default keepwork
