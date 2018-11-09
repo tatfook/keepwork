@@ -250,7 +250,8 @@ export const projects = {
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
   getContributeProjects: async () => get('projects/join'),
-  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`)
+  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
+  visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }
 
 export const applies = {
