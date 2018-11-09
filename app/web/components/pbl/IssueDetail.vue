@@ -26,7 +26,7 @@
           </el-input>
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
           <el-button size="mini" type="primary" @click="updateTag">确定</el-button>
-          <el-button size="mini" @click="cancelUpdateTag">取消</el-button>
+          <!-- <el-button size="mini" @click="cancelUpdateTag">取消</el-button> -->
         </span>
         <span v-else class="created-tag">
           <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
@@ -248,7 +248,6 @@ export default {
       await keepwork.issues
         .getSingleIssue({ issueId: this.issue.id })
         .then(res => {
-          console.log('res1', res)
           this.issueData = Object.assign(res, {
             titleIsEdit: false,
             tagEdit: false
@@ -298,7 +297,7 @@ export default {
         if (this.state === null) {
           let { state, ..._payload } = payload
           await this.getProjectIssues(_payload)
-        }else{
+        } else {
           await this.getProjectIssues(payload)
         }
         await this.getIssueData()
@@ -331,6 +330,18 @@ export default {
     },
     handleInputConfirm() {
       let inputValue = this.inputValue
+      let isExistTagIndex = _.findIndex(
+        this.dynamicTags,
+        tag => tag === inputValue
+      )
+      if (isExistTagIndex !== -1) {
+        this.$message({
+          showClose: true,
+          message: '该标签已存在',
+          type: 'error'
+        })
+        return
+      }
       if (inputValue) {
         this.dynamicTags.push(inputValue)
       }
@@ -559,6 +570,15 @@ export default {
         }
         .input-new-tag {
           margin-bottom: 4px;
+          display: inline-block;
+          width: 60px;
+          height: 20px;
+          padding: 0;
+          .el-input__inner {
+            height: 24px;
+            line-height: 24px;
+            padding: 0 8px;
+          }
         }
         .el-button {
           padding: 4px 10px;

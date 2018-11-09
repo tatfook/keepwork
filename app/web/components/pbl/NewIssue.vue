@@ -23,7 +23,6 @@
         <div class="sketch-box">
           <div class="sketch-box-tag">指派</div>
           <div class="sketch-box-content">
-            <!-- 指派头像显示 -->
             <div class="player">
               <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
               <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
@@ -116,6 +115,18 @@ export default {
     },
     handleInputConfirm() {
       let inputValue = this.inputValue
+      let isExistTagIndex = _.findIndex(
+        this.dynamicTags,
+        tag => tag === inputValue
+      )
+      if (isExistTagIndex !== -1) {
+        this.$message({
+          showClose: true,
+          message: '该标签已存在',
+          type: 'error'
+        })
+        return
+      }
       if (inputValue) {
         this.dynamicTags.push(inputValue)
       }
@@ -170,7 +181,7 @@ export default {
               objectType: 5,
               'x-per-page': 25,
               'x-page': 1,
-              'x-order':'createdAt-desc'
+              'x-order': 'createdAt-desc'
             })
             this.handleClose()
             this.cretateIssueLoading = false
@@ -224,6 +235,16 @@ export default {
           flex: 1;
           .el-tag + .el-tag {
             margin-left: 10px;
+          }
+          .input-new-tag {
+            margin-bottom: 4px;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+            padding: 0;
+            .el-input__inner {
+              padding: 0 8px;
+            }
           }
           .player {
             line-height: 38px;
