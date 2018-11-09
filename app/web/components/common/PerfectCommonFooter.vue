@@ -34,7 +34,8 @@
           <h4 class="title">keepwork家族</h4>
           <ul class="list">
             <li><a href="https://keepwork.com" target="_blank">- keepwork</a></li>
-            <li><a href="https://iicc.keepwork.com/#/" target="_blank">- Paracraft</a></li>
+            <li><a href="https://iicc.keepwork.com/#/" target="_blank">- IICC国际智能大赛</a></li>
+            <li><a href="http://paracraft.keepwork.com/?lang=zh" target="_blank">- Paracraft</a></li>
             <li><a href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">- NPL语言</a></li>
             <li><a href="https://keepwork.com/intro/keepwork/NPLCAD" target="_blank">- NPL CAD</a></li>
             <li><a href="https://keepwork.com/official/open/index" target="_blank">- 开放平台</a></li>

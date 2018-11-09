@@ -13,6 +13,7 @@
           <div class="new-project-type-item" :class="{'active iconfont': projectType.type === newProjectData.type}" v-for="(projectType, index) in projectTypes" :key="index" @click='selectProjectType(projectType.type)'>
             <img class="new-project-type-item-cover" :src="projectType.type === newProjectData.type ?projectType.activeIconImgSrc:projectType.iconImgSrc" alt="">
             <p class="new-project-type-item-label">{{projectType.label}}</p>
+            <p class="new-project-type-item-label new-project-type-item-label-sub" v-if="projectType.subLabel">{{projectType.subLabel}}</p>
           </div>
         </div>
       </div>
@@ -39,7 +40,8 @@ export default {
       projectTypes: [
         {
           type: 1,
-          label: 'Paracraft',
+          label: 'Paracraft创意空间',
+          subLabel: '3D动画和游戏作品',
           iconImgSrc: require('@/assets/pblImg/project_paracraft.png'),
           activeIconImgSrc: require('@/assets/pblImg/project_paracraft_active.png')
         },
@@ -157,8 +159,8 @@ export default {
       display: flex;
     }
     &-item {
-      width: 168px;
-      height: 168px;
+      width: 190px;
+      height: 186px;
       border: 1px solid #e8e8e8;
       text-align: center;
       margin: 0 20px 25px 0;
@@ -174,10 +176,17 @@ export default {
         position: absolute;
         left: 0;
         width: 100%;
-        bottom: 16px;
-        color: #909399;
+        bottom: 32px;
+        color: #303133;
         margin: 0;
         font-size: 14px;
+        font-weight: bold;
+        &-sub {
+          font-size: 12px;
+          bottom: 16px;
+          color: #909399;
+          font-weight: normal;
+        }
       }
     }
     &-item:last-child {

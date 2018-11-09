@@ -21,6 +21,7 @@ import ProjectJoinedMembersList from './common/ProjectJoinedMembersList'
 import ProjectBasicInfo from './common/ProjectBasicInfo'
 import ProjectComments from './common/ProjectComments'
 import ProjectBoards from './common/ProjectBoards'
+import { keepwork } from '@/api'
 export default {
   name: 'ProjectIndex',
   props: {
@@ -62,6 +63,9 @@ export default {
       default: false
     },
     projectApplyState: Number
+  },
+  async created(){
+    await keepwork.projects.visitProject(this.projectId)
   },
   computed: {
     originProjectName() {
