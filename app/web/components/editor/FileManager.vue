@@ -263,7 +263,6 @@ export default {
         path,
         expanded: node.expanded
       })
-
       // try open files list in site level
       let repositoryIsClickedAndFileListIsEmpty =
         node.level === 1 && _.isEmpty(data.children)
@@ -275,8 +274,13 @@ export default {
         await this.getRepositoryTree({ path })
       }
       // try open file
-      let isFileClicked = data.type === 'blob'
-      isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
+      // let isFileClicked = data.type === 'blob'
+      if (data.type === 'blob') {
+        this.$router.push('/' + data.path.replace(/\.md$/, ''))
+        let url = this.$router.resolve({ path: this.$route.path }).href
+        history.replaceState('', '', url)
+      }
+      // isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
     },
     closeAndResetFile(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
@@ -315,6 +319,8 @@ export default {
     },
     handleOpenedClick({ path }, node) {
       this.$router.push('/' + path.replace(/\.md$/, ''))
+      let url = this.$router.resolve({ path: this.$route.path }).href
+      history.replaceState('', '', url)
     },
     toggleContent(type) {
       this.trees[type] = !this.trees[type]
