@@ -114,6 +114,9 @@ export default {
       currSortMode: '综合'
     }
   },
+  created(){
+    window.scrollTo(0, 0)
+  },
   mounted() {
     const { query } = this.$route
     if (query && query.keyword) {

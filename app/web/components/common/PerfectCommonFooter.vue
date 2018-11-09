@@ -14,20 +14,20 @@
         <div class="list-box">
           <h4 class="title">用来做什么？</h4>
           <ul class="list">
-            <li><a href="" target="_blank">- 创建自己的项目</a></li>
-            <li><a href="" target="_blank">- 与老师一起完成项目</a></li>
-            <li><a href="" target="_blank">- 制作个人网站</a></li>
-            <li><a href="" target="_blank">- 拥有个人知识体系</a></li>
-            <li><a href="" target="_blank">- 学习在线课程</a></li>
+            <li><a>- 创建自己的项目</a></li>
+            <li><a>- 与老师一起完成项目</a></li>
+            <li><a>- 制作个人网站</a></li>
+            <li><a>- 拥有个人知识体系</a></li>
+            <li><a>- 学习在线课程</a></li>
           </ul>
         </div>
         <div class="list-box">
           <h4 class="title">学习法</h4>
           <ul class="list">
-            <li><a href="" target="_blank">- 在项目中学习</a></li>
-            <li><a href="" target="_blank">- 在传授中学习</a></li>
-            <li><a href="" target="_blank">- 费曼学习法</a></li>
-            <li><a href="" target="_blank">- 碎片化学习法</a></li>
+            <li><a>- 在项目中学习</a></li>
+            <li><a>- 在传授中学习</a></li>
+            <li><a>- 费曼学习法</a></li>
+            <li><a>- 碎片化学习法</a></li>
           </ul>
         </div>
         <div class="list-box">
