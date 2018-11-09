@@ -7,7 +7,7 @@
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
         <span slot="label">成员</span>
-        <project-members :projectId='projectId' class="edit-project-members"></project-members>
+        <project-members :projectDetail='pblProjectDetail' :projectId='projectId' class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>
     <p v-else>不好意思，没有编辑权限。。。</p>
