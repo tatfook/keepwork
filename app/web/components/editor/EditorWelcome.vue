@@ -179,6 +179,8 @@ export default {
     padding-bottom: 10px;
     font-weight: 600;
     color: #777;
+    max-width: 306px;
+    white-space: normal;
   }
   .tipsImg{
     width: 300px;
@@ -205,6 +207,9 @@ export default {
     margin-left: 270px;
     cursor:pointer;
   }
+  .changeButton-next:hover {
+    background-color: #48a3ff;
+  }
   .historicalRecords {
     margin-bottom: 15px;
     height: 150px;
@@ -220,6 +225,10 @@ export default {
 }
 @media only screen and (max-width: 1366px){
   .guid-content{
+    .tipsText{
+      font-size: 14px;
+      max-width: 206px;
+    }
     .tipsImg{
       width: 200px;
       height: 100px;
