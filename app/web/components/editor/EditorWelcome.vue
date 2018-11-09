@@ -134,7 +134,7 @@ export default {
   div{
     .welcomeButton {
       border-radius: 5px;
-      letter-spacing: 5px;
+      letter-spacing: 4px;
       color: #fff;
       font-size: 18px;
       text-align: center;
@@ -143,6 +143,7 @@ export default {
       width: 180px;
       height: 20px;
       line-height: 21px;
+      cursor:pointer;
     }
     .icon-next {
       float: right;
@@ -174,8 +175,10 @@ export default {
   }
   .tipsText{
     padding-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
     padding-bottom: 10px;
+    font-weight: 600;
+    color: #777;
   }
   .tipsImg{
     width: 300px;
