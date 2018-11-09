@@ -76,7 +76,7 @@ export default {
       ).slice(0,10)
     },
     moreBoardLink() {
-      return 'whiteboard'
+      return `${this.projectId}/whiteboard`
     }
   },
   methods: {
