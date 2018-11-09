@@ -245,6 +245,7 @@ export default {
         .map(i => i)
         .sort(this.sortByKey('lastStar'))
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
+      tempArr2 = this.sortByKeys(tempArr2, 'lastStar', 'updatedAt')
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
@@ -290,6 +291,25 @@ export default {
       return (obj1, obj2) => {
         return obj1[key] >= obj2[key] ? -1 : 1
       }
+    },
+    sortByKeys(arr, groupKey, sortKey) {
+      let group = _.reduce(
+        arr,
+        (obj, prv) => {
+          _.isArray(obj[prv[groupKey]])
+            ? obj[prv[groupKey]].push(prv)
+            : (obj[prv[groupKey]] = [prv])
+          return obj
+        },
+        {}
+      )
+      _.forEach(group, item => item.sort(this.sortByKey(sortKey)))
+      let keysArr = _.keys(group).sort((a, b) => b - a)
+      let likesArray = []
+      _.forEach(keysArr, key => {
+        likesArray = [...likesArray, ...group[key]]
+      })
+      return likesArray
     },
     async getNewsAndVideo() {
       // FIXME: 使用线上的markdown地址
