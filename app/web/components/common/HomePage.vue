@@ -8,7 +8,9 @@
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
           <div class="home-page-simple-show-center-left-desc">
-            <div class="home-page-simple-show-center-left-desc-box"><p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)">{{item.text}}</p></div>
+            <div class="home-page-simple-show-center-left-desc-box">
+              <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)">{{item.text}}</p>
+            </div>
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">给教育者的话</a>
@@ -158,7 +160,7 @@ import { lesson } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
-import axios from 'axios'
+import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 
 export default {
   name: 'HomePage',
@@ -170,12 +172,27 @@ export default {
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
       currIndex: 0,
-      briefPic:[
-        {image:require('@/assets/pblImg/game1.png'), text:'创作自己的游戏与动画'},
-        {image:require('@/assets/pblImg/game2.png'), text:'拥有自己的自己体系'},
-        {image:require('@/assets/pblImg/game3.png'), text:'拥有自己的个人网站'},
-        {image:require('@/assets/pblImg/game4.png'), text:'通过项目来学习编程'},
-        {image:require('@/assets/pblImg/game5.png'), text:'程序员为程序员创作的教程'},
+      briefPic: [
+        {
+          image: require('@/assets/pblImg/game1.png'),
+          text: '创作自己的游戏与动画'
+        },
+        {
+          image: require('@/assets/pblImg/game2.png'),
+          text: '拥有自己的自己体系'
+        },
+        {
+          image: require('@/assets/pblImg/game3.png'),
+          text: '拥有自己的个人网站'
+        },
+        {
+          image: require('@/assets/pblImg/game4.png'),
+          text: '通过项目来学习编程'
+        },
+        {
+          image: require('@/assets/pblImg/game5.png'),
+          text: '程序员为程序员创作的教程'
+        }
       ],
       boardImgUrl: require('@/assets/pblImg/game1.png'),
       newsHtml: '',
@@ -198,7 +215,7 @@ export default {
       this.getExcellentProjects(),
       this.getPackagesList(payload)
     ])
-    // await this.getNewsAndVideo()
+    await this.getNewsAndVideo()
   },
   computed: {
     ...mapGetters({
@@ -238,7 +255,7 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
-    switchPic(index){
+    switchPic(index) {
       this.currIndex = index
       this.boardImgUrl = this.briefPic[index].image
     },
@@ -275,12 +292,27 @@ export default {
       }
     },
     async getNewsAndVideo() {
-      // FIXME: 使用api去获取，需要等正式发布后更改
-      const newsUrl = `https://git.keepwork.com/gitlab_rls_official/keepworkkeepwork/raw/master/official/keepwork/news.md?_random=${Math.random()}`
-      const videoUrl = `https://api-release.keepwork.com/git/v0/projects/kevinxft%2F123321/files/kevinxft%2F123321%2Fvideo.md?_random=${Math.random()}`
-      let [ news, video ] = await Promise.all([ axios.get(newsUrl), axios.get(videoUrl)])
-      this.newsHtml = _.get(news, 'data', '')
-      this.videoHtml = _.get(video, 'data.content', '')
+      // FIXME: 使用线上的markdown地址
+      const HomePageInfo = {
+        apiPrefix: 'https://api-release.keepwork.com/git/v0',
+        projectName: 'kevinxft/123321',
+        newsPath: 'kevinxft/123321/news.md',
+        videoPath: 'kevinxft/123321/video.md'
+      }
+      let [news = '', video = ''] = await Promise.all([
+        gitlabShowRawForGuest(
+          HomePageInfo.apiPrefix,
+          HomePageInfo.projectName,
+          HomePageInfo.newsPath
+        ),
+        gitlabShowRawForGuest(
+          HomePageInfo.apiPrefix,
+          HomePageInfo.projectName,
+          HomePageInfo.videoPath
+        )
+      ])
+      this.newsHtml = news
+      this.videoHtml = video
     }
   }
 }
@@ -324,7 +356,7 @@ export default {
     height: 0;
     overflow: hidden;
     border: none;
-    transition: all .5s ease-out;
+    transition: all 0.5s ease-out;
   }
   &-simple-show {
     margin-top: 16px;
@@ -347,7 +379,7 @@ export default {
             font-size: 30px;
             margin: 12px 0;
           }
-          &-box{
+          &-box {
             height: 180px;
             .intro {
               font-size: 14px;
@@ -355,12 +387,12 @@ export default {
               margin: 0;
               line-height: 30px;
               cursor: pointer;
-              transition: all .5s ease-out;
+              transition: all 0.5s ease-out;
               &-hover {
                 color: #2397f3;
                 font-size: 30px;
                 margin: 12px 0;
-                transition: all .5s ease-out;
+                transition: all 0.5s ease-out;
               }
             }
           }
@@ -438,7 +470,7 @@ export default {
                 height: 22px;
                 margin-right: 6px;
               }
-              .news-badge{
+              .news-badge {
                 width: 22px;
                 height: 22px;
                 margin-right: 6px;
