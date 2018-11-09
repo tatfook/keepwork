@@ -207,9 +207,9 @@ const actions = {
       path: 'templates/basic/_config/theme.json',
       type: 'blob'
     }
-    fileList.push(themeJson)
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
+    fileList = _.uniq([...fileList, themeJson ], 'path')
     const projectName = `${username}/${sitename}`
     let files = _.map(fileList, ({ path, content }) => {
       let filename = path.split('/').slice(2).join('/')
