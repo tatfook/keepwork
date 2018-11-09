@@ -176,7 +176,7 @@ export default {
   filters: {
     relativeTimeFilter(date, isEn) {
       isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(date, 'YYYYMMDDHH').fromNow()
+      return moment(date).fromNow()
     }
   }
 }
