@@ -256,7 +256,7 @@ body {
 .index-page-container {
   min-height: 100%;
 }
-.index-page-main {
+.el-main.index-page-main {
   font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC',
     'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 0;

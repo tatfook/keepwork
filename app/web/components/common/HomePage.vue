@@ -215,7 +215,7 @@ export default {
       this.getExcellentProjects(),
       this.getPackagesList(payload)
     ])
-    await this.getNewsAndVideo()
+    // await this.getNewsAndVideo()
   },
   computed: {
     ...mapGetters({
@@ -376,7 +376,7 @@ export default {
     height: 0;
     overflow: hidden;
     border: none;
-    transition: all 0.5s ease-out;
+    transition: all 0.2s ease-out;
   }
   &-simple-show {
     margin-top: 16px;
@@ -400,19 +400,20 @@ export default {
             margin: 12px 0;
           }
           &-box {
-            height: 180px;
+            height: 190px;
             .intro {
               font-size: 14px;
               color: #c0c4cc;
               margin: 0;
               line-height: 30px;
               cursor: pointer;
-              transition: all 0.5s ease-out;
+              transition: all 0.3s ease-out;
               &-hover {
                 color: #2397f3;
                 font-size: 30px;
                 margin: 12px 0;
-                transition: all 0.5s ease-out;
+                font-weight: bold;
+                transition: all 0.3s ease-out;
               }
             }
           }
@@ -517,11 +518,16 @@ export default {
       margin: 0 auto;
       max-width: 1200px;
       .box {
-        margin: 24px 0;
-        padding: 20px 36px 20px 24px;
+        margin: 24px 12px;
+        padding: 10px 36px 10px 24px;
         display: flex;
         border-right: 1px solid #eee;
         cursor: pointer;
+        border-radius: 4px;
+        &:hover {
+          box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+          transition: all 200ms ease-in;
+        }
         &-text {
           flex: 1;
           &-intro {
@@ -546,9 +552,6 @@ export default {
             width: 100%;
           }
         }
-        &:hover {
-          background: rgb(222, 229, 248);
-        }
       }
       .no-line {
         border: none;
@@ -559,7 +562,7 @@ export default {
     background: #f6f7f8;
     &-excellent {
       margin: 0 auto;
-      padding-top: 50px;
+      padding-top: 16px;
       max-width: 1200px;
       .title {
         height: 60px;
@@ -593,6 +596,11 @@ export default {
           box-sizing: border-box;
           border: 1px solid #e8e8e8;
           background: #fff;
+          margin: 0 auto 16px;
+          &:hover {
+            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+            transition: all 200ms ease-in;
+          }
           &-cover {
             width: 100%;
             height: 143px;

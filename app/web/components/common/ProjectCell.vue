@@ -67,9 +67,10 @@ export default {
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
   background: #fff;
+  transition: all 200ms ease-in;
   &:hover {
-    box-shadow: 0 0 25px 3px #ccc;
-    transition: all 0.5s ease-in;
+    box-shadow: 0 12px 24px -6px rgba(0,0,0,.16);
+    transition: all 200ms ease-in;
   }
   &-cover {
     width: 100%;
