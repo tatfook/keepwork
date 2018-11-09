@@ -250,7 +250,7 @@ body {
   align-items: center;
   background-color: #f9f9f9;
 }
-.home-page-footer {
+.el-footer.home-page-footer {
   padding: 0;
 }
 .index-page-container {

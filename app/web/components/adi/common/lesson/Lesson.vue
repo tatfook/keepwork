@@ -155,6 +155,7 @@ export default {
 }
 .el-main.index-page-main {
   background-color: #fbfbfb;
+  padding: 0;
 }
 .maxwidth-template .el-main {
   max-width: 100%;
