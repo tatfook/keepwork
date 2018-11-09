@@ -147,7 +147,7 @@ export default {
     projectIssueList(newIssueList) {
       this.projectIssues = _.concat(newIssueList)
     },
-    async searchKeyWord(key, oldKey) { 
+    async searchKeyWord(key, oldKey) {
       let payload = {
         objectId: this.projectId,
         objectType: 5,

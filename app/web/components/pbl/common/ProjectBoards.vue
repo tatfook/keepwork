@@ -3,7 +3,7 @@
     <el-card class="project-boards-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
         <span class="project-boards-card-label">项目白板</span>
-        <router-link :to="{path:moreBoardLink}" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
+        <router-link :to="{ name: 'ProjectWhiteBoard', path:moreBoardLink }" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
       </div>
       <div class="project-boards-list" v-if="projectIssueList.length >0">
         <div class="project-boards-item" v-for="(issue, index) in projectIssueList" :key="index" @click="showIssueDetail(issue)">
@@ -73,7 +73,7 @@ export default {
         this.pblIssuesList({ projectId: this.projectId }),
         'rows',
         []
-      ).slice(0,10)
+      ).slice(0, 10)
     },
     moreBoardLink() {
       return `${this.projectId}/whiteboard`
