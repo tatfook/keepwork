@@ -4,7 +4,7 @@
       <div class="project-index-sidebar">
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
-        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
         <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
       </div>
       <div class="project-index-main">
