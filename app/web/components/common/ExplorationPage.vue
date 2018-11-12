@@ -7,12 +7,12 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
-              <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
+              <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
-              </el-autocomplete>
-              <!-- <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+              </el-autocomplete> -->
+              <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
-              </el-input> -->
+              </el-input>
             </el-col>
             <el-col :span="2">
               <el-dropdown @command="handleSort">
