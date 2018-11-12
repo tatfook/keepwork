@@ -22,6 +22,7 @@ import router from './pbl.router'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import gitlabModule from '@/store/gitlab'
+import Cookies from 'js-cookie'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -58,6 +59,15 @@ const store = new Vuex.Store({
     pbl: pblModule,
     gitlab: gitlabModule
   }
+})
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (!Cookies.get('token')) {
+      return window.location.replace('/')
+    }
+  }
+  next()
 })
 
 export default {
