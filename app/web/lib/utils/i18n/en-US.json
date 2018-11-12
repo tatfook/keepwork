@@ -308,7 +308,9 @@
     "praise": "Praise",
 
     "addVideoCover": "+ Add video cover",
-    "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?"
+    "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?",
+
+    "wrongModDirective": "Wrong Mod Directive"
   },
   "tips": {
     "clickToShow": "Click to show",

@@ -309,7 +309,9 @@
     "praise": "赞",
 
     "addVideoCover": "+ 添加视频封面",
-    "deleteVideoCoverConfirmMsg": "你确定要删除视频封面吗？"
+    "deleteVideoCoverConfirmMsg": "你确定要删除视频封面吗？",
+
+    "wrongModDirective": "错误的Mod指令"
   },
   "tips": {
     "clickToShow": "点击显示",

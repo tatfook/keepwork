@@ -6,7 +6,7 @@
       </div>
       <div class='mod'>
         <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
-        <span v-if='invalid'> 错误的Mod指令 </span>
+        <span v-if='invalid'>{{$t('editor.wrongModDirective')}}</span>
       </div>
       <div class='operator' v-if='isActive'>
         <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
