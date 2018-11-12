@@ -17,7 +17,6 @@ import LessonMoreInfoSettting from './LessonMoreInfoSettting'
 export default {
   name: 'EditLesson',
   async mounted() {
-    this.isEditorMod && console.log('编辑器模式😀😀😀😀')
     this.isLoading = true
     this.isGettingData = true
     await this.getLessonDetail({ lessonId: this.editingLessonId })

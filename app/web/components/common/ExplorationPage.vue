@@ -7,6 +7,9 @@
         <div class="search">
           <el-row>
             <el-col :span="22">
+              <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
+                <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
+              </el-autocomplete> -->
               <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-input>
@@ -97,6 +100,7 @@ import Website from './explorationPageTab/Website'
 import Course from './explorationPageTab/Course'
 import Recruiting from './explorationPageTab/Recruiting'
 import Users from './explorationPageTab/Users'
+import { EsAPI } from '@/api'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -110,7 +114,17 @@ export default {
       currSortMode: '综合'
     }
   },
-  mounted() {},
+  created(){
+    window.scrollTo(0, 0)
+  },
+  mounted() {
+    const { query } = this.$route
+    if (query && query.keyword) {
+      history.replaceState('', '', this.$route.path)
+      this.searchKey = query.keyword
+      this.goSearch()
+    }
+  },
   computed: {
     ...mapGetters({
       allProjects: 'pbl/allProjects',
@@ -124,10 +138,18 @@ export default {
         case 3:
         case 5:
         case 8:
-          return [{ mode: '综合', command: '/综合' },{ mode: '最新', command: 'updated_time/最新' },{ mode: '热门', command: 'recent_view/热门' }]
+          return [
+            { mode: '综合', command: '/综合' },
+            { mode: '最新', command: 'updated_time/最新' },
+            { mode: '热门', command: 'recent_view/热门' }
+          ]
           break
         case 6:
-          return [{mode: '综合', command: '/综合'},{ mode: '项目', command: '/项目' },{ mode: '名气', command: '/名气' },]
+          return [
+            { mode: '综合', command: '/综合' },
+            { mode: '项目', command: 'total_projects/项目' },
+            { mode: '名气', command: 'total_fans/名气' }
+          ]
           break
         default:
           return [{ mode: '综合', command: '/综合' }]
@@ -136,6 +158,22 @@ export default {
     }
   },
   methods: {
+    filterSuggetions(res, cb) {
+      if (res.length) {
+        cb(_.map(res, i => ({ value: i.keyword })))
+      }
+    },
+    async querySearch(queryString, cb) {
+      // FIXME: 还缺个热门和最近
+      let suggestions = await EsAPI.suggestions.getPrefixSuggestions({
+        prefix: queryString
+      })
+      return this.filterSuggetions(suggestions, cb)
+    },
+    handleSelect(item) {
+      this.searchKey = item.value
+      this.goSearch()
+    },
     handleSort(sortType) {
       this.currSortMode = sortType.split('/')[1]
       this.sortProjects = sortType.split('/')[0]
@@ -158,6 +196,7 @@ export default {
           this.$refs.course.targetPage(1)
           break
         case 6:
+          this.$refs.users.targetPage(1)
           break
         case 7:
           break
@@ -321,6 +360,15 @@ export default {
   .search-result-total {
     padding: 15px 0;
     font-size: 18px;
+  }
+}
+.search-result-total {
+  margin: 20px 30px;
+}
+.all-projects {
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
   }
 }
 </style>

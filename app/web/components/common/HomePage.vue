@@ -8,29 +8,33 @@
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
           <div class="home-page-simple-show-center-left-desc">
-            <h2 class="title">创作自己的游戏与动画</h2>
-            <p class="intro">拥有自己的自己体系</p>
-            <p class="intro">拥有自己的个人网站</p>
-            <p class="intro">通过项目来学习编程</p>
-            <p class="intro">程序员为程序员创作的教程</p>
+            <div class="home-page-simple-show-center-left-desc-box">
+              <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)">{{item.text}}</p>
+            </div>
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">给教育者的话</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">告家长</a>
             </div>
           </div>
-          <div class="flexible-info-board"></div>
+          <div class="flexible-info-board">
+            <img :src="boardImgUrl" alt="">
+          </div>
         </div>
         <div class="home-page-simple-show-center-right">
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">keepwork是做什么的</div>
-            <div class="video">
-              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/1049/raw#2018-10-11_17_00_04-800-双马尾.mp4" poster="https://api.keepwork.com/storage/v0/siteFiles/1048/raw#2018-10-11_16_59_35-392-双马尾.jpg" controls autoplay="autoplay" loop></video>
+            <div class="video" v-if="videoHtml" v-html="videoHtml">
+
+            </div>
+            <div v-else class="video">
+              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/1049/raw#2018-10-11_17_00_04-800-双马尾.mp4" poster="https://api.keepwork.com/storage/v0/siteFiles/1048/raw#2018-10-11_16_59_35-392-双马尾.jpg" controls></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
             <div class="title">官方公告</div>
-            <ul class="announce-list">
+            <ul class="announce-list" v-if="newsHtml" v-html="newsHtml"></ul>
+            <ul v-else class="announce-list">
               <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
                 <a href="//iicc.keepwork.com" target="_blank">进入</a>
               </li>
@@ -122,7 +126,7 @@
                 <p>包含：
                   <span>125</span>个课程</p>
                 <p>年龄：{{lessonPackage.minAge}}-{{lessonPackage.maxAge}}</p>
-                <p>简介：{{lessonPackage.intro}}</p>
+                <p class="lesson-desc-text">简介：{{lessonPackage.intro}}</p>
               </div>
             </div>
           </el-col>
@@ -156,6 +160,7 @@ import { lesson } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 
 export default {
   name: 'HomePage',
@@ -165,7 +170,33 @@ export default {
       hotsPackages: [],
       hiddenAd: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin
+      locationOrigin: window.location.origin,
+      currIndex: 0,
+      briefPic: [
+        {
+          image: require('@/assets/pblImg/game1.png'),
+          text: '创作自己的游戏与动画'
+        },
+        {
+          image: require('@/assets/pblImg/game2.png'),
+          text: '拥有自己的自己体系'
+        },
+        {
+          image: require('@/assets/pblImg/game3.png'),
+          text: '拥有自己的个人网站'
+        },
+        {
+          image: require('@/assets/pblImg/game4.png'),
+          text: '通过项目来学习编程'
+        },
+        {
+          image: require('@/assets/pblImg/game5.png'),
+          text: '程序员为程序员创作的教程'
+        }
+      ],
+      boardImgUrl: require('@/assets/pblImg/game1.png'),
+      newsHtml: '',
+      videoHtml: ''
     }
   },
   components: {
@@ -184,6 +215,7 @@ export default {
       this.getExcellentProjects(),
       this.getPackagesList(payload)
     ])
+    // await this.getNewsAndVideo()
   },
   computed: {
     ...mapGetters({
@@ -200,15 +232,20 @@ export default {
       return _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
     },
     handpickProjects() {
-      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.choicenessNo < obj2.choicenessNo)
+      let tempArr = this.projectsRows
+        .map(i => i)
+        .sort(this.sortByKey('choicenessNo'))
       let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
     },
     likesProjects() {
-      let tempArr = this.projectsRows.map(i => i).sort((obj1, obj2) => obj1.star < obj2.star)
-      let tempArr2 = _.cloneDeep(tempArr.slice(0,4))
+      let tempArr = this.projectsRows
+        .map(i => i)
+        .sort(this.sortByKey('lastStar'))
+      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
+      tempArr2 = this.sortByKeys(tempArr2, 'lastStar', 'updatedAt')
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
@@ -219,6 +256,10 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    switchPic(index) {
+      this.currIndex = index
+      this.boardImgUrl = this.briefPic[index].image
+    },
     closeAd() {
       this.hiddenAd = true
     },
@@ -245,6 +286,53 @@ export default {
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
+    },
+    sortByKey(key) {
+      return (obj1, obj2) => {
+        return obj1[key] >= obj2[key] ? -1 : 1
+      }
+    },
+    sortByKeys(arr, groupKey, sortKey) {
+      let group = _.reduce(
+        arr,
+        (obj, prv) => {
+          _.isArray(obj[prv[groupKey]])
+            ? obj[prv[groupKey]].push(prv)
+            : (obj[prv[groupKey]] = [prv])
+          return obj
+        },
+        {}
+      )
+      _.forEach(group, item => item.sort(this.sortByKey(sortKey)))
+      let keysArr = _.keys(group).sort((a, b) => b - a)
+      let likesArray = []
+      _.forEach(keysArr, key => {
+        likesArray = [...likesArray, ...group[key]]
+      })
+      return likesArray
+    },
+    async getNewsAndVideo() {
+      // FIXME: 使用线上的markdown地址
+      const HomePageInfo = {
+        apiPrefix: 'https://api-release.keepwork.com/git/v0',
+        projectName: 'kevinxft/123321',
+        newsPath: 'kevinxft/123321/news.md',
+        videoPath: 'kevinxft/123321/video.md'
+      }
+      let [news = '', video = ''] = await Promise.all([
+        gitlabShowRawForGuest(
+          HomePageInfo.apiPrefix,
+          HomePageInfo.projectName,
+          HomePageInfo.newsPath
+        ),
+        gitlabShowRawForGuest(
+          HomePageInfo.apiPrefix,
+          HomePageInfo.projectName,
+          HomePageInfo.videoPath
+        )
+      ])
+      this.newsHtml = news
+      this.videoHtml = video
     }
   }
 }
@@ -288,7 +376,7 @@ export default {
     height: 0;
     overflow: hidden;
     border: none;
-    transition: all 1s ease-out;
+    transition: all 0.2s ease-out;
   }
   &-simple-show {
     margin-top: 16px;
@@ -311,10 +399,23 @@ export default {
             font-size: 30px;
             margin: 12px 0;
           }
-          .intro {
-            font-size: 14px;
-            color: #c0c4cc;
-            margin: 11px 0;
+          &-box {
+            height: 190px;
+            .intro {
+              font-size: 14px;
+              color: #c0c4cc;
+              margin: 0;
+              line-height: 30px;
+              cursor: pointer;
+              transition: all 0.3s ease-out;
+              &-hover {
+                color: #2397f3;
+                font-size: 30px;
+                margin: 12px 0;
+                font-weight: bold;
+                transition: all 0.3s ease-out;
+              }
+            }
           }
           .join-button {
             padding: 0 28px;
@@ -336,13 +437,10 @@ export default {
         }
         .flexible-info-board {
           position: absolute;
-          right: 104px;
-          top: 68px;
+          right: 145px;
+          top: 52px;
           width: 223px;
           height: 146px;
-          border: 1px solid #ccc;
-          background: #fff;
-          border-radius: 4px;
         }
       }
       &-right {
@@ -386,8 +484,14 @@ export default {
                 text-decoration: none;
                 position: absolute;
                 right: 2px;
+                top: 0px;
               }
               .iicc {
+                width: 22px;
+                height: 22px;
+                margin-right: 6px;
+              }
+              .news-badge {
                 width: 22px;
                 height: 22px;
                 margin-right: 6px;
@@ -414,12 +518,16 @@ export default {
       margin: 0 auto;
       max-width: 1200px;
       .box {
-        margin: 24px 0;
-        padding: 20px 36px 20px 24px;
+        margin: 24px 12px;
+        padding: 10px 36px 10px 24px;
         display: flex;
         border-right: 1px solid #eee;
-        // border: 1px solid red;
         cursor: pointer;
+        border-radius: 4px;
+        &:hover {
+          box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+          transition: all 200ms ease-in;
+        }
         &-text {
           flex: 1;
           &-intro {
@@ -444,9 +552,6 @@ export default {
             width: 100%;
           }
         }
-        &:hover {
-          background: rgb(222, 229, 248);
-        }
       }
       .no-line {
         border: none;
@@ -457,7 +562,7 @@ export default {
     background: #f6f7f8;
     &-excellent {
       margin: 0 auto;
-      padding-top: 50px;
+      padding-top: 16px;
       max-width: 1200px;
       .title {
         height: 60px;
@@ -491,6 +596,11 @@ export default {
           box-sizing: border-box;
           border: 1px solid #e8e8e8;
           background: #fff;
+          margin: 0 auto 16px;
+          &:hover {
+            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+            transition: all 200ms ease-in;
+          }
           &-cover {
             width: 100%;
             height: 143px;
@@ -506,6 +616,15 @@ export default {
           &-desc {
             font-size: 12px;
             color: #909399;
+            &-text {
+              height: 80px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 5;
+              line-height: 16px;
+              -webkit-box-orient: vertical;
+            }
           }
         }
       }

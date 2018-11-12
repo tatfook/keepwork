@@ -34,6 +34,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
+import '@/components/common/thirdAuth'
 import { keepwork } from '@/api'
 
 Vue.use(Vuex)
@@ -49,7 +50,6 @@ Vue.use(VueAnalytics, {
     delay: 500 // delay in milliseconds
   }
 })
-
 
 const i18n = new VueI18n({
   locale,
@@ -92,7 +92,6 @@ router.beforeEach(async (to, from, next) => {
       // localStorage.setItem('refresh', true)
     }
     if (token && token !== 0) {
-      debugger
       let userInfo = await keepwork.user
         .verifyToken({ token })
         .catch(e => console.error('verify token failure'))

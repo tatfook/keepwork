@@ -1,8 +1,8 @@
 <template>
   <div class="project-detail-page">
     <div v-if="isProjectExist && isLoginUserVisible">
-      <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner'></project-header>
-      <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner' :projectApplyState='projectApplyState' :isLoginUsercommentable='isLoginUsercommentable' :isCommentClosed='isCommentClosed' :isProjectStopRecruit='isProjectStopRecruit'></router-view>
+      <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner' :isProhibitView="isProhibitView" ></project-header>
+      <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner' :projectApplyState='projectApplyState' :isLoginUsercommentable='isLoginUsercommentable' :isCommentClosed='isCommentClosed' :isProjectStopRecruit='isProjectStopRecruit' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></router-view>
     </div>
     <div class="project-detail-page-not-found" v-if="!isProjectExist || !isLoginUserVisible">
       <img src='@/assets/img/404.png' alt="">
@@ -25,7 +25,8 @@ export default {
       isLogined: 'user/isLogined',
       projectDetail: 'pbl/projectDetail',
       getDetailByUserId: 'user/getDetailByUserId',
-      loginUsername: 'user/username'
+      loginUsername: 'user/username',
+      projectMemberList: 'pbl/projectMemberList'
     }),
     pblProjectDetail() {
       return this.projectDetail({ projectId: this.projectId })
@@ -39,7 +40,7 @@ export default {
         userId: this.loginUserId
       })
     },
-    isLoginUserBeProjectMember(){
+    isLoginUserBeProjectMember() {
       return this.loginUserIsProjectOwner || this.projectApplyState === 1
     },
     projectPrivilege() {
@@ -54,7 +55,7 @@ export default {
     isCommentForMember() {
       return (this.projectPrivilege & 8) > 0
     },
-    isLoginUsercommentable(){
+    isLoginUsercommentable() {
       return !this.isCommentForMember || this.isLoginUserBeProjectMember
     },
     isCommentClosed() {
@@ -81,6 +82,18 @@ export default {
     },
     loginUserIsProjectOwner() {
       return this.loginUsername === this.editingProjectUsername
+    },
+    projectMembers() {
+      return this.projectMemberList({ projectId: this.projectId })
+    },
+    projectMembers() {
+      return this.projectMemberList({ projectId: this.projectId })
+    },
+    isProhibitView() {
+      return this.isBoardViewForMember && !this.isLoginUserBeProjectMember
+    },
+    isProhibitEdit() {
+      return this.isBoardEditForMember && !this.isLoginUserBeProjectMember
     }
   },
   data() {
@@ -97,7 +110,7 @@ export default {
       pblGetProjectDetail: 'pbl/getProjectDetail',
       getUserDetailByUserId: 'user/getUserDetailByUserId',
       getFavoriteState: 'pbl/getFavoriteState',
-      getStarState: 'pbl/getStarState'
+      getStarState: 'pbl/getStarState',
     }),
     async initProjectDetail() {
       this.isFirstGettingData = true

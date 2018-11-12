@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions, mapGetters } from 'vuex'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
@@ -231,6 +232,12 @@ export default {
     async handleSubmit() {
       let valid = await this.$refs.websiteNameForm.validate()
       if (!valid) return
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.websiteNameForm.value
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        return
+      }
       await this.createWebsite()
       if (this.isContinueAfterCreate) {
         return

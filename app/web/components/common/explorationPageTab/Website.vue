@@ -35,7 +35,6 @@ export default {
   },
   async mounted() {
     await this.targetPage(this.page)
-    console.log('website',this.website)
     this.loading = false
   },
   computed: {
@@ -53,7 +52,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { coverUrl: i.cover },
+          extra: { imageUrl: i.cover },
           name: i.name,
           name_title: this.searchKeyResult(i),
           visit: i.total_view,
@@ -76,7 +75,7 @@ export default {
       this.$nextTick(async () => {
         await this.getTypeProjects({
           page: targetPage,
-          per_age: this.perPage,
+          per_page: this.perPage,
           type: 'site',
           q: this.searchKey,
           sort: this.sortProjects

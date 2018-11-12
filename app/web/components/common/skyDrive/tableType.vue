@@ -152,8 +152,7 @@ export default {
         let a = document.createElement('a')
         a.target = '_blank'
         a.style.display = 'none'
-        a.href = `${downloadUrl};attname=${filename}`
-        console.log(a.href)
+        a.href = `${downloadUrl}&attname=${filename}`
         a.download = filename || ''
         document.body.appendChild(a)
         a.click()

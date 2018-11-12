@@ -31,6 +31,7 @@
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProjectComments',
@@ -63,7 +64,8 @@ export default {
     ...mapGetters({
       pblProjectCommentList: 'pbl/projectCommentList',
       userProfile: 'user/profile',
-      loginUserId: 'user/userId'
+      loginUserId: 'user/userId',
+      isLogined: 'user/isLogined'
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
@@ -76,7 +78,8 @@ export default {
     ...mapActions({
       pblGetComments: 'pbl/getComments',
       pblCreateComment: 'pbl/createComment',
-      pblDeleteComment: 'pbl/deleteComment'
+      pblDeleteComment: 'pbl/deleteComment',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async getCommentFromBackEnd() {
       this.isGetCommentBtnLoading = true
@@ -106,7 +109,17 @@ export default {
       this.getCommentFromBackEnd()
     },
     async sendComment() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.isAddingComment = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.newCommenContent
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isAddingComment = false
+        return
+      }
       await this.pblCreateComment({
         objectType: 5,
         objectId: this.projectId,
@@ -163,7 +176,7 @@ export default {
   filters: {
     relativeTimeFilter(date, isEn) {
       isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(date, 'YYYYMMDDHH').fromNow()
+      return moment(date).fromNow()
     }
   }
 }

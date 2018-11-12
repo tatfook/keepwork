@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, GitAPI, skyDrive, sensitiveWord } from '@/api'
+import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
@@ -108,10 +108,6 @@ const actions = {
     let { username, password } = payload
     if (registerInfo) {
       await dispatch('login', { username, password })
-      // let userinfo = _.get(registerInfo, 'data.userinfo')
-      // let { defaultSiteDataSource } = userinfo
-      // await dispatch('createUserProfilePageToBack', { username })
-      // await dispatch('createUserProfilePagesToGit', { defaultSiteDataSource })
     }
     return registerInfo
   },
@@ -149,9 +145,9 @@ const actions = {
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
   async updateUserInfo(context, userInfo) {
-    let { commit, getters: { profile, userId } } = context
-    let newUserInfo = await keepwork.user.update({ userId, userInfo })
-    commit(GET_PROFILE_SUCCESS, { ...profile, ...newUserInfo })
+    let { getters: { userId }, dispatch } = context
+    await keepwork.user.update({ userId, userInfo })
+    await dispatch('getProfile', { useCache: false })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context
@@ -161,7 +157,6 @@ const actions = {
   },
   async verifyCellphoneTwo(context, { cellphone, captcha, isBind, realname }) {
     let { dispatch, commit, getters: { sendCodeInfo } } = context
-    // smsId = smsId || (sendCodeInfo.data && sendCodeInfo.data.smsId)
     let verifyInfoTwo = await keepwork.user.verifyCellphoneTwo({ cellphone, captcha, isBind, realname })
     await dispatch('getProfile', { useCache: false })
     commit(SET_AUTH_CODE_INFO, verifyInfoTwo)
@@ -205,36 +200,30 @@ const actions = {
     await dispatch('getWebTemplateFiles', webTemplate)
     let { fileList } = webTemplate
     // copy all file in template.folder
+    // FIXME: add theme.json to gitlab
+    const themeJson = {
+      content: JSON.stringify(ThemeHelper.defaultTheme),
+      name: 'theme.json',
+      path: 'templates/basic/_config/theme.json',
+      type: 'blob'
+    }
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
+    fileList = _.uniq([...fileList, themeJson ], 'path')
     const projectName = `${username}/${sitename}`
-    for (let { path, name, content } of fileList) {
+    let files = _.map(fileList, ({ path, content }) => {
       let filename = path.split('/').slice(2).join('/')
-      // await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-      await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-    }
-
+      return { path: `${username}/${sitename}/${filename}`, content }
+    })
+    await dispatch('gitlab/createMultipleFile', { projectName, files }, { root: true })
+    // for (let { path, name, content } of fileList) {
+    //   let filename = path.split('/').slice(2).join('/')
+    //   await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
+    // }
     // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
-  // async initWebsite({ dispatch, getters }, { name }) {
-  //   let { username, getWebTemplate, getPersonalSiteInfoByPath } = getters
-  //   let { type: categoryName, templateName } = getPersonalSiteInfoByPath(`${username}/${name}`)
 
-  //   await dispatch('getWebTemplateConfig')
-  //   let webTemplate = getWebTemplate({ categoryName, templateName })
-  //   await dispatch('getWebTemplateFiles', webTemplate)
-  //   let { fileList } = webTemplate
-
-  //   // copy all file in template.folder
-  //   for (let { path, content } of fileList) {
-  //     let filename = path.split('/').slice(2).join('/')
-  //     await dispatch('gitlab/createFile', { path: `${username}/${name}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-  //   }
-
-  //   // refresh repositoryTree
-  //   await dispatch('gitlab/getRepositoryTree', { path: `${username}/${name}`, useCache: false }, { root: true })
-  // },
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
     let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
@@ -263,9 +252,7 @@ const actions = {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectName } = webTemplateProject
-    // let gitlabForGuest = new GitAPI({ url: rawBaseUrl + '/api/v4', token: ' ' })
     let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    // fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
     fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
@@ -283,7 +270,7 @@ const actions = {
       sitename: name,
       visibility: 0,
       extra: {
-        websiteSetting
+        ...websiteSetting
       }
     }
     let site = await keepwork.website.upsert(upsertPayload)
@@ -292,7 +279,6 @@ const actions = {
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
     if (typeof content === 'string') return content
-
     let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
     content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
@@ -622,10 +608,6 @@ const actions = {
     let { id: fileId } = fileUploaded
     let url = await dispatch('useFileInSite', { fileId, sitePath, useCache: false })
     return { file: fileUploaded, url }
-  },
-  async checkSensitive(context, { checkedWords }) {
-    let result = await sensitiveWord.checkSensitiveWords(checkedWords)
-    return result
   },
   async changePwd(context, { oldpassword, newpassword }) {
     // FIXME:

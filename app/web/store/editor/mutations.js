@@ -166,7 +166,7 @@ const mutations = {
     if (!key) {
       return Vue.set(state.activePage, 'activeMod', null)
     }
-    if (state.activePage.activeMod && state.activePage.activeMod.key === key) {
+    if (state.activePage && state.activePage.activeMod && state.activePage.activeMod.key === key) {
       return
     }
     const modList = activeModList(state)

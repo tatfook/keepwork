@@ -17,13 +17,12 @@
             </el-tag>
             <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
             </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
           </div>
         </div>
         <div class="sketch-box">
           <div class="sketch-box-tag">指派</div>
           <div class="sketch-box-content">
-            <!-- 指派头像显示 -->
             <div class="player">
               <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
               <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
@@ -54,6 +53,7 @@
 <script>
 import { keepwork } from '@/api'
 import _ from 'lodash'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions, mapGetters } from 'vuex'
 import default_portrait from '@/assets/img/default_portrait.png'
 import Vue from 'vue'
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       issueTitle: '',
-      dynamicTags: ['需求', '设计', '产品'],
+      dynamicTags: [],
       inputVisible: false,
       inputValue: '',
       descriptionText: '',
@@ -93,7 +93,7 @@ export default {
     },
     assignMembersId() {
       let arrId = []
-      _.map(this.assignedMembers, ({userId}) => {
+      _.map(this.assignedMembers, ({ userId }) => {
         arrId.push(userId)
       })
       return arrId.join('|')
@@ -115,6 +115,18 @@ export default {
     },
     handleInputConfirm() {
       let inputValue = this.inputValue
+      let isExistTagIndex = _.findIndex(
+        this.dynamicTags,
+        tag => tag === inputValue
+      )
+      if (isExistTagIndex !== -1) {
+        this.$message({
+          showClose: true,
+          message: '该标签已存在',
+          type: 'error'
+        })
+        return
+      }
       if (inputValue) {
         this.dynamicTags.push(inputValue)
       }
@@ -124,28 +136,35 @@ export default {
     handleClose() {
       this.$emit('close')
     },
-    handleCommand(userId){
+    handleCommand(userId) {
       _.forEach(this.memberList, member => {
-        if(member.userId === userId) { 
-          if(this.assignedMembers.length == 0){
+        if (member.userId === userId) {
+          if (this.assignedMembers.length == 0) {
             return this.assignedMembers.push(member)
           }
           let i
-          for(i=0; i < this.assignedMembers.length; ++i){
-            if(this.assignedMembers[i].userId === userId){
+          for (i = 0; i < this.assignedMembers.length; ++i) {
+            if (this.assignedMembers[i].userId === userId) {
               break
             }
           }
-          if(i === this.assignedMembers.length){
+          if (i === this.assignedMembers.length) {
             return this.assignedMembers.push(member)
           }
-          this.assignedMembers.splice(i,1)
+          this.assignedMembers.splice(i, 1)
         }
       })
     },
     async finishedCreateIssue() {
       this.cretateIssueLoading = true
       this.$nextTick(async () => {
+        let sensitiveResult = await checkSensitiveWords({
+          checkedWords: [this.issueTitle, this.descriptionText]
+        }).catch()
+        if (sensitiveResult && sensitiveResult.length > 0) {
+          this.cretateIssueLoading = false
+          return
+        }
         let payload = {
           objectType: 5,
           objectId: this.projectId,
@@ -157,14 +176,20 @@ export default {
         await keepwork.issues
           .createIssue(payload)
           .then(res => {
-            this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+            this.getProjectIssues({
+              objectId: this.projectId,
+              objectType: 5,
+              'x-per-page': 25,
+              'x-page': 1,
+              'x-order': 'createdAt-desc'
+            })
             this.handleClose()
             this.cretateIssueLoading = false
           })
           .catch(err => console.error(err))
       })
     },
-    isAssigned(member){
+    isAssigned(member) {
       return this.assignedMembers.indexOf(member) !== -1 ? true : false
     }
   }
@@ -210,6 +235,16 @@ export default {
           flex: 1;
           .el-tag + .el-tag {
             margin-left: 10px;
+          }
+          .input-new-tag {
+            margin-bottom: 4px;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+            padding: 0;
+            .el-input__inner {
+              padding: 0 8px;
+            }
           }
           .player {
             line-height: 38px;
@@ -257,14 +292,15 @@ export default {
     }
   }
 }
-.new-issue-assign{
-  .member-portrait{
+.new-issue-assign {
+  .member-portrait {
     width: 26px;
     height: 26px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: cover;
   }
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     display: flex;
     align-items: center;
   }
