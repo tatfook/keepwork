@@ -181,7 +181,7 @@ export const websiteComment = {
 }
 
 export const sensitiveWords = {
-  query: async () => get('sensitiveWords')
+  query: async () => get('sensitiveWords?x-per-page=100000')
 }
 
 export const bigfile = {
