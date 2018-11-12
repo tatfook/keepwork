@@ -35,7 +35,9 @@ export default {
     user: {
       type: Object,
       default() {
-        return {}
+        return {
+          default_portrait: default_portrait
+        }
       }
     }
   },
