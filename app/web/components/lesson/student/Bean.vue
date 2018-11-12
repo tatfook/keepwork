@@ -9,7 +9,7 @@
       </div>
       <div class="bean-nothing" v-if='!tableData.length && !beanLoading'>
         <img src="@/assets/lessonImg/no_packages.png" alt="">
-        <p>{{$t('lesson.noRecord')}}</p>
+        <p>{{$t('lesson.noRecordBean')}}</p>
       </div>
       <div class="bean-table" v-else>
         <el-table :data="tableData" style="width: 90%">

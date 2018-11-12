@@ -10,7 +10,7 @@
         </el-form-item>
         <el-form-item :label="$t('setting.siteLogo') + ':'">
           <div class="before-cropper-zone">
-            <img class="profile" :src='basicMessage.extra.websiteSetting.logoUrl' alt="">
+            <img class="profile" :src='basicMessage.extra.logoUrl' alt="">
             <div class="operate-masker">
               <span class="to-change-btn">
                 {{ $t('setting.change') }}
@@ -33,6 +33,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingBasicMessage',
@@ -43,9 +44,20 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.sitePath
     })
-    this.basicMessage = _.cloneDeep(this.getSiteDetailInfoByPath(this.sitePath).siteinfo)
+    this.basicMessage = _.cloneDeep(
+      this.getSiteDetailInfoByPath(this.sitePath).siteinfo
+    )
+
     if(!this.basicMessage.displayName) {
       this.basicMessage.displayName = this.basicMessage.sitename
+    }
+
+    let websiteSetting = _.get(this.basicMessage, 'extra.websiteSetting', '')
+    if (websiteSetting) {
+      this.$set(this.basicMessage, 'extra', {
+        ...websiteSetting,
+        ...this.basicMessage.extra
+      })
     }
     this.$refs.basicMessageForm.resetFields()
     this.loading = false
@@ -53,9 +65,7 @@ export default {
   data() {
     return {
       basicMessage: {
-        extra: {
-          websiteSetting: {}
-        }
+        extra: {}
       },
       loading: true,
       basicInfoRules: {
@@ -77,15 +87,16 @@ export default {
     }),
     siteUrl() {
       let origin = location.origin
-      return `${origin}/${this.basicMessage.username}/${this.basicMessage.sitename}`
+      return `${origin}/${this.basicMessage.username}/${
+        this.basicMessage.sitename
+      }`
     }
   },
   methods: {
     ...mapActions({
       gitlabUploadFile: 'gitlab/uploadFile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
-      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
-      userCheckSensitive: 'user/checkSensitive'
+      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
     }),
     async siteLogoUpload(e) {
       this.loading = true
@@ -120,20 +131,22 @@ export default {
       })
     },
     async checkSensitive() {
-      let checkedWords = [this.basicMessage.name, this.basicMessage.desc]
-      let result = await this.userCheckSensitive({ checkedWords })
+      let checkedWords = [
+        this.basicMessage.displayName,
+        this.basicMessage.description
+      ]
+      let result = await checkSensitiveWords({ checkedWords })
       return result && result.length > 0
     },
     async submitChange() {
-      // this.loading = true
+      this.loading = true
       this.$refs.basicMessageForm.validate(async valid => {
         if (valid) {
-          // let isSensitive = await this.checkSensitive()
-          // if (isSensitive) {
-          //   this.showErrorMsg(this.$t('common.inputIsSensitive'))
-          //   return
-          // }
-          // return console.dir(this.basicMessage)
+          let isSensitive = await this.checkSensitive()
+          if (isSensitive) {
+            this.loading = false
+            return
+          }
           await this.userSaveSiteBasicSetting({
             newBasicMessage: this.basicMessage
           })

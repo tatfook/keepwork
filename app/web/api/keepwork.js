@@ -181,7 +181,7 @@ export const websiteComment = {
 }
 
 export const sensitiveWords = {
-  query: async () => get('sensitiveWords')
+  query: async () => get('sensitiveWords?x-per-page=100000')
 }
 
 export const bigfile = {
@@ -218,7 +218,9 @@ export const favorites = {
   favoriteProject: async ({ objectId, objectType }) =>
     post('favorites', { objectId, objectType }),
   unFavoriteProject: async ({ objectId, objectType }) =>
-    deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`)
+    deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
+  getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
+  getUserSearchAllFavorites: async (args) => post('favorites/search', args)
 }
 
 export const projects = {
@@ -248,7 +250,8 @@ export const projects = {
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
   getContributeProjects: async () => get('projects/join'),
-  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`)
+  unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
+  visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }
 
 export const applies = {

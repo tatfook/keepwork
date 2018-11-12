@@ -28,6 +28,7 @@ import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import CommonFooter from '@/components/common/CommonFooter'
+import '@/components/common/thirdAuth'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)

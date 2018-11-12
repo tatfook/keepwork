@@ -33,7 +33,7 @@ const getters = {
   displayUsername: (state, { profile: { username, displayUsername } }) => (displayUsername || username || ''),
   userId: (state, { profile: { id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
-  realNameInfo: (state, { profile }) => _.get(profile, 'realNameInfo', {}),
+  realname: (state, { profile }) => _.get(profile, 'realname', {}),
   cellphone: (state, { profile }) => _.get(profile, 'cellphone', ''),
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
@@ -81,7 +81,8 @@ const getters = {
         children,
         username,
         name,
-        ...websiteSetting
+        ...websiteSetting,
+        ...extra
       }
     })
 
@@ -121,8 +122,9 @@ const getters = {
         })
       ]
     }, [])
-
-    allPageList = allPageList.map(str => str.replace(/\.[^.]+/, ''))
+    allPageList = allPageList.map(str => {
+      return str && str.replace(/\.[^.]+/, '')
+    })
 
     return allPageList
   },

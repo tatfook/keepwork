@@ -10,7 +10,7 @@
           创建
         </span>
         <span class="project-basic-info-more-viewcount">
-          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit}}
+          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
         </span>
         <span class="project-basic-info-more-starcount">
           <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star}}
@@ -69,6 +69,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import WebsiteBinder from './WebsiteBinder'
@@ -136,7 +137,8 @@ export default {
       loginUserId: 'user/userId',
       loginUserDetail: 'user/profile',
       userToken: 'user/token',
-      getSiteDetailInfoById: 'user/getSiteDetailInfoById'
+      getSiteDetailInfoById: 'user/getSiteDetailInfoById',
+      isLogined: 'user/isLogined'
     }),
     isApplied() {
       return this.projectApplyState === 0
@@ -205,7 +207,8 @@ export default {
       pblApplyJoinProject: 'pbl/applyJoinProject',
       pblUpdateProject: 'pbl/updateProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog',
-      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
+      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -226,6 +229,12 @@ export default {
             type: 'error',
             message: '项目描述太长了，请调整'
           })
+          return
+        }
+        let sensitiveResult = await checkSensitiveWords({
+          checkedWords: editorText.text()
+        }).catch()
+        if (sensitiveResult && sensitiveResult.length > 0) {
           return
         }
         this.isLoading = true
@@ -259,10 +268,20 @@ export default {
       this.isApplyDialogVisible = false
     },
     showApplyBox() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.isApplyDialogVisible = true
     },
     async applyJoinProject() {
       this.isApplyButtonLoading = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.applyText
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isApplyButtonLoading = false
+        return
+      }
       await this.pblApplyJoinProject({
         objectType: 5,
         objectId: this.projectId,

@@ -3,23 +3,18 @@
     <div class="project-white-board-content">
       <div class="project-white-board-content-header">
         <div class="search">
-          <el-input size="medium" placeholder="搜索关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
-            <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
-              <el-option label="全部" value="1"></el-option>
-              <el-option label="进行中" value="2"></el-option>
-              <el-option label="已完成" value="3"></el-option>
-            </el-select> -->
+          <el-input size="medium" placeholder="搜索标题关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
         <div class="filter">
           筛选：
-          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{projectIssueList.length}})</span></span>
-          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{finishedProjectIssueList.length}})</span></span>
-          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{unfinishedProjectIssueList.length}})</span></span>
+          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesOpenCount + issuesCloseCount}})</span></span>
+          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{issuesOpenCount}})</span></span>
+          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{issuesCloseCount}})</span></span>
         </div>
         <div class="new-issue-btn">
-          <el-button type="primary" size="medium" @click="goNewIssue">+ 新建问题</el-button>
+          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ 新建问题</el-button>
         </div>
       </div>
       <div class="project-white-board-content-list">
@@ -27,7 +22,7 @@
           <div class="single-issue-brief">
             <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
               <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
-              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.id}}</span>
+              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.no}}</span>
             </div>
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
@@ -44,7 +39,14 @@
       </div>
     </div>
     <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail"></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
+    <div class="all-issue-pages" v-if="issuesCount > perPage">
+      <div class="block">
+        <span class="demonstration"></span>
+        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
+        </el-pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -67,7 +69,22 @@ export default {
       searchKeyWord: '',
       select: '',
       default_portrait,
-      selectedIssue: {}
+      selectedIssue: {},
+      perPage: 25,
+      page: 1,
+      state: null
+    }
+  },
+  props: {
+    isBoardViewForMember: Boolean,
+    isBoardEditForMember: Boolean,
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -77,15 +94,28 @@ export default {
   computed: {
     ...mapGetters({
       issuesList: 'pbl/issuesList',
-      projectDetail: 'pbl/projectDetail'
+      projectDetail: 'pbl/projectDetail',
+      isLogined: 'user/isLogined'
     }),
     projectIssueList() {
-      let tempArr = _.get(
+      return _.get(this.issuesList({ projectId: this.projectId }), 'rows', [])
+    },
+    issuesCount() {
+      return _.get(this.issuesList({ projectId: this.projectId }), 'count', 0)
+    },
+    issuesOpenCount() {
+      return _.get(
         this.issuesList({ projectId: this.projectId }),
-        'rows',
-        []
+        'openCount',
+        0
       )
-      return tempArr.sort(this.sortByUpdateAt)
+    },
+    issuesCloseCount() {
+      return _.get(
+        this.issuesList({ projectId: this.projectId }),
+        'closeCount',
+        0
+      )
     },
     unfinishedProjectIssueList() {
       return _.filter(this.projectIssueList, i => i.state === 0)
@@ -104,7 +134,13 @@ export default {
     }
   },
   async mounted() {
-    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    if (this.isProhibitView) {
+      return this.$router.push({
+        name: 'ProjectIndexPage',
+        params: { id: this.projectId }
+      })
+    }
+    await this.targetPage(this.page)
     this.projectIssues = this.projectIssueList
   },
   watch: {
@@ -115,30 +151,49 @@ export default {
       let payload = {
         objectId: this.projectId,
         objectType: 5,
-        $or: [{ id: _.toNumber(key) || 0 }, { title: { $like: `%${key}%` } }]
+        'x-per-page': this.perPage,
+        'x-page': 1,
+        'x-order': 'createdAt-desc',
       }
+      if (key) payload['text-like'] = `%${key}%`;
       await this.getProjectIssues(payload)
       this.projectIssues = this.projectIssueList
     }
   },
   methods: {
     ...mapActions({
-      getProjectIssues: 'pbl/getProjectIssues'
+      getProjectIssues: 'pbl/getProjectIssues',
+      getProjectMember: 'pbl/getProjectMember',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
-    searchIssue() {
+    async targetPage(page) {
+      this.page = page
       let payload = {
         objectId: this.projectId,
         objectType: 5,
-        $or: [
-          { id: _.toNumber(this.searchKeyWord) || 0 },
-          { title: { $like: `%${this.searchKeyWord}%` } }
-        ]
+        'x-per-page': this.perPage,
+        'x-page': page,
+        'x-order': 'createdAt-desc',
+        state: this.state
       }
-      this.getProjectIssues(payload)
+      if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`;
+      if(this.state === null) {
+        let { state, ..._payload } = payload
+        return await this.getProjectIssues(_payload)
+      }
+      await this.getProjectIssues(payload)
+    },
+    searchIssue() {
+      this.targetPage(1)
       this.projectIssues = this.projectIssueList
     },
     goNewIssue() {
-      this.showNewIssue = true
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
+      if (!this.isProhibitEdit) {
+        this.showNewIssue = true
+      }
     },
     closeNewIssue() {
       this.showNewIssue = false
@@ -151,13 +206,16 @@ export default {
       this.showIssueDetail = false
     },
     showAllIssues() {
-      this.projectIssues = this.projectIssueList
+      this.state = null
+      this.targetPage(1)
     },
-    showFinishedIssues() {
-      this.projectIssues = this.finishedProjectIssueList
+    async showFinishedIssues() {
+      this.state = 1
+      this.targetPage(1)
     },
-    showUnfinishedIssues() {
-      this.projectIssues = this.unfinishedProjectIssueList
+    async showUnfinishedIssues() {
+      this.state = 0
+      this.targetPage(1)
     },
     relativeTime(time) {
       const offset = moment().utcOffset()
@@ -184,9 +242,6 @@ export default {
   .el-input-group__append {
     background: #fff;
   }
-  // .input-with-select .el-input-group__prepend {
-  //   background-color: #fff;
-  // }
   background: #f5f5f5;
   padding: 24px 0 120px;
   &-content {
@@ -323,6 +378,10 @@ export default {
         }
       }
     }
+  }
+  .all-issue-pages {
+    margin: 50px auto 0;
+    text-align: center;
   }
 }
 </style>

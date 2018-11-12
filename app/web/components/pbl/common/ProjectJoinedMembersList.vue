@@ -1,6 +1,6 @@
 <template>
   <div class="project-joined-members-list">
-    <el-table v-if="type === 'table'" :data="memberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
+    <el-table v-if="type === 'table'" :data="filterOwnerMemberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
       <el-table-column prop="username" label="成员" width="357">
       </el-table-column>
       <el-table-column label="加入时间" width="357">
@@ -21,8 +21,8 @@
         <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
-      <div v-if="memberList && memberList.length" class="project-joined-members-list-card-profiles">
-        <img v-for="(member, index) in memberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
+      <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
+        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
       <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
     </el-card>
@@ -45,7 +45,11 @@ export default {
       }
     },
     projectOwnerPortrait: String,
-    originProjectUsername: String
+    originProjectUsername: String,
+    projectDetail: {
+      type: Object,
+      required: true
+    }
   },
   async created() {
     this.isLoading = true
@@ -66,8 +70,17 @@ export default {
     ...mapGetters({
       pblProjectMemberList: 'pbl/projectMemberList'
     }),
+    projectOwnerUserId() {
+      return _.get(this.projectDetail, 'userId')
+    },
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectId })
+    },
+    filterOwnerMemberList() {
+      return _.filter(
+        this.memberList,
+        member => member.userId !== this.projectOwnerUserId
+      )
     }
   },
   methods: {

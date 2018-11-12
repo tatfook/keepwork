@@ -4,11 +4,11 @@
       <div class="project-index-sidebar">
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
-        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :originProjectUsername='originProjectUsername'></project-joined-members-list>
-        <project-boards :projectId='projectId' :projectDetail='pblProjectDetail'></project-boards>
+        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+        <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
       </div>
       <div class="project-index-main">
-        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
+        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
         <project-comments v-if='!isCommentClosed' class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
       </div>
     </div>
@@ -21,6 +21,7 @@ import ProjectJoinedMembersList from './common/ProjectJoinedMembersList'
 import ProjectBasicInfo from './common/ProjectBasicInfo'
 import ProjectComments from './common/ProjectComments'
 import ProjectBoards from './common/ProjectBoards'
+import { keepwork } from '@/api'
 export default {
   name: 'ProjectIndex',
   props: {
@@ -52,7 +53,19 @@ export default {
     isProjectStopRecruit: {
       type: Boolean,
       default: false
-    }
+    },
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
+    },
+    projectApplyState: Number
+  },
+  async created(){
+    await keepwork.projects.visitProject(this.projectId)
   },
   computed: {
     originProjectName() {

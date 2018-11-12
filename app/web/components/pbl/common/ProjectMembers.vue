@@ -12,7 +12,7 @@
         <project-applied-list :projectId='projectId'></project-applied-list>
       </el-tab-pane>
       <el-tab-pane label="项目成员">
-        <project-joined-members-list :projectId='projectId'></project-joined-members-list>
+        <project-joined-members-list :projectDetail='projectDetail' :projectId='projectId'></project-joined-members-list>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -24,6 +24,10 @@ export default {
   name: 'ProjectMembers',
   props: {
     projectId: {
+      required: true
+    },
+    projectDetail: {
+      type: Object,
       required: true
     }
   },

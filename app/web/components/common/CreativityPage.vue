@@ -6,7 +6,7 @@
         <p class="open-word">项目，是一个作品的开始。</p>
         <p class="open-word">它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
         <el-button class="create" type="primary" @click="createMyProject">＋创建我的项目</el-button>
-        <div class="project-type" v-if="!hasProjects">
+        <div class="project-type">
           <el-row>
             <el-col :sm="8">
               <div class="project-type-item">
@@ -96,17 +96,23 @@ export default {
     ...mapGetters({
       excellentProjects: 'pbl/excellentProjects',
       myProjects: 'pbl/myProjects',
-      myContributeProjects: 'pbl/myContributeProjects'
+      myContributeProjects: 'pbl/myContributeProjects',
+      isLogined: 'user/isLogined',
+      userId: 'user/userId'
     }),
-    myProjectsData(){
+    myProjectsData() {
       let arr = _.cloneDeep(this.myProjects)
       return _.forEach(arr, i => {
         i.name_title = i.name || '未命名'
       })
     },
-    myContributeProjectsData(){
+    myContributeProjectsData() {
       let arr = _.cloneDeep(this.myContributeProjects)
-      return _.forEach(arr, i => {
+      let myContribute = _.filter(
+        arr,
+        project => project.user.userId !== this.userId
+      )
+      return _.forEach(myContribute, i => {
         i.name_title = i.name || '未命名'
       })
     },
@@ -115,7 +121,11 @@ export default {
     },
     otherProjects() {
       let tempArr = _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
-      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
+      let others = _.filter(
+        tempArr,
+        project => project.user.userId !== this.userId
+      )
+      let tempArr2 = _.cloneDeep(others.slice(0, 4))
       return _.forEach(tempArr2, i => {
         i.name_title = i.name || '未命名'
       })
@@ -124,9 +134,13 @@ export default {
   methods: {
     ...mapActions({
       getExcellentProjects: 'pbl/getExcellentProjects',
-      getMyAllProjects: 'pbl/getMyAllProjects'
+      getMyAllProjects: 'pbl/getMyAllProjects',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     createMyProject() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       window.location.href = '/pbl/project/new'
     },
     goExplorationPage() {
@@ -135,10 +149,10 @@ export default {
     closeLearn() {
       this.hiddenLearn = true
     },
-    showLearnStep(){
-      this.showGuideDialog =true
+    showLearnStep() {
+      this.showGuideDialog = true
     },
-    closeLearnGuide(){
+    closeLearnGuide() {
       this.showGuideDialog = false
     }
   }
@@ -189,7 +203,7 @@ export default {
         margin-bottom: 40px;
         color: #909399;
         position: relative;
-        .learn{
+        .learn {
           cursor: pointer;
         }
         .close {
@@ -207,7 +221,7 @@ export default {
         height: 0;
         overflow: hidden;
         border: none;
-        transition: all 1s ease-out;
+        transition: all 0.2s ease-out;
       }
     }
   }

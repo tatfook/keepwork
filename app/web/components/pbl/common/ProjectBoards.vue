@@ -3,7 +3,7 @@
     <el-card class="project-boards-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
         <span class="project-boards-card-label">项目白板</span>
-        <router-link :to="{path:moreBoardLink}" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
+        <router-link :to="{ name: 'ProjectWhiteBoard', path:moreBoardLink }" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
       </div>
       <div class="project-boards-list" v-if="projectIssueList.length >0">
         <div class="project-boards-item" v-for="(issue, index) in projectIssueList" :key="index" @click="showIssueDetail(issue)">
@@ -17,7 +17,7 @@
       </div>
       <div class="project-boards-empty" v-else>项目白板为空</div>
     </el-card>
-    <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' @close="handleIssueDialogClose"></issue-detail>
+    <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' :isProhibitEdit="isProhibitEdit" @close="handleIssueDialogClose"></issue-detail>
   </div>
 </template>
 <script>
@@ -35,10 +35,24 @@ export default {
     projectDetail: {
       type: Object,
       required: true
+    },
+    isProhibitView: {
+      type: Boolean,
+      default: false
+    },
+    isProhibitEdit: {
+      type: Boolean,
+      default: false
     }
   },
   async mounted() {
-    await this.getProjectIssues({ objectId: this.projectId, objectType: 5 })
+    await this.getProjectIssues({
+      objectId: this.projectId,
+      objectType: 5,
+      'x-per-page': 10,
+      'x-page': 1,
+      'x-order': 'createdAt-desc'
+    })
     this.projectIssues = this.projectIssueList
   },
   data() {
@@ -59,7 +73,7 @@ export default {
         this.pblIssuesList({ projectId: this.projectId }),
         'rows',
         []
-      )
+      ).slice(0, 10)
     },
     moreBoardLink() {
       return `${this.projectId}/whiteboard`
@@ -80,8 +94,11 @@ export default {
   },
   filters: {
     relativeTimeFilter(date, isEn) {
+      const offset = moment().utcOffset()
       isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(date, 'YYYYMMDDHH').fromNow()
+      return moment(date)
+        .utcOffset(offset)
+        .fromNow()
     }
   },
   components: {

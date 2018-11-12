@@ -15,6 +15,7 @@ import ElementUI from 'element-ui'
 import { transfer } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
+import '@/components/common/thirdAuth'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)

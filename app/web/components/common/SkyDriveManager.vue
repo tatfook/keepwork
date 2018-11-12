@@ -221,11 +221,14 @@ export default {
         : await this.getFileRawUrl(file)
     },
     async handleInsert({ file }) {
-      this.$emit('close', { file, url: await this.handleGetUrl({ file }) })
+      if (file.checkPassed) {
+        let url = await this.handleGetUrl({ file })
+        this.$emit('close', { file, url: `${url}#${file.filename ? file.filename : ''}` })
+      }
     },
     async handleCopy(file) {
       this.$emit('copy', file)
-      let toCopyPrefix = this.handleGetUrl({ file })
+      let toCopyPrefix = await this.handleGetUrl({ file })
       let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
       await this.$confirm(toCopyLink, {
         confirmButtonText: this.$t('common.copy'),

@@ -1,6 +1,6 @@
 <template>
   <div class="project-cell">
-    <img class="project-cell-cover" :src="project.extra.coverUrl || project_default_cover" alt="" @click="goProjectDetail(project)">
+    <img class="project-cell-cover" :src="project.extra.imageUrl || project_default_cover" alt="" @click="goProjectDetail(project)">
     <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title"></span><span class="recruitment" v-if="project.privilege == 1">招募中</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
@@ -11,7 +11,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">{{project.user && project.user.username}}</div>
+      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait"><span class="username" :title="project.user.username">{{project.user && project.user.username}}</span></div>
       <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
   </div>
@@ -53,7 +53,9 @@ export default {
     relativeTime(time) {
       const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time).utcOffset(offset).fromNow()
+      return moment(time)
+        .utcOffset(offset)
+        .fromNow()
     }
   }
 }
@@ -67,9 +69,10 @@ export default {
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
   background: #fff;
+  transition: all 200ms ease-in;
   &:hover {
-    box-shadow: 0 0 25px 3px #ccc;
-    transition: all 0.5s ease-in;
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+    transition: all 200ms ease-in;
   }
   &-cover {
     width: 100%;
@@ -129,9 +132,16 @@ export default {
         border-radius: 50%;
         margin-right: 8px;
       }
+      .username {
+        display: inline-block;
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
     &-time {
-      width: 80px;
+      width: 120px;
       text-align: right;
     }
   }

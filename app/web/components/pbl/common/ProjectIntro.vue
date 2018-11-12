@@ -10,7 +10,7 @@
     <el-dialog title="请设定项目对应的资料网站" :visible.sync="isEditInfoSiteDialogShow" width="420px" :before-close="handleClose" v-loading='isLoading'>
       <el-form label-position="top" :model="tempInfoSiteData">
         <el-form-item label="名称">
-          <el-input v-model="tempInfoSiteData.displayName"></el-input>
+          <el-input v-model="tempInfoSiteData.displayName" maxlength='30' @blur='checkDisplayNameLength'></el-input>
         </el-form-item>
         <el-form-item label="网址">
           <el-input v-model="tempInfoSiteData.url"></el-input>
@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions } from 'vuex'
 export default {
   name: 'ProjectIntro',
@@ -102,8 +103,22 @@ export default {
     showEditInfoSiteDataDialog() {
       this.isEditInfoSiteDialogShow = true
     },
+    async checkSensitive(checkedWords) {
+      let result = await checkSensitiveWords({ checkedWords }).catch()
+      return result && result.length > 0
+    },
     async saveInfoSiteData() {
+      if (!this.checkDisplayNameLength()) {
+        return
+      }
       this.isLoading = true
+      let isSensitive = await this.checkSensitive([
+        this.tempInfoSiteData.displayName
+      ])
+      if (isSensitive) {
+        this.isLoading = false
+        return
+      }
       await this.pblUpdateProject({
         projectId: this.projectId,
         updatingProjectData: this.updatingProjectData
@@ -137,6 +152,18 @@ export default {
     handleClose() {
       this.tempInfoSiteData = _.cloneDeep(this.originInfoSiteData)
       this.isEditInfoSiteDialogShow = false
+    },
+    checkDisplayNameLength() {
+      let displayName = this.tempInfoSiteData.displayName
+      let displayNameLen = displayName.length
+      if (displayNameLen < 2 || displayNameLen > 30) {
+        this.$message({
+          type: 'error',
+          message: '资料网站名称最少2位，最多30位'
+        })
+        return false
+      }
+      return true
     }
   }
 }
@@ -161,10 +188,15 @@ export default {
     align-items: center;
     .el-button {
       flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .el-icon-edit-outline {
       margin-left: 16px;
       cursor: pointer;
+      font-size: 14px;
+      color: #909399;
     }
   }
 }

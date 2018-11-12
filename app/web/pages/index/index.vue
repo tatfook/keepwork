@@ -5,20 +5,22 @@
     </el-header>
     <el-main class="index-page-main">
       <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHome"></tool-header>
-      <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
+      <router-view :pageLoading="pageLoading" v-if="presetLoaded" />
     </el-main>
     <el-aside></el-aside>
     <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHome">
       <common-footer class="container"></common-footer>
     </el-footer>
-    <el-footer  class="home-page-footer" v-if='isHome'>
+    <el-footer class="home-page-footer" v-if='isHome'>
       <perfect-common-footer></perfect-common-footer>
     </el-footer>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    </div>
   </el-container>
 </template>
 
 <script>
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueAnalytics from 'vue-analytics'
@@ -39,7 +41,7 @@ import CommonHeader from '../../components/common/CommonHeader'
 import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
-
+import LoginDialog from '@/components/common/LoginDialog'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -96,14 +98,20 @@ export default {
     $route: 'updateActivePage',
     activePageInfo(activePageInfo) {
       let { username, sitename, pagename } = activePageInfo
-      document.title = this.activePageDisplayName || pagename || sitename || username || 'KeepWork'
+      document.title =
+        this.activePageDisplayName ||
+        pagename ||
+        sitename ||
+        username ||
+        'KeepWork'
     }
   },
   components: {
     CommonHeader,
     CommonFooter,
     ToolHeader,
-    PerfectCommonFooter
+    PerfectCommonFooter,
+    LoginDialog
   },
   methods: {
     ...mapActions({
@@ -111,30 +119,39 @@ export default {
       userGetProfile: 'user/getProfile',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       userInitPageDetail: 'user/initPageDetail',
-      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite'
+      getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite',
+      pblToggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    handleLoginDialogClose() {
+      this.pblToggleLoginDialog(false)
+    },
     async getPathWithPagename(path) {
       let originPath = path
-      path = path.split('/').filter(x => x).join('/')
+      path = path
+        .split('/')
+        .filter(x => x)
+        .join('/')
       await this.gitlabGetRepositoryTree({
         path,
         editorMode: false
       }).catch(e => console.error(e))
       let children = this.gitlabChildrenByPath(path)
       let indexChild = children.filter(file => file.name === 'index.md')[0]
-      let firstFileTypeChild = children.filter(
-        file => file.type === 'blob'
-      )[0]
+      let firstFileTypeChild = children.filter(file => file.type === 'blob')[0]
       let targetFile = indexChild || firstFileTypeChild
-      return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : originPath
+      return targetFile && targetFile.path
+        ? '/' + targetFile.path.replace(/\.md$/, '')
+        : originPath
     },
     async loadEditorPresets() {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
-      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(err => {
-        console.error(err)
-      })
+      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
+        err => {
+          console.error(err)
+        }
+      )
     },
     async updateActivePage() {
       if (!this.presetLoaded) return
@@ -164,10 +181,16 @@ export default {
       username: 'user/username',
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
-      activePageInfo: 'activePageInfo'
+      activePageInfo: 'activePageInfo',
+      isShowLoginDialog: 'pbl/isShowLoginDialog'
     }),
     isHome() {
-      return this.$route.name === 'HomePage' || this.$route.name === 'CreativityPage' || this.$route.name === 'ExplorationPage' || this.$route.name === 'StudyPage'
+      return (
+        this.$route.name === 'HomePage' ||
+        this.$route.name === 'CreativityPage' ||
+        this.$route.name === 'ExplorationPage' ||
+        this.$route.name === 'StudyPage'
+      )
     },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
@@ -227,14 +250,15 @@ body {
   align-items: center;
   background-color: #f9f9f9;
 }
-.home-page-footer{
+.el-footer.home-page-footer {
   padding: 0;
 }
 .index-page-container {
   min-height: 100%;
 }
-.index-page-main {
-  font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+.el-main.index-page-main {
+  font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC',
+    'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 0;
 }
 [mod-container] {
