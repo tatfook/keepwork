@@ -63,21 +63,8 @@ export default {
     renderMode: Boolean
   },
   render(h) {
-    // console.log('-----↓↓↓mod↓↓↓------')
-    // console.log(this.mod.data)
-    // console.log('-----↓↓↓editMode↓↓↓------')
-    // console.log(this.editMode)
-    // console.log('-----↓↓↓conf↓↓↓------')
-    // console.log(this.conf)
-    // console.log('-----↓↓↓theme↓↓↓------')
-    // console.log(this.theme)
-    // console.log('-----↓↓↓active↓↓↓------')
-    // console.log(this.active)
-    // console.log(this.compWrapperClass)
-    console.log(this.pop)
     let isShowMod = false
     _.forEach(this.mod.data, (item, key) => {
-      // console.log(key)
       // eslint-disable-next-line eqeqeq
       if (key == 'styleID') {
         return true
@@ -105,7 +92,7 @@ export default {
         </div>
       )
     } else {
-      return (<CompHide />)
+      return (<CompHide compHideData={this.mod.data} />)
 
     }
   },

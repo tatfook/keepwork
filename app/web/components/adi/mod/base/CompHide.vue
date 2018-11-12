@@ -1,9 +1,9 @@
 <template>
-  <div class="aaa">
-    <div class="bbb">
+  <div class="compHideA">
+    <div class="compHideB">
       <div class="hideLogo"></div>
       <div>标题模块</div>
-      <div>该内容被隐藏了，点击此处可再次编辑</div>
+      <div>该内容被<span class="compHideClose" @click="compHideShow()">隐藏了</span>，点击此处可再次编辑</div>
     </div>
   </div>
 </template>
@@ -12,11 +12,29 @@
 import BasicComponents from '@/components/adi/common/'
 import { mapActions, mapGetters } from 'vuex'
 
-export default {}
+export default {
+  props: {
+    compHideData: Object
+  },
+  methods: {
+    ...mapActions({
+      updateActiveModAttribute: 'updateActiveModAttribute'
+    }),
+    compHideShow(){
+      _.forEach(this.compHideData, (item, key) => {
+        if (key == 'styleID') {
+          return true
+        }
+        item.hidden = false
+        this.updateActiveModAttribute({"key": key, "value": item})
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>
-.aaa{
+.compHideA{
   height: 100px;
   width: 100%;
   background-color: #ececec;
@@ -24,7 +42,7 @@ export default {}
   padding-top: 30px;
   padding-bottom: 40px;
 }
-.bbb{
+.compHideB{
   text-align: center;
 }
 .hideLogo {
@@ -34,5 +52,8 @@ export default {}
   background-repeat: no-repeat;
   width: 60px;
   height: 60px;
+}
+.compHideClose {
+  color: #48a3ff;
 }
 </style>
