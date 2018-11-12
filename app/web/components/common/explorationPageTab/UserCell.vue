@@ -35,15 +35,14 @@ export default {
     user: {
       type: Object,
       default() {
-        return {
-          default_portrait: default_portrait
-        }
+        return {}
       }
     }
   },
   data() {
     return {
-      isLoading: false
+      isLoading: false,
+      default_portrait
     }
   },
   computed: {
