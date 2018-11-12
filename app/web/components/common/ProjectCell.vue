@@ -11,7 +11,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">{{project.user && project.user.username}}</div>
+      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait"><span class="username" :title="project.user.username">{{project.user && project.user.username}}</span></div>
       <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
     </div>
   </div>
@@ -53,7 +53,9 @@ export default {
     relativeTime(time) {
       const offset = moment().utcOffset()
       this.isEn ? moment.locale('en') : moment.locale('zh-cn')
-      return moment(time).utcOffset(offset).fromNow()
+      return moment(time)
+        .utcOffset(offset)
+        .fromNow()
     }
   }
 }
@@ -69,7 +71,7 @@ export default {
   background: #fff;
   transition: all 200ms ease-in;
   &:hover {
-    box-shadow: 0 12px 24px -6px rgba(0,0,0,.16);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
     transition: all 200ms ease-in;
   }
   &-cover {
@@ -130,9 +132,16 @@ export default {
         border-radius: 50%;
         margin-right: 8px;
       }
+      .username {
+        display: inline-block;
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
     &-time {
-      width: 80px;
+      width: 120px;
       text-align: right;
     }
   }
