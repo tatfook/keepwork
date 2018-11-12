@@ -47,6 +47,11 @@ export default {
     this.basicMessage = _.cloneDeep(
       this.getSiteDetailInfoByPath(this.sitePath).siteinfo
     )
+
+    if(!this.basicMessage.displayName) {
+      this.basicMessage.displayName = this.basicMessage.sitename
+    }
+
     let websiteSetting = _.get(this.basicMessage, 'extra.websiteSetting', '')
     if (websiteSetting) {
       this.$set(this.basicMessage, 'extra', {
@@ -146,6 +151,7 @@ export default {
             newBasicMessage: this.basicMessage
           })
           this.showResultInfo()
+          this.$emit('close')
         } else {
           this.loading = false
           return false
