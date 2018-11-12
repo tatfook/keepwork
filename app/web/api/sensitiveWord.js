@@ -1,5 +1,6 @@
 import AhoCorasick from 'aho-corasick.js'
 import keepwork from '@/api/keepwork'
+import _ from 'lodash'
 let repeatStr = (str, count) => {
   let repeatStr = str
   while (count > 1) {
@@ -26,6 +27,7 @@ let sensitive = {
     let me = this
     if (isEmptyObject(me.trie.suffix)) {
       list.forEach(function(item) {
+        item.word = _.trim(item.word)
         me.trie.add(item.word, { word: item.word })
       })
     }
