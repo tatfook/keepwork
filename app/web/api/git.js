@@ -47,7 +47,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
-              `projects/${projectPath}/files/${fullPath}?refresh_cache=${useCache}`
+              `projects/${projectPath}/files/${fullPath}`
             )
             return res.data
           },

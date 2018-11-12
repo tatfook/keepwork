@@ -27,7 +27,8 @@ export default new Router({
     {
       path: '/project/new',
       name: 'NewProject',
-      component: NewProject
+      component: NewProject,
+      meta: { requireAuth: true }
     },
     {
       path: '/project/:id',
