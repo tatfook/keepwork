@@ -91,7 +91,7 @@ export default {
             min: 6,  message: this.$t('common.minPassword'),
           },
           {
-            max: 12,
+            max: 24,
             message: this.$t('common.maxPassword')
           }
         ],

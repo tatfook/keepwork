@@ -6,7 +6,7 @@
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
     "minPassword": "密码最少6位",
-    "maxPassword": "密码最多不能超过12位",
+    "maxPassword": "密码最多不能超过24位",
     "accountName": "请输入账户名",
     "registerFailed": "注册失败",
     "password": "请输入密码",
