@@ -46,9 +46,9 @@ export default {
     show: Boolean
   },
   data() {
-    let validatePhoneNumber = (rule, value, callback) => {
-      if (!/^1\d{10}$/.test(value)) {
-        callback(new Error(this.$t('user.wrongNumberFormat')))
+    let validateUsername = (rule, value, callback) => {
+      if (/^[0-9]/.test(value)) {
+        callback(new Error(this.$t('common.usernameCannotWithNumber')))
       } else {
         callback()
       }
@@ -76,6 +76,9 @@ export default {
             required: true,
             message: this.$t('common.inputUsername'),
             trigger: 'blur'
+          },
+          {
+            validator: validateUsername,
           }
         ],
         password: [
@@ -83,6 +86,13 @@ export default {
             required: true,
             message: this.$t('common.inputPassword'),
             trigger: 'blur'
+          },
+          {
+            min: 6,  message: this.$t('common.minPassword'),
+          },
+          {
+            max: 12,
+            message: this.$t('common.maxPassword')
           }
         ],
         phoneNumber: [
