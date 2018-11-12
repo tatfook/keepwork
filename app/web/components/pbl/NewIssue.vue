@@ -298,6 +298,7 @@ export default {
     height: 26px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: cover;
   }
   .el-dropdown-menu__item {
     display: flex;

@@ -754,6 +754,7 @@ export default {
           width: 48px;
           height: 48px;
           border-radius: 100%;
+          object-fit: cover;
         }
       }
       &-content {
@@ -806,6 +807,7 @@ export default {
     height: 26px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: cover;
   }
   .el-dropdown-menu__item {
     display: flex;
