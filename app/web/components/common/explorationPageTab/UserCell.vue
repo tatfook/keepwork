@@ -29,11 +29,11 @@
 import default_portrait from '@/assets/img/default_portrait.png'
 
 export default {
-  name: "UserCell",
+  name: 'UserCell',
   props: {
-    user:{
+    user: {
       type: Object,
-      default(){
+      default() {
         return {}
       }
     }
@@ -90,86 +90,82 @@ export default {
 
 <style lang="scss">
 .user-cell {
-  // .user-tab {
-    // .el-row {
-      .user-tab {
-        width: 286px;
-        border: 1px solid #e8e8e8;
-        background: #fff;
-        padding: 30px 0;
-        text-align: center;
-        margin: 0 auto 10px;
-        &-cover {
-          width: 96px;
-          height: 96px;
-          border-radius: 50%;
-          object-fit: cover;
-          cursor: pointer;
+  .user-tab {
+    width: 286px;
+    border: 1px solid #e8e8e8;
+    background: #fff;
+    padding: 30px 0;
+    text-align: center;
+    margin: 0 auto 10px;
+    &-cover {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    &-name {
+      font-size: 16px;
+      color: #333;
+      margin: 18px 0;
+      line-height: 22px;
+      cursor: pointer;
+    }
+    &-brief {
+      font-size: 12px;
+      color: #999;
+      margin: 9px 0;
+      line-height: 16px;
+    }
+    &-abstract {
+      display: flex;
+      div {
+        flex: 1;
+        .title {
+          font-size: 13px;
+          color: #666;
         }
-        &-name {
-          font-size: 16px;
+        .amount {
+          line-height: 18px;
+          font-size: 18px;
           color: #333;
-          margin: 18px 0;
-          line-height: 22px;
-          cursor: pointer;
-        }
-        &-brief {
-          font-size: 12px;
-          color: #999;
-          margin: 9px 0;
-          line-height: 16px;
-        }
-        &-abstract {
-          display: flex;
-          div {
-            flex: 1;
-            .title {
-              font-size: 13px;
-              color: #666;
-            }
-            .amount {
-              line-height: 18px;
-              font-size: 18px;
-              color: #333;
-            }
-          }
-          .member {
-            position: relative;
-          }
-          .member::before {
-            content: '';
-            width: 1px;
-            height: 20px;
-            background: rgb(202, 200, 200);
-            position: absolute;
-            left: 0;
-            top: 32px;
-          }
-          .member::after {
-            content: '';
-            width: 1px;
-            height: 20px;
-            background: rgb(202, 200, 200);
-            position: absolute;
-            right: 0;
-            top: 32px;
-          }
-        }
-        &-jion {
-          padding-top: 6px;
-          &-button {
-            height: 32px;
-            width: 108px;
-            padding: 0;
-          }
-        }
-        .is-followed {
-          background: #5fe1af;
-          border: 1px solid #5fe1af;
         }
       }
-    // }
-  // }
+      .member {
+        position: relative;
+      }
+      .member::before {
+        content: '';
+        width: 1px;
+        height: 20px;
+        background: rgb(202, 200, 200);
+        position: absolute;
+        left: 0;
+        top: 32px;
+      }
+      .member::after {
+        content: '';
+        width: 1px;
+        height: 20px;
+        background: rgb(202, 200, 200);
+        position: absolute;
+        right: 0;
+        top: 32px;
+      }
+    }
+    &-jion {
+      padding-top: 6px;
+      &-button {
+        height: 32px;
+        width: 108px;
+        padding: 0;
+      }
+    }
+    .is-followed {
+      background: #5fe1af;
+      border: 1px solid #5fe1af;
+    }
+  }
 }
 </style>
 
