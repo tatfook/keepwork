@@ -6,7 +6,7 @@
     "notValidAccount": "Account is not valid",
     "usernameCannotWithNumber": "The username cannot begin with a number",
     "minPassword": "Password minimum 6 digits",
-    "maxPassword": "No more than 12 digits",
+    "maxPassword": "No more than 24 digits",
     "accountName": "Account name",
     "registerFailed": "Register Failed",
     "password": "Password",
