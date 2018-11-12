@@ -122,7 +122,7 @@ export default {
       }
       await this.pblCreateComment({
         objectType: 5,
-        objectId: this.projectId,
+        objectId: _.toString(this.projectId),
         content: this.newCommenContent
       })
         .then(newCommentDetail => {

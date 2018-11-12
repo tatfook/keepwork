@@ -138,7 +138,7 @@
           </div>
           <div class="finish">
             <el-button size="medium" @click="closeIssue">关闭问题</el-button>
-            <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment">评论</el-button>
+            <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment" :loading="createCommentLoading">评论</el-button>
           </div>
         </div>
       </div>
@@ -195,7 +195,8 @@ export default {
       myComment: '',
       isEdit: false,
       assignedMembers: [],
-      updateLoading: false
+      updateLoading: false,
+      createCommentLoading: false
     }
   },
   async mounted() {
@@ -373,21 +374,33 @@ export default {
         .catch(err => console.error(err))
     },
     async createComment() {
-      if (!this.myComment) return
+      this.createCommentLoading = true
+      if (!this.myComment) {
+        this.createCommentLoading = false
+        return
+      }
       let sensitiveResult = await checkSensitiveWords({
         checkedWords: this.myComment
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
-        this.isAddingComment = false
+        this.createCommentLoading = false
         return
       }
-      await keepwork.comments.createComment({
-        objectType: 4,
-        objectId: this.issue.id,
-        content: this.myComment
-      })
-      this.myComment = ''
-      this.getCommentsList()
+      await keepwork.comments
+        .createComment({
+          objectType: 4,
+          objectId: _.toString(this.issue.id),
+          content: this.myComment
+        })
+        .then(res => {
+          this.createCommentLoading = false
+          this.myComment = ''
+          this.getCommentsList()
+        })
+        .catch(err => {
+          this.$message.error('评论失败')
+          this.createCommentLoading = false
+        })
     },
     async handleComment(comment, action, index) {
       if (action == 1) {

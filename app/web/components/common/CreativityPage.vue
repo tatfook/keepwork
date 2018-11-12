@@ -101,7 +101,7 @@ export default {
       userId: 'user/userId'
     }),
     myProjectsData() {
-      let arr = _.cloneDeep(this.myProjects)
+      let arr = _.cloneDeep(this.myProjects).sort(this.sortByKey('createdAt'))
       return _.forEach(arr, i => {
         i.name_title = i.name || '未命名'
       })
@@ -154,6 +154,11 @@ export default {
     },
     closeLearnGuide() {
       this.showGuideDialog = false
+    },
+    sortByKey(key) {
+      return (obj1, obj2) => {
+        return obj1[key] >= obj2[key] ? -1 : 1
+      }
     }
   }
 }
