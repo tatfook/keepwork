@@ -198,64 +198,55 @@ export default {
     },
     setContentWindowData() {
       let self = this
-      // pick file
-      function pickFile(boardWindow) {
-        if (
-          boardWindow &&
-          boardWindow.board &&
-          boardWindow.board.pickFile
-        ) {
-          boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
-        } else {
-          setTimeout(
-            function(){
-              pickFile(boardWindow)
-            },
-            500
-          )
-        }
-      }
 
       function setdata() {
         let board = self.getBoard()
 
-        if (board) {
-          let boardWindow = board.contentWindow
-
-          // set save url
-          if (!boardWindow.keepworkSaveUrl) {
-            boardWindow.keepworkSaveUrl = {}
-          }
-
-          if (self.cardValue && self.cardValue.xml) {
-            boardWindow.keepworkSaveUrl.xmlUrl = self.cardValue.xml
-          }
-
-          if (self.cardValue && self.cardValue.svg) {
-            boardWindow.keepworkSaveUrl.svgUrl = self.cardValue.svg
-          }
-
-          boardWindow.boardType = {}
-          boardWindow.boardType.close = () => {
-            self.visible = false
-          }
-
-          // set site page path
-          let activePageInfo = self.activePageInfo
-          boardWindow.pagePath =
-            activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
-
-          // set old data
-          if (self.cardValue.data) {
-            boardWindow.boardOldData = self.cardValue.data
-          } else {
-            boardWindow.boardOldData = ''
-          }
-
-          pickFile(boardWindow)
-        } else {
-          setTimeout(setdata, 500)
+        if (!board) {
+          setTimeout(setdata, 100)
+          return false
         }
+
+        let boardWindow = board.contentWindow
+
+        if (!boardWindow || !boardWindow.board) {
+          setTimeout(setdata, 100)
+          return false
+        }
+
+        // set save url
+        if (!boardWindow.keepworkSaveUrl) {
+          boardWindow.keepworkSaveUrl = {}
+        }
+
+        if (self.cardValue && self.cardValue.xml) {
+          boardWindow.keepworkSaveUrl.xmlUrl = self.cardValue.xml
+        }
+
+        if (self.cardValue && self.cardValue.svg) {
+          boardWindow.keepworkSaveUrl.svgUrl = self.cardValue.svg
+        }
+
+        boardWindow.boardType = {}
+        boardWindow.boardType.close = () => {
+          self.visible = false
+        }
+
+        // set site page path
+        let activePageInfo = self.activePageInfo
+        boardWindow.pagePath =
+          activePageInfo.sitename + '/' + activePageInfo.bareRelativePath
+
+        // set old data
+        if (self.cardValue.data) {
+          boardWindow.boardOldData = self.cardValue.data
+        } else {
+          boardWindow.boardOldData = ''
+        }
+
+        // pick file
+        let currentFile = boardWindow.board.getCurrentFile()
+        boardWindow.board.pickFile(boardWindow.App.MODE_KEEPWORK)
       }
 
       setdata()
