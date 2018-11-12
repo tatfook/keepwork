@@ -53,15 +53,22 @@ export default {
   computed: {
     ...mapGetters({
       allUsers: 'pbl/allUsers',
-      userProfile: 'user/profile',
-      isLogined: 'user/isLogined'
+      userProfile: 'user/profile'
     }),
     usersCount() {
       return _.get(this.allUsers, 'total', 0)
     },
     allUsersData() {
       let hits = _.get(this.allUsers, 'hits', [])
-      return hits
+      let users = _.map(hits, user => {
+        return {
+          ...user,
+          isFollowed: this.userAllFollows
+            .map(item => item.objectId)
+            .includes(user.id)
+        }
+      })
+      return users
     },
     userId() {
       return _.get(this.userProfile, 'id', '')
@@ -78,7 +85,6 @@ export default {
       getUserFavorite: 'pbl/getUserFavorite',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
-
     async targetPage(targetPage) {
       this.currentPage = targetPage
       this.loading = true
@@ -109,9 +115,7 @@ export default {
         .then(res => {
           this.userAllFollows = _.get(res, 'rows', [])
         })
-    },
-    
-    
+    }
   }
 }
 </script>

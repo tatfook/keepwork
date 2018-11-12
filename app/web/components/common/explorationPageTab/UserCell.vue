@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="user-tab-jion">
-        <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': true}]" :loading="false" @click="toggleFollow(user)">{{'已关注'}}</el-button>
+        <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? '已关注' : '关注'}}</el-button>
         <el-button class="user-tab-jion-button" @click="goUserHomePage(user)">主页</el-button>
       </div>
     </div>
@@ -27,7 +27,8 @@
 </template>
 <script>
 import default_portrait from '@/assets/img/default_portrait.png'
-
+import { keepwork, EsAPI } from '@/api'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'UserCell',
   props: {
@@ -38,7 +39,21 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      isLoading: false,
+      default_portrait
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
     },
@@ -46,20 +61,23 @@ export default {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
       }
-      if (true) {
+      this.isLoading = true
+      if (!this.user.isFollowed) {
         await keepwork.favorites
           .favoriteProject({ objectId: user.id, objectType: 0 })
           .then(res => {
             this.showMessage({
               message: '关注成功'
             })
-            this.targetPage(this.currentPage)
-            this.getFollows()
+            this.user.isFollowed = true
+            this.user.total_fans = this.user.total_fans + 1
+            this.isLoading = false
           })
           .catch(err => {
             this.showMessage({
               message: '关注失败'
             })
+            this.isLoading = false
           })
       } else {
         await keepwork.favorites
@@ -68,13 +86,16 @@ export default {
             this.showMessage({
               message: '取消关注成功'
             })
-            this.targetPage(this.currentPage)
-            this.getFollows()
+            this.user.isFollowed = false
+            this.user.total_fans =
+              this.user.total_fans - 1 < 0 ? 0 : this.user.total_fans - 1
+            this.isLoading = false
           })
           .catch(err => {
             this.showMessage({
               message: '取消关注失败'
             })
+            this.isLoading = false
           })
       }
     },
