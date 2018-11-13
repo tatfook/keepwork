@@ -8,14 +8,14 @@
           <el-button @click="commit">{{$t(options.commit)}}</el-button>
         </div>
         <div class="comment-box">
-          <div class="comment-item" v-for='comment in getCommentList' :key='comment._id'>
-            <img :src="comment.userInfo.portrait">
+          <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
+            <img :src="comment.extra.portrait">
             <div class="text">
-              <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
+              <h4>{{ comment.extra.username }}</h4>
+              <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
               <p>{{ comment.content }}</p>
             </div>
-            <a class="delete-btn" @click="deleteComment(comment._id)">{{$t(options.delete)}}</a>
+            <a class="delete-btn" @click="deleteComment(comment.id)">{{$t(options.delete)}}</a>
           </div>
         </div>
       </div>
@@ -32,15 +32,15 @@
           </div>
           <h3><img :src="getStyleOneId">{{$t(options.title)}}</h3>
           <hr>
-          <div class="comment-item" v-for='comment in getCommentList' :key='comment._id'>
-            <img :src="comment.userInfo.portrait">
+          <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
+            <img :src="comment.extra.portrait">
             <div class="text">
-              <h4>{{ comment.userInfo.displayName }}</h4>
-              <p class="info">{{ getFormatDate(comment.updateTime) }}</p>
+              <h4>{{ comment.extra.username }}</h4>
+              <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
               <p>{{ comment.content }}</p>
               <hr>
             </div>
-            <a class="delete-btn" @click="deleteComment(comment._id)">{{$t(options.delete)}}</a>
+            <a class="delete-btn" @click="deleteComment(comment.id)">{{$t(options.delete)}}</a>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@ export default {
     },
     async deleteComment(commentId) {
       this.loading = true
-      await this.deleteCommentById({ _id: commentId, page: this.currentPage })
+      await this.deleteCommentById({ id: commentId, page: this.currentPage})
       this.loading = false
 
       this.loadComments(this.currentPage)
@@ -154,11 +154,11 @@ export default {
     async loadComments(page) {
       this.loading = true
 
-      page || this.currentPage
+      page = page || this.currentPage
 
       this.currentPage = page
 
-      await this.getActivePageComments({ page })
+      await this.getActivePageComments({ page, pageSize: this.pageSize })
 
       if (
         this.activePageCommentList &&
@@ -169,7 +169,6 @@ export default {
           this.loadComments(this.currentPage - 1)
         }
       }
-
       if (
         this.activePageCommentList &&
         this.activePageCommentList.commentTotal
@@ -224,6 +223,7 @@ export default {
 
         .delete-btn {
           position: absolute;
+          cursor: pointer;
           right: 0;
           top: 0;
         }

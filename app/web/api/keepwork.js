@@ -174,10 +174,9 @@ payload: {
 ```
 */
 export const websiteComment = {
-  create: async (...args) => post('website_comment/create', ...args),
-  getByPageUrl: async (...args) =>
-    post('website_comment/getByPageUrl', ...args),
-  deleteById: async (...args) => post('website_comment/deleteById', ...args)
+  create: async args => post('comments', args),
+  getByPageUrl: async args => get(`comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=${args.pageSize}&x-page=${args.page}&x-order=updatedAt-desc`),
+  deleteById: async args => deleteMethod(`comments/${args.id}`)
 }
 
 export const sensitiveWords = {

@@ -492,13 +492,12 @@ const actions = {
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context
     let fullPath = getFileFullPathByPath(path)
-
     await dispatch('getProfile')
     let { userId } = getters
     await dispatch('getWebsiteDetailInfoByPath', { path })
     let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
-    let payload = { websiteId, userId, url: fullPath, content }
+    let payload = { objectType: 3, objectId: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
 
     commit(CREATE_COMMENT_SUCCESS, { url: fullPath, commentList })
@@ -508,19 +507,17 @@ const actions = {
     let { dispatch, rootGetters: { activePageUrl } } = context
     await dispatch('createComment', { url: activePageUrl, content })
   },
-  async deleteCommentById(context, { _id, page }) {
+  async deleteCommentById(context, { id, page }) {
     let { dispatch, commit } = context
-    await keepwork.websiteComment.deleteById({ _id })
+    await keepwork.websiteComment.deleteById({ id })
 
-    commit(DELETE_COMMENT_SUCCESS, { _id })
+    commit(DELETE_COMMENT_SUCCESS, { _id: id })
     await dispatch('getActivePageComments', { page })
   },
-  async getCommentsByPageUrl({ commit }, { url: path, page }) {
+  async getCommentsByPageUrl({ commit }, { url: path, page, pageSize = 10 }) {
     let fullPath = getFileFullPathByPath(path)
-
-    let { commentList, total } = await keepwork.websiteComment.getByPageUrl({ url: fullPath, page })
-
-    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, { url: fullPath, commentList, commentTotal: total })
+    let { count, rows } = await keepwork.websiteComment.getByPageUrl({ objectId: fullPath, objectType: 2, page, pageSize })
+    commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, { url: fullPath, commentList: rows, commentTotal: count })
   },
   async getActivePageComments(context, { page }) {
     let { dispatch, rootGetters: { activePageUrl } } = context
