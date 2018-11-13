@@ -31,18 +31,18 @@ export default {
     }),
     handleClose() {
       let data = {
-        dialogShow: false, 
-        title: this.showIframeDialog.title, 
-        message: this.showIframeDialog.message, 
-        result: false 
+        dialogShow: false,
+        title: this.showIframeDialog.title,
+        message: this.showIframeDialog.message,
+        result: false
       }
       this.toggleIframeDialog(data)
     },
     confirm() {
       let data = {
-        dialogShow: false, 
-        title: this.showIframeDialog.title, 
-        message: this.showIframeDialog.message, 
+        dialogShow: false,
+        title: this.showIframeDialog.title,
+        message: this.showIframeDialog.message,
         result: true
       }
       this.toggleIframeDialog(data)

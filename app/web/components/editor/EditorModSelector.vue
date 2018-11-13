@@ -45,6 +45,7 @@ export default {
     isResult(value) {
       if (value) {
         this.deleting()
+        this.showIframeDialog.result = false
       } else {
         this.showIframeDialog.result = false
       }
@@ -102,9 +103,9 @@ export default {
     },
     toDeleteMod() {
       let data = {
-        dialogShow: true, 
-        title: this.$t('editor.modDelMsgTitle'), 
-        message: this.$t('editor.modDelMsg'), 
+        dialogShow: true,
+        title: this.$t('editor.modDelMsgTitle'),
+        message: this.$t('editor.modDelMsg'),
         result: false
       }
       this.toggleIframeDialog(data)
