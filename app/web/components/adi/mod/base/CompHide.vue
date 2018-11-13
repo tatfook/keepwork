@@ -1,9 +1,9 @@
 <template>
-  <div class="compHideA">
-    <div class="compHideB">
-      <div class="hideLogo"></div>
-      <div>标题模块</div>
-      <div>该内容被<span class="compHideClose" @click="compHideShow()">隐藏了</span>，点击此处可再次编辑</div>
+  <div class="comp-hide-abroad"  @dblclick="compHideShow()">
+    <div class="comp-hide-inner">
+      <div class="hide-logo"></div>
+      <div>{{ $t(compTitle()) }}</div>
+      <div>{{ $t('compHideText.anteriorSegmentText') }}<span class="comp-hide-text-blue">{{ $t('compHideText.blueCompHideText') }}</span>{{ $t('compHideText.posteriorSegmentText') }}</div>
     </div>
   </div>
 </template>
@@ -11,10 +11,12 @@
 <script>
 import BasicComponents from '@/components/adi/common/'
 import { mapActions, mapGetters } from 'vuex'
+import modsName from '../modsName'
 
 export default {
   props: {
-    compHideData: Object
+    compHideData: Object,
+    compHideName: String
   },
   methods: {
     ...mapActions({
@@ -28,13 +30,16 @@ export default {
         item.hidden = false
         this.updateActiveModAttribute({"key": key, "value": item})
       })
+    },
+    compTitle(){
+      return modsName[this.compHideName]
     }
   }
 }
 </script>
 
 <style scoped>
-.compHideA{
+.comp-hide-abroad{
   height: 100px;
   width: 100%;
   background-color: #ececec;
@@ -42,10 +47,10 @@ export default {
   padding-top: 30px;
   padding-bottom: 40px;
 }
-.compHideB{
+.comp-hide-inner{
   text-align: center;
 }
-.hideLogo {
+.hide-logo {
   margin: 0 auto;
   background-image: url('../../../../assets/img/hideLogo.png');
   background-position: center center;
@@ -53,7 +58,7 @@ export default {
   width: 60px;
   height: 60px;
 }
-.compHideClose {
+.comp-hide-text-blue {
   color: #48a3ff;
 }
 </style>

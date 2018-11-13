@@ -4,7 +4,7 @@ import ModBoard from './web/board'
 import ModText from './web/text'
 import ModQQ from './web/qq'
 import ModMixLayer from './web/mixLayer'
-import ModMixPositon from './web/mixPosition'
+import ModMixPosition from './web/mixPosition'
 import ModImg from './web/img'
 import ModImgLoop from './web/imgLoop'
 import ModParacraft from './web/paracraft'
@@ -120,7 +120,7 @@ let modsList = [
       {
         id: '6-3',
         label: 'modList.mixPosition',
-        mods: [ModMixPositon]
+        mods: [ModMixPosition]
       },
       {
         id: '6-4',

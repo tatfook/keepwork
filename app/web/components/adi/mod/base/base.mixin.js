@@ -64,15 +64,31 @@ export default {
   },
   render(h) {
     let isShowMod = false
+
     _.forEach(this.mod.data, (item, key) => {
-      // eslint-disable-next-line eqeqeq
-      if (key == 'styleID') {
-        return true
+
+      let modsID = this.mod.data.styleID || 0
+      let modstemplatesID = this.conf.styles[modsID]
+      let modstemplates = this.conf.templates[modstemplatesID ? modstemplatesID.templateID || 0 : 0]
+
+      let testFor = (item) => {
+        if (typeof item === 'object') {
+          _.forEach(item, (itemB, keyB) => {
+            if (this.mod.data[itemB]) {
+              if (!this.mod.data[itemB].hidden) {
+                isShowMod = true
+              }
+            }
+          })
+        }
       }
-      if (!this.mod.data[key].hidden) {
-        isShowMod = true
-      }
+
+      _.forEach(modstemplates, (item, key) => {
+        testFor(item)
+      })
+
     })
+
     if (this.sheet) this.sheet.detach()
     let styleID =
       Number(this.modData.styleID) >= this.conf.styles.length
@@ -83,8 +99,6 @@ export default {
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
     _.merge(this.theme.data, gThemeData)
-
-    // eslint-disable-next-line no-constant-condition
     if (this.renderMode || isShowMod) {
       return (
         <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
@@ -92,7 +106,7 @@ export default {
         </div>
       )
     } else {
-      return (<CompHide compHideData={this.mod.data} />)
+      return (<CompHide compHideName={this.mod.modType} compHideData={this.mod.data} />)
 
     }
   },
