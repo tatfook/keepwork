@@ -1125,7 +1125,7 @@
     "Unapproved": "Unapproved"
   },
   "compHideText": {
-    "anteriorSegmentText": "The content is",
+    "anteriorSegmentText": "The content is ",
     "blueCompHideText": "hidden",
     "posteriorSegmentText": ", double-click the gray area can be edited again."
   }
