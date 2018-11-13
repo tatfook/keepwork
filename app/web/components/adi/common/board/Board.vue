@@ -198,11 +198,7 @@ export default {
       let svg = this.properties.svg || ''
       let response = await axios.get(svg + '?bust' + Date.now())
 
-      if (svg.match('api-stage')) {
-        this.svgData = (response && response.data.content) || ''
-      } else {
-        this.svgData = (response && response.data) || '' 
-      }
+      this.svgData = (response && response.data.content) || ''
     }
   },
   mixins: [compBaseMixin],
