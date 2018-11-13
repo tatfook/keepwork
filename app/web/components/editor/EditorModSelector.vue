@@ -6,7 +6,7 @@
       </div>
       <div class='mod'>
         <component :is='modComponent' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
-        <span v-if='invalid'> 错误的Mod指令 </span>
+        <span v-if='invalid'>{{$t('editor.wrongModDirective')}}</span>
       </div>
       <div class='operator' v-if='isActive'>
         <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
@@ -41,13 +41,25 @@ export default {
   watch: {
     isActive(newVal) {
       if (newVal) this.scrollToCurrentMod()
+    },
+    isResult(value) {
+      if (value) {
+        this.deleting()
+        this.showIframeDialog.result = false
+      } else {
+        this.showIframeDialog.result = false
+      }
     }
   },
   computed: {
     ...mapGetters({
       activeMod: 'activeMod',
-      modList: 'modList'
+      modList: 'modList',
+      showIframeDialog: 'showIframeDialog'
     }),
+    isResult() {
+      return this.showIframeDialog.result
+    },
     modComponent() {
       if (this.modConf) return this.modConf.mod
     },
@@ -65,7 +77,8 @@ export default {
     ...mapActions({
       deleteMod: 'deleteMod',
       setPreMod: 'setPreMod',
-      setNewModPosition: 'setNewModPosition'
+      setNewModPosition: 'setNewModPosition',
+      toggleIframeDialog: 'toggleIframeDialog'
     }),
     newMod(position) {
       this.$store.dispatch('setNewModPosition', position)
@@ -89,24 +102,21 @@ export default {
       return index ? modList[index - 1] : modList[index || 0]
     },
     toDeleteMod() {
-      this.$confirm(
-        this.$t('editor.modDelMsg'),
-        this.$t('editor.modDelMsgTitle'),
-        {
-          confirmButtonText: this.$t('el.messagebox.confirm'),
-          cancelButtonText: this.$t('el.messagebox.cancel'),
-          type: 'error'
-        }
-      )
-        .then(() => {
-          let preMod = this.getPreMod()
-          if (preMod) {
-            this.setPreMod(preMod)
-            this.setNewModPosition(gConst.POSITION_AFTER)
-          }
-          this.deleteMod(this.mod.key)
-        })
-        .catch(() => {})
+      let data = {
+        dialogShow: true,
+        title: this.$t('editor.modDelMsgTitle'),
+        message: this.$t('editor.modDelMsg'),
+        result: false
+      }
+      this.toggleIframeDialog(data)
+    },
+    deleting() {
+      let preMod = this.getPreMod()
+      if (preMod) {
+        this.setPreMod(preMod)
+        this.setNewModPosition(gConst.POSITION_AFTER)
+      }
+      this.deleteMod(this.mod.key)
     }
   },
   components:{

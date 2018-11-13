@@ -131,7 +131,8 @@ const getters = {
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
   showSkyDrive: state => state.isSkyDriveManagerDialogShow,
   updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || [],
-  recentOpenedList: (state, { updateRecentUrlList, 'user/personalAndContributedSiteNameList': allSiteNameList }) => _.filter(updateRecentUrlList, ({ path }) => allSiteNameList.includes(path.split('/')[2]))
+  recentOpenedList: (state, { updateRecentUrlList, 'user/personalAndContributedSiteNameList': allSiteNameList }) => _.filter(updateRecentUrlList, ({ path }) => allSiteNameList.includes(path.split('/')[2])),
+  showIframeDialog: state => state.isIframeDialogShow
 }
 
 export default getters

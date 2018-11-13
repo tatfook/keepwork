@@ -40,6 +40,7 @@
         </div>
       </el-row>
       <iframe id="frameViewport" src="/vp" style="height: 100%; width: 100%; background: #fff" />
+      <iframe-dialog></iframe-dialog>
       <div class='mouse-event-backup' v-show="resizeWinParams.isResizing"></div>
       <!-- <editor-viewport></editor-viewport> -->
       <el-dialog class="multiple-text-dialog" :title="$t('card.paragraph')" :visible="isMultipleTextDialogShow" top='6vh' :before-close="handleMultipleTextDialogClose" @open='initMarkdownModDatas'>
@@ -109,6 +110,7 @@ import Search from './Search'
 import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
+import IframeDialog from '@/components/common/IframeDialog'
 
 export default {
   name: 'Editor',
@@ -151,7 +153,8 @@ export default {
     ModsList,
     FileManager,
     PageSetting,
-    SkyDriveManagerDialog
+    SkyDriveManagerDialog,
+    IframeDialog
   },
   computed: {
     ...mapGetters({

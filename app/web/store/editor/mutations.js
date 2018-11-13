@@ -57,6 +57,7 @@ const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
 const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
 const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
+const TOGGLE_IFRAME_DIALOG = 'TOGGLE_IFRAME_DIALOG'
 
 export const props = {
   SET_ACTIVE_PAGE,
@@ -106,7 +107,8 @@ export const props = {
   SAVE_HISTORY,
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
-  ADD_RECENT_OPENED_SITE
+  ADD_RECENT_OPENED_SITE,
+  TOGGLE_IFRAME_DIALOG
 }
 
 const activeAreaData = state => {
@@ -345,7 +347,10 @@ const mutations = {
       ...state.updateRecentUrlList,
       [username]: updateRecentUrlList
     })
-  }
+  },
+  [TOGGLE_IFRAME_DIALOG](state, payload) {
+    Vue.set(state, 'isIframeDialogShow', payload)
+  },
 }
 
 export default mutations
