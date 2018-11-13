@@ -61,29 +61,29 @@
                 <span class="username">{{issue.user.username}}</span>
                 <span class="time">{{relativeTime(issue.createdAt)}}</span>
               </div>
-              <!-- <div class="username-created-time-right" v-if="comment.extra.username == username">
-              <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                  · · ·
-                </span>
-                <el-dropdown-menu slot="dropdown" class="operate-comment">
-                  <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
-                  <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div> -->
+              <div class="username-created-time-right" v-if="currIssue.userId == userId">
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    · · ·
+                  </span>
+                  <el-dropdown-menu slot="dropdown" class="operate-comment">
+                    <el-dropdown-item><span class="action" @click="handleIssueDesc(1)">编辑</span></el-dropdown-item>
+                    <!-- <el-dropdown-item><span class="action" @click="handleIssueDesc(2)">删除</span></el-dropdown-item> -->
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </div>
             <div class="idea-area">
               <div class="arrows"></div>
-              <!-- <div v-if="comment.isEdit" class="text">
-              <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
-              <div class="text-button">
-                <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
-                <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+              <div v-if="currIssue.descEdit" class="text">
+                <textarea name=""  rows="8" placeholder="说点什么呢......" v-model.trim="currIssue.content"></textarea>
+                <div class="text-button">
+                  <el-button size="mini" type="primary" @click="submitModifiedIssueDesc">确定</el-button>
+                  <el-button size="mini" @click="cancelModifiedIssueDesc">取消</el-button>
+                </div>
               </div>
-            </div>
-            <div v-else class="text">{{comment.content}}</div> -->
-              <div class="text">{{issue.content}}</div>
+              <div v-else class="text">{{currIssue.content}}</div>
+              <!-- <div class="text">{{issue.content}}</div> -->
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
                 <span class="username">{{comment.extra.username}}</span>
                 <span class="time">{{relativeTime(comment.createdAt)}}</span>
               </div>
-              <div class="username-created-time-right" v-if="comment.extra.username == username && !isProhibitEdit">
+              <div class="username-created-time-right" v-if="comment.userId == userId && !isProhibitEdit">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
                     · · ·
@@ -213,7 +213,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      username: 'user/username',
+      // username: 'user/username',
+      userId: 'user/userId',
       userProfile: 'user/profile',
       pblProjectMemberList: 'pbl/projectMemberList',
       isLogined: 'user/isLogined'
@@ -251,6 +252,7 @@ export default {
         .then(res => {
           this.issueData = Object.assign(res, {
             titleIsEdit: false,
+            descEdit: false,
             tagEdit: false
           })
           this.currIssue = _.clone(this.issueData)
@@ -319,6 +321,20 @@ export default {
       } else {
         this.cancelUpdateTag()
       }
+    },
+    handleIssueDesc(command){
+      if(command == 1){
+        this.currIssue.descEdit = true
+      }else{
+        this.$message.error('第一条评论是问题的描述，不能删除')
+      }
+    },
+    async submitModifiedIssueDesc(){
+      await this.updateIssueItem({ content: this.currIssue.content })
+      this.getIssueData()
+    },
+    cancelModifiedIssueDesc(){
+      this.currIssue = _.clone(this.issueData)
     },
     handleCloseTag(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
