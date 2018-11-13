@@ -316,6 +316,7 @@ export const issues = {
 export const groups = {
   getAllGroups: async () => get('groups'),
   createGroup: async ({ groupname, members, description }) => post('groups', { groupname, members, description }),
+  updateGroup: async ({ id, members, description }) => put(`groups/${id}`, { members, description }),
   addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
 }
 

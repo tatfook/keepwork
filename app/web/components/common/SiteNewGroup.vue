@@ -3,7 +3,7 @@
     <div class="site-new-group-title">添加</div>
     <el-form label-position="right" label-width="98px" :model="newGroupData">
       <el-form-item label="分组名:">
-        <el-input v-model="newGroupData.groupname"></el-input>
+        <el-input :disabled="isEditMode" v-model="newGroupData.groupname"></el-input>
         <p class="site-new-group-info">* 分组名称仅支持英文、数字</p>
       </el-form-item>
       <el-form-item label="成员:">
@@ -19,7 +19,7 @@
         </div>
       </el-form-item>
       <el-form-item class="site-new-group-operations">
-        <el-button type="primary" :disabled="!newGroupData.groupname" @click="createNewGroup">确定</el-button>
+        <el-button type="primary" :disabled="!newGroupData.groupname" @click="submitFormData">确定</el-button>
         <el-button @click="closeDialog">取消</el-button>
       </el-form-item>
     </el-form>
@@ -29,6 +29,9 @@
 import { mapActions } from 'vuex'
 export default {
   name: 'SiteNewGroup',
+  props: {
+    editingGroupData: Object
+  },
   data() {
     return {
       isAddingButtonLoading: false,
@@ -40,12 +43,27 @@ export default {
       }
     }
   },
+  computed: {
+    isEditMode() {
+      let isEditMode = Boolean(
+        this.editingGroupData && this.editingGroupData.id
+      )
+      isEditMode && this.initEditingGroupData()
+      return isEditMode
+    }
+  },
   methods: {
     ...mapActions({
       userCreateNewGroup: 'user/createNewGroup',
+      userUpdateGroup: 'user/updateGroup',
       userAddMemberToGroup: 'user/addMemberToGroup',
       getUsersDetailByUsernames: 'user/getUsersDetailByUsernames'
     }),
+    initEditingGroupData() {
+      this.newGroupData.groupname = _.get(this.editingGroupData, 'groupname')
+      this.memberTags = _.get(this.editingGroupData, 'members', [])
+      this.setNewGroupMemberData()
+    },
     async addNewMember() {
       this.isAddingButtonLoading = true
       let addingMembers = await this.getUsersDetailByUsernames({
@@ -62,15 +80,24 @@ export default {
           this.memberTags.push(member)
         }
       })
-      this.saveMemberData()
+      this.setNewGroupMemberData()
       this.isAddingButtonLoading = false
       this.newMembers = ''
     },
-    saveMemberData() {
+    setNewGroupMemberData() {
       this.newGroupData.members = _.map(this.memberTags, 'id')
     },
     removeMember(member) {
       this.memberTags.splice(this.memberTags.indexOf(member), 1)
+    },
+    submitFormData() {
+      this.isEditMode ? this.updateGroupData() : this.createNewGroup()
+    },
+    async updateGroupData() {
+      await this.userUpdateGroup(
+        _.merge(this.newGroupData, { id: this.editingGroupData.id })
+      ).catch()
+      this.closeDialog()
     },
     async createNewGroup() {
       await this.userCreateNewGroup(this.newGroupData).catch()
@@ -78,6 +105,8 @@ export default {
     },
     closeDialog() {
       this.$emit('close')
+      this.newGroupData = {}
+      this.memberTags = []
     }
   }
 }

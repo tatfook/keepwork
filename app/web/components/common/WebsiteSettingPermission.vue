@@ -32,7 +32,7 @@
           </el-table-column>
           <el-table-column label="操作" width="76" fixed="right">
             <template slot-scope="scope">
-              <span class="iconfont icon-edit__"></span>
+              <span class="iconfont icon-edit__" @click="editGroup(scope.row)"></span>
               <span class="iconfont icon-delete"></span>
             </template>
           </el-table-column>
@@ -79,7 +79,7 @@
       <dialog-operations @close='handleClose'></dialog-operations>
     </div>
     <el-dialog class="website-setting-permission-create-group" :visible.sync="isNewGroupDialogShow" width="768px" :before-close="handleNewGroupDialogClose" append-to-body>
-      <site-new-group @close='handleNewGroupDialogClose'></site-new-group>
+      <site-new-group :editingGroupData='editingGroupData' @close='handleNewGroupDialogClose'></site-new-group>
     </el-dialog>
   </div>
 </template>
@@ -123,7 +123,8 @@ export default {
       originSiteGroups: [],
       tempGroups: [],
       siteVisibility: this.siteDetail.visibility,
-      isNewGroupDialogShow: false
+      isNewGroupDialogShow: false,
+      editingGroupData: undefined
     }
   },
   computed: {
@@ -167,12 +168,15 @@ export default {
     handleClose() {
       this.$emit('close')
     },
+    editGroup(groupData) {
+      this.editingGroupData = groupData
+      this.showNewGroupDialog()
+    },
     showNewGroupDialog() {
       this.isNewGroupDialogShow = true
     },
     async handleNewGroupDialogClose() {
-      let siteId = this.siteId
-      await this.userGetUserGroups()
+      this.editingGroupData = undefined
       this.isNewGroupDialogShow = false
     }
   },
