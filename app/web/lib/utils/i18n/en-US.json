@@ -1123,5 +1123,10 @@
     "leave": "leave",
     "packagePendingReview": "The package is not approved. Learning is temporarily unavailable.",
     "Unapproved": "Unapproved"
+  },
+  "compHideText": {
+    "anteriorSegmentText": "The content is",
+    "blueCompHideText": "hidden",
+    "posteriorSegmentText": ", double-click the gray area can be edited again."
   }
 }

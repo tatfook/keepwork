@@ -3,6 +3,7 @@ import jss from 'jss'
 import preset from 'jss-preset-default'
 import { mapGetters } from 'vuex'
 import CompWrapper from './CompWrapper'
+import CompHide from './CompHide'
 import { gThemeData } from '@/lib/global'
 
 jss.setup(preset())
@@ -52,14 +53,42 @@ const renderTemplate = (h, m, template, root) => {
 }
 
 export default {
+  // components: CompHide,
   props: {
     mod: Object,
     conf: Object,
     theme: Object,
     editMode: Boolean,
-    active: Boolean
+    active: Boolean,
+    renderMode: Boolean
   },
   render(h) {
+    let isShowMod = false
+
+    _.forEach(this.mod.data, (item, key) => {
+
+      let modsID = this.mod.data.styleID || 0
+      let modstemplatesID = this.conf.styles[modsID]
+      let modstemplates = this.conf.templates[modstemplatesID ? modstemplatesID.templateID || 0 : 0]
+
+      let testFor = (item) => {
+        if (typeof item === 'object') {
+          _.forEach(item, (itemB, keyB) => {
+            if (this.mod.data[itemB]) {
+              if (!this.mod.data[itemB].hidden) {
+                isShowMod = true
+              }
+            }
+          })
+        }
+      }
+
+      _.forEach(modstemplates, (item, key) => {
+        testFor(item)
+      })
+
+    })
+
     if (this.sheet) this.sheet.detach()
     let styleID =
       Number(this.modData.styleID) >= this.conf.styles.length
@@ -70,12 +99,16 @@ export default {
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
     _.merge(this.theme.data, gThemeData)
+    if (this.renderMode || isShowMod) {
+      return (
+        <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
+          {renderTemplate(h, this)}
+        </div>
+      )
+    } else {
+      return (<CompHide compHideName={this.mod.modType} compHideData={this.mod.data} />)
 
-    return (
-      <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
-        {renderTemplate(h, this)}
-      </div>
-    )
+    }
   },
   methods: {
     isChildActive(property) {

@@ -9,7 +9,7 @@
           <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render box-items-item" @click='newMod(mod.name, index)'>
             <div class="render-mod-container--click-prevent"></div>
             <div class="render-mod-container">
-              <component class="render-mod" :is='mod.mod' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+              <component class="render-mod" :is='mod.mod' :renderMode='true' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
               <div class="style-mask">
                 <span>{{$t('tips.clickToAdd')}}</span>
               </div>

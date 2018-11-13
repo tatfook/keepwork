@@ -1128,5 +1128,10 @@
     "leave": "离开",
     "packagePendingReview": "课程包未通过审核，暂不能学习。",
     "Unapproved": "未审核"
+  },
+  "compHideText": {
+    "anteriorSegmentText": "该内容被",
+    "blueCompHideText": "隐藏了",
+    "posteriorSegmentText": "，双击灰色区域可再次编辑"
   }
 }
