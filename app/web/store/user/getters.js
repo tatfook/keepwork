@@ -146,22 +146,23 @@ const getters = {
       username
     ])
     let websiteRootpaths = _.keys(contributedWebsitesMapByRootpath)
-
     let contributedSiteList = websiteRootpaths.map(rootPath => {
-      let {
-        projectId,
-        dataSource: { lastCommitId }
-      } = contributedWebsitesMapByRootpath[rootPath]
-      let files = _.get(repositoryTrees, [projectId, rootPath], []).filter(
+      // let {
+      //   projectId,
+      //   dataSource: { lastCommitId }
+      // } = contributedWebsitesMapByRootpath[rootPath]
+      let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = gitTree2NestedArray(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
       )
+      // FIXME: 手动增加memberName可能存在问题
       return {
         ...contributedWebsitesMapByRootpath[rootPath],
-        projectId,
-        lastCommitId,
+        memberName: username,
+        // projectId,
+        // lastCommitId,
         children
       }
     })

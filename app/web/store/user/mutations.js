@@ -98,15 +98,21 @@ const mutations = {
     })
   },
   [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, { username, list }) {
-    let targetList = list.map(({ siteinfo, siteuser }) => ({
-      ...siteinfo,
-      ...siteuser,
-      _id: siteinfo._id,
-      rootPath: `${siteinfo.username}/${siteinfo.name}`,
-      projectId: siteinfo.dataSource.projectId
+    let targetList = list.map(site => ({
+      ...site,
+      name: site.sitename,
+      _id: site.id,
+      rootPath: `${site.username}/${site.sitename}`
     }))
+    // let targetList = list.map(({ siteinfo, siteuser }) => ({
+    //   ...siteinfo,
+    //   ...siteuser,
+    //   _id: siteinfo._id,
+    //   rootPath: `${siteinfo.username}/${siteinfo.name}`,
+    //   projectId: siteinfo.dataSource.projectId
+    // }))
     Vue.set(state, 'contributedWebsite', {
-      ...state.siteDataSource,
+      // ...state.siteDataSource,
       [username]: _.keyBy(targetList, 'rootPath')
     })
   },

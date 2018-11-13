@@ -317,7 +317,7 @@ const actions = {
     if (useCache) return
     let list = await keepwork.siteUser.getContributeSites()
     // let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
-    list = _.values(list).filter(({ siteinfo, siteuser } = {}) => siteinfo && siteuser)
+    list = _.values(list).filter(({ sitename, username } = {}) => sitename && username)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
   },

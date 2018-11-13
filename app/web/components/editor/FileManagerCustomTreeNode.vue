@@ -10,7 +10,7 @@
     <span class="node-icon">
       <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
       <i class="iconfont icon-folder" v-else-if="isFolder"></i>
-      <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 'private'"></i>
+      <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 1"></i>
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
