@@ -78,7 +78,6 @@ const actions = {
 
     let children = _.get(repositoryTrees, [projectId, path])
     if (useCache && !_.isEmpty(children)) return
-
     let list = await gitlab.getTree({
       projectId,
       path,
@@ -91,30 +90,27 @@ const actions = {
     let { path, useCache = true, recursive = true } = payload
     await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
     let {
-      'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+      'user/getSiteDetailInfoByPath': getSiteDetailInfoByPath,
+      'user/siteDetailInfo': siteDetailInfo
     } = rootGetters
-    let siteDetailInfoDataSource = getSiteDetailInfoDataSourceByPath(path)
-    let { visibility } = siteDetailInfoDataSource
-
+    let { siteinfo } = getSiteDetailInfoByPath(path)
     // this is special for private website
-    let isPrivateWebsite = visibility === 1
+    let isPrivateWebsite = siteinfo.visibility === 1
     if (isPrivateWebsite) {
       await dispatch('getRepositoryTreeForOwner', payload)
       return
     }
 
-    let projectId = siteDetailInfoDataSource.projectId
     let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
 
-    let children = _.get(repositoryTrees, [projectId, path])
+    let children = _.get(repositoryTrees, [path, path])
     if (useCache && !_.isEmpty(children)) return
-
     let list = await gitlab.getTree({
-      projectId,
+      // projectId,
       path,
       recursive
     })
-    commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
+    commit(GET_REPOSITORY_TREE_SUCCESS, { path, list })
   },
   async getFileDetail(context, { projectPath, fullPath, useCache = false }) {
     let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
@@ -152,17 +148,17 @@ const actions = {
     // load necessary info for guest to get the file content
     await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
     let {
-      'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath
+      'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath,
+      'user/getSiteDetailInfoByPath': getSiteDetailInfoByPath
     } = rootGetters
     let {
       rawBaseUrl,
-      dataSourceUsername,
-      projectName,
-      visibility
+      projectName
     } = getSiteDetailInfoDataSourceByPath(path)
+    let { siteinfo } = getSiteDetailInfoByPath(path)
 
     // this is special for private website
-    let isPrivateWebsite = visibility === 1
+    let isPrivateWebsite = siteinfo.visibility === 1
     if (isPrivateWebsite) {
       if (forceAsGuest) throw new Error('Cannot read private sites without permission!')
 

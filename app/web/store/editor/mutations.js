@@ -184,8 +184,9 @@ const mutations = {
     Vue.set(state, 'isMultipleTextDialogShow', isShow)
   },
   [SET_ACTIVE_PROPERTY](state, property) {
-    if (!state.activePage.activeMod) return
-    Vue.set(state.activePage, 'activeProperty', property)
+    if (state.activePage && state.activePage.activeMod) {
+      Vue.set(state.activePage, 'activeProperty', property)
+    }
   },
   [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
     Vue.set(state, 'activePropertyOptions', payload)
