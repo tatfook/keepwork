@@ -83,7 +83,6 @@
                 </div>
               </div>
               <div v-else class="text">{{currIssue.content}}</div>
-              <!-- <div class="text">{{issue.content}}</div> -->
             </div>
           </div>
         </div>
@@ -831,8 +830,15 @@ export default {
   }
 }
 .operate-comment {
-  .action {
-    padding: 0 20px;
+  .el-dropdown-menu__item{
+    padding: 0;
+    .action {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 108px;
+      text-align: center;
+    }
   }
 }
 .new-issue-assign {

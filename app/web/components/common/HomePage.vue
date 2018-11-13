@@ -51,47 +51,38 @@
     </div>
     <div class="home-page-brief">
       <div class="home-page-brief-center">
-        <el-row>
-          <el-col :span="8" :xs="24">
-            <div class="box" @click="goCreativityPage">
-              <div class="box-text">
-                <h2>创造</h2>
-                <p class="box-text-intro">创造属于你自己的项目</p>
-                <p class="box-text-own">已创建项目:
-                  <span class="total">{{excellentProjectsCount}}</span></p>
-              </div>
-              <div class="box-img">
-                <img src="@/assets/img/puzzle.png" alt="">
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="8" :xs="24">
-            <div class="box" @click="goExplorationPage">
-              <div class="box-text">
-                <h2>探索</h2>
-                <p class="box-text-intro">发现更多有趣的作品</p>
-                <p class="box-text-own">已共享内容:
-                  <span class="total">123456</span></p>
-              </div>
-              <div class="box-img">
-                <img src="@/assets/img/rocket.png" alt="">
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="8" :xs="24">
-            <div class="box no-line" @click="goStudyPage">
-              <div class="box-text">
-                <h2>学习</h2>
-                <p class="box-text-intro">好好学习，天天向上</p>
-                <p class="box-text-own">拥有在线课程：
-                  <span class="total">{{allPackagesCount}}</span></p>
-              </div>
-              <div class="box-img">
-                <img src="@/assets/img/bulb.png" alt="">
-              </div>
-            </div>
-          </el-col>
-        </el-row>
+        <div class="box" @click="goCreativityPage" @mouseover="combinedPic('create', -1200)" @mouseout="combinedPic('create', -2000, 'leave')">
+          <div class="box-text">
+            <h2>创造</h2>
+            <p class="box-text-intro">创造属于你自己的项目</p>
+            <p class="box-text-own">已创建项目:
+              <span class="total">{{excellentProjectsCount}}</span></p>
+          </div>
+          <div class="box-img create" ref="create_box_img">
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200)" @mouseout="combinedPic('explore', -2000, 'leave')">
+          <div class="box-text">
+            <h2>探索</h2>
+            <p class="box-text-intro">发现更多有趣的作品</p>
+            <p class="box-text-own">已共享内容:
+              <span class="total">123456</span></p>
+          </div>
+          <div class="box-img explore" ref="explore_box_img">
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200)" @mouseout="combinedPic('study', -2000, 'leave')">
+          <div class="box-text">
+            <h2>学习</h2>
+            <p class="box-text-intro">好好学习，天天向上</p>
+            <p class="box-text-own">拥有在线课程：
+              <span class="total">{{allPackagesCount}}</span></p>
+          </div>
+          <div class="box-img study" ref="study_box_img">
+          </div>
+        </div>
       </div>
     </div>
     <div class="home-page-cabinet">
@@ -172,6 +163,7 @@ export default {
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
       currIndex: 0,
+      timer_pic: null,
       briefPic: [
         {
           image: require('@/assets/pblImg/game1.png'),
@@ -256,6 +248,25 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    combinedPic(item,len,leave) {
+      clearInterval(this.timer_pic)
+      this.timer_pic = setInterval(() => {
+        let backgroundLen = Number(
+          this.$refs[`${item}_box_img`].style['backgroundPositionX'].replace(
+            /px/,
+            ''
+          )
+        )
+        if (backgroundLen > len) {
+          backgroundLen -= 100
+          this.$refs[`${item}_box_img`].style['backgroundPositionX'] =
+            backgroundLen + 'px'
+        } else {
+          clearInterval(this.timer_pic)
+          if(leave) this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
+        }
+      }, 60)
+    },
     switchPic(index) {
       this.currIndex = index
       this.boardImgUrl = this.briefPic[index].image
@@ -517,11 +528,12 @@ export default {
     &-center {
       margin: 0 auto;
       max-width: 1200px;
+      display: flex;
       .box {
+        flex: 1;
         margin: 24px 12px;
         padding: 10px 36px 10px 24px;
         display: flex;
-        border-right: 1px solid #eee;
         cursor: pointer;
         border-radius: 4px;
         &:hover {
@@ -544,17 +556,28 @@ export default {
           }
         }
         &-img {
-          max-width: 100px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          img {
-            width: 100%;
+          width: 100px;
+          height: 100px;
+          margin: 19px 0;
+          background-repeat: no-repeat;
+          background-size: auto 100px;
+          background-position: 0px;
+          &.create {
+            background-image: url('../../assets/pblImg/create.png');
+          }
+          &.explore {
+            background-image: url('../../assets/pblImg/explore.png');
+          }
+          &.study {
+            background-image: url('../../assets/pblImg/bulb.png');
           }
         }
       }
-      .no-line {
-        border: none;
+      .line {
+        width: 1px;
+        height: 156px;
+        background: #eee;
+        margin: 25px 14px;
       }
     }
   }
