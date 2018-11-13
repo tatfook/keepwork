@@ -49,7 +49,7 @@
               <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
             <!-- </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent=""><i class="iconfont icon-folder-open"></i>我的项目</a>
+              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
