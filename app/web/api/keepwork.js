@@ -101,6 +101,7 @@ export const website = {
   getAllSites: async () => get('sites'),
   getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
   createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
+  deleteSiteGroup: async ({ siteId, groupId }) => deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
   getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
   getDetailInfo: async args =>

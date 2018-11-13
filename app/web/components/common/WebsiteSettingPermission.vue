@@ -48,7 +48,7 @@
         <el-form ref="form" :model="tempAuth" label-width="80px">
           <el-form-item label="选择分组">
             <el-select v-model="tempAuth.groupId">
-              <el-option v-for="(group, index) in userGroups" :key="index" :label='group.groupname' :value="group.id"></el-option>
+              <el-option v-for="(group, index) in filterAuthedGroups" :key="index" :label='group.groupname' :value="group.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="设定权限">
@@ -63,13 +63,19 @@
           </el-form-item>
         </el-form>
         <el-table :data="siteGroups" border style="width: 100%">
-          <el-table-column prop="name" label="分组名" width="96">
+          <el-table-column label="分组名" width="96">
+            <template slot-scope="scope">
+              <span :title="scope.row.groupname">{{scope.row.groupname}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="auth" label="权限">
+          <el-table-column label="权限">
+            <template slot-scope="scope">
+              <span>{{scope.row.level | levelFilter}}</span>
+            </template>
           </el-table-column>
           <el-table-column label="操作" width="46">
             <template slot-scope="scope">
-              <span class="iconfont icon-delete"></span>
+              <span class="iconfont icon-delete" @click="deleteAuth(scope.row)"></span>
             </template>
           </el-table-column>
         </el-table>
@@ -101,27 +107,14 @@ export default {
     await this.userGetUserGroups()
     let siteId = this.siteId
     await this.userGetSiteGroupsBySiteId({ siteId })
-    this.originSiteGroups = _.cloneDeep(this.getSiteGroupsById({ siteId }))
-    this.tempGroups = _.cloneDeep(this.originSiteGroups)
   },
   data() {
     return {
       isLoading: false,
-      siteGroups: [
-        {
-          name: 'apv4',
-          members: 'member1, member2'
-        },
-        {
-          name: 'git4',
-          members: ''
-        }
-      ],
       tempAuth: {
         groupId: undefined,
         level: undefined
       },
-      originSiteGroups: [],
       tempGroups: [],
       siteVisibility: this.siteDetail.visibility,
       isNewGroupDialogShow: false,
@@ -141,6 +134,15 @@ export default {
         _.isUndefined(this.tempAuth.groupId) ||
         _.isUndefined(this.tempAuth.level)
       )
+    },
+    siteGroups() {
+      return _.cloneDeep(this.getSiteGroupsById({ siteId: this.siteId }))
+    },
+    filterAuthedGroups() {
+      let authedGroupIds = _.map(this.siteGroups, 'groupId')
+      return _.filter(this.userGroups, group => {
+        return _.findIndex(authedGroupIds, id => id === group.id) === -1
+      })
     }
   },
   methods: {
@@ -148,24 +150,43 @@ export default {
       userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
       userGetUserGroups: 'user/getUserGroups',
       userCreateSiteGroup: 'user/createSiteGroup',
+      userDeleteSiteGroup: 'user/deleteSiteGroup',
       userDeleteGroup: 'user/deleteGroup'
     }),
     async addAuth() {
       let { groupId, level } = this.tempAuth
+      this.isLoading = true
       await this.userCreateSiteGroup({
         siteId: this.siteId,
         groupId,
         level
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '添加授权成功'
-        })
-        this.tempAuth = {
-          groupId: undefined,
-          level: undefined
-        }
       })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '添加授权成功'
+          })
+          this.tempAuth = {
+            groupId: undefined,
+            level: undefined
+          }
+        })
+        .catch()
+      this.isLoading = false
+    },
+    async deleteAuth(authData) {
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          let { groupId, siteId } = authData
+          this.isLoading = true
+          await this.userDeleteSiteGroup({ groupId, siteId }).catch()
+          this.isLoading = false
+        })
+        .catch(() => {})
     },
     handleClose() {
       this.$emit('close')
@@ -178,7 +199,7 @@ export default {
       this.isNewGroupDialogShow = true
     },
     deleteGroup(groupData) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('确定删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -198,6 +219,25 @@ export default {
   components: {
     DialogOperations,
     SiteNewGroup
+  },
+  filters: {
+    levelFilter(level) {
+      let levelText = ''
+      switch (level) {
+        case 0:
+          levelText = '拒绝'
+          break
+        case 32:
+          levelText = '浏览'
+          break
+        case 64:
+          levelText = '编辑'
+          break
+        default:
+          break
+      }
+      return levelText
+    }
   }
 }
 </script>

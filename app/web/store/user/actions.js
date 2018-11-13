@@ -501,6 +501,11 @@ const actions = {
     await keepwork.website.createSiteGroup({ siteId, groupId, level })
     await dispatch('getSiteGroupsBySiteId', { siteId })
   },
+  async deleteSiteGroup(context, { siteId, groupId }) {
+    let { dispatch } = context
+    await keepwork.website.deleteSiteGroup({ siteId, groupId }).catch()
+    await dispatch('getSiteGroupsBySiteId', { siteId })
+  },
   async getUserGroups(context) {
     let { commit } = context
     let groups = await keepwork.groups.getAllGroups()
