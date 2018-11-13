@@ -1,9 +1,8 @@
 <template>
   <div class="comp-hide-abroad"  @dblclick="compHideShow()">
     <div class="comp-hide-inner">
-      <div class="hide-logo"></div>
-      <div>{{ $t(compTitle()) }}</div>
-      <div>{{ $t('compHideText.anteriorSegmentText') }}<span class="comp-hide-text-blue">{{ $t('compHideText.blueCompHideText') }}</span>{{ $t('compHideText.posteriorSegmentText') }}</div>
+      <div class="comp-hide-title">{{ $t(compTitle()) }}</div>
+      <div class="comp-hide-text">{{ $t('compHideText.anteriorSegmentText') }}<span class="comp-hide-text-blue">{{ $t('compHideText.blueCompHideText') }}</span>{{ $t('compHideText.posteriorSegmentText') }}</div>
     </div>
   </div>
 </template>
@@ -40,23 +39,23 @@ export default {
 
 <style scoped>
 .comp-hide-abroad{
-  height: 100px;
+  height: 120px;
   width: 100%;
   background-color: #ececec;
   opacity: 0.8;
-  padding-top: 30px;
-  padding-bottom: 40px;
 }
 .comp-hide-inner{
   text-align: center;
 }
-.hide-logo {
-  margin: 0 auto;
-  background-image: url('../../../../assets/img/hideLogo.png');
-  background-position: center center;
-  background-repeat: no-repeat;
-  width: 60px;
+.comp-hide-title {
+  font-weight: 600;
+  font-size: 24px;
   height: 60px;
+  line-height: 75px;
+}
+.comp-hide-text {
+  height: 60px;
+  line-height: 30px;
 }
 .comp-hide-text-blue {
   color: #48a3ff;
