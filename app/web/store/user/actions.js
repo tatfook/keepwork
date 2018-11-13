@@ -211,7 +211,7 @@ const actions = {
     }
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
-    fileList = _.uniq([...fileList, themeJson ], 'path')
+    fileList = _.uniq([...fileList, themeJson], 'path')
     const projectName = `${username}/${sitename}`
     let files = _.map(fileList, ({ path, content }) => {
       let filename = path.split('/').slice(2).join('/')
@@ -506,13 +506,18 @@ const actions = {
     let groups = await keepwork.groups.getAllGroups()
     commit(GET_USER_GROUPS_SUCCESS, { groups })
   },
-  async createNewGroup(context, { groupname, description = '' }) {
-    let newGroupData = await keepwork.groups.createGroup({ groupname, description }).catch(err => Promise.resolve(err))
-    return newGroupData
+  async createNewGroup(context, { groupname, members, description = '' }) {
+    let { dispatch } = context
+    await keepwork.groups.createGroup({ groupname, members, description }).catch(err => Promise.resolve(err))
+    await dispatch('getUserGroups')
   },
   async addMemberToGroup(context, { groupId, memberName }) {
     await keepwork.groups.addMemberToGroup({ groupId, memberName }).catch(err => Promise.resolve(err))
     return Promise.resolve()
+  },
+  async getUsersDetailByUsernames(context, { username }) {
+    let membersDetail = await keepwork.user.searchUsersByUsernames({ username }).catch()
+    return membersDetail
   },
   async createComment(context, { url: path, content }) {
     let { dispatch, commit, getters, rootGetters } = context

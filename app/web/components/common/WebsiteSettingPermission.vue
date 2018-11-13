@@ -19,10 +19,16 @@
         <div class="website-setting-permission-group-button-row">
           <el-button round size="small" @click="showNewGroupDialog">新建组</el-button>
         </div>
-        <el-table :data="siteGroups" border style="width: 100%">
-          <el-table-column prop="name" label="分组名" width="96" fixed>
+        <el-table :data="userGroups" border style="width: 100%">
+          <el-table-column label="分组名" width="96" fixed>
+            <template slot-scope="scope">
+              <span :title="scope.row.groupname">{{scope.row.groupname}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="members" label="成员">
+          <el-table-column label="成员">
+            <template slot-scope="scope">
+              <span v-for="(member, index) in scope.row.members" :key="index">{{member.nickname || member.username}}, </span>
+            </template>
           </el-table-column>
           <el-table-column label="操作" width="76" fixed="right">
             <template slot-scope="scope">

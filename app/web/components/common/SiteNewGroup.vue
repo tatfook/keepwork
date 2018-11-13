@@ -13,14 +13,14 @@
         </div>
         <p class="site-new-group-info">* 可同时添加多名成员，用户名之间以英文半角逗号(,)隔开</p>
         <div class="site-new-group-tags">
-          <el-tag v-for="(member, index) in newGroupData.members" :key="index" closable type="info" @close="removeMember(member)">
-            {{member}}
+          <el-tag v-for="(member, index) in memberTags" :key="index" closable type="info" @close="removeMember(member)">
+            {{member.username}}
           </el-tag>
         </div>
       </el-form-item>
       <el-form-item class="site-new-group-operations">
-        <el-button type="primary" @click="createNewGroup">确定</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" :disabled="!newGroupData.groupname" @click="createNewGroup">确定</el-button>
+        <el-button @click="closeDialog">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -31,57 +31,53 @@ export default {
   name: 'SiteNewGroup',
   data() {
     return {
-      editingProjectId: undefined,
+      isAddingButtonLoading: false,
+      memberTags: [],
       newMembers: '',
       newGroupData: {
         groupname: '',
-        members: ['lixizhi', 'liyu', 'lixizhi', 'liyu']
+        members: []
       }
     }
   },
   methods: {
     ...mapActions({
       userCreateNewGroup: 'user/createNewGroup',
-      userAddMemberToGroup: 'user/addMemberToGroup'
+      userAddMemberToGroup: 'user/addMemberToGroup',
+      getUsersDetailByUsernames: 'user/getUsersDetailByUsernames'
     }),
-    addNewMember() {
-      let addingMembers = this.newMembers.split(',')
+    async addNewMember() {
+      this.isAddingButtonLoading = true
+      let addingMembers = await this.getUsersDetailByUsernames({
+        username: {
+          $in: this.newMembers.split(',')
+        }
+      }).catch()
+      addingMembers = _.get(addingMembers, 'rows', [])
       _.map(addingMembers, member => {
-        member = _.trim(member, ' ')
-        let findedIndex = _.findIndex(
-          this.newGroupData.members,
-          addedMember => member === addedMember
-        )
+        let findedIndex = _.findIndex(this.memberTags, {
+          username: member.username
+        })
         if (findedIndex === -1) {
-          this.newGroupData.members.push(member)
+          this.memberTags.push(member)
         }
       })
+      this.saveMemberData()
+      this.isAddingButtonLoading = false
       this.newMembers = ''
     },
+    saveMemberData() {
+      this.newGroupData.members = _.map(this.memberTags, 'id')
+    },
     removeMember(member) {
-      this.newGroupData.members.splice(
-        this.newGroupData.members.indexOf(member),
-        1
-      )
+      this.memberTags.splice(this.memberTags.indexOf(member), 1)
     },
     async createNewGroup() {
-      await this.userCreateNewGroup({
-        groupname: this.newGroupData.groupname
-      }).then(async newGroupData => {
-        this.editingProjectId = newGroupData.id
-        await this.addMembersToGroup()
-      })
+      await this.userCreateNewGroup(this.newGroupData).catch()
+      this.closeDialog()
     },
-    async addMembersToGroup() {
-      let groupId = this.editingProjectId
-      Promise.all(
-        this.newGroupData.members.map(memberName => {
-          return this.userAddMemberToGroup({ groupId, memberName })
-        })
-      )
-        .then(() => {
-          this.$emit('close')
-        })
+    closeDialog() {
+      this.$emit('close')
     }
   }
 }

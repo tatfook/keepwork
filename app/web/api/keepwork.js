@@ -48,7 +48,8 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) => post('user/bindThreeService', ...args)
+  bindThreeService: async (...args) => post('user/bindThreeService', ...args),
+  searchUsersByUsernames: async ({ username }) => post('users/search', { username })
 }
 
 /*doc
@@ -314,7 +315,7 @@ export const issues = {
 
 export const groups = {
   getAllGroups: async () => get('groups'),
-  createGroup: async ({ groupname, description }) => post('groups', { groupname, description }),
+  createGroup: async ({ groupname, members, description }) => post('groups', { groupname, members, description }),
   addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
 }
 
