@@ -1,5 +1,5 @@
 <template>
-  <div class="website-setting-permission">
+  <div class="website-setting-permission" v-loading='isLoading'>
     <div class="website-setting-permission-type">
       <h1><span class="website-setting-permission-index-label">1</span>网站类型</h1>
       <div class="website-setting-permission-type-main">
@@ -33,7 +33,7 @@
           <el-table-column label="操作" width="76" fixed="right">
             <template slot-scope="scope">
               <span class="iconfont icon-edit__" @click="editGroup(scope.row)"></span>
-              <span class="iconfont icon-delete"></span>
+              <span class="iconfont icon-delete" @click="deleteGroup(scope.row)"></span>
             </template>
           </el-table-column>
         </el-table>
@@ -106,6 +106,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       siteGroups: [
         {
           name: 'apv4',
@@ -146,7 +147,8 @@ export default {
     ...mapActions({
       userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
       userGetUserGroups: 'user/getUserGroups',
-      userCreateSiteGroup: 'user/createSiteGroup'
+      userCreateSiteGroup: 'user/createSiteGroup',
+      userDeleteGroup: 'user/deleteGroup'
     }),
     async addAuth() {
       let { groupId, level } = this.tempAuth
@@ -174,6 +176,19 @@ export default {
     },
     showNewGroupDialog() {
       this.isNewGroupDialogShow = true
+    },
+    deleteGroup(groupData) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          this.isLoading = true
+          await this.userDeleteGroup({ id: groupData.id })
+          this.isLoading = false
+        })
+        .catch(() => {})
     },
     async handleNewGroupDialogClose() {
       this.editingGroupData = undefined

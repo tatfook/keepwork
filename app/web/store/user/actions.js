@@ -516,6 +516,11 @@ const actions = {
     await keepwork.groups.createGroup({ groupname, members, description }).catch(err => Promise.resolve(err))
     await dispatch('getUserGroups')
   },
+  async deleteGroup(context, { id }) {
+    let { dispatch } = context
+    await keepwork.groups.deleteGroup({ id }).catch(err => Promise.resolve(err))
+    await dispatch('getUserGroups')
+  },
   async addMemberToGroup(context, { groupId, memberName }) {
     await keepwork.groups.addMemberToGroup({ groupId, memberName }).catch(err => Promise.resolve(err))
     return Promise.resolve()
