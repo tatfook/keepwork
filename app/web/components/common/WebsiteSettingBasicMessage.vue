@@ -12,9 +12,8 @@
           <div class="before-cropper-zone">
             <img class="profile" :src='basicMessage.extra.logoUrl' alt="">
             <div class="operate-masker">
-              <span class="to-change-btn">
+              <span class="to-change-btn" @click="showMediaSkyDriveDialog()">
                 {{ $t('setting.change') }}
-                <input type="file" class="input-file" @change='siteLogoUpload'>
               </span>
             </div>
           </div>
@@ -25,6 +24,7 @@
       </el-form>
     </div>
     <dialog-operations class="website-basic-message-operations" @save="submitChange" @close="handleClose"></dialog-operations>
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -32,6 +32,7 @@ import _ from 'lodash'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'WebsiteSettingBasicMessage',
   props: {
@@ -73,7 +74,8 @@ export default {
             trigger: 'change'
           }
         ]
-      }
+      },
+      isMediaSkyDriveDialogShow: false
     }
   },
   computed: {
@@ -95,6 +97,16 @@ export default {
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
       userSaveSiteBasicSetting: 'user/saveSiteBasicSetting'
     }),
+    showMediaSkyDriveDialog() {
+      this.isMediaSkyDriveDialogShow = true
+    },
+    async closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
+
+      if (url && this.basicMessage && this.basicMessage.extra) {
+        this.basicMessage.extra.logoUrl = url
+      }
+    },
     async siteLogoUpload(e) {
       this.loading = true
       let uploadingFile = e.target.files[0]
@@ -173,6 +185,7 @@ export default {
     }
   },
   components:{
+    SkyDriveManagerDialog,
     DialogOperations
   }
 }
