@@ -145,7 +145,6 @@ export default {
 
 <style lang="scss">
 .review {
-  height: 100%;
   [v-cloak] {
     display: none;
   }
@@ -165,7 +164,6 @@ export default {
     }
   }
   &-list {
-    height: 100%;
     display: flex;
     flex-direction: column;
     &-class-hours {
@@ -198,7 +196,6 @@ export default {
     }
     &-package {
       flex: 1;
-      overflow: auto;
       .package {
         padding: 18px;
         height: 200px;
