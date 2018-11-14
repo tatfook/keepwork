@@ -118,6 +118,11 @@ export default {
     padding: 30px 0;
     text-align: center;
     margin: 0 auto 10px;
+    transition: all 200ms ease-in;
+    &:hover {
+      box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+      transition: all 200ms ease-in;
+    }
     &-cover {
       width: 96px;
       height: 96px;

@@ -64,7 +64,7 @@ export default {
 <style lang='scss'>
 .project-cell {
   width: 290px;
-  padding: 16px;
+  padding: 16px 16px 8px;
   margin: 0 auto 16px;
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
