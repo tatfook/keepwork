@@ -32,7 +32,8 @@
         <p class="project-basic-info-detail-message-item"><label>创建时间:</label>{{originProjectDetail.createdAt | formatDate}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary" @click="toProjectPage">访问项目</el-button>
+          <el-button type="primary" @click="toProjectPage">{{isWebType ? '访问网站' : '访问项目' }}</el-button>
+          <el-button @click="toEditWebsite" plain v-if="isWebType && isProjectOwner">编辑网站</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>
@@ -140,6 +141,9 @@ export default {
       getSiteDetailInfoById: 'user/getSiteDetailInfoById',
       isLogined: 'user/isLogined'
     }),
+    isProjectOwner() {
+      return this.loginUserId === this.originProjectDetail.userId
+    },
     isApplied() {
       return this.projectApplyState === 0
     },
@@ -208,7 +212,7 @@ export default {
       pblUpdateProject: 'pbl/updateProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog',
       getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
-      toggleLoginDialog: 'pbl/toggleLoginDialog',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -322,6 +326,18 @@ export default {
           break
         default:
           break
+      }
+    },
+    async toEditWebsite() {
+      if (this.projectSiteId) {
+        await this.getWebsiteDetailBySiteId({ siteId: this.projectSiteId }).catch(e => console.error(e))
+        if (this.siteUrl) {
+          console.warn('url:', this.siteUrl)
+          let tempWin = window.open('_blank')
+          tempWin.location = `/ed${this.siteUrl}`
+        }
+      } else {
+        this.binderDialogVisible = true
       }
     },
     async toSitePage() {
