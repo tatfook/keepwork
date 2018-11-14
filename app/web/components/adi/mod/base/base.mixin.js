@@ -71,20 +71,22 @@ export default {
       let modstemplatesID = this.conf.styles[modsID]
       let modstemplates = this.conf.templates[modstemplatesID ? modstemplatesID.templateID || 0 : 0]
 
-      let testFor = (item) => {
+      let modsForEach = (item) => {
         if (typeof item === 'object') {
           _.forEach(item, (itemB, keyB) => {
             if (this.mod.data[itemB]) {
               if (!this.mod.data[itemB].hidden) {
                 isShowMod = true
               }
+            } else {
+              modsForEach(itemB)
             }
           })
         }
       }
 
       _.forEach(modstemplates, (item, key) => {
-        testFor(item)
+        modsForEach(item)
       })
 
     })
