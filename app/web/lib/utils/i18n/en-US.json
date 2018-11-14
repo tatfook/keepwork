@@ -743,6 +743,7 @@
   "setting": {
     "general": "Basic Info",
     "siteLayouts": "Layouts",
+    "sitePermission": "Permission",
     "siteStyle": "Style",
     "siteName": "Name",
     "siteLink": "Link",

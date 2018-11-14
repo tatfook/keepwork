@@ -30,7 +30,7 @@
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
-      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'></website-setting-dialog>
+      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' :siteDetail='siteDetail' @close='closeWebsiteSettingDialog'></website-setting-dialog>
     </div>
     <div @click.stop v-if='isNewWebPageDialogShow'>
       <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
@@ -452,6 +452,9 @@ export default {
 
       let [username, name] = this.data.path.split('/')
       return `${username}/${name}`
+    },
+    siteDetail(){
+      return this.isWebsite ? this.data : undefined
     },
     filePath() {
       return this.data.path.replace(/\.md$/, '')

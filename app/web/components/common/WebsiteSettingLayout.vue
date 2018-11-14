@@ -707,7 +707,7 @@ export default {
     }
   }
   &-layout-operations{
-    width: 175px;
+    width: 120px;
   }
 }
 </style>

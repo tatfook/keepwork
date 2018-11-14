@@ -23,6 +23,8 @@ const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
 const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
 const UPDATE_SITE_MSG_SUCCESS = 'UPDATE_SITE_MSG_SUCCESS'
+const GET_SITE_GROUP_SUCCESS = 'GET_SITE_GROUP_SUCCESS'
+const GET_USER_GROUPS_SUCCESS = 'GET_USER_GROUPS_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
 const GET_FROM_SKY_DRIVE_SUCCESS = 'GET_FROM_SKY_DRIVE_SUCCESS'
 const GET_SITE_THEME_CONFIG_SUCCESS = 'GET_SITE_THEME_CONFIG_SUCCESS'
@@ -56,6 +58,8 @@ export const props = {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
+  GET_SITE_GROUP_SUCCESS,
+  GET_USER_GROUPS_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
@@ -162,6 +166,15 @@ const mutations = {
   },
   [GET_WEB_TEMPLATE_FILE_SUCCESS](state, { file, content }) {
     Vue.set(file, 'content', content)
+  },
+  [GET_SITE_GROUP_SUCCESS](state, { siteId, groups }) {
+    Vue.set(state, 'sitesGroups', {
+      ...state.sitesGroups,
+      [siteId]: groups
+    })
+  },
+  [GET_USER_GROUPS_SUCCESS](state, { groups }) {
+    Vue.set(state, 'userGroups', groups)
   },
   [SET_PAGE_STAR_DETAIL](state, { starred, starredCount }) {
     Vue.set(state, 'activePageStarInfo', { starred, starredCount })

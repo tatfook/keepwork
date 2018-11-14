@@ -48,7 +48,8 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) => post('user/bindThreeService', ...args)
+  bindThreeService: async (...args) => post('user/bindThreeService', ...args),
+  searchUsersByUsernames: async ({ username }) => post('users/search', { username })
 }
 
 /*doc
@@ -98,6 +99,9 @@ export const website = {
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
+  getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
+  createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
+  deleteSiteGroup: async ({ siteId, groupId }) => deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
   getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
   getDetailInfo: async args =>
@@ -310,6 +314,14 @@ export const issues = {
   getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
 }
 
+export const groups = {
+  getAllGroups: async () => get('groups'),
+  createGroup: async ({ groupname, members, description }) => post('groups', { groupname, members, description }),
+  updateGroup: async ({ id, members, description }) => put(`groups/${id}`, { members, description }),
+  deleteGroup: async ({ id }) => deleteMethod(`groups/${id}`),
+  addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
+}
+
 export const keepwork = {
   user,
   website,
@@ -326,7 +338,8 @@ export const keepwork = {
   members,
   comments,
   bigfile,
-  issues
+  issues,
+  groups
 }
 
 export default keepwork

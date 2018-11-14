@@ -748,6 +748,7 @@
   "setting": {
     "general": "基本信息",
     "siteLayouts": "网站布局",
+    "sitePermission": "网站权限",
     "siteStyle": "网站样式",
     "siteName": "网站名称",
     "siteLink": "网站地址",

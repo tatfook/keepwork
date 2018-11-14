@@ -27,7 +27,7 @@ export default {
   align-self: flex-end;
   padding-bottom: 26px;
   .el-button {
-    width: 120px;
+    width: 80px;
     height: 40px;
     line-height: 40px;
     font-size: 14px;
