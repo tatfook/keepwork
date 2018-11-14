@@ -51,7 +51,7 @@
     </div>
     <div class="home-page-brief">
       <div class="home-page-brief-center">
-        <div class="box" @click="goCreativityPage" @mouseover="combinedPic('create', -1200)" @mouseout="combinedPic('create', -2000, 'leave')">
+        <div class="box" @click="goCreativityPage" @mouseover="combinedPic('create', -1200,0)" @mouseout="combinedPic('create', -2000,0, 'leave')">
           <div class="box-text">
             <h2>创造</h2>
             <p class="box-text-intro">每个人都应该拥有自己的作品</p>
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div class="line"></div>
-        <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200)" @mouseout="combinedPic('explore', -2000, 'leave')">
+        <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200,1)" @mouseout="combinedPic('explore', -2000,1, 'leave')">
           <div class="box-text">
             <h2>探索</h2>
             <p class="box-text-intro">打开一扇扇的门发现有趣的世界</p>
@@ -73,7 +73,7 @@
           </div>
         </div>
         <div class="line"></div>
-        <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200)" @mouseout="combinedPic('study', -2000, 'leave')">
+        <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200,2)" @mouseout="combinedPic('study', -2000,2, 'leave')">
           <div class="box-text">
             <h2>学习</h2>
             <p class="box-text-intro">学习起于探索成于创造</p>
@@ -163,7 +163,7 @@ export default {
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
       currIndex: 0,
-      timer_pic: null,
+      timer_pic: [],
       briefPic: [
         {
           image: require('@/assets/pblImg/game0.png'),
@@ -171,11 +171,11 @@ export default {
         },
         {
           image: require('@/assets/pblImg/game1.png'),
-          text: '基于玩和创造的自主学习'
+          text: '基于玩与创造的自主学习'
         },
         {
           image: require('@/assets/pblImg/game2.png'),
-          text: '探索发现建立个人的知识体系'
+          text: '建立个人知识体系、探索他人知识'
         },
         {
           image: require('@/assets/pblImg/game3.png'),
@@ -187,7 +187,7 @@ export default {
         },
         {
           image: require('@/assets/pblImg/game5.png'),
-          text: '大师级程序员的知识传授体系'
+          text: '来自职业程序员的知识传授'
         }
       ],
       boardImgUrl: require('@/assets/pblImg/game1.png'),
@@ -252,9 +252,9 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
-    combinedPic(item, len, leave) {
-      clearInterval(this.timer_pic)
-      this.timer_pic = setInterval(() => {
+    combinedPic(item, len, n, leave) {
+      clearInterval(this.timer_pic[n])
+      this.timer_pic[n] = setInterval(() => {
         let backgroundLen = Number(
           this.$refs[`${item}_box_img`].style['backgroundPositionX'].replace(
             /px/,
@@ -266,7 +266,7 @@ export default {
           this.$refs[`${item}_box_img`].style['backgroundPositionX'] =
             backgroundLen + 'px'
         } else {
-          clearInterval(this.timer_pic)
+          clearInterval(this.timer_pic[n])
           if (leave)
             this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
         }
