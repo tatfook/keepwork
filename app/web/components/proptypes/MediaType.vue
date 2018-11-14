@@ -36,15 +36,15 @@
           </el-button>
         </div>
         <div class="media-type-img-cover">
-          <span>`
+          <span>
             <el-button class="media-type-img-cover-btn_play media-type-img-cover-btn_play-icon el-icon-caret-right" size="mini" round @click="handlePlay()"></el-button>
-            <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertImg()">{{$t('common.change')}}</el-button>
+            <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertVideo()">{{$t('common.change')}}</el-button>
           </span>
         </div>
       </div>
 
       <div class="video-cover">
-        <el-button v-if="!posterValue" @click='insertImg()' plain>{{$t('editor.addVideoCover')}}</el-button>
+        <el-button v-if="!posterValue" @click='changeCover()' plain>{{$t('editor.addVideoCover')}}</el-button>
         <div class="media-type-img" v-if="posterValue" :style="{backgroundImage: 'url(' + posterValue + ')'}">
           <div class="media-type-img-cover">
             <span>
@@ -80,6 +80,7 @@ export default {
   data() {
     let self = this
     return {
+      openType: "image",
       isSkyDriveManagerDialogShow: false,
       isPlayIconShow: true,
       isVideoTabHide: false,
@@ -191,10 +192,17 @@ export default {
     },
     insertImg() {
       this.isVideoTabHide = false
+      this.openType = "image"
+      this.openSkyDriveManagerDialog()
+    },
+    insertVideo() {
+      this.isVideoTabHide = false
+      this.openType = "video"
       this.openSkyDriveManagerDialog()
     },
     changeCover() {
       this.isVideoTabHide = true
+      this.openType = "cover"
       this.openSkyDriveManagerDialog()
     },
     openSkyDriveManagerDialog() {
@@ -207,7 +215,20 @@ export default {
       this.isSkyDriveManagerDialogShow = false
 
       if (!url) return
-      this.updateValue("src", url)
+
+      switch(this.openType) {
+        case "image":
+          this.updateValue("poster", "")
+          this.updateValue("src", url)
+          break
+        case "video":
+          this.updateValue("src", url)
+          break
+        case "cover":
+          this.updateValue("poster", url)
+          break
+      }
+
     },
     getLocationUrl(url) {
       return url ? location.origin + '/' + url : ''

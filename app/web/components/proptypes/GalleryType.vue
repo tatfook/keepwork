@@ -23,18 +23,18 @@
           <div class="gallery-type-item-img-cover">
             <span>
               <el-button class="gallery-type-play-img-btn el-icon-caret-right" size="mini" round @click="handlePlay(index)"></el-button>
-              <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
+              <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateVideo(index)">{{$t('common.change')}}</el-button>
               <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)" :disabled="isDisabled"></el-button>
             </span>
           </div>
         </div>
 
         <div v-if="item.type === 'videos'" class="video-cover">
-          <el-button v-if="!item.poster" @click='handleUpdateImg()' plain>{{$t('editor.addVideoCover')}}</el-button>
+          <el-button v-if="!item.poster" @click='handleChangeCover(index)' plain>{{$t('editor.addVideoCover')}}</el-button>
           <div class="gallery-type-item-img" v-if="item.poster" :style="{backgroundImage: 'url(' + item.poster + ')'}">
             <div class="gallery-type-item-img-cover">
               <span>
-                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover()">{{$t('common.change')}}</el-button>
+                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover(index)">{{$t('common.change')}}</el-button>
                 <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(index)"></el-button>
               </span>
             </div>
@@ -80,6 +80,7 @@ export default {
     let self = this
     return {
       selectedIndex: 0,
+      openType: "image",
       isSkyDriveManagerDialogShow: false,
       isPlayIconShow: true,
       isVideoTabHide: false,
@@ -209,10 +210,19 @@ export default {
     },
     handleUpdateImg(index) {
       this.selectedIndex = index
+      this.openType = "image"
       this.isVideoTabHide = false
       this.openSkyDriveManagerDialog()
     },
-    handleChangeCover() {
+    handleUpdateVideo(index) {
+      this.selectedIndex = index
+      this.openType = "video"
+      this.isVideoTabHide = false
+      this.openSkyDriveManagerDialog()
+    },
+    handleChangeCover(index) {
+      this.selectedIndex = index
+      this.openType = "cover"
       this.isVideoTabHide = true
       this.openSkyDriveManagerDialog()
     },
@@ -228,15 +238,34 @@ export default {
       let item = this.originValue[this.selectedIndex]
       if (!file || !url || !item) return
 
-      item.type = file.type
-
-      if (file.type === 'images') {
-        item.img = url
+      switch(this.openType) {
+        case "image":
+          if (file.type === 'images') {
+            item.img = url
+          }
+          if (file.type === 'videos') {
+            item.type = file.type
+            item.video = url
+            item.img = ""
+            item.poster = ""
+          }
+          break
+        case "video":
+          if (file.type === 'images') {
+            item.type = file.type
+            item.img = url
+            item.video = ""
+            item.poster = ""
+          }
+          if (file.type === 'videos') {
+            item.video = url
+          }
+          break
+        case "cover":
+          item.poster = url
+          break
       }
 
-      if (file.type === 'videos') {
-        item.video = url
-      }
       this.handleChange()
     },
     getLocationUrl(url) {

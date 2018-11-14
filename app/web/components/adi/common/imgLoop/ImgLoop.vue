@@ -7,7 +7,7 @@
         </a>
         <a v-if="item.type === 'videos'" :target="item.target" :href="item.link">
           <div class="imgs">
-            <video :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" :poster="item.poster" controls="controls"></video>
+            <video v-if="updateDom" :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" :poster="item.poster" controls="controls"></video>
           </div>
         </a>
       </el-carousel-item>
@@ -17,11 +17,26 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
+import { setTimeout } from 'timers';
 
 export default {
   name: 'AdiImgLoop',
   mixins: [compBaseMixin],
+  data() {
+    return {
+      updateDom: true
+    }
+  },
+  watch: {
+    forImgs() {
+      this.refresh()
+    }
+  },
   methods: {
+    refresh() {
+      this.updateDom = false
+      setTimeout(() => {this.updateDom = true}, 0)
+    },
     loadImg(item) {
       if (item && item.img) {
         return this.generateStyleString({

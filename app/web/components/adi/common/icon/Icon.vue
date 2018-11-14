@@ -5,7 +5,7 @@
         <img :src="src" :style="getStyle">
       </div>
       <div v-else-if='isVideo' class="video">
-        <video :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
+        <video v-if="updateDom" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
       </div>
     </a>
   </div>
@@ -16,12 +16,23 @@ import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import Media from '@/components/adi/common/media/media.types'
+import { setTimeout } from 'timers';
 
 jss.setup(preset())
 
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
+  data() {
+    return {
+      updateDom: true
+    }
+  },
+  watch: {
+    poster() {
+      this.refresh()
+    }
+  },
   computed: {
     src() {
       return this.properties.src ? this.properties.src : this.options.emptyMedia
@@ -64,6 +75,10 @@ export default {
     }
   },
   methods: {
+    refresh() {
+      this.updateDom = false
+      setTimeout(() => {this.updateDom = true}, 0)
+    },
     parsePx(value) {
       if(value) {
         return parseInt(value) + 'px!important'
