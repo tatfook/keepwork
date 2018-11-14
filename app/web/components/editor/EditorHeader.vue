@@ -125,8 +125,8 @@
         </el-dropdown>
       </el-menu-item> -->
       <el-menu-item index='6' class="link-box" v-if="activePage && hasOpenedFiles">
-        <i class="iconfont icon-copy" @click='doCopyLink' v-tooltip.bottom='$t("common.copyURI")'></i>
-        <a :href='activePageFullUrl' target='_blank' v-tooltip.bottom='$t("editor.newWindowOpen")'>{{ activePageFullUrl }}</a>
+        <i class="iconfont icon-copy" @click='doCopyLink' v-tooltip.bottom='$t("tips.copyUrl")'></i>
+        <a :href='activePageFullUrl' target='_blank' v-tooltip.bottom='$t("tips.openInNewWindow.newWindowOpen")'>{{ activePageFullUrl }}</a>
       </el-menu-item>
       <el-menu-item index='7' class='unsaved-tip'>
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->

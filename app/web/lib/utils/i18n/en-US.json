@@ -316,9 +316,12 @@
     "wrongModDirective": "Wrong Mod Directive"
   },
   "tips": {
-    "clickToShow": "Click to show",
-    "clickToHide": "Click to hide",
-    "clickToAdd": "Click to add"
+    "mod": "Module",
+    "copyUrl": "Copy URL",
+    "openInNewWindow":"Open in new window",
+    "clickToShow": "Show",
+    "clickToHide": "Hide",
+    "clickToAdd": "Add"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",
