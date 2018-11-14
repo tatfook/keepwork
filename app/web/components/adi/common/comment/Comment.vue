@@ -158,7 +158,7 @@ export default {
 
       this.currentPage = page
 
-      await this.getActivePageComments({ page, pageSize: this.pageSize })
+      await this.getActivePageComments({ page })
 
       if (
         this.activePageCommentList &&

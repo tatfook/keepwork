@@ -548,7 +548,7 @@ const actions = {
     await dispatch('getWebsiteDetailInfoByPath', { path })
     let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
 
-    let payload = { objectType: 3, objectId: fullPath, content }
+    let payload = { objectType: 2, objectId: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
 
     commit(CREATE_COMMENT_SUCCESS, { url: fullPath, commentList })
@@ -565,9 +565,9 @@ const actions = {
     commit(DELETE_COMMENT_SUCCESS, { _id: id })
     await dispatch('getActivePageComments', { page })
   },
-  async getCommentsByPageUrl({ commit }, { url: path, page, pageSize = 10 }) {
+  async getCommentsByPageUrl({ commit }, { url: path, page }) {
     let fullPath = getFileFullPathByPath(path)
-    let { count, rows } = await keepwork.websiteComment.getByPageUrl({ objectId: fullPath, objectType: 2, page, pageSize })
+    let { count, rows } = await keepwork.websiteComment.getByPageUrl({ objectId: fullPath, objectType: 2, page })
     commit(GET_COMMENTS_BY_PAGE_URL_SUCCESS, { url: fullPath, commentList: rows, commentTotal: count })
   },
   async getActivePageComments(context, { page }) {
