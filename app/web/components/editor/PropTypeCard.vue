@@ -185,6 +185,7 @@ export default {
     max-width: 250px;
     word-break : normal;
     margin-top: 3px !important;
+    font-size: 12px;
   }
 </style>
 
