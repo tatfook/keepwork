@@ -2,7 +2,7 @@
   <div class="new-project container">
     <div class="new-project-step-0" v-show="nowStep === 0">
       <h1 class="new-project-title">新建项目</h1>
-      <p class="new-project-info">在项目里去创造你的作品吧</p>
+      <p class="new-project-info">项目，是一个作品的开始。<br>它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
       <div class="new-project-name">
         <label for="projectName" class="new-project-label">项目名称</label>
         <el-input id="projectName" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
