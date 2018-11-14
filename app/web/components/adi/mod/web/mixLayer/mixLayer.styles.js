@@ -12,11 +12,13 @@ let emptyData = {
   title: {
     emptyInput: 'adi.mixLayer.title',
     emptyLink: '',
+    emptyInputPlaceholder: 'titleText',
     emptyLinkTarget: '_blank'
   },
   subtitle: {
     emptyInput: 'adi.mixLayer.subtitle',
     emptyLink: '',
+    emptyInputPlaceholder: 'subTitleText',
     emptyLinkTarget: '_blank'
   },
   paragraph: {
