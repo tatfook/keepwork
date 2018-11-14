@@ -5,6 +5,7 @@ import mutations from './mutations'
 const state = () => ({
   profile: {},
   website: {},
+  userSitePrivilege: {},
   contributedWebsite: {},
   siteDataSource: {},
   comments: {},

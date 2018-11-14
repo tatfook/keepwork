@@ -34,6 +34,7 @@ const {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
+  GET_USER_PRIVILEGE_OF_SITE_SUCCESS,
   GET_SITE_GROUP_SUCCESS,
   GET_USER_GROUPS_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
@@ -490,6 +491,11 @@ const actions = {
     // await keepwork.website.updateByName(newBasicMessage)
     await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
+  },
+  async getUserPrivilege(context, { userId, siteId }) {
+    let { commit } = context
+    let privilege = await keepwork.website.getUserPrivilege({ siteId })
+    commit(GET_USER_PRIVILEGE_OF_SITE_SUCCESS, { userId, siteId, privilege })
   },
   async getSiteGroupsBySiteId(context, { siteId }) {
     let { commit } = context

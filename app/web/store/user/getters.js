@@ -132,6 +132,9 @@ const getters = {
     let [username, name] = path.split('/').filter(x => x)
     return personalSitePathMap[`${username}/${name}`]
   },
+  getUserSitePrivilege: state => ({ userId, siteId }) => {
+    return _.get(state.userSitePrivilege, `${userId}.${siteId}`)
+  },
   userGroups: state => state.userGroups,
   getSiteGroupsById: state => ({ siteId }) => _.get(state.sitesGroups, siteId, []),
   personalWebsiteNames: (state, { personalSiteList = [] }) => personalSiteList.map(site => site.name),
