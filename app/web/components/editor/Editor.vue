@@ -5,7 +5,7 @@
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" v-tooltip.top="{content: $t('editor.modules'), classes:'manager-win-tooltip'}"></el-button>
+          <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" v-tooltip.top="{content: $t('tips.mod'), classes:'manager-win-tooltip'}"></el-button>
           <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
@@ -73,7 +73,7 @@
                 <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
               </el-button-group>
               <el-button-group :style='isDisplayButton'>
-                <el-button class="iconfont icon-module" title="MOD" @click="addModToMarkdown"></el-button>
+                <el-button class="iconfont icon-module" @click="addModToMarkdown" v-tooltip.top="{content: $t('tips.mod'), classes:'code-win-tooltip'}"></el-button>
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
@@ -665,6 +665,11 @@ bigFile:
   
   &-tooltip {
     top: 30px!important;
+  }
+}
+.code-win {
+  &-tooltip {
+    top: 38px!important;
   }
 }
 </style>

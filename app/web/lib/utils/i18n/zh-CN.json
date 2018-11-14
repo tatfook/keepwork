@@ -317,6 +317,9 @@
     "wrongModDirective": "错误的Mod指令"
   },
   "tips": {
+    "mod": "模块",
+    "copyUrl": "复制链接",
+    "openInNewWindow":"新窗口打开",
     "clickToShow": "点击显示",
     "clickToHide": "点击隐藏",
     "clickToAdd": "点击添加"
