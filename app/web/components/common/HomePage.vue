@@ -14,7 +14,7 @@
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">致教育工作者</a>
-              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">写给父母们的话</a>
+              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">给父母们的话</a>
             </div>
           </div>
           <div class="flexible-info-board">
@@ -166,13 +166,13 @@ export default {
       timer_pic: null,
       briefPic: [
         {
-          image: require('@/assets/pblImg/game1.png'),
+          image: require('@/assets/pblImg/game0.png'),
           text: '创作3D游戏与动画作品'
         },
-        // {
-        //   image: require('@/assets/pblImg/game1.png'),
-        //   text: '基于玩和创造的自主学习'
-        // },
+        {
+          image: require('@/assets/pblImg/game1.png'),
+          text: '基于玩和创造的自主学习'
+        },
         {
           image: require('@/assets/pblImg/game2.png'),
           text: '探索发现建立个人的知识体系'
@@ -417,17 +417,17 @@ export default {
             margin: 12px 0;
           }
           &-box {
-            height: 170px;
+            height: 190px;
             .intro {
               font-size: 14px;
               color: #c0c4cc;
               margin: 0;
-              line-height: 32px;
+              line-height: 30px;
               cursor: pointer;
               transition: all 0.3s ease-out;
               &-hover {
                 color: #2397f3;
-                font-size: 30px;
+                font-size: 26px;
                 margin: 0;
                 font-weight: bold;
                 transition: all 0.3s ease-out;
