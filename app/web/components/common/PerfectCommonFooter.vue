@@ -115,6 +115,7 @@ export default {
       display: flex;
       .list-box {
         flex: 1;
+        padding-left: 40px;
         .title {
           color: #ffffff;
         }

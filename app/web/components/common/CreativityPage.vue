@@ -45,7 +45,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="my-contribute-projects" v-if="myContributeProjects.length > 0">
+        <div class="my-contribute-projects" v-if="myContributeProjectsData.length > 0">
           <h4 class="browse-title">我参与的项目</h4>
           <el-row>
             <el-col :sm="12" :md="6" v-for="(project,index) in myContributeProjectsData" :key="index">
