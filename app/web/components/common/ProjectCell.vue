@@ -68,6 +68,7 @@ export default {
   margin: 0 auto 16px;
   box-sizing: border-box;
   border: 1px solid #e8e8e8;
+  border-radius: 4px;
   background: #fff;
   transition: all 200ms ease-in;
   &:hover {
