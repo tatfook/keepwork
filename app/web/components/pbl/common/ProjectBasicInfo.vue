@@ -33,7 +33,7 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">{{isWebType ? '访问网站' : '访问项目' }}</el-button>
-          <el-button @click="toEditWebsite" plain v-if="isWebType && isProjectOwner">编辑网站</el-button>
+          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">编辑网站</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
       </div>  
@@ -110,6 +110,10 @@ export default {
       'extra.videoUrl',
       undefined
     )
+    this.isLogined && await this.userGetUserPrivilege({
+      siteId: this.projectSiteId,
+      userId: this.loginUserId
+    })
   },
   data() {
     return {
@@ -139,8 +143,18 @@ export default {
       loginUserDetail: 'user/profile',
       userToken: 'user/token',
       getSiteDetailInfoById: 'user/getSiteDetailInfoById',
-      isLogined: 'user/isLogined'
+      isLogined: 'user/isLogined',
+      getUserSitePrivilege: 'user/getUserSitePrivilege'
     }),
+    loginUserSitePrivilege() {
+      return this.getUserSitePrivilege({
+        siteId: this.projectSiteId,
+        userId: this.loginUserId
+      })
+    },
+    isLoginUserEditableForProjectSite() {
+      return this.loginUserSitePrivilege === 64
+    },
     isProjectOwner() {
       return this.loginUserId === this.originProjectDetail.userId
     },
@@ -212,7 +226,8 @@ export default {
       pblUpdateProject: 'pbl/updateProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog',
       getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
-      toggleLoginDialog: 'pbl/toggleLoginDialog'
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
+      userGetUserPrivilege: 'user/getUserPrivilege'
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -330,7 +345,9 @@ export default {
     },
     async toEditWebsite() {
       if (this.projectSiteId) {
-        await this.getWebsiteDetailBySiteId({ siteId: this.projectSiteId }).catch(e => console.error(e))
+        await this.getWebsiteDetailBySiteId({
+          siteId: this.projectSiteId
+        }).catch(e => console.error(e))
         if (this.siteUrl) {
           console.warn('url:', this.siteUrl)
           let tempWin = window.open('_blank')

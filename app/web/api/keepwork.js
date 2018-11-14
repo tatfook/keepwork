@@ -108,7 +108,8 @@ export const website = {
     get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args),
-  updateById: async args => put(`sites/${args.id}`, args)
+  updateById: async args => put(`sites/${args.id}`, args),
+  getUserPrivilege: async ({ siteId }) => get(`sites/${siteId}/privilege`)
 }
 
 /*doc

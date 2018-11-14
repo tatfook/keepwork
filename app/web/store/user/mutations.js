@@ -23,6 +23,7 @@ const GET_WEB_TEMPLATE_FILE_SUCCESS = 'GET_WEB_TEMPLATE_FILE_SUCCESS'
 const SET_PAGE_STAR_DETAIL = 'SET_PAGE_STAR_DETAIL'
 const GET_SITE_LAYOUT_CONFIG_SUCCESS = 'GET_SITE_LAYOUT_CONFIG_SUCCESS'
 const UPDATE_SITE_MSG_SUCCESS = 'UPDATE_SITE_MSG_SUCCESS'
+const GET_USER_PRIVILEGE_OF_SITE_SUCCESS = 'GET_USER_PRIVILEGE_OF_SITE_SUCCESS'
 const GET_SITE_GROUP_SUCCESS = 'GET_SITE_GROUP_SUCCESS'
 const GET_USER_GROUPS_SUCCESS = 'GET_USER_GROUPS_SUCCESS'
 const SAVE_SITE_LAYOUT_CONFIG_SUCCESS = 'SAVE_SITE_LAYOUT_CONFIG_SUCCESS'
@@ -58,6 +59,7 @@ export const props = {
   GET_SITE_LAYOUT_CONFIG_SUCCESS,
   SAVE_SITE_LAYOUT_CONFIG_SUCCESS,
   UPDATE_SITE_MSG_SUCCESS,
+  GET_USER_PRIVILEGE_OF_SITE_SUCCESS,
   GET_SITE_GROUP_SUCCESS,
   GET_USER_GROUPS_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
@@ -208,6 +210,12 @@ const mutations = {
     Vue.set(state.website, username, {
       ...state.website[username],
       [sitename]: newBasicMessage
+    })
+  },
+  [GET_USER_PRIVILEGE_OF_SITE_SUCCESS](state, { siteId, userId, privilege }) {
+    Vue.set(state.userSitePrivilege, userId, {
+      ...state.userSitePrivilege[userId],
+      [siteId]: privilege
     })
   },
   [GET_FROM_SKY_DRIVE_SUCCESS](state, payload) {
