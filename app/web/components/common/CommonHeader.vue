@@ -38,7 +38,7 @@
       <!-- <el-menu-item index="12" class="pull-right" v-if="isLogin">
         <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
       </el-menu-item> -->
-      <el-menu-item index="13" class="pull-right" v-if="isLogin">
+      <el-menu-item index="13" class="pull-right user-menu" v-if="isLogin">
         <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
             <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
@@ -452,8 +452,15 @@ export default {
   }
   .el-menu-item {
     padding: 0 30px 0 0;
+    color: #303133;
+    &:hover{
+      color: #409eff !important;
+    }
     &.register-button{
       padding: 0;
+    }
+    &.user-menu{
+      padding-right: 5px;
     }
   }
 }

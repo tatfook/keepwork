@@ -28,7 +28,7 @@
 
             </div>
             <div v-else class="video">
-              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/1049/raw#2018-10-11_17_00_04-800-双马尾.mp4" poster="https://api.keepwork.com/storage/v0/siteFiles/1048/raw#2018-10-11_16_59_35-392-双马尾.jpg" controls></video>
+              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
