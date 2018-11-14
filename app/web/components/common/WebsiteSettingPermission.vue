@@ -4,11 +4,11 @@
       <h1><span class="website-setting-permission-index-label">1</span>网站类型</h1>
       <div class="website-setting-permission-type-main">
         <div class="website-setting-permission-type-item">
-          <el-radio v-model="siteVisibility" :label="0">共有网站</el-radio>
+          <el-radio v-model="siteVisibility" :label="0" @change="setSiteVisibility">共有网站</el-radio>
           <p>默认允许大多数人访问，即使他们没有登录。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；还可以为部分人设定拒绝权限，则将他们加入黑名单（如果他们登录的话）。</p>
         </div>
         <div class="website-setting-permission-type-item">
-          <el-radio v-model="siteVisibility" :label="1">私有网站</el-radio>
+          <el-radio v-model="siteVisibility" :label="1" @change="setSiteVisibility">私有网站</el-radio>
           <p>默认不允许未登录用户浏览。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；可以为部分人设定浏览权限，则他们可以浏览您创建的内容，其他未授权用户均无法浏览。</p>
         </div>
       </div>
@@ -147,12 +147,32 @@ export default {
   },
   methods: {
     ...mapActions({
+      userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
       userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
       userGetUserGroups: 'user/getUserGroups',
       userCreateSiteGroup: 'user/createSiteGroup',
       userDeleteSiteGroup: 'user/deleteSiteGroup',
       userDeleteGroup: 'user/deleteGroup'
     }),
+    setSiteVisibility() {
+      this.$confirm('确定修改网站类型?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          this.isLoading = true
+          await this.userSaveSiteBasicSetting({
+            newBasicMessage: _.merge(this.siteDetail, {
+              visibility: this.siteVisibility
+            })
+          }).catch()
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.siteVisibility = this.siteVisibility === 1 ? 0 : 1
+        })
+    },
     async addAuth() {
       let { groupId, level } = this.tempAuth
       this.isLoading = true
