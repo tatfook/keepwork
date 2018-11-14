@@ -307,6 +307,13 @@ export default {
       })
     },
     async updateTitle() {
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: this.currIssue.title
+      }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.cretateIssueLoading = false
+        return
+      }
       await this.updateIssueItem({ title: this.currIssue.title })
       this.getIssueData()
     },
@@ -344,7 +351,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    handleInputConfirm() {
+    async handleInputConfirm() {
       let inputValue = this.inputValue
       let isExistTagIndex = _.findIndex(
         this.dynamicTags,
@@ -356,6 +363,13 @@ export default {
           message: '该标签已存在',
           type: 'error'
         })
+        return
+      }
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: inputValue
+      }).catch()
+      this.isTagLoading = false
+      if (sensitiveResult && sensitiveResult.length > 0) {
         return
       }
       if (inputValue) {
@@ -830,7 +844,7 @@ export default {
   }
 }
 .operate-comment {
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     padding: 0;
     .action {
       display: block;
