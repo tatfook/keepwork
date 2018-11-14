@@ -11,7 +11,7 @@
         </div>
         <div class="sketch-box">
           <div class="sketch-box-tag">标签</div>
-          <div class="sketch-box-content">
+          <div class="sketch-box-content" v-loading='isTagLoading'>
             <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
               {{tag}}
             </el-tag>
@@ -75,7 +75,8 @@ export default {
       descriptionText: '',
       default_portrait: default_portrait,
       assignedMembers: [],
-      cretateIssueLoading: false
+      cretateIssueLoading: false,
+      isTagLoading: false
     }
   },
   async mounted() {
@@ -113,7 +114,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    handleInputConfirm() {
+    async handleInputConfirm() {
       let inputValue = this.inputValue
       let isExistTagIndex = _.findIndex(
         this.dynamicTags,
@@ -125,6 +126,14 @@ export default {
           message: '该标签已存在',
           type: 'error'
         })
+        return
+      }
+      this.isTagLoading = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: inputValue
+      }).catch()
+      this.isTagLoading = false
+      if (sensitiveResult && sensitiveResult.length > 0) {
         return
       }
       if (inputValue) {

@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions } from 'vuex'
 export default {
   name: 'ProjectTags',
@@ -80,7 +81,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    handleInputConfirm() {
+    async handleInputConfirm() {
       this.inputValue = _.trim(this.inputValue, ' ')
       let inputValue = this.inputValue
       if (inputValue.indexOf('|') !== -1) {
@@ -89,6 +90,14 @@ export default {
           message: '标签里不能包含|',
           type: 'error'
         })
+        return
+      }
+      this.isLoading = true
+      let sensitiveResult = await checkSensitiveWords({
+        checkedWords: inputValue
+      }).catch()
+      this.isLoading = false
+      if (sensitiveResult && sensitiveResult.length > 0) {
         return
       }
       let nowTagInTagsIndex = _.findIndex(
