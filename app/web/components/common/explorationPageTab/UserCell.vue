@@ -1,7 +1,7 @@
 <template>
   <div class="user-cell">
     <div class="user-tab">
-      <div class="user-tab-cover"><img class="user-tab-cover-img" @click="goUserHomePage(user)" :src="user.portrait || default_portrait" alt=""></div>
+      <div class="user-tab-cover" @click="goUserHomePage(user)"><img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt=""></div>
       <h5 class="user-tab-name" @click="goUserHomePage(user)">{{user.username}}</h5>
       <p class="user-tab-brief" :title="user.description">{{user.description || '这家伙很懒，没有简介！'}}</p>
       <div class="user-tab-abstract">
