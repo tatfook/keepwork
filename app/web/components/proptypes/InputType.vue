@@ -28,8 +28,12 @@ export default {
       this.$emit('onChangeValue')
     },
     inputPlaceholder() {
-      if (this.optionsData.emptyInputPlaceholder) {
-        return this.optionsData.emptyInputPlaceholder
+      if (this.optionsData) {
+        if (this.optionsData.emptyInputPlaceholder) {
+          return this.optionsData.emptyInputPlaceholder
+        } else {
+          return this.editingKey
+        }
       } else {
         return this.editingKey
       }
