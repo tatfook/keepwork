@@ -3,7 +3,7 @@
     <div class="user-tab">
       <img class="user-tab-cover" @click="goUserHomePage(user)" :src="user.portrait || default_portrait" alt="">
       <h5 class="user-tab-name" @click="goUserHomePage(user)">{{user.username}}</h5>
-      <p class="user-tab-brief">{{user.desc || '这家伙很懒，没有简介！'}}</p>
+      <p class="user-tab-brief" :title="user.description">{{user.description || '这家伙很懒，没有简介！'}}</p>
       <div class="user-tab-abstract">
         <div>
           <p class="title">项目</p>
@@ -118,6 +118,11 @@ export default {
     padding: 30px 0;
     text-align: center;
     margin: 0 auto 10px;
+    transition: all 200ms ease-in;
+    &:hover {
+      box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+      transition: all 200ms ease-in;
+    }
     &-cover {
       width: 96px;
       height: 96px;
@@ -135,8 +140,12 @@ export default {
     &-brief {
       font-size: 12px;
       color: #999;
-      margin: 9px 0;
+      margin: 9px 9px;
       line-height: 16px;
+      height: 18px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     &-abstract {
       display: flex;

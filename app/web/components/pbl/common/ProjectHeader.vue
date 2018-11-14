@@ -5,7 +5,10 @@
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="">
         </el-breadcrumb-item>
-        <el-breadcrumb-item><a :href="'/' + editingProjectUsername" target="_blank">{{editingProjectUsername}}</a></el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <!-- <a :href="'/' + editingProjectUsername" target="_blank">{{editingProjectUsername}}</a> -->
+          <span>{{editingProjectUsername}}</span>
+        </el-breadcrumb-item>
         <el-breadcrumb-item>
           <el-dropdown @visible-change='dropdownVisibleChange' placement='bottom' trigger="click">
             <span class="el-dropdown-link">

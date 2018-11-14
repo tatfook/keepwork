@@ -13,8 +13,8 @@
             </div>
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
-              <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">给教育者的话</a>
-              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">告家长</a>
+              <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">致教育工作者</a>
+              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">给父母们的话</a>
             </div>
           </div>
           <div class="flexible-info-board">
@@ -54,9 +54,9 @@
         <div class="box" @click="goCreativityPage" @mouseover="combinedPic('create', -1200)" @mouseout="combinedPic('create', -2000, 'leave')">
           <div class="box-text">
             <h2>创造</h2>
-            <p class="box-text-intro">创造属于你自己的项目</p>
-            <p class="box-text-own">已创建项目:
-              <span class="total">{{excellentProjectsCount}}</span></p>
+            <p class="box-text-intro">每个人都应该拥有自己的作品</p>
+            <!-- <p class="box-text-own">已创建项目:
+              <span class="total">{{excellentProjectsCount}}</span></p> -->
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
@@ -65,9 +65,9 @@
         <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200)" @mouseout="combinedPic('explore', -2000, 'leave')">
           <div class="box-text">
             <h2>探索</h2>
-            <p class="box-text-intro">发现更多有趣的作品</p>
-            <p class="box-text-own">已共享内容:
-              <span class="total">123456</span></p>
+            <p class="box-text-intro">打开一扇扇的门发现有趣的世界</p>
+            <!-- <p class="box-text-own">已共享内容:
+              <span class="total">123456</span></p> -->
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
@@ -76,9 +76,9 @@
         <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200)" @mouseout="combinedPic('study', -2000, 'leave')">
           <div class="box-text">
             <h2>学习</h2>
-            <p class="box-text-intro">好好学习，天天向上</p>
-            <p class="box-text-own">拥有在线课程：
-              <span class="total">{{allPackagesCount}}</span></p>
+            <p class="box-text-intro">学习起于探索成于创造</p>
+            <!-- <p class="box-text-own">拥有在线课程：
+              <span class="total">{{allPackagesCount}}</span></p> -->
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
@@ -117,7 +117,7 @@
                 <p>包含：
                   <span>125</span>个课程</p>
                 <p>年龄：{{lessonPackage.minAge}}-{{lessonPackage.maxAge}}</p>
-                <p class="lesson-desc-text">简介：{{lessonPackage.intro}}</p>
+                <p class="lesson-desc-text" :title="lessonPackage.intro">简介：{{lessonPackage.intro}}</p>
               </div>
             </div>
           </el-col>
@@ -166,24 +166,28 @@ export default {
       timer_pic: null,
       briefPic: [
         {
+          image: require('@/assets/pblImg/game0.png'),
+          text: '创作3D游戏与动画作品'
+        },
+        {
           image: require('@/assets/pblImg/game1.png'),
-          text: '创作自己的游戏与动画'
+          text: '基于玩和创造的自主学习'
         },
         {
           image: require('@/assets/pblImg/game2.png'),
-          text: '拥有自己的自己体系'
+          text: '探索发现建立个人的知识体系'
         },
         {
           image: require('@/assets/pblImg/game3.png'),
-          text: '拥有自己的个人网站'
+          text: '拥有个人网站展示自己的作品'
         },
         {
           image: require('@/assets/pblImg/game4.png'),
-          text: '通过项目来学习编程'
+          text: '基于项目的学习'
         },
         {
           image: require('@/assets/pblImg/game5.png'),
-          text: '程序员为程序员创作的教程'
+          text: '大师级程序员的知识传授体系'
         }
       ],
       boardImgUrl: require('@/assets/pblImg/game1.png'),
@@ -248,7 +252,7 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
-    combinedPic(item,len,leave) {
+    combinedPic(item, len, leave) {
       clearInterval(this.timer_pic)
       this.timer_pic = setInterval(() => {
         let backgroundLen = Number(
@@ -263,9 +267,10 @@ export default {
             backgroundLen + 'px'
         } else {
           clearInterval(this.timer_pic)
-          if(leave) this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
+          if (leave)
+            this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
         }
-      }, 60)
+      }, 50)
     },
     switchPic(index) {
       this.currIndex = index
@@ -358,10 +363,11 @@ export default {
   }
   &-advertising-head {
     max-width: 1200px;
+    box-sizing: border-box;
     margin: 0 auto;
-    margin-top: 24px;
-    height: 40px;
-    line-height: 40px;
+    margin-top: 16px;
+    height: 42px;
+    line-height: 42px;
     text-align: center;
     background: rgba(35, 151, 243, 0.2);
     border-radius: 4px;
@@ -421,8 +427,8 @@ export default {
               transition: all 0.3s ease-out;
               &-hover {
                 color: #2397f3;
-                font-size: 30px;
-                margin: 12px 0;
+                font-size: 26px;
+                margin: 0;
                 font-weight: bold;
                 transition: all 0.3s ease-out;
               }
@@ -459,7 +465,7 @@ export default {
         margin-left: 30px;
         .title {
           height: 42px;
-          background: rgb(245, 245, 245);
+          background: linear-gradient(180deg, #ffffff 0%, #f4fbff 100%);
           font-size: 16px;
           color: #333;
           font-weight: 700;
@@ -536,6 +542,7 @@ export default {
         display: flex;
         cursor: pointer;
         border-radius: 4px;
+        transition: all 200ms ease-in;
         &:hover {
           box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
           transition: all 200ms ease-in;
@@ -544,7 +551,7 @@ export default {
           flex: 1;
           &-intro {
             color: #a0a4aa;
-            font-size: 16px;
+            font-size: 14px;
           }
           &-own {
             color: #606266;
@@ -620,6 +627,7 @@ export default {
           border: 1px solid #e8e8e8;
           background: #fff;
           margin: 0 auto 16px;
+          transition: all 200ms ease-in;
           &:hover {
             box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
             transition: all 200ms ease-in;
@@ -640,13 +648,14 @@ export default {
             font-size: 12px;
             color: #909399;
             &-text {
-              height: 80px;
+              height: 60px;
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
-              -webkit-line-clamp: 5;
-              line-height: 16px;
+              -webkit-line-clamp: 3;
+              line-height: 20px;
               -webkit-box-orient: vertical;
+              margin-bottom: 0;
             }
           }
         }

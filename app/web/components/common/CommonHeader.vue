@@ -120,7 +120,7 @@
         </el-dropdown>
       </el-menu-item>
 
-      <el-menu-item index='8' class="pull-right" v-if="!isLogin">
+      <el-menu-item index='8' class="pull-right register-button" v-if="!isLogin">
         <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right" v-if="!isLogin">
@@ -451,7 +451,10 @@ export default {
     line-height: 60px;
   }
   .el-menu-item {
-    padding: 0 15px;
+    padding: 0 30px 0 0;
+    &.register-button{
+      padding: 0;
+    }
   }
 }
 .profile-submenu,
