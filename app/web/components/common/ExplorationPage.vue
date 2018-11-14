@@ -273,6 +273,8 @@ export default {
           font-size: 14px;
           border-radius: 12px;
           margin-top: 4px;
+          background-color: #e8e8e8;
+          color: #909399;
           .search-num {
             margin-left: 8px;
           }

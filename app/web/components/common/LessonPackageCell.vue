@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-package-cell">
     <div class="lesson">
-      <img class="lesson-cover" :src="lessonPackage.coverUrl" alt="" @click="goLessonPackage(lessonPackage)">
+      <div class="lesson-cover"><img class="lesson-cover-img" :src="lessonPackage.cover" alt="" @click="goLessonPackage(lessonPackage)"></div>
       <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.name_title"></h4>
       <div class="lesson-desc">
         <p>包含：
@@ -42,13 +42,18 @@ export default {
     &-cover {
       width: 100%;
       height: 143px;
+      &-img{
+      width: 100%;
+      height: 143px;
       object-fit: cover;
       border-radius: 4px;
       cursor: pointer;
+      }
     }
     &-title {
       font-size: 14px;
       margin: 10px 0;
+      height: 20px;
       cursor: pointer;
       .red {
         color: red;
