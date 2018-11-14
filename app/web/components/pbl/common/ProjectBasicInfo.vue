@@ -36,7 +36,7 @@
           <el-button @click="toEditWebsite" plain v-if="isWebType && isProjectOwner">编辑网站</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
-      </div>
+      </div>  
     </div>
     <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">

@@ -9,7 +9,7 @@
     </div>
     <div class='project-editing-item' v-for="(privilege, index) in privilegeOptions" :key='index'>
       <label class="project-editing-item-label">{{privilege.label}}</label>
-      <el-radio-group v-model="projectPrivileges[privilege.dataKey]">
+      <el-radio-group v-model="projectPrivileges[privilege.dataKey]" :disabled="privilege.dataKey === 'boardEdit' && isMemberView" @change="handleChange">
         <el-radio v-for="(option, index) in privilege.options" :key='index' :label="option.value">{{option.label}}</el-radio>
       </el-radio-group>
     </div>
@@ -108,12 +108,20 @@ export default {
         this.originPrivilege
       )
       return isVisibilityModified || isPrivilegeModified
-    }
+    },
+    isMemberView() {
+      return this.projectPrivileges['boardView'] === 64
+    },
   },
   methods: {
     ...mapActions({
       pblUpdateProject: 'pbl/updateProject'
     }),
+    handleChange(value) {
+      if (value === 64) {
+        this.projectPrivileges['boardEdit'] = 256
+      }
+    },
     initPrivileges() {
       const privilegesNumber = this.originPrivilege
       _.forEach(this.privilegeOptions, (value, key) => {
