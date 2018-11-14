@@ -1130,8 +1130,8 @@
     "Unapproved": "未审核"
   },
   "compHideText": {
-    "anteriorSegmentText": "该内容被",
-    "blueCompHideText": "隐藏了",
-    "posteriorSegmentText": "，双击灰色区域可再次编辑"
+    "anteriorSegmentText": "内容以",
+    "blueCompHideText": "隐藏",
+    "posteriorSegmentText": "，双击本区域调整"
   }
 }
