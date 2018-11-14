@@ -13,8 +13,6 @@
         <a href='//paracraft.keepwork.com/?lang=zh' target="_blank" class="el-button">
           <span>了解更多</span>
         </a>
-        <!-- <el-button type="warning" >下载Paracraft</el-button> -->
-        <!-- <el-button>了解更多</el-button> -->
       </div>
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>安装过程中系统会提示您安装url protocols，请同意。</p>
       <div class="paracraft-info-operations">
