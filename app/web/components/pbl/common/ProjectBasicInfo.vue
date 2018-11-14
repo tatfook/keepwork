@@ -32,11 +32,11 @@
         <p class="project-basic-info-detail-message-item"><label>创建时间:</label>{{originProjectDetail.createdAt | formatDate}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary" @click="toProjectPage">{{isWebType ? '访问网站' : '访问项目' }}</el-button>
+          <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
           <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">编辑网站</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
         </div>
-      </div>  
+      </div>
     </div>
     <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
@@ -110,10 +110,11 @@ export default {
       'extra.videoUrl',
       undefined
     )
-    this.isLogined && await this.userGetUserPrivilege({
-      siteId: this.projectSiteId,
-      userId: this.loginUserId
-    })
+    this.isLogined &&
+      (await this.userGetUserPrivilege({
+        siteId: this.projectSiteId,
+        userId: this.loginUserId
+      }))
   },
   data() {
     return {
@@ -146,6 +147,18 @@ export default {
       isLogined: 'user/isLogined',
       getUserSitePrivilege: 'user/getUserSitePrivilege'
     }),
+    buttonName() {
+      if (this.isWebType) {
+        return '访问网站'
+      }
+      if (this.isCreating) {
+        return '创建中'
+      }
+      return '访问世界'
+    },
+    isCreating() {
+      return !this.originProjectDetail.world
+    },
     loginUserSitePrivilege() {
       return this.getUserSitePrivilege({
         siteId: this.projectSiteId,
@@ -210,6 +223,9 @@ export default {
       if (this.isWebType) {
         return
       }
+      if (this.isCreating) {
+        return ''
+      }
       let { archiveUrl, commitId } = this.originProjectDetail.world
       return paracraftUtil.getUrl({
         link: `${archiveUrl}?ref=${commitId}`,
@@ -227,7 +243,8 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog',
       getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
       toggleLoginDialog: 'pbl/toggleLoginDialog',
-      userGetUserPrivilege: 'user/getUserPrivilege'
+      userGetUserPrivilege: 'user/getUserPrivilege',
+      pblGetProjectDetail: 'pbl/getProjectDetail'
     }),
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
@@ -349,7 +366,6 @@ export default {
           siteId: this.projectSiteId
         }).catch(e => console.error(e))
         if (this.siteUrl) {
-          console.warn('url:', this.siteUrl)
           let tempWin = window.open('_blank')
           tempWin.location = `/ed${this.siteUrl}`
         }
@@ -368,10 +384,21 @@ export default {
         this.binderDialogVisible = true
       }
     },
-    toParacraftPage() {
+    async toParacraftPage() {
+      if (this.isCreating) {
+        await this.pblGetProjectDetail({
+          projectId: this.projectId,
+          useCache: false
+        }).catch(e => console.error(e))
+      }
       if (this.paracraftUrl) {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
+      } else {
+        this.$message({
+          type: 'warning',
+          message: '世界正在创建中,请稍后刷新页面重试！'
+        })
       }
     },
     showMediaSkyDriveDialog() {
