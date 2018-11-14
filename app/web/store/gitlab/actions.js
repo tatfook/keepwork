@@ -75,8 +75,7 @@ const actions = {
     let { commit, getters: { repositoryTrees } } = context
     let { path, useCache = true, recursive = true } = payload
     let { gitlab, projectId } = await getGitlabParams(context, { path })
-
-    let children = _.get(repositoryTrees, [projectId, path])
+    let children = _.get(repositoryTrees, [path, path])
     if (useCache && !_.isEmpty(children)) return
     let list = await gitlab.getTree({
       projectId,
