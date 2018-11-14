@@ -64,6 +64,7 @@
         <el-button type="primary" @click="applyJoinProject">完成创建</el-button>
       </span>
     </el-dialog>
+    <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
   </div>
 </template>
 <script>
@@ -73,6 +74,7 @@ import dayjs from 'dayjs'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
 export default {
   name: 'ProjectBasicInfo',
@@ -135,7 +137,8 @@ export default {
       waitUpdateCover: false,
       applyText: '',
       isApplyDialogVisible: false,
-      maxDescWithHtmlLen: 65535
+      maxDescWithHtmlLen: 65535,
+      isParacraftInfoDialogVisible: false
     }
   },
   computed: {
@@ -394,6 +397,7 @@ export default {
       if (this.paracraftUrl) {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
+        this.isParacraftInfoDialogVisible = true
       } else {
         this.$message({
           type: 'warning',
@@ -439,6 +443,9 @@ export default {
     },
     handleBinderDialogClose() {
       this.binderDialogVisible = false
+    },
+    handleParacraftInfoDialogClose() {
+      this.isParacraftInfoDialogVisible = false
     }
   },
   filters: {
@@ -483,6 +490,7 @@ export default {
   },
   components: {
     SkyDriveManagerDialog,
+    ParacraftInfo,
     WebsiteBinder
   }
 }
