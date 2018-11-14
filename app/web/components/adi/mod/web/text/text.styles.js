@@ -2,10 +2,12 @@ let emptyData = {
   title: {
     emptyInput: 'adi.text.title',
     emptyLink: '',
-    emptyLinkTarget: '_blank'
+    emptyLinkTarget: '_blank',
+    emptyInputPlaceholder: 'titleText',
   },
   paragraph: {
-    emptyAutoSizeInput: 'adi.text.paragraph'
+    emptyAutoSizeInput: 'adi.text.paragraph',
+    emptyInputPlaceholder: 'descText'
   }
 }
 

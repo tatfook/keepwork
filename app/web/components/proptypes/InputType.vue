@@ -1,5 +1,5 @@
 <template>
-  <el-input class="input-type" :placeholder="$t('field.' + editingKey)" v-model='inputTypeValue' clearable @input='updateValue' @focus='getFocus'></el-input>
+  <el-input class="input-type" :placeholder="$t('field.' + inputPlaceholder())" v-model='inputTypeValue' clearable @input='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
@@ -26,6 +26,13 @@ export default {
     },
     getFocus() {
       this.$emit('onChangeValue')
+    },
+    inputPlaceholder() {
+      if (this.optionsData.emptyInputPlaceholder) {
+        return this.optionsData.emptyInputPlaceholder
+      } else {
+        return this.editingKey
+      }
     }
   }
 }

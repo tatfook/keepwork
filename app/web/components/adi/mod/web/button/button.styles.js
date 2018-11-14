@@ -1,3 +1,10 @@
+import _ from 'lodash'
+
+let defaultData = {
+  button: {
+    emptyInputPlaceholder: 'buttonText'
+  }
+}
 export default [
   {
     templateID: 0,
@@ -15,7 +22,11 @@ export default [
       root: ['mod-full-width'],
       button: ['fontsColor']
     },
-    options: {},
+    options: {
+      config: {
+        ...defaultData
+      }
+    },
     useImage: false,
     cover: ''
   }

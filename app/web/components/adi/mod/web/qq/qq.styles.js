@@ -11,6 +11,7 @@ let emptyData = {
   },
   desc: {
     emptyInput: 'adi.qq.desc',
+    emptyInputPlaceholder: 'descText',
     emptyLink: '',
     emptyLinkTarget: '_blank'
   }

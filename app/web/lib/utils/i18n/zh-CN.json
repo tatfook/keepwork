@@ -652,7 +652,12 @@
     "cancel": "取消",
 
     "publish": "发布课程",
-    "hint": "提示"
+    "hint": "提示",
+
+    "titleText": "请输入标题",
+    "subTitleText": "请输入副标题",
+    "descText": "请输入描述内容",
+    "buttonText": "请输入按钮文字"
   },
   "skydrive": {
     "image": "图片",

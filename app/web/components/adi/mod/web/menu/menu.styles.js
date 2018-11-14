@@ -22,6 +22,7 @@ let defaultData = {
   businessName: {
     emptyInput: 'adi.title.businessName',
     emptyLink: '',
+    emptyInputPlaceholder: 'titleText',
     emptyLinkTarget: '_blank'
   },
   tagline: {

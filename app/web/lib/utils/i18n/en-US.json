@@ -648,7 +648,12 @@
     "submit": "submit",
     "cancel": "cancel",
     "publish": "Publish Lesson",
-    "hint": "hint"
+    "hint": "hint",
+
+    "titleText": "Please input the title",
+    "subTitleText": "Please input subtitle",
+    "descText": "Please input description",
+    "buttonText": "Please enter button text"
   },
   "skydrive": {
     "image": "Image",
