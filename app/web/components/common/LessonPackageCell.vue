@@ -1,13 +1,13 @@
 <template>
   <div class="lesson-package-cell">
     <div class="lesson">
-      <div class="lesson-cover"><img class="lesson-cover-img" :src="lessonPackage.cover" alt="" @click="goLessonPackage(lessonPackage)"></div>
+      <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
       <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.name_title"></h4>
       <div class="lesson-desc">
         <p>包含：
-          <span>{{lessonPackage.total_lessons}}</span>个课程</p>
-        <p>年龄：{{lessonPackage.age_min}}-{{lessonPackage.age_max}}</p>
-        <p>简介：{{lessonPackage.intro}}</p>
+          <span>{{lessonPackage.total_lessons || 0}}</span>个课程</p>
+        <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
+        <p>简介：{{lessonPackage.description}}</p>
       </div>
     </div>
   </div>
@@ -26,6 +26,13 @@ export default {
   methods: {
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
+    },
+    getPackageSuitableAge(lessonPackage) {
+      let { age_min, age_max } = lessonPackage
+      if (age_min == 0 && age_max == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${age_min}-${age_max}`
     }
   }
 }
@@ -39,15 +46,22 @@ export default {
     border: 1px solid #e8e8e8;
     background: #fff;
     margin: 0 auto 10px;
+    border-radius: 4px;
+    transition: all 200ms ease-in;
+    &:hover {
+      box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
+      transition: all 200ms ease-in;
+    }
     &-cover {
       width: 100%;
       height: 143px;
-      &-img{
-      width: 100%;
-      height: 143px;
-      object-fit: cover;
-      border-radius: 4px;
       cursor: pointer;
+      &-img {
+        width: 100%;
+        height: 143px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
       }
     }
     &-title {
