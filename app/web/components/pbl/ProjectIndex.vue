@@ -84,7 +84,6 @@ export default {
 </script>
 <style lang="scss">
 .project-index {
-  background-color: #f5f5f5;
   padding-top: 24px;
   &-sidebar {
     width: 276px;

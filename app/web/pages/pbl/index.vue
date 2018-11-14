@@ -4,7 +4,9 @@
       <common-header class="container"></common-header>
     </div>
     <router-view class="pbl-page-main-content" id="pbl-page" />
-    <common-footer class="container"></common-footer>
+    <div class="pbl-page-footer">
+      <common-footer class="container"></common-footer>
+    </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -132,6 +134,9 @@ body {
   }
   &-main-content {
     flex: 1;
+  }
+  &-footer {
+    background-color: #f5f5f5;
   }
   .container {
     width: 1200px;

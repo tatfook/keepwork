@@ -166,6 +166,7 @@ export default {
 </script>
 <style lang="scss">
 .project-detail-page {
+  background-color: #f5f5f5;
   &-not-found {
     text-align: center;
     padding-top: 40px;
