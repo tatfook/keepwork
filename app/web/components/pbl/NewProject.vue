@@ -147,6 +147,7 @@ export default {
     font-size: 14px;
     color: #909399;
     margin: 10px 0 30px;
+    line-height: 24px;
   }
   &-label {
     font-size: 14px;
