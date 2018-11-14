@@ -179,7 +179,7 @@ payload: {
 */
 export const websiteComment = {
   create: async args => post('comments', args),
-  getByPageUrl: async args => get(`comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=${args.pageSize}&x-page=${args.page}&x-order=updatedAt-desc`),
+  getByPageUrl: async args => get(`comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=10&x-page=${args.page}&x-order=updatedAt-desc`),
   deleteById: async args => deleteMethod(`comments/${args.id}`)
 }
 
