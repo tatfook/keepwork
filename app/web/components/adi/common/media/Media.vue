@@ -4,8 +4,8 @@
       <div class="img" :class="getImgClass" v-if='isImage'>
         <img :src="src">
       </div>
-      <div class="video" :class="getImgClass" v-else-if='isVideo'>
-        <video v-if="updateDom" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
+      <div class="video" v-else-if='isVideo'>
+        <video v-if="updateDom" :class="getVideoClass" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
       </div>
     </a>
   </div>
@@ -90,6 +90,53 @@ export default {
           [imgClassName]: {
             height: this.getMobileHeight(),
             width: this.getMobileWidth(),
+            'margin-top':
+              this.options.space &&
+              this.parsePx(this.options.space.mobileMarginTop),
+            'margin-bottom':
+              this.options.space &&
+              this.parsePx(this.options.space.mobileMarginBottom),
+            'padding-top':
+              this.options.space &&
+              this.parsePx(this.options.space.mobilePaddingTop),
+            'padding-bottom':
+              this.options.space &&
+              this.parsePx(this.options.space.mobilePaddingBottom)
+          }
+        }
+      }
+
+      if (this.sheet) {
+        this.sheet.detach()
+      }
+
+      this.sheet = jss.createStyleSheet(style)
+      this.sheet.attach()
+
+      return this.sheet.classes[imgClassName]
+    },
+    getVideoClass() {
+      let imgClassName = 'comp-media-img'
+      let style = {
+        [imgClassName]: {
+          'max-height': this.getWebHeight(),
+          'max-width': this.getWebWidth(),
+          'margin-top':
+            this.options.space && this.parsePx(this.options.space.webMarginTop),
+          'margin-bottom':
+            this.options.space &&
+            this.parsePx(this.options.space.webMarginBottom),
+          'padding-top':
+            this.options.space &&
+            this.parsePx(this.options.space.webPaddingTop),
+          'padding-bottom':
+            this.options.space &&
+            this.parsePx(this.options.space.webPaddingBottom)
+        },
+        '@media only screen and (max-width: 767px)': {
+          [imgClassName]: {
+            'max-height': this.getMobileHeight(),
+            'max-width': this.getMobileWidth(),
             'margin-top':
               this.options.space &&
               this.parsePx(this.options.space.mobileMarginTop),
@@ -215,7 +262,6 @@ export default {
       video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
       }
     }
   }

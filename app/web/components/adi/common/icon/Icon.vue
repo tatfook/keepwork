@@ -119,12 +119,13 @@ export default {
     }
     .video {
       min-width: 87px;
+      width: 100%;
+      height: 100%;
       video {
-        width: auto;
-        height: auto;
+        width: 100%;
+        height: 100%;
         max-width: 185px;
         max-height: 87px;
-        object-fit: cover;
       }
     }
   }

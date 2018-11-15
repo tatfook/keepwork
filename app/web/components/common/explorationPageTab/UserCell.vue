@@ -1,7 +1,7 @@
 <template>
   <div class="user-cell">
     <div class="user-tab">
-      <img class="user-tab-cover" @click="goUserHomePage(user)" :src="user.portrait || default_portrait" alt="">
+      <div class="user-tab-cover" @click="goUserHomePage(user)"><img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt=""></div>
       <h5 class="user-tab-name" @click="goUserHomePage(user)">{{user.username}}</h5>
       <p class="user-tab-brief" :title="user.description">{{user.description || '这家伙很懒，没有简介！'}}</p>
       <div class="user-tab-abstract">
@@ -126,9 +126,14 @@ export default {
     &-cover {
       width: 96px;
       height: 96px;
-      border-radius: 50%;
-      object-fit: cover;
       cursor: pointer;
+      margin: 0 auto;
+      &-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
     &-name {
       font-size: 16px;

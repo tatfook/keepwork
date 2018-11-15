@@ -53,7 +53,6 @@ const renderTemplate = (h, m, template, root) => {
 }
 
 export default {
-  // components: CompHide,
   props: {
     mod: Object,
     conf: Object,
@@ -101,7 +100,7 @@ export default {
     this.sheet = jss.createStyleSheet(this.style.data)
     this.sheet.attach()
     _.merge(this.theme.data, gThemeData)
-    if (this.renderMode || isShowMod) {
+    if (this.renderMode || isShowMod || !this.editMode) {
       return (
         <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
           {renderTemplate(h, this)}
