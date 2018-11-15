@@ -6,7 +6,7 @@
       <img src="@/assets/pblImg/step_1.png" alt="">
       <p class="tip_1">项目，是一个作品的开始。</p>
       <p>它将让你在学习中成长，</p>
-      <p>让你体会到团结协作的快了，让你成为优秀的管理者！</p>
+      <p>让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
     </div>
     <div class="create-project-guide-step" v-if="step == 2">
       <p>第一步：设置项目名称、项目类型</p>
