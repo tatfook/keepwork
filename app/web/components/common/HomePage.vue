@@ -261,7 +261,7 @@ export default {
         if (this.currIndex > 5) {
           this.currIndex = 0
         }
-      }, 1500)
+      }, 2000)
     },
     continueTextAnimation(index){
       this.currIndex = index
