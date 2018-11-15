@@ -8,7 +8,7 @@
       <div v-for='mod in activeModsList' :key='mod.name' class="box-items">
           <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render box-items-item" @click='newMod(mod.name, index)'>
             <div class="render-mod-container--click-prevent"></div>
-            <div class="render-mod-container">
+            <div class="render-mod-container" :style="getSettingStyle(style)">
               <component class="render-mod" :is='mod.mod' :renderMode='true' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
               <div class="style-mask">
                 <span>{{$t('tips.clickToAdd')}}</span>
@@ -60,6 +60,7 @@ export default {
     }
   },
   updated() {
+    console.log(this.activeModsList)
     this.autoResizePreview()
   },
   data() {
@@ -88,6 +89,13 @@ export default {
     }
   },
   methods: {
+    getSettingStyle(style) {
+      if (!style || !style.renderMinHeight) {
+        return ''
+      }
+
+      return `min-height: ${style.renderMinHeight}`
+    },
     generateStyleString(style) {
       let string = ''
 
