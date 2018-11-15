@@ -114,10 +114,7 @@ export default {
             message: '项目创建成功'
           })
           let projectId = projectDetail.id
-          // FIXME: bad code
-          setTimeout(() => {
-            projectId && this.$router.push(`/project/${projectId}`)
-          }, 1000)
+          projectId && this.$router.push(`/project/${projectId}`)
         })
         .catch(error => {
           console.error(error)
