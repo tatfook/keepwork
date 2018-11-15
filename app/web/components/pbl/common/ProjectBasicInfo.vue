@@ -160,7 +160,10 @@ export default {
       return '访问世界'
     },
     isCreating() {
-      return !(this.originProjectDetail.world && this.originProjectDetail.world.archiveUrl)
+      return !(
+        this.originProjectDetail.world &&
+        this.originProjectDetail.world.archiveUrl
+      )
     },
     loginUserSitePrivilege() {
       return this.getUserSitePrivilege({
@@ -227,17 +230,14 @@ export default {
         return
       }
       if (this.isCreating) {
-        return ''
+        return paracraftUtil.getOpenUrl({
+          usertoken: this.usertoken
+        })
       }
       let { archiveUrl, commitId } = this.originProjectDetail.world
       return paracraftUtil.getUrl({
         link: `${archiveUrl}?ref=${commitId}`,
         usertoken: this.userToken
-      })
-    },
-    openParacraftUrl() {
-      return paracraftUtil.getOpenUrl({
-        usertoken: this.usertoken
       })
     },
     isVideoShow() {
@@ -395,10 +395,8 @@ export default {
       }
     },
     async toParacraftPage() {
-      if (this.isCreating && this.isProjectOwner) {
-        let tempWin = window.open('_blank')
-        tempWin.location = this.openParacraftUrl
-        this.isParacraftInfoDialogVisible = true
+      if (this.isCreating && !this.isProjectOwner) {
+        return
       }
       if (this.paracraftUrl) {
         let tempWin = window.open('_blank')
