@@ -7,17 +7,12 @@
         <i class="iconfont icon-next"></i>
       </div>
     </div>
-    <div class="recordsWeb">
-      <ul>
-        <li v-for="(site,index) in recentOpenedList" :key="index"><a @click="gotoPath(site.path)">{{site.path}}</a></li>
-      </ul>
+    <div class="historical-records">
+      <div class="historical-records-text" @click="handleOpenedClick(item)" v-for="item in openedTreeData" :key="item">{{dataPrefix + item}}</div>
     </div>
-    <div class="historicalRecords">
-      <div class="historicalRecordsText" @click="handleOpenedClick(item)" v-for="item in openedTreeData" :key="item">{{dataPrefix + item}}</div>
-    </div>
-    <div class="historicalHr"></div>
-    <div class="tipsText">{{getText()}}</div>
-    <div class="tipsImg">
+    <div class="historical-hr"></div>
+    <div class="tips-text">{{getText()}}</div>
+    <div class="tips-img">
       <img :src='getImg()'>
     </div>
     <i class="iconfont icon-next changeButton-next" @click="hintTransformation"></i>
@@ -151,7 +146,7 @@ export default {
       font-size: 16px;
     }
   }
-  .historicalHr {
+  .historical-hr {
     width: 439px;
     height: 1px;
     border-bottom: 1px dashed #ebebeb;
@@ -173,7 +168,7 @@ export default {
     }
     }
   }
-  .tipsText{
+  .tips-text{
     padding-top: 20px;
     font-size: 16px;
     padding-bottom: 10px;
@@ -182,7 +177,7 @@ export default {
     max-width: 306px;
     white-space: normal;
   }
-  .tipsImg{
+  .tips-img{
     width: 300px;
     height: 150px;
     border: 3px solid #ebebeb;
@@ -210,11 +205,12 @@ export default {
   .changeButton-next:hover {
     background-color: #48a3ff;
   }
-  .historicalRecords {
+  .historical-records {
+    margin-top: 20px;
     margin-bottom: 15px;
     height: 150px;
     overflow-y:auto;
-    .historicalRecordsText {
+    .historical-records-text {
       font-size: 14px;
       display: block;
       color: #48a3ff;
@@ -225,11 +221,11 @@ export default {
 }
 @media only screen and (max-width: 1366px){
   .guid-content{
-    .tipsText{
+    .tips-text{
       font-size: 14px;
       max-width: 206px;
     }
-    .tipsImg{
+    .tips-img{
       width: 200px;
       height: 100px;
       img{
