@@ -61,7 +61,7 @@ export default {
           user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
           type: i.type,
-          privilege: i.recruiting ? 1 : 2
+          privilege: i.recruiting ? 1 : 0
         }
       })
     }
