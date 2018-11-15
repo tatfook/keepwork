@@ -7,10 +7,10 @@
         <p>你可以用它创建3D场景和人物，制作动画和游戏，学习和编写计算机程序</p>
       </div>
       <div class="paracraft-info-operations">
-        <a href='//paracraft.keepwork.com/download?lang=zh' target="_blank" class="el-button el-button--warning">
+        <a href='http://paracraft.keepwork.com/download?lang=zh' target="_blank" class="el-button el-button--warning">
           <span>下载Paracraft</span>
         </a>
-        <a href='//paracraft.keepwork.com/?lang=zh' target="_blank" class="el-button">
+        <a href='http://paracraft.keepwork.com/?lang=zh' target="_blank" class="el-button">
           <span>了解更多</span>
         </a>
       </div>
