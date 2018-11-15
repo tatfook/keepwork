@@ -25,8 +25,8 @@ const actions = {
   async toggleLoginDialog({ commit }, status) {
     commit(TOGGLE_LOGIN_DIALOG, status)
   },
-  async createNewProject(context, { description, name, privilege, type, visibility, siteId }) {
-    let projectDetail = await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId })
+  async createNewProject(context, { description, name, privilege, type, visibility, siteId, tags }) {
+    let projectDetail = await keepwork.projects.createProject({ description, name, privilege, type, visibility, siteId, tags })
     return projectDetail
   },
   async getExcellentProjects({ commit }) {

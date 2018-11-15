@@ -240,7 +240,8 @@ export const projects = {
     privilege,
     type,
     visibility,
-    siteId
+    siteId,
+    tags
   }) =>
     post('projects', {
       description,
@@ -248,7 +249,8 @@ export const projects = {
       privilege,
       type,
       visibility,
-      siteId
+      siteId,
+      tags
     }),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
