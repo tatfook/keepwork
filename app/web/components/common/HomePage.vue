@@ -24,17 +24,14 @@
         <div class="home-page-simple-show-center-right">
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">keepwork是做什么的</div>
-            <div class="video" v-if="videoHtml" v-html="videoHtml">
-
-            </div>
-            <div v-else class="video">
+            <div class="video">
               <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
             <div class="title">官方公告</div>
-            <ul class="announce-list" v-if="newsHtml" v-html="newsHtml"></ul>
-            <ul v-else class="announce-list">
+            <ul class="announce-list" v-html="newsHtml"></ul>
+            <!-- <ul v-else class="announce-list">
               <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
                 <a href="//iicc.keepwork.com" target="_blank">进入</a>
               </li>
@@ -44,7 +41,7 @@
                 </span> Lessons系统即将上线，尽情期待！
                 <a href="/l/student/center" target="_blank">进入</a>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
@@ -192,8 +189,7 @@ export default {
         }
       ],
       boardImgUrl: require('@/assets/pblImg/game0.png'),
-      newsHtml: '',
-      videoHtml: ''
+      newsHtml: ''
     }
   },
   components: {
@@ -213,7 +209,7 @@ export default {
       this.getExcellentProjects(),
       this.getPackagesList(payload)
     ])
-    // await this.getNewsAndVideo()
+    await this.getNewsAndVideo()
   },
   computed: {
     ...mapGetters({
@@ -343,25 +339,16 @@ export default {
     async getNewsAndVideo() {
       // FIXME: 使用线上的markdown地址
       const HomePageInfo = {
-        apiPrefix: 'https://api-release.keepwork.com/git/v0',
-        projectName: 'kevinxft/123321',
-        newsPath: 'kevinxft/123321/news.md',
-        videoPath: 'kevinxft/123321/video.md'
+        apiPrefix: 'https://api.keepwork.com/git/v0',
+        projectName: 'official/keepwork',
+        newsPath: 'official/keepwork/news.md',
       }
-      let [news = '', video = ''] = await Promise.all([
-        gitlabShowRawForGuest(
+      let news = await gitlabShowRawForGuest(
           HomePageInfo.apiPrefix,
           HomePageInfo.projectName,
           HomePageInfo.newsPath
-        ),
-        gitlabShowRawForGuest(
-          HomePageInfo.apiPrefix,
-          HomePageInfo.projectName,
-          HomePageInfo.videoPath
-        )
-      ])
+        ).catch(e => console.error(e))
       this.newsHtml = news
-      this.videoHtml = video
     }
   },
   beforeDestroy() {
