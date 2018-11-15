@@ -3,7 +3,7 @@ import mutations, {
   props
 } from '@/store/editor/mutations'
 import { initPageState } from '@/store/editor/state'
-import {getFileFullPathByPath} from '@/lib/utils/gitlab'
+import { getFileFullPathByPath } from '@/lib/utils/gitlab'
 
 const {
   SET_ACTIVE_PAGE,

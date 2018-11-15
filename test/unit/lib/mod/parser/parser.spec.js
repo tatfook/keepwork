@@ -29,7 +29,7 @@ describe('mod parser', () => {
     })
     test('code only contains \n', () => {
       const newBlockList = Parser.buildBlockList('\n\n\n')
-      expect(newBlockList.length).toEqual(1)
+      expect(newBlockList.length).toEqual(0)
     })
     test('non-empty code', () => {
       const newBlockList = Parser.buildBlockList('\n hello \n world \n')
@@ -245,11 +245,11 @@ describe('mod parser', () => {
       newBlock = Parser.addBlockAfterIndex(blockList, 1, newBlock)
       expect(blockList.length).toEqual(oldBlockList.length + 1)
       expect(newBlock.lineBegin).toBeGreaterThan(blockList[1].lineBegin)
-      expect(newBlock.lineBegin).toEqual(BlockHelper.endLine(blockList[1]) + 1)
+      expect(newBlock.lineBegin).toEqual(BlockHelper.endLine(blockList[1]) + 2)
     })
 
     test('add markdown mod before or after markdown mod', () => {
-      let newBlock = Parser.buildBlock('Markdown', {md: {data: ''}})
+      let newBlock = Parser.buildBlock('Markdown', { md: { data: '' } })
       Parser.addBlockAfterIndex(blockList, 0, newBlock)
       expect(blockList.length).toEqual(oldBlockList.length)
       expect(blockList[0].md).not.toEqual(oldBlockList[0].md)
@@ -277,11 +277,11 @@ describe('mod parser', () => {
       newBlock = Parser.addBlockByKey(blockList, blockList[1].key, newBlock)
       expect(blockList.length).toEqual(oldBlockList.length + 1)
       expect(newBlock.lineBegin).toBeGreaterThan(blockList[1].lineBegin)
-      expect(newBlock.lineBegin).toEqual(BlockHelper.endLine(blockList[1]) + 1)
+      expect(newBlock.lineBegin).toEqual(BlockHelper.endLine(blockList[1]) + 2)
     })
 
     test('add markdown mod before or after markdown mod', () => {
-      let newBlock = Parser.buildBlock('Markdown', {md: {data: ''}})
+      let newBlock = Parser.buildBlock('Markdown', { md: { data: '' } })
       Parser.addBlockByKey(blockList, blockList[0].key, newBlock)
       expect(blockList.length).toEqual(oldBlockList.length)
       expect(blockList[0].md).not.toEqual(oldBlockList[0].md)
@@ -297,7 +297,7 @@ describe('mod parser', () => {
 
   describe('#addBlockToMarkdown', () => {
     test('add mod inside markdown mod', () => {
-      let newCode = Parser.addBlockToMarkdown(code, 8, 'ModTitle', 1)
+      let newCode = Parser.addBlockToMarkdown(code, 8, 'ModTitle', 'styleID : 1')
       expect(newCode).toContain('styleID')
       const newBlockList = Parser.buildBlockList(newCode)
       expect(newBlockList.length).toBeGreaterThan(oldBlockList.length)

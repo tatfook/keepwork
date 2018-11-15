@@ -1,19 +1,24 @@
 # KeepWork Website
 
+
 ## Build Setup
 
 ```bash
 # install dependencies
 yarn install
 
-# serve with hot reload at localhost:8080
-yarn start
+# create .env file and add your settings
+cp .env.default .env
 
+# for dev
+yarn dev
+
+# for production
 # build for production with minification
 yarn build
+yarn start
 
-# build for production and view the bundle analyzer report
-yarn build --report
+# if there are some errors while start server, pls try stop before start
+yarn stop
+
 ```
-
-> /editor.html 跳转至 html 页面

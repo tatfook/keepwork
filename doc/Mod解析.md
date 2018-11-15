@@ -148,20 +148,8 @@ options: {
   config: {
     menu: {
       mode: 'horizontal',
-      emptyTarget: '_blank'
+      emptyLinkTarget: '_blank'
     }
-  }
-}
-```
-
-5.  preview
-
-另外，为使得 style 在选取时有较好的显示样式，可以在此处做一些简单配置，如：
-
-```
-preview: {
-  outter: {
-    height: '14px'
   }
 }
 ```
