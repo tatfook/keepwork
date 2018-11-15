@@ -47,7 +47,15 @@ export default {
       this.$router.push(path)
     },
     hintTransformation(){
-      this.tipsNumber = Math.floor(Math.random()*this.tips.length)
+      let numberRepeatedJudgment = () => {
+        let repeatedNumber = Math.floor(Math.random()*this.tips.length)
+        if(repeatedNumber != this.tipsNumber) {
+          this.tipsNumber = repeatedNumber
+        } else {
+          numberRepeatedJudgment()
+        }
+      }
+      numberRepeatedJudgment()
     },
     getText(){
       if(this.tips[this.tipsNumber] && this.tips[this.tipsNumber].text){
