@@ -81,9 +81,6 @@
         </el-table>
       </div>
     </div>
-    <div class="website-setting-permission-operations-col">
-      <dialog-operations :isSaveButtonVisible='false' @close='handleClose'></dialog-operations>
-    </div>
     <el-dialog class="website-setting-permission-create-group" :visible.sync="isNewGroupDialogShow" width="768px" :before-close="handleNewGroupDialogClose" append-to-body>
       <site-new-group :editingGroupData='editingGroupData' @close='handleNewGroupDialogClose'></site-new-group>
     </el-dialog>
@@ -285,8 +282,7 @@ export default {
     vertical-align: top;
   }
   &-type {
-    width: 22.24%;
-    flex-shrink: 0;
+    width: 280px;
     display: flex;
     flex-direction: column;
     p {
@@ -311,8 +307,7 @@ export default {
     }
   }
   &-group {
-    width: 35.86%;
-    flex-shrink: 0;
+    flex: 1;
     display: flex;
     flex-direction: column;
     &-main {
@@ -332,9 +327,8 @@ export default {
     }
   }
   &-auth {
-    flex: 1;
     overflow: hidden;
-    border-right: 15px solid #cdd4db;
+    width: 350px;
     p {
       font-size: 12px;
       margin: 6px 0;
@@ -350,6 +344,9 @@ export default {
     }
     .el-form-item {
       margin-bottom: 8px;
+    }
+    .el-select {
+      width: 100%;
     }
     .el-button {
       font-size: 14px;
