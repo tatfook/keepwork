@@ -80,7 +80,7 @@ export default {
         {
           text: this.$t('setting.sitePermission'),
           comp: WebsiteSettingPermission,
-          isShow: true
+          isShow: this.isBasicSettingShow
         }
       ]
     },
