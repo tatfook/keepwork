@@ -32,7 +32,10 @@ export default [
       config: {
         ...emptyData,
         imgLoop: _.merge({}, emptyData.imgLoop, {
-          height: '150px'
+          img: {
+            defaultWebHeight: '150px',
+            defaultMobileHeight: '150px'
+          }
         })
       }
     },
@@ -46,7 +49,15 @@ export default [
     },
     options: {
       theme: {},
-      config: { ...emptyData }
+      config: {
+        ...emptyData,
+        imgLoop: _.merge({}, emptyData.imgLoop, {
+          img: {
+            defaultWebHeight: '300px',
+            defaultMobileHeight: '300px'
+          }
+        })
+      }
     },
     cover: ''
   }
