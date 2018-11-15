@@ -76,7 +76,7 @@ export default {
 
       let refactor = 0
       if(window.innerWidth <= 1920){
-        refactor = 0.24
+        refactor = 0.225
       }else {
         refactor = 0.357
       }
@@ -97,6 +97,9 @@ export default {
   border: 2px solid transparent;
   display: block;
   margin-bottom: 12px;
+  &-image{
+    width: 100%;
+  }
 }
 .style-item:hover {
   border: 2px solid #bcbcbc;
@@ -116,7 +119,7 @@ export default {
   left: 0;
   height: 14px;
   width: 100%;
-  padding: 6px 10px;
+  padding: 6px 0px;
   text-align: center;
   color: #ffffff;
   font-size: 12px;
@@ -164,7 +167,7 @@ export default {
 
       .render-mod {
         width: 1080px;
-        transform: scale(0.24);
+        transform: scale(0.225);
         transform-origin: top left;
       }
     }
