@@ -1,10 +1,4 @@
-const getUrl = ({
-  protocol = 'paracraft',
-  paramA = '',
-  paramB = '',
-  usertoken = '',
-  link = ''
-}) => {
+const getCurrentEnv = () => {
   let env = null
   let currentEnv = process.env.KEEPWORK_API_PREFIX
   if (/release/.test(currentEnv)) {
@@ -13,6 +7,17 @@ const getUrl = ({
   if (/stage/.test(currentEnv)) {
     env = 'STAGE'
   }
+  return env
+}
+
+const getUrl = ({
+  protocol = 'paracraft',
+  paramA = '',
+  paramB = '',
+  usertoken = '',
+  link = ''
+}) => {
+  let env = getCurrentEnv()
   let actualUrl = env
     ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" env="${env}" cmd/loadworld ${link}`
     : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" cmd/loadworld ${link}`
@@ -26,14 +31,7 @@ const getOpenUrl = ({
   paramB = '',
   usertoken = ''
 }) => {
-  let env = null
-  let currentEnv = process.env.KEEPWORK_API_PREFIX
-  if (/release/.test(currentEnv)) {
-    env = 'RELEASE'
-  }
-  if (/stage/.test(currentEnv)) {
-    env = 'STAGE'
-  }
+  let env = getCurrentEnv()
   let actualUrl = env
     ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" env="${env}" `
     : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}"`
