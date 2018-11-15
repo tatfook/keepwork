@@ -7,7 +7,7 @@
         <p>包含：
           <span>{{lessonPackage.total_lessons || 0}}</span>个课程</p>
         <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
-        <p>简介：{{lessonPackage.description}}</p>
+        <p class="lesson-desc-text">简介：{{lessonPackage.description}}</p>
       </div>
     </div>
   </div>
@@ -76,6 +76,16 @@ export default {
     &-desc {
       font-size: 12px;
       color: #909399;
+      &-text {
+        height: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-height: 20px;
+        -webkit-box-orient: vertical;
+        margin-bottom: 0;
+      }
     }
   }
 }

@@ -646,6 +646,7 @@ export default {
           &-title {
             font-size: 14px;
             margin: 10px 0;
+            height: 20px;
             cursor: pointer;
           }
           &-desc {
