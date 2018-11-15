@@ -394,11 +394,6 @@ export default {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
         this.isParacraftInfoDialogVisible = true
-      } else {
-        this.$message({
-          type: 'warning',
-          message: '世界正在创建中,请稍后刷新页面重试！'
-        })
       }
     },
     showMediaSkyDriveDialog() {
