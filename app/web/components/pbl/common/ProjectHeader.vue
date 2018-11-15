@@ -3,7 +3,7 @@
     <div class="container">
       <el-breadcrumb separator="/" class="project-header-breadcrumb">
         <el-breadcrumb-item :to="{ path: '/' }">
-          <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="">
+          <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <!-- <a :href="'/' + editingProjectUsername" target="_blank">{{editingProjectUsername}}</a> -->
@@ -131,6 +131,9 @@ export default {
       unStarProject: 'pbl/unStarProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    goHomePage() {
+      window.location.href = `/`
+    },
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })
     },
