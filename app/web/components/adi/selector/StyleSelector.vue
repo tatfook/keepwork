@@ -4,9 +4,17 @@
       <div class="render-mod-container--click-prevent"></div>
       <div class="render-mod-container">
         <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :editMode='true' :conf='modConf' :theme='theme'></component>
+        <div class="style-shade">
+          <span>{{$t('tips.clickToChange')}}</span>
+        </div>
       </div>
     </div>
-    <img v-if='style.useImage && modConf.name != "ModMarkdown"' class="style-item" :class='{active: isActive(index)}' v-for='(style, index) in modConf.styles' :key='style.name' @click='changeStyle(index)' :src="style.cover" :alt="index">
+    <div class="style-item" v-if='style.useImage && modConf.name != "ModMarkdown"' v-for='(style, index) in modConf.styles' :key='style.name'>
+      <img class="style-item-image" :class='{active: isActive(index)}' @click='changeStyle(index)' :src="style.cover" :alt="index">
+      <div class="style-shade">
+        <span>{{$t('tips.clickToChange')}}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,14 +91,37 @@ export default {
 
 <style lang="scss" scoped>
 .style-item {
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   border: 2px solid transparent;
   display: block;
   margin-bottom: 12px;
 }
+.style-item:hover {
+  border: 2px solid #bcbcbc;
+  .style-shade {
+    opacity: 1;
+  }
+}
 .style-item.active {
   border-color: #3da4fd;
+  .style-shade {
+    opacity: 0;
+  }
+}
+.style-shade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 14px;
+  width: 100%;
+  padding: 6px 10px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 12px;
+  background: rgba(144, 167, 191, 0.5);
+  opacity: 0;
 }
 
 .render {

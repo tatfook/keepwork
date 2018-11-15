@@ -321,7 +321,8 @@
     "openInNewWindow":"Open in new window",
     "clickToShow": "Show",
     "clickToHide": "Hide",
-    "clickToAdd": "Add"
+    "clickToAdd": "Add",
+    "clickToChange": "Click to switch"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",
