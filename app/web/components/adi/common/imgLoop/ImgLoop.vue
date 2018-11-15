@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-carousel :height="options.height">
+    <el-carousel :class="getClass" :height="'100%'">
       <el-carousel-item v-for="(item, index) in forImgs" :key="index">
         <a v-if="!item.type || item.type === 'images'" :target="item.target" :href="item.link">
           <div class="imgs" :style="loadImg(item)"></div>
@@ -18,6 +18,8 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import { setTimeout } from 'timers';
+import jss from 'jss'
+import preset from 'jss-preset-default'
 
 export default {
   name: 'AdiImgLoop',
@@ -51,6 +53,44 @@ export default {
           return {}
         }
       }
+    },
+    parsePx(value) {
+      let returnValue = 'auto'
+
+      if (typeof value == 'number' || typeof value == 'string') {
+        if (!isNaN(parseInt(value))) {
+          returnValue = parseInt(value) + 'px'
+        }
+      }
+
+      return [[returnValue], '!important']
+    },
+    getValue(propertiesValue, optionsValue) {
+      if (propertiesValue) {
+        return this.parsePx(propertiesValue)
+      } else {
+        return this.parsePx(optionsValue)
+      }
+    },
+    getWebHeight() {
+      if (typeof this.options.img != 'object') {
+        return this.auto
+      }
+
+      return this.getValue(
+        this.properties.webHeight,
+        this.options.img.defaultWebHeight
+      )
+    },
+    getMobileHeight() {
+      if (typeof this.options.img != 'object') {
+        return this.auto
+      }
+
+      return this.getValue(
+        this.properties.mobileHeight,
+        this.options.img.defaultMobileHeight
+      )
     }
   },
   computed: {
@@ -69,6 +109,28 @@ export default {
       } else {
         return this.properties.data
       }
+    },
+    getClass() {
+      let className = 'comp-imgLoop'
+      let style = {
+        [className]: {
+          height: this.getWebHeight()
+        },
+        '@media only screen and (max-width: 767px)': {
+          [className]: {
+            height: this.getMobileHeight()
+          }
+        }
+      }
+
+      if (this.sheet) {
+        this.sheet.detach()
+      }
+
+      this.sheet = jss.createStyleSheet(style)
+      this.sheet.attach()
+
+      return this.sheet.classes[className]
     }
   }
 }
