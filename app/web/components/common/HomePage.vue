@@ -163,7 +163,7 @@ export default {
       hiddenAd: false,
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
-      currIndex: -1,
+      currIndex: 0,
       timer_pic: [],
       briefPic: [
         {
@@ -191,7 +191,7 @@ export default {
           text: '来自职业程序员的知识传授'
         }
       ],
-      boardImgUrl: require('@/assets/pblImg/game1.png'),
+      boardImgUrl: require('@/assets/pblImg/game0.png'),
       newsHtml: '',
       videoHtml: ''
     }
