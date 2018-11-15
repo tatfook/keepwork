@@ -231,7 +231,7 @@ export default {
       }
       if (this.isCreating) {
         return paracraftUtil.getOpenUrl({
-          usertoken: this.usertoken
+          usertoken: this.userToken
         })
       }
       let { archiveUrl, commitId } = this.originProjectDetail.world
