@@ -160,7 +160,7 @@ export default {
       return '访问世界'
     },
     isCreating() {
-      return !this.originProjectDetail.world
+      return !(this.originProjectDetail.world && this.originProjectDetail.world.archiveUrl)
     },
     loginUserSitePrivilege() {
       return this.getUserSitePrivilege({
@@ -365,35 +365,31 @@ export default {
     },
     async toEditWebsite() {
       if (this.projectSiteId) {
+        let tempWin = window.open('_blank')
         await this.getWebsiteDetailBySiteId({
           siteId: this.projectSiteId
         }).catch(e => console.error(e))
         if (this.siteUrl) {
-          let tempWin = window.open('_blank')
-          tempWin.location = `/ed${this.siteUrl}`
+          return (tempWin.location = `/ed${this.siteUrl}`)
         }
+        tempWin.close()
       } else {
         this.binderDialogVisible = true
       }
     },
     async toSitePage() {
+      let tempWin = window.open('_blank')
       if (this.projectSiteId) {
         await this.getWebsiteDetailBySiteId({ siteId: this.projectSiteId })
         if (this.siteUrl) {
-          let tempWin = window.open('_blank')
-          tempWin.location = this.siteUrl
+          return (tempWin.location = this.siteUrl)
         }
+        tempWin.close()
       } else {
         this.binderDialogVisible = true
       }
     },
     async toParacraftPage() {
-      if (this.isCreating) {
-        await this.pblGetProjectDetail({
-          projectId: this.projectId,
-          useCache: false
-        }).catch(e => console.error(e))
-      }
       if (this.paracraftUrl) {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
