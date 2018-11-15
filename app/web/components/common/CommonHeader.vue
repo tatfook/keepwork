@@ -123,7 +123,7 @@
       <el-menu-item index='8' class="pull-right register-button" v-if="!isLogin">
         <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
-      <el-menu-item index='9' class="pull-right" v-if="!isLogin">
+      <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-menu-item index='10'>
@@ -458,6 +458,9 @@ export default {
     }
     &.register-button{
       padding: 0;
+    }
+    &.login-button{
+      padding-right: 15px; 
     }
     &.user-menu{
       padding-right: 5px;
