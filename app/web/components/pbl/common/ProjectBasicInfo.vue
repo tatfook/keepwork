@@ -154,7 +154,7 @@ export default {
       if (this.isWebType) {
         return '访问网站'
       }
-      if (this.isCreating) {
+      if (this.isCreating && !this.isProjectOwner) {
         return '创建中'
       }
       return '访问世界'
@@ -233,6 +233,11 @@ export default {
       return paracraftUtil.getUrl({
         link: `${archiveUrl}?ref=${commitId}`,
         usertoken: this.userToken
+      })
+    },
+    openParacraftUrl() {
+      return paracraftUtil.getOpenUrl({
+        usertoken: this.usertoken
       })
     },
     isVideoShow() {
@@ -390,6 +395,11 @@ export default {
       }
     },
     async toParacraftPage() {
+      if (this.isCreating && this.isProjectOwner) {
+        let tempWin = window.open('_blank')
+        tempWin.location = this.openParacraftUrl
+        this.isParacraftInfoDialogVisible = true
+      }
       if (this.paracraftUrl) {
         let tempWin = window.open('_blank')
         tempWin.location = this.paracraftUrl
