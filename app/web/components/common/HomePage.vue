@@ -163,7 +163,7 @@ export default {
       hiddenAd: false,
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
-      currIndex: 0,
+      currIndex: -1,
       timer_pic: [],
       briefPic: [
         {
@@ -256,14 +256,11 @@ export default {
     }),
     textAnimation() {
       this.subtitleAnimation = setInterval(() => {
+        this.currIndex = this.currIndex + 1 > 5 ? 0 : this.currIndex + 1
         this.boardImgUrl = this.briefPic[this.currIndex].image
-        this.currIndex += 1
-        if (this.currIndex > 5) {
-          this.currIndex = 0
-        }
       }, 3000)
     },
-    continueTextAnimation(index){
+    continueTextAnimation(index) {
       this.currIndex = index
       this.textAnimation()
     },
@@ -290,7 +287,7 @@ export default {
     switchPic(index) {
       clearInterval(this.subtitleAnimation)
       this.currIndex = index
-      this.boardImgUrl = this.briefPic[index].image
+      this.boardImgUrl = this.briefPic[this.currIndex].image
     },
     closeAd() {
       this.hiddenAd = true
