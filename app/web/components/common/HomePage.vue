@@ -9,7 +9,7 @@
         <div class="home-page-simple-show-center-left">
           <div class="home-page-simple-show-center-left-desc">
             <div class="home-page-simple-show-center-left-desc-box">
-              <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)">{{item.text}}</p>
+              <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)" @mouseout="continueTextAnimation(index)">{{item.text}}</p>
             </div>
             <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
             <div class="remainder">
@@ -158,6 +158,7 @@ export default {
   data() {
     return {
       projects: [],
+      subtitleAnimation: null,
       hotsPackages: [],
       hiddenAd: false,
       isRegisterDialogShow: false,
@@ -200,6 +201,7 @@ export default {
     RegisterDialog
   },
   async mounted() {
+    this.textAnimation()
     lesson.packages
       .getHotsPackages()
       .then(res => {
@@ -252,6 +254,19 @@ export default {
       getExcellentProjects: 'pbl/getExcellentProjects',
       getPackagesList: 'lesson/center/getPackagesList'
     }),
+    textAnimation() {
+      this.subtitleAnimation = setInterval(() => {
+        this.boardImgUrl = this.briefPic[this.currIndex].image
+        this.currIndex += 1
+        if (this.currIndex > 5) {
+          this.currIndex = 0
+        }
+      }, 1500)
+    },
+    continueTextAnimation(index){
+      this.currIndex = index
+      this.textAnimation()
+    },
     combinedPic(item, len, n, leave) {
       clearInterval(this.timer_pic[n])
       this.timer_pic[n] = setInterval(() => {
@@ -273,6 +288,7 @@ export default {
       }, 50)
     },
     switchPic(index) {
+      clearInterval(this.subtitleAnimation)
       this.currIndex = index
       this.boardImgUrl = this.briefPic[index].image
     },
@@ -350,6 +366,9 @@ export default {
       this.newsHtml = news
       this.videoHtml = video
     }
+  },
+  beforeDestroy() {
+    clearinterval(this.subtitleAnimation)
   }
 }
 </script>
@@ -627,6 +646,7 @@ export default {
           border: 1px solid #e8e8e8;
           background: #fff;
           margin: 0 auto 16px;
+          border-radius: 4px;
           transition: all 200ms ease-in;
           &:hover {
             box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
