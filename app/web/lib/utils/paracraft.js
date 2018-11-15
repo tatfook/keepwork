@@ -18,10 +18,11 @@ const getOpenUrl = ({
 }) => {
   let hostname = window.location.hostname
   let env = null
-  if (/^release/.test(hostname)) {
+  let currentEnv = process.env.KEEPWORK_API_PREFIX
+  if (/release/.test(currentEnv)) {
     env = 'RELEASE'
   }
-  if (/^stage/.test(hostname)) {
+  if (/stage/.test(currentEnv)) {
     env = 'STAGE'
   }
   let actualUrl = env
