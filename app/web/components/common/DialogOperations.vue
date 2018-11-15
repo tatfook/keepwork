@@ -1,6 +1,6 @@
 <template>
   <div class="dialog-operations">
-    <el-button :disabled="isSaveBtnDisabled" type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
+    <el-button v-if="isSaveButtonVisible" :disabled="isSaveBtnDisabled" type="primary" @click="handleSave">{{$t('editor.save')}}</el-button>
     <el-button @click="handleClose">{{$t('editor.cancel')}}</el-button>
   </div>
 </template>
@@ -8,6 +8,10 @@
 export default {
   name: 'DialogOperations',
   props: {
+    isSaveButtonVisible: {
+      type: Boolean,
+      default: true
+    },
     isSaveBtnDisabled: Boolean
   },
   methods: {

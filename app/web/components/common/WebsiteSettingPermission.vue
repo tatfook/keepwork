@@ -4,7 +4,7 @@
       <h1><span class="website-setting-permission-index-label">1</span>网站类型</h1>
       <div class="website-setting-permission-type-main">
         <div class="website-setting-permission-type-item">
-          <el-radio v-model="siteVisibility" :label="0" @change="setSiteVisibility">共有网站</el-radio>
+          <el-radio v-model="siteVisibility" :label="0" @change="setSiteVisibility">公有网站</el-radio>
           <p>默认允许大多数人访问，即使他们没有登录。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；还可以为部分人设定拒绝权限，则将他们加入黑名单（如果他们登录的话）。</p>
         </div>
         <div class="website-setting-permission-type-item">
@@ -19,7 +19,7 @@
         <div class="website-setting-permission-group-button-row">
           <el-button round size="small" @click="showNewGroupDialog">新建组</el-button>
         </div>
-        <el-table :data="userGroups" border style="width: 100%">
+        <el-table :data="userGroups" border style="width: 100%" height="476">
           <el-table-column label="分组名" width="96" fixed>
             <template slot-scope="scope">
               <span :title="scope.row.groupname">{{scope.row.groupname}}</span>
@@ -62,7 +62,7 @@
             <el-button @click="addAuth" :disabled="isNewAuthButtonDisabled">添加授权</el-button>
           </el-form-item>
         </el-form>
-        <el-table :data="siteGroups" border style="width: 100%">
+        <el-table :data="siteGroups" border style="width: 100%" height="260">
           <el-table-column label="分组名" width="96">
             <template slot-scope="scope">
               <span :title="scope.row.groupname">{{scope.row.groupname}}</span>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="website-setting-permission-operations-col">
-      <dialog-operations @close='handleClose'></dialog-operations>
+      <dialog-operations :isSaveButtonVisible='false' @close='handleClose'></dialog-operations>
     </div>
     <el-dialog class="website-setting-permission-create-group" :visible.sync="isNewGroupDialogShow" width="768px" :before-close="handleNewGroupDialogClose" append-to-body>
       <site-new-group :editingGroupData='editingGroupData' @close='handleNewGroupDialogClose'></site-new-group>
