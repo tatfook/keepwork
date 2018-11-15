@@ -58,7 +58,8 @@ export default {
         visibility: 0,
         type: 1,
         description: '',
-        siteId: null
+        siteId: null,
+        tags: 'Praacraft|3D'
       }
     }
   },
@@ -86,6 +87,7 @@ export default {
     }),
     selectProjectType(type) {
       this.newProjectData.type = type
+      this.newProjectData.tags = type == 0 ? '网站' : 'Praacraft|3D'
     },
     handleConfirmSiteId({ siteId }) {
       this.isWebType && siteId && (this.newProjectData.siteId = siteId)
