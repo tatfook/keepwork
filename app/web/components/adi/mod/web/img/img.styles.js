@@ -84,6 +84,7 @@ export default [
       config: {
         ...emptyData
       }
-    }
+    },
+    renderMinHeight: '56px'
   }
 ]
