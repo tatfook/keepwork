@@ -49,19 +49,15 @@
       </div>
     </div>
 
-    <el-pagination
-      v-if="isShowPagination"
-      class="pagination"
-      layout="prev, pager, next"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      :total="total">
+    <el-pagination v-if="isShowPagination" class="pagination" layout="prev, pager, next" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" :total="total">
     </el-pagination>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { locale } from '@/lib/utils/i18n'
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -138,18 +134,17 @@ export default {
     },
     async deleteComment(commentId) {
       this.loading = true
-      await this.deleteCommentById({ id: commentId, page: this.currentPage})
+      await this.deleteCommentById({ id: commentId, page: this.currentPage })
       this.loading = false
 
       this.loadComments(this.currentPage)
     },
-    getFormatDate(date) {
-      if (typeof date === 'string') {
-        date = date.split(' ')[1]
-          ? date.split(' ')[0] + ' ' + date.split(' ')[1].replace(/-/g, ':')
-          : date
-      }
-      return date
+    getFormatDate(time) {
+      const offset = moment().utcOffset()
+      this.isEn ? moment.locale('en') : moment.locale('zh-cn')
+      return moment(time)
+        .utcOffset(offset)
+        .fromNow()
     },
     async loadComments(page) {
       this.loading = true
