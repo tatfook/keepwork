@@ -368,7 +368,7 @@ export default {
     }
   },
   beforeDestroy() {
-    clearinterval(this.subtitleAnimation)
+    clearInterval(this.subtitleAnimation)
   }
 }
 </script>
