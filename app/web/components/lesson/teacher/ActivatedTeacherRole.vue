@@ -115,6 +115,7 @@ export default {
 <style lang="scss">
 .activated-teacher-role {
   &-container {
+    height: 100%;
     margin: 0;
   }
   &-aside {
