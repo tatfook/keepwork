@@ -5,7 +5,7 @@
       <p class="new-project-info">项目，是一个作品的开始。<br>它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
       <div class="new-project-name">
         <label for="projectName" class="new-project-label">项目名称</label>
-        <el-input id="projectName" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
+        <el-input id="projectName" maxlength="40" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
       </div>
       <div class="new-project-type">
         <label for="projectName" class="new-project-label">项目类型</label>
