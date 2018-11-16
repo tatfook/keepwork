@@ -662,6 +662,10 @@ export default {
     .w-e-text {
       padding: 0 8px;
     }
+    &-editor {
+      position: relative;
+      z-index: 1;
+    }
   }
   &-apply-dialog {
     .el-dialog__header {
