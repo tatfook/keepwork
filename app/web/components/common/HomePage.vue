@@ -11,7 +11,7 @@
             <div class="home-page-simple-show-center-left-desc-box">
               <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)" @mouseout="continueTextAnimation(index)">{{item.text}}</p>
             </div>
-            <el-button type="primary" round class="join-button" @click="goJoin">马上免费加入</el-button>
+            <el-button type="primary" round class="join-button" @click="goJoin">免费加入</el-button>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">致教育工作者</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">给父母们的话</a>
@@ -418,6 +418,11 @@ export default {
             padding: 0 28px;
             height: 36px;
             margin: 24px 0 12px;
+            font-size: 15px;
+            background: linear-gradient(#ffde0d, #ff4e10);
+            border: none;
+            box-shadow: 3px 15px 18px -12px #ff720ee0;
+            text-shadow: 0px 1px 6px #a52e02b0;
           }
           .remainder {
             a {

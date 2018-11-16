@@ -13,5 +13,7 @@ module.exports = app => {
   router.get('/pbl', controller.pbl.index)
   router.get(/\/pbl\//, controller.pbl.index)
   router.get('/vip', controller.vip.index)
+  router.redirect('/wiki/*', '/', 302) // FIXME, remove this line later
   router.get(/^\/[a-zA-Z0-9]{4,}\/([\w-.]+(\/[\w-.]+)?)/, controller.viewer.index)
+  router.redirect('/*', '/', 302)
 }

@@ -20,16 +20,16 @@
     <div class="create-project-guide-step" v-if="step == 4">
       <p class="tip_1">第三步：创建成功，编辑项目详情元素</p>
       <div class="detail-element">
-        <span class="element">项目</span>
+        <!-- <span class="element">项目</span>
         <span class="element">证书</span>
         <span class="element">经历</span>
         <span class="element">工作室</span>
-        <span class="element">自我评价</span>
+        <span class="element">自我评价</span> -->
       </div>
     </div>
     <div class="create-project-guide-next">
       <el-button @click="goPreviousStep" round v-if="step > 1">上一步</el-button>
-      <el-button type="primary" @click="goNext" round>继续</el-button>
+      <el-button type="primary" @click="goNext" round>{{step === 4 ? '完成':'继续'}}</el-button>
     </div>
     <div slot="footer" class="dialog-footer">
       <div class="create-project-guide-progress">
