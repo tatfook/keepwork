@@ -72,7 +72,7 @@ export default {
       return this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
     },
     siteVisibility() {
-      return _.get(this.siteDetailInfo, ['site', 'visibility'], 1)
+      return _.get(this.siteDetailInfo, ['siteinfo', 'visibility'], 1)
     },
     isSitePrivate() {
       return this.siteVisibility === 1
