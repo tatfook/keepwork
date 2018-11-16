@@ -10,8 +10,9 @@
               <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-autocomplete> -->
-              <el-input class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
-                <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
+              <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+                <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"></i>
+                <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
               </el-input>
             </el-col>
             <el-col :span="2">
@@ -114,16 +115,16 @@ export default {
       currSortMode: '综合'
     }
   },
-  created(){
+  created() {
     window.scrollTo(0, 0)
   },
   mounted() {
     const { query } = this.$route
     if (query && query.keyword) {
-      history.replaceState('', '', this.$route.path)
       this.searchKey = query.keyword
       this.goSearch()
     }
+    history.replaceState('', '', this.$route.path)
   },
   computed: {
     ...mapGetters({
@@ -245,6 +246,17 @@ export default {
           height: 32px;
           .el-input__inner {
             height: 32px;
+            background: #f5f5f5;
+            border: none;
+          }
+          .el-input__inner:hover,
+          .el-input__inner:focus {
+            border-color: #dcdfe6;
+          }
+          &-button {
+            font-weight: bold;
+            line-height: 32px;
+            cursor: pointer;
           }
         }
         .el-dropdown-link {
