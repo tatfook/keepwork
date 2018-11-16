@@ -112,7 +112,7 @@
               <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)">{{lessonPackage.packageName}}</h4>
               <div class="lesson-desc">
                 <p>包含：
-                  <span>125</span>个课程</p>
+                  <span>{{lessonPackage.lessons.length}}</span>个课程</p>
                 <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
                 <p class="lesson-desc-text" :title="lessonPackage.intro">简介：{{lessonPackage.intro}}</p>
               </div>
