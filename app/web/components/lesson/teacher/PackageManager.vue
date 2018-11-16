@@ -513,7 +513,10 @@ export default {
     padding: 10px 20px;
     background-color: #fff;
     flex: 1;
-    overflow: auto;
+    // overflow: auto;
+    .el-table__body-wrapper {
+      height: auto !important;
+    }
   }
   &-table {
     border: 1px solid #d2d2d2;
