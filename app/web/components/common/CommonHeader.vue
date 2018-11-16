@@ -1,7 +1,7 @@
 <template>
   <div class="common-header">
     <el-menu mode='horizontal' class="hidden-xs-only common-header-menu">
-      <el-menu-item index='0' @click="goHomePage">
+      <el-menu-item index='0' class="home-page" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='1' @click="goCreativityPage">
@@ -451,16 +451,16 @@ export default {
     line-height: 60px;
   }
   .el-menu-item {
-    padding: 0 30px 0 0;
+    padding: 0 15px;
     color: #303133;
     &:hover{
       color: #409eff !important;
     }
+    &.home-page{
+      padding-left: 0;
+    }
     &.register-button{
       padding: 0;
-    }
-    &.login-button{
-      padding-right: 15px; 
     }
     &.user-menu{
       padding-right: 5px;
