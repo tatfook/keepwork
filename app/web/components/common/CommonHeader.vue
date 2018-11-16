@@ -115,7 +115,7 @@
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>网站编辑器</a></el-dropdown-item>
-            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft创意空间</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>

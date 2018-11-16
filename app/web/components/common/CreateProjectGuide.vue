@@ -6,7 +6,7 @@
       <img src="@/assets/pblImg/step_1.png" alt="">
       <p class="tip_1">项目，是一个作品的开始。</p>
       <p>它将让你在学习中成长，</p>
-      <p>让你体会到团结协作的快了，让你成为优秀的管理者！</p>
+      <p>让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
     </div>
     <div class="create-project-guide-step" v-if="step == 2">
       <p>第一步：设置项目名称、项目类型</p>
@@ -20,16 +20,16 @@
     <div class="create-project-guide-step" v-if="step == 4">
       <p class="tip_1">第三步：创建成功，编辑项目详情元素</p>
       <div class="detail-element">
-        <span class="element">项目</span>
+        <!-- <span class="element">项目</span>
         <span class="element">证书</span>
         <span class="element">经历</span>
         <span class="element">工作室</span>
-        <span class="element">自我评价</span>
+        <span class="element">自我评价</span> -->
       </div>
     </div>
     <div class="create-project-guide-next">
       <el-button @click="goPreviousStep" round v-if="step > 1">上一步</el-button>
-      <el-button type="primary" @click="goNext" round>继续</el-button>
+      <el-button type="primary" @click="goNext" round>{{step === 4 ? '完成':'继续'}}</el-button>
     </div>
     <div slot="footer" class="dialog-footer">
       <div class="create-project-guide-progress">

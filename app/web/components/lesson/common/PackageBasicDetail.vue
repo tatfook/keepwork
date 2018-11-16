@@ -63,12 +63,10 @@ export default {
           this.isLogin = false
         })
     }
-    if (
-      this.isTeacher &&
-      this.isPendingReview &&
-      !this.isOwnPackage
-    ) {
-      this.$router.push({ name: 'StudentCenter' })
+    if (this.isPendingReview) {
+      if (!this.isOwnPackage || !this.isTeacher) {
+        this.$router.push({ name: 'StudentCenter' })
+      }
     }
   },
   computed: {
@@ -86,7 +84,7 @@ export default {
       return this.actorType === 'teacher'
     },
     loginUserId() {
-      return _.get(this.userProfile, '_id')
+      return _.get(this.userProfile, 'id')
     },
     packageOwnerId() {
       return _.get(this.packageDetail, 'userId')

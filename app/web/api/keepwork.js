@@ -228,7 +228,7 @@ export const favorites = {
 }
 
 export const projects = {
-  getProjects: async () => post('projects/search'),
+  getProjects: async (args) => post('projects/search', args),
   getProjectDetail: async ({ projectId }) =>
     get(`projects/${projectId}/detail`),
   updateProject: async ({ projectId, updatingProjectData }) =>
@@ -240,7 +240,8 @@ export const projects = {
     privilege,
     type,
     visibility,
-    siteId
+    siteId,
+    tags
   }) =>
     post('projects', {
       description,
@@ -248,7 +249,8 @@ export const projects = {
       privilege,
       type,
       visibility,
-      siteId
+      siteId,
+      tags
     }),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),

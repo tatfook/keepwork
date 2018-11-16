@@ -1,6 +1,6 @@
 <template>
   <div class="user-tab">
-    <div class="search-result-total">搜索到：<span>{{usersCount}}</span>个结果</div>
+    <div class="search-result-total">包含：<span>{{usersCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>

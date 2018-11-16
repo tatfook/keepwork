@@ -1,10 +1,11 @@
 <template>
-  <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" @keyup.enter.native='goSearch'>
+  <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" placeholder="在keepwork里搜索" @keyup.enter.native='goSearch'>
     <!-- <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
       <el-option :label="$t('search.searchAll')" value="all"></el-option>
       <el-option :label="$t('search.searchMine')" value="loginUser" v-show="isLogin"></el-option>
     </el-select> -->
-    <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
+    <i slot="suffix" class="el-icon-search search-bar-comp-button" @click="goSearch"></i>
+    <!-- <el-button slot="append" class="search-bar-comp-button" icon="el-icon-search" @click="goSearch"></el-button> -->
   </el-input>
 </template>
 <script>
@@ -55,6 +56,11 @@ export default {
   .el-input__inner {
     width: 240px;
     height: 32px;
+    background: #f5f5f5;
+    border: none;
+  }
+  &-button {
+    font-weight: bold;
   }
   .el-input__inner:hover,
   .el-input__inner:focus {

@@ -149,5 +149,8 @@ export default {
       color: #63e08f;
     }
   }
+  &-empty {
+    font-size: 14px;
+  }
 }
 </style>

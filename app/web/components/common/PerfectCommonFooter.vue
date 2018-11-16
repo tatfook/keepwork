@@ -52,7 +52,7 @@
             <li><a href="https://keepwork.com/official/company/joinus" target="_blank">- 加入我们</a></li>
             <li><a href="https://keepwork.com/wiki/statics" target="_blank">- 网站统计</a></li>
             <li><a href="https://keepwork.com/intro/keepwork/changelog" target="_blank">- 更新信息</a></li>
-            <li><a href="https://github.com/tatfook/wikicraft/issues" target="_blank">- 问题反馈</a></li>
+            <li><a href="https://github.com/tatfook/keepwork/issues" target="_blank">- 问题反馈</a></li>
           </ul>
         </div>
       </div>
@@ -72,7 +72,7 @@
           <span class="line">|</span>
         </li>
         <li>
-          <a href="https://github.com/tatfook/wikicraft/issues" target="_blank">{{$t('common.feedback')}}</a>
+          <a href="https://github.com/tatfook/keepwork/issues" target="_blank">{{$t('common.feedback')}}</a>
           <span class="line">|</span>
         </li>
         <li>

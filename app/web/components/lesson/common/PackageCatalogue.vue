@@ -56,7 +56,7 @@ export default {
       isBeInClassroom: 'lesson/student/isBeInClassroom'
     }),
     loginUserId() {
-      return _.get(this.userProfile, '_id')
+      return _.get(this.userProfile, 'id')
     },
     packageOwnerId() {
       return _.get(this.packageDetail, 'userId')
