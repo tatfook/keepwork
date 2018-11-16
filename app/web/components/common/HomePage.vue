@@ -227,8 +227,7 @@ export default {
   },
   methods: {
     async getHotPackage() {
-      return lesson.packages
-        .getHotsPackages()
+      return lesson.packages.getHotsPackages()
     },
     async getHandpic() {
       return keepwork.projects.getProjects({
@@ -414,7 +413,8 @@ export default {
               }
             }
           }
-          .join-button {
+          .join-button,
+          .join-button:hover {
             padding: 0 28px;
             height: 36px;
             margin: 24px 0 12px;
