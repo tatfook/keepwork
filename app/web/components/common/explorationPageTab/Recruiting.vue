@@ -19,6 +19,7 @@
 import ProjectCell from '../ProjectCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
+import TabMinxin from './TabMinxin'
 
 export default {
   name: 'Recruiting',
@@ -28,12 +29,11 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       recruitongProjects: [],
       loading: true
     }
   },
+  mixins: [TabMinxin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false

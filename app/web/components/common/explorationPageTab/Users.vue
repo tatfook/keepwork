@@ -21,6 +21,7 @@ import { mapActions, mapGetters } from 'vuex'
 import default_portrait from '@/assets/img/default_portrait.png'
 import { keepwork, EsAPI } from '@/api'
 import UserCell from './UserCell'
+import TabMinxin from './TabMinxin'
 
 export default {
   name: 'Users',
@@ -30,8 +31,6 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       loading: true,
       default_portrait,
       isFollowLoading: [],
@@ -39,6 +38,7 @@ export default {
       currentPage: 1
     }
   },
+  mixins: [TabMinxin],
   async mounted() {
     await this.targetPage(this.page)
     this.isFollowLoading = Array.apply(

@@ -19,6 +19,7 @@
 import LessonPackageCell from '../LessonPackageCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
+import TabMinxin from './TabMinxin'
 import Vue from 'vue'
 
 
@@ -30,12 +31,11 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       lessonPackages: [],
       loading: true
     }
   },
+  mixins: [TabMinxin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
