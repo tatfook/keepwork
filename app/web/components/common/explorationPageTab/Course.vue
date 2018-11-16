@@ -1,6 +1,6 @@
 <template>
   <div class="course-tab" v-loading="loading">
-    <div class="search-result-total">搜索到：<span>{{lessonPackagesCount}}</span>个结果</div>
+    <div class="search-result-total">包含：<span>{{lessonPackagesCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(lessonPackage,index) in lessonPackagesData" :key="index">
         <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
