@@ -37,9 +37,9 @@ export default {
 
 <style lang="scss">
 .teacher-column {
-  height: 100%;
+  // height: 100%;
   &-activated {
-    height: 100%;
+    // height: 100%;
   }
 }
 </style>
