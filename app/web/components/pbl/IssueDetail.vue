@@ -100,7 +100,7 @@
               <div class="username-created-time-right" v-if="comment.userId == userId && !isProhibitEdit">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
-                    <i class="iconfont icon-ellipsis"></i>                    
+                    <i class="iconfont icon-ellipsis"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown" class="operate-comment">
                     <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
