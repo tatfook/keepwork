@@ -19,7 +19,7 @@
 import ProjectCell from '../ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
-import TabMinxin from './TabMinxin'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'AllProjects',
@@ -32,7 +32,7 @@ export default {
       loading: true
     }
   },
-  mixins: [TabMinxin],
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
