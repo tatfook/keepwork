@@ -228,7 +228,7 @@ export const favorites = {
 }
 
 export const projects = {
-  getProjects: async () => post('projects/search'),
+  getProjects: async (args) => post('projects/search', args),
   getProjectDetail: async ({ projectId }) =>
     get(`projects/${projectId}/detail`),
   updateProject: async ({ projectId, updatingProjectData }) =>

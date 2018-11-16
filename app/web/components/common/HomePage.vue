@@ -113,7 +113,7 @@
               <div class="lesson-desc">
                 <p>包含：
                   <span>125</span>个课程</p>
-                <p>年龄：{{lessonPackage.minAge}}-{{lessonPackage.maxAge}}</p>
+                <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
                 <p class="lesson-desc-text" :title="lessonPackage.intro">简介：{{lessonPackage.intro}}</p>
               </div>
             </div>
@@ -144,10 +144,9 @@
 </template>
 <script>
 import ProjectCell from './ProjectCell'
-import { lesson } from '@/api'
+import { lesson, keepwork } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
-import { mapActions, mapGetters } from 'vuex'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 
 export default {
@@ -189,7 +188,9 @@ export default {
         }
       ],
       boardImgUrl: require('@/assets/pblImg/game0.png'),
-      newsHtml: ''
+      newsHtml: '',
+      originHandpickProjects: [],
+      originLikesProjects: []
     }
   },
   components: {
@@ -198,58 +199,58 @@ export default {
   },
   async mounted() {
     this.textAnimation()
-    lesson.packages
-      .getHotsPackages()
-      .then(res => {
-        this.hotsPackages = res
-      })
-      .catch(err => console.error(err))
-    let payload = { perPage: 1, page: 1 }
-    await Promise.all([
-      this.getExcellentProjects(),
-      this.getPackagesList(payload)
-    ])
-    await this.getNewsAndVideo()
+    let [hotPackage, handpick, likes, news] = await Promise.all([
+      this.getHotPackage(),
+      this.getHandpic(),
+      this.getLikes(),
+      this.getNews()
+    ]).catch(e => console.error(e))
+
+    this.hotsPackages = hotPackage
+    this.newsHtml = news
+    this.originHandpickProjects = handpick
+    this.originLikesProjects = likes
   },
   computed: {
-    ...mapGetters({
-      excellentProjects: 'pbl/excellentProjects',
-      allPackages: 'lesson/center/packagesList'
-    }),
-    allPackagesCount() {
-      return _.get(this.allPackages, 'count', 0)
-    },
-    excellentProjectsCount() {
-      return _.get(this.excellentProjects, 'count', 0)
-    },
-    projectsRows() {
-      return _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
-    },
     handpickProjects() {
-      let tempArr = this.projectsRows
-        .map(i => i)
-        .sort(this.sortByKey('choicenessNo'))
-      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
-      return _.forEach(tempArr2, i => {
-        i.name_title = i.name || '未命名'
-      })
+      return _.map(_.get(this.originHandpickProjects, 'rows', []), i => ({
+        ...i,
+        name_title: i.name || '未命名'
+      }))
     },
     likesProjects() {
-      let tempArr = this.projectsRows
-        .map(i => i)
-        .sort(this.sortByKey('lastStar'))
-      let tempArr2 = _.cloneDeep(tempArr.slice(0, 4))
-      tempArr2 = this.sortByKeys(tempArr2, 'lastStar', 'updatedAt')
-      return _.forEach(tempArr2, i => {
-        i.name_title = i.name || '未命名'
-      })
+      return _.map(_.get(this.originLikesProjects, 'rows', []), i => ({
+        ...i,
+        name_title: i.name || '未命名'
+      }))
     }
   },
   methods: {
-    ...mapActions({
-      getExcellentProjects: 'pbl/getExcellentProjects',
-      getPackagesList: 'lesson/center/getPackagesList'
-    }),
+    async getHotPackage() {
+      return lesson.packages
+        .getHotsPackages()
+    },
+    async getHandpic() {
+      return keepwork.projects.getProjects({
+        'x-order': 'choicenessNo-desc',
+        'x-per-page': 4,
+        'x-page': 1
+      })
+    },
+    async getLikes() {
+      return keepwork.projects.getProjects({
+        'x-order': 'lastStar-desc-updatedAt-desc',
+        'x-per-page': 4,
+        'x-page': 1
+      })
+    },
+    getPackageSuitableAge(lessonPackage) {
+      let { minAge, maxAge } = lessonPackage
+      if (minAge == 0 && maxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${minAge}-${maxAge}`
+    },
     textAnimation() {
       this.subtitleAnimation = setInterval(() => {
         this.currIndex = this.currIndex + 1 > 5 ? 0 : this.currIndex + 1
@@ -299,15 +300,12 @@ export default {
     },
     goCreativityPage() {
       this.$router.push(`/creativity`)
-      // window.location.href=`${this.locationOrigin}/creativity`
     },
     goExplorationPage() {
       this.$router.push(`/exploration`)
-      // window.location.href=`${this.locationOrigin}/exploration`
     },
     goStudyPage() {
       this.$router.push(`/study`)
-      // window.location.href=`${this.locationOrigin}/study`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
@@ -317,38 +315,17 @@ export default {
         return obj1[key] >= obj2[key] ? -1 : 1
       }
     },
-    sortByKeys(arr, groupKey, sortKey) {
-      let group = _.reduce(
-        arr,
-        (obj, prv) => {
-          _.isArray(obj[prv[groupKey]])
-            ? obj[prv[groupKey]].push(prv)
-            : (obj[prv[groupKey]] = [prv])
-          return obj
-        },
-        {}
-      )
-      _.forEach(group, item => item.sort(this.sortByKey(sortKey)))
-      let keysArr = _.keys(group).sort((a, b) => b - a)
-      let likesArray = []
-      _.forEach(keysArr, key => {
-        likesArray = [...likesArray, ...group[key]]
-      })
-      return likesArray
-    },
-    async getNewsAndVideo() {
-      // FIXME: 使用线上的markdown地址
+    async getNews() {
       const HomePageInfo = {
         apiPrefix: 'https://api.keepwork.com/git/v0',
         projectName: 'official/keepwork',
         newsPath: 'official/keepwork/news.md'
       }
-      let news = await gitlabShowRawForGuest(
+      return gitlabShowRawForGuest(
         HomePageInfo.apiPrefix,
         HomePageInfo.projectName,
         HomePageInfo.newsPath
       ).catch(e => console.error(e))
-      this.newsHtml = news
     }
   },
   beforeDestroy() {

@@ -27,7 +27,7 @@
           </el-table-column>
           <el-table-column label="成员">
             <template slot-scope="scope">
-              <span v-for="(member, index) in scope.row.members" :key="index">{{member.nickname || member.username}}, </span>
+              <span v-for="(member, index) in scope.row.members" :key="index">{{member.username}}, </span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="76" fixed="right">
