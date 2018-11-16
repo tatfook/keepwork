@@ -1,6 +1,6 @@
 <template>
   <div class="website" v-loading="loading">
-    <div class="search-result-total">搜索到：<span>{{websiteCount}}</span>个结果</div>
+    <div class="search-result-total">包含：<span>{{websiteCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in websiteData" :key="index">
         <project-cell :project="project"></project-cell>
