@@ -1,7 +1,7 @@
 <template>
   <div class="learn-summary-container">
     <div class="summary-row summary-name">
-      {{$t('card.lesson')}}: {{lessonId}}
+      {{$t('card.lesson')}}: {{lessonName}}
     </div>
     <div class="summary-row summary-desc">
       {{goals}}
@@ -141,7 +141,7 @@ export default {
 @media screen and (max-width: 768px){
 .learn-summary-container {
   margin: 10px;
-}  
+}
 }
 </style>
 
