@@ -92,7 +92,7 @@ router.beforeEach(async (to, from, next) => {
       // localStorage.setItem('refresh', true)
     }
     if (token && token !== 0) {
-      let userInfo = await keepwork.user
+      let userInfo = await keepwork.lesson
         .verifyToken({ token })
         .catch(e => console.error('verify token failure'))
       if (userInfo) {
