@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      perPage: 12,
+      perPage: 20,
       page: 1,
       lessonPackages: [],
       loading: true
