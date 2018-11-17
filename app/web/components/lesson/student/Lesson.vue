@@ -53,9 +53,8 @@ export default {
     const {
       query: { reload }
     } = this.$route
-    if (Boolean(reload)) {
-      this.resetUrl(false)
-      return window.location.reload()
+    if (reload === 'true') {
+      return this.resetUrl(false)
     }
     // logined check
     if (!this.isLogined) {
