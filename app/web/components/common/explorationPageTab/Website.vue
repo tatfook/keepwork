@@ -81,6 +81,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
+        this.$emit('getAmount',this.websiteCount)
       })
     },
     searchKeyResult(i) {

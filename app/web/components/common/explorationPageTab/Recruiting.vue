@@ -78,6 +78,7 @@ export default {
           })
           .catch(err => console.error(err))
           this.loading = false
+        this.$emit('getAmount', this.recruitingCount)
       })
     },
     searchKeyResult(i) {

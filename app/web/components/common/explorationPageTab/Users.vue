@@ -96,6 +96,7 @@ export default {
           sort: this.sortUsers
         })
         this.loading = false
+        this.$emit('getAmount',this.usersCount)
         this.getFollows()
       })
     },

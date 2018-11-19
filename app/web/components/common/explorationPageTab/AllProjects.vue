@@ -77,6 +77,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
+        this.$emit('getAmount',this.projectsCount)
       })
     },
     searchKeyResult(i) {
