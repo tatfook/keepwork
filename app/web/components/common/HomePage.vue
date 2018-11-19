@@ -201,7 +201,7 @@ export default {
     this.textAnimation()
     let [hotPackage, handpick, likes, news] = await Promise.all([
       this.getHotPackage(),
-      this.getHandpic(),
+      this.getHandpick(),
       this.getLikes(),
       this.getNews()
     ]).catch(e => console.error(e))
@@ -229,7 +229,7 @@ export default {
     async getHotPackage() {
       return lesson.packages.getHotsPackages()
     },
-    async getHandpic() {
+    async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
         'x-per-page': 4,
