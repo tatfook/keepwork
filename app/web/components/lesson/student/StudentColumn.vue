@@ -77,8 +77,7 @@ import { lesson } from '@/api'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import StudentSubscribePackages from './StudentSubscribePackages'
-import avatar from '@/assets/lessonImg/default_avatar.png'
-
+import avatar from '@/assets/img/default_portrait.png'
 
 export default {
   name: 'StudentColumn',
