@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-student-status">
-    <el-row class="student-info" type="flex" align="middle">
+    <el-row class="student-info-wrap" type="flex" align="middle">
       <el-col :span="5" :sm="5">
         <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
       </el-col>
@@ -162,7 +162,7 @@ export default {
             if (device && device.toLowerCase() === 'paracraft') {
               this.switchDevice('p')
             }
-            window.location.href = this.$router.resolve(this.$route.path).href
+            history.replaceState('', '', this.$router.resolve(this.$route.path).href)
             this.uploadLearnRecords().catch(e => console.error(e))
           })
           .catch(e => {
@@ -181,7 +181,7 @@ export default {
   background: #424242;
   width: 100%;
   color: white;
-  .student-info {
+  .student-info-wrap {
     max-width: 1080px;
     margin: 0 auto;
     height: inherit;

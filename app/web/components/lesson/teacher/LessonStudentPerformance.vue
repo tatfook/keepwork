@@ -19,7 +19,7 @@
           <el-tooltip :content="statusTips(props.row.status)" placement="top">
             <div class="userinfo">
               <div class="portrait-wrap" :class="{ 'keepwork': props.row.status === 'k1', 'keepwork leave': props.row.status === 'k2', 'paracraft': props.row.status === 'p1', 'paracraft leave': props.row.status === 'p2' }">
-                <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'offline': checkOffline(props.row.status) }" :src="formatAvatar(props.row.portrait)" alt="portrait">
+                <img class="portrait" :class="{ 'online': checkOnline(props.row.status), 'leave': checkLeave(props.row.status), 'offline': checkOffline(props.row.status) }" :src="props.row.portrait || defaultAvatar" alt="portrait">
               </div>
               <span class="name">{{props.row.name || props.row.username}}</span>
             </div>
@@ -93,11 +93,6 @@ export default {
         return this.$t('lesson.leave')
       }
       return this.$t('lesson.online')
-    },
-    formatAvatar(value = '') {
-      return value.substr(0, 4).toLowerCase() === 'http'
-        ? value
-        : this.defaultAvatar
     },
     formatTRF(value) {
       if (value === 'A') {

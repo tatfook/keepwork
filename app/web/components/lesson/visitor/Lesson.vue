@@ -77,9 +77,13 @@ export default {
       switchDevice: 'lesson/student/switchDevice'
     }),
     resetUrl() {
-      window.location.href = this.$router.resolve({
-        path: this.$route.path
-      }).href
+      history.replaceState(
+        '',
+        '',
+        this.$router.resolve({
+          path: this.$route.path
+        }).href
+      )
     }
     // handleStorageEvent() {
     //   let refresh = localStorage.getItem('refresh')
