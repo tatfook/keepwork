@@ -53,7 +53,7 @@ export default {
     const {
       query: { reload }
     } = this.$route
-    if (reload === 'true') {
+    if (reload === true) {
       return this.resetUrl(false)
     }
     // logined check
@@ -154,20 +154,24 @@ export default {
     // },
     resetUrl(resetAll = true) {
       if (resetAll) {
-        return (window.location.href = this.$router.resolve({
+        let url = this.$router.resolve({
           path: this.$route.path
-        }).href)
+        }).href
+        history.replaceState('', '', url)
+        return window.location.reload()
       }
       const {
         name,
         params,
         query: { reload, ...filterQuery }
       } = this.$route
-      window.location.href = this.$router.resolve({
+      let url = this.$router.resolve({
         name,
         params,
         query: filterQuery
       }).href
+      history.replaceState('', '', url)
+      window.location.reload()
     },
     async intervalCheckClass(delay = 8 * 1000) {
       await this.checkClassroom()

@@ -18,9 +18,6 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-    console.log(this.quiz)
-  },
   props: {
     index: Number,
     quiz: {
