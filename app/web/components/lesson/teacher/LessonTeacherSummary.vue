@@ -59,7 +59,7 @@
           </el-table-column>
           <el-table-column prop="portrait" label="NO." width="80px">
             <template slot-scope="props">
-              <div class="portrait"><img style="width:100%;object-fit:cover" :src="props.row.portrait" alt=""></div>
+              <div class="portrait"><img style="width:100%;object-fit:cover" :src="props.row.portrait || avatar" alt=""></div>
             </template>
           </el-table-column>
           <el-table-column prop="name" sortable :label='$t("lesson.name")'>
@@ -122,6 +122,7 @@ export default {
   name: 'LessonTeacherSummary',
   data() {
     return {
+      avatar,
       modList: [],
       emailAddress: '',
       isEn: locale === 'en-US',
@@ -239,7 +240,7 @@ export default {
       let currentRecord = _.map(
         this.classroomLearnRecord,
         ({
-          extra: { portrait=avatar, name='visitor', username='visitor', quiz=[] },
+          extra: { portrait, name='visitor', username='visitor', quiz=[] },
           createdAt,
           lessonId,
           userId
