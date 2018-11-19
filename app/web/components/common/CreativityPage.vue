@@ -214,11 +214,12 @@ export default {
         .close {
           display: inline-block;
           width: 40px;
-          height: 38px;
-          line-height: 42px;
-          font-size: 28px;
+          height: 36px;
+          line-height: 36px;
+          font-size: 36px;
           position: absolute;
           right: 20px;
+          top: 0;
           cursor: pointer;
         }
       }

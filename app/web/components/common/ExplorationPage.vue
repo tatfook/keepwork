@@ -2,29 +2,49 @@
   <div class="exploration-page">
     <div class="exploration-page-theme">
       <div class="exploration-page-theme-center">
-        <h2 class="theme">
-          <span class="explore">探索</span>·未知之境</h2>
+        <div class="theme">
+          <!-- <span class="explore">探索</span>·未知之境 -->
+          <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+            <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"> 搜索</i>
+            <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
+          </el-input>
+        </div>
         <div class="search">
           <el-row>
-            <el-col :span="22">
+            <el-col :span="16">
               <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-autocomplete> -->
-              <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
-                <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"></i>
-                <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
-              </el-input>
+              <!-- <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+                <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"></i> -->
+              <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
+              <!-- </el-input> -->
+              <div class="search-tab">
+                <el-menu :default-active="activeTabIndex" class="search-tab-menu" mode="horizontal" @select="handleSelectTab">
+                  <el-menu-item index="1">项目</el-menu-item>
+                  <el-menu-item index="2">3D世界</el-menu-item>
+                  <el-menu-item index="3">网站</el-menu-item>
+                  <!-- <el-menu-item index="4">知识</el-menu-item> -->
+                  <el-menu-item index="5">课程</el-menu-item>
+                  <el-menu-item index="6">用户</el-menu-item>
+                  <!-- <el-menu-item index="7">工作室</el-menu-item> -->
+                  <el-menu-item index="8">招募中</el-menu-item>
+                </el-menu>
+              </div>
             </el-col>
-            <el-col :span="2">
-              <el-dropdown @command="handleSort">
-                <span class="el-dropdown-link">
-                  {{currSortMode}}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i.command">{{i.mode}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+            <el-col :span="8">
+              <div class="search-result">
+                <span class="contain-total">包含<span class="contain-total-num">{{searchResultAmount}}</span>个结果</span>
+                <el-dropdown @command="handleSort">
+                  <span class="el-dropdown-link">
+                    {{currSortMode}}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i.command">{{i.mode}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -33,30 +53,30 @@
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
         <div class="options" ref="options">
-          <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目</el-button>
-          <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界</el-button>
-          <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button>
+          <!-- <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目</el-button> -->
+          <!-- <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界</el-button> -->
+          <!-- <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button> -->
           <!-- <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识</el-button> -->
-          <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button>
-          <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button>
+          <!-- <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button> -->
+          <!-- <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button> -->
           <!-- <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室</el-button> -->
-          <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button>
+          <!-- <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button> -->
         </div>
         <div class="selected-projects" v-if='currIndex == 1'>
-          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects"></all-projects>
+          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects"></paracraft>
+          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects"></website>
+          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
         <div class="selected-lessons" v-if='currIndex == 5'>
-          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects"></course>
+          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course>
         </div>
         <div class="selected-user" v-if='currIndex == 6'>
-          <users ref="users" :searchKey="searchKey" :sortUsers="sortProjects"></users>
+          <users ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users>
         </div>
         <div class="selected-studio" v-if='currIndex == 7'>
           <el-row>
@@ -88,7 +108,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects"></recruiting>
+          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting>
         </div>
       </div>
     </div>
@@ -109,10 +129,12 @@ export default {
   name: 'ExplorationPage',
   data() {
     return {
+      activeTabIndex: '1',
       currIndex: 1,
       searchKey: '',
       sortProjects: '',
-      currSortMode: '综合'
+      currSortMode: '综合',
+      searchResultAmount: 0
     }
   },
   created() {
@@ -159,6 +181,12 @@ export default {
     }
   },
   methods: {
+    handleSelectTab(key, keyPath) {
+      this.selectTab(key)
+    },
+    getAmount(amount) {
+      this.searchResultAmount = amount
+    },
     filterSuggetions(res, cb) {
       if (res.length) {
         cb(_.map(res, i => ({ value: i.keyword })))
@@ -231,7 +259,7 @@ export default {
   &-theme {
     background: #fff;
     &-center {
-      margin: 10px auto;
+      margin: 10px auto 0;
       max-width: 1200px;
       .theme {
         text-align: center;
@@ -241,11 +269,16 @@ export default {
         }
       }
       .search {
+        &-tab {
+          &-menu {
+            border: none;
+          }
+        }
         &-input {
-          width: 300px;
-          height: 32px;
+          width: 480px;
+          height: 40px;
           .el-input__inner {
-            height: 32px;
+            height: 40px;
             background: #f5f5f5;
             border: none;
           }
@@ -253,19 +286,45 @@ export default {
           .el-input__inner:focus {
             border-color: #dcdfe6;
           }
+          .el-input__suffix {
+            right: 0;
+            top: 0;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            background: #409eff;
+            color: #fff;
+            display: inline-block;
+            width: 88px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 4px;
+            font-size: 16px;
+            letter-spacing: 4px;
+          }
           &-button {
             font-weight: bold;
             line-height: 32px;
             cursor: pointer;
           }
         }
-        .el-dropdown-link {
-          display: inline-block;
-          height: 32px;
-          line-height: 32px;
-          font-size: 14px;
-          color: #aaa;
-          cursor: pointer;
+        .search-result {
+          text-align: right;
+          .contain-total {
+            font-size: 14px;
+            padding-right: 30px;
+            color: #606266;
+            &-num {
+              color: #409eff;
+            }
+          }
+          .el-dropdown-link {
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            font-size: 14px;
+            color: #606266;
+            cursor: pointer;
+          }
         }
       }
     }

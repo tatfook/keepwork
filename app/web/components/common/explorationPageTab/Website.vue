@@ -19,6 +19,7 @@
 import ProjectCell from '../ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'Website',
@@ -28,11 +29,10 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       loading: true
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
@@ -81,6 +81,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
+        this.$emit('getAmount',this.websiteCount)
       })
     },
     searchKeyResult(i) {

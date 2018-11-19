@@ -19,8 +19,8 @@
 import LessonPackageCell from '../LessonPackageCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
+import TabMixin from './TabMixin'
 import Vue from 'vue'
-
 
 export default {
   name: 'Course',
@@ -30,12 +30,11 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       lessonPackages: [],
       loading: true
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
@@ -51,7 +50,7 @@ export default {
           let name = _.get(i.highlight, 'title', i.title)
           name = name.join().replace(/<span>/g, `<span class="red">`)
           Vue.set(i, 'name_title', name)
-        }else{
+        } else {
           Vue.set(i, 'name_title', i.title)
         }
       })
@@ -73,7 +72,8 @@ export default {
             this.lessonPackages = res
           })
           .catch(err => console.error(err))
-          this.loading = false
+        this.loading = false
+        this.$emit('getAmount', this.lessonPackagesCount)
       })
     }
   },
