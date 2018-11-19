@@ -120,6 +120,7 @@ export default {
 <style lang="scss">
 .teach {
   background: #fff;
+  height: 100%;
   &-nothing {
     width: 100%;
     height: 660px;
