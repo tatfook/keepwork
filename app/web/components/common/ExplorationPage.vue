@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     handleSelectTab(key, keyPath) {
-      this.selectTab(key)
+      this.selectTab(Number(key))
     },
     getAmount(amount) {
       this.searchResultAmount = amount
