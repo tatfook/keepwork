@@ -1,6 +1,5 @@
 <template>
   <div class="paracraft" v-loading="loading">
-    <div class="search-result-total">包含：<span>{{paracraftCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>

@@ -1,6 +1,5 @@
 <template>
   <div class="all-projects" v-loading="loading">
-    <div class="search-result-total">包含：<span>{{projectsCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in allProjectsDataOptimize" :key="index">
         <project-cell :project="project"></project-cell>
