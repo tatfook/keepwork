@@ -52,16 +52,6 @@
     </div>
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
-        <div class="options" ref="options">
-          <!-- <el-button :class="{'selected':1==currIndex}" @click="selectTab(1)">项目</el-button> -->
-          <!-- <el-button :class="{'selected':2==currIndex}" @click="selectTab(2)">3D世界</el-button> -->
-          <!-- <el-button :class="{'selected':3==currIndex}" @click="selectTab(3)">网站</el-button> -->
-          <!-- <el-button :class="{'selected':4==currIndex}" @click="selectTab(4)">知识</el-button> -->
-          <!-- <el-button :class="{'selected':5==currIndex}" @click="selectTab(5)">课程</el-button> -->
-          <!-- <el-button :class="{'selected':6==currIndex}" @click="selectTab(6)">用户</el-button> -->
-          <!-- <el-button :class="{'selected':7==currIndex}" @click="selectTab(7)">工作室</el-button> -->
-          <!-- <el-button :class="{'selected':8==currIndex}" @click="selectTab(8)">招募中</el-button> -->
-        </div>
         <div class="selected-projects" v-if='currIndex == 1'>
           <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
         </div>
@@ -335,29 +325,6 @@ export default {
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px 0 56px;
-      .options {
-        margin: 0 auto 24px;
-        text-align: center;
-        .el-button {
-          height: 24px;
-          padding: 0 15px;
-          font-size: 14px;
-          border-radius: 12px;
-          margin-top: 4px;
-          background-color: #e8e8e8;
-          color: #909399;
-          .search-num {
-            margin-left: 8px;
-          }
-        }
-        .selected {
-          background: #409eff;
-          color: #fff;
-        }
-        .selected:hover {
-          background: rgb(24, 138, 252);
-        }
-      }
       .selected-studio {
         .el-row {
           .studio {
