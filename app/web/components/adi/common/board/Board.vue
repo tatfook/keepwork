@@ -198,7 +198,11 @@ export default {
       let svg = this.properties.svg || ''
       let response = await axios.get(svg + '?bust' + Date.now())
 
-      this.svgData = (response && response.data.content) || ''
+      if (svg && svg.match('git/v')) {
+        this.svgData = (response && response.data.content) || ''
+      } else {
+        this.svgData = (response && response.data) || ''
+      }
     }
   },
   mixins: [compBaseMixin],
