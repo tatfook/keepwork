@@ -33,7 +33,7 @@ export default {
     this.switchSummary(false)
   },
   async mounted() {
-    if (this.visitorInfo.token !== 0 && !this.visitorInfo.token) {
+    if (!this.visitorInfo.token) {
       return this.$router.push({ name: 'StudentCenter' })
     }
     this.isLoading = true
@@ -77,9 +77,13 @@ export default {
       switchDevice: 'lesson/student/switchDevice'
     }),
     resetUrl() {
-      window.location.href = this.$router.resolve({
-        path: this.$route.path
-      }).href
+      history.replaceState(
+        '',
+        '',
+        this.$router.resolve({
+          path: this.$route.path
+        }).href
+      )
     }
     // handleStorageEvent() {
     //   let refresh = localStorage.getItem('refresh')

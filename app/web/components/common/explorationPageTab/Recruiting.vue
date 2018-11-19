@@ -1,6 +1,5 @@
 <template>
   <div class="recruiting" v-loading="loading">
-    <div class="search-result-total">包含：<span>{{recruitingCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in recruitmentData" :key="index">
         <project-cell :project="project"></project-cell>
@@ -19,6 +18,7 @@
 import ProjectCell from '../ProjectCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'Recruiting',
@@ -28,12 +28,11 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       recruitongProjects: [],
       loading: true
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
@@ -78,6 +77,7 @@ export default {
           })
           .catch(err => console.error(err))
           this.loading = false
+        this.$emit('getAmount', this.recruitingCount)
       })
     },
     searchKeyResult(i) {

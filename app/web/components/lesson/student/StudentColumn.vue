@@ -4,7 +4,7 @@
       <el-col :md="6" class="aside">
         <div class="aside-content">
           <div class="profile">
-            <img :src='userProfile.portrait' alt="portrait">
+            <img :src='userProfile.portrait || avatar' alt="portrait">
           </div>
           <div class="nickname">{{username}}</div>
           <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
@@ -77,11 +77,13 @@ import { lesson } from '@/api'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import StudentSubscribePackages from './StudentSubscribePackages'
+import avatar from '@/assets/img/default_portrait.png'
 
 export default {
   name: 'StudentColumn',
   data() {
     return {
+      avatar,
       loading: true,
       classID: '',
       skillsList: [],

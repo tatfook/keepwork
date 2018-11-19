@@ -201,7 +201,7 @@ export default {
     this.textAnimation()
     let [hotPackage, handpick, likes, news] = await Promise.all([
       this.getHotPackage(),
-      this.getHandpic(),
+      this.getHandpick(),
       this.getLikes(),
       this.getNews()
     ]).catch(e => console.error(e))
@@ -229,7 +229,7 @@ export default {
     async getHotPackage() {
       return lesson.packages.getHotsPackages()
     },
-    async getHandpic() {
+    async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
         'x-per-page': 4,
@@ -342,11 +342,10 @@ export default {
   }
   &-advertising-head {
     max-width: 1200px;
-    box-sizing: border-box;
     margin: 0 auto;
     margin-top: 16px;
-    height: 42px;
-    line-height: 42px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     background: rgba(35, 151, 243, 0.2);
     border-radius: 4px;
@@ -360,11 +359,12 @@ export default {
     .close {
       display: inline-block;
       width: 40px;
-      height: 38px;
-      line-height: 42px;
+      height: 40px;
+      line-height: 40px;
       font-size: 28px;
       position: absolute;
       right: 20px;
+      top: 0;
       cursor: pointer;
     }
   }

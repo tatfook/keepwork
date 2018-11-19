@@ -1,6 +1,5 @@
 <template>
   <div class="website" v-loading="loading">
-    <div class="search-result-total">包含：<span>{{websiteCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(project,index) in websiteData" :key="index">
         <project-cell :project="project"></project-cell>
@@ -19,6 +18,7 @@
 import ProjectCell from '../ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'Website',
@@ -28,11 +28,10 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       loading: true
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.loading = false
@@ -81,6 +80,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
+        this.$emit('getAmount',this.websiteCount)
       })
     },
     searchKeyResult(i) {

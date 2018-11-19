@@ -1,6 +1,5 @@
 <template>
   <div class="user-tab">
-    <div class="search-result-total">包含：<span>{{usersCount}}</span>个结果</div>
     <el-row>
       <el-col :sm="12" :md="6" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>
@@ -21,6 +20,7 @@ import { mapActions, mapGetters } from 'vuex'
 import default_portrait from '@/assets/img/default_portrait.png'
 import { keepwork, EsAPI } from '@/api'
 import UserCell from './UserCell'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'Users',
@@ -30,8 +30,6 @@ export default {
   },
   data() {
     return {
-      perPage: 20,
-      page: 1,
       loading: true,
       default_portrait,
       isFollowLoading: [],
@@ -39,6 +37,7 @@ export default {
       currentPage: 1
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
     this.isFollowLoading = Array.apply(
@@ -96,6 +95,7 @@ export default {
           sort: this.sortUsers
         })
         this.loading = false
+        this.$emit('getAmount',this.usersCount)
         this.getFollows()
       })
     },
