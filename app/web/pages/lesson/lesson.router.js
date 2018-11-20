@@ -40,6 +40,14 @@ const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
 const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
+const LearningCenter = () =>
+  import('@/components/common/studyPageComponents/LearningCenter')
+const LearningCenterPackages = () =>
+  import('@/components/common/studyPageComponents/LearningCenterPackages')
+const OfflineGuidanceCourse = () =>
+  import('@/components/common/studyPageComponents/OfflineGuidanceCourse')
+const TeachingVideo = () =>
+  import('@/components/common/studyPageComponents/TeachingVideo')
 
 Vue.use(Router)
 
@@ -184,6 +192,28 @@ export default new Router({
           name: 'Print',
           component: Print
         }
+      ]
+    },
+    {
+      path: '/',
+      name: 'LearningCenter',
+      component: LearningCenter,
+      children: [
+        {
+          path: '/',
+          name: 'LearningCenterPackages',
+          component: LearningCenterPackages
+        },
+        {
+          path: '/offlinecourse',
+          name: 'OfflineGuidanceCourse',
+          component: OfflineGuidanceCourse
+        },
+        {
+          path: '/teachingvideo',
+          name: 'TeachingVideo',
+          component: TeachingVideo
+        },
       ]
     },
     {
