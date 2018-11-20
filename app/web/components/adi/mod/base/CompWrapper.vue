@@ -69,7 +69,10 @@ export default {
       let ops = _.cloneDeep(this.options)
       if (this.compType === 'AdiMarkdown') {
         // check whitelist
-        const whitelist = process.env.MARKDOWN_SCRIPT_WHITELIST || []
+        let whitelist = []
+        if (process.env.MARKDOWN_SCRIPT_WHITELIST) {
+          whitelist = process.env.MARKDOWN_SCRIPT_WHITELIST.split(',')
+        }
         const siteAccount = this.activePageUrl.split('/')[1]
         if (whitelist.indexOf(siteAccount) > -1) ops.enableScript = true
       }
