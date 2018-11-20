@@ -194,6 +194,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 25px;
   }
   p {
     margin: 0;
