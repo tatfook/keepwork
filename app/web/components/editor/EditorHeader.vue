@@ -135,9 +135,9 @@
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
       <el-menu-item index='9' class='switch-box'>
-        <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()" v-tooltip.bottom="{content: $t('tips.ShowPreviewOnly'), classes:'switch-box-preview-tooltip'}"></span>
-        <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()" v-tooltip.bottom="{content: $t('tips.ShowBoth'), classes:'switch-box-both-tooltip'}"></span>
-        <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()" v-tooltip.bottom="{content: $t('tips.ShowCodeOnly'), classes:'switch-box-code-tooltip'}"></span>
+        <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()" v-tooltip.bottom="$t('tips.ShowPreviewOnly')"></span>
+        <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()" v-tooltip.bottom="$t('tips.ShowBoth')"></span>
+        <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()" v-tooltip.bottom="$t('tips.ShowCodeOnly')"></span>
       </el-menu-item>
     </el-menu>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
@@ -711,9 +711,6 @@ export default {
     color: #fff;
     border-radius: 16px;
   }
-  &-preview-tooltip {}
-  &-both-tooltip {}
-  &-code-tooltip {}
 }
 </style>
 <style lang="scss">
