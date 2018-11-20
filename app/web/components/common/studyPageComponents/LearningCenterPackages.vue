@@ -1,0 +1,238 @@
+<template>
+  <div class="learning-center-packages">
+    <div class="search">
+      <el-row>
+        <el-col :md="2" :sm="2">
+          <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
+        </el-col>
+        <el-col :md="5" :sm="5">
+          <span class="tip">{{$t('lesson.enterClass')}}</span>
+        </el-col>
+        <el-col :md="11" :sm="11">
+          <span class="search-input">
+            <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
+          </span>
+        </el-col>
+        <el-col :md="6" :sm="6" :xs="6">
+          <span class="search-btn">
+            <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
+              <label for="searchClass">{{$t('lesson.enter')}}</label>
+            </el-button>
+          </span>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="total-packages">{{$t('lesson.include')}}:
+      <span>{{sortedSubscribesList.length}}</span> {{$t('lesson.packagesCount')}}
+    </div>
+    <div class="packages" v-loading='loading'>
+      <div class="packages-nothing" v-if="!sortedSubscribesList.length && !loading">
+        <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
+        <p class="packages-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
+        <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
+      </div>
+      <el-row v-else class="bottom-line">
+        <el-col class="group-line" :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
+          <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
+</template>
+<script>
+import StudentSubscribePackages from '@/components/lesson/student/StudentSubscribePackages'
+import { mapGetters, mapActions } from 'vuex'
+
+
+export default {
+  name: 'LearningCenterPackages',
+  data() {
+    return {
+      loading: true
+    }
+  },
+  async mounted(){
+    let payload = { userId: this.userId }
+    await this.getUserSubscribes()
+    this.loading = false
+  },
+  computed: {
+    ...mapGetters({
+      userId: 'user/userId',
+      subscribesList: 'lesson/student/subscribesList',
+      enterClassInfo: 'lesson/student/enterClassInfo',
+    }),
+    filterSubscribesList() {
+      return this.subscribesList
+    },
+    continuingStudyPackages() {
+      let continuingStudyPackagesList = _.filter(
+        this.filterSubscribesList,
+        i => {
+          return (
+            i.learnedLessons.length > 0 &&
+            i.learnedLessons.length < i.lessons.length
+          )
+        }
+      )
+      return continuingStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    startStudyPackages() {
+      let startStudyPackagesList = _.filter(this.filterSubscribesList, i => {
+        return i.learnedLessons.length == 0 && i.lessons.length != 0
+      })
+      return startStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    finishedStudyPackages() {
+      let finishedStudyPackagesList = _.filter(this.filterSubscribesList, i => {
+        return i.learnedLessons.length == i.lessons.length
+      })
+      return finishedStudyPackagesList.sort(this.sortByUpdateAt)
+    },
+    sortedSubscribesList() {
+      if (this.filterSubscribesList.length === 0) {
+        return this.filterSubscribesList
+      } else {
+        return _.concat(
+          this.continuingStudyPackages,
+          this.startStudyPackages,
+          this.finishedStudyPackages
+        )
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      getProfile: 'user/getProfile',
+      enterClassRoom: 'lesson/student/enterClassRoom',
+      getUserSubscribes: 'lesson/student/getUserSubscribes',
+      switchDevice: 'lesson/student/switchDevice'
+    }),
+    async enterClass() {
+      if (JSON.stringify(this.enterClassInfo) == '{}') {
+        this.enterNewClass()
+      } else if (this.classID == this.enterClassInfo.key) {
+        this.$message.success(this.$t('lesson.haveEnteredClass'))
+        this.backCurrentClass()
+      } else if (this.classID !== this.enterClassInfo.key) {
+        let key = this.classID
+        await lesson.classrooms
+          .isValidKey(key)
+          .then(res => {
+            if (res) {
+              this.beInClassDialog = true
+            } else {
+              this.$message({
+                showClose: true,
+                message: this.$t('lesson.wrongKey'),
+                type: 'error'
+              })
+              this.beInClassDialog = false
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    },
+    async enterNewClass() {
+      let key = this.classID
+      await this.enterClassRoom({ key })
+        .then(res => {
+          this.switchDevice('k')
+          this.$router.push({
+            path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
+              this.enterClassInfo.lessonId
+            }?dialog=true`
+          })
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: this.$t('lesson.wrongKey'),
+            type: 'error'
+          })
+          this.beInClassDialog = false
+        })
+    },
+    async backCurrentClass() {
+      const { packageId, lessonId } = this.enterClassInfo
+      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
+    },
+    gotoLessonsCenter() {
+      this.$router.push({
+        path: `/student/center`
+      })
+    },
+  },
+  components: {
+    StudentSubscribePackages
+  }
+}
+</script>
+<style lang="scss">
+.learning-center-packages {
+  // padding: 0;
+  // background: #fff;
+  // overflow: hidden;
+  .search {
+    background: rgba(64, 158, 254, 0.1);
+    .bell {
+      display: inline-block;
+      padding: 18px 0 9px 39px;
+    }
+    .tip {
+      display: block;
+      padding-top: 20px;
+      font-size: 14px;
+      text-align: left;
+    }
+    &-input {
+      display: inline-block;
+      margin: 12px 0 11px 0;
+      width: 384px;
+    }
+    &-btn {
+      display: block;
+      margin-top: 12px;
+      padding-left: 16px;
+    }
+  }
+  .total-packages {
+    padding: 40px 0 15px;
+    height: 16px;
+    border-bottom: 2px solid #d2d2d2;
+    width: 788px;
+    margin: 0 auto;
+  }
+  .packages {
+    margin: 44px 0 0;
+    padding: 0 12px;
+    &-nothing {
+      margin-top: 60px;
+      width: 100%;
+      height: 500px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &-hint {
+        font-size: 20px;
+        line-height: 30px;
+        color: #111111;
+      }
+    }
+    .group-line {
+      border-bottom: 1px solid #d2d2d2;
+      padding: 10px 0;
+      margin-bottom: -1px;
+    }
+  }
+  .bottom-line {
+    border-bottom: 1px solid #d2d2d2;
+  }
+}
+</style>
+
+

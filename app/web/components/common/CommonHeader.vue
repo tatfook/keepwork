@@ -258,19 +258,15 @@ export default {
       })
     },
     goCreativityPage() {
-      // this.$router.push('creativity')
       window.location.href = `${this.locationOrigin}/creativity`
     },
     goExplorationPage() {
-      // this.$router.push('exploration')
       window.location.href = `${this.locationOrigin}/exploration`
     },
     goStudyPage() {
-      // this.$router.push('study')
-      window.location.href = `${this.locationOrigin}/study`
+      window.location.href = `${this.locationOrigin}/l`
     },
     goHomePage() {
-      // this.$router.push('/')
       window.location.href = `/`
     },
     goPersonalCenter() {
