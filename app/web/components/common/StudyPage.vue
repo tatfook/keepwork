@@ -1,37 +1,42 @@
 <template>
   <div class="study-page">
-    <div class="study-page-title"><span class="study">学习</span>·不停超越</div>
-    <div class="study-page-intro">
-      <el-row>
-        <el-col :sm="12" :md="8">
-          <div class="plate" @click="enterLessonCenter">
-            <img class="plate-cover" src="@/assets/pblImg/lesson_online.png" alt="">
-            <h4 class="plate-title">在线课程</h4>
-            <p class="plate-desc">随时随地、轻松愉快的在线学习</p>
-          </div>
-        </el-col>
-        <el-col :sm="12" :md="8">
-          <div class="plate" @click="enterParacraftLesson">
-            <img class="plate-cover" src="@/assets/pblImg/lesson_paracraft.png" alt="">
-            <h4 class="plate-title">动画教学</h4>
-            <p class="plate-desc">学习三维世界的动画创作，参加iicc大赛</p>
-          </div>
-        </el-col>
-        <el-col :sm="12" :md="8">
-          <div class="plate" @click="enterCodeLesson">
-            <img class="plate-cover" src="@/assets/pblImg/learn_codeblock.png" alt="">
-            <h4 class="plate-title">编程方块</h4>
-            <p class="plate-desc">图形化的方式学编程，创造自己的游戏</p>
-          </div>
-        </el-col>
-        <!-- <el-col :sm="12" :md="6">
-          <div class="plate" @click="enterNPLLesson">
-            <img class="plate-cover" src="@/assets/pblImg/NPL_CAD.png" alt="">
-            <h4 class="plate-title">NPL CAD</h4>
-            <p class="plate-desc">通过CAD学习计算机编程语言，一举两得</p>
-          </div>
-        </el-col> -->
-      </el-row>
+    <div class="study-page-header">
+      <div class="study-page-header-menu">
+        <div class="study-page-header-menu-lef">
+          <span @click="toLearnCenter" class="study-page-header-menu-left-button">学习中心</span>
+          <span @click="toLessonCenter" class="study-page-header-menu-left-button">全部课程</span>
+        </div>
+        <div class="study-page-header-menu-right">
+          <el-dropdown class="study-page-header-menu-right-dropdown">
+            <span class="el-dropdown-link">
+              解决方案<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>教学理念</el-dropdown-item>
+              <el-dropdown-item>学校教师</el-dropdown-item>
+              <el-dropdown-item>学生家长</el-dropdown-item>
+              <el-dropdown-item>机构合作</el-dropdown-item>
+              <el-dropdown-item>作品和创意大赛</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+          <el-dropdown class="study-page-header-menu-right-dropdown">
+            <span class="el-dropdown-link">
+              学习资源<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>教学视频</el-dropdown-item>
+              <el-dropdown-item>Paracraft下载</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+          <span class="study-page-header-menu-right-link">查看教师页</span>
+          <!-- <span class="study-page-header-menu-right-link">查看学生页</span> -->
+        </div>
+      </div>
+    </div>
+    <div class="study-page-content">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -39,61 +44,115 @@
 export default {
   name: 'StudyPage',
   data() {
-    return {}
+    return {
+      activeIndex: ''
+    }
+  },
+  watch: {
+    $route(route) {
+      console.warn(route)
+    }
   },
   methods: {
-    enterLessonCenter(){
-      window.open('/l/student/center')
+    handleSelect(value) {
+      console.warn(value)
     },
-    enterParacraftLesson(){
-      window.open('/l/student/package/8')
+    toLearnCenter() {
     },
-    enterCodeLesson(){
-      window.open('/l/student/package/6')
-    },
-    enterNPLLesson(){
-      window.open('/l/student/package/6')
+    toLessonCenter() {
     }
   }
 }
 </script>
-<style lang="scss">
-.study-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  &-title {
-    font-size: 26px;
-    text-align: center;
-    margin: 44px 0;
-    font-weight: 700;
-    .study {
-      color: #2397f3;
+
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .study-page {
+    &-header {
+      &-menu {
+        height: 50px;
+        padding: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        &-left-button {
+          margin-right: 0px;
+          font-size: 14px;
+          padding: 4px 8px;
+        }
+        &-right {
+          &-dropdown {
+            margin-right: 0px;
+          }
+          &-link {
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
-  &-intro{
-    .plate{
-      text-align: center;
-      padding: 64px 0 40px;
-      cursor: pointer;
-      &-cover{
-        height: 120px;
-        object-fit: contain;
+}
+</style>
+
+
+<style lang="scss">
+.pull-right {
+  float: right !important;
+}
+.study-page {
+  &-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: none !important;
+    &-menu {
+      height: 87px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &-left {
+        &-button {
+          padding: 8px 25px;
+          color: #909399;
+          font-size: 14px;
+          background: #f5f5f5;
+          border-radius: 4px;
+          border: solid 1px #e8e8e8;
+          cursor: pointer;
+          margin-right: 20px;
+          &:hover {
+            background: #4db5ff;
+            color: #ffffff;
+          }
+          &.selected {
+            background: #2397f3;
+            color: #ffffff;
+          }
+        }
       }
-      &-title{
-        line-height: 22px;
-        font-size: 18px;
-        color: #333;
-        margin: 40px 0 12px;
+      &-right {
+        &-dropdown {
+          margin-right: 70px;
+          cursor: pointer;
+        }
+        &-link {
+          color: #2397f3;
+          font-size: 16px;
+          cursor: pointer;
+          &:hover {
+            color: #4db5ff;
+          }
+          &.selected {
+            color: #4db5ff;
+          }
+        }
       }
-      &-desc{
-        color: #909399;
-        font-size: 13px;
-      }
-      &:hover{
-        border: 1px solid #eee;
-        box-shadow: 0 2px  8px rgb(230, 230, 230);
+      .el-row {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
       }
     }
+  }
+  &-content {
+    background: #f6f7f8;
   }
 }
 </style>
