@@ -8,18 +8,18 @@
         <el-breadcrumb-item>
           <span>{{nowUsername}}</span>
         </el-breadcrumb-item>
-        <el-tabs v-model="activePageName" class="profile-header-tabs" @tab-click="handleTabClick">
-          <el-tab-pane name="ProfileIndexPage">
-            <span slot="label" class="profile-header-tabs-label">主页</span>
-          </el-tab-pane>
-          <el-tab-pane name="ProfileSocialPage">
-            <span slot="label" class="profile-header-tabs-label">社交</span>
-          </el-tab-pane>
-          <el-tab-pane name="ProfileProjectPage">
-            <span slot="label" class="profile-header-tabs-label">项目</span>
-          </el-tab-pane>
-        </el-tabs>
       </el-breadcrumb>
+      <el-tabs v-model="activePageName" class="profile-header-tabs" @tab-click="handleTabClick">
+        <el-tab-pane name="ProfileIndexPage">
+          <span slot="label" class="profile-header-tabs-label">主页</span>
+        </el-tab-pane>
+        <el-tab-pane name="ProfileSocialPage">
+          <span slot="label" class="profile-header-tabs-label">社交</span>
+        </el-tab-pane>
+        <el-tab-pane name="ProfileProjectPage">
+          <span slot="label" class="profile-header-tabs-label">项目</span>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
   &-breadcrumb {
     font-size: 16px;
     padding-top: 24px;
+    margin-bottom: 32px;
     &-home-icon {
       vertical-align: middle;
     }
