@@ -1,6 +1,6 @@
 <template>
   <div class="common-header">
-    <el-menu mode='horizontal' class="hidden-xs-only common-header-menu">
+    <el-menu mode='horizontal' :default-active="activeIndex" class="hidden-xs-only common-header-menu">
       <el-menu-item index='0' class="home-page" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
@@ -211,7 +211,8 @@ export default {
       isSkyDriveManagerDialogShow: false,
       isLoginDialogShow: false,
       isRegisterDialogShow: false,
-      locationOrigin: window.location.origin
+      locationOrigin: window.location.origin,
+      activeIndex: '0'
     }
   },
   computed: {
@@ -245,6 +246,21 @@ export default {
         })
     }
   },
+  watch: {
+    $route(route) {
+      console.log(route.name)
+      switch (route.name) {
+        case 'CreativityPage':
+          return (this.activeIndex = '1')
+        case 'ExplorationPage':
+          return (this.activeIndex = '2')
+        case 'StudyPage':
+          return (this.activeIndex = '4')
+        default:
+          this.activeIndex = '0'
+      }
+    }
+  },
   methods: {
     ...mapActions({
       userGetProfile: 'user/getProfile',
@@ -258,16 +274,24 @@ export default {
       })
     },
     goCreativityPage() {
-      window.location.href = `${this.locationOrigin}/creativity`
+      if (this.$route.name !== 'CreativityPage') {
+        window.location.href = `${this.locationOrigin}/creativity`
+      }
     },
     goExplorationPage() {
-      window.location.href = `${this.locationOrigin}/exploration`
+      if (this.$route.name !== 'ExplorationPage') {
+        window.location.href = `${this.locationOrigin}/exploration`
+      }
     },
     goStudyPage() {
-      window.location.href = `${this.locationOrigin}/l`
+      if (this.$route.name !== 'StudyPage') {
+        window.location.href = `${this.locationOrigin}/study`
+      }
     },
     goHomePage() {
-      window.location.href = `/`
+      if (this.$route.name !== 'HomePage') {
+        window.location.href = `/`
+      }
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -449,16 +473,16 @@ export default {
   .el-menu-item {
     padding: 0 15px;
     color: #303133;
-    &:hover{
+    &:hover {
       color: #409eff !important;
     }
-    &.home-page{
+    &.home-page {
       padding-left: 0;
     }
-    &.register-button{
+    &.register-button {
       padding: 0;
     }
-    &.user-menu{
+    &.user-menu {
       padding-right: 5px;
     }
   }
