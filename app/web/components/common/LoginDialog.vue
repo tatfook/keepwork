@@ -135,7 +135,10 @@ export default {
           })
           this.loading = false
           if (!info) {
-            this.showMessage('error', this.$t('common.IncorrectUsernameOrPassword'))
+            this.showMessage(
+              'error',
+              this.$t('common.IncorrectUsernameOrPassword')
+            )
           } else {
             this.$emit('close')
             return false
@@ -303,6 +306,13 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .login-dialog {
+    .el-dialog {
+      width: 90%;
     }
   }
 }

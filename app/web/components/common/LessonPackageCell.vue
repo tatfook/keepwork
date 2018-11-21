@@ -89,6 +89,29 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .lesson-package-cell {
+    .lesson {
+      width: 164px;
+      padding: 0;
+      font-size: 12px;
+      border: none;
+      &-cover {
+        width: 100%;
+        height: 90px;
+        &-img {
+          width: 100%;
+          height: 90px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+      &-title{
+        font-size: 12px;
+      }
+    }
+  }
+}
 </style>
 
 

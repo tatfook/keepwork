@@ -139,16 +139,20 @@
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
         </template>
+        <div class="greeting">你好，{{username}}</div>
         <el-menu-item index='1-1'>
-          <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
+          <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
         </el-menu-item>
         <el-menu-item index='1-2'>
-          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
+          <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
         </el-menu-item>
         <el-menu-item index='1-3'>
-          <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
+          <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
         </el-menu-item>
         <el-menu-item index='1-4'>
+          <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
+        </el-menu-item>
+        <el-menu-item index='1-5'>
           <a @click.stop="logout">{{$t('common.logout')}}</a>
         </el-menu-item>
       </el-submenu>
@@ -496,6 +500,9 @@ export default {
   .el-submenu__title {
     padding: 0 15px;
   }
+ .el-menu--horizontal .greeting{
+   padding: 0 10px;
+ }
 }
 @media print {
   .common-header {
