@@ -3,7 +3,7 @@
     <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :editMode='editMode' :options='compOptions' />
   </div>
   <div v-else :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :options='options' />
+    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :options='compOptions' />
   </div>
 </template>
 
