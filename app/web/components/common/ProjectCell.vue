@@ -168,10 +168,11 @@ export default {
         border-radius: 4px;
       }
     }
-    &-title{
+    &-title {
       font-size: 12px;
     }
     &-author {
+      font-size: 12px;
       &-name {
         .username {
           width: 50px;
