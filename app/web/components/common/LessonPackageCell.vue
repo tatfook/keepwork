@@ -69,6 +69,9 @@ export default {
       margin: 10px 0;
       height: 20px;
       cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       .red {
         color: red;
       }
@@ -93,7 +96,7 @@ export default {
   .lesson-package-cell {
     .lesson {
       width: 164px;
-      padding: 0;
+      padding: 4px;
       font-size: 12px;
       border: none;
       &-cover {
@@ -106,8 +109,13 @@ export default {
           border-radius: 4px;
         }
       }
-      &-title{
+      &-title {
         font-size: 12px;
+      }
+      &-desc{
+        p{
+          margin: 5px 0;
+        }
       }
     }
   }
