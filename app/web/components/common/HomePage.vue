@@ -21,7 +21,7 @@
             <img :src="boardImgUrl" alt="">
           </div>
         </div>
-        <div class="home-page-simple-show-center-right">
+        <div class="home-page-simple-show-center-right hidden-sm-and-down">
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">keepwork是做什么的</div>
             <div class="video">
@@ -57,6 +57,7 @@
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
+          <div class="box-word">创造</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200,1)" @mouseout="combinedPic('explore', -2000,1, 'leave')">
@@ -68,6 +69,7 @@
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
+          <div class="box-word">探索</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200,2)" @mouseout="combinedPic('study', -2000,2, 'leave')">
@@ -79,6 +81,7 @@
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
+          <div class="box-word">学习</div>
         </div>
       </div>
     </div>
@@ -92,7 +95,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :sm="12" :md="6" v-for="(project,index) in handpickProjects" :key="index">
+          <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
             <project-cell :project='project'></project-cell>
           </el-col>
         </el-row>
@@ -106,17 +109,8 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col class="hot-lesson" :sm="12" :md="6" v-for="(lessonPackage,index) in hotsPackages" :key="index">
-            <div class="lesson">
-              <img class="lesson-cover" :src="lessonPackage.extra.coverUrl" alt="" @click="goLessonPackage(lessonPackage)">
-              <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)">{{lessonPackage.packageName}}</h4>
-              <div class="lesson-desc">
-                <p>包含：
-                  <span>{{lessonPackage.lessons.length}}</span>个课程</p>
-                <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
-                <p class="lesson-desc-text" :title="lessonPackage.intro">简介：{{lessonPackage.intro}}</p>
-              </div>
-            </div>
+          <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
+            <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
           </el-col>
         </el-row>
       </div>
@@ -129,7 +123,7 @@
           <div class="more" @click="viewMore">查看更多&gt;</div>
         </div>
         <el-row>
-          <el-col :sm="12" :md="6" v-for="(project,index) in likesProjects" :key="index">
+          <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in likesProjects" :key="index">
             <project-cell :project="project"></project-cell>
           </el-col>
         </el-row>
@@ -143,11 +137,13 @@
   </div>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css'
 import ProjectCell from './ProjectCell'
 import { lesson, keepwork } from '@/api'
 import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
+import LessonPackageCell from './LessonPackageCell'
 
 export default {
   name: 'HomePage',
@@ -195,7 +191,8 @@ export default {
   },
   components: {
     ProjectCell,
-    RegisterDialog
+    RegisterDialog,
+    LessonPackageCell
   },
   async mounted() {
     this.textAnimation()
@@ -206,7 +203,15 @@ export default {
       this.getNews()
     ]).catch(e => console.error(e))
 
-    this.hotsPackages = hotPackage
+    this.hotsPackages = _.map(hotPackage, i => ({
+      ...i,
+      cover: i.extra.coverUrl,
+      name_title: i.packageName,
+      total_lessons: i.lessons.length,
+      age_min: i.minAge,
+      age_max: i.maxAge,
+      description: i.intro
+    }))
     this.newsHtml = news
     this.originHandpickProjects = handpick
     this.originLikesProjects = likes
@@ -337,7 +342,7 @@ export default {
 .home-page {
   &-register-dialog {
     .el-dialog {
-      max-width: 352px;
+      width: 352px;
     }
   }
   &-advertising-head {
@@ -608,49 +613,6 @@ export default {
           cursor: pointer;
         }
       }
-      .hot-lesson {
-        .lesson {
-          width: 290px;
-          padding: 16px;
-          box-sizing: border-box;
-          border: 1px solid #e8e8e8;
-          background: #fff;
-          margin: 0 auto 16px;
-          border-radius: 4px;
-          transition: all 200ms ease-in;
-          &:hover {
-            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
-            transition: all 200ms ease-in;
-          }
-          &-cover {
-            width: 100%;
-            height: 143px;
-            object-fit: cover;
-            border-radius: 4px;
-            cursor: pointer;
-          }
-          &-title {
-            font-size: 14px;
-            margin: 10px 0;
-            height: 20px;
-            cursor: pointer;
-          }
-          &-desc {
-            font-size: 12px;
-            color: #909399;
-            &-text {
-              height: 60px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 3;
-              line-height: 20px;
-              -webkit-box-orient: vertical;
-              margin-bottom: 0;
-            }
-          }
-        }
-      }
     }
     .like {
       padding-bottom: 80px;
@@ -659,13 +621,124 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .home-page {
+    &-register-dialog {
+      .el-dialog {
+        width: 90%;
+      }
+    }
+    &-simple-show {
+      padding: 0;
+      &-center {
+        &-left {
+          background-size: 100%;
+          &-desc {
+            &-box {
+              padding-left: 10px;
+              height: 160px;
+              .intro {
+                font-size: 12px;
+                line-height: 28px;
+                &-hover {
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+          .flexible-info-board {
+            right: 186px;
+            top: 57px;
+            img {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    &-brief {
+      &-center {
+        .line {
+          height: 60px;
+        }
+        .box {
+          display: block;
+          margin: 0;
+          padding: 0;
+          height: 77px;
+          &-text {
+            display: none;
+          }
+          &-img {
+            margin: 0 auto;
+            width: 77px;
+            height: 77px;
+            background-size: auto 77px;
+          }
+          &-word {
+            text-align: center;
+            font-size: 13px;
+            color: #606266;
+            font-weight: bold;
+            height: 25px;
+          }
+        }
+      }
+    }
     &-cabinet {
+      background: #f6f7f8;
+      padding-top: 1px;
       &-excellent {
+        margin-top: 8px;
+        padding: 0;
+        background: #fff;
         .hot-lesson {
           .lesson {
             margin: 0 auto 15px;
           }
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 414px) {
+  .home-page-simple-show-center-left {
+    .flexible-info-board {
+      right: 7px;
+      top: 204px;
+      img {
+        width: 80%;
+      }
+    }
+  }
+}
+@media screen and (max-width: 375px) {
+  .home-page-simple-show-center-left {
+    .flexible-info-board {
+      right: -7px;
+      top: 213px;
+      img {
+        width: 80%;
+      }
+    }
+  }
+}
+@media screen and (max-width: 360px) {
+  .home-page-simple-show-center-left {
+    .flexible-info-board {
+      right: -17px;
+      top: 194px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+@media screen and (max-width: 320px) {
+  .home-page-simple-show-center-left {
+    .flexible-info-board {
+      right: -39px;
+      top: 235px;
+      img {
+        width: 80%;
       }
     }
   }

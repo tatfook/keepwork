@@ -78,7 +78,7 @@ export default {
             trigger: 'blur'
           },
           {
-            validator: validateUsername,
+            validator: validateUsername
           }
         ],
         password: [
@@ -88,7 +88,8 @@ export default {
             trigger: 'blur'
           },
           {
-            min: 6,  message: this.$t('common.minPassword'),
+            min: 6,
+            message: this.$t('common.minPassword')
           },
           {
             max: 24,
@@ -171,14 +172,17 @@ export default {
               this.handleClose()
             })
             .catch(e => {
-              if(e.response.data.code == 4){
-                this.showMessage('error', this.$t('user.verificationCodeExpiration'))
-              }else if(e.response.data.code == 5){
+              if (e.response.data.code == 4) {
+                this.showMessage(
+                  'error',
+                  this.$t('user.verificationCodeExpiration')
+                )
+              } else if (e.response.data.code == 5) {
                 this.showMessage('error', this.$t('user.verificationCodeError'))
-              }else if(e.response.data.code == 2){
+              } else if (e.response.data.code == 2) {
                 this.showMessage('error', this.$t('common.notValidAccount'))
-              }else{
-                this.showMessage('error', this.$t('common.registerFailed'))                
+              } else {
+                this.showMessage('error', this.$t('common.registerFailed'))
               }
               this.registerLoading = false
             })
@@ -333,6 +337,13 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .register-dialog {
+    .el-dialog {
+      width: 90%;
     }
   }
 }
