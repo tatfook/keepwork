@@ -132,23 +132,27 @@
     </el-menu>
 
     <el-menu mode='horizontal' class="hidden-sm-and-up">
-      <el-menu-item index='0' class="profile-menu-item">
+      <el-menu-item index='0' class="profile-menu-item" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-submenu index='1' class="pull-right" v-if="isLogin">
         <template slot="title">
           <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
         </template>
+        <div class="greeting">你好，{{username}}</div>
         <el-menu-item index='1-1'>
-          <a :href='"/" + userProfile.username'>{{$t('common.myHomePage')}}</a>
+          <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
         </el-menu-item>
         <el-menu-item index='1-2'>
-          <a href="/wiki/user_center?userCenterContentType=websiteManager">{{$t('common.websiteManagement')}}</a>
+          <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
         </el-menu-item>
         <el-menu-item index='1-3'>
-          <a href="/ed" target="_blank">{{$t('common.pageEditor')}}</a>
+          <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
         </el-menu-item>
         <el-menu-item index='1-4'>
+          <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
+        </el-menu-item>
+        <el-menu-item index='1-5'>
           <a @click.stop="logout">{{$t('common.logout')}}</a>
         </el-menu-item>
       </el-submenu>
@@ -162,16 +166,25 @@
         <template slot="title">
           <i class="el-icon-menu"></i>
         </template>
-        <el-menu-item index='2-1'>
+        <el-menu-item index='2-4' class=" function-menu">
+          <a href=""  @click.stop.prevent="goCreativityPage">创造</a>
+        </el-menu-item>
+        <el-menu-item index='2-5' class=" function-menu">
+          <a href="" @click.stop.prevent="goExplorationPage">探索</a>
+        </el-menu-item>
+        <el-menu-item index='2-6' class=" function-menu">
+          <a href="" @click.stop.prevent="goStudyPage">学习</a>
+        </el-menu-item>
+        <el-menu-item index='2-1' class=" function-menu">
           <a href="/wiki/home">{{$t('common.features')}}</a>
         </el-menu-item>
-        <el-menu-item index='2-2'>
+        <el-menu-item index='2-2' class=" function-menu">
           <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
         </el-menu-item>
-        <el-menu-item index='2-3'>
+        <el-menu-item index='2-3' class=" function-menu">
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
-        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-6'>
+        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-7'  class=" function-menu">
           <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a>
         </el-menu-item>
       </el-submenu>
@@ -495,6 +508,16 @@ export default {
 @media (max-width: 768px) {
   .el-submenu__title {
     padding: 0 15px;
+  }
+  .el-menu--horizontal .greeting {
+    padding: 0 10px;
+  }
+  .el-menu--horizontal .function-menu{
+    a{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 @media print {
