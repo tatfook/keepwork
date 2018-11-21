@@ -1,7 +1,7 @@
 <template>
   <div class="recruiting" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(project,index) in recruitmentData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in recruitmentData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
@@ -76,7 +76,7 @@ export default {
             this.recruitongProjects = res
           })
           .catch(err => console.error(err))
-          this.loading = false
+        this.loading = false
         this.$emit('getAmount', this.recruitingCount)
       })
     },

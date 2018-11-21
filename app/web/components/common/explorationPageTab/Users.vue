@@ -1,7 +1,7 @@
 <template>
   <div class="user-tab">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(user) in allUsersData" :key="user.id">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>
       </el-col>
     </el-row>
@@ -95,7 +95,7 @@ export default {
           sort: this.sortUsers
         })
         this.loading = false
-        this.$emit('getAmount',this.usersCount)
+        this.$emit('getAmount', this.usersCount)
         this.getFollows()
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="all-projects" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(project,index) in allProjectsDataOptimize" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
@@ -76,7 +76,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
-        this.$emit('getAmount',this.projectsCount)
+        this.$emit('getAmount', this.projectsCount)
       })
     },
     searchKeyResult(i) {
