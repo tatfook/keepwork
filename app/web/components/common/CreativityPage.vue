@@ -40,7 +40,7 @@
         <div class="my-projects" v-if="hasProjects">
           <h4 class="browse-title">我的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in myProjectsData" :key="index">
+            <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in myProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -48,7 +48,7 @@
         <div class="my-contribute-projects" v-if="myContributeProjectsData.length > 0">
           <h4 class="browse-title">我参与的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in myContributeProjectsData" :key="index">
+            <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in myContributeProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>
@@ -56,7 +56,7 @@
         <div class="others-projects">
           <h4 class="browse-title">看看其他人的项目</h4>
           <el-row>
-            <el-col :sm="12" :md="6" v-for="(project,index) in otherProjects" :key="index">
+            <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in otherProjects" :key="index">
               <project-cell :project="project"></project-cell>
             </el-col>
           </el-row>

@@ -1,7 +1,7 @@
 <template>
   <div class="paracraft" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(project,index) in pracraftData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
@@ -40,8 +40,8 @@ export default {
     ...mapGetters({
       pblParacraft: 'pbl/diffTypeProject'
     }),
-    paracraft(){
-      return this.pblParacraft({ type: 'paracraft'})
+    paracraft() {
+      return this.pblParacraft({ type: 'paracraft' })
     },
     paracraftCount() {
       return _.get(this.paracraft, 'total', 0)
@@ -80,7 +80,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
-        this.$emit('getAmount',this.paracraftCount)
+        this.$emit('getAmount', this.paracraftCount)
       })
     },
     searchKeyResult(i) {
