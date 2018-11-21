@@ -3,6 +3,7 @@
     <div class="container">
       <div class="profile-index-sidebar">
         <user-basic-msg class="profile-index-sidebar-item" :nowUserDetail='nowUserDetail'></user-basic-msg>
+        <user-certificates></user-certificates>
       </div>
       <div class="profile-index-main"></div>
     </div>
@@ -10,6 +11,7 @@
 </template>
 <script>
 import UserBasicMsg from './common/UserBasicMsg'
+import UserCertificates from './common/UserCertificates'
 export default {
   name: 'ProfileIndex',
   props: {
@@ -19,7 +21,8 @@ export default {
     }
   },
   components: {
-    UserBasicMsg
+    UserBasicMsg,
+    UserCertificates
   }
 }
 </script>
