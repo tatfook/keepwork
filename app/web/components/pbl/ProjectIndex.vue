@@ -1,6 +1,6 @@
 <template>
   <div class="project-index">
-    <div class="container">
+    <div class="container hidden-xs-only">
       <div class="project-index-sidebar">
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
@@ -11,6 +11,13 @@
         <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
         <project-comments v-if='!isCommentClosed' class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
       </div>
+    </div>
+    <div class="container-phone hidden-sm-and-up">
+      <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
+      <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
+      <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+      <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
+      <project-comments v-if='!isCommentClosed' class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
     </div>
   </div>
 </template>
@@ -64,7 +71,7 @@ export default {
     },
     projectApplyState: Number
   },
-  async created(){
+  async created() {
     await keepwork.projects.visitProject(this.projectId)
   },
   computed: {
@@ -82,6 +89,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@media (max-width: 768px) {
+  .project-index {
+    padding-top: 10px;
+    & > .container-phone {
+      display: block;
+    }
+  }
+}
+</style>
+
 <style lang="scss">
 .project-index {
   padding-top: 24px;
