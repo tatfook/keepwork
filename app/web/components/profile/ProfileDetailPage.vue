@@ -1,7 +1,7 @@
 <template>
   <div class="profile-detail-page" v-loading='isLoading'>
     <profile-header v-if="isFinishFirstInit" :nowUsername='nowUsername'></profile-header>
-    <router-view v-if="isFinishFirstInit"></router-view>
+    <router-view v-if="isFinishFirstInit" :nowUserDetail='nowUserDetail'></router-view>
   </div>
 </template>
 
@@ -55,3 +55,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.profile-detail-page {
+  background-color: #f5f5f5;
+}
+</style>
