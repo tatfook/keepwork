@@ -109,7 +109,7 @@
       </el-menu-item> -->
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
-          <span class="el-dropdown-link">
+          <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>工具<i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -330,6 +330,11 @@ export default {
 <style scoped>
 .pull-right {
   float: right !important;
+}
+.tool-menu{
+  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 .el-menu .brand {
   width: 115px;
