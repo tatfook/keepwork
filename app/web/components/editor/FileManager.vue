@@ -28,9 +28,15 @@
     </div>
 
     <div class="my-tree tree-item" :class="{'is-active': trees.isMyShow}">
-      <h1 class="toggle-bar" @click='togglePersonalSiteList'>
-        <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
-      </h1>
+      <div class="my-files-container">
+        <h1 class="toggle-bar" @click='togglePersonalSiteList'>
+          <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
+        </h1>
+        <span class="pull-right-icon">
+          <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()' v-tooltip.bottom="{content: $t('editor.newWebsite'), offset:'6'}"></el-button>
+          <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
+        </span>
+      </div>
       <el-collapse-transition>
         <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
         </el-tree>
@@ -445,6 +451,22 @@ export default {
       }
     }
   }
+
+  .my-files-container {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 18px;
+    .pull-right-icon {
+      .iconfont {
+        color: #535353;
+        font-size: 18px;
+        &:hover {
+          color: #3ba4ff;
+        }
+      }
+    }
+  }
+
   h1 {
     font-size: 16px;
     color: #333;

@@ -33,11 +33,6 @@
           <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
           <el-button class="iconfont icon-new_open_window" :title="$t('editor.preview')" @click='showPreview'></el-button>
         </el-button-group>
-        <div class="code-win-swich">
-          <span>{{$t('editor.showCode')}}</span>
-          <el-switch :value="isCodeShow" @change='toggleCodeWin'>
-          </el-switch>
-        </div>
       </el-row>
       <iframe id="frameViewport" src="/vp" style="height: 100%; width: 100%; background: #fff" />
       <iframe-dialog></iframe-dialog>
@@ -280,16 +275,6 @@ export default {
     }),
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
-    },
-    toggleCodeWin() {
-      this.resetShowingCol({
-        isCodeShow: !this.isCodeShow,
-        isPreviewShow: true
-      })
-      this.isCodeShow &&
-        this.$store.dispatch('setAddingArea', {
-          area: this.gConst.ADDING_AREA_ADI
-        })
     },
     toggleFullscreen() {
       this.resetShowingCol({
@@ -591,15 +576,6 @@ bigFile:
 .guid-col h1 {
   margin: 0 0 36px 0;
   font-size: 46px;
-}
-.code-win-swich {
-  position: absolute;
-  right: 15px;
-  top: 18px;
-  font-size: 12px;
-}
-.code-win-swich > span {
-  vertical-align: middle;
 }
 .code-win-fullscreen {
   width: 100% !important;

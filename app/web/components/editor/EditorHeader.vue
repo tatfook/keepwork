@@ -134,6 +134,11 @@
       <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
+      <el-menu-item index='9' class='switch-box'>
+        <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()" v-tooltip.bottom="{content: $t('tips.ShowPreviewOnly'), offset:'8'}"></span>
+        <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()" v-tooltip.bottom="{content: $t('tips.ShowBoth'), offset:'8'}"></span>
+        <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()" v-tooltip.bottom="{content: $t('tips.ShowCodeOnly'), offset:'8'}"></span>
+      </el-menu-item>
     </el-menu>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
     <div @click.stop v-if='isWebsiteSettingShow'>
@@ -203,6 +208,7 @@ export default {
       activePage: 'activePage',
       hasOpenedFiles: 'hasOpenedFiles',
       isCodeShow: 'isCodeShow',
+      isPreviewShow: 'isPreviewShow',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       updateRecentUrlList: 'updateRecentUrlList'
     }),
@@ -283,6 +289,18 @@ export default {
       userDeletePagesConfig: 'user/deletePagesConfig',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
+    toggleBoth() {
+      this.resetShowingCol({
+        isPreviewShow: true,
+        isCodeShow: true
+      })
+    },
+    toggleCodeWin() {
+      this.resetShowingCol({
+        isPreviewShow: !this.isPreviewShow,
+        isCodeShow: true
+      })
+    },
     async save() {
       let self = this
 
@@ -534,7 +552,7 @@ export default {
     openSkyDriveManagerDialog() {
       this.toggleSkyDrive({ showSkyDrive: true })
     },
-    toggleCodeWin() {
+    togglePreviewWin() {
       this.resetShowingCol({
         isCodeShow: !this.isCodeShow,
         isPreviewShow: true
@@ -564,7 +582,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .kp-dropdown-menu {
   padding: 0 0 0 10px;
 }
@@ -621,8 +639,8 @@ export default {
   padding-right: 0;
 }
 .user-profile {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 .input-link-copy-box {
@@ -668,6 +686,31 @@ export default {
 .link-box .iconfont:hover,
 .link-box a:hover {
   color: #429efd;
+}
+.switch-box {
+  float: right;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-right: 15px;
+  padding-left: 6px;
+  padding-right: 6px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  border-bottom: none;
+  background-color: #EFEFEF !important;
+  .iconfont {
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    border: none;
+  }
+  &-active {
+    background-color: #1278E1;
+    color: #fff;
+    border-radius: 16px;
+  }
 }
 </style>
 <style lang="scss">
