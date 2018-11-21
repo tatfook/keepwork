@@ -331,7 +331,7 @@ export default {
 .pull-right {
   float: right !important;
 }
-.tool-menu{
+.tool-menu {
   display: inline-block;
   width: 100%;
   height: 100%;
@@ -458,16 +458,16 @@ export default {
   .el-menu-item {
     padding: 0 15px;
     color: #303133;
-    &:hover{
+    &:hover {
       color: #409eff !important;
     }
-    &.home-page{
+    &.home-page {
       padding-left: 0;
     }
-    &.register-button{
+    &.register-button {
       padding: 0;
     }
-    &.user-menu{
+    &.user-menu {
       padding-right: 5px;
     }
   }

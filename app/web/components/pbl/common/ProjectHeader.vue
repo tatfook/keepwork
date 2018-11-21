@@ -1,7 +1,7 @@
 <template>
   <div class="project-header">
     <div class="container">
-      <el-breadcrumb separator="/" class="project-header-breadcrumb">
+      <el-breadcrumb separator="/" class="project-header-breadcrumb hidden-xs-only">
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
@@ -20,7 +20,7 @@
           </el-dropdown>
         </el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="project-header-operations">
+      <div class="project-header-operations hidden-xs-only">
         <div class="project-header-operations-item">
           <el-popover placement="top" width="160" @show='showSocialShare'>
             <div class="kp-social-share"></div>
@@ -52,9 +52,6 @@
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
           <span slot="label" class="project-header-tabs-label">设定</span>
         </el-tab-pane>
-        <!-- <el-tab-pane name="fourth">
-          <span slot="label" class="project-header-tabs-label">网站</span>
-        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>
@@ -252,6 +249,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
 .project-header {
   background-color: #fff;

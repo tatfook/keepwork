@@ -5,7 +5,7 @@
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
-        <img class="project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
+        <img class="hidden-xs-only project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
         <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent' maxlength="1000"></el-input>
       </div>
       <div class="project-comments-sends-operations">
@@ -273,6 +273,28 @@ export default {
     text-align: center;
     border-top: 1px solid #e8e8e8;
     cursor: pointer;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-comments {
+    &-sends {
+      &-profile-input {
+        padding-left: 0;
+      }
+    }
+    &-item {
+      padding: 12px;
+      &-profile {
+        height: 40px;
+        width: 40px;
+        margin-right: 12px;
+      }
+      &-comment {
+        font-size: 13px;
+        color: #606266;
+      }
+    }
   }
 }
 </style>

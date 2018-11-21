@@ -139,7 +139,7 @@ body {
     background-color: #f5f5f5;
   }
   .container {
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 }

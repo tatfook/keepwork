@@ -692,4 +692,38 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .project-basic-info {
+    &-detail {
+      display: flex;
+      flex-direction: column;
+      &-cover {
+        width: 100%;
+        height: 56.25%;
+        line-height: 0;
+      }
+      &-operations {
+        bottom: -10px;
+        display: flex;
+        .el-button {
+          flex: 1;
+          height: 36px;
+          font-size: 14px;
+          padding: 0;
+          line-height: 36px;
+        }
+      }
+    }
+  }
+  .el-message {
+    min-width: 90%;
+  }
+  &-apply-dialog {
+    .el-dialog {
+      width: 95% !important;
+    }
+  }
+}
 </style>
+
