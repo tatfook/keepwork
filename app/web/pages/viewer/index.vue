@@ -130,7 +130,7 @@ export default {
         file => file.type === 'blob'
       )[0]
       let targetFile = indexChild || firstFileTypeChild
-      return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : originPath
+      return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : `${originPath}/index`
     },
     async loadEditorPresets() {
       await this.userGetProfile({ useCache: false }).catch(err => {
