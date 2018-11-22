@@ -11,7 +11,7 @@
         </div>
         <div class="search">
           <el-row>
-            <el-col :span="16">
+            <el-col :sm="16" :xs="24">
               <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
                 <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
               </el-autocomplete> -->
@@ -32,10 +32,10 @@
                 </el-menu>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :sm="8" :xs="24">
               <div class="search-result">
                 <span class="contain-total">包含<span class="contain-total-num">{{searchResultAmount}}</span>个结果</span>
-                <el-dropdown @command="handleSort">
+                <el-dropdown @command="handleSort" class="sort-dropdown-menu">
                   <span class="el-dropdown-link">
                     {{currSortMode}}
                     <i class="el-icon-arrow-down el-icon--right"></i>
@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     handleSelectTab(key, keyPath) {
-      this.selectTab(key)
+      this.selectTab(Number(key))
     },
     getAmount(amount) {
       this.searchResultAmount = amount
@@ -409,6 +409,40 @@ export default {
   &-pages {
     margin-top: 40px;
     text-align: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .exploration-page {
+    &-theme {
+      &-center {
+        .theme {
+          margin: 20px;
+        }
+        .search {
+          &-tab {
+            &-menu {
+              display: flex;
+              justify-content: center;
+            }
+          }
+          &-input {
+            width: 100%;
+          }
+          .search-result {
+            text-align: left;
+            padding: 0 16px;
+            .contain-total {
+              display: inline-block;
+              height: 60px;
+              line-height: 60px;
+            }
+            .sort-dropdown-menu{
+              float: right;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

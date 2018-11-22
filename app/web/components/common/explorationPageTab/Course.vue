@@ -1,7 +1,7 @@
 <template>
   <div class="course-tab" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(lessonPackage,index) in lessonPackagesData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in lessonPackagesData" :key="index">
         <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
       </el-col>
     </el-row>

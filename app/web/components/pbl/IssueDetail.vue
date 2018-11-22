@@ -36,17 +36,19 @@
       <div class="issue-detail-status">
         <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
         <div class="issue-detail-status-right">
-          <span class="principal">负责人:</span>
-          <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
-          <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
-            <span class="el-dropdown-link">
-              <span class="assigns-btn"></span>
-            </span>
-            <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-              <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
-              <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <div class="principal">负责人:</div>
+          <div class="member-portrait">
+            <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
+            <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
+              <span class="el-dropdown-link">
+                <span class="assigns-btn"></span>
+              </span>
+              <el-dropdown-menu slot="dropdown" class="new-issue-assign">
+                <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
+                <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
         </div>
       </div>
       <div class="issue-detail-idea">
@@ -648,13 +650,12 @@ export default {
     }
     &-status {
       display: flex;
-      align-items: center;
       padding: 20px;
       border-bottom: 1px solid #e8e8e8;
       &-left {
         flex: 1;
-        display: flex;
-        align-items: center;
+        height: 40px;
+        line-height: 40px;
         .rank {
           margin-left: 14px;
           display: inline-flex;
@@ -674,47 +675,50 @@ export default {
       &-right {
         flex: 1;
         display: flex;
-        align-items: center;
         justify-content: flex-end;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         .principal {
+          width: 50px;
+          height: 40px;
+          line-height: 40px;
           padding-right: 12px;
-        }
-        .player-portrait {
-          width: 24px;
-          height: 24px;
-          object-fit: cover;
-          border: 1px solid #eee;
-          border-radius: 50%;
-          margin-right: 5px;
-        }
-        .assigns-btn {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          border: 1px solid #e8e8e8;
           display: inline-block;
-          position: relative;
-          margin-top: 8px;
-          &::after {
-            content: '';
-            height: 16px;
-            width: 1px;
-            background: #6e6d6d;
-            position: absolute;
-            left: 12px;
-            top: 5px;
+        }
+        .member-portrait {
+          flex: 1;
+          .player-portrait {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border: 1px solid #eee;
+            border-radius: 50%;
+            margin-right: 5px;
           }
-          &::before {
-            content: '';
-            height: 1px;
-            width: 16px;
-            background: #6e6d6d;
-            position: absolute;
-            left: 5px;
-            top: 12px;
+          .assigns-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1px solid #e8e8e8;
+            display: inline-block;
+            position: relative;
+            margin-top: 8px;
+            &::after {
+              content: '';
+              height: 16px;
+              width: 1px;
+              background: #6e6d6d;
+              position: absolute;
+              left: 12px;
+              top: 5px;
+            }
+            &::before {
+              content: '';
+              height: 1px;
+              width: 16px;
+              background: #6e6d6d;
+              position: absolute;
+              left: 5px;
+              top: 12px;
+            }
           }
         }
       }
@@ -867,6 +871,33 @@ export default {
   .el-dropdown-menu__item {
     display: flex;
     align-items: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .issue-detail-dialog {
+    .el-dialog {
+      width: 94%;
+    }
+    .issue-detail {
+      &-status {
+        display: block;
+        &-right {
+          display: block;
+        }
+      }
+      &-idea {
+        &-box {
+          &-content {
+            margin-right: 10px;
+          }
+        }
+      }
+      &-my-idea {
+        &-content {
+          margin-right: 10px;
+        }
+      }
+    }
   }
 }
 </style>

@@ -567,7 +567,7 @@ export default {
       background-color: #303133;
       color: #fff;
       text-align: center;
-      line-height: 270px;
+      // line-height: 270px;
       border-radius: 4px;
       margin-right: 16px;
       position: relative;
@@ -692,4 +692,48 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .project-basic-info {
+    &-detail {
+      display: flex;
+      flex-direction: column;
+      &-cover {
+        width: auto;
+        height: auto;
+        margin-right: 0;
+        padding-bottom: 56.25%;
+        position: relative;
+        &-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &-operations {
+        bottom: -10px;
+        display: flex;
+        .el-button {
+          flex: 1;
+          height: 36px;
+          font-size: 14px;
+          padding: 0;
+          line-height: 36px;
+        }
+      }
+    }
+    &-apply-dialog {
+      .el-dialog {
+        width: 94% !important;
+      }
+    }
+  }
+  .el-message {
+    min-width: 90%;
+  }
+}
 </style>
+

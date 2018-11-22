@@ -5,7 +5,7 @@
     </div>
     <router-view class="pbl-page-main-content" id="pbl-page" />
     <div class="pbl-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer></perfect-common-footer>
     </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -30,7 +30,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import '@/components/common/thirdAuth'
 
 Vue.use(Vuex)
@@ -87,7 +87,7 @@ export default {
   components: {
     LoginDialog,
     CommonHeader,
-    CommonFooter
+    PerfectCommonFooter
   },
   computed: {
     ...mapGetters({
@@ -139,7 +139,7 @@ body {
     background-color: #f5f5f5;
   }
   .container {
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 }

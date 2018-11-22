@@ -1,7 +1,7 @@
 <template>
   <div class="project-header">
     <div class="container">
-      <el-breadcrumb separator="/" class="project-header-breadcrumb">
+      <el-breadcrumb separator="/" class="project-header-breadcrumb hidden-xs-only">
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
@@ -20,7 +20,7 @@
           </el-dropdown>
         </el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="project-header-operations">
+      <div class="project-header-operations hidden-xs-only">
         <div class="project-header-operations-item">
           <el-popover placement="top" width="160" @show='showSocialShare'>
             <div class="kp-social-share"></div>
@@ -52,10 +52,18 @@
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
           <span slot="label" class="project-header-tabs-label">设定</span>
         </el-tab-pane>
-        <!-- <el-tab-pane name="fourth">
-          <span slot="label" class="project-header-tabs-label">网站</span>
-        </el-tab-pane> -->
       </el-tabs>
+    </div>
+    <div class="project-index-phone-operations-foot hidden-sm-and-up">
+      <span class="project-index-phone-operations-foot-item" @click="showTheCommentInput">
+        <i class="iconfont icon-information"></i> 评论
+      </span>
+      <span :class="['project-index-phone-operations-foot-item', {'item-select': isUserStaredProject}]" @click='toggleStarProject'>
+        <i :class="['iconfont', isUserStaredProject ? 'icon-like-fill' : 'icon-like1' ]"></i> 点赞
+      </span>
+      <span :class="['project-index-phone-operations-foot-item', {'item-select': isUserFavoriteProject}]" @click="toggleFavoriteProject">
+        <i :class="['iconfont', isUserFavoriteProject ? 'icon-star-fill' : 'icon-star1' ]"></i> 收藏
+      </span>
     </div>
   </div>
 </template>
@@ -63,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import 'social-share.js/dist/js/social-share.min.js'
 import 'social-share.js/dist/css/share.min.css'
+import scrollIntoView from 'scroll-into-view-if-needed'
 export default {
   name: 'ProjectHeader',
   props: {
@@ -131,6 +140,13 @@ export default {
       unStarProject: 'pbl/unStarProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    showTheCommentInput() {
+      let input = document.querySelector(
+        '#project-index-phone-comments .project-comments-sends-profile-input input'
+      )
+      input.focus()
+      scrollIntoView(input)
+    },
     goHomePage() {
       window.location.href = `/`
     },
@@ -252,6 +268,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
 .project-header {
   background-color: #fff;
@@ -369,6 +386,48 @@ export default {
     }
     h4 {
       display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .project-header-tabs {
+    .el-tabs__nav.is-top {
+      width: 100%;
+      display: flex;
+      height: 40px;
+      .el-tabs__item {
+        line-height: 40px;
+        width: 33.3333%;
+        text-align: center;
+      }
+    }
+  }
+  .project-index-phone-operations-foot {
+    height: 40px;
+    position: fixed;
+    z-index: 998;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    box-shadow: 0 0 21px 8px rgba(165, 163, 139, 0.3);
+    &-item {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      &:active {
+        color: #4db5ff;
+      }
+      &.item-select {
+        color: #2397f3;
+      }
+      &:not(:first-child) {
+        border-left: 1px solid #cfcfcf;
+      }
     }
   }
 }

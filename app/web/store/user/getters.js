@@ -73,16 +73,14 @@ const getters = {
         ({ name }) => name !== CONFIG_FOLDER_NAME
       )
       let { extra, ...website } = websitesMap[name]
-      let websiteSetting = _.get(extra, 'websiteSetting', {})
       return {
-        ...website,
         projectId,
         lastCommitId,
         children,
         username,
         name,
-        ...websiteSetting,
-        ...extra
+        ...extra,
+        ...website
       }
     })
 

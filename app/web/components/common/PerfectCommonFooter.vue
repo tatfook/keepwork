@@ -1,6 +1,6 @@
 <template>
   <div class="perfect-common-footer">
-    <div class="perfect-common-footer-detail-list">
+    <div class="perfect-common-footer-detail-list hidden-sm-and-down">
       <div class="list-box-wrap">
         <div class="list-box">
           <h4 class="title">致社区</h4>
@@ -93,6 +93,8 @@
   </div>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css'
+
 export default {
   name: 'PerfectCommonFooter',
   methods: {
@@ -126,8 +128,8 @@ export default {
           list-style: none;
           color: #666;
           line-height: 28px;
-          li{
-            a{
+          li {
+            a {
               color: #666;
               text-decoration: none;
             }
@@ -150,7 +152,7 @@ export default {
           display: inline-block;
           height: 60px;
           line-height: 60px;
-          .el-dropdown-link{
+          .el-dropdown-link {
             cursor: pointer;
           }
           .logo {
@@ -176,6 +178,32 @@ export default {
           }
           a:hover {
             border-bottom: 2px solid #3977ad;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .perfect-common-footer {
+    &-simple-list {
+      .footer-container {
+        text-align: center;
+        &-list{
+          li{
+            display: block;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            .logo{
+              img{
+                position: relative;
+                top:2px;
+              }
+            }
+            .line{
+              display: none;
+            }
           }
         }
       }
