@@ -322,7 +322,10 @@
     "clickToShow": "Show",
     "clickToHide": "Hide",
     "clickToAdd": "Add",
-    "clickToChange": "Click to switch"
+    "clickToChange": "Click to switch",
+    "ShowPreviewOnly": "Show preview only",
+    "ShowBoth": "Show both",
+    "ShowCodeOnly": "Show code only"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",

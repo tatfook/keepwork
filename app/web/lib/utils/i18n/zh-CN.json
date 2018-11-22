@@ -323,7 +323,10 @@
     "clickToShow": "点击显示",
     "clickToHide": "点击隐藏",
     "clickToAdd": "点击添加",
-    "clickToChange": "点击切换"
+    "clickToChange": "点击切换",
+    "ShowPreviewOnly": "仅显示预览",
+    "ShowBoth": "同时显示",
+    "ShowCodeOnly": "仅显示代码"
   },
   "help": {
     "menu": "为页面添加一组按钮，可以使用“菜单编辑器”来进行内容管理",
