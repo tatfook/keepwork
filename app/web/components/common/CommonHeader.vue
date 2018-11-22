@@ -284,9 +284,7 @@ export default {
       }
     },
     goStudyPage() {
-      if (this.$route.name !== 'StudyPage') {
-        window.location.href = `${this.locationOrigin}/study`
-      }
+      window.location.href = `${this.locationOrigin}/l`
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
