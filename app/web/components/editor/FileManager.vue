@@ -33,7 +33,7 @@
           <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
         </h1>
         <span class="pull-right-icon">
-          <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()' v-tooltip.bottom="{content: $t('editor.newWebsite'), offset:'6'}"></el-button>
+          <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()' v-tooltip.bottom="{content: $t('editor.newWebsite'), classes:'pull-right-icon-tooltip'}"></el-button>
           <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </span>
       </div>
@@ -608,5 +608,9 @@ export default {
     white-space: normal;
     line-height: 32px;
   }
+}
+.pull-right-icon-tooltip {
+  top: 7px !important;
+  margin-right: -15px !important;
 }
 </style>
