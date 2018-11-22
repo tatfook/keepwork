@@ -573,7 +573,7 @@ export default {
             background-image: url('../../assets/pblImg/bulb.png');
           }
         }
-        &-word{
+        &-word {
           display: none;
         }
       }
@@ -624,6 +624,18 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .home-page {
+    &-advertising-head {
+      font-size: 12px;
+      height: 30px;
+      line-height: 30px;
+      .iconfont {
+        font-size: 12px;
+      }
+      .close {
+        right: 10px;
+        line-height: 30px;
+      }
+    }
     &-register-dialog {
       .el-dialog {
         width: 90%;

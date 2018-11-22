@@ -95,7 +95,7 @@ export default {
 @media screen and (max-width: 768px) {
   .lesson-package-cell {
     .lesson {
-      width: 164px;
+      width: 100%;
       padding: 4px;
       font-size: 12px;
       border: none;

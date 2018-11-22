@@ -87,7 +87,7 @@ export default {
     }),
     selectProjectType(type) {
       this.newProjectData.type = type
-      this.newProjectData.tags = type == 0 ? '网站' : 'Praacraft|3D'
+      this.newProjectData.tags = type == 0 ? '网站' : 'Paracraft|3D'
     },
     handleConfirmSiteId({ siteId }) {
       this.isWebType && siteId && (this.newProjectData.siteId = siteId)
