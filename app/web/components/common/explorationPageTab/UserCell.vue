@@ -70,7 +70,7 @@ export default {
               message: '关注成功'
             })
             this.user.isFollowed = true
-            this.user.total_fans = this.user.total_fans + 1
+            this.user.total_fans = this.user.total_fans ? this.user.total_fans + 1 : 1
             this.isLoading = false
           })
           .catch(err => {
