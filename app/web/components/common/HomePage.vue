@@ -57,7 +57,7 @@
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
-          <div class="box-word">创造</div>
+          <div class="box-word hidden-sm-and-up">创造</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200,1)" @mouseout="combinedPic('explore', -2000,1, 'leave')">
@@ -69,7 +69,7 @@
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
-          <div class="box-word">探索</div>
+          <div class="box-word hidden-sm-and-up">探索</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200,2)" @mouseout="combinedPic('study', -2000,2, 'leave')">
@@ -81,7 +81,7 @@
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
-          <div class="box-word">学习</div>
+          <div class="box-word hidden-sm-and-up">学习</div>
         </div>
       </div>
     </div>
