@@ -141,6 +141,7 @@ export default {
             )
           } else {
             this.$emit('close')
+            window.location.reload()
             return false
           }
         }
