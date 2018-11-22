@@ -6,7 +6,7 @@
         <user-certificates></user-certificates>
       </div>
       <div class="profile-index-main">
-        <div class="profile-index-infos">
+        <div class="profile-index-infos profile-index-main-item">
           <div class="profile-index-infos-item">
             <i class="iconfont icon-folder-open"></i>
             <span class="profile-index-infos-label">项目</span>
@@ -30,6 +30,7 @@
             <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
           </div>
         </div>
+        <user-experiences class="profile-index-main-item"></user-experiences>
       </div>
     </div>
   </div>
@@ -38,6 +39,7 @@
 import CreateProjectGuide from '@/components/common/CreateProjectGuide'
 import UserBasicMsg from './common/UserBasicMsg'
 import UserCertificates from './common/UserCertificates'
+import UserExperiences from './common/UserExperiences'
 export default {
   name: 'ProfileIndex',
   props: {
@@ -63,6 +65,7 @@ export default {
   components: {
     UserBasicMsg,
     UserCertificates,
+    UserExperiences,
     CreateProjectGuide
   }
 }
@@ -84,6 +87,9 @@ export default {
   &-main {
     flex: 1;
     min-width: 0;
+    &-item {
+      margin-bottom: 24px;
+    }
   }
   &-infos {
     background-color: #fff;
