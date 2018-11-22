@@ -378,7 +378,7 @@
     <div class="geBlock" style="text-align:center;min-width:50%;"></div>
   </div>
   <script type="text/javascript">
-    window.onload = function() {
+    (function() {
       var showMsg = document.querySelector(".geBlock")
       var englishMsg =
       `      
@@ -409,9 +409,7 @@
       }else {
         showMsg.innerHTML=englishMsg
       }
-    }
-  </script>
-  <script type="text/javascript">
+    })()
     Menus.prototype.defaultMenuItems = ["edit", "view", "arrange", "extras"];
 
     /**
