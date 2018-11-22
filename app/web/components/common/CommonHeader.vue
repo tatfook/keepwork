@@ -248,13 +248,13 @@ export default {
   },
   watch: {
     $route(route) {
-      console.log(route.name)
+      console.warn(route.name)
       switch (route.name) {
         case 'CreativityPage':
           return (this.activeIndex = '1')
         case 'ExplorationPage':
           return (this.activeIndex = '2')
-        case 'StudyPage':
+        case 'LearningCenterPackages':
           return (this.activeIndex = '4')
         default:
           this.activeIndex = '0'
@@ -284,7 +284,9 @@ export default {
       }
     },
     goStudyPage() {
-      window.location.href = `${this.locationOrigin}/l`
+      if (this.$route.name !== 'LearningCenterPackages') {
+        window.location.href = `${this.locationOrigin}/l`
+      }
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
