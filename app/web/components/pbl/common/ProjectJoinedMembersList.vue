@@ -191,4 +191,26 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .project-joined-members-list {
+    &-card {
+      &-profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      &-created {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: #303133;
+        border-bottom: 1px solid #e8e8e8;
+        padding: 0 16px;
+      }
+    }
+  }
+}
 </style>

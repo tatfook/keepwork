@@ -102,4 +102,18 @@ export default {
     padding: 32px 16px 8px 184px;
   }
 }
+
+@media (max-width: 768px) {
+  .paracraft-info {
+    .el-dialog {
+      width: 95% !important;
+    }
+    .el-dialog__body {
+      padding: 10px;
+    }
+    &-background-img {
+      display: none;
+    }
+  }
+}
 </style>
