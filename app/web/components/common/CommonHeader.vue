@@ -167,7 +167,7 @@
           <i class="el-icon-menu"></i>
         </template>
         <el-menu-item index='2-4' class=" function-menu">
-          <a href=""  @click.stop.prevent="goCreativityPage">创造</a>
+          <a href="" @click.stop.prevent="goCreativityPage">创造</a>
         </el-menu-item>
         <el-menu-item index='2-5' class=" function-menu">
           <a href="" @click.stop.prevent="goExplorationPage">探索</a>
@@ -184,7 +184,7 @@
         <el-menu-item index='2-3' class=" function-menu">
           <a href='/official/help/index'>{{$t('common.help')}}</a>
         </el-menu-item>
-        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-7'  class=" function-menu">
+        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-7' class=" function-menu">
           <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a>
         </el-menu-item>
       </el-submenu>
@@ -407,15 +407,19 @@ export default {
     font-size: 30px;
   }
   .el-menu-item {
-    padding: 0 10px;
+    padding: 0;
   }
   .profile-menu-item {
     padding-left: 0;
   }
   .el-menu .login-btn {
-    padding: 0;
+    padding-right: 8px;
     background-color: transparent;
     color: #3977ad;
+    border: none;
+  }
+  .el-menu .register-btn{
+    padding: 6px;
   }
 }
 </style>
@@ -512,8 +516,8 @@ export default {
   .el-menu--horizontal .greeting {
     padding: 0 10px;
   }
-  .el-menu--horizontal .function-menu{
-    a{
+  .el-menu--horizontal .function-menu {
+    a {
       display: inline-block;
       width: 100%;
       height: 100%;
