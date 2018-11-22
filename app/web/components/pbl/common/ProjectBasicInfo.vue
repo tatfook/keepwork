@@ -725,14 +725,14 @@ export default {
         }
       }
     }
+    &-apply-dialog {
+      .el-dialog {
+        width: 94% !important;
+      }
+    }
   }
   .el-message {
     min-width: 90%;
-  }
-  &-apply-dialog {
-    .el-dialog {
-      width: 95% !important;
-    }
   }
 }
 </style>
