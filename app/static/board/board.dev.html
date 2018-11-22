@@ -378,7 +378,13 @@
 
 <body class="geEditor">
   <div id="geInfo">
-    <div class="geBlock" style="text-align:center;min-width:50%;">
+    <div class="geBlock" style="text-align:center;min-width:50%;"></div>
+  </div>
+  <script type="text/javascript">
+    (function() {
+      var showMsg = document.querySelector(".geBlock")
+      var englishMsg =
+      `      
       <h1>Flowchart Maker and Online Diagram Software</h1>
       <p>
         You can use it as a flowchart maker, network diagram software,
@@ -389,9 +395,24 @@
       <p>
         Please ensure JavaScript is enabled.
       </p>
-    </div>
-  </div>
-  <script type="text/javascript">
+      `
+      var chineseMsg =
+      `
+      <h1>流程图制造工具和在线图表软件</h1>
+      <p> 您可以使用它当作流程图制造工具或网络图软件，来在线创建UML；当作ER图工具，来设计数据库模式，在线构建BPMN；当作电路图制造工具等等.
+      </p>
+      <h2 id="geStatus">加载中...</h2>
+      <p>
+        请确保启用JavaScript.
+      </p>
+      `
+      
+      if(urlParams['lang'] === "zh") {
+        showMsg.innerHTML=chineseMsg
+      }else {
+        showMsg.innerHTML=englishMsg
+      }
+    })()
     Menus.prototype.defaultMenuItems = ["edit", "view", "arrange", "extras"];
 
     /**
