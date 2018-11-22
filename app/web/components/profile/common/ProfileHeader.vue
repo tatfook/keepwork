@@ -46,6 +46,11 @@ export default {
       let { paneName } = tabItem
       this.$router.push({ name: paneName })
     }
+  },
+  watch: {
+    $route(newRoute) {
+      this.activePageName = newRoute.name
+    }
   }
 }
 </script>
