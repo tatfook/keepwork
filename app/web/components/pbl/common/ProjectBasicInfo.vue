@@ -47,7 +47,7 @@
         </el-button>
       </div>
       <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
-      <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
+      <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
@@ -96,7 +96,11 @@ export default {
       required: true
     },
     projectApplyState: Number,
-    isProjectStopRecruit: Boolean
+    isProjectStopRecruit: Boolean,
+    descriptionId:{
+      type: String,
+      default: 'projectDescriptoinEditor'
+    }
   },
   async mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
@@ -259,7 +263,7 @@ export default {
         this.isDescriptionEditing = true
         this.$nextTick(() => {
           if (!this.descriptionEditor) {
-            this.descriptionEditor = new E('#projectDescriptoinEditor')
+            this.descriptionEditor = new E(`#${this.descriptionId}`)
             this.descriptionEditor.create()
           }
           this.descriptionEditor.txt.html(this.tempDesc)
@@ -723,6 +727,16 @@ export default {
           padding: 0;
           line-height: 36px;
         }
+      }
+    }
+    &-description-editor {
+      .w-e-toolbar {
+        flex-wrap: wrap;
+      }
+    }
+    &-description-content {
+      p {
+        word-break: break-all;
       }
     }
     &-apply-dialog {
