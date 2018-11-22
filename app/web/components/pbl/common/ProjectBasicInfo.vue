@@ -567,7 +567,7 @@ export default {
       background-color: #303133;
       color: #fff;
       text-align: center;
-      line-height: 270px;
+      // line-height: 270px;
       border-radius: 4px;
       margin-right: 16px;
       position: relative;
@@ -699,9 +699,19 @@ export default {
       display: flex;
       flex-direction: column;
       &-cover {
-        width: 100%;
-        height: 56.25%;
-        line-height: 0;
+        width: auto;
+        height: auto;
+        margin-right: 0;
+        padding-bottom: 56.25%;
+        position: relative;
+        &-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
       }
       &-operations {
         bottom: -10px;

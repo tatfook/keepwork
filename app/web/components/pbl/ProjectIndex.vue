@@ -17,7 +17,7 @@
       <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
       <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
       <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
-      <project-comments v-if='!isCommentClosed' class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
+      <project-comments v-if='!isCommentClosed' id="project-index-phone-comments" class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
     </div>
   </div>
 </template>
@@ -89,16 +89,6 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@media (max-width: 768px) {
-  .project-index {
-    padding-top: 10px;
-    & > .container-phone {
-      display: block;
-    }
-  }
-}
-</style>
 
 <style lang="scss">
 .project-index {
@@ -125,6 +115,23 @@ export default {
   &-comments {
     border: 1px solid #e8e8e8;
     border-radius: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-index {
+    padding-top: 10px;
+    & > .container-phone {
+      display: block;
+    }
+    &-basic {
+      margin-bottom: 8px;
+    }
+    &-sidebar {
+      &-item {
+        margin-bottom: 8px;
+      }
+    }
   }
 }
 </style>
