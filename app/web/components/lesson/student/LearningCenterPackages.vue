@@ -1,26 +1,18 @@
 <template>
   <div class="learning-center-packages">
     <div class="search">
-      <el-row>
-        <el-col :md="2" :sm="2">
-          <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
-        </el-col>
-        <el-col :md="5" :sm="5">
-          <span class="tip">{{$t('lesson.enterClass')}}</span>
-        </el-col>
-        <el-col :md="11" :sm="11">
-          <span class="search-input">
-            <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
-          </span>
-        </el-col>
-        <el-col :md="6" :sm="6" :xs="6">
-          <span class="search-btn">
-            <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
-              <label for="searchClass">{{$t('lesson.enter')}}</label>
-            </el-button>
-          </span>
-        </el-col>
-      </el-row>
+      <div class="search-hint">
+        <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
+        <span class="tip">{{$t('lesson.enterClass')}}</span>
+      </div>
+      <div class="search-input">
+        <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
+      </div>
+      <div class="search-btn">
+        <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
+          <label for="searchClass">{{$t('lesson.enter')}}</label>
+        </el-button>
+      </div>
     </div>
     <div class="total-packages">{{$t('lesson.include')}}:
       <span>{{sortedSubscribesList.length}}</span> {{$t('lesson.packagesCount')}}
@@ -43,7 +35,6 @@
 import StudentSubscribePackages from '@/components/lesson/student/StudentSubscribePackages'
 import { mapGetters, mapActions } from 'vuex'
 
-
 export default {
   name: 'LearningCenterPackages',
   data() {
@@ -51,7 +42,7 @@ export default {
       loading: true
     }
   },
-  async mounted(){
+  async mounted() {
     let payload = { userId: this.userId }
     await this.getUserSubscribes()
     this.loading = false
@@ -60,7 +51,7 @@ export default {
     ...mapGetters({
       userId: 'user/userId',
       subscribesList: 'lesson/student/subscribesList',
-      enterClassInfo: 'lesson/student/enterClassInfo',
+      enterClassInfo: 'lesson/student/enterClassInfo'
     }),
     filterSubscribesList() {
       return this.subscribesList
@@ -163,7 +154,7 @@ export default {
       this.$router.push({
         path: `/student/center`
       })
-    },
+    }
   },
   components: {
     StudentSubscribePackages
@@ -172,20 +163,22 @@ export default {
 </script>
 <style lang="scss">
 .learning-center-packages {
-  // padding: 0;
-  // background: #fff;
-  // overflow: hidden;
   .search {
     background: rgba(64, 158, 254, 0.1);
-    .bell {
-      display: inline-block;
-      padding: 18px 0 9px 39px;
-    }
-    .tip {
-      display: block;
-      padding-top: 20px;
-      font-size: 14px;
-      text-align: left;
+    display: flex;
+    &-hint {
+      display: flex;
+      align-content: center;
+      padding: 0 40px 0 50px;
+      .bell {
+        display: inline-block;
+        padding: 20px 20px 0 0;
+      }
+      .tip {
+        padding: 20px 0;
+        font-size: 14px;
+        text-align: left;
+      }
     }
     &-input {
       display: inline-block;
@@ -231,6 +224,29 @@ export default {
   }
   .bottom-line {
     border-bottom: 1px solid #d2d2d2;
+  }
+}
+@media screen and (max-width: 768px) {
+  .learning-center-packages {
+    .search {
+      background: #409efe;
+      display: block;
+      &-hint {
+        height: 40px;
+      }
+      &-input {
+        padding: 0 50px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      &-btn {
+        padding: 0 50px 20px;
+        .el-button {
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
   }
 }
 </style>
