@@ -40,14 +40,11 @@ const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
 const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
-const LearningCenter = () =>
-  import('@/components/common/studyPageComponents/student/LearningCenter')
 const LearningCenterPackages = () =>
-  import('@/components/common/studyPageComponents/student/LearningCenterPackages')
+  import('@/components/lesson/student/LearningCenterPackages')
 const OfflineGuidanceCourse = () =>
-  import('@/components/common/studyPageComponents/student/OfflineGuidanceCourse')
-const TeachingVideo = () =>
-  import('@/components/common/studyPageComponents/student/TeachingVideo')
+  import('@/components/lesson/student/OfflineGuidanceCourse')
+const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
 
 Vue.use(Router)
 
@@ -67,7 +64,7 @@ export default new Router({
       children: [
         {
           path: '/',
-          // name: 'TeacherColumn',
+          name: 'TeacherColumn',
           component: TeacherColumn,
           children: [
             {
@@ -195,36 +192,32 @@ export default new Router({
       ]
     },
     {
-      path: '/',
-      name: 'LearningCenter',
-      component: LearningCenter,
-      children: [
-        {
-          path: '/',
-          name: 'LearningCenterPackages',
-          component: LearningCenterPackages
-        },
-        {
-          path: '/offlinecourse',
-          name: 'OfflineGuidanceCourse',
-          component: OfflineGuidanceCourse
-        },
-        {
-          path: '/teachingvideo',
-          name: 'TeachingVideo',
-          component: TeachingVideo
-        },
-      ]
-    },
-    {
       path: '/student',
+      name: 'Student',
       component: Student,
       children: [
         {
           path: '/',
           name: 'StudentColumn',
           component: StudentColumn,
-          meta: { requireAuth: true }
+          meta: { requireAuth: true },
+          children: [
+            {
+              path: '/',
+              name: 'LearningCenterPackages',
+              component: LearningCenterPackages
+            },
+            {
+              path: 'offlinecourse',
+              name: 'OfflineGuidanceCourse',
+              component: OfflineGuidanceCourse
+            },
+            {
+              path: 'teachingvideo',
+              name: 'TeachingVideo',
+              component: TeachingVideo
+            }
+          ]
         },
         {
           path: 'about',
