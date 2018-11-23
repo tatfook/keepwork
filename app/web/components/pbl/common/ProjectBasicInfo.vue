@@ -97,7 +97,7 @@ export default {
     },
     projectApplyState: Number,
     isProjectStopRecruit: Boolean,
-    descriptionId:{
+    descriptionId: {
       type: String,
       default: 'projectDescriptoinEditor'
     }
@@ -654,6 +654,9 @@ export default {
     &-content {
       max-height: 280px;
       overflow: auto;
+      p {
+        word-break: break-all;
+      }
     }
     .w-e-toolbar {
       border-color: #e8e8e8 !important;
@@ -732,11 +735,6 @@ export default {
     &-description-editor {
       .w-e-toolbar {
         flex-wrap: wrap;
-      }
-    }
-    &-description-content {
-      p {
-        word-break: break-all;
       }
     }
     &-apply-dialog {
