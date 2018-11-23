@@ -184,6 +184,9 @@ export default {
       let classes = []
       classes = this.getClasses(name)
       classes.push('comp')
+      if (name === this.activeProperty) {
+        classes.push('comp-proptype-hover')
+      }
       if (this.isChildActive(name)) classes.push('comp-active')
       return classes
     },
