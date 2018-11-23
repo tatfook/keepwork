@@ -30,6 +30,7 @@
             <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
           </div>
         </div>
+        <recent-project class="profile-index-main-item"></recent-project>
         <contribution-calendar class="profile-index-main-item"></contribution-calendar>
         <user-experiences class="profile-index-main-item"></user-experiences>
       </div>
@@ -40,6 +41,7 @@
 import CreateProjectGuide from '@/components/common/CreateProjectGuide'
 import ContributionCalendar from '@/components/common/ContributionCalendar'
 import UserBasicMsg from './common/UserBasicMsg'
+import RecentProject from './common/RecentProject'
 import UserCertificates from './common/UserCertificates'
 import UserExperiences from './common/UserExperiences'
 export default {
@@ -67,6 +69,7 @@ export default {
   components: {
     UserBasicMsg,
     UserCertificates,
+    RecentProject,
     ContributionCalendar,
     UserExperiences,
     CreateProjectGuide
