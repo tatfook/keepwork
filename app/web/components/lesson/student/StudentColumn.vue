@@ -1,28 +1,26 @@
 <template>
   <div class="Learning-center">
-    <el-row class="student">
-      <el-col :md="6" class="aside">
-        <div class="aside-content">
-          <div class="profile">
-            <img :src='userProfile.portrait || avatar' alt="portrait">
-          </div>
-          <div class="nickname">{{username}}</div>
-          <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
-          <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-          <div class="skills" :loading="loadingSkillsPoint">
-            <ul class="skills-list">
-              <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
-                <span>{{skill.score}}</span>
-              </li>
-            </ul>
-          </div>
-          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+    <div class="Learning-center-content">
+      <div class="aside">
+        <div class="profile">
+          <img :src='userProfile.portrait || avatar' alt="portrait">
         </div>
-      </el-col>
-      <el-col :md="18" class="main">
+        <div class="nickname">{{username}}</div>
+        <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
+        <div class="skills" :loading="loadingSkillsPoint">
+          <ul class="skills-list">
+            <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
+              <span>{{skill.score}}</span>
+            </li>
+          </ul>
+        </div>
+        <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+      </div>
+      <div class="main">
         <router-view></router-view>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <div class="be-in-class" v-show="beInClassDialog">
       <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
         <div class="hint">
@@ -54,9 +52,9 @@ export default {
       beInClassDialog: false,
       currOption: 0,
       optionArr: [
-        {name: '线上课程'},
-        {name: '线下导引课'},
-        {name: '教学视频'}
+        { name: '线上课程' },
+        { name: '线下导引课' },
+        { name: '教学视频' }
       ]
     }
   },
@@ -88,8 +86,7 @@ export default {
         this.skillsList.every(skill => (sum += skill.score * 1))
       }
       return sum
-    },
-    
+    }
   },
   methods: {
     goBeanDetail() {
@@ -105,17 +102,17 @@ export default {
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
     },
-    switchSelect(index){
+    switchSelect(index) {
       this.currOption = index
       let routerName = ''
-      switch(index){
-        case 0: 
+      switch (index) {
+        case 0:
           routerName = 'LearningCenterPackages'
           break
-        case 1: 
+        case 1:
           routerName = 'OfflineGuidanceCourse'
           break
-        case 2: 
+        case 2:
           routerName = 'TeachingVideo'
           break
         default:
@@ -131,12 +128,15 @@ export default {
 
 <style lang="scss">
 .Learning-center {
-  .student {
-    margin: 0 auto;
-    max-width: 1150px;
+  &-content {
+    display: flex;
+    margin: 10px auto;
+    max-width: 1200px;
     .aside {
-      background: #f8f8f8;
-      padding: 0 16px;
+      width: 234px;
+      margin-right: 16px;
+      background: #fff;
+      padding: 35px 20px;
       overflow: hidden;
       text-align: center;
       &-content {
@@ -218,18 +218,20 @@ export default {
         font-size: 16px;
         color: #333;
         cursor: pointer;
-        &.selected{
+        &.selected {
           background: #409efe;
           color: #fff;
         }
       }
     }
     .main {
+      flex: 1;
       padding: 0;
       background: #fff;
       overflow: hidden;
     }
   }
+
   .be-in-class {
     .el-dialog__body {
       .hint {

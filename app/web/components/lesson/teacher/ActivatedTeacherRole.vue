@@ -32,37 +32,8 @@
         <router-view :windowWidth='windowWidth'></router-view>
       </div>
     </div>
-    <!-- <el-container class="teacher activated-teacher-role-teacher">
-      <el-aside width="260px" class="activated-teacher-role-aside">
-        <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='#b3b3b3' active-text-color='#fff'>
-          <el-menu-item index="1" @click="showItem('TEACH')">
-            <i class="iconfont icon-teach"></i>
-            <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
-          </el-menu-item>
-          <el-menu-item index="2" @click="showItem('REVIEW')">
-            <i class="iconfont icon-review"></i>
-            <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
-          </el-menu-item>
-          <el-submenu index="3" popper-class='activated-teacher-role-popver-menu'>
-            <template slot="title">
-              <i class="iconfont icon-setting"></i>
-              <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
-            </template>
-            <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
-            <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
-          </el-submenu>
-        </el-menu>
-      </el-aside>
-      <el-main>
-        <div class="activated-teacher-role-container">
-          <router-view :windowWidth='windowWidth'></router-view>
-        </div>
-      </el-main>
-    </el-container> -->
   </div>
-
 </template>
-
 <script>
 import avatar from '@/assets/img/default_portrait.png'
 import { mapGetters, mapActions } from 'vuex'
@@ -162,7 +133,7 @@ export default {
     display: flex;
     text-align: center;
     &-left {
-      width: 274px;
+      width: 234px;
       margin-right: 16px;
       padding: 35px 20px;
       background: #fff;
