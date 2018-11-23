@@ -17,38 +17,49 @@
         </el-form>
       </div>
       <div class="teacher-acquire">
-        <h4>{{$t('lesson.notActivatedText.getPrivilege')}}</h4>
-        <el-row :gutter="60">
-          <el-col :sm="12" :xs="22" v-for="n in 2" :key="n">
-            <div class="acquire-item">
-              <div :class="['role',n === 2 ? 'role-teacher':'']">{{n === 1 ? $t('lesson.notActivatedText.roleStudent') : $t('lesson.notActivatedText.roleTeacher')}}</div>
-              <div class="access">
+        <h4 class="teacher-acquire-title">具体服务如下</h4>
+        <div class="teacher-acquire-box">
+          <div class="acquire-item" v-for="n in 2" :key="n">
+            <div :class="['role',n === 2 ? 'role-teacher':'']">
+              <div class="role-text">{{n === 1 ? '自主学习用户' : "共享课程讲师"}}</div>
+              <span class="role-cost">{{n === 1 ? '免费' : "￥5000/年/人"}}</span>
+            </div>
+            <div class="access">
+              <p>
+                <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>自主学习</p>
+              <div class="teaching-function">
                 <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege1')}}</p>
+                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>学习优质课程<span>(部分课程课程)</span></p>
                 <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege2')}}</p>
-                <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege3')}}</p>
+                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>实时反馈学习情况、技能增长情况</p>
+              </div>
+              <p :class="{'not-student-privilege-text': n === 1}">
+                <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>课程开发</p>
+              <div class="teaching-function">
                 <p :class="{'not-student-privilege-text': n === 1}">
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege4')}}</p>
-                <div class="teaching-function">
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege5')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege6')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege7')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege8')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege9')}}</p>
-                </div>
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>创建课程</p>
                 <p :class="{'not-student-privilege-text': n === 1}">
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege10')}}</p>
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>发表课程，可供平台用户教学</p>
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>获得收藏</p>
+              </div>
+              <p :class="{'not-student-privilege-text': n === 1}">
+                <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>课堂教学</p>
+              <div class="teaching-function">
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>平台所有课程可免费用于课堂教学</p>
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>班级学生可免费在课堂中学习平台所有课程</p>
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>实时反馈学生的课堂表现和作答情况</p>
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>自动生成课堂总结报告，支持打印、发送到邮箱</p>
+                <p :class="{'not-student-privilege-text': n === 1}">
+                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>跟踪授课进度，追溯授课轨迹</p>
               </div>
             </div>
-          </el-col>
-        </el-row>
+          </div>
+        </div>
       </div>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
@@ -95,7 +106,7 @@ export default {
       },
       set() {}
     },
-    validCode(){
+    validCode() {
       return this.activeCode && this.organization
     }
   },
@@ -106,7 +117,11 @@ export default {
     }),
     async activateTeacherIdentity() {
       if (this.isLogin) {
-        let payload = { userId: this.userId, key: this.activeCode, school: this.organization }
+        let payload = {
+          userId: this.userId,
+          key: this.activeCode,
+          school: this.organization
+        }
         await lesson.users
           .toBeTeacher(payload)
           .then(res => {
@@ -148,7 +163,7 @@ export default {
 <style lang="scss">
 .teacher-wrap {
   .teacher {
-    max-width: 1150px;
+    max-width: 1200px;
     margin: 0 auto;
     &-top-hint {
       font-size: 14px;
@@ -158,13 +173,13 @@ export default {
         color: #f75858;
       }
       &-input {
-        .el-form-item{
+        .el-form-item {
           margin-bottom: 14px;
-          .el-input{
+          .el-input {
             width: 60%;
           }
         }
-        .active-code-button{
+        .active-code-button {
           width: 207px;
           height: 27px;
         }
@@ -172,47 +187,61 @@ export default {
     }
     &-acquire {
       margin: 60px 0;
-      .acquire-item {
-        width: 545px;
-        margin-bottom: 15px;
-        font-size: 14px;
-        line-height: 30px;
-        box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
-        .role {
-          height: 86px;
-          text-align: center;
-          font-size: 26px;
-          color: #333333;
-          background: #f7f7f7;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .role-teacher {
-          background: #409efe;
-          color: #fff;
-        }
-        .access {
-          padding: 44px 25px;
-          background: #fff;
-          p {
-            display: flex;
-            align-items: center;
-            .img-wrap {
-              margin-right: 8px;
-              display: inline-block;
-              width: 20px;
-              height: 20px;
-              .not-student-privilege {
-                visibility: hidden;
-              }
+      &-title {
+        text-align: center;
+        font-size: 24px;
+      }
+      &-box {
+        display: flex;
+        justify-content: space-between;
+        .acquire-item {
+          width: 570px;
+          margin-bottom: 15px;
+          font-size: 14px;
+          line-height: 30px;
+          box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
+          .role {
+            height: 100px;
+            text-align: center;
+            font-size: 24px;
+            color: #333333;
+            background: #f7f7f7;
+            &-text {
+              font-weight: bold;
+              color: #333;
+              padding-top: 20px;
+            }
+            &-cost {
+              font-size: 18px;
+              color: #10c55b;
             }
           }
-          .not-student-privilege-text {
-            color: rgb(179, 177, 177);
+          .role-teacher {
+            // background: #409efe;
+            // color: #fff;
           }
-          .teaching-function {
-            margin-left: 20px;
+          .access {
+            padding: 44px 25px;
+            background: #fff;
+            p {
+              display: flex;
+              align-items: center;
+              .img-wrap {
+                margin-right: 8px;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                .not-student-privilege {
+                  visibility: hidden;
+                }
+              }
+            }
+            .not-student-privilege-text {
+              color: rgb(179, 177, 177);
+            }
+            .teaching-function {
+              margin-left: 20px;
+            }
           }
         }
       }

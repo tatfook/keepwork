@@ -41,13 +41,13 @@ const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
 const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
 const LearningCenter = () =>
-  import('@/components/common/studyPageComponents/LearningCenter')
+  import('@/components/common/studyPageComponents/student/LearningCenter')
 const LearningCenterPackages = () =>
-  import('@/components/common/studyPageComponents/LearningCenterPackages')
+  import('@/components/common/studyPageComponents/student/LearningCenterPackages')
 const OfflineGuidanceCourse = () =>
-  import('@/components/common/studyPageComponents/OfflineGuidanceCourse')
+  import('@/components/common/studyPageComponents/student/OfflineGuidanceCourse')
 const TeachingVideo = () =>
-  import('@/components/common/studyPageComponents/TeachingVideo')
+  import('@/components/common/studyPageComponents/student/TeachingVideo')
 
 Vue.use(Router)
 
