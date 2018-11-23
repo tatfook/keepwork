@@ -21,17 +21,23 @@ export default {
         >
           {this.$t('card.openBoard')}
         </el-button>
-        <el-dialog class="board-dialog" {...this.getDialogProps}>
-          <iframe class="board-iframe" src={this.getBoardSrc} />
-          <div
-            class="mx-client-close"
-            on-click={() => {
-              this.closeEditor()
-            }}
-          >
-            {this.$t('editor.close')}
-          </div>
-        </el-dialog>
+        {(()=>{
+          if (this.visible) {
+            return (
+              <el-dialog class="board-dialog" {...this.getDialogProps}>
+                <iframe class="board-iframe" src={this.getBoardSrc} />
+                <div
+                  class="mx-client-close"
+                  on-click={() => {
+                    this.closeEditor()
+                  }}
+                >
+                  {this.$t('editor.close')}
+                </div>
+              </el-dialog>
+            )
+          }
+        })()}
       </div>
     )
   },
