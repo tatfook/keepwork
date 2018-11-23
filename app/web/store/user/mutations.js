@@ -1,12 +1,14 @@
 import _ from 'lodash'
 import Vue from 'vue'
 
+const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
 const SET_REAL_AUTH_PHONE_NUM = 'SET_REAL_AUTH_PHONE_NUM'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
 const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
+const GET_USER_DETAIL_WITH_RANK_SUCCESS = 'GET_USER_DETAIL_WITH_RANK_SUCCESS'
 const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
 const CREATE_COMMENT_SUCCESS = 'CREATE_COMMENT_SUCCESS'
 const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS'
@@ -36,12 +38,14 @@ const GET_USER_THREE_SERVICES_SUCCESS = 'GET_USER_THREE_SERVICES_SUCCESS'
 const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 
 export const props = {
+  TOGGLE_LOGIN_DIALOG,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
+  GET_USER_DETAIL_WITH_RANK_SUCCESS,
   GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
@@ -76,6 +80,9 @@ const doNothing = state => {
 }
 
 const mutations = {
+  [TOGGLE_LOGIN_DIALOG](state, status) {
+    Vue.set(state, 'isShowLoginDialog', status)
+  },
   [LOGIN_SUCCESS](state, profile) {
     // Vue.set(state, 'profile', { ...profile, token })
     Vue.set(state, 'profile', profile)
@@ -101,6 +108,12 @@ const mutations = {
       ...state.usersDetail,
       [userId]: userDetail,
       [username]: userDetail
+    })
+  },
+  [GET_USER_DETAIL_WITH_RANK_SUCCESS](state, { userId, userDetailWithRank }) {
+    Vue.set(state, 'usersDetailWithRank', {
+      ...state.usersDetailWithRank,
+      [userId]: userDetailWithRank
     })
   },
   [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, { username, list }) {

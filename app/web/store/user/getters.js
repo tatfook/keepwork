@@ -11,6 +11,7 @@ import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 
 const getters = {
+  isShowLoginDialog: state => state.isShowLoginDialog,
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
   token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
@@ -95,6 +96,7 @@ const getters = {
     return usersDetail[username]
   },
   getDetailByUserId: state => ({ userId }) => _.get(state.usersDetail, userId),
+  getDetailWithRankByUserId: state => ({ userId }) => _.get(state.usersDetailWithRank, userId),
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList

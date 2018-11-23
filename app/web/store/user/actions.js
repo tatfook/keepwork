@@ -12,6 +12,7 @@ import siteContent from '@/assets/source/site.md'
 import storage from '../../api/storage'
 
 const {
+  TOGGLE_LOGIN_DIALOG,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
@@ -39,6 +40,7 @@ const {
   GET_USER_GROUPS_SUCCESS,
   GET_FROM_SKY_DRIVE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
+  GET_USER_DETAIL_WITH_RANK_SUCCESS,
   GET_SITE_THEME_CONFIG_SUCCESS,
   SAVE_SITE_THEME_CONFIG_SUCCESS,
   USE_FILE_IN_SITE_SUCCESS,
@@ -63,6 +65,9 @@ const USER_PROFILE_PAGES_CONTENTS = [
 ]
 
 const actions = {
+  async toggleLoginDialog({ commit }, status) {
+    commit(TOGGLE_LOGIN_DIALOG, status)
+  },
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
     if (info) {
@@ -146,6 +151,11 @@ const actions = {
     userDetail = await keepwork.user.getDetailById({ userId })
     let { username } = userDetail
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
+  },
+  async getUserDetailWithRankByUserId(context, { userId }) {
+    let { commit } = context
+    let userDetailWithRank = await keepwork.user.getDetailWithRankById({ userId })
+    commit(GET_USER_DETAIL_WITH_RANK_SUCCESS, { userId, userDetailWithRank })
   },
   async updateUserInfo(context, userInfo) {
     let { getters: { userId }, dispatch } = context

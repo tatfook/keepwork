@@ -3,6 +3,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = () => ({
+  isShowLoginDialog: false,
   profile: {},
   website: {},
   userSitePrivilege: {},
@@ -16,6 +17,7 @@ const state = () => ({
   siteLayoutConfigs: {},
   skyDrive: {},
   usersDetail: [],
+  usersDetailWithRank: [],
   siteThemeConfigs: {},
   siteFiles: {},
   sitesGroups: {},
