@@ -284,9 +284,7 @@ export default {
       }
     },
     goStudyPage() {
-      if (this.$route.name !== 'LearningCenterPackages') {
-        window.location.href = `${this.locationOrigin}/l`
-      }
+      window.location.href = `${this.locationOrigin}/l/student`
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {

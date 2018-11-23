@@ -211,6 +211,17 @@ export default {
   background-color: rgba(127, 195, 255, 0.4);
   cursor: pointer;
 }
+.kp-mod-selector .comp-proptype-hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: rgba(127, 195, 255, 0.4);
+  cursor: pointer;
+}
 .kp-mod-selector.no-mask .comp:hover::before {
   background-color: transparent;
   cursor: pointer;
