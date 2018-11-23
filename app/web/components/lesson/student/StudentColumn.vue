@@ -1,5 +1,5 @@
 <template>
-  <div class="student-wrap">
+  <div class="Learning-center">
     <el-row class="student">
       <el-col :md="6" class="aside">
         <div class="aside-content">
@@ -16,46 +16,11 @@
               </li>
             </ul>
           </div>
+          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
         </div>
       </el-col>
       <el-col :md="18" class="main">
-        <div class="search">
-          <el-row>
-            <el-col :md="2" :sm="2">
-              <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
-            </el-col>
-            <el-col :md="5" :sm="5">
-              <span class="tip">{{$t('lesson.enterClass')}}</span>
-            </el-col>
-            <el-col :md="11" :sm="11">
-              <span class="search-input">
-                <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
-              </span>
-            </el-col>
-            <el-col :md="6" :sm="6" :xs="6">
-              <span class="search-btn">
-                <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
-                  <label for="searchClass">{{$t('lesson.enter')}}</label>
-                </el-button>
-              </span>
-            </el-col>
-          </el-row>
-        </div>
-        <div class="total-packages">{{$t('lesson.include')}}:
-          <span>{{sortedSubscribesList.length}}</span> {{$t('lesson.packagesCount')}}
-        </div>
-        <div class="packages" v-loading='loading'>
-          <div class="packages-nothing" v-if="!sortedSubscribesList.length && !loading">
-            <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
-            <p class="packages-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
-            <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
-          </div>
-          <el-row v-else class="bottom-line">
-            <el-col class="group-line" :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
-              <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
-            </el-col>
-          </el-row>
-        </div>
+        <router-view></router-view>
       </el-col>
     </el-row>
     <div class="be-in-class" v-show="beInClassDialog">
@@ -76,7 +41,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-import StudentSubscribePackages from './StudentSubscribePackages'
 import avatar from '@/assets/img/default_portrait.png'
 
 export default {
@@ -84,16 +48,20 @@ export default {
   data() {
     return {
       avatar,
-      loading: true,
       classID: '',
       skillsList: [],
       loadingSkillsPoint: true,
-      beInClassDialog: false
+      beInClassDialog: false,
+      currOption: 0,
+      optionArr: [
+        {name: '线上课程'},
+        {name: '线下导引课'},
+        {name: '教学视频'}
+      ]
     }
   },
   async mounted() {
     let payload = { userId: this.userId }
-    await this.getUserSubscribes()
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -101,15 +69,12 @@ export default {
         this.loadingSkillsPoint = false
       })
       .catch(error => console.log(error))
-    this.loading = false
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile',
       userId: 'user/userId',
+      userProfile: 'user/profile',
       username: 'user/username',
-      enterClassInfo: 'lesson/student/enterClassInfo',
-      subscribesList: 'lesson/student/subscribesList',
       userinfo: 'lesson/userinfo'
     }),
     beansCount() {
@@ -124,129 +89,48 @@ export default {
       }
       return sum
     },
-    filterSubscribesList() {
-      return this.subscribesList
-    },
-    continuingStudyPackages() {
-      let continuingStudyPackagesList = _.filter(
-        this.filterSubscribesList,
-        i => {
-          return (
-            i.learnedLessons.length > 0 &&
-            i.learnedLessons.length < i.lessons.length
-          )
-        }
-      )
-      return continuingStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    startStudyPackages() {
-      let startStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return i.learnedLessons.length == 0 && i.lessons.length != 0
-      })
-      return startStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    finishedStudyPackages() {
-      let finishedStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return i.learnedLessons.length == i.lessons.length
-      })
-      return finishedStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    sortedSubscribesList() {
-      if (this.filterSubscribesList.length === 0) {
-        return this.filterSubscribesList
-      } else {
-        return _.concat(
-          this.continuingStudyPackages,
-          this.startStudyPackages,
-          this.finishedStudyPackages
-        )
-      }
-    }
+    
   },
   methods: {
-    ...mapActions({
-      getProfile: 'user/getProfile',
-      enterClassRoom: 'lesson/student/enterClassRoom',
-      getUserSubscribes: 'lesson/student/getUserSubscribes',
-      switchDevice: 'lesson/student/switchDevice'
-    }),
     goBeanDetail() {
-      this.$router.push('/student/bean')
+      // this.$router.push('/student/bean')
+      this.$message.warning('程序员小姐姐努力开发中')
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
-    },
-    async enterClass() {
-      if (JSON.stringify(this.enterClassInfo) == '{}') {
-        this.enterNewClass()
-      } else if (this.classID == this.enterClassInfo.key) {
-        this.$message.success(this.$t('lesson.haveEnteredClass'))
-        this.backCurrentClass()
-      } else if (this.classID !== this.enterClassInfo.key) {
-        let key = this.classID
-        await lesson.classrooms
-          .isValidKey(key)
-          .then(res => {
-            if (res) {
-              this.beInClassDialog = true
-            } else {
-              this.$message({
-                showClose: true,
-                message: this.$t('lesson.wrongKey'),
-                type: 'error'
-              })
-              this.beInClassDialog = false
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      }
-    },
-    async enterNewClass() {
-      let key = this.classID
-      await this.enterClassRoom({ key })
-        .then(res => {
-          this.switchDevice('k')
-          this.$router.push({
-            path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
-              this.enterClassInfo.lessonId
-            }?dialog=true`
-          })
-        })
-        .catch(err => {
-          this.$message({
-            showClose: true,
-            message: this.$t('lesson.wrongKey'),
-            type: 'error'
-          })
-          this.beInClassDialog = false
-        })
-    },
-    async backCurrentClass() {
-      const { packageId, lessonId } = this.enterClassInfo
-      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
-    },
-    gotoLessonsCenter() {
-      this.$router.push({
-        path: `/student/center`
-      })
     },
     handleClose() {
       this.beInClassDialog = false
     },
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
+    },
+    switchSelect(index){
+      this.currOption = index
+      let routerName = ''
+      switch(index){
+        case 0: 
+          routerName = 'LearningCenterPackages'
+          break
+        case 1: 
+          routerName = 'OfflineGuidanceCourse'
+          break
+        case 2: 
+          routerName = 'TeachingVideo'
+          break
+        default:
+          break
+      }
+      this.$router.push({
+        name: routerName
+      })
     }
-  },
-  components: {
-    StudentSubscribePackages
   }
 }
 </script>
 
 <style lang="scss">
-.student-wrap {
+.Learning-center {
   .student {
     margin: 0 auto;
     max-width: 1150px;
@@ -257,7 +141,7 @@ export default {
       text-align: center;
       &-content {
         background: #fff;
-        padding: 30px 0 50px;
+        padding: 30px 10px 50px;
         margin: 0 auto;
       }
       .profile {
@@ -300,8 +184,9 @@ export default {
         text-align: left;
         color: #333;
       }
+
       .skills {
-        margin: 0 auto;
+        margin: 0 auto 35px;
         width: 233px;
         text-align: left;
         &-list {
@@ -322,68 +207,27 @@ export default {
           }
         }
       }
+      .options {
+        display: block;
+        height: 38px;
+        line-height: 38px;
+        margin-bottom: 16px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        border: solid 1px #bcbcbc;
+        font-size: 16px;
+        color: #333;
+        cursor: pointer;
+        &.selected{
+          background: #409efe;
+          color: #fff;
+        }
+      }
     }
     .main {
       padding: 0;
       background: #fff;
       overflow: hidden;
-      .search {
-        background: rgba(64, 158, 254, 0.1);
-        .bell {
-          display: inline-block;
-          padding: 18px 0 9px 39px;
-        }
-        .tip {
-          display: block;
-          padding-top: 20px;
-          font-size: 14px;
-          text-align: left;
-        }
-        &-input {
-          display: inline-block;
-          margin: 12px 0 11px 0;
-          width: 384px;
-        }
-        &-btn {
-          display: block;
-          margin-top: 12px;
-          padding-left: 16px;
-        }
-      }
-      .total-packages {
-        padding: 40px 0 15px;
-        height: 16px;
-        border-bottom: 2px solid #d2d2d2;
-        width: 788px;
-        margin: 0 auto;
-      }
-      .packages {
-        margin: 44px 0 0;
-        padding: 0 12px;
-        &-nothing {
-          margin-top: 60px;
-          width: 100%;
-          height: 500px;
-          background: #fff;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          &-hint {
-            font-size: 20px;
-            line-height: 30px;
-            color: #111111;
-          }
-        }
-        .group-line {
-          border-bottom: 1px solid #d2d2d2;
-          padding: 10px 0;
-          margin-bottom: -1px;
-        }
-      }
-      .bottom-line {
-        border-bottom: 1px solid #d2d2d2;
-      }
     }
   }
   .be-in-class {
@@ -403,7 +247,7 @@ export default {
   }
 }
 @media screen and (max-width: 768px) {
-  .student-wrap {
+  .Learning-center {
     .be-in-class {
       .el-dialog {
         width: 90% !important;

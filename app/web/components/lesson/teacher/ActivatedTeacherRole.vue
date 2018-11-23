@@ -1,6 +1,38 @@
 <template>
   <div class="activated-teacher-role">
-    <el-container class="teacher activated-teacher-role-teacher">
+    <div class="activated-teacher-role-content">
+      <div class="activated-teacher-role-content-left">
+        <div class="activated-teacher-role-content-left-avatar">
+          <img :src="userProfile.portrait || avatar" alt="">
+        </div>
+        <div class="nickname">{{username}}</div>
+        <div class="lecturer">
+          <img class="lecturer-sharing-resource" src="@/assets/lessonImg/sharing_resource.png" alt="">
+          <span>共享课程讲师</span>
+        </div>
+        <div class="activated-teacher-role-content-left-options">
+          <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='' active-text-color='#fff'>
+            <el-menu-item index="1" @click="showItem('TEACH')">
+              <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
+            </el-menu-item>
+            <el-menu-item index="2" @click="showItem('REVIEW')">
+              <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
+            </el-menu-item>
+            <el-submenu index="3" class='lesson-manager-popver-menu'>
+              <template slot="title">
+                <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
+              </template>
+              <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
+              <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </div>
+      </div>
+      <div class="activated-teacher-role-content-right">
+        <router-view :windowWidth='windowWidth'></router-view>
+      </div>
+    </div>
+    <!-- <el-container class="teacher activated-teacher-role-teacher">
       <el-aside width="260px" class="activated-teacher-role-aside">
         <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='#b3b3b3' active-text-color='#fff'>
           <el-menu-item index="1" @click="showItem('TEACH')">
@@ -26,18 +58,23 @@
           <router-view :windowWidth='windowWidth'></router-view>
         </div>
       </el-main>
-    </el-container>
+    </el-container> -->
   </div>
 
 </template>
 
 <script>
+import avatar from '@/assets/img/default_portrait.png'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'ActivatedTeacherRole',
   data() {
     return {
       windowWidth: window.innerWidth,
-      itmeActive: '1'
+      itmeActive: '1',
+      avatar,
+      currOption: 'teaching'
     }
   },
   mounted() {
@@ -45,6 +82,10 @@ export default {
     window.addEventListener('resize', this.handleWindowResize)
   },
   computed: {
+    ...mapGetters({
+      userProfile: 'user/profile',
+      username: 'user/username'
+    }),
     menuMode() {
       return this.windowWidth > 678 ? 'vertical' : 'horizontal'
     }
@@ -114,121 +155,95 @@ export default {
 
 <style lang="scss">
 .activated-teacher-role {
-  &-container {
-    height: 100%;
-    margin: 0;
-  }
-  &-aside {
-    width: 260px;
-  }
-  .teacher {
+  margin: 10px 0;
+  &-content {
+    max-width: 1200px;
     margin: 0 auto;
-    max-width: 1150px;
-    height: 100%;
-    .el-aside {
-      padding: 80px 0;
-      background: #2f3541;
-      border-right: 8px solid #409efe;
-      overflow: hidden;
-      margin-right: 38px;
-      .el-menu {
-        border: none;
-        background-color: transparent;
-        .el-menu-item,
-        .el-submenu__title {
-          height: 60px;
-          line-height: 60px;
-          padding: 0 15px 0 10px;
-          padding-left: 10px !important;
-          font-weight: bold;
-          i {
-            font-size: 24px;
-            margin-right: 10px;
-            font-weight: normal;
-          }
-          .el-icon-arrow-down {
-            font-size: 16px;
-            margin-right: unset;
-            right: 10px;
-          }
-        }
-        .el-menu-item.is-active,
-        .el-menu-item.is-active:hover {
-          background-color: #409efe;
-        }
-        .el-menu-item:hover,
-        .el-submenu__title:hover {
-          background-color: #434a50;
-        }
-        .el-submenu .el-menu-item {
-          height: 40px;
-          line-height: 40px;
-          padding-left: 50px !important;
-          font-weight: normal;
-        }
-        .el-submenu.is-active .el-submenu__title {
-          .item-title,
-          i {
-            color: #fff;
-          }
+    display: flex;
+    text-align: center;
+    &-left {
+      width: 274px;
+      margin-right: 16px;
+      padding: 35px 20px;
+      background: #fff;
+      &-avatar {
+        width: 96px;
+        height: 96px;
+        border: 1px solid #ccc;
+        margin: 0 auto;
+        border-radius: 50%;
+        margin-bottom: 14px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
         }
       }
-    }
-    .el-main {
-      overflow: hidden;
-      padding: 50px 0;
-    }
-  }
-}
-</style>
-<style lang="scss">
-@media (max-width: 768px) {
-  .activated-teacher-role {
-    &-popver-menu {
-      background-color: transparent;
-      .el-menu {
-        background-color: #2f3541;
-        .el-menu-item {
-          background-color: #2f3541;
+      .nickname {
+        font-size: 24px;
+        line-height: 34px;
+        color: #333333;
+        font-family: 'ArialMT';
+        margin: 5px;
+      }
+      .lecturer {
+        display: flex;
+        justify-content: center;
+        color: #2d9cf4;
+        &-sharing-resource {
+          width: 22px;
+          height: 22px;
+          object-fit: cover;
+          margin-right: 5px;
         }
       }
-    }
-    & .teacher {
-      flex-direction: column;
-      .el-aside {
-        margin: 0;
-        width: 100% !important;
-        padding: 0;
-        overflow: visible;
-        border-right: none;
+      &-options {
+        padding-top: 20px;
         .el-menu {
-          text-align: center;
-          .el-menu-item,
-          .el-submenu {
-            border: none;
-            display: inline-block;
-            float: none;
+          border: none;
+          .el-submenu__title {
+            height: 40px;
+            line-height: 32px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            border: solid 1px #bcbcbc;
           }
-          .el-menu-item i,
-          .el-submenu__title i {
-            font-size: 18px;
-            margin-right: 3px;
+          .lesson-manager-popver-menu {
+            .el-menu {
+              .el-menu-item {
+                margin: 0;
+                border-top: none;
+                background: #fff;
+                &.is-active {
+                  background: #2196f3;
+                }
+              }
+            }
           }
-          .el-submenu.is-active {
-            .el-submenu__title {
-              background-color: #409eff;
-              border: none;
+          .el-menu-item {
+            padding: 0 !important;
+            height: 40px;
+            line-height: 38px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            border: solid 1px #bcbcbc;
+            margin: 16px 0;
+            &.is-active {
+              background: #2196f3;
             }
           }
         }
       }
-      .el-main {
-        padding: 16px 0;
-        overflow: auto;
-      }
+    }
+    &-right {
+      flex: 1;
     }
   }
 }
 </style>
-
 

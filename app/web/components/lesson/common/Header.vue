@@ -28,9 +28,7 @@
             <el-dropdown-item>Paracraft下载</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
-        <span class="study-page-header-menu-right-link">查看教师页</span>
-        <!-- <span class="study-page-header-menu-right-link">查看学生页</span> -->
+        <span class="study-page-header-menu-right-link" @click="switchIdentity">{{toggleButtonText}}</span>
       </div>
     </div>
   </div>
@@ -103,6 +101,7 @@ export default {
       if (this.isTeacherPage) {
         return this.$t('lesson.viewStudentPage')
       }
+      return '默认值'
     }
   },
   components: {
@@ -112,6 +111,10 @@ export default {
     ...mapActions({
       toggleLoginDialog: 'lesson/toggleLoginDialog'
     }),
+    toLearnCenter() {
+      alert('学习中心')
+    },
+    toLessonCenter() {},
     switchIdentity() {
       if (!this.userIsLogined) {
         return this.toggleLoginDialog({ show: true })
