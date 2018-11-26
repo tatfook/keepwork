@@ -2,8 +2,8 @@
   <div class="study-page-header">
     <div class="study-page-header-menu">
       <div class="study-page-header-menu-lef">
-        <span @click="toLearnCenter" class="study-page-header-menu-left-button">学习中心</span>
-        <span @click="toLessonCenter" class="study-page-header-menu-left-button">全部课程</span>
+        <span @click="goToSpecialColumn" class="study-page-header-menu-left-button">学习中心</span>
+        <span @click="goToLessonsCenter" class="study-page-header-menu-left-button">全部课程</span>
       </div>
       <div class="study-page-header-menu-right">
         <el-dropdown class="study-page-header-menu-right-dropdown">
@@ -114,7 +114,6 @@ export default {
     toLearnCenter() {
       alert('学习中心')
     },
-    toLessonCenter() {},
     switchIdentity() {
       if (!this.userIsLogined) {
         return this.toggleLoginDialog({ show: true })

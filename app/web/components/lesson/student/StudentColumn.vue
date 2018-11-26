@@ -2,11 +2,15 @@
   <div class="Learning-center">
     <div class="Learning-center-content">
       <div class="aside">
-        <div class="profile">
-          <img :src='userProfile.portrait || avatar' alt="portrait">
+        <div class="profile-intro">
+          <div class="profile">
+            <img :src='userProfile.portrait || avatar' alt="portrait">
+          </div>
+          <div class="nickname-wrap">
+            <div class="nickname">{{username}}</div>
+            <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+          </div>
         </div>
-        <div class="nickname">{{username}}</div>
-        <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
         <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
         <div class="skills" :loading="loadingSkillsPoint">
           <ul class="skills-list">
@@ -15,7 +19,9 @@
             </li>
           </ul>
         </div>
-        <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+        <div class="options-wrap">
+          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+        </div>
       </div>
       <div class="main">
         <router-view></router-view>
@@ -90,8 +96,8 @@ export default {
   },
   methods: {
     goBeanDetail() {
-      // this.$router.push('/student/bean')
-      this.$message.warning('程序员小姐姐努力开发中')
+      this.$router.push('/student/bean')
+      // this.$message.warning('程序员小姐姐努力开发中')
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
@@ -133,10 +139,10 @@ export default {
     margin: 10px auto;
     max-width: 1200px;
     .aside {
-      width: 234px;
+      width: 274px;
       margin-right: 16px;
       background: #fff;
-      padding: 35px 20px;
+      padding: 35px 0;
       overflow: hidden;
       text-align: center;
       &-content {
@@ -144,50 +150,52 @@ export default {
         padding: 30px 10px 50px;
         margin: 0 auto;
       }
-      .profile {
-        width: 99px;
-        height: 99px;
-        margin: 0 auto;
-        border-radius: 50%;
-        border: solid 1px #ced0d2;
-        margin-top: 37px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+      .profile-intro {
+        .profile {
+          width: 99px;
+          height: 99px;
+          margin: 0 auto;
+          border-radius: 50%;
+          border: solid 1px #ced0d2;
+          margin-bottom: 20px;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
-      }
-      .nickname {
-        font-size: 24px;
-        line-height: 34px;
-        color: #333333;
-        font-family: 'ArialMT';
-      }
-      .beans {
-        border-bottom: 1px solid #909399;
-        margin: 5px 8px 15px;
-        padding-bottom: 20px;
-        color: #181818;
-        font-size: 14px;
-        .detail {
-          color: #409eff;
-          padding-left: 20px;
-          cursor: pointer;
+        .nickname-wrap {
+          .nickname {
+            font-size: 24px;
+            line-height: 34px;
+            color: #333333;
+            font-family: 'ArialMT';
+          }
+          .beans {
+            margin: 5px 8px;
+            padding-bottom: 10px;
+            color: #181818;
+            font-size: 14px;
+            .detail {
+              color: #409eff;
+              padding-left: 20px;
+              cursor: pointer;
+            }
+          }
         }
       }
       .skillpoints {
-        width: 233px;
+        border-top: 1px solid #909399;
         font-size: 14px;
-        margin: 10px auto;
+        margin: 0 20px;
         text-align: left;
         color: #333;
+        padding-top: 15px;
       }
 
       .skills {
-        margin: 0 auto 35px;
-        width: 233px;
+        margin: 0 20px 35px 20px;
         text-align: left;
         &-list {
           margin: 0;
@@ -207,20 +215,22 @@ export default {
           }
         }
       }
-      .options {
-        display: block;
-        height: 38px;
-        line-height: 38px;
-        margin-bottom: 16px;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        border: solid 1px #bcbcbc;
-        font-size: 16px;
-        color: #333;
-        cursor: pointer;
-        &.selected {
-          background: #409efe;
-          color: #fff;
+      .options-wrap {
+        .options {
+          display: block;
+          height: 38px;
+          line-height: 38px;
+          margin: 16px 20px;
+          background-color: #f5f5f5;
+          border-radius: 4px;
+          border: solid 1px #bcbcbc;
+          font-size: 16px;
+          color: #333;
+          cursor: pointer;
+          &.selected {
+            background: #409efe;
+            color: #fff;
+          }
         }
       }
     }
@@ -250,6 +260,36 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .Learning-center {
+    &-content {
+      display: block;
+      .aside {
+        width: 100%;
+        box-sizing: border-box;
+        .profile-intro {
+          display: flex;
+          .profile {
+            width: 99px;
+            margin-left: 22px;
+          }
+          .nickname-wrap {
+            flex: 1;
+            padding: 12px 60px 12px 0;
+            text-align: right;
+          }
+        }
+        .options-wrap {
+          border-top: 12px solid #f6f7f8;
+          padding-top: 32px;
+          display: flex;
+          .options {
+            flex: 1;
+            border: none;
+            margin: 0;
+            border-radius: 0;
+          }
+        }
+      }
+    }
     .be-in-class {
       .el-dialog {
         width: 90% !important;

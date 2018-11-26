@@ -23,6 +23,8 @@ const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
 const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
+const sharedCourseLecturer = () => import('@/components/lesson/teacher/sharedCourseLecturer')
+
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -67,6 +69,11 @@ export default new Router({
           name: 'TeacherColumn',
           component: TeacherColumn,
           children: [
+            {
+              path: 'sharedCourseLecturer',
+              name: 'sharedCourseLecturer',
+              component: sharedCourseLecturer
+            },
             {
               path: '/',
               name: 'TeacherColumn',
