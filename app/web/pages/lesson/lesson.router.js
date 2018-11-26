@@ -127,6 +127,11 @@ export default new Router({
           ]
         },
         {
+          path: 'teachingIdea',
+          name: 'TeacherTeachingIdea',
+          component: TeachingIdea
+        },
+        {
           path: 'about',
           name: 'TeacherAbout',
           component: About
@@ -230,7 +235,7 @@ export default new Router({
         },
         {
           path: 'teachingIdea',
-          name: 'TeachingIdea',
+          name: 'StudentTeachingIdea',
           component: TeachingIdea
         },
         {
