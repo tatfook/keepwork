@@ -84,18 +84,18 @@ export default {
     },
     updatingExtra() {
       return _.merge(
+        this.originExtra,
         {
           certificates: this.updatingCertifications
-        },
-        this.originExtra
+        }
       )
     },
     updatingUserInfo() {
       return _.merge(
+        this.nowUserDetail,
         {
           extra: this.updatingExtra
-        },
-        this.nowUserDetail
+        }
       )
     }
   },
