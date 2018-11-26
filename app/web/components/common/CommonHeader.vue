@@ -135,60 +135,90 @@
       <el-menu-item index='0' class="profile-menu-item" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
-      <el-submenu index='1' class="pull-right" v-if="isLogin">
-        <template slot="title">
-          <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
-        </template>
-        <div class="greeting">你好，{{username}}</div>
-        <el-menu-item index='1-1'>
-          <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
-        </el-menu-item>
-        <el-menu-item index='1-2'>
-          <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
-        </el-menu-item>
-        <el-menu-item index='1-3'>
-          <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
-        </el-menu-item>
-        <el-menu-item index='1-4'>
-          <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
-        </el-menu-item>
-        <el-menu-item index='1-5'>
-          <a @click.stop="logout">{{$t('common.logout')}}</a>
-        </el-menu-item>
-      </el-submenu>
-      <el-menu-item index='3' class="pull-right" v-if="!isLogin">
+
+      <el-menu-item index='1' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
-      <el-menu-item index='4' class="pull-right" v-if="!isLogin">
+
+      <el-menu-item index='2' class="pull-right" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
-      <el-submenu index='2' class="pull-right">
-        <template slot="title">
-          <i class="el-icon-menu"></i>
-        </template>
-        <el-menu-item index='2-4' class=" function-menu">
-          <a href="" @click.stop.prevent="goCreativityPage">创造</a>
-        </el-menu-item>
-        <el-menu-item index='2-5' class=" function-menu">
-          <a href="" @click.stop.prevent="goExplorationPage">探索</a>
-        </el-menu-item>
-        <el-menu-item index='2-6' class=" function-menu">
-          <a href="" @click.stop.prevent="goStudyPage">学习</a>
-        </el-menu-item>
-        <el-menu-item index='2-1' class=" function-menu">
-          <a href="/wiki/home">{{$t('common.features')}}</a>
-        </el-menu-item>
-        <el-menu-item index='2-2' class=" function-menu">
-          <a href="/wiki/apps">{{$t('common.applicationCenter')}}</a>
-        </el-menu-item>
-        <el-menu-item index='2-3' class=" function-menu">
-          <a href='/official/help/index'>{{$t('common.help')}}</a>
-        </el-menu-item>
-        <el-menu-item v-if="!IS_GLOBAL_VERSION" index='2-7' class=" function-menu">
-          <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a>
-        </el-menu-item>
-      </el-submenu>
+
+      <el-menu-item index="3" class="pull-right user-menu" v-if="isLogin">
+        <el-dropdown placement="bottom-end" trigger="click">
+          <span class="el-dropdown-link">
+            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
+            <div class="greeting">你好，{{username}}</div>
+            <!-- <el-dropdown-item divided>
+              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
+            <!-- </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item>
+              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
+            </el-dropdown-item> -->
+            <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
+            <!-- <el-dropdown-item>
+              <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
+            </el-dropdown-item> -->
+            <el-dropdown-item>
+              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item divided>
+              <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
+            </el-dropdown-item>
+            <!-- <el-dropdown-item>
+              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
+            </el-dropdown-item> -->
+            <!-- <el-dropdown-item>
+              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+            </el-dropdown-item> -->
+            <el-dropdown-item divided>
+              <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
+      <el-menu-item index="4" class="pull-right" v-if="isLogin">
+        <el-dropdown placement="bottom" trigger="click">
+          <span class="el-dropdown-link tool-menu">
+            <i class="iconfont icon-wrench-fill"></i><i class="el-icon-caret-bottom right-icon"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
+            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>网站编辑器</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft创意空间</a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
+      <el-menu-item index="5" class="pull-right" v-if="isLogin">
+        <el-dropdown placement="bottom" trigger="click">
+          <span class="el-dropdown-link tool-menu">
+            <i class="iconfont icon-menu"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item><a href="" @click.stop.prevent="goCreativityPage">创造</a></el-dropdown-item>
+            <el-dropdown-item><a href="" @click.stop.prevent="goExplorationPage">探索</a></el-dropdown-item>
+            <el-dropdown-item><a href="" @click.stop.prevent="goStudyPage">学习</a></el-dropdown-item>
+            <el-dropdown-item><a href="/wiki/apps">{{$t('common.applicationCenter')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href='/official/help/index'>{{$t('common.help')}}</a></el-dropdown-item>
+            <el-dropdown-item v-if="!IS_GLOBAL_VERSION"><a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
     </el-menu>
+
     <div @click.stop v-if='isPersonalCenterShow'>
       <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
@@ -407,7 +437,7 @@ export default {
     font-size: 30px;
   }
   .el-menu-item {
-    padding: 0;
+    padding: 0 10px;
   }
   .profile-menu-item {
     padding-left: 0;
@@ -418,7 +448,7 @@ export default {
     color: #3977ad;
     border: none;
   }
-  .el-menu .register-btn{
+  .el-menu .register-btn {
     padding: 6px;
   }
 }
