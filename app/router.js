@@ -6,6 +6,7 @@ module.exports = app => {
   router.get('/exploration', controller.home.index)
   router.get('/study', controller.home.index)
   router.get('/ed', controller.editor.index)
+  router.get('/combo', controller.combo.index)
   router.get(/\/ed\//, controller.editor.index)
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)

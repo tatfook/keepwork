@@ -24,6 +24,7 @@ import appModule from '@/store/app'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
+import comboModule from '@/store/combo'
 import createPersistedState from '@/store/createPersistedState'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -65,7 +66,8 @@ const store = new Vuex.Store({
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    combo: comboModule
   },
   plugins: [
     createPersistedState({

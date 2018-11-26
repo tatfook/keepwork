@@ -1,15 +1,20 @@
 <template>
   <div class="offline-guidance-course">
-    线下导引课
     <combo-box projectName="official/paracraft" filePath="offline-courses"></combo-box>
   </div>
 </template>
 
 <script>
-import ComboBox from '@/components/common/ComboBox'
+import ComboBox from '@/components/combo/ComboBox'
 export default {
-  components:  {
+  components: {
     ComboBox
   }
 }
 </script>
+
+<style lang="scss">
+.offline-guidance-course {
+  height: 100%;
+}
+</style>
