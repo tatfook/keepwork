@@ -261,8 +261,8 @@ a {
   padding: 0;
   height: 50px;
 }
-.comp-menu .el-menu .el-menu--horizontal {
-  border: none;
+.comp-menu .el-menu.el-menu--horizontal {
+  border-bottom: none;
 }
 .comp-footer {
   height: 100%;
