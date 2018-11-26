@@ -155,6 +155,7 @@ export default {
 @media screen and (max-width: 768px) {
   .project-cell {
     width: 100%;
+    max-width: 230px;
     padding: 4px;
     font-size: 12px;
     border: none;
