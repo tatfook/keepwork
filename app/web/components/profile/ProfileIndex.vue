@@ -3,24 +3,24 @@
     <div class="container">
       <div class="profile-index-sidebar">
         <user-basic-msg class="profile-index-sidebar-item" :nowUserDetail='nowUserDetail'></user-basic-msg>
-        <user-certificates></user-certificates>
+        <user-certificates :nowUserDetail='nowUserDetail'></user-certificates>
       </div>
       <div class="profile-index-main">
         <div class="profile-index-infos profile-index-main-item">
           <div class="profile-index-infos-item">
             <i class="iconfont icon-folder-open"></i>
             <span class="profile-index-infos-label">项目</span>
-            <div class="profile-index-infos-msg" v-if="projectCount > 0">
+            <div class="profile-index-infos-msg" v-if="nowUserDetail.rank.project > 0">
               <span class="profile-index-infos-msg-item">
-                <span class="profile-index-infos-count">54</span>个项目
+                <span class="profile-index-infos-count">{{nowUserDetail.rank.project}}</span>个项目
               </span>
               <i class="iconfont icon-comma"></i>
               <span class="profile-index-infos-msg-item">
-                <span class="profile-index-infos-count">41</span>个3D世界
+                <span class="profile-index-infos-count">{{nowUserDetail.rank.world}}</span>个3D世界
               </span>
               <i class="iconfont icon-comma"></i>
               <span class="profile-index-infos-msg-item">
-                <span class="profile-index-infos-count">13</span>个网站
+                <span class="profile-index-infos-count">{{nowUserDetail.rank.site}}</span>个网站
               </span>
             </div>
             <div class="profile-index-infos-intro" v-else>
@@ -32,7 +32,7 @@
         </div>
         <recent-project class="profile-index-main-item"></recent-project>
         <contribution-calendar class="profile-index-main-item"></contribution-calendar>
-        <user-experiences class="profile-index-main-item"></user-experiences>
+        <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail'></user-experiences>
       </div>
     </div>
   </div>
@@ -54,7 +54,6 @@ export default {
   },
   data() {
     return {
-      projectCount: 20,
       showGuideDialog: false
     }
   },

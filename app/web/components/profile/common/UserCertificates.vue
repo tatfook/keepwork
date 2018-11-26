@@ -8,9 +8,9 @@
       <div class="user-certificate-list" v-if="!isCertificateEmpty">
         <div class="user-certificate-item" v-for="(certificate, index) in userCertifications" :key="index">
           <span class="user-certificate-item-title">{{certificate.title}}</span>
-          <span class="user-certificate-item-date">{{certificate.date}}</span>
+          <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
           <div class="user-certificate-item-operations">
-            <el-button type="text">
+            <el-button type="text" @click="editCertificate(certificate, index)">
               <i class="iconfont icon-edit-square"></i>编辑
             </el-button>
             <el-button type="text">
@@ -21,74 +21,126 @@
       </div>
       <div class="user-certificate-empty" v-if="isCertificateEmpty">
         <img src="@/assets/img/default_certificate.png" alt="">
-        <p><span class="user-certificate-empty-anchor">添加</span>个人证书，展现更好的自己</p>
+        <p><span class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>个人证书，展现更好的自己</p>
       </div>
     </el-card>
-    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading='isAddingDialogLoading' class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
       <el-form label-position="top" :model="newCertificate">
         <el-form-item label="名称">
           <el-input v-model="newCertificate.title"></el-input>
         </el-form-item>
         <el-form-item label="时间">
-          <el-date-picker v-model="newCertificate.date" type="date">
+          <el-date-picker v-model="newCertificate.getDate" type="date">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="技能描述">
+        <el-form-item label="证书描述">
           <el-input type="textarea" resize="none" v-model="newCertificate.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleAddingDialogClose">取消</el-button>
-        <el-button type="primary" @click="handleAddExperience">确定</el-button>
+        <el-button type="primary" @click="handleAddCertificate">确定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
+import dayjs from 'dayjs'
 export default {
   name: 'UserCertificates',
+  props: {
+    nowUserDetail: {
+      type: Object,
+      required: true
+    }
+  },
+  mounted() {
+    this.userCertifications = _.cloneDeep(
+      _.get(this.nowUserDetail, 'extra.certificates', [])
+    )
+  },
   data() {
     return {
-      isCertificateEmpty: false,
+      editingIndex: undefined,
       isAddingDialogVisible: false,
-      newCertificate: {
-        title: '',
-        date: '',
-        description: ''
-      },
-      userCertifications: [
+      isAddingDialogLoading: false,
+      userCertifications: [],
+      updatingCertifications: [],
+      newCertificate: {}
+    }
+  },
+  computed: {
+    isEditMode() {
+      return !_.isUndefined(this.editingIndex)
+    },
+    isCertificateEmpty() {
+      return Boolean(
+        this.userCertifications && this.userCertifications.length == 0
+      )
+    },
+    originExtra() {
+      return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
+    },
+    updatingExtra() {
+      return _.merge(
         {
-          title: '普通话二级一等',
-          date: '2014 / 5'
+          certificates: this.updatingCertifications
         },
+        this.originExtra
+      )
+    },
+    updatingUserInfo() {
+      return _.merge(
         {
-          title: '全国摄影大赛一等奖全国摄影大赛一等奖',
-          date: '2014 / 5'
+          extra: this.updatingExtra
         },
-        {
-          title: '驾驶证',
-          date: '2014 / 5'
-        },
-        {
-          title: '英语六级',
-          date: '2014 / 5'
-        }
-      ]
+        this.nowUserDetail
+      )
     }
   },
   methods: {
+    ...mapActions({
+      userUpdateUserInfo: 'user/updateUserInfo'
+    }),
     showAddingDialog() {
       this.isAddingDialogVisible = true
+      this.updatingCertifications = _.cloneDeep(this.userCertifications)
     },
     handleAddingDialogClose() {
       this.isAddingDialogVisible = false
+      this.editingIndex = undefined
+      this.newCertificate = {}
     },
-    handleAddExperience() {
+    async handleAddCertificate() {
+      this.isAddingDialogLoading = true
+      if (this.isEditMode) {
+        this.updatingCertifications[this.editingIndex] = this.newCertificate
+      } else {
+        this.updatingCertifications.push(this.newCertificate)
+      }
+      await this.userUpdateUserInfo(this.updatingUserInfo).catch()
+      this.isAddingDialogLoading = false
       this.handleAddingDialogClose()
+    },
+    editCertificate(certificate, index) {
+      this.newCertificate = _.cloneDeep(certificate)
+      this.editingIndex = index
+      this.showAddingDialog()
     }
   },
-  props: {},
-  filters: {}
+  watch: {
+    nowUserDetail() {
+      this.userCertifications = _.cloneDeep(
+        _.get(this.nowUserDetail, 'extra.certificates', [])
+      )
+    }
+  },
+  filters: {
+    formatDate(date) {
+      return dayjs(date).format('YYYY / MM')
+    }
+  }
 }
 </script>
 <style lang="scss">
