@@ -23,7 +23,9 @@ const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
 const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
-const sharedCourseLecturer = () => import('@/components/lesson/teacher/sharedCourseLecturer')
+const SharedCourseLecturer = () =>
+  import('@/components/lesson/teacher/SharedCourseLecturer')
+const TeachingIdea = () => import('@/components/lesson/common/TeachingIdea')
 
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
@@ -71,8 +73,8 @@ export default new Router({
           children: [
             {
               path: 'sharedCourseLecturer',
-              name: 'sharedCourseLecturer',
-              component: sharedCourseLecturer
+              name: 'SharedCourseLecturer',
+              component: SharedCourseLecturer
             },
             {
               path: '/',
@@ -225,6 +227,11 @@ export default new Router({
               component: TeachingVideo
             }
           ]
+        },
+        {
+          path: 'teachingIdea',
+          name: 'TeachingIdea',
+          component: TeachingIdea
         },
         {
           path: 'about',

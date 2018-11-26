@@ -6,16 +6,16 @@
         <span @click="goToLessonsCenter" class="study-page-header-menu-left-button">全部课程</span>
       </div>
       <div class="study-page-header-menu-right">
-        <el-dropdown class="study-page-header-menu-right-dropdown">
+        <el-dropdown class="study-page-header-menu-right-dropdown" @command="getSolution">
           <span class="el-dropdown-link">
             解决方案<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>教学理念</el-dropdown-item>
-            <el-dropdown-item>学校教师</el-dropdown-item>
-            <el-dropdown-item>学生家长</el-dropdown-item>
-            <el-dropdown-item>机构合作</el-dropdown-item>
-            <el-dropdown-item>作品和创意大赛</el-dropdown-item>
+            <el-dropdown-item command="1">教学理念</el-dropdown-item>
+            <el-dropdown-item command="2">学校教师</el-dropdown-item>
+            <el-dropdown-item command="3">学生家长</el-dropdown-item>
+            <el-dropdown-item command="4">机构合作</el-dropdown-item>
+            <el-dropdown-item command="5">作品和创意大赛</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -111,8 +111,16 @@ export default {
     ...mapActions({
       toggleLoginDialog: 'lesson/toggleLoginDialog'
     }),
-    toLearnCenter() {
-      alert('学习中心')
+    getSolution(command){
+      switch(command){
+        case '1':
+        this.isStudentPage
+        ? this.$router.push(`/student/teachingIdea`)
+        : this.$router.push(`/teacher/teachingIdea`)
+        break;
+        default:
+        break;
+      }
     },
     switchIdentity() {
       if (!this.userIsLogined) {
@@ -169,7 +177,7 @@ export default {
 
 <style lang="scss">
 .study-page-header {
-  border: none !important;
+  border-bottom: 1px solid #eee;
   &-menu {
     margin: 0 auto;
     max-width: 1200px;

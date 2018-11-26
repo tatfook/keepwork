@@ -119,7 +119,6 @@ export default {
 <style lang="scss">
 .lesson-packages-wrap {
   background: #fff;
-  border-top: 1px solid #eee;
   .lesson-packages {
     max-width: 1200px;
     margin: 0 auto;
