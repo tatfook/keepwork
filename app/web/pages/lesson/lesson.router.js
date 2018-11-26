@@ -3,6 +3,9 @@ import Router from 'vue-router'
 // const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
+const TeachingIdea = () => import('@/components/lesson/common/TeachingIdea')
+const ServiceTeacher = () => import('@/components/lesson/common/ServiceTeacher')
+
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
@@ -25,7 +28,6 @@ const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
 const SharedCourseLecturer = () =>
   import('@/components/lesson/teacher/SharedCourseLecturer')
-const TeachingIdea = () => import('@/components/lesson/common/TeachingIdea')
 
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
@@ -130,6 +132,11 @@ export default new Router({
           path: 'teachingIdea',
           name: 'TeacherTeachingIdea',
           component: TeachingIdea
+        },
+        {
+          path: 'serviceTeacher',
+          name: 'TeacherServiceTeacher',
+          component: ServiceTeacher
         },
         {
           path: 'about',
