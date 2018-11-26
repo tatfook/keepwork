@@ -59,7 +59,7 @@ export default {
         type: 1,
         description: '',
         siteId: null,
-        tags: 'Praacraft|3D'
+        tags: 'Paracraft|3D'
       }
     }
   },
