@@ -9,8 +9,8 @@
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
             <div class="lecturer">
-              <img class="lecturer-sharing-resource" src="@/assets/lessonImg/sharing_resource.png" alt="">
-              <span>共享课程讲师</span>
+              <img class="lecturer-sharing-resource" src="@/assets/lessonImg/sharing_resource.png" alt="" @click="sharedCourseLecturer">
+              <span class="lecturer-text" @click="sharedCourseLecturer">共享课程讲师</span>
             </div>
           </div>
         </div>
@@ -66,6 +66,9 @@ export default {
     }
   },
   methods: {
+    sharedCourseLecturer(){
+      this.$router.push('/teacher/sharedCourseLecturer')
+    },
     setActiveItem() {
       switch (this.$route.name) {
         case 'TeacherColumnReview':
@@ -172,6 +175,10 @@ export default {
             height: 22px;
             object-fit: cover;
             margin-right: 5px;
+            cursor: pointer;
+          }
+          &-text {
+            cursor: pointer;
           }
         }
       }

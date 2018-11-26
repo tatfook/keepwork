@@ -96,8 +96,8 @@ export default {
   },
   methods: {
     goBeanDetail() {
-      // this.$router.push('/student/bean')
-      this.$message.warning('程序员小姐姐努力开发中')
+      this.$router.push('/student/bean')
+      // this.$message.warning('程序员小姐姐努力开发中')
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
