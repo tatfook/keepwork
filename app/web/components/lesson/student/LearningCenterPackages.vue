@@ -29,6 +29,16 @@
         </el-col>
       </el-row>
     </div>
+    <div class="be-in-class" v-show="beInClassDialog">
+      <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
+        <div class="hint">
+          <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
+          <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
+        </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
