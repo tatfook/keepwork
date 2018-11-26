@@ -162,6 +162,8 @@ export default {
 
 <style lang="scss">
 .teacher-wrap {
+  background: #fff;
+  margin-top: 20px;
   .teacher {
     max-width: 1200px;
     margin: 0 auto;
@@ -216,10 +218,6 @@ export default {
               color: #10c55b;
             }
           }
-          .role-teacher {
-            // background: #409efe;
-            // color: #fff;
-          }
           .access {
             padding: 44px 25px;
             background: #fff;
@@ -242,6 +240,36 @@ export default {
             .teaching-function {
               margin-left: 20px;
             }
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .teacher-wrap {
+    .teacher {
+      &-top-hint {
+        padding: 4px;
+        &-input {
+          .el-form-item {
+            margin-bottom: 14px;
+            .el-input {
+              width: 100%;
+            }
+          }
+          .active-code-button {
+            width: 100px;
+            height: 27px;
+          }
+        }
+      }
+      &-acquire {
+        &-box {
+          display: block;
+          .acquire-item {
+            margin-bottom: 20px;
+            width: 100%;
           }
         }
       }

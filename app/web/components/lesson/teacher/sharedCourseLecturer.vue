@@ -1,7 +1,7 @@
 <template>
   <div class="shared-course-lecturer">
-    <div class="shared-course-lecturer-title">您已成为<span>共享课程讲师</span></div>
-    <div>如需咨询，请联系：程老师 13267059950 （电话/微信）、846704851（QQ）</div>
+    <div class="shared-course-lecturer-title">您已成为<span class="extrude">共享课程讲师</span></div>
+    <div class="shared-course-lecturer-contact">如需咨询，请联系：程老师 13267059950 （电话/微信）、846704851（QQ）</div>
     <div class="teacher-acquire">
       <h4 class="teacher-acquire-title">具体服务如下</h4>
       <div class="teacher-acquire-box">
@@ -52,8 +52,24 @@
 </template>
 <style lang="scss">
 .shared-course-lecturer {
+  &-title {
+    text-align: center;
+    font-size: 24px;
+    line-height: 40px;
+    margin: 14px;
+    .extrude {
+      color: #2397f3;
+    }
+  }
+  &-contact {
+    color: #2397f3;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid #2397f3;
+    background-color: rgb(238, 247, 255);
+  }
   .teacher-acquire {
-    margin: 60px 0;
+    padding-bottom: 40px;
     background: #fff;
     &-title {
       text-align: center;
@@ -68,7 +84,8 @@
         max-width: 570px;
         font-size: 14px;
         line-height: 30px;
-        box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
+        // box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
+        border: 1px solid #eee;
         .role {
           height: 100px;
           text-align: center;
@@ -84,10 +101,6 @@
             font-size: 18px;
             color: #10c55b;
           }
-        }
-        .role-teacher {
-          // background: #409efe;
-          // color: #fff;
         }
         .access {
           padding: 44px 25px;
@@ -111,6 +124,18 @@
           .teaching-function {
             margin-left: 20px;
           }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .shared-course-lecturer {
+    .teacher-acquire {
+      &-box {
+        display: block;
+        .acquire-item {
+          margin-bottom: 20px;
         }
       }
     }

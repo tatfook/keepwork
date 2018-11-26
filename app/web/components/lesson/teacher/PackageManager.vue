@@ -439,6 +439,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: #fff;
   &-overview {
     margin-bottom: 20px;
     display: flex;
@@ -449,11 +450,13 @@ export default {
     color: #333;
     font-size: 22px;
     font-weight: bold;
+    padding-left: 20px;
   }
   &-new-button {
     font-size: 18px;
     font-weight: bold;
-    padding: 16px 15px;
+    padding: 8px 10px;
+    margin: 10px 20px 0;
     width: 266px;
     i {
       margin-right: 9px;
@@ -599,7 +602,7 @@ export default {
       &-item {
         flex: 1;
         padding: 0 8px;
-        .el-select{
+        .el-select {
           width: 100%;
         }
       }

@@ -182,7 +182,7 @@ export default {
         font-weight: 700;
         font-size: 18px;
         .red {
-          color: #ff414a;
+          color: #ff742e;
           font-size: 26px;
         }
       }
