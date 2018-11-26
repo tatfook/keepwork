@@ -1,10 +1,6 @@
 import _ from 'lodash'
 const getters = {
-  websiteContents: state => {
-    console.log(state)
-    return state.websiteContents
-  },
-  kevin: state => 'kevin ---->',
+  websiteContents: state => state.websiteContents,
   websiteConfigs: state => state.websiteConfigs,
   getModListByFullPath: (state, { websiteContents }) => fullPath =>
     _.get(websiteContents, fullPath, {}),

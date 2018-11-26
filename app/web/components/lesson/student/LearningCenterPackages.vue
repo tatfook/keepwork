@@ -51,7 +51,8 @@ export default {
     ...mapGetters({
       userId: 'user/userId',
       subscribesList: 'lesson/student/subscribesList',
-      enterClassInfo: 'lesson/student/enterClassInfo'
+      enterClassInfo: 'lesson/student/enterClassInfo',
+      classID: 'lesson/student/classID'
     }),
     filterSubscribesList() {
       return this.subscribesList

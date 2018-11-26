@@ -37,6 +37,7 @@ import CommonFooter from '@/components/common/CommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import { lesson } from '@/api'
+import { broadcast } from 'vuex-iframe-sync'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -72,7 +73,8 @@ const store = new Vuex.Store({
   plugins: [
     createPersistedState({
       paths: ['user.webTemplateConfig', 'user.skyDrive']
-    })
+    }),
+    broadcast('combo')
   ]
 })
 

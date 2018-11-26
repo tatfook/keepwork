@@ -18,6 +18,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
 import '@/components/common/thirdAuth'
 import ComboBoxView from '@/components/combo/ComboBoxView'
+import { transfer } from 'vuex-iframe-sync'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -35,7 +36,10 @@ const store = new Vuex.Store({
     user: userModule,
     editor: editorModule,
     combo: comboModule
-  }
+  },
+  plugins: [
+    transfer()
+  ]
 })
 
 export default {

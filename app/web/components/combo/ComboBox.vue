@@ -1,5 +1,18 @@
 <template>
-  <iframe :src="iframeUrl" frameborder="0" width="100%" height="100%"></iframe>
+  <div
+    v-if="isLoading"
+    style="height: 100%; width: 100%"
+    v-loading="isLoading"
+  >
+  </div>
+  <iframe
+    v-else
+    id="combo"
+    :src="iframeUrl"
+    frameborder="0"
+    width="100%"
+    height="100%"
+  ></iframe>
 </template>
 
 <script>
@@ -36,20 +49,15 @@ export default {
   },
   data() {
     return {
-      websiteConfig: {},
-      mainContent: '',
-      headerContent: '',
-      footerContent: '',
-      sidebarContent: ''
+      isLoading: true
     }
   },
   async mounted() {
-    await this.getWebsiteConfig({ projectName: this.projectName })
     await this.getContent({
       projectName: this.projectName,
       fileName: this.fileName
     }).catch(e => console.error(e))
-    console.warn("mounted------>")
+    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -58,6 +66,11 @@ export default {
     })
   },
   computed: {
+    ...mapGetters({
+      getModListByFullPath: 'combo/getModListByFullPath',
+      websiteContents: 'combo/websiteContents',
+      websiteConfigs: 'combo/websiteConfigs'
+    }),
     fullFilePath() {
       return `${this.projectName}/${this.fileName}`
     },
@@ -67,7 +80,7 @@ export default {
     iframeUrl() {
       return `/combo?projectName=${this.projectName}&fileName=${
         this.fileName
-      }, `
+      }`
     },
     // layout() {
     //   let layoutId = _.get(this.pages, [this.fileName, 'layout'], '')

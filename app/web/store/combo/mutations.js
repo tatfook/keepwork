@@ -11,7 +11,7 @@ export const props = {
 const mutations = {
   [GET_WEBSITE_CONTENT_SUCCESS](
     state,
-    { projectName, fullPath, section, modList }
+    { fullPath, section, modList }
   ) {
     Vue.set(state, 'websiteContents', {
       ...state.websiteContents,

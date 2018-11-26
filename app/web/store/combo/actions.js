@@ -20,6 +20,7 @@ const actions = {
       section,
       modList
     })
+    return Promise.resolve(modList)
   },
   async getWebsiteConfig({ commit }, { url = API_URL, projectName }) {
     const layoutConfigPath = '_config/layout.json'
