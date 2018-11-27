@@ -134,7 +134,7 @@ export default {
       return /.md$/.test(this._filePath) ? this._filePath : `${this._filePath}.md`
     },
     iframeUrl() {
-      return `/combo?projectName=${this._projectName}&fileName=${
+      return `/bx?projectName=${this._projectName}&fileName=${
         this._fileName
       }`
     },
