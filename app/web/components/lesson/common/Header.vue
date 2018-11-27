@@ -11,11 +11,11 @@
             解决方案<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">教学理念</el-dropdown-item>
-            <el-dropdown-item command="2">学校教师</el-dropdown-item>
-            <el-dropdown-item command="3">学生家长</el-dropdown-item>
-            <el-dropdown-item command="4">机构合作</el-dropdown-item>
-            <el-dropdown-item command="5">作品和创意大赛</el-dropdown-item>
+            <el-dropdown-item command="teachingIdea">教学理念</el-dropdown-item>
+            <el-dropdown-item command="teacher">学校教师</el-dropdown-item>
+            <el-dropdown-item command="parents">学生家长</el-dropdown-item>
+            <el-dropdown-item command="organization">机构合作</el-dropdown-item>
+            <el-dropdown-item command="competition">作品和创意大赛</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -80,7 +80,6 @@ export default {
       return TeacherPageReg.test(this.nowFullPath)
     },
     isStudentPage() {
-      // return StudentPageReg.test(this.nowFullPath)
       return !this.isTeacherPage
     },
     columnText() {
@@ -94,6 +93,9 @@ export default {
     statusTogglePath() {
       return this.isTeacherPage ? '/student' : '/teacher'
     },
+    currentPath() {
+      return this.isTeacherPage ? '/teacher' : '/student'
+    },
     toggleButtonText() {
       if (this.isStudentPage) {
         return this.$t('lesson.viewTeacherPage')
@@ -101,7 +103,6 @@ export default {
       if (this.isTeacherPage) {
         return this.$t('lesson.viewStudentPage')
       }
-      return '默认值'
     }
   },
   components: {
@@ -111,16 +112,10 @@ export default {
     ...mapActions({
       toggleLoginDialog: 'lesson/toggleLoginDialog'
     }),
-    getSolution(command){
-      switch(command){
-        case '1':
-        this.isStudentPage
-        ? this.$router.push(`/student/teachingIdea`)
-        : this.$router.push(`/teacher/teachingIdea`)
-        break;
-        default:
-        break;
-      }
+    getSolution(command) {
+      this.$router.push({
+        path: `${this.currentPath}/solution/${command}`
+      })
     },
     switchIdentity() {
       if (!this.userIsLogined) {

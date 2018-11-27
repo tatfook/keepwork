@@ -1,6 +1,7 @@
 <template>
-  <div class="teaching-idea">
-    <div class="teaching-idea-part part-1">
+  <div class="solution">
+    <div>解决方案</div>
+    <!-- <div class="teaching-idea-part part-1">
       <div class="teaching-idea-part-content">
         <img src="@/assets/lessonImg/lesson_code.jpg" alt="">
         <div class="part-1-text">
@@ -87,99 +88,108 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
-<style lang="scss">
-.teaching-idea {
-  .light {
-    color: #3ba4ff;
+<script>
+export default {
+  name: 'Solution',
+  mounted(){
+    console.log(this.$route)
   }
-  &-part {
-    background: #fff;
-    margin-bottom: 12px;
-    &-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      img {
-        width: 100%;
-      }
-    }
-  }
-  .part-1 {
-    padding-bottom: 12px;
-    &-text {
-      margin: 10px 0;
-      h6 {
-        font-size: 18px;
-        margin: 40px 0 10px;
-      }
-      p {
-        margin: 0;
-        line-height: 30px;
-        font-size: 14px;
+}
+</script>
 
-        .submenu {
-          display: block;
-          padding-left: 20px;
-        }
-      }
-    }
-  }
-  .part-2 {
-    padding: 30px;
-    &-text {
-      display: flex;
-      justify-content: space-around;
-      &-box {
-        width: 280px;
-        text-align: center;
-        &-title {
-          font-size: 18px;
-          width: 190px;
-          border-bottom: 1px solid #ececec;
-          padding: 8px 0;
-          margin: 20px auto;
-        }
-        &-content {
-          height: 140px;
-          p {
-            margin: 0;
-            font-size: 14px;
-            line-height: 30px;
-          }
-        }
-        .learn-more {
-          line-height: 40px;
-          background-color: #ffffff;
-          border-radius: 4px;
-          border: solid 2px #409efe;
-        }
-      }
-    }
-  }
-  .part-3 {
-    padding: 30px;
-    &-text {
-      p {
-        font-size: 14px;
-      }
-      .learn-more {
-        width: 340px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border-radius: 4px;
-        border: solid 2px #409efe;
-      }
-    }
-  }
-  .part-4 {
-    &-text {
-      font-size: 16px;
-      padding: 10px 0 40px;
-    }
-  }
+<style lang="scss">
+.solution {
+  // .light {
+  //   color: #3ba4ff;
+  // }
+  // &-part {
+  //   background: #fff;
+  //   margin-bottom: 12px;
+  //   &-content {
+  //     max-width: 1200px;
+  //     margin: 0 auto;
+  //     img {
+  //       width: 100%;
+  //     }
+  //   }
+  // }
+  // .part-1 {
+  //   padding-bottom: 12px;
+  //   &-text {
+  //     margin: 10px 0;
+  //     h6 {
+  //       font-size: 18px;
+  //       margin: 40px 0 10px;
+  //     }
+  //     p {
+  //       margin: 0;
+  //       line-height: 30px;
+  //       font-size: 14px;
+
+  //       .submenu {
+  //         display: block;
+  //         padding-left: 20px;
+  //       }
+  //     }
+  //   }
+  // }
+  // .part-2 {
+  //   padding: 30px;
+  //   &-text {
+  //     display: flex;
+  //     justify-content: space-around;
+  //     &-box {
+  //       width: 280px;
+  //       text-align: center;
+  //       &-title {
+  //         font-size: 18px;
+  //         width: 190px;
+  //         border-bottom: 1px solid #ececec;
+  //         padding: 8px 0;
+  //         margin: 20px auto;
+  //       }
+  //       &-content {
+  //         height: 140px;
+  //         p {
+  //           margin: 0;
+  //           font-size: 14px;
+  //           line-height: 30px;
+  //         }
+  //       }
+  //       .learn-more {
+  //         line-height: 40px;
+  //         background-color: #ffffff;
+  //         border-radius: 4px;
+  //         border: solid 2px #409efe;
+  //       }
+  //     }
+  //   }
+  // }
+  // .part-3 {
+  //   padding: 30px;
+  //   &-text {
+  //     p {
+  //       font-size: 14px;
+  //     }
+  //     .learn-more {
+  //       width: 340px;
+  //       height: 40px;
+  //       line-height: 40px;
+  //       text-align: center;
+  //       border-radius: 4px;
+  //       border: solid 2px #409efe;
+  //     }
+  //   }
+  // }
+  // .part-4 {
+  //   &-text {
+  //     font-size: 16px;
+  //     padding: 10px 0 40px;
+  //   }
+  // }
 }
 </style>
 
