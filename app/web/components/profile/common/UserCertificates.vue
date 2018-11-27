@@ -5,7 +5,7 @@
         <span>我的证书</span>
         <el-button v-show="!isCertificateEmpty" class="user-certificate-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
       </div>
-      <div class="user-certificate-list" v-if="!isCertificateEmpty">
+      <div class="user-certificate-list" v-if="!isCertificateEmpty" v-loading="isLoading">
         <div class="user-certificate-item" v-for="(certificate, index) in userCertifications" :key="index">
           <span class="user-certificate-item-title">{{certificate.title}}</span>
           <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
@@ -13,7 +13,7 @@
             <el-button type="text" @click="editCertificate(certificate, index)">
               <i class="iconfont icon-edit-square"></i>编辑
             </el-button>
-            <el-button type="text">
+            <el-button type="text" @click="deleteCertificate(certificate, index)">
               <i class="iconfont icon-delete1"></i>删除
             </el-button>
           </div>
@@ -24,14 +24,13 @@
         <p><span class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>个人证书，展现更好的自己</p>
       </div>
     </el-card>
-    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading='isAddingDialogLoading' class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
       <el-form label-position="top" :model="newCertificate">
         <el-form-item label="名称">
           <el-input v-model="newCertificate.title"></el-input>
         </el-form-item>
         <el-form-item label="时间">
-          <el-date-picker v-model="newCertificate.getDate" type="date">
-          </el-date-picker>
+          <el-date-picker v-model="newCertificate.getDate" type="date"></el-date-picker>
         </el-form-item>
         <el-form-item label="证书描述">
           <el-input type="textarea" resize="none" v-model="newCertificate.description"></el-input>
@@ -64,7 +63,7 @@ export default {
     return {
       editingIndex: undefined,
       isAddingDialogVisible: false,
-      isAddingDialogLoading: false,
+      isLoading: false,
       userCertifications: [],
       updatingCertifications: [],
       newCertificate: {}
@@ -83,18 +82,19 @@ export default {
       return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
     },
     updatingExtra() {
-      return _.merge(
-        this.originExtra,
-        {
-          certificates: this.updatingCertifications
-        }
-      )
+      return _.mergeWith(this.originExtra, {
+        certificates: this.updatingCertifications
+      }, (objValue, srcValue) => {
+        return srcValue
+      })
     },
     updatingUserInfo() {
-      return _.merge(
+      return _.mergeWith(
         this.nowUserDetail,
         {
           extra: this.updatingExtra
+        }, (objValue, srcValue) => {
+          return srcValue
         }
       )
     }
@@ -113,20 +113,29 @@ export default {
       this.newCertificate = {}
     },
     async handleAddCertificate() {
-      this.isAddingDialogLoading = true
       if (this.isEditMode) {
         this.updatingCertifications[this.editingIndex] = this.newCertificate
       } else {
         this.updatingCertifications.push(this.newCertificate)
       }
+      await this.updateData()
+    },
+    async updateData() {
+      this.isLoading = true
       await this.userUpdateUserInfo(this.updatingUserInfo).catch()
-      this.isAddingDialogLoading = false
+      this.isLoading = false
       this.handleAddingDialogClose()
     },
     editCertificate(certificate, index) {
       this.newCertificate = _.cloneDeep(certificate)
       this.editingIndex = index
       this.showAddingDialog()
+    },
+    async deleteCertificate(certificate, index) {
+      let updatingCertifications = _.cloneDeep(this.userCertifications)
+      updatingCertifications.splice(index, 1)
+      this.updatingCertifications = updatingCertifications
+      await this.updateData()
     }
   },
   watch: {
