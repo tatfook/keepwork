@@ -42,10 +42,8 @@ export default {
   data() {
     return {
       avatar,
-      classID: '',
       skillsList: [],
       loadingSkillsPoint: true,
-      beInClassDialog: false,
       currOption: 0,
       optionArr: [
         { name: '线上课程' },
@@ -91,9 +89,6 @@ export default {
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
-    },
-    handleClose() {
-      this.beInClassDialog = false
     },
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')

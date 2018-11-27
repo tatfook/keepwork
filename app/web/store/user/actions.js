@@ -161,6 +161,7 @@ const actions = {
     let { getters: { userId }, dispatch } = context
     await keepwork.user.update({ userId, userInfo })
     await dispatch('getProfile', { useCache: false })
+    await dispatch('getUserDetailWithRankByUserId', { userId })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context

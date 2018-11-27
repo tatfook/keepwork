@@ -99,7 +99,6 @@ export default {
       this.newExperience.endDate = newDateRange[1]
     }
   },
-  props: {},
   filters: {}
 }
 </script>

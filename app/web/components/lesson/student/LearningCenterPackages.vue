@@ -49,7 +49,9 @@ export default {
   name: 'LearningCenterPackages',
   data() {
     return {
-      loading: true
+      loading: true,
+      beInClassDialog: false,
+      classID: ''
     }
   },
   async mounted() {
@@ -61,8 +63,7 @@ export default {
     ...mapGetters({
       userId: 'user/userId',
       subscribesList: 'lesson/student/subscribesList',
-      enterClassInfo: 'lesson/student/enterClassInfo',
-      classID: 'lesson/student/classID'
+      enterClassInfo: 'lesson/student/enterClassInfo'
     }),
     filterSubscribesList() {
       return this.subscribesList
@@ -110,6 +111,9 @@ export default {
       getUserSubscribes: 'lesson/student/getUserSubscribes',
       switchDevice: 'lesson/student/switchDevice'
     }),
+    handleClose() {
+      this.beInClassDialog = false
+    },
     async enterClass() {
       if (JSON.stringify(this.enterClassInfo) == '{}') {
         this.enterNewClass()
