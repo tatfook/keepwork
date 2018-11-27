@@ -3,24 +3,24 @@
     <div class="user-tab">
       <div class="user-tab-cover" @click="goUserHomePage(user)"><img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt=""></div>
       <h5 class="user-tab-name" @click="goUserHomePage(user)">{{user.username}}</h5>
-      <p class="user-tab-brief" :title="user.description">{{user.description || '这家伙很懒，没有简介！'}}</p>
+      <p class="user-tab-brief" :title="user.description">{{user.description || $t("common.noSelfIntro")}}</p>
       <div class="user-tab-abstract">
         <div>
-          <p class="title">项目</p>
+          <p class="title">{{$t("explore.project")}}</p>
           <p class="amount">{{user.total_projects || 0}}</p>
         </div>
         <div class="member">
-          <p class="title">关注</p>
+          <p class="title">{{$t("explore.following")}}</p>
           <p class="amount">{{user.total_follows || 0}}</p>
         </div>
         <div>
-          <p class="title">粉丝</p>
+          <p class="title">{{$t("explore.Followers")}}</p>
           <p class="amount">{{user.total_fans || 0}}</p>
         </div>
       </div>
-      <div class="user-tab-join">
-        <el-button type="primary" :class="['user-tab-join-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? '已关注' : '关注'}}</el-button>
-        <el-button class="user-tab-join-button" @click="goUserHomePage(user)">主页</el-button>
+      <div class="user-tab-jion">
+        <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? $t("explore.followed") : $t("explore.follow")}}</el-button>
+        <el-button class="user-tab-join-button" @click="goUserHomePage(user)">{{$t("explore.profile")}}</el-button>
       </div>
     </div>
   </div>
