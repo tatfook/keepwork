@@ -1209,5 +1209,18 @@
     "follow": "Follow",
     "followed": "Followed",
     "profile": "Profile"
+  },
+  "project": {
+    "newProject": "New Project",
+    "projectName": "Project Name",
+    "projectType": "Project Type",
+    "createProject": "Create the project",
+    "prev": "Prev",
+    "next": "Next",
+    "3DGameAndAnim": "3D games and animations",
+    "websiteSettingForProject": "Website settings for your project",
+    "canNotChangedAfterSettings": "Cannot be changed after settings",
+    "selectExistingWebsite": "Select existing website",
+    "createNewWebsite": "Create new website"
   }
 }

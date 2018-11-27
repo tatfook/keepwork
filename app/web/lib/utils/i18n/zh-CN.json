@@ -1214,5 +1214,18 @@
     "follow": "关注",
     "followed": "已关注",
     "profile": "主页"
+  },
+  "project": {
+    "newProject": "新建项目",
+    "projectName": "项目名称",
+    "projectType": "项目类型",
+    "createProject": "完成创建",
+    "prev": "上一步",
+    "next": "下一步",
+    "3DGameAndAnim": "3D动画和游戏作品",
+    "websiteSettingForProject": "请设定您项目对应的网站",
+    "canNotChangedAfterSettings": "注意：设定后不可更改",
+    "selectExistingWebsite": "将已有网站加入项目",
+    "createNewWebsite": "创建新网站"
   }
 }
