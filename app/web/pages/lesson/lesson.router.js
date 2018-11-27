@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
+const AllTeachingVideo = () => import('@/components/lesson/common/AllTeachingVideo')
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
@@ -132,6 +133,11 @@ export default new Router({
           component: Solution
         },
         {
+          path: 'allteachingvideo',
+          name: 'TeacherAllTeachingVideo',
+          component: AllTeachingVideo
+        },
+        {
           path: 'about',
           name: 'TeacherAbout',
           component: About
@@ -237,6 +243,11 @@ export default new Router({
           path: 'solution/:command',
           name: 'StudentSolution',
           component: Solution
+        },
+        {
+          path: 'allteachingvideo',
+          name: 'StudentAllTeachingVideo',
+          component: AllTeachingVideo
         },
         {
           path: 'about',
