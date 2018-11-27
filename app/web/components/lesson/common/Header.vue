@@ -121,7 +121,7 @@ export default {
       switch (command) {
         case 'teaching-video':
           return this.$router.push({
-            path: `${this.currentPath}/allteachingvideo`
+            path: `${this.currentPath}/allteachingvideo/animate`
           })
           break
         case 'download':
