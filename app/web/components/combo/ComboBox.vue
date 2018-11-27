@@ -30,11 +30,7 @@ export default {
   props: {
     pattern: {
       type: String,
-      default: '',
-      validator(pattern) {
-        const TYPE = ['iframe']
-        return TYPE.some(i => i === pattern)
-      }
+      default: ''
     },
     projectName: {
       type: String,
