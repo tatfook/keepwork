@@ -2,18 +2,7 @@
   <div class="all-teaching-video">
     <div class="all-teaching-video-content">
       <div class="all-teaching-video-content-sidebar">
-        <!-- <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link">
-          <i class="el-icon-arrow-down el-icon--right"></i>教学视频：
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="a">动画教学</el-dropdown-item>
-          <el-dropdown-item command="b">编程教学</el-dropdown-item>
-          <el-dropdown-item command="c">CAD教学</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
         <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-
       </div>
       <div class="all-teaching-video-content-main">
         <p>
@@ -30,7 +19,7 @@ export default {
     return {
       data: [
         {
-          label: '教学视频',
+          label: '教学视频:',
           children: [
             {
               label: '动画教学'

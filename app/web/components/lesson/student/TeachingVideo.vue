@@ -3,19 +3,19 @@
     <div class="teaching-video-course">
       <el-row>
         <el-col :sm="8">
-          <div class="box" @click="goLessonPackage(8)">
+          <div class="box" @click="goLesson(8)">
             <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
             <p>动画教学</p>
           </div>
         </el-col>
         <el-col :sm="8">
-          <div class="box" @click="goLessonPackage(8)">
+          <div class="box" @click="goLesson(8)">
             <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
             <p>编程教学</p>
           </div>
         </el-col>
         <el-col :sm="8">
-          <div class="box" @click="goLessonPackage(8)">
+          <div class="box" @click="goLesson(8)">
             <img src="@/assets/lessonImg/teaching-video_3.png" alt="">
             <p>CAD教学</p>
           </div>
@@ -31,8 +31,8 @@ export default {
     return {}
   },
   methods: {
-    goLessonPackage(packageId) {
-      return this.$router.push(`/student/package/${packageId}`)
+    goLesson(index) {
+      return this.$router.push(`/student/allteachingvideo`)
     }
   }
 }
