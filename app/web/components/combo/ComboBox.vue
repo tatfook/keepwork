@@ -1,32 +1,53 @@
 <template>
-  <div
-    v-if="isLoading"
-    style="height: 100%; width: 100%"
-    v-loading="isLoading"
-  >
-  </div>
   <iframe
-    v-else
+    v-if="isIframePattern"
     id="combo"
     :src="iframeUrl"
     frameborder="0"
     width="100%"
     height="100%"
   ></iframe>
+  <div v-else>
+    <mod-loader
+      v-for="mod in modList"
+      :mod="mod"
+      :theme="theme"
+      :key="mod.key"
+    ></mod-loader>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ModLoader from '@/components/viewer/ModLoader'
+import themeFactory from '@/lib/theme/theme.factory'
+import ThemeHelper from '@/lib/theme'
+import _ from 'lodash'
 export default {
   name: 'ComboBox',
+  components: {
+    ModLoader
+  },
   props: {
+    pattern: {
+      type: String,
+      default: ''
+    },
     projectName: {
       type: String,
-      required: true
     },
     filePath: {
       type: String,
-      required: true
+    },
+    routes: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    routeKey: {
+      type: String,
+      default: 'command'
     },
     filterContentToShow: {
       type: Array,
@@ -49,15 +70,35 @@ export default {
   },
   data() {
     return {
-      isLoading: true
+      routeProjectName: '',
+      routeFilePath: ''
+    }
+  },
+  watch: {
+    async $route(to) {
+      if (!_.isEmpty(this.routes)) {
+        const { params: { [this.routeKey]: command } } = to
+        const { projectName, filePath } = this.routes[command]
+        this.routeProjectName = projectName
+        this.routeFilePath = filePath
+        await this.getContent({
+          projectName: this._projectName,
+          fileName: this._fileName
+        })
+      }
     }
   },
   async mounted() {
+    if (this.isRoutesPattern) {
+      const { params: { [this.routeKey]: command }} = this.$route
+      const { projectName, filePath } = this.routes[command]
+      this.routeProjectName = projectName
+      this.routeFilePath = filePath
+    }
     await this.getContent({
-      projectName: this.projectName,
-      fileName: this.fileName
-    }).catch(e => console.error(e))
-    this.isLoading = false
+        projectName: this._projectName,
+        fileName: this._fileName
+      }).catch(e => console.error(e))
   },
   methods: {
     ...mapActions({
@@ -71,16 +112,37 @@ export default {
       websiteContents: 'combo/websiteContents',
       websiteConfigs: 'combo/websiteConfigs'
     }),
-    fullFilePath() {
-      return `${this.projectName}/${this.fileName}`
+    isRoutesPattern() {
+      return !_.isEmpty(this.routes)
     },
-    fileName() {
-      return /.md$/.test(this.filePath) ? this.filePath : `${this.filePath}.md`
+    isPropsPattern() {
+      return !!(this.projectName && this.filePath)
+    },
+    isIframePattern() {
+      return this.pattern === 'iframe'
+    },
+    fullPath() {
+      return `${this._projectName}/${this._fileName}`
+    },
+    _projectName() {
+      return this.isRoutesPattern ? this.routeProjectName : this.projectName
+    },
+    _filePath() {
+      return this.isRoutesPattern ? this.routeFilePath : this.filePath
+    },
+    _fileName() {
+      return /.md$/.test(this._filePath) ? this._filePath : `${this._filePath}.md`
     },
     iframeUrl() {
-      return `/combo?projectName=${this.projectName}&fileName=${
-        this.fileName
+      return `/bx?projectName=${this._projectName}&fileName=${
+        this._fileName
       }`
+    },
+    contents() {
+      return this.getModListByFullPath(this.fullPath)
+    },
+    modList() {
+      return _.get(this.contents, 'main', [])
     },
     // layout() {
     //   let layoutId = _.get(this.pages, [this.fileName, 'layout'], '')

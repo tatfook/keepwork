@@ -133,7 +133,7 @@ export default new Router({
           component: Solution
         },
         {
-          path: 'allteachingvideo',
+          path: 'allteachingvideo/:command',
           name: 'TeacherAllTeachingVideo',
           component: AllTeachingVideo
         },
@@ -245,7 +245,7 @@ export default new Router({
           component: Solution
         },
         {
-          path: 'allteachingvideo',
+          path: 'allteachingvideo/:command',
           name: 'StudentAllTeachingVideo',
           component: AllTeachingVideo
         },
