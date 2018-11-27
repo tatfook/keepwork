@@ -124,7 +124,8 @@
     "weekday3": "Wednesday",
     "weekday4": "Thursday",
     "weekday5": "Friday",
-    "weekday6": "Saturday"
+    "weekday6": "Saturday",
+    "viewMore": "More"
   },
   "editor": {
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -1149,5 +1150,24 @@
     "anteriorSegmentText": "Content to ",
     "blueCompHideText": "hidden",
     "posteriorSegmentText": ", double click on the regional adjustment."
+  },
+  "home": {
+    "create3DGameAndAnim": "Create 3D games and animations",
+    "selfLearning": "Self-Directed Learning based on playing and creating",
+    "personalKnowledge": "Build up structured personal knowledge",
+    "haveYourOwnSite": "Have your own portfolio site",
+    "learnBasedOnProjects": "Learning based on projects",
+    "learnFromProfessionalProgrammers": "Learn from professional programmers",
+    "joinFree": "Join",
+    "toEducators": "To educators",
+    "toParents": "To parents",
+    "whatCanYouDoOnKp": "What can you do on KeepWork?",
+    "officialAnnouncements": "Official announcements",
+    "everyoneShouldHaveOwnWorks": "Everyone should have his own works",
+    "openDoorsToVariousWorlds": "Open doors to various worlds",
+    "learningIsFromExploringToCreating": "Learning is from exploring to creating",
+    "selectedProjects": "Selected Projects",
+    "hotLessons": "Hot Lessons",
+    "likedByOthers": "Liked by Others"
   }
 }

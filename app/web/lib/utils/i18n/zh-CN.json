@@ -125,7 +125,8 @@
     "weekday3": "星期三",
     "weekday4": "星期四",
     "weekday5": "星期五",
-    "weekday6": "星期六"
+    "weekday6": "星期六",
+    "viewMore": "查看更多"
   },
   "editor": {
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -1154,5 +1155,24 @@
     "anteriorSegmentText": "内容已",
     "blueCompHideText": "隐藏",
     "posteriorSegmentText": "，双击本区域调整"
+  },
+  "home": {
+    "create3DGameAndAnim": "创作3D游戏与动画作品",
+    "selfLearning": "基于玩与创造的自主学习",
+    "personalKnowledge": "建立个人知识体系、探索他人知识",
+    "haveYourOwnSite": "拥有个人网站展示自己的作品",
+    "learnBasedOnProjects": "基于项目的学习",
+    "learnFromProfessionalProgrammers": "来自职业程序员的知识传授",
+    "joinFree": "免费加入",
+    "toEducators": "致教育工作者",
+    "toParents": "给父母们的话",
+    "whatCanYouDoOnKp": "keepwork是做什么的",
+    "officialAnnouncements": "官方公告",
+    "everyoneShouldHaveOwnWorks": "每个人都应该拥有自己的作品",
+    "openDoorsToVariousWorlds": "打开一扇扇的门发现有趣的世界",
+    "learningIsFromExploringToCreating": "学习起于探索成于创造",
+    "selectedProjects": "精选项目",
+    "hotLessons": "热门课程",
+    "likedByOthers": "大家都觉得赞"
   }
 }
