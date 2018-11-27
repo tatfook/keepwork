@@ -1,25 +1,41 @@
 <template>
-  <div
-    v-if="isLoading"
-    style="height: 100%; width: 100%"
-    v-loading="isLoading"
-  >
-  </div>
   <iframe
-    v-else
+    v-if="isIframePattern"
     id="combo"
     :src="iframeUrl"
     frameborder="0"
     width="100%"
     height="100%"
   ></iframe>
+  <div v-else>
+    <mod-loader
+      v-for="mod in modList"
+      :mod="mod"
+      :theme="theme"
+      :key="mod.key"
+    ></mod-loader>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ModLoader from '@/components/viewer/ModLoader'
+import themeFactory from '@/lib/theme/theme.factory'
+import ThemeHelper from '@/lib/theme'
 export default {
   name: 'ComboBox',
+  components: {
+    ModLoader
+  },
   props: {
+    pattern: {
+      type: String,
+      default: '',
+      validator(pattern) {
+        const TYPE = ['iframe']
+        return TYPE.some(i => i === pattern)
+      }
+    },
     projectName: {
       type: String,
       required: true
@@ -53,6 +69,7 @@ export default {
     }
   },
   async mounted() {
+    await this.getWebsiteConfig({ projectName: this.projectName })
     await this.getContent({
       projectName: this.projectName,
       fileName: this.fileName
@@ -71,7 +88,10 @@ export default {
       websiteContents: 'combo/websiteContents',
       websiteConfigs: 'combo/websiteConfigs'
     }),
-    fullFilePath() {
+    isIframePattern() {
+      return this.pattern === 'iframe'
+    },
+    fullPath() {
       return `${this.projectName}/${this.fileName}`
     },
     fileName() {
@@ -81,6 +101,12 @@ export default {
       return `/combo?projectName=${this.projectName}&fileName=${
         this.fileName
       }`
+    },
+    contents() {
+      return this.getModListByFullPath(this.fullPath)
+    },
+    modList() {
+      return _.get(this.contents, 'main', [])
     },
     // layout() {
     //   let layoutId = _.get(this.pages, [this.fileName, 'layout'], '')

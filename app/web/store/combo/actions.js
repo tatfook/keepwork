@@ -13,14 +13,12 @@ const actions = {
     let fullPath = `${projectName}/${fileName}`
     let content = await gitlabShowRawForGuest(url, projectName, fullPath)
     let modList = Parser.buildBlockList(content)
-    console.warn('modList ------------->')
     commit(GET_WEBSITE_CONTENT_SUCCESS, {
       projectName,
       fullPath,
       section,
       modList
     })
-    return Promise.resolve(modList)
   },
   async getWebsiteConfig({ commit }, { url = API_URL, projectName }) {
     const layoutConfigPath = '_config/layout.json'

@@ -31,11 +31,11 @@ export default {
       } = this.$route
       return `${projectName}/${fileName}`
     },
-    content() {
+    contents() {
       return this.getModListByFullPath(this.fullPath)
     },
     modList() {
-      return _.get(this.content, 'main', [])
+      return _.get(this.contents, 'main', [])
     },
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
