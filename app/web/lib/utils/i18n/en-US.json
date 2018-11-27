@@ -126,7 +126,8 @@
     "weekday5": "Friday",
     "weekday6": "Saturday",
     "viewMore": "More",
-    "untitled": "Untitled"
+    "untitled": "Untitled",
+    "noSelfIntro": "No self intro."
   },
   "editor": {
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -1186,5 +1187,27 @@
     "exploreMoreProjects": "Explore more projects",
     "contributedProjects": "Contributed Projects",
     "howToCreateProject": "How to create projects?"
+  },
+  "explore": {
+    "searchFor": "Search for ...",
+    "search": "search",
+    "project": "Projects",
+    "3DWorlds": "3D Worlds",
+    "websites": "Websites",
+    "lessons": "Lessons",
+    "uses": "Users",
+    "recruiting": "Recruiting",
+    "contain": "",
+    "result": "results",
+    "overall": "Overall",
+    "newest": "Newest",
+    "hottest": "Hottest",
+    "projectSort": "Projects",
+    "popularity": "Popularity",
+    "following": "Following",
+    "followers": "Followers",
+    "follow": "Follow",
+    "followed": "Followed",
+    "profile": "Profile"
   }
 }

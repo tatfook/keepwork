@@ -127,7 +127,8 @@
     "weekday5": "星期五",
     "weekday6": "星期六",
     "viewMore": "查看更多",
-    "untitled": "Untitled"
+    "untitled": "Untitled",
+    "noSelfIntro": "这家伙很懒，没有简介！"
   },
   "editor": {
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -1191,5 +1192,27 @@
     "exploreMoreProjects": "去探索更多好玩的项目",
     "contributedProjects": "我参与的项目",
     "howToCreateProject": "不太了解项目？马上学习如何创建项目"
+  },
+  "explore": {
+    "searchFor": "请输入你要搜索的内容",
+    "search": "搜索",
+    "project": "项目",
+    "3DWorlds": "3D世界",
+    "websites": "网站",
+    "lessons": "课程",
+    "uses": "用户",
+    "recruiting": "招募中",
+    "contain": "包含",
+    "result": "个结果",
+    "overall": "综合",
+    "newest": "最新",
+    "hottest": "热门",
+    "projectSort": "项目",
+    "popularity": "名气",
+    "following": "关注",
+    "followers": "粉丝",
+    "follow": "关注",
+    "followed": "已关注",
+    "profile": "主页"
   }
 }
