@@ -19,13 +19,13 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-dropdown class="study-page-header-menu-right-dropdown">
+        <el-dropdown class="study-page-header-menu-right-dropdown" @command="hanldOperation">
           <span class="el-dropdown-link">
             学习资源<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>教学视频</el-dropdown-item>
-            <el-dropdown-item>Paracraft下载</el-dropdown-item>
+            <el-dropdown-item command="teaching-video">教学视频</el-dropdown-item>
+            <el-dropdown-item command="download">Paracraft下载</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span class="study-page-header-menu-right-link" @click="switchIdentity">{{toggleButtonText}}</span>
@@ -116,6 +116,20 @@ export default {
       this.$router.push({
         path: `${this.currentPath}/solution/${command}`
       })
+    },
+    hanldOperation(command) {
+      switch (command) {
+        case 'teaching-video':
+          return this.$router.push({
+            path: `${this.currentPath}/allteachingvideo`
+          })
+          break
+        case 'download':
+          window.open('http://paracraft.keepwork.com/download?lang=zh')
+          break
+        default:
+          break
+      }
     },
     switchIdentity() {
       if (!this.userIsLogined) {
