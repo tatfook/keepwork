@@ -25,7 +25,7 @@ const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
 const SharedCourseLecturer = () =>
   import('@/components/lesson/teacher/SharedCourseLecturer')
-const TeachingIdea = () => import('@/components/lesson/common/TeachingIdea')
+const Solution = () => import('@/components/lesson/common/Solution')
 
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
@@ -127,9 +127,9 @@ export default new Router({
           ]
         },
         {
-          path: 'teachingIdea',
-          name: 'TeacherTeachingIdea',
-          component: TeachingIdea
+          path: 'solution/:command',
+          name: 'TeacherSolution',
+          component: Solution
         },
         {
           path: 'about',
@@ -234,9 +234,9 @@ export default new Router({
           ]
         },
         {
-          path: 'teachingIdea',
-          name: 'StudentTeachingIdea',
-          component: TeachingIdea
+          path: 'solution/:command',
+          name: 'StudentSolution',
+          component: Solution
         },
         {
           path: 'about',
