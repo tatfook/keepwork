@@ -125,7 +125,8 @@
     "weekday4": "Thursday",
     "weekday5": "Friday",
     "weekday6": "Saturday",
-    "viewMore": "More"
+    "viewMore": "More",
+    "untitled": "Untitled"
   },
   "editor": {
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -1169,5 +1170,21 @@
     "selectedProjects": "Selected Projects",
     "hotLessons": "Hot Lessons",
     "likedByOthers": "Liked by Others"
+  },
+  "create": {
+    "creationStartFromProject": "Creation, starts from projects",
+    "projectIsWhereWorksStart": "Project is where your works starts.",
+    "whatYouLearnFromProject": "You can learn knowledge, teamwork and leadership in the projects.",
+    "createMyProject": "Create my project",
+    "create3DGameAndAnim": "Create 3D animations and games",
+    "website": "Websites",
+    "createYourOwnSite": "Create your own websites",
+    "konwledgeEngine": "Knowledge Engine",
+    "toBeReleased": "To be released!",
+    "myProjects": "My Projects",
+    "browseOthersProjects": " Browse others’ projects",
+    "exploreMoreProjects": "Explore more projects",
+    "contributedProjects": "Contributed Projects",
+    "howToCreateProject": "How to create projects?"
   }
 }

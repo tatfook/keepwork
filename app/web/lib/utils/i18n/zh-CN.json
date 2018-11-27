@@ -126,7 +126,8 @@
     "weekday4": "星期四",
     "weekday5": "星期五",
     "weekday6": "星期六",
-    "viewMore": "查看更多"
+    "viewMore": "查看更多",
+    "untitled": "Untitled"
   },
   "editor": {
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -1174,5 +1175,21 @@
     "selectedProjects": "精选项目",
     "hotLessons": "热门课程",
     "likedByOthers": "大家都觉得赞"
+  },
+  "create": {
+    "creationStartFromProject": "创造，从项目开始",
+    "projectIsWhereWorksStart": "项目，是一个作品的开始。",
+    "whatYouLearnFromProject": "它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！",
+    "createMyProject": "创建我的项目",
+    "create3DGameAndAnim": "创造3D交互动画和游戏",
+    "website": "网站",
+    "createYourOwnSite": "创造属于你的网站",
+    "konwledgeEngine": "个人知识引擎",
+    "toBeReleased": "敬请期待！",
+    "myProjects": "我的项目",
+    "browseOthersProjects": "看看其他人的项目",
+    "exploreMoreProjects": "去探索更多好玩的项目",
+    "contributedProjects": "我参与的项目",
+    "howToCreateProject": "不太了解项目？马上学习如何创建项目"
   }
 }
