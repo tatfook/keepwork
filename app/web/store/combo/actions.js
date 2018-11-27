@@ -1,13 +1,17 @@
 import { props } from './mutations'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import Parser from '@/lib/mod/parser'
+import _ from 'lodash'
 
 const { GET_WEBSITE_CONTENT_SUCCESS, GET_WEBSITE_CONFIG_SUCCESS } = props
 const API_URL = 'https://api.keepwork.com/git/v0'
 
 const actions = {
   async getContent(
-    { commit },
+    {
+      commit,
+      getters: { getModListByFullPath }
+    },
     { url = API_URL, projectName, fileName, section = 'main' }
   ) {
     let fullPath = `${projectName}/${fileName}`
