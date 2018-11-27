@@ -39,8 +39,8 @@
 
     <div class="icons">
       <a :href="editorPageUrl" class="icon-item">
-        <i v-if="true" class="iconfont icon-edit" v-tooltip="$t('editor.toEdit')"></i>
-        <i v-else class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
+        <i v-if="!isEditable()" class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
+        <i v-if="isEditable()" class="iconfont icon-edit" v-tooltip="$t('editor.toEdit')"></i>
       </a>
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
         <i class="iconfont icon-Share" v-tooltip="$t('editor.share')"></i>
@@ -97,6 +97,7 @@ export default {
       getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       userGetDetailByUsername: 'user/getDetailByUsername',
+      personalAndContributedSiteNameList: 'user/personalAndContributedSiteNameList',
       userIsLogined: 'user/isLogined'
     }),
     isLogin: {
@@ -171,6 +172,25 @@ export default {
       getUserDetailByUsername: 'user/getUserDetailByUsername',
       getProfile: 'user/getProfile'
     }),
+    isEditable() {
+      if(!this.userIsLogined && !this.personalAndContributedSiteNameList && !this.activePageInfo) {
+        return false
+      }
+
+      let editable
+      _.forEach(this.personalAndContributedSiteNameList, (value, key) => {
+        if(this.activePageInfo.sitename === value) {
+          editable = value
+        }
+      })
+
+      if(editable) {
+        return true
+      }else {
+        return false
+      }
+
+    },
     pushNewUrl(site) {
       this.$router.push(`/${site.username}/${site.name}`)
     },
