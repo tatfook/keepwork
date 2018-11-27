@@ -1,5 +1,7 @@
 <template>
-  <combo-box :routes="solutions"></combo-box>
+  <div class="solution">
+    <combo-box :routes="solutions"></combo-box>
+  </div>
 </template>
 <script>
 import ComboBox from '@/components/combo/ComboBox'
@@ -32,20 +34,24 @@ export default {
         competition: {
           projectName: 'official/paracraft',
           filePath: 'learn/works_and_contests'
-        },
-      },
+        }
+      }
     }
   },
   watch: {
     $route(to) {
       this.isLoading = true
-      const { params: { command }} = to
+      const {
+        params: { command }
+      } = to
       this.currentTab = command
       this.isLoading = false
     }
   },
-  mounted(){
-    const { params: { command } } = this.$route
+  mounted() {
+    const {
+      params: { command }
+    } = this.$route
     this.currentTab = command
     this.isLoading = false
   },
@@ -62,7 +68,8 @@ export default {
 
 <style lang="scss">
 .solution {
- 
+  max-width: 1200px;
+  margin: 0 auto;
 }
 </style>
 
