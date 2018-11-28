@@ -1,15 +1,15 @@
 <template>
   <div class="project-comments">
     <div class="project-comments-header">
-      评论<span class="project-comments-header-count">(已有{{totalCommentCount}}条评论)</span>
+      {{$t('project.comment')}}<span class="project-comments-header-count">({{$t('project.having')}}{{totalCommentCount}}{{$t('project.commentCount')}})</span>
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
         <img class="hidden-xs-only project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
-        <el-input :disabled='!isLoginUsercommentable' placeholder="发表你的看法吧..." v-model='newCommenContent' maxlength="1000"></el-input>
+        <el-input :disabled='!isLoginUsercommentable' :placeholder="$t('project.writeComment')" v-model='newCommenContent' maxlength="1000"></el-input>
       </div>
       <div class="project-comments-sends-operations">
-        <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">评论</el-button>
+        <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">{{$t('project.comment')}}</el-button>
       </div>
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
@@ -20,11 +20,11 @@
             <span class="project-comments-item-time">{{comment.createdAt | relativeTimeFilter(isEn)}}</span>
           </p>
           <p class="project-comments-item-comment">{{comment.content}}</p>
-          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)"><i class="iconfont icon-delete1"></i> 删除</el-button>
+          <el-button v-if="comment.userId === loginUserId" type="text" class="project-comments-item-delete" @click="deleteComment(comment)"><i class="iconfont icon-delete1"></i> {{$t('project.delete')}}</el-button>
         </div>
       </div>
     </div>
-    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?'已经到底啦':'点击加载更多'}}</div>
+    <div class="project-comments-more" v-loading='isGetCommentBtnLoading' @click="getMoreComment">{{isGetAllComment?$t('project.noMoreComment'):$t('project.viewMoreComments')}}</div>
   </div>
 </template>
 <script>

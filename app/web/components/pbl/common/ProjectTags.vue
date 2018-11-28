@@ -2,19 +2,19 @@
   <div class="project-tags">
     <el-card class="project-tags-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
-        <span class="project-tags-card-label">项目标签</span>
+        <span class="project-tags-card-label">{{$t("project.projectTags")}}</span>
         <el-button v-if="isLoginUserEditable" class="project-tags-card-button" type="text" @click="toggleIsTagEditing">
           <i class="el-icon-edit-outline" v-show="!isTagEditing"></i>
-          <span v-show="isTagEditing"><i class="iconfont icon-save3"></i>保存</span>
+          <span v-show="isTagEditing"><i class="iconfont icon-save3"></i>{{$t("common.Save")}}</span>
         </el-button>
       </div>
-      <div v-show="tempTags.length <= 0 && !isTagEditing">暂无标签</div>
+      <div v-show="tempTags.length <= 0 && !isTagEditing">{{$t("project.noTags")}}</div>
       <el-tag v-show="tempTags.length > 0 || isTagEditing" :closable="isTagEditing" size="small" :key="tag" v-for="tag in tempTags" :disable-transitions="false" @close="handleClose(tag)">
         {{tag}}
       </el-tag>
       <el-input class="project-tags-new-input" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
-      <el-button v-show="isTagEditing" v-else class="project-tags-new-button" size="small" @click="showInput">+ 新标签</el-button>
+      <el-button v-show="isTagEditing" v-else class="project-tags-new-button" size="small" @click="showInput">+ {{$t("project.newTag")}}</el-button>
     </el-card>
   </div>
 </template>
