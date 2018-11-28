@@ -102,4 +102,14 @@ export default {
     padding: 0 24px 24px 24px;
   }
 }
+
+@media (max-width: 768px) {
+  .edit-project {
+    &-tabs {
+      .el-tabs__content {
+        overflow: auto;
+      }
+    }
+  }
+}
 </style>

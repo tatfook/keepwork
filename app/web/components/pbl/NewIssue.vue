@@ -314,5 +314,12 @@ export default {
     align-items: center;
   }
 }
+@media screen and (max-width: 768px) {
+  .new-issue-dialog {
+    .el-dialog {
+      width: 90%;
+    }
+  }
+}
 </style>
 

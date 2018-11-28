@@ -1,7 +1,7 @@
 <template>
   <div class="website" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" v-for="(project,index) in websiteData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in websiteData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
@@ -40,8 +40,8 @@ export default {
     ...mapGetters({
       pblWebsite: 'pbl/diffTypeProject'
     }),
-    website(){
-      return this.pblWebsite({ type: 'site'})
+    website() {
+      return this.pblWebsite({ type: 'site' })
     },
     websiteCount() {
       return _.get(this.website, 'total', 0)
@@ -80,7 +80,7 @@ export default {
           sort: this.sortProjects
         })
         this.loading = false
-        this.$emit('getAmount',this.websiteCount)
+        this.$emit('getAmount', this.websiteCount)
       })
     },
     searchKeyResult(i) {

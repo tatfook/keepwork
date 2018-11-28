@@ -47,7 +47,7 @@
         </el-button>
       </div>
       <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
-      <div id="projectDescriptoinEditor" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
+      <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
@@ -96,7 +96,11 @@ export default {
       required: true
     },
     projectApplyState: Number,
-    isProjectStopRecruit: Boolean
+    isProjectStopRecruit: Boolean,
+    descriptionId: {
+      type: String,
+      default: 'projectDescriptoinEditor'
+    }
   },
   async mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
@@ -259,7 +263,7 @@ export default {
         this.isDescriptionEditing = true
         this.$nextTick(() => {
           if (!this.descriptionEditor) {
-            this.descriptionEditor = new E('#projectDescriptoinEditor')
+            this.descriptionEditor = new E(`#${this.descriptionId}`)
             this.descriptionEditor.create()
           }
           this.descriptionEditor.txt.html(this.tempDesc)
@@ -567,7 +571,7 @@ export default {
       background-color: #303133;
       color: #fff;
       text-align: center;
-      line-height: 270px;
+      // line-height: 270px;
       border-radius: 4px;
       margin-right: 16px;
       position: relative;
@@ -650,6 +654,9 @@ export default {
     &-content {
       max-height: 280px;
       overflow: auto;
+      p {
+        word-break: break-all;
+      }
     }
     .w-e-toolbar {
       border-color: #e8e8e8 !important;
@@ -692,4 +699,53 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .project-basic-info {
+    &-detail {
+      display: flex;
+      flex-direction: column;
+      &-cover {
+        width: auto;
+        height: auto;
+        margin-right: 0;
+        padding-bottom: 56.25%;
+        position: relative;
+        &-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &-operations {
+        bottom: -10px;
+        display: flex;
+        .el-button {
+          flex: 1;
+          height: 36px;
+          font-size: 14px;
+          padding: 0;
+          line-height: 36px;
+        }
+      }
+    }
+    &-description-editor {
+      .w-e-toolbar {
+        flex-wrap: wrap;
+      }
+    }
+    &-apply-dialog {
+      .el-dialog {
+        width: 94% !important;
+      }
+    }
+  }
+  .el-message {
+    min-width: 90%;
+  }
+}
 </style>
+

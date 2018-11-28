@@ -69,6 +69,9 @@ export default {
       margin: 10px 0;
       height: 20px;
       cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       .red {
         color: red;
       }
@@ -85,6 +88,35 @@ export default {
         line-height: 20px;
         -webkit-box-orient: vertical;
         margin-bottom: 0;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .lesson-package-cell {
+    .lesson {
+      width: 100%;
+      max-width: 230px;
+      padding: 4px;
+      font-size: 12px;
+      border: none;
+      &-cover {
+        width: 100%;
+        height: 90px;
+        &-img {
+          width: 100%;
+          height: 90px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+      &-title {
+        font-size: 12px;
+      }
+      &-desc {
+        p {
+          margin: 5px 0;
+        }
       }
     }
   }

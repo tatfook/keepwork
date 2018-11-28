@@ -14,7 +14,7 @@
         <span class="line">|</span>
       </li>
       <li>
-        <a href="https://github.com/tatfook/wikicraft/issues" target="_blank">{{$t('common.feedback')}}</a>
+        <a href="https://github.com/tatfook/keepwork/issues" target="_blank">{{$t('common.feedback')}}</a>
         <span class="line">|</span>
       </li>
       <li>

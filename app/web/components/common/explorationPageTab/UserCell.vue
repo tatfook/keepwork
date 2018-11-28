@@ -18,9 +18,9 @@
           <p class="amount">{{user.total_fans || 0}}</p>
         </div>
       </div>
-      <div class="user-tab-jion">
-        <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? '已关注' : '关注'}}</el-button>
-        <el-button class="user-tab-jion-button" @click="goUserHomePage(user)">主页</el-button>
+      <div class="user-tab-join">
+        <el-button type="primary" :class="['user-tab-join-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? '已关注' : '关注'}}</el-button>
+        <el-button class="user-tab-join-button" @click="goUserHomePage(user)">主页</el-button>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@ export default {
               message: '关注成功'
             })
             this.user.isFollowed = true
-            this.user.total_fans = this.user.total_fans + 1
+            this.user.total_fans = this.user.total_fans ? this.user.total_fans + 1 : 1
             this.isLoading = false
           })
           .catch(err => {
@@ -188,7 +188,7 @@ export default {
         top: 32px;
       }
     }
-    &-jion {
+    &-join {
       padding-top: 6px;
       &-button {
         height: 32px;
@@ -199,6 +199,47 @@ export default {
     .is-followed {
       background: #5fe1af;
       border: 1px solid #5fe1af;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .user-cell {
+    .user-tab {
+      width: 164px;
+      padding: 6px;
+      font-size: 12px;
+      &-cover {
+        width: 56px;
+        height: 56px;
+      }
+      &-name {
+        font-size: 12px;
+        margin: 8px;
+      }
+      &-brief {
+        margin: 3px;
+      }
+      &-abstract {
+        div {
+          .title,
+          .amount {
+            font-size: 12px;
+            height: 18px;
+            margin: 10px 0;
+          }
+        }
+        .member::before,
+        .member::after {
+          height: 20px;
+          position: absolute;
+          top: 22px;
+        }
+      }
+      &-join {
+        &-button {
+          width: 70px;
+        }
+      }
     }
   }
 }

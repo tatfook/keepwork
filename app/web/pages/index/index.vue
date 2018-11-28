@@ -8,10 +8,10 @@
       <router-view :pageLoading="pageLoading" v-if="presetLoaded" />
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHome">
+    <!-- <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHome">
       <common-footer class="container"></common-footer>
-    </el-footer>
-    <el-footer class="home-page-footer" v-if='isHome'>
+    </el-footer> -->
+    <el-footer class="home-page-footer">
       <perfect-common-footer></perfect-common-footer>
     </el-footer>
     <div @click.stop v-if="isShowLoginDialog">
@@ -184,14 +184,6 @@ export default {
       activePageInfo: 'activePageInfo',
       isShowLoginDialog: 'pbl/isShowLoginDialog'
     }),
-    isHome() {
-      return (
-        this.$route.name === 'HomePage' ||
-        this.$route.name === 'CreativityPage' ||
-        this.$route.name === 'ExplorationPage' ||
-        this.$route.name === 'StudyPage'
-      )
-    },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
       return this.userSiteLayoutConfigBySitePath(sitePath)

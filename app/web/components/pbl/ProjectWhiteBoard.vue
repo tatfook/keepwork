@@ -7,14 +7,14 @@
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
-        <div class="filter">
+        <div class="filter hidden-sm-and-down">
           筛选：
           <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesOpenCount + issuesCloseCount}})</span></span>
           <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{issuesOpenCount}})</span></span>
           <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{issuesCloseCount}})</span></span>
         </div>
         <div class="new-issue-btn">
-          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ 新建问题</el-button>
+          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ <span class="hidden-sm-and-down">新建问题</span></el-button>
         </div>
       </div>
       <div class="project-white-board-content-list">
@@ -27,12 +27,12 @@
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
               <span class="created-by">由<span class="name">{{issue.user.username}}</span>创建</span>
-              <span class="created-tag">
+              <div class="created-tag">
                 <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
-              </span>
+              </div>
             </div>
           </div>
-          <div class="single-issue-join" v-if="issue.assigns.length > 0">
+          <div class="single-issue-join  hidden-sm-and-down" v-if="issue.assigns.length > 0">
             <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
           </div>
         </div>
@@ -50,6 +50,7 @@
   </div>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css'
 import NewIssue from './NewIssue'
 import IssueDetail from './IssueDetail'
 import _ from 'lodash'
@@ -153,9 +154,9 @@ export default {
         objectType: 5,
         'x-per-page': this.perPage,
         'x-page': 1,
-        'x-order': 'createdAt-desc',
+        'x-order': 'createdAt-desc'
       }
-      if (key) payload['text-like'] = `%${key}%`;
+      if (key) payload['text-like'] = `%${key}%`
       await this.getProjectIssues(payload)
       this.projectIssues = this.projectIssueList
     }
@@ -176,8 +177,8 @@ export default {
         'x-order': 'createdAt-desc',
         state: this.state
       }
-      if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`;
-      if(this.state === null) {
+      if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`
+      if (this.state === null) {
         let { state, ..._payload } = payload
         return await this.getProjectIssues(_payload)
       }
@@ -289,6 +290,7 @@ export default {
       }
       .new-issue-btn {
         width: 116px;
+        text-align: right;
       }
     }
     &-list {
@@ -299,9 +301,6 @@ export default {
         border-bottom: 1px solid #f5f5f5;
         &-brief {
           flex: 1;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
           &-title {
             display: flex;
             align-items: center;
@@ -348,6 +347,7 @@ export default {
               }
             }
             .created-tag {
+              display: inline-block;
               .tag {
                 background: #eee;
                 color: #909399;

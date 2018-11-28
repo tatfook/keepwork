@@ -152,4 +152,34 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .project-cell {
+    width: 100%;
+    max-width: 230px;
+    padding: 4px;
+    font-size: 12px;
+    border: none;
+    &-cover {
+      width: 100%;
+      height: 90px;
+      &-img {
+        width: 100%;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+    }
+    &-title {
+      font-size: 12px;
+    }
+    &-author {
+      font-size: 12px;
+      &-name {
+        .username {
+          width: 50px;
+        }
+      }
+    }
+  }
+}
 </style>
