@@ -46,9 +46,9 @@ export default {
       loadingSkillsPoint: true,
       currOption: 0,
       optionArr: [
-        { name: '线上课程' },
-        { name: '线下导引课' },
-        { name: '教学视频' }
+        { name: this.$t('lesson.onlineLesson') },
+        { name: this.$t('lesson.offlineGuidingLesson') },
+        { name: this.$t('lesson.instructionalVideos') }
       ]
     }
   },

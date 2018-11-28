@@ -46,18 +46,18 @@ export default {
       },
       data: [
         {
-          label: '教学视频:',
+          label: `${this.$t("lesson.instructionalVideos")}:`,
           children: [
             {
-              label: '动画教学',
+              label: this.$t("lesson.animationsLesson"),
               value: 'animate'
             },
             {
-              label: '编程教学',
+              label: this.$t("lesson.programmingLesson"),
               value: 'program'
             },
             {
-              label: 'CAD教学',
+              label: this.$t("lesson.CADLesson"),
               value: 'cad'
             }
           ]

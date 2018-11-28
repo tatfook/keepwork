@@ -2,30 +2,30 @@
   <div class="study-page-header">
     <div class="study-page-header-menu">
       <div class="study-page-header-menu-lef">
-        <span @click="goToSpecialColumn" class="study-page-header-menu-left-button">学习中心</span>
-        <span @click="goToLessonsCenter" class="study-page-header-menu-left-button">全部课程</span>
+        <span @click="goToSpecialColumn" class="study-page-header-menu-left-button">{{$t('lesson.myDesk')}}</span>
+        <span @click="goToLessonsCenter" class="study-page-header-menu-left-button">{{$t('lesson.allLessons')}}</span>
       </div>
       <div class="study-page-header-menu-right">
         <el-dropdown class="study-page-header-menu-right-dropdown" @command="getSolution">
           <span class="el-dropdown-link">
-            解决方案<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$t("lesson.solutions")}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="teachingIdea">教学理念</el-dropdown-item>
-            <el-dropdown-item command="teacher">学校教师</el-dropdown-item>
-            <el-dropdown-item command="parents">学生家长</el-dropdown-item>
-            <el-dropdown-item command="organization">机构合作</el-dropdown-item>
-            <el-dropdown-item command="competition">作品和创意大赛</el-dropdown-item>
+            <el-dropdown-item command="teachingIdea">{{$t("lesson.ourIdeas")}}</el-dropdown-item>
+            <el-dropdown-item command="teacher">{{$t("lesson.forEducations")}}</el-dropdown-item>
+            <el-dropdown-item command="parents">{{$t("lesson.forLearners")}}</el-dropdown-item>
+            <el-dropdown-item command="organization">{{$t("lesson.partnership")}}</el-dropdown-item>
+            <el-dropdown-item command="competition">{{$t("lesson.worksAndContests")}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
         <el-dropdown class="study-page-header-menu-right-dropdown" @command="hanldOperation">
           <span class="el-dropdown-link">
-            学习资源<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$t("lesson.resources")}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="teaching-video">教学视频</el-dropdown-item>
-            <el-dropdown-item command="download">Paracraft下载</el-dropdown-item>
+            <el-dropdown-item command="teaching-video">{{$t("lesson.videos")}}</el-dropdown-item>
+            <el-dropdown-item command="download">{{$t("lesson.paracraftDownload")}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span class="study-page-header-menu-right-link" @click="switchIdentity">{{toggleButtonText}}</span>
