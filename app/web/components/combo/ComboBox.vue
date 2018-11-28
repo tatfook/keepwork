@@ -145,7 +145,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getModListByFullPath: 'combo/getModListByFullPath',
+      getContentsByFullPath: 'combo/getContentsByFullPath',
       websiteContents: 'combo/websiteContents',
       websiteConfigs: 'combo/websiteConfigs'
     }),
@@ -179,7 +179,7 @@ export default {
         }`
     },
     contents() {
-      return this.getModListByFullPath(this.fullPath)
+      return this.getContentsByFullPath(this.fullPath)
     },
     modList() {
       return _.get(this.contents, 'modList', [])
