@@ -10,7 +10,7 @@
             <div class="nickname">{{username}}</div>
             <div class="lecturer">
               <img class="lecturer-sharing-resource" src="@/assets/lessonImg/sharing_resource.png" alt="" @click="sharedCourseLecturer">
-              <span class="lecturer-text" @click="sharedCourseLecturer">共享课程讲师</span>
+              <span class="lecturer-text" @click="sharedCourseLecturer">{{$t('lesson.instructor')}}</span>
             </div>
           </div>
         </div>
