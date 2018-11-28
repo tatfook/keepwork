@@ -2,7 +2,7 @@ import _ from 'lodash'
 const getters = {
   websiteContents: state => state.websiteContents,
   websiteConfigs: state => state.websiteConfigs,
-  getModListByFullPath: (state, { websiteContents }) => fullPath =>
+  getContentsByFullPath: (state, { websiteContents }) => fullPath =>
     _.get(websiteContents, fullPath, {}),
   getPagesByProjectName: (state, { websiteConfigs }) => projectName =>
     _.get(websiteConfigs, [projectName, 'pages'], []),

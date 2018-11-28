@@ -8,15 +8,19 @@
           @node-click="handleNodeClick"
         ></el-tree>
       </div>
-      <div class="all-teaching-video-content-main">
-        <combo-box pattern="iframe" :routes="routes"></combo-box>
+      <div
+        class="all-teaching-video-content-main"
+      >
+        <combo-box
+          pattern="iframe"
+          :routes="routes"
+        ></combo-box>
       </div>
     </div>
   </div>
 </template>
 <script>
 import ComboBox from '@/components/combo/ComboBox'
-
 const TeacherPageReg = /^\/teacher/
 
 export default {
@@ -29,15 +33,15 @@ export default {
       routes: {
         animate: {
           projectName: 'official/paracraft',
-          filePath: 'learn/our_ideas'
+          filePath: 'animation-tutorials'
         },
         program: {
           projectName: 'official/paracraft',
-          filePath: 'learn/parents'
+          filePath: 'codeblock'
         },
         cad: {
-          projectName: 'official/paracraft',
-          filePath: 'learn/works_and_contests'
+          projectName: 'intro/keepwork',
+          filePath: 'NPLCAD'
         }
       },
       data: [
@@ -75,7 +79,6 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.warn(data)
       if (data.value) {
         this.$router.push({ path: `${this.currentPath}/allteachingvideo/${data.value}` })
       }
@@ -102,6 +105,7 @@ export default {
     &-main {
       flex: 1;
       background: #fff;
+      height: 100%;
     }
   }
 }
