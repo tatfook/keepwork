@@ -2,10 +2,10 @@ import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 
-const state = () => ({
+const state = {
   websiteContents: {},
   websiteConfigs: {}
-})
+}
 
 export default {
   namespaced: true,

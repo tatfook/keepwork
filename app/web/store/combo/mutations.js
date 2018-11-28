@@ -9,19 +9,15 @@ export const props = {
 }
 
 const mutations = {
-  [GET_WEBSITE_CONTENT_SUCCESS](
-    state,
-    { fullPath, section, modList }
-  ) {
+  [GET_WEBSITE_CONTENT_SUCCESS](state, { fullPath, section, modList, content }) {
     Vue.set(state, 'websiteContents', {
       ...state.websiteContents,
       [fullPath]: {
         ...state.websiteContents[fullPath],
-        [section]: modList
+        modList,
+        content
       }
     })
-    console.warn('websiteContents--------------->')
-    console.warn(state.websiteContents)
   },
   [GET_WEBSITE_CONFIG_SUCCESS](state, { projectName, config }) {
     Vue.set(state, 'websiteConfigs', {

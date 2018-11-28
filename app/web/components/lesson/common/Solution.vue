@@ -13,7 +13,6 @@ export default {
   },
   data() {
     return {
-      currentTab: 'teachingIdea',
       solutions: {
         teachingIdea: {
           projectName: 'official/paracraft',
@@ -38,37 +37,13 @@ export default {
       }
     }
   },
-  watch: {
-    $route(to) {
-      this.isLoading = true
-      const {
-        params: { command }
-      } = to
-      this.currentTab = command
-      this.isLoading = false
-    }
-  },
-  mounted() {
-    const {
-      params: { command }
-    } = this.$route
-    this.currentTab = command
-    this.isLoading = false
-  },
-  computed: {
-    projectName() {
-      return _.get(this.solutions, [this.currentTab, 'projectName'])
-    },
-    filePath() {
-      return _.get(this.solutions, [this.currentTab, 'filePath'])
-    }
-  }
 }
 </script>
 
 <style lang="scss">
 .solution {
   max-width: 1200px;
+  background: #fff;
   margin: 0 auto;
 }
 </style>

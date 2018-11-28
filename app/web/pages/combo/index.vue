@@ -1,5 +1,4 @@
 <template>
-  <!-- <combo-box-view></combo-box-view> -->
   <router-view></router-view>
 </template>
 
@@ -9,7 +8,6 @@ import Vuex from 'vuex'
 import router from './combo.router'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueClipboard from 'vue-clipboard2'
 import editorModule from '@/store/editor'
 import userModule from '@/store/user'
 import comboModule from '@/store/combo'
