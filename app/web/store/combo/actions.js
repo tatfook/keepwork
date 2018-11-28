@@ -10,18 +10,20 @@ const actions = {
   async getContent(
     {
       commit,
-      getters: { getModListByFullPath }
+      getters: { getContentsByFullPath }
     },
     { url = API_URL, projectName, fileName, section = 'main' }
   ) {
     let fullPath = `${projectName}/${fileName}`
+    if (!_.isEmpty(getContentsByFullPath(fullPath))) return
     let content = await gitlabShowRawForGuest(url, projectName, fullPath)
     let modList = Parser.buildBlockList(content)
     commit(GET_WEBSITE_CONTENT_SUCCESS, {
       projectName,
       fullPath,
       section,
-      modList
+      modList,
+      content
     })
   },
   async getWebsiteConfig({ commit }, { url = API_URL, projectName }) {

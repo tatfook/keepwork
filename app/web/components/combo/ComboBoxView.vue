@@ -9,21 +9,21 @@
   </div>
 </template>
 <script>
-import ModLoader from '@/components/viewer/ModLoader'
-import themeFactory from '@/lib/theme/theme.factory'
-import ThemeHelper from '@/lib/theme'
-import { mapGetters, mapActions } from 'vuex'
-import _ from 'lodash'
+import ModLoader from "@/components/viewer/ModLoader"
+import themeFactory from "@/lib/theme/theme.factory"
+import ThemeHelper from "@/lib/theme"
+import { mapGetters, mapActions } from "vuex"
+import _ from "lodash"
 export default {
-  name: 'ComboBoxView',
+  name: "ComboBoxView",
   components: {
     ModLoader
   },
   computed: {
     ...mapGetters({
-      getModListByFullPath: 'combo/getModListByFullPath',
-      websiteContents: 'combo/websiteContents',
-      websiteConfigs: 'combo/websiteConfigs'
+      getContentsByFullPath: "combo/getContentsByFullPath",
+      websiteContents: "combo/websiteContents",
+      websiteConfigs: "combo/websiteConfigs"
     }),
     fullPath() {
       const {
@@ -32,10 +32,10 @@ export default {
       return `${projectName}/${fileName}`
     },
     contents() {
-      return this.getModListByFullPath(this.fullPath)
+      return this.getContentsByFullPath(this.fullPath)
     },
     modList() {
-      return _.get(this.contents, 'main', [])
+      return _.get(this.contents, 'modList', [])
     },
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
@@ -45,7 +45,7 @@ export default {
       this.storedTheme.sheet.attach()
       return this.storedTheme
     }
-  },
+  }
 }
 </script>
 

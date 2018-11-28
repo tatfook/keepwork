@@ -291,7 +291,6 @@ export default {
   },
   watch: {
     $route(route) {
-      console.warn(route.name)
       switch (route.name) {
         case 'CreativityPage':
           return (this.activeIndex = '1')

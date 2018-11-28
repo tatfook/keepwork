@@ -1,12 +1,20 @@
 <template>
   <iframe
     v-if="isIframePattern"
-    id="combo"
+    :id="id"
     :src="iframeUrl"
-    frameborder="0"
     width="100%"
     height="100%"
+    frameborder="0"
+    target="_top"
+    @load="reset"
   ></iframe>
+  <div
+    v-else-if="isHtmlPattern"
+    v-html="html"
+    :class="customClass"
+  >
+  </div>
   <div v-else>
     <mod-loader
       v-for="mod in modList"
@@ -32,6 +40,14 @@ export default {
     pattern: {
       type: String,
       default: ''
+    },
+    id: {
+      type: String,
+      default: 'combo'
+    },
+    customClass: {
+      type: String,
+      default: 'combo-html'
     },
     projectName: {
       type: String,
@@ -71,7 +87,7 @@ export default {
   data() {
     return {
       routeProjectName: '',
-      routeFilePath: ''
+      routeFilePath: '',
     }
   },
   watch: {
@@ -90,21 +106,42 @@ export default {
   },
   async mounted() {
     if (this.isRoutesPattern) {
-      const { params: { [this.routeKey]: command }} = this.$route
+      const { params: { [this.routeKey]: command } } = this.$route
       const { projectName, filePath } = this.routes[command]
       this.routeProjectName = projectName
       this.routeFilePath = filePath
     }
     await this.getContent({
-        projectName: this._projectName,
-        fileName: this._fileName
-      }).catch(e => console.error(e))
+      projectName: this._projectName,
+      fileName: this._fileName
+    }).catch(e => console.error(e))
   },
   methods: {
     ...mapActions({
       getContent: 'combo/getContent',
       getWebsiteConfig: 'combo/getWebsiteConfig'
-    })
+    }),
+    reset() {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.resetHeight()
+          this.resetLink()
+        }, 3000)
+      })
+    },
+    resetHeight() {
+      let ele = document.getElementById(this.id)
+      let iframe = ele.contentDocument ? ele.contentDocument : ele.contentWindow.document
+      let html = iframe.documentElement
+      let body = iframe.body
+      let height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
+      ele.height = height + 100
+    },
+    resetLink() {
+      let iframe = document.getElementById(this.id)
+      let links = iframe.contentWindow.document.querySelectorAll('a')
+      links.forEach(a => a.setAttribute('target', '_blank'))
+    }
   },
   computed: {
     ...mapGetters({
@@ -121,6 +158,9 @@ export default {
     isIframePattern() {
       return this.pattern === 'iframe'
     },
+    isHtmlPattern() {
+      return this.pattern === 'html'
+    },
     fullPath() {
       return `${this._projectName}/${this._fileName}`
     },
@@ -136,22 +176,17 @@ export default {
     iframeUrl() {
       return `/bx?projectName=${this._projectName}&fileName=${
         this._fileName
-      }`
+        }`
     },
     contents() {
       return this.getModListByFullPath(this.fullPath)
     },
     modList() {
-      return _.get(this.contents, 'main', [])
+      return _.get(this.contents, 'modList', [])
     },
-    // layout() {
-    //   let layoutId = _.get(this.pages, [this.fileName, 'layout'], '')
-    //   if (!layoutId) return {}
-    //   return _.find(
-    //     _.get(this.layoutConfig, ['layouts'], []),
-    //     item => item.id === layoutId
-    //   )
-    // },
+    html() {
+      return _.get(this.content, 'content', '')
+    },
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
       if (this.storedTheme === newTheme) return this.storedTheme
