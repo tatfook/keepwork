@@ -25,32 +25,32 @@
           <el-popover placement="top" width="160" @show='showSocialShare'>
             <div class="kp-social-share"></div>
             <el-button slot="reference" plain size="medium">
-              <i class="iconfont icon-share1"></i>分享
+              <i class="iconfont icon-share1"></i>{{$t("project.share")}}
             </el-button>
           </el-popover>
         </div>
         <div class="project-header-operations-item">
           <el-button plain size="medium" @click="toggleFavoriteProject" :loading="isFavoriteButtonLoading">
-            <i class="iconfont" :class="favoriteIconClass"></i>{{isUserFavoriteProject ? '取消收藏': '收藏'}}
+            <i class="iconfont" :class="favoriteIconClass"></i>{{isUserFavoriteProject ? $t("project.unstar") : $t("project.star")}}
           </el-button>
           <span class="project-header-operations-item-count">{{projectDetail.favoriteCount}}</span>
         </div>
         <div class="project-header-operations-item">
           <el-button plain size="medium" @click='toggleStarProject' :loading="isStarButtonLoading">
-            <i class="iconfont" :class="starIconClass"></i>{{isUserStaredProject ? '取消点赞': '点赞'}}
+            <i class="iconfont" :class="starIconClass"></i>{{isUserStaredProject ? $t("project.unlike") : $t("project.like")}}
           </el-button>
           <span class="project-header-operations-item-count">{{projectDetail.star}}</span>
         </div>
       </div>
       <el-tabs v-model="activePageName" class="project-header-tabs" @tab-click="handleTabClick">
         <el-tab-pane name="ProjectIndexPage">
-          <span slot="label" class="project-header-tabs-label">主页</span>
+          <span slot="label" class="project-header-tabs-label">{{$t("project.main")}}</span>
         </el-tab-pane>
         <el-tab-pane name="ProjectWhiteBoard" v-if="!isProhibitView">
-          <span slot="label" class="project-header-tabs-label">白板</span>
+          <span slot="label" class="project-header-tabs-label">{{$t("project.whiteboard")}}</span>
         </el-tab-pane>
         <el-tab-pane name="EditProject" v-if="isLoginUserEditable">
-          <span slot="label" class="project-header-tabs-label">设定</span>
+          <span slot="label" class="project-header-tabs-label">{{$t("project.setting")}}</span>
         </el-tab-pane>
       </el-tabs>
     </div>

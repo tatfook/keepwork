@@ -44,15 +44,15 @@
             <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
-            <div class="greeting">你好，{{username}}</div>
+            <div class="greeting">{{$t("common.hello")}}，{{username}}</div>
             <!-- <el-dropdown-item divided>
               <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
             <!-- </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>我的项目</a>
+              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>我的课程</a>
+              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
@@ -68,7 +68,7 @@
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>设置中心</a>
+              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
@@ -110,12 +110,12 @@
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
-            <i class="iconfont icon-wrench-fill"></i>工具<i class="el-icon-caret-bottom right-icon"></i>
+            <i class="iconfont icon-wrench-fill"></i>{{$t('common.tools')}}<i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
-            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>网站编辑器</a></el-dropdown-item>
-            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>Paracraft创意空间</a></el-dropdown-item>
+            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>

@@ -14,17 +14,17 @@
     </el-table>
     <el-card v-if="type === 'card'" class="project-joined-members-list-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span class="project-joined-members-list-card-title">项目成员</span>
+        <span class="project-joined-members-list-card-title">{{$t("project.projectMembers")}}</span>
       </div>
       <div class="project-joined-members-list-card-created">
         <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
         <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
-        <span class="project-joined-members-list-card-label">创建者</span>
+        <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
         <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
-      <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
+      <div v-else class="project-joined-members-list-card-profiles-empty">{{$t("project.noOtherMembers")}}</div>
     </el-card>
   </div>
 </template>

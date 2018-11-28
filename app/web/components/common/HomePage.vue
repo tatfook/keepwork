@@ -11,10 +11,10 @@
             <div class="home-page-simple-show-center-left-desc-box">
               <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)" @mouseout="continueTextAnimation(index)">{{item.text}}</p>
             </div>
-            <span class="join-button" @click="goJoin">免费加入</span>
+            <span class="join-button" @click="goJoin">{{$t("home.joinFree")}}</span>
             <div class="remainder">
-              <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">致教育工作者</a>
-              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">给父母们的话</a>
+              <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">{{$t("home.toEducators")}}</a>
+              <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">{{$t("home.toParents")}}</a>
             </div>
           </div>
           <div class="flexible-info-board">
@@ -23,13 +23,13 @@
         </div>
         <div class="home-page-simple-show-center-right hidden-sm-and-down">
           <div class="home-page-simple-show-center-right-kp">
-            <div class="title">keepwork是做什么的</div>
+            <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div>
             <div class="video">
               <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video>
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
-            <div class="title">官方公告</div>
+            <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
             <!-- <ul v-else class="announce-list">
               <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
@@ -50,8 +50,8 @@
       <div class="home-page-brief-center">
         <div class="box" @click="goCreativityPage" @mouseover="combinedPic('create', -1200,0)" @mouseout="combinedPic('create', -2000,0, 'leave')">
           <div class="box-text">
-            <h2>创造</h2>
-            <p class="box-text-intro">每个人都应该拥有自己的作品</p>
+            <h2>{{$t('common.creativity')}}</h2>
+            <p class="box-text-intro">{{$t("home.everyoneShouldHaveOwnWorks")}}</p>
             <!-- <p class="box-text-own">已创建项目:
               <span class="total">{{excellentProjectsCount}}</span></p> -->
           </div>
@@ -62,8 +62,8 @@
         <div class="line"></div>
         <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200,1)" @mouseout="combinedPic('explore', -2000,1, 'leave')">
           <div class="box-text">
-            <h2>探索</h2>
-            <p class="box-text-intro">打开一扇扇的门发现有趣的世界</p>
+            <h2>{{$t('common.explore')}}</h2>
+            <p class="box-text-intro">{{$t("home.openDoorsToVariousWorlds")}}</p>
             <!-- <p class="box-text-own">已共享内容:
               <span class="total">123456</span></p> -->
           </div>
@@ -74,8 +74,8 @@
         <div class="line"></div>
         <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200,2)" @mouseout="combinedPic('study', -2000,2, 'leave')">
           <div class="box-text">
-            <h2>学习</h2>
-            <p class="box-text-intro">学习起于探索成于创造</p>
+            <h2>{{$t('common.study')}}</h2>
+            <p class="box-text-intro">{{$t("home.learningIsFromExploringToCreating")}}</p>
             <!-- <p class="box-text-own">拥有在线课程：
               <span class="total">{{allPackagesCount}}</span></p> -->
           </div>
@@ -91,8 +91,8 @@
           <div class="title-text">
             <span class="star">
               <img src="@/assets/img/hp_select_project.png" alt="">
-            </span>精选项目</div>
-          <div class="more" @click="viewMore">查看更多&gt;</div>
+            </span>{{$t("home.selectedProjects")}}</div>
+          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
@@ -105,8 +105,8 @@
           <div class="title-text">
             <span class="star">
               <img src="@/assets/img/hp_hot_lesson.png" alt="">
-            </span>热门课程</div>
-          <div class="more" @click="viewMore">查看更多&gt;</div>
+            </span>{{$t("home.hotLessons")}}</div>
+          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
@@ -119,8 +119,8 @@
           <div class="title-text">
             <span class="star">
               <img src="@/assets/img/hp_people_like.png" alt="">
-            </span>大家都觉得赞</div>
-          <div class="more" @click="viewMore">查看更多&gt;</div>
+            </span>{{$t("home.likedByOthers")}}</div>
+          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in likesProjects" :key="index">
@@ -160,27 +160,27 @@ export default {
       briefPic: [
         {
           image: require('@/assets/pblImg/game0.png'),
-          text: '创作3D游戏与动画作品'
+          text: this.$t('home.create3DGameAndAnim')
         },
         {
           image: require('@/assets/pblImg/game1.png'),
-          text: '基于玩与创造的自主学习'
+          text: this.$t('home.selfLearning')
         },
         {
           image: require('@/assets/pblImg/game2.png'),
-          text: '建立个人知识体系、探索他人知识'
+          text: this.$t('home.personalKnowledge')
         },
         {
           image: require('@/assets/pblImg/game3.png'),
-          text: '拥有个人网站展示自己的作品'
+          text: this.$t('home.haveYourOwnSite')
         },
         {
           image: require('@/assets/pblImg/game4.png'),
-          text: '基于项目的学习'
+          text: this.$t('home.learnBasedOnProjects')
         },
         {
           image: require('@/assets/pblImg/game5.png'),
-          text: '来自职业程序员的知识传授'
+          text: this.$t('home.learnFromProfessionalProgrammers')
         }
       ],
       boardImgUrl: require('@/assets/pblImg/game0.png'),

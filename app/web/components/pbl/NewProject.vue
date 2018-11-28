@@ -1,14 +1,14 @@
 <template>
   <div class="new-project container">
     <div class="new-project-step-0" v-show="nowStep === 0">
-      <h1 class="new-project-title">新建项目</h1>
-      <p class="new-project-info">项目，是一个作品的开始。<br>它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
+      <h1 class="new-project-title">{{$t("project.newProject")}}</h1>
+      <p class="new-project-info">{{$t("create.projectIsWhereWorksStart")}}<br>{{$t("create.whatYouLearnFromProject")}}</p>
       <div class="new-project-name">
-        <label for="projectName" class="new-project-label">项目名称</label>
+        <label for="projectName" class="new-project-label">{{$t("project.projectName")}}</label>
         <el-input id="projectName" maxlength="40" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
       </div>
       <div class="new-project-type">
-        <label for="projectName" class="new-project-label">项目类型</label>
+        <label for="projectName" class="new-project-label">{{$t("project.projectType")}}</label>
         <div class="new-project-type-box">
           <div class="new-project-type-item" :class="{'active iconfont': projectType.type === newProjectData.type}" v-for="(projectType, index) in projectTypes" :key="index" @click='selectProjectType(projectType.type)'>
             <img class="new-project-type-item-cover" :src="projectType.type === newProjectData.type ?projectType.activeIconImgSrc:projectType.iconImgSrc" alt="">
@@ -21,9 +21,9 @@
     <div class="new-project-step-1" v-show="nowStep === 1">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
     </div>
-    <el-button :loading="isCreating" v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">完成创建</el-button>
-    <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">下一步</el-button>
-    <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">上一步</el-button>
+    <el-button :loading="isCreating" v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">{{$t("project.createProject")}}</el-button>
+    <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">{{$t("project.next")}}</el-button>
+    <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">{{$t("project.prev")}}</el-button>
   </div>
 </template>
 <script>
@@ -40,14 +40,14 @@ export default {
       projectTypes: [
         {
           type: 1,
-          label: 'Paracraft创意空间',
-          subLabel: '3D动画和游戏作品',
+          label: this.$t("common.paracraft"),
+          subLabel: this.$t("project.3DGameAndAnim"),
           iconImgSrc: require('@/assets/pblImg/project_paracraft.png'),
           activeIconImgSrc: require('@/assets/pblImg/project_paracraft_active.png')
         },
         {
           type: 0,
-          label: '网站',
+          label: this.$t("create.website"),
           iconImgSrc: require('@/assets/pblImg/project_web.png'),
           activeIconImgSrc: require('@/assets/pblImg/project_web_active.png')
         }

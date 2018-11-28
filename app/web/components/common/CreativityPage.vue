@@ -2,43 +2,43 @@
   <div class="creativity-page">
     <div class="creativity-page-create">
       <div class="creativity-page-create-center">
-        <h3>创造，从项目开始</h3>
-        <p class="open-word">项目，是一个作品的开始。</p>
-        <p class="open-word">它将让你在学习中成长，让你体会到团结协作的快乐，让你成为优秀的管理者！</p>
-        <el-button class="create" type="primary" @click="createMyProject">＋创建我的项目</el-button>
+        <h3>{{$t("create.creationStartFromProject")}}</h3>
+        <p class="open-word">{{$t("create.projectIsWhereWorksStart")}}</p>
+        <p class="open-word">{{$t("create.whatYouLearnFromProject")}}</p>
+        <el-button class="create" type="primary" @click="createMyProject">＋{{$t("create.createMyProject")}}</el-button>
         <div class="project-type">
           <el-row>
             <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_paracraft.png" alt="">
                 <div class="project-type-item-title">Paracraft</div>
-                <div class="project-type-item-brief">创造3D交互动画和游戏</div>
+                <div class="project-type-item-brief">{{$t("create.create3DGameAndAnim")}}</div>
               </div>
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_web.png" alt="">
-                <div class="project-type-item-title">网站</div>
-                <div class="project-type-item-brief">创造属于你的网站</div>
+                <div class="project-type-item-title">{{$t("create.website")}}</div>
+                <div class="project-type-item-brief">{{$t("create.createYourOwnSite")}}</div>
               </div>
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/crate_knowledge_no.png" alt="">
-                <div class="project-type-item-title">个人知识引擎</div>
-                <div class="project-type-item-brief">敬请期待！</div>
+                <div class="project-type-item-title">{{$t("create.konwledgeEngine")}}</div>
+                <div class="project-type-item-brief">{{$t("create.toBeReleased")}}</div>
               </div>
             </el-col>
           </el-row>
         </div>
         <div :class="['learn-to-build',{'hidden-learn': hiddenLearn}]" v-if="!hasProjects">
-          <span @click="showLearnStep" class="learn"><i class="el-icon-warning"></i>不太了解项目？马上学习如何创建项目</span><span class="close" @click="closeLearn">&times;</span></div>
+          <span @click="showLearnStep" class="learn"><i class="el-icon-warning"></i>{{$t("create.howToCreateProject")}}</span><span class="close" @click="closeLearn">&times;</span></div>
       </div>
     </div>
     <div class="creativity-page-projects">
       <div class="creativity-page-projects-center">
         <div class="my-projects" v-if="hasProjects">
-          <h4 class="browse-title">我的项目</h4>
+          <h4 class="browse-title">{{$t("create.myProjects")}}</h4>
           <el-row>
             <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in myProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
@@ -46,7 +46,7 @@
           </el-row>
         </div>
         <div class="my-contribute-projects" v-if="myContributeProjectsData.length > 0">
-          <h4 class="browse-title">我参与的项目</h4>
+          <h4 class="browse-title">this.$t("create.contributedProjects")</h4>
           <el-row>
             <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in myContributeProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
@@ -54,7 +54,7 @@
           </el-row>
         </div>
         <div class="others-projects">
-          <h4 class="browse-title">看看其他人的项目</h4>
+          <h4 class="browse-title">{{$t("create.browseOthersProjects")}}</h4>
           <el-row>
             <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in otherProjects" :key="index">
               <project-cell :project="project"></project-cell>
@@ -62,7 +62,7 @@
           </el-row>
         </div>
         <div class="explore-more">
-          <el-button class="more" type="primary" @click="goExplorationPage">去探索更多好玩的项目 →</el-button>
+          <el-button class="more" type="primary" @click="goExplorationPage">{{$t("create.exploreMoreProjects")}} →</el-button>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@ export default {
     myProjectsData() {
       let arr = _.cloneDeep(this.myProjects).sort(this.sortByKey('createdAt'))
       return _.forEach(arr, i => {
-        i.name_title = i.name || '未命名'
+        i.name_title = i.name || this.$t("common.untitled")
       })
     },
     myContributeProjectsData() {
@@ -113,7 +113,7 @@ export default {
         project => project.user.userId !== this.userId
       )
       return _.forEach(myContribute, i => {
-        i.name_title = i.name || '未命名'
+        i.name_title = i.name || this.$t("common.untitled")
       })
     },
     hasProjects() {
@@ -127,7 +127,7 @@ export default {
       )
       let tempArr2 = _.cloneDeep(others.slice(0, 4))
       return _.forEach(tempArr2, i => {
-        i.name_title = i.name || '未命名'
+        i.name_title = i.name || this.$t("common.untitled")
       })
     }
   },
