@@ -109,4 +109,17 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .all-teaching-video {
+      display: block;
+      height: auto;
+    &-content {
+      display: block;
+      height: auto;
+      &-sidebar {
+        width: 100%;
+      }
+    }
+  }
+}
 </style>
