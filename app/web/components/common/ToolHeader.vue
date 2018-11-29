@@ -38,13 +38,10 @@
     </div>
 
     <div class="icons">
-      <a :href="editorPageUrl" class="icon-item" @click.stop='getLogin'>
+      <a :href="editorPageUrl" class="icon-item">
         <i v-if="!isEditable()" class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
         <i v-if="isEditable()" class="iconfont icon-edit" v-tooltip="$t('editor.toEdit')"></i>
       </a>
-      <!-- <a v-if='!this.isLogin'  class="icon-item">
-        <i class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
-      </a> -->
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
         <i class="iconfont icon-Share" v-tooltip="$t('editor.share')"></i>
       </span>
@@ -176,7 +173,6 @@ export default {
       getProfile: 'user/getProfile'
     }),
     isEditable() {
-      console.log(this.personalAndContributedSiteNameList)
       if(!this.userIsLogined && !this.personalAndContributedSiteNameList && !this.activePageInfo) {
         return false
       }
@@ -194,11 +190,6 @@ export default {
         return false
       }
 
-    },
-    getLogin() {
-      if (!this.isLogin) {
-        this.isLoginDialogShow = true
-      }
     },
     pushNewUrl(site) {
       this.$router.push(`/${site.username}/${site.name}`)
