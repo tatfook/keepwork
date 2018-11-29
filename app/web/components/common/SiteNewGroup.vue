@@ -85,7 +85,7 @@ export default {
       this.newMembers = ''
     },
     setNewGroupMemberData() {
-      this.newGroupData.members = _.map(this.memberTags, 'id')
+      this.newGroupData.members = _.map(this.memberTags, 'userId')
     },
     removeMember(member) {
       this.memberTags.splice(this.memberTags.indexOf(member), 1)
