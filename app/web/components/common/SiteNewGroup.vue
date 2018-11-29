@@ -77,6 +77,7 @@ export default {
           username: member.username
         })
         if (findedIndex === -1) {
+          member.userId = member.id
           this.memberTags.push(member)
         }
       })
