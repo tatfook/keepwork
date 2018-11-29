@@ -43,6 +43,8 @@ export default {
 <style lang="scss">
 .solution {
   background: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 </style>
 
