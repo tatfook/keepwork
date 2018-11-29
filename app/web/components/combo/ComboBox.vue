@@ -6,8 +6,8 @@
     width="100%"
     height="100%"
     frameborder="0"
-    target="_top"
     @load="reset"
+    scrolling="no"
   ></iframe>
   <div
     v-else-if="isHtmlPattern"
@@ -88,6 +88,7 @@ export default {
     return {
       routeProjectName: '',
       routeFilePath: '',
+      timer: null
     }
   },
   watch: {
@@ -105,6 +106,7 @@ export default {
     }
   },
   async mounted() {
+    clearTimeout(this.timer)
     if (this.isRoutesPattern) {
       const { params: { [this.routeKey]: command } } = this.$route
       const { projectName, filePath } = this.routes[command]
@@ -123,7 +125,7 @@ export default {
     }),
     reset() {
       this.$nextTick(() => {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this.resetHeight()
           this.resetLink()
         }, 3000)
@@ -135,7 +137,8 @@ export default {
       let html = iframe.documentElement
       let body = iframe.body
       let height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
-      ele.height = height + 100
+      ele.height = 'auto'
+      ele.height = height + 300
     },
     resetLink() {
       let iframe = document.getElementById(this.id)

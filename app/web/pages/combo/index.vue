@@ -14,13 +14,13 @@ import comboModule from '@/store/combo'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
-import '@/components/common/thirdAuth'
 import ComboBoxView from '@/components/combo/ComboBoxView'
 import { transfer } from 'vuex-iframe-sync'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
+
 const i18n = new VueI18n({
   locale,
   messages: i18nMessages
@@ -29,6 +29,7 @@ const i18n = new VueI18n({
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value)
 })
+
 const store = new Vuex.Store({
   modules: {
     user: userModule,
@@ -44,6 +45,7 @@ export default {
   name: 'Combo',
   router,
   store,
+  i18n,
   components: {
     ComboBoxView
   }
