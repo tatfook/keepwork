@@ -120,6 +120,8 @@
     "weekday6": "星期六"
   },
   "editor": {
+    "warningInput": "请输入正确的链接地址",
+
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
     "paracraftDownload": "点击下载",
 

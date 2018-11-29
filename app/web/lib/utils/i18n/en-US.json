@@ -119,6 +119,8 @@
     "weekday6": "Saturday"
   },
   "editor": {
+    "warningInput": "Please enter the correct link address",
+
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
     "paracraftDownload": "Download",
 
