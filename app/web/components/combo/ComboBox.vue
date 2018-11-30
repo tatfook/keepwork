@@ -15,7 +15,10 @@
     :class="customClass"
   >
   </div>
-  <div v-else>
+  <div
+    class="combo-box-container"
+    v-else
+  >
     <mod-loader
       v-for="mod in modList"
       :mod="mod"
@@ -30,6 +33,7 @@ import { mapActions, mapGetters } from 'vuex'
 import ModLoader from '@/components/viewer/ModLoader'
 import themeFactory from '@/lib/theme/theme.factory'
 import ThemeHelper from '@/lib/theme'
+import { locale } from '@/lib/utils/i18n'
 import _ from 'lodash'
 export default {
   name: 'ComboBox',
@@ -40,6 +44,14 @@ export default {
     pattern: {
       type: String,
       default: ''
+    },
+    autoWidth: {
+      type: Boolean,
+      default: false
+    },
+    enableScript: {
+      type: Boolean,
+      default: true
     },
     id: {
       type: String,
@@ -124,6 +136,7 @@ export default {
       getWebsiteConfig: 'combo/getWebsiteConfig'
     }),
     reset() {
+      // FIXME: firame.height bug
       this.$nextTick(() => {
         this.timer = setTimeout(() => {
           this.resetHeight()
@@ -174,6 +187,9 @@ export default {
       return this.isRoutesPattern ? this.routeFilePath : this.filePath
     },
     _fileName() {
+      if (this.isEn) {
+        return /.md$/.test(this._filePath) ? `${this._filePath}_EN` : `${this._filePath}_EN.md`
+      }
       return /.md$/.test(this._filePath) ? this._filePath : `${this._filePath}.md`
     },
     iframeUrl() {
@@ -184,11 +200,17 @@ export default {
     contents() {
       return this.getContentsByFullPath(this.fullPath)
     },
-    modList() {
+    originalModList() {
       return _.get(this.contents, 'modList', [])
+    },
+    modList() {
+      return this.originalModList.map(i => ({ ...i, enableScript: this.enableScript }))
     },
     html() {
       return _.get(this.content, 'content', '')
+    },
+    isEn() {
+      return locale === 'en-US'
     },
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
@@ -203,4 +225,14 @@ export default {
 </script>
 
 <style lang="scss">
+.combo-box-container {
+  .el-row {
+    width: auto;
+    max-width: 1080px;
+  }
+  div[data-mod] {
+    width: auto;
+    max-width: 1080px;
+  }
+}
 </style>

@@ -246,7 +246,7 @@ export default {
     compWrapperOptions(name) {
       let options = {}
 
-      options = _.merge(options, this.generateOptionsStyle(name))
+      options = _.merge(options, this.generateOptionsStyle(name), { enableScript: this.mod.enableScript })
 
       return options
     }
