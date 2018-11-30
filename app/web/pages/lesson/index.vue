@@ -5,7 +5,7 @@
     </div>
     <lesson-header></lesson-header>
     <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <perfect-common-footer class="lesson-page-footer"></perfect-common-footer>
+    <perfect-common-footer></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
