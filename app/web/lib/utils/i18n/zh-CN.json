@@ -994,7 +994,7 @@
     "notActivatedText": {
       "hint": "您已成为本系统的学生用户。如果您是一位教育工作者，需要使用授课功能，请在下方输入激活码。",
       "wrongCodeHint": "激活码有误，请确认后重试。",
-      "getActivationCode": "如需获取激活码，请联系 lixizhi@paraengine.com",
+      "getActivationCode": "如需获取激活码，请联系：程老师 13267059950 （电话/微信）、846704851（QQ）",
       "inputPlaceholder": "请输入激活码",
       "inputBelong": "请输入您所在的学校/机构",
       "activeCode": "激活码:",
