@@ -1,6 +1,6 @@
 <template>
   <div class="offline-guidance-course">
-    <combo-box projectName="official/paracraft" filePath="offline-courses"></combo-box>
+    <combo-box projectName="official/paracraft" filePath="learn/latest_offline_lesson"></combo-box>
   </div>
 </template>
 
