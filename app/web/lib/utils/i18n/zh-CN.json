@@ -800,6 +800,11 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "viewMore": "了解更多",
+    "teachingContent": "教学内容",
+    "onlineLessons": "线上课程",
+    "offlineGuidingLessons": "线下导引课",
+    "instructionalVideos_2": "100+教学视频",
     "deleteDialogYes": "确定",
     "deleteDialogNo": "取消",
     "pleaseInput": "请输入...",

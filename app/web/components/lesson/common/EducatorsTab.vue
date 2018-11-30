@@ -2,22 +2,22 @@
   <div class="eductors-tab">
     <div class="eductors-tab-title">
       <span class="eductors-tab-title-line"></span>
-      <span class="eductors-tab-title-text">教学内容</span>
+      <span class="eductors-tab-title-text">{{$t('lesson.teachingContent')}}</span>
       <span class="eductors-tab-title-line"></span>
     </div>
     <div class="eductors-tab-operations">
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 0 }]"
         @click="switchTab(0)"
-      >线上课程</span>
+      >{{$t('lesson.onlineLessons')}}</span>
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 1 }]"
         @click="switchTab(1)"
-      >线下引导课</span>
+      >{{$t('lesson.offlineGuidingLessons')}}</span>
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 2 }]"
         @click="switchTab(2)"
-      >100+教学课程</span>
+      >{{$t('lesson.instructionalVideos_2')}}</span>
     </div>
 
     <div class="eductors-tab-main">
@@ -25,7 +25,7 @@
         class="eductors-tab-main-item eductors-tab-main-item-online"
         v-show="currentTab === 0"
       >
-        <div class="eductors-tab-main-title">热门课程</div>
+        <div class="eductors-tab-main-title">{{$t('lesson.about.hottestLessons')}}</div>
         <div class="eductors-tab-main-item-wrap">
           <div
             class="eductors-tab-main-item-wrap-cell"
@@ -38,9 +38,9 @@
               :alt="item.packageName"
             >
             <div class="eductors-tab-main-item-wrap-cell-text-title">{{item.packageName}}</div>
-            <div class="eductors-tab-main-item-wrap-cell-text">包含: {{item.lessons.length}}个课程</div>
-            <div class="eductors-tab-main-item-wrap-cell-text"> 年龄: {{getPackageSuitableAge(item)}}</div>
-            <div class="eductors-tab-main-item-wrap-cell-text-desc">简介: {{item.intro}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text">{{$t('lesson.include')}}: {{item.lessons.length}}{{$t('lesson.lessonsCount')}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text"> {{$t('lesson.ages')}}: {{getPackageSuitableAge(item)}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text-desc">{{$t('lesson.intro')}}: {{item.intro}}</div>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
         class="eductors-tab-footer-more"
         @click="handleMore"
       >
-        了解更多
+        {{$t('lesson.viewMore')}}
       </div>
     </div>
   </div>
