@@ -63,7 +63,7 @@
       >
         <div
           class="eductors-tab-main-item-video-tab"
-          @click="goLesson()"
+          @click="handleMore"
         >
           <img
             src="@/assets/lessonImg/teaching-video_1.png"
@@ -73,7 +73,7 @@
         </div>
         <div
           class="eductors-tab-main-item-video-tab"
-          @click="goLesson()"
+          @click="handleMore"
         >
           <img
             src="@/assets/lessonImg/teaching-video_2.png"
@@ -83,14 +83,14 @@
         </div>
         <div
           class="eductors-tab-main-item-video-tab"
-          @click="goLesson()"
+          @click="handleMore"
         >
-        <div>
-          <img
-            src="@/assets/lessonImg/teaching-video_3.png"
-            alt=""
-          >
-        </div>
+          <div>
+            <img
+              src="@/assets/lessonImg/teaching-video_3.png"
+              alt=""
+            >
+          </div>
           <div>{{$t('lesson.CADLesson')}}</div>
         </div>
       </div>
@@ -141,6 +141,12 @@ export default {
       this.$router.push(`/student/allteachingvideo`)
     },
     handleMore() {
+      if (this.currentTab === 1) {
+        return this.$router.push('/student/parent/offline')
+      }
+      if (this.currentTab === 2) {
+        return this.$router.push('/student/allteachingvideo/animate')
+      }
       this.$router.push(`/student/center`)
     }
   }
