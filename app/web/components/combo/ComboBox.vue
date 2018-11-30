@@ -15,7 +15,10 @@
     :class="customClass"
   >
   </div>
-  <div v-else>
+  <div
+    class="combo-box-container"
+    v-else
+  >
     <mod-loader
       v-for="mod in modList"
       :mod="mod"
@@ -40,6 +43,14 @@ export default {
     pattern: {
       type: String,
       default: ''
+    },
+    autoWidth: {
+      type: Boolean,
+      default: false
+    },
+    enableScript: {
+      type: Boolean,
+      default: true
     },
     id: {
       type: String,
@@ -184,8 +195,11 @@ export default {
     contents() {
       return this.getContentsByFullPath(this.fullPath)
     },
-    modList() {
+    originalModList() {
       return _.get(this.contents, 'modList', [])
+    },
+    modList() {
+      return this.originalModList.map(i => ({ ...i, enableScript: this.enableScript }))
     },
     html() {
       return _.get(this.content, 'content', '')
@@ -203,4 +217,10 @@ export default {
 </script>
 
 <style lang="scss">
+.combo-box-container {
+  .el-row {
+    width: auto;
+    max-width: 1080px;
+  }
+}
 </style>

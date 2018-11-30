@@ -8,12 +8,10 @@
           @node-click="handleNodeClick"
         ></el-tree>
       </div>
-      <div
-        class="all-teaching-video-content-main"
-      >
+      <div class="all-teaching-video-content-main">
         <combo-box
-          pattern="iframe"
           :routes="routes"
+          :autoWidth="true"
         ></combo-box>
       </div>
     </div>
@@ -106,13 +104,22 @@ export default {
       flex: 1;
       background: #fff;
       height: 100%;
+      overflow: hidden;
+      .el-row {
+        width: auto;
+        max-width: 930px;
+      }
+      div[data-mod] {
+        width: auto;
+        max-width: 930px;
+      }
     }
   }
 }
 @media screen and (max-width: 768px) {
   .all-teaching-video {
-      display: block;
-      height: auto;
+    display: block;
+    height: auto;
     &-content {
       display: block;
       height: auto;
