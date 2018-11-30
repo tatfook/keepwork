@@ -15,7 +15,7 @@
               <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.selfLearning')}}</p>
             <div class="teaching-function">
               <p>
-                <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.learnAmazingLessons')}}<span>({{$t('lesson.partiallyFree')}})</span></p>
+                <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.learnAmazingLessons')}}<span class="lihgt">({{n == 1 ? $t('lesson.partiallyFree'):$t('lesson.allFree')}})</span></p>
               <p>
                 <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.realTimeFeedback')}}</p>
             </div>
@@ -52,6 +52,9 @@
 </template>
 <style lang="scss">
 .shared-course-lecturer {
+  .lihgt{
+    color: #ff742e;
+  }
   &-title {
     text-align: center;
     font-size: 24px;
