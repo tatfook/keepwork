@@ -795,6 +795,10 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "teachingContent": "Teach with diversified contents",
+    "onlineLessons": "Online Lessons",
+    "offlineGuidingLessons": "Guiding Lessons",
+    "instructionalVideos_2": "Videos",
     "deleteDialogYes": "Yes",
     "deleteDialogNo": "No",
     "pleaseInput": "please input...",

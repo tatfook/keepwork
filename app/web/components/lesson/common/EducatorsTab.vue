@@ -2,22 +2,22 @@
   <div class="eductors-tab">
     <div class="eductors-tab-title">
       <span class="eductors-tab-title-line"></span>
-      <span class="eductors-tab-title-text">教学内容</span>
+      <span class="eductors-tab-title-text">{{$t('lesson.teachingContent')}}</span>
       <span class="eductors-tab-title-line"></span>
     </div>
     <div class="eductors-tab-operations">
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 0 }]"
         @click="switchTab(0)"
-      >线上课程</span>
+      >{{$t('lesson.onlineLessons')}}</span>
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 1 }]"
         @click="switchTab(1)"
-      >线下引导课</span>
+      >{{$t('lesson.offlineGuidingLessons')}}</span>
       <span
         :class="['eductors-tab-operations-button', {'selected': currentTab === 2 }]"
         @click="switchTab(2)"
-      >100+教学课程</span>
+      >{{$t('lesson.instructionalVideos_2')}}</span>
     </div>
 
     <div class="eductors-tab-main">
