@@ -56,7 +56,7 @@ export default {
   },
   async mounted() {
     let payload = { userId: this.userId }
-    await this.getUserSubscribes()
+    await this.getUserSubscribes().catch(e => console.error(e))
     this.loading = false
   },
   computed: {
