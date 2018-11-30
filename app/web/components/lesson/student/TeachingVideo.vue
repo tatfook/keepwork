@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     goLesson(index) {
-      return this.$router.push(`/student/allteachingvideo`)
+      return this.$router.push(`/student/allteachingvideo/animate`)
     }
   }
 }
