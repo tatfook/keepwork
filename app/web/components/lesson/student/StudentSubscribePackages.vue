@@ -96,7 +96,7 @@ export default {
     enterPackageDetail() {
       let packageId = this.packageDetail.id
       this.$router.push({
-        path: `student/package/${packageId}`
+        path: `/student/package/${packageId}`
       })
     },
     attendClass() {
