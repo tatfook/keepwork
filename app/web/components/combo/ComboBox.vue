@@ -230,9 +230,5 @@ export default {
     width: auto;
     max-width: 1080px;
   }
-  div[data-mod] {
-    width: auto;
-    max-width: 1080px;
-  }
 }
 </style>
