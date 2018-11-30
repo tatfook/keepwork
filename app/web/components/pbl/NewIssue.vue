@@ -1,16 +1,16 @@
 <template>
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="new-issue-dialog">
     <div class="new-issue">
-      <div class="title">{{$t('project.createNewIssue')}}</div>
+      <div class="title">{{$t('project.createNewIssueTitle')}}</div>
       <div class="sketch">
         <div class="sketch-box">
-          <div class="sketch-box-tag">{{$t("project.title")}}</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t("project.title")}}</div>
           <div class="sketch-box-content">
             <el-input size="medium" v-model="issueTitle" :placeholder='$t("project.pleaseInputTitle")'></el-input>
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">{{$t('project.labels')}}</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.labels')}}</div>
           <div class="sketch-box-content" v-loading='isTagLoading'>
             <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
               {{tag}}
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">{{$t('project.asignees')}}</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.asignees')}}</div>
           <div class="sketch-box-content">
             <div class="player">
               <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">{{$t('project.write')}}</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.write')}}</div>
           <div class="sketch-box-content">
             <el-input type="textarea" :rows="4" v-model="descriptionText" :placeholder="$t('project.writeAComment')"></el-input>
           </div>
@@ -51,6 +51,7 @@
   </el-dialog>
 </template>
 <script>
+import { locale } from '@/lib/utils/i18n'
 import { keepwork } from '@/api'
 import _ from 'lodash'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
@@ -89,6 +90,9 @@ export default {
     ...mapGetters({
       pblProjectMemberList: 'pbl/projectMemberList'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectId })
     },
@@ -239,6 +243,9 @@ export default {
           width: 52px;
           font-size: 14px;
           color: #909399;
+          &-en {
+            width: 80px;
+          }
         }
         &-content {
           flex: 1;
@@ -274,7 +281,7 @@ export default {
               position: relative;
               margin-top: 8px;
               &::after {
-                content: '';
+                content: "";
                 height: 16px;
                 width: 1px;
                 background: #6e6d6d;
@@ -283,7 +290,7 @@ export default {
                 top: 10px;
               }
               &::before {
-                content: '';
+                content: "";
                 height: 1px;
                 width: 16px;
                 background: #6e6d6d;

@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       projectTypes: [this.$t("explore.websites"), this.$t("common.paracraft")],
-      applyStates: [this.$t("explore.applyJoin"), this.$t("explore.requested"), this.$t("explore.joined")],
+      applyStates: [this.$t("project.applyJoin"), this.$t("project.requested"), this.$t("project.joined")],
       binderDialogVisible: false,
       isApplyButtonLoading: false,
       isBinderDialogLoading: false,

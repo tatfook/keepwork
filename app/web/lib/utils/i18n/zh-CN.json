@@ -1314,6 +1314,7 @@
     "inProgress": "进行",
     "finished": "全部",
     "createNewIssue": "新建问题",
+    "createNewIssueTitle": "新建问题",
     "searchMethod": "搜索标题关键字或id...",
     "comment": "评论",
     "having": "已有",

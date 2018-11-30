@@ -138,6 +138,7 @@
 </template>
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
+import { locale } from '@/lib/utils/i18n'
 import ProjectCell from './ProjectCell'
 import { lesson, keepwork } from '@/api'
 import RegisterDialog from './RegisterDialog'
@@ -217,6 +218,9 @@ export default {
     this.originLikesProjects = likes
   },
   computed: {
+    isEn() {
+      return locale === 'en-US'
+    },
     handpickProjects() {
       return _.map(_.get(this.originHandpickProjects, 'rows', []), i => ({
         ...i,
@@ -323,7 +327,7 @@ export default {
       const HomePageInfo = {
         apiPrefix: 'https://api.keepwork.com/git/v0',
         projectName: 'official/keepwork',
-        newsPath: 'official/keepwork/news.md'
+        newsPath: this.isEn ? 'official/keepwork/news_en.md' : 'official/keepwork/news.md'
       }
       return gitlabShowRawForGuest(
         HomePageInfo.apiPrefix,

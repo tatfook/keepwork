@@ -1309,6 +1309,7 @@
     "inProgress": "In Progress",
     "finished": "Finished",
     "createNewIssue": "New Issue",
+    "createNewIssueTitle": "Create a new issue",
     "searchMethod": "search titles, keywords, or id...",
     "comment": "Comment",
     "having": "",
