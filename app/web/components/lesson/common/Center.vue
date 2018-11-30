@@ -218,10 +218,11 @@ export default {
     .lesson-packages {
       &-subject {
         .subject-desc {
-          width: 94%;
+          max-width: 287px;
           box-sizing: border-box;
           padding: 4px 4px 6px;
           border: none;
+          margin: 20px auto;
           border-bottom: solid 2px #d2d2d2;
           .img-wrap {
             width: 100%;

@@ -164,6 +164,7 @@ export default {
               height: 15px;
               position: absolute;
               top: 23px;
+              left: 0;
             }
           }
           .line {
