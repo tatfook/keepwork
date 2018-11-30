@@ -8,10 +8,10 @@
       </el-input>
     </div> -->
     <el-tabs class="project-members-tabs" type="card">
-      <el-tab-pane label="申请列表">
+      <el-tab-pane :label="$t('project.applicants')">
         <project-applied-list :projectId='projectId'></project-applied-list>
       </el-tab-pane>
-      <el-tab-pane label="项目成员">
+      <el-tab-pane :label="$t('project.projectMembers')">
         <project-joined-members-list :projectDetail='projectDetail' :projectId='projectId'></project-joined-members-list>
       </el-tab-pane>
     </el-tabs>

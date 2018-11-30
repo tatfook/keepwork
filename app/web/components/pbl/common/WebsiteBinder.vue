@@ -8,7 +8,7 @@
       <div class="website-binder-cards-item" @click="openUserSitesDialog">{{$t("project.selectExistingWebsite")}}</div>
       <div class="website-binder-cards-item" @click='openNewSiteDialog'>{{$t("project.createNewWebsite")}}</div>
     </div>
-    <el-dialog v-loading='isCreating' width="760px" title="选择已有网站" :visible.sync="isUserSitesDialogShow" :append-to-body='true'>
+    <el-dialog v-loading='isCreating' width="760px" :title="$t('project.selectExistingSite')" :visible.sync="isUserSitesDialogShow" :append-to-body='true'>
       <user-sites-selector ref='userSitesRef'></user-sites-selector>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeUserSitesDialog">{{$t("common.Cancel")}}</el-button>

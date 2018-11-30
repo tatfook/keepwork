@@ -1,24 +1,24 @@
 <template>
   <el-dialog class="paracraft-info" :visible.sync="isDialogVisible" width="508px" :before-close="handleDialogClose">
     <div class="paracraft-info-content">
-      <h1 class="paracraft-info-title">paracraft创意空间</h1>
+      <h1 class="paracraft-info-title">{{$t('common.paracraft')}}</h1>
       <div class="paracraft-info-intro">
-        <p>一款免费的3D创作软件</p>
-        <p>你可以用它创建3D场景和人物，制作动画和游戏，学习和编写计算机程序</p>
+        <p>{{$t('project.aFree3DCreationSoftware')}}</p>
+        <p>{{$t('project.whatYouCanUseByParacraft')}}</p>
       </div>
       <div class="paracraft-info-operations">
         <a href='http://paracraft.keepwork.com/download?lang=zh' target="_blank" class="el-button el-button--warning">
-          <span>下载Paracraft</span>
+          <span>{{$t('project.downloadParacraft')}}</span>
         </a>
         <a href='http://paracraft.keepwork.com/?lang=zh' target="_blank" class="el-button">
-          <span>了解更多</span>
+          <span>{{$t('project.knowMore')}}</span>
         </a>
       </div>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>安装过程中系统会提示您安装url protocols，请同意。</p>
+      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseAgreeProtocol')}}</p>
       <div class="paracraft-info-operations">
-        <el-button type="primary" @click="toParacraftWorld">启动3D世界</el-button>
+        <el-button type="primary" @click="toParacraftWorld">{{$t('project.open3DWorld')}}</el-button>
       </div>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>如果要编辑您的3D世界，请在Paracraft中登录后操作。</p>
+      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
     </div>
     <img class="paracraft-info-background-img paracraft-info-background-img-left-top" src="@/assets/img/paracraft_box.png" alt="">
     <img class="paracraft-info-background-img paracraft-info-background-img-right-bottom" src="@/assets/img/littepurple_box.png" alt="">

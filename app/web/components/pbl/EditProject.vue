@@ -2,11 +2,11 @@
   <div class="edit-project">
     <el-tabs v-if="isLoginUserEditable" class="edit-project-tabs container" v-model="activeName" type="card" v-loading='isLoading'>
       <el-tab-pane name="editing" class="edit-project-tabs-pane">
-        <span slot="label">设定</span>
+        <span slot="label">{{$t('project.setting')}}</span>
         <project-editing :originPrivilege='originPrivilege' :originVisibility='originVisibility' :originalProjectDetail='pblProjectDetail'></project-editing>
       </el-tab-pane>
       <el-tab-pane name="members" class="edit-project-tabs-pane">
-        <span slot="label">成员</span>
+        <span slot="label">{{$t('project.members')}}</span>
         <project-members :projectDetail='pblProjectDetail' :projectId='projectId' class="edit-project-members"></project-members>
       </el-tab-pane>
     </el-tabs>

@@ -299,7 +299,7 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '项目信息更新成功'
+            message: this.$t('project.projectInfoUpdated')
           })
           this.isLoading = false
           this.isDescriptionEditing = false
