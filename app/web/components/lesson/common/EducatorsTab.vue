@@ -25,7 +25,7 @@
         class="eductors-tab-main-item eductors-tab-main-item-online"
         v-show="currentTab === 0"
       >
-        <div class="eductors-tab-main-title">热门课程</div>
+        <div class="eductors-tab-main-title">{{$t('lesson.about.hottestLessons')}}</div>
         <div class="eductors-tab-main-item-wrap">
           <div
             class="eductors-tab-main-item-wrap-cell"
@@ -38,9 +38,9 @@
               :alt="item.packageName"
             >
             <div class="eductors-tab-main-item-wrap-cell-text-title">{{item.packageName}}</div>
-            <div class="eductors-tab-main-item-wrap-cell-text">包含: {{item.lessons.length}}个课程</div>
-            <div class="eductors-tab-main-item-wrap-cell-text"> 年龄: {{getPackageSuitableAge(item)}}</div>
-            <div class="eductors-tab-main-item-wrap-cell-text-desc">简介: {{item.intro}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text">{{$t('lesson.include')}}: {{item.lessons.length}}{{$t('lesson.lessonsCount')}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text"> {{$t('lesson.ages')}}: {{getPackageSuitableAge(item)}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text-desc">{{$t('lesson.intro')}}: {{item.intro}}</div>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
         class="eductors-tab-footer-more"
         @click="handleMore"
       >
-        了解更多
+        {{$t('lesson.viewMore')}}
       </div>
     </div>
   </div>
