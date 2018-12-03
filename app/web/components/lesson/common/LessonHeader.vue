@@ -18,7 +18,7 @@
       </span>
     </el-dialog>
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">{{`C${classroomId}` | idPretty}}</div>
+      <div class="full-font">C {{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
       <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
