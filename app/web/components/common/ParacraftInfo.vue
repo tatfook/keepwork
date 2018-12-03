@@ -142,7 +142,7 @@ export default {
     toParacraftWorldZip() {
       if (this.paracraftUrl) {
         let url = decodeURIComponent(this.paracraftUrl)
-        let downloadWorldZip = url.substring(url.indexOf('http'))
+        let downloadWorldZip = url.substring(url.indexOf('http'), url.lastIndexOf('.zip') + 4)
         this.launchUri(downloadWorldZip)
       }
     },
