@@ -6,7 +6,7 @@ const Center = () => import('@/components/lesson/common/Center')
 const AllTeachingVideo = () => import('@/components/lesson/common/AllTeachingVideo')
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
 const Solution = () => import('@/components/lesson/common/Solution')
-const ParentMore = () => import('@/components/lesson/common/ParentMore')
+const MoreResources = () => import('@/components/lesson/common/MoreResources')
 
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
@@ -140,9 +140,9 @@ export default new Router({
           component: AllTeachingVideo
         },
         {
-          path: 'parent/:command',
-          name: 'TeacherParentMore',
-          component: ParentMore
+          path: 'moreResources/:command',
+          name: 'TeacherMoreResources',
+          component: MoreResources
         },
         {
           path: 'about',
@@ -257,9 +257,9 @@ export default new Router({
           component: AllTeachingVideo
         },
         {
-          path: 'parent/:command',
-          name: 'StudentParentMore',
-          component: ParentMore
+          path: 'moreResources/:command',
+          name: 'StudentMoreResources',
+          component: MoreResources
         },
         {
           path: 'about',

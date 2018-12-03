@@ -142,7 +142,7 @@ export default {
     },
     handleMore() {
       if (this.currentTab === 1) {
-        return this.$router.push('/student/parent/offline')
+        return this.$router.push('/student/moreResources/offline')
       }
       if (this.currentTab === 2) {
         return this.$router.push('/student/allteachingvideo/animate')

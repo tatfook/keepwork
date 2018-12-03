@@ -7,7 +7,7 @@
 <script>
 import ComboBox from '@/components/combo/ComboBox'
 export default {
-  name: 'ParentMore',
+  name: 'MoreResources',
   components: {
     ComboBox
   },
@@ -21,6 +21,10 @@ export default {
         memtor: {
           projectName: 'official/paracraft',
           filePath: 'learn/mentor_service'
+        },
+        paracraft: {
+          projectName: 'official/paracraft',
+          filePath: 'index'
         }
       },
       currentFilePath: ''
