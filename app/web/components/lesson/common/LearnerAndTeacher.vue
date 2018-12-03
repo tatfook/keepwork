@@ -8,7 +8,7 @@
           <span class="role-cost">{{n === 1 ? $t('lesson.free') : `￥5000${$t('lesson.perYearPerPerson')}`}}</span>
         </div>
         <div class="access">
-          <p>
+          <p class="caption">
             <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.selfLearning')}}</p>
           <div class="teaching-function">
             <p>
@@ -16,7 +16,7 @@
             <p>
               <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.realTimeFeedback')}}</p>
           </div>
-          <p :class="{'not-student-privilege-text': n === 1}">
+          <p :class="[{'not-student-privilege-text': n === 1},'caption']">
             <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.lessonDevelopment')}}</p>
           <div class="teaching-function">
             <p :class="{'not-student-privilege-text': n === 1}">
@@ -26,7 +26,7 @@
             <p :class="{'not-student-privilege-text': n === 1}">
               <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t("lesson.getBenefit")}}</p>
           </div>
-          <p :class="{'not-student-privilege-text': n === 1}">
+          <p :class="[{'not-student-privilege-text': n === 1},'caption']">
             <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.classroomTeaching')}}</p>
           <div class="teaching-function">
             <p :class="{'not-student-privilege-text': n === 1}">
@@ -92,6 +92,9 @@ export default {
       .access {
         padding: 44px 25px;
         background: #fff;
+        .caption{
+          margin-bottom: 2px;
+        }
         p {
           padding-left: 24px;
           position: relative;
@@ -113,6 +116,9 @@ export default {
         }
         .teaching-function {
           margin-left: 20px;
+          p{
+            margin: 2px;
+          }
         }
       }
     }

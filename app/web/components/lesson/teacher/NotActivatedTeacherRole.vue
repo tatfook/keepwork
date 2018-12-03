@@ -4,7 +4,7 @@
       <div class="teacher-top-hint">
         <p>{{$t('lesson.notActivatedText.hint')}}</p>
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
-        <el-form class="teacher-top-hint-input" label-width="120px">
+        <el-form class="teacher-top-hint-input" label-width="150px">
           <el-form-item :label="$t('lesson.notActivatedText.activeCode')" prop=''>
             <el-input v-model.trim="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
           </el-form-item>
