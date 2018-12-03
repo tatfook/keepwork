@@ -17,8 +17,10 @@
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>安装过程中系统会提示您安装url protocols，请同意。</p>
       <div class="paracraft-info-operations">
         <el-button type="primary" @click="toParacraftWorld">启动3D世界</el-button>
+        <el-button @click="toParacraftWorldZip">下载存档</el-button>
       </div>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>如果要编辑您的3D世界，请在Paracraft中登录后操作。</p>
+      <p class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>如果要编辑您的3D世界，请在Paracraft中登录后操作。</p>
+      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>下载的存档请放在Paracraft安装目录下的\worlds\DesignHouse\中使用。</p>
     </div>
     <img class="paracraft-info-background-img paracraft-info-background-img-left-top" src="@/assets/img/paracraft_box.png" alt="">
     <img class="paracraft-info-background-img paracraft-info-background-img-right-bottom" src="@/assets/img/littepurple_box.png" alt="">
@@ -137,6 +139,13 @@ export default {
         this.launchUri(this.paracraftUrl)
       }
     },
+    toParacraftWorldZip() {
+      if (this.paracraftUrl) {
+        let url = decodeURIComponent(this.paracraftUrl)
+        let downloadWorldZip = url.substring(url.indexOf('http'))
+        this.launchUri(downloadWorldZip)
+      }
+    },
     handleDialogClose() {
       this.$emit('close')
     }
@@ -164,6 +173,8 @@ export default {
     }
   }
   &-operations {
+    display: inline-block;
+    margin-bottom: 4px;
     .el-button {
       font-size: 13px;
       text-decoration: none;
@@ -175,7 +186,15 @@ export default {
   &-operate-info {
     font-size: 12px;
     color: #909399;
-    margin: 16px 0 40px;
+    margin-bottom: 40px;
+    word-break:break-all;
+    span {
+      color: #f32323;
+    }
+  }
+  &-operate-msg {
+    font-size: 12px;
+    color: #909399;
     span {
       color: #f32323;
     }
@@ -197,7 +216,7 @@ export default {
     margin-top: 160px !important;
   }
   .el-dialog__body {
-    padding: 32px 16px 8px 184px;
+    padding: 32px 22px 8px 184px;
   }
 }
 
