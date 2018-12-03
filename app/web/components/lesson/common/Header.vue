@@ -223,7 +223,7 @@ export default {
           color: #ffffff;
         }
         &.selected {
-          background: #2397f3;
+          background: #409efe;
           color: #ffffff;
         }
       }
@@ -234,19 +234,19 @@ export default {
         cursor: pointer;
         .el-dropdown-link {
           &.selected {
-            color: #4db5ff;
+            color: #409efe;
           }
         }
       }
       &-link {
-        color: #2397f3;
+        color: #409efe;
         font-size: 16px;
         cursor: pointer;
         &:hover {
           color: #4db5ff;
         }
         &.selected {
-          color: #4db5ff;
+          color: #409efe;
         }
       }
     }
