@@ -7,7 +7,7 @@
     </el-dialog>
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="600px">
       <div>{{$t('lesson.curentClassId')}}
-        <span class="class-id">{{classroomId}}</span>
+        <span class="class-id">C{{classroomId}}</span>
       </div>
       <div v-html="$t('lesson.studentEnterClassId',{studentsPerformance:`<span class='performance'>${$t('lesson.studentsPerformance')}</span>`})">
       </div>
@@ -18,7 +18,7 @@
       </span>
     </el-dialog>
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">{{classroomId | idPretty}}</div>
+      <div class="full-font">{{`C${classroomId}` | idPretty}}</div>
     </el-dialog>
     <el-row>
       <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
@@ -28,7 +28,7 @@
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: {{classroomId}}</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: C{{classroomId}}</div>
           </el-tooltip>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
