@@ -31,7 +31,7 @@
           </div>
         </div>
         <recent-project class="profile-index-main-item" :nowUserDetail='nowUserDetail'></recent-project>
-        <contribution-calendar class="profile-index-main-item"></contribution-calendar>
+        <contribution-calendar class="profile-index-main-item" :nowUserDetail='nowUserDetail'></contribution-calendar>
         <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail'></user-experiences>
       </div>
     </div>

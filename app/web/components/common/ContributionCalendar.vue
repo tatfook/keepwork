@@ -30,36 +30,43 @@ import '@/lib/contribution-calendar/css/contribution-calendar.css'
 import contributionCalendarCreator from '@/lib/contribution-calendar/js/contribution-calendar'
 export default {
   name: 'ContributionCalendar',
+  props: {
+    nowUserDetail: {
+      type: Object,
+      required: true
+    }
+  },
   mounted() {
-    contributionCalendarCreator('contributeCalendar', {
-      year: '2018',
-      active: true,
-      stepColor: this.stepColor,
-      defaultColor: this.defaultColor,
-      defaultTextFillColor: '#909399',
-      dateCount: {
-        '2018-01-01': 0,
-        '2018-02-01': 1,
-        '2018-03-01': 5,
-        '2018-04-01': 6,
-        '2018-05-01': 7,
-        '2018-06-01': 14,
-        '2018-06-06': 17,
-        '2018-06-11': 19,
-        '2018-06-21': 21,
-        '2018-07-01': 24,
-        '2018-07-11': 28,
-        '2018-08-01': 35,
-        '2018-10-01': 40
-      }
-    })
+    this.setContributionCalendar()
   },
   data() {
     return {
       defaultColor: '#ebecee',
       stepColor: ['#cceaf9', '#82c6f1', '#3794de', '#175496', '#0d3a73']
     }
-  }
+  },
+  computed: {
+    contributionData() {
+      return _.get(this.nowUserDetail, 'contributions', {})
+    }
+  },
+  methods: {
+    setContributionCalendar() {
+      contributionCalendarCreator('contributeCalendar', {
+        year: '2018',
+        active: true,
+        stepColor: this.stepColor,
+        defaultColor: this.defaultColor,
+        defaultTextFillColor: '#909399',
+        dateCount: this.contributionData
+      })
+    }
+  },
+  watch: {
+    contributionData() {
+      this.setContributionCalendar()
+    }
+  },
 }
 </script>
 <style lang="scss">
@@ -79,7 +86,7 @@ export default {
   &-container {
     position: relative;
     &::before {
-      content: '';
+      content: "";
       display: inline-block;
       width: 1px;
       height: 50px;
@@ -90,7 +97,7 @@ export default {
       z-index: 2;
     }
     &::after {
-      content: '';
+      content: "";
       display: inline-block;
       width: 45px;
       height: 50px;
