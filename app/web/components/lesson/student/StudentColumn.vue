@@ -111,7 +111,7 @@ export default {
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
     },
-    initSelect() {
+    setActiveItem() {
       const SWITCH_TAG = {
         'LearningCenterPackages': '0',
         'OfflineGuidanceCourse': '1',
@@ -120,7 +120,7 @@ export default {
       const { name } = this.$route
       this.currOption = SWITCH_TAG[name] || '0'
     },
-    setActiveItem(index) {
+    switchSelect(index) {
       this.currOption = index
       let routerName = ''
       switch (index) {
