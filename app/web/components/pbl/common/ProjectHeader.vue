@@ -175,7 +175,7 @@ export default {
         await this.starProject({ projectId })
           .then(() => {
             this.showMessage({
-              message: '点赞成功'
+              message: this.$t('project.successfullyLiked')
             })
             this.isStarButtonLoading = false
           })
@@ -190,7 +190,7 @@ export default {
         await this.unStarProject({ projectId })
           .then(() => {
             this.showMessage({
-              message: '取消点赞成功'
+              message: this.$t('project.successfullyUnliked')
             })
             this.isStarButtonLoading = false
           })
@@ -215,7 +215,7 @@ export default {
         await this.favoriteProject({ objectId, objectType })
           .then(() => {
             this.showMessage({
-              message: '收藏成功'
+              message: this.$t('project.successfullyStarred')
             })
             this.isFavoriteButtonLoading = false
           })
@@ -230,7 +230,7 @@ export default {
         await this.unFavoriteProject({ objectId, objectType })
           .then(() => {
             this.showMessage({
-              message: '取消收藏成功'
+              message: this.$t('project.successfullyUnstarred')
             })
             this.isFavoriteButtonLoading = false
           })

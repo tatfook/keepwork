@@ -130,7 +130,7 @@ export default {
           .then(() => {
             this.$message({
               type: 'success',
-              message: '标签更新成功'
+              message: this.$t('project.labelUpdated')
             })
             this.isTagEditing = !this.isTagEditing
             this.isLoading = false

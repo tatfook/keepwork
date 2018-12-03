@@ -1,14 +1,14 @@
 <template>
   <div class="project-joined-members-list">
     <el-table v-if="type === 'table'" :data="filterOwnerMemberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
-      <el-table-column prop="username" label="成员" width="357">
+      <el-table-column prop="username" :label="$t('project.username')" width="357">
       </el-table-column>
-      <el-table-column label="加入时间" width="357">
+      <el-table-column :label="$t('project.joinAt')" width="357">
         <template slot-scope="scope">{{scope.row.updatedAt | formatDate(formatType)}}</template>
       </el-table-column>
-      <el-table-column label="操作" class-name='project-joined-members-list-table-operate' width="160">
+      <el-table-column :label="$t('project.operations')" class-name='project-joined-members-list-table-operate' width="160">
         <template slot-scope="scope">
-          <el-button size="mini" @click="deleteFromProject(scope.row)">移出</el-button>
+          <el-button size="mini" @click="deleteFromProject(scope.row)">{{$t('project.removeMember')}}</el-button>
         </template>
       </el-table-column>
     </el-table>

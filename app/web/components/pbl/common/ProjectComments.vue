@@ -128,7 +128,7 @@ export default {
         .then(newCommentDetail => {
           this.$message({
             type: 'success',
-            message: '评论成功'
+            message: this.$t('project.commentSuccessfully')
           })
           this.isAddingComment = false
           this.newCommenContent = ''
@@ -159,7 +159,7 @@ export default {
           this.isLoading = false
           this.$message({
             type: 'success',
-            message: '评论删除成功'
+            message: this.$t('project.commentDeleted')
           })
           this.resetCommentList()
         })

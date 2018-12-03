@@ -29,7 +29,7 @@
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectId")}}:</label>{{originProjectDetail.id}}</p>
-        <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate}}</p>
+        <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
@@ -71,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
+import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
@@ -125,7 +126,7 @@ export default {
   data() {
     return {
       projectTypes: [this.$t("explore.websites"), this.$t("common.paracraft")],
-      applyStates: [this.$t("explore.applyJoin"), this.$t("explore.requested"), this.$t("explore.joined")],
+      applyStates: [this.$t("project.applyJoin"), this.$t("project.requested"), this.$t("project.joined")],
       binderDialogVisible: false,
       isApplyButtonLoading: false,
       isBinderDialogLoading: false,
@@ -156,6 +157,12 @@ export default {
       isLogined: 'user/isLogined',
       getUserSitePrivilege: 'user/getUserSitePrivilege'
     }),
+    isEn() {
+      return locale === 'en-US' ? true : false
+    },
+    formatType(){
+      return this.isEn ? 'YYYY-MM-DD' : 'YYYY年MM月DD日'
+    },
     buttonName() {
       if (this.isWebType) {
         return this.$t("project.visit")
@@ -299,7 +306,7 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '项目信息更新成功'
+            message: this.$t('project.projectInfoUpdated')
           })
           this.isLoading = false
           this.isDescriptionEditing = false
@@ -458,7 +465,7 @@ export default {
       return projectTypes[typeValue]
     },
     formatDate(date, formatType) {
-      return dayjs(date).format('YYYY年MM月DD日')
+      return dayjs(date).format(formatType)
     },
     applyStateFilter(applyState, applyStates) {
       let stateText = ''

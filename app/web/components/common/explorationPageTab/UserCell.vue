@@ -14,7 +14,7 @@
           <p class="amount">{{user.total_follows || 0}}</p>
         </div>
         <div>
-          <p class="title">{{$t("explore.Followers")}}</p>
+          <p class="title">{{$t("explore.followers")}}</p>
           <p class="amount">{{user.total_fans || 0}}</p>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default {
           .favoriteProject({ objectId: user.id, objectType: 0 })
           .then(res => {
             this.showMessage({
-              message: '关注成功'
+              message: this.$t('explore.successfullyFollowed')
             })
             this.user.isFollowed = true
             this.user.total_fans = this.user.total_fans ? this.user.total_fans + 1 : 1
@@ -84,7 +84,7 @@ export default {
           .unFavoriteProject({ objectId: user.id, objectType: 0 })
           .then(res => {
             this.showMessage({
-              message: '取消关注成功'
+              message: this.$t('explore.successfullyUnfollowed')
             })
             this.user.isFollowed = false
             this.user.total_fans =

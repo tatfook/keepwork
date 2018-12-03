@@ -113,7 +113,7 @@ export default {
           this.isCreating = false
           this.$message({
             type: 'success',
-            message: '项目创建成功'
+            message: this.$t('project.projectCreated')
           })
           let projectId = projectDetail.id
           projectId && this.$router.push(`/project/${projectId}`)

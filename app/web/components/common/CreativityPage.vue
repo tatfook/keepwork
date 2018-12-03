@@ -46,7 +46,7 @@
           </el-row>
         </div>
         <div class="my-contribute-projects" v-if="myContributeProjectsData.length > 0">
-          <h4 class="browse-title">this.$t("create.contributedProjects")</h4>
+          <h4 class="browse-title">{{$t("create.contributedProjects")}}</h4>
           <el-row>
             <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in myContributeProjectsData" :key="index">
               <project-cell :project="project"></project-cell>
