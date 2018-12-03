@@ -24,7 +24,7 @@
     </div>
     <div class="user-basic-msg-infos">
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location}}
+        <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || "未知地址"}}
       </div>
       <div class="user-basic-msg-infos-item">
         <i class="iconfont icon-link1"></i>keepwork.com/{{nowUserDetail.username}}

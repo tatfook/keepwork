@@ -7,16 +7,19 @@
       </div>
       <div class="user-certificate-list" v-if="!isCertificateEmpty" v-loading="isLoading">
         <div class="user-certificate-item" v-for="(certificate, index) in userCertifications" :key="index">
-          <span class="user-certificate-item-title">{{certificate.title}}</span>
-          <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
-          <div class="user-certificate-item-operations">
-            <el-button type="text" @click="editCertificate(certificate, index)">
-              <i class="iconfont icon-edit-square"></i>编辑
-            </el-button>
-            <el-button type="text" @click="deleteCertificate(certificate, index)">
-              <i class="iconfont icon-delete1"></i>删除
-            </el-button>
+          <div class="user-certificate-item-header">
+            <span class="user-certificate-item-title">{{certificate.title}}</span>
+            <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
+            <div class="user-certificate-item-operations">
+              <el-button type="text" @click="editCertificate(certificate, index)">
+                <i class="iconfont icon-edit-square"></i>编辑
+              </el-button>
+              <el-button type="text" @click="deleteCertificate(certificate, index)">
+                <i class="iconfont icon-delete1"></i>删除
+              </el-button>
+            </div>
           </div>
+          <p v-show="certificate.description">{{certificate.description}}</p>
         </div>
       </div>
       <div class="user-certificate-empty" v-if="isCertificateEmpty">
@@ -180,10 +183,22 @@ export default {
   }
   &-item {
     margin-bottom: 8px;
-    display: flex;
-    position: relative;
+    border-bottom: 1px dashed #e8e8e8;
+    & > p {
+      margin: 8px 0;
+      font-size: 12px;
+      color: #909399;
+    }
     &:last-child {
       margin-bottom: 0;
+      border-bottom: none;
+      & > p {
+        margin-bottom: 0;
+      }
+    }
+    &-header {
+      display: flex;
+      position: relative;
     }
     &-title {
       flex: 1;
