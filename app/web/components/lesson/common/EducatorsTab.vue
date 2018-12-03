@@ -36,8 +36,9 @@
               class="eductors-tab-main-item-wrap-cell-img"
               :src="item.extra.coverUrl"
               :alt="item.packageName"
+              @click="goLessonPackage(item)"
             >
-            <div class="eductors-tab-main-item-wrap-cell-text-title">{{item.packageName}}</div>
+            <div class="eductors-tab-main-item-wrap-cell-text-title" @click="goLessonPackage(item)">{{item.packageName}}</div>
             <div class="eductors-tab-main-item-wrap-cell-text">{{$t('lesson.include')}}: {{item.lessons.length}}{{$t('lesson.lessonsCount')}}</div>
             <div class="eductors-tab-main-item-wrap-cell-text"> {{$t('lesson.ages')}}: {{getPackageSuitableAge(item)}}</div>
             <div class="eductors-tab-main-item-wrap-cell-text-desc">{{$t('lesson.intro')}}: {{item.intro}}</div>
@@ -130,6 +131,9 @@ export default {
     switchTab(index) {
       this.currentTab = index
     },
+    goLessonPackage(lessonPackage) {
+      window.open(`/l/student/package/${lessonPackage.id}`)
+    },
     getPackageSuitableAge(lessonPackage) {
       let { maxAge, minAge } = lessonPackage
       if (maxAge == 0 && minAge == 0) {
@@ -211,6 +215,7 @@ export default {
           width: 381px;
           border-radius: 6px;
           object-fit: cover;
+          cursor: pointer;
         }
         &-text {
           color: #818181;
@@ -225,6 +230,7 @@ export default {
             color: #333;
             margin: 5px;
             font-weight: bold;
+            cursor: pointer;
           }
           &-desc {
             margin: 5px;
