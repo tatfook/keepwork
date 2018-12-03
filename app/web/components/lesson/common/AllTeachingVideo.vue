@@ -4,6 +4,9 @@
       <div class="all-teaching-video-content-sidebar">
         <el-tree
           :data="data"
+          node-key="id"
+          :default-expanded-all="true"
+          :default-checked-keys="[2]"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
@@ -44,17 +47,21 @@ export default {
       },
       data: [
         {
+          id: 1,
           label: `${this.$t("lesson.instructionalVideos")}:`,
           children: [
             {
+              id: 2,
               label: this.$t("lesson.animationsLesson"),
               value: 'animate'
             },
             {
+              id: 3,
               label: this.$t("lesson.programmingLesson"),
               value: 'program'
             },
             {
+              id: 4,
               label: this.$t("lesson.CADLesson"),
               value: 'cad'
             }
