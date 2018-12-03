@@ -30,7 +30,7 @@
             <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
           </div>
         </div>
-        <recent-project class="profile-index-main-item"></recent-project>
+        <recent-project class="profile-index-main-item" :nowUserDetail='nowUserDetail'></recent-project>
         <contribution-calendar class="profile-index-main-item"></contribution-calendar>
         <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail'></user-experiences>
       </div>
