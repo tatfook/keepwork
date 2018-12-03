@@ -512,7 +512,10 @@ export default {
       }
     },
     goStudyPage() {
-      window.location.href = `${this.locationOrigin}/l/student`
+      if (this.userIsLogined) {
+        return window.location.href = `${this.locationOrigin}/l/student`
+      }
+      window.location.href = `${this.locationOrigin}/l/student/solution/teachingIdea`
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
