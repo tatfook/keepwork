@@ -4,13 +4,13 @@
       <el-row>
         <el-col :sm="8">
           <div class="box" @click="goLesson(8)">
-            <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
+            <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
             <p>{{$t('lesson.animationsLesson')}}</p>
           </div>
         </el-col>
         <el-col :sm="8">
           <div class="box" @click="goLesson(8)">
-            <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
+            <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
             <p>{{$t('lesson.programmingLesson')}}</p>
           </div>
         </el-col>
