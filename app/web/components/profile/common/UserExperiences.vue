@@ -3,14 +3,14 @@
     <el-card class="user-experience-card" shadow="never">
       <div slot="header" class="clearfix">
         <span>我的经历</span>
-        <el-button v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
+        <el-button v-if="isLoginUserEditable" v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
       </div>
       <div class="user-experience-list" v-if="!isExperienceEmpty" v-loading="isLoading">
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
           <div class="user-experience-item-title">
             {{experience.title}}
             <div class="user-experience-item-date">2014 / 5</div>
-            <div class="user-experience-item-operations">
+            <div class="user-experience-item-operations" v-if="isLoginUserEditable">
               <el-button type="text" @click="deleteExperience(experience, index)">
                 <i class="iconfont icon-delete1"></i>删除
               </el-button>
@@ -28,10 +28,10 @@
       </div>
       <div class="user-experience-empty" v-if="isExperienceEmpty">
         <img src="@/assets/img/default_experience.png" alt="">
-        <p><span class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>培训经历、项目经历、获奖经历</p>
+        <p><span v-if="isLoginUserEditable" class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '培训经历、项目经历、获奖经历' : '还没有添加经历~'}}</p>
       </div>
     </el-card>
-    <el-dialog title="添加经历" :visible.sync="isAddingDialogVisible" width="416px" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
+    <el-dialog v-if="isLoginUserEditable" title="添加经历" :visible.sync="isAddingDialogVisible" width="416px" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
       <el-form label-position="top" :model="newExperience">
         <el-form-item label="名称">
           <el-input v-model="newExperience.title"></el-input>
@@ -62,6 +62,10 @@ export default {
     nowUserDetail: {
       type: Object,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {

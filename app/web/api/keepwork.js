@@ -220,9 +220,9 @@ export const userThreeService = {
 export const favorites = {
   existFavorite: async ({ objectId, objectType }) =>
     get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
-  favoriteProject: async ({ objectId, objectType }) =>
+  favoriteObject: async ({ objectId, objectType }) =>
     post('favorites', { objectId, objectType }),
-  unFavoriteProject: async ({ objectId, objectType }) =>
+  unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
   getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
   getUserSearchAllFavorites: async (args) => post('favorites/search', args)

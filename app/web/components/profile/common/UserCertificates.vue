@@ -3,14 +3,14 @@
     <el-card class="user-certificate-card" shadow="never">
       <div slot="header" class="clearfix">
         <span>我的证书</span>
-        <el-button v-show="!isCertificateEmpty" class="user-certificate-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
+        <el-button v-if="isLoginUserEditable" v-show="!isCertificateEmpty" class="user-certificate-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
       </div>
       <div class="user-certificate-list" v-if="!isCertificateEmpty" v-loading="isLoading">
         <div class="user-certificate-item" v-for="(certificate, index) in userCertifications" :key="index">
           <div class="user-certificate-item-header">
             <span class="user-certificate-item-title">{{certificate.title}}</span>
             <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
-            <div class="user-certificate-item-operations">
+            <div class="user-certificate-item-operations" v-if="isLoginUserEditable">
               <el-button type="text" @click="editCertificate(certificate, index)">
                 <i class="iconfont icon-edit-square"></i>编辑
               </el-button>
@@ -24,10 +24,10 @@
       </div>
       <div class="user-certificate-empty" v-if="isCertificateEmpty">
         <img src="@/assets/img/default_certificate.png" alt="">
-        <p><span class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>个人证书，展现更好的自己</p>
+        <p><span v-if="isLoginUserEditable" class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '个人证书，展现更好的自己' : '暂无证书~'}}</p>
       </div>
     </el-card>
-    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog v-if="isLoginUserEditable" title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
       <el-form label-position="top" :model="newCertificate">
         <el-form-item label="名称">
           <el-input v-model="newCertificate.title"></el-input>
@@ -55,6 +55,10 @@ export default {
     nowUserDetail: {
       type: Object,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
