@@ -5,7 +5,7 @@
         <img :src="src" :style="getStyle">
       </div>
       <div v-else-if='isVideo' class="video">
-        <video v-if="updateDom" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
+        <video v-if="updateDom" :src='src' :style="getStyle" :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
       </div>
     </a>
   </div>

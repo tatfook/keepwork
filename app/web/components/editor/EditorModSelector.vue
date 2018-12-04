@@ -228,6 +228,7 @@ export default {
 }
 .el-popover--plain {
   padding: 10px;
+  // font-size: 24px;
 }
 .el-popover {
   position: absolute;

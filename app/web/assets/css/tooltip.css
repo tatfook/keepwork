@@ -1,6 +1,8 @@
 .tooltip {
   display: block !important;
   z-index: 10000;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
 }
 
 .tooltip .tooltip-inner {

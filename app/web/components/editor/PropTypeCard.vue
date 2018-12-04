@@ -14,7 +14,7 @@
       }'
       class="iconfont icon-help"></i>
       <el-col class="card-info">
-        <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" :title="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
+        <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" v-tooltip="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
         <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible' v-tooltip='isToolTip'>
         </el-switch>
       </el-col>
@@ -184,8 +184,7 @@ export default {
   .prop-type-card-tool-tip-class {
     max-width: 250px;
     word-break : normal;
-    margin-top: 3px !important;
-    font-size: 12px;
+    margin-top: 10px !important;
   }
 </style>
 
