@@ -22,9 +22,9 @@ export default {
           projectName: 'official/paracraft',
           filePath: 'learn/mentor_service'
         },
-        paracraft: {
+        our_ideas_view_more: {
           projectName: 'official/paracraft',
-          filePath: 'index'
+          filePath: 'learn/our_ideas_view_more'
         }
       },
       currentFilePath: ''
