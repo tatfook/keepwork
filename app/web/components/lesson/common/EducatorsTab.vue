@@ -67,7 +67,7 @@
           @click="handleMore"
         >
           <img
-            src="@/assets/lessonImg/teaching-video_1.png"
+            src="@/assets/lessonImg/teaching-video_2.png"
             alt=""
           >
           <p>{{$t('lesson.animationsLesson')}}</p>
@@ -77,7 +77,7 @@
           @click="handleMore"
         >
           <img
-            src="@/assets/lessonImg/teaching-video_2.png"
+            src="@/assets/lessonImg/teaching-video_1.png"
             alt=""
           >
           <p>{{$t('lesson.programmingLesson')}}</p>
