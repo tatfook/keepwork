@@ -103,13 +103,13 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-save' :title='$t("editor.save")' @click='save'></span>
+        <span v-loading='savePending' class='iconfont icon-save' @click='save' v-tooltip.bottom='$t("editor.save")'></span>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-return' :title='$t("editor.revoke")'></span>
+        <span class='iconfont icon-return' v-tooltip.bottom='$t("editor.revoke")'></span>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-revocation' :title='$t("editor.redo")'></span>
+        <span class='iconfont icon-revocation' v-tooltip.bottom='$t("editor.redo")'></span>
       </el-menu-item>
       <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>

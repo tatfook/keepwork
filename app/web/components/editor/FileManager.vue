@@ -6,9 +6,9 @@
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
         </h1>
         <span class="opened-files-buttons" v-show="trees.isOpenedShow && hasOpenedFiles">
-          <el-button class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
+          <el-button class="iconfont icon-save" size="mini" type="text" v-tooltip.bottom="$t('editor.saveAll')" @click.stop='saveAllOpenedFiles'>
           </el-button>
-          <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFilesConfirm'>
+          <el-button class="iconfont icon-delete____" size="mini" type="text" v-tooltip.bottom="$t('editor.closeAll')" @click.stop='closeAllOpenedFilesConfirm'>
           </el-button>
         </span>
       </div>

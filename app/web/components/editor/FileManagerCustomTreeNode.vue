@@ -2,8 +2,8 @@
   <div class="el-tree-node__label" :class="operationButtonsCountClass"  v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
     <span class="rename-wrapper" v-if="isRename">
       <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
-      <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
-      <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
+      <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" v-tooltip.bottom="$t('editor.confirm')"></el-button>
+      <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" v-tooltip.bottom="$t('editor.cancel')"></el-button>
     </span>
     <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || data.name || node.label | hideMDFileExtension}})</span>
     <span v-else>{{data.displayName || data.name || node.label | hideMDFileExtension}}</span>
@@ -14,19 +14,19 @@
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
-      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)' v-tooltip.bottom="$t('editor.save')">
       </el-button>
-      <el-button v-if="isHasOpened" class="iconfont icon-refresh edit-hover" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
+      <el-button v-if="isHasOpened" class="iconfont icon-refresh edit-hover" size="mini" type="text" @click.stop='confirmRefresh' v-tooltip.bottom="$t('editor.reload')">
       </el-button>
-      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
+      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" v-tooltip.bottom="$t('editor.rename')">
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
+      <el-button v-if="isAddable" class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile" v-tooltip.bottom="$t('editor.newPage')">
       </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
+      <el-button v-if="isAddable" class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder" v-tooltip.bottom="$t('editor.newFolder')">
       </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
+      <el-button v-if="isRemovable" class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile" v-tooltip.bottom="$t('editor.delete')">
       </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.settings")'>
+      <el-button v-if="isSettable" class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting" v-tooltip.bottom="$t('editor.settings')">
       </el-button>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>

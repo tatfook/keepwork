@@ -3,10 +3,10 @@
     <el-col id="managerWin" class="manager-win" :style='isDisplay'>     
       <el-row class="toolbar">
         <el-button-group>
-          <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
+          <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" v-tooltip.top="{content: $t('editor.files'), classes:'manager-win-tooltip'}"></el-button>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
           <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" v-tooltip.top="{content: $t('tips.mod'), classes:'manager-win-tooltip'}"></el-button>
-          <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
+          <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" v-tooltip.top="{content: $t('common.myWebDisk'), classes:'manager-win-tooltip'}"></el-button>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
         <sky-drive-manager-dialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
@@ -31,7 +31,7 @@
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-new_open_window" :title="$t('editor.preview')" @click='showPreview'></el-button>
+          <el-button class="iconfont icon-new_open_window" @click='showPreview' v-tooltip.top="{content: $t('editor.preview'), classes:'preview-win-tooltip'}"></el-button>
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="/vp" style="height: 100%; width: 100%; background: #fff" />
@@ -52,27 +52,27 @@
           <el-col class="toolbar-content" :style="getStyle">
             <div class="toolbar-content_left">
               <el-button-group>
-                <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-                <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-                <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-                <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-                <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+                <el-button class="iconfont icon-h1" @click="insertHeadline(1)" v-tooltip.top="{content: $t('editor.title') + '1', classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-h2" @click="insertHeadline(2)" v-tooltip.top="{content: $t('editor.title') + '2', classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-h3" @click="insertHeadline(3)" v-tooltip.top="{content: $t('editor.title') + '3', classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-thickening" @click="setFontStyle('bold')" v-tooltip.top="{content: $t('editor.bold'), classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-incline" @click="setFontStyle('italic')" v-tooltip.top="{content: $t('editor.italic'), classes:'code-win-tooltip'}"></el-button>
               </el-button-group>
               <el-button-group>
                 <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
               <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
               <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
                 <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
-                <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-                <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
-                <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
+                <el-button class="iconfont icon-code_division_line" @click="insertLine" v-tooltip.top="{content: $t('editor.horizontalDiv'), classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-code" @click="insertCode" v-tooltip.top="{content: $t('editor.code'), classes:'code-win-tooltip'}"></el-button>
+                <el-button class="iconfont icon-link_" @click="insertLink" v-tooltip.top="{content: $t('editor.link'), classes:'code-win-tooltip'}"></el-button>
               </el-button-group>
               <el-button-group :style='isDisplayButton'>
                 <el-button class="iconfont icon-module" @click="addModToMarkdown" v-tooltip.top="{content: $t('tips.mod'), classes:'code-win-tooltip'}"></el-button>
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button v-tooltip.top="{content: showContent, classes:'code-win-tooltip'}" :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -204,6 +204,9 @@ export default {
           'text-align': 'center'
         })
       }
+    },
+    showContent() {
+      return this.isFullscreen ? this.$t('editor.fullScreen') : this.$t('editor.exitFullScreen')
     },
     fullscreenIcon() {
       return this.isFullscreen
@@ -640,12 +643,17 @@ bigFile:
   }
   
   &-tooltip {
-    top: 30px!important;
+    top: 30px !important;
+  }
+}
+.preview-win {
+  &-tooltip {
+    top: 30px !important;
   }
 }
 .code-win {
   &-tooltip {
-    top: 38px!important;
+    top: 38px !important;
   }
 }
 </style>
