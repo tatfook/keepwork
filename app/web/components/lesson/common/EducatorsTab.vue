@@ -170,13 +170,13 @@ export default {
     justify-content: center;
     align-items: center;
     &-line {
-      width: 100px;
-      height: 5px;
-      background: #bcbcbc;
+      width: 85px;
+      height: 3px;
+      background: #409efe;
     }
     &-text {
       font-size: 36px;
-      margin: 0 50px;
+      margin: 0 36px;
     }
   }
   &-operations {
