@@ -1220,7 +1220,8 @@
     "learningIsFromExploringToCreating": "学习起于探索成于创造",
     "selectedProjects": "精选项目",
     "hotLessons": "热门课程",
-    "likedByOthers": "大家都觉得赞"
+    "likedByOthers": "大家都觉得赞",
+    "paracraftIsFree": "3D创作工具：Paracraft 永久免费！"
   },
   "create": {
     "creationStartFromProject": "创造，从项目开始",
@@ -1388,5 +1389,36 @@
     "operations": "操作",
     "joinAt": "加入时间",
     "removeMember": "移出"
+  },
+  "footer": {
+    "lettersTo": "致社区",
+    "educators": "致教育者",
+    "parents": "给父母的话",
+    "developers": "致开发者",
+    "programmingFans": "对爱好编程的你说",
+    "whatCanYouDo": "用来做什么？",
+    "createPersonalProject": "创建自己的项目",
+    "createProjectWithTeachers": "与老师一起完成项目",
+    "haveYourOwnSite": "制作个人网站",
+    "buildUpPersonalKnowledge": "拥有个人知识体系",
+    "learnOnlineLessons": "学习在线课程",
+    "learningMethod": "学习法",
+    "learningBasedOnProject": "在项目中学习",
+    "learningFromMentors": "在传授中学习",
+    "feynmanTechnique": "费曼学习法",
+    "fragmentedLearning": "碎片化学习法",
+    "keepworkFamily": "keepwork家族",
+    "iicc": "IICC国际智能大赛",
+    "NPLLangue": "NPL语言",
+    "openPlatform": "开放平台",
+    "haqi": "魔法哈奇",
+    "paracraftOnlineLessons": "Paracraft网络课程",
+    "paracraftOfflineTraining": "Paracraft线下培训班",
+    "support": "支持",
+    "contactUs": "联系我们",
+    "joinUs": "加入我们",
+    "siteStatics": "网站统计",
+    "update": "更新信息",
+    "feedback": "问题反馈"
   }
 }

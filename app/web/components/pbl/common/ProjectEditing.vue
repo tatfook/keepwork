@@ -14,7 +14,7 @@
       </el-radio-group>
     </div>
     <div class="project-editing-operate">
-      <el-button type="primary" size="medium" :disabled="!isModified" @click='updatePrivilege'>保存</el-button>
+      <el-button type="primary" size="medium" :disabled="!isModified" @click='updatePrivilege'>{{$t("common.Save")}}</el-button>
     </div>
   </div>
 </template>
