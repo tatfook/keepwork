@@ -161,7 +161,7 @@ export default {
 <style lang="scss">
 .eductors-tab {
   max-width: 1200px;
-  min-height: 605px;
+  min-height: 645px;
   margin: auto;
   position: relative;
   &-title {

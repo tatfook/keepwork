@@ -5,8 +5,9 @@
         <el-tree
           :data="data"
           node-key="id"
-          :default-expanded-all="true"
-          :default-checked-keys="[2]"
+          :current-node-key="defaultKey"
+          :default-expand-all="true"
+          :highlight-current="true"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
@@ -68,6 +69,7 @@ export default {
           ]
         },
       ],
+      defaultKey: 2,
       defaultProps: {
         children: 'children',
         label: 'label'
