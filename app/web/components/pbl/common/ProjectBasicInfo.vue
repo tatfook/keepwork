@@ -2,12 +2,12 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">{{originProjectDetail.name}}
-        <span class="project-basic-info-state" v-if="!isProjectStopRecruit">招募中</span>
+        <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
       </p>
       <p class="project-basic-info-more">
-        <span class="project-basic-info-more-created">由
+        <span class="project-basic-info-more-created">{{$t("project.createBy")}}
           <span class="project-basic-info-more-username">{{projectOwnerUsername}}</span>
-          创建
+          {{$t("project.created")}}
         </span>
         <span class="project-basic-info-more-viewcount">
           <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
@@ -24,44 +24,44 @@
       <div class="project-basic-info-detail-cover" v-loading='isCoverZoneLoading'>
         <img v-show="!isVideoShow" class="project-basic-info-detail-cover-image" :src='tempCoverUrl || defaultCoverUrl' alt="" @load="coverImageLoaded">
         <video v-show="isVideoShow" class="project-basic-info-detail-cover-video" :src="tempVideoUrl" controls></video>
-        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="el-icon-edit-outline"></i>更换图片或视频</p>
+        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p>
       </div>
       <div class="project-basic-info-detail-message">
-        <p class="project-basic-info-detail-message-item"><label>项目类型:</label>{{ projectType | projectTypeFilter }}</p>
-        <p class="project-basic-info-detail-message-item"><label>项目ID:</label>{{originProjectDetail.id}}</p>
-        <p class="project-basic-info-detail-message-item"><label>创建时间:</label>{{originProjectDetail.createdAt | formatDate}}</p>
+        <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
+        <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectId")}}:</label>{{originProjectDetail.id}}</p>
+        <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
-          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">编辑网站</el-button>
-          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter}}</el-button>
+          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
+          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
         </div>
       </div>
     </div>
     <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
-        项目描述:
+        {{$t("project.projectDescription")}}:
         <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
           <i class="el-icon-edit-outline" v-show="!isDescriptionEditing"></i>
-          <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>保存</span>
+          <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>{{$t("common.Save")}}</span>
         </el-button>
       </div>
-      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || '暂无描述'"></div>
+      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || $t('project.noDescripton')"></div>
       <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleBinderDialogClose">取 消</el-button>
+        <el-button @click="handleBinderDialogClose">{{$t("common.Cancel")}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog class="project-basic-info-apply-dialog" title="申请加入一个新的项目" :visible.sync="isApplyDialogVisible" width="400px" :before-close="handleApplyDialogClose">
-      <el-input type="textarea" placeholder="请说明你申请加入的理由..." resize='none' v-model="applyText">
+    <el-dialog class="project-basic-info-apply-dialog" :title='$t("project.applyForProject")' :visible.sync="isApplyDialogVisible" width="400px" :before-close="handleApplyDialogClose">
+      <el-input type="textarea" :placeholder="$t('project.enterApplicationReason')" resize='none' v-model="applyText">
       </el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleApplyDialogClose">取消</el-button>
-        <el-button type="primary" @click="applyJoinProject">完成创建</el-button>
+        <el-button @click="handleApplyDialogClose">{{$t("common.Cancel")}}</el-button>
+        <el-button type="primary" @click="applyJoinProject">{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
     <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
@@ -71,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
 import dayjs from 'dayjs'
+import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
@@ -124,6 +125,8 @@ export default {
   },
   data() {
     return {
+      projectTypes: [this.$t("explore.websites"), this.$t("common.paracraft")],
+      applyStates: [this.$t("project.applyJoin"), this.$t("project.requested"), this.$t("project.joined")],
       binderDialogVisible: false,
       isApplyButtonLoading: false,
       isBinderDialogLoading: false,
@@ -154,14 +157,20 @@ export default {
       isLogined: 'user/isLogined',
       getUserSitePrivilege: 'user/getUserSitePrivilege'
     }),
+    isEn() {
+      return locale === 'en-US' ? true : false
+    },
+    formatType(){
+      return this.isEn ? 'YYYY-MM-DD' : 'YYYY年MM月DD日'
+    },
     buttonName() {
       if (this.isWebType) {
-        return '访问网站'
+        return this.$t("project.visit")
       }
       if (this.isCreating && !this.isProjectOwner) {
-        return '创建中'
+        return this.$t("project.creating")
       }
-      return '访问世界'
+      return this.$t("project.visitWorld")
     },
     isCreating() {
       return !(
@@ -297,7 +306,7 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '项目信息更新成功'
+            message: this.$t('project.projectInfoUpdated')
           })
           this.isLoading = false
           this.isDescriptionEditing = false
@@ -452,40 +461,29 @@ export default {
     }
   },
   filters: {
-    projectTypeFilter(typeValue) {
-      let typeResult = ''
-      switch (typeValue) {
-        case 0:
-          typeResult = '网站'
-          break
-        case 1:
-          typeResult = 'paracraft创意空间'
-          break
-        default:
-          break
-      }
-      return typeResult
+    projectTypeFilter(typeValue, projectTypes) {
+      return projectTypes[typeValue]
     },
     formatDate(date, formatType) {
-      return dayjs(date).format('YYYY年MM月DD日')
+      return dayjs(date).format(formatType)
     },
-    applyStateFilter(applyState) {
+    applyStateFilter(applyState, applyStates) {
       let stateText = ''
       switch (applyState) {
         case -1:
-          stateText = '申请加入'
+          stateText = applyStates[0]
           break
         case 0:
-          stateText = '申请中'
+          stateText = applyStates[1]
           break
         case 1:
-          stateText = '已加入'
+          stateText = applyStates[2]
           break
         case 2:
-          stateText = '重新申请'
+          stateText = applyStates[0]
           break
         default:
-          stateText = '申请加入'
+          stateText = applyStates[0]
           break
       }
       return stateText
@@ -523,7 +521,7 @@ export default {
     color: #fff;
   }
   &-state::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: 4px;
     height: 4px;
@@ -543,7 +541,7 @@ export default {
       position: relative;
     }
     &-created::after {
-      content: '';
+      content: "";
       display: inline-block;
       width: 1px;
       height: 10px;

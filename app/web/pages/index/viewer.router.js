@@ -5,6 +5,7 @@ const CreativityPage = () => import('@/components/common/CreativityPage')
 const ExplorationPage = () => import('@/components/common/ExplorationPage')
 const StudyPage = () => import('@/components/common/StudyPage')
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -26,9 +27,9 @@ export default new Router({
       component: ExplorationPage
     },
     {
-      path: '/study',
+      path: '/l',
       name: 'StudyPage',
-      component: StudyPage
+      component: StudyPage,
     }
   ]
 })

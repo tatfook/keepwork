@@ -96,6 +96,7 @@ export default {
   .lesson-package-cell {
     .lesson {
       width: 100%;
+      max-width: 230px;
       padding: 4px;
       font-size: 12px;
       border: none;
@@ -112,8 +113,8 @@ export default {
       &-title {
         font-size: 12px;
       }
-      &-desc{
-        p{
+      &-desc {
+        p {
           margin: 5px 0;
         }
       }

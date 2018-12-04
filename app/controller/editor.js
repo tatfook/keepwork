@@ -11,5 +11,6 @@ module.exports = app => {
       const { ctx } = this
       await ctx.renderClient('viewport/index.js')
     }
+
   }
 }

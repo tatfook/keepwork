@@ -96,7 +96,7 @@ export default {
     enterPackageDetail() {
       let packageId = this.packageDetail.id
       this.$router.push({
-        path: `student/package/${packageId}`
+        path: `/student/package/${packageId}`
       })
     },
     attendClass() {
@@ -194,6 +194,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 25px;
   }
   p {
     margin: 0;

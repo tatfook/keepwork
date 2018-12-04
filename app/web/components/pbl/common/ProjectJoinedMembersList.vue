@@ -1,30 +1,30 @@
 <template>
   <div class="project-joined-members-list">
     <el-table v-if="type === 'table'" :data="filterOwnerMemberList" border style="width: 100%" v-loading='isLoading' class="project-joined-members-list-table">
-      <el-table-column prop="username" label="成员" width="357">
+      <el-table-column prop="username" :label="$t('project.username')" width="357">
       </el-table-column>
-      <el-table-column label="加入时间" width="357">
+      <el-table-column :label="$t('project.joinAt')" width="357">
         <template slot-scope="scope">{{scope.row.updatedAt | formatDate(formatType)}}</template>
       </el-table-column>
-      <el-table-column label="操作" class-name='project-joined-members-list-table-operate' width="160">
+      <el-table-column :label="$t('project.operations')" class-name='project-joined-members-list-table-operate' width="160">
         <template slot-scope="scope">
-          <el-button size="mini" @click="deleteFromProject(scope.row)">移出</el-button>
+          <el-button size="mini" @click="deleteFromProject(scope.row)">{{$t('project.removeMember')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-card v-if="type === 'card'" class="project-joined-members-list-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span class="project-joined-members-list-card-title">项目成员</span>
+        <span class="project-joined-members-list-card-title">{{$t("project.projectMembers")}}</span>
       </div>
       <div class="project-joined-members-list-card-created">
         <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
         <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
-        <span class="project-joined-members-list-card-label">创建者</span>
+        <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
         <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
-      <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
+      <div v-else class="project-joined-members-list-card-profiles-empty">{{$t("project.noOtherMembers")}}</div>
     </el-card>
   </div>
 </template>

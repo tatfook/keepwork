@@ -1,23 +1,23 @@
 <template>
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
-    <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/白板/问题详情</h4>
+    <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/{{$t('project.board')}}/{{$t('project.issueDetail')}}</h4>
     <div v-loading="updateLoading">
       <div class="issue-detail-header">
         <div class="issue-title">
           <div v-if="currIssue.titleIsEdit" class="issue-title-edit-box">
             <input class="issue-title-edit-box-input" type="text" v-model="currIssue.title">
-            <el-button class="issue-title-button" size="mini" type="primary" @click="updateTitle">确定</el-button>
-            <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">取消</el-button>
+            <el-button class="issue-title-button" size="mini" type="primary" @click="updateTitle">{{$t('common.Sure')}}</el-button>
+            <el-button class="issue-title-button" size="mini" @click="cancelUpdateTitle">{{$t('common.Cancel')}}</el-button>
           </div>
           <div v-else class="issue-title-title-box">
             <span class="issue-title-text" :title="currIssue.title">{{currIssue.title}} #{{currIssue.no}}</span>
-            <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>修改</span>
+            <span class="issue-title-edit" @click="editIssueTitle"><i class="iconfont icon-edit-square"></i>{{$t('project.editIssueTitle')}}</span>
           </div>
         </div>
       </div>
       <div class="issue-detail-intro">
         <span class="created-time">{{relativeTime(currIssue.createdAt)}}</span>
-        <span class="created-by">由<span class="name">{{issue.user.nickname}}</span>创建</span>
+        <span class="created-by">{{$t('project.createBy')}}<span class="name">{{issue.user.nickname}}</span>{{$t('project.created')}}</span>
         <span v-if="currIssue.tagEdit" class="issue-detail-intro-tag">
           <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
             {{tag}}
@@ -25,18 +25,18 @@
           <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
           </el-input>
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-          <el-button size="mini" type="primary" @click="updateTag">确定</el-button>
+          <el-button size="mini" type="primary" @click="updateTag">{{$t('common.Sure')}}</el-button>
           <!-- <el-button size="mini" @click="cancelUpdateTag">取消</el-button> -->
         </span>
         <span v-else class="created-tag">
           <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
-          <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>修改标签</span>
+          <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>{{$t('project.changeLabel')}}</span>
         </span>
       </div>
       <div class="issue-detail-status">
-        <div class="issue-detail-status-left">状态：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? '进行中' : '已完成'}}</span></span></div>
+        <div class="issue-detail-status-left">{{$t('project.status')}}：<span class="rank"><i :class="['iconfont',issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i><span class="rank-tip">{{issue.state == 0 ? $t('project.inProgressStatus') : $t('project.finishStatus')}}</span></span></div>
         <div class="issue-detail-status-right">
-          <div class="principal">负责人:</div>
+          <div class="principal" :class="{'principal-en': isEn}">{{$t('project.issueAsignees')}}:</div>
           <div class="member-portrait">
             <img class="player-portrait" v-for="player in assignedMembers" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
             <el-dropdown @command="handleCommand" trigger="click" placement="bottom-end">
@@ -44,7 +44,7 @@
                 <span class="assigns-btn"></span>
               </span>
               <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-                <el-dropdown-item v-if="memberList_2.length == 0">暂无其他成员</el-dropdown-item>
+                <el-dropdown-item v-if="memberList_2.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
                 <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -69,7 +69,7 @@
                     <i class="iconfont icon-ellipsis"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown" class="operate-comment">
-                    <el-dropdown-item><span class="action" @click="handleIssueDesc(1)">编辑</span></el-dropdown-item>
+                    <el-dropdown-item><span class="action" @click="handleIssueDesc(1)">{{$t('editor.edit')}}</span></el-dropdown-item>
                     <!-- <el-dropdown-item><span class="action" @click="handleIssueDesc(2)">删除</span></el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -78,10 +78,10 @@
             <div class="idea-area">
               <div class="arrows"></div>
               <div v-if="currIssue.descEdit" class="text">
-                <textarea name="" rows="8" placeholder="说点什么呢......" v-model.trim="currIssue.content"></textarea>
+                <textarea name="" rows="8" :placeholder='$t("project.leaveAComment")' v-model.trim="currIssue.content"></textarea>
                 <div class="text-button">
-                  <el-button size="mini" type="primary" @click="submitModifiedIssueDesc">确定</el-button>
-                  <el-button size="mini" @click="cancelModifiedIssueDesc">取消</el-button>
+                  <el-button size="mini" type="primary" @click="submitModifiedIssueDesc">{{$t('common.Sure')}}</el-button>
+                  <el-button size="mini" @click="cancelModifiedIssueDesc">{{$t('common.Cancel')}}</el-button>
                 </div>
               </div>
               <div v-else class="text">{{currIssue.content}}</div>
@@ -105,8 +105,8 @@
                     <i class="iconfont icon-ellipsis"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown" class="operate-comment">
-                    <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">编辑</span></el-dropdown-item>
-                    <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">删除</span></el-dropdown-item>
+                    <el-dropdown-item><span class="action" @click="handleComment(comment,1,index)">{{$t('editor.edit')}}</span></el-dropdown-item>
+                    <el-dropdown-item><span class="action" @click="handleComment(comment,2,index)">{{$t('common.remove')}}</span></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -114,10 +114,10 @@
             <div class="idea-area">
               <div class="arrows"></div>
               <div v-if="comment.isEdit" class="text">
-                <textarea name="" :ref="`edit${index}`" rows="8" placeholder="说点什么呢......" v-model.trim="comment.content"></textarea>
+                <textarea name="" :ref="`edit${index}`" rows="8" :placeholder='$t("project.leaveAComment")' v-model.trim="comment.content"></textarea>
                 <div class="text-button">
-                  <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">更新评论</el-button>
-                  <el-button size="mini" @click="cancelModifiedComment(comment,index)">取消</el-button>
+                  <el-button size="mini" type="primary" @click="submitModifiedComment(comment,index)">{{$t('project.updateComment')}}</el-button>
+                  <el-button size="mini" @click="cancelModifiedComment(comment,index)">{{$t('common.Cancel')}}</el-button>
                 </div>
               </div>
               <div v-else class="text">{{comment.content}}</div>
@@ -134,12 +134,12 @@
           <div class="idea-area">
             <div class="arrows"></div>
             <div class="text">
-              <textarea name="myIdea" rows="8" placeholder="说点什么呢...(建议不超过150个字符)" v-model.trim="myComment"></textarea>
+              <textarea name="myIdea" rows="8" :placeholder='$t("project.leaveAComment") + $t("project.recommentMaxLength")' v-model.trim="myComment"></textarea>
             </div>
           </div>
           <div class="finish">
-            <el-button size="medium" @click="closeIssue">{{currIssue.state == 0 ? '关闭问题' : '继续进行'}}</el-button>
-            <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment" :loading="createCommentLoading">评论</el-button>
+            <el-button size="medium" @click="closeIssue">{{currIssue.state == 0 ? $t('project.closeIssue') : $t('project.reopenIssue')}}</el-button>
+            <el-button type="primary" size="medium" @click="createComment" :disabled="!myComment" :loading="createCommentLoading">{{$t('project.comment')}}</el-button>
           </div>
         </div>
       </div>
@@ -220,6 +220,9 @@ export default {
       pblProjectMemberList: 'pbl/projectMemberList',
       isLogined: 'user/isLogined'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectDetail.id })
     },
@@ -683,6 +686,9 @@ export default {
           padding-right: 12px;
           display: inline-block;
         }
+        .principal-en{
+          width: 80px;
+        }
         .member-portrait {
           flex: 1;
           .player-portrait {
@@ -702,7 +708,7 @@ export default {
             position: relative;
             margin-top: 8px;
             &::after {
-              content: '';
+              content: "";
               height: 16px;
               width: 1px;
               background: #6e6d6d;
@@ -711,7 +717,7 @@ export default {
               top: 5px;
             }
             &::before {
-              content: '';
+              content: "";
               height: 1px;
               width: 16px;
               background: #6e6d6d;

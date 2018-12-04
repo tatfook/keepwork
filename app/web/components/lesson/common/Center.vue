@@ -3,8 +3,8 @@
     <div class="lesson-packages" v-loading='loading'>
       <div class="packages-sum">{{$t('lesson.include')}}:
         <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
-      <el-row :gutter="20" class="lesson-packages-subject">
-        <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8">
+      <el-row class="lesson-packages-subject">
+        <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8" :xs="24">
           <div class="subject-desc">
             <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)"><img class="subject-cover" :src="coursePackage.extra.coverUrl" alt=""></div>
             <h4 :title="coursePackage.packageName" :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
@@ -118,6 +118,7 @@ export default {
 
 <style lang="scss">
 .lesson-packages-wrap {
+  background: #fff;
   .lesson-packages {
     max-width: 1200px;
     margin: 0 auto;
@@ -209,6 +210,25 @@ export default {
     &-pages {
       text-align: center;
       padding: 40px 0;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .lesson-packages-wrap {
+    .lesson-packages {
+      &-subject {
+        .subject-desc {
+          max-width: 287px;
+          box-sizing: border-box;
+          padding: 4px 4px 6px;
+          border: none;
+          margin: 20px auto;
+          border-bottom: solid 2px #d2d2d2;
+          .img-wrap {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 }

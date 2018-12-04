@@ -1,72 +1,48 @@
 <template>
-  <div class="student-wrap">
-    <el-row class="student">
-      <el-col :md="6" class="aside">
-        <div class="aside-content">
+  <div class="Learning-center">
+    <div class="Learning-center-content">
+      <div class="aside">
+        <div class="profile-intro">
           <div class="profile">
-            <img :src='userProfile.portrait || avatar' alt="portrait">
+            <img
+              :src='userProfile.portrait || avatar'
+              alt="portrait"
+            >
           </div>
-          <div class="nickname">{{username}}</div>
-          <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
-          <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-          <div class="skills" :loading="loadingSkillsPoint">
-            <ul class="skills-list">
-              <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
-                <span>{{skill.score}}</span>
-              </li>
-            </ul>
+          <div class="nickname-wrap">
+            <div class="nickname">{{username}}</div>
+            <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span
+                class="detail"
+                @click="goBeanDetail"
+              >{{$t('lesson.packageManage.detailLabel')}} →</span></div>
           </div>
         </div>
-      </el-col>
-      <el-col :md="18" class="main">
-        <div class="search">
-          <el-row>
-            <el-col :md="2" :sm="2">
-              <span class="bell"><img src="@/assets/lessonImg/bell.png" alt=""></span>
-            </el-col>
-            <el-col :md="5" :sm="5">
-              <span class="tip">{{$t('lesson.enterClass')}}</span>
-            </el-col>
-            <el-col :md="11" :sm="11">
-              <span class="search-input">
-                <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
-              </span>
-            </el-col>
-            <el-col :md="6" :sm="6" :xs="6">
-              <span class="search-btn">
-                <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
-                  <label for="searchClass">{{$t('lesson.enter')}}</label>
-                </el-button>
-              </span>
-            </el-col>
-          </el-row>
+        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
+        <div
+          class="skills"
+          :loading="loadingSkillsPoint"
+        >
+          <ul class="skills-list">
+            <li
+              v-for="(skill,index) in skillsList"
+              :key="index"
+            ><span class="skill-name">{{skillName(skill)}}：</span>
+              <span>{{skill.score}}</span>
+            </li>
+          </ul>
         </div>
-        <div class="total-packages">{{$t('lesson.include')}}:
-          <span>{{sortedSubscribesList.length}}</span> {{$t('lesson.packagesCount')}}
+        <div class="options-wrap">
+          <span
+            v-for="(option,index) in optionArr"
+            :key="index"
+            :class="['options', {'selected': currOption == index}]"
+            @click="switchSelect(index)"
+          >{{option.name}}</span>
         </div>
-        <div class="packages" v-loading='loading'>
-          <div class="packages-nothing" v-if="!sortedSubscribesList.length && !loading">
-            <div><img src="@/assets/lessonImg/no_packages.png" alt=""></div>
-            <p class="packages-nothing-hint">{{$t('lesson.noLessonHint')}}</p>
-            <el-button type="primary" @click="gotoLessonsCenter">{{$t('lesson.lessonsCenter')}}</el-button>
-          </div>
-          <el-row v-else class="bottom-line">
-            <el-col class="group-line" :sm="12" :md="8" v-for="packageDetail in sortedSubscribesList" :key="packageDetail.id">
-              <student-subscribe-packages :packageDetail="packageDetail"></student-subscribe-packages>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <div class="be-in-class" v-show="beInClassDialog">
-      <el-dialog title="" center :visible.sync="beInClassDialog" width="30%" :before-close="handleClose">
-        <div class="hint">
-          <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
-          <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
-        </span>
-      </el-dialog>
+      </div>
+      <div class="main">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -76,7 +52,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-import StudentSubscribePackages from './StudentSubscribePackages'
 import avatar from '@/assets/img/default_portrait.png'
 
 export default {
@@ -84,16 +59,19 @@ export default {
   data() {
     return {
       avatar,
-      loading: true,
-      classID: '',
       skillsList: [],
       loadingSkillsPoint: true,
-      beInClassDialog: false
+      currOption: 0,
+      optionArr: [
+        { name: this.$t('lesson.onlineLesson') },
+        { name: this.$t('lesson.offlineGuidingLesson') },
+        { name: this.$t('lesson.instructionalVideos') }
+      ]
     }
   },
   async mounted() {
+    this.setActiveItem()
     let payload = { userId: this.userId }
-    await this.getUserSubscribes()
     await lesson.users
       .userSkills(payload)
       .then(res => {
@@ -101,15 +79,12 @@ export default {
         this.loadingSkillsPoint = false
       })
       .catch(error => console.log(error))
-    this.loading = false
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile',
       userId: 'user/userId',
+      userProfile: 'user/profile',
       username: 'user/username',
-      enterClassInfo: 'lesson/student/enterClassInfo',
-      subscribesList: 'lesson/student/subscribesList',
       userinfo: 'lesson/userinfo'
     }),
     beansCount() {
@@ -123,186 +98,116 @@ export default {
         this.skillsList.every(skill => (sum += skill.score * 1))
       }
       return sum
-    },
-    filterSubscribesList() {
-      return this.subscribesList
-    },
-    continuingStudyPackages() {
-      let continuingStudyPackagesList = _.filter(
-        this.filterSubscribesList,
-        i => {
-          return (
-            i.learnedLessons.length > 0 &&
-            i.learnedLessons.length < i.lessons.length
-          )
-        }
-      )
-      return continuingStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    startStudyPackages() {
-      let startStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return i.learnedLessons.length == 0 && i.lessons.length != 0
-      })
-      return startStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    finishedStudyPackages() {
-      let finishedStudyPackagesList = _.filter(this.filterSubscribesList, i => {
-        return i.learnedLessons.length == i.lessons.length
-      })
-      return finishedStudyPackagesList.sort(this.sortByUpdateAt)
-    },
-    sortedSubscribesList() {
-      if (this.filterSubscribesList.length === 0) {
-        return this.filterSubscribesList
-      } else {
-        return _.concat(
-          this.continuingStudyPackages,
-          this.startStudyPackages,
-          this.finishedStudyPackages
-        )
-      }
     }
   },
   methods: {
-    ...mapActions({
-      getProfile: 'user/getProfile',
-      enterClassRoom: 'lesson/student/enterClassRoom',
-      getUserSubscribes: 'lesson/student/getUserSubscribes',
-      switchDevice: 'lesson/student/switchDevice'
-    }),
     goBeanDetail() {
       this.$router.push('/student/bean')
+      // this.$message.warning('程序员小姐姐努力开发中')
     },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
-    async enterClass() {
-      if (JSON.stringify(this.enterClassInfo) == '{}') {
-        this.enterNewClass()
-      } else if (this.classID == this.enterClassInfo.key) {
-        this.$message.success(this.$t('lesson.haveEnteredClass'))
-        this.backCurrentClass()
-      } else if (this.classID !== this.enterClassInfo.key) {
-        let key = this.classID
-        await lesson.classrooms
-          .isValidKey(key)
-          .then(res => {
-            if (res) {
-              this.beInClassDialog = true
-            } else {
-              this.$message({
-                showClose: true,
-                message: this.$t('lesson.wrongKey'),
-                type: 'error'
-              })
-              this.beInClassDialog = false
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      }
-    },
-    async enterNewClass() {
-      let key = this.classID
-      await this.enterClassRoom({ key })
-        .then(res => {
-          this.switchDevice('k')
-          this.$router.push({
-            path: `/student/package/${this.enterClassInfo.packageId}/lesson/${
-              this.enterClassInfo.lessonId
-            }?dialog=true`
-          })
-        })
-        .catch(err => {
-          this.$message({
-            showClose: true,
-            message: this.$t('lesson.wrongKey'),
-            type: 'error'
-          })
-          this.beInClassDialog = false
-        })
-    },
-    async backCurrentClass() {
-      const { packageId, lessonId } = this.enterClassInfo
-      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
-    },
-    gotoLessonsCenter() {
-      this.$router.push({
-        path: `/student/center`
-      })
-    },
-    handleClose() {
-      this.beInClassDialog = false
-    },
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
+    },
+    setActiveItem() {
+      const SWITCH_TAG = {
+        'LearningCenterPackages': '0',
+        'OfflineGuidanceCourse': '1',
+        'TeachingVideo': '2'
+      }
+      const { name } = this.$route
+      this.currOption = SWITCH_TAG[name] || '0'
+    },
+    switchSelect(index) {
+      this.currOption = index
+      let routerName = ''
+      switch (index) {
+        case 0:
+          routerName = 'LearningCenterPackages'
+          break
+        case 1:
+          routerName = 'OfflineGuidanceCourse'
+          break
+        case 2:
+          routerName = 'TeachingVideo'
+          break
+        default:
+          break
+      }
+      this.$router.push({
+        name: routerName
+      })
     }
-  },
-  components: {
-    StudentSubscribePackages
   }
 }
 </script>
 
 <style lang="scss">
-.student-wrap {
-  .student {
-    margin: 0 auto;
-    max-width: 1150px;
+.Learning-center {
+  &-content {
+    display: flex;
+    margin: 10px auto;
+    max-width: 1200px;
     .aside {
-      background: #f8f8f8;
-      padding: 0 16px;
+      width: 274px;
+      margin-right: 16px;
+      background: #fff;
+      padding: 35px 0;
       overflow: hidden;
       text-align: center;
       &-content {
         background: #fff;
-        padding: 30px 0 50px;
+        padding: 30px 10px 50px;
         margin: 0 auto;
       }
-      .profile {
-        width: 99px;
-        height: 99px;
-        margin: 0 auto;
-        border-radius: 50%;
-        border: solid 1px #ced0d2;
-        margin-top: 37px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+      .profile-intro {
+        .profile {
+          width: 99px;
+          height: 99px;
+          margin: 0 auto;
+          border-radius: 50%;
+          border: solid 1px #ced0d2;
+          margin-bottom: 20px;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
-      }
-      .nickname {
-        font-size: 24px;
-        line-height: 34px;
-        color: #333333;
-        font-family: 'ArialMT';
-      }
-      .beans {
-        border-bottom: 1px solid #909399;
-        margin: 5px 8px 15px;
-        padding-bottom: 20px;
-        color: #181818;
-        font-size: 14px;
-        .detail {
-          color: #409eff;
-          padding-left: 20px;
-          cursor: pointer;
+        .nickname-wrap {
+          .nickname {
+            font-size: 24px;
+            line-height: 34px;
+            color: #333333;
+            font-family: "ArialMT";
+          }
+          .beans {
+            margin: 5px 8px;
+            padding-bottom: 10px;
+            color: #181818;
+            font-size: 14px;
+            .detail {
+              color: #409eff;
+              padding-left: 20px;
+              cursor: pointer;
+            }
+          }
         }
       }
       .skillpoints {
-        width: 233px;
+        border-top: 1px solid #909399;
         font-size: 14px;
-        margin: 10px auto;
+        margin: 0 20px;
         text-align: left;
         color: #333;
+        padding-top: 15px;
       }
+
       .skills {
-        margin: 0 auto;
-        width: 233px;
+        margin: 0 20px 35px 20px;
         text-align: left;
         &-list {
           margin: 0;
@@ -322,70 +227,33 @@ export default {
           }
         }
       }
+      .options-wrap {
+        .options {
+          display: block;
+          height: 38px;
+          line-height: 38px;
+          margin: 16px 20px;
+          background-color: #f5f5f5;
+          border-radius: 4px;
+          border: solid 1px #bcbcbc;
+          font-size: 16px;
+          color: #333;
+          cursor: pointer;
+          &.selected {
+            background: #409efe;
+            color: #fff;
+          }
+        }
+      }
     }
     .main {
+      flex: 1;
       padding: 0;
       background: #fff;
       overflow: hidden;
-      .search {
-        background: rgba(64, 158, 254, 0.1);
-        .bell {
-          display: inline-block;
-          padding: 18px 0 9px 39px;
-        }
-        .tip {
-          display: block;
-          padding-top: 20px;
-          font-size: 14px;
-          text-align: left;
-        }
-        &-input {
-          display: inline-block;
-          margin: 12px 0 11px 0;
-          width: 384px;
-        }
-        &-btn {
-          display: block;
-          margin-top: 12px;
-          padding-left: 16px;
-        }
-      }
-      .total-packages {
-        padding: 40px 0 15px;
-        height: 16px;
-        border-bottom: 2px solid #d2d2d2;
-        width: 788px;
-        margin: 0 auto;
-      }
-      .packages {
-        margin: 44px 0 0;
-        padding: 0 12px;
-        &-nothing {
-          margin-top: 60px;
-          width: 100%;
-          height: 500px;
-          background: #fff;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          &-hint {
-            font-size: 20px;
-            line-height: 30px;
-            color: #111111;
-          }
-        }
-        .group-line {
-          border-bottom: 1px solid #d2d2d2;
-          padding: 10px 0;
-          margin-bottom: -1px;
-        }
-      }
-      .bottom-line {
-        border-bottom: 1px solid #d2d2d2;
-      }
     }
   }
+
   .be-in-class {
     .el-dialog__body {
       .hint {
@@ -403,7 +271,37 @@ export default {
   }
 }
 @media screen and (max-width: 768px) {
-  .student-wrap {
+  .Learning-center {
+    &-content {
+      display: block;
+      .aside {
+        width: 100%;
+        box-sizing: border-box;
+        .profile-intro {
+          display: flex;
+          .profile {
+            width: 99px;
+            margin-left: 22px;
+          }
+          .nickname-wrap {
+            flex: 1;
+            padding: 12px 60px 12px 0;
+            text-align: right;
+          }
+        }
+        .options-wrap {
+          border-top: 12px solid #f6f7f8;
+          padding-top: 32px;
+          display: flex;
+          .options {
+            flex: 1;
+            border: none;
+            margin: 0;
+            border-radius: 0;
+          }
+        }
+      }
+    }
     .be-in-class {
       .el-dialog {
         width: 90% !important;

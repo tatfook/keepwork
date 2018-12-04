@@ -4,8 +4,8 @@
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view v-if="!loading" class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
-    <common-footer class="lesson-page-footer container"></common-footer>
+    <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
+    <perfect-common-footer></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -24,6 +24,7 @@ import appModule from '@/store/app'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
+import comboModule from '@/store/combo'
 import createPersistedState from '@/store/createPersistedState'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -33,9 +34,11 @@ import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import { lesson } from '@/api'
+import { broadcast } from 'vuex-iframe-sync'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -65,12 +68,14 @@ const store = new Vuex.Store({
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    combo: comboModule
   },
   plugins: [
     createPersistedState({
       paths: ['user.webTemplateConfig', 'user.skyDrive']
-    })
+    }),
+    broadcast('combo')
   ]
 })
 
@@ -173,7 +178,8 @@ export default {
     LessonHeader,
     CommonHeader,
     CommonFooter,
-    LoginDialog
+    LoginDialog,
+    PerfectCommonFooter
   },
   data() {
     return {

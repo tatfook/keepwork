@@ -1,10 +1,10 @@
 <template>
   <div class="project-editing" v-loading='isLoading'>
     <div class='project-editing-item'>
-      <label class="project-editing-item-label">项目状态</label>
+      <label class="project-editing-item-label">{{$t('project.projectStatus')}}</label>
       <el-radio-group v-model="projectVisibility">
-        <el-radio :label="0">公开项目</el-radio>
-        <el-radio :label="1">私有项目</el-radio>
+        <el-radio :label="0">{{$t('project.publicProject')}}</el-radio>
+        <el-radio :label="1">{{$t('project.privateProject')}}</el-radio>
       </el-radio-group>
     </div>
     <div class='project-editing-item' v-for="(privilege, index) in privilegeOptions" :key='index'>
@@ -14,48 +14,19 @@
       </el-radio-group>
     </div>
     <div class="project-editing-operate">
-      <el-button type="primary" size="medium" :disabled="!isModified" @click='updatePrivilege'>保存</el-button>
+      <el-button type="primary" size="medium" :disabled="!isModified" @click='updatePrivilege'>{{$t("common.Save")}}</el-button>
     </div>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
-const PRIVILEGE = {
-  comment: {
-    label: '评论权限',
-    dataKey: 'comment',
-    options: [
-      { value: 4, label: '任何人' },
-      { value: 8, label: '仅限成员' },
-      { value: 16, label: '关闭评论' }
-    ]
-  },
-  boardView: {
-    label: '白板查看',
-    dataKey: 'boardView',
-    options: [{ value: 32, label: '任何人' }, { value: 64, label: '仅限成员' }]
-  },
-  boardEdit: {
-    label: '白板编辑',
-    dataKey: 'boardEdit',
-    options: [
-      { value: 128, label: '任何人' },
-      { value: 256, label: '仅限成员' }
-    ]
-  },
-  recruit: {
-    label: '招募状态',
-    dataKey: 'recruit',
-    options: [{ value: 1, label: '开启招募' }, { value: 2, label: '停止招募' }]
-  }
-}
 export default {
   name: 'ProjectEditing',
   props: {
     originalProjectDetail: {
       type: Object,
       required: true,
-      validator: function(value) {
+      validator: function (value) {
         let { visibility, privilege } = value
         return [0, 1].indexOf(visibility) !== -1 && _.isNumber(privilege)
       }
@@ -68,7 +39,35 @@ export default {
   data() {
     return {
       isLoading: false,
-      privilegeOptions: PRIVILEGE,
+      privilegeOptions: {
+        comment: {
+          label: this.$t('project.commentBy'),
+          dataKey: 'comment',
+          options: [
+            { value: 4, label: this.$t('project.anyone') },
+            { value: 8, label: this.$t('project.membersOnly') },
+            { value: 16, label: this.$t('project.commentsOff') }
+          ]
+        },
+        boardView: {
+          label: this.$t('project.boardViewBy'),
+          dataKey: 'boardView',
+          options: [{ value: 32, label: this.$t('project.anyone') }, { value: 64, label: this.$t('project.membersOnly') }]
+        },
+        boardEdit: {
+          label: this.$t('project.boardEditBy'),
+          dataKey: 'boardEdit',
+          options: [
+            { value: 128, label: this.$t('project.anyone') },
+            { value: 256, label: this.$t('project.membersOnly') }
+          ]
+        },
+        recruit: {
+          label: this.$t('project.recruitingStatus'),
+          dataKey: 'recruit',
+          options: [{ value: 1, label: this.$t('project.onRecruiting') }, { value: 2, label: this.$t('project.offRecruiting') }]
+        }
+      },
       projectVisibility: 0,
       projectPrivileges: {
         recruit: undefined,
@@ -153,7 +152,7 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '更新成功'
+            message: this.$t('project.successfullyUpdated')
           })
           this.isLoading = false
         })

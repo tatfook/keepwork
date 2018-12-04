@@ -240,6 +240,9 @@ body {
 .index-page-main {
   padding: 0;
 }
+.index-page-container .el-main.index-page-main {
+  background-color: transparent;
+}
 [mod-container] {
   overflow: hidden;
 }

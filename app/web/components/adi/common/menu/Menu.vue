@@ -197,9 +197,6 @@ a {
           position: relative;
           z-index: 999;
         }
-        .el-submenu__icon-arrow {
-          //子菜单图片
-        }
       }
     }
     .el-menu-item {
@@ -251,18 +248,22 @@ a {
       height: 100%;
     }
     .el-submenu__title {
-      width: auto;
-      height: 100%;
-      line-height: 50px;
-      border: 0;
-      padding: 0;
       i {
         margin-left: -20px;
       }
     }
   }
 }
-
+.comp-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
+  width: auto;
+  line-height: 50px;
+  border: 0;
+  padding: 0;
+  height: 50px;
+}
+.comp-menu .el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
 .comp-footer {
   height: 100%;
   padding: 40px 0;

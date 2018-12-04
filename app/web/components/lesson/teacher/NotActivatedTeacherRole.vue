@@ -4,7 +4,7 @@
       <div class="teacher-top-hint">
         <p>{{$t('lesson.notActivatedText.hint')}}</p>
         <p class="red-hint">{{$t('lesson.notActivatedText.getActivationCode')}}</p>
-        <el-form class="teacher-top-hint-input" label-width="120px">
+        <el-form class="teacher-top-hint-input" label-width="150px">
           <el-form-item :label="$t('lesson.notActivatedText.activeCode')" prop=''>
             <el-input v-model.trim="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
           </el-form-item>
@@ -16,40 +16,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="teacher-acquire">
-        <h4>{{$t('lesson.notActivatedText.getPrivilege')}}</h4>
-        <el-row :gutter="60">
-          <el-col :sm="12" :xs="22" v-for="n in 2" :key="n">
-            <div class="acquire-item">
-              <div :class="['role',n === 2 ? 'role-teacher':'']">{{n === 1 ? $t('lesson.notActivatedText.roleStudent') : $t('lesson.notActivatedText.roleTeacher')}}</div>
-              <div class="access">
-                <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege1')}}</p>
-                <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege2')}}</p>
-                <p>
-                  <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege3')}}</p>
-                <p :class="{'not-student-privilege-text': n === 1}">
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege4')}}</p>
-                <div class="teaching-function">
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege5')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege6')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege7')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege8')}}</p>
-                  <p :class="{'not-student-privilege-text': n === 1}">
-                    <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege9')}}</p>
-                </div>
-                <p :class="{'not-student-privilege-text': n === 1}">
-                  <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.notActivatedText.privilege10')}}</p>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
+      <learner-and-teacher class="teacher-wrap-learner-and-teacher"></learner-and-teacher>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
@@ -61,6 +28,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import LoginDialog from '@/components/common/LoginDialog'
+import LearnerAndTeacher from '@/components/lesson/common/LearnerAndTeacher'
 
 export default {
   name: 'NotActivatedTeacherRole',
@@ -93,9 +61,9 @@ export default {
       get() {
         return this.userIsLogined
       },
-      set() {}
+      set() { }
     },
-    validCode(){
+    validCode() {
       return this.activeCode && this.organization
     }
   },
@@ -106,7 +74,11 @@ export default {
     }),
     async activateTeacherIdentity() {
       if (this.isLogin) {
-        let payload = { userId: this.userId, key: this.activeCode, school: this.organization }
+        let payload = {
+          userId: this.userId,
+          key: this.activeCode,
+          school: this.organization
+        }
         await lesson.users
           .toBeTeacher(payload)
           .then(res => {
@@ -120,14 +92,14 @@ export default {
           .catch(err => {
             this.$alert(
               `<span style="color:#f75858;">` +
-                this.$t('lesson.notActivatedText.wrongCodeHint') +
-                `</span>`,
+              this.$t('lesson.notActivatedText.wrongCodeHint') +
+              `</span>`,
               '',
               {
                 confirmButtonText: this.$t('common.Sure'),
                 center: true,
                 dangerouslyUseHTMLString: true,
-                callback: action => {}
+                callback: action => { }
               }
             )
           })
@@ -140,6 +112,7 @@ export default {
     }
   },
   components: {
+    LearnerAndTeacher,
     LoginDialog
   }
 }
@@ -147,8 +120,13 @@ export default {
 
 <style lang="scss">
 .teacher-wrap {
+  background: #fff;
+  margin-top: 20px;
+  .lihgt {
+    color: #ff742e;
+  }
   .teacher {
-    max-width: 1150px;
+    max-width: 1200px;
     margin: 0 auto;
     &-top-hint {
       font-size: 14px;
@@ -158,61 +136,40 @@ export default {
         color: #f75858;
       }
       &-input {
-        .el-form-item{
+        .el-form-item {
           margin-bottom: 14px;
-          .el-input{
+          .el-input {
             width: 60%;
           }
         }
-        .active-code-button{
+        .active-code-button {
           width: 207px;
           height: 27px;
         }
       }
     }
-    &-acquire {
-      margin: 60px 0;
-      .acquire-item {
-        width: 545px;
-        margin-bottom: 15px;
-        font-size: 14px;
-        line-height: 30px;
-        box-shadow: 1px 1px 5px #ddd9d9, -1px -1px 5px #ddd9d9;
-        .role {
-          height: 86px;
-          text-align: center;
-          font-size: 26px;
-          color: #333333;
-          background: #f7f7f7;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .role-teacher {
-          background: #409efe;
-          color: #fff;
-        }
-        .access {
-          padding: 44px 25px;
-          background: #fff;
-          p {
-            display: flex;
-            align-items: center;
-            .img-wrap {
-              margin-right: 8px;
-              display: inline-block;
-              width: 20px;
-              height: 20px;
-              .not-student-privilege {
-                visibility: hidden;
-              }
+  }
+  &-learner-and-teacher {
+    .acquire-item {
+      width: 570px;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .teacher-wrap {
+    .teacher {
+      &-top-hint {
+        padding: 4px;
+        &-input {
+          .el-form-item {
+            margin-bottom: 14px;
+            .el-input {
+              width: 100%;
             }
           }
-          .not-student-privilege-text {
-            color: rgb(179, 177, 177);
-          }
-          .teaching-function {
-            margin-left: 20px;
+          .active-code-button {
+            width: 100px;
+            height: 27px;
           }
         }
       }

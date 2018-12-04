@@ -3,7 +3,11 @@ import Router from 'vue-router'
 // const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
 const Center = () => import('@/components/lesson/common/Center')
+const AllTeachingVideo = () => import('@/components/lesson/common/AllTeachingVideo')
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
+const Solution = () => import('@/components/lesson/common/Solution')
+const MoreResources = () => import('@/components/lesson/common/MoreResources')
+
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
 const StudentPackageDetailPage = () =>
@@ -23,6 +27,9 @@ const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
 const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
+const SharedCourseLecturer = () =>
+  import('@/components/lesson/teacher/SharedCourseLecturer')
+
 const LessonSummaryShare = () =>
   import('@/components/lesson/student/LessonSummaryShare')
 const PurchasePackage = () =>
@@ -40,6 +47,11 @@ const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
 const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
+const LearningCenterPackages = () =>
+  import('@/components/lesson/student/LearningCenterPackages')
+const OfflineGuidanceCourse = () =>
+  import('@/components/lesson/student/OfflineGuidanceCourse')
+const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
 
 Vue.use(Router)
 
@@ -59,9 +71,14 @@ export default new Router({
       children: [
         {
           path: '/',
-          // name: 'TeacherColumn',
+          name: 'TeacherColumn',
           component: TeacherColumn,
           children: [
+            {
+              path: 'sharedCourseLecturer',
+              name: 'SharedCourseLecturer',
+              component: SharedCourseLecturer
+            },
             {
               path: '/',
               name: 'TeacherColumn',
@@ -111,6 +128,21 @@ export default new Router({
               meta: { requireAuth: true }
             }
           ]
+        },
+        {
+          path: 'solution/:command',
+          name: 'TeacherSolution',
+          component: Solution
+        },
+        {
+          path: 'allteachingvideo/:command',
+          name: 'TeacherAllTeachingVideo',
+          component: AllTeachingVideo
+        },
+        {
+          path: 'moreResources/:command',
+          name: 'TeacherMoreResources',
+          component: MoreResources
         },
         {
           path: 'about',
@@ -188,13 +220,46 @@ export default new Router({
     },
     {
       path: '/student',
+      name: 'Student',
       component: Student,
       children: [
         {
           path: '/',
           name: 'StudentColumn',
           component: StudentColumn,
-          meta: { requireAuth: true }
+          meta: { requireAuth: true },
+          children: [
+            {
+              path: '/',
+              name: 'LearningCenterPackages',
+              component: LearningCenterPackages
+            },
+            {
+              path: 'offlinecourse',
+              name: 'OfflineGuidanceCourse',
+              component: OfflineGuidanceCourse
+            },
+            {
+              path: 'teachingvideo',
+              name: 'TeachingVideo',
+              component: TeachingVideo
+            }
+          ]
+        },
+        {
+          path: 'solution/:command',
+          name: 'StudentSolution',
+          component: Solution
+        },
+        {
+          path: 'allteachingvideo/:command',
+          name: 'StudentAllTeachingVideo',
+          component: AllTeachingVideo
+        },
+        {
+          path: 'moreResources/:command',
+          name: 'StudentMoreResources',
+          component: MoreResources
         },
         {
           path: 'about',

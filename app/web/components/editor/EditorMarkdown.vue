@@ -404,7 +404,7 @@ export default {
         }
       })
         .then(({ file, url }) => {
-          this.replaceLine(lineNo, '')
+          this.replaceLine(lineNo, ' ')
           this.updateMarkdown()
           this.flushParserCache()
           this.$emit('insertBigfile', { file, url: `${url}#${file.filename}` })
@@ -447,7 +447,7 @@ export default {
 </style>
 <style lang="css">
 .kp-md-editor .CodeMirror {
-  margin:0 auto;
+  margin: 0 auto;
   height: 100%;
   max-width: 1080px;
 }
