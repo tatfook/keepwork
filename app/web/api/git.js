@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { Base64 } from 'js-base64'
-import es from './esGateway'
+import { get as _get } from 'lodash'
+import Cookies from 'js-cookie'
 
 const defaultConfig = {
   url: process.env.GITLAB_API_PREFIX,
@@ -13,6 +13,20 @@ const gitLabAPIGenerator = ({ url, token }) => {
     timeout: 30 * 1000,
     headers: { Authorization: token }
   })
+
+  instance.interceptors.response.use(
+    response => response,
+    async error => {
+      const CODES = [401]
+      if (CODES.some(code => code === _get(error, 'response.status', '')) && Cookies.get('token')) {
+        Cookies.remove('token')
+        Cookies.remove('token', { path: '/' })
+        window.localStorage.removeItem('satellizer_token')
+        window.location.reload()
+      }
+    }
+  )
+
   return {
     projects: {
       repository: {
@@ -305,15 +319,6 @@ export class GitAPI {
     }/blob/master/${path}`
   }
 
-  async commitToES(path, action, content, options) {
-    return es.submitGitData(path, action, content, options)
-  }
-
-  async commitToESByArray(actions, options) {
-    actions.map(action => {
-      return null
-    })
-  }
 }
 
 export default GitAPI
