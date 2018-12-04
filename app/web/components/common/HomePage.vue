@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-      <i class="iconfont icon-sound-fill"></i>3D创作工具：Paracraft 永久免费！
+      <i class="iconfont icon-sound-fill"></i>{{$t('home.paracraftIsFree')}}
       <span class="close" @click="closeAd">&times;</span>
     </div>
     <div class="home-page-simple-show">
