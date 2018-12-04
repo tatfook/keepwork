@@ -44,7 +44,7 @@ import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
-  name: 'userData',
+  name: 'UserData',
   mounted() {
     this.userInfo = _.cloneDeep(this.loginUserProfile)
     this.copiedLoginUserProfile = _.cloneDeep(this.loginUserProfile)

@@ -2,8 +2,8 @@
   <div class="profile-index">
     <div class="container">
       <div class="profile-index-sidebar">
-        <user-basic-msg class="profile-index-sidebar-item" :nowUserDetail='nowUserDetail'></user-basic-msg>
-        <user-certificates :nowUserDetail='nowUserDetail'></user-certificates>
+        <user-basic-msg class="profile-index-sidebar-item" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-basic-msg>
+        <user-certificates :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-certificates>
       </div>
       <div class="profile-index-main">
         <div class="profile-index-infos profile-index-main-item">
@@ -30,9 +30,9 @@
             <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
           </div>
         </div>
-        <recent-project class="profile-index-main-item"></recent-project>
-        <contribution-calendar class="profile-index-main-item"></contribution-calendar>
-        <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail'></user-experiences>
+        <recent-project class="profile-index-main-item" :nowUserDetail='nowUserDetail'></recent-project>
+        <contribution-calendar class="profile-index-main-item" :nowUserDetail='nowUserDetail'></contribution-calendar>
+        <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-experiences>
       </div>
     </div>
   </div>
@@ -44,6 +44,7 @@ import UserBasicMsg from './common/UserBasicMsg'
 import RecentProject from './common/RecentProject'
 import UserCertificates from './common/UserCertificates'
 import UserExperiences from './common/UserExperiences'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ProfileIndex',
   props: {
@@ -55,6 +56,17 @@ export default {
   data() {
     return {
       showGuideDialog: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      loginUserId: 'user/userId'
+    }),
+    nowProfileUserId() {
+      return this.nowUserDetail.id
+    },
+    isLoginUserEditable() {
+      return this.loginUserId === this.nowProfileUserId
     }
   },
   methods: {

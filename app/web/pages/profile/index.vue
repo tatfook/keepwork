@@ -22,6 +22,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
 import router from './profile.router'
 import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import profileModule from '@/store/profile'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -56,6 +57,7 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
+    pbl: pblModule,
     profile: profileModule
   }
 })

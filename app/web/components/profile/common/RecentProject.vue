@@ -12,55 +12,46 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import ProjectCell from '@/components/common/ProjectCell'
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'RecentProject',
-  data() {
-    return {
-      recentProject: [
-        {
-          name: '告诉果果',
-          name_title: '告诉果果',
-          visit: 2687,
-          star: 1746,
-          comment: 500,
-          extra: {
-            imageUrl:
-              'https://git.keepwork.com/gitlab_rls_qizai/world_base32_5gozfzuyuxsltghjuoholen44wk3r2eartul7by/raw/master/preview.jpg'
-          },
-          user: {
-            username: 'kaitlyn'
-          }
-        },
-        {
-          name: '告诉果果',
-          name_title: '告诉果果',
-          visit: 2687,
-          star: 1746,
-          comment: 500,
-          extra: {
-            imageUrl:
-              'https://git.keepwork.com/gitlab_rls_qizai/world_base32_5gozfzuyuxsltghjuoholen44wk3r2eartul7by/raw/master/preview.jpg'
-          },
-          user: {
-            username: 'kaitlyn'
-          }
-        },
-        {
-          name: '告诉果果',
-          name_title: '告诉果果',
-          visit: 2687,
-          star: 1746,
-          comment: 500,
-          extra: {
-            imageUrl:
-              'https://git.keepwork.com/gitlab_rls_qizai/world_base32_5gozfzuyuxsltghjuoholen44wk3r2eartul7by/raw/master/preview.jpg'
-          },
-          user: {
-            username: 'kaitlyn'
-          }
-        }
-      ]
+  props: {
+    nowUserDetail: {
+      type: Object,
+      required: true
+    }
+  },
+  created() {
+    this.pblGetUserProjects({ userId: this.nowUserId })
+  },
+  computed: {
+    ...mapGetters({
+      userProjects: 'pbl/userProjects',
+    }),
+    nowUserId() {
+      return _.get(this.nowUserDetail, 'id')
+    },
+    userProjectList() {
+      let userId = this.nowUserId
+      return _.get(this.userProjects({ userId }), 'rows', [])
+    },
+    sortedProjectList() {
+      return _.sortBy(this.userProjectList, project => -moment(project.updatedAt).valueOf())
+    },
+    recentProject() {
+      return _.slice(this.sortedProjectList, 0, 3)
+    }
+  },
+  methods: {
+    ...mapActions({
+      pblGetUserProjects: 'pbl/getUserProjects'
+    })
+  },
+  watch: {
+    nowUserDetail() {
+      this.pblGetUserProjects({ userId: this.nowUserId })
     }
   },
   components: {
