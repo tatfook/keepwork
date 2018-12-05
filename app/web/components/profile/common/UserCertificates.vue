@@ -27,7 +27,7 @@
         <p><span v-if="isLoginUserEditable" class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '个人证书，展现更好的自己' : '暂无证书~'}}</p>
       </div>
     </el-card>
-    <el-dialog v-if="isLoginUserEditable" title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog v-if="isLoginUserEditable" title="添加证书" :visible.sync="isAddingDialogVisible" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
       <el-form label-position="top" :model="newCertificate">
         <el-form-item label="名称">
           <el-input v-model="newCertificate.title"></el-input>
@@ -243,6 +243,10 @@ export default {
     }
   }
   &-adding-dialog {
+    .el-dialog {
+      width: 416px;
+      max-width: 100%;
+    }
     .el-dialog__header {
       border-bottom: 1px solid #e8e8e8;
       padding: 16px;
@@ -270,6 +274,25 @@ export default {
       width: 88px;
       height: 36px;
       line-height: 36px;
+      padding: 0 16px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-certificate {
+    &-card {
+      border-radius: 0;
+      border-width: 1px 0;
+      .el-card__header {
+        padding: 9px 16px;
+      }
+      .el-card__body {
+        padding: 16px;
+      }
+    }
+    &-adding-dialog {
       padding: 0 16px;
     }
   }

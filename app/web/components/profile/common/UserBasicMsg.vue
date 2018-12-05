@@ -3,9 +3,11 @@
     <div class="user-basic-msg-profile">
       <img :src='nowUserDetail.portrait' alt="">
     </div>
-    <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
-    <div class="user-basic-msg-desc">{{nowUserDetail.description}}</div>
-    <div class="user-basic-msg-rank-info">
+    <div class="user-basic-msg-username-desc">
+      <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
+      <div class="user-basic-msg-desc">{{nowUserDetail.description}}</div>
+    </div>
+    <div class="user-basic-msg-rank-info hidden-sm-and-down">
       <div class="user-basic-msg-rank-info-item">
         <div class="user-basic-msg-rank-info-label">项目</div>
         <div class="user-basic-msg-rank-info-count">{{nowUserDetail.rank.project}}</div>
@@ -23,7 +25,7 @@
       <el-button v-if="isLoginUserEditable">编辑个人资料</el-button>
       <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? '取消关注':'关注'}}</el-button>
     </div>
-    <div class="user-basic-msg-infos">
+    <div class="user-basic-msg-infos hidden-sm-and-down">
       <div class="user-basic-msg-infos-item">
         <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || "未知地址"}}
       </div>
@@ -137,6 +139,8 @@ export default {
 </script>
 <style lang="scss">
 .user-basic-msg {
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
   font-size: 13px;
   text-align: center;
   color: #606266;
@@ -196,6 +200,47 @@ export default {
       }
       .iconfont {
         margin-right: 12px;
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-basic-msg {
+    display: flex;
+    align-items: center;
+    padding: 20px 16px;
+    background-color: #fff;
+    border: none;
+    &-profile {
+      margin-top: 0;
+      width: auto;
+      font-size: 0;
+      img {
+        width: 84px;
+        height: 84px;
+      }
+    }
+    &-username-desc {
+      flex: 1;
+      text-align: left;
+      padding: 0 20px;
+    }
+    &-username {
+      margin-top: 0;
+    }
+    &-desc {
+      color: #909399;
+    }
+    &-operation {
+      margin-bottom: 0;
+      padding: 0;
+      width: auto;
+      .el-button {
+        width: auto;
+        min-width: 65px;
+        padding: 8.5px 8px;
       }
     }
   }

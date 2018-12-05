@@ -1,7 +1,7 @@
 <template>
   <div class="profile-header">
     <div class="container">
-      <el-breadcrumb separator="/" class="profile-header-breadcrumb">
+      <el-breadcrumb separator="/" class="profile-header-breadcrumb hidden-sm-and-down">
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="profile-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
@@ -112,6 +112,31 @@ export default {
     }
     .el-tabs__active-bar {
       display: none;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .profile-header {
+    padding: 0 16px;
+        box-shadow: none;
+    border-bottom: 1px solid #ebeef5;
+
+    &-tabs {
+      &-label {
+        color: #909399;
+      }
+      .el-tabs__item.is-active {
+        & > span {
+          color: #303133;
+        }
+      }
+    }
+    .el-tabs__nav {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
     }
   }
 }
