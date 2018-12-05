@@ -5,17 +5,17 @@
     :rules="rules"
     ref="passwordResetForm"
   >
-    <h3 class="password-reset-form-title">重置密码</h3>
+    <h3 class="password-reset-form-title">{{$t('user.passwordReset')}}</h3>
     <el-form-item prop="phoneOrEmail">
       <el-input
         v-model="ruleForm.phoneOrEmail"
-        placeholder="请输入手机号/邮箱"
+        :placeholder="$t('user.inputPhoneOrEmail')"
       ></el-input>
     </el-form-item>
     <el-form-item prop="captcha">
       <el-input
         v-model="ruleForm.captcha"
-        placeholder="输入验证码"
+        :placeholder="$t('user.inputVerificationCode')"
       >
         <el-button
           type="primary"
@@ -24,21 +24,21 @@
           :loading="isSendCode"
           slot="suffix"
           @click="sendCode"
-        > {{disabledSendButton ? `${count}s后重发` : '发送验证码' }} </el-button>
+        > {{disabledSendButton ? `${count}${$t('user.countResend')}` : $t('user.sendCodes') }} </el-button>
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
         v-model="ruleForm.password"
         type="password"
-        placeholder="设置新密码"
+        :placeholder="$t('user.newPassword')"
       ></el-input>
     </el-form-item>
     <el-form-item prop="rePassword">
       <el-input
         v-model="ruleForm.rePassword"
         type="password"
-        placeholder="确认新密码"
+        :placeholder="$t('user.reNewPassword')"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -47,7 +47,7 @@
         :loading='isLoading'
         type="primary"
         @click="passwordReset('ruleForm')"
-      >确认</el-button>
+      >{{$t('common.OK')}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -63,15 +63,15 @@ export default {
       if (PHONE_REG.test(value) || EMAIL_REG.test(value)) {
         callback()
         } else {
-        callback(new Error('请输入正确的手机号或者邮箱'))
+        callback(new Error(this.$t('user.worongEmailOrPhone')))
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error(this.$t('user.reNewPwdRequired')))
       } else {
         if (value !== this.ruleForm.password) {
-          callback(new Error('两次输入密码不一致!'))
+          callback(new Error(this.$t('user.twoPwdInconsistent')))
         } else {
           callback()
         }
@@ -94,7 +94,7 @@ export default {
         phoneOrEmail: [
           {
             required: true,
-            message: '邮箱或者密码不能为空',
+            message: this.$t('user.worongEmailOrPhone'),
             trigger: 'blur'
           },
           {
@@ -104,7 +104,7 @@ export default {
         captcha: [
           {
             required: true,
-            message: '验证码不能为空',
+            message: this.$t('user.inputVerificationCode'),
           }
         ],
         password: [
@@ -166,7 +166,7 @@ export default {
           password
         }
         const result = await this.userPasswordReset(payload).catch(e => {
-          this.$message.error('重置密码失败')
+          this.$message.error(this.$t('common.failure'))
         })
         if (result == 'OK') {
           await this.userLogin({
@@ -202,7 +202,7 @@ export default {
             }, 1000)
           } catch (error) {
             this.isSendCode = false
-            this.$message.error('您的请求过于频繁，请明天再试')
+            this.$message.error(this.$t('user.sendingFrequent'))
           }
         }
       })
