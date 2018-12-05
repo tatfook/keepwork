@@ -16,14 +16,11 @@ import { transfer } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
 import '@/components/common/thirdAuth'
-import VTooltip from 'v-tooltip'
-import '@/assets/css/tooltip.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueClipboard)
-Vue.use(VTooltip)
 
 const i18n = new VueI18n({
   locale,
