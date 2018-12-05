@@ -207,7 +207,7 @@ export default {
     },
     flushParserCache() {
       if (
-        this.parserCache.code &&
+        this.parserCache.code !== undefined &&
         this.parserCache.code !== this.code
       ) {
         return this.$store.dispatch('updateMarkDown', this.parserCache)
