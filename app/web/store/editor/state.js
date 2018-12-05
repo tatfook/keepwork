@@ -58,7 +58,7 @@ const state = () => ({
   isMultipleTextDialogShow: false,
   isSkyDriveManagerDialogShow: false,
   updateRecentUrlList: [],
-  isIframeDialogShow: false
+  iframeDialog: {}
 })
 
 export default state
