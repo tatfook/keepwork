@@ -673,6 +673,10 @@ const actions = {
     let result = await keepwork.user.changePassword({ oldpassword, password: newpassword })
     return result
   },
+  async passwordReset(context, payload) {
+    const result = await keepwork.user.passwordReset(payload)
+    return result
+  },
   async getByEmail(context, { email }) {
     let users = await keepwork.user.getByEmail({ email })
     return users.length > 0
@@ -680,6 +684,14 @@ const actions = {
   async getByCellphone(context, { cellphone }) {
     let users = await keepwork.user.getByCellphone({ cellphone })
     return users.length > 0
+  },
+  async getCodeByEmail(context, payload) {
+    const users = await keepwork.user.getResetCodeByEmail(payload)
+    return users
+  },
+  async getCodeByCellphone(context, payload) {
+    const users = await keepwork.user.getResetCodeByCellphone(payload)
+    return users
   },
   async verifyEmailOne(context, { email, bind }) {
     return keepwork.user.verifyEmailOne({ email, bind })
