@@ -94,6 +94,7 @@ export default [
           emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
+            'flex-wrap': 'wrap',
             'justify-content': 'center'
           }
         }
@@ -197,6 +198,7 @@ export default [
           emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
+            'flex-wrap': 'wrap',
             justifyContent: 'center'
           }
         }
@@ -300,6 +302,7 @@ export default [
           emptyLinkTarget: '_blank',
           menuStyle: {
             display: 'flex',
+            'flex-wrap': 'wrap',
             justifyContent: 'center'
           }
         }
