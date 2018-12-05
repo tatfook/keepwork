@@ -9,12 +9,8 @@
         <span v-if='invalid'>{{$t('editor.wrongModDirective')}}</span>
       </div>
       <div class='operator' v-if='isActive'>
-        <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
-          <el-button slot="reference" class="add-mod-btn add-before" @click.stop.prevent='newMod(gConst.POSITION_BEFORE)'> + </el-button>
-        </el-popover>
-        <el-popover placement="top" trigger="hover" :content="$t('editor.addModHere')">
-          <el-button slot="reference" class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)'> + </el-button>
-        </el-popover>
+        <el-button slot="reference" class="add-mod-btn add-before" @click.stop.prevent='newMod(gConst.POSITION_BEFORE)' v-tooltip.top="$t('editor.addModHere')"> + </el-button>
+        <el-button slot="reference" class="add-mod-btn add-after" @click.stop.prevent='newMod(gConst.POSITION_AFTER)' v-tooltip.top="$t('editor.addModHere')"> + </el-button>
       </div>
     </div>
     <QuickToTop/>
@@ -225,24 +221,6 @@ export default {
 .kp-mod-selector.no-mask .comp:hover::before {
   background-color: transparent;
   cursor: pointer;
-}
-.el-popover--plain {
-  padding: 10px;
-}
-.el-popover {
-  position: absolute;
-  background-color: #303133;
-  min-width: 86px;
-  font-size: 12px;
-  color: #fff;
-  border: unset;
-  border-radius: 4px;
-}
-.popper__arrow {
-  border-color: #303133 transparent #303133 transparent !important;
-}
-.popper__arrow:after {
-  border-color: #303133 transparent #303133 transparent !important;
 }
 </style>
 

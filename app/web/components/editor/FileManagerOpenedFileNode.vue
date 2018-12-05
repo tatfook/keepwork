@@ -5,13 +5,13 @@
     </span>
     <span class=''>{{ node.label }}</span>
     <span class="file-manager-buttons-container">
-      <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
+      <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" v-tooltip.bottom="$t('editor.save')" @click.stop='save(data)'>
       </el-button>
-      <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
+      <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" v-tooltip.bottom="$t('editor.reload')" @click.stop='confirmRefresh'>
       </el-button>
-      <el-button class="iconfont icon-delete____ edit-hover" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
+      <el-button class="iconfont icon-delete____ edit-hover" size="mini" type="text" v-tooltip.bottom="$t('editor.close')" @click.stop='handleCloseConfirm(data)'>
       </el-button>
-      <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeOpenedFile(data)">
+      <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" v-tooltip.bottom="$t('editor.delete')" @click.stop="removeOpenedFile(data)">
       </el-button>
     </span>
     <div @click.stop class="close-dialog">
