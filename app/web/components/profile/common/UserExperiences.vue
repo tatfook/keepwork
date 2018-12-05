@@ -31,7 +31,7 @@
         <p><span v-if="isLoginUserEditable" class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '培训经历、项目经历、获奖经历' : '还没有添加经历~'}}</p>
       </div>
     </el-card>
-    <el-dialog v-if="isLoginUserEditable" title="添加经历" :visible.sync="isAddingDialogVisible" width="416px" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
+    <el-dialog v-if="isLoginUserEditable" title="添加经历" :visible.sync="isAddingDialogVisible" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
       <el-form label-position="top" :model="newExperience">
         <el-form-item label="名称">
           <el-input v-model="newExperience.title"></el-input>
@@ -288,6 +288,10 @@ export default {
     }
   }
   &-adding-dialog {
+    .el-dialog {
+      width: 416px;
+      max-width: 100%;
+    }
     .el-dialog__header {
       border-bottom: 1px solid #e8e8e8;
       padding: 16px;
@@ -315,6 +319,28 @@ export default {
       width: 88px;
       height: 36px;
       line-height: 36px;
+      padding: 0 16px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-experience {
+    &-card {
+      border-radius: 0;
+      border-width: 1px 0;
+      .el-card__header {
+        padding: 9px 16px;
+      }
+    }
+    &-item {
+      padding: 16px 0;
+      &-link {
+        margin: 4px 0 12px;
+      }
+    }
+    &-adding-dialog {
       padding: 0 16px;
     }
   }

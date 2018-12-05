@@ -1,5 +1,6 @@
 <template>
   <div class="profile-detail-page" v-loading='isLoading'>
+    <user-basic-msg v-if="isFinishFirstInit" class="hidden-sm-and-up" :isLoginUserEditable='isLoginUserEditable' :nowUserDetail='nowUserDetail'></user-basic-msg>
     <profile-header v-if="isFinishFirstInit" :nowUsername='nowUsername'></profile-header>
     <router-view v-if="isFinishFirstInit" :nowUserDetail='nowUserDetail'></router-view>
   </div>
@@ -8,6 +9,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ProfileHeader from './common/ProfileHeader'
+import UserBasicMsg from './common/UserBasicMsg'
 export default {
   name: 'ProfileDetailPage',
   async mounted() {
@@ -22,6 +24,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      loginUserId: 'user/userId',
       userGetDetailWithRankByUserId: 'user/getDetailWithRankByUserId'
     }),
     nowUserId() {
@@ -32,6 +35,12 @@ export default {
     },
     nowUsername() {
       return _.get(this.nowUserDetail, 'username')
+    },
+    nowProfileUserId() {
+      return _.get(this.nowUserDetail, 'id')
+    },
+    isLoginUserEditable() {
+      return this.loginUserId === this.nowProfileUserId
     }
   },
   methods: {
@@ -51,6 +60,7 @@ export default {
     }
   },
   components: {
+    UserBasicMsg,
     ProfileHeader
   }
 }

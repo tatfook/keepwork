@@ -92,3 +92,23 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .recent-project {
+    &-card {
+      border-radius: 0;
+      border-width: 1px 0;
+      .el-card__header {
+        padding: 9px 16px;
+      }
+    }
+    &-list {
+      overflow: auto;
+      padding: 8px 16px;
+      & &-item {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+</style>
