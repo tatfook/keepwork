@@ -2,7 +2,7 @@
   <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
     <h3 class="register-title">{{$t('common.register')}}</h3>
     <el-form-item prop="username" :error="usernameError">
-      <el-popover placement="top" width="264" trigger="hover" content="" v-model="visible">
+      <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
         <el-input slot="reference" @focus="handleUsernameInputFocus" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
         <div class="register-dialog-form-tip">
           {{$t('common.accountNoChange')}}<br>
@@ -142,8 +142,8 @@ export default {
       this.usernameError = ''
     },
     isExist() {
-      if (!this.ruleForm.username) return
       this.visible = false
+      if (!this.ruleForm.username) return
       keepwork.user
         .getUser(this.ruleForm.username)
         .then(res => {
