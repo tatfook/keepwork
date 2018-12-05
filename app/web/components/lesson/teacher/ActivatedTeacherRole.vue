@@ -144,7 +144,7 @@ export default {
       margin-right: 16px;
       width: 274px;
       &-top {
-        padding: 35px 0;
+        padding: 35px 0 0;
         .avatar {
           width: 96px;
           height: 96px;
@@ -183,7 +183,7 @@ export default {
         }
       }
       &-options {
-        padding: 20px;
+        padding: 27px 20px;
         .el-menu {
           border: none;
           .el-submenu__title {
@@ -201,6 +201,7 @@ export default {
                 margin: 0;
                 border-top: none;
                 background: #fff;
+                border-radius: 0;
                 &.is-active {
                   background: #2196f3;
                 }
@@ -216,7 +217,7 @@ export default {
             background-color: #f5f5f5;
             border-radius: 4px;
             border: solid 1px #bcbcbc;
-            margin: 16px 0;
+            margin-bottom: 16px;
             &.is-active {
               background: #2196f3;
             }
@@ -260,7 +261,7 @@ export default {
               border-radius: 0;
             }
             .lesson-manager-popver-menu {
-              padding: 16px 0;
+              padding: 0;
               &.is-active {
                 .el-submenu__title {
                   background: #409efe;
