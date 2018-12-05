@@ -12,7 +12,7 @@
     </div>
     <div class="project-cell-author">
       <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait"><span class="username" :title="project.user.username">{{project.user && project.user.username}}</span></div>
-      <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
+      <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}</div>
     </div>
   </div>
 </template>
