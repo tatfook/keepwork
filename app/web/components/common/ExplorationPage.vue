@@ -254,7 +254,7 @@ export default {
       max-width: 1200px;
       .theme {
         text-align: center;
-        margin: 42px;
+        margin: 24px auto 32px;
         .explore {
           color: #409eff;
         }
@@ -263,6 +263,9 @@ export default {
         &-tab {
           &-menu {
             border: none;
+            &.el-menu.el-menu--horizontal{
+              border: none;
+            }
           }
         }
         &-input {
@@ -271,11 +274,11 @@ export default {
           .el-input__inner {
             height: 40px;
             background: #f5f5f5;
-            border: none;
+            border: #f5f5f5 1px solid;
           }
           .el-input__inner:hover,
           .el-input__inner:focus {
-            border-color: #dcdfe6;
+            border-color: #409efe;
           }
           .el-input__suffix {
             right: 0;
