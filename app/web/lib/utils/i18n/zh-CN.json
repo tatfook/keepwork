@@ -766,6 +766,8 @@
     "unBundingFailure": "解绑失败",
     "wrongEmailFormat": "请输入正确的邮箱",
     "worongEmailOrPhone": "请输入正确的手机号或者邮箱",
+    "phoneNotBound": "手机号未绑定",
+    "emailNotBound": "邮箱未绑定",
     "emailHasBeenBoundToOtherAccounts": "该邮箱已被绑定！",
     "cellphoneHasBeenBoundToOtherAccounts": "该手机号已被绑定！",
     "mailSentSuccess": "邮件发送成功！",
