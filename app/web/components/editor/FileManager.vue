@@ -6,12 +6,10 @@
           <i class="el-icon-arrow-right"></i> {{ $t('editor.openedFiles') }}
         </h1>
         <span class="opened-files-buttons" v-show="trees.isOpenedShow && hasOpenedFiles">
-          <el-tooltip :content="$t('editor.saveAll')">
-            <el-button class="iconfont icon-save" size="mini" type="text" @click.stop='saveAllOpenedFiles'></el-button>
-          </el-tooltip>
-          <el-tooltip :content="$t('editor.closeAll')">
-            <el-button class="iconfont icon-delete____" size="mini" type="text" @click.stop='closeAllOpenedFilesConfirm'></el-button>
-          </el-tooltip>
+          <el-button class="iconfont icon-save" size="mini" type="text" :title='$t("editor.saveAll")' @click.stop='saveAllOpenedFiles'>
+          </el-button>
+          <el-button class="iconfont icon-delete____" size="mini" type="text" :title='$t("editor.closeAll")' @click.stop='closeAllOpenedFilesConfirm'>
+          </el-button>
         </span>
       </div>
     <div @click.stop class="close-dialog">
@@ -35,9 +33,7 @@
           <i class="el-icon-arrow-right"></i> {{ $t('editor.myPersonalWebsites') }}
         </h1>
         <span class="pull-right-icon">
-          <el-tooltip :content="$t('editor.newWebsite')">
-            <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()'></el-button>
-          </el-tooltip>
+          <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()' v-tooltip.bottom="{content: $t('editor.newWebsite'), classes:'pull-right-icon-tooltip'}"></el-button>
           <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </span>
       </div>
@@ -612,5 +608,9 @@ export default {
     white-space: normal;
     line-height: 32px;
   }
+}
+.pull-right-icon-tooltip {
+  top: 7px !important;
+  margin-right: -15px !important;
 }
 </style>

@@ -22,7 +22,7 @@
         <span class="project-joined-members-list-card-label">创建者</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
-        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' ='member.username' alt="">
+        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
       <div v-else class="project-joined-members-list-card-profiles-empty">暂无其他成员</div>
     </el-card>
