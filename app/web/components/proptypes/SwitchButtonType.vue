@@ -1,16 +1,14 @@
 <template>
   <div>
     {{$t(originValue.desc)}}
-    <el-tooltip :content="isToolTip" placement="top">
-      <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @input='updateValue' @focus='getFocus'></el-switch>
-    </el-tooltip>
+    <el-switch v-model="inputTypeValue.value" active-color="#13ce66" inactive-color="#ff4949" clearable @input='updateValue' @focus='getFocus' v-tooltip='isToolTip'></el-switch>
   </div>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
 
 export default {
-  name: 'SwitchButtonType',
+  name: 'LinkType',
   mixins: [protypesBaseMixin],
   props: {
     originValue: Object
