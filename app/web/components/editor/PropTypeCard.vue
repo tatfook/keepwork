@@ -4,8 +4,12 @@
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
-      <el-tooltip v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq' || cardKey == 'md'" :content="tipTool()" popper-class="prop-header-tooltip-class" placement="top">
+      <el-tooltip v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq'" :content="tipTool()" popper-class="prop-header-tooltip-class" placement="top">
         <i class="iconfont icon-help"></i>
+      </el-tooltip>
+      <el-tooltip v-if="cardKey == 'md'" popper-class="prop-header-tooltip-class" placement="top">
+        <i class="iconfont icon-help"></i>
+        <div slot="content"><span v-html="tipTool()"></span></div>
       </el-tooltip>
       <el-col class="card-info">
         <el-tooltip :content="$t('editor.enlargeMdEditing')" placement="top">
@@ -179,9 +183,7 @@ export default {
 </style>
 <style>
   .prop-header-tooltip-class {
-    max-width: 250px;
-    /* word-break : normal;
-    margin-top: 10px !important; */
+    max-width: 215px;
   }
 </style>
 
