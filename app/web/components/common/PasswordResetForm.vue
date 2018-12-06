@@ -54,6 +54,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { keepwork } from '@/api'
 const EMAIL_REG =  /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
 const PHONE_REG = /^1[3-9][0-9]{9}$/
 export default {
@@ -166,6 +167,9 @@ export default {
           password
         }
         const result = await this.userPasswordReset(payload).catch(e => {
+          if (e.response.data.code === 5) {
+            return this.$message.error(this.$t('user.verificationCodeError'))
+          }
           this.$message.error(this.$t('common.failure'))
         })
         if (result == 'OK') {
@@ -185,9 +189,19 @@ export default {
             this.isSendCode = true
             const phoneOrEmail = this.ruleForm.phoneOrEmail
             if (PHONE_REG.test(phoneOrEmail)) {
+              const res = await keepwork.user.searchByField({ cellphone: phoneOrEmail})
+              if (res.count === 0) {
+                 this.isSendCode = false
+                 return this.$message.error(this.$t('user.phoneNotBound'))
+              }
               this.users = await this.getCodeByCellphone({ cellphone: phoneOrEmail })
             }
             if (EMAIL_REG.test(phoneOrEmail)) {
+              const res = await keepwork.user.searchByField({ email: phoneOrEmail})
+              if (res.count === 0) {
+                this.isSendCode = false
+                return this.$message.error(this.$t('user.emailNotBound'))
+              }
               this.users = await this.getCodeByEmail({ email: phoneOrEmail })
             }
             this.isSendCode = false
@@ -201,6 +215,7 @@ export default {
               }
             }, 1000)
           } catch (error) {
+            console.error(error)
             this.isSendCode = false
             this.$message.error(this.$t('user.sendingFrequent'))
           }
