@@ -18,19 +18,15 @@
       <div class="issue-detail-intro">
         <span class="created-time">{{relativeTime(currIssue.createdAt)}}</span>
         <span class="created-by">{{$t('project.createBy')}}<span class="name">{{issue.user.nickname}}</span>{{$t('project.created')}}</span>
-        <span v-if="currIssue.tagEdit" class="issue-detail-intro-tag">
-          <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
+        <span class="issue-detail-intro-tag">
+          <el-tag :key="tag" v-for="tag in dynamicTags" :closable="isEditTags" :disable-transitions="false" @close="handleCloseTag(tag)">
             {{tag}}
           </el-tag>
           <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
           </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-          <el-button size="mini" type="primary" @click="updateTag">{{$t('common.Sure')}}</el-button>
-          <!-- <el-button size="mini" @click="cancelUpdateTag">取消</el-button> -->
-        </span>
-        <span v-else class="created-tag">
-          <span class="tag" v-for="(tag,i) in issueTagArr(currIssue)" :key="i">{{tag}}</span>
-          <span class="edit-tag" @click="alterTag"><i class="iconfont icon-edit-square"></i>{{$t('project.changeLabel')}}</span>
+          <el-button v-show="isEditTags" v-else class="button-new-tag" size="small" @click="showInput">+ {{$t('project.newTag')}}</el-button>
+          <el-button v-if="isEditTags" size="mini" type="primary" @click="updateTag">{{$t('common.Sure')}}</el-button>
+          <span v-else class="edit-tag" @click="updateTag"><i class="iconfont icon-edit-square"></i>{{$t('project.changeLabel')}}</span>
         </span>
       </div>
       <div class="issue-detail-status">
@@ -187,6 +183,7 @@ export default {
   data() {
     return {
       default_portrait,
+      isEditTags: false,
       issueData: {},
       dynamicTags: [],
       inputVisible: false,
@@ -214,7 +211,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // username: 'user/username',
+      username: 'user/username',
       userId: 'user/userId',
       userProfile: 'user/profile',
       pblProjectMemberList: 'pbl/projectMemberList',
@@ -260,7 +257,7 @@ export default {
             tagEdit: false
           })
           this.currIssue = _.clone(this.issueData)
-          this.dynamicTags = this.currIssue.tags.split('|')
+          this.dynamicTags = this.currIssue.tags.split('|').filter(x => x)
           this.assignedMembers = _.clone(this.currIssue.assigns)
         })
         .catch(err => console.error(err))
@@ -273,15 +270,6 @@ export default {
         return this.prohibitEditWarning()
       }
       Vue.set(this.currIssue, 'titleIsEdit', true)
-    },
-    alterTag() {
-      if (!this.isLogined) {
-        return this.toggleLoginDialog(true)
-      }
-      if (this.isProhibitEdit) {
-        return this.prohibitEditWarning()
-      }
-      Vue.set(this.currIssue, 'tagEdit', true)
     },
     async updateIssueItem(item) {
       this.updateLoading = true
@@ -323,15 +311,22 @@ export default {
       this.getIssueData()
     },
     async updateTag() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
+      if (this.isProhibitEdit) {
+        return this.prohibitEditWarning()
+      }
       let tags = this.dynamicTags.join('|')
       if (tags != this.currIssue.tags) {
         await this.updateIssueItem({ tags })
         await this.getIssueData()
         this.currIssue = _.clone(this.issueData)
-        this.dynamicTags = this.currIssue.tags.split('|')
+        this.dynamicTags = this.currIssue.tags.split('|').filter( x => x)
       } else {
         this.cancelUpdateTag()
       }
+      this.isEditTags = !this.isEditTags
     },
     handleIssueDesc(command) {
       if (command == 1) {
@@ -388,13 +383,15 @@ export default {
     },
     cancelUpdateTag() {
       this.currIssue = _.clone(this.issueData)
-      this.dynamicTags = this.currIssue.tags.split('|')
+      this.dynamicTags = this.currIssue.tags.split('|').filter(x => x)
     },
     handleClose() {
       this.$emit('close')
     },
     issueTagArr(issue) {
-      return _.get(issue, 'tags', '').split('|')
+      if(_.get(issue, 'tags', '')){
+        return _.get(issue, 'tags', '').split('|')
+      }
     },
     async getCommentsList() {
       await keepwork.comments
@@ -613,6 +610,9 @@ export default {
           height: 22px;
           line-height: 20px;
           margin-bottom: 4px;
+          background-color: #eee;
+          color: #909399;
+          border: none;
         }
         .el-tag + .el-tag {
           margin-left: 4px;
@@ -636,19 +636,9 @@ export default {
           padding: 4px 10px;
         }
       }
-      .created-tag {
-        .tag {
-          background: #eee;
-          color: #909399;
-          display: inline-block;
-          padding: 2px 4px;
-          border-radius: 2px;
-          margin: 0 5px 4px 0;
-        }
-        .edit-tag {
-          color: #409eff;
-          cursor: pointer;
-        }
+      .edit-tag {
+        color: #409eff;
+        cursor: pointer;
       }
     }
     &-status {
