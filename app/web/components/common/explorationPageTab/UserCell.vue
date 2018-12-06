@@ -18,8 +18,8 @@
           <p class="amount">{{user.total_fans || 0}}</p>
         </div>
       </div>
-      <div class="user-tab-jion">
-        <el-button type="primary" :class="['user-tab-jion-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? $t("explore.followed") : $t("explore.follow")}}</el-button>
+      <div class="user-tab-join">
+        <el-button type="primary" :class="['user-tab-join-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? $t("explore.followed") : $t("explore.follow")}}</el-button>
         <el-button class="user-tab-join-button" @click="goUserHomePage(user)">{{$t("explore.profile")}}</el-button>
       </div>
     </div>
