@@ -3,18 +3,18 @@
     <el-card class="user-experience-card" shadow="never">
       <div slot="header" class="clearfix">
         <span>我的经历</span>
-        <el-button v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
+        <el-button v-if="isLoginUserEditable" v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
       </div>
-      <div class="user-experience-list" v-if="!isExperienceEmpty">
+      <div class="user-experience-list" v-if="!isExperienceEmpty" v-loading="isLoading">
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
           <div class="user-experience-item-title">
             {{experience.title}}
             <div class="user-experience-item-date">2014 / 5</div>
-            <div class="user-experience-item-operations">
-              <el-button type="text">
+            <div class="user-experience-item-operations" v-if="isLoginUserEditable">
+              <el-button type="text" @click="deleteExperience(experience, index)">
                 <i class="iconfont icon-delete1"></i>删除
               </el-button>
-              <el-button type="text">
+              <el-button type="text" @click="editExperience(experience, index)">
                 <i class="iconfont icon-edit-square"></i>编辑
               </el-button>
             </div>
@@ -28,10 +28,10 @@
       </div>
       <div class="user-experience-empty" v-if="isExperienceEmpty">
         <img src="@/assets/img/default_experience.png" alt="">
-        <p><span class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>培训经历、项目经历、获奖经历</p>
+        <p><span v-if="isLoginUserEditable" class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '培训经历、项目经历、获奖经历' : '还没有添加经历~'}}</p>
       </div>
     </el-card>
-    <el-dialog title="添加技能" :visible.sync="isAddingDialogVisible" width="416px" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog v-if="isLoginUserEditable" title="添加经历" :visible.sync="isAddingDialogVisible" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
       <el-form label-position="top" :model="newExperience">
         <el-form-item label="名称">
           <el-input v-model="newExperience.title"></el-input>
@@ -55,12 +55,29 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'UserExperiences',
+  props: {
+    nowUserDetail: {
+      type: Object,
+      required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
+    }
+  },
+  mounted() {
+    this.userExperiences = _.cloneDeep(
+      _.get(this.nowUserDetail, 'extra.experiences', [])
+    )
+  },
   data() {
     return {
+      isLoading: false,
+      editingIndex: undefined,
       isAddingDialogVisible: false,
-      isExperienceEmpty: false,
       newExperienceRangeDate: undefined,
       newExperience: {
         title: '',
@@ -69,34 +86,90 @@ export default {
         endDate: '',
         description: ''
       },
-      userExperiences: [
+      userExperiences: [],
+      updatingExperiences: []
+    }
+  },
+  computed: {
+    isEditMode() {
+      return !_.isUndefined(this.editingIndex)
+    },
+    isExperienceEmpty() {
+      return Boolean(
+        this.userExperiences && this.userExperiences.length == 0
+      )
+    },
+    originExtra() {
+      return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
+    },
+    updatingExtra() {
+      return _.mergeWith(this.originExtra, {
+        experiences: this.updatingExperiences
+      }, (objValue, srcValue) => {
+        return srcValue
+      })
+    },
+    updatingUserInfo() {
+      return _.mergeWith(
+        this.nowUserDetail,
         {
-          title: 'IICC大赛一等奖',
-          link: 'http://www.iicc.keepwork.com/awards/choi',
-          description:
-            '最近很多学弟学妹开始考虑收到offer要做什么，签证要怎么签，去纽约我要带什么，我要去哪找房子住，学校周围哪里好吃哪里好玩，纽约交通怎么样……等等等等的问题，然而现在的微信群里都是房地产大亨们……你们懂的。于是我们建了一个大纽约地区的交流群，里面有学长学姐为大家答疑解惑，衣食住行全部帮你解答，纯分享，禁广告，已经发现广告群主立马踢出'
-        },
-        {
-          title: '少儿编程培训班',
-          link: 'http://www.lessons.keepwork.com',
-          description: '最近很多学弟学妹开始考虑收到offer要做什么，签'
+          extra: this.updatingExtra
+        }, (objValue, srcValue) => {
+          return srcValue
         }
-      ]
+      )
     }
   },
   methods: {
+    ...mapActions({
+      userUpdateUserInfo: 'user/updateUserInfo'
+    }),
     showAddingDialog() {
       this.isAddingDialogVisible = true
+      this.updatingExperiences = _.cloneDeep(this.userExperiences)
     },
     handleAddingDialogClose() {
       this.isAddingDialogVisible = false
+      this.editingIndex = undefined
+      this.newExperience = {}
+      this.newExperienceRangeDate = []
     },
-    handleAddExperience() {
+    async handleAddExperience() {
+      if (this.isEditMode) {
+        this.updatingExperiences[this.editingIndex] = this.newExperience
+      } else {
+        this.updatingExperiences.push(this.newExperience)
+      }
+      await this.updateData()
+    },
+    async updateData() {
+      this.isLoading = true
+      await this.userUpdateUserInfo(this.updatingUserInfo).catch()
+      this.isLoading = false
       this.handleAddingDialogClose()
+    },
+    editExperience(experience, index) {
+      this.newExperience = _.cloneDeep(experience)
+      this.newExperienceRangeDate = [this.newExperience.startDate, this.newExperience.endDate]
+      this.editingIndex = index
+      this.showAddingDialog()
+    },
+    async deleteExperience(experience, index) {
+      let updatingExperience = _.cloneDeep(this.userExperiences)
+      updatingExperience.splice(index, 1)
+      this.updatingExperiences = updatingExperience
+      await this.updateData()
     },
     setExperienceDate(newDateRange) {
       this.newExperience.startDate = newDateRange[0]
       this.newExperience.endDate = newDateRange[1]
+    }
+  },
+  watch: {
+    nowUserDetail() {
+      this.userExperiences = _.cloneDeep(
+        _.get(this.nowUserDetail, 'extra.experiences', [])
+      )
     }
   },
   filters: {}
@@ -171,7 +244,7 @@ export default {
       padding-left: 20px;
       position: relative;
       &::before {
-        content: '';
+        content: "";
         display: inline-block;
         width: 2px;
         background-color: #cceaf9;
@@ -183,7 +256,7 @@ export default {
       &-label {
         font-size: #303133;
         &::before {
-          content: '';
+          content: "";
           display: inline-block;
           width: 4px;
           height: 4px;
@@ -207,12 +280,18 @@ export default {
     color: #909399;
     font-size: 14px;
     text-align: center;
+    padding: 44px 0 16px;
     &-anchor {
       color: #2397f3;
       cursor: pointer;
+      margin-right: 4px;
     }
   }
   &-adding-dialog {
+    .el-dialog {
+      width: 416px;
+      max-width: 100%;
+    }
     .el-dialog__header {
       border-bottom: 1px solid #e8e8e8;
       padding: 16px;
@@ -240,6 +319,28 @@ export default {
       width: 88px;
       height: 36px;
       line-height: 36px;
+      padding: 0 16px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-experience {
+    &-card {
+      border-radius: 0;
+      border-width: 1px 0;
+      .el-card__header {
+        padding: 9px 16px;
+      }
+    }
+    &-item {
+      padding: 16px 0;
+      &-link {
+        margin: 4px 0 12px;
+      }
+    }
+    &-adding-dialog {
       padding: 0 16px;
     }
   }

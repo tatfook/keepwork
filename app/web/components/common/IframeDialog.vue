@@ -1,7 +1,7 @@
 <template>
-    <el-dialog :title="showIframeDialog.title" :visible.sync="showDialog" :before-close="handleClose" class="iframe-dialog">
+    <el-dialog :title="iframeDialog.title" :visible.sync="showDialog" :before-close="handleClose" class="iframe-dialog">
       <i class="el-icon-error content_icon"></i>
-      <span class="content_txt">{{showIframeDialog.message}}</span>
+      <span class="content_txt">{{iframeDialog.message}}</span>
       <span slot="footer">
         <el-button size="small" @click="handleClose()">{{$t('editor.cancel')}}</el-button>
         <el-button size="small" type="primary" @click="confirm()">{{$t('editor.confirm')}}</el-button>
@@ -19,10 +19,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      showIframeDialog: 'showIframeDialog'
+      iframeDialog: 'iframeDialog'
     }),
     showDialog() {
-      return this.showIframeDialog.dialogShow
+      return this.iframeDialog.show
     }
   },
   methods: {
@@ -31,21 +31,13 @@ export default {
     }),
     handleClose() {
       let data = {
-        dialogShow: false,
-        title: this.showIframeDialog.title,
-        message: this.showIframeDialog.message,
-        result: false
+        show: false,
       }
       this.toggleIframeDialog(data)
     },
     confirm() {
-      let data = {
-        dialogShow: false,
-        title: this.showIframeDialog.title,
-        message: this.showIframeDialog.message,
-        result: true
-      }
-      this.toggleIframeDialog(data)
+      this.$store.dispatch(this.iframeDialog.action, this.iframeDialog.payload)
+      this.handleClose()
     }
   }
 }
@@ -70,7 +62,7 @@ export default {
 .iframe-dialog {
 
   .el-dialog {
-    margin-top: 30vh !important; 
+    margin-top: 30vh !important;
     width: 32% !important;
 
     .el-dialog__body {

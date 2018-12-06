@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" :height="tableHeight" style="width: 100%">
+      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" style="width: 100%">
         <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
         </el-table-column>
         <el-table-column prop='packages' type='expand' width="40">
@@ -201,9 +201,6 @@ export default {
     },
     isPhoneSize() {
       return this.windowWidth < 768
-    },
-    tableHeight() {
-      return this.isPhoneSize ? undefined : '100%'
     }
   },
   methods: {

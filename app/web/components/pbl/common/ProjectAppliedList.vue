@@ -1,18 +1,18 @@
 <template>
   <div class="project-applied-list">
     <el-table :data="appliedList" border style="width: 100%" class="project-applied-list-table" v-loading='isLoading'>
-      <el-table-column prop="object.username" label="成员" width="160">
+      <el-table-column prop="object.username" :label="$t('project.username')" width="160">
       </el-table-column>
-      <el-table-column label="申请时间" width="160">
+      <el-table-column :label="$t('project.applyAt')" width="160">
         <template slot-scope="scope">{{scope.row.updatedAt | formatDate(formatType)}}</template>
       </el-table-column>
-      <el-table-column prop="legend" label="留言">
+      <el-table-column prop="legend" :label="$t('project.message')">
       </el-table-column>
-      <el-table-column label="操作" class-name='project-applied-list-table-operate' width="160">
+      <el-table-column :label="$t('project.operations')" class-name='project-applied-list-table-operate' width="160">
         <template slot-scope="scope">
-          <el-button size="mini" @click="approveApply(scope.row)" v-if="scope.row.state == 0">通过</el-button>
-          <el-button size="mini" @click="rejectApply(scope.row)" v-if="scope.row.state == 0">拒绝</el-button>
-          <span class="project-applied-list-table-reject" v-if="scope.row.state == 2">已拒绝</span>
+          <el-button size="mini" @click="approveApply(scope.row)" v-if="scope.row.state == 0">{{$t('project.approve')}}</el-button>
+          <el-button size="mini" @click="rejectApply(scope.row)" v-if="scope.row.state == 0">{{$t('project.reject')}}</el-button>
+          <span class="project-applied-list-table-reject" v-if="scope.row.state == 2">{{$t('project.rejected')}}</span>
         </template>
       </el-table-column>
     </el-table>

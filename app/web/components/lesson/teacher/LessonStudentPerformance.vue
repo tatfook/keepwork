@@ -13,7 +13,7 @@
     <!-- <div class="refresh-data-wrap" v-if="isBeInClass && !learnRecords">
       <el-button @click="handleRefreshLearnRecords" icon="el-icon-refresh" type="warning" size="medium">{{$t('lesson.clickToRefresh')}}</el-button>
     </div> -->
-    <el-table class="performance-table" :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" height="500" tooltip-effect="dark" :default-expand-all="false">
+    <el-table class="performance-table" :data="tableData" style="width: 100%" :default-sort="{prop: 'name', order: 'descending'}" tooltip-effect="dark" :default-expand-all="false">
       <el-table-column v-if="isHasData" fixed prop="name" :label="$t('lesson.name')" sortable min-width="140" align="center" :show-overflow-tooltip="true">
         <template slot-scope="props">
           <el-tooltip :content="statusTips(props.row.status)" placement="top">

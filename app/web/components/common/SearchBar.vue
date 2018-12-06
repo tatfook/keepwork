@@ -1,5 +1,5 @@
 <template>
-  <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" placeholder="在keepwork里搜索" @keyup.enter.native='goSearch'>
+  <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" :placeholder="$t('common.searchInKp')" @keyup.enter.native='goSearch'>
     <!-- <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
       <el-option :label="$t('search.searchAll')" value="all"></el-option>
       <el-option :label="$t('search.searchMine')" value="loginUser" v-show="isLogin"></el-option>

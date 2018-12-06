@@ -1,34 +1,49 @@
 <template>
   <div class="study-page-header">
     <div class="study-page-header-menu">
-      <div class="study-page-header-menu-lef">
-        <span @click="goToSpecialColumn" class="study-page-header-menu-left-button">学习中心</span>
-        <span @click="goToLessonsCenter" class="study-page-header-menu-left-button">全部课程</span>
+      <div class="study-page-header-menu-left">
+        <span
+          @click="goToSpecialColumn"
+          :class="['study-page-header-menu-left-button', { 'selected': activeIndex === 1 }]"
+        >{{$t('lesson.myDesk')}}</span>
+        <span
+          @click="goToLessonsCenter"
+          :class="['study-page-header-menu-left-button', { 'selected': activeIndex === 2 }]"
+        >{{$t('lesson.allLessons')}}</span>
       </div>
       <div class="study-page-header-menu-right">
-        <el-dropdown class="study-page-header-menu-right-dropdown" @command="getSolution">
-          <span class="el-dropdown-link">
-            解决方案<i class="el-icon-arrow-down el-icon--right"></i>
+        <el-dropdown
+          class="study-page-header-menu-right-dropdown"
+          @command="getSolution"
+        >
+          <span :class="['el-dropdown-link', { 'selected': activeIndex === 3}]">
+            {{$t("lesson.solutions")}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="teachingIdea">教学理念</el-dropdown-item>
-            <el-dropdown-item command="teacher">学校教师</el-dropdown-item>
-            <el-dropdown-item command="parents">学生家长</el-dropdown-item>
-            <el-dropdown-item command="organization">机构合作</el-dropdown-item>
-            <el-dropdown-item command="competition">作品和创意大赛</el-dropdown-item>
+            <el-dropdown-item command="teachingIdea">{{$t("lesson.ourIdeas")}}</el-dropdown-item>
+            <el-dropdown-item command="teacher">{{$t("lesson.forEducations")}}</el-dropdown-item>
+            <el-dropdown-item command="parents">{{$t("lesson.forLearners")}}</el-dropdown-item>
+            <el-dropdown-item command="organization">{{$t("lesson.partnership")}}</el-dropdown-item>
+            <el-dropdown-item command="competition">{{$t("lesson.worksAndContests")}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-dropdown class="study-page-header-menu-right-dropdown" @command="hanldOperation">
-          <span class="el-dropdown-link">
-            学习资源<i class="el-icon-arrow-down el-icon--right"></i>
+        <el-dropdown
+          class="study-page-header-menu-right-dropdown"
+          @command="hanldOperation"
+        >
+          <span :class="['el-dropdown-link', { 'selected': activeIndex === 4}]">
+            {{$t("lesson.resources")}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="teaching-video">教学视频</el-dropdown-item>
-            <el-dropdown-item command="download">Paracraft下载</el-dropdown-item>
+            <el-dropdown-item command="teaching-video">{{$t("lesson.videos")}}</el-dropdown-item>
+            <el-dropdown-item command="download">{{$t("lesson.paracraftDownload")}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span class="study-page-header-menu-right-link" @click="switchIdentity">{{toggleButtonText}}</span>
+        <span
+          class="study-page-header-menu-right-link"
+          @click="switchIdentity"
+        >{{toggleButtonText}}</span>
       </div>
     </div>
   </div>
@@ -43,10 +58,34 @@ const TeacherPageReg = /^\/teacher/
 const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
 const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
 const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
+const LEARN_CNETER_TAG = ['TeacherColumn', 'TeacherColumnReview', 'TeacherColumnLessonManager', 'TeacherColumnPackageManager', 'TeacherColumnEditPackage', 'LearningCenterPackages', 'OfflineGuidanceCourse', 'TeachingVideo']
+const ALL_LESSON_TAG = ['StudentCenter']
+const SOLUTION_TAG = ['StudentSolution', 'TeacherSolution']
+const VIDEO_TAG = ['TeacherAllTeachingVideo', 'StudentAllTeachingVideo']
 export default {
   name: 'Header',
   data() {
-    return {}
+    return {
+      activeIndex: 0
+    }
+  },
+  watch: {
+    $route(to) {
+      const { name } = to
+      if (LEARN_CNETER_TAG.some(i => i === name)) {
+        return this.activeIndex = 1
+      }
+      if (ALL_LESSON_TAG.some(i => i === name)) {
+        return this.activeIndex = 2
+      }
+      if (SOLUTION_TAG.some(i => i === name)) {
+        return this.activeIndex = 3
+      }
+      if (VIDEO_TAG.some(i => i === name)) {
+        return this.activeIndex = 4
+      }
+      this.activeIndex = 0
+    }
   },
   computed: {
     ...mapGetters({
@@ -156,32 +195,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@media (max-width: 768px) {
-  .study-page-header {
-    margin: 0;
-    &-menu {
-      height: 50px;
-      padding: 10px;
-      flex-direction: column;
-      align-items: flex-start;
-      &-left-button {
-        margin-right: 0px;
-        font-size: 14px;
-        padding: 4px 8px;
-      }
-      &-right {
-        &-dropdown {
-          margin-right: 0px;
-        }
-        &-link {
-          font-size: 14px;
-        }
-      }
-    }
-  }
-}
-</style>
+
 
 
 <style lang="scss">
@@ -209,7 +223,7 @@ export default {
           color: #ffffff;
         }
         &.selected {
-          background: #2397f3;
+          background: #409efe;
           color: #ffffff;
         }
       }
@@ -218,16 +232,21 @@ export default {
       &-dropdown {
         margin-right: 70px;
         cursor: pointer;
+        .el-dropdown-link {
+          &.selected {
+            color: #409efe;
+          }
+        }
       }
       &-link {
-        color: #2397f3;
+        color: #409efe;
         font-size: 16px;
         cursor: pointer;
         &:hover {
           color: #4db5ff;
         }
         &.selected {
-          color: #4db5ff;
+          color: #409efe;
         }
       }
     }
@@ -238,68 +257,30 @@ export default {
   }
 }
 
-// .lesson-header {
-//   background-color: #fff;
-//   border-bottom: 2px solid #bfbfbf;
-//   padding: 14px 0;
-//   &-nav {
-//     max-width: 1150px;
-//     margin: 0 auto;
-//     position: relative;
-//     &-box {
-//       text-align: center;
-//     }
-//     &-item {
-//       display: inline-block;
-//       margin: 0 32px;
-//       cursor: pointer;
-//       border-radius: 34px;
-//       padding: 6px 18px;
-//     }
-//     &-item.active,
-//     &-item:hover {
-//       background-color: #409efe;
-//       color: #fff;
-//       box-shadow: 0 4px 6px 0 rgba(42, 102, 164, 0.38);
-//     }
-//   }
-//   &-toggle-button {
-//     padding: 11px;
-//     position: absolute;
-//     top: 0;
-//     right: 0;
-//     border: 1px solid;
-//     color: #409efe;
-//     border-radius: 4px;
-//     font-size: 12px;
-//     text-decoration: none;
-//   }
-// }
-// @media (max-width: 1200px) {
-//   .lesson-header {
-//     &-toggle-button {
-//       right: 15px;
-//     }
-//   }
-// }
-// @media (max-width: 768px) {
-//   .lesson-header {
-//     &-nav {
-//       &-box {
-//         text-align: left;
-//       }
-//       &-item {
-//         margin: 0;
-//         font-size: 14px;
-//         padding: 6px 10px;
-//       }
-//     }
-//   }
-// }
-// @media print {
-//   .lesson-header {
-//     display: none;
-//   }
-// }
+@media (max-width: 768px) {
+  .study-page-header {
+    margin: 0;
+    &-menu {
+      height: 50px;
+      padding: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      &-left-button {
+        margin-right: 0px;
+        font-size: 14px;
+        padding: 4px 8px;
+      }
+      &-right {
+        &-dropdown {
+          margin-right: 0px;
+        }
+        &-link {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
 </style>
 

@@ -1,19 +1,44 @@
 <template>
   <div class="solution">
-    <combo-box :routes="solutions"></combo-box>
+    <combo-box
+      v-show="isParents"
+      projectName="official/paracraft"
+      filePath="learn/parent_banner"
+    ></combo-box>
+    <educators-tab v-show="isParents"></educators-tab>
+    <combo-box :routes="routes"></combo-box>
   </div>
 </template>
 <script>
+import EducatorsTab from './EducatorsTab'
 import ComboBox from '@/components/combo/ComboBox'
 import _ from 'lodash'
 export default {
   name: 'Solution',
   components: {
-    ComboBox
+    ComboBox,
+    EducatorsTab
+  },
+  watch: {
+    $route(to) {
+      const { params: { command } } = to
+      const { projectName, filePath } = this.routes[command]
+      this.currentFilePath = filePath
+    }
+  },
+  mounted() {
+    const { params: { command } } = this.$route
+    const { projectName, filePath } = this.routes[command]
+    this.currentFilePath = filePath
+  },
+  computed: {
+    isParents() {
+      return this.currentFilePath === 'learn/parents'
+    }
   },
   data() {
     return {
-      solutions: {
+      routes: {
         teachingIdea: {
           projectName: 'official/paracraft',
           filePath: 'learn/our_ideas'
@@ -34,7 +59,8 @@ export default {
           projectName: 'official/paracraft',
           filePath: 'learn/works_and_contests'
         }
-      }
+      },
+      currentFilePath: ''
     }
   },
 }
@@ -42,8 +68,8 @@ export default {
 
 <style lang="scss">
 .solution {
-  max-width: 1200px;
   background: #fff;
+  max-width: 1200px;
   margin: 0 auto;
 }
 </style>

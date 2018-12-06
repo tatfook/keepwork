@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
     <div class="project-cell-cover" @click="goProjectDetail(project)"><img class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt=""></div>
-    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title"></span><span class="recruitment" v-if="project.privilege & 1">招募中</span></h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title || project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -12,7 +12,7 @@
     </div>
     <div class="project-cell-author">
       <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait"><span class="username" :title="project.user.username">{{project.user && project.user.username}}</span></div>
-      <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
+      <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}</div>
     </div>
   </div>
 </template>

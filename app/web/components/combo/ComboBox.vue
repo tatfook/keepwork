@@ -6,8 +6,8 @@
     width="100%"
     height="100%"
     frameborder="0"
-    target="_top"
     @load="reset"
+    scrolling="no"
   ></iframe>
   <div
     v-else-if="isHtmlPattern"
@@ -15,7 +15,10 @@
     :class="customClass"
   >
   </div>
-  <div v-else>
+  <div
+    class="combo-box-container"
+    v-else
+  >
     <mod-loader
       v-for="mod in modList"
       :mod="mod"
@@ -30,6 +33,7 @@ import { mapActions, mapGetters } from 'vuex'
 import ModLoader from '@/components/viewer/ModLoader'
 import themeFactory from '@/lib/theme/theme.factory'
 import ThemeHelper from '@/lib/theme'
+import { locale } from '@/lib/utils/i18n'
 import _ from 'lodash'
 export default {
   name: 'ComboBox',
@@ -40,6 +44,14 @@ export default {
     pattern: {
       type: String,
       default: ''
+    },
+    autoWidth: {
+      type: Boolean,
+      default: false
+    },
+    enableScript: {
+      type: Boolean,
+      default: true
     },
     id: {
       type: String,
@@ -88,6 +100,7 @@ export default {
     return {
       routeProjectName: '',
       routeFilePath: '',
+      timer: null
     }
   },
   watch: {
@@ -105,6 +118,7 @@ export default {
     }
   },
   async mounted() {
+    clearTimeout(this.timer)
     if (this.isRoutesPattern) {
       const { params: { [this.routeKey]: command } } = this.$route
       const { projectName, filePath } = this.routes[command]
@@ -122,8 +136,9 @@ export default {
       getWebsiteConfig: 'combo/getWebsiteConfig'
     }),
     reset() {
+      // FIXME: firame.height bug
       this.$nextTick(() => {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this.resetHeight()
           this.resetLink()
         }, 3000)
@@ -135,7 +150,8 @@ export default {
       let html = iframe.documentElement
       let body = iframe.body
       let height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
-      ele.height = height + 100
+      ele.height = 'auto'
+      ele.height = height + 300
     },
     resetLink() {
       let iframe = document.getElementById(this.id)
@@ -171,6 +187,9 @@ export default {
       return this.isRoutesPattern ? this.routeFilePath : this.filePath
     },
     _fileName() {
+      if (this.isEn) {
+        return /.md$/.test(this._filePath) ? `${this._filePath}_EN` : `${this._filePath}_EN.md`
+      }
       return /.md$/.test(this._filePath) ? this._filePath : `${this._filePath}.md`
     },
     iframeUrl() {
@@ -181,11 +200,17 @@ export default {
     contents() {
       return this.getContentsByFullPath(this.fullPath)
     },
-    modList() {
+    originalModList() {
       return _.get(this.contents, 'modList', [])
+    },
+    modList() {
+      return this.originalModList.map(i => ({ ...i, enableScript: this.enableScript }))
     },
     html() {
       return _.get(this.content, 'content', '')
+    },
+    isEn() {
+      return locale === 'en-US'
     },
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
@@ -200,4 +225,10 @@ export default {
 </script>
 
 <style lang="scss">
+.combo-box-container {
+  .el-row {
+    width: auto;
+    max-width: 1080px;
+  }
+}
 </style>

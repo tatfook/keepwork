@@ -4,8 +4,8 @@
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
     <lesson-header></lesson-header>
-    <router-view v-if="!loading" class="lesson-page-main-content" :class="{'lesson-page-main-content-scroll-only': isHeaderFooterFixed}" id="lesson-page" />
-    <common-footer class="lesson-page-footer container"></common-footer>
+    <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
+    <perfect-common-footer></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -34,6 +34,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
 import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import { lesson } from '@/api'
@@ -177,7 +178,8 @@ export default {
     LessonHeader,
     CommonHeader,
     CommonFooter,
-    LoginDialog
+    LoginDialog,
+    PerfectCommonFooter
   },
   data() {
     return {

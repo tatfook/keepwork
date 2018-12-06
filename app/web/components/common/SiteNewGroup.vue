@@ -77,6 +77,7 @@ export default {
           username: member.username
         })
         if (findedIndex === -1) {
+          member.userId = member.id
           this.memberTags.push(member)
         }
       })
@@ -85,7 +86,7 @@ export default {
       this.newMembers = ''
     },
     setNewGroupMemberData() {
-      this.newGroupData.members = _.map(this.memberTags, 'id')
+      this.newGroupData.members = _.map(this.memberTags, 'userId')
     },
     removeMember(member) {
       this.memberTags.splice(this.memberTags.indexOf(member), 1)

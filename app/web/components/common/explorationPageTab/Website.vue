@@ -59,6 +59,7 @@ export default {
           comment: i.total_comment || 0,
           user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
+          createdAt: i.created_time,
           type: i.type,
           privilege: i.recruiting ? 1 : 0
         }

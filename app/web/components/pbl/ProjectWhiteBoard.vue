@@ -3,18 +3,18 @@
     <div class="project-white-board-content">
       <div class="project-white-board-content-header">
         <div class="search">
-          <el-input size="medium" placeholder="搜索标题关键字或id......" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
+          <el-input size="medium" :placeholder="$t('project.searchMethod')" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
         <div class="filter hidden-sm-and-down">
-          筛选：
-          <span class="rank" @click="showAllIssues"><span class="rank-tip">全部({{issuesOpenCount + issuesCloseCount}})</span></span>
-          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">进行 ({{issuesOpenCount}})</span></span>
-          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">完成 ({{issuesCloseCount}})</span></span>
+          {{$t("project.filter")}}：
+          <span class="rank" @click="showAllIssues"><span class="rank-tip">{{$t("project.all")}}({{issuesOpenCount + issuesCloseCount}})</span></span>
+          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">{{$t("project.inProgress")}} ({{issuesOpenCount}})</span></span>
+          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">{{$t("project.finished")}} ({{issuesCloseCount}})</span></span>
         </div>
         <div class="new-issue-btn">
-          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ <span class="hidden-sm-and-down">新建问题</span></el-button>
+          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ {{$t("project.createNewIssue")}}</el-button>
         </div>
       </div>
       <div class="project-white-board-content-list">
@@ -26,7 +26,7 @@
             </div>
             <div class="single-issue-brief-intro">
               <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
-              <span class="created-by">由<span class="name">{{issue.user.username}}</span>创建</span>
+              <span class="created-by">{{$t("project.createBy")}}<span class="name">{{issue.user.username}}</span>{{$t("project.created")}}</span>
               <div class="created-tag">
                 <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
               </div>

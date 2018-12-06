@@ -56,7 +56,7 @@ export default {
   },
   async mounted() {
     let payload = { userId: this.userId }
-    await this.getUserSubscribes()
+    await this.getUserSubscribes().catch(e => console.error(e))
     this.loading = false
   },
   computed: {
@@ -143,7 +143,8 @@ export default {
     },
     async enterNewClass() {
       let key = this.classID
-      await this.enterClassRoom({ key })
+      let _key = key.toString().substring(1)
+      await this.enterClassRoom({ key: _key })
         .then(res => {
           this.switchDevice('k')
           this.$router.push({

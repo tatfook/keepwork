@@ -4,20 +4,20 @@
       <el-row>
         <el-col :sm="8">
           <div class="box" @click="goLesson(8)">
-            <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
-            <p>动画教学</p>
+            <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
+            <p>{{$t('lesson.animationsLesson')}}</p>
           </div>
         </el-col>
         <el-col :sm="8">
           <div class="box" @click="goLesson(8)">
-            <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
-            <p>编程教学</p>
+            <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
+            <p>{{$t('lesson.programmingLesson')}}</p>
           </div>
         </el-col>
         <el-col :sm="8">
           <div class="box" @click="goLesson(8)">
             <img src="@/assets/lessonImg/teaching-video_3.png" alt="">
-            <p>CAD教学</p>
+            <p>{{$t('lesson.CADLesson')}}</p>
           </div>
         </el-col>
       </el-row>
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     goLesson(index) {
-      return this.$router.push(`/student/allteachingvideo`)
+      return this.$router.push(`/student/allteachingvideo/animate`)
     }
   }
 }

@@ -4,16 +4,18 @@
       <div class="all-teaching-video-content-sidebar">
         <el-tree
           :data="data"
+          node-key="id"
+          :current-node-key="defaultKey"
+          :default-expand-all="true"
+          :highlight-current="true"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
       </div>
-      <div
-        class="all-teaching-video-content-main"
-      >
+      <div class="all-teaching-video-content-main">
         <combo-box
-          pattern="iframe"
           :routes="routes"
+          :autoWidth="true"
         ></combo-box>
       </div>
     </div>
@@ -46,23 +48,28 @@ export default {
       },
       data: [
         {
-          label: '教学视频:',
+          id: 1,
+          label: `${this.$t("lesson.instructionalVideos")}:`,
           children: [
             {
-              label: '动画教学',
+              id: 2,
+              label: this.$t("lesson.animationsLesson"),
               value: 'animate'
             },
             {
-              label: '编程教学',
+              id: 3,
+              label: this.$t("lesson.programmingLesson"),
               value: 'program'
             },
             {
-              label: 'CAD教学',
+              id: 4,
+              label: this.$t("lesson.CADLesson"),
               value: 'cad'
             }
           ]
         },
       ],
+      defaultKey: 2,
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -106,6 +113,28 @@ export default {
       flex: 1;
       background: #fff;
       height: 100%;
+      overflow: hidden;
+      .el-row {
+        width: auto;
+        max-width: 930px;
+      }
+      div[data-mod] {
+        width: auto;
+        max-width: 930px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .all-teaching-video {
+    display: block;
+    height: auto;
+    &-content {
+      display: block;
+      height: auto;
+      &-sidebar {
+        width: 100%;
+      }
     }
   }
 }

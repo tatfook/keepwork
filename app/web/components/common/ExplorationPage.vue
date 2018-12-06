@@ -4,8 +4,8 @@
       <div class="exploration-page-theme-center">
         <div class="theme">
           <!-- <span class="explore">探索</span>·未知之境 -->
-          <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
-            <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"> 搜索</i>
+          <el-input :placeholder="$t('explore.searchFor')" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
+            <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"> {{$t("explore.search")}}</i>
             <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
           </el-input>
         </div>
@@ -21,27 +21,27 @@
               <!-- </el-input> -->
               <div class="search-tab">
                 <el-menu :default-active="activeTabIndex" class="search-tab-menu" mode="horizontal" @select="handleSelectTab">
-                  <el-menu-item index="1">项目</el-menu-item>
-                  <el-menu-item index="2">3D世界</el-menu-item>
-                  <el-menu-item index="3">网站</el-menu-item>
+                  <el-menu-item index="1">{{$t("explore.project")}}</el-menu-item>
+                  <el-menu-item index="2">{{$t("explore.3DWorlds")}}</el-menu-item>
+                  <el-menu-item index="3">{{$t("explore.websites")}}</el-menu-item>
                   <!-- <el-menu-item index="4">知识</el-menu-item> -->
-                  <el-menu-item index="5">课程</el-menu-item>
-                  <el-menu-item index="6">用户</el-menu-item>
+                  <el-menu-item index="5">{{$t("explore.lessons")}}</el-menu-item>
+                  <el-menu-item index="6">{{$t("explore.uses")}}</el-menu-item>
                   <!-- <el-menu-item index="7">工作室</el-menu-item> -->
-                  <el-menu-item index="8">招募中</el-menu-item>
+                  <el-menu-item index="8">{{$t("explore.recruiting")}}</el-menu-item>
                 </el-menu>
               </div>
             </el-col>
             <el-col :sm="8" :xs="24">
               <div class="search-result">
-                <span class="contain-total">包含<span class="contain-total-num">{{searchResultAmount}}</span>个结果</span>
+                <span class="contain-total">{{$t("explore.contain")}}<span class="contain-total-num">{{searchResultAmount}}</span>{{$t("explore.result")}}</span>
                 <el-dropdown @command="handleSort" class="sort-dropdown-menu">
                   <span class="el-dropdown-link">
                     {{currSortMode}}
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i.command">{{i.mode}}</el-dropdown-item>
+                    <el-dropdown-item v-for="(i,index) in currSortColumn" :key="index" :command="i">{{i.mode}}</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -123,7 +123,7 @@ export default {
       currIndex: 1,
       searchKey: '',
       sortProjects: '',
-      currSortMode: '综合',
+      currSortMode: this.$t("explore.overall"),
       searchResultAmount: 0
     }
   },
@@ -152,20 +152,20 @@ export default {
         case 5:
         case 8:
           return [
-            { mode: '综合', command: '/综合' },
-            { mode: '最新', command: 'updated_time/最新' },
-            { mode: '热门', command: 'recent_view/热门' }
+            { mode: this.$t("explore.overall"), command: '/综合' },
+            { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
+            { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
           ]
           break
         case 6:
           return [
-            { mode: '综合', command: '/综合' },
-            { mode: '项目', command: 'total_projects/项目' },
-            { mode: '名气', command: 'total_fans/名气' }
+            { mode: this.$t("explore.overall"), command: '/综合' },
+            { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
+            { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
           ]
           break
         default:
-          return [{ mode: '综合', command: '/综合' }]
+          return [{ mode: this.$t("explore.overall"), command: '/综合' }]
           break
       }
     }
@@ -193,8 +193,9 @@ export default {
       this.searchKey = item.value
       this.goSearch()
     },
-    handleSort(sortType) {
-      this.currSortMode = sortType.split('/')[1]
+    handleSort(selectSort) {
+      let sortType = selectSort.command
+      this.currSortMode = selectSort.mode
       this.sortProjects = sortType.split('/')[0]
       this.goSearch()
     },
@@ -229,7 +230,7 @@ export default {
     },
     selectTab(index) {
       this.currIndex = index
-      this.currSortMode = '综合'
+      this.currSortMode = this.$t("explore.overall")
       this.sortProjects = ''
     }
   },
@@ -253,7 +254,7 @@ export default {
       max-width: 1200px;
       .theme {
         text-align: center;
-        margin: 42px;
+        margin: 24px auto 32px;
         .explore {
           color: #409eff;
         }
@@ -262,6 +263,9 @@ export default {
         &-tab {
           &-menu {
             border: none;
+            &.el-menu.el-menu--horizontal{
+              border: none;
+            }
           }
         }
         &-input {
@@ -270,11 +274,11 @@ export default {
           .el-input__inner {
             height: 40px;
             background: #f5f5f5;
-            border: none;
+            border: #f5f5f5 1px solid;
           }
           .el-input__inner:hover,
           .el-input__inner:focus {
-            border-color: #dcdfe6;
+            border-color: #409efe;
           }
           .el-input__suffix {
             right: 0;
@@ -295,6 +299,8 @@ export default {
             font-weight: bold;
             line-height: 32px;
             cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: normal;
           }
         }
         .search-result {

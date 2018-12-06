@@ -2,8 +2,8 @@
   <div class="project-boards">
     <el-card class="project-boards-card" shadow="never" v-loading='isLoading'>
       <div slot="header" class="clearfix">
-        <span class="project-boards-card-label">项目白板</span>
-        <router-link :to="{ name: 'ProjectWhiteBoard', path:moreBoardLink }" class="project-boards-card-link">查看更多<i class="el-icon-arrow-right"></i></router-link>
+        <span class="project-boards-card-label">{{$t("project.projectWhiteboard")}}</span>
+        <router-link :to="{ name: 'ProjectWhiteBoard', path:moreBoardLink }" class="project-boards-card-link">{{$t("project.readMore")}}<i class="el-icon-arrow-right"></i></router-link>
       </div>
       <div class="project-boards-list" v-if="projectIssueList.length >0">
         <div class="project-boards-item" v-for="(issue, index) in projectIssueList" :key="index" @click="showIssueDetail(issue)">
@@ -15,7 +15,7 @@
           <span class="project-boards-item-time">{{issue.updatedAt | relativeTimeFilter(isEn)}}</span>
         </div>
       </div>
-      <div class="project-boards-empty" v-else>项目白板为空</div>
+      <div class="project-boards-empty" v-else>{{$t("project.noContent")}}</div>
     </el-card>
     <issue-detail v-if="isIssueDetailDialogShow" :show='isIssueDetailDialogShow' :projectDetail='projectDetail' :issue='issueDetail' :isProhibitEdit="isProhibitEdit" @close="handleIssueDialogClose"></issue-detail>
   </div>

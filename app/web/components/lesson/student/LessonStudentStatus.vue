@@ -2,7 +2,7 @@
   <div class="lesson-student-status">
     <el-row class="student-info-wrap" type="flex" align="middle">
       <el-col :span="5" :sm="5">
-        <span>{{$t('lesson.classId')}} {{enterClassId}}</span>
+        <span>{{$t('lesson.classId')}} C{{enterClassId}}</span>
       </el-col>
       <!-- <el-col :span="5" :sm="5" v-if="isVisitor">
         <span class="nickname-wrap">

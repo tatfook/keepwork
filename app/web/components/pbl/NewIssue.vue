@@ -1,27 +1,27 @@
 <template>
   <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="new-issue-dialog">
     <div class="new-issue">
-      <div class="title">新建问题</div>
+      <div class="title">{{$t('project.createNewIssueTitle')}}</div>
       <div class="sketch">
         <div class="sketch-box">
-          <div class="sketch-box-tag">标题</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t("project.title")}}</div>
           <div class="sketch-box-content">
-            <el-input size="medium" v-model="issueTitle" placeholder="请输入标题···"></el-input>
+            <el-input size="medium" v-model="issueTitle" :placeholder='$t("project.pleaseInputTitle")'></el-input>
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">标签</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.labels')}}</div>
           <div class="sketch-box-content" v-loading='isTagLoading'>
             <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
               {{tag}}
             </el-tag>
             <el-input class="input-new-tag" v-if="inputVisible" maxlength="40" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
             </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ {{$t('project.newLabel')}}</el-button>
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">指派</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.asignees')}}</div>
           <div class="sketch-box-content">
             <div class="player">
               <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
@@ -30,7 +30,7 @@
                   <span class="assigns-btn"></span>
                 </span>
                 <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-                  <el-dropdown-item v-if="memberList.length == 0">暂无其他成员</el-dropdown-item>
+                  <el-dropdown-item v-if="memberList.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
                   <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -38,19 +38,20 @@
           </div>
         </div>
         <div class="sketch-box">
-          <div class="sketch-box-tag">描述</div>
+          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.write')}}</div>
           <div class="sketch-box-content">
-            <el-input type="textarea" :rows="4" v-model="descriptionText" placeholder="请输入描述···"></el-input>
+            <el-input type="textarea" :rows="4" v-model="descriptionText" :placeholder="$t('project.writeAComment')"></el-input>
           </div>
         </div>
       </div>
       <div class="finish">
-        <el-button size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">完成创建</el-button>
+        <el-button size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">{{$t('project.submitIssue')}}</el-button>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
+import { locale } from '@/lib/utils/i18n'
 import { keepwork } from '@/api'
 import _ from 'lodash'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
@@ -89,6 +90,9 @@ export default {
     ...mapGetters({
       pblProjectMemberList: 'pbl/projectMemberList'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     memberList() {
       return this.pblProjectMemberList({ projectId: this.projectId })
     },
@@ -239,6 +243,9 @@ export default {
           width: 52px;
           font-size: 14px;
           color: #909399;
+          &-en {
+            width: 80px;
+          }
         }
         &-content {
           flex: 1;
@@ -274,7 +281,7 @@ export default {
               position: relative;
               margin-top: 8px;
               &::after {
-                content: '';
+                content: "";
                 height: 16px;
                 width: 1px;
                 background: #6e6d6d;
@@ -283,7 +290,7 @@ export default {
                 top: 10px;
               }
               &::before {
-                content: '';
+                content: "";
                 height: 1px;
                 width: 16px;
                 background: #6e6d6d;

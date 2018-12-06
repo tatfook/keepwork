@@ -34,6 +34,9 @@ export const user = {
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async args => get(`/users?email=${args.email}`),
   getByCellphone: async args => get(`/users?cellphone=${args.cellphone}`),
+  getResetCodeByEmail: async args => get(`/users/email_captcha?email=${args.email}`),
+  getResetCodeByCellphone: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  passwordReset: async args => post('/users/reset_password', args),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
   verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailTwo: async args => post('/users/email_captcha', args),
@@ -220,9 +223,9 @@ export const userThreeService = {
 export const favorites = {
   existFavorite: async ({ objectId, objectType }) =>
     get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
-  favoriteProject: async ({ objectId, objectType }) =>
+  favoriteObject: async ({ objectId, objectType }) =>
     post('favorites', { objectId, objectType }),
-  unFavoriteProject: async ({ objectId, objectType }) =>
+  unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
   getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
   getUserSearchAllFavorites: async (args) => post('favorites/search', args)

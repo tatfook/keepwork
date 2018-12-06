@@ -1,24 +1,24 @@
 <template>
   <div class="project-website">
     <el-card class="project-website-card" shadow="never">
-      <p class="project-website-info">欢迎来到{{originProjectDetail.name}}</p>
+      <p class="project-website-info">{{$t("project.welcomeTo")}}{{originProjectDetail.name}}</p>
       <div class="project-website-operations" v-show="isLoginUserEditable || originInfoSiteData.displayName">
-        <el-button @click="handleFakeButtonClick" size='small' type="primary">{{originInfoSiteData.displayName || '设定项目资料网站'}}</el-button>
+        <el-button @click="handleFakeButtonClick" size='small' type="primary">{{originInfoSiteData.displayName || $t("project.websiteSettingForResource")}}</el-button>
         <i v-show="isLoginUserEditable && isHaveOriginInfoSiteData" class="el-icon-edit-outline" @click='showEditInfoSiteDataDialog'></i>
       </div>
     </el-card>
-    <el-dialog title="请设定项目对应的资料网站" :visible.sync="isEditInfoSiteDialogShow" width="420px" :before-close="handleClose" v-loading='isLoading'>
+    <el-dialog :title="$t('project.websiteSettingForResource')" :visible.sync="isEditInfoSiteDialogShow" width="420px" :before-close="handleClose" v-loading='isLoading'>
       <el-form label-position="top" :model="tempInfoSiteData">
-        <el-form-item label="名称">
+        <el-form-item :label='$t("project.name")'>
           <el-input v-model="tempInfoSiteData.displayName" maxlength='30' @blur='checkDisplayNameLength'></el-input>
         </el-form-item>
-        <el-form-item label="网址">
+        <el-form-item :label='$t("project.url")'>
           <el-input v-model="tempInfoSiteData.url"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="saveInfoSiteData" :disabled="isSaveButtonDisabled">确 定</el-button>
+        <el-button @click="handleClose">{{$t("common.Cancel")}}</el-button>
+        <el-button type="primary" @click="saveInfoSiteData" :disabled="isSaveButtonDisabled">{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
   </div>

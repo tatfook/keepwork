@@ -4,23 +4,40 @@
       <div class="aside">
         <div class="profile-intro">
           <div class="profile">
-            <img :src='userProfile.portrait || avatar' alt="portrait">
+            <img
+              :src='userProfile.portrait || avatar'
+              alt="portrait"
+            >
           </div>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
-            <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span class="detail" @click="goBeanDetail">{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+            <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span
+                class="detail"
+                @click="goBeanDetail"
+              >{{$t('lesson.packageManage.detailLabel')}} →</span></div>
           </div>
         </div>
         <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-        <div class="skills" :loading="loadingSkillsPoint">
+        <div
+          class="skills"
+          :loading="loadingSkillsPoint"
+        >
           <ul class="skills-list">
-            <li v-for="(skill,index) in skillsList" :key="index"><span class="skill-name">{{skillName(skill)}}：</span>
+            <li
+              v-for="(skill,index) in skillsList"
+              :key="index"
+            ><span class="skill-name">{{skillName(skill)}}：</span>
               <span>{{skill.score}}</span>
             </li>
           </ul>
         </div>
         <div class="options-wrap">
-          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+          <span
+            v-for="(option,index) in optionArr"
+            :key="index"
+            :class="['options', {'selected': currOption == index}]"
+            @click="switchSelect(index)"
+          >{{option.name}}</span>
         </div>
       </div>
       <div class="main">
@@ -46,13 +63,14 @@ export default {
       loadingSkillsPoint: true,
       currOption: 0,
       optionArr: [
-        { name: '线上课程' },
-        { name: '线下导引课' },
-        { name: '教学视频' }
+        { name: this.$t('lesson.onlineLesson') },
+        { name: this.$t('lesson.offlineGuidingLesson') },
+        { name: this.$t('lesson.instructionalVideos') }
       ]
     }
   },
   async mounted() {
+    this.setActiveItem()
     let payload = { userId: this.userId }
     await lesson.users
       .userSkills(payload)
@@ -92,6 +110,15 @@ export default {
     },
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
+    },
+    setActiveItem() {
+      const SWITCH_TAG = {
+        'LearningCenterPackages': '0',
+        'OfflineGuidanceCourse': '1',
+        'TeachingVideo': '2'
+      }
+      const { name } = this.$route
+      this.currOption = SWITCH_TAG[name] || '0'
     },
     switchSelect(index) {
       this.currOption = index
@@ -155,7 +182,7 @@ export default {
             font-size: 24px;
             line-height: 34px;
             color: #333333;
-            font-family: 'ArialMT';
+            font-family: "ArialMT";
           }
           .beans {
             margin: 5px 8px;
