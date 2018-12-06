@@ -53,7 +53,8 @@ export const user = {
     return res
   },
   bindThreeService: async (...args) => post('user/bindThreeService', ...args),
-  searchUsersByUsernames: async ({ username }) => post('users/search', { username })
+  searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
+  searchByField: async args => post('users/search', args)
 }
 
 /*doc

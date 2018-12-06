@@ -3,9 +3,9 @@
     <div class="password-reset-page-form">
       <password-reset-form></password-reset-form>
       <div class="password-reset-page-operation">
-          <router-link to="/" class="password-reset-page-operation-home">
+          <span @click="handleBackHome" class="password-reset-page-operation-home">
           {{$t('editor.backHomePage')}}
-          </router-link>
+          </span>
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     handleBackHome() {
-      this.$router.push({ path: '/' })
+      window.location.href = window.location.origin
     }
   }
 }
