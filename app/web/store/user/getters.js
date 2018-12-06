@@ -95,6 +95,7 @@ const getters = {
   },
   getDetailByUserId: state => ({ userId }) => _.get(state.usersDetail, userId),
   getDetailWithRankByUserId: state => ({ userId }) => _.get(state.usersDetailWithRank, userId),
+  getDetailWithRankByUsername: state => ({ username }) => _.get(state.usersDetailWithRank, username),
   personalSiteList: (state, { username, getPersonalSiteListByUsername }) => {
     let personalSiteList = getPersonalSiteListByUsername(username)
     return personalSiteList
