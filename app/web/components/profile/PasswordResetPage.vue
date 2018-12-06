@@ -28,7 +28,6 @@ export default {
 
 <style lang="scss">
 .password-reset-page {
-//   height: 83vh;
   background: #f7f8f9;
   padding-top: 100px;
   &-form {

@@ -5,6 +5,7 @@ const NotFound = () => import('@/components/profile/NotFound')
 const ProfileIndex = () => import('@/components/profile/ProfileIndex')
 const ProfileSocial = () => import('@/components/profile/ProfileSocial')
 const ProfileProject = () => import('@/components/profile/ProfileProject')
+const PasswordResetPage = () => import('@/components/profile/PasswordResetPage')
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '*',
       name: 'ProfileNotFound',
       component: NotFound
+    },
+    {
+      path: '/set',
+      name: 'PasswordResetPage',
+      component: PasswordResetPage
     },
     {
       path: '/:id',
