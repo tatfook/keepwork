@@ -157,18 +157,15 @@ export default {
             { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
             { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
           ]
-          break
         case 6:
           return [
             // { mode: this.$t("explore.overall"), command: '/综合' },
             { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
             { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
           ]
-          break
         default:
           // return [{ mode: this.$t("explore.overall"), command: '/综合' }]
           return [{ mode: this.$t("explore.hottest"), command: 'recent_view/热门' }]
-          break
       }
     }
   },
