@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="package-manager-details">
-      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" height="100%" style="width: 100%">
+      <el-table class="package-manager-table" v-loading="isTableLoading" :data="filteredPackageList" style="width: 100%">
         <el-table-column type="index" :label="$t('lesson.serialNumber')" width="70">
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
