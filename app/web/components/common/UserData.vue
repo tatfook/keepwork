@@ -169,7 +169,7 @@ export default {
     }
   }
   &-operations-col {
-    width: 185px;
+    width: 120px;
     text-align: center;
     align-self: flex-end;
   }

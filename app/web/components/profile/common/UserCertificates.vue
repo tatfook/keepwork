@@ -228,6 +228,9 @@ export default {
       .el-button + .el-button {
         margin-left: 4px;
       }
+      .el-button:hover {
+        color: #2397f3;
+      }
     }
     &:hover &-operations {
       display: inline-block;
