@@ -79,7 +79,9 @@
             slot="dropdown"
             class="user-menu-dropdown"
           >
-            <div class="greeting">{{$t("common.hello")}}，{{username}}</div>
+            <div class="greeting">{{$t("common.hello")}}，
+              <span class="fake-link" @click="goUserProfilePage">{{username}}</span>
+            </div>
             <!-- <el-dropdown-item divided>
               <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
             <!-- </el-dropdown-item> -->
@@ -522,6 +524,9 @@ export default {
         window.location.href = `/`
       }
     },
+    goUserProfilePage() {
+      return window.location.href = `${this.locationOrigin}/u/${this.username}`
+    },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
     },
@@ -633,6 +638,12 @@ export default {
 .el-dropdown-menu .iconfont {
   margin-right: 14px;
   font-size: 20px;
+}
+.fake-link{
+  cursor: pointer;
+}
+.fake-link:hover {
+  color: #66b1ff;
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {
