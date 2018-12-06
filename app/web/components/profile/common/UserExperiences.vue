@@ -2,8 +2,8 @@
   <div class="user-experience">
     <el-card class="user-experience-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span>我的经历</span>
-        <el-button v-if="isLoginUserEditable" v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
+        <span>{{$t("profile.experience")}}</span>
+        <el-button v-if="isLoginUserEditable" v-show="!isExperienceEmpty" class="user-experience-card-header-button" type="text" @click="showAddingDialog">{{$t("profile.add")}}</el-button>
       </div>
       <div class="user-experience-list" v-if="!isExperienceEmpty" v-loading="isLoading">
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
@@ -12,10 +12,10 @@
             <div class="user-experience-item-date">2014 / 5</div>
             <div class="user-experience-item-operations" v-if="isLoginUserEditable">
               <el-button type="text" @click="deleteExperience(experience, index)">
-                <i class="iconfont icon-delete1"></i>删除
+                <i class="iconfont icon-delete1"></i>{{$t("profile.delete")}}
               </el-button>
               <el-button type="text" @click="editExperience(experience, index)">
-                <i class="iconfont icon-edit-square"></i>编辑
+                <i class="iconfont icon-edit-square"></i>{{$t("profile.edit")}}
               </el-button>
             </div>
           </div>
@@ -28,28 +28,28 @@
       </div>
       <div class="user-experience-empty" v-if="isExperienceEmpty">
         <img src="@/assets/img/default_experience.png" alt="">
-        <p><span v-if="isLoginUserEditable" class="user-experience-empty-anchor" @click="showAddingDialog">添加</span>{{isLoginUserEditable ? '培训经历、项目经历、获奖经历' : '还没有添加经历~'}}</p>
+        <p><span v-if="isLoginUserEditable" class="user-experience-empty-anchor" @click="showAddingDialog">{{$t("profile.add")}}</span>{{isLoginUserEditable ? $t("profile.addExperienceInfo") : $t("profile.noContentForExperience")}}</p>
       </div>
     </el-card>
-    <el-dialog v-if="isLoginUserEditable" title="添加经历" :visible.sync="isAddingDialogVisible" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
+    <el-dialog v-if="isLoginUserEditable" :title="$t('profile.addExperience')" :visible.sync="isAddingDialogVisible" class="user-experience-adding-dialog" :before-close="handleAddingDialogClose" v-loading="isLoading">
       <el-form label-position="top" :model="newExperience">
-        <el-form-item label="名称">
+        <el-form-item :label="$t('profile.name')">
           <el-input v-model="newExperience.title"></el-input>
         </el-form-item>
-        <el-form-item label="时间">
-          <el-date-picker v-model="newExperienceRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change='setExperienceDate'>
+        <el-form-item :label="$t('profile.period')">
+          <el-date-picker v-model="newExperienceRangeDate" type="daterange" :range-separator="$t('profile.startToEnd')" :start-placeholder="$t('profile.startDate')" :end-placeholder="$t('profile.endDate')" @change='setExperienceDate'>
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="网址">
+        <el-form-item :label="$t('profile.url')">
           <el-input v-model="newExperience.link"></el-input>
         </el-form-item>
-        <el-form-item label="经历描述">
+        <el-form-item :label="$t('profile.experienceDescription')">
           <el-input type="textarea" resize="none" v-model="newExperience.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleAddingDialogClose">取消</el-button>
-        <el-button type="primary" @click="handleAddExperience">确定</el-button>
+        <el-button @click="handleAddingDialogClose">{{$t("common.Cancel")}}</el-button>
+        <el-button type="primary" @click="handleAddExperience">{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
   </div>

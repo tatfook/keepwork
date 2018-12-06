@@ -11,13 +11,13 @@
       </el-breadcrumb>
       <el-tabs v-model="activePageName" class="profile-header-tabs" @tab-click="handleTabClick">
         <el-tab-pane name="ProfileIndexPage">
-          <span slot="label" class="profile-header-tabs-label">主页</span>
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.overview")}}</span>
         </el-tab-pane>
         <el-tab-pane name="ProfileSocialPage">
-          <span slot="label" class="profile-header-tabs-label">社交</span>
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.friends")}}</span>
         </el-tab-pane>
         <el-tab-pane name="ProfileProjectPage">
-          <span slot="label" class="profile-header-tabs-label">项目</span>
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.projects")}}</span>
         </el-tab-pane>
       </el-tabs>
     </div>

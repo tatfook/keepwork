@@ -2,8 +2,8 @@
   <div class="recent-project">
     <el-card class="recent-project-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span>最近项目</span>
-        <router-link class="recent-project-card-header-button" :to='{name:"ProfileProjectPage"}'>查看更多<i class="el-icon-arrow-right"></i></router-link>
+        <span>{{$t("profile.rencentProject")}}</span>
+        <router-link class="recent-project-card-header-button" :to='{name:"ProfileProjectPage"}'>{{$t("profile.more")}}<i class="el-icon-arrow-right"></i></router-link>
       </div>
       <div class="recent-project-list">
         <project-cell class="recent-project-list-item" v-for="(project, index) in recentProject" :key="index" :project='project'></project-cell>

@@ -2,24 +2,24 @@
   <div class="user-statics">
     <div class="user-statics-item">
       <i class="iconfont icon-folder-open"></i>
-      <span class="user-statics-label">项目</span>
+      <span class="user-statics-label">{{$t("profile.projects")}}</span>
       <div class="user-statics-msg" v-if="nowUserDetail.rank.project > 0">
         <span class="user-statics-msg-item">
-          <span class="user-statics-count">{{nowUserDetail.rank.project}}</span>个项目
+          <span class="user-statics-count">{{nowUserDetail.rank.project}}</span>{{$t("profile.projectsCount")}}
         </span>
         <i class="iconfont icon-comma"></i>
         <span class="user-statics-msg-item">
-          <span class="user-statics-count">{{nowUserDetail.rank.world}}</span>个3D世界
+          <span class="user-statics-count">{{nowUserDetail.rank.world}}</span>{{$t("profile.3DWorldCount")}}
         </span>
         <i class="iconfont icon-comma"></i>
         <span class="user-statics-msg-item">
-          <span class="user-statics-count">{{nowUserDetail.rank.site}}</span>个网站
+          <span class="user-statics-count">{{nowUserDetail.rank.site}}</span>{{$t("profile.siteCount")}}
         </span>
       </div>
       <div class="user-statics-intro" v-else>
-        项目是什么？如何创建项目？<span class="user-statics-intro-link" @click="showLearnGuide">了解更多</span>
+        {{$t('profile.whatAndHowCreat')}}<span class="user-statics-intro-link" @click="showLearnGuide">{{$t("profile.knowMore")}}</span>
       </div>
-      <router-link class="user-statics-link" :to='{name:"ProfileProjectPage"}'><span class="hidden-sm-and-down">项目主页</span><i class="el-icon-arrow-right"></i></router-link>
+      <router-link class="user-statics-link" :to='{name:"ProfileProjectPage"}'><span class="hidden-sm-and-down">{{$t("profile.projectViewMore")}}</span><i class="el-icon-arrow-right"></i></router-link>
       <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
     </div>
   </div>
