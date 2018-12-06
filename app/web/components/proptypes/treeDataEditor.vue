@@ -23,10 +23,18 @@
         </span>
         <i v-if="!warningInput(data)" class="iconfont icon-prompt"></i>
         <span class="node-operate">
-          <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
-          <el-button v-tooltip='$t("editor.insertBefore")' icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
-          <el-button v-tooltip='$t("editor.insertChild")' icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
-          <el-button v-tooltip='$t("editor.delete")' icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          <el-tooltip :content="$t('editor.insertAfter')" placement="top">
+            <el-button icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertBefore')" placement="top">
+            <el-button icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertChild')" placement="top">
+            <el-button icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.delete')" placement="top">
+            <el-button icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          </el-tooltip>
         </span>
       </span>
     </el-tree>

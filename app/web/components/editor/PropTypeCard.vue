@@ -4,19 +4,20 @@
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
-      <i v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq' || cardKey == 'md'"
-      v-tooltip='{
-        content: tipTool,
-        classes: "prop-type-card-tool-tip-class",
-        delay: { show: 100, hide: 1000 },
-        autoHide: false,
-        hideOnTargetClick: false
-      }'
-      class="iconfont icon-help"></i>
+      <el-tooltip v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq'" :content="tipTool()" popper-class="prop-header-tooltip-class" placement="top">
+        <i class="iconfont icon-help"></i>
+      </el-tooltip>
+      <el-tooltip v-if="cardKey == 'md'" popper-class="prop-header-tooltip-class" placement="top">
+        <i class="iconfont icon-help"></i>
+        <div slot="content"><span v-html="tipTool()"></span></div>
+      </el-tooltip>
       <el-col class="card-info">
-        <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" :title="$t('editor.enlargeMdEditing')" @click='showMultiTextDailog'></i>
-        <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible' v-tooltip='isToolTip'>
-        </el-switch>
+        <el-tooltip :content="$t('editor.enlargeMdEditing')" placement="top">
+          <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" @click='showMultiTextDailog'></i>
+        </el-tooltip>
+        <el-tooltip :content="isToolTip" placement="top">
+          <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'></el-switch>
+        </el-tooltip>
       </el-col>
     </el-row>
     <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
@@ -181,11 +182,8 @@ export default {
 }
 </style>
 <style>
-  .prop-type-card-tool-tip-class {
-    max-width: 250px;
-    word-break : normal;
-    margin-top: 3px !important;
-    font-size: 12px;
+  .prop-header-tooltip-class {
+    max-width: 215px;
   }
 </style>
 

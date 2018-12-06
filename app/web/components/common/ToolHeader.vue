@@ -39,17 +39,25 @@
 
     <div class="icons">
       <a :href="editorPageUrl" class="icon-item">
-        <i v-if="!isEditable()" class="iconfont el-icon-view" v-tooltip="$t('editor.checkCode')"></i>
-        <i v-if="isEditable()" class="iconfont icon-edit" v-tooltip="$t('editor.toEdit')"></i>
+        <el-tooltip v-if="!isEditable()" :content="$t('editor.checkCode')">
+          <i class="iconfont el-icon-view"></i>
+        </el-tooltip>
+        <el-tooltip  v-if="isEditable()" :content="$t('editor.toEdit')">
+          <i class="iconfont icon-edit"></i>
+        </el-tooltip>
       </a>
       <span v-if="!IS_GLOBAL_VERSION" class="icon-item" v-popover:share>
-        <i class="iconfont icon-Share" v-tooltip="$t('editor.share')"></i>
+        <el-tooltip :content="$t('editor.share')">
+          <i class="iconfont icon-Share"></i>
+        </el-tooltip>
       </span>
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
       <span class="icon-item" v-loading='starPending'>
-        <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar' v-tooltip="$t('editor.praise')"></i>
+        <el-tooltip :content="$t('editor.praise')">
+          <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
+        </el-tooltip>
         <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
       </span>
     </div>
