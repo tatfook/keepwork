@@ -1,7 +1,7 @@
 <template>
   <div class="project-cell">
     <div v-if="project.extra.videoUrl" class="project-cell-cover" @click="goProjectDetail(project)">
-      <video class="project-cell-cover-img" controls="controls" src="http://qiniu.keepwork.com/50662e00-f2bb-11e8-a52c-f5cb6dd7616d.mp4?e=1544172965&token=LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:XDsdskVnRrFTfhXd1us8OoNjcCg="></video>
+      <video class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
       <div class="video-mask"></div>
     </div>
     <div v-else class="project-cell-cover" @click="goProjectDetail(project)"><img class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt=""></div>
