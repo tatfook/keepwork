@@ -5,14 +5,18 @@
     </span>
     <span class=''>{{ node.label }}</span>
     <span class="file-manager-buttons-container">
-      <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
-      </el-button>
-      <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
-      </el-button>
-      <el-button class="iconfont icon-delete____ edit-hover" size="mini" type="text" :title='$t("editor.close")' @click.stop='handleCloseConfirm(data)'>
-      </el-button>
-      <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" :title='$t("editor.delete")' @click.stop="removeOpenedFile(data)">
-      </el-button>
+      <el-tooltip :content="$t('editor.save')">
+        <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text"></el-button>
+      </el-tooltip>
+      <el-tooltip :content="$t('editor.reload')">
+        <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" @click.stop='confirmRefresh'></el-button>
+      </el-tooltip>
+      <el-tooltip :content="$t('editor.close')">
+        <el-button class="iconfont icon-delete____ edit-hover" size="mini" type="text" @click.stop='handleCloseConfirm(data)'></el-button>
+      </el-tooltip>
+      <el-tooltip :content="$t('editor.delete')">
+        <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeOpenedFile(data)"></el-button>
+      </el-tooltip>
     </span>
     <div @click.stop class="close-dialog">
       <el-dialog center :visible.sync="dialogVisible" width="360px" closed="handleCloseDialog">

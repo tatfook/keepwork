@@ -103,13 +103,19 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
-        <span v-loading='savePending' class='iconfont icon-save' :title='$t("editor.save")' @click='save'></span>
+        <el-tooltip :content="$t('editor.save')">
+          <span v-loading='savePending' class='iconfont icon-save' @click='save'></span>
+        </el-tooltip>
       </el-menu-item>
       <el-menu-item index='4' class='li-btn' @click='undo' :disabled='!canUndo'>
-        <span class='iconfont icon-return' :title='$t("editor.revoke")'></span>
+        <el-tooltip :content="$t('editor.revoke')">
+          <span class='iconfont icon-return'></span>
+        </el-tooltip>
       </el-menu-item>
       <el-menu-item index='5' class='li-btn' @click='redo' :disabled='!canRedo'>
-        <span class='iconfont icon-revocation' :title='$t("editor.redo")'></span>
+        <el-tooltip :content="$t('editor.redo')">
+          <span class='iconfont icon-revocation'></span>
+        </el-tooltip>
       </el-menu-item>
       <!-- <el-menu-item index=' 8 ' class='li-btn'>
         <el-dropdown @command='changeViewType '>
@@ -125,8 +131,12 @@
         </el-dropdown>
       </el-menu-item> -->
       <el-menu-item index='6' class="link-box" v-if="activePage && hasOpenedFiles">
-        <i class="iconfont icon-copy" @click='doCopyLink' v-tooltip.bottom='$t("tips.copyUrl")'></i>
-        <a :href='activePageFullUrl' target='_blank' v-tooltip.bottom='$t("tips.openInNewWindow")'>{{ activePageFullUrl }}</a>
+        <el-tooltip :content="$t('tips.copyUrl')">
+          <i class="iconfont icon-copy" @click='doCopyLink'></i>
+        </el-tooltip>
+        <el-tooltip :content="$t('tips.openInNewWindow')">
+          <a :href='activePageFullUrl' target='_blank'>{{ activePageFullUrl }}</a>
+        </el-tooltip>
       </el-menu-item>
       <el-menu-item index='7' class='unsaved-tip'>
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
@@ -135,9 +145,15 @@
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
       <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
-        <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()" v-tooltip.bottom="{content: $t('tips.ShowPreviewOnly'), offset:'5'}"></span>
-        <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()" v-tooltip.bottom="{content: $t('tips.ShowBoth'), offset:'5'}"></span>
-        <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()" v-tooltip.bottom="{content: $t('tips.ShowCodeOnly'), offset:'5'}"></span>
+        <el-tooltip :content="$t('tips.ShowPreviewOnly')">
+          <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()"></span>
+        </el-tooltip>
+        <el-tooltip :content="$t('tips.ShowBoth')">
+          <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()"></span>
+        </el-tooltip>
+        <el-tooltip :content="$t('tips.ShowCodeOnly')">
+          <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()"></span>
+        </el-tooltip>
       </el-menu-item>
     </el-menu>
     <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>

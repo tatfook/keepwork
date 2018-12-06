@@ -15343,15 +15343,6 @@ v-charts@^1.17.10:
     numerify "1.2.9"
     utils-lite "0.1.10"
 
-v-tooltip@^2.0.0-rc.33:
-  version "2.0.0-rc.33"
-  resolved "http://registry.npm.taobao.org/v-tooltip/download/v-tooltip-2.0.0-rc.33.tgz#78f7d8e9c34265622be65ba9dc78c67f1dc02b73"
-  integrity sha1-ePfY6cNCZWIr5lup3HjGfx3AK3M=
-  dependencies:
-    lodash.merge "^4.6.0"
-    popper.js "^1.12.9"
-    vue-resize "^0.4.3"
-
 vali-date@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/vali-date/download/vali-date-1.0.0.tgz#1b904a59609fb328ef078138420934f6b86709a6"
