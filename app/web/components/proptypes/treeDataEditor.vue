@@ -59,7 +59,7 @@ export default {
         children: 'child',
         label: 'name'
       },
-      notButton: true
+      notButton: false
     }
   },
   computed: {
