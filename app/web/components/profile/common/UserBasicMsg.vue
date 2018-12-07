@@ -30,7 +30,7 @@
         <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || $t("profile.unknownAddress")}}
       </div>
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-link1"></i>keepwork.com/{{nowUserDetail.username}}
+        <i class="iconfont icon-link1"></i>keepwork.com/u/{{nowUserDetail.username}}
       </div>
       <div class="user-basic-msg-infos-item">
         <i class="iconfont icon-reloadtime"></i>{{$t("profile.registerAt")}} {{nowUserDetail.createdAt | formatDate(formatType)}}
