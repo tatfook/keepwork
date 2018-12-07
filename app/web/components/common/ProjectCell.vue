@@ -147,6 +147,7 @@ export default {
         width: 30px;
         height: 30px;
         object-fit: cover;
+        overflow: hidden;
         border-radius: 50%;
         margin-right: 8px;
       }

@@ -192,6 +192,7 @@ export default {
       margin: 8px 0;
       font-size: 12px;
       color: #909399;
+      word-break: break-all;
     }
     &:last-child {
       margin-bottom: 0;

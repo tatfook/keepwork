@@ -88,6 +88,7 @@ export default {
     margin-bottom: -33px;
     & &-item {
       border: none;
+      margin: 0 4px 16px;
     }
   }
 }

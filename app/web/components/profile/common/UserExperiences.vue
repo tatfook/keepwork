@@ -284,6 +284,7 @@ export default {
         margin-top: 16px;
         width: 553px;
         max-width: 100%;
+        word-break: break-all;
       }
     }
   }
