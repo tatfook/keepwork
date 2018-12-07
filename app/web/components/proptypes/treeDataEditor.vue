@@ -141,6 +141,10 @@ export default {
       targetInputElement.focus()
     },
     hideInput(data, type) {
+      if(data && data.link == '') {
+        this.notButton = false
+      }
+      this.warningInput(data)
       let showKey = type + 'InputShow'
       data[showKey] = false
     },
