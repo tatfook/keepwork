@@ -15,7 +15,10 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <div class="project-cell-author-name"><img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait"><span class="username" :title="project.user.username">{{project.user && project.user.username}}</span></div>
+      <a :href="`/u/${project.user.username}`" target="_blank" class="project-cell-author-name" @click="toUserProfilePage(project.user.username)">
+        <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
+        <span class="username" :title="project.user.username">{{project.user && project.user.username}}</span>
+      </a>
       <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}</div>
     </div>
   </div>
@@ -91,7 +94,7 @@ export default {
       border-radius: 4px;
       cursor: pointer;
     }
-    .video-mask{
+    .video-mask {
       width: 100%;
       height: 143px;
       position: absolute;
@@ -143,10 +146,16 @@ export default {
       flex: 1;
       display: flex;
       align-items: center;
+      text-decoration: none;
+      color: #303133;
+      &:hover {
+        color: #2397f3;
+      }
       img {
         width: 30px;
         height: 30px;
         object-fit: cover;
+        overflow: hidden;
         border-radius: 50%;
         margin-right: 8px;
       }
