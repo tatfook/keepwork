@@ -1,8 +1,12 @@
 <template>
   <div class="user-cell">
     <div class="user-tab">
-      <div class="user-tab-cover" @click="goUserHomePage(user)"><img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt=""></div>
-      <h5 class="user-tab-name" @click="goUserHomePage(user)">{{user.username}}</h5>
+      <div class="user-tab-cover">
+        <a :href="`/u/${user.username}`" target="_blank">
+          <img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt="">
+        </a>
+      </div>
+      <h5 class="user-tab-name"><a :href="`/u/${user.username}`" target="_blank">{{user.username}}</a></h5>
       <p class="user-tab-brief" :title="user.description">{{user.description || $t("common.noSelfIntro")}}</p>
       <div class="user-tab-abstract">
         <div>
@@ -20,7 +24,7 @@
       </div>
       <div class="user-tab-join">
         <el-button type="primary" :class="['user-tab-join-button',{'is-followed': user.isFollowed}]" :loading="isLoading" @click="toggleFollow(user)">{{user.isFollowed ? $t("explore.followed") : $t("explore.follow")}}</el-button>
-        <el-button class="user-tab-join-button" @click="goUserHomePage(user)">{{$t("explore.profile")}}</el-button>
+        <a class="user-tab-join-button" :href="`/u/${user.username}`" target="_blank">{{$t("explore.profile")}}</a>
       </div>
     </div>
   </div>
@@ -98,9 +102,6 @@ export default {
             this.isLoading = false
           })
       }
-    },
-    goUserHomePage() {
-      window.location.href = `/u/${this.user.username}`
     }
   }
 }
@@ -134,10 +135,15 @@ export default {
     }
     &-name {
       font-size: 16px;
-      color: #333;
       margin: 18px 0;
       line-height: 22px;
-      cursor: pointer;
+      & > a {
+        color: #333;
+        text-decoration: none;
+        &:hover {
+          color: #2397f3;
+        }
+      }
     }
     &-brief {
       font-size: 12px;
@@ -167,7 +173,7 @@ export default {
         position: relative;
       }
       .member::before {
-        content: '';
+        content: "";
         width: 1px;
         height: 20px;
         background: rgb(202, 200, 200);
@@ -176,7 +182,7 @@ export default {
         top: 32px;
       }
       .member::after {
-        content: '';
+        content: "";
         width: 1px;
         height: 20px;
         background: rgb(202, 200, 200);
@@ -191,6 +197,20 @@ export default {
         height: 32px;
         width: 108px;
         padding: 0;
+      }
+      & a {
+        display: inline-block;
+        border: 1px solid #dcdfe6;
+        line-height: 32px;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-left: 10px;
+        color: #606266;
+        &:hover {
+          color: #409eff;
+          border-color: #c6e2ff;
+          background-color: #ecf5ff;
+        }
       }
     }
     .is-followed {
