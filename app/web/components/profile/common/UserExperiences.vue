@@ -37,7 +37,7 @@
           <el-input v-model="newExperience.title"></el-input>
         </el-form-item>
         <el-form-item :label="$t('profile.period')">
-          <el-date-picker v-model="newExperienceRangeDate" type="daterange" :range-separator="$t('profile.startToEnd')" :start-placeholder="$t('profile.startDate')" :end-placeholder="$t('profile.endDate')" @change='setExperienceDate'>
+          <el-date-picker unlink-panels v-model="newExperienceRangeDate" type="daterange" :range-separator="$t('profile.startToEnd')" :start-placeholder="$t('profile.startDate')" :end-placeholder="$t('profile.endDate')" @change='setExperienceDate'>
           </el-date-picker>
         </el-form-item>
         <el-form-item :label="$t('profile.url')">
