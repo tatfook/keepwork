@@ -9,7 +9,7 @@
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
           <div class="user-experience-item-title">
             {{experience.title}}
-            <div class="user-experience-item-date">2014 / 5</div>
+            <div class="user-experience-item-date">{{experience.startDate | formatDate}} - {{experience.endDate | formatDate}}</div>
             <div class="user-experience-item-operations" v-if="isLoginUserEditable">
               <el-button type="text" @click="deleteExperience(experience, index)">
                 <i class="iconfont icon-delete1"></i>{{$t("profile.delete")}}
@@ -21,7 +21,7 @@
           </div>
           <div class="user-experience-item-link">{{experience.link}}</div>
           <div class="user-experience-item-desc">
-            <div class="user-experience-item-desc-label">经历描述</div>
+            <div class="user-experience-item-desc-label">{{$t('profile.experienceDescription')}}</div>
             <div class="user-experience-item-desc-detail">{{experience.description}}</div>
           </div>
         </div>
@@ -56,6 +56,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import dayjs from 'dayjs'
 export default {
   name: 'UserExperiences',
   props: {
@@ -172,7 +173,11 @@ export default {
       )
     }
   },
-  filters: {}
+  filters: {
+    formatDate(date) {
+      return dayjs(date).format('YYYY/MM/DD')
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -231,10 +236,16 @@ export default {
     &:hover &-operations {
       display: inline-block;
     }
+    &:hover &-date {
+      display: none;
+    }
     .el-button {
       padding: 0;
       font-size: 12px;
       color: #909399;
+    }
+    .el-button:hover {
+      color: #2397f3;
     }
     &-link {
       color: #909399;

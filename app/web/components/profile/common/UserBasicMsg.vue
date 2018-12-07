@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="user-basic-msg-operation">
-      <el-button v-if="isLoginUserEditable">{{$t("profile.addBio")}}</el-button>
+      <el-button v-if="isLoginUserEditable" @click="isPersonalCenterShow = true">{{$t("profile.addBio")}}</el-button>
       <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
     </div>
     <div class="user-basic-msg-infos hidden-sm-and-down">
@@ -36,12 +36,14 @@
         <i class="iconfont icon-reloadtime"></i>{{$t("profile.registerAt")}} {{nowUserDetail.createdAt | formatDate(formatType)}}
       </div>
     </div>
+    <personal-center-dialog v-if="isLoginUserEditable" :show='isPersonalCenterShow' @close='isPersonalCenterShow = false'></personal-center-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { locale } from '@/lib/utils/i18n'
 import dayjs from 'dayjs'
+import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 export default {
   name: 'UserBasicMsg',
   props: {
@@ -59,6 +61,7 @@ export default {
   },
   data() {
     return {
+      isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
   },
@@ -68,7 +71,7 @@ export default {
       loginUserId: 'user/userId',
       profileUserFavoriteState: 'profile/userFavoriteState'
     }),
-    formatType(){
+    formatType() {
       return locale === 'en-US' ? 'hh:mm a DD MMM. YYYY' : 'YYYY年MM月DD日 HH:mm'
     },
     nowUserId() {
@@ -133,6 +136,9 @@ export default {
     nowUserId() {
       this.initFavoriteState()
     }
+  },
+  components:{
+    PersonalCenterDialog
   },
   filters: {
     formatDate(date, formatType) {
