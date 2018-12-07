@@ -308,6 +308,14 @@ const addBlockToMarkdown = (code, position = 0, modName, content) => {
   return mdLines.join('\n')
 }
 
+const addBlockToMarkdownWithoutHeadAndTail = (code, position = 0, modName, content) => {
+  if (CmdHelper.isMarkdownCmd(getCmd(modName))) return code
+
+  let mdLines = code.split('\n')
+  mdLines.splice(position, 0, content)
+  return mdLines.join('\n')
+}
+
 export default {
   buildBlock,
   buildBlockList,
@@ -321,6 +329,7 @@ export default {
   addBlockAfterIndex,
   addBlockByKey,
   addBlockToMarkdown,
+  addBlockToMarkdownWithoutHeadAndTail,
   getCmd,
   getActiveBlock,
   getBlockByCursorLine

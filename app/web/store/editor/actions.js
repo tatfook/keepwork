@@ -328,7 +328,6 @@ const actions = {
     if (getters.activePage.addingArea === gConst.ADDING_AREA_ADI) {
       dispatch('addModToAdi', payload)
     } else {
-      payload.modContent = 'styleID: ' + payload.styleID
       dispatch('addModToMarkdown', payload)
     }
   },
@@ -356,12 +355,21 @@ const actions = {
     dispatch('refreshCode')
   },
   async addModToMarkdown({ commit, dispatch, getters }, payload) {
+    let modProperties = ModFactory.generate(payload.modName)
+    modProperties.styleID = payload.styleID || modProperties.styleID
+    modProperties = _.merge(modProperties, payload.modProperties)
+    let newMod = Parser.buildBlock(
+      Parser.getCmd(payload.modName),
+      modProperties
+    )
+    payload.modContent = Parser.buildMarkdown([newMod])
+
     let position = getters.activePage.cursorPosition + 1
     const block = Parser.getBlockByCursorLine(getters.modList, position)
     if (block && !BlockHelper.isMarkdownMod(block)) {
       position = BlockHelper.endLine(block)
     }
-    const newCode = Parser.addBlockToMarkdown(
+    const newCode = Parser.addBlockToMarkdownWithoutHeadAndTail(
       getters.code,
       position,
       payload.modName,
