@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="paracraft-info" :visible.sync="isDialogVisible" width="508px" :before-close="handleDialogClose">
+  <el-dialog class="paracraft-info" :visible.sync="isDialogVisible" :before-close="handleDialogClose">
     <div class="paracraft-info-content">
       <h1 class="paracraft-info-title">{{$t('common.paracraft')}}</h1>
       <div class="paracraft-info-intro">
@@ -17,14 +17,18 @@
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseAgreeProtocol')}}</p>
       <div class="paracraft-info-operations">
         <el-button type="primary" @click="toParacraftWorld">{{$t('project.open3DWorld')}}</el-button>
+        <el-button @click="toParacraftWorldZip">{{$t('project.downloadedArchive')}}</el-button>
       </div>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
+      <p class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
+      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleasePutItUnderTheCatalogueToUse')}}</p>
     </div>
     <img class="paracraft-info-background-img paracraft-info-background-img-left-top" src="@/assets/img/paracraft_box.png" alt="">
     <img class="paracraft-info-background-img paracraft-info-background-img-right-bottom" src="@/assets/img/littepurple_box.png" alt="">
   </el-dialog>
 </template>
 <script>
+import launchUri from '@/lib/utils/launchUri'
+
 export default {
   name: 'ParacraftInfo',
   props: {
@@ -37,8 +41,14 @@ export default {
   methods: {
     toParacraftWorld() {
       if (this.paracraftUrl) {
-        let tempWin = window.open('_blank')
-        tempWin.location = this.paracraftUrl
+        launchUri(this.paracraftUrl)
+      }
+    },
+    toParacraftWorldZip() {
+      if (this.paracraftUrl) {
+        let url = decodeURIComponent(this.paracraftUrl)
+        let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
+        launchUri(downloadWorldZip)
       }
     },
     handleDialogClose() {
@@ -68,6 +78,8 @@ export default {
     }
   }
   &-operations {
+    display: inline-block;
+    margin-bottom: 4px;
     .el-button {
       font-size: 13px;
       text-decoration: none;
@@ -79,7 +91,15 @@ export default {
   &-operate-info {
     font-size: 12px;
     color: #909399;
-    margin: 16px 0 40px;
+    margin-bottom: 40px;
+    word-break:break-all;
+    span {
+      color: #f32323;
+    }
+  }
+  &-operate-msg {
+    font-size: 12px;
+    color: #909399;
     span {
       color: #f32323;
     }
@@ -97,9 +117,11 @@ export default {
   }
   .el-dialog {
     position: relative;
+    width: 508px;
+    margin-top: 160px !important;
   }
   .el-dialog__body {
-    padding: 32px 16px 8px 184px;
+    padding: 32px 22px 8px 184px;
   }
 }
 
