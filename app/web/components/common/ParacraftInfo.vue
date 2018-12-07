@@ -17,14 +17,18 @@
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseAgreeProtocol')}}</p>
       <div class="paracraft-info-operations">
         <el-button type="primary" @click="toParacraftWorld">{{$t('project.open3DWorld')}}</el-button>
+        <el-button @click="toParacraftWorldZip">{{$t('project.downloadedArchive')}}</el-button>
       </div>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
+      <p class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
+      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleasePutItUnderTheCatalogueToUse')}}</p>
     </div>
     <img class="paracraft-info-background-img paracraft-info-background-img-left-top" src="@/assets/img/paracraft_box.png" alt="">
     <img class="paracraft-info-background-img paracraft-info-background-img-right-bottom" src="@/assets/img/littepurple_box.png" alt="">
   </el-dialog>
 </template>
 <script>
+import launchUri from '@/lib/utils/launchUri'
+
 export default {
   name: 'ParacraftInfo',
   props: {
@@ -134,14 +138,14 @@ export default {
     },
     toParacraftWorld() {
       if (this.paracraftUrl) {
-        this.launchUri(this.paracraftUrl)
+        launchUri(this.paracraftUrl)
       }
     },
     toParacraftWorldZip() {
       if (this.paracraftUrl) {
         let url = decodeURIComponent(this.paracraftUrl)
-        let downloadWorldZip = url.substring(url.indexOf('http'), url.lastIndexOf('.zip') + 4)
-        this.launchUri(downloadWorldZip)
+        let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
+        launchUri(downloadWorldZip)
       }
     },
     handleDialogClose() {
