@@ -77,6 +77,8 @@ import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
+import launchUri from '@/lib/utils/launchUri'
+
 export default {
   name: 'ProjectBasicInfo',
   props: {
@@ -412,8 +414,7 @@ export default {
         return
       }
       if (this.paracraftUrl) {
-        let tempWin = window.open('_blank')
-        tempWin.location = this.paracraftUrl
+        launchUri(this.paracraftUrl)
         this.isParacraftInfoDialogVisible = true
       }
     },
