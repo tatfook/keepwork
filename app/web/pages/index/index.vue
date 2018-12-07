@@ -4,7 +4,7 @@
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
-      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHome"></tool-header>
+      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
       <router-view :pageLoading="pageLoading" v-if="presetLoaded" />
     </el-main>
     <el-aside></el-aside>

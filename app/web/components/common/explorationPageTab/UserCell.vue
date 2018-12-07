@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLogined: 'user/isLogined'
+      isLogined: 'user/isLogined',
     })
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
       this.isLoading = true
       if (!this.user.isFollowed) {
         await keepwork.favorites
-          .favoriteProject({ objectId: user.id, objectType: 0 })
+          .favoriteObject({ objectId: user.id, objectType: 0 })
           .then(res => {
             this.showMessage({
               message: this.$t('explore.successfullyFollowed')
@@ -81,7 +81,7 @@ export default {
           })
       } else {
         await keepwork.favorites
-          .unFavoriteProject({ objectId: user.id, objectType: 0 })
+          .unFavoriteObject({ objectId: user.id, objectType: 0 })
           .then(res => {
             this.showMessage({
               message: this.$t('explore.successfullyUnfollowed')
@@ -100,10 +100,7 @@ export default {
       }
     },
     goUserHomePage() {
-      this.$message({
-        type: 'warning',
-        message: '程序员小姐姐努力开发中'
-      })
+      window.location.href = `/u/${this.user.username}`
     }
   }
 }
