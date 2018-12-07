@@ -1,26 +1,25 @@
 <template>
   <el-card class="contribution-calendar" shadow="never">
     <div slot="header">
-      <span>活跃度</span>
+      <span>{{$t("profile.contributions")}}</span>
       <el-dropdown>
         <span class="el-dropdown-link">
           2018<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
+          <el-dropdown-item>2018</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <div id="contributeCalendar" class="contribution-calendar-container"></div>
     <div class="clearfix calendar-footer" id="calendarSibling">
       <div class="contribution-calendar-legend">
-        <span>少</span>
+        <span>{{$t("profile.lessState")}}</span>
         <ul class="contribution-calendar-legend-color clearfix">
           <li :style="{'background-color': defaultColor}"></li>
           <li v-for="(colorBlock, index) in stepColor" :key="index" :style="{'background-color': colorBlock}"></li>
         </ul>
-        <span>多</span>
+        <span>{{$t("profile.moreState")}}</span>
       </div>
     </div>
   </el-card>
@@ -58,7 +57,8 @@ export default {
         stepColor: this.stepColor,
         defaultColor: this.defaultColor,
         defaultTextFillColor: '#909399',
-        dateCount: this.contributionData
+        dateCount: this.contributionData,
+        languageLocaleIsForGlobalUser: true
       })
     }
   },

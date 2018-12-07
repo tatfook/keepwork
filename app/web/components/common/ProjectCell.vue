@@ -1,6 +1,10 @@
 <template>
   <div class="project-cell">
-    <div class="project-cell-cover" @click="goProjectDetail(project)"><img class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt=""></div>
+    <div v-if="project.extra.videoUrl" class="project-cell-cover" @click="goProjectDetail(project)">
+      <video class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
+      <div class="video-mask"></div>
+    </div>
+    <div v-else class="project-cell-cover" @click="goProjectDetail(project)"><img class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt=""></div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title || project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
@@ -79,12 +83,20 @@ export default {
     width: 100%;
     height: 143px;
     cursor: pointer;
+    position: relative;
     &-img {
       width: 100%;
       height: 143px;
       object-fit: cover;
       border-radius: 4px;
       cursor: pointer;
+    }
+    .video-mask{
+      width: 100%;
+      height: 143px;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
   &-title {

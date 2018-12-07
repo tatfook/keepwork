@@ -51,7 +51,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { imageUrl: i.cover },
+          extra: { imageUrl: i.cover, videoUrl: i.video  },
           name: i.name,
           name_title: this.searchKeyResult(i),
           visit: i.total_view,

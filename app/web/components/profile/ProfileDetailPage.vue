@@ -1,8 +1,12 @@
 <template>
   <div class="profile-detail-page" v-loading='isLoading'>
-    <user-basic-msg v-if="isFinishFirstInit" class="hidden-sm-and-up" :isLoginUserEditable='isLoginUserEditable' :nowUserDetail='nowUserDetail'></user-basic-msg>
-    <profile-header v-if="isFinishFirstInit" :nowUsername='nowUsername'></profile-header>
-    <router-view v-if="isFinishFirstInit" :nowUserDetail='nowUserDetail'></router-view>
+    <user-basic-msg v-if="isFinishFirstInit && isUserExist" class="hidden-sm-and-up" :isLoginUserEditable='isLoginUserEditable' :nowUserDetail='nowUserDetail'></user-basic-msg>
+    <profile-header v-if="isFinishFirstInit && isUserExist" :nowUsername='nowUsername'></profile-header>
+    <router-view v-if="isFinishFirstInit && isUserExist" :nowUserDetail='nowUserDetail'></router-view>
+    <div class="profile-detail-page-notfound" v-if="!isUserExist">
+      <img src="@/assets/img/404.png" alt="">
+      <h1>{{$t("profile.usernameDoNotExist")}}</h1>
+    </div>
   </div>
 </template>
 
@@ -18,6 +22,7 @@ export default {
   },
   data() {
     return {
+      isUserExist: true,
       isLoading: false,
       isFinishFirstInit: false
     }
@@ -25,16 +30,16 @@ export default {
   computed: {
     ...mapGetters({
       loginUserId: 'user/userId',
-      userGetDetailWithRankByUserId: 'user/getDetailWithRankByUserId'
+      userGetDetailWithRankByUsername: 'user/getDetailWithRankByUsername'
     }),
-    nowUserId() {
-      return this.$route.params.id
+    nowUsername() {
+      return this.$route.params.username
     },
     nowUserDetail() {
-      return this.userGetDetailWithRankByUserId({ userId: this.nowUserId })
+      return this.userGetDetailWithRankByUsername({ username: this.nowUsername })
     },
-    nowUsername() {
-      return _.get(this.nowUserDetail, 'username')
+    nowUserId() {
+      return _.get(this.nowUserDetail, 'id')
     },
     nowProfileUserId() {
       return _.get(this.nowUserDetail, 'id')
@@ -45,12 +50,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserDetailWithRankByUserId: 'user/getUserDetailWithRankByUserId'
+      getUserDetailWithRankByUserIdOrUsername: 'user/getUserDetailWithRankByUserIdOrUsername'
     }),
     async init() {
       this.isLoading = true
-      this.nowUserId &&
-        (await this.getUserDetailWithRankByUserId({ userId: this.nowUserId }))
+      if (/^[0-9]*$/.test(this.nowUsername)) {
+        this.isUserExist = false
+        this.isLoading = false
+        return
+      }
+      await this.getUserDetailWithRankByUserIdOrUsername({ username: this.nowUsername }).catch(err => {
+        this.isUserExist = false
+      })
       this.isLoading = false
     }
   },
@@ -68,5 +79,15 @@ export default {
 <style lang="scss">
 .profile-detail-page {
   background-color: #f5f5f5;
+  &-notfound {
+    text-align: center;
+    padding-top: 40px;
+    h1 {
+      font-weight: normal;
+      font-size: 24px;
+      color: #303133;
+      margin-top: 24px;
+    }
+  }
 }
 </style>

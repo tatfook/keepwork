@@ -9,38 +9,41 @@
     </div>
     <div class="user-basic-msg-rank-info hidden-sm-and-down">
       <div class="user-basic-msg-rank-info-item">
-        <div class="user-basic-msg-rank-info-label">项目</div>
+        <div class="user-basic-msg-rank-info-label">{{$t("profile.projects")}}</div>
         <div class="user-basic-msg-rank-info-count">{{nowUserDetail.rank.project}}</div>
       </div>
       <div class="user-basic-msg-rank-info-item">
-        <div class="user-basic-msg-rank-info-label">关注</div>
+        <div class="user-basic-msg-rank-info-label">{{$t("profile.following")}}</div>
         <div class="user-basic-msg-rank-info-count">{{nowUserDetail.rank.follow}}</div>
       </div>
       <div class="user-basic-msg-rank-info-item">
-        <div class="user-basic-msg-rank-info-label">粉丝</div>
+        <div class="user-basic-msg-rank-info-label">{{$t("profile.followers")}}</div>
         <div class="user-basic-msg-rank-info-count">{{nowUserDetail.rank.fans}}</div>
       </div>
     </div>
     <div class="user-basic-msg-operation">
-      <el-button v-if="isLoginUserEditable">编辑个人资料</el-button>
-      <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? '取消关注':'关注'}}</el-button>
+      <el-button v-if="isLoginUserEditable" @click="isPersonalCenterShow = true">{{$t("profile.addBio")}}</el-button>
+      <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
     </div>
     <div class="user-basic-msg-infos hidden-sm-and-down">
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || "未知地址"}}
+        <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || $t("profile.unknownAddress")}}
       </div>
       <div class="user-basic-msg-infos-item">
         <i class="iconfont icon-link1"></i>keepwork.com/{{nowUserDetail.username}}
       </div>
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-reloadtime"></i>注册于 {{nowUserDetail.createdAt | formatDate}}
+        <i class="iconfont icon-reloadtime"></i>{{$t("profile.registerAt")}} {{nowUserDetail.createdAt | formatDate(formatType)}}
       </div>
     </div>
+    <personal-center-dialog v-if="isLoginUserEditable" :show='isPersonalCenterShow' @close='isPersonalCenterShow = false'></personal-center-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { locale } from '@/lib/utils/i18n'
 import dayjs from 'dayjs'
+import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 export default {
   name: 'UserBasicMsg',
   props: {
@@ -58,6 +61,7 @@ export default {
   },
   data() {
     return {
+      isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
   },
@@ -67,6 +71,9 @@ export default {
       loginUserId: 'user/userId',
       profileUserFavoriteState: 'profile/userFavoriteState'
     }),
+    formatType() {
+      return locale === 'en-US' ? 'hh:mm a DD MMM. YYYY' : 'YYYY年MM月DD日 HH:mm'
+    },
     nowUserId() {
       return this.nowUserDetail.id
     },
@@ -130,9 +137,12 @@ export default {
       this.initFavoriteState()
     }
   },
+  components:{
+    PersonalCenterDialog
+  },
   filters: {
-    formatDate(date) {
-      return dayjs(date).format('YYYY年MM月DD日 HH:mm')
+    formatDate(date, formatType) {
+      return dayjs(date).format(formatType)
     }
   }
 }
