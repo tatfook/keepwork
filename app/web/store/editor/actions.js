@@ -355,6 +355,7 @@ const actions = {
     dispatch('refreshCode')
   },
   async addModToMarkdown({ commit, dispatch, getters }, payload) {
+    // this function will causes add bigfile fail
     let modProperties = ModFactory.generate(payload.modName)
     modProperties.styleID = payload.styleID || modProperties.styleID
     modProperties = _.merge(modProperties, payload.modProperties)
@@ -370,6 +371,26 @@ const actions = {
       position = BlockHelper.endLine(block)
     }
     const newCode = Parser.addBlockToMarkdownWithoutHeadAndTail(
+      getters.code,
+      position,
+      payload.modName,
+      payload.modContent
+    )
+    commit(SET_EDITING_AREA, { area: gConst.ADDING_AREA_ADI }) // reset editing area after mod added
+    await dispatch('updateMarkDown', { code: newCode })
+    const mod = Parser.getActiveBlock(getters.modList, position + 2)
+    commit(SET_ACTIVE_MOD, mod.key)
+    commit(SET_ACTIVE_PROPERTY, null)
+    commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
+    dispatch('updateCursor', { cursor: { ch: 0, line: position + 2 } })
+  },
+  async addBigFileToMarkdown({ commit, dispatch, getters }, payload) {
+    let position = getters.activePage.cursorPosition + 1
+    const block = Parser.getBlockByCursorLine(getters.modList, position)
+    if (block && !BlockHelper.isMarkdownMod(block)) {
+      position = BlockHelper.endLine(block)
+    }
+    const newCode = Parser.addBlockToMarkdown(
       getters.code,
       position,
       payload.modName,

@@ -471,7 +471,7 @@ export default {
   },
   filters: {
     hideMDFileExtension(str) {
-      return str.replace(/\.md$/, '')
+      return str && str.replace(/\.md$/, '') || ''
     }
   },
   components: {
