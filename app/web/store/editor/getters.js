@@ -132,6 +132,7 @@ const getters = {
   showSkyDrive: state => state.isSkyDriveManagerDialogShow,
   updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || [],
   recentOpenedList: (state, { updateRecentUrlList, 'user/personalAndContributedSiteNameList': allSiteNameList }) => _.filter(updateRecentUrlList, ({ path }) => allSiteNameList.includes(path.split('/')[2])),
+  showAngle: state => state.isAnglesToggle,
   iframeDialog: state => state.iframeDialog
 }
 

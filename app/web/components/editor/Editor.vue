@@ -23,8 +23,62 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
+    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true && showAngle == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true && showAngle == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+      <el-row class="toolbar">
+        <el-scrollbar wrap-class="toolbar" :native="false">
+          <el-col class="toolbar-content" :style="getStyle">
+            <div class="toolbar-content_left">
+              <el-button-group>
+                <el-tooltip :content="$t('editor.title') + '1'">
+                  <el-button class="iconfont icon-h1" @click="insertHeadline(1)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.title') + '2'">
+                  <el-button class="iconfont icon-h2" @click="insertHeadline(2)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.title') + '3'">
+                  <el-button class="iconfont icon-h3" @click="insertHeadline(3)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.bold')">
+                  <el-button class="iconfont icon-thickening" @click="setFontStyle('bold')"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.italic')">
+                  <el-button class="iconfont icon-incline" @click="setFontStyle('italic')"></el-button>
+                </el-tooltip>
+              </el-button-group>
+              <el-button-group>
+                <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
+              <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
+              <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
+                <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
+                <el-tooltip :content="$t('editor.horizontalDiv')">
+                  <el-button class="iconfont icon-code_division_line" @click="insertLine"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.code')">
+                  <el-button class="iconfont icon-code" @click="insertCode"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.link')">
+                  <el-button class="iconfont icon-link_" @click="insertLink"></el-button>
+                </el-tooltip>
+              </el-button-group>
+              <el-button-group :style='isDisplayButton'>
+                <el-tooltip :content="$t('tips.mod')">
+                  <el-button class="iconfont icon-module" @click="addModToMarkdown"></el-button>
+                </el-tooltip>
+              </el-button-group>
+            </div>
+            <el-button-group class="fullScreenBtn">
+              <el-tooltip :content="showContent">
+                <el-button :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              </el-tooltip>
+            </el-button-group>
+          </el-col>
+        </el-scrollbar>
+      </el-row>
+      <editor-markdown ref='codemirror' @insertBigfile='insertBigfile'></editor-markdown>
+    </el-col>
     <div class="col-between" :style='isDisplay'></div>
-    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <el-col id="previewWin" v-if="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -53,8 +107,8 @@
         </span>
       </el-dialog>
     </el-col>
-    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true && showAngle == false" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true && showAngle == false" :style='{ width: codeWinWidth + "%" }' class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -195,6 +249,7 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
       isCodeShow: 'isCodeShow',
+      showAngle: 'showAngle',
       isFullscreen: 'isPreviewShow'
     }),
     isWelcomeShow() {
@@ -302,6 +357,7 @@ export default {
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
       setActivePropertyData: 'setActivePropertyData',
+      toggleAngles: 'toggleAngles',
       toggleSkyDrive: 'toggleSkyDrive'
     }),
     changeView(type) {
@@ -465,6 +521,7 @@ bigFile:
 .code-win {
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: auto;
 }
 .manager-win {
@@ -490,9 +547,9 @@ bigFile:
 #frameViewport {
   border: none;
 }
-.previewWin {
+/* .previewWin {
   position: relative;
-}
+} */
 .mouse-event-backup {
   position: absolute;
   left: 0;
