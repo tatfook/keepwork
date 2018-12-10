@@ -6,7 +6,7 @@
       </div>
       <div class="teach-packages-list">
         <el-row>
-          <el-col :sm="12" :xs="22" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
+          <el-col :sm="12" :xs="24" v-for="(lessonPackage,index) in sortedTeachList" v-if="perPage*(page-1) <= index && index < perPage*page " :key="lessonPackage.id">
             <div class="package">
               <p class="time">
                 <span v-show="lessonPackage.lastTeachDate">{{$t('lesson.teachingTime')}}:
@@ -15,7 +15,7 @@
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
-              <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
+              <p>{{$t('lesson.include')}}: {{lessonPackage.lessonCount}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(lessonPackage)}}</p>
               <p :title="lessonPackage.intro">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
             </div>
@@ -142,21 +142,22 @@ export default {
       border-bottom: 1px solid #d2d2d2;
       height: 60px;
       line-height: 60px;
-      padding-left: 12px;
+      margin: 0 82px;
     }
     &-list {
-      padding: 30px 56px;
+      padding: 28px 38px;
       flex: 1;
       overflow: auto;
       .el-row {
         .package {
-          width: 305px;
+          width: 320px;
           margin: 10px auto 50px;
           p {
             font-size: 14px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: #777;
           }
           .time {
             height: 20px;
@@ -165,14 +166,15 @@ export default {
             }
           }
           .package-cover {
-            width: 303px;
-            height: 188px;
+            width: 320px;
+            height: 178px;
             border-radius: 2px;
             cursor: pointer;
             img {
-              width: 303px;
-              height: 188px;
+              width: 100%;
+              height: 100%;
               object-fit: cover;
+              border-radius: 4px;
             }
           }
           .title {
@@ -180,6 +182,10 @@ export default {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 14px;
+            color: #333;
           }
         }
       }
@@ -195,11 +201,15 @@ export default {
 @media (max-width: 768px) {
   .teach {
     &-packages {
+      margin: 16px auto;
+       &-total {
+         margin: 0 30px;
+       }
       &-list {
         padding: 24px 16px;
         .el-row {
           .package {
-            margin-bottom: 16px;
+            margin: 16px auto;
           }
         }
       }

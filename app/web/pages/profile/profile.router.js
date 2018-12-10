@@ -5,12 +5,13 @@ const NotFound = () => import('@/components/profile/NotFound')
 const ProfileIndex = () => import('@/components/profile/ProfileIndex')
 const ProfileSocial = () => import('@/components/profile/ProfileSocial')
 const ProfileProject = () => import('@/components/profile/ProfileProject')
+const PasswordResetPage = () => import('@/components/profile/PasswordResetPage')
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: '/user',
+  base: '/u',
   routes: [
     {
       path: '*',
@@ -18,20 +19,25 @@ export default new Router({
       component: NotFound
     },
     {
-      path: '/:id',
+      path: '/set',
+      name: 'PasswordResetPage',
+      component: PasswordResetPage
+    },
+    {
+      path: '/:username',
       component: ProfileDetailPage,
       children: [{
-        path: '/:id',
+        path: '/:username',
         name: 'ProfileIndexPage',
         component: ProfileIndex
       },
       {
-        path: '/:id/social',
+        path: '/:username/social',
         name: 'ProfileSocialPage',
         component: ProfileSocial
       },
       {
-        path: '/:id/project',
+        path: '/:username/project',
         name: 'ProfileProjectPage',
         component: ProfileProject
       }]

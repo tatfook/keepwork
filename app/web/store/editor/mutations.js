@@ -350,7 +350,7 @@ const mutations = {
     })
   },
   [TOGGLE_IFRAME_DIALOG](state, payload) {
-    Vue.set(state, 'isIframeDialogShow', payload)
+    Vue.set(state, 'iframeDialog', payload)
   },
 }
 

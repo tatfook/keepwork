@@ -364,7 +364,7 @@ bigFile:
         modContent
       }
       this.$refs.codemirror.updateActiveCursor()
-      this.$store.dispatch('addModToMarkdown', payload)
+      this.$store.dispatch('addBigFileToMarkdown', payload)
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.toggleSkyDrive({ showSkyDrive: false })

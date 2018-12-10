@@ -9,10 +9,7 @@
     :before-close="handleClose"
     :append-to-body='true'
   >
-  
-    <sky-drive ref='skyDriveManager' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
-    <!-- <sky-driveManager ref='skyDriveManager' :mediaLibrary='mediaLibrary' @close='handleClose'></sky-driveManager> -->
-
+    <sky-drive ref='skyDriveManager' :isSiteMode='isSiteMode' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
   </el-dialog>
 </template>
 
@@ -22,6 +19,11 @@ import SkyDriveManager from './SkyDriveManager'
 export default {
   name: 'SkyDriveManagerDialog',
   props: {
+    isSiteMode: {
+      validator: function (value) {
+        return [true, false, undefined].indexOf(value) !== -1
+      }
+    },
     show: Boolean,
     mediaLibrary: Boolean,
     isVideoTabShow: Boolean,

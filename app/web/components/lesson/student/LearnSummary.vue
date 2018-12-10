@@ -23,7 +23,6 @@ import { lesson } from '@/api'
 import { locale } from '@/lib/utils/i18n'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
-import dayjs from 'dayjs'
 import moment, { months } from 'moment'
 import 'moment/locale/zh-cn'
 export default {
@@ -31,7 +30,6 @@ export default {
   components: {
     'student-summary': StudentSummary
   },
-  props: {},
   data() {
     return {
       isLoading: true,
@@ -43,11 +41,11 @@ export default {
   async mounted() {
     const { packageId, lessonId } = this.$route.params
     const [learnRecords, lessonDetail] = await Promise.all([
-      lesson.lessons.learnRecords({ lessonId: Number(lessonId) }),
+      lesson.lessons.getLastLearnRecordById({ lessonId: Number(lessonId) }),
       lesson.lessons.lessonDetail({ lessonId: Number(lessonId) })
     ]).catch(e => console.error(e))
     this.lessonDetail = lessonDetail || {}
-    this.learnRecords = learnRecords || []
+    this.learnRecords = learnRecords.rows || []
     this.summary = {
       name: this.lessonName,
       day: this.day,
@@ -55,7 +53,6 @@ export default {
     }
     this.isLoading = false
   },
-  methods: {},
   computed: {
     isEn() {
       return locale === 'en-US'
@@ -64,7 +61,7 @@ export default {
       return _.get(this.lastLearnRecord, 'extra.howManyDays', 1)
     },
     lastLearnRecord() {
-      return this.learnRecords[this.learnRecords.length - 1] || {}
+      return this.learnRecords[0] || {}
     },
     lessonId() {
       return this.lessonDetail.id || ''
@@ -79,7 +76,7 @@ export default {
       return this.lessonDetail.skills
     },
     lastTime() {
-      let arr = this.learnRecords.filter(({ extra: { quiz } }) =>
+      let arr = this.learnRecords.filter(({ extra: { quiz = [] } }) =>
         quiz.every(item => item.result !== null)
       )
       if (arr.length === 0) {

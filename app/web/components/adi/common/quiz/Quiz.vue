@@ -9,7 +9,7 @@
       <div class="quiz-content">
         <div class="title break-word">{{ item.title }}
           <span v-if="item.type == 1">(
-            <em>{{$t('card.multipleChoices')}}</em>)</span>
+            <span class="multiple-choices-font">{{$t('card.multipleChoices')}}</span>)</span>
         </div>
         <div :data-answer="item.answer" class="getData">
           <div class="opt-item" v-for="(opt, index) in item.options" v-if="item.type == 0 || item.type == 1 || item.type == 2" :key="index">
@@ -129,7 +129,7 @@ export default {
   padding-left: 10px;
 }
 
-em {
+.multiple-choices-font {
   color: #ff414a;
   font-style: normal;
 }
@@ -179,44 +179,6 @@ em {
   color: #ff414a;
   margin-bottom: 0;
   padding: 15px 20px 0;
-}
-
-.answer-sheet {
-  position: fixed;
-  /*固定定位*/
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  height: 60px;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  list-style-type: none;
-  padding-top: 20px;
-  /* overflow: hidden; */
-}
-
-/* .answer-sheet{
-    max-height: 600px;
-    text-align: center;
-    margin: 20px 0;
-    padding: 0 10px;
-    overflow: hidden;
-    box-sizing: border-box;
-    list-style-type: none;
-  } */
-.answer-sheet li {
-  font-size: 16px;
-  width: 70px;
-  height: 25px;
-  margin: 5px 10px;
-  float: left;
-  line-height: 1.5;
-  background-color: #f2f2f2;
-  border-radius: 4px;
-}
-
-.answer-sheet a {
-  text-decoration: none;
 }
 
 .quiz-item-done {

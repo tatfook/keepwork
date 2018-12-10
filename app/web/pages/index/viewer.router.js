@@ -4,6 +4,7 @@ const HomePage = () => import('@/components/common/HomePage')
 const CreativityPage = () => import('@/components/common/CreativityPage')
 const ExplorationPage = () => import('@/components/common/ExplorationPage')
 const StudyPage = () => import('@/components/common/StudyPage')
+const KeepworkAgreement = () => import('@/components/common/KeepworkAgreement')
 
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
       path: '/l',
       name: 'StudyPage',
       component: StudyPage,
+    },
+    {
+      path: '/agreement',
+      name: 'KeepworkAgreement',
+      component: KeepworkAgreement
     }
   ]
 })

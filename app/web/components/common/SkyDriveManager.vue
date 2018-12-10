@@ -1,8 +1,8 @@
 <template>
 
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
-    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :isEditorPage='isEditorPage' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' :isEditorPage='isEditorPage' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
@@ -15,6 +15,7 @@ import mediaType from './skyDrive/mediaType'
 export default {
   name: 'SkyDriveManager',
   props: {
+    isSiteMode: Boolean,
     mediaLibrary: {
       type: Boolean,
       default: false
@@ -51,6 +52,9 @@ export default {
     }),
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
+    },
+    isUseFileInSiteMode(){
+      return this.isSiteMode === false ? false : this.isEditorPage
     },
     tableTypeComp() {
       return this.isMounted ? this.$refs.tableTypeComp : ''
@@ -216,7 +220,7 @@ export default {
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
     async handleGetUrl({ file }) {
-      return this.isEditorPage
+      return this.isUseFileInSiteMode
         ? await this.getSiteFileUrl(file)
         : await this.getFileRawUrl(file)
     },

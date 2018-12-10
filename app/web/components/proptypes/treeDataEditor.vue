@@ -17,13 +17,26 @@
           <el-input :style="fixPadding(node, data)" :placeholder='$t("editor.menuName")' :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
-          <el-input :ref='"link"+node.id' :placeholder='$t("editor.inputConnection")' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+          <el-tooltip class="item" :disabled='warningInput(data)' effect="dark" :content="$t('editor.warningInput')" placement="top">
+            <el-input :ref='"link"+node.id' :style="warningInput(data, node)" :placeholder='$t("editor.inputConnection")' @change="changeInputColor(data, node)" :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link", node)' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+          </el-tooltip>
+        </span>
+        <span class="node-prompt">
+          <i v-if="!warningInput(data)" class="iconfont icon-prompt"></i>
         </span>
         <span class="node-operate">
-          <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
-          <el-button v-tooltip='$t("editor.insertBefore")' icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
-          <el-button v-tooltip='$t("editor.insertChild")' icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
-          <el-button v-tooltip='$t("editor.delete")' icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          <el-tooltip :content="$t('editor.insertAfter')" placement="top">
+            <el-button icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertBefore')" placement="top">
+            <el-button icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertChild')" placement="top">
+            <el-button icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.delete')" placement="top">
+            <el-button icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          </el-tooltip>
         </span>
       </span>
     </el-tree>
@@ -33,13 +46,14 @@
     </p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose">{{$t('el.messagebox.cancel')}}</el-button>
-      <el-button type="primary" @click="finishEditingMenu">{{$t('el.messagebox.confirm')}}</el-button>
+      <el-button type="primary" :disabled='notButton' @click="finishEditingMenu">{{$t('el.messagebox.confirm')}}</el-button>
     </span>
   </el-dialog>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import { setTimeout } from 'timers'
+import { types } from 'util';
 
 let newMenuId = 1
 
@@ -54,7 +68,8 @@ export default {
       defaultProps: {
         children: 'child',
         label: 'name'
-      }
+      },
+      notButton: false
     }
   },
   computed: {
@@ -100,8 +115,47 @@ export default {
         }
         }, 0)
     },
+    warningInput(item, node){
+      if(item && item.link){
+        let currentUrl = item.link
+        let url = /(^(http|https):\/\/.+|^\/(\w)+)/
+        let self = this
+        function inputStyle(data) {
+          if(!node){
+            return
+          }
+          let name = "link" + node.id
+          setTimeout(() => {
+            if(self.$refs[name]){
+              let inputStyle = self.$refs[name].$refs["input"]
+              if(!inputStyle){
+                return
+              }
+              if(data){
+                inputStyle.style.borderWidth = null
+                inputStyle.style.borderStyle = null
+                inputStyle.style.borderColor = null
+              }else{
+                inputStyle.style.borderWidth = '1px'
+                inputStyle.style.borderStyle = 'solid'
+                inputStyle.style.borderColor = 'red'
+              }
+            }
+          }, 0)
+        }
+        if(currentUrl.match(url)) {
+          inputStyle(true)
+          this.notButton = false
+          return true
+        } else {
+          inputStyle(false)
+          this.notButton = true
+          return false
+        }
+      }
+      return true
+    },
     finishEditingMenu() {
-      this.handleClose()
       function deleteLevel(data){
          _.forEach(data, (item, key) => {
            if(item.level) {
@@ -129,6 +183,7 @@ export default {
       }
       let treeDataResult = this.treeData.map(fixLinkItem)
       this.$emit('finishEditing', treeDataResult)
+      this.handleClose()
     },
     showInput(inputRefId, data, type) {
       inputRefId = type + inputRefId
@@ -140,7 +195,25 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.focus()
     },
-    hideInput(data, type) {
+    changeInputColor(data, node){
+      let name = "link" + node.id
+      if(data && data.link == '') {
+        if(this.$refs[name]){
+          let inputStyle = this.$refs[name].$refs["input"]
+          if(!inputStyle){
+            return
+          }
+          inputStyle.style.borderWidth = null
+          inputStyle.style.borderStyle = null
+          inputStyle.style.borderColor = null
+        }
+      }
+    },
+    hideInput(data, type, node) {
+      if(data && data.link == '') {
+        this.notButton = false
+      }
+      this.warningInput(data)
       let showKey = type + 'InputShow'
       data[showKey] = false
     },
@@ -263,12 +336,18 @@ export default {
     flex-basis: 135px;
     flex-shrink: 0;
     flex-grow: 0;
-    margin-left: 10px;
     box-sizing: border-box;
     min-width: 0;
     .el-button:hover {
       color: #1989fa
     }
+  }
+  .node-prompt {
+    flex-basis: 20px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    min-width: 0;
   }
   .el-tree-node__content {
     height: 34px;
@@ -321,6 +400,9 @@ export default {
     font-size: 28px;
     vertical-align: middle;
     color: #3ba4ff;
+  }
+  .icon-prompt {
+    color: red;
   }
 }
 </style>

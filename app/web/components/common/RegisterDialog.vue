@@ -32,7 +32,8 @@
       </el-row>
     </el-form-item>
     <el-form-item>
-      <el-button class="login-btn" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
+      <div class="agreement"><el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox></div>
+      <el-button class="login-btn" :disabled="!checkedAgreement" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -65,6 +66,7 @@ export default {
       nowOrigin: document.location.origin,
       count: 60,
       smsId: '',
+      checkedAgreement: false,
       ruleForm: {
         username: '',
         password: '',
@@ -142,8 +144,8 @@ export default {
       this.usernameError = ''
     },
     isExist() {
-      if (!this.ruleForm.username) return
       this.visible = false
+      if (!this.ruleForm.username) return
       keepwork.user
         .getUser(this.ruleForm.username)
         .then(res => {
@@ -278,6 +280,21 @@ export default {
         .send-code-button {
           width: 100%;
         }
+      }
+    }
+    .agreement{
+      .el-checkbox{
+        display: flex;
+        align-items: center;
+      }
+      .el-checkbox__label{
+        display: inline-block;
+        word-break: break-word;
+        white-space: normal;
+       }
+      a{
+        text-decoration: none;
+        color: #409efe;
       }
     }
     &-operate {

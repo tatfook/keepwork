@@ -152,16 +152,19 @@ const actions = {
     let { username } = userDetail
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
   },
-  async getUserDetailWithRankByUserId(context, { userId }) {
+  async getUserDetailWithRankByUserIdOrUsername(context, { userId, username }) {
     let { commit } = context
-    let userDetailWithRank = await keepwork.user.getDetailWithRankById({ userId })
-    commit(GET_USER_DETAIL_WITH_RANK_SUCCESS, { userId, userDetailWithRank })
+    let userKey = (userId === undefined) ? username : userId
+    let userDetailWithRank = await keepwork.user.getDetailWithRankByIdOrUsername({ userKey })
+    userId = _.get(userDetailWithRank, 'id')
+    username = _.get(userDetailWithRank, 'username')
+    commit(GET_USER_DETAIL_WITH_RANK_SUCCESS, { userId, username, userDetailWithRank })
   },
   async updateUserInfo(context, userInfo) {
     let { getters: { userId }, dispatch } = context
     await keepwork.user.update({ userId, userInfo })
     await dispatch('getProfile', { useCache: false })
-    await dispatch('getUserDetailWithRankByUserId', { userId })
+    await dispatch('getUserDetailWithRankByUserIdOrUsername', { userId })
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context
@@ -673,6 +676,10 @@ const actions = {
     let result = await keepwork.user.changePassword({ oldpassword, password: newpassword })
     return result
   },
+  async passwordReset(context, payload) {
+    const result = await keepwork.user.passwordReset(payload)
+    return result
+  },
   async getByEmail(context, { email }) {
     let users = await keepwork.user.getByEmail({ email })
     return users.length > 0
@@ -680,6 +687,14 @@ const actions = {
   async getByCellphone(context, { cellphone }) {
     let users = await keepwork.user.getByCellphone({ cellphone })
     return users.length > 0
+  },
+  async getCodeByEmail(context, payload) {
+    const users = await keepwork.user.getResetCodeByEmail(payload)
+    return users
+  },
+  async getCodeByCellphone(context, payload) {
+    const users = await keepwork.user.getResetCodeByCellphone(payload)
+    return users
   },
   async verifyEmailOne(context, { email, bind }) {
     return keepwork.user.verifyEmailOne({ email, bind })

@@ -63,11 +63,6 @@ export default {
           this.isLogin = false
         })
     }
-    if (this.isPendingReview) {
-      if (!this.isOwnPackage || !this.isTeacher) {
-        this.$router.push({ name: 'StudentCenter' })
-      }
-    }
   },
   computed: {
     ...mapGetters({

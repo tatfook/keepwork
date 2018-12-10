@@ -2,43 +2,46 @@
   <div class="user-certificate">
     <el-card class="user-certificate-card" shadow="never">
       <div slot="header" class="clearfix">
-        <span>我的证书</span>
-        <el-button v-show="!isCertificateEmpty" class="user-certificate-card-header-button" type="text" @click="showAddingDialog">添加</el-button>
+        <span>{{$t("profile.myCertificates")}}</span>
+        <el-button v-if="isLoginUserEditable" v-show="!isCertificateEmpty" class="user-certificate-card-header-button" type="text" @click="showAddingDialog">{{$t("profile.add")}}</el-button>
       </div>
       <div class="user-certificate-list" v-if="!isCertificateEmpty" v-loading="isLoading">
         <div class="user-certificate-item" v-for="(certificate, index) in userCertifications" :key="index">
-          <span class="user-certificate-item-title">{{certificate.title}}</span>
-          <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
-          <div class="user-certificate-item-operations">
-            <el-button type="text" @click="editCertificate(certificate, index)">
-              <i class="iconfont icon-edit-square"></i>编辑
-            </el-button>
-            <el-button type="text" @click="deleteCertificate(certificate, index)">
-              <i class="iconfont icon-delete1"></i>删除
-            </el-button>
+          <div class="user-certificate-item-header">
+            <span class="user-certificate-item-title">{{certificate.title}}</span>
+            <span class="user-certificate-item-date">{{certificate.getDate | formatDate}}</span>
+            <div class="user-certificate-item-operations" v-if="isLoginUserEditable">
+              <el-button type="text" @click="editCertificate(certificate, index)">
+                <i class="iconfont icon-edit-square"></i>{{$t("profile.edit")}}
+              </el-button>
+              <el-button type="text" @click="deleteCertificate(certificate, index)">
+                <i class="iconfont icon-delete1"></i>{{$t("profile.delete")}}
+              </el-button>
+            </div>
           </div>
+          <p v-show="certificate.description">{{certificate.description}}</p>
         </div>
       </div>
       <div class="user-certificate-empty" v-if="isCertificateEmpty">
         <img src="@/assets/img/default_certificate.png" alt="">
-        <p><span class="user-certificate-empty-anchor" @click="showAddingDialog">添加</span>个人证书，展现更好的自己</p>
+        <p><span v-if="isLoginUserEditable" class="user-certificate-empty-anchor" @click="showAddingDialog">{{$t("profile.add")}}</span>{{isLoginUserEditable ? $t("profile.addCertificatesInfo") : $t("profile.noContentForCertificate")}}</p>
       </div>
     </el-card>
-    <el-dialog title="添加证书" :visible.sync="isAddingDialogVisible" width="416px" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
+    <el-dialog v-if="isLoginUserEditable" :title="$t('profile.addCertificate')" :visible.sync="isAddingDialogVisible" v-loading="isLoading" class="user-certificate-adding-dialog" :before-close="handleAddingDialogClose">
       <el-form label-position="top" :model="newCertificate">
-        <el-form-item label="名称">
+        <el-form-item :label="$t('profile.name')">
           <el-input v-model="newCertificate.title"></el-input>
         </el-form-item>
-        <el-form-item label="时间">
+        <el-form-item :label="$t('profile.gainAt')">
           <el-date-picker v-model="newCertificate.getDate" type="date"></el-date-picker>
         </el-form-item>
-        <el-form-item label="证书描述">
+        <el-form-item :label="$t('profile.certificateDescription')">
           <el-input type="textarea" resize="none" v-model="newCertificate.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleAddingDialogClose">取消</el-button>
-        <el-button type="primary" @click="handleAddCertificate">确定</el-button>
+        <el-button @click="handleAddingDialogClose">{{$t("common.Cancel")}}</el-button>
+        <el-button type="primary" @click="handleAddCertificate">{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -52,6 +55,10 @@ export default {
     nowUserDetail: {
       type: Object,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -180,10 +187,23 @@ export default {
   }
   &-item {
     margin-bottom: 8px;
-    display: flex;
-    position: relative;
+    border-bottom: 1px dashed #e8e8e8;
+    & > p {
+      margin: 8px 0;
+      font-size: 12px;
+      color: #909399;
+      word-break: break-all;
+    }
     &:last-child {
       margin-bottom: 0;
+      border-bottom: none;
+      & > p {
+        margin-bottom: 0;
+      }
+    }
+    &-header {
+      display: flex;
+      position: relative;
     }
     &-title {
       flex: 1;
@@ -209,6 +229,9 @@ export default {
       .el-button + .el-button {
         margin-left: 4px;
       }
+      .el-button:hover {
+        color: #2397f3;
+      }
     }
     &:hover &-operations {
       display: inline-block;
@@ -224,6 +247,10 @@ export default {
     }
   }
   &-adding-dialog {
+    .el-dialog {
+      width: 416px;
+      max-width: 100%;
+    }
     .el-dialog__header {
       border-bottom: 1px solid #e8e8e8;
       padding: 16px;
@@ -251,6 +278,25 @@ export default {
       width: 88px;
       height: 36px;
       line-height: 36px;
+      padding: 0 16px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-certificate {
+    &-card {
+      border-radius: 0;
+      border-width: 1px 0;
+      .el-card__header {
+        padding: 9px 16px;
+      }
+      .el-card__body {
+        padding: 16px;
+      }
+    }
+    &-adding-dialog {
       padding: 0 16px;
     }
   }

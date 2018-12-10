@@ -163,7 +163,7 @@ const actions = {
   },
   async favoriteProject(context, { objectId, objectType }) {
     let { dispatch } = context
-    await keepwork.favorites.favoriteProject({ objectId, objectType }).then(async () => {
+    await keepwork.favorites.favoriteObject({ objectId, objectType }).then(async () => {
       await dispatch('getFavoriteState', { objectId, objectType, useCache: false })
       await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
       return Promise.resolve()
@@ -173,7 +173,7 @@ const actions = {
   },
   async unFavoriteProject(context, { objectId, objectType }) {
     let { dispatch } = context
-    await keepwork.favorites.unFavoriteProject({ objectId, objectType }).then(async () => {
+    await keepwork.favorites.unFavoriteObject({ objectId, objectType }).then(async () => {
       await dispatch('getFavoriteState', { objectId, objectType, useCache: false })
       await dispatch('getProjectDetail', { projectId: objectId, useCache: false })
       return Promise.resolve()

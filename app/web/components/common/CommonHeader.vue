@@ -79,11 +79,12 @@
             slot="dropdown"
             class="user-menu-dropdown"
           >
-            <div class="greeting">{{$t("common.hello")}}，{{username}}</div>
-            <!-- <el-dropdown-item divided>
-              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
-            <!-- </el-dropdown-item> -->
+            <div class="greeting">{{$t("common.hello")}}，{{username}}
+            </div>
             <el-dropdown-item divided>
+              <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
               <a
                 href="#"
                 @click.stop.prevent="goCreativityPage"
@@ -521,6 +522,9 @@ export default {
       if (this.$route.name !== 'HomePage') {
         window.location.href = `/`
       }
+    },
+    goUserProfilePage() {
+      return window.location.href = `${this.locationOrigin}/u/${this.username}`
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true

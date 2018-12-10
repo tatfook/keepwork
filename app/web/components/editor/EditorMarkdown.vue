@@ -157,27 +157,26 @@ export default {
       this.$store.dispatch('setActiveManagePaneComponent', 'ModsList') // TODO: move wintype defination to gConst
     },
     highlightCodeByMod(mod) {
-      if (mod.modType === 'ModMarkdown') return
+      if (mod.modType === 'ModMarkdown') return this.clearHighlight()
       let lineBegin = mod.lineBegin - 1
       let lineEnd = BlockHelper.endLine(mod)
       this.clearHighlight()
-      for (let i = lineBegin; i < lineEnd; i++) {
-        this.editor.addLineClass(i, 'gutter', 'mark-text')
-      }
+      this.editor.addLineClass(lineBegin, 'background', 'mark-text')
+      this.editor.addLineClass(lineEnd - 1, 'background', 'mark-text')
     },
     clearHighlight() {
       let lineCount = this.editor.lineCount()
-      while (lineCount--) {
-        this.editor.removeLineClass(lineCount, 'gutter', 'mark-text')
+      while(lineCount--) {
+          this.editor.removeLineClass(lineCount, 'background', 'mark-text')
       }
     },
     handleClick(codeMirror) {
-      this.clearHighlight()
       this.$nextTick(() => {
         let line = codeMirror.getCursor().line
         let mod = Parser.getBlockByCursorLine(this.modList || [], line + 1)
+        if (mod && this.activeMod && mod.key === this.activeMod.key) return
         if (mod) {
-          this.highlightCodeByMod(mod)
+          // this.highlightCodeByMod(mod)
           let currentActiveModKey = this.activeMod && this.activeMod.key
           if (mod.key !== currentActiveModKey) this.setActiveMod(mod.key)
           if (mod.cmd === 'Markdown') {
@@ -207,7 +206,7 @@ export default {
     },
     flushParserCache() {
       if (
-        this.parserCache.code &&
+        this.parserCache.code !== undefined &&
         this.parserCache.code !== this.code
       ) {
         return this.$store.dispatch('updateMarkDown', this.parserCache)
@@ -456,7 +455,8 @@ export default {
   border: none;
 }
 .mark-text {
-  border-right: 4px solid #ffac36;
+  background-color: #cdd4db;
+  /* border-right: 4px solid #ffac36; */
 }
 .mark-bg {
   background: #ffe193;

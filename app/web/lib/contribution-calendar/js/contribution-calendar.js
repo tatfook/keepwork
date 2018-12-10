@@ -143,6 +143,12 @@ function showTables(svg, yearLen) {
     r.setAttribute('height', '10')
     r.setAttribute('x', (14 - locX))
     r.setAttribute('y', (12 * locY))
+
+    let title = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+    let textNode = document.createTextNode(dataDate + ' 的活跃度为 ' + dataCount)
+    title.appendChild(textNode)
+    r.appendChild(title)
+
     g.appendChild(r)
     svg.appendChild(g)
   }

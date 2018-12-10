@@ -122,8 +122,9 @@ export default {
       activeTabIndex: '1',
       currIndex: 1,
       searchKey: '',
-      sortProjects: '',
-      currSortMode: this.$t("explore.overall"),
+      sortProjects: 'recent_view',
+      // currSortMode: this.$t("explore.overall"),
+      currSortMode: this.$t("explore.hottest"),
       searchResultAmount: 0
     }
   },
@@ -152,21 +153,19 @@ export default {
         case 5:
         case 8:
           return [
-            { mode: this.$t("explore.overall"), command: '/综合' },
+            // { mode: this.$t("explore.overall"), command: '/综合' },
             { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
             { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
           ]
-          break
         case 6:
           return [
-            { mode: this.$t("explore.overall"), command: '/综合' },
+            // { mode: this.$t("explore.overall"), command: '/综合' },
             { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
             { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
           ]
-          break
         default:
-          return [{ mode: this.$t("explore.overall"), command: '/综合' }]
-          break
+          // return [{ mode: this.$t("explore.overall"), command: '/综合' }]
+          return [{ mode: this.$t("explore.hottest"), command: 'recent_view/热门' }]
       }
     }
   },
@@ -230,8 +229,14 @@ export default {
     },
     selectTab(index) {
       this.currIndex = index
-      this.currSortMode = this.$t("explore.overall")
-      this.sortProjects = ''
+      if(index == 6){
+        this.currSortMode = this.$t("explore.popularity")
+        this.sortProjects = 'total_fans'
+      }else{
+        // this.currSortMode = this.$t("explore.overall")
+        this.currSortMode = this.$t("explore.hottest")
+        this.sortProjects = 'recent_view'
+      }
     }
   },
   components: {
@@ -254,7 +259,7 @@ export default {
       max-width: 1200px;
       .theme {
         text-align: center;
-        margin: 42px;
+        margin: 24px auto 32px;
         .explore {
           color: #409eff;
         }
@@ -263,6 +268,9 @@ export default {
         &-tab {
           &-menu {
             border: none;
+            &.el-menu.el-menu--horizontal{
+              border: none;
+            }
           }
         }
         &-input {
@@ -271,11 +279,11 @@ export default {
           .el-input__inner {
             height: 40px;
             background: #f5f5f5;
-            border: none;
+            border: #f5f5f5 1px solid;
           }
           .el-input__inner:hover,
           .el-input__inner:focus {
-            border-color: #dcdfe6;
+            border-color: #409efe;
           }
           .el-input__suffix {
             right: 0;

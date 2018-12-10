@@ -1,7 +1,7 @@
 <template>
   <div class="profile-header">
     <div class="container">
-      <el-breadcrumb separator="/" class="profile-header-breadcrumb">
+      <el-breadcrumb separator="/" class="profile-header-breadcrumb hidden-sm-and-down">
         <el-breadcrumb-item :to="{ path: '/' }">
           <img class="profile-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
@@ -11,14 +11,14 @@
       </el-breadcrumb>
       <el-tabs v-model="activePageName" class="profile-header-tabs" @tab-click="handleTabClick">
         <el-tab-pane name="ProfileIndexPage">
-          <span slot="label" class="profile-header-tabs-label">主页</span>
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.overview")}}</span>
         </el-tab-pane>
-        <el-tab-pane name="ProfileSocialPage">
-          <span slot="label" class="profile-header-tabs-label">社交</span>
+        <!-- <el-tab-pane name="ProfileSocialPage">
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.friends")}}</span>
         </el-tab-pane>
         <el-tab-pane name="ProfileProjectPage">
-          <span slot="label" class="profile-header-tabs-label">项目</span>
-        </el-tab-pane>
+          <span slot="label" class="profile-header-tabs-label">{{$t("profile.projects")}}</span>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>
@@ -112,6 +112,31 @@ export default {
     }
     .el-tabs__active-bar {
       display: none;
+    }
+  }
+}
+</style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .profile-header {
+    padding: 0 16px;
+        box-shadow: none;
+    border-bottom: 1px solid #ebeef5;
+
+    &-tabs {
+      &-label {
+        color: #909399;
+      }
+      .el-tabs__item.is-active {
+        & > span {
+          color: #303133;
+        }
+      }
+    }
+    .el-tabs__nav {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
     }
   }
 }

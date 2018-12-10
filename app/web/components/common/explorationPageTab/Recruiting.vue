@@ -46,7 +46,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { imageUrl: i.cover },
+          extra: { imageUrl: i.cover, videoUrl: i.video  },
           name: i.name,
           name_title: this.searchKeyResult(i),
           visit: i.total_view,
@@ -54,6 +54,7 @@ export default {
           comment: i.total_comment || 0,
           user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
+          createdAt: i.created_time,
           type: i.type,
           privilege: i.recruiting ? 1 : 2
         }

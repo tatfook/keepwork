@@ -116,9 +116,13 @@ export default {
                 []
               )
             } else {
-              return (
-                <div class="mx-client-start">{self.$t(self.options.desc)}</div>
-              )
+              if (self.editMode) {
+                return (
+                  <div class="mx-client-start">{self.$t(self.options.desc)}</div>
+                )
+              } else {
+                return ''
+              }
             }
           } else {
             if (self.properties.data) {

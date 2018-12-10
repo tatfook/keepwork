@@ -13,7 +13,8 @@
           <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
         </el-form-item>
         <div class="login-dialog-form-operate">
-          <div class="forget-pwd"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div>
+          <!-- <div class="forget-pwd"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div> -->
+          <div class="forget-pwd" @click="handleShowResetForm">{{$t('common.forgetPassword')}}?</div>
           <div class="signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.clickRegister')}}</a></div>
         </div>
         <div class="login-dialog-form-three-login">
@@ -47,6 +48,13 @@
     <div v-show="isPerfectRegisterInfo">
       <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
+    <div v-show="isShowPasswordResetForm">
+      <password-reset-form></password-reset-form>
+      <div class="register-oprate">
+        <div @click="backHome" class="back-home-page">{{$t('editor.backHomePage')}}</div>
+        <div @click="hasAccountToLogin" class="has-account">{{$t('common.alreadyOwnAccount')}}<span class="login-now">{{$t('common.fastLogin')}}</span></div>
+      </div>
+    </div>
   </el-dialog>
 
 </template>
@@ -54,6 +62,7 @@
 import { mapActions } from 'vuex'
 import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
 import RegisterDialog from '@/components/common/RegisterDialog'
+import PasswordResetForm from '@/components/common/PasswordResetForm'
 
 export default {
   name: 'LoginDialog',
@@ -78,6 +87,7 @@ export default {
       isLoginForm: true,
       isRegisterForm: false,
       isPerfectRegisterInfo: false,
+      isShowPasswordResetForm: false,
       nowOrigin: document.location.origin,
       userThreeService: {},
       ruleForm: {
@@ -107,12 +117,19 @@ export default {
       userLogin: 'user/login',
       userThirdLogin: 'user/thirdLogin'
     }),
+    handleShowResetForm() {
+      this.isShowPasswordResetForm = true
+      this.isLoginForm = false
+      this.isRegisterForm = false
+      this.isPerfectRegisterInfo = false
+    },
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
     hasAccountToLogin() {
       this.isLoginForm = true
       this.isRegisterForm = false
+      this.isShowPasswordResetForm = false
       this.isPerfectRegisterInfo = false
     },
     showMessage(type, message) {
@@ -188,7 +205,8 @@ export default {
   },
   components: {
     RegisterDialog,
-    PerfectRegisterInfo
+    PerfectRegisterInfo,
+    PasswordResetForm
   }
 }
 </script>
@@ -257,6 +275,7 @@ export default {
         width: 115px;
         cursor: pointer;
         text-align: left;
+        color:#1272cc;
       }
       a {
         text-decoration: none;

@@ -24,7 +24,7 @@
       </el-form>
     </div>
     <dialog-operations class="website-basic-message-operations" @save="submitChange" @close="handleClose"></dialog-operations>
-    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :isSiteMode='false' :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>

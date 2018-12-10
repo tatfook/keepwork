@@ -110,10 +110,11 @@ const mutations = {
       [username]: userDetail
     })
   },
-  [GET_USER_DETAIL_WITH_RANK_SUCCESS](state, { userId, userDetailWithRank }) {
+  [GET_USER_DETAIL_WITH_RANK_SUCCESS](state, { userId, username, userDetailWithRank }) {
     Vue.set(state, 'usersDetailWithRank', {
       ...state.usersDetailWithRank,
-      [userId]: userDetailWithRank
+      [userId]: userDetailWithRank,
+      [username]: userDetailWithRank
     })
   },
   [GET_CONTRIBUTED_WEBSITE_SUCCESS](state, { username, list }) {

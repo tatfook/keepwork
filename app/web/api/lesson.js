@@ -48,7 +48,7 @@ export const packages = {
     post(`packages/${packageId}/audit`, { state }),
   release: async ({ packageDetail }) =>
     put(`packages/${packageDetail.id}`, packageDetail),
-  delete: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
+  destroy: async ({ packageId }) => deleteMethod(`packages/${packageId}`),
   addLesson: async ({ packageId, lessonId }) =>
     post(`packages/${packageId}/lessons`, { lessonId }),
   removeLesson: async ({ packageId, lessonId }) => {
@@ -77,11 +77,12 @@ export const lessons = {
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
   isReward: async ({ packageId, lessonId }) =>
     get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),
-  delete: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
+  destroy: async ({ lessonId }) => deleteMethod(`lessons/${lessonId}`),
   lessonContentByVersion: async ({ lessonId, version = 1 }) =>
     get(`lessons/${lessonId}/contents?version=${version}`),
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
   learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
+  getLastLearnRecordById: async ({ lessonId }) => get(`learnRecords?lessonId=${lessonId}&x-per-page=1&x-order=createdAt-desc`),
   getLastLearnRecords: async () => get('learnRecords?x-per-page=1&x-order=createdAt-desc')
 }
 
