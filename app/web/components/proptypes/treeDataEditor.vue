@@ -18,15 +18,25 @@
         </span>
         <span class="node-link">
           <el-tooltip class="item" :disabled='warningInput(data)' effect="dark" :content="$t('editor.warningInput')" placement="top">
-            <el-input :ref='"link"+node.id' :style="warningInput(data, node)" :placeholder='$t("editor.inputConnection")' :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link")' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+            <el-input :ref='"link"+node.id' :style="warningInput(data, node)" :placeholder='$t("editor.inputConnection")' @change="changeInputColor(data, node)" :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link", node)' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
           </el-tooltip>
         </span>
-        <i v-if="!warningInput(data)" class="iconfont icon-prompt"></i>
+        <span class="node-prompt">
+          <i v-if="!warningInput(data)" class="iconfont icon-prompt"></i>
+        </span>
         <span class="node-operate">
-          <el-button v-tooltip='$t("editor.insertAfter")' icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
-          <el-button v-tooltip='$t("editor.insertBefore")' icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
-          <el-button v-tooltip='$t("editor.insertChild")' icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
-          <el-button v-tooltip='$t("editor.delete")' icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          <el-tooltip :content="$t('editor.insertAfter')" placement="top">
+            <el-button icon='iconfont icon-add-later1' circle @click='insert(node, data, "after")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertBefore')" placement="top">
+            <el-button icon='iconfont icon-add-before1' circle @click='insert(node, data, "before")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.insertChild')" placement="top">
+            <el-button icon='iconfont icon-add_subitem1-copy-copy' circle @click='insert(node, data, "child")'></el-button>
+          </el-tooltip>
+          <el-tooltip :content="$t('editor.delete')" placement="top">
+            <el-button icon='iconfont icon-delete' circle @click='remove(node, data)'></el-button>
+          </el-tooltip>
         </span>
       </span>
     </el-tree>
@@ -185,7 +195,21 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.focus()
     },
-    hideInput(data, type) {
+    changeInputColor(data, node){
+      let name = "link" + node.id
+      if(data && data.link == '') {
+        if(this.$refs[name]){
+          let inputStyle = this.$refs[name].$refs["input"]
+          if(!inputStyle){
+            return
+          }
+          inputStyle.style.borderWidth = null
+          inputStyle.style.borderStyle = null
+          inputStyle.style.borderColor = null
+        }
+      }
+    },
+    hideInput(data, type, node) {
       if(data && data.link == '') {
         this.notButton = false
       }
@@ -312,12 +336,18 @@ export default {
     flex-basis: 135px;
     flex-shrink: 0;
     flex-grow: 0;
-    margin-left: 20px;
     box-sizing: border-box;
     min-width: 0;
     .el-button:hover {
       color: #1989fa
     }
+  }
+  .node-prompt {
+    flex-basis: 20px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    min-width: 0;
   }
   .el-tree-node__content {
     height: 34px;
