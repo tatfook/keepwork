@@ -6,11 +6,11 @@
       </div>
       <div class="profile-social-main">
         <el-tabs class="profile-social-tabs profile-social-main-item" v-model="activeName">
-          <el-tab-pane name="first">
+          <el-tab-pane name="favorite">
             <span slot='label'>关注</span>
             <user-list :nowProfileUserId="nowProfileUserId" listType='favorite'></user-list>
           </el-tab-pane>
-          <el-tab-pane name="second">
+          <el-tab-pane name="follow">
             <span slot='label'>粉丝</span>
             <user-list :nowProfileUserId="nowProfileUserId" listType='follow'></user-list>
           </el-tab-pane>
@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'second'
+      activeName: 'favorite'
     };
   },
   computed: {

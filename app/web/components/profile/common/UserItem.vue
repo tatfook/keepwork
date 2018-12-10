@@ -4,11 +4,11 @@
       <img :src="user.portrait || defaultPortrait" alt="">
     </div>
     <div class="user-item-info">
-      <router-link class="user-item-info-name" :to="{name: 'ProfileIndexPage', params: {username: user.username}}" target="_blank">{{user.nickname}}</router-link>
+      <router-link class="user-item-info-name" :to="{name: 'ProfileIndexPage', params: {username: user.username}}" target="_blank">{{user.nickname || user.username}}</router-link>
       <div class="user-item-info-desc">{{user.description}}</div>
     </div>
     <div class="user-item-operate">
-      <el-button type="primary" plain>关注</el-button>
+      <el-button :type="user.isFollowed | buttonTypeFilter" plain>{{user.isFollowed ? '取消关注':'关注'}}</el-button>
     </div>
   </div>
 </template>
@@ -24,6 +24,11 @@ export default {
   data() {
     return {
       defaultPortrait: require('@/assets/img/default_portrait.png')
+    }
+  },
+  filters: {
+    buttonTypeFilter(isFollowed) {
+      return isFollowed ? 'text' : 'primary'
     }
   }
 }
@@ -46,6 +51,7 @@ export default {
   }
   &-info {
     flex: 1;
+    margin-right: 16px;
     &-name {
       font-size: 14px;
       color: #303133;
@@ -61,11 +67,21 @@ export default {
   }
   &-operate {
     .el-button {
+      font-size: 12px;
+    }
+    .el-button--primary {
+      padding: 5px 14px;
       background-color: transparent;
       color: #2397f3;
       border-color: #2397f3;
-      font-size: 12px;
-      padding: 5px 14px;
+    }
+    .el-button--text {
+      color: #909399;
+      &:hover,
+      &:focus {
+        color: #2397f3;
+        border-color: transparent;
+      }
     }
   }
 }

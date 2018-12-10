@@ -28,9 +28,17 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLogined: 'user/isLogined',
+      loginUserId: 'user/userId',
       favoriteUsers: 'profile/favoriteUsers',
       followUsers: 'profile/followUsers'
     }),
+    isLoginUserBeProfileUser() {
+      return this.loginUserId === this.nowProfileUserId
+    },
+    loginUserFavoriteUsers() {
+      return this.favoriteUsers({ userId: this.loginUserId })
+    },
     nowProfileFavoriteUsers() {
       return this.favoriteUsers({ userId: this.nowProfileUserId })
     },
@@ -44,14 +52,23 @@ export default {
       return this.listType === 'follow'
     },
     userList() {
+      let list = []
       if (this.isFavoriteType) {
-        return this.nowProfileFavoriteUsers
+        list = this.nowProfileFavoriteUsers
       } else {
-        return this.nowProfileFollowUsers
+        list = this.nowProfileFollowUsers
       }
+      let usersWithFollowState = _.map(list, user => {
+        let isUserInLoginUserFavorites = _.find(this.loginUserFavoriteUsers, { 'id': user.id })
+        return {
+          ...user,
+          isFollowed: !_.isUndefined(isUserInLoginUserFavorites)
+        }
+      })
+      return usersWithFollowState
     },
     isEmpty() {
-      return !Boolean(this.userList.length)
+      return !Boolean(this.userList && this.userList.length)
     },
     emptyImg() {
       return this.isFavoriteType ? require('@/assets/img/default_followers.png') : require('@/assets/img/default_fans.png')
@@ -67,11 +84,10 @@ export default {
     }),
     async initFavoriteData() {
       let userId = this.nowProfileUserId
-      if (this.isFavoriteType) {
-        await this.profileGetFavoriteUsers({ userId })
-      } else {
-        await this.profileGetFollowUsers({ userId })
-      }
+      await Promise.all([
+        this.isFavoriteType ? this.profileGetFavoriteUsers({ userId }) : this.profileGetFollowUsers({ userId }),
+        this.profileGetFavoriteUsers({ userId: this.loginUserId }),
+      ])
     }
   },
   components: {
