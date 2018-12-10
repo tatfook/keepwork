@@ -24,7 +24,8 @@
       </el-scrollbar>
     </el-col>
     <div class="col-between" :style='isDisplay'></div>
-    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }'>
+      <div class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -52,9 +53,11 @@
           <el-button type="primary" @click="handleMultipleTextDialogClose('save')">{{$t('common.confirmButtonText')}}</el-button>
         </span>
       </el-dialog>
+      </div>
     </el-col>
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }'>
+      <div class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -106,6 +109,7 @@
         </el-scrollbar>
       </el-row>
       <editor-markdown ref='codemirror' @insertBigfile='insertBigfile'></editor-markdown>
+      </div>
     </el-col>
     <el-col v-if="isWelcomeShow" class="guid-col">
       <el-row>
@@ -463,6 +467,7 @@ bigFile:
 .manager-win,
 .preview-win,
 .code-win {
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -489,9 +494,6 @@ bigFile:
 }
 #frameViewport {
   border: none;
-}
-.previewWin {
-  position: relative;
 }
 .mouse-event-backup {
   position: absolute;

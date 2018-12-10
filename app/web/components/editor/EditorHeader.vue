@@ -91,6 +91,10 @@
                   <i :class="['iconfont', 'icon-Chinese-english', isEnglish ? 'icon-language' : '']"></i>
                   {{$t('common.chinese-englishSwitch')}}
                 </button>
+                <button :class=" isEnglish ? 'btn-angles' : '' " @click="toggleAngles" :disabled="!isPreviewShow || !isCodeShow">
+                  <i class="iconfont icon-qiehuan"></i>
+                  {{$t('common.left-rightAngles')}}
+                </button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -316,6 +320,35 @@ export default {
         isPreviewShow: false,
         isCodeShow: true
       })
+      // this.isCodeShow &&
+      //   this.$store.dispatch('setAddingArea', {
+      //     area: this.gConst.ADDING_AREA_ADI
+      //   })
+    },
+    toggleAngles() {
+      let previewID = document.querySelector('#previewWin')
+      let preview = document.querySelector('.preview-win')
+      let codeID = document.querySelector('#codeWin')
+      let code = document.querySelector('.code-win')
+
+      if(!preview || !code) {
+        return false
+      }
+      if(previewID.querySelector('.preview-win')) {
+        previewID.appendChild(code)
+        codeID.appendChild(preview)
+        previewID.removeChild(preview)
+        preview = null
+        codeID.removeChild(code)
+        code = null
+      }else {
+        previewID.appendChild(preview)
+        codeID.appendChild(code)
+        previewID.removeChild(code)
+        code = null
+        codeID.removeChild(preview)
+        preview = null
+      }
     },
     async save() {
       let self = this
@@ -877,9 +910,10 @@ export default {
   }
 }
 .kp-menu {
-  .btn-language {
+  .btn-language, 
+  .btn-angles {
     height: 48px;
-    .icon-language {
+    .iconfont {
       line-height: 48px;
     }
   }
