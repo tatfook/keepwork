@@ -100,7 +100,7 @@ export default {
       if (result === true) {
         this.showMessage('success', this.$t('common.saveSuccess'))
       } else {
-        this.showMessage('error', this.$t('common.saveFail'))
+        this.showMessage('error', this.$t('user.pwdIncorrect'))
       }
       this.pwdFormDatas = {}
       this.loading = false
