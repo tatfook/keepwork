@@ -334,7 +334,7 @@
   "tips": {
     "mod": "模块",
     "copyUrl": "复制链接",
-    "openInNewWindow":"新窗口打开",
+    "openInNewWindow": "新窗口打开",
     "clickToShow": "点击显示",
     "clickToHide": "点击隐藏",
     "clickToAdd": "点击添加",
@@ -1477,6 +1477,9 @@
     "startToEnd": "至",
     "endDate": "结束日期",
     "whatAndHowCreat": "项目是什么？如何创建项目？",
-    "knowMore": "了解更多"
+    "knowMore": "了解更多",
+    "noContentForProject": "还没有创建项目~",
+    "noProjectToShow": "你还没有项目，",
+    "createNewProject": "立即创建新项目"
   }
 }

@@ -1472,6 +1472,9 @@
     "startToEnd": "To",
     "endDate": "End date",
     "whatAndHowCreat": "How to create projects? ",
-    "knowMore": "know more"
+    "knowMore": "know more",
+    "noContentForProject": "No content.",
+    "noProjectToShow": "No projects to show.",
+    "createNewProject": "Create New Project."
   }
 }

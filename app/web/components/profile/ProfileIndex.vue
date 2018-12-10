@@ -7,7 +7,7 @@
       </div>
       <div class="profile-index-main">
         <user-statics class="profile-index-main-item" :nowUserDetail='nowUserDetail'></user-statics>
-        <recent-project class="profile-index-main-item" :nowUserDetail='nowUserDetail'></recent-project>
+        <recent-project class="profile-index-main-item" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></recent-project>
         <contribution-calendar class="profile-index-main-item hidden-sm-and-down" :nowUserDetail='nowUserDetail'></contribution-calendar>
         <user-certificates class="profile-index-main-item hidden-md-and-up" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-certificates>
         <user-experiences class="profile-index-main-item" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-experiences>
