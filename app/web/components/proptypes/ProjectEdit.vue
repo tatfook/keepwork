@@ -1,8 +1,7 @@
 <template>
   <div class="project-edit-container">
     <el-button @click="handleChangeProp">test</el-button>
-    <el-input></el-input>
-
+    <el-input v-model="projectId"></el-input>
     <div class="project-edit-row">
       {{$t('card.projectTags')}} <el-switch></el-switch>
     </div>
@@ -16,11 +15,14 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      projectId: ''
+    }
   },
   methods: {
     handleChangeProp() {
-      this.$emit('onPropertyChange', {name: 'kevin', id: '90001'})
+      console.log(this.projectId)
+      this.$emit('onPropertyChange', { projectId: this.projectId })
     }
   },
 }
