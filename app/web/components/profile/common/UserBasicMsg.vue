@@ -1,7 +1,7 @@
 <template>
   <div class="user-basic-msg">
     <div class="user-basic-msg-profile">
-      <img :src='nowUserDetail.portrait' alt="">
+      <img :src='nowUserDetail.portrait || defaultPortrait' alt="">
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
@@ -61,6 +61,7 @@ export default {
   },
   data() {
     return {
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
@@ -137,7 +138,7 @@ export default {
       this.initFavoriteState()
     }
   },
-  components:{
+  components: {
     PersonalCenterDialog
   },
   filters: {
