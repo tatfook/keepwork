@@ -27,6 +27,8 @@ import AdiLesson from './lesson/lesson.proptypes'
 import AdiQuiz from './quiz/quiz.proptypes'
 import AdiHint from './hint/hint.proptypes'
 
+import AdiProject from './project/project.proptypes'
+
 export default {
   AdiMarkdown,
   AdiIFrame,
@@ -54,5 +56,6 @@ export default {
   AdiImg,
   AdiLesson,
   AdiQuiz,
-  AdiHint
+  AdiHint,
+  AdiProject
 }

@@ -17,6 +17,8 @@ import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 
+import ModProject from './web/project'
+
 let modsList = [
   {
     id: 1,
@@ -144,17 +146,17 @@ let modsList = [
     label: 'modList.lesson',
     children: [
       {
-        id: '9-1',
+        id: '7-1',
         label: 'modList.lesson',
         mods: [ModLesson]
       },
       {
-        id: '9-2',
+        id: '7-2',
         label: 'modList.quiz',
         mods: [ModQuiz]
       },
       {
-        id: '9-3',
+        id: '7-3',
         label: 'modList.hint',
         mods: [ModHint]
       }
@@ -162,15 +164,26 @@ let modsList = [
   },
   {
     id: 8,
+    label: 'modList.project',
+    children: [
+      {
+        id: '8-1',
+        label: 'modList.project',
+        mods: [ModProject]
+      }
+    ]
+  },
+  {
+    id: 9,
     label: 'modList.other',
     children: [
       {
-        id: '7-1',
+        id: '9-1',
         label: 'modList.paracraft',
         mods: [ModParacraft]
       },
       {
-        id: '7-2',
+        id: '9-2',
         label: 'modList.vipRead',
         mods: [ModVipRead]
       }
