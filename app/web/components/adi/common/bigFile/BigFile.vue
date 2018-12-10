@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     getSize() {
-      return filesize(this.properties.size)
+      return filesize(this.properties && this.properties.size || 0)
     },
     async download() {
       let downloadUrl = this.actualUrl
