@@ -8,7 +8,7 @@
       <div class="user-item-info-desc">{{user.description}}</div>
     </div>
     <div class="user-item-operate" v-if="!isLoginUserBeNowUser">
-      <el-button :loading="isFavoriteButtonLoading" :type="followState | buttonTypeFilter" plain @click="toggleFavoriteUser">{{followState ? '取消关注':'关注'}}</el-button>
+      <el-button :class="followState | buttonClassFilter" :loading="isFavoriteButtonLoading" type="primary" @click="toggleFavoriteUser">{{followState ? '已关注':'关注'}}</el-button>
     </div>
   </div>
 </template>
@@ -82,8 +82,8 @@ export default {
     }
   },
   filters: {
-    buttonTypeFilter(isFollowed) {
-      return isFollowed ? 'text' : 'primary'
+    buttonClassFilter(isFollowed) {
+      return isFollowed ? 'button-outline' : ''
     }
   }
 }
@@ -123,20 +123,12 @@ export default {
   &-operate {
     .el-button {
       font-size: 12px;
+      width: 66px;
+      padding: 5px 0;
     }
-    .el-button--primary {
-      padding: 5px 14px;
+    .button-outline {
       background-color: transparent;
       color: #2397f3;
-      border-color: #2397f3;
-    }
-    .el-button--text {
-      color: #909399;
-      &:hover,
-      &:focus {
-        color: #2397f3;
-        border-color: transparent;
-      }
     }
   }
 }
