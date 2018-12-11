@@ -1472,6 +1472,8 @@
     "startToEnd": "To",
     "endDate": "End date",
     "whatAndHowCreat": "How to create projects? ",
-    "knowMore": "know more"
+    "knowMore": "know more",
+    "noFriendsToShow": "No friends to show.",
+    "noFollowersToShow": "No followers to show."
   }
 }

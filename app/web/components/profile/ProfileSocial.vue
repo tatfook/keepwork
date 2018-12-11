@@ -7,7 +7,7 @@
       <div class="profile-social-main">
         <el-tabs class="profile-social-tabs profile-social-main-item" v-model="activeName" v-loading='isLoading'>
           <el-tab-pane name="favorite">
-            <span slot='label'>关注</span>
+            <span slot='label'>{{$t('profile.following')}}</span>
             <user-list v-if="!isEmpty" :userList='userList'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
@@ -15,7 +15,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane name="follow">
-            <span slot='label'>粉丝</span>
+            <span slot='label'>{{$t('profile.followers')}}</span>
             <user-list v-if="!isEmpty" :userList='userList'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
@@ -98,7 +98,7 @@ export default {
       return this.isFavoriteType ? require('@/assets/img/default_followers.png') : require('@/assets/img/default_fans.png')
     },
     emptyInfo() {
-      return this.isFavoriteType ? '还未关注任何人' : '还没有粉丝~'
+      return this.isFavoriteType ? this.$t('profile.noFriendsToShow') : this.$t('profile.noFollowersToShow')
     }
   },
   methods: {

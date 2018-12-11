@@ -8,7 +8,7 @@
       <div class="user-item-info-desc">{{user.description}}</div>
     </div>
     <div class="user-item-operate" v-if="!isLoginUserBeNowUser">
-      <el-button :class="followState | buttonClassFilter" :loading="isFavoriteButtonLoading" type="primary" @click="toggleFavoriteUser">{{followState ? '已关注':'关注'}}</el-button>
+      <el-button :class="followState | buttonClassFilter" :loading="isFavoriteButtonLoading" type="primary" @click="toggleFavoriteUser">{{followState ? $t('profile.followed'):$t('profile.follow')}}</el-button>
     </div>
   </div>
 </template>
