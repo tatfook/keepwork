@@ -325,7 +325,7 @@ const getters = {
   threeServices: (state) => state.threeServices,
   getThreeService: (state, { threeServices }) => type => {
     let result = _.find(threeServices, (o) => {
-      return o.serviceName === type
+      return o.type === type
     })
     return result
   },
