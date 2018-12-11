@@ -1477,6 +1477,8 @@
     "startToEnd": "至",
     "endDate": "结束日期",
     "whatAndHowCreat": "项目是什么？如何创建项目？",
-    "knowMore": "了解更多"
+    "knowMore": "了解更多",
+    "noFriendsToShow": "还未关注任何人~",
+    "noFollowersToShow": "还没有粉丝~"
   }
 }

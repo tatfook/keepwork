@@ -229,6 +229,7 @@ export const favorites = {
   unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
   getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
+  getUserFollows: async ({ objectType, objectId }) => get(`favorites/follows?objectId=${objectId}&objectType=${objectType}`),
   getUserSearchAllFavorites: async (args) => post('favorites/search', args)
 }
 
