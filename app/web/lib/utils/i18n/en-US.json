@@ -394,7 +394,9 @@
     "lessonShare": "LessonShare",
     "package": "Package",
     "lessonPackage": "Lesson Package",
-    "hint": "Hint"
+    "hint": "Hint",
+
+    "project": "Project"
   },
   "adi": {
     "hint": {
@@ -605,7 +607,16 @@
     "keepOneOption": "Please set at least one answer",
     "coinsInsufficient": "Sorry. Your coins are insufficient.",
 
-    "hint": "hint"
+    "hint": "hint",
+
+    "project": "Project",
+    "projectTags": "Project Tags",
+    "projectMembers": "Project Members",
+
+    "projectId": "Project ID",
+
+    "projectNotFound": "Project Not Found",
+    "projectInputId": "Enter the project ID to get the project data"
   },
   "field": {
     "fileId": "file Id",

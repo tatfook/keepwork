@@ -396,7 +396,9 @@
     "package": "课程包",
     "lessonPackage": "课程包",
 
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目"
   },
   "adi": {
     "hint": {
@@ -607,7 +609,16 @@
     "keepTwoOptions": "至少保留两个选项",
     "keepOneOption": "至少保留一个选项",
     "coinsInsufficient": "对不起,你的知识币不够",
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目",
+    "projectTags": "项目标签",
+    "projectMembers": "项目成员",
+
+    "projectId": "请输入项目ID",
+
+    "projectNotFound": "找不到该项目",
+    "projectInputId": "输入项目ID,获取项目数据"
   },
   "field": {
     "fileId": "字段",

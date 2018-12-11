@@ -41,11 +41,11 @@
           :src="tempVideoUrl"
           controls
         ></video>
-        <p
+        <!-- <p
           v-if="isLoginUserEditable"
           class="project-basic-info-detail-cover-cursor show-on-hover"
           @click="showMediaSkyDriveDialog"
-        ><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p>
+        ><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p> -->
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
@@ -57,18 +57,19 @@
             type="primary"
             @click="toProjectPage"
           >{{ buttonName }}</el-button>
-          <el-button
+          <!-- <el-button
             @click="toEditWebsite"
             plain
             v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)"
-          >{{$t("project.edit")}}</el-button>
-          <el-button
+          >{{$t("project.edit")}}</el-button> -->
+          <el-button @click="toProejctHomePage" plain>项目主页</el-button>
+          <!-- <el-button
             :disabled="isApplied"
             :loading='isApplyButtonLoading'
             plain
             v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit"
             @click="showApplyBox"
-          >{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
+          >{{projectApplyState | applyStateFilter(applyStates)}}</el-button> -->
         </div>
       </div>
     </div>
@@ -78,7 +79,7 @@
     >
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
-        <el-button
+        <!-- <el-button
           v-if="isLoginUserEditable"
           class="project-website-card-button"
           type="text"
@@ -89,7 +90,7 @@
             v-show="!isDescriptionEditing"
           ></i>
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>{{$t("common.Save")}}</span>
-        </el-button>
+        </el-button> -->
       </div>
       <div
         class="project-basic-info-description-content"
@@ -102,12 +103,12 @@
         class="project-basic-info-description-editor"
       ></div>
     </div>
-    <sky-drive-manager-dialog
+    <!-- <sky-drive-manager-dialog
       :mediaLibrary='true'
       :show='isMediaSkyDriveDialogShow'
       :isVideoTabShow='true'
       @close='closeSkyDriveManagerDialog'
-    ></sky-drive-manager-dialog>
+    ></sky-drive-manager-dialog> -->
     <el-dialog
       title="提示"
       v-loading='isBinderDialogLoading'
@@ -161,7 +162,7 @@ import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
-import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+// import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
 import launchUri from '@/lib/utils/launchUri'
@@ -357,6 +358,9 @@ export default {
       userGetUserPrivilege: 'user/getUserPrivilege',
       pblGetProjectDetail: 'pbl/getProjectDetail'
     }),
+    toProejctHomePage() {
+      window.location.href = `${window.location.origin}/pbl/project/${this.projectId}`
+    },
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
         this.isDescriptionEditing = true
@@ -579,7 +583,7 @@ export default {
     }
   },
   components: {
-    SkyDriveManagerDialog,
+    // SkyDriveManagerDialog,
     ParacraftInfo,
     WebsiteBinder
   }
