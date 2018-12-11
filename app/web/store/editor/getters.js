@@ -81,6 +81,7 @@ const getters = {
   showingCol: state => state.showingCol,
   isCodeShow: (state, { showingCol }) => !!_.get(showingCol, 'isCodeShow'),
   isPreviewShow: (state, { showingCol }) => !!_.get(showingCol, 'isPreviewShow'),
+  isManagerShow: (state, { showingCol }) => !!_.get(showingCol, 'isManagerShow'),
   canUndo: (state, { activeAreaData }) =>
     activeAreaData && UndoHelper.canUndo(activeAreaData.undoManager),
   canRedo: (state, { activeAreaData }) =>

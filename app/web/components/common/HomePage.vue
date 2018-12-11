@@ -241,7 +241,7 @@ export default {
     async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
-        'x-per-page': 4,
+        'x-per-page': 8,
         'x-page': 1
       })
     },

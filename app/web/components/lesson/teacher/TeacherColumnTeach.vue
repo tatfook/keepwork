@@ -15,7 +15,7 @@
               </p>
               <div class="package-cover" @click="enterPackage(lessonPackage.id)"><img :src="lessonPackage.extra.coverUrl" alt=""></div>
               <h4 :title="lessonPackage.packageName" class="title">{{lessonPackage.packageName}}</h4>
-              <p>{{$t('lesson.include')}}: {{sortedTeachList.length}} {{$t('lesson.lessonsCount')}}</p>
+              <p>{{$t('lesson.include')}}: {{lessonPackage.lessonCount}} {{$t('lesson.lessonsCount')}}</p>
               <p>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(lessonPackage)}}</p>
               <p :title="lessonPackage.intro">{{$t('lesson.intro')}} : {{lessonPackage.intro}}</p>
             </div>

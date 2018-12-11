@@ -773,7 +773,8 @@
     "smsCode": "SmsCode:",
     "sendCodes": "Send Code",
     "inputLoginPwd": "Login Password",
-    "pleaseCheckPwd": "Please check if the password is correct"
+    "pleaseCheckPwd": "Please check if the password is correct",
+    "pwdIncorrect": "Your password was incorrect. "
   },
   "setting": {
     "general": "Basic Info",

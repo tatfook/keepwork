@@ -97,10 +97,10 @@ export default {
         newpassword: this.pwdFormDatas.newpassword,
         oldpassword: this.pwdFormDatas.oldpassword
       })
-      if (result == 'success') {
+      if (result === true) {
         this.showMessage('success', this.$t('common.saveSuccess'))
       } else {
-        this.showMessage('error', result)
+        this.showMessage('error', this.$t('user.pwdIncorrect'))
       }
       this.pwdFormDatas = {}
       this.loading = false

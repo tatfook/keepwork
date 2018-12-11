@@ -7,7 +7,7 @@
       </div>
       <div class="user-experience-list" v-if="!isExperienceEmpty" v-loading="isLoading">
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
-          <div class="user-experience-item-title">
+          <div class="user-experience-item-title" :title="experience.title">
             {{experience.title}}
             <div class="user-experience-item-date">{{experience.startDate | formatDate}} - {{experience.endDate | formatDate}}</div>
             <div class="user-experience-item-operations" v-if="isLoginUserEditable">
@@ -19,7 +19,7 @@
               </el-button>
             </div>
           </div>
-          <div class="user-experience-item-link">{{experience.link}}</div>
+          <a class="user-experience-item-link" :href="experience.link" target="_blank" :title="experience.link">{{experience.link}}</a>
           <div class="user-experience-item-desc">
             <div class="user-experience-item-desc-label">{{$t('profile.experienceDescription')}}</div>
             <div class="user-experience-item-desc-detail">{{experience.description}}</div>
@@ -37,7 +37,7 @@
           <el-input v-model="newExperience.title"></el-input>
         </el-form-item>
         <el-form-item :label="$t('profile.period')">
-          <el-date-picker v-model="newExperienceRangeDate" type="daterange" :range-separator="$t('profile.startToEnd')" :start-placeholder="$t('profile.startDate')" :end-placeholder="$t('profile.endDate')" @change='setExperienceDate'>
+          <el-date-picker unlink-panels v-model="newExperienceRangeDate" type="daterange" :range-separator="$t('profile.startToEnd')" :start-placeholder="$t('profile.startDate')" :end-placeholder="$t('profile.endDate')" @change='setExperienceDate'>
           </el-date-picker>
         </el-form-item>
         <el-form-item :label="$t('profile.url')">
@@ -216,6 +216,10 @@ export default {
       font-size: 16px;
       color: #303133;
       position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 160px;
     }
     &-date,
     &-operations {
@@ -250,6 +254,15 @@ export default {
     &-link {
       color: #909399;
       margin: 8px 0 24px;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+      width: 100%;
+      &:hover {
+        color: #2397f3;
+      }
     }
     &-desc {
       padding-left: 20px;
@@ -284,6 +297,7 @@ export default {
         margin-top: 16px;
         width: 553px;
         max-width: 100%;
+        word-break: break-all;
       }
     }
   }

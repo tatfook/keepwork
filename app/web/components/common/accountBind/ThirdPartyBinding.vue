@@ -32,21 +32,24 @@ export default {
       username: 'user/username',
       getThreeService: 'user/getThreeService'
     }),
+    typeNumber(){
+      return _.toNumber(this.type.split('/')[1])
+    },
     bindServiceData() {
-      return this.getThreeService(this.type)
+      return this.getThreeService(this.typeNumber)
     },
     bindServiceId() {
-      return _.get(this.bindServiceData, '_id')
+      return _.get(this.bindServiceData, 'id')
     },
     bindServiceUsername() {
-      return _.get(this.bindServiceData, 'serviceUsername')
+      return _.get(this.bindServiceData, 'externalUsername')
     },
     isUserBindService() {
       return this.bindServiceId && this.bindServiceUsername ? true : false
     },
     bindLabel() {
       let label = ''
-      switch (this.type) {
+      switch (this.type.split('/')[0]) {
         case 'github':
           label = this.$t('user.githubBind')
           break
@@ -71,7 +74,7 @@ export default {
       threeServiceDeleteById: 'user/threeServiceDeleteById'
     }),
     async handleBingdingResult(result) {
-      if (result && result.data && result.data.error == 0) {
+      if (result && result.data && result.data.token) {
         await this.getUserThreeServiceByUsername({
           username: this.username
         })
@@ -102,16 +105,16 @@ export default {
         return
       }
       this.isLoading = true
-      let provider = this.type
+      let provider = this.type.split('/')[0]
       this.$auth
-        .authenticate(provider)
+        .authenticate(provider, {state: "bind"})
         .then(async result => {
-          console.log(result)
+          console.log('1',result)
           this.handleBingdingResult(result)
           this.isLoading = false
         })
         .catch(async result => {
-          console.log(result)
+          console.log('2',result)
           this.handleBingdingResult(result)
           this.isLoading = false
         })
