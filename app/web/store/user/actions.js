@@ -119,10 +119,10 @@ const actions = {
     }
     return registerInfo
   },
-  async thirdRegister({ commit }, payload) {
-    let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
-    return thirdRegisterInfo
-  },
+  // async thirdRegister({ commit }, payload) {
+  //   let thirdRegisterInfo = await keepwork.user.register(payload, null, true)
+  //   return thirdRegisterInfo
+  // },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
     let { commit, dispatch, getters: { token } } = context
     if (useCache) return

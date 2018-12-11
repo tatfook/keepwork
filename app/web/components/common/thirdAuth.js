@@ -31,7 +31,7 @@ Vue.use(VueAuthenticate, {
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: '101403344',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/qq',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       popupOptions
     },
     weixin: {
@@ -44,7 +44,7 @@ Vue.use(VueAuthenticate, {
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: 'wxc97e44ce7c18725e',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/weixin',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       popupOptions,
       scope: 'snsapi_login',
       requiredUrlParams: ['scope', 'appid', 'state'],
@@ -58,7 +58,7 @@ Vue.use(VueAuthenticate, {
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: '2411934420',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/xinlang',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       oauthType: '2.0',
       popupOptions
     },
@@ -70,7 +70,7 @@ Vue.use(VueAuthenticate, {
       redirectUri: `${window.location.origin}/wiki/login`
       // clientId: '2219fe9cb6d105dd30fb',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/github',
-      // redirectUri: 'http://127.0.0.1:7001/'
+      // redirectUri: 'http://127.0.0.1:7001'
     }
   }
 })

@@ -1011,7 +1011,7 @@
       "core7": "Key Point-7"
     },
     "notActivatedText": {
-      "hint": "You have signed up as a Learner. If you want to become an Insturctor, please input the activation code here.",
+      "hint": "You have signed up as a Learner. If you want to become an Instructor, please input the activation code here.",
       "wrongCodeHint": "Incorrect activation code. Please check it and try again.      ",
       "getActivationCode": "To get the activation code, please contact Mr Cheng: 13267059950(Tel/Wechat)、846704851(QQ)",
       "inputPlaceholder": "Please input the activation code.",
