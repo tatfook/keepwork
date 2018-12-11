@@ -95,7 +95,7 @@ export default {
         if (valid) {
           let isCellphoneBinded = await this.isCellphoneBInded()
           if (isCellphoneBinded) {
-            emailForm.clearValidate()
+            phoneForm.clearValidate()
             this.phoneError = this.$t('user.cellphoneHasBeenBoundToOtherAccounts')
             return
           }

@@ -18,7 +18,7 @@
       <el-form-item>
         <el-row class="send-auth">
           <el-col class="send-auth-code">
-              <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
+              <el-input v-model="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
           </el-col>
           <el-col class="send-auth-send-code">
               <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
@@ -29,7 +29,8 @@
         </el-row> 
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.perfectInfo')}}</el-button>
+        <div class="agreement"><el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox></div>
+        <el-button class="login-btn"  :disabled="!checkedAgreement" :loading='registerLoading'  type="primary" @click="register('ruleForm')">{{$t('common.perfectInfo')}}</el-button>
       </el-form-item>
     </el-form>
 </template>
@@ -50,19 +51,27 @@ export default {
         callback()
       }
     }
+    let validateUsername = (rule, value, callback) => {
+      if (/^[0-9]/.test(value)) {
+        callback(new Error(this.$t('common.usernameCannotWithNumber')))
+      } else {
+        callback()
+      }
+    }
     return {
       loading: false,
       registerLoading: false,
       sendCodeLoading: false,
-      authCode: '',
       sendCodeDisabled: false,
       nowOrigin: document.location.origin,
+      checkedAgreement: false,
       count: 60,
       smsId: '',
       ruleForm: {
         username: '',
         password: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        authCode: ''
       },
       rules: {
         username: [
@@ -70,6 +79,9 @@ export default {
             required: true,
             message: this.$t('common.inputUsername'),
             trigger: 'blur'
+          },
+          {
+            validator: validateUsername
           }
         ],
         password: [
@@ -77,6 +89,14 @@ export default {
             required: true,
             message: this.$t('common.inputPassword'),
             trigger: 'blur'
+          },
+          {
+            min: 6,
+            message: this.$t('common.minPassword')
+          },
+          {
+            max: 24,
+            message: this.$t('common.maxPassword')
           }
         ],
         phoneNumber: [
@@ -86,6 +106,13 @@ export default {
             trigger: 'blur'
           },
           { validator: validatePhoneNumber, trigger: 'change' }
+        ],
+        authCode: [
+          {
+            required: true,
+            message: this.$t('user.inputVerificationCode'),
+            trigger: 'blur'
+          }
         ]
       }
     }
@@ -102,7 +129,8 @@ export default {
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       userRegister: 'user/register',
       verifyCellphoneTwo: 'user/verifyCellphoneTwo',
-      thirdRegister: 'user/thirdRegister'
+      // thirdRegister: 'user/thirdRegister',
+      userRegister: 'user/register'
     }),
     handleClose() {
       this.$emit('close')
@@ -120,45 +148,33 @@ export default {
           let payload = {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
-            threeService: this.userThreeService,
-            bind: true,
-            setRealNameInfo: true,
             cellphone: this.ruleForm.phoneNumber,
-            smsCode: this.authCode,
-            smsId: this.smsId
+            captcha: this.ruleForm.authCode,
+            oauthToken: this.userThreeService.token
           }
+          console.log('threelogin',payload)
           this.registerLoading = true
           //第三方进行注册
-          let thirdRegisterInfo = await this.thirdRegister(payload).catch(e => {
-            this.showMessage('error', this.$t('common.registerFailed'))
-            this.registerLoading = false
-          })
-          //注册成功进行登录
-          if(thirdRegisterInfo.error.id === 0){
-            this.registerLoading = false
-            this.loading = true
-            let loginInfo = await this.userLogin(payload).catch(e => {
-              console.error(e)
-              this.loading = false
+          await this.userRegister(payload)
+            .then(res => {
+              this.registerLoading = false
+              this.handleClose()
             })
-            this.handleClose()
-            this.loading = false
-          }else{
-            switch (thirdRegisterInfo.error.message) {
-              case '用户名已存在':
-                this.showMessage('error', this.$t('common.existAccount'))
-                this.registerLoading = false
-                break
-              case '验证码错误':
+            .catch(e => {
+              if (e.response.data.code == 4) {
+                this.showMessage(
+                  'error',
+                  this.$t('user.verificationCodeExpiration')
+                )
+              } else if (e.response.data.code == 5) {
                 this.showMessage('error', this.$t('user.verificationCodeError'))
-                this.registerLoading = false
-                break
-              default:
+              } else if (e.response.data.code == 2) {
+                this.showMessage('error', this.$t('common.notValidAccount'))
+              } else {
                 this.showMessage('error', this.$t('common.registerFailed'))
-                this.registerLoading = false
-                break
-            }
-          }
+              }
+              this.registerLoading = false
+            })
         } else {
           return false
         }
@@ -173,9 +189,7 @@ export default {
             console.error(e)
           })
       this.sendCodeLoading = false
-      this.smsId = _.get(info, 'data.smsId')
-      let message = info.error && info.error.message
-      if (message === 'success') {
+      if (info === 'OK') {
         this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
         this.sendCodeDisabled = true
         this.timer = setInterval(() => {
@@ -189,25 +203,10 @@ export default {
           }
         }, 1000)
         return
+      } else {
+        this.$message.error(this.$t('user.smsCodeSentFailed'))
+        this.sendCodeLoading = false
       }
-      // if (message === '号码格式有误') {
-      //   this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-      //   return
-      // }
-      // if (message === '短信验证码发送过频繁') {
-      //   this.showMessage('error', this.$t('user.sendingFrequent'))
-      //   return
-      // }
-      // if (message === '验证码超出同模板同号码天发送上限') {
-      //   this.showMessage('error', this.$t('user.codeExceedsTheSendingLimit'))
-      //   return
-      // }
-      // let message2 =
-      //   info.message && info.message.slice(0, 6)
-      // if (message2 === '手机号已绑定') {
-      //   this.showMessage('error', this.$t('user.hasBeenBoundToOtherAccounts'))
-      //   return
-      // }
     },
   }
 }
@@ -262,6 +261,21 @@ export default {
         .send-code-button {
           width: 100%;
         }
+      }
+    }
+    .agreement{
+      .el-checkbox{
+        display: flex;
+        align-items: center;
+      }
+      .el-checkbox__label{
+        display: inline-block;
+        word-break: break-word;
+        white-space: normal;
+       }
+      a{
+        text-decoration: none;
+        color: #409efe;
       }
     }
     &-operate {

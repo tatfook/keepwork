@@ -61,7 +61,6 @@ export default {
       loading: false,
       registerLoading: false,
       sendCodeLoading: false,
-      authCode: '',
       sendCodeDisabled: false,
       nowOrigin: document.location.origin,
       count: 60,
@@ -70,7 +69,8 @@ export default {
       ruleForm: {
         username: '',
         password: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        authCode: ''
       },
       rules: {
         username: [
