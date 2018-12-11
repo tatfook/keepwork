@@ -613,7 +613,12 @@
 
     "project": "项目",
     "projectTags": "项目标签",
-    "projectMembers": "项目成员"
+    "projectMembers": "项目成员",
+
+    "projectId": "请输入项目ID",
+
+    "projectNotFound": "找不到该项目",
+    "projectInputId": "输入项目ID,获取项目数据"
   },
   "field": {
     "fileId": "字段",

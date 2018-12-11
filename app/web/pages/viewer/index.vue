@@ -30,6 +30,7 @@ import VueI18n from 'vue-i18n'
 import VueClipboard from 'vue-clipboard2'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import gitlabModule from '@/store/gitlab'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -74,7 +75,8 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
-    gitlab: gitlabModule
+    gitlab: gitlabModule,
+    pbl: pblModule
   }
 })
 

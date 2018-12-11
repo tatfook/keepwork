@@ -11,7 +11,9 @@ import media from './MediaType'
 import animations from './AnimationsType'
 import quiz from './QuizType'
 import lessonEditor from './LessonEditor'
-import projectEdit from './ProjectEdit'
+import projectInput from './ProjectInput'
+import projectMembersSwitch from './ProjectMembersSwitch'
+import projectTagsSwitch from './ProjectTagsSwitch'
 
 export default {
   input,
@@ -27,5 +29,7 @@ export default {
   animations,
   quiz,
   lessonEditor,
-  projectEdit
+  projectInput,
+  projectMembersSwitch,
+  projectTagsSwitch
 }
