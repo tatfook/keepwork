@@ -25,7 +25,7 @@
               <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.no}}</span>
             </div>
             <div class="single-issue-brief-intro">
-              <span class="created-time">{{relativeTime(issue.updatedAt)}}</span>
+              <span class="created-time">{{isEn ? $t('common.update') : ''}} {{relativeTime(issue.updatedAt)}}{{isEn ? '' : $t('common.update')}}</span>
               <span class="created-by">{{$t("project.createBy")}}<span class="name">{{issue.user.username}}</span>{{$t("project.created")}}</span>
               <div class="created-tag">
                 <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>

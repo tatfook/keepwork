@@ -52,7 +52,7 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) => post('user/bindThreeService', ...args),
+  bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
   searchByField: async args => post('users/search', args)
 }
@@ -218,7 +218,8 @@ export const userThreeService = {
   getOauthUsers: async args => get('oauth_users'),
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
-  unbind: async (...args) => post('user_three_service/unbind', ...args)
+  // unbind: async (...args) => post('user_three_service/unbind', ...args)
+  unbind: async (args) => deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
 }
 
 export const favorites = {
