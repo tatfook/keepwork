@@ -141,3 +141,18 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media only screen and (max-width: 991px) {
+  .user-item {
+    padding: 12px 16px;
+    &-info {
+      min-width: 0;
+      &-desc {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+</style>

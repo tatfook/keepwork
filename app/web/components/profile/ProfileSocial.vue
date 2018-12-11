@@ -115,6 +115,26 @@ export default {
 @media only screen and (max-width: 991px) {
   .profile-social {
     padding-top: 8px;
+    &-tabs {
+      .el-tabs__nav-wrap {
+        padding: 6px 48px;
+      }
+      .el-tabs__nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .el-tabs__item {
+        height: 28px;
+        line-height: 28px;
+      }
+      .el-tabs__item.is-active {
+        & > span {
+          padding: 7px 30px;
+          border-radius: 28px;
+        }
+      }
+    }
   }
 }
 </style>
