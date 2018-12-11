@@ -39,10 +39,7 @@ export default {
     },
     isLoginUserBeNowUser() {
       return this.nowUserId === this.loginUserId
-    },
-    // nowIsFollowed() {
-    //   return this.user.isFollowed
-    // }
+    }
   },
   methods: {
     ...mapActions({
