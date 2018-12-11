@@ -12,7 +12,7 @@ const actions = {
   async initProfileData(context, { userId }) {
     let { dispatch } = context
     await dispatch(
-      'user/getUserDetailWithRankByUserId',
+      'user/getUserDetailWithRankByUserIdOrUsername',
       { userId },
       { root: true }
     )

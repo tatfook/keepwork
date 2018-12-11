@@ -5,14 +5,22 @@
         <user-basic-msg class="profile-social-sidebar-item" :nowUserDetail='nowUserDetail' :isLoginUserEditable='isLoginUserEditable'></user-basic-msg>
       </div>
       <div class="profile-social-main">
-        <el-tabs class="profile-social-tabs profile-social-main-item" v-model="activeName">
+        <el-tabs class="profile-social-tabs profile-social-main-item" v-model="activeName" v-loading='isLoading'>
           <el-tab-pane name="favorite">
             <span slot='label'>关注</span>
-            <user-list :nowProfileUserId="nowProfileUserId" listType='favorite'></user-list>
+            <user-list v-if="!isEmpty" :userList='userList'></user-list>
+            <div v-if="isEmpty" class="profile-social-empty">
+              <img :src="emptyImg" alt="">
+              <div class="user-list-empty-info">{{emptyInfo}}</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane name="follow">
             <span slot='label'>粉丝</span>
-            <user-list :nowProfileUserId="nowProfileUserId" listType='follow'></user-list>
+            <user-list v-if="!isEmpty" :userList='userList'></user-list>
+            <div v-if="isEmpty" class="profile-social-empty">
+              <img :src="emptyImg" alt="">
+              <div class="user-list-empty-info">{{emptyInfo}}</div>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -20,7 +28,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import UserBasicMsg from './common/UserBasicMsg'
 import UserList from './common/UserList'
 export default {
@@ -31,20 +39,86 @@ export default {
       required: true
     }
   },
+  mounted() {
+    this.initFavoriteData()
+  },
   data() {
     return {
+      isLoading: false,
       activeName: 'favorite'
     };
   },
   computed: {
     ...mapGetters({
-      loginUserId: 'user/userId'
+      loginUserId: 'user/userId',
+      favoriteUsers: 'profile/favoriteUsers',
+      followUsers: 'profile/followUsers'
     }),
     nowProfileUserId() {
       return this.nowUserDetail.id
     },
     isLoginUserEditable() {
       return this.loginUserId === this.nowProfileUserId
+    },
+    loginUserFavoriteUsers() {
+      return this.favoriteUsers({ userId: this.loginUserId })
+    },
+    nowProfileFavoriteUsers() {
+      return this.favoriteUsers({ userId: this.nowProfileUserId })
+    },
+    nowProfileFollowUsers() {
+      return this.followUsers({ userId: this.nowProfileUserId })
+    },
+    isFavoriteType() {
+      return this.activeName === 'favorite'
+    },
+    isFollowType() {
+      return this.activeName === 'follow'
+    },
+    userList() {
+      let list = []
+      if (this.isFavoriteType) {
+        list = this.nowProfileFavoriteUsers
+      } else {
+        list = this.nowProfileFollowUsers
+      }
+      let usersWithFollowState = _.map(list, user => {
+        let isUserInLoginUserFavorites = _.find(this.loginUserFavoriteUsers, { 'id': user.id })
+        return {
+          ...user,
+          isFollowed: !_.isUndefined(isUserInLoginUserFavorites)
+        }
+      })
+      return usersWithFollowState
+    },
+    isEmpty() {
+      return !Boolean(this.userList && this.userList.length)
+    },
+    emptyImg() {
+      return this.isFavoriteType ? require('@/assets/img/default_followers.png') : require('@/assets/img/default_fans.png')
+    },
+    emptyInfo() {
+      return this.isFavoriteType ? '还未关注任何人' : '还没有粉丝~'
+    }
+  },
+  methods: {
+    ...mapActions({
+      profileGetFavoriteUsers: 'profile/getFavoriteUsers',
+      profileGetFollowUsers: 'profile/getFollowUsers'
+    }),
+    async initFavoriteData() {
+      let userId = this.nowProfileUserId
+      this.isLoading = true
+      await Promise.all([
+        this.isFavoriteType ? this.profileGetFavoriteUsers({ userId }) : this.profileGetFollowUsers({ userId }),
+        this.profileGetFavoriteUsers({ userId: this.loginUserId }),
+      ])
+      this.isLoading = false
+    }
+  },
+  watch: {
+    activeName() {
+      this.initFavoriteData()
     }
   },
   components: {
@@ -107,6 +181,15 @@ export default {
         color: #fff;
         border-radius: 24px;
       }
+    }
+  }
+  &-empty {
+    text-align: center;
+    padding: 36px 0 48px;
+    font-size: 14px;
+    color: #a6adb3;
+    &-info {
+      margin-top: 24px;
     }
   }
 }
