@@ -7,12 +7,13 @@
       <router-link class="user-item-info-name" :to="{name: 'ProfileIndexPage', params: {username: user.username}}" target="_blank">{{user.nickname || user.username}}</router-link>
       <div class="user-item-info-desc">{{user.description}}</div>
     </div>
-    <div class="user-item-operate">
-      <el-button :type="user.isFollowed | buttonTypeFilter" plain>{{user.isFollowed ? '取消关注':'关注'}}</el-button>
+    <div class="user-item-operate" v-if="!isLoginUserBeNowUser">
+      <el-button :loading="isFavoriteButtonLoading" :type="followState | buttonTypeFilter" plain @click="toggleFavoriteUser">{{followState ? '取消关注':'关注'}}</el-button>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex"
 export default {
   name: 'UserItem',
   props: {
@@ -23,7 +24,64 @@ export default {
   },
   data() {
     return {
+      isFavoriteButtonLoading: false,
+      followState: this.user.isFollowed,
       defaultPortrait: require('@/assets/img/default_portrait.png')
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined',
+      loginUserId: 'user/userId'
+    }),
+    nowUserId() {
+      return this.user.id
+    },
+    isLoginUserBeNowUser() {
+      return this.nowUserId === this.loginUserId
+    },
+    // nowIsFollowed() {
+    //   return this.user.isFollowed
+    // }
+  },
+  methods: {
+    ...mapActions({
+      profileFavoriteUser: 'profile/favoriteUser',
+      profileUnFavoriteUser: 'profile/unFavoriteUser',
+      toggleLoginDialog: 'user/toggleLoginDialog'
+    }),
+    async toggleFavoriteUser() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
+      let objectId = this.nowUserId
+      let objectType = 0
+      this.isFavoriteButtonLoading = true
+      if (!this.followState) {
+        await this.profileFavoriteUser({ objectId, objectType })
+          .then(() => {
+            this.showMessage({
+              message: this.$t('project.successfullyStarred')
+            })
+            this.isFavoriteButtonLoading = false
+          })
+          .catch(error => {
+            this.isFavoriteButtonLoading = false
+          })
+      } else {
+        await this.profileUnFavoriteUser({ objectId, objectType })
+          .then(() => {
+            this.showMessage({
+              message: this.$t('project.successfullyUnstarred')
+            })
+            this.isFavoriteButtonLoading = false
+          })
+          .catch(error => {
+            this.isFavoriteButtonLoading = false
+          })
+        this.isFavoriteButtonLoading = false
+      }
+      this.followState = !this.followState
     }
   },
   filters: {
