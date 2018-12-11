@@ -134,7 +134,7 @@
       <el-menu-item index='8' class='pull-right user-profile-box'>
         <img class='user-profile' :src='userProfile.portrait' alt=''>
       </el-menu-item>
-      <el-menu-item index='9' class='switch-box'>
+      <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
         <span class="iconfont icon-preview1" :class='{"switch-box-active": isPreviewShow && !isCodeShow}' @click="togglePreviewWin()" v-tooltip.bottom="{content: $t('tips.ShowPreviewOnly'), offset:'5'}"></span>
         <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()" v-tooltip.bottom="{content: $t('tips.ShowBoth'), offset:'5'}"></span>
         <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()" v-tooltip.bottom="{content: $t('tips.ShowCodeOnly'), offset:'5'}"></span>
@@ -212,6 +212,9 @@ export default {
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       updateRecentUrlList: 'updateRecentUrlList'
     }),
+    isWelcomeShow() {
+      return !this.activePageInfo.sitename
+    },
     isEnglish() {
       return locale === 'en-US' ? true : false
     },
@@ -292,7 +295,8 @@ export default {
     toggleBoth() {
       this.resetShowingCol({
         isPreviewShow: true,
-        isCodeShow: true
+        isCodeShow: true,
+        isManagerShow: true
       })
     },
     toggleCodeWin() {
@@ -304,7 +308,8 @@ export default {
     togglePreviewWin() {
       this.resetShowingCol({
         isPreviewShow: true,
-        isCodeShow: false
+        isCodeShow: false,
+        isManagerShow: true
       })
 
       // we should improve performance
