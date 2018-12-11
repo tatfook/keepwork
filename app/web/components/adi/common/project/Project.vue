@@ -4,31 +4,38 @@
     v-if="!isLoading"
   >
     <template v-if="isProjectExist">
-      <project-tags
-        v-if="isProjectExist && projectTagsShow"
-        :originProjectDetail="pblProjectDetail"
-        :projectId="projectId"
-        :isLoginUserEditable='loginUserIsProjectOwner'
-      ></project-tags>
-      <project-basic-info
-        v-if="isProjectExist"
-        class="project-index-basic"
-        :originProjectDetail='pblProjectDetail'
-        :projectOwnerUsername='editingProjectUsername'
-        :projectApplyState='projectApplyState'
-        :projectId='projectId'
-        :isProjectStopRecruit='isProjectStopRecruit'
-        :isLoginUserEditable='loginUserIsProjectOwner'
-      ></project-basic-info>
-      <project-joined-members-list
-        v-if="isProjectExist && projectMembersShow"
-        class="project-index-sidebar-item"
-        type='card'
-        :projectId='projectId'
-        :projectOwnerPortrait='projectOwnerPortrait'
-        :projectDetail='pblProjectDetail'
-        :originProjectUsername='editingProjectUsername'
-      ></project-joined-members-list>
+      <template v-if="isLoginUserVisible">
+        <project-tags
+          v-if="isProjectExist && projectTagsShow"
+          :originProjectDetail="pblProjectDetail"
+          :projectId="projectId"
+          :isLoginUserEditable='loginUserIsProjectOwner'
+        ></project-tags>
+        <project-basic-info
+          v-if="isProjectExist"
+          class="project-index-basic"
+          :originProjectDetail='pblProjectDetail'
+          :projectOwnerUsername='editingProjectUsername'
+          :projectApplyState='projectApplyState'
+          :projectId='projectId'
+          :isProjectStopRecruit='isProjectStopRecruit'
+          :isLoginUserEditable='loginUserIsProjectOwner'
+        ></project-basic-info>
+        <project-joined-members-list
+          v-if="isProjectExist && projectMembersShow"
+          class="project-index-sidebar-item"
+          type='card'
+          :projectId='projectId'
+          :projectOwnerPortrait='projectOwnerPortrait'
+          :projectDetail='pblProjectDetail'
+          :originProjectUsername='editingProjectUsername'
+        ></project-joined-members-list>
+      </template>
+      <template v-else>
+        <div class="project-mod-tips">
+          <h2>{{$t('card.projectForbidden')}}</h2>
+        </div>
+      </template>
     </template>
     <template v-else-if="projectIdIsEmpty">
       <div class="project-mod-tips">
@@ -41,6 +48,7 @@
         <h2>{{$t('card.projectNotFound')}}</h2>
       </div>
     </template>
+
   </div>
 </template>
 

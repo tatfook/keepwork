@@ -616,7 +616,8 @@
     "projectId": "Project ID",
 
     "projectNotFound": "Project Not Found",
-    "projectInputId": "Enter the project ID to get the project data"
+    "projectInputId": "Enter the project ID to get the project data",
+    "projectForbidden":"Unable to display content"
   },
   "field": {
     "fileId": "file Id",
