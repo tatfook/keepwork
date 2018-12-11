@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win" :style='isDisplay'>     
+    <el-col id="managerWin" class="manager-win" v-if="isManagerShow">     
       <el-row class="toolbar">
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
@@ -17,8 +17,8 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between" :style='isDisplay'></div>
-    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <div class="col-between" v-if="isManagerShow"></div>
+    <el-col id="previewWin" v-show="isPreviewShow" class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -45,8 +45,8 @@
         </span>
       </el-dialog>
     </el-col>
-    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="col-between editor-resizer" v-if="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-if="!isWelcomeShow && isCodeShow" class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -72,7 +72,7 @@
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button :title='isManagerShow ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -167,24 +167,14 @@ export default {
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
       isCodeShow: 'isCodeShow',
-      isFullscreen: 'isPreviewShow'
+      isPreviewShow: 'isPreviewShow',
+      isManagerShow: 'isManagerShow'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
-    isDisplay() {
-      if (this.isFullscreen) {
-        return this.generateStyleString({
-          'display': 'block'
-        })
-      } else {
-        return this.generateStyleString({
-          'display': 'none'
-        })
-      }
-    },
     isDisplayButton() {
-      if (this.isFullscreen) {
+      if (this.isPreviewShow) {
         return this.generateStyleString({
           'display': 'inline-block'
         })
@@ -195,7 +185,7 @@ export default {
       }
     },
     getStyle() {
-      if (this.isFullscreen) {
+      if (this.isPreviewShow) {
         return this.generateStyleString({
           'text-align': 'left'
         })
@@ -206,64 +196,9 @@ export default {
       }
     },
     fullscreenIcon() {
-      return this.isFullscreen
+      return this.isManagerShow
         ? 'iconfont icon-full-screen_'
         : 'iconfont icon-full_screen_exit'
-    }
-  },
-  watch: {
-    'showingCol.isPreviewShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.previewWinWidth = 0
-          this.codeWinWidth = 100 - this.managerWinWidth
-        } else if (this.showingCol.isCodeShow === false) {
-          this.previewWinWidth = 100 - this.managerWinWidth
-        } else {
-          let halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
-        }
-      },
-      deep: true
-    },
-    'showingCol.isCodeShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.codeWinWidth = 0
-          this.previewWinWidth = 100 - this.managerWinWidth
-        } else if (this.showingCol.isPreviewShow === false) {
-          this.codeWinWidth = 100 - this.managerWinWidth
-        } else {
-          let halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
-        }
-      },
-      deep: true
-    },
-    'showingCol.isManagerShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.managerWinWidth = 0
-          this.previewWinWidth = 100 - this.codeWinWidth
-        } else {
-          let halfWidth = (100 - this.codeWinWidth) / 2
-          let minusWidth = halfWidth > 25 ? 25 : halfWidth
-          this.managerWinWidth = minusWidth
-          this.previewWinWidth = halfWidth - minusWidth
-        }
-      },
-      deep: true
     }
   },
   methods: {
@@ -278,8 +213,7 @@ export default {
     },
     toggleFullscreen() {
       this.resetShowingCol({
-        isCodeShow: true,
-        isPreviewShow: !this.isFullscreen
+        isManagerShow: !this.isManagerShow
       })
     },
     generateStyleString(style) {
