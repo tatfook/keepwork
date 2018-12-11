@@ -1479,6 +1479,9 @@
     "endDate": "结束日期",
     "whatAndHowCreat": "项目是什么？如何创建项目？",
     "knowMore": "了解更多",
+    "noContentForProject": "还没有创建项目~",
+    "noProjectToShow": "你还没有项目，",
+    "createNewProject": "立即创建新项目",
     "noFriendsToShow": "还未关注任何人~",
     "noFollowersToShow": "还没有粉丝~"
   }
