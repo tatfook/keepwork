@@ -301,6 +301,18 @@ export default {
         isCodeShow: true
       })
     },
+    togglePreviewWin() {
+      this.resetShowingCol({
+        isPreviewShow: true,
+        isCodeShow: false
+      })
+
+      // we should improve performance
+      // this.isCodeShow &&
+      //   this.$store.dispatch('setAddingArea', {
+      //     area: this.gConst.ADDING_AREA_ADI
+      //   })
+    },
     async save() {
       let self = this
 
@@ -551,16 +563,6 @@ export default {
     },
     openSkyDriveManagerDialog() {
       this.toggleSkyDrive({ showSkyDrive: true })
-    },
-    togglePreviewWin() {
-      this.resetShowingCol({
-        isCodeShow: false,
-        isPreviewShow: true
-      })
-      this.isCodeShow &&
-        this.$store.dispatch('setAddingArea', {
-          area: this.gConst.ADDING_AREA_ADI
-        })
     },
     toggleLanguage,
     backHome() {
