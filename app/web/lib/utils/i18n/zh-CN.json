@@ -617,8 +617,10 @@
 
     "projectId": "请输入项目ID",
 
-    "projectNotFound": "找不到该项目",
-    "projectInputId": "输入项目ID,获取项目数据"
+    "projectNotFound": "项目不存在",
+    "projectInputId": "输入项目ID,获取项目数据",
+    "projectForbidden": "无法显示内容"
+    
   },
   "field": {
     "fileId": "字段",
