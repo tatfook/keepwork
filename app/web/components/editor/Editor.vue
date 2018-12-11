@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win" v-if="isManagerShow">     
+    <el-col id="managerWin" class="manager-win" v-show="isManagerShow">     
       <el-row class="toolbar">
         <el-button-group>
           <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
@@ -18,7 +18,7 @@
       </el-scrollbar>
     </el-col>
     <div class="col-between" v-if="isManagerShow"></div>
-    <el-col id="previewWin" v-show="isPreviewShow" class="preview-win">
+    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -46,7 +46,7 @@
       </el-dialog>
     </el-col>
     <div class="col-between editor-resizer" v-if="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="!isWelcomeShow && isCodeShow" class="code-win">
+    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -213,6 +213,8 @@ export default {
     },
     toggleFullscreen() {
       this.resetShowingCol({
+        isPreviewShow: false,
+        isCodeShow: true,
         isManagerShow: !this.isManagerShow
       })
     },
