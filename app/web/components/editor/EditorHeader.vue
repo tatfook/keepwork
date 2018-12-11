@@ -91,6 +91,10 @@
                   <i :class="['iconfont', 'icon-Chinese-english', isEnglish ? 'icon-language' : '']"></i>
                   {{$t('common.chinese-englishSwitch')}}
                 </button>
+                <button :class=" isEnglish ? 'btn-angles' : '' " @click="toggleLeftAndRightAngles" :disabled="!(isPreviewShow && isCodeShow)">
+                  <i class="iconfont icon-qiehuan"></i>
+                  {{$t('common.left-rightAngles')}}
+                </button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -226,6 +230,7 @@ export default {
       isCodeShow: 'isCodeShow',
       isPreviewShow: 'isPreviewShow',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      showAngle: 'showAngle',
       updateRecentUrlList: 'updateRecentUrlList'
     }),
     isWelcomeShow() {
@@ -306,6 +311,7 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
+      toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     toggleBoth() {
@@ -333,6 +339,13 @@ export default {
       //   this.$store.dispatch('setAddingArea', {
       //     area: this.gConst.ADDING_AREA_ADI
       //   })
+    },
+    toggleLeftAndRightAngles() {
+      if(!this.showAngle) {
+        this.toggleAngles({ showAngle: true })
+      } else {
+        this.toggleAngles({ showAngle: false })
+      }
     },
     async save() {
       let self = this
@@ -884,9 +897,10 @@ export default {
   }
 }
 .kp-menu {
-  .btn-language {
+  .btn-language, 
+  .btn-angles {
     height: 48px;
-    .icon-language {
+    .iconfont {
       line-height: 48px;
     }
   }

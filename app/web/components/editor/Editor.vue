@@ -23,8 +23,8 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between" v-show="isManagerShow"></div>
-    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win">
+    <div class="col-between col-between-one" v-if="isManagerShow"></div>
+    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="getPreviewWinStyle">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -53,8 +53,8 @@
         </span>
       </el-dialog>
     </el-col>
-    <div class="col-between editor-resizer" v-show="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win">
+    <div class="col-between editor-resizer col-between-two" v-if="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="getCodeWinStyle">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -192,6 +192,7 @@ export default {
       activePropertyData: 'activePropertyData',
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
+      showAngle: 'showAngle',
       isCodeShow: 'isCodeShow',
       isPreviewShow: 'isPreviewShow',
       isManagerShow: 'isManagerShow'
@@ -220,6 +221,21 @@ export default {
           'text-align': 'center'
         })
       }
+    },
+    getPreviewWinStyle() {
+      if(this.showAngle) {
+        return 'order: 2;'
+      } else {
+        return 'order: 4;'
+      }
+    },
+    getCodeWinStyle() {
+      if(this.showAngle) {
+        return 'order: 4;'
+      } else {
+        return 'order: 2;'
+      }
+
     },
     showContent() {
       return this.isFullscreen ? this.$t('editor.fullScreen') : this.$t('editor.exitFullScreen')
@@ -399,6 +415,7 @@ bigFile:
 .code-win {
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: auto;
 }
 .manager-win {
@@ -415,6 +432,12 @@ bigFile:
   flex-shrink: 0;
   background-color: #cdd4db;
 }
+.col-between-one {
+  order: 1;
+}
+.col-between-two {
+  order: 3;
+}
 .editor-resizer {
   cursor: col-resize;
 }
@@ -423,9 +446,6 @@ bigFile:
 }
 #frameViewport {
   border: none;
-}
-.previewWin {
-  position: relative;
 }
 .mouse-event-backup {
   position: absolute;
