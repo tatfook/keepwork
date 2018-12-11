@@ -32,7 +32,7 @@
       </el-row>
     </el-form-item>
     <el-form-item>
-      <div class="agreement"><el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="https://keepwork.com/wiki/license" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox></div>
+      <div class="agreement"><el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox></div>
       <el-button class="login-btn" :disabled="!checkedAgreement" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
     </el-form-item>
   </el-form>

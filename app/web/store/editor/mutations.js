@@ -243,25 +243,21 @@ const mutations = {
     Vue.set(state.activePage, 'activePropertyTabType', componentType)
   },
   [RESET_SHOWING_COL](state, showingColObj) {
-    Vue.set(
-      state.showingCol,
-      'isManagerShow',
-      showingColObj.isManagerShow === undefined
-        ? true
-        : showingColObj.isManagerShow
-    )
-    Vue.set(
-      state.showingCol,
-      'isPreviewShow',
-      showingColObj.isPreviewShow === undefined
-        ? true
-        : showingColObj.isPreviewShow
-    )
-    Vue.set(
-      state.showingCol,
-      'isCodeShow',
-      showingColObj.isCodeShow === undefined ? true : showingColObj.isCodeShow
-    )
+    if (typeof showingColObj !== 'object') {
+      return false
+    }
+
+    if (typeof showingColObj.isManagerShow === 'boolean') {
+      Vue.set(state.showingCol, 'isManagerShow', showingColObj.isManagerShow)
+    }
+
+    if (typeof showingColObj.isPreviewShow === 'boolean') {
+      Vue.set(state.showingCol, 'isPreviewShow', showingColObj.isPreviewShow)
+    }
+
+    if (typeof showingColObj.isCodeShow === 'boolean') {
+      Vue.set(state.showingCol, 'isCodeShow', showingColObj.isCodeShow)
+    }
   },
   [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, payload) {
     payload = _.isArray(payload) ? payload : [payload]

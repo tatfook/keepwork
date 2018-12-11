@@ -20,11 +20,12 @@
     <div class="create-project-guide-step" v-if="step == 4">
       <p class="tip_1">第三步：创建成功，编辑项目详情元素</p>
       <div class="detail-element">
-        <!-- <span class="element">项目</span>
-        <span class="element">证书</span>
-        <span class="element">经历</span>
-        <span class="element">工作室</span>
-        <span class="element">自我评价</span> -->
+        <span class="element">项目</span>
+        <span class="element">资源网站</span>
+        <span class="element">标签</span>
+        <span class="element">成员</span>
+        <span class="element">白板</span>
+        <span class="element">评论</span>
       </div>
     </div>
     <div class="create-project-guide-next">

@@ -1,7 +1,7 @@
 <template>
   <div class="user-basic-msg">
     <div class="user-basic-msg-profile">
-      <img :src='nowUserDetail.portrait' alt="">
+      <img :src='nowUserDetail.portrait || defaultPortrait' alt="">
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
@@ -27,10 +27,10 @@
     </div>
     <div class="user-basic-msg-infos hidden-sm-and-down">
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-location"></i>{{nowUserDetail.extra.location || $t("profile.unknownAddress")}}
+        <i class="iconfont icon-location"></i>{{nowUserDetail.extra && nowUserDetail.extra.location || $t("profile.unknownAddress")}}
       </div>
       <div class="user-basic-msg-infos-item">
-        <i class="iconfont icon-link1"></i>keepwork.com/{{nowUserDetail.username}}
+        <i class="iconfont icon-link1"></i>keepwork.com/u/{{nowUserDetail.username}}
       </div>
       <div class="user-basic-msg-infos-item">
         <i class="iconfont icon-reloadtime"></i>{{$t("profile.registerAt")}} {{nowUserDetail.createdAt | formatDate(formatType)}}
@@ -61,6 +61,7 @@ export default {
   },
   data() {
     return {
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
@@ -137,7 +138,7 @@ export default {
       this.initFavoriteState()
     }
   },
-  components:{
+  components: {
     PersonalCenterDialog
   },
   filters: {

@@ -21,7 +21,7 @@
               <el-input v-model="authCode" :placeholder="$t('common.authCode')"></el-input>
           </el-col>
           <el-col class="send-auth-send-code">
-              <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !ruleForm.phoneNumber" type="primary" class="send-code-button" @click.stop="sendAuthCode">
+              <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
                 <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
                 <span v-else>{{$t('user.sendCodes')}}</span>
               </el-button>
@@ -88,6 +88,11 @@ export default {
           { validator: validatePhoneNumber, trigger: 'change' }
         ]
       }
+    }
+  },
+  computed: {
+    isCellphoneVerify() {
+      return /^1\d{10}$/.test(this.ruleForm.phoneNumber)
     }
   },
   methods: {

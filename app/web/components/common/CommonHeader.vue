@@ -79,13 +79,12 @@
             slot="dropdown"
             class="user-menu-dropdown"
           >
-            <div class="greeting">{{$t("common.hello")}}，
-              <span class="fake-link" @click="goUserProfilePage">{{username}}</span>
+            <div class="greeting">{{$t("common.hello")}}，{{username}}
             </div>
-            <!-- <el-dropdown-item divided>
-              <a :href='"/" + userProfile.username'><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a> -->
-            <!-- </el-dropdown-item> -->
             <el-dropdown-item divided>
+              <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
               <a
                 href="#"
                 @click.stop.prevent="goCreativityPage"
@@ -638,12 +637,6 @@ export default {
 .el-dropdown-menu .iconfont {
   margin-right: 14px;
   font-size: 20px;
-}
-.fake-link{
-  cursor: pointer;
-}
-.fake-link:hover {
-  color: #66b1ff;
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {

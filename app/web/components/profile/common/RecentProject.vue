@@ -5,8 +5,15 @@
         <span>{{$t("profile.rencentProject")}}</span>
         <!-- <router-link class="recent-project-card-header-button" :to='{name:"ProfileProjectPage"}'>{{$t("profile.more")}}<i class="el-icon-arrow-right"></i></router-link> -->
       </div>
-      <div class="recent-project-list">
+      <div class="recent-project-list" v-if="!isProjectEmpty">
         <project-cell class="recent-project-list-item" v-for="(project, index) in recentProject" :key="index" :project='project'></project-cell>
+      </div>
+      <div class="recent-project-empty" v-if="isProjectEmpty">
+        <img src="@/assets/img/default_project.png" alt="">
+        <p>
+          {{isLoginUserEditable ? $t("profile.noProjectToShow") : $t("profile.noContentForProject")}}
+          <a v-if="isLoginUserEditable" class="recent-project-empty-anchor" href="/pbl/project/new" target="_blank">{{$t("profile.createNewProject")}}</a>
+        </p>
       </div>
     </el-card>
   </div>
@@ -21,6 +28,10 @@ export default {
     nowUserDetail: {
       type: Object,
       required: true
+    },
+    isLoginUserEditable: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -42,7 +53,12 @@ export default {
     },
     recentProject() {
       return _.slice(this.sortedProjectList, 0, 3)
-    }
+    },
+    isProjectEmpty() {
+      return Boolean(
+        this.recentProject && this.recentProject.length == 0
+      )
+    },
   },
   methods: {
     ...mapActions({
@@ -88,6 +104,17 @@ export default {
     margin-bottom: -33px;
     & &-item {
       border: none;
+      margin: 0 4px 16px;
+    }
+  }
+  &-empty {
+    color: #909399;
+    font-size: 14px;
+    text-align: center;
+    padding: 44px 0 16px;
+    &-anchor {
+      color: #2397f3;
+      text-decoration: none;
     }
   }
 }

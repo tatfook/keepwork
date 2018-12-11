@@ -25,6 +25,7 @@
   </el-card>
 </template>
 <script>
+import { locale } from '@/lib/utils/i18n'
 import '@/lib/contribution-calendar/css/contribution-calendar.css'
 import contributionCalendarCreator from '@/lib/contribution-calendar/js/contribution-calendar'
 export default {
@@ -58,7 +59,7 @@ export default {
         defaultColor: this.defaultColor,
         defaultTextFillColor: '#909399',
         dateCount: this.contributionData,
-        languageLocaleIsForGlobalUser: true
+        languageLocaleIsForGlobalUser: locale === 'en-US'
       })
     }
   },
