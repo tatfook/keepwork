@@ -84,9 +84,6 @@ export default {
   async created() {
     await this.loadPblPresets()
   },
-  mounted(){
-    window.document.title = "Project"
-  },
   components: {
     LoginDialog,
     CommonHeader,
