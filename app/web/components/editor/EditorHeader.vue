@@ -91,7 +91,7 @@
                   <i :class="['iconfont', 'icon-Chinese-english', isEnglish ? 'icon-language' : '']"></i>
                   {{$t('common.chinese-englishSwitch')}}
                 </button>
-                <button :class=" isEnglish ? 'btn-angles' : '' " @click="toggleLeftAndRightAngles" :disabled="!(isPreviewShow && isCodeShow)">
+                <button :class=" isEnglish ? 'btn-angles' : '' " @click="toggleLeftAndRightAngles" :disabled="isWelcomeShow || !(isPreviewShow && isCodeShow)">
                   <i class="iconfont icon-qiehuan"></i>
                   {{$t('common.left-rightAngles')}}
                 </button>
