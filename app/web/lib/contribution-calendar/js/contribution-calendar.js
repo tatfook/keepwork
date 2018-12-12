@@ -35,6 +35,11 @@ let defaults = {
 }
 let languageLocaleIsForGlobalUser = defaults.languageLocaleIsForGlobalUser
 let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+let gEle = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+let startX = 36
+let startY = 45
+gEle.setAttribute('transform', 'translate(' + startX + ', ' + startY + ')')
+svg.appendChild(gEle)
 let year = defaults.year
 let yearLen = 0
 let month = []
@@ -97,7 +102,7 @@ function showMonth(svg) {
     text.setAttribute('fill', defaultTextFillColor)
     let textNode = document.createTextNode(monthChars[i - 1])
     text.appendChild(textNode)
-    svg.appendChild(text)
+    gEle.appendChild(text)
   }
   return svg
 }
@@ -115,7 +120,7 @@ function showWeek(svg) {
     text.setAttribute('fill', defaultTextFillColor)
     let textNode = document.createTextNode(weekItem)
     text.appendChild(textNode)
-    svg.appendChild(text)
+    gEle.appendChild(text)
   }
   return svg
 }
@@ -150,7 +155,7 @@ function showTables(svg, yearLen) {
     r.appendChild(title)
 
     g.appendChild(r)
-    svg.appendChild(g)
+    gEle.appendChild(g)
   }
   return svg
 }
