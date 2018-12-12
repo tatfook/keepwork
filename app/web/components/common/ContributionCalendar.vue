@@ -103,10 +103,13 @@ export default {
       width: 45px;
       height: 50px;
       left: 70px;
-      top: 56px;
+      top: 58px;
       background-color: #fff;
       position: absolute;
       z-index: 1;
+    }
+    svg {
+      margin-left: 78px;
     }
   }
   &-legend {
