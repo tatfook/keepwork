@@ -155,7 +155,7 @@
         <el-tooltip :content="$t('tips.ShowBoth')">
           <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()"></span>
         </el-tooltip>
-        <el-tooltip :content="$t('tips.ShowBoth')">
+        <el-tooltip :content="$t('tips.ShowCodeOnly')">
           <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()"></span>
         </el-tooltip>
       </el-menu-item>
@@ -324,7 +324,8 @@ export default {
     toggleCodeWin() {
       this.resetShowingCol({
         isPreviewShow: false,
-        isCodeShow: true
+        isCodeShow: true,
+        isManagerShow: true
       })
     },
     togglePreviewWin() {
