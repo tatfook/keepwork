@@ -94,6 +94,9 @@ export default {
       activePageName: this.$route.name
     }
   },
+  mounted(){
+    window.document.title = `${this.editingProjectName}`
+  },
   computed: {
     ...mapGetters({
       userProjects: 'pbl/userProjects',
