@@ -62,6 +62,7 @@ const {
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
   ADD_RECENT_OPENED_SITE,
+  TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG
 } = props
 
@@ -539,6 +540,9 @@ const actions = {
   addRecentOpenedSiteUrl(context, { updateRecentUrlList }) {
     let { commit, rootGetters: { 'user/username': username } } = context
     commit(ADD_RECENT_OPENED_SITE, { updateRecentUrlList, username })
+  },
+  toggleAngles({ commit }, { showAngle }) {
+    commit(TOGGLE_ANGLES, { showAngle })
   },
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
