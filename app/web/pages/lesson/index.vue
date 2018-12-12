@@ -205,13 +205,15 @@ export default {
       getUserDetail: 'lesson/getUserDetail',
       toggleLoginDialog: 'lesson/toggleLoginDialog',
       changeStatus: 'lesson/student/changeStatus',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords'
+      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
+      resumeClassData: 'lesson/resumeClassData'
     }),
     async loadLessonPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
       )
       await this.getUserDetail().catch(err => console.error(err))
+      await this.resumeClassData().catch(err => console.error(err))
       this.loading = false
     },
     handleLoginDialogClose() {

@@ -86,8 +86,7 @@
             </el-dropdown-item>
             <el-dropdown-item>
               <a
-                href="#"
-                @click.stop.prevent="goCreativityPage"
+                href="/a/account"
               ><i class="iconfont icon-account1"></i>{{$t("common.myAccount")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
