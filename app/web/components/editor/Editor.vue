@@ -24,7 +24,7 @@
       </el-scrollbar>
     </el-col>
     <div class="col-between flex-order-one" v-if="isManagerShow"></div>
-    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="setPreviewWinStyle">
+    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="setStyle('preview')">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -54,7 +54,7 @@
       </el-dialog>
     </el-col>
     <div class="col-between editor-resizer flex-order-two" v-if="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setCodeWinStyle">
+    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setStyle('code')">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content" :style="getStyle">
@@ -222,21 +222,6 @@ export default {
         })
       }
     },
-    setPreviewWinStyle() {
-      if(!this.showAngle) {
-        return 'order: 3;'
-      } else {
-        return 'order: 5;'
-      }
-    },
-    setCodeWinStyle() {
-      if(!this.showAngle) {
-        return 'order: 5;'
-      } else {
-        return 'order: 3;'
-      }
-
-    },
     showContent() {
       return this.isFullscreen ? this.$t('editor.fullScreen') : this.$t('editor.exitFullScreen')
     },
@@ -292,6 +277,22 @@ export default {
       let rightColName = this.resizeWinParams.rightColWidthParam
       this[leftColName] = this[leftColName] + diffPercent
       this[rightColName] -= diffPercent
+    },
+    setStyle(val) {
+      if(!this.showAngle) {
+        if(val === 'preview') {
+          return 'order: 3;'
+        } else {
+          return 'order: 5;'
+        }
+      }else {
+        if(val === 'preview') {
+          return 'order: 5;'
+        } else {
+          return 'order: 3;'
+        }
+
+      }
     },
     showPreview() {
       this.$emit('showPreview')
