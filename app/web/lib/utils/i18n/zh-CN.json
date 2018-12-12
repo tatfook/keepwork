@@ -616,7 +616,7 @@
     "projectMembers": "项目成员",
 
     "projectId": "请输入项目ID",
-
+    "projectHome": "项目主页",
     "projectNotFound": "项目不存在",
     "projectInputId": "输入项目ID,获取项目数据",
     "projectForbidden": "无法显示内容"

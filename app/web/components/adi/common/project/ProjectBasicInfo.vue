@@ -62,7 +62,7 @@
             plain
             v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)"
           >{{$t("project.edit")}}</el-button> -->
-          <el-button @click="toProejctHomePage" plain>项目主页</el-button>
+          <el-button @click="toProejctHomePage" plain>{{$t('card.projectHome')}}</el-button>
           <!-- <el-button
             :disabled="isApplied"
             :loading='isApplyButtonLoading'
