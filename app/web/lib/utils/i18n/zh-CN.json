@@ -620,7 +620,7 @@
     "projectNotFound": "项目不存在",
     "projectInputId": "输入项目ID,获取项目数据",
     "projectForbidden": "无法显示内容"
-    
+
   },
   "field": {
     "fileId": "字段",
@@ -1305,9 +1305,9 @@
     "whiteboard": "白板",
     "share": "分享",
     "star": "收藏",
-    "unstar": "取消收藏",
+    "unstar": "已收藏",
     "like": "点赞",
-    "unlike": "取消点赞",
+    "unlike": "已点赞",
     "setting": "设定",
     "welcomeTo": "欢迎来到",
     "projectTags": "项目标签",
