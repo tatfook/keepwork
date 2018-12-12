@@ -614,7 +614,7 @@
     "projectMembers": "Project Members",
 
     "projectId": "Project ID",
-
+    "projectHome": "Project home",
     "projectNotFound": "Project Not Found",
     "projectInputId": "Enter the project ID to get the project data",
     "projectForbidden":"Unable to display content"
