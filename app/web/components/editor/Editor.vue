@@ -23,7 +23,7 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between flex-order-one" v-if="isManagerShow"></div>
+    <div class="col-between flex-order-one" v-show="isManagerShow"></div>
     <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="setPreviewWinStyle">
       <el-row class="toolbar">
         <!-- <el-button-group>
@@ -53,7 +53,7 @@
         </span>
       </el-dialog>
     </el-col>
-    <div class="col-between editor-resizer flex-order-two" v-if="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <div class="col-between editor-resizer flex-order-two" v-show="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
     <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setCodeWinStyle">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
