@@ -93,8 +93,8 @@ export default {
       height: 50px;
       background-color: #eee;
       position: absolute;
-      left: 80px;
-      top: 45px;
+      left: 94px;
+      top: 60px;
       z-index: 2;
     }
     &::after {
@@ -102,8 +102,8 @@ export default {
       display: inline-block;
       width: 45px;
       height: 50px;
-      left: 56px;
-      top: 50px;
+      left: 70px;
+      top: 56px;
       background-color: #fff;
       position: absolute;
       z-index: 1;
