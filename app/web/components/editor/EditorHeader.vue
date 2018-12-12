@@ -302,7 +302,8 @@ export default {
     toggleCodeWin() {
       this.resetShowingCol({
         isPreviewShow: false,
-        isCodeShow: true
+        isCodeShow: true,
+        isManagerShow: true
       })
     },
     togglePreviewWin() {
