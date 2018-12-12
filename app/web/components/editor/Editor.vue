@@ -223,14 +223,14 @@ export default {
       }
     },
     setPreviewWinStyle() {
-      if(this.showAngle) {
+      if(!this.showAngle) {
         return 'order: 3;'
       } else {
         return 'order: 5;'
       }
     },
     setCodeWinStyle() {
-      if(this.showAngle) {
+      if(!this.showAngle) {
         return 'order: 5;'
       } else {
         return 'order: 3;'
