@@ -23,7 +23,7 @@
     </div>
     <div class="user-basic-msg-operation">
       <el-button v-if="isLoginUserEditable" @click="isPersonalCenterShow = true">{{$t("profile.addBio")}}</el-button>
-      <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
+      <el-button v-else type="primary" :class="{'button-outline': isLoginUserFavoritteNowUser}" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
     </div>
     <div class="user-basic-msg-infos hidden-sm-and-down">
       <div class="user-basic-msg-infos-item">
@@ -198,6 +198,10 @@ export default {
     }
     .el-button--default {
       background: linear-gradient(#fff, #f6f7f8);
+    }
+    .button-outline {
+      background-color: transparent;
+      color: #2397f3;
     }
   }
   &-infos {

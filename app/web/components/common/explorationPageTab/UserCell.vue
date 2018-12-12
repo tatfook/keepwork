@@ -214,8 +214,8 @@ export default {
       }
     }
     .is-followed {
-      background: #5fe1af;
-      border: 1px solid #5fe1af;
+      background-color: transparent;
+      color: #2397f3;
     }
   }
 }
