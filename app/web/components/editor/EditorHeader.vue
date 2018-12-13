@@ -81,8 +81,22 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
+                <button :disabled='currentDisabled' @click='togglePreviewWin'>
+                  <i class="iconfont icon-preview1"></i>{{$t('tips.ShowPreviewOnly')}}
+                </button>
+                <button :disabled='currentDisabled' @click='toggleBoth'>
+                  <i class="iconfont icon-both"></i>{{$t('tips.ShowCodeOnly')}}
+                </button>
                 <button :disabled='currentDisabled' @click='toggleCodeWin'>
-                  <i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
+                  <i class="iconfont icon-code1"></i>{{$t('tips.ShowCodeOnly')}}
+                </button>
+                <button :disabled='currentDisabled' @click='openZenMode'>
+                  {{$t('tips.ShowZenMode')}}
+                </button>
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <div class="kp-menu">
                 <button>
                   <i class="iconfont icon-help"></i>
                   <a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
@@ -314,6 +328,32 @@ export default {
       toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
+    openZenMode() {
+      const dom = document.querySelector('#codeWin')
+
+      if (!dom) {
+        return false
+      }
+
+      this.resetShowingCol({
+        isZenMode: true
+      })
+
+      this.$fullscreen.toggle(dom, {
+        wrap: false,
+        fullscreenClass: 'zenmode',
+        callback: (state) => {
+          if (!state) {
+            this.resetShowingCol({
+              isZenMode: false
+            })
+            const vscroolbar = dom.querySelector(".CodeMirror-vscrollbar")
+            // Is very strange. when I set display none, scroolbar is normally
+            vscroolbar.style.display = 'none'
+          }
+        }
+      })
+    },
     toggleBoth() {
       this.resetShowingCol({
         isPreviewShow: true,
