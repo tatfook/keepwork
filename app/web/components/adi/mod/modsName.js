@@ -17,5 +17,7 @@ export default {
   ModQuiz: 'modList.quiz',
   ModHint: 'modList.hint',
   ModVipRead: 'modList.vipRead',
-  ModProject: 'modList.project'
+  ModProject: 'modList.project',
+  ModBigFile: 'modList.bigFile',
+  ModToc: 'modList.toc'
 }
