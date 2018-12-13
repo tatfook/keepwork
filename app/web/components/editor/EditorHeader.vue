@@ -85,7 +85,7 @@
                   <i class="iconfont icon-preview1"></i>{{$t('tips.ShowPreviewOnly')}}
                 </button>
                 <button :disabled='currentDisabled' @click='toggleBoth'>
-                  <i class="iconfont icon-both"></i>{{$t('tips.ShowCodeOnly')}}
+                  <i class="iconfont icon-both"></i>{{$t('tips.ShowBoth')}}
                 </button>
                 <button :disabled='currentDisabled' @click='toggleCodeWin'>
                   <i class="iconfont icon-code1"></i>{{$t('tips.ShowCodeOnly')}}
