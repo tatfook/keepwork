@@ -1481,6 +1481,10 @@
     "noProjectToShow": "No projects to show.",
     "createNewProject": "Create New Project.",
     "noFriendsToShow": "No friends to show.",
-    "noFollowersToShow": "No followers to show."
+    "noFollowersToShow": "No followers to show.",
+    "createdProjects": "Created projects",
+    "contributedProjects": "Contributed projects",
+    "noProjectsToShow": "No projects to show.",
+    "noContributedProjectsToShow": "No contributed projects to show."
   }
 }

@@ -11,7 +11,7 @@
             <user-list v-if="!isEmpty" :userList='userList'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
-              <div class="user-list-empty-info">{{emptyInfo}}</div>
+              <div class="profile-social-empty-info">{{emptyInfo}}</div>
             </div>
           </el-tab-pane>
           <el-tab-pane name="follow">
@@ -19,7 +19,7 @@
             <user-list v-if="!isEmpty" :userList='userList'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
-              <div class="user-list-empty-info">{{emptyInfo}}</div>
+              <div class="profile-social-empty-info">{{emptyInfo}}</div>
             </div>
           </el-tab-pane>
         </el-tabs>

@@ -16,9 +16,9 @@
         <el-tab-pane name="ProfileSocialPage">
           <span slot="label" class="profile-header-tabs-label">{{$t("profile.friends")}}</span>
         </el-tab-pane>
-        <!-- <el-tab-pane name="ProfileProjectPage">
+        <el-tab-pane name="ProfileProjectPage">
           <span slot="label" class="profile-header-tabs-label">{{$t("profile.projects")}}</span>
-        </el-tab-pane> -->
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
