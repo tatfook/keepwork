@@ -1288,6 +1288,8 @@
     "projectName": "Project Name",
     "projectType": "Project Type",
     "createProject": "Create the project",
+    "projectAlreadyExists": "The project already exists.",
+    "ProjectCreationFailed": "Failed to create the project, please try again later!",
     "prev": "Prev",
     "next": "Next",
     "3DGameAndAnim": "3D games and animations",
