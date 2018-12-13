@@ -1297,6 +1297,8 @@
     "projectName": "项目名称",
     "projectType": "项目类型",
     "createProject": "完成创建",
+    "projectAlreadyExists": "该项目已存在！",
+    "ProjectCreationFailed": "创建项目失败，请稍后再试！",
     "prev": "上一步",
     "next": "下一步",
     "3DGameAndAnim": "3D动画和游戏作品",
