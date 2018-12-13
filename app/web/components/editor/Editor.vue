@@ -139,7 +139,7 @@ import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
 import IframeDialog from '@/components/common/IframeDialog'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
 
 export default {
   name: 'Editor',
@@ -173,6 +173,44 @@ export default {
         }, 1000)
       })
     })
+  },
+  watch: {
+    isPreviewShow: {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return
+        }
+        if (newVal === false) {
+          this.previewWinWidth = 0
+          this.codeWinWidth = 100 - this.managerWinWidth
+        } else if (this.isCodeShow === false) {
+          this.previewWinWidth = 100 - this.managerWinWidth
+        } else {
+          let halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    },
+    isCodeShow: {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return
+        }
+        if (newVal === false) {
+          this.codeWinWidth = 0
+          this.previewWinWidth = 100 - this.managerWinWidth
+        } else if (this.isPreviewShow === false) {
+          this.codeWinWidth = 100 - this.managerWinWidth
+        } else {
+          let halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    }
   },
   components: {
     EditorMarkdown,
@@ -221,19 +259,30 @@ export default {
       }
     },
     setPreviewWinStyle() {
+      const style = {}
+
       if(!this.showAngle) {
-        return 'order: 3;'
+        style.order = 3
       } else {
-        return 'order: 5;'
-      }
-    },
-    setCodeWinStyle() {
-      if(!this.showAngle) {
-        return 'order: 5;'
-      } else {
-        return 'order: 3;'
+        style.order = 5
       }
 
+      style.width = this.previewWinWidth + '%'
+
+      return style
+    },
+    setCodeWinStyle() {
+      const style = {}
+
+      if(!this.showAngle) {
+        style.order = 5
+      } else {
+        style.order = 3
+      }
+
+      style.width = this.codeWinWidth + '%'
+
+      return style
     },
     showContent() {
       return this.isFullscreen ? this.$t('editor.fullScreen') : this.$t('editor.exitFullScreen')
@@ -292,15 +341,24 @@ export default {
       if (!(event && event.clientX)) {
         return
       }
+
       this.resizeWinParams.isResizing = true
       this.resizeWinParams.mouseStartX = event.clientX
-      this.resizeWinParams.leftColWidthParam = leftColWidthParam
-      this.resizeWinParams.rightColWidthParam = rightColWidthParam
+
+      if (this.showAngle) {
+        this.resizeWinParams.leftColWidthParam = rightColWidthParam
+        this.resizeWinParams.rightColWidthParam = leftColWidthParam
+      } else {
+        this.resizeWinParams.leftColWidthParam = leftColWidthParam
+        this.resizeWinParams.rightColWidthParam = rightColWidthParam
+      }
+      
     },
     dragMouseMove(event) {
       if (!(this.resizeWinParams.isResizing && event && event.clientX)) {
         return
       }
+
       let mouseNowX = event.clientX
       let diffClientX = mouseNowX - this.resizeWinParams.mouseStartX
       let diffPercent = diffClientX / this.bodyWidth * 100
