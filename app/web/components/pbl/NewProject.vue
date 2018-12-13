@@ -30,6 +30,8 @@
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions } from 'vuex'
 import WebsiteBinder from './common/WebsiteBinder'
+import { keepwork } from '@/api'
+
 export default {
   name: 'NewProject',
   data() {
@@ -99,9 +101,20 @@ export default {
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
         return false
-      } else {
-        return true
       }
+      let name = this.newProjectData.name
+      keepwork.projects
+      .getUserProjectsByName({ name })
+      .then(res => {
+        if(res.count > 0){
+          this.$message.error(this.$t('project.projectAlreadyExists'))
+          return false
+        }
+      })
+      .catch(e => {
+        console.error(e)
+      })
+      return true
     },
     async createNewProject() {
       if (!(await this.checkProjectName())) {
