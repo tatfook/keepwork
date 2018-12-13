@@ -241,6 +241,7 @@ export const projects = {
   updateProject: async ({ projectId, updatingProjectData }) =>
     put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
+  getUserProjectsByName: async ({ name }) => post('projects/search', { name }),
   createProject: async ({
     description,
     name,
