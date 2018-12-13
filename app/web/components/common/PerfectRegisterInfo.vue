@@ -1,7 +1,7 @@
 <template>
     <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-      <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+      <el-form-item prop="username" :error="usernameError">
+        <el-input  @focus="handleUsernameInputFocus" @blur="isExist" v-model="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
       </el-form-item>
       <div class="register-dialog-form-tip">
         {{$t('common.accountNoChange')}}<br>
@@ -36,6 +36,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
 
 export default {
   name: 'PerfectRegisterInfo',
@@ -59,6 +60,7 @@ export default {
       }
     }
     return {
+      usernameError: '',
       loading: false,
       registerLoading: false,
       sendCodeLoading: false,
@@ -132,6 +134,22 @@ export default {
       // thirdRegister: 'user/thirdRegister',
       userRegister: 'user/register'
     }),
+    handleUsernameInputFocus() {
+      this.usernameError = ''
+    },
+    isExist() {
+      if (!this.ruleForm.username) return
+      keepwork.user
+        .getUser(this.ruleForm.username)
+        .then(res => {
+          if (res) {
+            this.usernameError = this.$t('common.existAccount')
+          }
+        })
+        .catch(e => {
+          this.usernameError = ''
+        })
+    },
     handleClose() {
       this.$emit('close')
     },
@@ -143,8 +161,9 @@ export default {
       })
     },
     async register(formName) {
+      if (this.usernameError) return
       this.$refs[formName].validate(async valid => {
-        if (valid) {
+        if (valid && !this.usernameError) {
           let payload = {
             username: this.ruleForm.username,
             password: this.ruleForm.password,
@@ -152,7 +171,6 @@ export default {
             captcha: this.ruleForm.authCode,
             oauthToken: this.userThreeService.token
           }
-          console.log('threelogin',payload)
           this.registerLoading = true
           //第三方进行注册
           await this.userRegister(payload)
