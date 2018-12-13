@@ -57,7 +57,14 @@
     <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setCodeWinStyle">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col class="toolbar-content" :style="getStyle">
+          <el-col class="toolbar-content">
+            <div class="zenmode-icon" v-if="isZenMode">
+              <img :src="require('@/assets/img/zen.png')" />
+              <!-- tooltip can not shoe in fullscreen -->
+              <!-- <el-tooltip :content="$t('editor.zenModeTips')">
+                <i class="iconfont icon-help"></i>
+              </el-tooltip> -->
+            </div>
             <div class="toolbar-content_left">
               <el-button-group>
                 <el-tooltip :content="$t('editor.title') + '1'">
@@ -91,14 +98,14 @@
                   <el-button class="iconfont icon-link_" @click="insertLink"></el-button>
                 </el-tooltip>
               </el-button-group>
-              <el-button-group :style='isDisplayButton'>
+              <el-button-group v-if="!isZenMode" :style='isDisplayButton'>
                 <el-tooltip :content="$t('tips.mod')">
                   <el-button class="iconfont icon-module" @click="addModToMarkdown"></el-button>
                 </el-tooltip>
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='isManagerShow ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button :title='$t("tips.ShowZenMode")' :icon="fullscreenIcon" circle @click="openZenMode"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -132,6 +139,7 @@ import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
 import IframeDialog from '@/components/common/IframeDialog'
+import { setTimeout } from 'timers';
 
 export default {
   name: 'Editor',
@@ -195,7 +203,8 @@ export default {
       showAngle: 'showAngle',
       isCodeShow: 'isCodeShow',
       isPreviewShow: 'isPreviewShow',
-      isManagerShow: 'isManagerShow'
+      isManagerShow: 'isManagerShow',
+      isZenMode: 'isZenMode'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
@@ -208,17 +217,6 @@ export default {
       } else {
         return this.generateStyleString({
           'display': 'none'
-        })
-      }
-    },
-    getStyle() {
-      if (this.isPreviewShow) {
-        return this.generateStyleString({
-          'text-align': 'left'
-        })
-      } else {
-        return this.generateStyleString({
-          'text-align': 'center'
         })
       }
     },
@@ -256,11 +254,30 @@ export default {
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
-    toggleFullscreen() {
+    openZenMode() {
+      const dom = this.$el.querySelector('#codeWin')
+
+      if (!dom) {
+        return false
+      }
+
       this.resetShowingCol({
-        isPreviewShow: false,
-        isCodeShow: true,
-        isManagerShow: !this.isManagerShow
+        isZenMode: true
+      })
+
+      this.$fullscreen.toggle(dom, {
+        wrap: false,
+        fullscreenClass: 'zenmode',
+        callback: (state) => {
+          if (!state) {
+            this.resetShowingCol({
+              isZenMode: false
+            })
+            const vscroolbar = dom.querySelector(".CodeMirror-vscrollbar")
+            // Is very strange. when I set display none, scroolbar is normally
+            vscroolbar.style.display = 'none'
+          }
+        }
       })
     },
     generateStyleString(style) {
@@ -577,6 +594,104 @@ bigFile:
 }
 </style>
 <style lang="scss">
+.zenmode {
+  background-color: black;
+  background-image: url('../../assets/img/cubes.png');
+
+  .toolbar {
+    width: 100%;
+    margin: 0 auto!important;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1c1c1c;
+
+    .el-scrollbar {
+      width: 1080px;
+      margin: 0 auto;
+    }
+
+    .toolbar-content {
+      padding: 8px;
+
+      .zenmode-icon {
+        float: left;
+        margin-top: 5px;
+
+        img {
+          vertical-align: middle;
+        }
+
+        i {
+          color: #5e5e5e;
+          vertical-align: middle;
+        }
+      }
+
+      .toolbar-content_left {
+        text-align: right;
+        float: right;
+
+        button {
+          background-color: #1c1c1c;
+          border-color: #303133;
+        }
+
+        button:hover {
+          background-color: #333333;
+          color: white;
+        }
+
+        button:active {
+          color: white;
+        }
+      }
+    }
+
+    .fullScreenBtn {
+      display: none;
+    }
+  }
+
+  .kp-md-editor {
+    width: 1080px;
+    margin: 0 auto;
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar-thumb{
+      background: #3b3b3b;
+      border-radius: 20px;
+    }
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar-track {
+      background: #1c1c1c;
+      border-radius: 20px;
+    }
+  }
+}
+
+.manager-win {
+  .el-scrollbar {
+    height: 100%;
+  }
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+  }
+  .manager-content-box {
+    background-color: #fff;
+  }
+  .manager-content-inner {
+    height: 100%;
+  }
+  
+}
+
+.el-tooltip__popper {
+  font-size: 14px;
+}
+
 .multiple-text-dialog {
   .el-dialog {
     width: 1300px;
@@ -608,26 +723,5 @@ bigFile:
   .el-button--primary {
     padding: 7px 45px;
   }
-}
-</style>
-
-<style lang="scss">
-.manager-win {
-  .el-scrollbar {
-    height: 100%;
-  }
-  .el-scrollbar__wrap {
-    overflow-x: auto;
-  }
-  .manager-content-box {
-    background-color: #fff;
-  }
-  .manager-content-inner {
-    height: 100%;
-  }
-  
-}
-.el-tooltip__popper {
-  font-size: 14px;
 }
 </style>

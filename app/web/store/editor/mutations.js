@@ -260,6 +260,10 @@ const mutations = {
     if (typeof showingColObj.isCodeShow === 'boolean') {
       Vue.set(state.showingCol, 'isCodeShow', showingColObj.isCodeShow)
     }
+
+    if (typeof showingColObj.isZenMode === 'boolean') {
+      Vue.set(state.showingCol, 'isZenMode', showingColObj.isZenMode)
+    }
   },
   [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, payload) {
     payload = _.isArray(payload) ? payload : [payload]

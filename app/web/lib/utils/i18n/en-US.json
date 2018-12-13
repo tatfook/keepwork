@@ -133,6 +133,7 @@
     "noSelfIntro": "No self intro."
   },
   "editor": {
+    "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
     "warningInput": "Please enter the correct link address",
 
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -341,7 +342,8 @@
     "clickToChange": "Click to switch",
     "ShowPreviewOnly": "Show preview only",
     "ShowBoth": "Show both",
-    "ShowCodeOnly": "Show code only"
+    "ShowCodeOnly": "Show code only",
+    "ShowZenMode": "Zen Mode"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",

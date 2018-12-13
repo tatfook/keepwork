@@ -134,6 +134,7 @@
     "noSelfIntro": "这家伙很懒，没有简介！"
   },
   "editor": {
+    "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
     "warningInput": "请输入正确的链接地址",
 
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -342,7 +343,8 @@
     "clickToChange": "点击切换",
     "ShowPreviewOnly": "仅显示预览",
     "ShowBoth": "同时显示",
-    "ShowCodeOnly": "仅显示代码"
+    "ShowCodeOnly": "仅显示代码",
+    "ShowZenMode": "禅模式"
   },
   "help": {
     "menu": "为页面添加一组按钮，可以使用“菜单编辑器”来进行内容管理",
