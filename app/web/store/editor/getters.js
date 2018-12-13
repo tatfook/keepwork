@@ -79,9 +79,42 @@ const getters = {
     if (state.activePage) return state.activePage.activePropertyTabType
   },
   showingCol: state => state.showingCol,
-  isCodeShow: (state, { showingCol }) => !!_.get(showingCol, 'isCodeShow'),
-  isPreviewShow: (state, { showingCol }) => !!_.get(showingCol, 'isPreviewShow'),
-  isManagerShow: (state, { showingCol }) => !!_.get(showingCol, 'isManagerShow'),
+  isCodeShow: (state, { showingCol }) => {
+    const isCodeShow = _.get(showingCol, 'isCodeShow')
+
+    if (typeof isCodeShow !== 'boolean') {
+      return true
+    } else {
+      return isCodeShow
+    }
+  },
+  isPreviewShow: (state, { showingCol }) => {
+    const isPreviewShow = _.get(showingCol, 'isPreviewShow')
+
+    if (typeof isPreviewShow !== 'boolean') {
+      return true
+    } else {
+      return isPreviewShow
+    }
+  },
+  isManagerShow: (state, { showingCol }) => {
+    const isManagerShow = _.get(showingCol, 'isManagerShow')
+
+    if (typeof isManagerShow !== 'boolean') {
+      return true
+    } else {
+      return isManagerShow
+    }
+  },
+  isZenMode: (state, { showingCol }) => {
+    const isZenMode = _.get(showingCol, 'isZenMode')
+
+    if (typeof isZenMode !== 'boolean') {
+      return false
+    } else {
+      return isZenMode
+    }
+  },
   canUndo: (state, { activeAreaData }) =>
     activeAreaData && UndoHelper.canUndo(activeAreaData.undoManager),
   canRedo: (state, { activeAreaData }) =>
