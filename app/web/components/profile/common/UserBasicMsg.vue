@@ -5,7 +5,7 @@
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
-      <div class="user-basic-msg-desc">{{nowUserDetail.description}}</div>
+      <div class="user-basic-msg-desc" :title="nowUserDetail.description">{{nowUserDetail.description}}</div>
     </div>
     <div class="user-basic-msg-rank-info hidden-sm-and-down">
       <div class="user-basic-msg-rank-info-item">
@@ -174,6 +174,10 @@ export default {
   &-desc {
     color: #c0c4cc;
     font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
   }
   &-rank-info {
     display: flex;
@@ -210,6 +214,9 @@ export default {
     padding: 18px 24px;
     &-item {
       margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &:last-child {
         margin-bottom: 0;
       }
