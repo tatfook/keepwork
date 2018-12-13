@@ -42,7 +42,7 @@
         </span>
       </div>
       <el-collapse-transition>
-        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="personalSiteList.length > 0 && trees.isMyShow" ref='fileManagerTree' node-key="path" :data="personalSiteList | sortBy('domain')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick" @node-expand="handleNodeExpand" @node-collapse="handleNodeCollapse">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -59,7 +59,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick">
+        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick" @node-collapse="handleNodeCollapse"  @node-expand="handleNodeExpand">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -291,6 +291,20 @@ export default {
         history.replaceState('', '', url)
       }
       // isFileClicked && this.$router.push('/' + data.path.replace(/\.md$/, ''))
+    },
+    handleNodeExpand(data, node, component) {
+      let path = data.path || `${data.username}/${data.name}`
+      this.updateFilemanagerTreeNodeExpandMapByPath({
+        path,
+        expanded: true
+      })
+    },
+    handleNodeCollapse(data, node, component) {
+      let path = data.path || `${data.username}/${data.name}`
+      this.updateFilemanagerTreeNodeExpandMapByPath({
+        path,
+        expanded: false
+      })
     },
     closeAndResetFile(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
