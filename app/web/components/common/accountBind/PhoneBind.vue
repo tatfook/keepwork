@@ -2,7 +2,7 @@
   <div class="phone-bind">
     <el-form class="phone-bind-form" ref='phoneForm' :inline="true" :model='phoneFormData' :rules="phoneBindRules" label-width="140px">
       <el-form-item prop="cellphone">
-        <span slot="label">{{$t('user.phoneBind')}}:</span>
+        <span slot="label">{{$t('user.phoneBind')}}</span>
         <el-input class="phone-bind-form-item-content" size='small' v-model="phoneFormData.cellphone" v-if="!isUserBindPhone"></el-input>
         <span class="el-form-item__error" v-show="phoneError">{{phoneError}}</span>
         <div class="phone-bind-form-item-content" v-if="isUserBindPhone">{{userPhone}}</div>

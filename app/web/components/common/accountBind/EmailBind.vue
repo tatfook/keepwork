@@ -2,7 +2,7 @@
   <div class="email-bind">
     <el-form class="email-bind-form" ref='emailForm' :inline="true" :rules="emailBindRules" label-width="140px" :model='emailFormData'>
       <el-form-item prop="email">
-        <span slot="label">{{$t('user.emailBind')}}:</span>
+        <span slot="label">{{$t('user.emailBind')}}</span>
         <el-input class="email-bind-form-item-content" size='small' v-model="emailFormData.email" v-if="!isUserBindEmail"></el-input>
         <span class="el-form-item__error" v-show="emailError">{{emailError}}</span>
         <div class="email-bind-form-item-content" v-if="isUserBindEmail">{{userEmail}}</div>
