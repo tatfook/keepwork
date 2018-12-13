@@ -45,13 +45,10 @@ import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
-import VTooltip from 'v-tooltip'
-import '@/assets/css/tooltip.css'
 
 Vue.use(fullscreen)
 Vue.use(VueClipboard)
 Vue.use(VueKeepScrollPosition)
-Vue.use(VTooltip)
 
 Vue.config.productionTip = false
 Vue.use(Vuex)

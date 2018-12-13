@@ -40,15 +40,11 @@ import CommonHeader from '../../components/common/CommonHeader'
 import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
-import VTooltip from 'v-tooltip'
-import '@/assets/css/tooltip.css'
-
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(ElementUI.Popover)
-Vue.use(VTooltip)
 
 Vue.use(VueI18n)
 Vue.use(VueClipboard)

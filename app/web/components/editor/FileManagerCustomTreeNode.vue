@@ -2,8 +2,12 @@
   <div class="el-tree-node__label" :class="operationButtonsCountClass"  v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
     <span class="rename-wrapper" v-if="isRename">
       <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
-      <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini" :title='$t("editor.confirm")'></el-button>
-      <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini" :title='$t("editor.cancel")'></el-button>
+      <el-tooltip :content="$t('editor.confirm')">
+        <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini"></el-button>
+      </el-tooltip>
+      <el-tooltip :content="$t('editor.cancel')">
+        <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini"></el-button>
+      </el-tooltip>
     </span>
     <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || data.name || node.label | hideMDFileExtension}})</span>
     <span v-else>{{data.displayName || data.name || node.label | hideMDFileExtension}}</span>
@@ -14,20 +18,27 @@
       <i class="iconfont icon-common_websites" v-else></i>
     </span>
     <span class="file-manager-buttons-container" v-if="!isRename">
-      <el-button v-if="isHasOpened" v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" :title='$t("editor.save")' @click.stop='save(data)'>
-      </el-button>
-      <el-button v-if="isHasOpened" class="iconfont icon-refresh edit-hover" size="mini" type="text" :title='$t("editor.reload")' @click.stop='confirmRefresh'>
-      </el-button>
-      <el-button v-if="isFile || isFolder" class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename" :title='$t("editor.rename")'>
-      </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile" :title='$t("editor.newPage")'>
-      </el-button>
-      <el-button v-if="isAddable" class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder" :title='$t("editor.newFolder")'>
-      </el-button>
-      <el-button v-if="isRemovable" class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile" :title='$t("editor.delete")'>
-      </el-button>
-      <el-button v-if="isSettable" class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting" :title='$t("editor.settings")'>
-      </el-button>
+      <el-tooltip v-if="isHasOpened" :content="$t('editor.save')">
+        <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)' ></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isHasOpened" :content="$t('editor.reload')">
+        <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" @click.stop='confirmRefresh'></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isFile || isFolder" :content="$t('editor.rename')">
+        <el-button  class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename"></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isAddable" :content="$t('editor.newPage')">
+        <el-button class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile"></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isAddable" :content="$t('editor.newFolder')">
+        <el-button  class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder"></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isRemovable" :content="$t('editor.delete')">
+        <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile"></el-button>
+      </el-tooltip>
+      <el-tooltip v-if="isSettable" :content="$t('editor.settings')">
+        <el-button  class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting"></el-button>
+      </el-tooltip>
     </span>
     <div @click.stop v-if='isWebsiteSettingShow'>
       <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' :siteDetail='siteDetail' @close='closeWebsiteSettingDialog'></website-setting-dialog>

@@ -18,6 +18,7 @@ import Mousetrap from 'mousetrap'
 import { gConst } from '@/lib/global'
 
 import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/3024-night.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
 import 'codemirror/addon/hint/show-hint.css'
@@ -70,6 +71,13 @@ export default {
     },
     activePage(page) {
       this.preClickedMod = ''
+    },
+    isZenMode(state) {     
+      if (state) {
+        this.editor.setOption('theme', '3024-night')
+      } else {
+        this.editor.setOption('theme', 'default')
+      }
     }
   },
   computed: {
@@ -79,7 +87,8 @@ export default {
       code: 'code',
       modList: 'modList',
       activeMod: 'activeMod',
-      cursorPos: 'cursorPos'
+      cursorPos: 'cursorPos',
+      isZenMode: 'isZenMode'
     }),
     options() {
       const save = () => Mousetrap.trigger('mod+s')
@@ -98,6 +107,7 @@ export default {
       }
       return {
         mode: 'markdown',
+        theme: 'default',
         lineNumbers: true,
         line: true,
         lineWrapping: true,
@@ -434,7 +444,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .kp-md-editor {
   flex: 1;
   overflow: auto;
@@ -448,7 +458,6 @@ export default {
 .kp-md-editor .CodeMirror {
   margin: 0 auto;
   height: 100%;
-  max-width: 1080px;
 }
 .kp-md-editor .CodeMirror-gutters {
   background-color: transparent;
