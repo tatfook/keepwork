@@ -23,10 +23,13 @@ export default {
 <style lang="scss">
 .account-container {
   display: flex;
+  padding-top: 20px;
   .account-tab-left {
+    width: 265px;
   }
   .account-main-content {
     flex: 1;
+    margin-left: 20px;
   }
 }
 </style>

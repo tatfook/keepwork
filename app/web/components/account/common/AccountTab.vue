@@ -6,9 +6,9 @@
       alt="avatar"
     >
     <div class="account-tab-username">{{ username }}</div>
-    <el-button class="account-tab-button selected">我的账户</el-button>
-    <el-button class="account-tab-button">交易明细</el-button>
-    <el-button class="account-tab-button">优惠卷</el-button>
+    <el-button :class="['account-tab-button', {'selected': isMyAccountTab }]" @click="switchTab('MyAccount')" >我的账户</el-button>
+    <el-button :class="['account-tab-button', {'selected': isTransactionDetail }]" @click="switchTab('TransactionDetail')">交易明细</el-button>
+    <el-button :class="['account-tab-button', {'selected': isDiscountCoupon }]" @click="switchTab('DiscountCoupon')">优惠卷</el-button>
   </div>
 </template>
 
@@ -16,15 +16,45 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'AccountTab',
+  data() {
+    return {
+      currentTab: 'MyAccount'
+    }
+  },
+  watch: {
+    $route(to) {
+      this.initTabSelected()
+    }
+  },
+  mounted() {
+    this.initTabSelected()
+  },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile'
     }),
+    isMyAccountTab() {
+      return this.currentTab === 'MyAccount'
+    },
+    isTransactionDetail() {
+      return this.currentTab === 'TransactionDetail'
+    },
+    isDiscountCoupon() {
+      return this.currentTab === 'DiscountCoupon'
+    },
     avatar() {
       return this.userProfile.portrait || require('@/assets/img/default_portrait.png')
     },
     username() {
       return this.userProfile.username
+    }
+  },
+  methods: {
+    switchTab(name) {
+      this.$router.push({ name })
+    },
+    initTabSelected() {
+      this.currentTab = this.$route.name
     }
   }
 }

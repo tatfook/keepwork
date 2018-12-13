@@ -18,33 +18,48 @@
         </span>
       </el-popover>
     </div>
-    <div class="account-detail-row">
-      <span class="account-detail-row-name">
-        余额(元)
-      </span>
-      <span class="account-detail-row-count">
-        200.0
-      </span>
-      <el-button>去冲值</el-button>
+    <div class="account-detail-item">
+      <div class="account-detail-item-row">
+        <div class="account-detail-item-row-col name">余额(元)</div>
+        <div class="account-detail-item-row-col count">200.00</div>
+        <div class="account-detail-item-row-button">
+          <el-button
+            type="primary"
+            class="account-item-button"
+          >去冲值</el-button>
+        </div>
+      </div>
     </div>
-    <div class="account-detail-row">
-      <span class="account-detail-row-name">
-        知识币(个)
-      </span>
-      <span class="account-detail-row-count">
-        200.0
-      </span>
-      <el-button>去兑换</el-button>
+
+    <div class="account-detail-item">
+      <div class="account-detail-item-row">
+        <div class="account-detail-item-row-col name">知识币(个)</div>
+        <div class="account-detail-item-row-col count">18</div>
+        <div class="account-detail-item-row-button">
+          <el-button
+            type="primary"
+            class="account-item-button"
+          >去兑换</el-button>
+        </div>
+      </div>
+      <div class="account-detail-item-row">
+        <div class="account-detail-item-row-col lock">200 <span class="lock-tips">(待解锁)</span></div>
+      </div>
     </div>
-    <div class="account-detail-row">
-      <span class="account-detail-row-name">
-        知识豆(个)
-      </span>
-      <span class="account-detail-row-count">
-        200.0
-      </span>
-      <el-button>去兑换</el-button>
+
+    <div class="account-detail-item">
+      <div class="account-detail-item-row">
+        <div class="account-detail-item-row-col name">知识豆(个)</div>
+        <div class="account-detail-item-row-col count">50</div>
+        <div class="account-detail-item-row-button">
+          <el-button
+            type="primary"
+            class="account-item-button"
+          >去兑换</el-button>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -61,51 +76,71 @@ export default {
 </script>
 
 <style lang="scss">
-.account-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  margin-top: 20px;
-  display: flex;
-  .account-tab {
-    width: 260px;
-  }
-  .account-detail {
-    flex: 1;
-    margin-left: 20px;
-    background: #fff;
-    &-header {
-      height: 61px;
-      line-height: 61px;
-      color: #303133;
-      padding: 0 2em;
-      border-bottom: 1px solid #e8e8e8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      &-tips {
-        font-size: 13px;
-        color: #55a7e8;
-        cursor: pointer;
-        &-icon {
-          font-size: 16px;
-          color: #ff9307;
-        }
+.account-detail {
+  flex: 1;
+  background: #fff;
+  padding-bottom: 77px;
+  &-header {
+    height: 61px;
+    line-height: 61px;
+    color: #303133;
+    padding: 0 28px;
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-tips {
+      font-size: 13px;
+      color: #55a7e8;
+      cursor: pointer;
+      &-icon {
+        font-size: 16px;
+        color: #ff9307;
       }
     }
+  }
 
+  &-item {
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // min-height: 80px;
+    margin: 0 28px;
+    padding: 20px 0;
     &-row {
-      min-height: 80px;
-      border-bottom: 1px solid #e8e8e8;
+      width: 100%;
       display: flex;
-      padding: 0 2em;
       align-items: center;
-      &-name {
-        flex:1
-      }
-      &-count {
-        flex:1;
+      &-col {
+        flex: 1;
+        &.name {
+          color: #808080;
+          font-size: 15px;
+        }
+        &.count {
+          font-size: 24px;
+          color: #404144;
+        }
+        &.lock {
+          text-align: center;
+          font-size: 24px;
+          color: #bec1c6;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+        .lock-tips {
+          font-size: 14px;
+          color: #bec1c6;
+        }
       }
 
+      &-button {
+        .account-item-button {
+          padding: 10px 20px;
+        }
+      }
     }
   }
 }
