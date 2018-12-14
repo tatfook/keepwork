@@ -24,8 +24,7 @@
     <div v-if="stepIndex===1">
       <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm">
         <el-form-item prop="value">
-          <el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value">
-            <template slot="prepend">{{ locationOrigin }}/{{ folderPath }}/</template>
+          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value">
           </el-input>
         </el-form-item>
       </el-form>
@@ -309,19 +308,19 @@ export default {
     border: 3px solid #409eff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
-  .el-input-group__prepend {
-    padding: 0 5px 0 0;
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    color: #606266;
-  }
-  .el-input-group--prepend .el-input__inner {
-    border-radius: 4px;
-  }
   .el-input-group {
-    width: 500px;
     font-size: 16px;
+  }
+  .el-form-item__content {
+    word-break: break-all;
+    white-space: normal;
+  }
+  .el-input {
+    display: inline;
+    margin-left: 6px;
+  }
+  .el-input__inner {
+    width: 320px;
   }
   .webpage-name {
     .el-form-item__error {
