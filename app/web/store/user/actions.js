@@ -711,7 +711,6 @@ const actions = {
     let { commit } = context
     // let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
     let userThreeServices = await keepwork.userThreeService.getOauthUsers()
-    console.log('userThree', userThreeServices)
     commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
   },
   async threeServiceDeleteById(context, { id, username }) {

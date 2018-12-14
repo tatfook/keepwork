@@ -69,7 +69,7 @@
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
+              <a href="/u/p/userData"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>

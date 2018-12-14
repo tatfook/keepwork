@@ -1,6 +1,6 @@
 <template>
   <div class="third-party-bind">
-    <span class="third-party-bind-label">{{bindLabel}}:</span>
+    <span class="third-party-bind-label">{{bindLabel}}</span><span><i :class="['iconfont', iconType]"></i></span>
     <span class="third-party-bind-info">{{isUserBindService ? bindServiceUsername : $t('user.unBound')}}</span>
     <el-button size="small" class="third-party-bind-button" :class="{'third-party-bind-button-unbund':isUserBindService}" @click="authenticate" :loading="isLoading">{{isUserBindService ? $t('user.unbunding') : $t('user.binding')}}</el-button>
     <password-verify-dialog :isPwdDialogVisible='isPwdDialogVisible' :pwdDialogData='pwdDialogData' @close='handlePwdDialogClose'></password-verify-dialog>
@@ -32,6 +32,26 @@ export default {
       username: 'user/username',
       getThreeService: 'user/getThreeService'
     }),
+    iconType(){
+      let _icon = ''
+      switch (this.type.split('/')[0]) {
+        case 'github':
+          _icon = 'icon-github-fill';
+          break
+        case 'qq':
+          _icon = 'icon-QQ-circle-fill'
+          break
+        case 'weixin':
+          _icon = 'icon-logo-wechat'
+          break
+        case 'xinlangweibo':
+          _icon = 'icon-weibo-circle-fill'
+          break
+        default:
+          break
+      }
+      return _icon
+    },
     typeNumber(){
       return _.toNumber(this.type.split('/')[1])
     },
@@ -131,12 +151,31 @@ export default {
 <style lang="scss" scoped>
 .third-party-bind {
   margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  height: 46px;
   &-label {
-    width: 140px;
+    width: 100px;
     display: inline-block;
     text-align: right;
-    padding-right: 56px;
+    padding-right: 26px;
     box-sizing: border-box;
+  }
+  .iconfont{
+    font-size: 36px;
+    margin-right: 26px;
+  }
+  .icon-logo-wechat{
+    color: rgba(129, 206, 76,.99)
+  }
+  .icon-weibo-circle-fill{
+    color: rgba(233, 60, 72,.99)
+  }
+  .icon-QQ-circle-fill{
+    color: rgba(59, 156, 230,.99)
+  }
+  .icon-github-fill{
+    color: #000;
   }
   &-info {
     display: inline-block;
