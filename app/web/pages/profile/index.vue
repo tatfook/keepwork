@@ -3,7 +3,7 @@
     <div class="profile-page-header">
       <common-header class="container"></common-header>
     </div>
-    <router-view class="profile-page-main-content" id="profile-page" />
+    <router-view v-if="!loading" class="profile-page-main-content" id="profile-page" />
     <div class="profile-page-footer">
       <common-footer class="container"></common-footer>
     </div>

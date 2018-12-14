@@ -17,7 +17,7 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <a :href="`/u/${project.user.username}`" target="_blank" class="project-cell-author-name" @click="toUserProfilePage(project.user.username)">
+      <a :href="`/u/${project.user.username}`" target="_blank" class="project-cell-author-name">
         <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
         <span class="username" :title="project.user.username">{{project.user && project.user.username}}</span>
       </a>
