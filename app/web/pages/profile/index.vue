@@ -24,6 +24,7 @@ import VueClipboard from 'vue-clipboard2'
 import router from './profile.router'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
+import lessonModule from '@/store/lesson'
 import profileModule from '@/store/profile'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -59,7 +60,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     pbl: pblModule,
-    profile: profileModule
+    profile: profileModule,
+    lesson: lessonModule
   }
 })
 
