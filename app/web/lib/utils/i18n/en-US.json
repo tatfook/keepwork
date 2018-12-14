@@ -268,6 +268,7 @@
     "setWebsiteName": "You can also set the site name on the site settings page",
     "privatePermissions": "Open VIP, additional support for privileges such as private permissions and rights management",
     "createdSuccessfully": "Congratulations, the website was created successfully",
+    "webPageCreatedSuccessfully": "Successfully created a page.",
     "lowerCaseLetters": "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore": "Website name cannot start with an underscore",
 
