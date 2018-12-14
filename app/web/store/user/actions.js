@@ -119,10 +119,10 @@ const actions = {
     }
     return registerInfo
   },
-  async thirdRegister({ commit }, payload) {
-    let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
-    return thirdRegisterInfo
-  },
+  // async thirdRegister({ commit }, payload) {
+  //   let thirdRegisterInfo = await keepwork.user.register(payload, null, true)
+  //   return thirdRegisterInfo
+  // },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
     let { commit, dispatch, getters: { token } } = context
     if (useCache) return
@@ -154,8 +154,7 @@ const actions = {
   },
   async getUserDetailWithRankByUserIdOrUsername(context, { userId, username }) {
     let { commit } = context
-    let userKey = (userId === undefined) ? username : userId
-    let userDetailWithRank = await keepwork.user.getDetailWithRankByIdOrUsername({ userKey })
+    let userDetailWithRank = (userId === undefined) ? await keepwork.user.getDetailWithRankByUsername({ username }) : await keepwork.user.getDetailWithRankById({ userId })
     userId = _.get(userDetailWithRank, 'id')
     username = _.get(userDetailWithRank, 'username')
     commit(GET_USER_DETAIL_WITH_RANK_SUCCESS, { userId, username, userDetailWithRank })

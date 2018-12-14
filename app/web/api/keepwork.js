@@ -26,7 +26,8 @@ export const user = {
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
-  getDetailWithRankByIdOrUsername: async ({ userKey }) => get(`users/${userKey}/detail`),
+  getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
@@ -52,7 +53,7 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) => post('user/bindThreeService', ...args),
+  bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
   searchByField: async args => post('users/search', args)
 }
@@ -218,7 +219,8 @@ export const userThreeService = {
   getOauthUsers: async args => get('oauth_users'),
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
-  unbind: async (...args) => post('user_three_service/unbind', ...args)
+  // unbind: async (...args) => post('user_three_service/unbind', ...args)
+  unbind: async (args) => deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
 }
 
 export const favorites = {
@@ -239,6 +241,7 @@ export const projects = {
   updateProject: async ({ projectId, updatingProjectData }) =>
     put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
+  getUserProjectsByName: async ({ name }) => post('projects/search', { name }),
   createProject: async ({
     description,
     name,

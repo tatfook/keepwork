@@ -9,7 +9,9 @@
         <div class="user-experience-item" v-for="(experience, index) in userExperiences" :key="index">
           <div class="user-experience-item-title" :title="experience.title">
             {{experience.title}}
-            <div class="user-experience-item-date">{{experience.startDate | formatDate}} - {{experience.endDate | formatDate}}</div>
+            <div class="user-experience-item-date">
+              <span v-if="experience.startDate && experience.endDate">{{experience.startDate | formatDate}} - {{experience.endDate | formatDate}}</span>
+            </div>
             <div class="user-experience-item-operations" v-if="isLoginUserEditable">
               <el-button type="text" @click="deleteExperience(experience, index)">
                 <i class="iconfont icon-delete1"></i>{{$t("profile.delete")}}
@@ -232,6 +234,7 @@ export default {
     &-operations {
       display: none;
       background-color: #fff;
+      padding-left: 36px;
       .iconfont {
         vertical-align: middle;
         margin-right: 6px;
@@ -239,9 +242,6 @@ export default {
     }
     &:hover &-operations {
       display: inline-block;
-    }
-    &:hover &-date {
-      display: none;
     }
     .el-button {
       padding: 0;

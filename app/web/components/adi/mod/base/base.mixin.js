@@ -65,7 +65,6 @@ export default {
     let isShowMod = false
 
     _.forEach(this.mod.data, (item, key) => {
-
       let modsID = this.mod.data.styleID || 0
       let modstemplatesID = this.conf.styles[modsID]
       let modstemplates = this.conf.templates[modstemplatesID ? modstemplatesID.templateID || 0 : 0]
@@ -184,9 +183,13 @@ export default {
       let classes = []
       classes = this.getClasses(name)
       classes.push('comp')
-      if (name === this.activeProperty) {
-        classes.push('comp-proptype-hover')
+
+      if (this.activeMod) {
+        if (this.mod.uuid === this.activeMod.uuid && name === this.activeProperty) {
+          classes.push('comp-proptype-hover')
+        }
       }
+
       if (this.isChildActive(name)) classes.push('comp-active')
       return classes
     },
@@ -254,7 +257,7 @@ export default {
   computed: {
     ...mapGetters({
       activeProperty: 'activeProperty',
-      activePageInfo: 'activePageInfo',
+      activeMod: 'activeMod',
       themeConf: 'themeConf',
       userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
     }),

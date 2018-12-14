@@ -1,12 +1,18 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win" :style='isDisplay'>     
+    <el-col id="managerWin" class="manager-win" v-show="isManagerShow">     
       <el-row class="toolbar">
         <el-button-group>
-          <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')" :title="$t('editor.files')"></el-button>
+          <el-tooltip :content="$t('editor.files')">
+            <el-button id="file-manager-button" class="iconfont icon-list_directory" :class='{"el-button--primary": activeManagePaneComponentName=="FileManager"}' @click="changeView('FileManager')"></el-button>
+          </el-tooltip>
           <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
-          <el-button v-if='activePage && hasOpenedFiles' class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')" v-tooltip.top="{content: $t('tips.mod'), classes:'manager-win-tooltip'}"></el-button>
-          <el-button v-if='activePage && hasOpenedFiles' class='iconfont icon-upload' @click="openSkyDriveManagerDialog" :title="$t('common.myWebDisk')"></el-button>
+          <el-tooltip v-if='activePage && hasOpenedFiles' :content="$t('tips.mod')">
+            <el-button class="iconfont icon-module" :class='{"el-button--primary": activeManagePaneComponentName=="ModsList"}' @click="changeView('ModsList')"></el-button>
+          </el-tooltip>
+          <el-tooltip v-if='activePage && hasOpenedFiles' :content="$t('common.myWebDisk')">
+            <el-button class='iconfont icon-upload' @click="openSkyDriveManagerDialog"></el-button>
+          </el-tooltip>
           <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
         <sky-drive-manager-dialog :show='showSkyDrive' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
@@ -17,8 +23,8 @@
         </keep-alive>
       </el-scrollbar>
     </el-col>
-    <div class="col-between" :style='isDisplay'></div>
-    <el-col id="previewWin" v-show="showingCol.isPreviewShow == true && !isWelcomeShow" :style='{ width: previewWinWidth + "%" }' class="preview-win">
+    <div class="col-between flex-order-one" v-if="isManagerShow"></div>
+    <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="setPreviewWinStyle">
       <el-row class="toolbar">
         <!-- <el-button-group>
           <el-button class="iconfont icon-computer" title="电脑"></el-button>
@@ -31,7 +37,9 @@
         <el-button-group>
           <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
           <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
-          <el-button class="iconfont icon-new_open_window" :title="$t('editor.preview')" @click='showPreview'></el-button>
+          <el-tooltip :content="$t('editor.preview')">
+            <el-button class="iconfont icon-new_open_window" @click='showPreview'></el-button>
+          </el-tooltip>
         </el-button-group>
       </el-row>
       <iframe id="frameViewport" src="/vp" style="height: 100%; width: 100%; background: #fff" />
@@ -45,34 +53,59 @@
         </span>
       </el-dialog>
     </el-col>
-    <div class="col-between editor-resizer" v-if="!isWelcomeShow && showingCol.isPreviewShow == true && showingCol.isCodeShow == true" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
-    <el-col id="codeWin" v-if="!isWelcomeShow && showingCol.isCodeShow == true" :style='{ width: codeWinWidth + "%" }' class="code-win">
+    <div class="col-between editor-resizer flex-order-two" v-show="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')"></div>
+    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setCodeWinStyle">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
-          <el-col class="toolbar-content" :style="getStyle">
+          <el-col class="toolbar-content">
+            <div class="zenmode-icon" v-if="isZenMode">
+              <img :src="require('@/assets/img/zen.png')" />
+              <!-- tooltip can not shoe in fullscreen -->
+              <!-- <el-tooltip :content="$t('editor.zenModeTips')">
+                <i class="iconfont icon-help"></i>
+              </el-tooltip> -->
+            </div>
             <div class="toolbar-content_left">
               <el-button-group>
-                <el-button class="iconfont icon-h1" :title="$t('editor.title') + '1'" @click="insertHeadline(1)"></el-button>
-                <el-button class="iconfont icon-h2" :title="$t('editor.title') + '2'" @click="insertHeadline(2)"></el-button>
-                <el-button class="iconfont icon-h3" :title="$t('editor.title') + '3'" @click="insertHeadline(3)"></el-button>
-                <el-button class="iconfont icon-thickening" :title="$t('editor.bold')" @click="setFontStyle('bold')"></el-button>
-                <el-button class="iconfont icon-incline" :title="$t('editor.italic')" @click="setFontStyle('italic')"></el-button>
+                <el-tooltip :content="$t('editor.title') + '1'">
+                  <el-button class="iconfont icon-h1" @click="insertHeadline(1)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.title') + '2'">
+                  <el-button class="iconfont icon-h2" @click="insertHeadline(2)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.title') + '3'">
+                  <el-button class="iconfont icon-h3" @click="insertHeadline(3)"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.bold')">
+                  <el-button class="iconfont icon-thickening" @click="setFontStyle('bold')"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.italic')">
+                  <el-button class="iconfont icon-incline" @click="setFontStyle('italic')"></el-button>
+                </el-tooltip>
               </el-button-group>
               <el-button-group>
                 <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
               <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
               <el-button class="iconfont icon-reference" title="引用内容"></el-button> -->
                 <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
-                <el-button class="iconfont icon-code_division_line" :title="$t('editor.horizontalDiv')" @click="insertLine"></el-button>
-                <el-button class="iconfont icon-code" :title="$t('editor.code')" @click="insertCode"></el-button>
-                <el-button class="iconfont icon-link_" :title="$t('editor.link')" @click="insertLink"></el-button>
+                <el-tooltip :content="$t('editor.horizontalDiv')">
+                  <el-button class="iconfont icon-code_division_line" @click="insertLine"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.code')">
+                  <el-button class="iconfont icon-code" @click="insertCode"></el-button>
+                </el-tooltip>
+                <el-tooltip :content="$t('editor.link')">
+                  <el-button class="iconfont icon-link_" @click="insertLink"></el-button>
+                </el-tooltip>
               </el-button-group>
-              <el-button-group :style='isDisplayButton'>
-                <el-button class="iconfont icon-module" @click="addModToMarkdown" v-tooltip.top="{content: $t('tips.mod'), classes:'code-win-tooltip'}"></el-button>
+              <el-button-group v-if="!isZenMode" :style='isDisplayButton'>
+                <el-tooltip :content="$t('tips.mod')">
+                  <el-button class="iconfont icon-module" @click="addModToMarkdown"></el-button>
+                </el-tooltip>
               </el-button-group>
             </div>
             <el-button-group class="fullScreenBtn">
-              <el-button :title='isFullscreen ? $t("editor.fullScreen") : $t("editor.exitFullScreen")' :icon="fullscreenIcon" circle @click="toggleFullscreen"></el-button>
+              <el-button :title='$t("tips.ShowZenMode")' :icon="fullscreenIcon" circle @click="openZenMode"></el-button>
             </el-button-group>
           </el-col>
         </el-scrollbar>
@@ -106,6 +139,7 @@ import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters, mapActions } from 'vuex'
 import IframeDialog from '@/components/common/IframeDialog'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'Editor',
@@ -140,6 +174,44 @@ export default {
       })
     })
   },
+  watch: {
+    isPreviewShow: {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return
+        }
+        if (newVal === false) {
+          this.previewWinWidth = 0
+          this.codeWinWidth = 100 - this.managerWinWidth
+        } else if (this.isCodeShow === false) {
+          this.previewWinWidth = 100 - this.managerWinWidth
+        } else {
+          let halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    },
+    isCodeShow: {
+      handler(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return
+        }
+        if (newVal === false) {
+          this.codeWinWidth = 0
+          this.previewWinWidth = 100 - this.managerWinWidth
+        } else if (this.isPreviewShow === false) {
+          this.codeWinWidth = 100 - this.managerWinWidth
+        } else {
+          let halfWidth = (100 - this.managerWinWidth) / 2
+          this.previewWinWidth = halfWidth
+          this.codeWinWidth = halfWidth
+        }
+      },
+      deep: true
+    }
+  },
   components: {
     EditorMarkdown,
     EditorWelcome,
@@ -166,25 +238,17 @@ export default {
       activePropertyData: 'activePropertyData',
       hasOpenedFiles: 'hasOpenedFiles',
       showSkyDrive: 'showSkyDrive',
+      showAngle: 'showAngle',
       isCodeShow: 'isCodeShow',
-      isFullscreen: 'isPreviewShow'
+      isPreviewShow: 'isPreviewShow',
+      isManagerShow: 'isManagerShow',
+      isZenMode: 'isZenMode'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
-    isDisplay() {
-      if (this.isFullscreen) {
-        return this.generateStyleString({
-          'display': 'block'
-        })
-      } else {
-        return this.generateStyleString({
-          'display': 'none'
-        })
-      }
-    },
     isDisplayButton() {
-      if (this.isFullscreen) {
+      if (this.isPreviewShow) {
         return this.generateStyleString({
           'display': 'inline-block'
         })
@@ -194,76 +258,39 @@ export default {
         })
       }
     },
-    getStyle() {
-      if (this.isFullscreen) {
-        return this.generateStyleString({
-          'text-align': 'left'
-        })
+    setPreviewWinStyle() {
+      const style = {}
+
+      if(!this.showAngle) {
+        style.order = 3
       } else {
-        return this.generateStyleString({
-          'text-align': 'center'
-        })
+        style.order = 5
       }
+
+      style.width = this.previewWinWidth + '%'
+
+      return style
+    },
+    setCodeWinStyle() {
+      const style = {}
+
+      if(!this.showAngle) {
+        style.order = 5
+      } else {
+        style.order = 3
+      }
+
+      style.width = this.codeWinWidth + '%'
+
+      return style
+    },
+    showContent() {
+      return this.isFullscreen ? this.$t('editor.fullScreen') : this.$t('editor.exitFullScreen')
     },
     fullscreenIcon() {
-      return this.isFullscreen
+      return this.isManagerShow
         ? 'iconfont icon-full-screen_'
         : 'iconfont icon-full_screen_exit'
-    }
-  },
-  watch: {
-    'showingCol.isPreviewShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.previewWinWidth = 0
-          this.codeWinWidth = 100 - this.managerWinWidth
-        } else if (this.showingCol.isCodeShow === false) {
-          this.previewWinWidth = 100 - this.managerWinWidth
-        } else {
-          let halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
-        }
-      },
-      deep: true
-    },
-    'showingCol.isCodeShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.codeWinWidth = 0
-          this.previewWinWidth = 100 - this.managerWinWidth
-        } else if (this.showingCol.isPreviewShow === false) {
-          this.codeWinWidth = 100 - this.managerWinWidth
-        } else {
-          let halfWidth = (100 - this.managerWinWidth) / 2
-          this.previewWinWidth = halfWidth
-          this.codeWinWidth = halfWidth
-        }
-      },
-      deep: true
-    },
-    'showingCol.isManagerShow': {
-      handler(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return
-        }
-        if (newVal === false) {
-          this.managerWinWidth = 0
-          this.previewWinWidth = 100 - this.codeWinWidth
-        } else {
-          let halfWidth = (100 - this.codeWinWidth) / 2
-          let minusWidth = halfWidth > 25 ? 25 : halfWidth
-          this.managerWinWidth = minusWidth
-          this.previewWinWidth = halfWidth - minusWidth
-        }
-      },
-      deep: true
     }
   },
   methods: {
@@ -276,10 +303,30 @@ export default {
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
-    toggleFullscreen() {
+    openZenMode() {
+      const dom = this.$el.querySelector('#codeWin')
+
+      if (!dom) {
+        return false
+      }
+
       this.resetShowingCol({
-        isCodeShow: true,
-        isPreviewShow: !this.isFullscreen
+        isZenMode: true
+      })
+
+      this.$fullscreen.toggle(dom, {
+        wrap: false,
+        fullscreenClass: 'zenmode',
+        callback: (state) => {
+          if (!state) {
+            this.resetShowingCol({
+              isZenMode: false
+            })
+            const vscroolbar = dom.querySelector(".CodeMirror-vscrollbar")
+            // Is very strange. when I set display none, scroolbar is normally
+            vscroolbar.style.display = 'none'
+          }
+        }
       })
     },
     generateStyleString(style) {
@@ -294,15 +341,24 @@ export default {
       if (!(event && event.clientX)) {
         return
       }
+
       this.resizeWinParams.isResizing = true
       this.resizeWinParams.mouseStartX = event.clientX
-      this.resizeWinParams.leftColWidthParam = leftColWidthParam
-      this.resizeWinParams.rightColWidthParam = rightColWidthParam
+
+      if (this.showAngle) {
+        this.resizeWinParams.leftColWidthParam = rightColWidthParam
+        this.resizeWinParams.rightColWidthParam = leftColWidthParam
+      } else {
+        this.resizeWinParams.leftColWidthParam = leftColWidthParam
+        this.resizeWinParams.rightColWidthParam = rightColWidthParam
+      }
+      
     },
     dragMouseMove(event) {
       if (!(this.resizeWinParams.isResizing && event && event.clientX)) {
         return
       }
+
       let mouseNowX = event.clientX
       let diffClientX = mouseNowX - this.resizeWinParams.mouseStartX
       let diffPercent = diffClientX / this.bodyWidth * 100
@@ -434,9 +490,11 @@ bigFile:
 .code-win {
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: auto;
 }
 .manager-win {
+  order: 1;
   flex-basis: 460px;
   flex-shrink: 0;
 }
@@ -450,6 +508,12 @@ bigFile:
   flex-shrink: 0;
   background-color: #cdd4db;
 }
+.flex-order-one {
+  order: 2;
+}
+.flex-order-two {
+  order: 4;
+}
 .editor-resizer {
   cursor: col-resize;
 }
@@ -458,9 +522,6 @@ bigFile:
 }
 #frameViewport {
   border: none;
-}
-.previewWin {
-  position: relative;
 }
 .mouse-event-backup {
   position: absolute;
@@ -536,6 +597,7 @@ bigFile:
   font-size: 16px;
 }
 .guid-col {
+  order: 6;
   background: url('../../assets/img/background.png') no-repeat top right #fff;
   background-size: 45%;
   display: flex;
@@ -590,6 +652,104 @@ bigFile:
 }
 </style>
 <style lang="scss">
+.zenmode {
+  background-color: black;
+  background-image: url('../../assets/img/cubes.png');
+
+  .toolbar {
+    width: 100%;
+    margin: 0 auto!important;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1c1c1c;
+
+    .el-scrollbar {
+      width: 1080px;
+      margin: 0 auto;
+    }
+
+    .toolbar-content {
+      padding: 8px;
+
+      .zenmode-icon {
+        float: left;
+        margin-top: 5px;
+
+        img {
+          vertical-align: middle;
+        }
+
+        i {
+          color: #5e5e5e;
+          vertical-align: middle;
+        }
+      }
+
+      .toolbar-content_left {
+        text-align: right;
+        float: right;
+
+        button {
+          background-color: #1c1c1c;
+          border-color: #303133;
+        }
+
+        button:hover {
+          background-color: #333333;
+          color: white;
+        }
+
+        button:active {
+          color: white;
+        }
+      }
+    }
+
+    .fullScreenBtn {
+      display: none;
+    }
+  }
+
+  .kp-md-editor {
+    width: 1080px;
+    margin: 0 auto;
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar-thumb{
+      background: #3b3b3b;
+      border-radius: 20px;
+    }
+
+    .CodeMirror-vscrollbar::-webkit-scrollbar-track {
+      background: #1c1c1c;
+      border-radius: 20px;
+    }
+  }
+}
+
+.manager-win {
+  .el-scrollbar {
+    height: 100%;
+  }
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+  }
+  .manager-content-box {
+    background-color: #fff;
+  }
+  .manager-content-inner {
+    height: 100%;
+  }
+  
+}
+
+.el-tooltip__popper {
+  font-size: 14px;
+}
+
 .multiple-text-dialog {
   .el-dialog {
     width: 1300px;
@@ -620,32 +780,6 @@ bigFile:
   }
   .el-button--primary {
     padding: 7px 45px;
-  }
-}
-</style>
-
-<style lang="scss">
-.manager-win {
-  .el-scrollbar {
-    height: 100%;
-  }
-  .el-scrollbar__wrap {
-    overflow-x: auto;
-  }
-  .manager-content-box {
-    background-color: #fff;
-  }
-  .manager-content-inner {
-    height: 100%;
-  }
-  
-  &-tooltip {
-    top: 30px!important;
-  }
-}
-.code-win {
-  &-tooltip {
-    top: 38px!important;
   }
 }
 </style>

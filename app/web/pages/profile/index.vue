@@ -3,7 +3,7 @@
     <div class="profile-page-header">
       <common-header class="container"></common-header>
     </div>
-    <router-view class="profile-page-main-content" id="profile-page" />
+    <router-view v-if="!loading" class="profile-page-main-content" id="profile-page" />
     <div class="profile-page-footer">
       <common-footer class="container"></common-footer>
     </div>
@@ -24,6 +24,7 @@ import VueClipboard from 'vue-clipboard2'
 import router from './profile.router'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
+import lessonModule from '@/store/lesson'
 import profileModule from '@/store/profile'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -59,7 +60,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     pbl: pblModule,
-    profile: profileModule
+    profile: profileModule,
+    lesson: lessonModule
   }
 })
 

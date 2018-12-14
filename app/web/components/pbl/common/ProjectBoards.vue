@@ -12,7 +12,7 @@
             <i class="el-icon-success" v-show="issue.state === 1"></i>
           </div>
           <span class="project-boards-item-title" :title="issue.title">{{issue.title}}</span>
-          <span class="project-boards-item-time">{{issue.updatedAt | relativeTimeFilter(isEn)}}</span>
+          <span class="project-boards-item-time">{{isEn ? $t('common.update') : ''}} {{issue.updatedAt | relativeTimeFilter(isEn)}}{{isEn ? '' : $t('common.update')}}</span>
         </div>
       </div>
       <div class="project-boards-empty" v-else>{{$t("project.noContent")}}</div>

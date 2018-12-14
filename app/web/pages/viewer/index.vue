@@ -30,6 +30,7 @@ import VueI18n from 'vue-i18n'
 import VueClipboard from 'vue-clipboard2'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
+import pblModule from '@/store/pbl'
 import gitlabModule from '@/store/gitlab'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -39,15 +40,11 @@ import CommonHeader from '../../components/common/CommonHeader'
 import CommonFooter from '../../components/common/CommonFooter'
 import ToolHeader from '../../components/common/ToolHeader'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
-import VTooltip from 'v-tooltip'
-import '@/assets/css/tooltip.css'
-
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(ElementUI.Popover)
-Vue.use(VTooltip)
 
 Vue.use(VueI18n)
 Vue.use(VueClipboard)
@@ -74,7 +71,8 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
-    gitlab: gitlabModule
+    gitlab: gitlabModule,
+    pbl: pblModule
   }
 })
 

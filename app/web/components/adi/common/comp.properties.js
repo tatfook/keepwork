@@ -26,6 +26,7 @@ import AdiImg from './img/img.properties'
 import AdiLesson from './lesson/lesson.properties'
 import AdiQuiz from './quiz/quiz.properties'
 import AdiHint from './hint/hint.properties'
+import AdiProject from './project/project.properties'
 
 export default {
   AdiMarkdown,
@@ -54,5 +55,6 @@ export default {
   AdiImg,
   AdiLesson,
   AdiQuiz,
-  AdiHint
+  AdiHint,
+  AdiProject
 }

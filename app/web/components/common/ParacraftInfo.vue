@@ -16,8 +16,8 @@
       </div>
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseAgreeProtocol')}}</p>
       <div class="paracraft-info-operations">
-        <el-button type="primary" @click="toParacraftWorld">{{$t('project.open3DWorld')}}</el-button>
-        <el-button @click="toParacraftWorldZip">{{$t('project.downloadedArchive')}}</el-button>
+        <el-button type="primary" @click="toParacraftWorld()">{{$t('project.open3DWorld')}}</el-button>
+        <el-button v-if="isDownload" @click="toParacraftWorldZip()">{{$t('project.downloadedArchive')}}</el-button>
       </div>
       <p class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
       <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleasePutItUnderTheCatalogueToUse')}}</p>
@@ -38,6 +38,16 @@ export default {
     },
     paracraftUrl: String
   },
+  computed: {
+    isDownload() {
+      let url = decodeURIComponent(this.paracraftUrl)
+      if(url.indexOf('cmd/loadworld') === -1) {
+        return false
+      } else {
+        return true
+      }
+    }
+  },
   methods: {
     toParacraftWorld() {
       if (this.paracraftUrl) {
@@ -45,11 +55,9 @@ export default {
       }
     },
     toParacraftWorldZip() {
-      if (this.paracraftUrl) {
-        let url = decodeURIComponent(this.paracraftUrl)
-        let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
-        launchUri(downloadWorldZip)
-      }
+      let url = decodeURIComponent(this.paracraftUrl)
+      let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
+      launchUri(downloadWorldZip)
     },
     handleDialogClose() {
       this.$emit('close')

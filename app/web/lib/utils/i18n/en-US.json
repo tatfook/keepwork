@@ -2,6 +2,7 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "account": "Account",
     "existAccount": "The username already exists",
     "notValidAccount": "Account is not valid",
     "usernameCannotWithNumber": "The username cannot begin with a number",
@@ -33,7 +34,9 @@
     "userData": "Information",
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
+    "thirdBanding": "Account binding",
     "chinese-englishSwitch": "Switch to Chinese(中文)",
+    "left-rightAngles": "Toggle left and right angles",
     "accountNoChange": "Account name cannot be changed after registration",
     "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
     "defaultAddress": "The defaulted personal website address:",
@@ -57,7 +60,7 @@
     "settings": "Settings",
     "features": "Features",
     "applicationCenter": "Application center",
-    "myHomePage": "My home page",
+    "myHomePage": "My Profile",
     "websiteManagement": "Website Management",
     "pageEditor": "Page editor",
     "myWebDisk": "Cloud Drive",
@@ -129,9 +132,11 @@
     "weekday6": "Saturday",
     "viewMore": "More",
     "untitled": "Untitled",
-    "noSelfIntro": "No self intro."
+    "noSelfIntro": "No self intro.",
+    "identification": "Certification"
   },
   "editor": {
+    "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
     "warningInput": "Please enter the correct link address",
 
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -340,7 +345,8 @@
     "clickToChange": "Click to switch",
     "ShowPreviewOnly": "Show preview only",
     "ShowBoth": "Show both",
-    "ShowCodeOnly": "Show code only"
+    "ShowCodeOnly": "Show code only",
+    "ShowZenMode": "Zen Mode"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",
@@ -394,7 +400,9 @@
     "lessonShare": "LessonShare",
     "package": "Package",
     "lessonPackage": "Lesson Package",
-    "hint": "Hint"
+    "hint": "Hint",
+
+    "project": "Project"
   },
   "adi": {
     "hint": {
@@ -605,7 +613,17 @@
     "keepOneOption": "Please set at least one answer",
     "coinsInsufficient": "Sorry. Your coins are insufficient.",
 
-    "hint": "hint"
+    "hint": "hint",
+
+    "project": "Project",
+    "projectTags": "Project Tags",
+    "projectMembers": "Project Members",
+
+    "projectId": "Project ID",
+    "projectHome": "Project home",
+    "projectNotFound": "Project Not Found",
+    "projectInputId": "Enter the project ID to get the project data",
+    "projectForbidden":"Unable to display content"
   },
   "field": {
     "fileId": "file Id",
@@ -774,7 +792,8 @@
     "sendCodes": "Send Code",
     "inputLoginPwd": "Login Password",
     "pleaseCheckPwd": "Please check if the password is correct",
-    "pwdIncorrect": "Your password was incorrect. "
+    "pwdIncorrect": "Your password was incorrect. ",
+    "saveTheChanges": "Save the changes"
   },
   "setting": {
     "general": "Basic Info",
@@ -1000,7 +1019,7 @@
       "core7": "Key Point-7"
     },
     "notActivatedText": {
-      "hint": "You have signed up as a Learner. If you want to become an Insturctor, please input the activation code here.",
+      "hint": "You have signed up as a Learner. If you want to become an Instructor, please input the activation code here.",
       "wrongCodeHint": "Incorrect activation code. Please check it and try again.      ",
       "getActivationCode": "To get the activation code, please contact Mr Cheng: 13267059950(Tel/Wechat)、846704851(QQ)",
       "inputPlaceholder": "Please input the activation code.",
@@ -1276,6 +1295,8 @@
     "projectName": "Project Name",
     "projectType": "Project Type",
     "createProject": "Create the project",
+    "projectAlreadyExists": "The project already exists.",
+    "ProjectCreationFailed": "Failed to create the project, please try again later!",
     "prev": "Prev",
     "next": "Next",
     "3DGameAndAnim": "3D games and animations",
@@ -1476,6 +1497,7 @@
     "knowMore": "know more",
     "noContentForProject": "No content.",
     "noProjectToShow": "No projects to show.",
-    "createNewProject": "Create New Project."
+    "createNewProject": "Create New Project.",
+    "changePassword": "Change Password"
   }
 }

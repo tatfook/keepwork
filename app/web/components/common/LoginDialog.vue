@@ -171,7 +171,7 @@ export default {
     },
     authorizedToLogin(provider) {
       this.$auth
-        .authenticate(provider)
+        .authenticate(provider, {state: "login"})
         .then(async result => {
           this.handleLoginResult(result)
         })
@@ -180,20 +180,24 @@ export default {
         })
     },
     async handleLoginResult(result) {
-      if (result && result.data && result.data.error == 0) {
-        if (result.data.token == 'token') {
-          // 用户未绑定  跳完善注册信息页
-          this.isLoginForm = false
-          this.isRegisterForm = false
-          this.isPerfectRegisterInfo = true
-          this.userThreeService = result.data.data
-        } else {
-          // 登录成功  进行页面跳转
+      console.log('loginResult', result)
+      if (result && result.data && result.data.token) {
+        if (result.data.id) {
+           // 用户绑定过账号，进行登录，进行页面跳转
           let token = result.data.token
-          let userinfo = result.data.data
+          let userinfo = result.data
           this.userThirdLogin({ token, userinfo })
           this.handleClose()
           this.showMessage('success', this.$t('common.loginSuccess'))
+          setTimeout(() => {
+            window.location.reload()
+          },800)
+        } else {
+         // 用户未绑定  跳完善注册信息页
+          this.isLoginForm = false
+          this.isRegisterForm = false
+          this.isPerfectRegisterInfo = true
+          this.userThreeService = result.data
         }
       } else {
         this.showMessage('error', this.$t('common.logonFailed'))

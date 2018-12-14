@@ -6,6 +6,11 @@ const ProfileIndex = () => import('@/components/profile/ProfileIndex')
 const ProfileSocial = () => import('@/components/profile/ProfileSocial')
 const ProfileProject = () => import('@/components/profile/ProfileProject')
 const PasswordResetPage = () => import('@/components/profile/PasswordResetPage')
+const PersonalCenter = () => import('@/components/profile/PersonalCenter')
+const UserData = () => import('@/components/profile/PersonalCenterComponents/UserData')
+const ChangePassword = () => import('@/components/profile/PersonalCenterComponents/ChangePassword')
+const ThirdPartyAccountBinding = () => import('@/components/profile/PersonalCenterComponents/ThirdPartyAccountBinding')
+const RealNameAuthentication = () => import('@/components/profile/PersonalCenterComponents/RealNameAuthentication')
 
 Vue.use(Router)
 
@@ -22,6 +27,33 @@ export default new Router({
       path: '/set',
       name: 'PasswordResetPage',
       component: PasswordResetPage
+    },
+    {
+      path: '/p',
+      name: 'PersonalCenter',
+      component: PersonalCenter,
+      children: [
+        {
+          path: 'userData',
+          name: 'UserData',
+          component: UserData
+        },
+        {
+          path: 'changePassword',
+          name: 'ChangePassword',
+          component: ChangePassword
+        },
+        {
+          path: 'thirdPartyAccountBinding',
+          name: 'ThirdPartyAccountBinding',
+          component: ThirdPartyAccountBinding
+        },
+        {
+          path: 'realNameAuthentication',
+          name: 'RealNameAuthentication',
+          component: RealNameAuthentication
+        }
+      ]
     },
     {
       path: '/:username',

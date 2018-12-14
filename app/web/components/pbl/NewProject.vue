@@ -30,6 +30,8 @@
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions } from 'vuex'
 import WebsiteBinder from './common/WebsiteBinder'
+import { keepwork } from '@/api'
+
 export default {
   name: 'NewProject',
   data() {
@@ -99,9 +101,20 @@ export default {
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
         return false
-      } else {
-        return true
       }
+      let name = this.newProjectData.name
+      keepwork.projects
+      .getUserProjectsByName({ name })
+      .then(res => {
+        if(res.count > 0){
+          this.$message.error(this.$t('project.projectAlreadyExists'))
+          return false
+        }
+      })
+      .catch(e => {
+        console.error(e)
+      })
+      return true
     },
     async createNewProject() {
       if (!(await this.checkProjectName())) {
@@ -119,7 +132,12 @@ export default {
           projectId && this.$router.push(`/project/${projectId}`)
         })
         .catch(error => {
-          console.error(error)
+          if(error.response.status == 409){
+            this.$message.error(this.$t('project.projectAlreadyExists'))
+          }else{
+            this.$message.error(this.$t('project.ProjectCreationFailed'))
+          }
+          this.isCreating = false
         })
     },
     goPrevStep() {
@@ -139,7 +157,7 @@ export default {
 </script>
 <style lang="scss">
 .new-project {
-  padding-top: 55px;
+  padding: 55px 0;
   &-title {
     font-size: 24px;
     color: #303133;
