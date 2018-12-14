@@ -804,9 +804,9 @@
     "MicrosoftYaHei": "微软雅黑",
     "SimHei": "黑体",
     "STSong": "mac 华文宋体",
-    "Font": "字体:",
+    "Font": "网站字体:",
     "font": "字体",
-    "color": "颜色:",
+    "color": "网站颜色:",
     "fontSize": "字号:",
     "pleaseSelect": "请选择",
     "tips": "注意: 所选字体如浏览器不支持，会显示默认字体"
