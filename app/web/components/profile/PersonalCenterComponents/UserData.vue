@@ -69,6 +69,7 @@ export default {
       loading: false,
       cities: cityName,
       tempLocation: null,
+      userInfo:{},
       copiedLoginUserProfile: {},
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false
@@ -78,9 +79,6 @@ export default {
     ...mapGetters({
       loginUserProfile: 'user/profile'
     }),
-    userInfo(){
-      return  _.cloneDeep(this.loginUserProfile)
-    },
     portrait() {
       return _.get(this.userInfo, 'portrait')
     },
@@ -106,6 +104,7 @@ export default {
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     getUserInfo(){
+      this.userInfo = _.cloneDeep(this.loginUserProfile)
       this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
       this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
     },
