@@ -1,6 +1,6 @@
 <template>
   <div class="third-party-account-binding">
-    <div class="third-party-account-binding-title">账号绑定</div>
+    <div class="third-party-account-binding-title">{{$t('user.accountBinding')}}</div>
     <div class="third-party-account-binding-content">
       <third-party-binding type='weixin/1'></third-party-binding>
       <third-party-binding type='xinlangweibo/3'></third-party-binding>

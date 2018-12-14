@@ -1,8 +1,9 @@
 <template>
   <div class="email-bind">
-    <el-form class="email-bind-form" ref='emailForm' :inline="true" :rules="emailBindRules" label-width="140px" :model='emailFormData'>
+    <el-form class="email-bind-form" ref='emailForm' :inline="true" :rules="emailBindRules" label-width="100px" :model='emailFormData'>
       <el-form-item prop="email">
         <span slot="label">{{$t('user.emailBind')}}</span>
+        <span class="icon-wrap"><i class="iconfont icon-bangdingyouxiang"></i></span>
         <el-input class="email-bind-form-item-content" size='small' v-model="emailFormData.email" v-if="!isUserBindEmail"></el-input>
         <span class="el-form-item__error" v-show="emailError">{{emailError}}</span>
         <div class="email-bind-form-item-content" v-if="isUserBindEmail">{{userEmail}}</div>
@@ -132,6 +133,11 @@ export default {
 <style lang="scss">
 .email-bind {
   &-form {
+    height: 46px;
+    line-height: 46px;
+    display: flex;
+    margin-bottom: 22px;
+    padding-top: 8px;
     &-item-content {
       width: 180px;
       padding-right: 56px;
@@ -145,8 +151,21 @@ export default {
       }
     }
     .el-form-item__label {
-      padding-right: 56px;
+      padding-right: 26px;
       color: #333;
+    }
+    .el-form-item__content{
+      display: inline-flex;
+      align-items: center;
+    }
+    .el-form-item{
+      display: inline-flex;
+      align-items: center;
+      vertical-align: center !important;
+    }
+    .iconfont{
+      font-size: 36px;
+      margin-right: 26px;
     }
   }
 }

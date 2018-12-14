@@ -1,19 +1,19 @@
 <template>
-  <div class="user-data">
-    <div class="user-data-title">账户安全</div>
+  <div class="user-data" v-loading="loading">
+    <div class="user-data-title">{{$t('common.accountSecurity')}}</div>
     <div class="user-data-content">
       <el-form ref="form" :model="userInfo" label-width="80px">
-          <el-form-item label='头像'>
+          <el-form-item :label='$t("card.pic")'>
             <div class="user-data-content-profile" @click="showMediaSkyDriveDialog">
               <img :src="portrait || defaultPortrait" alt="" class="profile">
-              <span class="change">点击更换头像</span>
+              <span class="change">{{$t('user.modifyAvatar')}}</span>
             </div>
           </el-form-item>
-          <el-form-item label='账户'>
-            <span>hahhaha</span>
+          <el-form-item :label='$t("common.account")'>
+            <span>{{userInfo.username}}</span>
           </el-form-item>
-          <el-form-item label='手机'>
-            <span>12556562352</span>
+          <el-form-item :label='$t("user.phoneBind")'>
+            <span>{{userInfo.realname}}</span>
           </el-form-item>
           <el-form-item :label='$t("user.displayName")'>
             <el-input v-model="userInfo.nickname" size="small"></el-input>
@@ -25,14 +25,21 @@
               <el-radio label="N">{{$t('user.confidentiality')}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label='现居' size="small">
-            <el-input v-model="tempLocation"></el-input>
+          <el-form-item :label='$t("user.location")' size="small">
+            <el-select v-model="tempLocation" :placeholder="$t('editor.select')">
+              <el-option
+                v-for="item in cities"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label='签名'>
+          <el-form-item :label='$t("user.introduce")'>
             <el-input type="textarea" resize="none" :rows=6 v-model="userInfo.description"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveUserData">保存更改</el-button>
+            <el-button type="primary" @click="saveUserData">{{$t('user.saveTheChanges')}}</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -45,17 +52,22 @@ import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from '@/components/common/DialogOperations'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import cityName from './CityName.js'
+
 export default {
   name: 'UserData',
+  watch: {
+    $route(value) {
+      this.getUserInfo()
+    }
+  },
   mounted() {
-    this.userInfo = _.cloneDeep(this.loginUserProfile)
-    this.copiedLoginUserProfile = _.cloneDeep(this.loginUserProfile)
-    this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
+    this.getUserInfo()
   },
   data() {
     return {
       loading: false,
-      userInfo: {},
+      cities: cityName,
       tempLocation: null,
       copiedLoginUserProfile: {},
       defaultPortrait: require('@/assets/img/default_portrait.png'),
@@ -66,6 +78,9 @@ export default {
     ...mapGetters({
       loginUserProfile: 'user/profile'
     }),
+    userInfo(){
+      return  _.cloneDeep(this.loginUserProfile)
+    },
     portrait() {
       return _.get(this.userInfo, 'portrait')
     },
@@ -90,6 +105,10 @@ export default {
     ...mapActions({
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
+    getUserInfo(){
+      this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
+      this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
+    },
     async checkSensitive(checkedWords) {
       let result = await checkSensitiveWords({ checkedWords })
       return result && result.length > 0

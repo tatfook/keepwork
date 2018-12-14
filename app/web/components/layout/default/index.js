@@ -25,7 +25,7 @@ export default {
                       <meta name="description" :content="vDescription">
                       <meta http-equiv="content-type" content="text/html;charset=utf-8">
                       <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_hjtwfx5k5vj.css">
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_jsvp6t4sst.css">
                     </head>
                     <body :class="baseClass">
                     <div id="app">

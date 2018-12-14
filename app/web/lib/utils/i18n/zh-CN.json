@@ -2,6 +2,7 @@
   "common": {
     "login": "登 录",
     "register": "注 册",
+    "account": "账户",
     "existAccount": "用户名已存在",
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
@@ -33,6 +34,7 @@
     "userData": "用户资料",
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
+    "thirdBanding": "第三方账号绑定",
     "chinese-englishSwitch": "切换为英文（English）",
     "accountNoChange": "账户名注册成功不可更改",
     "useLettersOrNumber": "推荐使用英文字母、数字组合(例如：keep123)",
@@ -130,7 +132,8 @@
     "weekday6": "星期六",
     "viewMore": "查看更多",
     "untitled": "Untitled",
-    "noSelfIntro": "这家伙很懒，没有简介！"
+    "noSelfIntro": "这家伙很懒，没有简介！",
+    "identification": "立即认证"
   },
   "editor": {
     "warningInput": "请输入正确的链接地址",
@@ -730,15 +733,14 @@
     "fileUploading": "还有文件正在上传中，离开后文件将取消上传，是否继续？"
   },
   "user": {
-    "displayName": "昵称:",
-    "nickname": "昵:",
-    "sex": "性别:",
-    "location": "位置:",
-    "introduce": "个人简介:",
+    "displayName": "昵称",
+    "sex": "性别",
+    "location": "现居",
+    "introduce": "签名",
     "male": "男",
     "female": "女",
     "confidentiality": "保密",
-    "modifyAvatar": "修改头像",
+    "modifyAvatar": "点击修改头像",
     "inputPhoneNumber": "请输入手机号码",
     "inputPhoneOrEmail": "请输入手机号/邮箱",
     "inputVerificationCode": "请输入验证码",
@@ -792,7 +794,8 @@
     "sendCodes": "获取验证码",
     "inputLoginPwd": "输入登录密码",
     "pleaseCheckPwd": "请检查密码是否正确",
-    "pwdIncorrect": "旧密码错误。"
+    "pwdIncorrect": "旧密码错误。",
+    "saveTheChanges": "保存更改"
   },
   "setting": {
     "general": "基本信息",
@@ -1494,6 +1497,7 @@
     "knowMore": "了解更多",
     "noContentForProject": "还没有创建项目~",
     "noProjectToShow": "你还没有项目，",
-    "createNewProject": "立即创建新项目"
+    "createNewProject": "立即创建新项目",
+    "changePassword": "密码修改"
   }
 }

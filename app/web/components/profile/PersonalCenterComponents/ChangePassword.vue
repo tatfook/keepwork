@@ -1,19 +1,19 @@
 <template>
   <div class="change-password">
-    <div class="change-password-title">密码修改</div>
+    <div class="change-password-title">{{$t('profile.changePassword')}}</div>
     <div class="change-password-content">
       <el-form class="change-pwd-form" :rules='pwdRules' ref="resetPwdForm" :model="pwdFormDatas" label-width="130px">
         <el-form-item :label="$t('user.oldPwd')" prop='oldpassword'>
-          <el-input v-model="pwdFormDatas.oldpassword" size="small"></el-input>
+          <el-input type="password" v-model="pwdFormDatas.oldpassword" size="small"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.newPwd')" prop='newpassword'>
           <el-input :type='visibleNewPwd ? "text": "password"' v-model="pwdFormDatas.newpassword" size="small">
-            <i slot="suffix" class="iconfont icon-browse_fill" @click="visibleNewPwd = !visibleNewPwd"></i>
+            <i slot="suffix" :class="['iconfont',visibleNewPwd ? 'icon-browse_fill' : 'icon-Close_eyes' ]" @click="visibleNewPwd = !visibleNewPwd"></i>
           </el-input>
         </el-form-item>
         <el-form-item :label="$t('user.reNewPwd')" prop='reNewpassword'>
           <el-input :type='visibleConfirmNewPwd ? "text": "password"'  v-model="pwdFormDatas.reNewpassword" size="small">
-            <i slot="suffix" class="iconfont icon-browse_fill" @click="visibleConfirmNewPwd = !visibleConfirmNewPwd"></i>
+            <i slot="suffix" :class="['iconfont',visibleConfirmNewPwd ? 'icon-browse_fill' : 'icon-Close_eyes' ]" @click="visibleConfirmNewPwd = !visibleConfirmNewPwd"></i>
           </el-input>
         </el-form-item>
         <el-form-item>

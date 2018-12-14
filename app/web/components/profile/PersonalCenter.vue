@@ -8,23 +8,66 @@
         <router-view />
       </div>
     </div>
+    <div @click.stop v-if="showLoginDialog">
+      <login-dialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose" />
+    </div>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import LoginDialog from '@/components/common/LoginDialog'
+
 export default {
   name: "PersonalCenter",
   data(){
     return{
       tabTitles: [
-        {title: '个人资料'},
-        {title: '密码修改'},
-        {title: '第三方账号绑定'},
-        {title: '实名认证'},
+        {title: this.$t('common.userData')},
+        {title: this.$t('profile.changePassword')},
+        {title: this.$t('common.thirdBanding')},
+        {title: this.$t('common.realNameAuthentication')},
       ],
       currTabIndex: 0,
     }
   },
+  watch: {
+    $route(value) {
+      this.getTabIndex(value)
+    }
+  },
+  mounted(){
+    this.getTabIndex(this.$route)
+  },
+  computed: {
+    ...mapGetters({
+      userIsLogined: 'user/isLogined',
+    }),
+    showLoginDialog() {
+      return !this.userIsLogined
+    }
+  },
   methods:{
+    handleLoginDialogClose() {
+      location.reload()
+    },
+    getTabIndex(value){
+      switch(value.name){
+        case 'UserData':
+        this.currTabIndex =0
+        break
+        case 'ChangePassword':
+        this.currTabIndex =1
+        break
+        case 'ThirdPartyAccountBinding':
+        this.currTabIndex =2
+        break
+        case 'RealNameAuthentication':
+        this.currTabIndex =3
+        break
+        default:
+        break
+      }
+    },
     switchTab(index){
       this.currTabIndex = index
       switch(this.currTabIndex) {
@@ -42,6 +85,9 @@ export default {
         break
       }
     }
+  },
+  components: {
+    LoginDialog
   }
 }
 </script>

@@ -2,6 +2,7 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "account": "Account",
     "existAccount": "The username already exists",
     "notValidAccount": "Account is not valid",
     "usernameCannotWithNumber": "The username cannot begin with a number",
@@ -33,6 +34,7 @@
     "userData": "Information",
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
+    "thirdBanding": "Account binding",
     "chinese-englishSwitch": "Switch to Chinese(中文)",
     "accountNoChange": "Account name cannot be changed after registration",
     "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
@@ -129,7 +131,8 @@
     "weekday6": "Saturday",
     "viewMore": "More",
     "untitled": "Untitled",
-    "noSelfIntro": "No self intro."
+    "noSelfIntro": "No self intro.",
+    "identification": "Certification"
   },
   "editor": {
     "warningInput": "Please enter the correct link address",
@@ -786,7 +789,8 @@
     "sendCodes": "Send Code",
     "inputLoginPwd": "Login Password",
     "pleaseCheckPwd": "Please check if the password is correct",
-    "pwdIncorrect": "Your password was incorrect. "
+    "pwdIncorrect": "Your password was incorrect. ",
+    "saveTheChanges": "Save the changes"
   },
   "setting": {
     "general": "Basic Info",
@@ -1488,6 +1492,7 @@
     "knowMore": "know more",
     "noContentForProject": "No content.",
     "noProjectToShow": "No projects to show.",
-    "createNewProject": "Create New Project."
+    "createNewProject": "Create New Project.",
+    "changePassword": "Change Password"
   }
 }
