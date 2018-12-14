@@ -1,34 +1,36 @@
 <template>
-  <div class="coupon">
-    <div class="coupon-left">
-      <div class="coupon-left-sum">
-        <span class="coupon-left-sum-money"><span class="coupon-left-sum-money-rmb">¥</span>5</span>
-        <!-- <div class="coupon-left-sum-coin">5 知识币</div> -->
-        <!-- <div class="coupon-left-sum-bean">5 知识豆</div> -->
+  <div class="coupon-ticket disabled">
+    <div class="coupon-ticket-left">
+      <div class="coupon-ticket-left-sum">
+        <span class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-rmb">¥</span>5</span>
+        <!-- <div class="coupon-ticket-left-sum-coin">5 知识币</div> -->
+        <!-- <div class="coupon-ticket-left-sum-bean">5 知识豆</div> -->
       </div>
-      <div class="coupon-left-condition">
+      <div class="coupon-ticket-left-condition">
         满100元可用
       </div>
-      <div class="coupon-left-label deadline-label">即将过期</div>
-      <div class="coupon-left-dot right-top"></div>
-      <div class="coupon-left-dot right-bottom"></div>
+      <div class="coupon-ticket-left-label deadline-label">即将过期</div>
+      <div class="coupon-ticket-left-dot right-top"></div>
+      <div class="coupon-ticket-left-dot right-bottom"></div>
     </div>
-    <div class="coupon-right">
-      <div class="coupon-right-dot left-top"></div>
-      <div class="coupon-right-dot left-bottom"></div>
-      <div class="coupon-right-type">
+    <div class="coupon-ticket-right">
+      <div class="coupon-ticket-right-dot left-top"></div>
+      <div class="coupon-ticket-right-dot left-bottom"></div>
+      <div class="coupon-ticket-right-type disabled">
         通用券，Keepwork全平台通用
       </div>
-      <div class="coupon-right-deadline">
+      <div class="coupon-ticket-right-deadline">
         2018/11/28 — 2018/12/30
       </div>
+      <!-- <div class="coupon-ticket-right-icon used-icon"></div> -->
+      <div class="coupon-ticket-right-icon past-icon"></div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Coupon',
+  name: 'CouponTicket',
   props: {
     data: Object
   }
@@ -36,12 +38,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.coupon {
+.coupon-ticket {
   background: #65cad9;
   color: #fff;
   width: 430px;
   min-height: 110px;
   display: flex;
+  &.disabled {
+    background: #cbcbcb;
+  }
   &-left {
     display: flex;
     flex-direction: column;
@@ -121,6 +126,9 @@ export default {
       color: #137282;
       font-size: 16px;
       font-weight: bold;
+      &.disabled {
+        color: #8a898b;
+      }
     }
     &-deadline {
       font-size: 12px;
@@ -156,8 +164,24 @@ export default {
       left: -2px;
     }
     &::after {
-      border-left: 4px dotted #fff;
-      right: -2px;
+      border-left: 6px dotted #fff;
+      right: -3px;
+      top: 6px;
+    }
+
+    &-icon {
+      width: 86px;
+      height: 62px;
+      object-fit: contain;
+      position: absolute;
+      right: 4px;
+      bottom: 10px;
+      &.past-icon {
+        background: url('../../../assets/account/past.png')
+      }
+      &.used-icon {
+        background: url('../../../assets/account/used.png')
+      }
     }
   }
 }

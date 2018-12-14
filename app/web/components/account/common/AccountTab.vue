@@ -8,7 +8,7 @@
     <div class="account-tab-username">{{ username }}</div>
     <el-button :class="['account-tab-button', {'selected': isMyAccountTab }]" @click="switchTab('MyAccount')" >我的账户</el-button>
     <el-button :class="['account-tab-button', {'selected': isTransactionDetail }]" @click="switchTab('TransactionDetail')">交易明细</el-button>
-    <el-button :class="['account-tab-button', {'selected': isDiscountCoupon }]" @click="switchTab('DiscountCoupon')">优惠卷</el-button>
+    <el-button :class="['account-tab-button', {'selected': isDiscountCoupon }]" @click="switchTab('DiscountCoupon')">优惠券</el-button>
   </div>
 </template>
 

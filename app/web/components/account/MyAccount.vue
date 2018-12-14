@@ -26,7 +26,8 @@
           <el-button
             type="primary"
             class="account-item-button"
-          >去冲值</el-button>
+            @click="toRechargePage"
+          >去充值</el-button>
         </div>
       </div>
     </div>
@@ -70,6 +71,11 @@ export default {
   name: 'MyAccount',
   components: {
     AccountTab
+  },
+  methods: {
+    toRechargePage() {
+      this.$router.push({ name: 'Recharge' })
+    }
   }
 
 }

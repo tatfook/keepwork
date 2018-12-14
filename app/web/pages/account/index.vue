@@ -8,6 +8,7 @@
     </div>
     <div class="account-page-main-content">
       <router-view
+        v-if="!loading"
         class="account-page-main-content-center"
         id="account-page"
       />

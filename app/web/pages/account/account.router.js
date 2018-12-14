@@ -7,6 +7,8 @@ const AccountContainer = () => import('@/components/account/AccountContainer')
 const MyAccount = () => import('@/components/account/MyAccount')
 const TransactionDetail = () => import('@/components/account/TransactionDetail')
 const DiscountCoupon = () => import('@/components/account/DiscountCoupon')
+const RechargePage = () => import('@/components/account/RechargePage')
+const RechargeConfirm = () => import('@/components/account/RechargeConfirm')
 
 export default new Router({
   mode: 'history',
@@ -39,6 +41,16 @@ export default new Router({
           component: DiscountCoupon
         }
       ]
+    },
+    {
+      path: '/recharge',
+      name: 'Recharge',
+      component: RechargePage
+    },
+    {
+      path: '/rechargeConfirm',
+      name: 'RechargeConfirm',
+      component: RechargeConfirm
     }
   ]
 })

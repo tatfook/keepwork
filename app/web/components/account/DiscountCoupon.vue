@@ -4,23 +4,29 @@
       优惠卷
     </div>
     <div class="discount-coupon-tab">
-
-    </div>
-    <div class="discount-coupon-sum">
-      共6个
-    </div>
-
-    <div class="discount-coupon-main">
-
-      <div class="discount-coupon-main-tickets">
-        <div
-          class="discount-coupon-main-tickets-item"
-          v-for="(item, index) in tickets"
-          :key="index"
+      <el-tabs
+        v-model="activeName"
+        @tab-click="handleClick"
+      >
+        <el-tab-pane
+          label="可使用"
+          name="useable"
         >
-          <coupon></coupon>
-        </div>
-      </div>
+          <coupon-list></coupon-list>
+        </el-tab-pane>
+        <el-tab-pane
+          label="已使用"
+          name="used"
+        >
+          <coupon-list></coupon-list>
+        </el-tab-pane>
+        <el-tab-pane
+          label="已过期"
+          name="past"
+        >
+          <coupon-list></coupon-list>
+        </el-tab-pane>
+      </el-tabs>
     </div>
     <div class="discount-coupon-explain">
       <div class="discount-coupon-explain-title">优惠卷使用说明:</div>
@@ -34,15 +40,21 @@
 </template>
 
 <script>
-import Coupon from './common/Coupon'
+import CouponList from './common/CouponList'
 export default {
   name: 'DiscountCoupon',
   components: {
-    Coupon
+    CouponList
   },
   data() {
     return {
+      activeName: 'useable',
       tickets: [1, 2, 3, 4, 5, 6]
+    }
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.warn(tab, event)
     }
   }
 }
@@ -62,32 +74,15 @@ export default {
   }
 
   &-tab {
-    margin: 0 28px;
-  }
-
-  &-sum {
-    margin: 0 28px;
-    font-size: 14px;
-    color: #808080;
-  }
-
-  &-main {
-    margin: 0 28px;
-    &-tickets {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      &-item {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        margin-top: 22px;
-      }
+    margin: 20px 28px 10px;
+    .el-tabs__nav-scroll {
+      padding-left: 20px;
+      background: #f5f5f5;
     }
   }
 
   &-explain {
-    margin: 28px 28px 0;
+    margin: 60px 28px 0;
     &-title {
       color: #666666;
       font-size: 16px;
