@@ -3,9 +3,9 @@
     <div class="package-catalogue-progress" v-show="isUserSubscribePackage && !isTeacher">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
-        <p>{{lessonProgressInfo}}</p>
+        <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
       </div>
-      <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
+      <p>{{lessonProgressInfo}}</p>
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
@@ -154,7 +154,7 @@ export default {
       if (this.isUserSubscribePackage) {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id
-        }/lesson/${lesson.id}`
+          }/lesson/${lesson.id}`
         if (this.$route.name === 'StudentPackage') {
           return this.toLearnConfirm(
             this.packageDetail.id,
@@ -178,7 +178,7 @@ export default {
     toViewSummary(lesson) {
       let targetLessonPath = `/${this.actorType}/learnSummary/package/${
         this.packageDetail.id
-      }/lesson/${lesson.id}`
+        }/lesson/${lesson.id}`
       this.$router.push({
         path: targetLessonPath
       })
@@ -195,7 +195,7 @@ export default {
       }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
-      }/lesson/${this.continueLearnedLesson.id}`
+        }/lesson/${this.continueLearnedLesson.id}`
       this.toLearnConfirm(
         this.packageDetail.id,
         this.continueLearnedLesson.id,
@@ -214,7 +214,7 @@ export default {
       }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
-      }/lesson/${lesson.id}`
+        }/lesson/${lesson.id}`
       return this.toLearnConfirm(
         this.packageDetail.id,
         lesson.id,
@@ -262,18 +262,20 @@ export default {
     padding: 13px 20px;
     color: #818181;
     font-size: 14px;
-    display: flex;
-    align-items: center;
     &-detail {
-      width: 760px;
-      max-width: 86%;
-      p {
-        margin: 5px 0 0;
+      .el-progress {
+        width: 760px;
+        max-width: 86%;
+        display: inline-block;
+        vertical-align: bottom;
       }
     }
     &-button {
       padding: 10px 14px;
       margin-left: 22px;
+    }
+    p {
+      margin: 5px 0 0;
     }
   }
   &-title {
@@ -386,7 +388,7 @@ export default {
         line-height: 22px;
       }
       &-item::before {
-        content: '';
+        content: "";
         width: 4px;
         height: 4px;
         border-radius: 50%;
