@@ -7,7 +7,7 @@
 import Register from '@/components/common/RegisterDialog'
 
 export default {
-  name: 'RegisterDialog',
+  name: 'RegisterPage',
   components: {
     Register
   }
