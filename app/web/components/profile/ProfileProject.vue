@@ -6,7 +6,7 @@
       </div>
       <div class="profile-project-main">
         <el-tabs class="profile-project-tabs profile-project-main-item" v-model="activeName" v-loading='isLoading'>
-          <el-tab-pane disabled>
+          <el-tab-pane v-if="isLoginUserEditable" disabled>
             <a slot='label' class="profile-project-tabs-operate" href="/pbl/project/new" target="_blank" type="primary"><i class="el-icon-circle-plus-outline"></i>{{$t("project.newProject")}}</a>
           </el-tab-pane>
           <el-tab-pane name="created">
