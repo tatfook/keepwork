@@ -11,28 +11,46 @@
     </div>
     <div class="recharge-confirm-message">
       <div class="recharge-confirm-message-row">充值账号: <span class="message-bold">{{ username }}</span> </div>
-      <div class="recharge-confirm-message-row">充值金额: <span class="message-bold">50元</span> </div>
+      <div class="recharge-confirm-message-row">充值金额: <span class="message-bold">{{money}}元</span> </div>
     </div>
     <div class="recharge-confirm-line">
       <div class="line-1px"></div>
     </div>
-    <div class="recharge-confirm-way">
-      请使用支付宝支付:
+    <div
+      v-if="isWeixin"
+      class="recharge-confirm-way"
+    >
+      请使用微信支付:
+    </div>
+    <div
+      v-if="isZhifubao"
+      class="recharge-confirm-way"
+    >
+      请使用支付宝支付: 
     </div>
     <div class="recharge-confirm-main">
       <div class="recharge-confirm-main-content">
-        <div class="recharge-confirm-main-content-qr"></div>
+        <div class="recharge-confirm-main-content-qr">
+          <div v-if="isOrderSuccess" class="recharge-confirm-main-content-qr-success">
+            <i class="el-icon-success"></i>
+            充值成功
+          </div>
+          <img
+            v-if="qrData && !isOrderSuccess"
+            :src="qrData"
+          >
+        </div>
         <div class="recharge-confirm-main-content-tips">
           <div class="recharge-confirm-main-content-tips-money">
-            充值金额: <span class="highlight">50元</span>
+            充值金额: <span class="highlight">{{ money }}元</span>
           </div>
           <div class="recharge-confirm-main-content-tips-app">
-            <p>请用微信扫一扫</p>
-            <!-- <p>请用支付宝扫一扫</p> -->
+            <p v-if="isWeixin">请用微信扫一扫</p>
+            <p v-if="isZhifubao">请用支付宝扫一扫</p>
             <p>扫描二维码支付</p>
           </div>
         </div>
-        <div class="recharge-confirm-main-content-guide zhifubao-guide">
+        <div :class="['recharge-confirm-main-content-guide', {'zhifubao-guide': isZhifubao, 'weixin-guide': isWeixin}]">
         </div>
       </div>
     </div>
@@ -40,16 +58,74 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import _ from 'lodash'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'RechargeConfirm',
+  data() {
+    return {
+      _interval: null
+    }
+  },
+  mounted() {
+    if (!this.orderId) {
+      return this.$router.push({ name: 'Recharge' })
+    }
+    this.intervalCheckOrder()
+  },
+  destroyed() {
+    this.clearOrderRecord()
+    clearTimeout(this._interval)
+  },
+  methods: {
+    ...mapActions({
+      getOrderState: 'account/getOrderState',
+      clearOrderRecord: 'account/clearOrderRecord',
+      getBalance: 'account/getBalance'
+    }),
+    intervalCheckOrder() {
+      clearTimeout(this._interval)
+      this._interval = setTimeout(async () => {
+        let order = await this.getOrderState({ id: this.orderId })
+        if (order.state === 256) {
+          await this.getBalance().catch(e => console.error(e))
+          setTimeout(() => this.$router.push({ name: 'Account' }), 1500)
+          return
+        }
+        this.intervalCheckOrder()
+      }, 2000)
+    }
+  },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile'
+      userProfile: 'user/profile',
+      order: 'account/order',
     }),
+    orderState() {
+      return this.order.state
+    },
+    isOrderSuccess() {
+      return this.orderState === 256
+    },
+    orderId() {
+      return this.order.id || ''
+    },
+    isWeixin() {
+      return this.channel === 'wx_pub_qr'
+    },
+    isZhifubao() {
+      return this.channel === 'alipay_qr'
+    },
+    channel() {
+      return this.order.channel
+    },
+    qrData() {
+      return this.order.QR || ''
+    },
+    money() {
+      return this.order.amount || ''
+    },
     username() {
-      return _.get(this.userProfile, 'username', '')
+      return this.userProfile.username || ''
     }
   }
 }
@@ -124,7 +200,14 @@ export default {
         margin-left: 67px;
         height: 288px;
         width: 288px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: url("../../assets/account/qr-bg.png");
+        &-success {
+          color: #67C23A;
+          font-size: 28px;
+        }
       }
 
       &-tips {

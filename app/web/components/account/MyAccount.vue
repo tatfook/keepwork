@@ -21,7 +21,7 @@
     <div class="account-detail-item">
       <div class="account-detail-item-row">
         <div class="account-detail-item-row-col name">余额(元)</div>
-        <div class="account-detail-item-row-col count">200.00</div>
+        <div class="account-detail-item-row-col count">{{rmb}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
@@ -35,7 +35,7 @@
     <div class="account-detail-item">
       <div class="account-detail-item-row">
         <div class="account-detail-item-row-col name">知识币(个)</div>
-        <div class="account-detail-item-row-col count">18</div>
+        <div class="account-detail-item-row-col count">{{coin}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
@@ -44,14 +44,21 @@
         </div>
       </div>
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col lock">200 <span class="lock-tips">(待解锁)</span></div>
+        <div class="account-detail-item-row-col"></div>
+        <div class="account-detail-item-row-col lock">{{lockCoin}}<span class="lock-tips">(待解锁)</span></div>
+        <div class="account-detail-item-row-button lock">
+          <el-button
+            type="primary"
+            class="account-item-button"
+          >去兑换</el-button>
+        </div>
       </div>
     </div>
 
     <div class="account-detail-item">
       <div class="account-detail-item-row">
         <div class="account-detail-item-row-col name">知识豆(个)</div>
-        <div class="account-detail-item-row-col count">50</div>
+        <div class="account-detail-item-row-col count">{{bean}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
@@ -67,10 +74,31 @@
 
 <script>
 import AccountTab from '@/components/account/common/AccountTab'
+import { mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
   components: {
     AccountTab
+  },
+  computed: {
+    ...mapGetters({
+      balance: 'account/balance'
+    }),
+    _rmb() {
+      return this.balance.rmb || 0
+    },
+    rmb() {
+      return this._rmb.toFixed(2)
+    },
+    coin() {
+      return this.balance.coin || 0
+    },
+    lockCoin() {
+      return this.balance.lockCoin || 0
+    },
+    bean() {
+      return this.balance.bean
+    }
   },
   methods: {
     toRechargePage() {
@@ -130,7 +158,7 @@ export default {
           color: #404144;
         }
         &.lock {
-          text-align: center;
+          // text-align: center;
           font-size: 24px;
           color: #bec1c6;
           margin-top: 10px;
@@ -145,6 +173,10 @@ export default {
       &-button {
         .account-item-button {
           padding: 10px 20px;
+        }
+
+        &.lock {
+          visibility: hidden;
         }
       }
     }

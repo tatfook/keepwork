@@ -6,25 +6,24 @@
     <div class="discount-coupon-tab">
       <el-tabs
         v-model="activeName"
-        @tab-click="handleClick"
       >
         <el-tab-pane
           label="可使用"
           name="useable"
         >
-          <coupon-list></coupon-list>
+          <!-- <coupon-list></coupon-list> -->
         </el-tab-pane>
         <el-tab-pane
           label="已使用"
           name="used"
         >
-          <coupon-list></coupon-list>
+          <!-- <coupon-list></coupon-list> -->
         </el-tab-pane>
         <el-tab-pane
           label="已过期"
           name="past"
         >
-          <coupon-list></coupon-list>
+          <!-- <coupon-list></coupon-list> -->
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -40,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import CouponList from './common/CouponList'
 export default {
   name: 'DiscountCoupon',
@@ -52,10 +52,18 @@ export default {
       tickets: [1, 2, 3, 4, 5, 6]
     }
   },
+  async mounted() {
+    await this.getDiscounts()
+  },
+  computed: {
+    ...mapGetters({
+      discounts: 'account/discounts'
+    })
+  },
   methods: {
-    handleClick(tab, event) {
-      console.warn(tab, event)
-    }
+    ...mapActions({
+      getDiscounts: 'account/getDiscounts'
+    })
   }
 }
 </script>

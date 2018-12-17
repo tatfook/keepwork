@@ -4,7 +4,7 @@
       交易明细
     </div>
     <div class="transaction-detail-main">
-      <div class="transaction-detail-main-row">
+      <!-- <div class="transaction-detail-main-row">
         <div class="transaction-detail-main-row-date">
           2018/12/12 15:20
         </div>
@@ -16,12 +16,12 @@
         <div class="transaction-detail-main-row-sum">
           +10 知识币，+10 知识豆
         </div>
-      </div>
+      </div> -->
     </div>
-    <div class="transaction-detail-footer">
+    <div v-if="showPagination" class="transaction-detail-footer">
       <el-pagination
         class="transaction-detail-footer-pagination"
-        :page-size="20"
+        :page-size="10"
         :pager-count="11"
         layout="prev, pager, next"
         :total="100000"
@@ -32,8 +32,25 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'TransactionDetail'
+  name: 'TransactionDetail',
+  computed: {
+    ...mapGetters({
+      trades: 'account/trades'
+    }),
+    showPagination() {
+      return this.trades > 10
+    }
+  },
+  methods: {
+    ...mapActions({
+      getTrades: 'account/getTrades'
+    })
+  },
+  async mounted() {
+    await this.getTrades()
+  },
 }
 </script>
 

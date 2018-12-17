@@ -12,17 +12,43 @@
     <div class="recharge-page-money">
       充值金额:
       <div class="recharge-page-money-options">
-        <div class="recharge-page-money-options-card selected">
+        <div
+          :class="['recharge-page-money-options-card', { 'selected': isCard50 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_50)"
+        >
           50元
         </div>
-        <div class="recharge-page-money-options-card">
+        <div
+          :class="['recharge-page-money-options-card', { 'selected': isCard100 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_100)"
+        >
           100元
         </div>
-        <div class="recharge-page-money-options-card">
+        <div
+          :class="['recharge-page-money-options-card', { 'selected': isCard500 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_500)"
+        >
           500元
         </div>
-        <div class="recharge-page-money-options-card">
-          其他金额
+        <div
+          :class="['recharge-page-money-options-card', { 'selected': isCardOther } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_OTHER)"
+        >
+          <div
+            class="recharge-page-money-options-card-input"
+            v-show="isCardOther"
+          >
+            <input
+              class="recharge-page-money-options-card-input-inner"
+              type="number"
+              min="1"
+              ref="inputMoney"
+              autofocus="autofocus"
+              v-model="inputMoney"
+            >
+            元
+          </div>
+          <span v-show="!isCardOther">其他金额</span>
         </div>
       </div>
       <div class="recharge-page-money-tips">
@@ -33,44 +59,136 @@
     <div class="recharge-page-way">
       支付方式:
       <div class="recharge-page-way-options">
-        <span class="recharge-page-way-options-card selected">
+        <span
+          :class="['recharge-page-way-options-card', { 'selected': isWeixinPay }]"
+          @click="handleSelectPayWay(CONF.WEIXIN_PAY)"
+        >
           <span class="recharge-page-way-options-card-icon weixin-icon"></span>
           <span class="recharge-page-way-options-card-name">微信支付</span>
-          <span class="recharge-page-way-options-card-selected-label">
+          <span
+            class="recharge-page-way-options-card-selected-label"
+            v-show="isWeixinPay"
+          >
           </span>
         </span>
-        <span class="recharge-page-way-options-card">
+        <span
+          :class="['recharge-page-way-options-card', { 'selected': isZhifubaoPay }]"
+          @click="handleSelectPayWay(CONF.ZHIFUBAO_PAY)"
+        >
           <span class="recharge-page-way-options-card-icon zhifubao-icon"></span>
           <span class="recharge-page-way-options-card-name">支付宝</span>
-          <!-- <span class="recharge-page-way-options-card-selected-label"></span> -->
+          <span
+            class="recharge-page-way-options-card-selected-label"
+            v-show="isZhifubaoPay"
+          ></span>
         </span>
       </div>
 
       <div class="recharge-page-confirm">
-        <el-button type="primary" class="recharge-page-confirm-button">立即充值</el-button>
+        <el-button
+          type="primary"
+          class="recharge-page-confirm-button"
+          @click="toComfirmPayPage"
+          :loading="isCreateLoading"
+        >立即充值</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import _ from 'lodash'
+import { mapGetters, mapActions } from 'vuex'
+const MONEY_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
   name: 'RechargePage',
+  data() {
+    return {
+      rechargeMoney: 0,
+      inputMoney: '',
+      moneyCard: '50',
+      payWay: 'weixin',
+      isCreateLoading: false
+    }
+  },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile'
     }),
     username() {
-      return _.get(this.userProfile, 'username', '')
+      return this.userProfile.username || ''
+    },
+    isCard50() {
+      return this.moneyCard === this.CONF.CARD_50
+    },
+    isCard100() {
+      return this.moneyCard === this.CONF.CARD_100
+    },
+    isCard500() {
+      return this.moneyCard === this.CONF.CARD_500
+    },
+    isCardOther() {
+      return this.moneyCard === this.CONF.CARD_OTHER
+    },
+    isWeixinPay() {
+      return this.payWay === this.CONF.WEIXIN_PAY
+    },
+    isZhifubaoPay() {
+      return this.payWay === this.CONF.ZHIFUBAO_PAY
+    },
+    CONF() {
+      return {
+        WEIXIN_PAY: 'weixin',
+        ZHIFUBAO_PAY: 'zhifubao',
+        CARD_50: '50',
+        CARD_100: '100',
+        CARD_500: '500',
+        CARD_OTHER: 'other',
+        MAX_MONEY: 1000000
+      }
     }
   },
   methods: {
-    handleSelectMoneyCard() {
-
+    ...mapActions({
+      createOrder: 'account/createOrder'
+    }),
+    handleSelectMoneyCard(type) {
+      if (type !== this.moneyCard) {
+        this.moneyCard = type
+        this.inputMoney = ''
+      }
+      if (type === this.CONF.CARD_OTHER) {
+        this.$nextTick(() => {
+          this.$refs.inputMoney.focus()
+        })
+      }
     },
-    handleSelectPayWay() {
+    handleSelectPayWay(way) {
+      this.payWay = way
+    },
+    getRechargeMoney() {
+      if (this.isCardOther) {
+        return +this.inputMoney
+      }
+      return +this.CONF[`CARD_${this.moneyCard}`]
+    },
+    async toComfirmPayPage() {
+      if (this.isCardOther && !MONEY_REG.test(this.inputMoney)) {
+        return this.$message.error('充值金额必须为正整数')
+      }
+      const amount = this.getRechargeMoney()
+      if (amount > this.CONF.MAX_MONEY) {
+        return this.$message.error('充值金额不能大于100万')
+      }
+      const channel = this.isWeixinPay ? 'wx_pub_qr' : 'alipay_qr'
+      try {
+        this.isCreateLoading = true
+        await this.createOrder({ amount, channel })
+        this.$router.push({ name: 'RechargeConfirm' })
+        this.isCreateLoading = false
+      } catch (error) {
+        this.isCreateLoading = false
+        this.$message.error('创建订单失败')
+      }
 
     }
   }
@@ -119,6 +237,25 @@ export default {
           background: #65cad9;
           color: #fff;
           border: none;
+        }
+        &-input {
+          width: 100%;
+          text-align: center;
+          &-inner {
+            border: none;
+            border-bottom: 3px solid #fff;
+            background: none;
+            font-size: 30px;
+            max-width: 40%;
+            text-align: center;
+            color: #fff;
+            display: inline-block;
+            outline: none;
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+          }
         }
       }
     }
@@ -197,9 +334,9 @@ export default {
   &-confirm {
     margin-top: 38px;
     &-button {
-        width: 329px;
-        height: 43px;
-        font-size: 18px;
+      width: 329px;
+      height: 43px;
+      font-size: 18px;
     }
   }
 }

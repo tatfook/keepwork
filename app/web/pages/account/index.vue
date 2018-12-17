@@ -39,6 +39,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import VueClipboard from 'vue-clipboard2'
 import router from './account.router'
 import userModule from '@/store/user'
+import accountModule from '@/store/account'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -71,6 +72,7 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
+    account: accountModule
   }
 })
 
@@ -102,15 +104,20 @@ export default {
   methods: {
     ...mapActions({
       toggleLoginDialog: 'user/toggleLoginDialog',
-      getUserProfile: 'user/getProfile'
+      getUserProfile: 'user/getProfile',
+      getBalance: 'account/getBalance'
     }),
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
     },
     async loadAccountPresets() {
-      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
-        console.error(err)
-      )
+      // await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+      //   console.error(err)
+      // )
+      await Promise.all([
+        this.getUserProfile({ force: false, useCache: false }),
+        this.getBalance()
+      ]).catch( e => console.error(e))
       this.loading = false
     }
   }
