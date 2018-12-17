@@ -18,13 +18,13 @@ export default {
   max-width: 352px;
   margin: 80px auto 10px;
   box-shadow: 1px 1px 5px #cccccc;
-.register-dialog {
-  &-form {
-    padding: 20px 32px;
-    margin: 0 auto;
-    position: relative;
+  .register-dialog {
+    &-form {
+      padding: 20px 32px;
+      margin: 0 auto;
+      position: relative;
     }  
-}
+  }
 }
 </style>
 
