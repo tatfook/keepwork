@@ -172,6 +172,11 @@ export default {
             .then(res => {
               this.registerLoading = false
               this.handleClose()
+              if(this.$route.name == 'Register'){
+                window.location.href = '/'
+              }else{
+                window.location.reload()
+              }
             })
             .catch(e => {
               if (e.response.data.code == 4) {
