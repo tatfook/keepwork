@@ -1486,6 +1486,8 @@
     "createdProjects": "Created projects",
     "contributedProjects": "Contributed projects",
     "noProjectsToShow": "No projects to show.",
-    "noContributedProjectsToShow": "No contributed projects to show."
+    "noContributedProjectsToShow": "No contributed projects to show.",
+    "top": "Top",
+    "unTop": "Un-Top"
   }
 }
