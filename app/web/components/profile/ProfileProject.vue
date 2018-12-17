@@ -7,12 +7,12 @@
       <div class="profile-project-main">
         <el-tabs class="profile-project-tabs profile-project-main-item" v-model="activeName" v-loading='isLoading'>
           <el-tab-pane disabled>
-            <a slot='label' class="profile-project-tabs-operate" href="/pbl/project/new" target="_blank" type="primary">{{$t("project.newProject")}}</a>
+            <a slot='label' class="profile-project-tabs-operate" href="/pbl/project/new" target="_blank" type="primary"><i class="el-icon-circle-plus-outline"></i>{{$t("project.newProject")}}</a>
           </el-tab-pane>
           <el-tab-pane name="created">
             <span slot='label'>{{$t('profile.createdProjects')}}</span>
             <div v-if="!isCreatedEmpty" class="profile-project-list">
-              <project-cell class="profile-project-list-item" v-for="(project, index) in nowProfileCreatedProjects" :key="index" :project='project'></project-cell>
+              <project-cell class="profile-project-list-item" v-for="(project, index) in sortedNowProfileCreatedProjectsWithStick" :key="index" :project='project' :isTopizable='isLoginUserEditable' @toggleStickProject='toggleStickProject'></project-cell>
             </div>
             <div v-if="isCreatedEmpty" class="profile-project-empty">
               <img src="@/assets/img/default_project.png" alt="">
@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import ProjectCell from '@/components/common/ProjectCell'
 import UserBasicMsg from './common/UserBasicMsg'
 import { mapGetters, mapActions } from 'vuex';
@@ -47,11 +48,15 @@ export default {
   },
   mounted() {
     this.initProjectsData()
+    this.pinedProjects = _.cloneDeep(
+      _.get(this.nowUserDetail, 'extra.pinedProjects', [])
+    )
   },
   data() {
     return {
       isLoading: false,
-      activeName: 'created'
+      activeName: 'created',
+      pinedProjects: []
     }
   },
   computed: {
@@ -75,6 +80,17 @@ export default {
     nowProfileCreatedProjects() {
       return this.createdProjects({ userId: this.nowProfileUserId })
     },
+    nowProfileCreatedProjectsWithStick() {
+      let copiedProjects = _.cloneDeep(this.nowProfileCreatedProjects)
+      _.map(this.pinedProjects, projectId => {
+        let pinedProjectIndex = _.findIndex(copiedProjects, { 'id': projectId })
+        copiedProjects[pinedProjectIndex].isTopped = true
+      })
+      return copiedProjects
+    },
+    sortedNowProfileCreatedProjectsWithStick() {
+      return _.sortBy(this.nowProfileCreatedProjectsWithStick, project => project.isTopped && -moment(project.createdAt).valueOf())
+    },
     nowProfileJoinedProjects() {
       return this.joinedProjects({ userId: this.nowProfileUserId })
     },
@@ -83,18 +99,63 @@ export default {
     },
     isJoinedEmpty() {
       return !Boolean(this.nowProfileJoinedProjects && this.nowProfileJoinedProjects.length)
+    },
+    originExtra() {
+      return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
+    },
+    updatingExtra() {
+      return _.mergeWith(this.originExtra, {
+        pinedProjects: this.pinedProjects
+      }, (objValue, srcValue) => {
+        return srcValue
+      })
+    },
+    updatingUserInfo() {
+      return _.mergeWith(
+        this.nowUserDetail,
+        {
+          extra: this.updatingExtra
+        }, (objValue, srcValue) => {
+          return srcValue
+        }
+      )
     }
   },
   methods: {
     ...mapActions({
       profileGetUserCreatedProjects: 'profile/getUserCreatedProjects',
-      profileGetUserJoinedProjects: 'profile/getUserJoinedProjects'
+      profileGetUserJoinedProjects: 'profile/getUserJoinedProjects',
+      userUpdateUserInfo: 'user/updateUserInfo'
     }),
     async initProjectsData() {
       let userId = this.nowProfileUserId
       this.isLoading = true
       this.isCreatedType ? await this.profileGetUserCreatedProjects({ userId }) : await this.profileGetUserJoinedProjects({ userId })
       this.isLoading = false
+    },
+    async updateData() {
+      this.isLoading = true
+      await this.userUpdateUserInfo(this.updatingUserInfo).catch()
+      this.isLoading = false
+    },
+    toggleStickProject(project) {
+      let modifedProjectId = project.id
+      if (project.isTopped) {
+        let targetIndex = _.findIndex(this.pinedProjects, projectId => {
+          return projectId === modifedProjectId
+        })
+        this.pinedProjects.splice(targetIndex, 1)
+      } else {
+        this.pinedProjects.push(modifedProjectId)
+      }
+      this.updateData()
+    }
+  },
+  watch: {
+    nowUserDetail() {
+      this.pinedProjects = _.cloneDeep(
+        _.get(this.nowUserDetail, 'extra.pinedProjects', [])
+      )
     }
   },
   components: {
@@ -167,12 +228,14 @@ export default {
       }
     }
     &-operate {
-      background-color: #2397f3;
-      color: #fff;
+      color: #2397f3;
       text-decoration: none;
       font-size: 14px;
       padding: 6px 16px;
       border-radius: 4px;
+      .el-icon-circle-plus-outline {
+        margin-right: 8px;
+      }
     }
   }
   &-list {
