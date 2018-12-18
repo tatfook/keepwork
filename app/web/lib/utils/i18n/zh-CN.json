@@ -1228,6 +1228,8 @@
     "freeForClassroomLearning": "班级学生可免费在课堂中学习平台所有课程",
     "trackStudentsPerformance": "实时反馈学生的课堂表现和作答情况",
     "beShownReport": "自动生成课堂总结报告，支持打印、发送到邮箱",
+    "findMentor": "寻找导师？",
+    "mentorService": "导师服务",
     "trackTeachingProgress": "跟踪授课进度，追溯授课轨迹"
   },
   "compHideText": {
