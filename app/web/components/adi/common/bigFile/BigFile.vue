@@ -16,7 +16,7 @@
           <div class="iconfont" :class="getIconClass"></div>
         </div>
         <div>
-          <div class="filename">{{this.properties.filename}}</div>
+          <div class="filename">{{getFileName()}}</div>
           <div class="filesize">{{getSize()}}</div>
         </div>
         <div class="split"></div>
@@ -93,6 +93,23 @@ export default {
     }
   },
   methods: {
+    getFileName() {
+      if(!this.properties && !this.properties.filename) {
+        return
+      }
+
+      let name = this.properties.filename
+      let lastCharacterIndex = name.lastIndexOf('.' + this.properties.ext)
+      let realName = name.substring(0, lastCharacterIndex)
+
+      if(realName.length <= 10) {
+        return name
+      } else {
+        let prefixName = name.substring(0, 3)
+        let suffixName = name.substring(lastCharacterIndex - 3)
+        return prefixName + '---' + suffixName
+      }
+    },
     getSize() {
       return filesize(this.properties && this.properties.size || 0)
     },
@@ -269,14 +286,16 @@ export default {
     height: 75 - 17 * 2px;
     border: 1px solid #d9d9d9;
     background-color: #f3f3f3;
-    padding: 17px 0px;
+    padding: 17px 36px 17px 24px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    .filename,
+    .filename {
+      width: 190px;
+    }
     .filesize {
-      width: 150px;
+      width: 190px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

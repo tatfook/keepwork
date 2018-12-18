@@ -9,7 +9,6 @@ import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
-import formatDate from '@/lib/utils/formatDate'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { mapGetters, mapActions } from 'vuex'
 import { codemirror } from 'vue-codemirror'
@@ -72,7 +71,7 @@ export default {
     activePage(page) {
       this.preClickedMod = ''
     },
-    isZenMode(state) {     
+    isZenMode(state) {
       if (state) {
         this.editor.setOption('theme', '3024-night')
       } else {
@@ -396,9 +395,7 @@ export default {
       } else {
         this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
       }
-      let filename = `${(formatDate() || '').replace(/\s|\:/g, '_')}-${(
-        Date.now() + ''
-      ).replace(/\d*(\d{3})$/, '$1')}-${file.name}`
+      let filename = `${file.name}`
 
       await this.userUploadFileAndUseInSite({
         file,
