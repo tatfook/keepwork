@@ -494,12 +494,12 @@ export default {
       let ext = file.ext || (file.filename || '').split('.').pop()
       let filename = file.filename || url
       const modContent = `
-          bigFile:
-            src: >-
-              ${url}
-            ext: ${ext}
-            filename: ${filename}
-            size: ${file.size}
+bigFile:
+  src: >-
+    ${url}
+  ext: ${ext}
+  filename: ${filename}
+  size: ${file.size}
           `
       const payload = {
         modName: 'ModBigFile',
