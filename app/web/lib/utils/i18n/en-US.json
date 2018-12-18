@@ -339,7 +339,7 @@
   "tips": {
     "mod": "Module",
     "copyUrl": "Copy URL",
-    "openInNewWindow":"Open in new window",
+    "openInNewWindow": "Open in new window",
     "clickToShow": "Show",
     "clickToHide": "Hide",
     "clickToAdd": "Add",
@@ -624,7 +624,7 @@
     "projectHome": "Project home",
     "projectNotFound": "Project Not Found",
     "projectInputId": "Enter the project ID to get the project data",
-    "projectForbidden":"Unable to display content"
+    "projectForbidden": "Unable to display content"
   },
   "field": {
     "fileId": "file Id",
@@ -1224,6 +1224,8 @@
     "freeForClassroomLearning": "Your students could learn all lessons on the platform free of charge in the class.",
     "trackStudentsPerformance": "You will be able to track students' real-time performance in a class.",
     "beShownReport": "You will be shown teaching reports including accuracy analysis and testing results of students after a class, which support printing and sending to mailboxes.",
+    "findMentor": "Find a Mentor?",
+    "mentorService": "Mentor Service",
     "trackTeachingProgress": "You will be able to track your teaching progress."
   },
   "compHideText": {

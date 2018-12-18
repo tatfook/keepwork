@@ -2,6 +2,8 @@ import _ from 'lodash'
 import moment from 'moment'
 const getters = {
   userinfo: state => state.userinfo,
+  userIdenity: (state, { userinfo }) => _.get(userinfo, 'identity'),
+  userTutor: (state, { userinfo }) => _.get(userinfo, 'tutor'),
   learnDayCount: (state, { userinfo }) =>
     _.get(userinfo, 'extra.learn.learnDayCount', 0),
   lastLearnDate: (state, { userinfo }) =>

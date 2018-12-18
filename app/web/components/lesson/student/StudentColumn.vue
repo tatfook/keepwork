@@ -1,53 +1,44 @@
 <template>
-  <div class="Learning-center">
-    <div class="Learning-center-content">
+  <div class="learning-center">
+    <div class="learning-center-content">
       <div class="aside">
         <div class="profile-intro">
           <div class="profile">
-            <img
-              :src='userProfile.portrait || avatar'
-              alt="portrait"
-            >
+            <img :src='userProfile.portrait || avatar' alt="portrait">
           </div>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
-            <div class="beans"><span>{{beansCount}}{{$t('lesson.beans')}}</span><span
-                class="detail"
-                @click="goBeanDetail"
-              >{{$t('lesson.packageManage.detailLabel')}} →</span></div>
+            <div class="learning-center-tutor">
+              <img v-if="isHaveTotur" src="@/assets/lessonImg/tutor_icon.png" alt="">
+              {{isHaveTotur ? $t('lesson.mentorService') : $t('lesson.findMentor')}}
+            </div>
+            <div class="learning-center-skill-info">
+              <span>{{skillpointsCount}} {{$t('lesson.skillPoints')}}</span>
+              <span class="learning-center-skill-info-link" v-loading='isLoadingSkills' @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span>
+            </div>
           </div>
         </div>
-        <div class="skillpoints">{{skillpointsCount}} {{$t('lesson.skillPoints')}} :</div>
-        <div
-          class="skills"
-          :loading="loadingSkillsPoint"
-        >
-          <ul class="skills-list">
-            <li
-              v-for="(skill,index) in skillsList"
-              :key="index"
-            ><span class="skill-name">{{skillName(skill)}}：</span>
-              <span>{{skill.score}}</span>
-            </li>
-          </ul>
-        </div>
         <div class="options-wrap">
-          <span
-            v-for="(option,index) in optionArr"
-            :key="index"
-            :class="['options', {'selected': currOption == index}]"
-            @click="switchSelect(index)"
-          >{{option.name}}</span>
+          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
         </div>
       </div>
       <div class="main">
         <router-view></router-view>
       </div>
+      <el-dialog class="learning-center-skill-dialog" :class="{'learning-center-skill-dialog-en': isEn}" title="技能点详情" :visible.sync="isSkillDetailShow">
+        <div class="learning-center-skill-dialog-info">{{skillpointsCount}} {{$t('lesson.skillPoints')}}:</div>
+        <ul class="learning-center-skill-dialog-skills">
+          <li class="learning-center-skill-dialog-skills-item" v-for="(skill,index) in skillsList" :key="index">
+            {{skillName(skill)}}：<span class="learning-center-skill-dialog-skills-count">{{skill.score}}</span>
+          </li>
+        </ul>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import { locale } from '@/lib/utils/i18n'
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
@@ -60,7 +51,9 @@ export default {
     return {
       avatar,
       skillsList: [],
+      isLoadingSkills: false,
       loadingSkillsPoint: true,
+      isSkillDetailShow: false,
       currOption: 0,
       optionArr: [
         { name: this.$t('lesson.onlineLesson') },
@@ -71,22 +64,26 @@ export default {
   },
   async mounted() {
     this.setActiveItem()
-    let payload = { userId: this.userId }
     await lesson.users
-      .userSkills(payload)
+      .userSkills({ userId: this.userId })
       .then(res => {
         this.skillsList = res
         this.loadingSkillsPoint = false
       })
-      .catch(error => console.log(error))
+      .catch(() => {
+      })
   },
   computed: {
     ...mapGetters({
       userId: 'user/userId',
       userProfile: 'user/profile',
       username: 'user/username',
-      userinfo: 'lesson/userinfo'
+      userinfo: 'lesson/userinfo',
+      lessonUserTutor: 'lesson/userTutor',
     }),
+    isHaveTotur() {
+      return Boolean(this.lessonUserTutor && this.lessonUserTutor.tutorId)
+    },
     beansCount() {
       return _.get(this.userinfo, 'bean', 0)
     },
@@ -98,13 +95,12 @@ export default {
         this.skillsList.every(skill => (sum += skill.score * 1))
       }
       return sum
+    },
+    isEn() {
+      return locale === 'en-US' ? true : false
     }
   },
   methods: {
-    goBeanDetail() {
-      this.$router.push('/student/bean')
-      // this.$message.warning('程序员小姐姐努力开发中')
-    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
@@ -145,7 +141,7 @@ export default {
 </script>
 
 <style lang="scss">
-.Learning-center {
+.learning-center {
   &-content {
     display: flex;
     margin: 10px auto;
@@ -228,11 +224,14 @@ export default {
         }
       }
       .options-wrap {
+        margin: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e8e8e8;
         .options {
           display: block;
           height: 38px;
           line-height: 38px;
-          margin: 16px 20px;
+          margin: 0 0 20px;
           background-color: #f5f5f5;
           border-radius: 4px;
           border: solid 1px #bcbcbc;
@@ -251,6 +250,90 @@ export default {
       padding: 0;
       background: #fff;
       overflow: hidden;
+    }
+  }
+  &-tutor {
+    cursor: pointer;
+    font-size: 14px;
+    color: #409efe;
+    margin: 4px 0;
+  }
+  &-skill-info {
+    font-size: 14px;
+    color: #818181;
+    &-link {
+      color: #409efe;
+      cursor: pointer;
+    }
+    .el-icon-back {
+      transform: rotate(180deg);
+      margin-left: 3px;
+    }
+  }
+  &-skill-dialog {
+    .el-dialog {
+      width: 396px;
+      max-width: 100%;
+    }
+    .el-dialog__header {
+      padding: 0;
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      background-color: #309efe;
+    }
+    .el-dialog__title {
+      color: #fff;
+      font-size: 16px;
+    }
+    .el-dialog__headerbtn {
+      top: 14px;
+      right: 16px;
+    }
+    .el-dialog__headerbtn .el-dialog__close {
+      color: #fff;
+      font-weight: bold;
+    }
+    .el-dialog__body {
+      padding: 24px 42px 36px 42px;
+    }
+    &-skills {
+      &-count {
+        color: #303133;
+      }
+    }
+    &-info {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 16px;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    li {
+      list-style: none;
+      width: 145px;
+      border-bottom: 1px solid #ececec;
+      font-size: 14px;
+      color: #818181;
+      height: 32px;
+      line-height: 32px;
+      &:nth-child(1),
+      &:nth-child(2) {
+        border-top: 1px solid #ececec;
+      }
+    }
+    &-en {
+      .el-dialog {
+        width: 566px;
+      }
+      li {
+        width: 230px;
+      }
     }
   }
 
