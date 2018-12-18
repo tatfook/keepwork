@@ -55,11 +55,9 @@ export default {
       }
     },
     toParacraftWorldZip() {
-      if (this.paracraftUrl) {
-        let url = decodeURIComponent(this.paracraftUrl)
-        let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
-        launchUri(downloadWorldZip)
-      }
+      let url = decodeURIComponent(this.paracraftUrl)
+      let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
+      launchUri(downloadWorldZip)
     },
     handleDialogClose() {
       this.$emit('close')

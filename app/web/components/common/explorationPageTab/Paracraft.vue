@@ -60,7 +60,7 @@ export default {
           user: { username: i.username, portrait: i.user_portrait || '' },
           updatedAt: i.updated_time,
           createdAt: i.created_time,
-          type: i.type,
+          type: i.type === 'site' ? 0 : 1,
           privilege: i.recruiting ? 1 : 0
         }
       })

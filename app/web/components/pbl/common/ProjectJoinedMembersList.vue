@@ -22,7 +22,7 @@
         <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
-        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
+        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' ='member.username' alt="">
       </div>
       <div v-else class="project-joined-members-list-card-profiles-empty">{{$t("project.noOtherMembers")}}</div>
     </el-card>

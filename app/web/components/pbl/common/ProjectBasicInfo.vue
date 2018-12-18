@@ -2,7 +2,10 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">{{originProjectDetail.name}}
-        <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
+        <span
+          class="project-basic-info-state"
+          v-if="!isProjectStopRecruit"
+        >{{$t("explore.recruiting")}}</span>
       </p>
       <p class="project-basic-info-more">
         <span class="project-basic-info-more-created">{{$t("project.createBy")}}
@@ -21,10 +24,28 @@
       </p>
     </div>
     <div class="project-basic-info-detail">
-      <div class="project-basic-info-detail-cover" v-loading='isCoverZoneLoading'>
-        <img v-show="!isVideoShow" class="project-basic-info-detail-cover-image" :src='tempCoverUrl || defaultCoverUrl' alt="" @load="coverImageLoaded">
-        <video v-show="isVideoShow" class="project-basic-info-detail-cover-video" :src="tempVideoUrl" controls></video>
-        <p v-if="isLoginUserEditable" class="project-basic-info-detail-cover-cursor show-on-hover" @click="showMediaSkyDriveDialog"><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p>
+      <div
+        class="project-basic-info-detail-cover"
+        v-loading='isCoverZoneLoading'
+      >
+        <img
+          v-show="!isVideoShow"
+          class="project-basic-info-detail-cover-image"
+          :src='tempCoverUrl || defaultCoverUrl'
+          alt=""
+          @load="coverImageLoaded"
+        >
+        <video
+          v-show="isVideoShow"
+          class="project-basic-info-detail-cover-video"
+          :src="tempVideoUrl"
+          controls
+        ></video>
+        <p
+          v-if="isLoginUserEditable"
+          class="project-basic-info-detail-cover-cursor show-on-hover"
+          @click="showMediaSkyDriveDialog"
+        ><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p>
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
@@ -32,39 +53,105 @@
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
-          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
-          <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
+          <el-button
+            type="primary"
+            @click="toProjectPage"
+          >{{ buttonName }}</el-button>
+          <el-button
+            @click="toEditWebsite"
+            plain
+            v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)"
+          >{{$t("project.edit")}}</el-button>
+          <el-button
+            :disabled="isApplied"
+            :loading='isApplyButtonLoading'
+            plain
+            v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit"
+            @click="showApplyBox"
+          >{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
         </div>
       </div>
     </div>
-    <div class="project-basic-info-description" v-loading='isLoading'>
+    <div
+      class="project-basic-info-description"
+      v-loading='isLoading'
+    >
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
-        <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
-          <i class="el-icon-edit-outline" v-show="!isDescriptionEditing"></i>
+        <el-button
+          v-if="isLoginUserEditable"
+          class="project-website-card-button"
+          type="text"
+          @click="toggleIsDescEditing"
+        >
+          <i
+            class="el-icon-edit-outline"
+            v-show="!isDescriptionEditing"
+          ></i>
           <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>{{$t("common.Save")}}</span>
         </el-button>
       </div>
-      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || $t('project.noDescripton')"></div>
-      <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
+      <div
+        class="project-basic-info-description-content"
+        v-show="!isDescriptionEditing"
+        v-html="tempDesc || $t('project.noDescripton')"
+      ></div>
+      <div
+        :id="descriptionId"
+        v-show="isDescriptionEditing"
+        class="project-basic-info-description-editor"
+      ></div>
     </div>
-    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
-    <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
+    <sky-drive-manager-dialog
+      :mediaLibrary='true'
+      :show='isMediaSkyDriveDialogShow'
+      :isVideoTabShow='true'
+      @close='closeSkyDriveManagerDialog'
+    ></sky-drive-manager-dialog>
+    <el-dialog
+      title="提示"
+      v-loading='isBinderDialogLoading'
+      :visible.sync="binderDialogVisible"
+      :before-close="handleBinderDialogClose"
+    >
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="handleBinderDialogClose">{{$t("common.Cancel")}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog class="project-basic-info-apply-dialog" :title='$t("project.applyForProject")' :visible.sync="isApplyDialogVisible" width="400px" :before-close="handleApplyDialogClose">
-      <el-input type="textarea" :placeholder="$t('project.enterApplicationReason')" resize='none' v-model="applyText">
+    <el-dialog
+      class="project-basic-info-apply-dialog"
+      :title='$t("project.applyForProject")'
+      :visible.sync="isApplyDialogVisible"
+      width="400px"
+      :before-close="handleApplyDialogClose"
+    >
+      <el-input
+        type="textarea"
+        :placeholder="$t('project.enterApplicationReason')"
+        resize='none'
+        v-model="applyText"
+      >
       </el-input>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="handleApplyDialogClose">{{$t("common.Cancel")}}</el-button>
-        <el-button type="primary" @click="applyJoinProject">{{$t("common.Sure")}}</el-button>
+        <el-button
+          type="primary"
+          @click="applyJoinProject"
+        >{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
-    <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
+    <paracraft-info
+      :isDialogVisible='isParacraftInfoDialogVisible'
+      :paracraftUrl='paracraftUrl'
+      @close='handleParacraftInfoDialogClose'
+    ></paracraft-info>
   </div>
 </template>
 <script>
@@ -225,7 +312,8 @@ export default {
       return this.projectType === 0
     },
     projectSiteId() {
-      return this.originProjectDetail.siteId
+      // FIXME: 确认清楚是哪个id
+      return this.originProjectDetail.siteId || this.originProjectDetail.id
     },
     siteDetailInfo() {
       if (!this.isWebType) {
@@ -735,6 +823,11 @@ export default {
           object-fit: cover;
           width: 100%;
           height: 100%;
+        }
+        &-video {
+          position: absolute;
+          top: 0;
+          left: 0;
         }
       }
       &-operations {

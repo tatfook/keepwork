@@ -2,6 +2,7 @@
   "common": {
     "login": "登 录",
     "register": "注 册",
+    "account": "账户",
     "existAccount": "用户名已存在",
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
@@ -33,6 +34,7 @@
     "userData": "用户资料",
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
+    "thirdBanding": "第三方账号绑定",
     "chinese-englishSwitch": "切换为英文（English）",
     "left-rightAngles": "切换左右视角",
     "accountNoChange": "账户名注册成功不可更改",
@@ -131,7 +133,8 @@
     "weekday6": "星期六",
     "viewMore": "查看更多",
     "untitled": "Untitled",
-    "noSelfIntro": "这家伙很懒，没有简介！"
+    "noSelfIntro": "这家伙很懒，没有简介！",
+    "identification": "立即认证"
   },
   "editor": {
     "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
@@ -399,7 +402,9 @@
     "package": "课程包",
     "lessonPackage": "课程包",
 
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目"
   },
   "adi": {
     "hint": {
@@ -610,7 +615,18 @@
     "keepTwoOptions": "至少保留两个选项",
     "keepOneOption": "至少保留一个选项",
     "coinsInsufficient": "对不起,你的知识币不够",
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目",
+    "projectTags": "项目标签",
+    "projectMembers": "项目成员",
+
+    "projectId": "请输入项目ID",
+    "projectHome": "项目主页",
+    "projectNotFound": "项目不存在",
+    "projectInputId": "输入项目ID,获取项目数据",
+    "projectForbidden": "无法显示内容"
+
   },
   "field": {
     "fileId": "字段",
@@ -720,15 +736,14 @@
     "fileUploading": "还有文件正在上传中，离开后文件将取消上传，是否继续？"
   },
   "user": {
-    "displayName": "昵称:",
-    "nickname": "昵:",
-    "sex": "性别:",
-    "location": "位置:",
-    "introduce": "个人简介:",
+    "displayName": "昵称",
+    "sex": "性别",
+    "location": "现居",
+    "introduce": "签名",
     "male": "男",
     "female": "女",
     "confidentiality": "保密",
-    "modifyAvatar": "修改头像",
+    "modifyAvatar": "点击修改头像",
     "inputPhoneNumber": "请输入手机号码",
     "inputPhoneOrEmail": "请输入手机号/邮箱",
     "inputVerificationCode": "请输入验证码",
@@ -759,12 +774,12 @@
     "newPwdRequired": "请输入新密码",
     "reNewPwdRequired": "请再次输入新密码",
     "pwdMinLen": "密码最少6位",
-    "emailBind": "邮箱绑定",
-    "phoneBind": "手机绑定",
-    "qqBind": "QQ绑定",
-    "weixinBind": "微信绑定",
-    "weiboBind": "微博绑定",
-    "githubBind": "Github绑定",
+    "emailBind": "邮箱",
+    "phoneBind": "手机",
+    "qqBind": "QQ",
+    "weixinBind": "微信",
+    "weiboBind": "微博",
+    "githubBind": "Github",
     "binding": "绑定",
     "unbunding": "解绑",
     "unBound": "未绑定",
@@ -782,7 +797,8 @@
     "sendCodes": "获取验证码",
     "inputLoginPwd": "输入登录密码",
     "pleaseCheckPwd": "请检查密码是否正确",
-    "pwdIncorrect": "旧密码错误。"
+    "pwdIncorrect": "旧密码错误。",
+    "saveTheChanges": "保存更改"
   },
   "setting": {
     "general": "基本信息",
@@ -1284,6 +1300,8 @@
     "projectName": "项目名称",
     "projectType": "项目类型",
     "createProject": "完成创建",
+    "projectAlreadyExists": "该项目已存在！",
+    "ProjectCreationFailed": "创建项目失败，请稍后再试！",
     "prev": "上一步",
     "next": "下一步",
     "3DGameAndAnim": "3D动画和游戏作品",
@@ -1295,9 +1313,9 @@
     "whiteboard": "白板",
     "share": "分享",
     "star": "收藏",
-    "unstar": "取消收藏",
+    "unstar": "已收藏",
     "like": "点赞",
-    "unlike": "取消点赞",
+    "unlike": "已点赞",
     "setting": "设定",
     "welcomeTo": "欢迎来到",
     "projectTags": "项目标签",
@@ -1492,6 +1510,7 @@
     "noProjectsToShow": "还没有创建项目~",
     "noContributedProjectsToShow": "还没有参与项目~",
     "top": "置顶",
-    "unTop": "取消置顶"
+    "unTop": "取消置顶",
+    "changePassword": "密码修改"
   }
 }

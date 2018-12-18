@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="0" type='flex' class="full-height editor-page-container" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col id="managerWin" class="manager-win" v-show="isManagerShow">     
+    <el-col id="managerWin" class="manager-win" v-show="isManagerShow">
       <el-row class="toolbar">
         <el-button-group>
           <el-tooltip :content="$t('editor.files')">
@@ -352,7 +352,7 @@ export default {
         this.resizeWinParams.leftColWidthParam = leftColWidthParam
         this.resizeWinParams.rightColWidthParam = rightColWidthParam
       }
-      
+
     },
     dragMouseMove(event) {
       if (!(this.resizeWinParams.isResizing && event && event.clientX)) {
@@ -561,7 +561,7 @@ bigFile:
 }
 .toolbar-content {
   min-width: 500px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 .toolbar-content_left {
   display: inline-block;
@@ -743,7 +743,7 @@ bigFile:
   .manager-content-inner {
     height: 100%;
   }
-  
+
 }
 
 .el-tooltip__popper {

@@ -105,10 +105,10 @@ export default {
       let result
       switch (this.codeDialogDatas.type) {
         case 'email':
-          result = await this.verifyEmailCode()
+          result = await this.verifyEmailCode().catch(e => console.error(e))
           break
         case 'cellphone':
-          result = await this.verifyPhoneCode()
+          result = await this.verifyPhoneCode().catch(e => console.error(e))
           break
         default:
           break
@@ -143,11 +143,12 @@ export default {
         captcha: this.code,
         cellphone: this.codeDialogDatas.value
       })
-      if (result == true) {
+      if (result == 'OK') {
         this.showMessage(
           'success',
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
         )
+        result = true
       } else {
         this.codeError = result.error.message
         this.showMessage(
@@ -155,7 +156,7 @@ export default {
           `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.failure')}`
         )
       }
-      return result.data ? 'success' : result.error.message
+      return result
     },
     async sendCode() {
       this.codeError = ''
