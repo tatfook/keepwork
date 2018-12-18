@@ -241,7 +241,6 @@ export default {
   &-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     margin-bottom: -1px;
     & &-item {
       margin: 0;
