@@ -106,7 +106,7 @@ export default {
     &-sidebar {
       width: 274px;
       height: 100%;
-      margin-right: 36px;
+      margin-right: 10px;
       background: #fff;
     }
     &-main {
@@ -114,6 +114,7 @@ export default {
       background: #fff;
       height: 100%;
       overflow: hidden;
+      padding-left: 10px;
       .el-row {
         width: auto;
         max-width: 930px;
